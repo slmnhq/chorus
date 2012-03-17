@@ -57,6 +57,10 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         return this.get("executionInfo") && this.get("executionInfo").state == "success";
     },
 
+    isInProgress: function() {
+        return this.get("executionInfo") && !(this.get("executionInfo").completedStamp);
+    },
+
     hasActiveSchedule: function() {
         return this.has('scheduleInfo') && this.get('scheduleInfo').jobName
     }

@@ -3,6 +3,10 @@ describe("chorus.models.TabularData", function() {
         this.tabularData = fixtures.tabularData();
     })
 
+    it("includes the InstanceCredentials mixin", function() {
+        expect(this.tabularData.instanceRequiringCredentials).toBe(chorus.Mixins.InstanceCredentials.model.instanceRequiringCredentials);
+    });
+
     describe("#initialize", function() {
         it("doesn't override type when type already exists", function() {
             var model = new chorus.models.TabularData({ type: "foo"})
@@ -58,10 +62,10 @@ describe("chorus.models.TabularData", function() {
 
             "SANDBOX_TABLE": {
                 "BASE_TABLE": "sandbox_table_large.png",
-                "EXTERNAL_TABLE": "source_table_large.png",
+                "EXTERNAL_TABLE": "sandbox_table_large.png",
                 "MASTER_TABLE": "sandbox_table_large.png",
                 "VIEW": "sandbox_view_large.png",
-                "HDFS_EXTERNAL_TABLE": "source_table_large.png"
+                "HDFS_EXTERNAL_TABLE": "sandbox_table_large.png"
             }
         };
 
@@ -79,10 +83,10 @@ describe("chorus.models.TabularData", function() {
 
             "SANDBOX_TABLE": {
                 "BASE_TABLE": "sandbox_table_medium.png",
-                "EXTERNAL_TABLE": "source_table_medium.png",
+                "EXTERNAL_TABLE": "sandbox_table_medium.png",
                 "MASTER_TABLE": "sandbox_table_medium.png",
                 "VIEW": "sandbox_view_medium.png",
-                "HDFS_EXTERNAL_TABLE": "source_table_medium.png"
+                "HDFS_EXTERNAL_TABLE": "sandbox_table_medium.png"
             }
         };
 
@@ -130,18 +134,14 @@ describe("chorus.models.TabularData", function() {
         it("returns false unless the object is a Dataset (with a workspace id)", function() {
             var table = fixtures.databaseObject();
             expect(table.isImportable()).toBeFalsy();
-        });
 
-        it("returns false when the dataset is a sandbox table or view", function() {
             var dataset = fixtures.datasetSandboxTable();
-            expect(dataset.isImportable()).toBeFalsy();
+            expect(dataset.isImportable()).toBeTruthy();
 
             dataset = fixtures.datasetSandboxView();
-            expect(dataset.isImportable()).toBeFalsy();
-        });
+            expect(dataset.isImportable()).toBeTruthy();
 
-        it("returns true when the dataset is a source table, source view or chorus view", function() {
-            var dataset = fixtures.datasetSourceTable();
+            dataset = fixtures.datasetSourceTable();
             expect(dataset.isImportable()).toBeTruthy();
 
             dataset = fixtures.datasetSourceView();

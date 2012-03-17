@@ -138,7 +138,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         if (button.is(":disabled")) return;
         this.account = new chorus.models.InstanceAccount({instanceId:this.instance.get("id")});
         this.collection.add(this.account);
-        this.$("button.add_account").attr("disabled", "disabled");
+        this.$("button.add_account").prop("disabled", true);
         var newLi = this.$("li[data-id=new]");
         newLi.addClass('editing new');
         newLi.find("div.name").addClass("hidden");
@@ -224,7 +224,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         if (event) {
             event.preventDefault();
         }
-        this.$("button.add_account").removeAttr("disabled");
+        this.$("button.add_account").prop("disabled", false);
         this.$("li").removeClass("editing");
         this.$("li[data-id=new]").remove();
         if (this.account && this.account.isNew()) {

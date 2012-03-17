@@ -138,11 +138,19 @@ Backbone.Events.unbind = function(ev, callback, context) {
     return object;
   }
 
+  function include(/* *modules */) {
+    var modules = _.toArray(arguments);
+    var mergedModules = _.extend.apply(_, [{}].concat(modules));
+    return this.extend(mergedModules);
+  }
+
   _.each(["Model", "Collection", "View", "Router"], function(klass) {
     Backbone[klass].prototype._super = _super;
     Backbone[klass].prototype._findSuper = _findSuper;
     Backbone[klass].prototype.unbind = Backbone.Events.unbind;
+    Backbone[klass].include = include;
   });
 
 })(Backbone);
+
 

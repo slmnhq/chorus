@@ -3,6 +3,12 @@ describe("chorus.pages.SearchIndexPage", function() {
         this.query = "foo";
     });
 
+    it("has a helpId", function() {
+        this.page = new chorus.pages.SearchIndexPage(this.query);
+        expect(this.page.helpId).toBe("search")
+    });
+
+
     describe("when searching for all items, across all of chorus", function() {
         beforeEach(function() {
             this.page = new chorus.pages.SearchIndexPage(this.query);
@@ -264,8 +270,34 @@ describe("chorus.pages.SearchIndexPage", function() {
                         });
 
                         it("shows that file in the sidebar", function() {
-                            expect(this.page.sidebar.$(".info .full_name")).toHaveText("");
+                            expect(this.page.sidebar.$(".info .name")).toHaveText(this.clickedFile.get('name'));
                         });
+                    });
+                });
+            });
+
+            describe("the other files section", function() {
+                beforeEach(function() {
+                    this.attachments = this.page.search.attachments();
+                    this.attachmentLis = this.page.$(".attachment_list li");
+                });
+
+                it("shows a list of search results", function() {
+                    expect(this.attachmentLis.length).toBe(2);
+                });
+
+                describe("clicking on a search result", function() {
+                    beforeEach(function() {
+                        this.clickedFile = this.attachments.at(0);
+                        this.attachmentLis.eq(0).trigger("click");
+                    });
+
+                    it("selects that file", function() {
+                        expect(this.attachmentLis.eq(0)).toHaveClass("selected");
+                    });
+
+                    it("shows that file in the sidebar", function() {
+                        expect(this.page.sidebar.$(".info .name")).toHaveText(this.clickedFile.get("name"));
                     });
                 });
             });

@@ -38,15 +38,15 @@ describe("chorus.views.NotificationRecipient", function() {
 
             it("should display a dropdown containing all elligible recipients", function() {
                 expect(this.view.$("select")).not.toHaveClass("hidden");
-                expect(this.view.$("select option").length).toBe(this.users.length - 1);
+                expect(this.view.$("select option").length).toBe(3);
 
-                expect(this.view.$("select option:eq(0)").text()).toContain(this.user1.displayName());
-                expect(this.view.$("select option:eq(0)").val()).toContain(this.user1.get("id"));
+                expect(this.view.$("select option:eq(1)").text()).toContain(this.user1.displayName());
+                expect(this.view.$("select option:eq(1)").val()).toContain(this.user1.get("id"));
 
-                expect(this.view.$("select option:eq(1)").text()).toContain(this.user2.displayName());
-                expect(this.view.$("select option:eq(1)").val()).toContain(this.user2.get("id"));
+                expect(this.view.$("select option:eq(2)").text()).toContain(this.user2.displayName());
+                expect(this.view.$("select option:eq(2)").val()).toContain(this.user2.get("id"));
 
-                expect(this.view.$("select").val()).toBe(this.user1.get("id").toString());
+                expect(this.view.$("select").val()).toBe("");
             });
 
             it("does not display the logged in user as an elligible recipient", function() {
@@ -55,13 +55,29 @@ describe("chorus.views.NotificationRecipient", function() {
 
             context("when the add user link is clicked", function() {
                 beforeEach(function() {
+                    spyOn(chorus, "styleSelect");
+                    this.view.$("select").val(this.user1.id.toString());
                     this.view.$(".add_user").click();
                 });
 
                 itHasOnlyTheFirstUser();
 
+                it("goes back to the blank select option", function() {
+                    expect(this.view.$("select").val()).toBe("");
+                    expect(chorus.styleSelect).toHaveBeenCalled();
+                });
+
+                context("trying to add the blank user option", function() {
+                    beforeEach(function() {
+                        this.view.$("a.add_user").click();
+                    });
+
+                    itHasOnlyTheFirstUser();
+                });
+
                 context("adding the same user", function() {
                     beforeEach(function() {
+                        this.view.$("select").val(this.user1.id.toString());
                         this.view.$(".add_user").click();
                     });
 
@@ -78,7 +94,7 @@ describe("chorus.views.NotificationRecipient", function() {
                     });
 
                     it("returns only the id of the current selection", function() {
-                        expect(this.view.getPickedUsers()).toEqual([this.view.$("select option:selected").val()]);
+                        expect(this.view.getPickedUsers()).toEqual([]);
                     });
                 });
 
@@ -120,8 +136,7 @@ describe("chorus.views.NotificationRecipient", function() {
                     });
 
                     it("should remove the user's ID from the internal array", function() {
-                        expect(this.view.getPickedUsers().length).toBe(1);
-                        expect(this.view.getPickedUsers()).toContain(this.user1.id.toString());
+                        expect(this.view.getPickedUsers().length).toBe(0);
                     });
                 });
 

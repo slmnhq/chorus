@@ -1,4 +1,6 @@
-chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
+chorus.views.Bare = Backbone.View.include(
+    chorus.Mixins.Events
+).extend({
     constructorName: "View",
 
     initialize: function initialize() {
@@ -281,7 +283,7 @@ chorus.views.Bare = Backbone.View.extend(_.extend({}, chorus.Mixins.Events, {
             }
         })
     }
-}));
+});
 chorus.views.Bare.extend = chorus.classExtend;
 
 chorus.views.Base = chorus.views.Bare.extend({

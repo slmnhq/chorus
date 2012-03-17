@@ -32,17 +32,29 @@ describe("WorkfileContentDetails", function() {
             beforeEach(function() {
                 this.model = fixtures.alpineWorkfile();
                 spyOn(chorus.views, "AlpineWorkfileContentDetails");
-                chorus.views.WorkfileContentDetails.buildFor(this.model);
+                this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
 
             it("instantiates an AlpineWorkfileContentDetails view with the given workfile", function() {
-                expect(chorus.views.AlpineWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+                expect(this.view).toBeA(chorus.views.AlpineWorkfileContentDetails);
+            });
+        });
+
+        context("when the workfile is a binary file", function() {
+            beforeEach(function() {
+                this.model = fixtures.binaryWorkfile();
+                spyOn(chorus.views, "BinaryWorkfileContentDetails");
+                chorus.views.WorkfileContentDetails.buildFor(this.model);
+            });
+
+            it("instantiates a BinaryWorkfileContentDetails view with the given workfile", function() {
+                expect(chorus.views.BinaryWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
             });
         });
 
         context("when given anything else", function() {
             beforeEach(function() {
-                fixtures.otherWorkfile();
+                fixtures.textWorkfile();
                 spyOn(chorus.views, "WorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor = chorus.views.WorkfileContentDetails.originalValue.buildFor;
                 chorus.views.WorkfileContentDetails.buildFor(this.model);
@@ -67,7 +79,7 @@ describe("WorkfileContentDetails", function() {
         });
 
         it("should not have disabled class from the save as link", function() {
-            expect(this.view.$(".save_as")).not.toHaveAttr("disabled");
+            expect(this.view.$(".save_as")).not.toBeDisabled();
         });
 
         it("should not display the autosave text", function() {
@@ -148,8 +160,8 @@ describe("WorkfileContentDetails", function() {
                         expect($("a.save_as_current", this.qtipMenu)).not.toExist();
                         expect($("span.save_as_current.disabled", this.qtipMenu)).toExist();
                     });
-                })
-            })
+                });
+            });
         });
     });
 

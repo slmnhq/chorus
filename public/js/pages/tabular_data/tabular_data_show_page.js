@@ -30,7 +30,9 @@
         }
     });
 
-    chorus.pages.TabularDataShowPage = chorus.pages.Base.extend({
+    chorus.pages.TabularDataShowPage = chorus.pages.Base.include(
+        chorus.Mixins.InstanceCredentials.page
+    ).extend({
         constructorName: "TabularDataShowPage",
         helpId: "databaseObject",
         hideDeriveChorusView: true,

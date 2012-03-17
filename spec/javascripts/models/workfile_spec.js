@@ -250,12 +250,6 @@ describe("chorus.models.Workfile", function() {
                 });
             });
 
-            context("when file does not have its own page", function() {
-                it("uses downloadUrl", function() {
-                    spyOn(this.model, 'hasOwnPage').andReturn(false);
-                    expect(this.model.showUrl()).toBe(this.model.downloadUrl());
-                });
-            });
         });
 
         describe("#downloadUrl", function() {
@@ -348,6 +342,21 @@ describe("chorus.models.Workfile", function() {
             expect(this.model.isAlpine()).toBeFalsy();
         })
     });
+
+    describe("isBinary", function() {
+        it("returns true when the workfile is a binary file", function() {
+            this.model.set({ mimeType: 'exe/MSI'});
+            expect(this.model.isBinary()).toBeTruthy();
+        })
+
+        it("returns false when the workfile is NOT a binary file", function() {
+            this.model.set({ mimeType: 'text/plain'});
+            expect(this.model.isBinary()).toBeFalsy();
+            this.model.set({ fileType: 'SQL'});
+            expect(this.model.isBinary()).toBeFalsy();
+        })
+
+    })
 
     describe("createDraft", function() {
         beforeEach(function() {
@@ -578,52 +587,8 @@ describe("chorus.models.Workfile", function() {
     })
 
     describe("#hasOwnPage", function() {
-        context("when the workfile is an image", function() {
-            beforeEach(function() {
-                spyOn(this.model, 'isImage').andReturn(true)
-                spyOn(this.model, 'isText').andReturn(false)
-                spyOn(this.model, 'isAlpine').andReturn(false)
-            })
-
-            it("returns true", function() {
-                expect(this.model.hasOwnPage()).toBeTruthy();
-            })
-        })
-
-        context("when the workfile is a text", function() {
-            beforeEach(function() {
-                spyOn(this.model, 'isImage').andReturn(false)
-                spyOn(this.model, 'isText').andReturn(true)
-                spyOn(this.model, 'isAlpine').andReturn(false)
-            })
-
-            it("returns true", function() {
-                expect(this.model.hasOwnPage()).toBeTruthy();
-            })
-        })
-
-        context("when the workfile is an alpine file", function() {
-            beforeEach(function() {
-                spyOn(this.model, 'isImage').andReturn(false)
-                spyOn(this.model, 'isText').andReturn(false)
-                spyOn(this.model, 'isAlpine').andReturn(true)
-            })
-
-            it("returns true", function() {
-                expect(this.model.hasOwnPage()).toBeTruthy();
-            })
-        })
-
-        context("when the workfile is a neither image, text or alpine file", function() {
-            beforeEach(function() {
-                spyOn(this.model, 'isImage').andReturn(false)
-                spyOn(this.model, 'isText').andReturn(false)
-                spyOn(this.model, 'isAlpine').andReturn(false)
-            })
-
-            it("returns false", function() {
-                expect(this.model.hasOwnPage()).toBeFalsy();
-            })
+        it("returns true", function() {
+            expect(this.model.hasOwnPage()).toBeTruthy();
         })
     })
 

@@ -120,6 +120,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$(".schedule_import").not(".hidden")).not.toExist();
             });
 
+            it("should have a truncate checkbox for a new table", function() {
+                expect(this.dialog.$("#import_scheduler_truncate_new")).toExist();
+            });
+
             it("should set executeAfterSave to be false on the DatasetImport", function() {
                 expect(this.dialog.model.executeAfterSave).toBeFalsy();
             });
@@ -326,6 +330,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     it("pre-populates the table name", function() {
                         expect(this.dialog.$(".new_table input.name").val()).toBe("my_table");
                     })
+
+                    it("should have a truncate checkbox for a new table", function() {
+                        expect(this.dialog.$("#import_scheduler_truncate_new")).toExist();
+                    });
                 });
 
                 context("and the toTable is an existing Table", function() {
@@ -354,6 +362,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         expect(this.dialog.$("input[type='radio']#import_scheduler_new_table")).not.toBeChecked();
                         expect(this.dialog.$(".existing_table fieldset")).not.toHaveClass("disabled");
                         expect(this.dialog.$(".new_table fieldset")).toHaveClass("disabled");
+                    });
+
+                    it("should have a truncate checkbox for a new table", function() {
+                        expect(this.dialog.$("#import_scheduler_truncate_new")).toExist();
                     });
 
                     it("has the 'schedule' checkbox checked by default", function() {
@@ -517,6 +529,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.dialog.$("button.submit").click();
                 expect(this.server.lastCreate().url).toContain('import');
             });
+
+            it("should not have a truncate checkbox for a new table", function() {
+                expect(this.dialog.$("#import_scheduler_truncate_new")).not.toExist();
+            });
         });
 
         beforeEach(function() {
@@ -576,6 +592,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
             it("should have a 'Limit Rows' checkbox", function() {
                 expect(this.dialog.$(".new_table .limit label")).toContainTranslation("import.limit_rows");
                 expect(this.dialog.$(".new_table .limit input:checkbox").prop("checked")).toBeFalsy();
+            });
+
+            it("should not have a truncate checkbox for a new table", function() {
+                expect(this.dialog.$("#import_scheduler_truncate_new")).not.toExist();
             });
 
             it("should have a textfield for the 'Limit Rows' value", function() {

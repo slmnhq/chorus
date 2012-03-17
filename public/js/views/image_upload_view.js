@@ -61,7 +61,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
                 }).spin(self.$(".spinner_container")[0]);
             }
             self.$("img").addClass("disabled");
-            self.$("input[type=file]").attr("disabled", "disabled");
+            self.$("input[type=file]").prop("disabled", true);
             self.$("a.action").addClass("disabled");
 
             data.submit();
@@ -72,7 +72,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
             var originalUrl = self.model.imageUrl();
             self.spinner.stop();
             self.$("img").removeClass("disabled");
-            self.$("input[type=file]").removeAttr("disabled");
+            self.$("input[type=file]").prop("disabled", false);
             self.$("a.action").removeClass("disabled");
 
             var json = $.parseJSON(data.result);

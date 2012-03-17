@@ -1,5 +1,6 @@
 chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         className:"workfile_content_details",
+        additionalClass: "workfile_content_details",
 
         setup:function () {
             chorus.PageEvents.subscribe("file:autosaved", this.updateAutosaveText, this);
@@ -70,6 +71,10 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
 
             if (model.isAlpine()) {
                 return new chorus.views.AlpineWorkfileContentDetails({ model:model });
+            }
+
+            if (model.isBinary()) {
+                return new chorus.views.BinaryWorkfileContentDetails({ model:model });
             }
 
             return new chorus.views.WorkfileContentDetails({ model:model });

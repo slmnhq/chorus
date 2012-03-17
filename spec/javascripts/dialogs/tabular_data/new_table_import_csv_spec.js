@@ -62,7 +62,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             });
 
             it("has " + separator + " as separator", function() {
-                expect(this.dialog.$('input.delimiter[checked]').val()).toBe(separator);
+                expect(this.dialog.$('input.delimiter:checked').val()).toBe(separator);
             });
 
             it("reparses the file with " + separator + " as the separator", function() {
@@ -122,7 +122,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 });
 
                 it("has z as separator", function() {
-                    expect(this.dialog.$('input.delimiter[checked]').val()).toBe('other');
+                    expect(this.dialog.$('input.delimiter:checked').val()).toBe('other');
                 });
 
                 it("reparses the file with z as the separator", function() {

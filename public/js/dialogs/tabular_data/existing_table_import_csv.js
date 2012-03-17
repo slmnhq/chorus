@@ -79,17 +79,17 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             });
         })
 
-        self.$("input.delimiter").removeAttr("checked");
+        self.$("input.delimiter").prop("checked", false);
         if (_.contains([",", "\t", ";", " "], self.delimiter)) {
-            self.$("input.delimiter[value='" + self.delimiter + "']").attr("checked", "true");
+            self.$("input.delimiter[value='" + self.delimiter + "']").prop("checked", true);
         } else {
-            self.$("input#delimiter_other").attr("checked", "true");
+            self.$("input#delimiter_other").prop("checked", true);
         }
 
         var invalidMapping = _.any(this.destinations, function(destination) {
             return destination.frequency != 1;
         });
-        this.$("button.submit").attr("disabled", invalidMapping);
+        this.$("button.submit").prop("disabled", !!invalidMapping);
     },
 
     destinationColumnSelected: function(e, api) {
@@ -201,9 +201,9 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setOtherDelimiter: function() {
-        this.$("input.delimiter[type=radio]").removeAttr("checked");
+        this.$("input.delimiter[type=radio]").prop("checked", false);
         var otherRadio = this.$("input#delimiter_other");
-        otherRadio.attr("checked", true)
+        otherRadio.prop("checked", true)
         otherRadio.click();
     },
 

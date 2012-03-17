@@ -26,6 +26,7 @@ describe("chorus.views.SearchResults", function() {
             expect(sections.filter(".this_workspace")).toExist();
             expect(sections.filter(".user_list")).toExist();
             expect(sections.filter(".workfile_list")).toExist();
+            expect(sections.filter(".attachment_list")).toExist();
             expect(sections.filter(".workspace_list")).toExist();
             expect(sections.filter(".hdfs_list")).toExist();
             expect(sections.filter(".instance_list")).toExist();
@@ -37,6 +38,7 @@ describe("chorus.views.SearchResults", function() {
             this.model = makeSearchResults()
             this.model.set({ entityType: "workfile" });
             this.model.unset("workspace");
+            this.model.unset("attachment");
             this.model.unset("user");
             this.model.unset("hdfs");
             this.model.unset("dataset");
@@ -55,6 +57,7 @@ describe("chorus.views.SearchResults", function() {
                 workspaceId: "101",
                 searchIn: "this_workspace",
 
+                attachment: null,
                 workspace: null,
                 instance: null,
                 dataset: null,
@@ -75,6 +78,7 @@ describe("chorus.views.SearchResults", function() {
 
         it("does not show the sections for other types of items", function() {
             expect(this.view.$(".search_result_list.this_workspace")).not.toExist();
+            expect(this.view.$(".search_result_list.attachment_list")).not.toExist();
             expect(this.view.$(".search_result_list.instance_list")).not.toExist();
             expect(this.view.$(".search_result_list.workspace_list")).not.toExist();
             expect(this.view.$(".search_result_list.user_list")).not.toExist();
@@ -111,6 +115,14 @@ describe("chorus.views.SearchResults", function() {
                 var workfileToClick = this.model.workfiles().at(1);
                 this.view.$(".workfile_list li").eq(1).click();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", workfileToClick);
+            });
+        });
+
+        context("when the li is for an attachment", function() {
+            it("triggers the 'attachment:selected' event on itself, with the clicked attachment", function() {
+                var attachmentToClick = this.model.attachments().at(1);
+                this.view.$(".attachment_list li").eq(1).click();
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("attachment:selected", attachmentToClick);
             });
         });
 

@@ -38,6 +38,6 @@ chorus.dialogs.NameChorusView = chorus.dialogs.Base.extend({
 
     checkInput: function() {
         var hasText = this.$("input[name=objectName]").val().trim().length > 0;
-        this.$("button.submit").attr("disabled", !hasText);
+        this.$("button.submit").prop("disabled", !hasText);
     }
 });

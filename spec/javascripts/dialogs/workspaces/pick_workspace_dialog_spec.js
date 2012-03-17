@@ -3,7 +3,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
         setLoggedInUser({id: 4003});
         chorus.session.trigger("saved")
         this.launchElement = $("<a></a>")
-        this.dialog = new chorus.dialogs.PickWorkspace({launchElement : this.launchElement});
+        this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement});
     });
 
     it("does not re-render when the model changes", function() {
@@ -19,14 +19,24 @@ describe("chorus.dialogs.PickWorkspace", function() {
             expect(this.dialog.picklistView.collection).toBe(this.dialog.collection);
         })
 
-        it("only gets the chorus.session.users()'s workspaces", function(){
+        it("only gets the chorus.session.users()'s workspaces", function() {
             expect(this.dialog.collection.attributes.userId).toBe(chorus.session.user().get("id"));
         })
 
         context("when the launch element activeOnly is set to true", function() {
             beforeEach(function() {
                 this.launchElement.data('activeOnly', true);
-                this.dialog = new chorus.dialogs.PickWorkspace({launchElement : this.launchElement});
+                this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement});
+            });
+
+            it("only fetches the active workspaces", function() {
+                expect(this.dialog.collection.attributes.active).toBeTruthy();
+            });
+        });
+
+        context("when options.activeOnly is set to true", function() {
+            beforeEach(function() {
+                this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement, activeOnly: true});
             });
 
             it("only fetches the active workspaces", function() {
@@ -37,7 +47,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.dialog = new chorus.dialogs.PickWorkspace({launchElement : this.launchElement});
+            this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement});
             this.dialog.buttonTitle = "Some button";
             spyOn(this.dialog.picklistView, "render");
             this.dialog.render();
@@ -60,7 +70,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
 
     describe("choose workspace button", function() {
         beforeEach(function() {
-            this.dialog = new chorus.dialogs.PickWorkspace({launchElement : this.launchElement });
+            this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement });
             this.dialog.render();
         })
 
@@ -93,7 +103,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
     describe("clicking the choose workspace button", function() {
         beforeEach(function() {
             this.workspace = fixtures.workspace();
-            this.dialog = new chorus.dialogs.PickWorkspace({launchElement : this.launchElement });
+            this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement });
             this.dialog.render();
 
             spyOn(chorus, "toast");

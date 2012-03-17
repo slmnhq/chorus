@@ -8,7 +8,8 @@
         workspaces: "WorkspaceSet",
         workspaceItems: "WorkspaceItemSet",
         instances: "InstanceSet",
-        users: "UserSet"
+        users: "UserSet",
+        attachments: "ArtifactSet"
     };
 
     chorus.models.SearchResult = chorus.models.Base.extend({
@@ -117,6 +118,7 @@
         users: makeCollectionMethod("users"),
         hdfs: makeCollectionMethod("hdfs"),
         workspaceItems: makeCollectionMethod("workspaceItems"),
+        attachments: makeCollectionMethod("attachments"),
 
         getResults: function() {
             switch(this.entityType()) {
@@ -137,6 +139,8 @@
                     break;
                 case "hdfs":
                     return this.hdfs();
+                case "attachment":
+                    return this.attachments();
             }
 
             if (this.isScopedToSingleWorkspace()) {

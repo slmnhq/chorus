@@ -46,7 +46,7 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
         }, this)
 
         this.$("button.submit").startLoading("instances.edit_dialog.saving");
-        this.$("button.cancel").attr("disabled", "disabled");
+        this.$("button.cancel").prop("disabled", true);
         this.model.save(attrs);
     },
 
@@ -58,7 +58,7 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
 
     saveFailed:function () {
         this.$("button.submit").stopLoading();
-        this.$("button.cancel").removeAttr("disabled");
+        this.$("button.cancel").prop("disabled", false);
     },
 
     fetchUserSet:function () {

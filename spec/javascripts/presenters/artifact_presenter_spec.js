@@ -10,8 +10,8 @@ describe("chorus.presenters.Artifact", function() {
 
     context("given a model without its own page", function() {
         it("includes the model's download url", function() {
-            var model = fixtures.workfile({ mimeType: "application/octet-stream" });
-            expect(model.hasOwnPage()).toBeFalsy();
+            var model = fixtures.artifact();
+            spyOn(model, "hasOwnPage").andReturn(false);
             var presenter = new chorus.presenters.Artifact(model);
             expect(presenter.url).toBe(model.downloadUrl());
         });

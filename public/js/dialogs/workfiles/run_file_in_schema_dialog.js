@@ -35,7 +35,7 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
     workspaceLoaded:function () {
         if (this.workspace.sandbox()) {
             this.$(".name").text(this.workspace.sandbox().schema().canonicalName());
-            this.$("input#sandbox_schema").attr("disabled", false);
+            this.$("input#sandbox_schema").prop("disabled", false);
             this.$("label[for='sandbox_schema']").removeClass('disabled');
         }
     },
@@ -45,7 +45,7 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
     },
 
     onSchemaPickerChange:function () {
-        this.$("button.submit").attr("disabled", !this.schemaPicker.ready());
+        this.$("button.submit").prop("disabled", !this.schemaPicker.ready());
     },
 
     onClickSubmit:function () {
@@ -66,7 +66,7 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
 
     sandboxSchemaSelected:function () {
         this.$(".another_schema").addClass("collapsed");
-        this.$("button.submit").attr("disabled", false);
+        this.$("button.submit").prop("disabled", false);
         this.clearErrors();
     },
 

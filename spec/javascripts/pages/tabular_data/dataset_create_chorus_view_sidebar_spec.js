@@ -70,6 +70,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             beforeEach(function() {
                 this.otherDataset = fixtures.datasetSandboxTable();
                 this.otherDataset.columns().reset([fixtures.databaseColumn()]);
+                this.dataset.columns().models[0].tabularData.aliasedName="a";
                 this.chorusView.addJoin(this.dataset.columns().models[0], this.otherDataset.columns().models[0], 'inner');
             });
 
@@ -77,6 +78,11 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.view.$(".dataset").length).toBe(2);
                 expect(this.view.$(".dataset:eq(1) .name")).toContainText(this.otherDataset.get("objectName"));
             })
+
+            it("displays the correct aliasedName for source and destination columns", function() {
+                expect(this.view.$(".joins .letter:eq(0)")).toContainText(this.chorusView.joins[0].sourceColumn.tabularData.aliasedName);
+                expect(this.view.$(".joins .letter:eq(1)")).toContainText(this.chorusView.joins[0].destinationColumn.tabularData.aliasedName);
+            });
 
             context("removing the join", function() {
                 beforeEach(function() {

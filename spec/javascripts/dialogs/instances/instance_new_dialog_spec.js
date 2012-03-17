@@ -181,7 +181,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                     });
 
                     it("disables the cancel button", function() {
-                        expect(this.dialog.$("button.cancel").attr("disabled")).toBe("disabled");
+                        expect(this.dialog.$("button.cancel")).toBeDisabled();
                     });
 
                     context("when save completes", function() {

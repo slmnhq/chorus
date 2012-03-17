@@ -9,7 +9,8 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         ".workfile_list":      "workfileList",
         ".workspace_list":     "workspaceList",
         ".dataset_list":       "tabularDataList",
-        ".instance_list":      "instanceList"
+        ".instance_list":      "instanceList",
+        ".attachment_list":    "attachmentList"
     },
 
     events: {
@@ -34,6 +35,9 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         }
         if (this.model.instances()) {
             this.instanceList = this.buildListView('instance', this.model.instances());
+        }
+        if (this.model.attachments()) {
+            this.attachmentList = this.buildListView('attachment', this.model.attachments());
         }
         if (!this.model.hasSpecificEntityType() && this.model.workspaceItems()) {
             this.thisWorkspaceList = new chorus.views.WorkspaceSearchResultList({

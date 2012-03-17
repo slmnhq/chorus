@@ -1,4 +1,6 @@
-chorus.collections.DatabaseObjectSet = chorus.collections.Base.extend({
+chorus.collections.DatabaseObjectSet = chorus.collections.Base.include(
+    chorus.Mixins.InstanceCredentials.model
+).extend({
     model: chorus.models.DatabaseObject,
     urlTemplate: "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}",
 

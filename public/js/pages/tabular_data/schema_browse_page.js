@@ -1,4 +1,6 @@
-chorus.pages.SchemaBrowsePage = chorus.pages.Base.extend({
+chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
+    chorus.Mixins.InstanceCredentials.page
+).extend({
     helpId: "schema",
     useLoadingSection: true,
 

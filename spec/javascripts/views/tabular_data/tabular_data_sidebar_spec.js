@@ -233,14 +233,15 @@ describe("chorus.views.TabularDataSidebar", function() {
                 context("when the dataset is a sandbox table or view", function() {
                     context("and the dataset has received an import", function() {
                         beforeEach(function() {
-                            this.dataset = fixtures.datasetSandboxTable({
-                                importInfo: {
-                                    completedStamp: "2012-02-29 14:35:38.165",
-                                    sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
-                                    sourceTable: "some_source_table"
-                                }
-                            });
+                            this.dataset = fixtures.datasetSandboxTable();
                             chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                            this.server.completeFetchFor(this.dataset.getImport(), {
+                                executionInfo: {
+                                    completedStamp: "2012-02-29 14:35:38.165"
+                                },
+                                sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
+                                sourceTable: "some_source_table"
+                            });
                         });
 
                         it("has an 'imported xx ago' description", function() {
@@ -250,13 +251,9 @@ describe("chorus.views.TabularDataSidebar", function() {
                             });
                             expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
                                 timeAgo: chorus.helpers.relativeTimestamp("2012-02-29 14:35:38.165"),
-                                tableLink: "some_source_table"
+                                tableLink: "some_source_tab..."
                             });
                             expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl())
-                        });
-
-                        it("doesn't fetch the import configuration", function() {
-                            expect(this.dataset.getImport()).not.toHaveBeenFetched();
                         });
 
                         it("doesn't display a 'import now' link", function() {
@@ -270,10 +267,6 @@ describe("chorus.views.TabularDataSidebar", function() {
                             chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                         });
 
-                        it("doesn't fetch the import configuration", function() {
-                            expect(this.dataset.getImport()).not.toHaveBeenFetched();
-                        });
-
                         it("doesn't display a 'import now' link", function() {
                             expect(this.view.$(".import_now")).not.toExist();
                         });
@@ -283,6 +276,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 context("when the dataset is a source table or view", function() {
                     beforeEach(function() {
                         this.dataset = fixtures.datasetSourceTable();
+                        this.view.importConfiguration.set({sourceId: this.dataset.id});
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
@@ -298,10 +292,6 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                         it("does not show the 'import now' link", function() {
                             expect(this.view.$("a.import_now")).not.toExist();
-                        });
-
-                        it("does not try to fetch the import configuration", function() {
-                            expect(this.dataset.getImport()).not.toHaveBeenFetched();
                         });
                     });
 
@@ -384,6 +374,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                         context("when the dataset has an import schedule", function() {
                             beforeEach(function() {
                                 this.importResponse = fixtures.datasetImport({
+                                    sourceId: this.dataset.id,
                                     scheduleInfo: {
                                         endTime: "2013-06-02",
                                         frequency: "WEEKLY",
@@ -436,10 +427,39 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     var destTable = new chorus.models.Dataset({
                                         id: this.view.importConfiguration.get("destinationTable"),
                                         workspaceId: this.dataset.get("workspace").id})
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                                 });
                             });
+
+                            context("when the import is in progress", function() {
+                                beforeEach(function() {
+                                    this.importResponse.set({
+                                        executionInfo: {
+                                            startedStamp: "2012-02-29 14:23:58.169",
+                                            toTable: 'our_destinationplusomemore',
+                                            creator: "InitialUser",
+                                            state: "success"
+                                        }
+                                    })
+
+                                    this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                });
+
+                                itHasActionLinks(["import_now", "edit_schedule"]);
+
+                                it("has an 'import in progress' description", function() {
+                                    var execInfo = this.view.importConfiguration.get("executionInfo")
+                                    var destTable = new chorus.models.Dataset({
+                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        workspaceId: this.dataset.get("workspace").id})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.in_progress", {tableLink: "our_destination..."});
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.began", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp)});
+                                    expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
+                                    expect(this.view.$(".last_import img").attr("src")).toBe("/images/in_progress.png");
+                                });
+                            });
+
 
                             context("when the import has failed to execute", function() {
                                 beforeEach(function() {
@@ -464,7 +484,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     var destTable = new chorus.models.Dataset({
                                         id: this.view.importConfiguration.get("destinationTable"),
                                         workspaceId: this.dataset.get("workspace").id})
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "bad_destination_table"})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "bad_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                                     expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
                                 });
@@ -474,7 +494,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                             context("when the import has not yet executed", function() {
                                 beforeEach(function() {
-                                    this.importResponse.set({ executionInfo: null });
+                                    this.importResponse.set({executionInfo: null });
                                     this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
                                 });
 
@@ -485,6 +505,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                         context("when the dataset does not have an import schedule", function() {
                             beforeEach(function() {
                                 this.importResponse = fixtures.datasetImport({
+                                    sourceId: this.dataset.id,
                                     scheduleInfo: null,
                                     toTable: "our_destination"
                                 });
@@ -516,7 +537,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     var destTable = new chorus.models.Dataset({
                                         id: this.view.importConfiguration.get("destinationTable"),
                                         workspaceId: this.dataset.get("workspace").id})
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                                 });
                             });
@@ -546,7 +567,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     var destTable = new chorus.models.Dataset({
                                         id: this.view.importConfiguration.get("destinationTable"),
                                         workspaceId: this.dataset.get("workspace").id})
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                                     expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
                                 });
@@ -651,6 +672,10 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                     it("displays the associate with workspace dialog", function() {
                         expect(chorus.modal).toBeA(chorus.dialogs.AssociateWithWorkspace);
+                    });
+
+                    it("lists only active workspaces", function() {
+                        expect(chorus.modal.options.activeOnly).toBeTruthy();
                     });
                 });
             });

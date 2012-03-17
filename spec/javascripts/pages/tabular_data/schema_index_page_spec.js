@@ -5,6 +5,14 @@ describe("chorus.pages.SchemaIndexPage", function() {
         this.page.render();
     });
 
+    it("includes the InstanceCredentials mixin", function() {
+        expect(this.page.requiredResourcesFetchFailed).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchFailed);
+    });
+
+    it("has a helpId", function() {
+        expect(this.page.helpId).toBe("instances")
+    });
+
     it("fetches the instance", function() {
         expect(this.page.instance).toHaveBeenFetched();
     });

@@ -5,6 +5,10 @@ describe("chorus.pages.DatabaseIndexPage", function() {
         this.page.render();
     });
 
+    it("has a helpId", function() {
+        expect(this.page.helpId).toBe("instances")
+    });
+
     it("fetches the instance", function() {
         expect(this.page.instance).toHaveBeenFetched();
     });

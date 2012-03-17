@@ -15,7 +15,18 @@
                     <img src="/images/message_error_small.png" />
                 </div>
             {{/if}}
-            {{lastImport}}
+
+            {{#if importInProgress}}
+                <div class="icon">
+                    <img src="/images/in_progress.png" />
+                </div>
+                <div class="import_in_progress right">
+                    {{inProgressText}}
+                </div>
+            {{/if}}
+            <div class="last_import_text {{#if importInProgress}}right{{/if}}">
+                {{lastImport}}
+            </div>
         </div>
 
         <div class="next_import">

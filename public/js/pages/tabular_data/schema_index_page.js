@@ -1,5 +1,8 @@
-chorus.pages.SchemaIndexPage = chorus.pages.Base.extend({
+chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
+    chorus.Mixins.InstanceCredentials.page
+).extend({
     constructorName: "SchemaIndexPage",
+    helpId: "instances",
 
     setup: function(instanceId, databaseName) {
         this.databaseName = databaseName;

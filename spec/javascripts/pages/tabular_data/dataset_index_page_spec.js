@@ -187,10 +187,11 @@ describe("chorus.pages.DatasetIndexPage", function() {
                     });
                 });
 
-                context("when the account loads and is empty", function() {
+                context("when the account loads and is empty and the instance account maps are indiviudal", function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
                         this.server.completeFetchFor(this.account, fixtures.emptyInstanceAccount())
+                        this.server.completeFetchFor(this.page.instance, fixtures.instance())
                     });
 
                     it("pops up a WorkspaceInstanceAccount dialog", function() {
@@ -223,6 +224,19 @@ describe("chorus.pages.DatasetIndexPage", function() {
                             expect(this.modalSpy).not.toHaveBeenCalled();
                         });
                     });
+                });
+
+
+                context("when the account loads and is empty and the instance is shared", function() {
+                                    beforeEach(function() {
+                                        spyOnEvent(this.page.collection, 'reset');
+                                        this.server.completeFetchFor(this.account, fixtures.emptyInstanceAccount())
+                                        this.server.completeFetchFor(this.page.instance, fixtures.instance({sharedAccount: {info: "hello"}}))
+                                    });
+
+                                    it("does not pop up a WorkspaceInstanceAccount dialog", function() {
+                                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
+                                    });
                 });
 
                 context("when the account loads and is valid", function() {

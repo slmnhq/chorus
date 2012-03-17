@@ -1,4 +1,6 @@
-chorus.models.TabularData = chorus.models.Base.extend({
+chorus.models.TabularData = chorus.models.Base.include(
+    chorus.Mixins.InstanceCredentials.model
+).extend({
     constructorName: "TabularData",
     nameAttribute: 'objectName',
 
@@ -251,10 +253,10 @@ chorus.models.TabularData = chorus.models.Base.extend({
 
         "SANDBOX_TABLE": {
             "BASE_TABLE": "sandbox_table",
-            "EXTERNAL_TABLE": "source_table",
+            "EXTERNAL_TABLE": "sandbox_table",
             "MASTER_TABLE": "sandbox_table",
             "VIEW": "sandbox_view",
-            "HDFS_EXTERNAL_TABLE": "source_table"
+            "HDFS_EXTERNAL_TABLE": "sandbox_table"
         }
     }
 });

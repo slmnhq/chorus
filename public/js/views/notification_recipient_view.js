@@ -24,8 +24,9 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
     onAddUserClicked: function(e) {
         e && e.preventDefault();
 
-        var id = this.$("select").val();
-        if (this.$("li[data-id='" + id + "']").length == 0) {
+        var $select = this.$("select");
+        var id = $select.val();
+        if (id && this.$("li[data-id='" + id + "']").length == 0) {
 
             var name = this.$("select option:selected").text();
             var $span = this.$("<span class='name'></span>").text(name);
@@ -33,6 +34,9 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
             var $li = this.$("<li></li>").append($span).append($remove).attr("data-id", id.toString());
 
             this.$(".picked_users").append($li);
+
+            $select.val("");
+            chorus.styleSelect($select);
         }
     },
 
@@ -47,7 +51,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         });
 
         var $selected = this.$("option:selected");
-        if ($selected.length) {
+        if ($selected.val() && $selected.length) {
             ids.push($selected.val());
         }
 

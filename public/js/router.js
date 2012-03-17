@@ -1,5 +1,7 @@
 (function() {
-    chorus.Router = Backbone.Router.extend(_.extend({}, chorus.Mixins.Events, {
+    chorus.Router = Backbone.Router.include(
+        chorus.Mixins.Events
+    ).extend({
         constructor: function chorus$Router() {
             Backbone.Router.apply(this, arguments);
         },
@@ -103,7 +105,7 @@
                 }
             };
         }
-    }));
+    });
 
 
     // apply arbitrary number of arguments to constructor (for routes with parameters)

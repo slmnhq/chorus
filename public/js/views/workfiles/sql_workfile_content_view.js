@@ -29,6 +29,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     },
 
     runInDefault: function() {
+        if (!this.model.executionSchema()) return;
         this.run({
             instance: this.model.executionSchema().get('instanceId'),
             database: this.model.executionSchema().get('databaseId'),

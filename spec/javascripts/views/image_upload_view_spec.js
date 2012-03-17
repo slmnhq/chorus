@@ -91,7 +91,7 @@ describe("chorus.views.ImageUpload", function() {
             });
 
             it("disables the upload button", function() {
-                expect(this.view.$("input[type=file]").attr("disabled")).toBe("disabled");
+                expect(this.view.$("input[type=file]")).toBeDisabled();
                 expect(this.view.$("a.action")).toHaveClass("disabled");
             });
 
@@ -138,7 +138,7 @@ describe("chorus.views.ImageUpload", function() {
                 });
 
                 it("re-enables the upload button", function() {
-                    expect(this.view.$("input[type=file]").attr("disabled")).toBeUndefined();
+                    expect(this.view.$("input[type=file]")).not.toBeDisabled();
                     expect(this.view.$("a.action")).not.toHaveClass("disabled");
                 });
             });
@@ -167,7 +167,7 @@ describe("chorus.views.ImageUpload", function() {
                 });
 
                 it("re-enables the upload button", function() {
-                    expect(this.view.$("input[type=file]").attr("disabled")).toBeUndefined();
+                    expect(this.view.$("input[type=file]")).not.toBeDisabled();
                     expect(this.view.$("a.action")).not.toHaveClass("disabled");
                 });
 

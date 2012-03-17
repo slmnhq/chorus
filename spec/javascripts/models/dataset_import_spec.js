@@ -28,6 +28,23 @@ describe("chorus.models.DatasetImport", function() {
         });
     });
 
+    describe("#isInProgress", function() {
+        it("returns true when the import has no completedStamp", function() {
+            this.model.set({ executionInfo: { state: "success", completedStamp: null } })
+            expect(this.model.isInProgress()).toBeTruthy();
+        });
+
+        it("returns false if the import has a completedStamp", function() {
+            this.model.set({ executionInfo: { state: "success", completedStamp: "Yesterday" } })
+            expect(this.model.isInProgress()).toBeFalsy();
+        });
+        it("returns false if the import has not been executed", function() {
+            this.model.unset("executionInfo");
+            expect(this.model.isInProgress()).toBeFalsy();
+        });
+
+    })
+
     describe("#startTime, #endTime, #frequency", function() {
         context("when the import has the 'scheduleStartTime' attribute (as required by the POST api)", function() {
             beforeEach(function() {

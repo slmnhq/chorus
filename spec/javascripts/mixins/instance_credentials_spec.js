@@ -5,37 +5,48 @@ describe("chorus.Mixins.InstanceCredentials", function() {
             _.extend(this.collection, chorus.Mixins.InstanceCredentials.model);
         });
 
-        describe("#needsInstanceCredentials", function() {
-            it("returns true when a fetch failed because of missing instance credentials", function() {
-                this.collection.serverErrors = [{
-                    description: null,
-                    message: "Account map is needed.",
-                    msgcode: "E_4_0109",
-                    msgkey: "ACCOUNTMAP.NO_ACTIVE_ACCOUNT",
-                    severity: "error"
-                }];
+        describe("#instanceRequiringCredentials", function() {
+            context("when a fetch failed because of missing instance credentials", function() {
+                it("returns an instance model with the right id", function() {
+                    this.collection.errorData = {
+                        instanceId: "101",
+                        instanceName: "Ron Instance"
+                    };
 
-                expect(this.collection.needsInstanceCredentials()).toBeTruthy();
+                    this.collection.serverErrors = [{
+                        description: null,
+                        message: "Account map is needed.",
+                        msgcode: "E_4_0109",
+                        msgkey: "ACCOUNTMAP.NO_ACTIVE_ACCOUNT",
+                        severity: "error"
+                    }];
 
-                this.collection.serverErrors = [{
-                    description: null,
-                    message: "com.emc.edc.common.AccountMapException: Account map is needed.",
-                    msgcode: null,
-                    msgkey: null,
-                    severity: "error"
-                }];
+                    var instance = this.collection.instanceRequiringCredentials();
+                    expect(instance).toBeA(chorus.models.Instance);
+                    expect(instance.get("id")).toBe("101");
 
-                expect(this.collection.needsInstanceCredentials()).toBeTruthy();
+                    this.collection.serverErrors = [{
+                        description: null,
+                        message: "com.emc.edc.common.AccountMapException: Account map is needed.",
+                        msgcode: null,
+                        msgkey: null,
+                        severity: "error"
+                    }];
+
+                    var instance = this.collection.instanceRequiringCredentials();
+                    expect(instance).toBeA(chorus.models.Instance);
+                    expect(instance.get("id")).toBe("101");
+                });
             });
 
             it("returns false when a fetch failed for some other reason", function() {
-                this.collection.serverErrors = { message: "sql error - no table named 'dudes'" };
-                expect(this.collection.needsInstanceCredentials()).toBeFalsy();
+                this.collection.serverErrors = [{ message: "sql error - no table named 'dudes'" }];
+                expect(this.collection.instanceRequiringCredentials()).toBeFalsy();
             });
 
             it("returns false when the model has no server errors", function() {
                 delete this.collection.serverErrors;
-                expect(this.collection.needsInstanceCredentials()).toBeFalsy();
+                expect(this.collection.instanceRequiringCredentials()).toBeFalsy();
             });
         });
     });
@@ -43,7 +54,6 @@ describe("chorus.Mixins.InstanceCredentials", function() {
     describe("page", function() {
         beforeEach(function() {
             this.page = new chorus.pages.Base()
-            this.page.instance = fixtures.instance();
             this.model = new chorus.models.Base();
             this.otherModel = new chorus.models.Base();
 
@@ -58,33 +68,17 @@ describe("chorus.Mixins.InstanceCredentials", function() {
 
             spyOn(Backbone.history, 'loadUrl');
             spyOn(chorus.Modal.prototype, 'launchModal');
+
+            this.model.fetch();
+            this.otherModel.fetch();
         })
 
         describe("when a fetch fails for one of the page's required resources", function() {
-            beforeEach(function() {
-                this.model.fetch();
-                this.otherModel.fetch();
-            });
-
-            context("when the resource does not respond to #needsInstanceCredentials", function() {
+            context("when credentials are missing", function() {
                 beforeEach(function() {
-                    this.server.lastFetchFor(this.otherModel).fail([{
-                        message: "Not found"
-                    }]);
-                });
-
-                itGoesToThe404Page();
-            });
-
-            context("credentials are missing", function() {
-                beforeEach(function() {
-                    this.server.lastFetchFor(this.model).fail([{
-                        description: null,
-                        message: "Account map is needed.",
-                        msgcode: "E_4_0109",
-                        msgkey: "ACCOUNTMAP.NO_ACTIVE_ACCOUNT",
-                        severity: "error"
-                    }]);
+                    this.instance = fixtures.instance();
+                    spyOn(this.model, 'instanceRequiringCredentials').andReturn(this.instance);
+                    this.server.lastFetchFor(this.model).fail();
                 })
 
                 it("does not go to the 404 page", function() {
@@ -95,6 +89,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                     expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled()
                     var dialog = chorus.Modal.prototype.launchModal.mostRecentCall.object;
                     expect(dialog).toBeA(chorus.dialogs.InstanceAccount);
+                    expect(dialog.options.instance).toBe(this.instance);
                     expect(dialog.options.reload).toBeTruthy();
                     expect(dialog.options.title).toMatchTranslation("instances.account.add.title");
                 });
@@ -102,17 +97,22 @@ describe("chorus.Mixins.InstanceCredentials", function() {
 
             context("fetch failed for some other reason", function() {
                 beforeEach(function() {
-                    this.server.lastFetchFor(this.model).fail([{
-                        description: null,
-                        message: "Some other failure.",
-                        msgcode: "E_4_0109",
-                        msgkey: "null",
-                        severity: "error"
-                    }]);
+                    spyOn(this.model, 'instanceRequiringCredentials').andReturn(undefined);
+                    this.server.lastFetchFor(this.model).fail();
                 })
 
                 itGoesToThe404Page();
-            })
+            });
+
+            context("when the resource does not respond to #instanceRequiringCredentials", function() {
+                beforeEach(function() {
+                    this.server.lastFetchFor(this.otherModel).fail([{
+                        message: "Not found"
+                    }]);
+                });
+
+                itGoesToThe404Page();
+            });
 
             function itGoesToThe404Page() {
                 it("does go to the 404 page", function() {

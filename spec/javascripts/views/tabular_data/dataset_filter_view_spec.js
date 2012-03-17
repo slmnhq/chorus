@@ -91,8 +91,8 @@ describe("chorus.views.DatasetFilter", function() {
             });
 
             it("does not disable the option for the 'other' column", function() {
-                expect(this.view.$(".column_filter option:eq(1)")).not.toHaveAttr("disabled");
-                expect(this.view.$(".column_filter option:eq(0)")).not.toHaveAttr("disabled");
+                expect(this.view.$(".column_filter option:eq(1)")).not.toBeDisabled();
+                expect(this.view.$(".column_filter option:eq(0)")).not.toBeDisabled();
             });
         });
 

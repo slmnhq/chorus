@@ -84,7 +84,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             });
 
             it("has " + separator + " as separator", function() {
-                expect(this.dialog.$('input.delimiter[checked]').val()).toBe(separator);
+                expect(this.dialog.$('input.delimiter:checked').val()).toBe(separator);
             });
 
             it("reparses the file with " + separator + " as the separator", function() {
@@ -145,7 +145,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 });
 
                 it("has z as separator", function() {
-                    expect(this.dialog.$('input.delimiter[checked]').val()).toBe('other');
+                    expect(this.dialog.$('input.delimiter:checked').val()).toBe('other');
                 });
 
                 it("reparses the file with z as the separator", function() {
@@ -378,8 +378,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         beforeEach(function() {
             spyOn(this.dialog, "postRender").andCallThrough();
             spyOn(this.dialog, "recalculateScrolling").andCallThrough();
-            this.dialog.$("#hasHeader").removeAttr("checked");
-            this.dialog.$("#hasHeader").change();
+            this.dialog.$("#hasHeader").prop("checked", false).change();
         })
 
         it("sets header on the csv model", function() {
@@ -391,7 +390,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
 
         it("the box is unchecked", function() {
-            expect(this.dialog.$("#hasHeader").attr("checked")).toBeFalsy();
+            expect(this.dialog.$("#hasHeader").prop("checked")).toBeFalsy();
         });
 
         it("calls recalculate Scrolling", function() {
@@ -418,11 +417,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
     describe("scrolling the data", function() {
         beforeEach(function() {
+            this.addMatchers(chorus.svgHelpers.matchers);
+
             spyOn(this.dialog, "adjustHeaderPosition").andCallThrough();
             $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();
             this.dialog.$(".tbody").trigger("scroll");
         });
+
         it("sets the header position", function() {
             expect(this.dialog.adjustHeaderPosition).toHaveBeenCalled();
         });
@@ -430,13 +432,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         context("scroll position after the page re-renders", function() {
             beforeEach(function() {
                 var api = this.dialog.$(".tbody").data("jsp");
-                api.scrollTo(5, 2);
+                api.scrollTo(7, 4);
                 this.dialog.render();
             });
-            it("maintain the previous scroll position", function() {
+
+            it("roughly maintains the previous scroll position", function() {
                 var api = this.dialog.$(".tbody").data("jsp");
-                expect(api.getContentPositionX()).toBe(5);
-                expect(api.getContentPositionY()).toBe(2);
+                expect(api.getContentPositionX()).toBeWithinDeltaOf(7, 2);
+                expect(api.getContentPositionY()).toBeWithinDeltaOf(4, 2);
             })
         })
     })

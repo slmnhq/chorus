@@ -22,7 +22,7 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
     },
 
     defaultWorkspaces: function() {
-        if(this.options.launchElement && this.options.launchElement.data("activeOnly")) {
+        if(this.options.activeOnly || (this.options.launchElement && this.options.launchElement.data("activeOnly"))) {
             return chorus.session.user().activeWorkspaces();
         }
         return chorus.session.user().workspaces();
@@ -44,12 +44,7 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
     },
 
     itemSelected:function (item) {
-        if (item) {
-            this.$("button.submit").removeAttr("disabled");
-        }
-        else {
-            this.$("button.submit").attr("disabled", "disabled");
-        }
+        this.$("button.submit").prop("disabled", !item);
     },
 
     doCallback : function () {

@@ -26,28 +26,28 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
             it("Field called 'name' should be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=name]").val()).toBe("pasta");
-                expect(this.dialog.$("input[name=name]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
             })
 
             it("Field called 'description' should be editable and pre populated", function() {
                 expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a food name");
-                expect(this.dialog.$("textarea[name=description]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
             })
 
             it("Field called 'host' should be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=host]").val()).toBe("greenplum");
-                expect(this.dialog.$("input[name=host]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=host]").prop("disabled")).toBeFalsy();
             })
 
             it("Field called 'port' should be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=port]").val()).toBe("8555");
-                expect(this.dialog.$("input[name=port]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=port]").prop("disabled")).toBeFalsy();
             });
 
             it("has a 'database' field that is pre-populated", function() {
                 expect(this.dialog.$("input[name='maintenanceDb']").val()).toBe("postgres");
                 expect(this.dialog.$("label[name='maintenanceDb']").text()).toMatchTranslation("instances.dialog.database_name");
-                expect(this.dialog.$("input[name='maintenanceDb']").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name='maintenanceDb']").prop("disabled")).toBeFalsy();
             });
         });
 
@@ -59,27 +59,27 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
             it("Field called 'Names' should be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=name]").val()).toBe("pasta");
-                expect(this.dialog.$("input[name=name]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
             })
 
             it("Field called 'description' should be editable and pre populated", function() {
                 expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a food name");
-                expect(this.dialog.$("textarea[name=description]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
             })
 
             it("Field called 'host' should not be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=host]").val()).toBe("greenplum");
-                expect(this.dialog.$("input[name=host]").attr("disabled")).toBeTruthy();
+                expect(this.dialog.$("input[name=host]").prop("disabled")).toBeTruthy();
             })
 
             it("Field called 'port' should not be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=port]").val()).toBe("8555");
-                expect(this.dialog.$("input[name=port]").attr("disabled")).toBeTruthy();
+                expect(this.dialog.$("input[name=port]").prop("disabled")).toBeTruthy();
             })
 
             it("Field called 'size' should not be editable and pre populated", function() {
                 expect(this.dialog.$("input[name=size]").val()).toBe("10");
-                expect(this.dialog.$("input[name=size]").attr("disabled")).toBeTruthy();
+                expect(this.dialog.$("input[name=size]").prop("disabled")).toBeTruthy();
             })
         });
 
@@ -91,32 +91,32 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
             it("has a pre-populated and enabled 'name' field", function() {
                 expect(this.dialog.$("input[name=name]").val()).toBe("pasta");
-                expect(this.dialog.$("input[name=name]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
             })
 
             it("has a pre-populated and enabled 'description' field", function() {
                 expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a food name");
-                expect(this.dialog.$("textarea[name=description]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
             })
 
             it("has a pre-populated and enabled 'host' field", function() {
                 expect(this.dialog.$("input[name=host]").val()).toBe("greenplum");
-                expect(this.dialog.$("input[name=host]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=host]").prop("disabled")).toBeFalsy();
             })
 
             it("has a pre-populated and enabled 'port' field", function() {
                 expect(this.dialog.$("input[name=port]").val()).toBe("8555");
-                expect(this.dialog.$("input[name=port]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=port]").prop("disabled")).toBeFalsy();
             });
 
             it("has a pre-populated and enabled 'HDFS account' field", function() {
                 expect(this.dialog.$("input[name=userName]").val()).toBe("user");
-                expect(this.dialog.$("input[name=userName]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=userName]").prop("disabled")).toBeFalsy();
             });
 
             it("has a pre-populated and enabled 'group list' field", function() {
                 expect(this.dialog.$("input[name=userGroups]").val()).toBe("hadoop");
-                expect(this.dialog.$("input[name=userGroups]").attr("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=userGroups]").prop("disabled")).toBeFalsy();
             });
         });
     });
@@ -227,7 +227,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
         it("disables the cancel button", function() {
             spyOn(this.dialog.model, "save");
             this.dialog.$("button[type=submit]").submit();
-            expect(this.dialog.$("button.cancel").attr("disabled")).toBe("disabled");
+            expect(this.dialog.$("button.cancel")).toBeDisabled();
         });
 
         context("with a provisioned instance", function() {

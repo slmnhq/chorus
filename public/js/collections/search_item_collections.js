@@ -30,36 +30,56 @@
         workspace: chorus.models.Workspace
     };
 
-    chorus.collections.Search.WorkspaceItemSet = chorus.collections.Base.extend(_.extend({}, searchCollectionMixins, {
+    chorus.collections.Search.WorkspaceItemSet = chorus.collections.Base.include(
+        searchCollectionMixins
+    ).extend({
         model: function(modelJson, options) {
             var constructor = constructorMap[modelJson.entityType];
             return new constructor(modelJson, options);
         },
 
         searchKey: "thisWorkspace"
-    }));
+    });
 
-    chorus.collections.Search.HdfsEntrySet = chorus.collections.HdfsEntrySet.extend(_.extend({}, searchCollectionMixins, {
+    chorus.collections.Search.HdfsEntrySet = chorus.collections.HdfsEntrySet.include(
+        searchCollectionMixins
+    ).extend({
         searchKey: "hdfs"
-    }));
+    });
 
-    chorus.collections.Search.InstanceSet = chorus.collections.InstanceSet.extend(_.extend({}, searchCollectionMixins, {
+    chorus.collections.Search.InstanceSet = chorus.collections.InstanceSet.include(
+        searchCollectionMixins
+    ).extend({
         searchKey: "instance"
-    }));
+    });
 
-    chorus.collections.Search.TabularDataSet = chorus.collections.TabularDataSet.extend(_.extend({}, searchCollectionMixins, {
+    chorus.collections.Search.TabularDataSet = chorus.collections.TabularDataSet.include(
+        searchCollectionMixins
+    ).extend({
         searchKey: "dataset"
-    }));
+    });
 
-    chorus.collections.Search.UserSet = chorus.collections.UserSet.extend(_.extend({}, searchCollectionMixins, {
+    chorus.collections.Search.UserSet = chorus.collections.UserSet.include(
+        searchCollectionMixins
+    ).extend({
         searchKey: "user"
-    }));
+    });
 
-    chorus.collections.Search.WorkspaceSet = chorus.collections.WorkspaceSet.extend(_.extend({}, searchCollectionMixins, {
+    chorus.collections.Search.WorkspaceSet = chorus.collections.WorkspaceSet.include(
+        searchCollectionMixins
+    ).extend({
         searchKey: "workspace"
-    }));
+    });
 
-    chorus.collections.Search.WorkfileSet = chorus.collections.WorkfileSet.extend(_.extend({}, searchCollectionMixins, {
+    chorus.collections.Search.WorkfileSet = chorus.collections.WorkfileSet.include(
+        searchCollectionMixins
+    ).extend({
         searchKey: "workfile"
-    }));
+    });
+
+    chorus.collections.Search.ArtifactSet = chorus.collections.ArtifactSet.include(
+        searchCollectionMixins
+    ).extend({
+        searchKey: "attachment"
+    });
 })();

@@ -27,6 +27,7 @@
             @include content-details-button($content-details-action-link-border-color);
         }
 
+        padding: 0;
         .save {
             float: right;
 
@@ -58,6 +59,29 @@
             color: $content-details-action-link-color;
             display: inline;
             padding-left: $padding-x;
+        }
+    }
+
+    .workfile_content_details {
+        padding: 0 10px;
+    }
+    .binary_workfile_content_details {
+        line-height: 31px;
+        background-image: url("/images/binary_workfile_action_bar_tile.png");
+        a.download {
+            margin-top: -1px;
+            float: right;
+            button {
+                font-size: 13px;
+                font-weight: $semibold;
+                color: $color-text2;
+                @include content-details-button(#AAA);
+                background-color: #D2D8DD;
+            }
+        }
+
+        .not_previewable {
+            @include font-content-details;
         }
     }
 
