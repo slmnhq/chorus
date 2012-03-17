@@ -160,6 +160,10 @@ chorus.models.Activity = chorus.models.Base.extend({
         return this.get("type") === "NOTE";
     },
 
+    isUserGenerated: function () {
+        return this.isNote() || this.get("type") == "INSIGHT_CREATED";
+    },
+
     isPublished: function() {
         return this.get("isPublished") === true;
     },
