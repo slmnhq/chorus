@@ -62,45 +62,44 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         _.defer(_.bind(function() {chorus.styleSelect(this.$("select.names"))}, this));
 
         if (this.options.launchElement.hasClass("create_schedule")) {
-            this.$("input[name='schedule']").attr("checked", "checked");
+            this.$("input[name='schedule']").prop("checked", true);
             this.activeScheduleView.enable();
-            this.$("input[name='schedule']").attr("disabled", "disabled");
+            this.$("input[name='schedule']").prop("disabled", true);
         }
     },
 
     setFieldValues: function(model) {
-        this.$("input[type='radio']").attr("checked", false);
+        this.$("input[type='radio']").prop("checked", false);
         var toTableExists = !!(this.sandboxTables.findWhere({id: model.get("destinationTable")}));
         if (toTableExists) {
-            this.$("input[type='radio']#import_scheduler_existing_table").attr("checked", "checked").change();
+            this.$("input[type='radio']#import_scheduler_existing_table").prop("checked", true).change();
             this.activeScheduleView = this.scheduleViewExisting;
             this.$("select[name='toTable']").val(model.get("toTable"));
         } else {
             this.activeScheduleView = this.scheduleViewNew;
             this.$(".new_table input.name").val(model.get("toTable"));
-            this.$("input[type='radio']#import_scheduler_new_table").attr("checked", "checked").change();
+            this.$("input[type='radio']#import_scheduler_new_table").prop("checked", true).change();
         }
 
         if (this.model.get("scheduleInfo")) {
             if (this.model.get("scheduleInfo").jobName) {
-                this.$("input[name='schedule']").attr("checked", "checked");
-            }
-            else {
-                this.$("input[name='schedule']").removeAttr("checked");
+                this.$("input[name='schedule']").prop("checked", true);
+            } else {
+                this.$("input[name='schedule']").prop("checked", false);
             }
         }
         this.scheduleViewExisting.setFieldValues(this.model);
         this.scheduleViewNew.setFieldValues(this.model);
 
         if (model.get("truncate")) {
-            this.$(".truncate").attr("checked", "checked");
+            this.$(".truncate").prop("checked", true);
         } else {
-            this.$(".truncate").attr("checked", false);
+            this.$(".truncate").prop("checked", false);
         }
 
         if (model.get("sampleCount") && model.get("sampleCount") != '0') {
-            this.$("input[name='limit_num_rows']").attr("checked", "checked");
-            this.$("input[name='sampleCount']").attr("disabled", false);
+            this.$("input[name='limit_num_rows']").prop("checked", true);
+            this.$("input[name='sampleCount']").prop("disabled", false);
             this.$("input[name='sampleCount']").val(model.get("sampleCount"));
         }
     },
@@ -134,6 +133,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
+            allowNewTruncate: !this.options.launchElement.hasClass("import_now"),
             sandboxTables: this.sandboxTables.pluck("objectName"),
             canonicalName: this.dataset.schema().canonicalName(),
             showSchedule: this.showSchedule,
