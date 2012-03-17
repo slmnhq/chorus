@@ -233,14 +233,15 @@ describe("chorus.views.TabularDataSidebar", function() {
                 context("when the dataset is a sandbox table or view", function() {
                     context("and the dataset has received an import", function() {
                         beforeEach(function() {
-                            this.dataset = fixtures.datasetSandboxTable({
-                                importInfo: {
-                                    completedStamp: "2012-02-29 14:35:38.165",
-                                    sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
-                                    sourceTable: "some_source_table"
-                                }
-                            });
+                            this.dataset = fixtures.datasetSandboxTable();
                             chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                            this.server.completeFetchFor(this.dataset.getImport(), {
+                                executionInfo: {
+                                    completedStamp: "2012-02-29 14:35:38.165"
+                                },
+                                sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
+                                sourceTable: "some_source_table"
+                            });
                         });
 
                         it("has an 'imported xx ago' description", function() {
@@ -255,10 +256,6 @@ describe("chorus.views.TabularDataSidebar", function() {
                             expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl())
                         });
 
-                        it("doesn't fetch the import configuration", function() {
-                            expect(this.dataset.getImport()).not.toHaveBeenFetched();
-                        });
-
                         it("doesn't display a 'import now' link", function() {
                             expect(this.view.$(".import_now")).not.toExist();
                         });
@@ -270,10 +267,6 @@ describe("chorus.views.TabularDataSidebar", function() {
                             chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                         });
 
-                        it("doesn't fetch the import configuration", function() {
-                            expect(this.dataset.getImport()).not.toHaveBeenFetched();
-                        });
-
                         it("doesn't display a 'import now' link", function() {
                             expect(this.view.$(".import_now")).not.toExist();
                         });
@@ -283,6 +276,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 context("when the dataset is a source table or view", function() {
                     beforeEach(function() {
                         this.dataset = fixtures.datasetSourceTable();
+                        this.view.importConfiguration.set({sourceId: this.dataset.id});
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
@@ -298,10 +292,6 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                         it("does not show the 'import now' link", function() {
                             expect(this.view.$("a.import_now")).not.toExist();
-                        });
-
-                        it("does not try to fetch the import configuration", function() {
-                            expect(this.dataset.getImport()).not.toHaveBeenFetched();
                         });
                     });
 
@@ -384,6 +374,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                         context("when the dataset has an import schedule", function() {
                             beforeEach(function() {
                                 this.importResponse = fixtures.datasetImport({
+                                    sourceId: this.dataset.id,
                                     scheduleInfo: {
                                         endTime: "2013-06-02",
                                         frequency: "WEEKLY",
@@ -503,7 +494,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                             context("when the import has not yet executed", function() {
                                 beforeEach(function() {
-                                    this.importResponse.set({ executionInfo: null });
+                                    this.importResponse.set({executionInfo: null });
                                     this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
                                 });
 
@@ -514,6 +505,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                         context("when the dataset does not have an import schedule", function() {
                             beforeEach(function() {
                                 this.importResponse = fixtures.datasetImport({
+                                    sourceId: this.dataset.id,
                                     scheduleInfo: null,
                                     toTable: "our_destination"
                                 });
