@@ -1,4 +1,6 @@
-chorus.models.TabularData = chorus.models.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.model, {
+chorus.models.TabularData = chorus.models.Base.include(
+    chorus.Mixins.InstanceCredentials.model
+).extend({
     constructorName: "TabularData",
     nameAttribute: 'objectName',
 
@@ -219,7 +221,7 @@ chorus.models.TabularData = chorus.models.Base.extend(_.extend({}, chorus.Mixins
 
     importFrequency: $.noop
 
-}), {
+}, {
 
     metaTypeMap: {
         "BASE_TABLE": "table",

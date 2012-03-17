@@ -1,4 +1,6 @@
-chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
+chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
+    chorus.Mixins.InstanceCredentials.page
+).extend({
     constructorName: "DatabaseIndexPage",
     helpId: "instances",
 
@@ -30,4 +32,4 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mi
 
         this.sidebar = new chorus.views.DatabaseListSidebar();
     }
-}));
+});

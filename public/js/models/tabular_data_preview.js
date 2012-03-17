@@ -1,4 +1,6 @@
-chorus.models.TabularDataPreview = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
+chorus.models.TabularDataPreview = chorus.models.Base.include(
+    chorus.Mixins.SQLResults
+).extend({
     constructorName: "TabularDataPreview",
     urlTemplate: function() {
         if (this.get("tableName")) {
@@ -11,4 +13,4 @@ chorus.models.TabularDataPreview = chorus.models.Base.extend(_.extend({}, chorus
             return "workspace/{{workspaceId}}/dataset/{{datasetId}}/sample"
         }
     }
-}));
+});

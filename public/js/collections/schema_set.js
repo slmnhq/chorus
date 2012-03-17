@@ -1,4 +1,6 @@
-chorus.collections.SchemaSet = chorus.collections.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.model, {
+chorus.collections.SchemaSet = chorus.collections.Base.include(
+    chorus.Mixins.InstanceCredentials.model
+).extend({
     constructorName: "SchemaSet",
     model:chorus.models.Schema,
     urlTemplate:"instance/{{instanceId}}/database/{{databaseName}}/schema",
@@ -17,4 +19,4 @@ chorus.collections.SchemaSet = chorus.collections.Base.extend(_.extend({}, choru
             }, model)
         }, this)
     }
-}));
+});

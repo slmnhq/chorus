@@ -327,5 +327,48 @@ describe("backbone_extensions", function() {
             expect(this.callback).not.toHaveBeenCalled();
         });
     });
+
+    describe(".include(*modules)", function() {
+        var Klass, module1, module2, module3;
+
+        beforeEach(function() {
+            module1 = { foo1: function() { return "bar1" } };
+            module2 = { foo2: function() { return "bar2" } };
+            module3 = { foo3: function() { return "bar3" } };
+            Klass = chorus.models.Base.include(module1, module2, module3);
+        });
+
+        it("returns a constructor whose prototype has all of the given modules' properties", function() {
+            var instance = new Klass();
+            expect(instance.foo1()).toBe("bar1");
+            expect(instance.foo2()).toBe("bar2");
+            expect(instance.foo3()).toBe("bar3");
+            expect(instance).toBeA(chorus.models.Base);
+        });
+
+        it("does not mutate the modules", function() {
+            expect(_.keys(module1)).toEqual(["foo1"]);
+            expect(_.keys(module2)).toEqual(["foo2"]);
+            expect(_.keys(module3)).toEqual(["foo3"]);
+        });
+
+        describe("when the returned constructor is extended", function() {
+            var SubKlass;
+
+            beforeEach(function() {
+                SubKlass = Klass.extend({
+                    foo1: function() {
+                        return this._super("foo1", arguments) + "baz";
+                    }
+                });
+            });
+
+            it("makes the included module methods accessible via 'super'", function() {
+                var instance = new SubKlass();
+                expect(instance.foo1()).toBe("bar1baz");
+                expect(new (SubKlass.include({}))).toBeA(SubKlass);
+            });
+        });
+    });
 });
 

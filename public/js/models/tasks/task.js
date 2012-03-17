@@ -1,4 +1,6 @@
-chorus.models.Task = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
+chorus.models.Task = chorus.models.Base.include(
+    chorus.Mixins.SQLResults
+).extend({
     urlTemplate: "task/sync/",
 
     initialize: function(attrs) {
@@ -13,4 +15,4 @@ chorus.models.Task = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLRes
             action: 'cancel'
         }});
     }
-}));
+});

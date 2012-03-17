@@ -1,4 +1,6 @@
-chorus.views.visualizations.Boxplot = chorus.views.Base.extend(_.extend({}, chorus.Mixins.VisHelpers, {
+chorus.views.visualizations.Boxplot = chorus.views.Base.include(
+    chorus.Mixins.VisHelpers
+).extend({
     constructorName: "BoxplotVisualizationView",
     render: function() {
         var $el = $(this.el);
@@ -139,5 +141,5 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.extend(_.extend({}, chor
                 });
         }
     }
-}));
+});
 

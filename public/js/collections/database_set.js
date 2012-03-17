@@ -1,4 +1,6 @@
-chorus.collections.DatabaseSet = chorus.collections.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.model, {
+chorus.collections.DatabaseSet = chorus.collections.Base.include(
+    chorus.Mixins.InstanceCredentials.model
+).extend({
     model:chorus.models.Database,
     urlTemplate:"instance/{{instanceId}}/database",
     setup:function () {
@@ -19,4 +21,4 @@ chorus.collections.DatabaseSet = chorus.collections.Base.extend(_.extend({}, cho
 
         return this._super('parse', [data]);
     }
-}));
+});

@@ -1,4 +1,6 @@
-chorus.pages.SchemaIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixins.InstanceCredentials.page, {
+chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
+    chorus.Mixins.InstanceCredentials.page
+).extend({
     constructorName: "SchemaIndexPage",
     helpId: "instances",
 
@@ -31,4 +33,4 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.extend(_.extend({}, chorus.Mixi
 
         this.sidebar = new chorus.views.SchemaListSidebar();
     }
-}));
+});

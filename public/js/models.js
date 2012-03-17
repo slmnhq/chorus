@@ -1,5 +1,10 @@
 chorus.models = {
-    Base: Backbone.Model.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, chorus.Mixins.dbHelpers, chorus.Mixins.Fetching, {
+    Base: Backbone.Model.include(
+        chorus.Mixins.Urls,
+        chorus.Mixins.Events,
+        chorus.Mixins.dbHelpers,
+        chorus.Mixins.Fetching
+    ).extend({
         constructorName: "Model",
 
         isDeleted: function() {
@@ -208,12 +213,16 @@ chorus.models = {
         _textForAttr: function(attr) {
             return (this.attrToLabel && this.attrToLabel[attr]) ? t(this.attrToLabel[attr]) : attr;
         }
-    }))
+    })
 };
 chorus.models.Base.extend = chorus.classExtend;
 
 chorus.collections = {
-    Base: Backbone.Collection.extend(_.extend({}, chorus.Mixins.Urls, chorus.Mixins.Events, chorus.Mixins.Fetching, {
+    Base: Backbone.Collection.include(
+        chorus.Mixins.Urls,
+        chorus.Mixins.Events,
+        chorus.Mixins.Fetching
+    ).extend({
         constructorName: "Collection",
 
         initialize: function(models, options) {
@@ -346,7 +355,7 @@ chorus.collections = {
             this.sortIndex = idx
             this.sortOrder = order
         }
-    }))
+    })
 };
 chorus.collections.Base.extend = chorus.classExtend;
 
