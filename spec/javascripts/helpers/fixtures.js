@@ -2775,6 +2775,65 @@ beforeEach(function() {
                         }
                     ],
                     numFound: 1
+                },
+                attachment: {
+                    docs: [{
+                        entityType: "hdfs",
+                        id: "10000",
+                        isDeleted: false,
+                        lastUpdatedStamp: "2012-03-16 11:17:09",
+                        fileId: "10000",
+                        fileType: "CSV",
+                        isBinary: true,
+                        name: "titanic.csv",
+                        highlightedAttributes: {
+                            name: ["<em>titanic<\/em>.csv"]
+                        },
+                        owner: {
+                            id: "InitialUser",
+                            lastName: "Admin",
+                            firstName: "EDC"
+                        },
+                        workspace: {
+                            id: "10000",
+                            name: "ws"
+                        },
+                        hdfs: {
+                            id: "10020|/webui/help/publish/Data/Index.js",
+                            name: "Index.js",
+                            path: "/webui/help/publish/Data",
+                            instance: {
+                                id: "10020",
+                                name: "hadoooooooooop"
+                            },
+                            entityType: "hdfs"
+                        },
+                        comments: []
+                    },
+                    {
+                        entityType: "workspace",
+                        id: "10001",
+                        isDeleted: false,
+                        lastUpdatedStamp: "2012-03-16 11:18:32",
+                        fileId: "10001",
+                        fileType: "IMAGE",
+                        isBinary: true,
+                        name: "Titanic2.jpg",
+                        highlightedAttributes: {
+                            name: ["<em>Titanic<\/em>2.jpg"]
+                        },
+                        owner: {
+                            id: "InitialUser",
+                            lastName: "Admin",
+                            firstName: "EDC"
+                        },
+                        workspace: {
+                            id: "10000",
+                            name: "ws"
+                        },
+                        comments: []
+                    }],
+                    numFound: 2
                 }
             }, overrides)
         },

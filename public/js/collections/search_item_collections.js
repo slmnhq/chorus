@@ -62,4 +62,8 @@
     chorus.collections.Search.WorkfileSet = chorus.collections.WorkfileSet.extend(_.extend({}, searchCollectionMixins, {
         searchKey: "workfile"
     }));
+
+    chorus.collections.Search.ArtifactSet = chorus.collections.ArtifactSet.extend(_.extend({}, searchCollectionMixins, {
+        searchKey: "attachment"
+    }));
 })();

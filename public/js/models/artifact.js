@@ -2,7 +2,7 @@ chorus.models.Artifact = chorus.models.Base.extend({
     constructorName: "Artifact",
 
     iconUrl: function(options) {
-        return chorus.urlHelpers.fileIconUrl(this.get("type"), options && options.size);
+        return chorus.urlHelpers.fileIconUrl(this.get("type") || this.get("fileType"), options && options.size);
     },
 
     downloadUrl:function () {

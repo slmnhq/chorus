@@ -310,6 +310,12 @@ describe("chorus.models.SearchResult", function() {
                 expect(this.model.instances()).toBeA(chorus.collections.Search.InstanceSet)
             });
         });
+
+        describe("#attachments", function() {
+            it("returns a Search ArtifactSet", function() {
+                expect(this.model.attachments()).toBeA(chorus.collections.Search.ArtifactSet)
+            });
+        });
     });
 
     describe("#searchIn", function() {

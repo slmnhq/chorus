@@ -34,6 +34,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         return [
             {data: "all", text: t("search.type.all")},
             {data: "workfile", text: t("search.type.workfile")},
+            {data: "attachment", text: t("search.type.attachment")},
             {data: "hdfs", text: t("search.type.hdfs")},
             {data: "dataset", text: t("search.type.dataset")},
             {data: "instance", text: t("search.type.instance")},
@@ -78,7 +79,8 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             workfile: new chorus.views.WorkfileListSidebar({ hideAddNoteLink: true }),
             workspace: new chorus.views.WorkspaceListSidebar(),
             tabularData: new chorus.views.TabularDataSidebar({listMode: true}),
-            instance: new chorus.views.InstanceListSidebar()
+            instance: new chorus.views.InstanceListSidebar(),
+            attachment: new chorus.views.ArtifactListSidebar()
         };
 
         // explicitly set up bindings after initializing sidebar collection
@@ -88,6 +90,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         chorus.PageEvents.subscribe("workfile:selected", this.workfileSelected, this);
         chorus.PageEvents.subscribe("user:selected", this.userSelected, this);
         chorus.PageEvents.subscribe("instance:selected", this.instanceSelected, this);
+        chorus.PageEvents.subscribe("attachment:selected", this.attachmentSelected, this);
 
         chorus.PageEvents.subscribe("choice:search_in", this.scopeSearchResults, this);
         chorus.PageEvents.subscribe("choice:filter", this.filterSearchResults, this);
@@ -119,8 +122,13 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.renderSidebar(this.sidebars.instance);
     },
 
+    attachmentSelected: function(attachment) {
+        this.sidebars.attachment.setArtifact(attachment);
+        this.renderSidebar(this.sidebars.attachment);
+    },
+
     renderSidebar: function(sidebar) {
-        this.sidebar && $(this.sidebar.el).removeClass("workspace_list_sidebar dataset_list_sidebar workfile_list_sidebar user_list_sidebar hdfs_list_sidebar");
+        this.sidebar && $(this.sidebar.el).removeClass("attachment_list_sidebar workspace_list_sidebar dataset_list_sidebar workfile_list_sidebar user_list_sidebar hdfs_list_sidebar");
         this.sidebar = sidebar;
         this.renderSubview('sidebar');
         this.trigger('resized');
