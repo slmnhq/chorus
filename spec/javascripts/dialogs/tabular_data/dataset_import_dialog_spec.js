@@ -139,7 +139,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
             describe("the default selection", function() {
                 it("selects the new table button by default", function() {
-                    expect(this.dialog.$(".new_table input:radio").attr("checked")).toBeTruthy()
+                    expect(this.dialog.$(".new_table input:radio").prop("checked")).toBeTruthy()
                 });
 
                 it("shows the file name entry, in lowercase, with spaces converted to underscores", function() {
@@ -282,7 +282,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                     describe("and then selecting 'Import into new table", function() {
                         beforeEach(function() {
                             this.dialog.$("input:radio").val("new")
-                            this.dialog.$(".new_table input:radio").attr("checked", "checked").change();
+                            this.dialog.$(".new_table input:radio").prop("checked", true).change();
                         });
 
                         it("enables the table name input", function() {

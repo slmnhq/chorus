@@ -63,7 +63,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         function fileChosen(e, data) {
             if (data.files.length > 0) {
                 self.$(".defaultText").addClass("hidden");
-                self.$("button.submit").removeAttr("disabled");
+                self.$("button.submit").prop("disabled", false);
                 self.uploadObj = data;
                 var filename = data.files[0].name;
                 self.uploadExtension = _.last(filename.split('.'));
@@ -95,7 +95,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
                 e.preventDefault();
                 self.resource.serverErrors = json.message;
                 self.$("button.submit").stopLoading();
-                self.$("button.submit").attr("disabled", "disabled");
+                self.$("button.submit").prop("disabled", true);
 
                 // $.text(val) clears the selected element, so .text here kills the spinner inside the button.
 

@@ -24,7 +24,7 @@ describe("WorkfilesImportDialog", function() {
         });
 
         it("disables the upload button", function() {
-            expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
+            expect(this.dialog.$("button.submit")).toBeDisabled();
         });
 
         context("clicking on the cancel button", function() {
@@ -95,9 +95,8 @@ describe("WorkfilesImportDialog", function() {
         });
 
         it("enables the upload button", function() {
-            expect(this.dialog.$("button.submit")).not.toHaveAttr("disabled");
+            expect(this.dialog.$("button.submit")).not.toBeDisabled();
         });
-
 
         it("does not put the button in loading mode", function() {
             expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
@@ -133,7 +132,7 @@ describe("WorkfilesImportDialog", function() {
             });
 
             it("disables the upload button", function() {
-                expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
+                expect(this.dialog.$("button.submit").prop("disabled")).toBeTruthy();
             });
 
             it("changes the text on the upload button to 'uploading'", function() {
@@ -177,7 +176,7 @@ describe("WorkfilesImportDialog", function() {
                 });
 
                 it("disables the upload button", function() {
-                    expect(this.dialog.$("button.submit").attr("disabled")).toBe("disabled");
+                    expect(this.dialog.$("button.submit").prop("disabled")).toBeTruthy();
                 });
 
                 it("takes the upload button out of the loading state", function() {

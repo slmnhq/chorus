@@ -40,7 +40,7 @@ describe("WorkspacesNewDialog", function() {
         beforeEach(function() {
             this.dialog.render();
             this.dialog.$("input[name=name]").val("   Super Dataland   ").keyup();
-            this.dialog.$("input[type=checkbox][name=isPublic]").attr("checked", "checked");
+            this.dialog.$("input[type=checkbox][name=isPublic]").prop("checked", true);
             this.dialog.$("form.new_workspace").submit();
         })
 
@@ -50,7 +50,7 @@ describe("WorkspacesNewDialog", function() {
         })
 
         it("sets isPublic to false when the box isn't checked", function() {
-            this.dialog.$("input[type=checkbox][name=isPublic]").removeAttr("checked");
+            this.dialog.$("input[type=checkbox][name=isPublic]").prop("checked", false);
             this.dialog.$("form.new_workspace").submit();
             expect(this.dialog.resource.get("isPublic")).toBe(false)
         })

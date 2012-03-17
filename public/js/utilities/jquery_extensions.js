@@ -23,7 +23,7 @@ jQuery.fn.extend({
                 addClass("is_loading");
 
             if (el.is("button")) {
-                el.attr("disabled", "disabled");
+                el.prop("disabled", true);
             }
         });
     },
@@ -38,7 +38,7 @@ jQuery.fn.extend({
             if (!el.isLoading()) return;
             var originalText = el.data("loading-original-text");
             // $.text(val) clears the selected element, so .text here kills the spinner inside the button.
-            el.removeData("loading-original-text").removeClass("is_loading").removeAttr("disabled").text(originalText);
+            el.removeData("loading-original-text").removeClass("is_loading").prop("disabled", false).text(originalText);
         });
     },
 

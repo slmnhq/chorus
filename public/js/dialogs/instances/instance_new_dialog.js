@@ -24,13 +24,13 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         this.$("fieldset").addClass("collapsed");
         $(e.currentTarget).closest("fieldset").removeClass("collapsed");
         this.clearErrors();
-        this.$("button.submit").removeAttr("disabled")
+        this.$("button.submit").prop("disabled", false)
     },
 
     createInstance:function (e) {
         e && e.preventDefault();
         this.$("button.submit").startLoading("instances.new_dialog.saving");
-        this.$("button.cancel").attr("disabled", "disabled");
+        this.$("button.cancel").prop("disabled", true);
         this.model.save(this.fieldValues());
     },
 
@@ -57,7 +57,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     saveFailed:function () {
         this.$("button.submit").stopLoading();
-        this.$("button.cancel").removeAttr("disabled");
+        this.$("button.cancel").prop("disabled", false);
     }
 });
 

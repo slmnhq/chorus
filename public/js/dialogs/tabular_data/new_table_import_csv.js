@@ -96,11 +96,11 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             $dataTypes.find(".th").eq(index).find(".center").append(linkMenu.render().el);
         });
 
-        this.$("input.delimiter").removeAttr("checked");
+        this.$("input.delimiter").prop("checked", false);
         if (_.contains([",", "\t", ";", " "], this.delimiter)) {
-            this.$("input.delimiter[value='" + this.delimiter + "']").attr("checked", "true");
+            this.$("input.delimiter[value='" + this.delimiter + "']").prop("checked", true);
         } else {
-            this.$("input#delimiter_other").attr("checked", "true");
+            this.$("input#delimiter_other").prop("checked", true);
         }
     },
 
@@ -201,9 +201,9 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setOtherDelimiter: function() {
-        this.$("input.delimiter[type=radio]").removeAttr("checked");
+        this.$("input.delimiter[type=radio]").prop("checked", false);
         var otherRadio = this.$("input#delimiter_other");
-        otherRadio.attr("checked", true)
+        otherRadio.prop("checked", true)
         otherRadio.click();
     }
 });

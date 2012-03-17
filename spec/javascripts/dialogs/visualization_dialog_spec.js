@@ -198,7 +198,7 @@ describe("chorus.dialogs.Visualization", function() {
                         }
 
                         spyOn(this.dialog, "createDownloadForm").andReturn(this.fakeForm)
-                        this.dialog.$("button.save").attr("disabled", false);
+                        this.dialog.$("button.save").prop("disabled", false);
                         this.dialog.$("button.save").click();
                     });
 
@@ -238,7 +238,7 @@ describe("chorus.dialogs.Visualization", function() {
                     beforeEach(function () {
                         spyOn(chorus.models.Workfile.prototype, 'save').andCallThrough();
                         this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
-                        this.dialog.$("button.save_as_workfile").attr("disabled", false);
+                        this.dialog.$("button.save_as_workfile").prop("disabled", false);
                         this.dialog.$("button.save_as_workfile").click();
                     });
 

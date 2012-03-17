@@ -44,12 +44,7 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
     },
 
     itemSelected:function (item) {
-        if (item) {
-            this.$("button.submit").removeAttr("disabled");
-        }
-        else {
-            this.$("button.submit").attr("disabled", "disabled");
-        }
+        this.$("button.submit").prop("disabled", !item);
     },
 
     doCallback : function () {

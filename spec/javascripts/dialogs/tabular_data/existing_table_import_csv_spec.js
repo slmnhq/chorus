@@ -84,7 +84,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             });
 
             it("has " + separator + " as separator", function() {
-                expect(this.dialog.$('input.delimiter[checked]').val()).toBe(separator);
+                expect(this.dialog.$('input.delimiter:checked').val()).toBe(separator);
             });
 
             it("reparses the file with " + separator + " as the separator", function() {
@@ -145,7 +145,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 });
 
                 it("has z as separator", function() {
-                    expect(this.dialog.$('input.delimiter[checked]').val()).toBe('other');
+                    expect(this.dialog.$('input.delimiter:checked').val()).toBe('other');
                 });
 
                 it("reparses the file with z as the separator", function() {
@@ -378,8 +378,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         beforeEach(function() {
             spyOn(this.dialog, "postRender").andCallThrough();
             spyOn(this.dialog, "recalculateScrolling").andCallThrough();
-            this.dialog.$("#hasHeader").removeAttr("checked");
-            this.dialog.$("#hasHeader").change();
+            this.dialog.$("#hasHeader").prop("checked", false).change();
         })
 
         it("sets header on the csv model", function() {
@@ -391,7 +390,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
 
         it("the box is unchecked", function() {
-            expect(this.dialog.$("#hasHeader").attr("checked")).toBeFalsy();
+            expect(this.dialog.$("#hasHeader").prop("checked")).toBeFalsy();
         });
 
         it("calls recalculate Scrolling", function() {

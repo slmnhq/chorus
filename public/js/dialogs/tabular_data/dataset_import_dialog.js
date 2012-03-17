@@ -23,25 +23,25 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     },
 
     onRadioSelect: function(e) {
-        this.$(".new_table input:text").attr("disabled", "disabled");
-        this.$(".existing_table select").attr("disabled", "disabled");
+        this.$(".new_table input:text").prop("disabled", true);
+        this.$(".existing_table select").prop("disabled", true);
         this.$(".existing_table .options").addClass('hidden');
-        this.$(".existing_table .options input").attr("disabled", "disabled");
+        this.$(".existing_table .options input").prop("disabled", true);
 
         this.importTarget = $(e.currentTarget).val();
 
         if (this.importTarget == "new") {
-            this.$(".new_table input:text").attr("disabled", false);
-            this.$("button.submit").attr("disabled", false);
+            this.$(".new_table input:text").prop("disabled", false);
+            this.$("button.submit").prop("disabled", false);
         } else if (this.importTarget == "existing") {
-            this.$(".existing_table select").attr("disabled", false);
+            this.$(".existing_table select").prop("disabled", false);
             this.$(".existing_table .options").removeClass("hidden");
-            this.$(".existing_table .options input").attr("disabled", false);
+            this.$(".existing_table .options input").prop("disabled", false);
             if (!this.$("select").val()) {
-                this.$("button.submit").attr("disabled", "disabled");
+                this.$("button.submit").prop("disabled", true);
             }
         } else {
-            this.$("button.submit").attr("disabled", false);
+            this.$("button.submit").prop("disabled", false);
         }
 
         chorus.styleSelect(this.$("select"));
@@ -49,9 +49,9 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     onSelectChanged: function(e) {
         if ($(e.currentTarget).val()) {
-            this.$("button.submit").attr("disabled", false);
+            this.$("button.submit").prop("disabled", false);
         } else {
-            this.$("button.submit").attr("disabled", "disabled");
+            this.$("button.submit").prop("disabled", true);
         }
     },
 
@@ -139,7 +139,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         });
 
         function fileChosen(e, data) {
-            self.$("button.submit").attr("disabled", false);
+            self.$("button.submit").prop("disabled", false);
             self.$('.empty_selection').addClass('hidden');
 
             self.uploadObj = data;

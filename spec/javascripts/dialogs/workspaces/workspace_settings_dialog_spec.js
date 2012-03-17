@@ -495,7 +495,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("when the isPublic checkbox is checked", function() {
                         beforeEach(function() {
-                            this.dialog.$("input[name=isPublic]").attr("checked", "checked");
+                            this.dialog.$("input[name=isPublic]").prop("checked", true);
                             this.dialog.$('form').submit();
                         })
 
@@ -506,7 +506,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("when the isPublic checkbox is not checked", function() {
                         beforeEach(function() {
-                            this.dialog.$("input[name=isPublic]").removeAttr("checked");
+                            this.dialog.$("input[name=isPublic]").prop("checked", false);
                             this.dialog.$('form').submit();
                         })
 
@@ -517,7 +517,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("when the active radio is checked", function() {
                         beforeEach(function() {
-                            this.dialog.$("input#workspace_active").attr("checked", "checked");
+                            this.dialog.$("input#workspace_active").prop("checked", true);
                             this.dialog.$('form').submit();
                         })
 
@@ -532,7 +532,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("when the archived radio is checked", function() {
                         beforeEach(function() {
-                            this.dialog.$("input#workspace_archived").attr("checked", "checked");
+                            this.dialog.$("input#workspace_archived").prop("checked", true);
                             this.dialog.$('form').submit();
                         })
 

@@ -67,7 +67,7 @@ describe("WorkfileContentDetails", function() {
         });
 
         it("should not have disabled class from the save as link", function() {
-            expect(this.view.$(".save_as")).not.toHaveAttr("disabled");
+            expect(this.view.$(".save_as")).not.toBeDisabled();
         });
 
         it("should not display the autosave text", function() {

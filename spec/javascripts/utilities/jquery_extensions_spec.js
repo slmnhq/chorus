@@ -43,11 +43,12 @@ describe("jquery extensions", function() {
             });
 
             it("disables buttons", function() {
-                expect(this.button.attr("disabled")).toBe("disabled");
+                expect(this.button.prop("disabled")).toBeTruthy();
             });
 
             it("does not disable non-buttons", function() {
                 expect(this.span).not.toHaveAttr("disabled");
+                expect(this.span).not.toBeDisabled();
             });
 
             it("adds the is_loading class to the element", function() {
@@ -92,8 +93,8 @@ describe("jquery extensions", function() {
                 });
 
                 it("enables buttons", function() {
-                    expect(this.buttons.eq(0)).not.toHaveAttr("disabled")
-                    expect(this.buttons.eq(1)).not.toHaveAttr("disabled")
+                    expect(this.buttons.eq(0)).not.toBeDisabled();
+                    expect(this.buttons.eq(1)).not.toBeDisabled();
                 });
 
                 it("removes the loading class from the elements", function() {
