@@ -250,7 +250,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                             });
                             expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
                                 timeAgo: chorus.helpers.relativeTimestamp("2012-02-29 14:35:38.165"),
-                                tableLink: "some_source_table"
+                                tableLink: "some_source_tab..."
                             });
                             expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl())
                         });
@@ -436,10 +436,39 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     var destTable = new chorus.models.Dataset({
                                         id: this.view.importConfiguration.get("destinationTable"),
                                         workspaceId: this.dataset.get("workspace").id})
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                                 });
                             });
+
+                            context("when the import is in progress", function() {
+                                beforeEach(function() {
+                                    this.importResponse.set({
+                                        executionInfo: {
+                                            startedStamp: "2012-02-29 14:23:58.169",
+                                            toTable: 'our_destinationplusomemore',
+                                            creator: "InitialUser",
+                                            state: "success"
+                                        }
+                                    })
+
+                                    this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                });
+
+                                itHasActionLinks(["import_now", "edit_schedule"]);
+
+                                it("has an 'import in progress' description", function() {
+                                    var execInfo = this.view.importConfiguration.get("executionInfo")
+                                    var destTable = new chorus.models.Dataset({
+                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        workspaceId: this.dataset.get("workspace").id})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.in_progress", {tableLink: "our_destination..."});
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.began", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp)});
+                                    expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
+                                    expect(this.view.$(".last_import img").attr("src")).toBe("/images/in_progress.png");
+                                });
+                            });
+
 
                             context("when the import has failed to execute", function() {
                                 beforeEach(function() {
@@ -464,7 +493,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     var destTable = new chorus.models.Dataset({
                                         id: this.view.importConfiguration.get("destinationTable"),
                                         workspaceId: this.dataset.get("workspace").id})
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "bad_destination_table"})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "bad_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                                     expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
                                 });
@@ -516,7 +545,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     var destTable = new chorus.models.Dataset({
                                         id: this.view.importConfiguration.get("destinationTable"),
                                         workspaceId: this.dataset.get("workspace").id})
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                                 });
                             });
@@ -546,7 +575,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     var destTable = new chorus.models.Dataset({
                                         id: this.view.importConfiguration.get("destinationTable"),
                                         workspaceId: this.dataset.get("workspace").id})
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination"})
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
                                     expect(this.view.$(".last_import img").attr("src")).toBe("/images/message_error_small.png");
                                 });

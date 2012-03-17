@@ -74,7 +74,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function() {
         var ctx = _.extend({ typeString: Handlebars.helpers.humanizedTabularDataType(this.resource && this.resource.attributes) },
-                            this.options);
+            this.options);
 
         if (this.resource) {
             ctx.entityType = this.resource.entityType;
@@ -119,7 +119,6 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
             ctx.isImportable = this.importConfiguration.loaded;
             ctx.hasSchedule = this.importConfiguration && this.importConfiguration.hasActiveSchedule();
             ctx.hasImport = this.importConfiguration && this.importConfiguration.has("id");
-
             var destinationTable = new chorus.models.Dataset({
                 id: this.importConfiguration.get("destinationTable"),
                 workspaceId: this.resource.get("workspace").id
@@ -134,6 +133,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
 
             if (this.importConfiguration.has("executionInfo")) {
                 var importStatusKey;
+                var toTable = this.importConfiguration.get("executionInfo").toTable
                 if (this.importConfiguration.wasSuccessfullyExecuted()) {
                     importStatusKey = "import.last_imported";
                 } else {
@@ -142,21 +142,40 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
                 }
                 ctx.lastImport = chorus.helpers.safeT(importStatusKey, {
                     timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                    tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("executionInfo").toTable)
+                    tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), ellipsize(toTable), {title: toTable})
                 });
+
+                if (this.importConfiguration.isInProgress()) {
+                    ctx.lastImport = chorus.helpers.safeT("import.began", {
+                        timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp)
+                    });
+                    ctx.inProgressText = chorus.helpers.safeT("import.in_progress", {
+                        tableLink: chorus.helpers.linkTo(destinationTable.showUrl(),
+                            ellipsize(toTable), {title: toTable})
+                    });
+                    ctx.importInProgress = true;
+                }
+
             }
         } else {
             var importInfo = this.resource.get("importInfo");
             if (importInfo && importInfo.sourceId) {
                 var sourceTable = this.resource.lastImportSource();
+                var tableName = sourceTable.get("objectName");
                 ctx.hasImport = true;
+
                 ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", {
                     timeAgo: chorus.helpers.relativeTimestamp(importInfo.completedStamp),
-                    tableLink: chorus.helpers.linkTo(sourceTable.showUrl(), sourceTable.get("objectName"))
+                    tableLink: chorus.helpers.linkTo(sourceTable.showUrl(), ellipsize(tableName), {title: tableName})
                 });
             }
         }
         return ctx;
+
+        function ellipsize(name) {
+            var length = 15;
+            return (name.length < length) ? name : name.slice(0, length) + "...";
+        }
     },
 
     postRender: function() {
