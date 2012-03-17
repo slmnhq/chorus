@@ -191,6 +191,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
                         this.server.completeFetchFor(this.account, fixtures.emptyInstanceAccount())
+                        this.server.completeFetchFor(this.page.instance, fixtures.instance())
                     });
 
                     it("pops up a WorkspaceInstanceAccount dialog", function() {
