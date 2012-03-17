@@ -42,6 +42,15 @@ describe("chorus.views.Activity", function() {
             itShouldRenderWorkspaceDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
 
+            context("when the current user was the one who added the members", function() {
+                beforeEach(function() {
+                    setLoggedInUser({ id: this.view.model.author().id });
+                    this.view.render();
+                });
+
+                itDoesNotDisplayDeleteLink();
+            });
+
             context("when only one member was added", function() {
                 beforeEach(function() {
                     this.view.model.set({ user: [this.view.model.get("user")[0]] });
@@ -230,16 +239,12 @@ describe("chorus.views.Activity", function() {
                     this.view.render();
                 });
 
-                it("displays a delete link", function() {
-                    expect(this.view.$(".delete_link")).toExist();
-                })
+                itDisplaysDeleteLink();
             })
 
             context("when the current user is not an admin", function() {
                 context("and is not the author of the note", function() {
-                    it("does not display a delete link if user is not the owner", function() {
-                        expect(this.view.$(".delete_link")).not.toExist();
-                    })
+                    itDoesNotDisplayDeleteLink();
                 })
 
                 context("and is the author of the note", function() {
@@ -247,10 +252,8 @@ describe("chorus.views.Activity", function() {
                         setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.view.model.author().id});
                         this.view.render();
                     });
-
-                    it("displays a delete link", function() {
-                        expect(this.view.$(".delete_link")).toExist();
-                    })
+                    
+                    itDisplaysDeleteLink();
                 })
             })
 
@@ -560,6 +563,18 @@ describe("chorus.views.Activity", function() {
             });
         });
     });
+
+    function itDisplaysDeleteLink() {
+        it("displays a delete link", function() {
+            expect(this.view.$(".activity_content .delete_link")).toExist();
+        });
+    }
+
+    function itDoesNotDisplayDeleteLink() {
+        it("does not display a delete link", function() {
+            expect(this.view.$(".activity_content .delete_link")).not.toExist();
+        });
+    }
 
     function itShouldRenderAuthorDetails() {
         it("renders the author's icon", function() {

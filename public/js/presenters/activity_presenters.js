@@ -46,7 +46,8 @@
                 iconClass: 'profile',
                 promoterLink: model.get("promotionActioner") ? chorus.helpers.userProfileLink(new chorus.models.User(model.get("promotionActioner"))) : null,
                 promotionTimestamp: model.get("promotionTime") ? chorus.helpers.relativeTimestamp(model.get("promotionTime")) : null,
-                isNote: model.isNote()
+                isNote: model.isNote(),
+                isUserGenerated: model.isUserGenerated()
             };
 
             if (this.author) {

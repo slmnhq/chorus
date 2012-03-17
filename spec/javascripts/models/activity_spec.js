@@ -55,6 +55,21 @@ describe("chorus.models.Activity", function() {
         })
     })
 
+    describe("#isUserGenerated", function() {
+        it("returns true for notes", function() {
+            expect(fixtures.activities.NOTE_ON_DATASET_TABLE().isUserGenerated()).toBeTruthy();
+            expect(fixtures.activities.NOTE_ON_WORKFILE().isUserGenerated()).toBeTruthy();
+        });
+
+        it("returns true for 'INSIGHT_CREATED' activities", function() {
+            expect(fixtures.activities.INSIGHT_CREATED().isUserGenerated()).toBeTruthy();
+        });
+
+        it("returns false for other activities", function() {
+            expect(fixtures.activities.MEMBERS_ADDED().isUserGenerated()).toBeFalsy();
+        });
+    });
+
     describe("#promoteToInsight", function() {
         beforeEach(function() {
             this.success = jasmine.createSpy("success");
