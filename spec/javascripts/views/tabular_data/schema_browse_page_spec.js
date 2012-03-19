@@ -14,6 +14,20 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         expect(this.page.requiredResourcesFetchFailed).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchFailed);
     });
 
+    context("when only the instance has been fetched", function() {
+        beforeEach(function() {
+            this.server.completeFetchFor(this.instance);
+        });
+
+        it("renders the schema's canonical name", function() {
+            expect($(this.page.el)).toContainText(this.page.schema.canonicalName());
+        });
+
+        it("displays a loading section", function() {
+            expect(this.page.$(".loading_section")).toExist();
+        });
+    });
+
     context("after everything has been fetched", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.instance);
