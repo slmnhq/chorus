@@ -177,6 +177,36 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("when importing from a chorus view", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.IMPORT_SUCCESS_CHORUS_VIEW();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the right importType", function() {
+            expect(this.presenter.importType).toMatchTranslation("dataset.import.types.chorus_view")
+        });
+
+        it("should pass the importType to the header", function() {
+            expect(this.presenter.header.importType).toMatchTranslation("dataset.import.types.chorus_view");
+        });
+
+        it("should have the right importSourceName", function() {
+            expect(this.presenter.importSourceName).toBe("a_chorus_view")
+        });
+
+        it("should have the right importSourceUrl", function() {
+            expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10006/datasets/"10002"|"Analytics"|"analytics"|"QUERY"|"a_chorus_view"')
+        });
+
+        it("should have an importSourceLink in the header", function() {
+            expect(this.presenter.header.importSourceLink).toBeDefined();
+        });
+
+        itShouldHaveImportIcon();
+        itShouldHaveDestinationTableLink();
+    });
+
     context(".IMPORT_FAILED", function() {
         context("when importing from a file", function() {
             beforeEach(function() {
