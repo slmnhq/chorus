@@ -8,6 +8,15 @@ describe("chorus.pages.SearchIndexPage", function() {
         expect(this.page.helpId).toBe("search")
     });
 
+    describe("URL escaping", function() {
+        beforeEach(function(){
+            this.page = new chorus.pages.SearchIndexPage("100%");
+        });
+
+        it("has the right query for the model", function() {
+            expect(this.page.model.get("query")).toBe("100%");
+        });
+    });
 
     describe("when searching for all items, across all of chorus", function() {
         beforeEach(function() {
