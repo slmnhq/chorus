@@ -184,6 +184,20 @@ describe("chorus.views.Header", function() {
                 expect(this.view.$(".search input:text").val()).toBe("");
             });
 
+            describe("clicking outside of the typeahead area", function() {
+                beforeEach(function() {
+                    $(document).trigger("click");
+                });
+
+                it("hides the search view", function() {
+                    expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
+                });
+
+                it("doesn't clear the search text", function() {
+                    expect(this.view.$(".search input:text").val()).toBe("test_query");
+                });
+            });
+
             it("calls #handleKeyEvent on the type-ahead view", function() {
                 spyOn(this.view.typeAheadView, 'handleKeyEvent');
                 var event = jQuery.Event("keydown", { keyCode: 38 });

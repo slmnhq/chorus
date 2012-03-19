@@ -7,7 +7,7 @@ chorus.views.Header = chorus.views.Base.extend({
         "click a.notifications": "togglePopupNotifications",
         "click .gear a": "togglePopupGear",
         "submit .search form": "startSearch",
-        "click .type_ahead_result a": "dismissSearch",
+        "click .type_ahead_result a": "clearSearch",
         "keydown .search input": "searchKeyPressed"
     },
 
@@ -60,11 +60,21 @@ chorus.views.Header = chorus.views.Base.extend({
     displayResult: function() {
         var query = this.$(".search input").val();
         this.typeAheadView.searchFor(query);
-        this.$(".type_ahead_result").toggleClass("hidden", query.length === 0);
+        if (query.length > 0) {
+            this.$(".type_ahead_result").removeClass("hidden");
+            this.captureClicks();
+        } else {
+            this.$(".type_ahead_result").addClass("hidden");
+            this.releaseClicks();
+        }
+    },
+
+    clearSearch: function() {
+        this.$(".search input").val('');
+        this.dismissSearch();
     },
 
     dismissSearch: function() {
-        this.$(".search input").val('');
         this.$(".type_ahead_result").addClass("hidden");
     },
 
@@ -185,6 +195,7 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     dismissPopups: function() {
+        this.dismissSearch();
         this.releaseClicks();
         this.$(".menu").addClass("hidden");
     },
