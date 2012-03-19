@@ -188,13 +188,13 @@ describe("chorus.dialogs.Visualization", function() {
 
             describe("downloading the chart", function() {
                 describe("clicking on the 'save chart' button", function() {
-                    beforeEach(function () {
+                    beforeEach(function() {
                         this.submitSpy = jasmine.createSpy("submit");
                         this.hideSpy = jasmine.createSpy("hide");
 
                         this.fakeForm = {
-                            submit : this.submitSpy,
-                            hide : this.hideSpy
+                            submit: this.submitSpy,
+                            hide: this.hideSpy
                         }
 
                         spyOn(this.dialog, "createDownloadForm").andReturn(this.fakeForm)
@@ -216,7 +216,7 @@ describe("chorus.dialogs.Visualization", function() {
                 })
 
                 describe("constructing the download form", function() {
-                    beforeEach(function () {
+                    beforeEach(function() {
                         this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                         this.form = this.dialog.createDownloadForm();
                     });
@@ -235,7 +235,7 @@ describe("chorus.dialogs.Visualization", function() {
 
             describe("saving as work file", function() {
                 describe("clicking on the 'save as work file' button", function() {
-                    beforeEach(function () {
+                    beforeEach(function() {
                         spyOn(chorus.models.Workfile.prototype, 'save').andCallThrough();
                         this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                         this.dialog.$("button.save_as_workfile").prop("disabled", false);
@@ -252,6 +252,19 @@ describe("chorus.dialogs.Visualization", function() {
                         expect(this.dialog.workfile.get("source")).toBe("visualization");
                         expect(this.dialog.workfile.get("fileName")).toBe("Foo-boxplot.png");
                     });
+
+                    describe("when the table name contains characters not valid in a workfile name", function() {
+                        beforeEach(function() {
+                            this.dialog.options.chartOptions.name = "this'that/the_other";
+                            this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
+                            this.dialog.$("button.save_as_workfile").prop("disabled", false);
+                            this.dialog.$("button.save_as_workfile").click();
+                        });
+
+                        it("strips the offending characters", function() {
+                            expect(this.dialog.workfile.get("fileName")).toBe("thisthatthe_other-boxplot.png")
+                        });
+                    })
 
                     it("saves the workfile", function() {
                         expect(this.dialog.workfile.save).toHaveBeenCalled();

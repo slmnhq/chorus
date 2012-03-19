@@ -72,11 +72,15 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     createWorkfile: function() {
+        function sanitizeFilename(fileName) {
+            return fileName.replace(/[^A-Z0-9_\-.]/gi, '')
+        }
+
         this.workfile = new chorus.models.Workfile({
             workspaceId: this.task.get("workspaceId"),
             source: "visualization",
             svgData: this.makeSvgData(),
-            fileName: this.options.chartOptions.name + "-" + this.options.chartOptions.type + ".png"
+            fileName: sanitizeFilename(this.options.chartOptions.name + "-" + this.options.chartOptions.type) + ".png"
         });
         this.workfile.save();
         this.workfile.bindOnce('saved', this.onWorkfileSaved, this);
