@@ -90,7 +90,7 @@
                 header.objectType = objectType(this.noteObject)
             }
 
-            if (this.presenter.versionName && this.presenter.versionUrl) {
+            if (this.presenter.versionName) {
                 header.versionLink = chorus.helpers.linkTo(this.presenter.versionUrl, this.presenter.versionName).toString()
             }
 
@@ -111,7 +111,6 @@
             if (this.presenter.hdfsName) {
                 header.hdfsLink = chorus.helpers.linkTo(this.presenter.hdfsUrl, this.presenter.hdfsName).toString();
             }
-
 
             return header;
         },
