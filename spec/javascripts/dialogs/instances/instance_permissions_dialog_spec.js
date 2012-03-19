@@ -8,7 +8,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
             this.instance = fixtures.instanceWithSharedAccount();
-            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
+            var launchElement = $("<a/>").data("instance", this.instance);
+            this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
         })
 
         it("does not re-render on model changes", function() {
@@ -28,7 +29,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
             this.instance.set({ ownerId: account.user().get("id") });
             this.instance.accounts().reset(account);
 
-            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
+            var launchElement = $("<a/>").data("instance", this.instance);
+            this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
         })
 
         describe("#render", function() {
@@ -216,7 +218,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 fixtures.instanceAccount({ id: '2', user: { firstName: "jim", lastName: "aardvark", id: '222' } }),
                 fixtures.instanceAccount({ id: '3', user: this.owner})
             ]);
-            this.dialog = new chorus.dialogs.InstancePermissions({ pageModel : this.instance })
+            var launchElement = $("<a/>").data("instance", this.instance);
+            this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
             this.dialog.launchModal();
 
             var ownerAccountId = this.instance.accountForOwner().get('id');

@@ -19,7 +19,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
     makeModel:function () {
         this._super("makeModel", arguments);
-        this.instance = this.model;
+        this.model = this.instance = this.options.launchElement.data("instance");
 
         this.users = new chorus.collections.UserSet();
         this.bindings.add(this.users, "reset", this.populateSelect);
