@@ -136,10 +136,10 @@ describe("chorus.models.TabularData", function() {
             expect(table.isImportable()).toBeFalsy();
 
             var dataset = fixtures.datasetSandboxTable();
-            expect(dataset.isImportable()).toBeTruthy();
+            expect(dataset.isImportable()).toBeFalsy();
 
             dataset = fixtures.datasetSandboxView();
-            expect(dataset.isImportable()).toBeTruthy();
+            expect(dataset.isImportable()).toBeFalsy();
 
             dataset = fixtures.datasetSourceTable();
             expect(dataset.isImportable()).toBeTruthy();

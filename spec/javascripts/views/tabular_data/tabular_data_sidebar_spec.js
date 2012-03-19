@@ -231,45 +231,13 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
 
                 context("when the dataset is a sandbox table or view", function() {
-                    context("and the dataset has received an import", function() {
-                        beforeEach(function() {
-                            this.dataset = fixtures.datasetSandboxTable();
-                            chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
-                            this.server.completeFetchFor(this.dataset.getImport(), {
-                                executionInfo: {
-                                    completedStamp: "2012-02-29 14:35:38.165"
-                                },
-                                sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
-                                sourceTable: "some_source_table"
-                            });
-                        });
-
-                        it("has an 'imported xx ago' description", function() {
-                            var sourceTable = new chorus.models.Dataset({
-                                id: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
-                                workspaceId: this.dataset.get("workspace").id
-                            });
-                            expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
-                                timeAgo: chorus.helpers.relativeTimestamp("2012-02-29 14:35:38.165"),
-                                tableLink: "some_source_tab..."
-                            });
-                            expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl())
-                        });
-
-                        it("doesn't display a 'import now' link", function() {
-                            expect(this.view.$(".import_now")).not.toExist();
-                        });
+                    beforeEach(function() {
+                        this.dataset = fixtures.datasetSandboxTable({ importInfo: null });
+                        chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
-                    context("and the dataset has not received an import", function() {
-                        beforeEach(function() {
-                            this.dataset = fixtures.datasetSandboxTable({ importInfo: null });
-                            chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
-                        });
-
-                        it("doesn't display a 'import now' link", function() {
-                            expect(this.view.$(".import_now")).not.toExist();
-                        });
+                    it("doesn't display an 'import now' link", function() {
+                        expect(this.view.$(".import_now")).not.toExist();
                     });
                 });
 
@@ -282,17 +250,6 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                     it("fetches the import configuration for the dataset", function() {
                         expect(this.dataset.getImport()).toHaveBeenFetched();
-                    });
-
-                    describe("when a non-importable dataset is then selected", function() {
-                        beforeEach(function() {
-                            this.dataset = fixtures.datasetSandboxTable();
-                            chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
-                        });
-
-                        it("does not show the 'import now' link", function() {
-                            expect(this.view.$("a.import_now")).not.toExist();
-                        });
                     });
 
                     describe("when the import fetch completes", function() {

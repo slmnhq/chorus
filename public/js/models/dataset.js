@@ -40,6 +40,10 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         return this.get("type") === "CHORUS_VIEW";
     },
 
+    isSandbox: function() {
+        return this.get("type") == "SANDBOX_TABLE";
+    },
+
     deriveChorusView: function() {
         var chorusView = new chorus.models.ChorusView({sourceObjectId: this.id});
         chorusView.sourceObject = this;
@@ -97,17 +101,17 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
     },
 
     isImportable: function() {
-        return true;
+        return !this.isSandbox();
     },
 
     setWorkspace: function(workspace) {
         this.set({workspace: {id: workspace.get('id')}});
     },
 
-     activities: function() {
+    activities: function() {
         var original = this._super("activities", arguments);
         if (this.isChorusView()) {
-           original.attributes.workspace = this.get("workspace");
+            original.attributes.workspace = this.get("workspace");
         }
 
         return original;
