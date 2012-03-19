@@ -1,34 +1,42 @@
 describe("chorus.Mixins.dbHelpers", function() {
     describe(".safePGName", function() {
+        beforeEach(function() {
+            this.originalValidationRegexes = chorus.ValidationRegexes;
+        });
+
+        afterEach(function() {
+            chorus.ValidationRegexes = this.originalValidationRegexes;
+        })
+
         context("with one argument", function() {
-            context("with uppercase", function() {
-                it("should displays quotes around the name", function() {
-                    expect(chorus.Mixins.dbHelpers.safePGName("Hello")).toBe('"Hello"');
+            context("when the name matches chorus.ValidationRegexes.SafePgName", function() {
+                beforeEach(function() {
+                    chorus.ValidationRegexes = {
+                        SafePgName: function() { return /.*/ }
+                    }
+                });
+
+                it("does not quote the name", function() {
+                    expect(chorus.Mixins.dbHelpers.safePGName("foo")).toBe("foo");
                 });
             });
 
-            context("with all lowercase", function() {
-                it("should not displays quotes around the name", function() {
-                    expect(chorus.Mixins.dbHelpers.safePGName("hello")).toBe('hello');
+            context("when the name does not match chorus.ValidationRegexes.SafePgName", function() {
+                beforeEach(function() {
+                    chorus.ValidationRegexes = {
+                        SafePgName: function() { return /no match/ }
+                    }
+                });
+
+                it("quotes the name", function() {
+                    expect(chorus.Mixins.dbHelpers.safePGName("foo")).toBe('"foo"');
                 });
             });
-
-            context("with a number as the first character", function() {
-                it("should display quotes around the name", function() {
-                    expect(chorus.Mixins.dbHelpers.safePGName("1up")).toBe('"1up"');
-                })
-            })
-
-            context("with a quoted value", function() {
-                it("should display one set of quotes around the name", function() {
-                    expect(chorus.Mixins.dbHelpers.safePGName('"IamQuoted"')).toBe('"IamQuoted"');
-                })
-            })
         })
 
         context("with two arguments", function() {
             it("encodes each argument separately, then concatenates them with '.'", function() {
-                expect(chorus.Mixins.dbHelpers.safePGName("Foo", "bar")).toBe("\"Foo\".bar")
+                expect(chorus.Mixins.dbHelpers.safePGName("Foo", "bar")).toBe('"Foo".bar')
             })
         })
     })

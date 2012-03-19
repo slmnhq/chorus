@@ -13,7 +13,7 @@ describe("chorus.models.SchemaFunction", function() {
                 this.model.set({schemaName: "Aa", functionName: "fuN"});
             })
             it("puts quotes around the uppercase names", function() {
-                expect(this.model.toText()).toBe('"Aa".fuN(Int elephant, Bool arg2)');
+                expect(this.model.toText()).toBe('"Aa"."fuN"(Int elephant, Bool arg2)');
             });
         })
 

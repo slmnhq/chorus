@@ -11,7 +11,7 @@ describe("chorus.ValidationRegexes", function() {
 
     itWorks("SafePgName", {
         good: ['"a_good_name"', '"1number"', "a_b_c_5", "_still_good"],
-        bad: ["1number", "'single quotes'", "   "]
+        bad: ["1number", "'single quotes'", "   ", '"hi"there', "hiThere"]
     });
 
     itWorks("AllWhitespace", {

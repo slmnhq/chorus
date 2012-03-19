@@ -1,7 +1,7 @@
 chorus.ValidationRegexes = (function(){
     var chorusIdentifier64 = /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/;
     var chorusIdentifier = /^[a-zA-Z][a-zA-Z0-9_]*$/;
-    var safePgName = /^[a-z_"][a-zA-Z0-9_"]*$/;
+    var safePgName = /^[a-z_][a-z0-9_"]*$|^".*"$/; // TODO: catch quoted strings that contain unescaped quotes
     var allWhitespace = /^\s*$/;
     var time = /^(\d{1,2}(:\d{2}){1,2})?$/;
     var year = /^[0-9]{1,4}$/;
