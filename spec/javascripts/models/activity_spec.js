@@ -247,6 +247,16 @@ describe("chorus.models.Activity", function() {
         })
     })
 
+    describe("#chorusViewDataset", function() {
+        it("creates a dataset out of the chorusView", function() {
+            var activity = fixtures.activities.IMPORT_SUCCESS_CHORUS_VIEW();
+            var dataset = activity.chorusViewDataset();
+            expect(dataset.get('id')).toBe(activity.get('chorusView').id)
+            expect(dataset.get('objectName')).toBe(activity.get('chorusView').name)
+            expect(dataset.get('workspace').id).toBe(activity.get('workspace').id)
+        })
+    })
+
     describe("#workspace", function() {
         context("with an workspace", function() {
             beforeEach(function() {

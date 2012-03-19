@@ -47,6 +47,19 @@ chorus.models.Activity = chorus.models.Base.extend({
             });
         }
     },
+    
+    chorusViewDataset: function() {
+        var chorusView = this.get("chorusView");
+        if (chorusView && this.get("workspace")) {
+            return new chorus.models.Dataset({
+                id: chorusView.id,
+                type: chorusView.type,
+                objectType: chorusView.objectType,
+                objectName: chorusView.name,
+                workspace: this.get("workspace")
+            });
+        }
+    },
 
     sourceDataset: function() {
         var sourceObject = this.get("sourceObject")
