@@ -2,7 +2,7 @@ chorus.collections.DatabaseObjectSet = chorus.collections.Base.include(
     chorus.Mixins.InstanceCredentials.model
 ).extend({
     model: chorus.models.DatabaseObject,
-    urlTemplate: "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}",
+    urlTemplate: "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}",
 
     urlParams: function() {
         return {type: "meta"}

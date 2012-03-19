@@ -6,11 +6,11 @@ chorus.models.DatabaseObject = chorus.models.TabularData.extend({
     },
 
     urlTemplate: function() {
-        return "data/" + this.get("instance").id + "/database/{{databaseName}}/schema/{{schemaName}}/" + this.metaType() + "/{{objectName}}"
+        return "data/" + this.get("instance").id + "/database/{{encode databaseName}}/schema/{{encode schemaName}}/" + this.metaType() + "/{{encode objectName}}"
     },
 
     showUrlTemplate: function() {
-        return "instances/" + (this.get("instance") && this.get("instance").id) + "/databases/{{databaseName}}/schemas/{{schemaName}}/{{objectType}}/" + $("<div/>").html(this.get("objectName")).text()
+        return "instances/" + (this.get("instance") && this.get("instance").id) + "/databases/{{encode databaseName}}/schemas/{{encode schemaName}}/{{objectType}}/" + encodeURIComponent($.stripHtml(this.get("objectName")))
     },
 
     urlTemplateAttributes: function() {

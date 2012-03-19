@@ -61,7 +61,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
                 it("launches the right dialog", function() {
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
-                    expect(chorus.modal.csv.get("encodedPath")).toBe("%2Ffoo%2Fmy_file.sql");
+                    expect(chorus.modal.csv.get("path")).toBe("/foo/my_file.sql");
                 });
             })
         });

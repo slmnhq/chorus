@@ -3,9 +3,9 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
 
     urlTemplate: function() {
         if (this.attributes.tableName) {
-            return "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}/table/{{tableName}}/column";
+            return "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}/table/{{encode tableName}}/column";
         } else if (this.attributes.viewName) {
-            return "data/{{instanceId}}/database/{{databaseName}}/schema/{{schemaName}}/view/{{viewName}}/column";
+            return "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}/view/{{encode viewName}}/column";
         } else if (this.attributes.queryName) {
             return "workspace/{{workspaceId}}/dataset/{{queryName}}/column";
         }

@@ -6,6 +6,10 @@ describe("chorus.collections.HdfsEntrySet", function() {
             });
         });
 
+        it("has the right URL", function() {
+            expect(this.hdfsEntrySet.url()).toContain("/edc/data/" + this.hdfsEntrySet.attributes.instance.id + "/hdfs/%2Fdata%2Fsomewhere");
+        });
+
         describe("add", function() {
             it("sets the path and instance on the added entries", function() {
                 expect(this.hdfsEntrySet.at(0).get('path')).toBe('/data/somewhere');

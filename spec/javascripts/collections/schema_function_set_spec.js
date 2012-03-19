@@ -4,6 +4,17 @@ describe("chorus.collections.SchemaFunctionSet", function() {
         this.functionSet = this.schema.functions();
     });
 
+    describe("#urlTemplate", function() {
+        beforeEach(function() {
+            this.schema = fixtures.schema({instanceId: 10000, databaseName: "%foo%", name: "b/a/r"});
+            this.functionSet = this.schema.functions();
+        });
+
+        it("encodes the url", function() {
+            expect(this.functionSet.url()).toContain("/edc/instance/10000/database/%25foo%25/schema/b%2Fa%2Fr/function");
+        });
+    });
+
     describe("sort", function() {
         beforeEach(function() {
             this.functionSet.reset([

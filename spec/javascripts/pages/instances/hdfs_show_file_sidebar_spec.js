@@ -60,7 +60,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
             it("launches the right dialog", function() {
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
-                expect(chorus.modal.csv.get("encodedPath")).toBe("%2Ffolder%2Ffilename.txt");
+                expect(chorus.modal.csv.get("path")).toBe("/folder/filename.txt");
             });
         });
 

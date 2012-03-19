@@ -572,6 +572,24 @@ describe("handlebars", function() {
             });
         });
 
+        describe("encode", function() {
+            beforeEach(function() {
+                this.template = "{{encode value}}";
+            });
+
+            it("encodes the appropriate entities", function() {
+                var context = {value: "% /xyz"}
+                var string = Handlebars.compile(this.template)(context);
+                expect(string).toBe("%25%20%2Fxyz");
+            });
+
+            it("handles html-ish stuff correctly", function() {
+                var context = {value: "<stuff>"}
+                var string = Handlebars.compile(this.template)(context);
+                expect(string).toBe("%3Cstuff%3E");
+            });
+        });
+
         describe("usedInWorkspaces", function() {
             var contextObjectClass = chorus.models.Base.extend({
                 showUrlTemplate: "{{workspaceId}}/contextObject",

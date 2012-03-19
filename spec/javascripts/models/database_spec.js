@@ -3,8 +3,15 @@ describe("chorus.models.Database", function() {
         this.model = fixtures.database({ instanceId: '1', instanceName: "insta_whip", id: '2', name: "love_poems" });
     });
 
-    it("should have the correct show url", function() {
-        expect(this.model.showUrl()).toMatchUrl("#/instances/1/databases/love_poems");
+    describe("#urlTemplate", function() {
+        it("should have the correct show url", function() {
+            expect(this.model.showUrl()).toMatchUrl("#/instances/1/databases/love_poems");
+        });
+
+        it("should encode the name in the url", function() {
+            this.model.set({name: "%%%"});
+            expect(this.model.showUrl()).toBe("#/instances/1/databases/%25%25%25");
+        });
     });
 
     describe("#schemas", function() {

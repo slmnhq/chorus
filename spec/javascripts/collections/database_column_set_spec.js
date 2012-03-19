@@ -17,6 +17,25 @@ describe("chorus.collections.DatabaseColumnSet", function() {
             expect(this.columns.url()).toContain("/edc/data/2/database/db1/schema/schema1/table/table1/column");
         })
 
+        context("when the names need to be url encoded", function() {
+            beforeEach(function() {
+                var table = fixtures.datasetSandboxTable({
+                    instance: {
+                        id: '2',
+                        name: '%foo%'
+                    },
+                    databaseName: 'b/a/r',
+                    schemaName: ' baz ',
+                    objectName: '!!!'
+                });
+                this.columns = table.columns();
+            });
+
+            it("should url encode the appropriate entities", function() {
+                expect(this.columns.url()).toContain("/edc/data/2/database/b%2Fa%2Fr/schema/%20baz%20/table/!!!/column");
+            });
+        });
+
         describe("add", function() {
             it("sets tabularData on the added column", function() {
                 this.columns.add(fixtures.databaseColumn());
@@ -50,6 +69,25 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         it("has the correct urlTemplate", function() {
             expect(this.columns.url()).toContain("/edc/data/2/database/db1/schema/schema1/view/view1/column");
         })
+
+        context("when the names need to be url encoded", function() {
+            beforeEach(function() {
+                var table = fixtures.datasetSandboxView({
+                    instance: {
+                        id: '2',
+                        name: '%foo%'
+                    },
+                    databaseName: 'b/a/r',
+                    schemaName: ' baz ',
+                    objectName: '!!!'
+                });
+                this.columns = table.columns();
+            });
+
+            it("should url encode the appropriate entities", function() {
+                expect(this.columns.url()).toContain("/edc/data/2/database/b%2Fa%2Fr/schema/%20baz%20/view/!!!/column");
+            });
+        });
 
         describe("add", function() {
             it("sets the schemaName and viewName (as parentName) on the added column", function() {

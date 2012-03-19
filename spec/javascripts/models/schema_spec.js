@@ -1,4 +1,13 @@
 describe("chorus.models.Schema", function() {
+    describe("#showUrl", function() {
+        beforeEach(function() {
+            this.model = fixtures.schema({instanceId : 10000, databaseName : "%foo%", name : "b/a/r"});
+        })
+        it("should encode the url", function() {
+            expect(this.model.showUrl()).toContain("instances/10000/databases/%25foo%25/schemas/b%2Fa%2Fr");
+        });
+    });
+
     context("from a sandbox", function() {
         beforeEach(function() {
             this.sandbox = fixtures.sandbox();

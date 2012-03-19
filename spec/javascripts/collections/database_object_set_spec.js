@@ -1,6 +1,8 @@
 describe("chorus.collections.DatabaseObjectSet", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.DatabaseObjectSet([], { instanceId: '10000', databaseName:"some_database", schemaName: "some_schema" });
+        this.collection = new chorus.collections.DatabaseObjectSet([], {
+            instanceId: '10000', databaseName:"some_database", schemaName: "some_schema"
+        });
     });
 
     it("includes the InstanceCredentials mixin", function() {
@@ -10,6 +12,18 @@ describe("chorus.collections.DatabaseObjectSet", function() {
     describe("#url", function() {
         it("is correct", function() {
             expect(this.collection.url({ rows: 10, page: 1})).toMatchUrl("/edc/data/10000/database/some_database/schema/some_schema?rows=10&page=1&type=meta");
+        });
+
+        context("when the url needs to be encoded", function() {
+            beforeEach(function() {
+                this.collection = new chorus.collections.DatabaseObjectSet([], {
+                    instanceId: '10000', databaseName: "some%database", schemaName: "some schema"
+                });
+            });
+
+            it("should encode the url", function() {
+                expect(this.collection.url()).toContain("/edc/data/10000/database/some%25database/schema/some%20schema");
+            });
         });
     });
 

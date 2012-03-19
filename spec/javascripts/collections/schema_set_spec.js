@@ -3,6 +3,11 @@ describe("chorus.collections.SchemaSet", function() {
         this.collection = fixtures.schemaSet({ instanceId: '50', databaseId: '41', databaseName: "wicked_tables"});
     });
 
+    it("has the right URL", function() {
+        this.collection.attributes.databaseName = "%foo%";
+        expect(this.collection.url()).toContain("/edc/instance/50/database/%25foo%25/schema");
+    });
+
     it("includes the InstanceCredentials mixin", function() {
         expect(this.collection.instanceRequiringCredentials).toBe(chorus.Mixins.InstanceCredentials.model.instanceRequiringCredentials);
     });

@@ -5,14 +5,15 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
 
     showUrlTemplate: function() {
         if(this.get("isDir")) {
-            return "instances/{{instance.id}}/browse" + this.getPath() + "/{{name}}";
+            return "instances/{{instance.id}}/browse" + this.getPath() + "/{{encode name}}";
         } else {
-            return "instances/{{instance.id}}/browseFile" + this.getPath() + "/{{name}}";
+            return "instances/{{instance.id}}/browseFile" + this.getPath() + "/{{encode name}}";
         }
     },
 
     getPath: function() {
-        return (this.get("path") == "/") ? "" : this.get("path")
+        var encodedPath = encodeURIComponent((this.get("path") == "/") ? "" : this.get("path"));
+        return encodedPath.replace(/%2F/g, "/");
     },
 
     pathSegments: function() {

@@ -4,33 +4,20 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
             this.databaseObjectStatistics = new chorus.models.DatabaseObjectStatistics()
         })
 
-        describe("when it gets a table", function() {
-            it("should show the table url", function(){
+        describe("#url", function() {
+            it("should be right", function() {
                 this.databaseObjectStatistics.set({
                     instanceId: 1,
-                    databaseName: "theDatabase",
-                    schemaName: "theSchema",
-                    type: "SOURCE_TABLE",
-                    objectType: "BASE_TABLE",
-                    objectName: "aName"
-                })
-
-                expect(this.databaseObjectStatistics.url()).toMatchUrl("/edc/data/1/database/theDatabase/schema/theSchema?type=meta&filter=aName")
-            })
-        })
-
-        describe("when it gets a view", function() {
-            it("should show the view url", function() {
-                this.databaseObjectStatistics.set({
-                    instanceId: 1,
-                    databaseName: "theDatabase",
-                    schemaName: "theSchema",
+                    databaseName: "%foo%",
+                    schemaName: "b/a",
                     type: "CHORUS_VIEW",
                     objectType: "",
-                    objectName: "anotherName"
+                    objectName: "a%pct"
                 })
 
-                expect(this.databaseObjectStatistics.url()).toMatchUrl("/edc/data/1/database/theDatabase/schema/theSchema?type=meta&filter=anotherName")
+                expect(this.databaseObjectStatistics.url()).toContain("/edc/data/1/database/%25foo%25/schema/b%2Fa");
+                expect(this.databaseObjectStatistics.url()).toContain("type=meta");
+                expect(this.databaseObjectStatistics.url()).toContain("filter=a%25pct");
             })
         })
 
@@ -50,7 +37,7 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
 
                 this.databaseObjectStatistics.datasetId = "composite|id"
 
-                expect(this.databaseObjectStatistics.url()).toMatchUrl("/edc/workspace/10010/dataset/composite|id")
+                expect(this.databaseObjectStatistics.url()).toContain("/edc/workspace/10010/dataset/composite%7Cid")
             })
         })
     })

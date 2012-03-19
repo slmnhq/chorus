@@ -2,6 +2,7 @@ describe("chorus.collections.DatasetSet", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatasetSet([], {workspaceId: 10000});
     });
+
     describe("#url", function() {
         it("is correct", function() {
             expect(this.collection.url({rows: 10, page: 1})).toMatchUrl("/edc/workspace/10000/dataset?rows=10&page=1");
@@ -13,6 +14,18 @@ describe("chorus.collections.DatasetSet", function() {
                 expect(this.collection.url({rows: 10, page: 1})).toMatchUrl("/edc/workspace/10000/dataset?type=SOURCE_TABLE&rows=10&page=1");
             })
         })
+
+        context("when the url needs to be encoded", function() {
+            beforeEach(function() {
+                this.collection = new chorus.collections.DatasetSet([], {
+                    instanceId: 10000, databaseName: "%foo%", schemaName: " bar "
+                });
+            });
+
+            it("should encode the url", function() {
+                expect(this.collection.url()).toContain("/edc/data/10000/database/%25foo%25/schema/%20bar%20");
+            });
+        });
     });
 
     describe("sorting", function() {

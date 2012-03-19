@@ -4,12 +4,8 @@ chorus.collections.HdfsEntrySet = chorus.collections.Base.include(
     constructorName: "HdfsEntrySet",
     model: chorus.models.HdfsEntry,
 
-    setup: function() {
-        this.attributes.encodedPath = encodeURIComponent(this.attributes.path);
-    },
-
     urlTemplate: function() {
-        return "data/{{instance.id}}/hdfs/{{encodedPath}}";
+        return "data/{{instance.id}}/hdfs/{{encode path}}";
     },
 
     _add: function(model, options) {

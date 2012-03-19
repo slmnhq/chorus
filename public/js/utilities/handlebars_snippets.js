@@ -242,6 +242,10 @@
             return value;
         },
 
+        encode: function(value) {
+            return encodeURIComponent(value);
+        },
+
         usedInWorkspaces: function(workspaceList, contextObject) {
             contextObject = contextObject.clone();
             if (!workspaceList || workspaceList.length == 0) { return ""; }

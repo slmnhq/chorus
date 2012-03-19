@@ -35,8 +35,17 @@ describe("chorus.models.DatabaseColumn", function() {
 
             describe("#url", function() {
                 it("is correct", function() {
+                    this.model.set({
+                        instanceId: 5,
+                        databaseName: "%foo%",
+                        schemaName: "b/a/r",
+                        parentName: "a space"
+                    });
                     var attr = this.model.attributes;
-                    expect(this.model.url({ rows: 10, page: 1})).toMatchUrl("/edc/data/"+attr.instanceId+"/database/"+attr.databaseName+"/schema/"+attr.schemaName+"/"+attr.parentType+"/"+attr.parentName+"/column?filter="+attr.name+"&type=meta");
+                    var url = this.model.url();
+                    expect(url).toContain("/edc/data/5/database/%25foo%25/schema/b%2Fa%2Fr/"+attr.parentType+"/a%20space/column?");
+                    expect(url).toContain("filter=" + attr.name);
+                    expect(url).toContain("type=meta");
                 });
             });
 

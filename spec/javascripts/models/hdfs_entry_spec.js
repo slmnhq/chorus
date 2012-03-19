@@ -11,13 +11,13 @@ describe("chorus.models.HdfsEntry", function() {
                     instance: {
                         id: '42'
                     },
-                    path: '/data/somewhere'
+                    path: '/data/a%pct',
+                    name: '%foo%'
                 });
             });
 
             it("is correct", function() {
-                var url = "#/instances/42/browse/data/somewhere/" + this.model.get("name");
-                expect(this.model.showUrl()).toBe(url);
+                expect(this.model.showUrl()).toBe("#/instances/42/browse/data/a%25pct/%25foo%25");
             });
         });
 
@@ -27,19 +27,18 @@ describe("chorus.models.HdfsEntry", function() {
                     instance: {
                         id: '42'
                     },
-                    path: '/data/somewhere'
+                    path: '/data/a space',
+                    name: '%foo%'
                 });
             });
 
             it("is correct", function() {
-                var url = "#/instances/42/browseFile/data/somewhere/" + this.model.get("name");
-                expect(this.model.showUrl()).toBe(url);
+                expect(this.model.showUrl()).toBe("#/instances/42/browseFile/data/a%20space/%25foo%25");
             });
 
             it("is correct when path is /", function() {
                 this.model.set({path: "/"})
-                var url = "#/instances/42/browseFile/" + this.model.get("name");
-                expect(this.model.showUrl()).toBe(url);
+                expect(this.model.showUrl()).toBe("#/instances/42/browseFile/%25foo%25");
             });
         });
     });
@@ -47,8 +46,11 @@ describe("chorus.models.HdfsEntry", function() {
     describe("pathSegments", function() {
         beforeEach(function() {
             this.model = fixtures.hdfsEntryFile({
-                path: '/foo/bar/baz',
-                randomAttr: 'something'
+                path: '/foo/bar/%baz',
+                randomAttr: 'something',
+                instance: {
+                    id: 10000
+                }
             });
             this.segments = this.model.pathSegments();
         });
@@ -66,7 +68,8 @@ describe("chorus.models.HdfsEntry", function() {
         it("the last segment represents the last entry", function() {
             var segment = this.segments[2];
             expect(segment.get('path')).toBe('/foo/bar');
-            expect(segment.get('name')).toBe('baz');
+            expect(segment.get('name')).toBe('%baz');
+            expect(segment.showUrl()).toContain("/foo/bar/%25baz")
         });
 
         it("maintains random attributes", function() {

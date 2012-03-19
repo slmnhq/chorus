@@ -6,43 +6,29 @@ describe("chorus.models.DatabaseObject", function() {
     describe("url", function() {
         context("when it is a table", function() {
             beforeEach(function() {
-                this.databaseObject = fixtures.databaseTable();
+                this.databaseObject = fixtures.databaseTable({
+                    databaseName: "%foo%",
+                    schemaName: "b/a/r",
+                    objectName: "a space"
+                });
             });
 
             it("uses the table exploration api", function() {
-                var pieces = [
-                    "/edc/data",
-                    this.databaseObject.get('instance').id,
-                    "database",
-                    this.databaseObject.get("databaseName"),
-                    "schema",
-                    this.databaseObject.get('schemaName'),
-                    'table',
-                    this.databaseObject.get('objectName')
-                ]
-                var url = encodeURI(pieces.join('/'));
-                expect(this.databaseObject.url()).toMatchUrl(url);
+                expect(this.databaseObject.url()).toContain("/edc/data/" + this.databaseObject.get("instance").id + "/database/%25foo%25/schema/b%2Fa%2Fr/table/a%20space")
             });
         });
 
         context("when it is a view", function() {
             beforeEach(function() {
-                this.databaseObject = fixtures.databaseView();
+                this.databaseObject = fixtures.databaseView({
+                    databaseName: "%foo%",
+                    schemaName: "b/a/r",
+                    objectName: "a space"
+                });
             });
 
-            it("uses the view exploration api", function() {
-                var pieces = [
-                    "/edc/data",
-                    this.databaseObject.get('instance').id,
-                    "database",
-                    this.databaseObject.get("databaseName"),
-                    "schema",
-                    this.databaseObject.get('schemaName'),
-                    'view',
-                    this.databaseObject.get('objectName')
-                ]
-                var url = encodeURI(pieces.join('/'));
-                expect(this.databaseObject.url()).toMatchUrl(url);
+            it("uses the table exploration api", function() {
+                expect(this.databaseObject.url()).toContain("/edc/data/" + this.databaseObject.get("instance").id + "/database/%25foo%25/schema/b%2Fa%2Fr/view/a%20space")
             });
         });
     });
@@ -50,38 +36,20 @@ describe("chorus.models.DatabaseObject", function() {
     describe("showUrl", function() {
         context("when it is a table", function() {
             beforeEach(function() {
-                this.databaseObject = fixtures.databaseTable();
+                this.databaseObject = fixtures.databaseTable({
+                    databaseName: "%foo%",
+                    schemaName: "b/a/r",
+                    objectName: "a space"
+                });
             });
 
-            it("has the correct api", function() {
-                var pieces = [
-                    "#/instances",
-                    this.databaseObject.get('instance').id,
-                    "databases",
-                    this.databaseObject.get("databaseName"),
-                    "schemas",
-                    this.databaseObject.get('schemaName'),
-                    this.databaseObject.get('objectType'),
-                    this.databaseObject.get('objectName')
-                ]
-                var url = encodeURI(pieces.join('/'));
-                expect(this.databaseObject.showUrl()).toMatchUrl(url);
+            it("has the correct url", function() {
+                expect(this.databaseObject.showUrl()).toContain("instances/" + this.databaseObject.get("instance").id + "/databases/%25foo%25/schemas/b%2Fa%2Fr/BASE_TABLE/a%20space")
             });
 
             it("works when there is markup in the name (e.g. result from type ahead search", function() {
-                this.databaseObject.set({objectName: "<em>foo</em>_bar"})
-                var pieces = [
-                    "#/instances",
-                    this.databaseObject.get('instance').id,
-                    "databases",
-                    this.databaseObject.get("databaseName"),
-                    "schemas",
-                    this.databaseObject.get('schemaName'),
-                    this.databaseObject.get('objectType'),
-                    "foo_bar"
-                ]
-                var url = encodeURI(pieces.join('/'));
-                expect(this.databaseObject.showUrl()).toMatchUrl(url);
+                this.databaseObject.set({objectName: "<em>a</em> space"})
+                expect(this.databaseObject.showUrl()).toContain("instances/" + this.databaseObject.get("instance").id + "/databases/%25foo%25/schemas/b%2Fa%2Fr/BASE_TABLE/a%20space");
             })
         });
 

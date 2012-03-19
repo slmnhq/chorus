@@ -1,6 +1,6 @@
 describe("chorus.models.TabularDataPreview", function() {
     beforeEach(function() {
-        this.model = new chorus.models.TabularDataPreview({databaseName: "dataman", instanceId: "33", schemaName: "partyman"});
+        this.model = new chorus.models.TabularDataPreview({databaseName: "data%man", instanceId: "33", schemaName: "party/man"});
     });
 
     context("with a table name", function() {
@@ -8,7 +8,7 @@ describe("chorus.models.TabularDataPreview", function() {
             this.model.set({tableName : "foo"});
         });
         it("should have the correct url template", function() {
-            expect(this.model.url()).toBe("/edc/data/33/database/dataman/schema/partyman/table/foo/sample");
+            expect(this.model.url()).toBe("/edc/data/33/database/data%25man/schema/party%2Fman/table/foo/sample");
         });
     });
 
@@ -17,16 +17,16 @@ describe("chorus.models.TabularDataPreview", function() {
             this.model.set({viewName : "bar"});
         });
         it("should have the correct url template", function() {
-            expect(this.model.url()).toBe("/edc/data/33/database/dataman/schema/partyman/view/bar/sample");
+            expect(this.model.url()).toBe("/edc/data/33/database/data%25man/schema/party%2Fman/view/bar/sample");
         });
     });
 
     context("with a chorus view dataset id", function() {
         beforeEach(function() {
-            this.model.set({workspaceId: "123", datasetId: "myCV"});
+            this.model.set({workspaceId: "123", datasetId: "my%CV"});
         });
         it("should have the correct url template", function() {
-            expect(this.model.url()).toBe("/edc/workspace/123/dataset/myCV/sample");
+            expect(this.model.url()).toBe("/edc/workspace/123/dataset/my%25CV/sample");
         })
     })
 
