@@ -9,6 +9,10 @@ describe("chorus.views.Dashboard", function(){
         it("creates a 'home' activity list", function() {
             expect(this.view.activityList.collection.attributes.entityType).toBe("home")
         });
+
+        it("sets page size information on the activity list", function() {
+            expect(this.view.activityList.collection.attributes.pageSize).toBe(50);
+        });
     })
 
     describe("#render", function() {

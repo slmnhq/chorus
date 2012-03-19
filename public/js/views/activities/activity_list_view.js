@@ -24,8 +24,12 @@ chorus.views.ActivityList = chorus.views.Base.extend({
         var ctx = { activityType: this.options.type };
         if (this.collection.loaded && this.collection.pagination) {
             var page = parseInt(this.collection.pagination.page);
-            var total = parseInt(this.collection.pagination.total);
-            ctx.showMoreLink = total > page;
+            if (this.collection.pagination.total) {
+                var total = parseInt(this.collection.pagination.total);
+                ctx.showMoreLink = total > page;
+            } else {
+                ctx.showMoreLink = this.collection.length >= this.collection.attributes.pageSize;
+            }
         } else {
             ctx.showMoreLink = false;
         }

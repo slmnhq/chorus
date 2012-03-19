@@ -195,26 +195,62 @@ describe("chorus.views.ActivityList", function() {
         })
 
         describe("pagination", function() {
-            beforeEach(function() {
-                this.collection.pagination = {};
-                this.collection.pagination.total = "1";
-                this.collection.pagination.page = "1";
-                this.collection.pagination.records = "8";
-                this.view.render();
+            context("with full pagination information in the response", function() {
+                beforeEach(function() {
+                    this.collection.pagination = {};
+                    this.collection.pagination.total = "1";
+                    this.collection.pagination.page = "1";
+                    this.collection.pagination.records = "8";
+                    this.view.render();
+                });
+
+                context("when there is no next page", function() {
+                    itDoesNotShowAMoreLink();
+                })
+
+                context("when there is a next page", function() {
+                    beforeEach(function() {
+                        this.collection.pagination.total = "4";
+                        this.view.render();
+                    })
+
+                    itShowsAMoreLink();
+                });
             });
 
-            context("when there is no next page", function() {
-                it("does not render a 'more' link", function() {
-                    expect(this.view.$("a.more_activities")).not.toExist();
+            context("with partial pagination information in the response", function() {
+                beforeEach(function() {
+                    this.collection.pagination = {};
+                    this.collection.pagination.total = null;
+                    this.collection.pagination.page = "1";
+                    this.collection.pagination.records = null;
+                });
+
+                context("when the number of activities returned is less than the page size", function() {
+                    beforeEach(function() {
+                        this.collection.attributes.pageSize = this.collection.length + 1;
+                        this.view.render();
+                    });
+                    itDoesNotShowAMoreLink();
+                })
+
+                context("when the number of activities returned is equal to the page size", function() {
+                    beforeEach(function() {
+                        this.collection.attributes.pageSize = this.collection.length;
+                        this.view.render();
+                    });
+
+                    itShowsAMoreLink();
                 })
             })
 
-            context("when there is a next page", function() {
-                beforeEach(function() {
-                    this.collection.pagination.total = "4";
-                    this.view.render();
+            function itDoesNotShowAMoreLink() {
+                it("does not render a 'more' link", function() {
+                    expect(this.view.$("a.more_activities")).not.toExist();
                 })
+            }
 
+            function itShowsAMoreLink() {
                 it("renders a 'more' link", function() {
                     expect(this.view.$(".more_activities a")).toExist();
                 })
@@ -236,7 +272,7 @@ describe("chorus.views.ActivityList", function() {
                         expect(this.view.postRender.callCount).toBe(1);
                     })
                 })
-            })
+            }
         })
 
     });
@@ -244,7 +280,7 @@ describe("chorus.views.ActivityList", function() {
     describe("error handling", function() {
         beforeEach(function() {
             spyOn(chorus, "log");
-            spyOn(this.collection.at(0), 'get').andCallFake(function () {throw 'an error during rendering'})
+            spyOn(this.collection.at(0), 'get').andCallFake(function() {throw 'an error during rendering'})
         })
 
         it("does not raise an exception", function() {

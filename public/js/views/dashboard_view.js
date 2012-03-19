@@ -23,6 +23,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         });
 
         var activities = chorus.session.user().activities('home');
+        activities.attributes.pageSize = 50;
 
         activities.fetch();
         this.activityList = new chorus.views.ActivityList({ collection: activities, additionalClass: "dashboard" });
