@@ -7,6 +7,9 @@
 
     .join {
         margin-bottom: 5px;
+        .aliased_name {
+            overflow: hidden;
+        }
         .column {
             @include ellipsis;
             width: 57px;
@@ -42,9 +45,16 @@
         .dataset {
             margin-bottom: 5px;
             @include secondary-text-semibold;
+
+            .aliased_name {
+                overflow: hidden;
+            }
+
             .label {
+                line-height: 19px;
                 display: inline-block;
                 margin-right: 2px;
+                overflow: hidden;
             }
             .name {
                 @include ellipsis;
