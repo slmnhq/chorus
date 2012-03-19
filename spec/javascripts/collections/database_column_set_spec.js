@@ -98,6 +98,24 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         });
     });
 
+    describe("#errorMessage", function() {
+        it("returns the server errors on the collection", function() {
+            var table = fixtures.datasetSandboxTable({
+                instance: {
+                    id: '2',
+                    name: 'instance2'
+                },
+                databaseName: 'db1',
+                schemaName: 'schema1',
+                objectName: 'table1'
+            });
+            this.columns = table.columns();
+            this.columns.serverErrors = [{message: "fail"}, {message: "oops"}]
+
+            expect(this.columns.errorMessage()).toBe("fail\noops");
+        });
+    });
+
     describe("sorting", function() {
         context("without dataset", function() {
             beforeEach(function() {

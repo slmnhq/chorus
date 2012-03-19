@@ -101,7 +101,9 @@
         },
 
         columnSetFetched: function() {
+            var serverErrors = this.columnSet.serverErrors
             this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
+            this.columnSet.serverErrors = serverErrors;
             this.columnSet.loaded = true;
 
             var customHeaderView = new headerView({

@@ -73,6 +73,10 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
                 list: this.options.$columnList
             });
         }
+
+        if(this.collection.serverErrors && this.collection.serverErrors.length){
+            this.showError(this.collection, chorus.alerts.Error);
+        }
     },
 
     triggerSelectAll: function(e) {

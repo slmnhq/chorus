@@ -35,21 +35,33 @@ describe("chorus.pages.TabularDataShowPage", function() {
             })
 
             describe("when the columnSet fetch completes", function() {
-                beforeEach(function() {
-                    this.server.completeFetchAllFor(this.columnSet);
-                })
+                context("with valid data", function() {
 
-                it("creates the sidebar", function() {
-                    expect(this.page.sidebar).toBeDefined();
-                    expect(this.page.sidebar.resource).toBe(this.page.tabularData);
-                })
+                    beforeEach(function() {
+                        this.server.completeFetchAllFor(this.columnSet);
+                    })
 
-                it("does not set workspace", function() {
-                    expect(this.page.sidebar.options.workspace).toBeFalsy();
-                })
+                    it("creates the sidebar", function() {
+                        expect(this.page.sidebar).toBeDefined();
+                        expect(this.page.sidebar.resource).toBe(this.page.tabularData);
+                    })
 
-                it("sets the main content as persistent", function() {
-                    expect(this.page.mainContent.persistent).toBeTruthy();
+                    it("does not set workspace", function() {
+                        expect(this.page.sidebar.options.workspace).toBeFalsy();
+                    })
+
+                    it("sets the main content as persistent", function() {
+                        expect(this.page.mainContent.persistent).toBeTruthy();
+                    })
+                })
+                context("with errors", function() {
+                    beforeEach(function() {
+                        this.server.lastFetchAllFor(this.columnSet).fail([{message: "No permission"}]);
+                    });
+
+                    it("puts the errors on the new column set", function() {
+                        expect(this.page.columnSet.serverErrors[0].message).toBe("No permission");
+                    })
                 })
             })
         })
@@ -74,7 +86,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
             it("navigates to the 404 page", function() {
                 expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
             })
-        })
+        });
 
         describe("workspace usage", function() {
             it("is in the custom header", function() {

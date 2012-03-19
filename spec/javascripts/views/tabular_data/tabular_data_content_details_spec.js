@@ -34,7 +34,6 @@ describe("chorus.views.TabularDataContentDetails", function() {
             expect(this.view.$(".filters")).toHaveClass("hidden");
         });
 
-
         it("hides the edit chorus view info bar", function() {
             expect(this.view.$(".edit_chorus_view_info")).toHaveClass("hidden");
         });
@@ -574,15 +573,27 @@ describe("chorus.views.TabularDataContentDetails", function() {
             });
         });
 
+        describe("column errors", function() {
+            beforeEach(function() {
+                spyOn(this.view, "showError");
+                this.collection.serverErrors = [{message: "No permission"}];
+                this.view.render();
+            });
+
+            it("shows errors in the main content area", function() {
+                expect(this.view.showError).toHaveBeenCalledWith(this.collection, chorus.alerts.Error);
+            });
+        });
+
         describe("sql errors bar", function() {
             it("renders, hidden", function() {
                 expect(this.view.$(".sql_errors")).toHaveClass("hidden");
-            })
+            });
 
             it("isn't cleared by clearErrors", function() {
                 this.view.clearErrors();
                 expect(this.view.$(".sql_errors").html()).not.toBe("");
-            })
+            });
 
             describe("showError", function() {
                 beforeEach(function() {
@@ -627,9 +638,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         expect(this.view.$(".sql_errors")).toHaveClass('hidden');
                     });
                 });
-
-
-            })
-        })
-    })
+            });
+        });
+    });
 });
