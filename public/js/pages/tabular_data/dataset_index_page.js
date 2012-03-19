@@ -85,9 +85,7 @@
                 this.instance = this.workspace.sandbox().instance()
                 this.account = this.workspace.sandbox().instance().accountForCurrentUser();
 
-                this.account.onLoaded(
-                    function(){this.instance.onLoaded(this.checkAccount, this)},
-                    this);
+                this.checkAccountOnLoaded();
 
                 this.instance.fetch();
                 this.account.fetch();
@@ -104,9 +102,12 @@
             }
         },
 
+        checkAccountOnLoaded: function() {
+           this.account.onLoaded(function() {this.instance.onLoaded(this.checkAccount, this)}, this);
+        },
+
         checkAccount: function() {
-            var shared = this.instance.get("sharedAccount") && (_.keys(this.instance.get("sharedAccount")).length > 0);
-            if (!shared && !this.account.get('id')) {
+            if (!this.instance.isShared() && !this.account.get('id')) {
                 if (!chorus.session.sandboxPermissionsCreated[this.workspace.get("id")]) {
                     this.dialog = new chorus.dialogs.WorkspaceInstanceAccount({model: this.account, pageModel: this.workspace});
                     this.dialog.launchModal();

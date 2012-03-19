@@ -228,15 +228,15 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
 
                 context("when the account loads and is empty and the instance is shared", function() {
-                                    beforeEach(function() {
-                                        spyOnEvent(this.page.collection, 'reset');
-                                        this.server.completeFetchFor(this.account, fixtures.emptyInstanceAccount())
-                                        this.server.completeFetchFor(this.page.instance, fixtures.instance({sharedAccount: {info: "hello"}}))
-                                    });
+                    beforeEach(function() {
+                        spyOnEvent(this.page.collection, 'reset');
+                        this.server.completeFetchFor(this.account, fixtures.emptyInstanceAccount())
+                        this.server.completeFetchFor(this.page.instance, fixtures.instance({sharedAccount: {dbUserName: "Bob"}}))
+                    });
 
-                                    it("does not pop up a WorkspaceInstanceAccount dialog", function() {
-                                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
-                                    });
+                    it("does not pop up a WorkspaceInstanceAccount dialog", function() {
+                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
+                    });
                 });
 
                 context("when the account loads and is valid", function() {

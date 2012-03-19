@@ -1801,7 +1801,8 @@ beforeEach(function() {
         emptyInstanceAccount: function(overrides) {
             var attributes = _.extend({
                 instanceId: "10020",
-                userName: "u1"
+                userName: "u1",
+                sharedAccount : {}
             }, overrides);
             return new chorus.models.InstanceAccount(attributes);
         },
