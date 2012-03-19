@@ -151,6 +151,10 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 expect(this.page.$("#breadcrumbs")).toExist();
             });
 
+            it("shows the page title", function() {
+                expect(this.page.$('.content_header h1').text().trim()).toEqual(t('dataset.title'));
+            });
+
             it("fetches the collection when csv_import:started is triggered", function() {
                 spyOn(this.page.collection, 'fetch').andCallThrough();
                 chorus.PageEvents.broadcast("csv_import:started");

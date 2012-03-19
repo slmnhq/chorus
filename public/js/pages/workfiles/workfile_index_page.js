@@ -31,6 +31,7 @@
                     modelClass:"Workfile",
                     collection:this.collection,
                     model:workspace,
+                    title: t("workfiles.title"),
                     linkMenus:{
                         type:{
                             title:t("header.menu.filter.title"),

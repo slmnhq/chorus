@@ -41,6 +41,7 @@
                 modelClass: "Dataset",
                 collection: this.collection,
                 model: this.workspace,
+                title: t("dataset.title"),
                 linkMenus: {
                     type: {
                         title: t("header.menu.filter.title"),

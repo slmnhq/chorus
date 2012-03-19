@@ -62,7 +62,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         })
 
         it("fetches the first page of the collection", function() {
-            expect(this.server.requests[1].url).toBe("/edc/workspace/"+this.model.get('workspaceId')+"/workfile?page=1&rows=50&sidx=fileName&sord=asc")
+            expect(this.server.requests[1].url).toBe("/edc/workspace/" + this.model.get('workspaceId') + "/workfile?page=1&rows=50&sidx=fileName&sord=asc")
         })
     });
 
@@ -104,25 +104,25 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
 
-            it("has can filter the list by 'SQL'" ,function(){
+            it("has can filter the list by 'SQL'", function() {
                 this.page.$("li[data-type=SQL] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("SQL");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
 
-            it("has can filter the list by 'CODE'" ,function(){
+            it("has can filter the list by 'CODE'", function() {
                 this.page.$("li[data-type=CODE] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("CODE");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
 
-            it("has can filter the list by 'TEXT'" ,function(){
+            it("has can filter the list by 'TEXT'", function() {
                 this.page.$("li[data-type=TEXT] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("TEXT");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
 
-            it("has can filter the list by 'OTHER'" ,function(){
+            it("has can filter the list by 'OTHER'", function() {
                 this.page.$("li[data-type=OTHER] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("OTHER");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
@@ -136,7 +136,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 spyOn(this.page.collection, "fetch");
             })
 
-            it("has options for sorting", function(){
+            it("has options for sorting", function() {
                 expect(this.page.$("ul[data-event=sort] li[data-type=alpha]")).toExist();
                 expect(this.page.$("ul[data-event=sort] li[data-type=date]")).toExist();
             })
@@ -155,7 +155,6 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
         })
-
     })
 
     describe("buttons", function() {
@@ -181,6 +180,10 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 it("renders buttons", function() {
                     expect(this.page.mainContent.contentDetails.$("button[data-dialog=WorkfilesImport]")).toExist();
                     expect(this.page.mainContent.contentDetails.$("button[data-dialog=WorkfilesSqlNew]")).toExist();
+                })
+
+                it("shows the page title", function() {
+                    expect(this.page.$('.content_header h1').text().trim()).toEqual(t("workfiles.title"));
                 })
             })
 
