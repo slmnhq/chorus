@@ -33,12 +33,15 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
     });
 
     describe("#render", function() {
+        var dialog, disableSpy;
+
         beforeEach(function() {
+            dialog = this.dialog;
             stubDefer();
-            this.disableSpy = jasmine.createSpy("disable")
+            disableSpy = jasmine.createSpy("disable")
             spyOn(this.dialog, "makeEditor").andCallThrough();
             spyOn($.fn, "cleditor").andReturn([{
-                disable: this.disableSpy
+                disable: disableSpy
             }])
             setLoggedInUser({ id: 11 });
             this.workspace.set({ ownerId: 11})
@@ -110,7 +113,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             beforeEach(function() {
                 setLoggedInUser({ id: 11 });
                 this.workspace.set({ ownerId: 11});
-                this.disableSpy.reset();
+                disableSpy.reset();
                 this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                 this.dialog.render();
             })
@@ -119,9 +122,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
             })
 
-            it("does not disable the cleditor", function() {
-                expect(this.disableSpy).not.toHaveBeenCalled();
-            });
+            itHasEditableNameAndSummmary();
 
             describe("the owner select", function() {
                 it("shows up", function() {
@@ -182,17 +183,30 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     expect(archivedRadio).toBeChecked();
                 })
             })
-        })
+        });
 
-        context("when the user is not the owner of the workspace", function() {
+        context("when the user is not the owner, but is a member of the workspace", function() {
             beforeEach(function() {
+                setLoggedInUser({ id: 11 });
+                this.workspace.set({ ownerId: 12})
+            });
+
+            itDoesNotAllowEditingImage();
+            itDoesNotAllowEditingMembers();
+            itHasEditableNameAndSummmary();
+            itDisablesArchivedSetting();
+        });
+
+        context("when the user is not a member of the workspace", function() {
+            beforeEach(function() {
+                setLoggedInUser({ id: 18 });
                 this.workspace.set({ ownerId: 12})
             })
 
             context("and the user is not an admin", function() {
                 beforeEach(function() {
                     setLoggedInUser({ id: 11, admin: false});
-                    this.disableSpy.reset();
+                    disableSpy.reset();
                     this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                     this.dialog.render();
                 })
@@ -207,26 +221,17 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 it("disables the workspace summary", function() {
                     expect(this.dialog.$("textarea[name=summary]")).toBeDisabled();
+                    expect(disableSpy).toHaveBeenCalledWith(true);
                 });
 
-                it("disables the workspace image uploader", function() {
-                    expect(this.dialog.$("a.action")).not.toExist();
-                });
-
-                it("renders the owner as link to the user profile", function() {
-                    expect(this.dialog.$("select.owner")).not.toExist();
-                    expect(this.dialog.$("div.owner a")).toHaveText("Deborah D");
-                    expect(this.dialog.$("div.owner a").attr("href")).toBe(this.dialog.owner.showUrl());
-                });
+                itDoesNotAllowEditingImage();
+                itDoesNotAllowEditingMembers();
+                itDisablesArchivedSetting();
 
                 it("removes the save button and changes the cancel text to close window", function() {
                     expect(this.dialog.$("button.submit")).not.toExist();
                     expect(this.dialog.$("button.cancel")).toContainTranslation("actions.close_window");
                 })
-
-                it("disables the cleditor", function() {
-                    expect(this.disableSpy).toHaveBeenCalledWith(true);
-                });
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
@@ -234,12 +239,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         this.dialog.render();
                     })
 
-                    it("displays disabled radio buttons with 'active' selected", function() {
+                    it("displays radio buttons with 'active' selected", function() {
                         var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
                         var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
-                        expect(activeRadio).toBeDisabled();
                         expect(activeRadio).toBeChecked();
-                        expect(archivedRadio).toBeDisabled();
                         expect(archivedRadio).not.toBeChecked();
                     })
                 })
@@ -250,12 +253,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         this.dialog.render();
                     })
 
-                    it("displays disabled radio buttons with 'archived' selected", function() {
+                    it("displays radio buttons with 'archived' selected", function() {
                         var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
                         var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
-                        expect(activeRadio).toBeDisabled();
                         expect(activeRadio).not.toBeChecked();
-                        expect(archivedRadio).toBeDisabled();
                         expect(archivedRadio).toBeChecked();
                     })
                 })
@@ -264,7 +265,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             context("and the user is an admin", function() {
                 beforeEach(function() {
                     setLoggedInUser({ id: 11, admin: true });
-                    this.disableSpy.reset();
+                    disableSpy.reset();
                     this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                     this.dialog.render();
                 })
@@ -274,7 +275,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 })
 
                 it("does not disable the cleditor", function() {
-                    expect(this.disableSpy).not.toHaveBeenCalled();
+                    expect(disableSpy).not.toHaveBeenCalled();
                 });
 
                 describe("the owner select", function() {
@@ -526,10 +527,42 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         expect(this.dialog.pageModel.get("summary")).toBe("my summary");
                     })
                 })
-
-
             });
-        })
+        });
+
+        function itHasEditableNameAndSummmary() {
+            it("does not disable the workspace name input", function() {
+                expect(this.dialog.$("input[name=name]")).not.toBeDisabled();
+            });
+
+            it("does not disable the summary", function() {
+                expect(this.dialog.$("input[name=summary]")).not.toBeDisabled();
+                expect(disableSpy).not.toHaveBeenCalled();
+            });
+        }
+
+        function itDoesNotAllowEditingImage() {
+            it("disables the workspace image uploader", function() {
+                expect(this.dialog.$("a.action")).not.toExist();
+            });
+        }
+
+        function itDisablesArchivedSetting() {
+            it("disables the radio buttons for archiving and un-archiving the workspace", function() {
+                var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
+                var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
+                expect(activeRadio).toBeDisabled();
+                expect(archivedRadio).toBeDisabled();
+            });
+        }
+
+        function itDoesNotAllowEditingMembers() {
+            it("renders the owner as link to the user profile", function() {
+                expect(this.dialog.$("select.owner")).not.toExist();
+                expect(this.dialog.$("div.owner a")).toHaveText("Deborah D");
+                expect(this.dialog.$("div.owner a").attr("href")).toBe(this.dialog.owner.showUrl());
+            });
+        }
     })
 
     describe("select styling", function() {
