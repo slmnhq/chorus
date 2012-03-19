@@ -457,6 +457,22 @@ describe("chorus.views.Activity", function() {
                 itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
                 itShouldNotRenderAnInsightLink();
             })
+            context("for a chorus view", function() {
+                beforeEach(function() {
+                    this.view.model = fixtures.activities.IMPORT_SUCCESS_CHORUS_VIEW();
+                    this.presenter = new chorus.presenters.Activity(this.view.model)
+                    this.view.render();
+                });
+
+                it("should contain the type of import(view)", function() {
+                    expect($(this.view.el)).toContainTranslation("dataset.import.types.chorus_view")
+                });
+
+
+                itShouldRenderObjectDetails({checkLink: true});
+                itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
+                itShouldNotRenderAnInsightLink();
+            })
         })
 
         context("type: IMPORT_FAILED", function() {

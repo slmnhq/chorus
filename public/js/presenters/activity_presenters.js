@@ -329,6 +329,13 @@
                 importType: t("dataset.import.types.file"),
                 importSourceName: model.get('file').name
             }
+        } else if (model.has("chorusView")) {
+            var chorusView = model.chorusViewDataset();
+            ctx = {
+                importSourceName: chorusView.get("objectName"),
+                importSourceUrl: chorusView.showUrl(),
+                importType: t("dataset.import.types.chorus_view")
+            }
         } else {
             var sourceTable = model.databaseObject().asDataset();
             ctx = {

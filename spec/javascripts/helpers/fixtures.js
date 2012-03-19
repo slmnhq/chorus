@@ -794,6 +794,47 @@ beforeEach(function() {
                 })
             },
 
+            "IMPORT_SUCCESS_CHORUS_VIEW": function() {
+                return new chorus.models.Activity({
+                    author: {
+                        firstName: "EDC",
+                        id: "InitialUser",
+                        isDeleted: false,
+                        lastName: "Admin"
+                    },
+                    chorusView: {
+                        id: '"10002"|"Analytics"|"analytics"|"QUERY"|"a_chorus_view"',
+                        isDeleted: false,
+                        name: "a_chorus_view",
+                        objectName: "a_chorus_view",
+                        objectType: "QUERY",
+                        query: "SELECT a.tot_sales_act FROM ad_chorus_analytics_table67 AS a",
+                        type: "CHORUS_VIEW",
+                        workspaceId: "10006"
+                    },
+                    comments: [],
+                    id: fixtures.nextId.toString(),
+                    import: {
+                        id: "10020",
+                        isDeleted: false,
+                        name: "a_chorus_view"
+                    },
+                    isDeleted: false,
+                    table: {
+                        id: '"10002"|"Analytics"|"analytics"|"BASE_TABLE"|"new_imported_table"',
+                        isDeleted: false,
+                        name: "new_imported_table"
+                    },
+                    timestamp: "2012-03-18 21:51:41",
+                    type: "IMPORT_SUCCESS",
+                    workspace: {
+                        id: "10006",
+                        isDeleted: false,
+                        name: "workspace1"
+                    }
+                })
+            },
+
             "IMPORT_SUCCESS_SOURCE_TABLE": function() {
                 return new chorus.models.Activity({
                     author: {
