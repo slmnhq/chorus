@@ -243,6 +243,27 @@ describe("chorus global", function() {
             expect(datePickerParams.formElements[this.id3]).toBe("%Y");
             expect(datePickerParams.dragDisabled).toBeTruthy();
         });
+
+        describe("disableBeforeToday", function() {
+            beforeEach(function() {
+                this.clock = sinon.useFakeTimers(new Date(2000, 11, 25).getTime(), "Date");
+            });
+
+            afterEach(function() {
+                this.clock.restore();
+            });
+
+            it("disables the right dates when disableBeforeToday is passed in", function() {
+                spyOn(datePickerController, "setDisabledDates");
+                chorus.datePicker({
+                    "%d": this.input1,
+                    "%m": this.input2,
+                    "%Y": this.input3
+                }, {disableBeforeToday: true});
+
+                expect(datePickerController.setDisabledDates).toHaveBeenCalledWith(this.input1.attr("id"), {"00000101" : "20001224"});
+            });
+        });
     });
 
     describe("fileIconUrl", function() {

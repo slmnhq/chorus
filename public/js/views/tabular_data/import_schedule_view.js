@@ -6,12 +6,18 @@ chorus.views.ImportSchedule = chorus.views.Base.extend({
             "%Y": this.$(".date.start input[name='year']"),
             "%m": this.$(".date.start input[name='month']"),
             "%d": this.$(".date.start input[name='day']")
+        },
+        {
+            disableBeforeToday: true
         });
 
         chorus.datePicker({
             "%Y": this.$(".date.end input[name='year']"),
             "%m": this.$(".date.end input[name='month']"),
             "%d": this.$(".date.end input[name='day']")
+        },
+        {
+            disableBeforeToday: true
         });
 
         _.defer(_.bind(function() {

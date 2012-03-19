@@ -186,10 +186,10 @@ window.Chorus = function chorus$Global() {
         $element.selectmenu(newOptions);
     }
 
-    self.datePicker = function(options) {
+    self.datePicker = function(selectors, options) {
         var formElementParams = {};
 
-        _.each(options, function(el, format) {
+        _.each(selectors, function(el, format) {
             var uniqueId = _.uniqueId("date-picker");
             el.attr("id", uniqueId);
             formElementParams[uniqueId] = format;
@@ -211,6 +211,12 @@ window.Chorus = function chorus$Global() {
                         }
                     ]
                 }
+            });
+
+            options && options.disableBeforeToday && _.each(formElementParams, function(v, k) {
+                datePickerController.setDisabledDates(k, {
+                  "00000101" : new Date($.now() - (1000  * 60 * 60 * 24)).toString("yyyyMMdd")
+                });
             });
         });
     };
