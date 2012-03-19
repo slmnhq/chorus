@@ -37,13 +37,14 @@ chorus.views.visualizations.Heatmap = chorus.views.Base.extend({
         var fillScale = d3.scale.linear().domain([data.minValue, data.maxValue]).range(["white", "steelblue"]);
 
         var content = svg.append("svg:g").attr("class", "content");
+
         content.selectAll(".bin").data(data).enter()
             .append("svg:rect")
             .attr("class", "bin")
             .attr("x", function(row) { return scales.x(row.xLabel[0])+1 })
             .attr("y", function(row) { return scales.y(row.yLabel[1])-1 })
-            .attr("height", function(row) {return Math.abs(scales.y(row.yLabel[1])-scales.y(row.yLabel[0]))-2})
-            .attr("width", function(row) {return Math.abs(scales.x(row.xLabel[1])-scales.x(row.xLabel[0]))-2})
+            .attr("height", function(row) {return Math.abs(scales.y(row.yLabel[1])-scales.y(row.yLabel[0])) })
+            .attr("width", function(row) {return Math.abs(scales.x(row.xLabel[1])-scales.x(row.xLabel[0])) })
             .style("fill", function(row, i) {
                 return fillScale(row.value);
             });

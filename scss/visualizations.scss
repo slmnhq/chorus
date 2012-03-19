@@ -79,4 +79,11 @@ svg.chart {
             fill: $chart-fill-color;
         }
     }
+
+    &.heatmap {
+        rect.bin {
+            stroke-width: 1;
+            stroke: white;
+        }
+    }
 }
