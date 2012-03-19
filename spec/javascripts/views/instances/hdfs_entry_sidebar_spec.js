@@ -81,10 +81,17 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             it("does not have a create external table link", function() {
                 expect(this.view.$("a.external_table")).not.toExist();
-            })
+            });
+        });
 
-        })
-    })
+        context("when there is no model", function() {
+            it("does not render anything", function() {
+                this.view.render();
+                expect(this.view.$(".info")).not.toExist();
+                expect(this.view.$(".actions")).not.toExist();
+            });
+        });
+    });
 
     function itHasTheRightDefaultBehavior(withActivities) {
         it("should display the file name", function() {
