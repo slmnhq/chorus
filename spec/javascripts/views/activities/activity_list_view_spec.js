@@ -214,33 +214,42 @@ describe("chorus.views.ActivityList", function() {
                         this.view.render();
                     })
 
-                    itShowsAMoreLink();
+                    itShowsAMoreLink(2);
                 });
             });
 
             context("with partial pagination information in the response", function() {
                 beforeEach(function() {
+                    this.collection.reset([
+                        fixtures.activities.NOTE_ON_CHORUS_VIEW(),
+                        fixtures.activities.NOTE_ON_CHORUS_VIEW(),
+                        fixtures.activities.NOTE_ON_CHORUS_VIEW(),
+                        fixtures.activities.NOTE_ON_CHORUS_VIEW()
+                    ])
+
                     this.collection.pagination = {};
-                    this.collection.pagination.total = null;
-                    this.collection.pagination.page = "1";
-                    this.collection.pagination.records = null;
+                    this.collection.pagination.total = "-1";
+                    this.collection.pagination.records = "-1";
                 });
 
-                context("when the number of activities returned is less than the page size", function() {
+                context("when there are no more activities", function() {
                     beforeEach(function() {
-                        this.collection.attributes.pageSize = this.collection.length + 1;
+                        this.collection.pagination.page = "2";
+                        this.collection.attributes.pageSize = 3;
                         this.view.render();
                     });
+
                     itDoesNotShowAMoreLink();
                 })
 
-                context("when the number of activities returned is equal to the page size", function() {
+                context("when there might be more activities", function() {
                     beforeEach(function() {
-                        this.collection.attributes.pageSize = this.collection.length;
+                        this.collection.pagination.page = "2";
+                        this.collection.attributes.pageSize = 2;
                         this.view.render();
                     });
 
-                    itShowsAMoreLink();
+                    itShowsAMoreLink(3);
                 })
             })
 
@@ -250,7 +259,7 @@ describe("chorus.views.ActivityList", function() {
                 })
             }
 
-            function itShowsAMoreLink() {
+            function itShowsAMoreLink(nextPage) {
                 it("renders a 'more' link", function() {
                     expect(this.view.$(".more_activities a")).toExist();
                 })
@@ -260,14 +269,14 @@ describe("chorus.views.ActivityList", function() {
                         spyOn(this.collection, 'fetchPage');
                         this.view.$(".more_activities a").click();
 
-                        expect(this.collection.fetchPage).toHaveBeenCalledWith(2, { add: true, silent: true, success: jasmine.any(Function) });
+                        expect(this.collection.fetchPage).toHaveBeenCalledWith(nextPage, { add: true, silent: true, success: jasmine.any(Function) });
                     })
 
                     it("only re-renders the page once", function() {
                         spyOn(this.view, 'postRender');
                         this.view.$(".more_activities a").click();
 
-                        this.server.completeFetchFor(this.collection, fixtures.activitySet(), {page: 2})
+                        this.server.completeFetchFor(this.collection, fixtures.activitySet(), {page: nextPage})
 
                         expect(this.view.postRender.callCount).toBe(1);
                     })
