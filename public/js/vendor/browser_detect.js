@@ -1,3 +1,8 @@
+/*
+ * http://tympanus.net/codrops/2009/08/30/javascript-browser-detection/
+ * Written by Mary Lou
+ * Free for personal and commercial use
+ */
 var BrowserDetect = {
 	init: function () {
 		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";

@@ -1,5 +1,9 @@
 // lib/handlebars/parser.js
 /* Jison generated parser */
+/* Copyright (C) 2011 by Yehuda Katz
+ * https://github.com/wycats/handlebars.js/
+ * MIT License
+ */
 var handlebars = (function(){
 var parser = {trace: function trace() { },
 yy: {},

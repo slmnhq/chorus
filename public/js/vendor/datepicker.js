@@ -1,4 +1,6 @@
 /*! DatePicker v6a MIT/GPL2 @freqdec */
+/* https://github.com/freqdec/datePicker */
+
 var datePickerController = (function datePickerController() {
 
         var debug               = false,

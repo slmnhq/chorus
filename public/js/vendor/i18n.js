@@ -1,3 +1,15 @@
+/******************************************************************************
+ * jquery.i18n.properties
+ *
+ * Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and
+ * MIT (http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt) licenses.
+ *
+ * @author      Nuno Fernandes
+ * @url         www.codingwithcoffee.com
+ * @inspiration Localisation assistance for jQuery (http://keith-wood.name/localisation.html)
+ *              by Keith Wood (kbwood{at}iinet.com.au) June 2007
+ *
+ *****************************************************************************/
 // Instantiate the object
 var I18n = I18n || {};
 
