@@ -1,6 +1,11 @@
 (function() {
     var imageRegex = /^image\//;
     var textRegex = /^text\//;
+    var IMAGE = 'IMAGE';
+    var SQL = 'SQL';
+    var TEXT = 'TEXT';
+    var ALPINE = 'ALPINE';
+    var BINARY = 'BINARY';
 
     chorus.models.Workfile = chorus.models.Base.extend({
         constructorName: "Workfile",
@@ -119,27 +124,50 @@
         },
 
         isImage: function() {
-            var type = this.get("mimeType");
-            return type && !!type.match(imageRegex);
+            return this.workfileType() == IMAGE;
         },
 
         isSql: function() {
-            var type = this.get("fileType");
-            return type == "SQL";
+            return this.workfileType() == SQL;
         },
 
         isText: function() {
-            var type = this.get("mimeType");
-            return type && !!type.match(textRegex);
-        },
-
-        isBinary: function() {
-            return !(this.isSql() || this.isImage() || this.isText());
+            return this.workfileType() == TEXT;
         },
 
         isAlpine: function() {
-            var fileName = this.get("fileName") || this.get("name")
-            return fileName && _.str.endsWith(fileName.toLowerCase(), ".afm")
+            return this.workfileType() == ALPINE;
+        },
+
+        isBinary: function() {
+            return this.workfileType() == BINARY;
+        },
+
+        workfileType: function () {
+            // This function ensures a file has one and only one type
+            var mimeType = this.get("mimeType");
+            var fileType = this.get("fileType");
+            var fileName = this.get("fileName") || this.get("name");
+
+            // Check most specific cases first, with more general cases later so
+            // we are sure to see the unusual ones.
+            if (fileName && _.str.endsWith(fileName.toLowerCase(), ".afm")) {
+                return ALPINE;
+            }
+
+            if (fileType == "SQL") {
+                return SQL;
+            }
+
+            if (mimeType && !!mimeType.match(imageRegex)) {
+                return IMAGE;
+            }
+
+            if (mimeType && !!mimeType.match(textRegex)) {
+                return TEXT;
+            }
+
+            return BINARY;
         },
 
         downloadUrl: function() {
@@ -214,6 +242,7 @@
         },
 
         diskPath: function() {
+            // TODO: get this from the server.  See https://www.pivotaltracker.com/story/show/26669213
             return chorus.workfileDir + "/" +  this.workspace().id + "/" + this.get("versionInfo").versionFileId;
         }
     });
