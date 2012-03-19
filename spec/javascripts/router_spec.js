@@ -35,6 +35,26 @@ describe("chorus.router", function() {
                     expect(Backbone.history.navigate).not.toHaveBeenCalled();
                 })
             })
+
+            describe("when the fragment is URI encoded", function() {
+                beforeEach(function() {
+                    Backbone.history.fragment = "/foo/'1'|2";
+                });
+
+                describe("and the target fragment is the current fragment", function() {
+                    it("calls loadUrl on the fragment", function() {
+                        chorus.router.navigate("/foo/%271%27%7C2", true);
+                        expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo/%271%27%7C2");
+                        expect(Backbone.history.navigate).not.toHaveBeenCalled();
+                    })
+
+                    it("calls loadUrl on the fragment, even if the target fragment is prefixed by #", function() {
+                        chorus.router.navigate("#/foo/%271%27%7C2", true);
+                        expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo/%271%27%7C2");
+                        expect(Backbone.history.navigate).not.toHaveBeenCalled();
+                    })
+                });
+            })
         })
     });
 

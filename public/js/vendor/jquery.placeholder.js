@@ -1,5 +1,9 @@
 // From https://github.com/snikch/jquery-placeholder-plugin
-//
+/*
+ * Copyright (c) 2010 Andrew Jones, http://andrew-jones.com
+ * Parts Copyright (c) 2010 Mal Curtis, http://mal.co.nz
+ * MIT License
+ */
 (function($) {
 	$.extend({
 		placeholder : {

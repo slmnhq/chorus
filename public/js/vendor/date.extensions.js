@@ -1,4 +1,10 @@
 /**
+ * Javascript Relative Time Helper
+ * The MIT License
+ *
+ * Copyright (c) 2009 James F. Herdman 
+ * https://github.com/jherdman/javascript-relative-time-helpers
+ *
  * from http://stackoverflow.com/questions/3764459/why-will-this-dateparser-not-work-in-safari
  *
  * Returns a description of this past date in relative terms.

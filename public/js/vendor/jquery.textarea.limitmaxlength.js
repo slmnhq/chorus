@@ -1,4 +1,5 @@
 // taken from http://that-matt.com/2010/04/updated-textarea-maxlength-with-jquery-plugin/ and modified
+// Licensed under Public Domain
 
 jQuery.fn.limitMaxlength = function(options){
 
