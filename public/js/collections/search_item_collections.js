@@ -27,7 +27,8 @@
         workfile: chorus.models.Workfile,
         databaseObject: chorus.models.DynamicTabularData,
         chorusView: chorus.models.DynamicTabularData,
-        workspace: chorus.models.Workspace
+        workspace: chorus.models.Workspace,
+        attachment: chorus.models.Artifact
     };
 
     chorus.collections.Search.WorkspaceItemSet = chorus.collections.Base.include(

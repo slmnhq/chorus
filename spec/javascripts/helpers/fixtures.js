@@ -2913,6 +2913,24 @@ beforeEach(function() {
             }, overrides);
         },
 
+        searchResultAttachmentJson: function(overrides) {
+            return _.extend({
+                comments: [],
+                entityType: "attachment",
+                fileId: "10020",
+                fileType: "IMAGE",
+                highlightedAttributes: {name:['<em>tracker</em>_dot.jpeg']},
+                id: "10020",
+                isBinary: true,
+                isDeleted: false,
+                lastUpdatedStamp: "2012-03-19 16:17:04",
+                name: "tracker_dot.jpeg",
+                owner: {id: 'InitialUser', lastName:'Admin', firstName:'EDC'},
+                type: "attachment",
+                workspace: {id:10000, name:'danny'}
+            }, overrides);
+        },
+
         searchResultChorusViewJson: function(overrides) {
             return _.extend({
                 compositeId: '"10000"|"dca_demo"|"ddemo"|"QUERY"|"cv_us_president"',

@@ -3,7 +3,8 @@
         workfile:       chorus.views.SearchWorkfile,
         databaseObject: chorus.views.SearchDataset,
         chorusView:     chorus.views.SearchDataset,
-        workspace:      chorus.views.SearchWorkspace
+        workspace:      chorus.views.SearchWorkspace,
+        attachment:     chorus.views.SearchAttachment,
     };
 
     chorus.views.WorkspaceSearchResultList = chorus.views.SearchResultList.extend({
