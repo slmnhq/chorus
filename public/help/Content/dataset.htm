@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="4" MadCap:lastHeight="513" MadCap:lastWidth="662" MadCap:ignoredWords="Dataset;dataset;Heatmap;Boxplot;datasets" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="Chorus_Help.xml" MadCap:SearchType="Stem">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="802" MadCap:lastWidth="623" MadCap:ignoredWords="Dataset;dataset;Heatmap;Boxplot;datasets" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="Chorus_Help.xml" MadCap:SearchType="Stem">
     <!-- saved from url=(0014)about:internet -->
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Working with your data sources</title>
@@ -13,28 +13,39 @@
         <p>The Dataset detail tab displays details about a particular dataset. </p>
         <h3>Features of the Datasets page</h3>
         <ul>
-            <li value="1">Working with a sandbox dataset</li>
-            <li value="2">Working with source datasets and Chorus views</li>
+            <li value="1">Creating a sandbox from the Data tab</li>
+            <li value="2">Exploring the Data tab (basic tasks)</li>
+            <li value="3">Working with source datasets and Chorus views</li>
         </ul>
-        <h2>Working with a sandbox dataset</h2>
-        <p>You can only use the sandbox dataset to explore. You can import data into it and use it as a destination, but cannot use it as a source. As such you can only perform the following functions:</p>
+        <h2>Creating a sandbox from the Data tab</h2>
+        <p>Create a sandbox so that you can access the full feature set associated with the Data tab:</p>
+        <ol>
+            <li value="1">Hover over and then select the "?" icon next to Import File.</li>
+            <li value="2">Using drop-down options, you can select an instance, database, and schema to associate with your sandbox. Each user can only be associated with a single sandbox. </li>
+        </ol>
+        <h4>Benefits of working with a sandbox</h4>
+        <p>When you do create a sandbox, you can perform the following:</p>
         <ul>
-            <li value="1"><b>Import File</b>: import files from source tables and views.</li>
-            <li value="2"><b>Add a note</b>
+            <li value="1">Import files into your sandbox</li>
+            <li value="2">Browse datasets</li>
+            <li value="3">Provides access to source tables and views</li>
+            <li value="4">Allows you to customize your view by source or Chorus</li>
+            <li value="5">Presents all the datasets in the database or schema on the tab</li>
+        </ul>
+        <h2>Exploring the Data tab (basic tasks)</h2>
+        <p>If you do not have a sandbox, you can only perform the following basic functions when browsing a data tab:</p>
+        <ul>
+            <li value="1"><b>Add a note</b>
             </li>
-            <li value="3"><b>Preview Data</b>
+            <li value="2"><b>Preview Data</b>
             </li>
         </ul>
         <h2>Working with source datasets and Chorus views</h2>
-        <p>You can perform the following tasks when working in the Chorus view</p>
+        <p>You can perform the following additional tasks when working in the Chorus view</p>
         <ul>
-            <li value="1"><b>Import File</b>: import files from source tables and views.</li>
-            <li value="2"><b>Add a note</b>
-            </li>
-            <li value="3"><b>Import Now</b>: to import data into a new or existing table. You can limit the number that are being imported.</li>
-            <li value="4"><b>Create import schedule</b>: to import data into a new or existing table, limit the number of rows, and schedule a start and end time.</li>
-            <li value="5"><b>Preview Data</b>
-            </li>
+            <li value="1"><b>Import File</b>:You can only import .csv files from your local drive.</li>
+            <li value="2"><b>Import Now</b>: This option functions only on source tables and views, and on Chorus views. Use it to immediately import a table into a new or existing one. You can only perform this once. You can specify the number that are being imported. If can import the data into an existing sandbox table. You can truncate the data. You must specify the table name from the drop-down list.</li>
+            <li value="3"><b>Create import schedule</b>: This automatically imports data into a new or existing table, limit the number of rows, and schedule a start and end time. You can set up a daily, weekly, or monthly schedule.</li>
         </ul>
         <script type="text/javascript" src="SkinSupport/MadCapBodyEnd.js">
         </script>
