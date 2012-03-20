@@ -1,9 +1,9 @@
 chorus.Mixins.ClEditor = {
-    makeEditor: function($container, controlClass, inputName) {
+    makeEditor: function($container, controlSelector, inputName, options) {
         var controls = ["bold", "italic", "bullets", "numbers", "link", "unlink"];
 
         _.each(controls, function(control, i) {
-            var $controlContainer = $container.find("." + controlClass);
+            var $controlContainer = $container.find(controlSelector);
             $controlContainer.append($('<a class="'+ control +'" href="#"></a>').text(t("workspace.settings.toolbar."+ control)));
             if(i < controls.length - 1) {
                 $controlContainer.append($('<span>|</span>'));
@@ -11,8 +11,9 @@ chorus.Mixins.ClEditor = {
             $container.find("a." + control).unbind("click").bind("click", _.bind(this["onClickToolbar"+ _.capitalize(control)], $container));
         }, this);
 
-
-        return $container.find("textarea[name='"+ inputName +"']").cleditor({controls: "bold italic | bullets numbering | link unlink"})[0];
+        options = options || {};
+        var editorOptions = _.extend(options, {controls: "bold italic | bullets numbering | link unlink"});
+        return $container.find("textarea[name='"+ inputName +"']").cleditor(editorOptions)[0];
 
     },
 

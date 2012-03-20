@@ -1,4 +1,6 @@
-chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
+chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
+    chorus.Mixins.ClEditor
+).extend({
     className: "notes_new",
     persistent: true,
     events: {
@@ -42,6 +44,10 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.extend({
             dropZone: this.$("input[type=file]"),
             progress: this.updateProgressBar
         });
+
+        _.defer(_.bind(function() {
+            this.makeEditor($(this.el), ".toolbar", "body", { width: 350 });
+        }, this));
     },
 
     makeModel: function() {

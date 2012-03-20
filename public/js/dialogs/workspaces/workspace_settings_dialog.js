@@ -61,7 +61,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
     postRender: function() {
         this.$("select.owner").val(this.model.get("ownerId"));
         _.defer(_.bind(function() {
-            var clEditor = this.makeEditor($(this.el), "toolbar", "summary")
+            var clEditor = this.makeEditor($(this.el), ".toolbar", "summary")
             if (!this.hasPermission) {
                 clEditor.disable(true)
             }

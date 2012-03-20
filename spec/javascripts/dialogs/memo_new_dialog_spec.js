@@ -12,8 +12,10 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             model: this.model
         });
 
+        stubDefer();
         spyOn($.fn, 'fileupload');
-        spyOn(this.dialog, "launchSubModal")
+        spyOn(this.dialog, "launchSubModal");
+        spyOn(this.dialog, "makeEditor");
         this.dialog.render();
         $('#jasmine_content').append(this.dialog.el);
     });
@@ -51,6 +53,12 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         it("hides the notification content area by default", function() {
             expect(this.dialog.$(".notification_recipients")).toHaveClass("hidden");
         });
+
+        it("makes a cl editor with toolbar", function() {
+            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", {width: 350});
+            expect(this.dialog.$('.toolbar')).toExist();
+        });
+
 
         describe("selecting recipients", function() {
             beforeEach(function() {
