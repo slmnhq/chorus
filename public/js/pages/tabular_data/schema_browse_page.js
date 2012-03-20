@@ -12,11 +12,12 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 
         this.instance = new chorus.models.Instance({id: instanceId});
         this.instance.fetch();
-        this.requiredResources.push(this.instance);
+        this.dependOn(this.instance, this.instanceLoaded);
 
         this.collection = new chorus.collections.DatabaseObjectSet([], {instanceId: instanceId, databaseName: databaseName, schemaName: schemaName });
         this.collection.sortAsc("objectName");
         this.collection.fetch();
+        this.dependOn(this.collection);
 
         this.sidebar = new chorus.views.TabularDataSidebar({listMode: true});
 
@@ -30,18 +31,25 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         }, this);
     },
 
-    resourcesLoaded: function() {
-        this.schema.set({instanceName: this.instance.get("name")});
-        this.mainContent.contentHeader.options.title = this.schema.canonicalName();
-
+    crumbs: function() {
         var database = new chorus.models.Database({instanceId: this.instance.id, name: this.schema.get("databaseName")});
-        this.crumbs = [
+        return [
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.instances"), url: '#/instances'},
             {label: this.instance.get("name"), url: this.instance.showUrl()},
             {label: this.schema.get("databaseName"), url: database.showUrl() },
             {label: this.schema.get("name")}
         ];
+    },
+
+    instanceLoaded: function() {
+        this.schema.set({instanceName: this.instance.get("name")});
+
+        this.mainContent = new chorus.views.MainContentList({
+            modelClass: "Dataset",
+            collection: this.collection,
+            title: this.schema.canonicalName()
+        });
 
         this.render();
     }
