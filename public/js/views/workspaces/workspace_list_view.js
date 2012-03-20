@@ -1,7 +1,13 @@
-chorus.views.WorkspaceList = chorus.views.Base.extend({
+chorus.views.WorkspaceList = chorus.views.SelectableList.extend({
     className:"workspace_list",
     tagName:"ul",
     additionalClass:"list",
+
+    itemSelected: function(model) {
+        if(model) {
+            chorus.PageEvents.broadcast("workspace:selected", model);
+        }
+    },
 
     collectionModelContext:function (model) {
         var date = Date.parseFromApi(model.get("archivedTimestamp"));
@@ -17,6 +23,7 @@ chorus.views.WorkspaceList = chorus.views.Base.extend({
     },
 
     postRender: function() {
+        this._super("postRender")
         this.collection.each(function(model, index) {
             model.loaded = true;
             this.summaryView = new chorus.views.TruncatedText({model:model, attribute:"summary", attributeIsHtmlSafe: true})

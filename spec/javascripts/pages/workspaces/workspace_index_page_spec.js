@@ -1,31 +1,26 @@
 describe("chorus.pages.WorkspaceIndexPage", function() {
     beforeEach(function() {
-        chorus.user = new chorus.models.User({
-            "firstName" : "Daniel",
-            "lastName" : "Burkes",
-            "fullName": "Daniel Francis Burkes"
-        }); 
+        this.workspaces = fixtures.workspaceSet();
+        this.page = new chorus.pages.WorkspaceIndexPage();
     });
 
     describe("#initialize", function() {
-        beforeEach(function() {
-            this.page = new chorus.pages.WorkspaceIndexPage();
-        })
-
         it("has a helpId", function() {
             expect(this.page.helpId).toBe("workspaces")
         })
+
+        it("has a sidebar", function() {
+            expect(this.page.sidebar).toBeA(chorus.views.WorkspaceListSidebar);
+        });
     })
 
     describe("#render", function() {
         beforeEach(function() {
-            this.page = new chorus.pages.WorkspaceIndexPage();
-            chorus.bindModalLaunchingClicks(this.page);
             this.page.render();
-        })
+        });
 
-        describe("when the collection is loading", function(){
-            it("should have a loading element", function(){
+        describe("when the collection is loading", function() {
+            it("should have a loading element", function() {
                 expect(this.page.$(".loading")).toExist();
             });
 
@@ -34,18 +29,31 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
             })
         });
 
-        it("creates a WorkspaceList view", function() {
-            expect(this.page.$(".workspace_list")).toExist();
-        });
-
-        it("displays an 'add workspace' button", function() {
-            expect(this.page.$("button:contains('Create Workspace')")).toExist();
-        });
-        it("open dialogs when user click on 'add workspace' button ", function() {
-                stubModals();
-                this.page.$('button[data-dialog="WorkspacesNew"]').click();
-                expect(chorus.modal instanceof chorus.dialogs.WorkspacesNew).toBeTruthy();
+        describe("when the collection is loaded", function() {
+            beforeEach(function() {
+                chorus.bindModalLaunchingClicks(this.page);
+                this.server.completeFetchFor(this.page.collection)
             });
+
+            it("creates a WorkspaceList view", function() {
+                expect(this.page.$(".workspace_list")).toExist();
+            });
+
+            it("displays an 'add workspace' button", function() {
+                expect(this.page.$("button:contains('Create Workspace')")).toExist();
+            });
+
+            describe("when the workspace:selected event is triggered on the list view", function() {
+                beforeEach(function() {
+                    expect(this.page.model).toBeUndefined();
+                    chorus.PageEvents.broadcast("workspace:selected", this.page.collection.at(0));
+                });
+
+                it("sets the model of the page", function() {
+                    expect(this.page.model).toBe(this.page.collection.at(0));
+                })
+            });
+        });
     });
 
     describe("events", function() {

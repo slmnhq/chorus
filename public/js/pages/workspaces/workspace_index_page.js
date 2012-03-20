@@ -28,12 +28,19 @@ chorus.pages.WorkspaceIndexPage = chorus.pages.Base.extend({
                 ]
             }
         );
+        this.sidebar = new chorus.views.WorkspaceListSidebar();
+        chorus.PageEvents.subscribe("workspace:selected", this.setModel, this);
 
         this.mainContent.contentHeader.bind("choice:filter", this.choose, this)
         this.choose("active");
     },
+
     choose:function (choice) {
         this.collection.attributes.active = (choice == "active")
         this.collection.fetch();
+    },
+
+    setModel: function(workfile) {
+        this.model = workfile;
     }
 });
