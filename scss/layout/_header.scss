@@ -68,7 +68,9 @@ $header-item-spacing: 2*$padding-x;
 
         .container {
             width: 100%;
-            @include ellipsis;
+            line-height: 0;
+            padding-bottom: 2px;
+            vertical-align: middle;
         }
 
         ul li {
@@ -80,6 +82,11 @@ $header-item-spacing: 2*$padding-x;
             a {
                 @include font-menu;
                 line-height: 16px;
+                margin-right: 110px;
+                @include ellipsis;
+                display: inline-block;
+                max-width: 70%;
+                padding-bottom: 2px;
 
                 em {
                     @include results-console;
@@ -93,8 +100,10 @@ $header-item-spacing: 2*$padding-x;
 
             .type {
                 @include results-console-message;
-                float: right;
-                padding-top: 2px;
+                position: absolute;
+                top: 9px;
+                right: 10px;
+                line-height: 0;
             }
 
             &.selected {
