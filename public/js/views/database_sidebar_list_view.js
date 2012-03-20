@@ -1,7 +1,8 @@
 chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     constructorName: "DatabaseSidebarListView",
     events: {
-        "click .context a": "contextClicked"
+        "click .context a": "contextClicked",
+        "click .no_credentials .add_credentials": "launchAddCredentialsDialog"
     },
 
     collectionModelContext: function(model) {
@@ -21,6 +22,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 schemaAssociated: false
             }
         } else {
+            var errorMessage = this.collection && this.collection.serverErrors && this.collection.serverErrors[0] && this.collection.serverErrors[0].message
             return {
                 schemaAssociated: true,
                 schemaName: this.schema && this.schema.get("name"),
@@ -31,7 +33,9 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                         name: schema.get("name"),
                         isCurrent: this.schema.get('id') === schema.get('id')
                     };
-                }, this)
+                }, this),
+                noCredentials: errorMessage && errorMessage.match(/Account.*map.*needed/),
+                noCredentialsWarning: chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})})
             };
         }
     },
@@ -139,5 +143,11 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
             this.schemas.fetch();
             this.fetchResourceAfterSchemaSelected();
         }
+    },
+
+    launchAddCredentialsDialog: function(e) {
+        e && e.preventDefault();
+        var instance = new chorus.models.Instance({id: this.schema.get("instanceId")});
+        new chorus.dialogs.InstanceAccount({ instance: instance, title: t("instances.sidebar.add_credentials"), reload: true }).launchModal();
     }
 });

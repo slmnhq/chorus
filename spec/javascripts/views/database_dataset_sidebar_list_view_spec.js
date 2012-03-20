@@ -2,7 +2,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
     beforeEach(function() {
         var sandbox = fixtures.sandbox();
         this.schema = sandbox.schema();
-
+        this.modalSpy = stubModals();
         this.view = new chorus.views.DatabaseDatasetSidebarList({schema: this.schema});
     });
 
@@ -149,6 +149,26 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                         expect(this.view.$('.none_found')).toExist();
                         expect(this.view.$('.none_found').text().trim()).toMatchTranslation("schema.metadata.list.empty");
                     })
+                });
+            });
+
+            context("if the tables and views fetch fails", function() {
+                beforeEach(function() {
+                    this.server.lastFetchFor(this.schema.databaseObjects()).fail([{message: "Account map needed"}]);
+                    this.view.render();
+                });
+
+                it("should not display the loading spinner", function() {
+                    expect(this.view.$(".loading_section")).not.toExist();
+                });
+
+                it("should display an option to enter credentials", function() {
+                    expect(this.view.$('.no_credentials')).toExist();
+                });
+
+                it("launches the correct dialog when the 'click here' credentials link is clicked", function() {
+                    this.view.$('.no_credentials .add_credentials').click();
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
                 });
             });
 

@@ -1,6 +1,7 @@
 describe("chorus.views.DatabaseFunctionSidebarList", function() {
     beforeEach(function() {
         this.schema = fixtures.sandbox({ schemaName: "righteous_tables" }).schema();
+        this.modalSpy = stubModals();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
         this.view = new chorus.views.DatabaseFunctionSidebarList({schema: this.schema});
     });
@@ -146,6 +147,33 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                             });
                         })
                     })
+                });
+            });
+
+            context("when the functions fail to load", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.schema.database().schemas(), [
+                        this.schema,
+                        fixtures.schema({ name: "awesome_tables", id: "5" }),
+                        fixtures.schema({ name: "orphaned_tables", id: "6" })
+                    ]);
+
+                    this.server.lastFetchFor(this.view.collection).fail([
+                        {message: "Account map needed yo"}
+                    ]);
+                });
+
+                it("does not show the loading spinner", function() {
+                   expect(this.view.$(".loading_section")).not.toExist();
+                });
+
+                it("should display an option to enter credentials", function() {
+                    expect(this.view.$('.no_credentials')).toExist();
+                });
+
+                it("launches the correct dialog when the 'click here' credentials link is clicked", function() {
+                    this.view.$('.no_credentials .add_credentials').click();
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
                 });
             });
 

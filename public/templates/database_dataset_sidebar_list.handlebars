@@ -1,4 +1,7 @@
 {{#if schemaAssociated}}
+    {{#if noCredentials}}
+        <div class="notice no_credentials"><span class="bottom">{{noCredentialsWarning}}</span></div>
+    {{/if}}
     <input class="search" placeholder='{{t "schema.metadata.list.hint.datasets"}}'/>
     <div class="context">{{safeT "schema.functions.search_in" schemaLink=schemaLink}}</div>
     {{#if models.length}}
