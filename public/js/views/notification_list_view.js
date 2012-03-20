@@ -7,10 +7,10 @@ chorus.views.NotificationList = chorus.views.Base.extend({
         "click .more_notifications a":"fetchMoreNotifications"
     },
 
-    fetchMoreNotifications:function (ev) {
+    fetchMoreNotifications: function (ev) {
         ev.preventDefault();
         var pageToFetch = parseInt(this.collection.pagination.page) + 1;
-        this.collection.fetchPage(pageToFetch, { add:true });
+        this.collection.fetchPage(pageToFetch, { add: true, success: _.bind(this.render, this) });
         this.collection.bindOnce("loaded", function() {
             this.collection.markAllRead({});
         }, this);

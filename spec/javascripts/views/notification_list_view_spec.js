@@ -78,7 +78,15 @@ describe("chorus.views.NotificationList", function() {
                     context("when the fetch completes", function() {
                         beforeEach(function() {
                             spyOn(chorus.collections.NotificationSet.prototype, "markAllRead").andCallThrough();
-                            this.server.completeFetchFor(this.collection, this.collection, {page:2}, {page: "2", total: "9999999"});
+                            this.server.completeFetchFor(this.collection, [
+                                fixtures.notification(),
+                                fixtures.notification(),
+                                fixtures.notification()
+                            ], {page:2}, {page: "2", total: "9999999"});
+                        });
+
+                        it("renders the new notifications", function() {
+                            expect(this.view.$("li").length).toBe(6);
                         });
 
                         it("marks all notification read again", function() {

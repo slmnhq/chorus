@@ -67,7 +67,7 @@ describe("chorus.views.Base", function() {
                 spyOn(this.view, "preRender");
             })
 
-            _.each(["reset", "add", "remove", "change"], function(evt) {
+            _.each(["reset", "remove", "change"], function(evt) {
                 it("re-renders on the " + evt + " event", function() {
                     this.view.resource.trigger(evt);
                     expect(this.view.preRender).toHaveBeenCalled();

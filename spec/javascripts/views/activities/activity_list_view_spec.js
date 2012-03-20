@@ -265,19 +265,23 @@ describe("chorus.views.ActivityList", function() {
                 })
 
                 describe("when the 'more' link is clicked", function() {
-                    it("fetches the next page of the activity stream", function() {
-                        spyOn(this.collection, 'fetchPage');
+                    beforeEach(function() {
+                        this.originalActivityCount = this.view.$('li[data-activity-id]').length;
+                        spyOn(this.view, 'postRender').andCallThrough();
                         this.view.$(".more_activities a").click();
 
-                        expect(this.collection.fetchPage).toHaveBeenCalledWith(nextPage, { add: true, silent: true, success: jasmine.any(Function) });
+                        this.server.completeFetchFor(this.collection, [
+                            fixtures.activity(),
+                            fixtures.activity(),
+                            fixtures.activity()
+                        ], {page: nextPage})
+                    });
+
+                    it("fetches the next page of the activity stream", function() {
+                        expect(this.view.$('li[data-activity-id]').length).toBe(this.originalActivityCount + 3);
                     })
 
                     it("only re-renders the page once", function() {
-                        spyOn(this.view, 'postRender');
-                        this.view.$(".more_activities a").click();
-
-                        this.server.completeFetchFor(this.collection, fixtures.activitySet(), {page: nextPage})
-
                         expect(this.view.postRender.callCount).toBe(1);
                     })
                 })
