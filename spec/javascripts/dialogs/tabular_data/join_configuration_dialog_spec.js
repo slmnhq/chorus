@@ -35,7 +35,7 @@ describe("chorus.dialogs.JoinConfiguration", function() {
             expect(this.destinationTable.columns()).toHaveBeenFetched();
         });
 
-        describe("when the fetch completes for the destination table's columns", function() {
+        describe("when the fetch completes successfully for the destination table's columns", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.destinationTable.columns(), [
                     fixtures.databaseColumn({ name: "destination_column_1" }),
@@ -98,5 +98,29 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                 });
             });
         });
-    })
+
+        describe("when the fetch completes with failure for the destination table's columns", function() {
+            beforeEach(function() {
+                spyOn(this.dialog, "closeModal");
+                this.dialog.previousModal = {
+                    showErrors: jasmine.createSpy("showErrors")
+                }
+                this.server.lastFetch().fail();
+            });
+
+            it("copies the serverErrors to the dialog model", function() {
+                expect(this.dialog.model.serverErrors).toEqual(this.destinationTable.columns().serverErrors)
+            });
+
+            it("closes itself", function() {
+                expect(this.dialog.closeModal).toHaveBeenCalled();
+            });
+
+            it("shows errors on the previous modal", function() {
+                expect(this.dialog.previousModal.showErrors).toHaveBeenCalledWith(this.dialog.model);
+            });
+
+
+        });
+    });
 });
