@@ -16,7 +16,7 @@ describe("chorus.views.DatabaseList", function() {
     context("when the collection is loaded", function() {
         beforeEach(function() {
             this.collection.loaded = true;
-            this.collection.trigger("loaded");
+            this.collection.trigger("reset");
         });
 
         it("hides a loading section", function() {
@@ -33,11 +33,11 @@ describe("chorus.views.DatabaseList", function() {
 
             expect(this.view.$("li.database a.name").eq(1)).toContainText(this.database2.get("name"));
             expect(this.view.$("li.database a.name").eq(1)).toHaveHref(this.database2.showUrl());
-        })
+        });
 
         it("displays the right icon for each database", function() {
-            expect(this.view.$("li.database img").eq(0)).toHaveAttr("src", "/images/instances/greenplum_database.png")
-        })
+            expect(this.view.$("li.database img").eq(0)).toHaveAttr("src", "/images/instances/greenplum_database.png");
+        });
 
         it("should broadcast a database:selected event when itemSelected is called", function() {
             spyOn(chorus.PageEvents, "broadcast");

@@ -21,6 +21,10 @@ describe("chorus.pages.DatabaseIndexPage", function() {
         it("has some breadcrumbs", function() {
             expect(this.page.$(".breadcrumbs")).toContainTranslation("breadcrumbs.home")
         });
+
+        it("displays a loading section", function() {
+            expect(this.page.$(".loading_section")).toExist();
+        });
     });
 
     describe("when all of the fetches complete", function() {
