@@ -43,24 +43,20 @@
                 <li><a class="associate" href="#">{{t "actions.associate_with_workspace"}}</a></li>
             {{/if}}
 
-            {{#if workspace}}
+            {{#if canExport}}
                 {{#if hasSandbox}}
-                    {{#if canExport}}
-                        <li><a class="import_now dialog" data-dialog="ImportScheduler" href="#">{{t "actions.import_now"}}</a></li>
-                        {{#if hasSchedule}}
-                            <li><a class="edit_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.edit_schedule"}}</a></li>
-                        {{else}}
-                            <li><a class="create_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.create_schedule"}}</a></li>
-                        {{/if}}
+                    <li><a class="import_now dialog" data-dialog="ImportScheduler" href="#">{{t "actions.import_now"}}</a></li>
+                    {{#if hasSchedule}}
+                        <li><a class="edit_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.edit_schedule"}}</a></li>
+                    {{else}}
+                        <li><a class="create_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.create_schedule"}}</a></li>
                     {{/if}}
                 {{else}}
-                    {{#if canExport}}
-                        <li><span class="import_now disabled">{{t "actions.import_now"}}</span></li>
-                        {{#if hasSchedule}}
-                            <li><span class="edit_schedule disabled">{{t "actions.edit_schedule"}}</span></li>
-                        {{else}}
-                            <li><span class="create_schedule disabled">{{t "actions.create_schedule"}}</span></li>
-                        {{/if}}
+                    <li><span class="import_now disabled">{{t "actions.import_now"}}</span></li>
+                    {{#if hasSchedule}}
+                        <li><span class="edit_schedule disabled">{{t "actions.edit_schedule"}}</span></li>
+                    {{else}}
+                        <li><span class="create_schedule disabled">{{t "actions.create_schedule"}}</span></li>
                     {{/if}}
                 {{/if}}
             {{/if}}
