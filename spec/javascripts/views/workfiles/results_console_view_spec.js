@@ -184,8 +184,20 @@ describe("chorus.views.ResultsConsoleView", function() {
                     itShowsExecutionResults();
                 })
 
-                it("displays the result message", function() {
-                    expect(this.view.$(".message").text().trim()).toBe("hi there")
+                it("has a link to display the execution message", function() {
+                    expect(this.view.$(".execution .view_details").text()).toMatchTranslation("actions.view_details");
+                });
+
+                describe("clicking the execution message link", function() {
+                    it("launches an execution message alert", function() {
+                        var fakeModal = stubModals();
+                        this.view.$(".execution a.view_details").click();
+
+                        expect(fakeModal).toHaveBeenCalled();
+                        var alertEl = $(fakeModal.mostRecentCall.args[0]);
+                        expect(alertEl).toBe(".info.alert");
+                        expect(alertEl).toContainText("hi there");
+                    });
                 });
 
                 context("and there was an execution error", function() {
