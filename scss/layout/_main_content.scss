@@ -8,13 +8,14 @@
 .content_header {
     background: white;
     min-height: 36px;
-    padding: 12px $padding-x;
+    padding: 12px $padding-x 5px;
     border-bottom: 1px solid $subheader-border-color;
     @include border-top-radius(3px);
 
     h1 {
         @include ellipsis;
         padding-top: 16px;
+        padding-bottom: 7px;
         @include heading-normal;
     }
 
