@@ -1,5 +1,7 @@
 chorus.views.NotificationList = chorus.views.Base.extend({
+    constructorName: "NotificationListView",
     className: "notification_list",
+    useLoadingSection: true,
 
     events: {
         "click .more_notifications a":"fetchMoreNotifications"

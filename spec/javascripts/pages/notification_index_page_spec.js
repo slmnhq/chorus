@@ -4,6 +4,12 @@ describe("chorus.pages.NotificationIndexPage", function() {
         this.page = new chorus.pages.NotificationIndexPage();
     });
 
+    describe("before the fetch completes", function() {
+        it("displays at least the title", function() {
+            expect($(this.page.el)).toContainTranslation("header.your_notifications");
+        });
+    });
+
     describe("when the notification fetches completes", function() {
         beforeEach(function() {
             spyOn(chorus.collections.NotificationSet.prototype, "markAllRead").andCallThrough();

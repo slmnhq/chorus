@@ -5,12 +5,17 @@ describe("chorus.views.NotificationList", function() {
             fixtures.notification(),
             fixtures.notification()
         ]);
-        this.collection.loaded = true;
         this.view = new chorus.views.NotificationList({ collection: this.collection });
+    });
+
+    it("uses a loading section", function() {
+        this.view.render();
+        expect(this.view.$(".loading_section")).toExist();
     });
 
     describe("#render", function() {
         beforeEach(function() {
+            this.collection.loaded = true;
             spyOn(chorus.views.Activity.prototype, 'initialize').andCallThrough();
             this.view.render();
         });
@@ -33,6 +38,7 @@ describe("chorus.views.NotificationList", function() {
 
     describe("more link", function() {
         beforeEach(function() {
+            this.collection.loaded = true;
             this.collection.pagination = (this.collection.pagination || {});
             this.collection.pagination.page = "1";
             this.collection.pagination.total = "99999999";
