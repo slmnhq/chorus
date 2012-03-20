@@ -16,6 +16,24 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         expect(this.page.instance).toHaveBeenFetched();
     });
 
+    describe("before the instance fetch completes", function() {
+        beforeEach(function() {
+            this.page.render();
+        });
+
+        it("has a loading section on the page", function() {
+            expect(this.page.$(".loading_section")).toExist();
+        });
+
+        it("has some breadcrumbs", function() {
+            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
+            expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
+
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/instances");
+            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
+        });
+    });
+
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
             var entries = fixtures.hdfsEntrySet(null, {instanceId: "1234", path: "/foo"});

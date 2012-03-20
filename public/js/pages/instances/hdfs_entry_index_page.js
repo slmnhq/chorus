@@ -7,32 +7,45 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
         this.path = "/" + path;
         this.instance = new chorus.models.Instance({id: instanceId});
         this.instance.fetch();
-        this.requiredResources.push(this.instance);
+        this.bindings.add(this.instance, "loaded", this.entriesFetched);
 
         this.collection = new chorus.collections.HdfsEntrySet([], {instance: this.instance, path: this.path});
         this.collection.fetch();
-        this.requiredResources.push(this.collection);
-        chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this)
-    },
 
-    resourcesLoaded: function() {
-        var pathLength = _.compact(this.path.split("/")).length
-        this.crumbs = [
-            { label: t("breadcrumbs.home"), url: "#/" },
-            { label: t("breadcrumbs.instances"), url: "#/instances" },
-            { label: this.instance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "") }
-        ];
+        chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this)
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "HdfsEntry",
-            collection: this.collection,
-            title: this.instance.get("name") + ": " + this.ellipsizePath()
+            collection: this.collection
         });
 
         this.sidebar = new chorus.views.HdfsEntrySidebar({
             rootPath: this.path,
-            instanceId: this.instance.get("id")
+            instanceId: instanceId
         });
+
+        var pathLength = _.compact(this.path.split("/")).length
+        var mainCrumbs = [
+            { label: t("breadcrumbs.home"), url: "#/" },
+            { label: t("breadcrumbs.instances"), url: "#/instances" }
+        ];
+
+        this.breadcrumbs = new chorus.views.ModelBoundBreadcrumbsView({model: this.instance});
+        this.breadcrumbs.getLoadedCrumbs = function () {
+            return mainCrumbs.concat([
+                { label: this.model.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "") }
+            ]);
+        };
+        this.breadcrumbs.getLoadingCrumbs = function () {
+            return mainCrumbs.concat([
+                { label: "..."}
+            ]);
+        };
+    },
+
+    entriesFetched: function() {
+        this.mainContent.contentHeader.options.title = this.instance.get("name") + ": " + this.ellipsizePath();
+        this.render();
     },
 
     postRender: function() {

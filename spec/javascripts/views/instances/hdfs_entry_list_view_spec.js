@@ -3,8 +3,15 @@ describe("chorus.views.HdfsEntryList", function() {
         this.collection = fixtures.hdfsEntrySet(null, {instance: {id: "1234"}, path: "/abc"});
         this.view = new chorus.views.HdfsEntryList({ collection : this.collection});
     });
+
+    it("uses a loading section", function() {
+        this.view.render();
+        expect(this.view.$(".loading_section")).toExist();
+    });
+
     describe("#render", function() {
         beforeEach(function() {
+            this.collection.loaded = true;
             spyOn(chorus.PageEvents, "broadcast");
             this.view.render();
         });

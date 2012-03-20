@@ -1,6 +1,7 @@
 chorus.views.HdfsEntryList = chorus.views.SelectableList.extend({
     constructorName: "HdfsEntryList",
     className: "hdfs_entry_list",
+    useLoadingSection: true,
 
     collectionModelContext: function(model) {
         return {
