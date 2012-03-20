@@ -275,6 +275,17 @@
             return new Handlebars.SafeString(result.outerHtml());
         },
 
+        attachmentFoundIn: function(model) {
+            if(model.workspace) {
+                var workspaceLink = model.workspace().showLink();
+                var datasetLink = model.tabularData().showLink();
+                return t("attachment.found_in.tabular_data_in_workspace", { workspaceLink: workspaceLink, tabularDataLink: datasetLink })
+            } else {
+                var datasetLink = model.tabularData().showLink();
+                return t("attachment.found_in.tabular_data_not_in_workspace", { tabularDataLink: datasetLink })
+            }
+        },
+
         tabularDataLocation: function(tabularData) {
             var highlightedTabularData = chorus.helpers.withSearchResults(tabularData)
             var instance = tabularData.instance();

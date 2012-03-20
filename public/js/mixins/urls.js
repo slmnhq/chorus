@@ -12,5 +12,9 @@ chorus.Mixins.Urls = {
         var prefix = "#/"
         var encodedFragment = new URI(Handlebars.compile(template, {noEscape: true})(attributes)).normalize().toString()
         return prefix + encodedFragment;
+    },
+
+    showLink: function() {
+        return Handlebars.helpers.linkTo(this.showUrl(), this.name());
     }
 };

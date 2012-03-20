@@ -689,6 +689,35 @@ describe("handlebars", function() {
             }
         });
 
+        describe("attachmentFoundIn", function() {
+            context("on a tabularData in a workspace", function() {
+                beforeEach(function() {
+                    this.model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
+                    this.result = Handlebars.helpers.attachmentFoundIn(this.model).toString();
+                });
+
+                it("displays the correct text", function() {
+                    expect(this.result).toMatchTranslation('attachment.found_in.tabular_data_in_workspace', {
+                        workspaceLink: Handlebars.helpers.linkTo(this.model.workspace().showUrl(), this.model.workspace().name()),
+                        tabularDataLink: Handlebars.helpers.linkTo(this.model.tabularData().showUrl(), this.model.tabularData().name())
+                    });
+                })
+            });
+
+            context("on a tabularData not in a workspace", function() {
+                beforeEach(function() {
+                    this.model = fixtures.attachmentOnDatasetNotInWorkspaceSearchResult();
+                    this.result = Handlebars.helpers.attachmentFoundIn(this.model).toString();
+                });
+
+                it("displays the correct text", function() {
+                    expect(this.result).toMatchTranslation('attachment.found_in.tabular_data_not_in_workspace', {
+                        tabularDataLink: Handlebars.helpers.linkTo(this.model.tabularData().showUrl(), this.model.tabularData().name())
+                    });
+                })
+            });
+        });
+
         describe("tabularDataLocation", function() {
             beforeEach(function() {
                 this.model = fixtures.tabularData();

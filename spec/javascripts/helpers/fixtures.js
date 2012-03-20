@@ -2375,6 +2375,65 @@ beforeEach(function() {
             }, overrides)
         },
 
+        attachmentOnDatasetInWorkspaceSearchResult: function(overrides) {
+            var model = this.attachmentOnDatasetNotInWorkspaceSearchResult(overrides);
+            model.set({workspace: {
+                id: "10000",
+                name: "ws"
+            }});
+            model.get('databaseObject').workspaces = [
+                {
+                    id: "10000",
+                    datasetType: "SANDBOX_TABLE",
+                    name: "ws"
+                },
+                {
+                    id: "10030",
+                    datasetType: "SANDBOX_TABLE",
+                    name: "has_sandbox"
+                }
+            ];
+            return model;
+        },
+
+        attachmentOnDatasetNotInWorkspaceSearchResult: function(overrides) {
+            var attributes = _.extend({
+                entityType: "databaseObject",
+                id: "10005",
+                isDeleted: false,
+                lastUpdatedStamp: "2012-03-16 17:06:08",
+                fileId: "10005",
+                fileType: "IMAGE",
+                isBinary: true,
+                name: "Titanic2.jpg",
+                highlightedAttributes: {
+                    name: ["<em>Titanic</em><em>2</em>.jpg"]
+                },
+                owner: {
+                    id: "InitialUser",
+                    lastName: "Admin",
+                    firstName: "EDC"
+                },
+                workspace: {
+                },
+                databaseObject: {
+                    id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"2010_report_on_white_house"',
+                    databaseName: "dca_demo",
+                    schemaName: "ddemo",
+                    objectName: "2010_report_on_white_house",
+                    workspaces: [],
+                    instance: {
+                        id: "10000",
+                        name: "gillette"
+                    },
+                    entityType: "databaseObject",
+                    objectType: "BASE_TABLE"
+                },
+                comments: []
+            });
+            return new chorus.models.Artifact(attributes);
+        },
+
         searchResultJson: function(overrides) {
             return _.extend({
                 "workfile": {
