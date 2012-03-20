@@ -138,6 +138,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         it("it displays the workfile name in the content header", function() {
             expect(this.page.mainContent.contentHeader.$("h1").text()).toBe(this.model.get('fileName'));
+            expect(this.page.mainContent.contentHeader.$("h1").attr("title")).toBe(this.model.get('fileName'));
         });
 
         it("displays the file icon in the content header", function() {

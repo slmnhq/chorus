@@ -27,6 +27,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
 
         it("renders the name of the workspace in an h1", function() {
             expect(this.view.$("h1").text().trim()).toBe(this.model.get("name"));
+            expect(this.view.$("h1").attr("title").trim()).toBe(this.model.get("name"));
         });
 
         context("the workspace has an image", function() {

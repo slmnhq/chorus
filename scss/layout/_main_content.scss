@@ -13,6 +13,7 @@
     @include border-top-radius(3px);
 
     h1 {
+        @include ellipsis;
         padding-top: 16px;
         @include heading-normal;
     }

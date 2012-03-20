@@ -10,6 +10,7 @@ describe("chorus.views.HdfsShowFileHeader", function() {
     })
 
     it("has the file name", function() {
-        expect(this.view.$("h1").text()).toBe("myFile.txt")
+        expect(this.view.$("h1").text()).toBe("myFile.txt");
+        expect(this.view.$("h1").attr("title")).toBe("myFile.txt");
     })
 })

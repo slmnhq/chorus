@@ -771,7 +771,8 @@ describe("chorus.views.Base", function() {
             })
 
             it("renders the header title", function() {
-                expect(this.view.$("h1").text().trim()).toBe("Hi there")
+                expect(this.view.$("h1").text().trim()).toBe("Hi there");
+                expect(this.view.$("h1").attr("title")).toBe("Hi there");
             })
 
             it("does not render an image", function() {

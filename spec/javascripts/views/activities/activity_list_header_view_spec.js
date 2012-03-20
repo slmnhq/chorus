@@ -35,6 +35,7 @@ describe("chorus.views.ActivityListHeader", function() {
                 context("when insights mode is false", function() {
                     it("displays the title for 'all' mode by default", function() {
                         expect(this.view.$("h1").text()).toBe("the_all_title_i_passed");
+                        expect(this.view.$("h1").attr("title")).toBe("the_all_title_i_passed");
                     });
 
                     it("displays the 'All Activity' link as active", function() {
@@ -51,6 +52,7 @@ describe("chorus.views.ActivityListHeader", function() {
 
                     it("displays the title for 'insights' mode by default", function() {
                         expect(this.view.$("h1").text()).toBe("the_insights_title_i_passed");
+                        expect(this.view.$("h1").attr("title")).toBe("the_insights_title_i_passed");
                     });
 
                     it("displays the 'Insights' link as active", function() {
@@ -83,6 +85,7 @@ describe("chorus.views.ActivityListHeader", function() {
 
                     it("switches to the title for 'insights' mode", function() {
                         expect(this.view.$("h1").text()).toBe("the_insights_title_i_passed");
+                        expect(this.view.$("h1").attr("title")).toBe("the_insights_title_i_passed");
                     });
 
                     describe("clicking on 'All Activity'", function() {
@@ -103,6 +106,7 @@ describe("chorus.views.ActivityListHeader", function() {
 
                         it("switches back to the title for 'all' mode", function() {
                             expect(this.view.$("h1").text()).toBe("the_all_title_i_passed");
+                            expect(this.view.$("h1").attr("title")).toBe("the_all_title_i_passed");
                         });
                     });
                 });
