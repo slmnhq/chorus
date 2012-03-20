@@ -215,10 +215,6 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$('.sql_errors .close_errors')).toExist();
                     })
 
-                    it("does not display the result message", function() {
-                        expect(this.view.$(".message")).toBeEmpty();
-                    });
-
                     it("should hide the execution content area", function() {
                         expect(this.view.$(".result_content")).toHaveClass("hidden");
                     });
