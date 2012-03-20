@@ -44,6 +44,13 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
+    describe("#workfilesUrl", function() {
+        it("links to the workfile index route", function() {
+            this.model.set({id: 5});
+            expect(this.model.workfilesUrl()).toBe("#/workspaces/5/workfiles");
+        });
+    });
+
     describe("#owner", function() {
         beforeEach(function() {
             this.model.set({owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47"})

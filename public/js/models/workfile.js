@@ -190,7 +190,7 @@
         },
 
         workfilesUrl: function() {
-            return "#/workspaces/" + this.get("workspaceId") + "/workfiles";
+            return this.workspace().workfilesUrl();
         },
 
         canEdit: function() {
