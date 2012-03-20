@@ -34,16 +34,23 @@ describe("chorus.views.visualizations.BoxPlot", function() {
             this.maxWhiskers = this.boxes.find("line.whisker.max")
             this.whiskers = this.boxes.find("line.whisker");
             this.midlines = this.boxes.find("line.midline");
-        });
-
-        beforeEach(function() {
             this.addMatchers(chorus.svgHelpers.matchers);
         });
 
+        describe("re-rendering", function() {
+            beforeEach(function() {
+                this.view.render();
+            });
+
+            it("does not create multiple charts", function() {
+                expect(this.view.$("svg.chart").length).toBe(1);
+            });
+        });
+
         it("has the correct axis labels", function() {
-            expect(this.view.$('.xaxis .axis_label').text()).toBe("foo")
-            expect(this.view.$('.yaxis .axis_label').text()).toBe("bar")
-        })
+            expect(this.view.$('.xaxis .axis_label').text()).toBe("foo");
+            expect(this.view.$('.yaxis .axis_label').text()).toBe("bar");
+        });
 
         it("has the Y grid lines", function() {
             expect(this.view.$('.yaxis line.grid').length).toBeGreaterThan(0);
@@ -51,11 +58,11 @@ describe("chorus.views.visualizations.BoxPlot", function() {
         });
 
         it("combines bucket names with percentages and ellipsizes", function() {
-            var xlabels = this.view.$(".xaxis .label text")
-            expect(xlabels[0].textContent).toBe("chupa… (81%)")
-            expect(xlabels[1].textContent).toBe("beluga (33%)")
-            expect(xlabels[2].textContent).toBe("aardv… (25%)")
-        })
+            var xlabels = this.view.$(".xaxis .label text");
+            expect(xlabels[0].textContent).toBe("chupa… (81%)");
+            expect(xlabels[1].textContent).toBe("beluga (33%)");
+            expect(xlabels[2].textContent).toBe("aardv… (25%)");
+        });
 
         describe("the quartile rectangles", function() {
             it("has one for each bucket", function() {

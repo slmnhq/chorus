@@ -55,6 +55,16 @@ describe("chorus.views.visualizations.Timeseries", function() {
             expect(labels[0].textContent).toBe("2012-01-01")
         })
 
+        describe("re-rendering", function() {
+            beforeEach(function() {
+                this.view.render();
+            });
+
+            it("does not create multiple charts", function() {
+                expect(this.view.$("svg.chart").length).toBe(1);
+            });
+        });
+
         describe("the path", function() {
             beforeEach(function() {
                 this.xs = pathXs(this.path);

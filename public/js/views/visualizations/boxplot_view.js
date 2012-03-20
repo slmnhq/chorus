@@ -4,6 +4,7 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.include(
     constructorName: "BoxplotVisualizationView",
     render: function() {
         var $el = $(this.el);
+        $el.html("");
         $el.addClass("visualization");
         var data = new chorus.presenters.visualizations.Boxplot(this.model).present();
         this.postRender();

@@ -1,6 +1,7 @@
 chorus.views.visualizations.Histogram = chorus.views.Base.extend({
     render: function() {
         var $el = $(this.el);
+        $el.html("");
         $el.addClass("visualization");
 
         var data = new chorus.presenters.visualizations.Histogram(this.model).present();

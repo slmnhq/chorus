@@ -34,6 +34,16 @@ describe("chorus.views.visualizations.FrequencyView", function() {
             expect(this.view.$('.yaxis .axis_label').text()).toBe("animals")
         });
 
+        describe("re-rendering", function() {
+            beforeEach(function() {
+                this.view.render();
+            });
+
+            it("does not create multiple charts", function() {
+                expect(this.view.$("svg.chart").length).toBe(1);
+            });
+        });
+
         describe("the frequency rectangles", function() {
             it("has one for each bucket", function() {
                 expect(this.boxes.length).toBe(3);
@@ -82,5 +92,4 @@ describe("chorus.views.visualizations.FrequencyView", function() {
             expect($(gridRect[gridRect.length-1]).attr("class")).toBe("grid")
         })
     });
-
 });

@@ -28,6 +28,16 @@ describe("chorus.views.visualizations.Histogram", function() {
             this.view.render();
         })
 
+        describe("re-rendering", function() {
+            beforeEach(function() {
+                this.view.render();
+            });
+
+            it("does not create multiple charts", function() {
+                expect(this.view.$("svg.chart").length).toBe(1);
+            });
+        });
+
         it("has one bar for each bin", function() {
             expect(this.view.$(".bar").length).toBe(5);
         })
