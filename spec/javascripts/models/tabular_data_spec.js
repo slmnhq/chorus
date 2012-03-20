@@ -473,6 +473,12 @@ describe("chorus.models.TabularData", function() {
         });
     });
 
+    describe("#workspace", function() {
+        it("is a chorus.models.Workspace", function() {
+            expect(this.tabularData.workspace()).toBeA(chorus.models.Workspace);
+        });
+    });
+
     describe("#setDatasetNumber", function() {
         beforeEach(function() {
             this.tabularData.setDatasetNumber(4)
@@ -501,6 +507,24 @@ describe("chorus.models.TabularData", function() {
             expect(this.tabularData.aliasedName).toBeUndefined();
         })
     })
+
+    describe("#isDeleteable", function () {
+        it("is true when the tabular data is a source table", function() {
+            expect(fixtures.datasetSourceTable().isDeleteable()).toBeTruthy();
+        });
+
+        it("is true when the tabular data is a source view", function() {
+            expect(fixtures.datasetSourceView().isDeleteable()).toBeTruthy();
+        });
+
+        it("is true when the tabular data is a chorus view", function() {
+            expect(fixtures.datasetChorusView().isDeleteable()).toBeTruthy();
+        });
+
+        it("is false otherwise", function() {
+            expect(fixtures.datasetSandboxTable().isDeleteable()).toBeFalsy();
+        });
+    });
 
     describe("#makeBoxplotTask", function() {
         beforeEach(function() {

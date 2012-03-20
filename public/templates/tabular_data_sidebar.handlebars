@@ -66,6 +66,8 @@
                     <li><a class="tabular_data_preview" href="#">{{t "actions.tabular_data_preview"}}</a></li>
                 {{/if}}
             {{/unless}}
+
+            {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete">{{t "actions.delete"}}</a></li>{{/if}}
         </ul>
     </div>
 

@@ -108,6 +108,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
             ctx.canExport = this.options.workspace.canUpdate() && !ctx.noCredentials && ctx.isImportConfigLoaded && this.resource.canBeImportSource();
             ctx.hasSandbox = this.options.workspace.sandbox();
             ctx.workspaceId = this.options.workspace.id;
+            ctx.isDeleteable = this.resource && this.resource.isDeleteable() && this.options.workspace.canUpdate();
         }
 
         return ctx;

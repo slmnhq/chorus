@@ -226,8 +226,57 @@ describe("chorus.views.TabularDataSidebar", function() {
                     this.view.render();
                 });
 
+                context("and no dataset is selected", function() {
+                    beforeEach(function() {
+                        chorus.PageEvents.broadcast("tabularData:selected");
+                    });
+
+                    it("does not display a delete link", function() {
+                        expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                    });
+                })
+
                 it("doesn't display any import links by default", function() {
                     expect(this.view.$("a.create_schedule, a.edit_schedule, a.import_now")).not.toExist();
+                });
+
+                context("and isDeleteable returns true", function() {
+                    beforeEach(function() {
+                        spyOn(this.view.resource, "isDeleteable").andReturn(true);
+                    });
+
+                    context("and the logged-in user has update permission on the workspace", function() {
+                        beforeEach(function() {
+                            this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                            this.view.render();
+                        });
+
+                        it("displays a delete link", function() {
+                            expect(this.view.$("a.alert[data-alert=DatasetDelete]")).toExist();
+                        });
+                    });
+
+                    context("and the logged-in user does not have update permission on the workspace", function() {
+                        beforeEach(function() {
+                            this.view.options.workspace = fixtures.workspace({ permission: ["read"] })
+                            this.view.render();
+                        });
+
+                        it("does not display a delete link", function() {
+                            expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                        });
+                    });
+                });
+
+                context("and isDeleteable returns false", function() {
+                    beforeEach(function() {
+                        spyOn(this.view.resource, "isDeleteable").andReturn(false);
+                        this.view.render();
+                    });
+
+                    it("does not display a delete link", function() {
+                        expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                    });
                 });
 
                 context("when the dataset is a sandbox table or view", function() {
@@ -653,6 +702,12 @@ describe("chorus.views.TabularDataSidebar", function() {
                     expect(this.view.$(".actions .import_now")).not.toExist();
                 });
 
+                it("does not display a delete link", function() {
+                    spyOn(this.view.resource, 'isDeleteable').andReturn(true);
+                    this.view.render();
+                    expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                });
+
                 it("has a link to associate the dataset with a workspace", function() {
                     expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_workspace');
                 });
@@ -836,8 +891,8 @@ describe("chorus.views.TabularDataSidebar", function() {
         })
 
         describe("has all the translations for all objectTypes", function() {
-            _.each(["QUERY", "VIEW", "TABLE", "BASE_TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type){
-                it("does not have any missing translations for"+type, function() {
+            _.each(["QUERY", "VIEW", "TABLE", "BASE_TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
+                it("does not have any missing translations for" + type, function() {
                     this.dataset = fixtures.datasetSourceTable({objectType: type});
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     expect(this.view.activityList.options.type).not.toContain("missing");

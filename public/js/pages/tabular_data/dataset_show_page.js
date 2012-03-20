@@ -9,7 +9,7 @@
                 {label: t("breadcrumbs.home"), url: "#/"},
                 {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
                 {label: this.workspace.displayShortName(), url: this.workspace.showUrl()},
-                {label: t("breadcrumbs.workspaces_data"), url: this.workspace.showUrl() + "/datasets"},
+                {label: t("breadcrumbs.workspaces_data"), url: this.workspace.datasetsUrl()},
                 {label: this.tabularData.get('objectName')}
             ];
         },

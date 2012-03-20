@@ -26,6 +26,11 @@ chorus.models.TabularData = chorus.models.Base.include(
         return this.constructor.metaTypeMap[this.get("objectType")] || "table";
     },
 
+    isDeleteable: function() {
+        var type = this.get("type")
+        return type && (type == "SOURCE_TABLE" || type == "CHORUS_VIEW");
+    },
+
     columns: function(options) {
         if (!this._columns) {
             this._columns = new chorus.collections.DatabaseColumnSet([], {
@@ -62,6 +67,13 @@ chorus.models.TabularData = chorus.models.Base.include(
             });
         }
         return this._schema;
+    },
+
+    workspace: function() {
+        if (!this._workspace) {
+            this._workspace = new chorus.models.Workspace(this.get("workspace"));
+        }
+        return this._workspace;
     },
 
     statistics: function() {

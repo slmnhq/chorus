@@ -88,6 +88,10 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return this.get('active') ? "/images/workspaces/workspace_small.png" : "/images/workspaces/workspace_archived_small.png";
     },
 
+    datasetsUrl: function() {
+        return this.showUrl() + "/datasets";
+    },
+
     attrToLabel:{
         "name":"workspace.validation.name"
     },

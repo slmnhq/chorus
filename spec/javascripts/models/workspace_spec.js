@@ -37,6 +37,13 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
+    describe("#datasetsUrl", function() {
+        it("links to the dataset index route", function() {
+            this.model.set({id: 5});
+            expect(this.model.datasetsUrl()).toBe("#/workspaces/5/datasets");
+        });
+    });
+
     describe("#owner", function() {
         beforeEach(function() {
             this.model.set({owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47"})
@@ -129,7 +136,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#archiver", function() {
         beforeEach(function() {
-            this.model.set({archiver: "jhenry", archiverFirstName: "John" ,archiverLastName: "Henry"})
+            this.model.set({archiver: "jhenry", archiverFirstName: "John", archiverLastName: "Henry"})
         });
 
         it("returns a new User with the right username and fullName", function() {
@@ -218,7 +225,7 @@ describe("chorus.models.Workspace", function() {
         context("when the workspace has a sandbox", function() {
             beforeEach(function() {
                 this.model = fixtures.workspace({
-                    sandboxInfo : {
+                    sandboxInfo: {
                         databaseId: 4,
                         databaseName: "db",
                         instanceId: 5,
@@ -247,7 +254,7 @@ describe("chorus.models.Workspace", function() {
         context("when the workspace does not have a sandbox", function() {
             beforeEach(function() {
                 this.model = fixtures.workspace({
-                    sandboxInfo : {
+                    sandboxInfo: {
                         databaseId: null,
                         databaseName: null,
                         instanceId: null,
