@@ -23,24 +23,16 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
             rootPath: this.path,
             instanceId: instanceId
         });
+    },
 
-        var pathLength = _.compact(this.path.split("/")).length
-        var mainCrumbs = [
+    crumbs: function() {
+        var pathLength = _.compact(this.path.split("/")).length;
+        var modelCrumb = this.instance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "");
+        return [
             { label: t("breadcrumbs.home"), url: "#/" },
-            { label: t("breadcrumbs.instances"), url: "#/instances" }
+            { label: t("breadcrumbs.instances"), url: "#/instances" },
+            { label: this.instance.loaded ? modelCrumb : "..." }
         ];
-
-        this.breadcrumbs = new chorus.views.ModelBoundBreadcrumbsView({model: this.instance});
-        this.breadcrumbs.getLoadedCrumbs = function () {
-            return mainCrumbs.concat([
-                { label: this.model.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "") }
-            ]);
-        };
-        this.breadcrumbs.getLoadingCrumbs = function () {
-            return mainCrumbs.concat([
-                { label: "..."}
-            ]);
-        };
     },
 
     entriesFetched: function() {
