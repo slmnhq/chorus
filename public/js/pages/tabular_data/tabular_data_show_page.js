@@ -1,17 +1,4 @@
 (function() {
-    var breadcrumbsView = chorus.views.ModelBoundBreadcrumbsView.extend({
-        getLoadedCrumbs: function() {
-            return [
-                {label: t("breadcrumbs.home"), url: "#/"},
-                {label: t("breadcrumbs.instances"), url: '#/instances'},
-                {label: this.model.get("instance").name, url: "#/instances/" + this.model.get('instance').id + "/databases" },
-                {label: this.model.get("databaseName"),  url: "#/instances/" + this.model.get('instance').id + "/databases/" + this.model.get('databaseName') },
-                {label: this.model.get("schemaName"), url: this.model.schema().showUrl()},
-                {label: this.model.get("objectName")}
-            ];
-        }
-    });
-
     var headerView = chorus.views.ListHeaderView.extend({
         additionalContext: function() {
             return {
@@ -53,11 +40,17 @@
         setup: function() {
             this.makeModel.apply(this, arguments)
             this.fetchResources();
-            this.makeBreadcrumbs();
         },
 
-        makeBreadcrumbs: function() {
-            this.breadcrumbs = new breadcrumbsView({model: this.tabularData});
+        crumbs: function() {
+            return [
+                {label: t("breadcrumbs.home"), url: "#/"},
+                {label: t("breadcrumbs.instances"), url: '#/instances'},
+                {label: this.tabularData.get("instance").name, url: "#/instances/" + this.tabularData.get('instance').id + "/databases" },
+                {label: this.tabularData.get("databaseName"),  url: "#/instances/" + this.tabularData.get('instance').id + "/databases/" + this.tabularData.get('databaseName') },
+                {label: this.tabularData.get("schemaName"), url: this.tabularData.schema().showUrl()},
+                {label: this.tabularData.get("objectName")}
+            ];
         },
 
         makeModel: function(instanceId, databaseName, schemaName, objectType, objectName) {

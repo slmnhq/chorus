@@ -8,6 +8,11 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         Backbone.history.loadUrl("/invalidRoute");
     },
 
+    dependOn: function(model) {
+        this.bindings.add(model, "fetchFailed", this.requiredResourcesFetchFailed);
+        this.bindings.add(model, "change", this.render);
+    },
+
     failurePageOptions: function() {}
 });
 
@@ -27,7 +32,7 @@ chorus.pages.Base = chorus.pages.Bare.extend({
 
     setupSubviews: function() {
         this.header = this.header || new chorus.views.Header({ workspaceId: this.workspaceId });
-        this.breadcrumbs = this.breadcrumbs || new chorus.views.BreadcrumbsView({
+        this.breadcrumbs = new chorus.views.BreadcrumbsView({
             breadcrumbs: _.isFunction(this.crumbs) ? this.crumbs() : this.crumbs
         });
     },

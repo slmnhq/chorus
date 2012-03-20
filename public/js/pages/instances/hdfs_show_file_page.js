@@ -7,22 +7,11 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
 
         this.model = new chorus.models.HdfsFile({ instanceId: instanceId, path: this.path });
         this.model.fetch()
-        this.requiredResources.push(this.model)
+        this.dependOn(this.model);
 
         this.instance = new chorus.models.Instance({id: instanceId});
         this.instance.fetch();
-        this.requiredResources.push(this.instance);
-    },
-
-    resourcesLoaded: function() {
-        var pathLength = _.compact(this.path.split("/")).length - 1
-
-        this.crumbs = [
-            { label: t("breadcrumbs.home"), url: "#/" },
-            { label: t("breadcrumbs.instances"), url: "#/instances" },
-            { label: this.instance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "") , url: "#/instances"},
-            { label: this.model.fileNameFromPath()}
-        ];
+        this.dependOn(this.instance);
 
         this.mainContent = new chorus.views.MainContentView({
             model:this.model,
@@ -32,7 +21,20 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
         });
 
         this.sidebar = new chorus.views.HdfsShowFileSidebar({ model: this.model })
-        this.render();
+    },
+
+    crumbs: function() {
+        var pathLength = _.compact(this.path.split("/")).length - 1
+
+        var instanceCrumb = this.instance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "");
+        var fileNameCrumb = this.model.fileNameFromPath();
+
+        return [
+            { label: t("breadcrumbs.home"), url: "#/" },
+            { label: t("breadcrumbs.instances"), url: "#/instances" },
+            { label: this.instance.loaded ? instanceCrumb : "..." , url: "#/instances"},
+            { label: this.model.loaded ? fileNameCrumb : "..."}
+        ];
     },
 
     postRender: function() {

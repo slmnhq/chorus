@@ -1,4 +1,4 @@
-describe("user_show_page", function(){
+describe("chorus.pages.UserShow", function(){
     describe("#setup", function(){
         beforeEach(function(){
             this.view = new chorus.pages.UserShowPage("44");

@@ -15,6 +15,20 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         expect(this.page.model.get("instanceId")).toBe("1234");
     });
 
+    describe("before fetches complete", function() {
+        beforeEach(function() {
+            this.page.render();
+        });
+
+        it("shows some breadcrumbs", function() {
+            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
+            expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
+
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/instances");
+            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
+        });
+    });
+
     context("fetches fail", function() {
         beforeEach(function() {
             spyOn(Backbone.history, "loadUrl")
@@ -33,6 +47,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         });
 
         it("has the breadcrumbs", function (){
+            expect(this.page.model.loaded).toBeTruthy();
             expect(this.page.$(".breadcrumbs .spacer").length).toBe(3);
 
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");

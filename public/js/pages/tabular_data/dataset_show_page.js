@@ -1,28 +1,17 @@
 (function() {
-    var breadcrumbsView = chorus.views.ModelBoundBreadcrumbsView.extend({
-        makeModel: function() {
-            this.requiredResources.push(this.options.workspace);
-            this.requiredResources.push(this.options.tabularData);
-        },
-
-        getLoadedCrumbs: function() {
-            return [
-                {label: t("breadcrumbs.home"), url: "#/"},
-                {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-                {label: this.options.workspace.displayShortName(), url: this.options.workspace.showUrl()},
-                {label: t("breadcrumbs.workspaces_data"), url: this.options.workspace.showUrl() + "/datasets"},
-                {label: this.options.tabularData.get('objectName')}
-            ];
-        }
-    });
-
     chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
         constructorName: "DatasetShowPage",
         helpId: "dataset",
         hideDeriveChorusView: false,
 
-        makeBreadcrumbs: function() {
-            this.breadcrumbs = new breadcrumbsView({workspace: this.workspace, tabularData: this.tabularData});
+        crumbs: function() {
+            return [
+                {label: t("breadcrumbs.home"), url: "#/"},
+                {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
+                {label: this.workspace.displayShortName(), url: this.workspace.showUrl()},
+                {label: t("breadcrumbs.workspaces_data"), url: this.workspace.showUrl() + "/datasets"},
+                {label: this.tabularData.get('objectName')}
+            ];
         },
 
         makeModel: function(workspaceId, datasetId) {

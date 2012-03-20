@@ -32,8 +32,8 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 this.page.render();
             });
 
-            it("does not display any text", function(){
-                expect(this.page.$(".breadcrumb").text().trim()).toBe("");
+            it("displays some breadcrumbs", function(){
+                expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home")
             });
         });
 
@@ -100,5 +100,5 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 });
             });
         });
-    })
+    });
 });

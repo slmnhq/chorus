@@ -21,6 +21,20 @@ describe("chorus.pages.Base", function() {
         })
     })
 
+    describe("#dependOn", function() {
+        beforeEach(function() {
+            this.page = new chorus.pages.Bare();
+            this.model = new chorus.models.Base();
+            spyOn(this.page, "requiredResourcesFetchFailed");
+            this.page.dependOn(this.model);
+        });
+
+        it("binds fetchFailed to requiredResourcesFetchFailed", function() {
+            this.model.trigger("fetchFailed");
+            expect(this.page.requiredResourcesFetchFailed).toHaveBeenCalled();
+        });
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             this.view = new chorus.pages.Base();
@@ -92,16 +106,24 @@ describe("chorus.pages.Base", function() {
 
             context("with dynamic breadcrumbs", function() {
                 beforeEach(function() {
-                    this.view.crumbs = function() {
+
+                    this.view.crumbs = jasmine.createSpy("crumbs").andCallFake(function() {
                         return [
                             {label: "There"}
                         ]
-                    }
+                    });
                     this.view.render();
                 })
 
                 it("creates a BreadcrumbsView with the dynamic breadcrumbs", function() {
                     expect(this.view.breadcrumbs.options.breadcrumbs).toEqual(this.view.crumbs());
+                });
+
+                it("re-evaluates the function every time render is called", function() {
+                    expect(this.view.crumbs).toHaveBeenCalled();
+                    this.view.crumbs.reset();
+                    this.view.render();
+                    expect(this.view.crumbs).toHaveBeenCalled();
                 });
             })
         })

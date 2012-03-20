@@ -1,15 +1,4 @@
 (function() {
-    var breadcrumbsView = chorus.views.ModelBoundBreadcrumbsView.extend({
-        getLoadedCrumbs: function() {
-            return [
-                {label: t("breadcrumbs.home"), url: "#/"},
-                {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-                {label: this.model.displayShortName(), url: this.model.showUrl()},
-                {label: t("breadcrumbs.workspaces_data")}
-            ];
-        }
-    });
-
     chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
         constructorName: "DatasetIndexPage",
         helpId: "datasets",
@@ -20,7 +9,6 @@
             this.workspace.onLoaded(this.workspaceLoaded, this);
             this.workspace.fetch();
             this.requiredResources.push(this.workspace);
-            this.breadcrumbs = new breadcrumbsView({model: this.workspace});
 
             this.collection = new chorus.collections.DatasetSet([], {workspaceId: workspaceId});
             this.collection.sortAsc("objectName");
@@ -33,6 +21,15 @@
             chorus.PageEvents.subscribe("csv_import:started", function() {
                 this.collection.fetch();
             }, this)
+        },
+
+        crumbs: function() {
+            return [
+                {label: t("breadcrumbs.home"), url: "#/"},
+                {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
+                {label: this.workspace.displayShortName(), url: this.workspace.showUrl()},
+                {label: t("breadcrumbs.workspaces_data")}
+            ];
         },
 
         workspaceLoaded: function() {

@@ -14,21 +14,3 @@ chorus.views.BreadcrumbsView = chorus.views.Base.extend({
         });
     }
 });
-
-chorus.views.ModelBoundBreadcrumbsView = chorus.views.BreadcrumbsView.extend({
-    getLoadedCrumbs:function () {
-        return [];
-    },
-    getLoadingCrumbs:function () {
-        return []
-    },
-    context:function () {
-        var breadcrumbs;
-        if(this.model && !this.model.loaded) {
-            breadcrumbs = this.getLoadingCrumbs();
-        } else {
-            breadcrumbs = this.getLoadedCrumbs();
-        }
-        return { breadcrumbs: breadcrumbs };
-    }
-});

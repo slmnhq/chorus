@@ -138,6 +138,10 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 expect(this.page.sidebar.options.workspace.id).toEqual(this.workspace.id);
             });
 
+            it("has breadcrumbs", function() {
+                expect(this.page.$(".breadcrumbs")).toContainTranslation("breadcrumbs.workspaces_data");
+            });
+
             it("creates the main content", function() {
                 expect(this.page.mainContent).toBeDefined();
                 expect(this.page.mainContent.model).toBeA(chorus.models.Workspace);

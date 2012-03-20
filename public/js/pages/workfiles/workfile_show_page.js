@@ -1,16 +1,4 @@
 (function () {
-    var breadcrumbsView = chorus.views.ModelBoundBreadcrumbsView.extend({
-        getLoadedCrumbs:function () {
-            return [
-                {label:t("breadcrumbs.home"), url:"#/"},
-                {label:t("breadcrumbs.workspaces"), url:'#/workspaces'},
-                {label:this.options.workspace.displayShortName(20), url:this.options.workspace.showUrl()},
-                {label:t("breadcrumbs.workfiles.all"), url:this.options.workspace.showUrl() + "/workfiles"},
-                {label:this.model.get("fileName") }
-            ];
-        }
-    });
-
     chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         helpId: "workfile",
 
@@ -32,7 +20,8 @@
             }
 
             this.model.fetch();
-            this.model.workspace().fetch();
+            this.workspace = this.model.workspace();
+            this.workspace.fetch();
             this.requiredResources.push(this.model);
             this.requiredResources.push(this.model.workspace());
 
@@ -41,8 +30,17 @@
             }, this);
         },
 
+        crumbs: function() {
+            return [
+                {label:t("breadcrumbs.home"), url:"#/"},
+                {label:t("breadcrumbs.workspaces"), url:'#/workspaces'},
+                {label: this.workspace.loaded ? this.workspace.displayShortName(20) : "...", url:this.workspace.showUrl()},
+                {label:t("breadcrumbs.workfiles.all"), url:this.workspace.showUrl() + "/workfiles"},
+                {label:this.model.loaded ? this.model.get("fileName") : "..." }
+            ];
+        },
+
         resourcesLoaded:function () {
-            this.breadcrumbs = new breadcrumbsView({workspace:this.model.workspace(), model:this.model});
             this.sidebar = new chorus.views.WorkfileShowSidebar({model:this.model});
             this.subNav = new chorus.views.SubNav({workspace:this.model.workspace(), tab:"workfiles"});
 
