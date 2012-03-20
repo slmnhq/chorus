@@ -130,25 +130,47 @@ describe("chorus.models.TabularData", function() {
         });
     })
 
-    describe("#isImportable", function() {
-        it("returns false unless the object is a Dataset (with a workspace id)", function() {
+    describe("#canBeImportSource", function() {
+        it("returns true if the object is a Dataset (with a workspace id) but not a Sandbox Dataset", function() {
             var table = fixtures.databaseObject();
-            expect(table.isImportable()).toBeFalsy();
+            expect(table.canBeImportSource()).toBeFalsy();
 
             var dataset = fixtures.datasetSandboxTable();
-            expect(dataset.isImportable()).toBeFalsy();
+            expect(dataset.canBeImportSource()).toBeFalsy();
 
             dataset = fixtures.datasetSandboxView();
-            expect(dataset.isImportable()).toBeFalsy();
+            expect(dataset.canBeImportSource()).toBeFalsy();
 
             dataset = fixtures.datasetSourceTable();
-            expect(dataset.isImportable()).toBeTruthy();
+            expect(dataset.canBeImportSource()).toBeTruthy();
 
             dataset = fixtures.datasetSourceView();
-            expect(dataset.isImportable()).toBeTruthy();
+            expect(dataset.canBeImportSource()).toBeTruthy();
 
             dataset = fixtures.datasetChorusView();
-            expect(dataset.isImportable()).toBeTruthy();
+            expect(dataset.canBeImportSource()).toBeTruthy();
+        });
+    });
+
+    describe("#canBeImportDestination", function() {
+        it("returns true if the object is a Dataset (with a workspace id)", function() {
+            var table = fixtures.databaseObject();
+            expect(table.canBeImportDestination()).toBeFalsy();
+
+            var dataset = fixtures.datasetSandboxTable();
+            expect(dataset.canBeImportDestination()).toBeTruthy();
+
+            dataset = fixtures.datasetSandboxView();
+            expect(dataset.canBeImportDestination()).toBeTruthy();
+
+            dataset = fixtures.datasetSourceTable();
+            expect(dataset.canBeImportDestination()).toBeTruthy();
+
+            dataset = fixtures.datasetSourceView();
+            expect(dataset.canBeImportDestination()).toBeTruthy();
+
+            dataset = fixtures.datasetChorusView();
+            expect(dataset.canBeImportDestination()).toBeTruthy();
         });
     });
 

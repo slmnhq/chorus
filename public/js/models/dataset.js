@@ -100,8 +100,12 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         }
     },
 
-    isImportable: function() {
+    canBeImportSource: function() {
         return !this.isSandbox();
+    },
+
+    canBeImportDestination: function() {
+        return true;
     },
 
     setWorkspace: function(workspace) {

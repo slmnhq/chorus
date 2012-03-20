@@ -38,35 +38,31 @@
         <ul>
             {{#if workspace}}
                 <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
-                {{#if canImport}}
-                    <li>
-                        {{#if hasSandbox}}
-                            <a class="dialog import_now" data-dialog="ImportScheduler" href="#">{{t "actions.import_now"}}</a>
-                        {{else}}
-                            <span class="import_now disabled">{{t "actions.import_now"}}</span>
-                        {{/if}}
-                    </li>
-                    {{#if hasSchedule}}
-                        <li>
-                            {{#if hasSandbox}}
-                                <a class="dialog edit_schedule" data-dialog="ImportScheduler" href="#">{{t "actions.edit_schedule"}}</a>
-                            {{else}}
-                                <span class="edit_schedule disabled">{{t "actions.edit_schedule"}}</span>
-                            {{/if}}
-                        </li>
-                    {{else}}
-                        <li>
-                            {{#if hasSandbox}}
-                                <a class="dialog create_schedule" data-dialog="ImportScheduler" href="#">{{t "actions.create_schedule"}}</a>
-                            {{else}}
-                                <span class="create_schedule disabled">{{t "actions.create_schedule"}}</span>
-                            {{/if}}
-                        </li>
-                    {{/if}}
-                {{/if}}
             {{else}}
                 <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}">{{t "actions.add_note"}}</a></li>
                 <li><a class="associate" href="#">{{t "actions.associate_with_workspace"}}</a></li>
+            {{/if}}
+
+            {{#if workspace}}
+                {{#if hasSandbox}}
+                    {{#if canExport}}
+                        <li><a class="import_now dialog" data-dialog="ImportScheduler" href="#">{{t "actions.import_now"}}</a></li>
+                        {{#if hasSchedule}}
+                            <li><a class="edit_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.edit_schedule"}}</a></li>
+                        {{else}}
+                            <li><a class="create_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.create_schedule"}}</a></li>
+                        {{/if}}
+                    {{/if}}
+                {{else}}
+                    {{#if canExport}}
+                        <li><span class="import_now disabled">{{t "actions.import_now"}}</span></li>
+                        {{#if hasSchedule}}
+                            <li><span class="edit_schedule disabled">{{t "actions.edit_schedule"}}</span></li>
+                        {{else}}
+                            <li><span class="create_schedule disabled">{{t "actions.create_schedule"}}</span></li>
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
             {{/if}}
 
             {{#unless noCredentials}}

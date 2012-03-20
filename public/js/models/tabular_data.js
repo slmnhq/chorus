@@ -165,8 +165,16 @@ chorus.models.TabularData = chorus.models.Base.include(
         return this.fromClauseBody();
     },
 
-    isImportable: function() {
+    canBeImportSource: function() {
         return false;
+    },
+
+    canBeImportDestination: function() {
+        return false;
+    },
+
+    canBeImportSourceOrDestination: function() {
+        return this.canBeImportSource() || this.canBeImportDestination();
     },
 
     asDataset: function() {
