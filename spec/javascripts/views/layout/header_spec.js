@@ -110,6 +110,8 @@ describe("chorus.views.Header", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            spyOn(chorus, 'addClearButton');
+
             this.view.session.loaded = true;
             this.view.session.trigger("loaded");
             this.server.completeFetchAllFor(this.view.unreadNotifications,
@@ -154,11 +156,16 @@ describe("chorus.views.Header", function() {
             expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
         });
 
+        it("adds a clear button to the search field", function() {
+            expect(chorus.addClearButton).toHaveBeenCalledWith(this.view.$(".search input"));
+        });
+
         describe("typing in the search bar", function() {
             beforeEach(function() {
                 spyOn(this.view.typeAheadView, "searchFor");
                 this.view.$(".search input:text").val("test_query").trigger("textchange");
             });
+
 
             it("should display the type ahead search view", function() {
                 expect(this.view.$(this.view.typeAheadView.el)).toExist();

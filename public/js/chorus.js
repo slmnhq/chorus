@@ -230,22 +230,10 @@ window.Chorus = function chorus$Global() {
             list = options.list,
             selector = options.selector;
 
-        input.unbind("textchange").bind("textchange", _.bind(onTextChange, this, options));
-        input.addClass("chorus_search")
+        input.unbind("textchange.filter").bind("textchange.filter", _.bind(onTextChange, this, options));
+        input.addClass("chorus_search");
         input.each(function(i, el) {
-            var $el = $(el);
-            var clearLink = $("<a href='#'/>")
-                .addClass("chorus_search_clear hidden")
-                .append("<img src='/images/icon_clear_search.png'></a>")
-                .bind('click', function(e) {
-                    e.preventDefault();
-                    $el.val("").trigger('textchange').blur();
-                });
-
-            var container = $("<div class='chorus_search_container'></div>");
-            container.css({ display: $el.css("display") });
-            container.insertAfter(el);
-            container.append(el).append(clearLink);
+            self.addClearButton(el);
         });
     };
 
@@ -258,7 +246,6 @@ window.Chorus = function chorus$Global() {
             clearLink = changedInput.siblings(".chorus_search_clear");
 
         var compare = changedInput.val().toLowerCase();
-        clearLink.toggleClass("hidden", compare.length === 0);
         list.find("li").each(function() {
             var elToMatch = selector ? $(this).find(selector) : $(this);
             var matches = (elToMatch.text().toLowerCase().indexOf(compare) >= 0);
@@ -273,6 +260,25 @@ window.Chorus = function chorus$Global() {
 
         if (afterFilter) afterFilter();
     }
+
+    self.addClearButton = function(input) {
+        var $input = $(input);
+        var clearLink = $("<a href='#'/>")
+            .addClass("chorus_search_clear hidden")
+            .append("<img src='/images/icon_clear_search.png'></a>")
+            .bind('click', function(e) {
+                e.preventDefault();
+                $input.val("").trigger('textchange').blur();
+            });
+
+        $input.unbind("textchange.clear_link").bind("textchange.clear_link", function() {
+            clearLink.toggleClass("hidden", $input.val().length === 0);
+        });
+        var container = $("<div class='chorus_search_container'></div>");
+        container.css({ display: $input.css("display") });
+        container.insertAfter($input);
+        container.append($input).append(clearLink);
+    };
 
     self.hotKeyMeta = BrowserDetect.OS == "Mac" ? "ctrl" : "alt";
 

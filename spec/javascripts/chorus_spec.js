@@ -401,66 +401,10 @@ describe("chorus global", function() {
             });
         });
 
-        describe("the 'x'", function() {
-            beforeEach(function() {
-                chorus.search({ input: this.input1, list: this.list});
-
-                this.clearLink = this.container.find("a.chorus_search_clear");
-            });
-
-            it("adds a little 'x' to the right of the search input", function() {
-                this.input1.val("nit").trigger("textchange");
-                expect(this.clearLink).toExist();
-                expect(this.clearLink.find("img").attr("src")).toBe("/images/icon_clear_search.png");
-            });
-
-            it("hides the 'x' when the input is blank", function() {
-                expect(this.clearLink).toHaveClass("hidden");
-
-                this.input1.val("foo").trigger("textchange");
-                expect(this.clearLink).not.toHaveClass("hidden");
-
-                this.input1.val("").trigger("textchange");
-                expect(this.clearLink).toHaveClass("hidden");
-            });
-
-            describe("when the 'x' is clicked", function() {
-                beforeEach(function() {
-                    this.input1.val("nit").trigger("textchange");
-                    spyOn($.fn, "blur")
-                    this.clearLink.click();
-                });
-
-                it("clears the search text", function() {
-                    expect(this.input1.val()).toBe("");
-                });
-
-                it("hides the 'x'", function() {
-                    expect(this.clearLink).toHaveClass("hidden");
-                });
-
-                it("updates the list, removing any filtering", function() {
-                    expect(this.list.find("li").eq(0)).not.toHaveClass("hidden");
-                    expect(this.list.find("li").eq(1)).not.toHaveClass("hidden");
-                    expect(this.list.find("li").eq(2)).not.toHaveClass("hidden");
-                });
-
-                it("blurs the element so the placeholder text reappears", function() {
-                    expect($.fn.blur).toHaveBeenCalled();
-                })
-            });
-        });
-
         describe("when there is more than one element in the 'input' jquery array", function() {
             beforeEach(function() {
                 chorus.search({ input: this.container.find("input"), list: this.list});
                 this.wrapperDivs = this.container.find(".chorus_search_container");
-            });
-
-            it("wraps each input in a separate div", function() {
-                expect(this.wrapperDivs.length).toBe(2);
-                expect(this.wrapperDivs.eq(0)).toContain(this.input1);
-                expect(this.wrapperDivs.eq(1)).toContain(this.input2);
             });
 
             it("uses the text from the most recently changed input to filter the list", function() {
@@ -483,8 +427,10 @@ describe("chorus global", function() {
                 expect(this.list.find("li").eq(2)).not.toHaveClass("hidden");
             });
 
-            it("gives each input its own 'x' button", function() {
+            it("adds a clear button to each input", function() {
                 expect(this.wrapperDivs.length).toBe(2);
+                expect(this.wrapperDivs.eq(0)).toContain(this.input1);
+                expect(this.wrapperDivs.eq(1)).toContain(this.input2);
                 expect(this.wrapperDivs.eq(0)).toContain(".chorus_search_clear");
                 expect(this.wrapperDivs.eq(1)).toContain(".chorus_search_clear");
             });
@@ -527,6 +473,57 @@ describe("chorus global", function() {
             });
         });
     })
+
+    describe("#addClearButton", function() {
+        beforeEach(function() {
+            this.input1 = $("<input></input>");
+            this.container = $("<div></div>").append(this.input1)
+
+            chorus.addClearButton(this.input1);
+            this.clearLink = this.container.find("a.chorus_search_clear");
+        });
+
+        it("adds a little 'x' to the right of the search input", function() {
+            this.input1.val("nit").trigger("textchange");
+            expect(this.clearLink).toExist();
+            expect(this.clearLink.find("img").attr("src")).toBe("/images/icon_clear_search.png");
+        });
+
+        it("hides the 'x' when the input is blank", function() {
+            expect(this.clearLink).toHaveClass("hidden");
+
+            this.input1.val("foo").trigger("textchange");
+            expect(this.clearLink).not.toHaveClass("hidden");
+
+            this.input1.val("").trigger("textchange");
+            expect(this.clearLink).toHaveClass("hidden");
+        });
+
+        describe("when the 'x' is clicked", function() {
+            beforeEach(function() {
+                this.input1.val("nit").trigger("textchange");
+                spyOnEvent(this.input1, 'textchange');
+                spyOn($.fn, "blur")
+                this.clearLink.click();
+            });
+
+            it("clears the search text", function() {
+                expect(this.input1.val()).toBe("");
+            });
+
+            it("hides the 'x'", function() {
+                expect(this.clearLink).toHaveClass("hidden");
+            });
+
+            it("triggers a 'textchange' event on the input", function() {
+                expect("textchange").toHaveBeenTriggeredOn(this.input1);
+            });
+
+            it("blurs the element so the placeholder text reappears", function() {
+                expect($.fn.blur).toHaveBeenCalled();
+            })
+        });
+    });
 
     describe("#help", function() {
         beforeEach(function() {
