@@ -36,13 +36,10 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.server.lastFetchFor(this.page.model.workspace())).toBeDefined();
         });
 
-        it("does not instantiate any views", function() {
-            expect(this.page.mainContent).toBeUndefined();
-            expect(this.page.sidebar).toBeUndefined();
-            expect(this.page.subNav).toBeUndefined();
-            expect(this.page.breadcrumbs).toBeUndefined();
-
-        })
+        it("displays a loading spinner when rendered before fetches complete", function() {
+            this.page.render();
+            expect(this.page.$(".loading_section")).toExist();
+        });
 
         context("with a version number", function() {
             beforeEach(function() {
@@ -54,13 +51,18 @@ describe("chorus.pages.WorkfileShowPage", function() {
             })
         })
 
-        context("when the model fails to load properly", function() {
+        describe("fetch failure", function() {
             beforeEach(function() {
                 spyOn(Backbone.history, "loadUrl")
-                this.page.model.trigger('fetchFailed')
             })
 
-            it("navigates to the 404 page", function() {
+            it("navigates to the 404 page for the model", function() {
+                this.page.model.trigger('fetchFailed', this.page.model);
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+            })
+
+            it("navigates to the 404 page for the workspace", function() {
+                this.page.workspace.trigger('fetchFailed', this.page.workspace);
                 expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
             })
         })
@@ -73,9 +75,8 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
             context("and the workfile does not have a draft", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.model);
                     chorus.views.Base.prototype.render.reset();
-                    this.page.resourcesLoaded();
+                    this.server.completeFetchFor(this.model);
                 })
 
                 it("loads breadcrumbs, sidebar, subnavigation, and mainContent", function() {
@@ -93,7 +94,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
                     expect(chorus.views.WorkfileContent.buildFor).toHaveBeenCalledWith(this.page.model)
                 });
 
-                it("re-renders", function() {
+                it("renders again", function() {
                     expect(chorus.views.Base.prototype.render).toHaveBeenCalled();
                 });
             })

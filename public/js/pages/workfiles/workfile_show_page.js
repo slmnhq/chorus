@@ -22,12 +22,22 @@
             this.model.fetch();
             this.workspace = this.model.workspace();
             this.workspace.fetch();
-            this.requiredResources.push(this.model);
-            this.requiredResources.push(this.model.workspace());
+            this.dependOn(this.model, this.modelChanged);
+            this.dependOn(this.workspace, this.modelChanged);
 
             chorus.PageEvents.subscribe("file:autosaved", function () {
                 this.model && this.model.trigger("invalidated");
             }, this);
+
+            this.mainContent = new chorus.views.MainContentView({
+                model:this.model,
+                content: new chorus.views.LoadingSection(),
+                contentHeader:new chorus.views.WorkfileHeader({model:this.model})
+            });
+            this.bindings.add(this.model, "change", this.modelChanged);
+
+            this.sidebar = new chorus.views.WorkfileShowSidebar({model:this.model});
+            this.subNav = new chorus.views.SubNav({workspace:this.workspace, tab:"workfiles"});
         },
 
         crumbs: function() {
@@ -40,29 +50,19 @@
             ];
         },
 
-        resourcesLoaded:function () {
-            this.sidebar = new chorus.views.WorkfileShowSidebar({model:this.model});
-            this.subNav = new chorus.views.SubNav({workspace:this.model.workspace(), tab:"workfiles"});
-
-            this.mainContent = new chorus.views.MainContentView({
-                model:this.model,
-                contentHeader:new chorus.views.WorkfileHeader({model:this.model})
-            });
-            this.bindings.add(this.model, "change", this.modelChanged);
-            this.modelChanged();
-        },
-
         modelChanged:function () {
-            if (this.model.isLatestVersion() && this.model.get("hasDraft") && !this.model.isDraft) {
-                var alert = new chorus.alerts.WorkfileDraft({model:this.model});
-                alert.launchModal();
-            }
-            if (!this.mainContent.contentDetails) {
-                this.mainContent.contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
-                this.mainContent.content = chorus.views.WorkfileContent.buildFor(this.model);
-            }
+            if (this.model.loaded && this.workspace.loaded) {
+                if (this.model.isLatestVersion() && this.model.get("hasDraft") && !this.model.isDraft) {
+                    var alert = new chorus.alerts.WorkfileDraft({model:this.model});
+                    alert.launchModal();
+                }
+                if (!this.mainContent.contentDetails) {
+                    this.mainContent.contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
+                    this.mainContent.content = chorus.views.WorkfileContent.buildFor(this.model);
+                }
 
-            this.render();
+                this.render();
+            }
         }
     });
 
