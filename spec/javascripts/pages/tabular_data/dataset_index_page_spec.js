@@ -20,14 +20,6 @@ describe("chorus.pages.DatasetIndexPage", function() {
             expect(this.workspace).toHaveBeenFetched();
         });
 
-        it("does not create the sidebar", function() {
-            expect(this.page.sidebar).toBeUndefined();
-        });
-
-        it("does not create the main content (because of the import button in the content details)", function() {
-            expect(this.page.mainContent).toBeUndefined();
-        });
-
         it("sets the workspace id, for prioritizing search", function() {
             expect(this.page.workspaceId).toBe(9999);
         });
@@ -35,6 +27,27 @@ describe("chorus.pages.DatasetIndexPage", function() {
         it("fetches the collection", function() {
             expect(this.server.lastFetchFor(this.page.collection)).toBeDefined();
         });
+
+        it("#render shows a loading message", function() {
+            this.page.render();
+            expect(this.page.$(".loading_section")).toExist();
+        });
+    });
+
+    describe("when a fetch fails", function() {
+        beforeEach(function() {
+            spyOn(Backbone.history, "loadUrl")
+        })
+
+        it("navigates to the 404 page when the workspace fetch fails", function() {
+            this.page.workspace.trigger('fetchFailed', this.page.workspace);
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+        })
+
+        it("navigates to the 404 page when the collection fetch fails", function() {
+            this.page.collection.trigger('fetchFailed', this.page.collection);
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+        })
     });
 
     context("it does not have a sandbox", function() {

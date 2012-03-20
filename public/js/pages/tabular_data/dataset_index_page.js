@@ -6,13 +6,13 @@
         setup: function(workspaceId) {
             this.workspaceId = workspaceId;
             this.workspace = new chorus.models.Workspace({id: workspaceId});
-            this.workspace.onLoaded(this.workspaceLoaded, this);
             this.workspace.fetch();
-            this.requiredResources.push(this.workspace);
+            this.dependOn(this.workspace, this.workspaceLoaded);
 
             this.collection = new chorus.collections.DatasetSet([], {workspaceId: workspaceId});
             this.collection.sortAsc("objectName");
             this.collection.fetch();
+            this.dependOn(this.collection);
 
             chorus.PageEvents.subscribe("tabularData:selected", function(dataset) {
                 this.model = dataset;
@@ -21,18 +21,7 @@
             chorus.PageEvents.subscribe("csv_import:started", function() {
                 this.collection.fetch();
             }, this)
-        },
 
-        crumbs: function() {
-            return [
-                {label: t("breadcrumbs.home"), url: "#/"},
-                {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-                {label: this.workspace.displayShortName(), url: this.workspace.showUrl()},
-                {label: t("breadcrumbs.workspaces_data")}
-            ];
-        },
-
-        workspaceLoaded: function() {
             this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "Dataset",
@@ -68,6 +57,18 @@
             }, this)
 
             this.sidebar = new chorus.views.TabularDataSidebar({ workspace: this.workspace, listMode: true });
+        },
+
+        crumbs: function() {
+            return [
+                {label: t("breadcrumbs.home"), url: "#/"},
+                {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
+                {label: this.workspace.displayShortName(), url: this.workspace.showUrl()},
+                {label: t("breadcrumbs.workspaces_data")}
+            ];
+        },
+
+        workspaceLoaded: function() {
             this.render();
 
             var targetButton = this.mainContent.options.buttons[0];
