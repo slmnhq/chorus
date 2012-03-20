@@ -69,7 +69,8 @@
     }
 
     input[type=text] {
-        width: 250px;
+        width: 25%;
+        max-width: 250px;
         display: inline-block;
         margin-right: 10px;
         vertical-align: top;
