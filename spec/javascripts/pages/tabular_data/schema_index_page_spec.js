@@ -21,6 +21,12 @@ describe("chorus.pages.SchemaIndexPage", function() {
         expect(this.page.collection).toHaveBeenFetched();
     });
 
+    describe("before the fetches complete", function() {
+        it("has some breadcrumbs", function() {
+            expect(this.page.$(".breadcrumbs")).toContainTranslation("breadcrumbs.home")
+        });
+    });
+
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.instance);

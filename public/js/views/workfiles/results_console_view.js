@@ -6,7 +6,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         "click a.minimize": "minimizeTable",
         "click .expander_button": "toggleExpand",
         "click .close_errors": "closeError",
-        "click .view_details": "viewDetails",
+        "click .sql_errors .view_details": "viewErrorDetails",
+        "click .execution .view_details": "viewExecutionDetails",
         "click a.close": "clickClose"
     },
 
@@ -16,18 +17,18 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         chorus.PageEvents.subscribe("file:executionFailed", this.executionFailed, this);
     },
 
-    execute: function(model, isPostRequest) {
-        this.model = model;
+    execute: function(task, isPostRequest) {
+        this.model = task;
         if(isPostRequest) {
-            model.save();
+            task.save();
         } else {
-            model.fetchIfNotLoaded();
+            task.fetchIfNotLoaded();
         }
         this.executionStarted();
-        model.onLoaded(_.bind(this.executionSucceeded, this, model));
-        this.bindings.add(model, "saved", _.bind(this.executionSucceeded, this, model));
-        this.bindings.add(model, "fetchFailed", _.bind(this.executionFailed, this, model));
-        this.bindings.add(model, "saveFailed", _.bind(this.executionFailed, this, model));
+        task.onLoaded(_.bind(this.executionSucceeded, this, task));
+        this.bindings.add(task, "saved", _.bind(this.executionSucceeded, this, task));
+        this.bindings.add(task, "fetchFailed", _.bind(this.executionFailed, this, task));
+        this.bindings.add(task, "saveFailed", _.bind(this.executionFailed, this, task));
     },
 
     executionStarted: function() {
@@ -157,10 +158,15 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".sql_errors").addClass("hidden");
     },
 
-    viewDetails: function(e) {
+    viewErrorDetails: function(e) {
         e.preventDefault();
+        var alert = new chorus.alerts.ExecutionError({ model: this.model });
+        alert.launchModal();
+    },
 
-        var alert = new chorus.alerts.ExecutionError({model: this.model});
+    viewExecutionDetails: function(e) {
+        e.preventDefault();
+        var alert = new chorus.alerts.ExecutionMessage({ model: this.model });
         alert.launchModal();
     },
 

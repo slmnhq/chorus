@@ -8,9 +8,16 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         Backbone.history.loadUrl("/invalidRoute");
     },
 
-    dependOn: function(model) {
+    dependOn: function(model, functionToCallWhenLoaded) {
         this.bindings.add(model, "fetchFailed", this.requiredResourcesFetchFailed);
         this.bindings.add(model, "change", this.render);
+        if (functionToCallWhenLoaded) {
+            if (model.loaded) {
+                functionToCallWhenLoaded.apply(this);
+            } else {
+                this.bindings.add(model, "loaded", functionToCallWhenLoaded);
+            }
+        }
     },
 
     failurePageOptions: function() {}

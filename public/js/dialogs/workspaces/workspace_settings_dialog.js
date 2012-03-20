@@ -1,17 +1,13 @@
-chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.extend({
+chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
+    chorus.Mixins.ClEditor
+).extend({
     className:"workspace_settings",
     title:t("workspace.settings.title"),
     persistent:true,
 
     events:{
         "submit form":"updateWorkspace",
-        "click button.submit":"updateWorkspace",
-        "click a.bold": "onClickToolbarBold",
-        "click a.italic": "onClickToolbarItalic",
-        "click a.bullets": "onClickToolbarBullets",
-        "click a.numbers": "onClickToolbarNumbers",
-        "click a.link": "onClickToolbarLink",
-        "click a.unlink": "onClickToolbarUnlink"
+        "click button.submit":"updateWorkspace"
     },
 
     additionalContext:function () {
@@ -65,42 +61,11 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.extend({
     postRender: function() {
         this.$("select.owner").val(this.model.get("ownerId"));
         _.defer(_.bind(function() {
-            var clEditor = $("textarea[name=summary]").cleditor({controls: "bold italic | bullets numbering | link unlink"})[0];
+            var clEditor = this.makeEditor($(this.el), "toolbar", "summary")
             if (!this.hasPermission) {
                 clEditor.disable(true)
             }
         }, this));
-    },
-
-    onClickToolbarBold: function(e) {
-        e && e.preventDefault();
-        this.$(".cleditorButton[title='Bold']").click();
-    },
-
-    onClickToolbarItalic: function(e) {
-        e && e.preventDefault();
-        this.$(".cleditorButton[title='Italic']").click();
-    },
-
-    onClickToolbarBullets: function(e) {
-        e && e.preventDefault();
-        this.$(".cleditorButton[title='Bullets']").click();
-    },
-
-    onClickToolbarNumbers: function(e) {
-        e && e.preventDefault();
-        this.$(".cleditorButton[title='Numbering']").click();
-    },
-
-    onClickToolbarLink: function(e) {
-        e && e.preventDefault();
-        this.$(".cleditorButton[title='Insert Hyperlink']").click();
-        e.stopImmediatePropagation();
-    },
-
-    onClickToolbarUnlink: function(e) {
-        e && e.preventDefault();
-        this.$(".cleditorButton[title='Remove Hyperlink']").click();
     },
 
     updateWorkspace:function (e) {

@@ -14,6 +14,22 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         expect(this.page.requiredResourcesFetchFailed).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchFailed);
     });
 
+    describe("when a fetch fails", function() {
+        beforeEach(function() {
+            spyOn(Backbone.history, "loadUrl")
+        })
+
+        it("navigates to the 404 page when the instance fetch fails", function() {
+            this.page.instance.trigger('fetchFailed', this.page.instance);
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+        })
+
+        it("navigates to the 404 page when the collection fetch fails", function() {
+            this.page.collection.trigger('fetchFailed', this.page.collection);
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+        })
+    });
+
     context("when only the instance has been fetched", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.instance);

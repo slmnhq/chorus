@@ -10,7 +10,7 @@ map <D-S-F8> :!/Users/pivotal/workspace/chorus/launch_jasmine.sh %<CR>
 
 set cursorline
 
-set foldmethod=syntax
+set foldmethod=indent
 
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>""
 map <C-n> :tabnew 
