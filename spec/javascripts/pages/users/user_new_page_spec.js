@@ -5,14 +5,10 @@ describe("chorus.pages.UserNewPage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("user_new")
+        expect(this.page.helpId).toBe("user_new");
     });
 
     describe("#setup", function() {
-        beforeEach(function() {
-            spyOn(this.page, 'render').andCallThrough();
-        });
-
         it("fetches the chorus configuration information", function() {
             expect(this.config).toHaveBeenFetched();
         });
@@ -23,11 +19,8 @@ describe("chorus.pages.UserNewPage", function() {
                     this.server.completeFetchFor(this.config, { externalAuth: true });
                 });
 
-                it("re-renders", function() {
-                    expect(this.page.render).toHaveBeenCalled();
-                });
-
                 it("instantiates a user new ldap view", function() {
+                    expect(this.page.$(".user_new_ldap")).toExist();
                     expect(this.page.mainContent.content).toBeA(chorus.views.UserNewLdap);
                 });
             });
@@ -37,21 +30,39 @@ describe("chorus.pages.UserNewPage", function() {
                     this.server.completeFetchFor(this.config, { externalAuth: false });
                 });
 
-                it("re-renders", function() {
-                    expect(this.page.render).toHaveBeenCalled();
-                });
-
                 it("instantiates the normal user new view", function() {
+                    expect(this.page.$(".user_new")).toExist();
                     expect(this.page.mainContent.content).toBeA(chorus.views.UserNew);
                 });
             });
         });
-
     });
 
     describe("#render", function(){
-        it("renders successfully", function() {
+        beforeEach(function() {
             this.page.render();
+        });
+
+        it("has the correct breadcrumbs", function() {
+            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toHaveHref("#/");
+            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toContainTranslation("breadcrumbs.home");
+            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toHaveHref("#/users");
+            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toContainTranslation("breadcrumbs.users");
+            expect(this.page.$("#breadcrumbs .breadcrumb .slug")).toContainTranslation("breadcrumbs.new_user");
+        });
+
+        it("has the correct title", function() {
+            expect(this.page.$(".content_header")).toContainTranslation("users.new_user");
+        });
+
+        it("has the correct subtitle", function() {
+            expect(this.page.$(".content_details")).toContainTranslation("users.details");
+        });
+
+        it("goes to 404 when the instance fetch fails", function() {
+            spyOn(Backbone.history, "loadUrl");
+            this.server.lastFetchFor(this.config).fail();
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
         });
     });
 })

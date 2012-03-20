@@ -8,20 +8,20 @@ chorus.pages.UserNewPage = chorus.pages.Base.extend({
 
     setup:function () {
         this.model = new chorus.models.User()
-        this.requiredResources.push(chorus.models.Config.instance());
-    },
-
-    resourcesLoaded: function() {
-        var config = chorus.models.Config.instance();
-        var viewClass = (config.isExternalAuth()) ? chorus.views.UserNewLdap : chorus.views.UserNew;
 
         this.mainContent = new chorus.views.MainContentView({
             model:this.model,
-            content: new viewClass({ model: this.model }),
             contentHeader:new chorus.views.StaticTemplate("default_content_header", {title:t("users.new_user")}),
             contentDetails:new chorus.views.StaticTemplate("plain_text", {text:t("users.details")})
         });
 
+        this.dependOn(chorus.models.Config.instance());
+        chorus.models.Config.instance().onLoaded(this.configLoaded, this);
+    },
+
+    configLoaded: function() {
+        this.mainContent.content = (chorus.models.Config.instance().isExternalAuth())
+            ? new chorus.views.UserNewLdap({model: this.model}) : new chorus.views.UserNew({model: this.model});
         this.render();
     }
 });
