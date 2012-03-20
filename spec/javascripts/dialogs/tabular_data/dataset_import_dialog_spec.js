@@ -137,6 +137,10 @@ describe("chorus.dialogs.DatasetImport", function() {
                 expect(this.dialog.$(".existing_table select")).toExist();
             });
 
+            it("sets the title text of the file input field", function() {
+                expect(this.dialog.$("input[type=file]").prop("title")).toMatchTranslation("dataset.import.change_file");
+            });
+
             describe("the default selection", function() {
                 it("selects the new table button by default", function() {
                     expect(this.dialog.$(".new_table input:radio").prop("checked")).toBeTruthy()

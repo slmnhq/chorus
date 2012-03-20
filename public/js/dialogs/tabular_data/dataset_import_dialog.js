@@ -158,6 +158,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             self.$(".file-wrapper a").removeClass("hidden");
             self.$(".file-wrapper button").addClass("hidden");
 
+            self.$("input[type=file]").prop("title", t("dataset.import.change_file"));
         }
 
         function uploadFinished(e, data) {
