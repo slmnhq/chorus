@@ -20,7 +20,8 @@ chorus.views.UserShowSidebar = chorus.views.Sidebar.extend({
         var userIsAdmin = chorus.session.user().get("admin");
         return {
             permission: userIsLoggedIn || userIsAdmin,
-            changePasswordAvailable: userIsLoggedIn && !this.config.isExternalAuth()
+            changePasswordAvailable: userIsLoggedIn && !this.config.isExternalAuth(),
+            isInEditMode: this.options.editMode
         }
     }
 });

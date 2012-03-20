@@ -22,6 +22,6 @@ chorus.pages.UserEditPage = chorus.pages.Base.extend({
             contentDetails:new chorus.views.StaticTemplate("plain_text", {text:t("users.details")})
         });
 
-        this.sidebar = new chorus.views.UserShowSidebar({model:this.model})
+        this.sidebar = new chorus.views.UserShowSidebar({ model: this.model, editMode: true });
     }
 });

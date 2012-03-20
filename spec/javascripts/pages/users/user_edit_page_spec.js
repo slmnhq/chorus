@@ -4,12 +4,10 @@ describe("chorus.pages.UserEditPage", function() {
             this.view = new chorus.pages.UserEditPage("42");
         });
 
-        it("sets up the model with the supplied user id", function() {
+        it("fetches the right user", function() {
+            expect(this.view.model).toBeA(chorus.models.User);
             expect(this.view.model.get("id")).toBe("42");
-        });
-
-        it("fetches the model automatically", function() {
-            expect(this.server.requests[0].url).toBe("/edc/user/42");
+            expect(this.view.model).toHaveBeenFetched();
         });
 
         it("has a helpId", function() {
@@ -19,15 +17,14 @@ describe("chorus.pages.UserEditPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            chorus.session = new chorus.models.Session();
-            setLoggedInUser({"userName" : "edcadmin"});
-
             this.user = fixtures.user()
+            setLoggedInUser(this.user.attributes);
 
             this.view = new chorus.pages.UserEditPage(this.user.get("id"));
-            this.view.model.set(this.user.attributes)
-            this.view.model.loaded = true;
-            this.view.render();
+
+            this.server.completeFetchFor(this.user);
+            this.server.completeFetchFor(this.user.activities());
+            this.server.completeFetchFor(chorus.models.Config.instance());
         });
 
         it("displays the first + last name in the header", function() {
@@ -36,6 +33,10 @@ describe("chorus.pages.UserEditPage", function() {
 
         it("displays the word 'details' in the details-header", function() {
             expect(this.view.$(".content_details").text().trim()).toBe(t("users.details"));
+        });
+
+        it("does not have the 'edit profile' link in the sidebar", function() {
+            expect(this.view.$("a.edit_user")).not.toExist();
         });
 
         context("breadcrumbs", function() {
@@ -56,8 +57,7 @@ describe("chorus.pages.UserEditPage", function() {
 
             it("displays edit user for the fourth crumb", function() {
                 expect(this.view.$("#breadcrumbs .breadcrumb .slug").text()).toBe(t("breadcrumbs.user_edit"));
-            })
+            });
         });
-
-    })
-})
+    });
+});

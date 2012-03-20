@@ -2,7 +2,10 @@
     <div class="actions">
         <h1>Actions</h1>
         <ul>
-            <li><a href="#/users/{{id}}/edit" class="edit_user">{{t "actions.edit_profile"}}</a></li>
+            {{#unless isInEditMode}}
+                <li><a href="#/users/{{id}}/edit" class="edit_user">{{t "actions.edit_profile"}}</a></li>
+            {{/unless}}
+
             {{#ifAdmin}}
                 <li><a href="#" class="alert delete_user" data-id="{{id}}" data-alert="UserDelete">{{t "actions.delete_user"}}</a></li>
             {{/ifAdmin}}

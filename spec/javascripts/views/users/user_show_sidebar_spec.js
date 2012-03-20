@@ -43,19 +43,17 @@ describe("chorus.views.UserShowSidebar", function() {
         });
     });
 
-    describe("#render", function() {
-        context("when logged in as an admin", function() {
-            beforeEach(function() {
-                setLoggedInUser({admin: true});
-                this.view = new chorus.views.UserShowSidebar({model: this.user});
-                this.view.render();
-            })
-
-            it("should have a 'delete user' action", function() {
-                expect(this.view.$(".actions a.delete_user[data-alert=UserDelete]")).toExist();
-            });
+    context("when logged in as an admin", function() {
+        beforeEach(function() {
+            setLoggedInUser({admin: true});
+            this.view = new chorus.views.UserShowSidebar({model: this.user});
+            this.view.render();
         })
-    })
+
+        it("should have a 'delete user' action", function() {
+            expect(this.view.$(".actions a.delete_user[data-alert=UserDelete]")).toExist();
+        });
+    });
 
     context("when logged in as an non-admin", function() {
         beforeEach(function() {
@@ -63,67 +61,51 @@ describe("chorus.views.UserShowSidebar", function() {
             this.view = new chorus.views.UserShowSidebar({model: this.user});
         });
 
-        context("user being shown is not user logged in", function() {
-            beforeEach(function() {
-                this.view.render();
-            });
+        context("and the user being shown is not the current user", function() {
             it("shouldn't have actions", function() {
+                this.view.render();
                 expect(this.view.$(".actions")).not.toExist();
             });
+
+            it("should not show change password option", function() {
+                expect(this.view.$("a.change_password")).not.toExist();
+            });
         });
-        context("user being shown is user logged in", function() {
+
+        context("and the user being shown is the current user", function() {
             beforeEach(function() {
-                setLoggedInUser({'userName': 'bill', 'id' : "42"});
+                setLoggedInUser({ userName: 'bill', id : "42" });
                 this.view.render();
             });
 
-            it("should have the edit user action", function() {
+            it("has the 'edit user' link", function() {
                 expect(this.view.$("a.edit_user")).toExist();
                 expect(this.view.$("a.edit_user")).toHaveAttr("href", "#/users/42/edit")
             });
 
-            it("should not allow delete user", function() {
+            it("has the 'delete user' link", function() {
                 expect(this.view.$("a.delete_user")).not.toExist();
             });
-        })
+
+            it("has the 'change password' link", function() {
+                expect(this.view.$("a.change_password[data-dialog=ChangePassword]")).toExist();
+            });
+
+            context("and the 'editMode' option was passed", function() {
+                it("does not show the 'edit user' link", function() {
+                    this.view.options.editMode = true;
+                    this.view.render();
+                    expect(this.view.$("a.edit_user")).not.toExist();
+                });
+            });
+
+            context("and external auth is configured", function() {
+                it("does not show the change password option", function() {
+                    this.config.set({ externalAuth: true })
+                    this.view.render();
+                    expect(this.view.$("a.change_password")).not.toExist();
+                });
+            })
+        });
     });
-
-    context("user being shown is user logged in", function() {
-        beforeEach(function() {
-            setLoggedInUser({userName: "inspectorHenderson"});
-            this.view = new chorus.views.UserShowSidebar({model: this.user});
-            this.view.model.set({userName : "inspectorHenderson"});
-
-        });
-
-        it("should allow change password", function() {
-            expect(this.view.$("a.change_password[data-dialog=ChangePassword]")).toExist();
-        });
-    })
-
-    context("user being shown is not the user logged in", function() {
-        beforeEach(function() {
-            setLoggedInUser({userName: "inspectorHenderson"});
-
-            this.view = new chorus.views.UserShowSidebar({model: this.user});
-            this.view.model.set({userName : "edcadmin"});
-        });
-
-        it("should not show change password option", function() {
-            expect(this.view.$("a.change_password")).not.toExist();
-        });
-    })
-
-    context("system is in external authentication mode", function() {
-        beforeEach(function() {
-            this.config.set({ externalAuth: true })
-            setLoggedInUser({userName: "inspectorHenderson"});
-            this.view = new chorus.views.UserShowSidebar({model: this.user});
-            this.view.model.set({userName : "inspectorHenderson"});
-        });
-
-        it("does not show the change password option", function() {
-            expect(this.view.$("a.change_password")).not.toExist();
-        })
-    })
 });
