@@ -12,17 +12,8 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
         this.instance.fetch();
         this.collection.fetchAll();
 
-        this.requiredResources.push(this.instance);
-        this.requiredResources.push(this.collection);
-    },
-
-    resourcesLoaded: function() {
-        this.crumbs = [
-            { label: t("breadcrumbs.home"), url: "#/" },
-            { label: t("breadcrumbs.instances"), url: "#/instances" },
-            { label: this.instance.get("name"), url: this.instance.showUrl() },
-            { label: this.databaseName }
-        ];
+        this.dependOn(this.instance);
+        this.dependOn(this.collection);
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Schema",
@@ -32,5 +23,14 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
         });
 
         this.sidebar = new chorus.views.SchemaListSidebar();
+    },
+
+    crumbs: function() {
+        return [
+            { label: t("breadcrumbs.home"), url: "#/" },
+            { label: t("breadcrumbs.instances"), url: "#/instances" },
+            { label: this.instance.get("name"), url: this.instance.showUrl() },
+            { label: this.databaseName }
+        ];
     }
 });
