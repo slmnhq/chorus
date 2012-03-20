@@ -1,6 +1,6 @@
 describe("chorus.dialogs.Visualization", function() {
     beforeEach(function() {
-        stubModals();
+        this.modalSpy = stubModals();
         spyOn(chorus.Modal.prototype, "closeModal");
         this.dataset = fixtures.datasetSourceTable();
         this.chartOptions = {type: "boxplot", name: "Foo"};
@@ -234,54 +234,90 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             describe("saving as work file", function() {
-                describe("clicking on the 'save as work file' button", function() {
+                context("when the dialog was launched from within a workspace", function() {
+                    describe("clicking on the 'save as work file' button", function() {
+                        beforeEach(function() {
+                            spyOn(chorus.models.Workfile.prototype, 'save').andCallThrough();
+                            this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
+                            this.dialog.$("button.save_as_workfile").prop("disabled", false);
+                            this.dialog.$("button.save_as_workfile").click();
+                        });
+
+                        it("disables the save as workfile button and shows the loading spinner", function() {
+                            expect(this.dialog.$("button.save_as_workfile").isLoading()).toBeTruthy();
+                        });
+
+
+                        it("makes a workfile with the correct elements", function() {
+                            expect(this.dialog.workfile.get("svgData")).toBeDefined();
+                            expect(this.dialog.workfile.get("source")).toBe("visualization");
+                            expect(this.dialog.workfile.get("fileName")).toBe("Foo-boxplot.png");
+                        });
+
+                        describe("when the table name contains characters not valid in a workfile name", function() {
+                            beforeEach(function() {
+                                this.dialog.options.chartOptions.name = "this'that/the_other";
+                                this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
+                                this.dialog.$("button.save_as_workfile").prop("disabled", false);
+                                this.dialog.$("button.save_as_workfile").click();
+                            });
+
+                            it("strips the offending characters", function() {
+                                expect(this.dialog.workfile.get("fileName")).toBe("thisthatthe_other-boxplot.png")
+                            });
+                        })
+
+                        it("saves the workfile", function() {
+                            expect(this.dialog.workfile.save).toHaveBeenCalled();
+                        });
+
+                        context("when the save completes", function() {
+                            beforeEach(function() {
+                                spyOn(chorus, "toast");
+                                this.server.completeSaveFor(this.dialog.workfile, {fileName: "Foo-boxplot_2.png"});
+                            });
+
+                            it("should restore the save as workfile button", function() {
+                                expect(this.dialog.$('button.save_as_workfile').isLoading()).toBeFalsy();
+                            });
+
+                            it("shows a toast message", function() {
+                                expect(chorus.toast).toHaveBeenCalledWith("dataset.visualization.toast.workfile_from_chart", {fileName: "Foo-boxplot_2.png"});
+                            });
+                        });
+                    });
+                });
+
+                context("when the dialog was launched from outside of a workspace", function() {
                     beforeEach(function() {
+                        this.dialog.task.unset("workspaceId");
                         spyOn(chorus.models.Workfile.prototype, 'save').andCallThrough();
                         this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                         this.dialog.$("button.save_as_workfile").prop("disabled", false);
                         this.dialog.$("button.save_as_workfile").click();
                     });
 
-                    it("disables the save as workfile button and shows the loading spinner", function() {
-                        expect(this.dialog.$("button.save_as_workfile").isLoading()).toBeTruthy();
+                    it("should display the workspace picker", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.VisualizationWorkspacePicker);
                     });
 
-
-                    it("makes a workfile with the correct elements", function() {
-                        expect(this.dialog.workfile.get("svgData")).toBeDefined();
-                        expect(this.dialog.workfile.get("source")).toBe("visualization");
-                        expect(this.dialog.workfile.get("fileName")).toBe("Foo-boxplot.png");
+                    it("should not start the spinner", function() {
+                        expect(this.dialog.$("button.save_as_workfile").isLoading()).toBeFalsy();
                     });
 
-                    describe("when the table name contains characters not valid in a workfile name", function() {
+                    context("when a workspace is selected", function() {
                         beforeEach(function() {
-                            this.dialog.options.chartOptions.name = "this'that/the_other";
-                            this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
-                            this.dialog.$("button.save_as_workfile").prop("disabled", false);
-                            this.dialog.$("button.save_as_workfile").click();
+                            this.workspace = fixtures.workspace({id: "543"});
+                            this.dialog.workspacePicker.trigger("workspace:selected", this.workspace);
                         });
 
-                        it("strips the offending characters", function() {
-                            expect(this.dialog.workfile.get("fileName")).toBe("thisthatthe_other-boxplot.png")
-                        });
-                    })
-
-                    it("saves the workfile", function() {
-                        expect(this.dialog.workfile.save).toHaveBeenCalled();
-                    });
-
-                    context("when the save completes", function() {
-                        beforeEach(function() {
-                            spyOn(chorus, "toast");
-                            this.server.completeSaveFor(this.dialog.workfile, {fileName: "Foo-boxplot_2.png"});
+                        it("saves the workfile in the selected workspace", function() {
+                            var workfile = new chorus.models.Workfile({workspaceId: "543"});
+                            expect(this.server.lastCreate().url).toMatchUrl(workfile.url());
                         });
 
-                        it("should restore the save as workfile button", function() {
-                            expect(this.dialog.$('button.save_as_workfile').isLoading()).toBeFalsy();
-                        });
-
-                        it("shows a toast message", function() {
-                            expect(chorus.toast).toHaveBeenCalledWith("dataset.visualization.toast.workfile_from_chart", {fileName: "Foo-boxplot_2.png"});
+                        it("starts the spinner", function() {
+                            expect(this.dialog.$("button.save_as_workfile").isLoading()).toBeTruthy();
                         });
                     });
                 });

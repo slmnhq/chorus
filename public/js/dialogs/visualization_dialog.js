@@ -71,16 +71,18 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         return form;
     },
 
-    createWorkfile: function() {
-        function sanitizeFilename(fileName) {
-            return fileName.replace(/[^A-Z0-9_\-.]/gi, '')
+    saveWorkfile: function(workspace) {
+        this.$('button.save_as_workfile').startLoading("visualization.saving");
+
+        if (workspace) {
+            this.task.set({workspaceId : workspace.get("id")});
         }
 
         this.workfile = new chorus.models.Workfile({
             workspaceId: this.task.get("workspaceId"),
             source: "visualization",
             svgData: this.makeSvgData(),
-            fileName: sanitizeFilename(this.options.chartOptions.name + "-" + this.options.chartOptions.type) + ".png"
+            fileName: this.sanitizeFilename(this.options.chartOptions.name + "-" + this.options.chartOptions.type) + ".png"
         });
         this.workfile.save();
         this.workfile.bindOnce('saved', this.onWorkfileSaved, this);
@@ -126,7 +128,18 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     createWorkfileFromVisualization: function(e) {
         e.preventDefault();
-        this.$('button.save_as_workfile').startLoading("visualization.saving")
-        this.createWorkfile();
+
+        if (!this.task.get("workspaceId")) {
+            this.workspacePicker = new chorus.dialogs.VisualizationWorkspacePicker();
+            this.launchSubModal(this.workspacePicker);
+            this.workspacePicker.bindOnce("workspace:selected", this.saveWorkfile, this);
+
+        } else {
+            this.saveWorkfile();
+        }
+    },
+
+    sanitizeFilename: function(fileName) {
+        return fileName.replace(/[^A-Z0-9_\-.]/gi, '')
     }
 });
