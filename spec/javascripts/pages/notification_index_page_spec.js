@@ -6,6 +6,7 @@ describe("chorus.pages.NotificationIndexPage", function() {
 
     describe("before the fetch completes", function() {
         it("displays at least the title", function() {
+            this.page.render();
             expect($(this.page.el)).toContainTranslation("header.your_notifications");
         });
     });
