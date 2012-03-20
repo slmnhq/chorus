@@ -5,14 +5,15 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.workspaceId = workspaceId;
 
         this.workspace = new chorus.models.Workspace({id: workspaceId});
+        this.bindings.add(this.workspace, "change", this.updateButtons);
         this.workspace.fetch();
-        this.requiredResources.push(this.workspace);
+        this.dependOn(this.workspace);
 
         this.collection = new chorus.collections.WorkfileSet([], {workspaceId: workspaceId});
         this.collection.fileType = "";
         this.collection.sortAsc("fileName");
         this.collection.fetch();
-        this.requiredResources.push(this.collection);
+
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
         this.mainContent = new chorus.views.MainContentList({
                 modelClass: "Workfile",
@@ -39,7 +40,6 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
                         ],
                         event: "sort"
                     }
-
                 }
             }
         );
@@ -65,10 +65,6 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             {label: this.workspace.loaded ? this.workspace.displayShortName() : "...", url: this.workspace.showUrl()},
             {label: t("breadcrumbs.workfiles.all")}
         ];
-    },
-
-    resourcesLoaded: function() {
-        this.updateButtons();
     },
 
     setModel: function(workfile) {
@@ -99,8 +95,8 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
                     ]
                 }
             ];
-
-            this.mainContent.contentDetails.render();
         }
+
+        this.render();
     }
 });

@@ -43,46 +43,52 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         });
     });
 
-    describe("#initialize", function() {
+    describe("#setup", function() {
         it("fetches the model", function() {
             expect(this.server.requests[0].url).toBe("/edc/workspace/" + this.model.get('workspaceId'));
-        })
+        });
 
         it("sets the workspace id, for prioritizing search", function() {
             expect(this.page.workspaceId).toBe(this.workspace.get("id"));
         });
 
         it("defaults to alphabetical sorting", function() {
-            expect(this.page.collection.sortIndex).toBe("fileName")
+            expect(this.page.collection.sortIndex).toBe("fileName");
             expect(this.page.collection.sortOrder).toBe("asc");
-        })
+        });
 
         it("defaults to all files", function() {
             expect(this.page.collection.fileType).toBe("");
-        })
+        });
 
         it("fetches the first page of the collection", function() {
-            expect(this.server.requests[1].url).toBe("/edc/workspace/" + this.model.get('workspaceId') + "/workfile?page=1&rows=50&sidx=fileName&sord=asc")
-        })
+            expect(this.server.requests[1].url).toBe("/edc/workspace/" + this.model.get('workspaceId') + "/workfile?page=1&rows=50&sidx=fileName&sord=asc");
+        });
+
+        it("goes to 404 when the workspace fetch fails", function() {
+            spyOn(Backbone.history, "loadUrl");
+            this.server.lastFetchFor(this.page.workspace).fail();
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
+        });
     });
 
     describe("when the workfile:selected event is triggered on the list view", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
             this.page.render();
-        })
+        });
 
         it("sets the model of the page", function() {
             chorus.PageEvents.broadcast("workfile:selected", this.model);
             expect(this.page.model).toBe(this.model);
-        })
+        });
     });
 
     describe("menus", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
             this.server.completeFetchFor(this.page.collection);
-        })
+        });
 
         describe("filtering", function() {
             beforeEach(function() {
@@ -158,7 +164,6 @@ describe("chorus.pages.WorkfileIndexPage", function() {
     })
 
     describe("buttons", function() {
-
         context("before the workspace is fetched", function() {
             beforeEach(function() {
                 this.page.render();
