@@ -105,4 +105,11 @@
             font-weight: $semibold;
         }
     }
+
+    .results_console {
+        .bottom_gutter {
+            height: 0;
+            background: transparent;
+        }
+    }
 }
