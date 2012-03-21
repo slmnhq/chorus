@@ -39,6 +39,7 @@
 
         setup: function() {
             this.makeModel.apply(this, arguments)
+            this.dependOn(this.tabularData);
             this.fetchResources();
         },
 
@@ -66,13 +67,8 @@
         },
 
         fetchResources: function() {
-            this.requiredResources.remove(this.tabularData);
-            this.requiredResources.push(this.tabularData);
             this.tabularData.fetch();
-        },
-
-        resourcesLoaded: function() {
-            this.fetchColumnSet();
+            this.bindings.add(this.tabularData, "change", this.fetchColumnSet);
         },
 
         fetchColumnSet: function() {
