@@ -281,6 +281,34 @@ describe("chorus.models.Workspace", function() {
     });
 
     describe("permissions checking", function() {
+        beforeEach(function() {
+            this.model.set({owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47"})
+        });
+
+        describe("#currentUserIsMember", function() {
+            it("returns true iff the current logged-in user is a member", function() {
+                this.model.members().add([
+                    fixtures.user({ id: "31" }),
+                    fixtures.user({ id: "32" }),
+                    fixtures.user({ id: "33" }),
+                ]);
+
+                setLoggedInUser({ id: "31" });
+                expect(this.model.currentUserIsMember()).toBeTruthy();
+                setLoggedInUser({ id: "48" });
+                expect(this.model.currentUserIsMember()).toBeFalsy();
+            });
+        });
+
+        describe("#currentUserIsOwner", function() {
+            it("returns true iff the current logged-in user is the owner", function() {
+                setLoggedInUser({ id: "47" });
+                expect(this.model.currentUserIsOwner()).toBeTruthy();
+                setLoggedInUser({ id: "48" });
+                expect(this.model.currentUserIsOwner()).toBeFalsy();
+            });
+        });
+
         describe("canRead", function() {
             it("is true when permission contains 'read'", function() {
                 this.model.set({permission: ['read', 'commenting']});

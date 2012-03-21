@@ -20,27 +20,27 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
             imageUrl:this.pageModel.imageUrl(),
             hasImage:this.pageModel.hasImage(),
             members:this.pageModel.members().models,
-            permission: this.hasPermission,
+            canSave : this.pageModel.currentUserIsMember() || this.userIsOwnerOrAdmin(),
+            isOwnerOrAdmin : this.userIsOwnerOrAdmin(),
             ownerName: this.owner && this.owner.displayName(),
             ownerUrl: this.owner.showUrl(),
-            sandboxLocation:sandboxLocation,
-            disable : this.hasPermission ? "" : ' disabled="disabled" '
+            sandboxLocation:sandboxLocation
         }
     },
 
-    setup:function () {
-        var ownerId = this.pageModel.get("ownerId");
-        this.owner = this.pageModel.members().find(function (member) {
-            return member.get("id") == ownerId
-        });
+    userIsOwnerOrAdmin: function() {
+        return this.pageModel.currentUserIsOwner() || chorus.session.user().get("admin");
+    },
 
-        this.hasPermission = (ownerId == chorus.session.user().get("id")) || chorus.session.user().get("admin");
+    setup: function() {
+        this.owner = this.pageModel.owner();
+
         this.imageUpload = new chorus.views.ImageUpload({
             model:this.pageModel,
             addImageKey:"workspace.settings.image.add",
             changeImageKey:"workspace.settings.image.change",
             spinnerSmall:true,
-            editable: this.hasPermission
+            editable: this.userIsOwnerOrAdmin()
         });
 
         this.bindings.add(this.pageModel, "saved", this.saved);
@@ -59,12 +59,21 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
     },
 
     postRender: function() {
+        var canUpdateName = false;
+        if (this.userIsOwnerOrAdmin()) {
+            canUpdateName = true;
+        } else if (this.pageModel.currentUserIsMember()) {
+            this.$('input[name=isPublic], input[name=status]').attr('disabled', 'disabled');
+            canUpdateName = true;
+        } else {
+            this.$('input[name=name], input[name=isPublic], textarea[name=summary], input[name=status]').attr('disabled', 'disabled');
+        }
+
         this.$("select.owner").val(this.model.get("ownerId"));
+
         _.defer(_.bind(function() {
             var clEditor = this.makeEditor($(this.el), ".toolbar", "summary")
-            if (!this.hasPermission) {
-                clEditor.disable(true)
-            }
+            if (!canUpdateName) { clEditor.disable(true) }
         }, this));
     },
 

@@ -1,10 +1,18 @@
 describe("chorus.dialogs.WorkspaceSettings", function() {
     beforeEach(function() {
         this.launchElement = $("<a></a>");
-        this.workspace = new chorus.models.Workspace({name: "my name", summary: "my summary", id: "457"});
-        this.workspace.set({ ownerId: '12' });
-        this.members = this.workspace.members();
-        this.members.add([
+
+        this.workspace = fixtures.workspace({
+            name: "my name",
+            summary: "my summary",
+            id: "457",
+            ownerId: "12",
+            ownerFirstName: "Deborah",
+            ownerLastName: "D"
+        });
+        this.workspace.unset("sandboxInfo");
+
+        this.workspace.members().add([
             new chorus.models.User({ id: 11, firstName: "Mikey", lastName: "B" }),
             new chorus.models.User({ id: 12, firstName: "Deborah", lastName: "D" }),
             new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
@@ -44,7 +52,6 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 disable: disableSpy
             }])
             setLoggedInUser({ id: 11 });
-            this.workspace.set({ ownerId: 11})
             this.dialog.render();
         });
 
@@ -71,22 +78,29 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
         describe("sandbox location", function() {
             context("with a sandbox", function() {
                 beforeEach(function() {
-                    this.workspace.set({ sandboxInfo: { databaseName: "Analytics",
-                        instanceName: "Gillette",
-                        sandboxId: "10070",
-                        schemaName: "analytics"} });
+                    this.workspace.set({
+                        sandboxInfo: {
+                            databaseName: "Analytics",
+                            instanceName: "Gillette",
+                            sandboxId: "10070",
+                            schemaName: "analytics"
+                        }
+                    })
                     this.dialog.render();
                 });
+
                 it("shows sandbox info", function() {
                     expect(this.dialog.$(".sandboxLocation").text()).toBe("Gillette / Analytics / analytics");
                 });
             });
+
             context("without a sandbox", function() {
                 it("shows sandbox info", function() {
                     expect(this.dialog.$(".sandboxLocation").text()).toMatchTranslation("workspace.settings.sandbox.none");
                 });
             });
         })
+
         context("when the workspace is public", function() {
             beforeEach(function() {
                 this.workspace.set({ isPublic: true })
@@ -111,8 +125,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
         context("when the user is the owner of the workspace", function() {
             beforeEach(function() {
-                setLoggedInUser({ id: 11 });
-                this.workspace.set({ ownerId: 11});
+                setLoggedInUser({ id: "12" });
                 disableSpy.reset();
                 this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                 this.dialog.render();
@@ -143,7 +156,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 });
 
                 it("defaults to the current owner", function() {
-                    expect(this.dialog.$("select.owner").val()).toBe("11");
+                    expect(this.dialog.$("select.owner").val()).toBe("12");
                 });
             })
 
@@ -188,24 +201,23 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
         context("when the user is not the owner, but is a member of the workspace", function() {
             beforeEach(function() {
                 setLoggedInUser({ id: 11 });
-                this.workspace.set({ ownerId: 12})
+                this.dialog.render();
             });
 
             itDoesNotAllowEditingImage();
             itDoesNotAllowEditingMembers();
             itHasEditableNameAndSummmary();
-            itDisablesArchivedSetting();
+            itDisablesArchivingAndUnarchiving();
         });
 
         context("when the user is not a member of the workspace", function() {
             beforeEach(function() {
                 setLoggedInUser({ id: 18 });
-                this.workspace.set({ ownerId: 12})
-            })
+            });
 
             context("and the user is not an admin", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ id: 11, admin: false});
+                    setLoggedInUser({ id: '99', admin: false });
                     disableSpy.reset();
                     this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                     this.dialog.render();
@@ -226,7 +238,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 itDoesNotAllowEditingImage();
                 itDoesNotAllowEditingMembers();
-                itDisablesArchivedSetting();
+                itDisablesArchivingAndUnarchiving();
 
                 it("removes the save button and changes the cancel text to close window", function() {
                     expect(this.dialog.$("button.submit")).not.toExist();
@@ -237,42 +249,42 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     beforeEach(function() {
                         this.workspace.set({ active: true })
                         this.dialog.render();
-                    })
+                    });
 
                     it("displays radio buttons with 'active' selected", function() {
                         var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
                         var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
                         expect(activeRadio).toBeChecked();
                         expect(archivedRadio).not.toBeChecked();
-                    })
-                })
+                    });
+                });
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
                         this.workspace.set({ active: false })
                         this.dialog.render();
-                    })
+                    });
 
                     it("displays radio buttons with 'archived' selected", function() {
                         var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
                         var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
                         expect(activeRadio).not.toBeChecked();
                         expect(archivedRadio).toBeChecked();
-                    })
-                })
+                    });
+                });
             });
 
             context("and the user is an admin", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ id: 11, admin: true });
+                    setLoggedInUser({ admin: true });
                     disableSpy.reset();
                     this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                     this.dialog.render();
-                })
+                });
 
                 it("does not disable the 'Publicly available' checkbox", function() {
                     expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
-                })
+                });
 
                 it("does not disable the cleditor", function() {
                     expect(disableSpy).not.toHaveBeenCalled();
@@ -299,7 +311,14 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     it("defaults to the current owner", function() {
                         expect(this.dialog.$("select.owner").val()).toBe("12");
                     });
-                })
+                });
+
+                it("enables the radio buttons for archiving/unarchiving", function() {
+                    var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
+                    var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
+                    expect(archivedRadio).not.toBeDisabled();
+                    expect(activeRadio).not.toBeDisabled();
+                });
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
@@ -307,36 +326,32 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         this.dialog.render();
                     })
 
-                    it("displays enabled radio buttons with 'active' selected", function() {
+                    it("displays radio buttons with 'active' selected", function() {
                         var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
                         var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
-                        expect(activeRadio).not.toBeDisabled();
                         expect(activeRadio).toBeChecked();
-                        expect(archivedRadio).not.toBeDisabled();
                         expect(archivedRadio).not.toBeChecked();
                     })
 
                     it("shows the save button and cancel buttons", function() {
                         expect(this.dialog.$("button.submit")).toExist();
                         expect(this.dialog.$("button.cancel")).toContainTranslation("actions.cancel");
-                    })
-                })
+                    });
+                });
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
                         this.workspace.set({ active: false })
                         this.dialog.render();
-                    })
+                    });
 
-                    it("displays enabled radio buttons with 'archived' selected", function() {
+                    it("displays radio buttons with 'archived' selected", function() {
                         var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
                         var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
-                        expect(activeRadio).not.toBeDisabled();
                         expect(activeRadio).not.toBeChecked();
-                        expect(archivedRadio).not.toBeDisabled();
                         expect(archivedRadio).toBeChecked();
-                    })
-                })
+                    });
+                });
 
                 context("and the workspace has an image", function() {
                     beforeEach(function() {
@@ -526,7 +541,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     it("does not set the name on the workspace", function() {
                         expect(this.dialog.pageModel.get("summary")).toBe("my summary");
                     })
-                })
+                });
             });
         });
 
@@ -536,7 +551,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             });
 
             it("does not disable the summary", function() {
-                expect(this.dialog.$("input[name=summary]")).not.toBeDisabled();
+                expect(this.dialog.$("textarea[name=summary]")).not.toBeDisabled();
                 expect(disableSpy).not.toHaveBeenCalled();
             });
         }
@@ -547,7 +562,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             });
         }
 
-        function itDisablesArchivedSetting() {
+        function itDisablesArchivingAndUnarchiving() {
             it("disables the radio buttons for archiving and un-archiving the workspace", function() {
                 var activeRadio = this.dialog.$("input[type=radio][id=workspace_active]");
                 var archivedRadio = this.dialog.$("input[type=radio][id=workspace_archived]");
