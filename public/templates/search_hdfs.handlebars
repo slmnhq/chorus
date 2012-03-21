@@ -1,7 +1,11 @@
 <div class="spacer_left"></div>
 <img class="icon" src="{{iconUrl}}"></img>
 <div class="description">
-    <a class="name" href="{{showUrl}}">{{displaySearchMatch "name"}}</a>
+    {{#if displayableFiletype}}
+        <a class="name" href="{{showUrl}}">{{displaySearchMatch "name"}}</a>
+    {{else}}
+        <span class="name">{{displaySearchMatch "name"}}</span>
+    {{/if}}
     <div class="location">
         {{t "hdfs.from"}}
         <span class="instance">{{instanceLink}} /</span>

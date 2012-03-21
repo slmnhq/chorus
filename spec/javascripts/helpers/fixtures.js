@@ -3275,6 +3275,8 @@ beforeEach(function() {
                     id: "10001",
                     name: "hadoop"
                 },
+                isBinary: false,
+                isDir: false,
                 lastUpdatedStamp: "2012-03-05 15:23:55",
                 name: "Thumbs.db",
                 path: "/webui/images/thirdparty/jquerybubblepopup-theme/green"
@@ -3368,6 +3370,8 @@ beforeEach(function() {
                             "id": "10020|/webui/js/chorus/app/views/EdcViews.js",
                             "name": "EdcViews.js",
                             "path": "/webui/js/chorus/app/views",
+                            isBinary: false,
+                            isDir: false,
                             "lastUpdatedStamp": "2012-03-14 16:46:40",
                             "highlightedAttributes": {
                                 "name": ["<em>Edc<\/em>Views.js"]
