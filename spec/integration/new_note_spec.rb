@@ -27,7 +27,7 @@ describe "creating a note on a workspace" do
       let(:file) { Tempfile.new("my_desktop_file_name") }
 
       before do
-        page.execute_script("chorus.modal.$('textarea').val('Blood.'); chorus.modal.$('iframe').contents().find('body').html('Blood.')")
+        set_cleditor_value("body", "Blood.")
         click_link "Show options"
         attach_file "fileToUpload[]", file.path
       end
