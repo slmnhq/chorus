@@ -2423,7 +2423,7 @@ beforeEach(function() {
                         "lastName": "Admin",
                         "firstName": "EDC"
                     },
-                    "name": "buildout.txt",
+                    "fileName": "buildout.txt",
                     "owner": {
                         "id": "InitialUser",
                         "lastName": "Admin",
@@ -3428,8 +3428,9 @@ beforeEach(function() {
                             "id": "10030",
                             "isDeleted": false,
                             "mimeType": "text/plain",
+                            "fileName": "buildout.txt",
                             "highlightedAttributes": {
-                                "fileName": ["<em>buildout<\/em>.txt"]
+                                "fileName": ["<em>buildout</em>.txt"]
                             },
                             "owner": {
                                 "id": "InitialUser",
@@ -3456,7 +3457,66 @@ beforeEach(function() {
                                 "versionOwner": "edcadmin",
                                 "versionNum": 1
                             },
-                            "fileName": "buildout.txt",
+                            "comments": []
+                        },
+
+                        {
+                            "schemaName": "ddemo",
+                            "entityType": "databaseObject",
+                            "id": '10000\"|"dca_demo"|"ddemo"|"BASE_TABLE"|"_uspresident"',
+                            "objectType": "BASE_TABLE",
+                            "databaseName": "dca_demo",
+                            "workspaceIds": ["10000", "10030"],
+                            "objectName": "_uspresident",
+                            "highlightedAttributes": {
+                                "objectName": ["_<em>uspresident</em>"]
+                            },
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
+                            "workspaces": [
+                                {
+                                    "id": "10000",
+                                    "datasetType": "SANDBOX_TABLE",
+                                    "name": "ws"
+                                },
+                                {
+                                    "id": "10030",
+                                    "datasetType": "SANDBOX_TABLE",
+                                    "name": "has_sandbox"
+                                }
+                            ],
+                            "comments": []
+                        },
+
+                        {
+                            "entityType": "chorusView",
+                            "id": '10000"|"dca_demo"|"ddemo"|"QUERY"|"chorus_view"',
+                            "isDeleted": false,
+                            "lastUpdatedStamp": "2012-03-21 10:15:11",
+                            "datasetType": "CHORUS_VIEW",
+                            "databaseName": "dca_demo",
+                            "schemaName": "ddemo",
+                            "objectType": "QUERY",
+                            "content": 'SELECT a.position_title FROM "2010_report_on_white_house" AS a',
+                            "objectName": "chorus_view",
+                            "highlightedAttributes": {
+                                "objectName": ["<em>chorus_view</em>"]
+                            },
+                            "owner": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
+                            },
+                            "workspace": {
+                                "id": "10000",
+                                "name": "ws"
+                            },
+                            "instance": {
+                                "id": "10000",
+                                "name": "gillette"
+                            },
                             "comments": []
                         }
                     ],
