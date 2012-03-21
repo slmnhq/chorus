@@ -6,7 +6,14 @@ chorus.dialogs.PreviewColumns = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.resource = this.collection = this.model.columns();
+        this.bindings.add(this.collection, 'fetchFailed', this.columnFetchFailed);
         this.collection.fetch();
+    },
+
+    columnFetchFailed: function() {
+        this.model.serverErrors = this.collection.serverErrors;
+        this.closeModal()
+        this.previousModal.showErrors(this.model);
     },
 
     postRender: function() {

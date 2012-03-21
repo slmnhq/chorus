@@ -15,7 +15,7 @@ describe("chorus.dialogs.PreviewColumns", function() {
         expect(this.databaseObject.columns()).toHaveBeenFetched();
     });
 
-    describe("when the fetch completes", function() {
+    describe("when the fetch completes successfully", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.databaseObject.columns(), [
                 fixtures.databaseColumn({name: "Rhino", recentComment: "awesome", type: "text" }),
@@ -75,6 +75,28 @@ describe("chorus.dialogs.PreviewColumns", function() {
                 expect(types.eq(2).text()).toBe("int4");
                 expect(types.eq(3).text()).toBe("time");
             });
+        });
+    });
+
+    describe("when the fetch fails", function() {
+        beforeEach(function() {
+            spyOn(this.dialog, "closeModal");
+            this.dialog.previousModal = {
+                showErrors: jasmine.createSpy("showErrors")
+            }
+            this.server.lastFetch().fail();
+        });
+
+        it("copies the serverErrors to the dialog model", function() {
+            expect(this.dialog.model.serverErrors).toEqual(this.databaseObject.columns().serverErrors)
+        });
+
+        it("closes itself", function() {
+            expect(this.dialog.closeModal).toHaveBeenCalled();
+        });
+
+        it("shows errors on the previous modal", function() {
+            expect(this.dialog.previousModal.showErrors).toHaveBeenCalledWith(this.dialog.model);
         });
     });
 });
