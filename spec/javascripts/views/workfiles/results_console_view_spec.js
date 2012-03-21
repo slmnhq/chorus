@@ -175,6 +175,24 @@ describe("chorus.views.ResultsConsoleView", function() {
                     });
                 });
 
+                context("and the task does not have results", function() {
+                    beforeEach(function() {
+                        this.task = fixtures.taskWithoutResults();
+                        this.view = new chorus.views.ResultsConsole({ model: this.task });
+                        this.view.render();
+                        this.view.execute(this.task);
+                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
+                    });
+
+                    it("collapses the result table", function() {
+                        expect(this.view.$(".controls")).toHaveClass("collapsed");
+                        expect(this.view.$('.result_table')).toHaveClass("collapsed");
+                        expect(this.view.$('.result_table')).not.toHaveClass("minimized");
+                        expect(this.view.$('.result_table')).not.toHaveClass("maximized");
+                        expect(this.view.$('.data_table').css("height")).toBe("0px");
+                    });
+                });
+
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
                         this.task = fixtures.taskWithResult();
@@ -540,7 +558,7 @@ describe("chorus.views.ResultsConsoleView", function() {
         })
 
         context("when execution is successful", function() {
-            context("when fetch returns successfully" , function() {
+            context("when fetch returns successfully", function() {
                 beforeEach(function() {
                     this.server.completeFetchFor(this.executionModel);
                 });

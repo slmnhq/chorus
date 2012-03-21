@@ -59,7 +59,11 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     executionSucceeded: function(task) {
         this.showResultTable(task)
-        this.hideSpinner()
+        this.hideSpinner();
+
+        if (!task.get("result") || task.get("result").hasResult == "false") {
+            this.collapseTable();
+        }
     },
 
     showResultTable: function(task) {
