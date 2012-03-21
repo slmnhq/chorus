@@ -1,5 +1,7 @@
 describe("chorus.views.Login", function() {
     beforeEach(function() {
+        stubDefer();
+        spyOn($.fn, 'focus');
         this.view = new chorus.views.Login({model: chorus.session});
         this.view.render();
     });
@@ -11,6 +13,11 @@ describe("chorus.views.Login", function() {
     it("requests the version string from the server", function() {
         expect(this.server.requests[0].url).toBe("/VERSION");
     })
+
+    it("focuses the username field by default", function() {
+        expect($.fn.focus).toHaveBeenCalled();
+        expect($.fn.focus.mostRecentCall.object).toBe("input[name='userName']");
+    });
 
     describe("when the version string is returned", function() {
         beforeEach(function() {
