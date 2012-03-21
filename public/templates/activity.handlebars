@@ -12,8 +12,12 @@
         <div class="activity_header">
             {{headerHtml}}
         </div>
-        {{#if body}}
-            <div class="body">{{body}}</div>
+        {{#if isUserGenerated}}
+            <div class="truncated_text"></div>
+        {{else}}
+            {{#if body}}
+                <div class="body">{{body}}</div>
+            {{/if}}
         {{/if}}
         <ul class='attachments'>
         {{#each attachments}}

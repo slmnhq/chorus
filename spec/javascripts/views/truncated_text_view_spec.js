@@ -1,5 +1,6 @@
 describe("chorus.views.TruncatedText", function() {
     beforeEach(function() {
+        stubDefer();
         this.text = '<span style="font-weight: normal; ">This is&nbsp;</span><div><span style="font-weight: normal;"><br></span>' +
             '</div><div><span style="font-weight: normal;"><br></span></div><div><span style="font-weight: normal; "><br></span>' +
             '</div><div><span style="font-weight: normal; ">some </span><b>great</b> stuff <div style="font-weight: normal; "><ul>' +

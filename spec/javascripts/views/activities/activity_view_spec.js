@@ -4,6 +4,56 @@ describe("chorus.views.Activity", function() {
         this.view = new chorus.views.Activity({ model: this.model });
     });
 
+    describe("html content", function() {
+        context("when the activity is a note", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.NOTE_ON_WORKSPACE();
+                this.model.loaded = true;
+                this.view = new chorus.views.Activity({ model: this.model });
+                this.view.render();
+            });
+
+            it("displays the body as html", function() {
+                expect(this.view.$(".activity_content .truncated_text")).toExist();
+                expect(this.view.$(".activity_content .body")).not.toExist();
+                expect(this.view.$(".activity_content .truncated_text .styled_text")).toContainText(this.model.get("text"));
+                expect(this.view.htmlContent).toBeA(chorus.views.TruncatedText);
+                expect(this.view.htmlContent.options.attributeIsHtmlSafe).toBeTruthy();
+            });
+        });
+
+        context("when the activity is an insight", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.INSIGHT_CREATED();
+                this.model.loaded = true;
+                this.view = new chorus.views.Activity({ model: this.model });
+                this.view.render();
+            });
+
+            it("displays the content as html", function() {
+                expect(this.view.$(".activity_content .truncated_text")).toExist();
+                expect(this.view.$(".activity_content .truncated_text .styled_text")).toContainText(this.model.get("text"));
+                expect(this.view.$(".activity_content .body")).not.toExist();
+                expect(this.view.htmlContent).toBeA(chorus.views.TruncatedText);
+                expect(this.view.htmlContent.options.attributeIsHtmlSafe).toBeTruthy();
+            });
+        });
+
+        context("when the activity is something else", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.IMPORT_FAILED_FILE();
+                this.model.loaded = true;
+                this.view = new chorus.views.Activity({ model: this.model });
+                this.view.render();
+            });
+
+            it("does not display html content", function() {
+                expect(this.view.$(".activity_content .truncated_text")).not.toExist();
+                expect(this.view.htmlContent).toBeUndefined();
+            });
+        });
+    });
+
     describe("#render", function() {
         context("isNotification", function() {
             beforeEach(function() {
@@ -18,7 +68,7 @@ describe("chorus.views.Activity", function() {
             });
 
             it("should not render the links", function() {
-                expect(this.view.$(".links")).not.toExist();
+                expect(this.view.$(".activity_content > .links")).not.toExist();
             });
 
             it("should not have a DeleteNoteConfirmAlert", function() {
@@ -209,6 +259,7 @@ describe("chorus.views.Activity", function() {
         context("type: NOTE", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.NOTE_ON_WORKSPACE();
+                this.view.model.loaded = true;
                 this.collection = new chorus.collections.ActivitySet();
                 this.collection.add(this.view.model);
 
@@ -226,7 +277,7 @@ describe("chorus.views.Activity", function() {
             })
 
             it("displays the comment body", function() {
-                expect(this.view.$(".body").eq(0).text().trim()).toBe(this.view.model.get("text"));
+                expect(this.view.$(".truncated_text .styled_text").eq(0)).toContainText(this.view.model.get("text"));
             });
 
             it("displays the timestamp", function() {
@@ -252,7 +303,7 @@ describe("chorus.views.Activity", function() {
                         setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.view.model.author().id});
                         this.view.render();
                     });
-                    
+
                     itDisplaysDeleteLink();
                 })
             })

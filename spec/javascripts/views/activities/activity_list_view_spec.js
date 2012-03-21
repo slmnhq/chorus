@@ -70,7 +70,7 @@ describe("chorus.views.ActivityList", function() {
             });
 
             it("passes the option through to the activity views so they don't render links", function() {
-                expect(this.view.$("li .links")).not.toExist();
+                expect(this.view.$("li .activity_content > .links")).not.toExist();
             });
         });
 

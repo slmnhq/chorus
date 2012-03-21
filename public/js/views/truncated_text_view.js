@@ -18,12 +18,14 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        var heightLimit = parseInt(this.$(".original").css("line-height")) * 2;
-        if (this.$(".original").height() > heightLimit) {
-            $(this.el).addClass('expandable');
-        } else {
-            $(this.el).removeClass('expandable');
-        }
+        _.defer(_.bind(function() {
+            var heightLimit = parseInt(this.$(".original").css("line-height")) * 2;
+            if (this.$(".original").height() > heightLimit) {
+                $(this.el).addClass('expandable');
+            } else {
+                $(this.el).removeClass('expandable');
+            }
+        }, this));
     },
 
     toggleMore: function(e) {
