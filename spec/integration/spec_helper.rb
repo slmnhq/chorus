@@ -17,5 +17,5 @@ RSpec.configure do |c|
   c.include LoginHelpers
   c.include CleditorHelpers
 
-  Capybara.default_wait_time = 10
+  Capybara.default_wait_time = 30
 end
