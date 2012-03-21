@@ -19,7 +19,8 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
             workspaceAdmin:this.model.workspaceAdmin(),
             imageUrl:this.model.imageUrl() + "&buster=" + (new Date().getTime()),
             hasImage:this.model.hasImage(),
-            hasSandbox:!!this.model.sandbox()
+            hasSandbox:!!this.model.sandbox(),
+            currentUserIsMember: this.model.currentUserIsMember()
         };
     },
 

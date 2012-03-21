@@ -73,7 +73,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             });
         });
 
-        context("the current user has workspace admin permissions on the workspace", function() {
+        context("when the current user has workspace admin permissions on the workspace", function() {
             beforeEach(function() {
                 spyOn(this.model, "workspaceAdmin").andReturn(true);
                 this.view.render();
@@ -115,13 +115,26 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             });
         });
 
-        context("the current user does not have workspace admin permissions on the workspace", function() {
+        context("when the current user is a member of the workspace, but not an admin/owner", function() {
             beforeEach(function() {
                 spyOn(this.model, "workspaceAdmin").andReturn(false);
+                spyOn(this.model, "currentUserIsMember").andReturn(true);
                 this.view.render();
             });
 
-            it("does have a link to edit workspace settings", function() {
+            it("has a link to edit the workspace's settings", function() {
+                expect(this.view.$("a.dialog[data-dialog=WorkspaceSettings]").text().trim()).toMatchTranslation("actions.edit_workspace");
+            });
+        });
+
+        context("when the current user is not a member of the workspace", function() {
+            beforeEach(function() {
+                spyOn(this.model, "workspaceAdmin").andReturn(false);
+                spyOn(this.model, "currentUserIsMember").andReturn(false);
+                this.view.render();
+            });
+
+            it("has a link to view the workspace's settings", function() {
                 expect(this.view.$("a[data-dialog=WorkspaceSettings]").text().trim()).toMatchTranslation("actions.view_workspace_settings");
             });
 
