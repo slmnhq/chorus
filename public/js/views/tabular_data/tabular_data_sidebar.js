@@ -109,6 +109,19 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
             ctx.hasSandbox = this.options.workspace.sandbox();
             ctx.workspaceId = this.options.workspace.id;
             ctx.isDeleteable = this.resource && this.resource.isDeleteable() && this.options.workspace.canUpdate();
+
+            if (this.resource) {
+                if (this.resource.get("type") == "CHORUS_VIEW") {
+                    ctx.deleteMsgKey = "delete";
+                    ctx.deleteTextKey = "actions.delete";
+                } else if (this.resource.get("type") == "SOURCE_TABLE" && this.resource.get("objectType") == "VIEW") {
+                    ctx.deleteMsgKey = "disassociate_view";
+                    ctx.deleteTextKey = "actions.delete_association";
+                } else if (this.resource.get("type") == "SOURCE_TABLE" && this.resource.get("objectType") == "BASE_TABLE") {
+                    ctx.deleteMsgKey = "disassociate_table";
+                    ctx.deleteTextKey = "actions.delete_association";
+                }
+            }
         }
 
         return ctx;

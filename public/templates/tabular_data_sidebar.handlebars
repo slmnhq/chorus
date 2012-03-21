@@ -67,7 +67,7 @@
                 {{/if}}
             {{/unless}}
 
-            {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete">{{t "actions.delete"}}</a></li>{{/if}}
+            {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey}}</a></li>{{/if}}
         </ul>
     </div>
 

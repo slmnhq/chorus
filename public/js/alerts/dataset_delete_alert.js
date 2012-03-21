@@ -1,8 +1,13 @@
 chorus.alerts.DatasetDelete = chorus.alerts.ModelDelete.extend({
-    text:t("dataset.delete.text"),
-    title:t("dataset.delete.title"),
-    ok:t("dataset.delete.button"),
-    deleteMessage:"dataset.delete.toast",
+    setup: function() {
+        this._super("setup")
+
+        var keyPrefix = this.options.launchElement.data("key-prefix");
+        this.text = t("dataset." + keyPrefix + ".text");
+        this.title = t("dataset." + keyPrefix + ".title");
+        this.ok = t("dataset." + keyPrefix + ".button");
+        this.deleteMessage = "dataset." + keyPrefix + ".toast";
+    },
 
     deleteMessageParams:function () {
         return {

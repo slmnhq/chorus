@@ -231,52 +231,11 @@ describe("chorus.views.TabularDataSidebar", function() {
                         chorus.PageEvents.broadcast("tabularData:selected");
                     });
 
-                    it("does not display a delete link", function() {
-                        expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
-                    });
+                    itShowsTheAppropriateDeleteLink(false)
                 })
 
                 it("doesn't display any import links by default", function() {
                     expect(this.view.$("a.create_schedule, a.edit_schedule, a.import_now")).not.toExist();
-                });
-
-                context("and isDeleteable returns true", function() {
-                    beforeEach(function() {
-                        spyOn(this.view.resource, "isDeleteable").andReturn(true);
-                    });
-
-                    context("and the logged-in user has update permission on the workspace", function() {
-                        beforeEach(function() {
-                            this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
-                            this.view.render();
-                        });
-
-                        it("displays a delete link", function() {
-                            expect(this.view.$("a.alert[data-alert=DatasetDelete]")).toExist();
-                        });
-                    });
-
-                    context("and the logged-in user does not have update permission on the workspace", function() {
-                        beforeEach(function() {
-                            this.view.options.workspace = fixtures.workspace({ permission: ["read"] })
-                            this.view.render();
-                        });
-
-                        it("does not display a delete link", function() {
-                            expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
-                        });
-                    });
-                });
-
-                context("and isDeleteable returns false", function() {
-                    beforeEach(function() {
-                        spyOn(this.view.resource, "isDeleteable").andReturn(false);
-                        this.view.render();
-                    });
-
-                    it("does not display a delete link", function() {
-                        expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
-                    });
                 });
 
                 context("when the dataset is a sandbox table or view", function() {
@@ -285,6 +244,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                         this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
+
+                    itShowsTheAppropriateDeleteLink(false);
 
                     context("and the dataset has not received an import", function() {
                         beforeEach(function() {
@@ -325,12 +286,14 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
                 });
 
-                context("when the dataset is a source table or view", function() {
+                context("when the dataset is a source table", function() {
                     beforeEach(function() {
                         this.dataset = fixtures.datasetSourceTable();
                         this.view.importConfiguration.set({sourceId: this.dataset.id});
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
+
+                    itShowsTheAppropriateDeleteLink(true, "table");
 
                     it("fetches the import configuration for the dataset", function() {
                         expect(this.dataset.getImport()).toHaveBeenFetched();
@@ -670,6 +633,24 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
                 });
 
+                context("when the dataset is a source view", function() {
+                    beforeEach(function() {
+                        this.dataset = fixtures.datasetSourceView();
+                        chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                    });
+
+                    itShowsTheAppropriateDeleteLink(true, "view");
+                });
+
+                context("when the dataset is a chorus view", function() {
+                    beforeEach(function() {
+                        this.dataset = fixtures.datasetChorusView();
+                        chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                    });
+
+                    itShowsTheAppropriateDeleteLink(true, "chorus view");
+                });
+
                 it("does not have a link to associate the dataset with a workspace", function() {
                     expect(this.view.$('.actions .associate')).not.toExist();
                 });
@@ -682,6 +663,52 @@ describe("chorus.views.TabularDataSidebar", function() {
                     expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
                     expect(notesNew.attr("data-allow-workspace-attachments")).toBeDefined();
                 });
+
+                function itShowsTheAppropriateDeleteLink(shouldBePresent, type) {
+                    if (shouldBePresent) {
+                        var keyPrefix, textKey;
+
+                        if (type == "chorus view") {
+                            keyPrefix = "delete";
+                            textKey = "actions.delete";
+                        } else if (type == "view") {
+                            keyPrefix = "disassociate_view"
+                            textKey = "actions.delete_association";
+                        } else {
+                            keyPrefix = "disassociate_table";
+                            textKey = "actions.delete_association";
+                        }
+
+                        context("and the logged-in user has update permission on the workspace", function() {
+                            beforeEach(function() {
+                                this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                                this.view.render();
+                            });
+
+                            it("displays a delete link", function() {
+                                var el = this.view.$("a.alert[data-alert=DatasetDelete][data-key-prefix=" + keyPrefix + "]")
+                                expect(el).toExist();
+                                expect(el).toHaveText(t(textKey))
+                            });
+                        });
+
+                        context("and the logged-in user does not have update permission on the workspace", function() {
+                            beforeEach(function() {
+                                this.view.options.workspace = fixtures.workspace({ permission: ["read"] })
+                                this.view.render();
+                            });
+
+                            it("does not display a delete link", function() {
+                                expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                            });
+                        });
+                    } else {
+                        it("does not display a delete link", function() {
+                            this.view.render();
+                            expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                        })
+                    }
+                }
             });
 
             context("when there is not a workspace", function() {
