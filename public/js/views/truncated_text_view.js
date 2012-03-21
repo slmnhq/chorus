@@ -18,7 +18,8 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        if (this.$(".original").height() > this.$(".styled_text").height()) {
+        var heightLimit = parseInt(this.$(".original").css("line-height")) * 2;
+        if (this.$(".original").height() > heightLimit) {
             $(this.el).addClass('expandable');
         } else {
             $(this.el).removeClass('expandable');
