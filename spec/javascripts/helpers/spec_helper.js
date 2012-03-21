@@ -5,7 +5,7 @@
         // Code that only needs to be run once before all the tests run
         _.debounce = function(func) { return func; }
 
-        $(window).focus(function(){
+        $(window).focus(function() {
             jasmine.getEnv().updateInterval = jasmine.DEFAULT_UPDATE_INTERVAL;
         });
 
@@ -44,7 +44,7 @@
         stubHotkeys();
 
         var regexEqualityTester = function(a, b) {
-            if(a instanceof RegExp && b instanceof RegExp) {
+            if (a instanceof RegExp && b instanceof RegExp) {
                 return a.toString() === b.toString();
             }
         }
@@ -72,190 +72,6 @@
             }
 
             clearRenderedDOM();
-
-            this.addMatchers({
-                toBeA: function(klass) {
-                    if (_.isFunction(klass)) {
-                        return this.actual instanceof klass;
-                    } else {
-                        return (typeof this.actual === klass);
-                    }
-                },
-
-                toBeEnabled: function() {
-                    return this.actual.is(':not(:disabled)');
-                },
-
-                toMatchTranslation: function(translationKey) {
-                    var translatedText = t.apply(this, arguments);
-                    this.message = function() {
-                        return [
-                            "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "' (" + translatedText + ")",
-                            "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "' (" + translatedText + ")"
-                        ];
-                    };
-                    if (!I18n.lookup(translationKey)) {
-                        throw("No entry in messages.properties for " + translationKey);
-                    }
-
-                    return this.actual === translatedText;
-                },
-
-                toContainTranslation: function(translationKey) {
-                    var actual = _.isString(this.actual) ? this.actual : this.actual.text();
-                    var translatedText = t.apply(this, arguments);
-                    this.message = function() {
-                        return [
-                            "Expected text '" + actual + "' to contain the translation for '" + translationKey + "' (" + translatedText + ")",
-                            "Expected text '" + actual + "' not to contain the translation for '" + translationKey + "' (" + translatedText + ")"
-                        ];
-                    };
-                    if (!I18n.lookup(translationKey)) {
-                        throw("No entry in messages.properties for " + translationKey);
-                    }
-
-                    return this.env.contains_(actual, translatedText);
-                },
-
-                toHaveBeenCalledOnSelector: function(selector) {
-                    return _.any(this.actual.calls, function(call) {
-                        return call.object.selector === selector;
-                    })
-                },
-
-                toHaveBeenCalledOn: function(object) {
-                    return _.any(this.actual.calls, function(call) {
-                        return call.object === object
-                    })
-                },
-
-                toContainText: function(text) {
-                    var actualText = _.isString(this.actual) ? this.actual : this.actual.text()
-                    this.message = function() {
-                        return [
-                            'Expected "' + actualText + '" to contain "' + text + '"',
-                            'Expected "' + actualText + '" not to contain "' + text + '"'
-                        ];
-                    }
-                    return this.env.contains_(actualText, text);
-                },
-
-                toHaveSpinner: function() {
-                    this.message = function() {
-                        return [
-                            'Expected "' + this.actual.selector + '" to have a spinner',
-                            'Expected "' + this.actual.selector + '" not to have a spinner'
-                        ]
-                    }
-                    return this.actual.find("div[aria-role=progressbar]").length
-                },
-
-                toHaveModal: function(modalClass) {
-                    if (!modalClass) { throw "expected undefined modal class to have been launched."; }
-                    var modalClassName = modalClass.prototype.className;
-                    this.message = function() {
-                        return [
-                            'Expected to have a modal with class ' + modalClassName,
-                            'Expected not to have a modal with class ' + modalClassName
-                        ]
-                    }
-                    return this.actual.mostRecentCall && this.actual.mostRecentCall.args && this.actual.mostRecentCall.args[0] && $(this.actual.mostRecentCall.args[0]).hasClass(modalClassName);
-                },
-
-                toHaveBeenTriggeredOn: function(target, args) {
-                    var call, eventName = this.actual;
-
-                    if (args) {
-                        this.message = function() {
-                            if (call) {
-                                return [
-                                    "Expected event " + eventName + " to have been triggered on " + target + " with" + args + " but was triggered with " + call.args + " (did you forget to call this matcher with an array of arguments?)",
-                                    "Expected event " + eventName + " not to have been triggered on " + target + " with" + args + " but was triggered with " + call.args
-                                ];
-                            } else {
-                                return [
-                                    "Expected event " + eventName + " to have been triggered on " + target + " with " + args + " but it was never triggered",
-                                    "Expected event " + eventName + " not to have been triggered on " + target + " with " + args + " but it was"
-                                ];
-                            }
-                        }
-                    } else {
-                        this.message = function() {
-                            return [
-                                "Expected event " + eventName + " to have been triggered on " + target,
-                                "Expected event " + eventName + " not to have been triggered on " + target
-                            ];
-                        }
-                    }
-
-                    if (_.isString(target) || target instanceof jQuery) {
-                        return jasmine.JQuery.events.wasTriggered(target, eventName);
-                    } else if (target._chorusEventSpies && target._chorusEventSpies[eventName]) {
-                        call = _.last(target._chorusEventSpies[eventName].calls);
-                        if (!call) return false;
-                        if (args)  return (_.isEqual(call.args, args));
-                        return true;
-                    } else {
-                        throw "The event '" + eventName + "' has not been spied on, for the object " + target;
-                    }
-                },
-
-                toMatchUrl: function(target, options) {
-                    this.message = function() {
-                        return [
-                            "Expected url " + this.actual + " to be equivalent to url " + target,
-                            "Expected url " + this.actual + " not to be equivalent to url " + target
-                        ];
-                    }
-
-                    var paramsToIgnore = (options && options.paramsToIgnore) || [];
-                    var targetURI = new URI(decodeURI(target)).removeSearch(paramsToIgnore);
-                    var actualURI = new URI(decodeURI(this.actual)).removeSearch(paramsToIgnore);
-                    return (actualURI).equals(targetURI);
-                },
-
-                toContainQueryParams: function(queryParams) {
-                    var actualQueryParams = new URI(this.actual).query(true);
-                    var targetQueryParams = new URI("").addSearch(queryParams).query(true);
-
-                    return _.all(targetQueryParams, function(targetValue, targetKey) {
-                        return actualQueryParams[targetKey] === targetValue;
-                    });
-                },
-
-                toHaveUrlPath: function(targetPath) {
-                    var actualURI = new URI(this.actual);
-                    return actualURI.path() === targetPath;
-                },
-
-                toHaveHref: function(expectedHref) {
-                    var actualHref = this.actual.attr("href")
-                    this.message = function() {
-                        return [
-                            "Expected href " + actualHref + " to be an `a` and equivalent to href " + expectedHref,
-                            "Expected href " + actualHref + " to be an `a` and not to be equivalent to href " + expectedHref
-                        ];
-                    }
-                    return this.actual.is("a") && decodeURI(actualHref) === decodeURI(expectedHref);
-                },
-
-                toHaveVisibleQtip: function() {
-                    return this.actual.find('.qtip').attr('aria-hidden') == 'false'
-                },
-
-                toBeBetween: function(lowerBound, upperBound) {
-                    return (this.actual >= lowerBound) && (this.actual <= upperBound);
-                },
-
-                toHaveBeenFetched: function() {
-                    return !!this.spec.server.lastFetchFor(this.actual);
-                },
-
-                toHaveBeenCreated: function() {
-                    return !!this.spec.server.lastCreateFor(this.actual);
-                }
-            });
-
 
             var fakeSpinner = {
                 spin: jasmine.createSpy('MockSpinner.spin').andCallFake(function(parentEl) {
@@ -301,6 +117,189 @@
 
     window.xitBehavesLike = {};
     _.each(window.itBehavesLike, function(value, key) { window.xitBehavesLike[key] = $.noop });
+
+    _.extend(jasmine.Matchers.prototype, {
+        toBeA: function(klass) {
+            if (_.isFunction(klass)) {
+                return this.actual instanceof klass;
+            } else {
+                return (typeof this.actual === klass);
+            }
+        },
+
+        toBeEnabled: function() {
+            return this.actual.is(':not(:disabled)');
+        },
+
+        toMatchTranslation: function(translationKey) {
+            var translatedText = t.apply(this, arguments);
+            this.message = function() {
+                return [
+                    "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "' (" + translatedText + ")",
+                    "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "' (" + translatedText + ")"
+                ];
+            };
+            if (!I18n.lookup(translationKey)) {
+                throw("No entry in messages.properties for " + translationKey);
+            }
+
+            return this.actual === translatedText;
+        },
+
+        toContainTranslation: function(translationKey) {
+            var actual = _.isString(this.actual) ? this.actual : this.actual.text();
+            var translatedText = t.apply(this, arguments);
+            this.message = function() {
+                return [
+                    "Expected text '" + actual + "' to contain the translation for '" + translationKey + "' (" + translatedText + ")",
+                    "Expected text '" + actual + "' not to contain the translation for '" + translationKey + "' (" + translatedText + ")"
+                ];
+            };
+            if (!I18n.lookup(translationKey)) {
+                throw("No entry in messages.properties for " + translationKey);
+            }
+
+            return this.env.contains_(actual, translatedText);
+        },
+
+        toHaveBeenCalledOnSelector: function(selector) {
+            return _.any(this.actual.calls, function(call) {
+                return call.object.selector === selector;
+            })
+        },
+
+        toHaveBeenCalledOn: function(object) {
+            return _.any(this.actual.calls, function(call) {
+                return call.object === object
+            })
+        },
+
+        toContainText: function(text) {
+            var actualText = _.isString(this.actual) ? this.actual : this.actual.text()
+            this.message = function() {
+                return [
+                    'Expected "' + actualText + '" to contain "' + text + '"',
+                    'Expected "' + actualText + '" not to contain "' + text + '"'
+                ];
+            }
+            return this.env.contains_(actualText, text);
+        },
+
+        toHaveSpinner: function() {
+            this.message = function() {
+                return [
+                    'Expected "' + this.actual.selector + '" to have a spinner',
+                    'Expected "' + this.actual.selector + '" not to have a spinner'
+                ]
+            }
+            return this.actual.find("div[aria-role=progressbar]").length
+        },
+
+        toHaveModal: function(modalClass) {
+            if (!modalClass) { throw "expected undefined modal class to have been launched."; }
+            var modalClassName = modalClass.prototype.className;
+            this.message = function() {
+                return [
+                    'Expected to have a modal with class ' + modalClassName,
+                    'Expected not to have a modal with class ' + modalClassName
+                ]
+            }
+            return this.actual.mostRecentCall && this.actual.mostRecentCall.args && this.actual.mostRecentCall.args[0] && $(this.actual.mostRecentCall.args[0]).hasClass(modalClassName);
+        },
+
+        toHaveBeenTriggeredOn: function(target, args) {
+            var call, eventName = this.actual;
+
+            if (args) {
+                this.message = function() {
+                    if (call) {
+                        return [
+                            "Expected event " + eventName + " to have been triggered on " + target + " with" + args + " but was triggered with " + call.args + " (did you forget to call this matcher with an array of arguments?)",
+                            "Expected event " + eventName + " not to have been triggered on " + target + " with" + args + " but was triggered with " + call.args
+                        ];
+                    } else {
+                        return [
+                            "Expected event " + eventName + " to have been triggered on " + target + " with " + args + " but it was never triggered",
+                            "Expected event " + eventName + " not to have been triggered on " + target + " with " + args + " but it was"
+                        ];
+                    }
+                }
+            } else {
+                this.message = function() {
+                    return [
+                        "Expected event " + eventName + " to have been triggered on " + target,
+                        "Expected event " + eventName + " not to have been triggered on " + target
+                    ];
+                }
+            }
+
+            if (_.isString(target) || target instanceof jQuery) {
+                return jasmine.JQuery.events.wasTriggered(target, eventName);
+            } else if (target._chorusEventSpies && target._chorusEventSpies[eventName]) {
+                call = _.last(target._chorusEventSpies[eventName].calls);
+                if (!call) return false;
+                if (args)  return (_.isEqual(call.args, args));
+                return true;
+            } else {
+                throw "The event '" + eventName + "' has not been spied on, for the object " + target;
+            }
+        },
+
+        toMatchUrl: function(target, options) {
+            this.message = function() {
+                return [
+                    "Expected url " + this.actual + " to be equivalent to url " + target,
+                    "Expected url " + this.actual + " not to be equivalent to url " + target
+                ];
+            }
+
+            var paramsToIgnore = (options && options.paramsToIgnore) || [];
+            var targetURI = new URI(decodeURI(target)).removeSearch(paramsToIgnore);
+            var actualURI = new URI(decodeURI(this.actual)).removeSearch(paramsToIgnore);
+            return (actualURI).equals(targetURI);
+        },
+
+        toContainQueryParams: function(queryParams) {
+            var actualQueryParams = new URI(this.actual).query(true);
+            var targetQueryParams = new URI("").addSearch(queryParams).query(true);
+
+            return _.all(targetQueryParams, function(targetValue, targetKey) {
+                return actualQueryParams[targetKey] === targetValue;
+            });
+        },
+
+        toHaveUrlPath: function(targetPath) {
+            var actualURI = new URI(this.actual);
+            return actualURI.path() === targetPath;
+        },
+
+        toHaveHref: function(expectedHref) {
+            var actualHref = this.actual.attr("href")
+            this.message = function() {
+                return [
+                    "Expected href " + actualHref + " to be an `a` and equivalent to href " + expectedHref,
+                    "Expected href " + actualHref + " to be an `a` and not to be equivalent to href " + expectedHref
+                ];
+            }
+            return this.actual.is("a") && decodeURI(actualHref) === decodeURI(expectedHref);
+        },
+
+        toHaveVisibleQtip: function() {
+            return this.actual.find('.qtip').attr('aria-hidden') == 'false'
+        },
+
+        toBeBetween: function(lowerBound, upperBound) {
+            return (this.actual >= lowerBound) && (this.actual <= upperBound);
+        },
+
+        toHaveBeenFetched: function() {
+            return !!this.spec.server.lastFetchFor(this.actual);
+        },
+
+        toHaveBeenCreated: function() {
+            return !!this.spec.server.lastCreateFor(this.actual);
+        }
+    });
 
     window.unsetLoggedInUser = function() {
         chorus.session.unset("id");
