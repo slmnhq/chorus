@@ -76,11 +76,30 @@ describe("chorus.dialogs.InstanceAccount", function() {
                 expect(window.history.back).not.toHaveBeenCalled();
             });
         });
+    });
+
+    describe("when options.goBack=true", function() {
+        beforeEach(function() {
+            this.dialog.options.goBack = true;
+        });
 
         describe("when the dialog is dismissed", function() {
             it("goes back one page in the browser", function() {
                 this.dialog.$("button.cancel").click();
                 expect(window.history.back).toHaveBeenCalled();
+            });
+        });
+    });
+
+    describe("when options.goBack=false", function() {
+        beforeEach(function() {
+            this.dialog.options.goBack = false;
+        });
+
+        describe("when the dialog is dismissed", function() {
+            it("does not go back one page in the browser", function() {
+                this.dialog.$("button.cancel").click();
+                expect(window.history.back).not.toHaveBeenCalled();
             });
         });
     });

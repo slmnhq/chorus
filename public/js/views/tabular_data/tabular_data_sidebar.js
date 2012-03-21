@@ -201,7 +201,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
 
     launchAddCredentialsDialog: function(e) {
         e && e.preventDefault();
-        new chorus.dialogs.InstanceAccount({ instance: this.resource.instance(), title: t("instances.sidebar.add_credentials"), reload: true }).launchModal();
+        new chorus.dialogs.InstanceAccount({ instance: this.resource.instance(), title: t("instances.sidebar.add_credentials"), reload: true, goBack: false }).launchModal();
     },
 
     launchAssociateWithWorkspaceDialog: function(e) {

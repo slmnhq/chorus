@@ -16,12 +16,11 @@ chorus.dialogs.InstanceAccount = chorus.dialogs.Account.extend({
 
     modalClosed: function() {
         this._super("modalClosed", arguments);
-        if (this.options.reload) {
-            if (this.savedSuccessfully) {
-                chorus.router.reload();
-            } else {
-                window.history.back();
-            }
+        if (this.options.reload && this.savedSuccessfully) {
+            chorus.router.reload();
+        }
+        if (this.options.goBack && !this.savedSuccessfully) {
+            window.history.back();
         }
     },
 

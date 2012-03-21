@@ -24,7 +24,8 @@ chorus.Mixins.InstanceCredentials.page = {
             var dialog = new chorus.dialogs.InstanceAccount({
                 title: t("instances.account.add.title"),
                 instance: instance,
-                reload: true
+                reload: true,
+                goBack: true
             });
             dialog.launchModal();
         } else {

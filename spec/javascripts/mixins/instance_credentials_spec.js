@@ -90,8 +90,13 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                     var dialog = chorus.Modal.prototype.launchModal.mostRecentCall.object;
                     expect(dialog).toBeA(chorus.dialogs.InstanceAccount);
                     expect(dialog.options.instance).toBe(this.instance);
-                    expect(dialog.options.reload).toBeTruthy();
                     expect(dialog.options.title).toMatchTranslation("instances.account.add.title");
+                });
+
+                it("configure the dialog to reload after credentials are added and navigate back on dismissal", function() {
+                    var dialog = chorus.Modal.prototype.launchModal.mostRecentCall.object;
+                    expect(dialog.options.reload).toBeTruthy();
+                    expect(dialog.options.goBack).toBeTruthy();
                 });
             })
 
