@@ -74,12 +74,10 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     saveWorkfile: function(workspace) {
         this.$('button.save_as_workfile').startLoading("visualization.saving");
 
-        if (workspace) {
-            this.task.set({workspaceId : workspace.get("id")});
-        }
+        var workspaceId = workspace ? workspace.get("id") : this.task.get("workspaceId");
 
         this.workfile = new chorus.models.Workfile({
-            workspaceId: this.task.get("workspaceId"),
+            workspaceId: workspaceId,
             source: "visualization",
             svgData: this.makeSvgData(),
             fileName: this.sanitizeFilename(this.options.chartOptions.name + "-" + this.options.chartOptions.type) + ".png"
