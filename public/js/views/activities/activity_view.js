@@ -54,5 +54,9 @@ chorus.views.Activity = chorus.views.Base.extend({
         if (this.model.get("isInsight")) {
             $(this.el).addClass("insight");
         }
+    },
+
+    show: function() {
+        this.htmlContent && this.htmlContent.show();
     }
 });

@@ -378,6 +378,7 @@ describe("chorus.views.Header", function() {
                     spyOn(this.view.unreadNotifications, "markAllRead").andCallFake(_.bind(function(options) {
                         this.successFunction = options.success;
                     }, this));
+                    spyOn(this.view.notificationList, "show");
                     this.view.$("a.notifications").click();
                 })
 
@@ -393,6 +394,10 @@ describe("chorus.views.Header", function() {
                     expect(this.view.unreadNotifications.markAllRead).toHaveBeenCalled();
                     expect(this.successFunction).toBeDefined();
                 })
+
+                it("calls show on the notification list", function() {
+                    expect(this.view.notificationList.show).toHaveBeenCalled();
+                });
 
                 describe("when the mark-all-read call succeeds", function() {
                     beforeEach(function() {

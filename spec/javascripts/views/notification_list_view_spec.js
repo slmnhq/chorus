@@ -121,4 +121,21 @@ describe("chorus.views.NotificationList", function() {
             });
         });
     });
+
+    describe("#show", function() {
+        beforeEach(function() {
+            this.view.render();
+            expect(this.view.activities.length).toBe(3);
+            _.each(this.view.activities, function(activity) {
+                spyOn(activity, "show");
+            });
+            this.view.show();
+        });
+
+        it("calls show on each activity", function() {
+            _.each(this.view.activities, function(activity) {
+                expect(activity.show).toHaveBeenCalled();
+            });
+        });
+    });
 });

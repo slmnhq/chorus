@@ -18,6 +18,10 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     },
 
     postRender: function() {
+        this.show();
+    },
+
+    show: function() {
         _.defer(_.bind(function() {
             var heightLimit = parseInt(this.$(".original").css("line-height")) * 2;
             if (this.$(".original").height() > heightLimit) {
@@ -29,13 +33,14 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     },
 
     toggleMore: function(e) {
-        e.preventDefault();
+        e && e.preventDefault();
+        e.stopPropagation();
         $(this.el).toggleClass("expanded");
     },
 
-    openLink: function(event) {
-        event.preventDefault();
-        window.open($(event.currentTarget).attr("href"))
+    openLink: function(e) {
+        e && e.preventDefault();
+        window.open($(e.currentTarget).attr("href"))
     }
 });
 

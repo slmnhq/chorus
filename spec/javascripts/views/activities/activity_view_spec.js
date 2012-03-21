@@ -5,6 +5,22 @@ describe("chorus.views.Activity", function() {
     });
 
     describe("html content", function() {
+
+        describe("#show", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.NOTE_ON_WORKSPACE();
+                this.view = new chorus.views.Activity({ model: this.model });
+                this.view.render();
+
+                spyOn(this.view.htmlContent, "show");
+            });
+
+            it("calls show on the truncated text", function() {
+                this.view.show();
+                expect(this.view.htmlContent.show).toHaveBeenCalled();
+            });
+        });
+
         context("when the activity is a note", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.NOTE_ON_WORKSPACE();

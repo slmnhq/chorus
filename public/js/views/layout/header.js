@@ -117,6 +117,7 @@ chorus.views.Header = chorus.views.Base.extend({
         if (beingShown) {
             this.captureClicks();
             this.unreadNotifications.markAllRead({ success: _.bind(this.clearNotificationCount, this) });
+            this.notificationList.show();
         } else {
             this.unreadNotifications.each(function(model) {
                 model.set({ unread: false }, { silent: true })

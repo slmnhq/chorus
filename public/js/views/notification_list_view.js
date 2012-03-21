@@ -7,6 +7,10 @@ chorus.views.NotificationList = chorus.views.Base.extend({
         "click .more_notifications a":"fetchMoreNotifications"
     },
 
+    setup: function() {
+        this.activities = [];
+    },
+
     fetchMoreNotifications: function (ev) {
         ev.preventDefault();
         var pageToFetch = parseInt(this.collection.pagination.page) + 1;
@@ -30,9 +34,12 @@ chorus.views.NotificationList = chorus.views.Base.extend({
 
     postRender: function() {
         var $list = this.$("ul");
+
+        this.activities = [];
         this.collection.each(function(model) {
             var view = new chorus.views.Activity({ model: model.activity(), isNotification: true });
             view.render();
+            this.activities.push(view);
 
             if (model.get("unread")) {
                 $(view.el).addClass("unread");
@@ -40,5 +47,11 @@ chorus.views.NotificationList = chorus.views.Base.extend({
 
             $list.append(view.el);
         }, this);
+    },
+
+    show: function() {
+        _.each(this.activities, function(activity) {
+            activity.show();
+        })
     }
 });
