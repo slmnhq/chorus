@@ -41,6 +41,7 @@
             this.makeModel.apply(this, arguments)
             this.dependOn(this.tabularData);
             this.fetchResources();
+            this.mainContent = new chorus.views.LoadingSection();
         },
 
         crumbs: function() {
