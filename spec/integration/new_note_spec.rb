@@ -6,6 +6,7 @@ describe "creating a note on a workspace" do
     login('edcadmin', 'secret')
     create_valid_workspace
     click_link "Add a note"
+    wait_until { page.has_selector?("a.show_options") }
   end
 
   describe "launching the submodal dialog" do
