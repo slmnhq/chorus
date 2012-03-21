@@ -1340,6 +1340,10 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.iconSrc).toBe("/images/import_icon.png");
             expect(this.presenter.iconClass).toBe("");
         });
+
+        it("links the icon to the import destination", function() {
+            expect(this.presenter.iconHref).toBe(this.presenter.objectUrl);
+        });
     }
 
     function itShouldHaveImportFailedIcon() {

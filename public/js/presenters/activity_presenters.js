@@ -350,7 +350,8 @@
         _.extend(ctx, {
             objectName: destinationObject.get("objectName"),
             objectType: t("database_object.TABLE"),
-            objectUrl: destinationObject.showUrl()
+            objectUrl: destinationObject.showUrl(),
+            iconHref: destinationObject.showUrl()
         });
 
         return ctx;
