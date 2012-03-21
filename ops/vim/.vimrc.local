@@ -4,7 +4,7 @@ set smarttab
 set shiftwidth=4
 
 " don't blink cursor
-" set gcr=n:blinkon0
+set gcr=n:blinkon0
 
 map <D-S-F8> :!/Users/pivotal/workspace/chorus/launch_jasmine.sh %<CR>
 
@@ -14,6 +14,5 @@ set foldmethod=indent
 
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>""
 map <C-n> :tabnew 
-set gcr=a:blinkwait0
 
 
