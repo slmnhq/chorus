@@ -10,6 +10,11 @@
     <div class="execution">
         <div class="right">
             <span class="controls hidden">
+                {{#if result}}
+                    <a href="#" class="action view_details">{{t "actions.view_details"}}</a>
+                    <span class="separator">|</span>
+                {{/if}}
+
                 <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
                 <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
                 {{#if enableClose}}
@@ -17,8 +22,6 @@
                     <a class="close" href='#'>{{t "actions.close"}}</a>
                 {{/if}}
             </span>
-
-            <a href="#" class="action view_details">{{t "actions.view_details"}}</a>
 
             <span class='execution_info'>
                 <span class="elapsed_time"/>

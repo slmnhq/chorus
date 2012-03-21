@@ -18,7 +18,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     execute: function(task, isPostRequest) {
-        this.model = task;
+        this.resource = this.model = task;
         if(isPostRequest) {
             task.save();
         } else {
@@ -191,7 +191,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         chorus.PageEvents.broadcast("action:closePreview");
     },
 
-    additionalContext: function() {
+    additionalContext: function(ctx) {
         return {
             titleKey: this.options.titleKey || "results_console_view.title",
             enableClose: this.options.enableClose,

@@ -61,11 +61,6 @@
                     display: inline-block;
                 }
 
-                .separator {
-                    padding-left: $padding-x;
-                    padding-right: $padding-x;
-                }
-
                 .cancel {
                     font-weight: normal;
                 }
@@ -81,6 +76,12 @@
                 }
             }
         }
+    }
+
+    .separator {
+        color: $color-text3;
+        padding-left: $padding-x;
+        padding-right: $padding-x;
     }
 
     .result_table {

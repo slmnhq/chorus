@@ -1,20 +1,20 @@
 describe("chorus.views.ResultsConsoleView", function() {
     beforeEach(function() {
-        this.model = fixtures.task({
+        var task = fixtures.task({
             checkId: "foo",
             result: {
                 message: "hi there"
             }
         });
-        this.view = new chorus.views.ResultsConsole({model: this.model});
+        this.view = new chorus.views.ResultsConsole({ model: task });
         this.timerId = 1;
         spyOn(_, "delay").andReturn(this.timerId++)
-    })
+    });
 
     describe("#render", function() {
         beforeEach(function() {
             this.view.render();
-        })
+        });
 
         it("does not display the close link", function() {
             expect(this.view.$("a.close")).not.toExist();
@@ -75,7 +75,7 @@ describe("chorus.views.ResultsConsoleView", function() {
     describe("event handling", function() {
         beforeEach(function() {
             this.view.render();
-        })
+        });
 
         describe("clicking the close link", function() {
             beforeEach(function() {
@@ -162,6 +162,19 @@ describe("chorus.views.ResultsConsoleView", function() {
             })
 
             describe("when the execution is completed", function() {
+                context("and the task does not have a result message", function() {
+                    beforeEach(function() {
+                        this.task = fixtures.task({ result: null });
+                        this.view = new chorus.views.ResultsConsole({ model: this.task });
+                        this.view.execute(this.task);
+                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
+                    });
+
+                    it("does not show the 'view details' link", function() {
+                        expect(this.view.$(".execution a.view_details")).not.toExist();
+                    });
+                });
+
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
                         this.task = fixtures.taskWithResult();
@@ -459,8 +472,8 @@ describe("chorus.views.ResultsConsoleView", function() {
                     });
                 })
             }
-        })
-    })
+        });
+    });
 
     describe("#startSpinner", function() {
         beforeEach(function() {
