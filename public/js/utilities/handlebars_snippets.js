@@ -276,7 +276,7 @@
         },
 
         attachmentFoundIn: function(model) {
-            if(model.workspace) {
+            if(model.workspace()) {
                 var workspaceLink = model.workspace().showLink();
                 var datasetLink = model.tabularData().showLink();
                 return t("attachment.found_in.tabular_data_in_workspace", { workspaceLink: workspaceLink, tabularDataLink: datasetLink })

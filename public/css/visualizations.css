@@ -1,0 +1,70 @@
+/* line 3, ../../scss/visualizations.scss */
+svg.chart {
+  background: white;
+  height: 340px;
+  width: 925px;
+}
+/* line 8, ../../scss/visualizations.scss */
+svg.chart line {
+  stroke-width: 0.4;
+  stroke: #444;
+}
+/* line 13, ../../scss/visualizations.scss */
+svg.chart path {
+  fill: none;
+}
+/* line 17, ../../scss/visualizations.scss */
+svg.chart .ytick, svg.chart .xtick {
+  stroke-dasharray: 1;
+  stroke-width: 0.25;
+  stroke: #aaa;
+}
+/* line 23, ../../scss/visualizations.scss */
+svg.chart .axis_edge line {
+  stroke-width: 0.40;
+  stroke: #444;
+}
+/* line 28, ../../scss/visualizations.scss */
+svg.chart text {
+  font-size: 12px;
+  font-weight: 600;
+  fill: #5f5f5f;
+}
+/* line 35, ../../scss/visualizations.scss */
+svg.chart .xaxis line, svg.chart .yaxis line, svg.chart .axis line {
+  stroke-width: 0.40;
+  stroke: #444;
+}
+/* line 40, ../../scss/visualizations.scss */
+svg.chart .xaxis .grid, svg.chart .xaxis .grid line, svg.chart .yaxis .grid, svg.chart .yaxis .grid line, svg.chart .axis .grid, svg.chart .axis .grid line {
+  stroke-dasharray: 1;
+  stroke-width: 0.25;
+  stroke: #444;
+}
+/* line 47, ../../scss/visualizations.scss */
+svg.chart.time_series path {
+  stroke-width: 0.6;
+  stroke: black;
+}
+/* line 53, ../../scss/visualizations.scss */
+svg.chart.boxplot .quartile {
+  fill: #4a83c3;
+}
+/* line 57, ../../scss/visualizations.scss */
+svg.chart.boxplot .midline, svg.chart.boxplot .whisker, svg.chart.boxplot .median {
+  stroke: black;
+  stroke-width: 1.0;
+}
+/* line 64, ../../scss/visualizations.scss */
+svg.chart.frequency rect {
+  fill: #4a83c3;
+}
+/* line 70, ../../scss/visualizations.scss */
+svg.chart.timeseries path.series {
+  stroke-width: 5.0;
+  stroke: #4a83c3;
+}
+/* line 78, ../../scss/visualizations.scss */
+svg.chart.histogram rect.bar {
+  fill: #4a83c3;
+}

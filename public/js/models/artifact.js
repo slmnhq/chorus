@@ -1,6 +1,10 @@
 chorus.models.Artifact = chorus.models.Base.extend({
     constructorName: "Artifact",
 
+    name: function() {
+        return this.attributes && this.attributes.name;
+    },
+
     iconUrl: function(options) {
         return chorus.urlHelpers.fileIconUrl(this.get("type") || this.get("fileType"), options && options.size);
     },
@@ -14,6 +18,27 @@ chorus.models.Artifact = chorus.models.Base.extend({
             this._workspace = this.get('workspace')&& !_.isEmpty(this.get('workspace')) && new chorus.models.Workspace(this.get('workspace'));
         }
         return this._workspace;
+    },
+
+    workfile: function() {
+        if(!this._workfile) {
+            this._workfile = this.get('workfile') && new chorus.models.Workfile(this.get('workfile'));
+        }
+        return this._workfile;
+    },
+
+    hdfsFile: function() {
+        if(!this._hdfsFile) {
+            this._hdfsFile = this.get('hdfs') && new chorus.models.HdfsFile(this.get('hdfs'));
+        }
+        return this._hdfsFile;
+    },
+
+    instance: function() {
+        if (!this._instance) {
+            this._instance = this.get('instance') && new chorus.models.Instance(this.get('instance'));
+        }
+        return this._instance;
     },
 
     tabularData: function() {

@@ -12,6 +12,10 @@
         entityType: "workfile",
         nameAttribute: 'fileName',
 
+        name: function() {
+            return this.attributes.name;
+        },
+
         urlTemplate: function() {
             if(this.isNew()) {
                 return "workspace/{{workspaceId}}/workfile";

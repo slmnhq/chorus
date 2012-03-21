@@ -2375,17 +2375,117 @@ beforeEach(function() {
             }, overrides)
         },
 
+        attachmentOnWorkfileInWorkspaceSearchResult: function(overrides) {
+            var attributes = _.extend({
+                "entityType": "attachment",
+                "type": "attachment",
+                "id": "10011",
+                "isDeleted": false,
+                "lastUpdatedStamp": "2012-03-20 15:08:16",
+                "fileId": "10011",
+                "fileType": "IMAGE",
+                "isBinary": true,
+                "name": "Titanic2.jpg",
+                "highlightedAttributes": {
+                    "name": ["<em>Titanic<\/em><em>2<\/em>.jpg"]
+                },
+                "owner": {
+                    "id": "InitialUser",
+                    "lastName": "Admin",
+                    "firstName": "EDC"
+                },
+                "workspace": {
+                    "id": "10000",
+                    "name": "ws"
+                },
+                "workfile": {
+                    "id": "10030",
+                    "lastUpdatedStamp": "2012-03-14 17:15:21",
+                    "fileType": "TXT",
+                    "versionInfo": {
+                        "lastUpdatedStamp": "2012-03-14 17:15:21.984",
+                        "versionFileId": "1331770521971_1380",
+                        "modifiedBy": {
+                            "id": "InitialUser",
+                            "lastName": "Admin",
+                            "firstName": "EDC"
+                        },
+                        "versionOwner": "edcadmin",
+                        "versionNum": 1
+                    },
+                    "latestVersionNum": 1,
+                    "workspace": {
+                        "id": "10000",
+                        "name": "ws"
+                    },
+                    "modifiedBy": {
+                        "id": "InitialUser",
+                        "lastName": "Admin",
+                        "firstName": "EDC"
+                    },
+                    "name": "buildout.txt",
+                    "owner": {
+                        "id": "InitialUser",
+                        "lastName": "Admin",
+                        "firstName": "EDC"
+                    },
+                    "isDeleted": false,
+                    "entityType": "workfile",
+                    "mimeType": "text/plain"
+                },
+                "comments": []
+            });
+            return new chorus.models.Artifact(attributes);
+        },
+
+        attachmentOnFileInHdfsSearchResult: function(overrides) {
+            var attributes = _.extend(
+                {
+                    "entityType": "attachment",
+                    "type": "attachment",
+                    "id": "10012",
+                    "isDeleted": false,
+                    "lastUpdatedStamp": "2012-03-20 15:46:12",
+                    "fileId": "10012",
+                    "fileType": "IMAGE",
+                    "isBinary": true,
+                    "name": "pivotal (1).jpg",
+                    "highlightedAttributes": {
+                        "name": ["<em>pivotal<\/em> (1).jpg"]
+                    },
+                    "owner": {
+                        "id": "InitialUser",
+                        "lastName": "Admin",
+                        "firstName": "EDC"
+                    },
+                    "workspace": {},
+                    "hdfs": {
+                        "id": "10020|/data/cleardb.sql",
+                        "name": "cleardb.sql",
+                        "path": "/data",
+                        "instance": {
+                            "id": "10020",
+                            "name": "hadoooooooooop"
+                        },
+                        "entityType": "hdfs"
+                    },
+                    "comments": []
+                }
+            );
+            return new chorus.models.Artifact(attributes);
+        },
+
         attachmentOnDatasetInWorkspaceSearchResult: function(overrides) {
             var model = this.attachmentOnDatasetNotInWorkspaceSearchResult(overrides);
             model.set({workspace: {
-                id: "10000",
+                id: "33333",
                 name: "ws"
             }});
             model.get('databaseObject').workspaces = [
                 {
-                    id: "10000",
+                    id: "15555",
                     datasetType: "SANDBOX_TABLE",
-                    name: "ws"
+                    name: "wswsws"
                 },
                 {
                     id: "10030",
@@ -2396,9 +2496,10 @@ beforeEach(function() {
             return model;
         },
 
+
         attachmentOnDatasetNotInWorkspaceSearchResult: function(overrides) {
             var attributes = _.extend({
-                entityType: "databaseObject",
+                entityType: "attachment",
                 id: "10005",
                 isDeleted: false,
                 lastUpdatedStamp: "2012-03-16 17:06:08",
@@ -2423,13 +2524,84 @@ beforeEach(function() {
                     objectName: "2010_report_on_white_house",
                     workspaces: [],
                     instance: {
-                        id: "10000",
+                        id: "22222",
                         name: "gillette"
                     },
                     entityType: "databaseObject",
                     objectType: "BASE_TABLE"
                 },
                 comments: []
+            });
+            return new chorus.models.Artifact(attributes);
+        },
+
+        attachmentOnInstanceSearchResult: function(overrides) {
+            var attributes = _.extend({
+                    "entityType": "attachment",
+                    "type": "attachment",
+                    "id": "10014",
+                    "isDeleted": false,
+                    "lastUpdatedStamp": "2012-03-20 16:43:21",
+                    "fileId": "10014",
+                    "fileType": "IMAGE",
+                    "isBinary": true,
+                    "name": "chuck.jpg",
+                    "highlightedAttributes": {
+                        "name": ["<em>chuck<\/em>.jpg"]
+                    },
+                    "owner": {
+                        "id": "InitialUser",
+                        "lastName": "Admin",
+                        "firstName": "EDC"
+                    },
+                    "workspace": {},
+                    "instance": {
+                        "port": 5432,
+                        "id": "10000",
+                        "host": "gillette.sf.pivotallabs.com",
+                        "provisionType": "register",
+                        "name": "gillette",
+                        "owner": {
+                            "id": "InitialUser",
+                            "lastName": "Admin",
+                            "firstName": "EDC"
+                        },
+                        "state": "online",
+                        "instanceProvider": "Greenplum Database",
+                        "isDeleted": false,
+                        "entityType": "instance",
+                        "maintenanceDb": "postgres"
+                    },
+                    "comments": []
+                });
+            return new chorus.models.Artifact(attributes);
+        },
+
+        attachmentOnWorkspaceSearchResult: function(overrides) {
+            var attributes = _.extend({
+
+                "entityType": "attachment",
+                "type": "attachment",
+                "id": "10013",
+                "isDeleted": false,
+                "lastUpdatedStamp": "2012-03-20 16:31:17",
+                "fileId": "10013",
+                "fileType": "IMAGE",
+                "isBinary": true,
+                "name": "chuck.jpg",
+                "highlightedAttributes": {
+                    "name": ["<em>chuck<\/em>.jpg"]
+                },
+                "owner": {
+                    "id": "InitialUser",
+                    "lastName": "Admin",
+                    "firstName": "EDC"
+                },
+                "workspace": {
+                    "id": "10000",
+                    "name": "ws"
+                },
+                "comments": []
             });
             return new chorus.models.Artifact(attributes);
         },
@@ -3134,36 +3306,131 @@ beforeEach(function() {
                 "typeAhead": {
                     "docs": [
                         {
-                            "id": "InitialUser",
+                            "lastUpdatedStamp": "2012-03-16 12:33:15",
+                            "type": "attachment",
+                            "name": "Titanic2 (1).jpg",
+                            "fileType": "IMAGE",
+                            "id": "10002",
                             "isDeleted": false,
-                            "lastUpdatedStamp": "2012-02-29 11:05:26",
-                            "admin": true,
-                            "name": "edcadmin",
-                            "emailAddress": "edcadmin@example.com",
-                            "content": "Cool person",
-                            highlightedAttributes: {
-                                firstName: ["<em>EDC</em>"]
+                            "fileId": "10002",
+                            "entityType": "attachment",
+                            "highlightedAttributes": {
+                                "name": ["<em>Titanic<\/em>2 (1).jpg"]
                             },
-                            "firstName": "EDC",
-                            "lastName": "Admin",
-                            "entityType": "user",
                             "owner": {
-
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
-                            "comments": [
-
-                            ]
+                            "workspace": {},
+                            "instance": {
+                                "port": 5432,
+                                "id": "10000",
+                                "host": "gillette.sf.pivotallabs.com",
+                                "provisionType": "register",
+                                "name": "gillette",
+                                "owner": {
+                                    "id": "InitialUser",
+                                    "lastName": "Admin",
+                                    "firstName": "EDC"
+                                },
+                                "state": "online",
+                                "instanceProvider": "Greenplum Database",
+                                "isDeleted": false,
+                                "entityType": "instance",
+                                "maintenanceDb": "postgres"
+                            },
+                            "comments": []
                         },
+
                         {
-                            "id": "10010",
-                            "isDeleted": false,
-                            "lastUpdatedStamp": "2012-02-29 09:36:01",
-                            "fileType": "SQL",
-                            "fileName": "edc_query.sql",
-                            highlightedAttributes: {
-                                fileName: ["<em>edc</em>_query.sql"]
+                            "entityType": "hdfs",
+                            "id": "10020|/webui/js/chorus/app/views/EdcViews.js",
+                            "name": "EdcViews.js",
+                            "path": "/webui/js/chorus/app/views",
+                            "lastUpdatedStamp": "2012-03-14 16:46:40",
+                            "highlightedAttributes": {
+                                "name": ["<em>Edc<\/em>Views.js"]
                             },
+                            "instance": {
+                                "id": "10020",
+                                "name": "hadoooooooooop"
+                            },
+                            "comments": []
+                        },
+
+                        {
+                            "lastUpdatedStamp": "2012-03-09 17:50:58",
+                            "state": 1,
+                            "entityType": "workspace",
+                            "id": "10000",
+                            "isDeleted": false,
+                            "isPublic": true,
+                            "name": "ws",
+                            "highlightedAttributes": {
+                                "name": ["<em>ws<\/em>"]
+                            },
+                            "owner": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
+                            },
+                            "active": true,
+                            "comments": []
+                        },
+
+                        {
+                            "port": 5432,
+                            "host": "gillette.sf.pivotallabs.com",
+                            "lastUpdatedStamp": "2012-03-16 16:39:14",
+                            "state": "online",
+                            "provisionType": "register",
+                            "entityType": "instance",
+                            "instanceProvider": "Greenplum Database",
+                            "id": "10000",
+                            "isDeleted": false,
+                            "name": "gillette",
+                            "highlightedAttributes": {
+                                "name": ["<em>gillette<\/em>"]
+                            },
+                            "owner": {
+                                "id": "InitialUser",
+                                "lastName": "Admin",
+                                "firstName": "EDC"
+                            },
+                            "comments": []
+                        },
+
+                        {
+                            "lastUpdatedStamp": "2012-03-16 10:40:36",
+                            "entityType": "user",
+                            "id": "10010",
+                            "name": "user1",
+                            "firstName": "user1",
+                            "isDeleted": false,
+                            "admin": false,
+                            "lastName": "user1",
+                            "emailAddress": "user1@user.com",
+                            "highlightedAttributes": {
+                                "lastName": ["<em>user<\/em>1"],
+                                "name": ["<em>user<\/em>1"],
+                                "firstName": ["<em>user<\/em>1"]
+                            },
+                            "owner": {},
+                            "comments": []
+
+                        },
+
+                        {
+                            "lastUpdatedStamp": "2012-03-14 17:15:21",
                             "entityType": "workfile",
+                            "fileType": "TXT",
+                            "id": "10030",
+                            "isDeleted": false,
+                            "mimeType": "text/plain",
+                            "highlightedAttributes": {
+                                "fileName": ["<em>buildout<\/em>.txt"]
+                            },
                             "owner": {
                                 "id": "InitialUser",
                                 "lastName": "Admin",
@@ -3178,110 +3445,19 @@ beforeEach(function() {
                                 "id": "10000",
                                 "name": "ws"
                             },
-                            "comments": [
-
-                            ]
-                        },
-                        {
-                            "id": "10000",
-                            "isDeleted": false,
-                            "lastUpdatedStamp": "2012-02-24 16:08:32",
-                            "isPublic": false,
-                            "name": "ws",
-                            highlightedAttributes: {
-                                name: ["<em>ws</em>"]
+                            "versionInfo": {
+                                "lastUpdatedStamp": "2012-03-14 17:15:21.984",
+                                "versionFileId": "1331770521971_1380",
+                                "modifiedBy": {
+                                    "id": "InitialUser",
+                                    "lastName": "Admin",
+                                    "firstName": "EDC"
+                                },
+                                "versionOwner": "edcadmin",
+                                "versionNum": 1
                             },
-                            "entityType": "workspace",
-                            "owner": {
-                                "id": "InitialUser",
-                                "lastName": "Admin",
-                                "firstName": "EDC"
-                            },
-                            "comments": [
-
-                            ]
-                        },
-                        {
-                            comments: [],
-                            entityType: "hdfs",
-                            instance: {id: '10010', name: "HadoopOnGillette"},
-                            id: "10010",
-                            name: "HadoopOnGillette",
-                            isDeleted: false,
-                            lastUpdatedStamp: "2012-03-01 11:49:31",
-                            highlightedAttributes: {
-                                name: [
-                                    "<em>Hadoop</em>OnGillette"
-                                ]
-                            },
-                            parentType: "hdfs_10010",
-                            path: "/webui/images"
-                        },
-                        {
-                            comments: [],
-                            databaseName: "Analytics",
-                            entityType: "databaseObject",
-                            id: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"',
-                            instance: {id: 10000, name: "gillette"},
-                            isDeleted: false,
-                            objectName: "clv_data",
-                            highlightedAttributes: {
-                                objectName: ["<em>clv</em>_data"]
-                            },
-                            objectType: "BASE_TABLE",
-                            parentType: "gpdb_10000_Analytics",
-                            schemaName: "analytics",
-                            workspaces: []
-                        },
-                        {
-                            comments: [],
-                            compositeId: '"10000"|"dca_demo"|"ddemo"|"QUERY"|"aaaaaaaachorus_view_1815"',
-                            content: "SELECT a.presidency, a.president, a.wikipedia_entry, a.party, a.left_office, a.thumbnail, a.home_state, a.portrait, a.took_office↵FROM _uspresident AS a↵",
-                            databaseName: "dca_demo",
-                            datasetType: "CHORUS_VIEW",
-                            entityType: "chorusView",
-                            id: "10040",
-                            instance: {
-                                id: "10000",
-                                name: "gillette"
-                            },
-                            isDeleted: false,
-                            lastUpdatedStamp: "2012-03-01 14:43:14",
-                            objectName: "aaaaaaaachorus_view_1815",
-                            highlightedAttributes: {
-                                objectName: ["aaaaaaaachorus_view_<em>1815</em>"]
-                            },
-                            objectType: "QUERY",
-                            owner: {
-                                firstName: "EDC",
-                                id: "InitialUser",
-                                lastName: "Admin"
-                            },
-                            schemaName: "ddemo",
-                            workspace: {
-                                id: "10000",
-                                name: "ws"
-                            }
-                        },
-                        {
-                            comments: [],
-                            entityType: "instance",
-                            highlightedAttributes: {
-                                name: [
-                                    "<em>Awesome</em>_instance"
-                                ]
-                            },
-                            host: "gillette",
-                            id: "10042",
-                            isDeleted: false,
-                            lastUpdatedStamp: "2012-03-06 09:02:00",
-                            name: "Awesome_instance",
-                            owner: {
-                                firstName: "EDC",
-                                id: "InitialUser",
-                                lastName: "Admin"
-                            },
-                            port: 5432
+                            "fileName": "buildout.txt",
+                            "comments": []
                         }
                     ],
                     "numFound": 3

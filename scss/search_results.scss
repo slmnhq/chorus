@@ -54,6 +54,10 @@
             display: inline-block;
             vertical-align: middle;
 
+            .found_in {
+                display: block;
+            }
+
             em {
                 background-color: $search-highlight-color;
                 font-weight: $semibold;

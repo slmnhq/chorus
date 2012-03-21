@@ -1,6 +1,6 @@
 describe("chorus.models.Artifact", function() {
     beforeEach(function() {
-        this.model = fixtures.artifact({ id: "97" });
+        this.model = fixtures.artifact({ id: "97", name: "helmut" });
     });
 
     it("has the appropriate #downloadUrl", function() {
@@ -15,6 +15,10 @@ describe("chorus.models.Artifact", function() {
     it("uses fileType for the iconUrl", function() {
         this.model.set({fileType: 'jpg'});
         expect(this.model.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('jpg'));
+    });
+
+    it("returns its name", function () {
+        expect(this.model.name()).toBe("helmut");
     });
 
     describe("workspace", function() {
@@ -40,6 +44,69 @@ describe("chorus.models.Artifact", function() {
 
         it("memoizes", function() {
             expect(this.model.workspace()).toBe(this.model.workspace());
+        })
+    });
+
+    describe("workfile", function() {
+        beforeEach(function() {
+            this.model = fixtures.attachmentOnWorkfileInWorkspaceSearchResult();
+        });
+
+        it("returns the workfile", function() {
+            this.workfile = this.model.workfile();
+            expect(this.workfile.get('name')).toBe(this.model.get('workfile').name);
+            expect(this.workfile.get('id')).toBe(this.model.get('workfile').id);
+        });
+
+        it("returns falsy when there is no workfile", function() {
+            this.model.unset('workfile');
+            expect(this.model.workfile()).toBeFalsy();
+        });
+
+        it("memoizes", function() {
+            expect(this.model.workfile()).toBe(this.model.workfile());
+        })
+    });
+
+    describe("hdfs", function() {
+        beforeEach(function() {
+            this.model = fixtures.attachmentOnFileInHdfsSearchResult();
+        });
+
+        it("returns the hdfsFile", function() {
+            this.hdfsFile = this.model.hdfsFile();
+            expect(this.hdfsFile.get('name')).toBe(this.model.get('hdfs').name);
+            expect(this.hdfsFile.get('id')).toBe(this.model.get('hdfs').id);
+        });
+
+        it("returns falsy when there is no hdfsFile", function() {
+            this.model.unset('hdfs');
+            expect(this.model.hdfsFile()).toBeFalsy();
+        });
+
+        it("memoizes", function() {
+            expect(this.model.hdfsFile()).toBe(this.model.hdfsFile());
+        })
+    });
+
+    describe("instance", function() {
+        beforeEach(function() {
+            this.model = fixtures.attachmentOnInstanceSearchResult();
+        });
+
+        it("returns the instance", function() {
+            this.instance = this.model.instance();
+            expect(this.instance.get('name')).toBe(this.model.get('instance').name);
+            expect(this.instance.get('id')).toBe(this.model.get('instance').id);
+        });
+
+        it("returns falsy when there is no instance", function() {
+            this.model.unset('instance');
+            expect(this.model.instance()).toBeFalsy();
+        });
+
+        it("memoizes", function() {
+            expect(this.model.instance()).toBe(this.model.instance());
         })
     });
 

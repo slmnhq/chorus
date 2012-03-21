@@ -1,0 +1,1189 @@
+/* line 3, ../../scss/vendorish/_facebox.scss */
+#facebox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 16003;
+  text-align: left;
+}
+/* line 10, ../../scss/vendorish/_facebox.scss */
+#facebox .popup {
+  position: relative;
+}
+/* line 13, ../../scss/vendorish/_facebox.scss */
+#facebox .content {
+  padding: 0;
+  background: #fff;
+}
+/* line 266, ../../scss/_common.scss */
+#facebox .content:after {
+  content: ".";
+  display: block;
+  height: 0;
+  font-size: 0;
+  clear: both;
+  visibility: hidden;
+}
+/* line 19, ../../scss/vendorish/_facebox.scss */
+#facebox .content > p:first-child {
+  margin-top: 0;
+}
+/* line 22, ../../scss/vendorish/_facebox.scss */
+#facebox .content > p:last-child {
+  margin-bottom: 0;
+}
+/* line 28, ../../scss/vendorish/_facebox.scss */
+#facebox .alert .content {
+  background: #eaeff6;
+}
+/* line 32, ../../scss/vendorish/_facebox.scss */
+#facebox .close {
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  padding: 2px;
+  background: #fff;
+}
+/* line 40, ../../scss/vendorish/_facebox.scss */
+#facebox.alert_facebox .close {
+  display: none;
+}
+/* line 44, ../../scss/vendorish/_facebox.scss */
+#facebox .loading, #facebox .image {
+  text-align: center;
+}
+
+/* line 50, ../../scss/vendorish/_facebox.scss */
+.dialog_facebox img, .alert_facebox img {
+  border: 0;
+  margin: 0;
+}
+
+/* line 56, ../../scss/vendorish/_facebox.scss */
+#facebox_overlay {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  opacity: 0.45 !important;
+}
+
+/* line 65, ../../scss/vendorish/_facebox.scss */
+.facebox_hide {
+  z-index: -100;
+}
+
+/* line 69, ../../scss/vendorish/_facebox.scss */
+.facebox_overlayBG {
+  background-color: #000;
+  z-index: 16002;
+}
+
+/* line 4, ../../scss/modals/_alert.scss */
+.alert .guts {
+  width: 450px;
+  max-width: 450px;
+  background-color: #eaeff6;
+  padding: 18px 15px 10px 18px;
+}
+/* line 12, ../../scss/modals/_alert.scss */
+.alert .guts .content .left {
+  float: left;
+  max-width: 360px;
+}
+/* line 266, ../../scss/_common.scss */
+.alert .guts .content .left:after {
+  content: ".";
+  display: block;
+  height: 0;
+  font-size: 0;
+  clear: both;
+  visibility: hidden;
+}
+/* line 17, ../../scss/modals/_alert.scss */
+.alert .guts .content .left h1 {
+  color: black;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+/* line 24, ../../scss/modals/_alert.scss */
+.alert .guts .content .left p {
+  font-size: 14px;
+  font-weight: normal;
+  color: #5f5f5f;
+}
+/* line 29, ../../scss/modals/_alert.scss */
+.alert .guts .content .right {
+  float: right;
+  width: 90px;
+}
+/* line 33, ../../scss/modals/_alert.scss */
+.alert .guts .content .right img {
+  float: right;
+}
+/* line 36, ../../scss/modals/_alert.scss */
+.alert .guts .content .right img.info {
+  display: none;
+}
+/* line 39, ../../scss/modals/_alert.scss */
+.alert .guts .content .right img.error {
+  display: none;
+}
+/* line 46, ../../scss/modals/_alert.scss */
+.alert .guts .body {
+  margin-top: 10px;
+}
+/* line 49, ../../scss/modals/_alert.scss */
+.alert .guts .body p {
+  padding: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 100px;
+  border: 1px solid #d0d0d0;
+  font-size: 12px;
+  font-weight: normal;
+  color: black;
+}
+/* line 63, ../../scss/modals/_alert.scss */
+.alert.info img.message {
+  display: none;
+}
+/* line 66, ../../scss/modals/_alert.scss */
+.alert.info img.error {
+  display: none;
+}
+/* line 69, ../../scss/modals/_alert.scss */
+.alert.info img.info {
+  display: inline !important;
+}
+/* line 75, ../../scss/modals/_alert.scss */
+.alert.error img.message {
+  display: none;
+}
+/* line 78, ../../scss/modals/_alert.scss */
+.alert.error img.info {
+  display: none;
+}
+/* line 81, ../../scss/modals/_alert.scss */
+.alert.error img.error {
+  display: inline !important;
+}
+
+/* line 7, ../../scss/modals/_collection_picklist.scss */
+.collection_picklist {
+  background-color: #eaeff6;
+}
+/* line 10, ../../scss/modals/_collection_picklist.scss */
+.collection_picklist .search {
+  padding: 4px 12px;
+  margin: 0;
+  height: 25px;
+  border-bottom: 1px solid #a4a6a8;
+}
+/* line 21, ../../scss/modals/_collection_picklist.scss */
+.collection_picklist .items ul li.selected {
+  background-color: #3795dd;
+}
+/* line 24, ../../scss/modals/_collection_picklist.scss */
+.collection_picklist .items ul li.selected .name {
+  color: white;
+}
+
+/* line 1, ../../scss/modals/_collection_list.scss */
+.collection_list {
+  max-height: 359px;
+  overflow: auto;
+}
+/* line 6, ../../scss/modals/_collection_list.scss */
+.collection_list ul li {
+  height: 39px;
+  border-bottom: 1px dotted #b9bbbd;
+  padding: 0 8px;
+  line-height: 39px;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* line 14, ../../scss/modals/_collection_list.scss */
+.collection_list ul li img {
+  max-width: 32px;
+  max-height: 32px;
+  vertical-align: middle;
+  padding-right: 4px;
+}
+/* line 21, ../../scss/modals/_collection_list.scss */
+.collection_list ul li .name {
+  vertical-align: middle;
+  font-size: 14px;
+  font-weight: normal;
+  color: #5f5f5f;
+}
+
+/* line 4, ../../scss/modals/_dialog.scss */
+.dialog .dialog_header {
+  height: 54px;
+  border-bottom: 1px solid #d0d0d0;
+}
+/* line 8, ../../scss/modals/_dialog.scss */
+.dialog .dialog_header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: black;
+  line-height: 54px;
+  vertical-align: middle;
+  margin: 0 15px;
+  padding-right: 25px;
+}
+/* line 17, ../../scss/modals/_dialog.scss */
+.dialog .dialog_content {
+  background-color: #eaeff6;
+  padding: 10px 15px;
+}
+/* line 21, ../../scss/modals/_dialog.scss */
+.dialog .dialog_content .menus {
+  height: 30px;
+}
+/* line 27, ../../scss/modals/_dialog.scss */
+.dialog fieldset {
+  border: 1px solid #d0d0d0;
+  padding: 0 15px 15px;
+}
+/* line 31, ../../scss/modals/_dialog.scss */
+.dialog fieldset legend label {
+  font-size: 14px;
+  font-weight: normal;
+  color: black;
+}
+/* line 37, ../../scss/modals/_dialog.scss */
+.dialog fieldset form label {
+  margin-top: 8px;
+}
+/* line 41, ../../scss/modals/_dialog.scss */
+.dialog fieldset form label, .dialog fieldset input {
+  display: inline-block;
+}
+/* line 46, ../../scss/modals/_dialog.scss */
+.dialog .sub_header {
+  padding: 0;
+  line-height: 34px;
+  vertical-align: middle;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5f5f5f;
+}
+/* line 52, ../../scss/modals/_dialog.scss */
+.dialog .sub_header .sort_menu {
+  float: right;
+}
+/* line 57, ../../scss/modals/_dialog.scss */
+.dialog label {
+  font-size: 13px;
+  font-weight: normal;
+  color: #5f5f5f;
+}
+/* line 62, ../../scss/modals/_dialog.scss */
+.dialog.with_sub_header .dialog_content {
+  padding: 0;
+}
+/* line 66, ../../scss/modals/_dialog.scss */
+.dialog.with_sub_header .sub_header {
+  padding: 0 15px;
+  border-bottom: 1px solid #b0b0b0;
+}
+/* line 71, ../../scss/modals/_dialog.scss */
+.dialog.with_sub_header .sub_content {
+  padding: 10px 15px;
+}
+/* line 75, ../../scss/modals/_dialog.scss */
+.dialog.with_sub_header .loading_section {
+  padding: 20px;
+}
+/* line 79, ../../scss/modals/_dialog.scss */
+.dialog.with_sub_header .modal_controls {
+  padding: 15px;
+  border-top: 1px solid #b0b0b0;
+  margin: 0;
+}
+
+/* line 3, ../../scss/modals/_instance_account.scss */
+.instance_account {
+  width: 475px;
+}
+/* line 6, ../../scss/modals/_instance_account.scss */
+.instance_account label {
+  display: inline-block;
+  margin-bottom: 12px;
+}
+/* line 11, ../../scss/modals/_instance_account.scss */
+.instance_account input {
+  width: 350px;
+  margin-bottom: 12px;
+  margin-left: 12px;
+}
+
+/* line 1, ../../scss/modals/_import_scheduler.scss */
+.date-picker {
+  z-index: 20001;
+}
+
+/* line 5, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler {
+  width: 500px;
+}
+/* line 8, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler fieldset.disabled {
+  border: none;
+  padding-bottom: 0;
+}
+/* line 12, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler fieldset.disabled .inputs {
+  display: none;
+}
+/* line 17, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler legend {
+  margin-bottom: 5px;
+}
+/* line 21, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler .destination {
+  padding-bottom: 10px;
+  font-size: 12px;
+  font-weight: normal;
+  color: #5f5f5f;
+}
+/* line 26, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler input[type=checkbox] {
+  margin-left: 20px;
+}
+/* line 30, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler .row {
+  line-height: 34px;
+  vertical-align: middle;
+}
+/* line 35, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler label {
+  display: inline-block;
+  min-width: 200px;
+  line-height: 20px;
+}
+/* line 41, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler label.main {
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 14px;
+  vertical-align: middle;
+  color: black;
+}
+/* line 46, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler .new_table .name {
+  width: 206px;
+}
+/* line 52, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler .existing_table .names {
+  width: 200px;
+  display: inline-block;
+}
+/* line 59, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler .limit .row_limit {
+  float: right;
+  width: 120px;
+  margin-right: 6px;
+}
+/* line 266, ../../scss/_common.scss */
+.import_scheduler .limit .row_limit:after {
+  content: ".";
+  display: block;
+  height: 0;
+  font-size: 0;
+  clear: both;
+  visibility: hidden;
+}
+/* line 68, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler .date .label {
+  width: 150px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 14px;
+  vertical-align: middle;
+  color: black;
+  display: inline-block;
+}
+/* line 74, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler .date input {
+  width: 50px;
+  display: inline-block;
+}
+/* line 80, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler .frequency {
+  width: 100px;
+}
+/* line 84, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler .hours, .import_scheduler .ampm, .import_scheduler .minutes {
+  width: 65px;
+}
+/* line 88, ../../scss/modals/_import_scheduler.scss */
+.import_scheduler .schedule_widget {
+  margin-left: 40px;
+}
+
+/* line 1, ../../scss/modals/_note.scss */
+.notes_new {
+  width: 380px;
+}
+/* line 5, ../../scss/modals/_note.scss */
+.notes_new textarea {
+  min-width: 350px;
+  min-height: 75px;
+  resize: none;
+}
+/* line 11, ../../scss/modals/_note.scss */
+.notes_new a {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+/* line 18, ../../scss/modals/_note.scss */
+.notes_new .options_area .file-wrapper {
+  margin-bottom: 2px;
+}
+/* line 22, ../../scss/modals/_note.scss */
+.notes_new .options_area .label {
+  color: #5f5f5f;
+  font-weight: 600;
+  width: 72px;
+  display: inline-block;
+}
+/* line 29, ../../scss/modals/_note.scss */
+.notes_new .options_area .separator {
+  color: #2c95dd;
+  margin: 0 2px;
+}
+/* line 36, ../../scss/modals/_note.scss */
+.notes_new .options_area .attachment_links.disabled input {
+  display: none;
+}
+/* line 40, ../../scss/modals/_note.scss */
+.notes_new .options_area .attachment_links.disabled a {
+  color: #959595;
+}
+/* line 47, ../../scss/modals/_note.scss */
+.notes_new .file_details, .notes_new .dataset_details {
+  vertical-align: middle;
+  line-height: 32px;
+}
+/* line 50, ../../scss/modals/_note.scss */
+.notes_new .file_details img, .notes_new .dataset_details img {
+  vertical-align: middle;
+}
+/* line 53, ../../scss/modals/_note.scss */
+.notes_new .file_details .remove, .notes_new .dataset_details .remove {
+  float: right;
+}
+/* line 56, ../../scss/modals/_note.scss */
+.notes_new .file_details .progress_bar, .notes_new .dataset_details .progress_bar {
+  display: inline-block;
+  background-color: #d8dee6;
+  width: 100px;
+  height: 15px;
+  float: right;
+  margin-top: 7px;
+  position: relative;
+}
+/* line 64, ../../scss/modals/_note.scss */
+.notes_new .file_details .progress_bar span, .notes_new .dataset_details .progress_bar span {
+  background-image: url(/images/loading_animation.gif);
+  position: absolute;
+  display: inline-block;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+/* line 73, ../../scss/modals/_note.scss */
+.notes_new .file_details .upload_finished, .notes_new .dataset_details .upload_finished {
+  float: right;
+  color: #959595;
+}
+/* line 79, ../../scss/modals/_note.scss */
+.notes_new .name {
+  display: inline-block;
+  width: 170px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #5f5f5f;
+  font-weight: 600;
+}
+/* line 87, ../../scss/modals/_note.scss */
+.notes_new .options_text, .notes_new .options_area {
+  font-size: 12px;
+  margin: 8px 8px;
+}
+/* line 92, ../../scss/modals/_note.scss */
+.notes_new .options_text {
+  color: #7d7d7d;
+}
+/* line 95, ../../scss/modals/_note.scss */
+.notes_new .options_text .show_options {
+  font-weight: 600;
+  border-bottom: 1px dotted;
+}
+/* line 101, ../../scss/modals/_note.scss */
+.notes_new .row {
+  margin-bottom: 10px;
+}
+/* line 104, ../../scss/modals/_note.scss */
+.notes_new .row a.workfile {
+  vertical-align: bottom;
+}
+/* line 109, ../../scss/modals/_note.scss */
+.notes_new .link_menu {
+  padding-left: 8px;
+}
+/* line 113, ../../scss/modals/_note.scss */
+.notes_new .notification_recipient {
+  margin-left: 5px;
+  margin-right: 8px;
+  margin-top: 8px;
+}
+/* line 118, ../../scss/modals/_note.scss */
+.notes_new .notification_recipient .title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5f5f5f;
+}
+/* line 122, ../../scss/modals/_note.scss */
+.notes_new .notification_recipient .add_user {
+  font-size: 12px;
+  font-weight: 600;
+}
+/* line 127, ../../scss/modals/_note.scss */
+.notes_new .notification_recipient .user_lists {
+  margin-left: 80px;
+}
+/* line 130, ../../scss/modals/_note.scss */
+.notes_new .notification_recipient .user_lists .dropdown {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+/* line 137, ../../scss/modals/_note.scss */
+.notes_new .notification_recipient .picked_users .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5f5f5f;
+  max-width: 200px;
+  display: inline-block;
+}
+/* line 144, ../../scss/modals/_note.scss */
+.notes_new .notification_recipient .picked_users .remove {
+  float: right;
+}
+/* line 148, ../../scss/modals/_note.scss */
+.notes_new .notification_recipient .picked_users .name, .notes_new .notification_recipient .picked_users .remove {
+  line-height: 20px;
+  vertical-align: middle;
+}
+/* line 154, ../../scss/modals/_note.scss */
+.notes_new .notification_recipient select {
+  width: 200px;
+}
+
+/* line 1, ../../scss/modals/_sandbox_new.scss */
+.dialog.sandbox_new {
+  width: 440px;
+}
+/* line 4, ../../scss/modals/_sandbox_new.scss */
+.dialog.sandbox_new legend div {
+  display: inline-block;
+  margin: 0 8px;
+}
+/* line 9, ../../scss/modals/_sandbox_new.scss */
+.dialog.sandbox_new .size_and_max {
+  line-height: 32px;
+  vertical-align: middle;
+}
+/* line 13, ../../scss/modals/_sandbox_new.scss */
+.dialog.sandbox_new .size_and_max input[name=size] {
+  width: 100px;
+  margin-right: 10px;
+}
+/* line 18, ../../scss/modals/_sandbox_new.scss */
+.dialog.sandbox_new .size_and_max .max_size {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: normal;
+  color: #7d7d7d;
+}
+
+/* line 7, ../../scss/modals/_shuttle.scss */
+.shuttle_widget {
+  background-color: #eaeff6;
+  width: 720px;
+  border-bottom: 1px solid #b9bbbd;
+  border-top: 1px solid #b9bbbd;
+}
+/* line 13, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_header {
+  border-bottom: 1px solid #b9bbbd;
+  position: relative;
+  height: 33px;
+}
+/* line 18, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_header .search_container {
+  left: 0;
+  border-right: 1px solid #b9bbbd;
+}
+/* line 22, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_header .search_container .chorus_search_container {
+  width: 70%;
+}
+/* line 27, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_header .summary {
+  left: 50%;
+}
+/* line 31, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_header .search_container, .shuttle_widget .shuttle_header .summary {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  vertical-align: middle;
+  line-height: 25px;
+}
+/* line 38, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_header .search_container > div, .shuttle_widget .shuttle_header .summary > div {
+  padding: 4px 8px;
+}
+/* line 42, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_header .search_container a, .shuttle_widget .shuttle_header .summary a {
+  float: right;
+}
+/* line 47, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_header .object_name {
+  color: #7d7d7d;
+}
+/* line 51, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_header .selected_count {
+  padding-left: 5px;
+}
+/* line 55, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_header a {
+  font-weight: 600;
+}
+/* line 60, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .shuttle_body {
+  position: relative;
+  height: 320px;
+}
+/* line 65, ../../scss/modals/_shuttle.scss */
+.shuttle_widget a {
+  font-size: 12px;
+}
+/* line 69, ../../scss/modals/_shuttle.scss */
+.shuttle_widget .was_added {
+  color: #7d7d7d;
+  float: right;
+  font-size: 12px;
+}
+/* line 75, ../../scss/modals/_shuttle.scss */
+.shuttle_widget li a {
+  float: right;
+}
+/* line 79, ../../scss/modals/_shuttle.scss */
+.shuttle_widget img.profile {
+  max-height: 100%;
+  max-width: 100%;
+  vertical-align: middle;
+}
+/* line 85, ../../scss/modals/_shuttle.scss */
+.shuttle_widget div.image {
+  position: relative;
+  display: inline-block;
+  padding: 2px;
+  width: 33px;
+  height: 33px;
+}
+/* line 93, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul {
+  position: absolute;
+  width: 50%;
+  top: 0;
+  bottom: 0;
+  vertical-align: top;
+  overflow-y: auto;
+}
+/* line 101, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul li {
+  height: 39px;
+  border-bottom: 1px dotted #b9bbbd;
+  padding: 0 8px;
+  line-height: 36px;
+}
+/* line 107, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul li .name {
+  font-size: 14px;
+  font-weight: normal;
+  color: #5f5f5f;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 10px;
+  display: inline-block;
+  max-width: 60%;
+}
+/* line 117, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul.available {
+  left: 0;
+  border-right: 1px solid #b9bbbd;
+}
+/* line 122, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul.available li img.checkmark {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  display: none;
+}
+/* line 130, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul.available li.added img.checkmark {
+  display: inherit;
+}
+/* line 133, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul.available li.added a {
+  display: none;
+}
+/* line 137, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul.available li.added .was_added {
+  display: inline;
+}
+/* line 142, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul.available li a {
+  display: inline;
+}
+/* line 146, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul.available li .was_added {
+  display: none;
+}
+/* line 152, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul.selected {
+  left: 50%;
+}
+/* line 155, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul.selected li {
+  display: none;
+}
+/* line 157, ../../scss/modals/_shuttle.scss */
+.shuttle_widget ul.selected li.added {
+  display: block;
+}
+
+/* line 165, ../../scss/modals/_shuttle.scss */
+.dialog.workspace_edit_members .dialog_content {
+  padding: 0;
+}
+/* line 167, ../../scss/modals/_shuttle.scss */
+.dialog.workspace_edit_members .dialog_content .modal_controls {
+  padding: 0 20px 20px;
+}
+
+/* line 2, ../../scss/modals/_sql_preview.scss */
+.sql_preview .dialog_content {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+/* line 7, ../../scss/modals/_sql_preview.scss */
+.sql_preview .container {
+  width: 845px;
+  min-height: 120px;
+  max-height: 430px;
+}
+/* line 13, ../../scss/modals/_sql_preview.scss */
+.sql_preview .CodeMirror-scroll {
+  height: auto;
+  overflow: visible;
+}
+/* line 18, ../../scss/modals/_sql_preview.scss */
+.sql_preview .CodeMirror-gutter {
+  background-color: #eaeff6;
+}
+
+/* line 3, ../../scss/modals/_workspace_members_more.scss */
+.workspace_members_more {
+  width: 315px;
+}
+/* line 6, ../../scss/modals/_workspace_members_more.scss */
+.workspace_members_more .sub_header {
+  padding: 0 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* line 11, ../../scss/modals/_workspace_members_more.scss */
+.workspace_members_more .collection_list {
+  border-top: 1px solid #a4a6a8;
+  border-bottom: 1px solid #a4a6a8;
+}
+/* line 17, ../../scss/modals/_workspace_members_more.scss */
+.workspace_members_more button {
+  float: right;
+  margin: 0 10px 15px;
+}
+
+/* line 25, ../../scss/modals/_workspace_members_more.scss */
+.dialog.workspace_members_more .dialog_content {
+  padding: 0;
+}
+
+/* line 1, ../../scss/modals/_comment.scss */
+.dialog.comment {
+  width: 440px;
+}
+/* line 4, ../../scss/modals/_comment.scss */
+.dialog.comment textarea {
+  min-height: 75px;
+}
+
+/* line 11, ../../scss/modals/_visualization.scss */
+.visualization .dialog_content {
+  padding: 0;
+}
+/* line 15, ../../scss/modals/_visualization.scss */
+.visualization .right {
+  float: right;
+}
+/* line 19, ../../scss/modals/_visualization.scss */
+.visualization .headerbar {
+  background: #eaeff6;
+  border-bottom: 1px solid #b9bbbd;
+  font-size: 0;
+}
+/* line 24, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .text {
+  padding: 12px 10px 0;
+  display: inline-block;
+  vertical-align: top;
+}
+/* line 30, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .type {
+  font-size: 14px;
+  font-weight: 600;
+  color: #7d7d7d;
+}
+/* line 36, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .label {
+  font-size: 14px;
+  font-weight: 600;
+  color: black;
+}
+/* line 40, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .filter {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0 10px 0 0;
+  line-height: 35px;
+  vertical-align: middle;
+}
+/* line 48, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .chart_icon {
+  height: 35px;
+  width: 45px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-left: 1px dotted #b9bbbd;
+}
+/* line 56, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .chart_icon.selected {
+  background-color: #4a83c3;
+}
+/* line 2, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .boxplot.chart_icon {
+  background-image: url("/images/visualizations/dialog/boxplot_off.png");
+}
+/* line 4, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .boxplot.chart_icon.selected {
+  background-image: url("/images/visualizations/dialog/boxplot_on.png");
+}
+/* line 2, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .chorusview.chart_icon {
+  background-image: url("/images/visualizations/dialog/chorusview_off.png");
+}
+/* line 4, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .chorusview.chart_icon.selected {
+  background-image: url("/images/visualizations/dialog/chorusview_on.png");
+}
+/* line 2, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .frequency.chart_icon {
+  background-image: url("/images/visualizations/dialog/frequency_off.png");
+}
+/* line 4, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .frequency.chart_icon.selected {
+  background-image: url("/images/visualizations/dialog/frequency_on.png");
+}
+/* line 2, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .heatmap.chart_icon {
+  background-image: url("/images/visualizations/dialog/heatmap_off.png");
+}
+/* line 4, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .heatmap.chart_icon.selected {
+  background-image: url("/images/visualizations/dialog/heatmap_on.png");
+}
+/* line 2, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .histogram.chart_icon {
+  background-image: url("/images/visualizations/dialog/histogram_off.png");
+}
+/* line 4, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .histogram.chart_icon.selected {
+  background-image: url("/images/visualizations/dialog/histogram_on.png");
+}
+/* line 2, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .timeseries.chart_icon {
+  background-image: url("/images/visualizations/dialog/timeseries_off.png");
+}
+/* line 4, ../../scss/modals/_visualization.scss */
+.visualization .headerbar .timeseries.chart_icon.selected {
+  background-image: url("/images/visualizations/dialog/timeseries_on.png");
+}
+/* line 69, ../../scss/modals/_visualization.scss */
+.visualization .modal_controls {
+  width: 100%;
+  height: 55px;
+  background: #eaeff6;
+  border-top: 1px solid #b9bbbd;
+}
+/* line 76, ../../scss/modals/_visualization.scss */
+.visualization .modal_controls .vertical a {
+  font-size: 12px;
+  font-weight: 600;
+  padding-left: 10px;
+  display: inline-block;
+  padding: 20px 0 0 10px;
+}
+/* line 84, ../../scss/modals/_visualization.scss */
+.visualization .modal_controls .vertical .right {
+  margin-right: 10px;
+}
+/* line 87, ../../scss/modals/_visualization.scss */
+.visualization .modal_controls .vertical .right button {
+  margin-top: 12px;
+  margin-left: 5px;
+}
+/* line 95, ../../scss/modals/_visualization.scss */
+.visualization .chart_area {
+  width: 940px;
+  height: 340px;
+  background: white;
+  line-height: 340px;
+  vertical-align: middle;
+  text-align: center;
+}
+/* line 104, ../../scss/modals/_visualization.scss */
+.visualization .chart_area .empty_data {
+  font-weight: 600;
+}
+
+/* line 1, ../../scss/modals/_attach.scss */
+.dialog.attach_dialog {
+  width: 320px;
+}
+/* line 4, ../../scss/modals/_attach.scss */
+.dialog.attach_dialog .dialog_content {
+  padding: 0;
+}
+/* line 7, ../../scss/modals/_attach.scss */
+.dialog.attach_dialog .dialog_content .none {
+  margin: 5px;
+}
+/* line 10, ../../scss/modals/_attach.scss */
+.dialog.attach_dialog .dialog_content .collection_list {
+  max-height: 360px;
+  overflow: auto;
+}
+/* line 15, ../../scss/modals/_attach.scss */
+.dialog.attach_dialog .dialog_content .collection_list ul li {
+  cursor: pointer;
+  height: 39px;
+  line-height: 39px;
+  vertical-align: middle;
+}
+/* line 21, ../../scss/modals/_attach.scss */
+.dialog.attach_dialog .dialog_content .collection_list ul li a {
+  width: 100%;
+}
+/* line 25, ../../scss/modals/_attach.scss */
+.dialog.attach_dialog .dialog_content .collection_list ul li img {
+  width: auto;
+  height: auto;
+  padding-right: 2px;
+}
+/* line 31, ../../scss/modals/_attach.scss */
+.dialog.attach_dialog .dialog_content .collection_list ul li.selected {
+  background-color: #3795dd;
+}
+/* line 34, ../../scss/modals/_attach.scss */
+.dialog.attach_dialog .dialog_content .collection_list ul li.selected .name {
+  color: white;
+}
+/* line 42, ../../scss/modals/_attach.scss */
+.dialog.attach_dialog .dialog_content .modal_controls {
+  padding: 10px 15px;
+  margin-top: 0;
+  border-top: 1px solid #a4a6a8;
+}
+
+/* line 1, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables {
+  width: 480px;
+}
+/* line 4, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list_content_details {
+  width: auto;
+}
+/* line 8, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list {
+  max-height: 500px;
+  overflow: auto;
+}
+/* line 12, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li {
+  padding-right: 10px;
+  margin-right: 0;
+}
+/* line 16, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li .actions {
+  float: right;
+  height: 35px;
+  line-height: 35px;
+  padding-right: 10px;
+}
+/* line 22, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li .actions a {
+  font-size: 12px;
+}
+/* line 26, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li .actions .separator {
+  color: #2c95dd;
+  margin: 0 6px;
+}
+/* line 33, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li .text .main {
+  width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* line 36, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li .text .main .name {
+  font-size: 14px;
+  font-weight: normal;
+  color: #5f5f5f;
+}
+/* line 42, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li .column_count {
+  font-size: 12px;
+  font-weight: normal;
+  color: #7d7d7d;
+}
+/* line 46, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li.selected {
+  background-color: #3795dd;
+}
+/* line 48, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li.selected .spacer {
+  background-color: #3795dd;
+}
+/* line 52, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li.selected .name, .manage_join_tables .list li.selected .column_count, .manage_join_tables .list li.selected a {
+  color: white;
+}
+/* line 57, ../../scss/modals/_manage_join_tables.scss */
+.manage_join_tables .list li .original a.join {
+  font-size: 12px;
+  font-weight: normal;
+  color: #7d7d7d;
+  cursor: default;
+}
+
+/* line 65, ../../scss/modals/_manage_join_tables.scss */
+.join_configuration {
+  width: 480px;
+}
+/* line 68, ../../scss/modals/_manage_join_tables.scss */
+.join_configuration .join_tables_content {
+  padding: 20px;
+  padding-top: 10px;
+}
+/* line 72, ../../scss/modals/_manage_join_tables.scss */
+.join_configuration .join_tables_content label {
+  margin-top: 15px;
+  margin-bottom: 4px;
+  display: block;
+  width: 326px;
+}
+/* line 79, ../../scss/modals/_manage_join_tables.scss */
+.join_configuration .join_tables_content select {
+  display: block;
+  width: 326px;
+}
+
+/* line 86, ../../scss/modals/_manage_join_tables.scss */
+.preview_columns {
+  width: 480px;
+}
+/* line 89, ../../scss/modals/_manage_join_tables.scss */
+.preview_columns .list_container {
+  max-height: 360px;
+  overflow-y: auto;
+}
+/* line 94, ../../scss/modals/_manage_join_tables.scss */
+.preview_columns .list {
+  margin-right: 20px;
+  border-right: 1px solid #a4a6a8;
+}
+/* line 100, ../../scss/modals/_manage_join_tables.scss */
+.preview_columns .sub_header .chorus_search_container {
+  margin-top: 5px;
+  float: right;
+  width: 250px;
+  display: inline-block;
+}
+/* line 107, ../../scss/modals/_manage_join_tables.scss */
+.preview_columns .sub_header .name {
+  display: inline-block;
+  max-width: 165px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5f5f5f;
+}
+/* line 115, ../../scss/modals/_manage_join_tables.scss */
+.preview_columns .column_count {
+  vertical-align: top;
+}
+/* line 120, ../../scss/modals/_manage_join_tables.scss */
+.preview_columns .text .name {
+  font-size: 14px;
+  font-weight: normal;
+  color: #5f5f5f;
+}
+/* line 124, ../../scss/modals/_manage_join_tables.scss */
+.preview_columns .text .comment {
+  font-size: 12px;
+  font-weight: normal;
+  color: #7d7d7d;
+}
+/* line 130, ../../scss/modals/_manage_join_tables.scss */
+.preview_columns .modal_controls button.cancel {
+  float: left;
+}
+
+/* line 2, ../../scss/modals/_attach_dialog.scss */
+.attach_dialog .loading_section {
+  background: white;
+  padding: 8px 8px;
+}

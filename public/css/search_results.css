@@ -1,0 +1,134 @@
+/* line 4, ../../scss/search_results.scss */
+.search_result_list .list_content_details {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5f5f5f;
+  width: auto;
+  padding: 5px 10px;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ebeef2), color-stop(100%, #d7dfe9));
+  background-image: -webkit-linear-gradient(#ebeef2, #d7dfe9);
+  background-image: -moz-linear-gradient(#ebeef2, #d7dfe9);
+  background-image: -o-linear-gradient(#ebeef2, #d7dfe9);
+  background-image: -ms-linear-gradient(#ebeef2, #d7dfe9);
+  background-image: linear-gradient(#ebeef2, #d7dfe9);
+  border-top: 1px solid #cbcbcb;
+  border-bottom: 1px solid #a4a4a4;
+  height: 20px;
+  line-height: 20px;
+  vertical-align: middle;
+}
+/* line 16, ../../scss/search_results.scss */
+.search_result_list .list_content_details .pagination span, .search_result_list .list_content_details .pagination a {
+  font-size: 12px;
+  padding-left: 15px;
+}
+/* line 23, ../../scss/search_results.scss */
+.search_result_list .count, .search_result_list .page_numbers {
+  font-size: 12px;
+  padding: 4px;
+  color: #5f5f5f;
+}
+/* line 28, ../../scss/search_results.scss */
+.search_result_list .count {
+  font-weight: 600;
+}
+/* line 32, ../../scss/search_results.scss */
+.search_result_list div.pagination .links .next {
+  padding-right: 10px;
+}
+/* line 36, ../../scss/search_results.scss */
+.search_result_list span.previous, .search_result_list span.next {
+  color: #959595;
+}
+/* line 40, ../../scss/search_results.scss */
+.search_result_list li {
+  min-height: 45px;
+}
+/* line 42, ../../scss/search_results.scss */
+.search_result_list li a.name {
+  font-size: 18px;
+}
+/* line 46, ../../scss/search_results.scss */
+.search_result_list li img {
+  vertical-align: top;
+  max-width: 32px;
+  max-height: 32px;
+}
+/* line 52, ../../scss/search_results.scss */
+.search_result_list li .description {
+  padding-left: 5px;
+  display: inline-block;
+  vertical-align: middle;
+}
+/* line 57, ../../scss/search_results.scss */
+.search_result_list li .description em {
+  background-color: yellow;
+  font-weight: 600;
+}
+/* line 62, ../../scss/search_results.scss */
+.search_result_list li .description .location {
+  padding: 5px 0;
+  font-size: 12px;
+  color: #5f5f5f;
+  line-height: 12px;
+  vertical-align: baseline;
+}
+/* line 69, ../../scss/search_results.scss */
+.search_result_list li .description .location a {
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 600;
+  vertical-align: baseline;
+}
+/* line 77, ../../scss/search_results.scss */
+.search_result_list li .description .description_content {
+  font-size: 14px;
+  font-weight: normal;
+  color: #5f5f5f;
+}
+/* line 82, ../../scss/search_results.scss */
+.search_result_list li .prefix {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5f5f5f;
+}
+/* line 86, ../../scss/search_results.scss */
+.search_result_list li .content {
+  font-size: 14px;
+  font-weight: normal;
+  color: #5f5f5f;
+}
+/* line 91, ../../scss/search_results.scss */
+.search_result_list li .supporting_message span, .search_result_list li .more_comments span {
+  line-height: 1.5em;
+  vertical-align: baseline;
+}
+/* line 97, ../../scss/search_results.scss */
+.search_result_list li .comments, .search_result_list li .more_comments, .search_result_list li .supporting_message, .search_result_list li .more_supporting_message {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5f5f5f;
+  margin: 0;
+}
+/* line 101, ../../scss/search_results.scss */
+.search_result_list li .comments .comment, .search_result_list li .more_comments .comment, .search_result_list li .supporting_message .comment, .search_result_list li .more_supporting_message .comment {
+  padding: 3px 0;
+}
+/* line 104, ../../scss/search_results.scss */
+.search_result_list li .comments .comment .comment_type, .search_result_list li .more_comments .comment .comment_type, .search_result_list li .supporting_message .comment .comment_type, .search_result_list li .more_supporting_message .comment .comment_type {
+  padding-right: 5px;
+}
+/* line 108, ../../scss/search_results.scss */
+.search_result_list li .comments .comment .comment_content, .search_result_list li .more_comments .comment .comment_content, .search_result_list li .supporting_message .comment .comment_content, .search_result_list li .more_supporting_message .comment .comment_content {
+  font-size: 14px;
+  font-weight: normal;
+  color: #5f5f5f;
+}
+/* line 111, ../../scss/search_results.scss */
+.search_result_list li .comments .comment .comment_content em, .search_result_list li .more_comments .comment .comment_content em, .search_result_list li .supporting_message .comment .comment_content em, .search_result_list li .more_supporting_message .comment .comment_content em {
+  background: yellow;
+}
+/* line 118, ../../scss/search_results.scss */
+.search_result_list li .comments .has_more_comments a, .search_result_list li .comments .more_comments a, .search_result_list li .more_comments .has_more_comments a, .search_result_list li .more_comments .more_comments a, .search_result_list li .supporting_message .has_more_comments a, .search_result_list li .supporting_message .more_comments a, .search_result_list li .more_supporting_message .has_more_comments a, .search_result_list li .more_supporting_message .more_comments a {
+  font-size: 12px;
+}

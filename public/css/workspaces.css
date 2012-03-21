@@ -1,0 +1,202 @@
+/* line 4, ../../scss/workspaces/_new_workspace.scss */
+.workspaces_new input[type=checkbox] {
+  margin: 8px 4px 0 8px;
+}
+/* line 8, ../../scss/workspaces/_new_workspace.scss */
+.workspaces_new input[type=text] {
+  width: 400px;
+}
+
+/* line 4, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list li.archived .name span {
+  text-decoration: line-through;
+}
+/* line 8, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list .owner {
+  color: #959595;
+}
+/* line 11, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list .owner a {
+  font-weight: 600;
+}
+/* line 16, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list .private {
+  font-size: 13px;
+  font-weight: normal;
+  color: #5f5f5f;
+  border-left: 2px solid #d0d0d0;
+  margin-left: 5px;
+  padding: 3px 10px 1px;
+}
+/* line 24, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list li .full {
+  display: none;
+}
+/* line 27, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list li .truncated {
+  display: block;
+}
+/* line 31, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list li.more .full {
+  display: block;
+}
+/* line 34, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list li.more .truncated {
+  display: none;
+}
+/* line 39, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list li .badge {
+  position: absolute;
+  top: 5px;
+}
+/* line 44, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list li .spacer {
+  display: inline-block;
+  width: 10px;
+  min-height: 45px;
+}
+/* line 50, ../../scss/workspaces/_workspace_list.scss */
+.workspace_list li.selected {
+  background: white;
+}
+
+/* line 8, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings input[name=name] {
+  width: 400px;
+  display: inline;
+}
+/* line 13, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings input#public_checkbox, .workspace_settings label[for=public_checkbox] {
+  display: inline;
+}
+/* line 17, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 8px;
+}
+/* line 22, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings label:first-child {
+  margin-top: 0;
+}
+/* line 27, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .dialog_content {
+  width: 550px;
+}
+/* line 31, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .edit_photo {
+  width: 230px;
+  margin-right: 10px;
+  display: inline-block;
+}
+/* line 36, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .edit_photo .spinner_container {
+  width: 230px;
+  height: 50px;
+  background: white;
+  margin-bottom: 8px;
+  text-align: center;
+  border: 1px solid #BEC1C4;
+}
+/* line 44, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .edit_photo .spinner_container img {
+  max-width: 230px;
+  max-height: 50px;
+}
+/* line 48, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .edit_photo .spinner_container img.disabled {
+  display: none;
+}
+/* line 55, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .instructions, .workspace_settings .archived_text {
+  margin-top: 6px;
+  width: 305px;
+  float: right;
+  color: #7d7d7d;
+  font-size: 14px;
+}
+/* line 63, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings div.owner, .workspace_settings .sandboxLocation {
+  font-size: 13px;
+  font-weight: normal;
+  color: black;
+  padding-left: 12px;
+}
+/* line 68, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings select.owner, .workspace_settings .ui-selectmenu {
+  display: block;
+  min-width: 215px;
+}
+/* line 73, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .workspace_status {
+  padding-top: 10px;
+  display: inline-block;
+}
+/* line 77, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .workspace_status label:first-child {
+  padding-bottom: 6px;
+  margin-bottom: 0;
+  display: block;
+}
+/* line 83, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .workspace_status label {
+  display: inline;
+}
+/* line 86, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .workspace_status label span {
+  color: black;
+}
+/* line 91, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .workspace_status .radio {
+  padding: 6px 0 0 8px;
+}
+/* line 95, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .archived_text {
+  padding-top: 32px;
+  width: 435px;
+}
+/* line 100, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .toolbar {
+  float: right;
+  margin-right: 5px;
+  font-size: 12px;
+  color: #2c95dd;
+}
+/* line 106, ../../scss/workspaces/_workspace_settings.scss */
+.workspace_settings .toolbar a {
+  font-size: 12px;
+  padding: 0px 2px;
+}
+
+/* line 2, ../../scss/workspaces/_workspace_show.scss */
+.workspace_show .activity_list_header {
+  padding: 10px 16px 20px;
+}
+/* line 5, ../../scss/workspaces/_workspace_show.scss */
+.workspace_show .activity_list_header h1 {
+  font-size: 24px;
+  font-weight: 600;
+}
+/* line 10, ../../scss/workspaces/_workspace_show.scss */
+.workspace_show .activity_list_header .menus a {
+  font-size: 12px;
+}
+
+/* line 5, ../../scss/workspaces/_workspace_sidebar.scss */
+.workspace_list_sidebar .info .name, .workspace_show_sidebar .info .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 10px;
+}
+/* line 12, ../../scss/workspaces/_workspace_sidebar.scss */
+.workspace_list_sidebar .workspace_member_list, .workspace_show_sidebar .workspace_member_list {
+  margin: 5px 0px;
+}

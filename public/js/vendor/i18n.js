@@ -143,6 +143,7 @@ I18n.translate = function(scope, options) {
         return translation;
       }
     } else {
+
       return this.interpolate(translation, options);
     }
   } catch(err) {
