@@ -277,6 +277,12 @@ chorus.views.Bare = Backbone.View.include(
             if (api) {
                 _.defer(_.bind(function() {
                     api.reinitialise();
+                    if (!api.getIsScrollableH() && api.getContentPositionX() > 0) {
+                        el.find(".jspPane").css("left", 0)
+                    }
+                    if (!api.getIsScrollableV() && api.getContentPositionY() > 0) {
+                        el.find(".jspPane").css("top", 0)
+                    }
                     el.find('.jspVerticalBar').hide();
                     el.find('.jspHorizontalBar').hide();
                 }, this));
