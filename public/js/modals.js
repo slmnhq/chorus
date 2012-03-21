@@ -13,6 +13,11 @@
             pushModalBindings(this);
         },
 
+        postRender: function() {
+            this._super("postRender");
+            $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .popup').width() / 2))
+        },
+
         makeModel:function (options) {
             if (options && options.pageModel) {
                 this.pageModel = options.pageModel;

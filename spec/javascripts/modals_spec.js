@@ -38,6 +38,20 @@ describe("chorus.Modal", function() {
            expect(chorus.modal).toBe(this.modal)
         })
 
+        describe("re-rendering", function() {
+            beforeEach(function() {
+                spyOn($.fn, "css")
+                this.modal.render();
+            });
+
+            it("re-centers the modal", function() {
+                var calls = $.fn.css.calls;
+                expect(calls.length).toBe(1);
+                expect(calls[0].args).toEqual(["left", jasmine.any(Number)])
+                expect(calls[0].object.selector).toBe("#facebox")
+            });
+        });
+
         describe("when the facebox closes", function() {
             beforeEach(function() {
                 spyOn(this.modal, 'close');

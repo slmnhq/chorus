@@ -8,6 +8,7 @@ chorus.alerts.Error = chorus.alerts.Base.extend({
     },
 
     postRender:function () {
+        this._super("postRender")
         this.$(".errors").addClass('hidden');
         this.$("button.submit").addClass("hidden");
     }
