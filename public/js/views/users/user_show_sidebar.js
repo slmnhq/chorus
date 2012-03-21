@@ -19,6 +19,7 @@ chorus.views.UserShowSidebar = chorus.views.Sidebar.extend({
         var userIsLoggedIn = this.model.get("userName") == chorus.session.user().get("userName");
         var userIsAdmin = chorus.session.user().get("admin");
         return {
+            displayName: this.model.displayName(),
             permission: userIsLoggedIn || userIsAdmin,
             changePasswordAvailable: userIsLoggedIn && !this.config.isExternalAuth(),
             isInEditMode: this.options.editMode

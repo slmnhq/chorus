@@ -1,5 +1,7 @@
 describe("chorus.views.UserListSidebar", function() {
     beforeEach(function() {
+        spyOn(chorus.views.UserListSidebar.prototype, "setUser").andCallThrough();
+
         this.model = fixtures.user({ title: "Supreme Test-Driver" });
         this.view = new chorus.views.UserListSidebar({ model: this.model });
         this.view.render();
@@ -27,6 +29,12 @@ describe("chorus.views.UserListSidebar", function() {
 
         it("fetches the other user's activities'", function() {
             expect(this.otherModel.activities()).toHaveBeenFetched();
+        });
+
+        it("is called when user:selected is triggered", function() {
+            this.view.setUser.reset();
+            chorus.PageEvents.broadcast("user:selected", fixtures.user());
+            expect(this.view.setUser).toHaveBeenCalled();
         });
     });
 

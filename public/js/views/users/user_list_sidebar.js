@@ -6,6 +6,8 @@ chorus.views.UserListSidebar = chorus.views.Sidebar.extend({
 
     setup: function() {
         if (this.model) this.setUser(this.model);
+
+        chorus.PageEvents.subscribe("user:selected", this.setUser, this);
     },
 
     setUser: function(user) {
@@ -19,7 +21,7 @@ chorus.views.UserListSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function() {
         return {
-            displayName: this.model.displayName()
-        }
+            displayName: this.model && this.model.displayName()
+        };
     }
 });

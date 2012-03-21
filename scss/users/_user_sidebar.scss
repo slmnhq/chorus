@@ -1,11 +1,19 @@
 @import "../_common.scss";
 
-.user_list_sidebar {
-    .info {
-        .full_name {
-            @include ellipsis;
-            @include heading-sidebar;
-            margin-bottom: 10px;
+#sidebar{
+    .user_list_sidebar, .user_show_sidebar {
+
+        .info {
+            .full_name {
+                @include ellipsis;
+                @include heading-sidebar;
+                margin-bottom: 0;
+                line-height: 18px;
+            }
+
+            .title {
+                @include secondary-text-small;
+            }
         }
     }
 }

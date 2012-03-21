@@ -40,6 +40,8 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
         this.mainContent.contentHeader.bind("choice:sort", function (choice) {
             this.collection.sortAsc(choice)
             this.collection.fetch();
-        }, this)
+        }, this);
+
+        this.sidebar = new chorus.views.UserListSidebar();
     }
 });

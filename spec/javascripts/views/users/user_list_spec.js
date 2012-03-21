@@ -1,4 +1,8 @@
 describe("chorus.views.UserList", function() {
+    it("is a selectable list", function() {
+        expect(new chorus.views.UserList({collection: fixtures.userSet()})).toBeA(chorus.views.SelectableList);
+    });
+
     describe("#render", function() {
         describe("when the collection has loaded", function() {
             beforeEach(function() {
@@ -66,6 +70,13 @@ describe("chorus.views.UserList", function() {
             it("links the user's image to the user show page", function() {
                 expect(this.view.$("li:nth-child(1) a img")).toExist();
                 expect(this.view.$("li:nth-child(2) a img")).toExist();
+            });
+
+            it("broadcasts user:selected when a user's entry is selected", function() {
+                spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
+                var user = fixtures.user();
+                this.view.itemSelected(user);
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", user);
             });
         });
     })
