@@ -21,6 +21,39 @@ describe("chorus.models.Artifact", function() {
         expect(this.model.name()).toBe("helmut");
     });
 
+    describe("#showUrlTemplate", function() {
+        it("shows the URL for a workspace", function() {
+            var model = fixtures.attachmentOnWorkspaceSearchResult();
+            expect(model.showUrl()).toBe("#/workspaces/10000");
+        });
+
+        it("shows the URL for a tabularData set in a workspace", function() {
+            var model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
+            var encoded_id = encodeURIComponent('"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"2010_report_on_white_house"')
+            expect(model.showUrl()).toBe("#/workspaces/33333/datasets/" + encoded_id);
+        });
+
+        it("shows the URL for a tabularData with no workspace", function() {
+            var model = fixtures.attachmentOnDatasetNotInWorkspaceSearchResult();
+            expect(model.showUrl()).toBe("#/instances/22222/databases/dca_demo/schemas/ddemo/BASE_TABLE/2010_report_on_white_house");
+        });
+
+        it("shows the URL for a workfile in a workspace", function() {
+            var model = fixtures.attachmentOnWorkfileInWorkspaceSearchResult();
+            expect(model.showUrl()).toBe("#/workspaces/10000/workfiles/10030");
+        });
+
+        it("shows the URL for an instance", function() {
+             var model = fixtures.attachmentOnInstanceSearchResult();
+             expect(model.showUrl()).toBe("#/instances/10000/databases");
+         });
+
+        it("shows the URL for an hdfsFile", function() {
+            var model = fixtures.attachmentOnFileInHdfsSearchResult();
+            expect(model.showUrl()).toBe("#/instances/10020/browseFile/data/cleardb.sql");
+        });
+    });
+
     describe("workspace", function() {
         beforeEach(function() {
             this.model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();

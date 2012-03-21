@@ -5,6 +5,28 @@ chorus.models.Artifact = chorus.models.Base.extend({
         return this.attributes && this.attributes.name;
     },
 
+    showUrl: function(){
+        var workspaceUrl = this.workspace() && this.workspace().get('id') && this.workspace().showUrl();
+        var tabularDataUrl = this.tabularData() && this.tabularData().showUrl();
+        var workfileUrl = this.workfile() && this.workfile().showUrl();
+        var hdfsFileUrl = this.hdfsFile() && this.hdfsFile().showUrl();
+        var instanceUrl = this.instance() && this.instance().showUrl();
+
+        if (workspaceUrl && tabularDataUrl) {
+            return tabularDataUrl;
+        } else if (tabularDataUrl) {
+            return tabularDataUrl;
+        } else if (workspaceUrl && workfileUrl) {
+            return workfileUrl;
+        } else if (hdfsFileUrl) {
+            return hdfsFileUrl;
+        } else if (workspaceUrl) {
+            return workspaceUrl;
+        } else if (instanceUrl) {
+            return instanceUrl;
+        }
+    },
+
     iconUrl: function(options) {
         return chorus.urlHelpers.fileIconUrl(this.get("type") || this.get("fileType"), options && options.size);
     },
