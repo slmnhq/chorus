@@ -10,7 +10,7 @@ jasmine.ProfileReporter.prototype.reportRunnerStarting = function(runner) {
 
 jasmine.ProfileReporter.prototype.reportRunnerResults = function(runner) {
     _(this.timings).each(function(timing) {
-        console.log(timing.spec.getFullName() + " : " + timing.elapsedMs + "ms")
+        console.log(timing.spec.id + " - " + timing.spec.getFullName() + " : " + timing.elapsedMs + "ms\n")
     })
 };
 

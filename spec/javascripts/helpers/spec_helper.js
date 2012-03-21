@@ -291,6 +291,7 @@
         this.server.restore();
         this.clock && this.clock.restore && this.clock.restore();
         $.cookie("userId", null)
+        chorus._navigated();
     });
 
     //global helpers
