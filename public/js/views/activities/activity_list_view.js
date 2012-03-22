@@ -41,17 +41,26 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     postRender:function () {
         $(this.el).addClass(this.options.additionalClass);
         var ul = this.$("ul");
+        this.activities = [];
         this.collection.each(function(model) {
             try {
                 var view = new chorus.views.Activity({
                     model:model,
                     displayStyle: this.options.displayStyle,
-                    isNotification: this.options.isNotification
+                    isNotification: this.options.isNotification,
+                    isReadOnly: this.options.isReadOnly
                 });
+                this.activities.push(view);
                 ul.append(view.render().el);
             } catch (err) {
                 chorus.log(err);
             }
         }, this);
+    },
+
+    show: function() {
+        _.each(this.activities, function(activity) {
+            activity.show();
+        });
     }
 });

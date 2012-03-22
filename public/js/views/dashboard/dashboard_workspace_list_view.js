@@ -47,11 +47,13 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
 
     postRender: function() {
         this.collection.each(function(workspace) {
-            var li = this.$("li[data-id=" + workspace.get("id") + "]");
-            var commentList = new chorus.views.CommentList({
-                collection: workspace.comments(),
+            var comments = workspace.comments();
+            comments.loaded = true;
+            var commentList = new chorus.views.ActivityList({
+                collection: comments,
                 initialLimit: 5,
-                displayStyle: 'without_workspace'
+                displayStyle: 'without_workspace',
+                isReadOnly: true
             });
             var el = $(commentList.render().el);
             el.find("ul").addClass("tooltip activity");
@@ -64,8 +66,9 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
                 return { left: 0, top: top };
             }
 
+            var li = this.$("li[data-id=" + workspace.get("id") + "]");
             li.find(".comment .count").qtip({
-                content: el.html(),
+                content: el,
                 show: {
                     event: 'mouseover',
                     solo: true
@@ -85,6 +88,11 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
                     tip: {
                         width: 15,
                         height: 20
+                    }
+                },
+                events: {
+                    show: function(e) {
+                        commentList.show();
                     }
                 }
             });

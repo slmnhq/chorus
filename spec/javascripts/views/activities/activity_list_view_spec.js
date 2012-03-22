@@ -305,4 +305,21 @@ describe("chorus.views.ActivityList", function() {
             expect(chorus.log).toHaveBeenCalled();
         })
     });
+
+    describe("#show", function() {
+        beforeEach(function() {
+            this.view.render();
+            expect(this.view.activities.length).toBe(this.collection.length);
+            _.each(this.view.activities, function(activity) {
+                spyOn(activity, "show");
+            });
+            this.view.show();
+        });
+
+        it("calls show on each activity", function() {
+            _.each(this.view.activities, function(activity) {
+                expect(activity.show).toHaveBeenCalled();
+            });
+        });
+    });
 });

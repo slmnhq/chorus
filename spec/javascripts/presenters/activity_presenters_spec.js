@@ -575,12 +575,27 @@ describe("chorus.presenters.Activity", function() {
     context(".INSIGHT_CREATED", function() {
         beforeEach(function() {
             this.model = fixtures.activities.INSIGHT_CREATED();
-            this.presenter = new chorus.presenters.Activity(this.model);
         });
 
-        it("should have the correct entityType", function() {
-            expect(this.presenter.entityType).toBe("comment");
+        context("in an activity stream", function() {
+            beforeEach(function() {
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("should have the correct entityType", function() {
+                expect(this.presenter.entityType).toBe("comment");
+            });
         });
+
+        context("in a comment list", function() {
+            beforeEach(function() {
+                this.presenter = new chorus.presenters.Activity(this.model, {isReadOnly: true})
+            });
+
+            it("should have the correct readOnly value", function() {
+                expect(this.presenter.isReadOnly).toBeTruthy();
+            });
+        })
     })
 
     context(".RECEIVE_NOTE", function() {
@@ -591,6 +606,8 @@ describe("chorus.presenters.Activity", function() {
 
         it("should have the correct entityType", function() {
             expect(this.presenter.entityType).toBe("comment");
+            expect(this.presenter.isReadOnly).toBeTruthy();
+            expect(this.presenter.isNotification).toBeTruthy();
         });
     })
 

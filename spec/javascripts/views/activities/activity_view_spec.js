@@ -79,6 +79,19 @@ describe("chorus.views.Activity", function() {
                 this.view.render();
             });
 
+            it("should have a NotificationDeleteAlert", function() {
+                expect(this.view.$("a[data-alert=NotificationDeleteAlert]")).toExist();
+            });
+        });
+
+        context("isReadOnly", function() {
+            beforeEach(function() {
+                this.presenter = new chorus.presenters.Activity(this.view.model);
+                this.view.model = fixtures.activities.NOTE_ON_WORKSPACE();
+                this.view.options.isReadOnly = true;
+                this.view.render();
+            });
+
             it("should not render comments", function() {
                 expect(this.view.$(".comment_list")).not.toExist();
             });
@@ -90,11 +103,7 @@ describe("chorus.views.Activity", function() {
             it("should not have a DeleteNoteConfirmAlert", function() {
                 expect(this.view.$("a[data-alert=DeleteNoteConfirmAlert]")).not.toExist();
             });
-
-            it("should have a NotificationDeleteAlert", function() {
-                expect(this.view.$("a[data-alert=NotificationDeleteAlert]")).toExist();
-            });
-        });
+        })
 
         context("type: MEMBERS_ADDED", function() {
             beforeEach(function() {

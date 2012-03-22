@@ -16,6 +16,7 @@
             this.presenter.header = _.extend(this.defaultHeader(), this.presenter.header) //presenter.header includes extensions.header
             this.presenter.headerHtml = new Handlebars.SafeString(this.headerHtml());
             this.presenter.isNotification = options.isNotification;
+            this.presenter.isReadOnly = options.isReadOnly || options.isNotification;
 
             this.presenter._impl = this;
 
