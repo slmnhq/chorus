@@ -29,9 +29,10 @@
     {{#if lastComment}}
         <div class="comment">
             <div class="body"></div>
-            <div class="info">
-                {{userProfileLink lastComment.creator}} {{t "comments.commented_on"}} <span class="timestamp">{{lastComment.on}}</span>
-            </div>
+            {{userProfileLink lastComment.creator}}
+            <span class="comment_info">
+                {{t "comments.commented_on"}} <span class="on">{{lastComment.on}}</span>
+            </span>
         </div>
     {{/if}}
 </div>

@@ -104,8 +104,8 @@ describe("chorus.views.Dataset", function() {
 
         it("renders the most recent comment", function() {
             expect(this.view.$(".comment .body")).toContainText("I love you john.");
-            expect(this.view.$(".comment .info a")).toContainText("Bob Smith");
-            expect(this.view.$(".comment .info .timestamp")).toContainText("Dec 15");
+            expect(this.view.$(".comment a")).toContainText("Bob Smith");
+            expect(this.view.$(".comment_info .on")).toContainText("Dec 15");
         });
     });
 
