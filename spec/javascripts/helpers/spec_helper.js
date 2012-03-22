@@ -285,12 +285,37 @@
         });
     });
 
+    var specWhitelist = {
+        id: true,
+        env: true,
+        suite: true,
+        description: true,
+        queue: true,
+        afterCallbacks: true,
+        spies_: true,
+        results_: true,
+        matchersClass: true
+    };
+
     afterEach(function() {
         chorus.router.trigger("leaving")
         delete chorus.models.Config._instance;
         this.server.restore();
         this.clock && this.clock.restore && this.clock.restore();
         $.cookie("userId", null)
+        if (this instanceof jasmine.Spec) {
+            // reduce the number of keys to iterate
+            var oldProto = this.prototype;
+            delete this.prototype;
+
+            _.each(this, function(_value, key) {
+                if (this.hasOwnProperty(key) && !(key in specWhitelist)) {
+                    delete this[key];
+                }
+            }, this);
+
+            this.prototype = oldProto;
+        }
         chorus._navigated();
     });
 
