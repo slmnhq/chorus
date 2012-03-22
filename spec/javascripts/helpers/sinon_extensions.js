@@ -48,6 +48,14 @@ _.extend(sinon.fakeServer, {
         return _.last(this.destroys());
     },
 
+    lastUpdateFor: function(model) {
+        return _.last(_.filter(this.updates(), function(potentialRequest) {
+            var uri = new URI(potentialRequest.url);
+            var modelUri = new URI(model.url());
+            return uri.equals(modelUri);
+        }));
+    },
+
     lastDestroyFor: function(model) {
         return _.last(_.filter(this.destroys(), function(potentialRequest) {
             var uri = new URI(potentialRequest.url);
@@ -78,33 +86,41 @@ _.extend(sinon.fakeServer, {
         return this.lastFetchFor(model, _.extend({ rows: 1000}, overrides));
     },
 
-    completeFetchFor: function(model, results, options, pagination) {
-        if (results) {
-            results = results.attributes ? results.attributes : results;
-        } else if (model instanceof Backbone.Model) {
-            results = model.attributes;
+    makeFakeResponse: function(modelOrCollection, response) {
+        if (response) {
+            return response.attributes ? response.attributes : response;
+        } else if (modelOrCollection instanceof Backbone.Model) {
+            return modelOrCollection.attributes;
         } else {
-            results = [];
+            return [];
         }
+    },
 
+    completeFetchFor: function(model, response, options, pagination) {
+        response = this.makeFakeResponse(model, response);
         var fetch = this.lastFetchFor(model, options)
         if (fetch) {
-            fetch.succeed(results, pagination);
+            fetch.succeed(response, pagination);
         } else {
             throw "No fetch found for " + model.url() + ". Found fetches for: [" + _.pluck(this.fetches(), 'url').join(', ') + "]";
         }
     },
 
-    completeSaveFor: function(model, results) {
-        if (results) {
-            results = results.attributes ? results.attributes : results;
+    completeUpdateFor: function(model, response) {
+        response = this.makeFakeResponse(model, response);
+        var create = this.lastUpdateFor(model);
+        if (create) {
+            create.succeed(response);
         } else {
-            results = model.attributes;
+            throw "No update found for " + model.url() + ". Found updates for: [" + _.pluck(this.creates(), 'url').join(', ') + "]";
         }
+    },
 
+    completeSaveFor: function(model, response) {
+        response = this.makeFakeResponse(model, response);
         var create = this.lastCreateFor(model);
         if (create) {
-            create.succeed(results);
+            create.succeed(response);
         } else {
             throw "No create found for " + model.url() + ". Found creates for: [" + _.pluck(this.creates(), 'url').join(', ') + "]";
         }

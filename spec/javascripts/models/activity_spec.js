@@ -70,6 +70,32 @@ describe("chorus.models.Activity", function() {
         });
     });
 
+    describe("#toComment", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.NOTE_ON_INSTANCE({ id: "101", instance: { id: "45" } });
+            this.model.collection = new chorus.collections.ActivitySet();
+        });
+
+        it("returns a comment with the right attributes", function() {
+            var comment = this.model.toComment();
+            expect(comment).toBeA(chorus.models.Comment);
+            expect(comment.get("entityType")).toBe("instance");
+            expect(comment.get("entityId")).toBe("45");
+            expect(comment.get("id")).toBe("101");
+            expect(comment.get("body")).toBe(this.model.get("text"));
+        });
+
+        describe("when the comment is saved", function() {
+            beforeEach(function() {
+                this.model.toComment().trigger("saved");
+            });
+
+            it("re-fetches the activity's collection", function() {
+                expect(this.model.collection).toHaveBeenFetched();
+            });
+        });
+    });
+
     describe("#promoteToInsight", function() {
         beforeEach(function() {
             this.success = jasmine.createSpy("success");
@@ -110,6 +136,18 @@ describe("chorus.models.Activity", function() {
         it("returns false for non-notes", function() {
             this.model.set({ type: "WORKSPACE_MAKE_PUBLIC" });
             expect(this.model.isNote()).toBeFalsy();
+        });
+    });
+
+    describe("#isInsight", function() {
+        it("returns true for insights", function() {
+            this.model.set({ type: "INSIGHT_CREATED" });
+            expect(this.model.isInsight()).toBeTruthy();
+        });
+
+        it("returns false for non-insights", function() {
+            this.model.set({ type: "WORKSPACE_MAKE_PUBLIC" });
+            expect(this.model.isInsight()).toBeFalsy();
         });
     });
 

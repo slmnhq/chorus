@@ -21,7 +21,6 @@ describe("sinon extensions", function() {
             this.collection.fetch()
         })
 
-
         context("it is called with a specified result", function(){
             beforeEach(function() {
                 this.server.completeFetchFor(this.model, { name: "John Smith", secretIdentity: "Neo" })
@@ -59,5 +58,37 @@ describe("sinon extensions", function() {
                 })
             })
         });
-    })
+    });
+
+    describe("#makeFakeResponse(modelOrCollection, response)", function() {
+        context("when called with a specified response", function(){
+            it("returns the specified response", function() {
+                var fakeResponse = this.server.makeFakeResponse(this.model, {
+                    name: "John Smith",
+                    secretIdentity: "Neo"
+                });
+                expect(fakeResponse).toEqual({
+                    name: "John Smith",
+                    secretIdentity: "Neo"
+                });
+            })
+        })
+
+        context("when no response is passed", function() {
+            context("and it is called with a backbone model", function() {
+                it("uses the current attributes of the model", function() {
+                    var user = new chorus.models.User({ id: '1', name: "Keanu Reeves" });
+                    var fakeResponse = this.server.makeFakeResponse(user);
+                    expect(fakeResponse).toEqual({ id: '1', name: "Keanu Reeves" });
+                });
+            });
+
+            context("it is called with a collection", function() {
+                it("uses an empty model set", function() {
+                    var collection = new chorus.collections.UserSet([], { group: "Agents" })
+                    expect(this.server.makeFakeResponse(collection)).toEqual([]);
+                });
+            });
+        });
+    });
 });

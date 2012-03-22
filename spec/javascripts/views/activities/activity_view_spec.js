@@ -112,19 +112,12 @@ describe("chorus.views.Activity", function() {
                 this.view.render();
             });
 
+            itDoesNotDisplayEditLink();
+            itDoesNotDisplayDeleteLink();
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderWorkspaceDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
-
-            context("when the current user was the one who added the members", function() {
-                beforeEach(function() {
-                    setLoggedInUser({ id: this.view.model.author().id });
-                    this.view.render();
-                });
-
-                itDoesNotDisplayDeleteLink();
-            });
 
             context("when only one member was added", function() {
                 beforeEach(function() {
@@ -152,6 +145,8 @@ describe("chorus.views.Activity", function() {
                 this.view.render();
             });
 
+            itDoesNotDisplayEditLink();
+            itDoesNotDisplayDeleteLink();
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderWorkspaceDetails({checkLink: true});
@@ -184,6 +179,8 @@ describe("chorus.views.Activity", function() {
                 this.view.render();
             });
 
+            itDoesNotDisplayEditLink();
+            itDoesNotDisplayDeleteLink();
             itShouldRenderAuthorDetails();
             itShouldRenderObjectDetails({checkLink: true});
             itShouldRenderACommentLink("activitystream", t("comments.title.ACTIVITY"))
@@ -316,12 +313,22 @@ describe("chorus.views.Activity", function() {
                 });
 
                 itDisplaysDeleteLink();
-            })
+
+                context("and is not the author of the note", function() {
+                    beforeEach(function() {
+                        setLoggedInUser({ id: this.view.model.author().id + 12341324 });
+                        this.view.render();
+                    });
+
+                    itDoesNotDisplayEditLink();
+                });
+            });
 
             context("when the current user is not an admin", function() {
                 context("and is not the author of the note", function() {
                     itDoesNotDisplayDeleteLink();
-                })
+                    itDoesNotDisplayEditLink();
+                });
 
                 context("and is the author of the note", function() {
                     beforeEach(function() {
@@ -329,8 +336,9 @@ describe("chorus.views.Activity", function() {
                         this.view.render();
                     });
 
+                    itRendersEditLink();
                     itDisplaysDeleteLink();
-                })
+                });
             })
 
             context("when the delete link appears", function() {
@@ -455,6 +463,7 @@ describe("chorus.views.Activity", function() {
                     this.view.render();
                 });
 
+                itRendersEditLink();
                 itShouldRenderPublishOrUnpublishLinks();
             });
 
@@ -666,6 +675,22 @@ describe("chorus.views.Activity", function() {
     function itDoesNotDisplayDeleteLink() {
         it("does not display a delete link", function() {
             expect(this.view.$(".activity_content .delete_link")).not.toExist();
+        });
+    }
+
+    function itRendersEditLink() {
+        it("displays an edit link", function() {
+            var editLink = this.view.$(".activity_content .edit_link");
+            expect(editLink.text()).toMatchTranslation("actions.edit");
+            expect(editLink).toHaveClass("dialog");
+            expect(editLink).toHaveData("dialog", "EditNote");
+            expect(editLink).toHaveData("activity", this.view.model);
+        });
+    }
+
+    function itDoesNotDisplayEditLink() {
+        it("does not display an edit link", function() {
+            expect(this.view.$(".activity_content .edit_link")).not.toExist();
         });
     }
 

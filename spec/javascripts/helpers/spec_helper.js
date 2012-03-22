@@ -253,6 +253,10 @@
 
                 toHaveBeenCreated: function() {
                     return !!this.spec.server.lastCreateFor(this.actual);
+                },
+
+                toHaveBeenUpdated: function() {
+                    return !!this.spec.server.lastUpdateFor(this.actual);
                 }
             });
 

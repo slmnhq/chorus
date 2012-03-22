@@ -304,8 +304,8 @@ beforeEach(function() {
                 });
             },
 
-            "NOTE_ON_INSTANCE": function() {
-                return new chorus.models.Activity({
+            "NOTE_ON_INSTANCE": function(overrides) {
+                return new chorus.models.Activity(_.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE",
                     text: "How about that.",
@@ -335,7 +335,7 @@ beforeEach(function() {
                             type: "TXT"
                         }
                     ]
-                });
+                }, overrides));
             },
 
             "NOTE_ON_CHORUS_VIEW": function(overrides) {
@@ -690,14 +690,14 @@ beforeEach(function() {
                     }));
             },
 
-            "INSIGHT_CREATED": function() {
+            "INSIGHT_CREATED": function(overrides) {
                 return new chorus.models.Activity(
                     _.extend(this.NOTE_ON_DATASET_JSON(), {
                         type: "INSIGHT_CREATED",
                         isInsight: true,
                         promotionActioner: {id: 10010, lastName: "1", firstName: "u"},
                         promotionTime: "2012-02-14 12:34:56"
-                    }));
+                    }, overrides));
             },
 
             "IMPORT_UPDATED_TABLE": function() {

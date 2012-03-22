@@ -147,6 +147,23 @@ chorus.models.Activity = chorus.models.Base.extend({
         insight.save(null, { method: "create" });
     },
 
+    toComment: function(attrs, options) {
+        var commentEntity = this.noteworthy();
+        var comment = new chorus.models.Comment({
+            entityType: commentEntity.entityType,
+            entityId: commentEntity.id,
+            id: this.id,
+            body: this.get("text")
+        });
+
+        comment.bind("saved", function() {
+            options && options.success && options.success();
+            this.collection.fetch();
+        }, this);
+
+        return comment;
+    },
+
     attachments: function() {
         if (!this._attachments) {
             this._attachments = _.map(this.get("artifacts"), function(artifactJson) {
@@ -173,8 +190,12 @@ chorus.models.Activity = chorus.models.Base.extend({
         return this.get("type") === "NOTE";
     },
 
+    isInsight: function() {
+        return this.get("type") === "INSIGHT_CREATED";
+    },
+
     isUserGenerated: function () {
-        return this.isNote() || this.get("type") == "INSIGHT_CREATED";
+        return this.isNote() || this.isInsight();
     },
 
     isPublished: function() {

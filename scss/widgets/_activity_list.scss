@@ -174,7 +174,7 @@ $system-action-color: #7C7D7D;
             }
         }
 
-        a.delete_link {
+        a.delete_link, a.edit_link {
             @include secondary-text-small;
             display: none;
             border-left: solid 1px;
@@ -212,14 +212,15 @@ $system-action-color: #7C7D7D;
     }
 }
 
-.popup_notifications li:hover .activity_content a.delete_link,
-li .activity_content:hover a.delete_link,
-li[data-activity-type=INSIGHT_CREATED] .activity_content:hover a.delete_link {
-    display: inline;
-}
-
-.comment_content:hover a.delete_link {
-    display: inline;
+.popup_notifications li,
+li .activity_content,
+.comment_content 
+{
+    &:hover {
+        a.edit_link, a.delete_link {
+            display: inline;
+        }
+    }
 }
 
 #sidebar .activity_heading {

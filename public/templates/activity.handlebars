@@ -38,6 +38,9 @@
                 <a class="delete_link alert" data-alert="NotificationDeleteAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
             {{else}}
                 {{#if isUserGenerated}}
+                    {{#if isOwner}}
+                        <a class="edit_link dialog" data-dialog="EditNote" href="#">{{t "actions.edit"}}</a>
+                    {{/if}}
                     {{#ifAdminOr isOwner}}
                         <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
                     {{/ifAdminOr}}
