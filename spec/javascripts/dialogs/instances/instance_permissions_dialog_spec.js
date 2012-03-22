@@ -1,7 +1,7 @@
 describe("chorus.dialogs.InstancePermissions", function() {
     beforeEach(function() {
         spyOn(chorus, 'styleSelect');
-        stubModals();
+        this.modalSpy = stubModals();
     });
 
     describe("#setup", function() {
@@ -232,12 +232,20 @@ describe("chorus.dialogs.InstancePermissions", function() {
         it("only shows 'owner' in the row corresponding to the owner", function() {
             expect(this.ownerLi).toContain("span.owner");
             expect(this.otherLis).not.toContain("span.owner");
-            expect(this.otherLis).not.toContainTranslation("instances.permissions.change_owner");
+        });
+
+        it("does not have any 'change owner' links", function() {
+            expect(this.dialog.$("li")).not.toContainTranslation("instances.permissions.change_owner");
         });
 
         it("only shows the 'make owner' links for users that aren't already the owner", function() {
             expect(this.ownerLi).not.toContain("a.make_owner");
-            expect(_.all(this.otherLis, function(li) { return $(li).find("a.make_owner") })).toBeTruthy();
+            expect(_.all(this.otherLis, function(li) { return $(li).find("a.make_owner").length })).toBeTruthy();
+        });
+
+        it("only shows the 'remove credentials' links for users that aren't already the owner", function() {
+            expect(this.ownerLi).not.toContain("a.remove_credentials");
+            expect(_.all(this.otherLis, function(li) { return $(li).find("a.remove_credentials").length })).toBeTruthy();
         });
 
         it("does not display the 'switch to individual accounts' link", function() {
@@ -382,6 +390,62 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 it("clears the errors", function() {
                     expect(this.dialog.clearErrors).toHaveBeenCalled();
                 })
+            });
+        });
+
+        describe("removing a user's account credentials", function() {
+            beforeEach(function() {
+                this.instance.set({"name": "myInstance"});
+                this.accountBeingRemoved = this.accounts.get(2);
+                this.otherAccount = this.accounts.get(1);
+                this.liBeingRemoved = this.dialog.$("li[data-id=2]");
+                this.otherLi = this.dialog.$("li[data-id=1]");
+                this.modalSpy.reset()
+                spyOn(chorus, "toast");
+                spyOn(this.dialog, "launchSubModal").andCallThrough();
+                this.liBeingRemoved.find("a.remove_credentials").click();
+            });
+
+            it("should open a confirmation dialog", function() {
+                expect(this.modalSpy).toHaveModal(chorus.alerts.RemoveIndividualAccount);
+            });
+
+            context("when removeIndividualAccount is triggered", function() {
+                beforeEach(function() {
+                    this.dialog.launchSubModal.calls[0].args[0].trigger("removeIndividualAccount");
+                });
+
+                it("should call delete on the accountmap", function() {
+                    expect(this.server.lastDestroy().url).toBe("/edc/instance/accountmap/" + this.accountBeingRemoved.id);
+                });
+
+                context("when the delete succeeds", function() {
+                    beforeEach(function() {
+                        var destroy = this.server.lastDestroy();
+                        this.server.reset();
+                        destroy.succeed();
+                    });
+
+                    it("shows a toast message", function() {
+                       expect(chorus.toast).toHaveBeenCalledWith("instances.remove_individual_account.toast", {
+                           instanceName: "myInstance",
+                           userName: "jim aardvark"
+                       });
+                    });
+
+                    it("refreshes the account list", function() {
+                        expect(this.server.lastFetchFor(this.accounts)).toBeDefined();
+                    });
+                });
+
+                context("when the delete fails", function() {
+                    beforeEach(function() {
+                        this.server.lastDestroy().fail([{message: "don't delete me"}]);
+                    });
+                    it("displays the error", function() {
+                       expect(this.dialog.$(".errors")).toContainText("don't delete me");
+                    });
+                });
             });
         });
 

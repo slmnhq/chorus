@@ -1,4 +1,4 @@
-describe("RemoveSharedAccount", function() {
+describe("chorus.alerts.RemoveSharedAccount", function() {
     beforeEach(function() {
         this.alert = new chorus.alerts.RemoveSharedAccount();
         this.alert.render();

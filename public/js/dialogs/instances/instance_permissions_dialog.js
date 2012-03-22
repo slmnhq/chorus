@@ -14,7 +14,8 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         "click a.remove_shared_account":"removeSharedAccountAlert",
         "click a.make_owner":"confirmChangeOwnerFromIndividualAccount",
         "click a.save_owner":"confirmChangeOwnerFromSharedAccount",
-        "click a.cancel_change_owner":"cancelChangeOwner"
+        "click a.cancel_change_owner":"cancelChangeOwner",
+        "click a.remove_credentials": "confirmRemoveCredentials"
     },
 
     makeModel:function () {
@@ -303,5 +304,40 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
             chorus.toast("instances.shared_account_add_failed");
             localGroup.removeAll();
         }
+    },
+
+    confirmRemoveCredentials: function(e) {
+        e.preventDefault();
+        var accountId = $(e.target).closest("li").data("id");
+        var selectedUser = this.collection.get(accountId).user();
+
+        var alert = new chorus.alerts.RemoveIndividualAccount(
+            {
+                instanceName: this.instance.get("name"),
+                name: selectedUser.displayName()
+            });
+
+        this.launchSubModal(alert);
+        alert.bindOnce("removeIndividualAccount", _.bind(this.removeIndividualAccount, this, accountId));
+    },
+
+    removeIndividualAccount : function(accountId) {
+        var selectedUser = this.collection.get(accountId).user();
+
+        var account = new chorus.models.InstanceAccount({id: accountId});
+
+        this.bindings.add(account, "destroyFailed", function() {
+            this.showErrors(account);
+        }, this);
+        this.bindings.add(account, "destroy", function() {
+            chorus.toast("instances.remove_individual_account.toast", {
+                instanceName: this.instance.get("name"),
+                userName: selectedUser.displayName()
+            });
+            this.collection.fetch();
+        }, this);
+
+
+        account.destroy();
     }
 });
