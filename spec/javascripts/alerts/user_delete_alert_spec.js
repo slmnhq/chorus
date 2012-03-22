@@ -1,4 +1,4 @@
-describe("UserDelete", function() {
+describe("chorus.alerts.UserDelete", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-id='42'></a>")
         this.alert = new chorus.alerts.UserDelete({ launchElement : this.launchElement });

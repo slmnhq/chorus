@@ -1,4 +1,4 @@
-describe("ListContentDetails", function() {
+describe("chorus.views.ListContentDetails", function() {
     beforeEach(function() {
         this.collection = fixtures.userSet();
         this.collection.pagination = {

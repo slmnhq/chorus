@@ -1,4 +1,4 @@
-describe("WorkfilesSqlNewDialog", function() {
+describe("chorus.dialogs.WorkfilesSqlNew", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-workspace-id='4'></a>")
         this.dialog = new chorus.dialogs.WorkfilesSqlNew({launchElement: this.launchElement})

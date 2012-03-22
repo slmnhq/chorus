@@ -1,4 +1,4 @@
-describe("WorkspaceMembersMore", function() {
+describe("chorus.dialogs.WorkspaceMembersMore", function() {
     var workspace, dialog, members;
     beforeEach(function() {
         workspace = fixtures.workspace();

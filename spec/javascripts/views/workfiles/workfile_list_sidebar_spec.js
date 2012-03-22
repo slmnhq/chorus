@@ -1,4 +1,4 @@
-describe("WorkfileListSidebar", function() {
+describe("chorus.views.WorkfileListSidebar", function() {
     beforeEach(function() {
         this.workspace = fixtures.workspace();
         this.view = new chorus.views.WorkfileListSidebar({ workspace: this.workspace });

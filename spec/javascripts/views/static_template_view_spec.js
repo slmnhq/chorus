@@ -1,4 +1,4 @@
-describe("static_template_view", function(){
+describe("chorus.views.StaticTemplate", function(){
     describe("#render", function() {
         it("renders the template it is passed as an argument", function(){
             var staticView = new chorus.views.StaticTemplate("foobar");

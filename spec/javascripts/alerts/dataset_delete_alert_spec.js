@@ -1,4 +1,4 @@
-describe("DatasetDelete", function() {
+describe("chorus.alerts.DatasetDelete", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-key-prefix='delete'></a>")
         this.model = fixtures.datasetChorusView();

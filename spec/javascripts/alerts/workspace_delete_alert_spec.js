@@ -1,4 +1,4 @@
-describe("WorkspaceDelete", function() {
+describe("chorus.alerts.WorkspaceDelete", function() {
     beforeEach(function() {
         this.launchElement = $("<a></a>")
         this.model = new chorus.models.Workspace({ name: "Friends' Writings", id: '34' });

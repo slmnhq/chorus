@@ -1,4 +1,4 @@
-describe("WorkfileContent", function() {
+describe("chorus.views.WorkfileContent", function() {
     beforeEach(function() {
         this.model = new chorus.models.Workfile({});
     });

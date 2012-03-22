@@ -1,4 +1,4 @@
-describe("CommentDialog", function() {
+describe("chorus.dialogs.CommentDialog", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-entity-type='note' data-entity-id='1' data-entity-title='note'></a>")
         this.dialog = new chorus.dialogs.Comment({

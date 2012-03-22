@@ -1,4 +1,4 @@
-describe("WorkspaceEditMembers", function() {
+describe("chorus.dialogs.WorkspaceEditMembers", function() {
     beforeEach(function() {
         this.workspace = new chorus.models.Workspace({
             id : "17",

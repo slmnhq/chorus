@@ -1,4 +1,4 @@
-describe("WorkspacesNewDialog", function() {
+describe("chorus.dialogs.WorkspacesNew", function() {
     beforeEach(function() {
         this.dialog = new chorus.dialogs.WorkspacesNew();
     });

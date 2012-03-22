@@ -1,4 +1,4 @@
-describe("ImageWorkfileContent", function() {
+describe("chorus.views.ImageWorkfileContent", function() {
     beforeEach(function() {
         this.model = fixtures.imageWorkfile();
         this.view = new chorus.views.ImageWorkfileContent({ model : this.model })
