@@ -202,7 +202,8 @@ describe("chorus.views.TextWorkfileContentView", function() {
                     describe("when the timeout elapses again after the file is changed again", function() {
                         beforeEach(function() {
                             this.server.lastCreate().succeed([]);
-                            this.view.editor.setValue("Foo, Bar, Baz, Quux");
+                            // start timer directly to imply change on code mirror
+                            this.view.startTimer();
                             this.clock.tick(this.saveInterval);
                         });
 
