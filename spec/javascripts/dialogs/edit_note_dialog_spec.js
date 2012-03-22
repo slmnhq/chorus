@@ -86,11 +86,16 @@ describe("chorus.dialogs.EditNote", function() {
         });
     });
 
-    describe("submitting the form with valid data", function() {
+    describe("submitting the form", function() {
         beforeEach(function() {
             this.dialog.$("textarea").val("Agile, meet big data. Let's pair.");
+            spyOn($.fn, "stopLoading").andCallThrough();
             this.dialog.$("button.submit").click();
         });
+
+        it("starts a spinner", function() {
+            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+        })
 
         it("updates the note correctly", function() {
             var comment = this.note.toComment();
@@ -99,15 +104,36 @@ describe("chorus.dialogs.EditNote", function() {
             expect(update.params().body).toBe("Agile, meet big data. Let's pair.");
         });
 
-        describe("when the put completes", function() {
+        describe("when the put completes successfully", function() {
             beforeEach(function() {
                 spyOn(this.dialog, "closeModal")
                 this.server.lastUpdate().succeed();
+            });
+
+            it("removes the spinner from the button", function() {
+                expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
             });
 
             it("closes the dialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
         });
+
+        context("when the save fails", function() {
+            beforeEach(function() {
+                spyOn(this.dialog, "closeModal");
+
+                this.dialog.model.trigger("saveFailed");
+            });
+
+            it("does not close the dialog box", function() {
+                expect(this.dialog.closeModal).not.toHaveBeenCalled();
+            })
+
+            it("removes the spinner from the button", function() {
+                expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit")
+            });
+        });
     });
+
 });

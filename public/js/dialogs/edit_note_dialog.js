@@ -18,6 +18,7 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
     },
 
     showErrors: function(model) {
+        this.$("button.submit").stopLoading();
         this._super("showErrors");
 
         if (!model) {
@@ -43,6 +44,8 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
 
     submit: function(e) {
         e && e.preventDefault()
+        this.$("button.submit").startLoading("notes.button.uploading");
+
         var newText = this.$("textarea").val();
         var cleanText = _.trim($.stripHtml(newText));
 
@@ -54,6 +57,7 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
     },
 
     submitSucceeds: function() {
+        this.$("button.submit").stopLoading();
         this.closeModal();
     }
 });
