@@ -116,10 +116,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                         expect(this.page.sidebar.$(".fileName")).toHaveText("test.sql");
                     });
 
-                    it("does not show the 'add a note' link in the sidebar", function() {
-                        expect(this.page.sidebar.$("a[data-dialog='NotesNew']")).not.toExist()
-                    });
-
                     it("sets the workfile as the selectedItem on the search result", function() {
                         expect(this.page.search.selectedItem).toBe(this.page.search.workfiles().at(1));
                     });
