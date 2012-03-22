@@ -5,8 +5,9 @@ describe("chorus.dialogs.NotesNewDialog", function() {
             launchElement: this.launchElement,
             pageModel: new chorus.models.Workfile()
         });
+        stubDefer();
+        spyOn(this.dialog, "makeEditor");
         this.dialog.render();
-        $('#jasmine_content').append(this.dialog.el);
     });
 
     describe("#setup", function() {
@@ -40,6 +41,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
                     launchElement: this.launchElement,
                     pageModel: new chorus.models.Workfile()
                 });
+                spyOn(this.dialog, "makeEditor");
                 this.dialog.render();
             });
 

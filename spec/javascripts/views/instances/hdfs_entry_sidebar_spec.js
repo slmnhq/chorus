@@ -40,6 +40,8 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             describe("clicking the add a note link", function() {
                 beforeEach(function() {
+                    stubDefer();
+                    spyOn(chorus.dialogs.MemoNew.prototype, "makeEditor");
                     this.view.$("a.dialog.add_note").click();
 
                     chorus.modal.$("textarea").text("test comment").change();

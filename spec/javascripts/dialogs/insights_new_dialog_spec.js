@@ -5,8 +5,9 @@ describe("chorus.dialogs.InsightsNewDialog", function() {
             launchElement : this.launchElement
         });
 
+        stubDefer();
+        spyOn(this.dialog, "makeEditor");
         this.dialog.render();
-        $('#jasmine_content').append(this.dialog.el);
     });
 
     describe("#setup", function() {
