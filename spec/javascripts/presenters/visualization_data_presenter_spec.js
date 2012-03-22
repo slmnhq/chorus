@@ -88,9 +88,9 @@ describe("chorus.presenters.visualizations", function() {
         beforeEach(function() {
             this.model = fixtures.boxplotTaskWithResult({
                 rows: [
-                    { bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "25.3%" },
-                    { bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4,   percentage: "25%" },
-                    { bucket: 'chupacabra', min: 10,  firstQuartile: 10,  median: 25,  thirdQuartile: 30,  max: 40,  percentage: "25.5%" }
+                    { bucket: 'beluga', min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "25.3%" },
+                    { bucket: 'aardvark', min: 1, firstQuartile: 1, median: 2.5, thirdQuartile: 3, max: 4, percentage: "25%" },
+                    { bucket: 'chupacabra', min: 10, firstQuartile: 10, median: 25, thirdQuartile: 30, max: 40, percentage: "25.5%" }
                 ]
             });
 
@@ -101,9 +101,9 @@ describe("chorus.presenters.visualizations", function() {
         it("presents arrays of {bucket, min, firstQuartile, median, thirdQuartile, max, percentage}, in order of descending percentage", function() {
             expect(this.data.length).toBe(3);
 
-            expect(this.data[0]).toEqual({ bucket: 'chupacabra', min: 10,  firstQuartile: 10,  median: 25,  thirdQuartile: 30,  max: 40,  percentage: "25.5%" });
-            expect(this.data[1]).toEqual({ bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "25.3%" });
-            expect(this.data[2]).toEqual({ bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4,   percentage: "25%" });
+            expect(this.data[0]).toEqual({ bucket: 'chupacabra', min: 10, firstQuartile: 10, median: 25, thirdQuartile: 30, max: 40, percentage: "25.5%" });
+            expect(this.data[1]).toEqual({ bucket: 'beluga', min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "25.3%" });
+            expect(this.data[2]).toEqual({ bucket: 'aardvark', min: 1, firstQuartile: 1, median: 2.5, thirdQuartile: 3, max: 4, percentage: "25%" });
         });
 
         it("sets minY and maxY", function() {
@@ -127,8 +127,8 @@ describe("chorus.presenters.visualizations", function() {
         beforeEach(function() {
             this.model = new chorus.models.HistogramTask({
                 columns: [
-                    {name : "bin", typeCategory: "STRING"},
-                    {name : "frequency", typeCategory: "WHOLE_NUMBER"}
+                    {name: "bin", typeCategory: "STRING"},
+                    {name: "frequency", typeCategory: "WHOLE_NUMBER"}
                 ],
 
                 rows: [
@@ -138,7 +138,7 @@ describe("chorus.presenters.visualizations", function() {
                     { bin: "30-39", frequency: 1 },
                     { bin: "40-49", frequency: 2000 }
                 ],
-                tabularData: fixtures.datasetSandboxTable();
+                tabularData: fixtures.datasetSandboxTable()
             });
             this.presenter = new chorus.presenters.visualizations.Histogram(this.model);
 
@@ -147,8 +147,8 @@ describe("chorus.presenters.visualizations", function() {
         it("returns bin and frequency as bin and frequency", function() {
             var x = _.pluck(this.data, "bin");
             var y = _.pluck(this.data, "frequency");
-            expect(y).toEqual([5,8,0,1,2000]);
-            expect(x).toEqual(["0-9","10-19","20-29","30-39","40-49"]);
+            expect(y).toEqual([5, 8, 0, 1, 2000]);
+            expect(x).toEqual(["0-9", "10-19", "20-29", "30-39", "40-49"]);
         });
     });
 
@@ -156,16 +156,16 @@ describe("chorus.presenters.visualizations", function() {
         beforeEach(function() {
             this.model = fixtures.heatmapTaskWithResult({
                 rows: [
-                    { yLabel: [30, 71.8],     xLabel: [0, 1.8],   value: 39541, y: 1, x: 1 },
-                    { yLabel: [71.8, 113.6],  xLabel: [0, 1.8],   value: 39873, y: 2, x: 1 },
-                    { yLabel: [113.6, 155.4], xLabel: [0, 1.8],   value: 39993, y: 3, x: 1 },
-                    { yLabel: [155.4, 197.2], xLabel: [0, 1.8],   value: 39596, y: 4, x: 1 },
-                    { yLabel: [30, 71.8],     xLabel: [1.8, 3.6], value: 39818, y: 1, x: 2 },
-                    { yLabel: [71.8, 113.6],  xLabel: [1.8, 3.6], value: 39838, y: 2, x: 2 },
+                    { yLabel: [30, 71.8], xLabel: [0, 1.8], value: 39541, y: 1, x: 1 },
+                    { yLabel: [71.8, 113.6], xLabel: [0, 1.8], value: 39873, y: 2, x: 1 },
+                    { yLabel: [113.6, 155.4], xLabel: [0, 1.8], value: 39993, y: 3, x: 1 },
+                    { yLabel: [155.4, 197.2], xLabel: [0, 1.8], value: 39596, y: 4, x: 1 },
+                    { yLabel: [30, 71.8], xLabel: [1.8, 3.6], value: 39818, y: 1, x: 2 },
+                    { yLabel: [71.8, 113.6], xLabel: [1.8, 3.6], value: 39838, y: 2, x: 2 },
                     { yLabel: [113.6, 155.4], xLabel: [1.8, 3.6], value: 39911, y: 3, x: 2 },
                     { yLabel: [155.4, 197.2], xLabel: [1.8, 3.6], value: 40757, y: 4, x: 2 },
-                    { yLabel: [30, 71.8],     xLabel: [3.6, 5.4], value: 39631, y: 1, x: 3 },
-                    { yLabel: [71.8, 113.6],  xLabel: [3.6, 5.4], value: 40174, y: 2, x: 3 },
+                    { yLabel: [30, 71.8], xLabel: [3.6, 5.4], value: 39631, y: 1, x: 3 },
+                    { yLabel: [71.8, 113.6], xLabel: [3.6, 5.4], value: 40174, y: 2, x: 3 },
                 ]
             });
 
@@ -174,8 +174,8 @@ describe("chorus.presenters.visualizations", function() {
         });
 
         it("returns the rows", function() {
-            expect(this.data[0]).toEqual({ yLabel: [30, 71.8],     xLabel: [0, 1.8],   value: 39541, y: 1, x: 1 });
-            expect(this.data[1]).toEqual({ yLabel: [71.8, 113.6],  xLabel: [0, 1.8],   value: 39873, y: 2, x: 1 });
+            expect(this.data[0]).toEqual({ yLabel: [30, 71.8], xLabel: [0, 1.8], value: 39541, y: 1, x: 1 });
+            expect(this.data[1]).toEqual({ yLabel: [71.8, 113.6], xLabel: [0, 1.8], value: 39873, y: 2, x: 1 });
         });
 
         it("sets the min and max x and y values", function() {
@@ -190,4 +190,5 @@ describe("chorus.presenters.visualizations", function() {
             expect(this.data.maxValue).toBe(40757);
         });
     });
-});
+})
+;
