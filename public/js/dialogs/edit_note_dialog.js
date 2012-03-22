@@ -44,6 +44,12 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
     submit: function(e) {
         e && e.preventDefault()
         var newText = this.$("textarea").val();
+        var cleanText = _.trim($.stripHtml(newText));
+
+        if (cleanText === "") {
+            newText = cleanText;
+        }
+
         this.model.save({ body: newText })
     },
 

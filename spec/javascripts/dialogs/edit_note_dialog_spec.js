@@ -52,12 +52,35 @@ describe("chorus.dialogs.EditNote", function() {
     });
 
     describe("submitting the form with a blank body", function() {
-        beforeEach(function() {
+        it("shows errors when form is blank", function() {
             this.dialog.$("textarea").val("");
             this.dialog.$("button.submit").click();
+
+            expect(this.dialog.model.errors.body).toEqual("Note is required")
+            expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
         });
 
-        it("shows errors", function() {
+        it("shows errors when form is just a <br>", function() {
+            this.dialog.$("textarea").val("<br>");
+            this.dialog.$("button.submit").click();
+
+            expect(this.dialog.model.errors.body).toEqual("Note is required")
+            expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
+        });
+
+        it("shows errors when form is just HTML whitespaces", function() {
+            this.dialog.$("textarea").val("&nbsp;&nbsp;");
+            this.dialog.$("button.submit").click();
+
+            expect(this.dialog.model.errors.body).toEqual("Note is required")
+            expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
+        });
+
+
+        it("shows errors when form is just a lot of whitespaces", function() {
+            this.dialog.$("textarea").val("                     ");
+            this.dialog.$("button.submit").click();
+
             expect(this.dialog.model.errors.body).toEqual("Note is required")
             expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
         });
