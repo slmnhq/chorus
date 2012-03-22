@@ -64,6 +64,16 @@ describe("chorus.views.Workfile", function() {
         });
     });
 
+    context("when the workfile has no comments", function() {
+        beforeEach(function() {
+            this.model.unset("recentComments");
+        });
+
+        it("does not display the most recent comment", function() {
+            expect(this.view.$(".comment")).not.toExist();
+        });
+    });
+
     it("displays the abbreviated date of the most recent comment", function() {
         expect(this.view.$(".comment_info .on").text().trim()).toBe("Dec 15");
     });

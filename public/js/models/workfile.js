@@ -91,12 +91,17 @@
         },
 
         lastComment: function() {
-            var comments = this.get("recentComments");
-            return comments && comments.length > 0 && new chorus.models.Comment({
-                body: comments[0].text,
-                author: comments[0].author,
-                commentCreatedStamp: comments[0].timestamp
-            });
+            var commentsJson = this.get("recentComments");
+            if (commentsJson && commentsJson.length > 0) {
+                var comment = new chorus.models.Comment({
+                    body: commentsJson[0].text,
+                    author: commentsJson[0].author,
+                    commentCreatedStamp: commentsJson[0].timestamp
+                });
+
+                comment.loaded = true;
+                return comment;
+            }
         },
 
         createDraft: function() {

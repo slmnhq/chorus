@@ -179,6 +179,10 @@ describe("chorus.models.Workfile", function() {
             expect(this.comment.get("body")).toBe(this.lastCommentJson.text);
         });
 
+        it("sets the 'loaded' flag to true", function() {
+            expect(this.comment.loaded).toBeTruthy();
+        });
+
         it("has the right creator", function() {
             var creator = this.comment.author()
             expect(creator.get("id")).toBe(this.lastCommentJson.author.id);

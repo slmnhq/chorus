@@ -2,6 +2,18 @@ chorus.views.Workfile = chorus.views.Base.extend({
     className:"workfile",
     tagName: "li",
 
+    subviews: {
+        ".comment .body": "commentBody"
+    },
+
+    setupSubviews: function() {
+        this.commentBody = new chorus.views.TruncatedText({
+            model: this.model.lastComment(),
+            attribute: "body",
+            attributeIsHtmlSafe: true
+        });
+    },
+
     postRender: function() {
         $(this.el).attr('data-id', this.model.id);
     },
