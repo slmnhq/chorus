@@ -7,27 +7,6 @@ chorus.views.WorkfileList = chorus.views.SelectableList.extend({
         }
     },
 
-    collectionModelContext:function (model) {
-        var ctx = new chorus.presenters.Artifact(model, {iconSize:'large'});
-
-        ctx.activeWorkspace = this.options.activeWorkspace;
-
-        var lastComment = model.lastComment();
-        if (lastComment) {
-            var date = Date.parseFromApi(lastComment.get("commentCreatedStamp"))
-
-            ctx.lastComment = {
-                body:lastComment.get("body"),
-                creator:lastComment.author(),
-                on:date && date.toString("MMM d")
-            }
-
-            ctx.otherCommentCount = parseInt(model.get("commentCount"), 10) - 1;
-        }
-
-        return ctx;
-    },
-
     filter:function (type) {
         this.collection.attributes.type = type;
         this.collection.fetch();
@@ -35,14 +14,16 @@ chorus.views.WorkfileList = chorus.views.SelectableList.extend({
     },
 
     postRender:function () {
-        var li;
+        this.collection.each(function(workfile) {
+            var view = new chorus.views.Workfile({model: workfile, activeWorkspace: this.options.activeWorkspace});
+            $(this.el).append(view.render().el);
+        }, this);
 
         if (chorus.page && chorus.page.pageOptions && chorus.page.pageOptions.workfileId) {
             if (this.collection.loaded) {
                 var match = this.$("li[data-id=" + chorus.page.pageOptions.workfileId + "]");
                 if (match.length) {
-                    li = match;
-                    this.selectItem(li);
+                    this.selectItem(match);
                 }
 
                 delete chorus.page.pageOptions;
