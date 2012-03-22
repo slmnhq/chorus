@@ -52,31 +52,54 @@ describe("chorus.models.Workspace", function() {
     });
 
     describe("#owner", function() {
-        beforeEach(function() {
-            this.model.set({owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47"})
+        context('when owner data is not nested', function() {
+            beforeEach(function() {
+                this.model.set({ ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47" });
+            });
+
+            it("has the first name", function() {
+                expect(this.model.owner().get("firstName")).toBe("John");
+            });
+
+            it("has the last name", function() {
+                expect(this.model.owner().get("lastName")).toBe("Henry");
+            });
+
+            it("has the right userId", function() {
+                expect(this.model.owner().get("id")).toBe("47");
+            });
+
+            it("doesn't automatically fetch the User", function() {
+                var numberOfServerRequests = this.server.requests.length;
+                this.model.owner();
+                expect(this.server.requests.length).toBe(numberOfServerRequests);
+            });
+
+            it("memoizes", function() {
+                var owner = this.model.owner();
+                expect(owner).toBe(this.model.owner());
+            });
         });
 
-        it("has the first name ", function() {
-            expect(this.model.owner().get("firstName")).toBe("John");
-        });
+        context('when owner data is nested', function() {
+            beforeEach(function() {
+                this.model.set({ owner: { id: '47' } })
+            });
 
-        it("has the last name ", function() {
-            expect(this.model.owner().get("lastName")).toBe("Henry");
-        });
+            it("has the right userId", function() {
+                expect(this.model.owner().get("id")).toBe("47");
+            });
 
-        it("has the right userId", function() {
-            expect(this.model.owner().get("id")).toBe("47");
-        });
+            it("doesn't automatically fetch the User", function() {
+                var numberOfServerRequests = this.server.requests.length;
+                this.model.owner();
+                expect(this.server.requests.length).toBe(numberOfServerRequests);
+            });
 
-        it("doesn't automatically fetch the User", function() {
-            var numberOfServerRequests = this.server.requests.length;
-            this.model.owner();
-            expect(this.server.requests.length).toBe(numberOfServerRequests);
-        });
-
-        it("memoizes", function() {
-            var owner = this.model.owner();
-            expect(owner).toBe(this.model.owner());
+            it("memoizes", function() {
+                var owner = this.model.owner();
+                expect(owner).toBe(this.model.owner());
+            });
         });
     });
 
@@ -282,7 +305,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("permissions checking", function() {
         beforeEach(function() {
-            this.model.set({owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47"})
+            this.model.set({ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47"})
         });
 
         describe("#currentUserIsMember", function() {

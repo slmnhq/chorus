@@ -367,7 +367,14 @@ describe("chorus.presenters.Activity", function() {
 
     context(".NOTE_ON_ANYTHING", function() {
         beforeEach(function() {
-            this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({});
+            this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({
+                workspace: _.extend(fixtures.nestedWorkspaceJson(), {
+                    owner: {
+                        id: 'workspace-owner-id',
+                        userName: 'Workspace Owner'
+                    }
+                })
+            });
             this.presenter = new chorus.presenters.Activity(this.model);
         });
 
@@ -381,7 +388,18 @@ describe("chorus.presenters.Activity", function() {
 
         context("when the logged in user owns the file", function() {
             beforeEach(function() {
-                setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.model.author().id});
+                setLoggedInUser({id: this.model.author().id});
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("sets the isOwner field to true", function() {
+                expect(this.presenter.isOwner).toBeTruthy();
+            });
+        })
+
+        context("when the logged in user owns the workspace in which the note was made", function() {
+            beforeEach(function() {
+                setLoggedInUser({id: this.model.workspace().owner().id});
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 

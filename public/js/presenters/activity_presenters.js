@@ -54,7 +54,7 @@
             if (this.author) {
                 obj.iconSrc = this.author.imageUrl();
                 obj.iconHref = this.author.showUrl();
-                obj.isOwner = this.author.id == chorus.session.user().id;
+                obj.isOwner = this.author.id == chorus.session.user().id || (this.workspace && this.workspace.currentUserIsOwner());
             }
 
             return obj;

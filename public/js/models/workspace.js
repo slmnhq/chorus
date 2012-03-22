@@ -19,12 +19,17 @@ chorus.models.Workspace = chorus.models.Base.extend({
         }
     },
 
-    owner:function () {
-        this._owner = this._owner || new chorus.models.User({
-            id:this.get("ownerId"),
-            firstName:this.get("ownerFirstName"),
-            lastName:this.get("ownerLastName")
-        });
+    owner: function() {
+        var ownerAttrs;
+        if (this._owner) {
+            return this._owner
+        }
+        ownerAttrs = this.get("owner") || {
+            id: this.get("ownerId"),
+            firstName: this.get("ownerFirstName"),
+            lastName: this.get("ownerLastName")
+        };
+        this._owner = new chorus.models.User(ownerAttrs);
         return this._owner;
     },
 
