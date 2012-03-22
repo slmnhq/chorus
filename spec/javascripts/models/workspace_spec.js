@@ -54,19 +54,14 @@ describe("chorus.models.Workspace", function() {
     describe("#owner", function() {
         context('when owner data is not nested', function() {
             beforeEach(function() {
-                this.model.set({ ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47" });
+                this.model.set({ owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47" });
             });
 
-            it("has the first name", function() {
-                expect(this.model.owner().get("firstName")).toBe("John");
-            });
-
-            it("has the last name", function() {
-                expect(this.model.owner().get("lastName")).toBe("Henry");
-            });
-
-            it("has the right userId", function() {
+            it("has the attributes", function() {
                 expect(this.model.owner().get("id")).toBe("47");
+                expect(this.model.owner().get("userName")).toBe("jhenry");
+                expect(this.model.owner().get("firstName")).toBe("John");
+                expect(this.model.owner().get("lastName")).toBe("Henry");
             });
 
             it("doesn't automatically fetch the User", function() {

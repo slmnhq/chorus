@@ -20,15 +20,20 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     owner: function() {
-        var ownerAttrs;
         if (this._owner) {
             return this._owner
         }
-        ownerAttrs = this.get("owner") || {
-            id: this.get("ownerId"),
-            firstName: this.get("ownerFirstName"),
-            lastName: this.get("ownerLastName")
-        };
+        var ownerAttrs;
+        if (_.isObject(this.get("owner"))) {
+            ownerAttrs = this.get("owner");
+        } else {
+            ownerAttrs = {
+                id: this.get("ownerId"),
+                userName: this.get("owner"),
+                firstName: this.get("ownerFirstName"),
+                lastName: this.get("ownerLastName")
+            };
+        }
         this._owner = new chorus.models.User(ownerAttrs);
         return this._owner;
     },

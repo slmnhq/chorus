@@ -416,6 +416,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         expect("close.facebox").not.toHaveBeenTriggeredOn($(document));
                     });
 
+                    it("should display a loading spinner in the submit button", function() {
+                        expect(this.dialog.$("button.submit")).toHaveSpinner();
+                    });
+
                     context("when the isPublic checkbox is checked", function() {
                         beforeEach(function() {
                             this.dialog.$("input[name=isPublic]").prop("checked", true);
@@ -491,6 +495,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                             this.server.respond();
                         });
 
+                        it("stops the spinner", function() {
+                            expect(this.dialog.$("button.submit")).not.toHaveSpinner();
+                        });
+
                         it("does not close the dialog", function() {
                             expect("close.facebox").not.toHaveBeenTriggeredOn($(document));
                         });
@@ -534,6 +542,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     it("triggers validation Failed", function() {
                         expect("validationFailed").toHaveBeenTriggeredOn(this.dialog.pageModel);
                     })
+
+                    it("stops the spinner", function() {
+                        expect(this.dialog.$("button.submit")).not.toHaveSpinner();
+                    });
 
                     it("does not set the name on the workspace", function() {
                         expect(this.dialog.pageModel.get("name")).toBe("my name");

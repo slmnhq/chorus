@@ -44,6 +44,8 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
         });
 
         this.bindings.add(this.pageModel, "saved", this.saved);
+        this.bindings.add(this.pageModel, "validationFailed", this.saveFailed);
+        this.bindings.add(this.pageModel, "saveFailed", this.saveFailed);
         this.model.members().sortAsc("lastName");
         this.model.members().fetch();
 
@@ -94,11 +96,16 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
             attrs.ownerName = this.model.members().get(attrs.ownerId).get("userName");
         }
 
+        this.$("button.submit").startLoading();
         this.pageModel.save(attrs);
     },
 
     saved:function () {
         this.pageModel.trigger("invalidated");
         this.closeModal();
+    },
+
+    saveFailed: function() {
+        this.$("button.submit").stopLoading();
     }
 });
