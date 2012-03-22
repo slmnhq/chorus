@@ -457,13 +457,12 @@ describe("chorus.views.Activity", function() {
 
             itShouldRenderACommentLink("comment", t("comments.title.ACTIVITY"));
 
-            context("when the current user in an admin", function() {
+            context("when the current user is an admin", function() {
                 beforeEach(function() {
                     setLoggedInUser({admin: true});
                     this.view.render();
                 });
 
-                itRendersEditLink();
                 itShouldRenderPublishOrUnpublishLinks();
             });
 
