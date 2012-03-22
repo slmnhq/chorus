@@ -167,7 +167,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         if (this.oneTimeImport()) {
             this.$("button.submit").startLoading("import.importing");
         } else {
-            this.$("button.submit").startLoading("import.saving");
+            this.$("button.submit").startLoading("actions.saving");
         }
 
         saveOptions = {};

@@ -72,7 +72,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     saveWorkfile: function(workspace) {
-        this.$('button.save_as_workfile').startLoading("visualization.saving");
+        this.$('button.save_as_workfile').startLoading("actions.saving");
 
         var workspaceId = workspace ? workspace.get("id") : this.task.get("workspaceId");
 

@@ -417,7 +417,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         });
 
                         it("has the right loading text in the submit button", function() {
-                            expect(this.dialog.$("button.submit").text()).toMatchTranslation("import.saving");
+                            expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.saving");
                         });
 
                         it("sends activateSchedule", function() {

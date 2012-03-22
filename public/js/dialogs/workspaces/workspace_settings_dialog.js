@@ -96,7 +96,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
             attrs.ownerName = this.model.members().get(attrs.ownerId).get("userName");
         }
 
-        this.$("button.submit").startLoading();
+        this.$("button.submit").startLoading("actions.saving");
         this.pageModel.save(attrs);
     },
 
