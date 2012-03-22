@@ -21,11 +21,11 @@ function waitFor(testFx, onReady, timeOutMillis) {
             } else {
                 if(!condition) {
                     // If condition still not fulfilled (timeout but condition is 'false')
-                    console.log("'waitFor()' timeout");
+                    console.log("\nPhantomJS: Execution time exceeded\n");
                     phantom.exit(1);
                 } else {
                     // Condition fulfilled (timeout and/or condition is 'true')
-                    console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
+                    console.log("\nRuntime (ms):  " + (new Date().getTime() - start));
                     typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
                     clearInterval(interval); //< Stop this interval
                 }
@@ -56,7 +56,7 @@ if (phantom.args[0]) {
 page.open(url, function(status){
     if (status !== "success") {
         console.log("Unable to access network");
-        phantom.exit();
+        phantom.exit(1);
     } else {
         page.evaluate(function() {
             if (window.phantomInitialized) {
@@ -79,7 +79,7 @@ page.open(url, function(status){
                         var resultItems = spec.results().getItems();
                         _.each(resultItems, function(result) {
                             if (result.type == 'expect' && result.passed && !result.passed()) {
-                                console.log(">>>" + result.message + "\n");
+                                console.log(">>> " + result.message + "\n");
                             }
                         });
                     }
