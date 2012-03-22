@@ -12,10 +12,11 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             model: this.model
         });
         $('#jasmine_content').append(this.dialog.el);
-        stubDefer();
+
         spyOn($.fn, 'fileupload');
-        spyOn(this.dialog, "launchSubModal")
+        spyOn(this.dialog, "launchSubModal");
         spyOn(this.dialog, "makeEditor").andCallThrough();
+        stubDefer();
         this.dialog.render();
     });
 

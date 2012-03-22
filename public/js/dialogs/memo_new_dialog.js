@@ -155,7 +155,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
             model = this.resource
         }
 
-        if(model.errors){
+        if(model.errors && model.errors.body){
             var $input = this.$(".cleditorMain");
             this.markInputAsInvalid($input, model.errors.body, true);
 

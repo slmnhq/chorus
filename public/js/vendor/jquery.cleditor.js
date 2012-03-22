@@ -806,7 +806,6 @@
     var $frame = editor.$frame = $('<iframe frameborder="0" src="javascript:true;">')
       .hide()
       .appendTo($main);
-
     // Load the iframe document content
     var contentWindow = $frame[0].contentWindow,
       doc = editor.doc = contentWindow.document,

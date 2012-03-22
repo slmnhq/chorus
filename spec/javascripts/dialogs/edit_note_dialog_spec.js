@@ -7,7 +7,7 @@ describe("chorus.dialogs.EditNote", function() {
         this.dialog = new chorus.dialogs.EditNote({ launchElement: this.launchElement });
         $('#jasmine_content').append(this.dialog.el);
 
-        spyOn(chorus.dialogs.EditNote.prototype, "makeEditor");
+        spyOn(this.dialog, "makeEditor").andCallThrough();
         stubDefer();
 
         this.dialog.render();
@@ -22,6 +22,7 @@ describe("chorus.dialogs.EditNote", function() {
             this.note = fixtures.activities.INSIGHT_CREATED({ workspace: { id: '2' }});
             this.launchElement = $("<a/>").data("activity", this.note);
             this.dialog = new chorus.dialogs.EditNote({ launchElement: this.launchElement });
+            $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();
         });
 
@@ -41,24 +42,24 @@ describe("chorus.dialogs.EditNote", function() {
 
     it("makes a cl editor with toolbar", function() {
         expect(this.dialog.$('.toolbar')).toExist();
-
         expect(this.dialog.makeEditor).toHaveBeenCalled();
         var editorArgs = this.dialog.makeEditor.mostRecentCall.args;
-        expect(editorArgs[0]).toBe(this.dialog.$("form"));
+
+        expect(editorArgs[0]).toBe(this.dialog.el);
         expect(editorArgs[1]).toBe(".toolbar");
         expect(editorArgs[2]).toBe("body");
-        expect(editorArgs[3]).toEqual({ width: 350 });
+        expect(editorArgs[3]).toEqual({ width : 350, controls : 'bold italic | bullets numbering | link unlink' });
     });
 
     describe("submitting the form with a blank body", function() {
         beforeEach(function() {
-            spyOn(this.dialog, 'showErrors');
             this.dialog.$("textarea").val("");
             this.dialog.$("button.submit").click();
         });
 
         it("shows errors", function() {
-            expect(this.dialog.showErrors).toHaveBeenCalled();
+            expect(this.dialog.model.errors.body).toEqual("Note is required")
+            expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
         });
     });
 
