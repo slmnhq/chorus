@@ -1,4 +1,4 @@
-describe("WorkfilesImportDialog", function() {
+describe("chorus.dialogs.WorkfilesImport", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-workspace-id='4'></a>")
         this.model = fixtures.workfile({ workspaceId: 4 });
@@ -55,27 +55,12 @@ describe("WorkfilesImportDialog", function() {
             this.fileUploadArgs.add(null, {files: this.fileList});
 
             spyOn(chorus.router, "navigate");
+            this.fileUploadArgs.done(null, this.successfulResponseTxt);
         });
 
-        context("and the workfile has a show page", function() {
-            beforeEach(function() {
-                this.fileUploadArgs.done(null, this.successfulResponseTxt);
-            })
-
-            it("navigates to the show page of the workfile", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl(), true, undefined);
-            });
+        it("navigates to the show page of the workfile", function() {
+            expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl(), true);
         });
-
-        context("and the workfile does not have a show page", function() {
-            beforeEach(function() {
-                this.fileUploadArgs.done(null, this.successfulResponseOther);
-            })
-
-            it("navigates to the workfile index with page options", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.workfilesUrl(), true, { workfileId : "9" });
-            })
-        })
     });
 
     context("when a file has been chosen", function() {

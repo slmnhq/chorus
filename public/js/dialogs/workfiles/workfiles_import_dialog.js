@@ -80,25 +80,13 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
                 self.model = new chorus.models.Workfile(json.resource[0]);
                 chorus.toast('workfiles.uploaded', {fileName:self.model.get("fileName")});
                 self.closeModal();
-
-                var url, options;
-                if (self.model.isText() || self.model.isImage()) {
-                    url = self.model.showUrl();
-                } else {
-                    url = self.model.workfilesUrl();
-                    options = { workfileId:self.model.get("id") };
-                }
-
-                chorus.router.navigate(url, true, options);
+                chorus.router.navigate(self.model.showUrl(), true);
             }
             else {
                 e.preventDefault();
                 self.resource.serverErrors = json.message;
                 self.$("button.submit").stopLoading();
                 self.$("button.submit").prop("disabled", true);
-
-                // $.text(val) clears the selected element, so .text here kills the spinner inside the button.
-
                 self.resource.trigger("saveFailed");
             }
         }

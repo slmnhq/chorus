@@ -52,59 +52,6 @@ describe("chorus.views.WorkfileList", function() {
             this.view.itemSelected(this.model1);
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", this.model1);
         });
-
-        describe("when a workfileId is provided in pageOptions", function() {
-            beforeEach(function() {
-                chorus.page = chorus.page || {};
-                chorus.page.pageOptions = { workfileId : this.model3.get('id') }
-            })
-
-            context("and the workfile collection is loaded", function() {
-                beforeEach(function() {
-                    this.collection.loaded = true;
-                })
-
-                context("and the indicated workfile appears in the list", function() {
-                    beforeEach(function() {
-                        this.view.render();
-                    })
-
-                    it("selects the indicated workfile", function() {
-                        expect(this.view.$("li[data-id="+this.model3.get('id')+"]")).toHaveClass("selected");
-                    })
-
-                    it("clears the pageOptions after rendering", function() {
-                        expect(chorus.page.pageOptions).toBeUndefined();
-                    })
-                })
-
-                context("and the indicated workfile does not appear in the list", function() {
-                    beforeEach(function() {
-                        chorus.page.pageOptions = { workfileId : "999" }
-                        this.view.render();
-                    })
-
-                    it("selects the first item in the list", function() {
-                        expect(this.view.$("li:first-child")).toHaveClass("selected");
-                    });
-
-                    it("clears the pageOptions after rendering", function() {
-                        expect(chorus.page.pageOptions).toBeUndefined();
-                    })
-                })
-            });
-
-            context("and the workfile collection is not loaded", function() {
-                beforeEach(function() {
-                    delete this.view.collection.loaded;
-                    this.view.render();
-                })
-
-                it("does not clear the pageOptions after rendering", function() {
-                    expect(chorus.page.pageOptions).toBeDefined();
-                })
-            })
-        })
     });
 
     describe("#filter", function() {
