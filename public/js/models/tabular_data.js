@@ -98,12 +98,16 @@ chorus.models.TabularData = chorus.models.Base.include(
     },
 
     lastComment: function() {
-        var comment = this.get("recentComment");
-        return comment && new chorus.models.Comment({
-            body: comment.text,
-            author: comment.author,
-            commentCreatedStamp: comment.timestamp
-        });
+        var commentJson = this.get("recentComment");
+        if (commentJson) {
+            var comment = new chorus.models.Comment({
+                body: commentJson.text,
+                author: commentJson.author,
+                commentCreatedStamp: commentJson.timestamp
+            });
+            comment.loaded = true;
+            return comment;
+        }
     },
 
     preview: function(inEditChorusView) {
@@ -191,6 +195,10 @@ chorus.models.TabularData = chorus.models.Base.include(
 
     asDataset: function() {
         return new chorus.models.Dataset(this);
+    },
+
+    hasCredentials: function() {
+        return this.get('hasCredentials') !== false
     },
 
     makeBoxplotTask: function(taskAttrs) {

@@ -1,0 +1,38 @@
+<span class="spacer_left"></span>
+
+{{#ifAll hasCredentials activeWorkspace}}
+    <a class="image" href="{{showUrl}}">
+        <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
+    </a>
+{{else}}
+    <span class="image">
+        <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
+    </span>
+{{/ifAll}}
+
+<div class="right">
+
+    {{importFrequencyTag importFrequency}}
+
+    {{#ifAll hasCredentials activeWorkspace}}
+        <a href="{{showUrl}}" class="name">{{objectName}}</a>
+    {{else}}
+        <span class="name">{{objectName}}</span>
+    {{/ifAll}}
+
+    <div class="location">
+        {{tabularDataLocation resource}}
+    </div>
+
+    {{usedInWorkspaces workspaces dataset}}
+
+    {{#if lastComment}}
+        <div class="comment">
+            <div class="body"></div>
+            <div class="info">
+                {{userProfileLink lastComment.creator}} {{t "comments.commented_on"}} <span class="timestamp">{{lastComment.on}}</span>
+            </div>
+        </div>
+    {{/if}}
+</div>
+<span class="spacer_right"></span>

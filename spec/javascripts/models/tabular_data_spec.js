@@ -208,6 +208,10 @@ describe("chorus.models.TabularData", function() {
             expect(creator.get("lastName")).toBe(this.lastCommentJson.author.lastName);
         });
 
+        it("is loaded", function() {
+            expect(this.comment.loaded).toBeTruthy();
+        });
+
         context("when the data doesn't have any comments", function() {
             it("returns null", function() {
                 expect(fixtures.tabularData({recentComment: null}).lastComment()).toBeFalsy();

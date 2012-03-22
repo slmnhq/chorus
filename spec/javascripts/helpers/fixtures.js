@@ -1876,7 +1876,7 @@ beforeEach(function() {
                 instance: {id: fixtures.nextId(), name: "some_instance"},
                 objectName: "Dataset" + id,
                 schemaName: "some_schema",
-                recentComment: fixtures.activities.NOTE_ON_DATASET(),
+                recentComment: fixtures.activities.NOTE_ON_DATASET_JSON(),
                 commentCount: 1
             }, overrides);
         },
