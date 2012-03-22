@@ -50,7 +50,7 @@ page.onConsoleMessage = function(msg) {
 
 var url = 'http://localhost:8888/'
 if (phantom.args[0]) {
-    url += '?spec=' + phantom.args[0];
+    url += '?spec=' + encodeURIComponent(phantom.args[0]);
 }
 
 page.open(url, function(status){
@@ -69,10 +69,19 @@ page.open(url, function(status){
             jasmine.getEnv().updateInterval = null;
             var phantomReporter = {
                 reportSpecResults: function(spec) {
-                    if (spec.results().passed()) {
+                    if (spec.results().skipped) {
+                        // nothing for now!
+                    } else if (spec.results().passed()) {
                         console.log(".");
                     } else {
-                        console.log("\nF (" + spec.getFullName() + ")\n");
+                        console.log("\nF (" + spec.getFullName()  + ")\n");
+
+                        var resultItems = spec.results().getItems();
+                        _.each(resultItems, function(result) {
+                            if (result.type == 'expect' && result.passed && !result.passed()) {
+                                console.log(">>>" + result.message + "\n");
+                            }
+                        });
                     }
                 }
             };
