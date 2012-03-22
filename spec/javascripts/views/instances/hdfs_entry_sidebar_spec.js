@@ -38,20 +38,8 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             itHasTheRightDefaultBehavior(true);
 
-            describe("clicking the add a note link", function() {
-                beforeEach(function() {
-                    stubDefer();
-                    spyOn(chorus.dialogs.MemoNew.prototype, "makeEditor");
-                    this.view.$("a.dialog.add_note").click();
-
-                    chorus.modal.$("textarea").text("test comment").change();
-                    chorus.modal.$("button.submit").submit();
-                });
-
-                it("makes a request to the correct URL", function() {
-                    // testing this URL explicitly because tracking the URL through encodings has proven to be difficult
-                    expect(this.server.lastCreate().url).toBe("/edc/comment/hdfs/123%7C%2Ffoo%2Fmy_file.sql");
-                });
+            it("encodes the entity id", function() {
+                expect(this.view.$("a.add_note").attr("data-entity-id")).toBe("123%7C%2Ffoo%2Fmy_file.sql");
             });
 
             describe("clicking the external table link", function() {

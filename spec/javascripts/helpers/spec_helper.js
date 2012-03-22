@@ -362,6 +362,18 @@
         return spy;
     };
 
+    window.stubDelay = function() {
+        spyOn(_, 'delay').andCallFake(function(func) {
+            func();
+        });
+    }
+
+    window.stubSetTimeout = function() {
+        spyOn(window, 'setTimeout').andCallFake(function(func) {
+            func();
+        });
+    }
+
     window.stubDefer = function() {
         spyOn(_, 'defer').andCallFake(function(func) {
             func();

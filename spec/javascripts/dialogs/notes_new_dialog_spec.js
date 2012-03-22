@@ -1,12 +1,12 @@
 describe("chorus.dialogs.NotesNewDialog", function() {
     beforeEach(function() {
+        stubDelay();
         this.launchElement = $("<a data-entity-type='workfile' data-allow-workspace-attachments='true' data-entity-id='1' data-workspace-id='22'></a>");
         this.dialog = new chorus.dialogs.NotesNew({
             launchElement: this.launchElement,
             pageModel: new chorus.models.Workfile()
         });
-        stubDefer();
-        spyOn(this.dialog, "makeEditor");
+        $('#jasmine_content').append(this.dialog.el);
         this.dialog.render();
     });
 
@@ -41,7 +41,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
                     launchElement: this.launchElement,
                     pageModel: new chorus.models.Workfile()
                 });
-                spyOn(this.dialog, "makeEditor");
+                $('#jasmine_content').append(this.dialog.el);
                 this.dialog.render();
             });
 

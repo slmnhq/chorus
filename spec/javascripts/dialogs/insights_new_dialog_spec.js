@@ -1,12 +1,12 @@
 describe("chorus.dialogs.InsightsNewDialog", function() {
     beforeEach(function() {
+        stubDelay();
         this.launchElement = $("<a data-allow-workspace-attachments='true' data-workspace-id='22'></a>")
         this.dialog = new chorus.dialogs.InsightsNew({
             launchElement : this.launchElement
         });
 
-        stubDefer();
-        spyOn(this.dialog, "makeEditor");
+        $('#jasmine_content').append(this.dialog.el);
         this.dialog.render();
     });
 
