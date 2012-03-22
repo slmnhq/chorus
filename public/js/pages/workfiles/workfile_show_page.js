@@ -2,16 +2,6 @@
     chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         helpId: "workfile",
 
-        events:function () {
-            var superClassEvents = this._super("events");
-            return _.extend({}, superClassEvents, {
-                "keydown":"handleShortcut"
-            });
-        },
-
-        handleShortcut:function () {
-        },
-
         setup: function(workspaceId, workfileId, versionNum) {
             this.workspaceId = workspaceId;
             this.model = new chorus.models.Workfile({id:workfileId, workspaceId:workspaceId});
