@@ -110,6 +110,17 @@ describe("chorus.presenters.visualizations", function() {
             expect(this.data.minY).toBe(1);
             expect(this.data.maxY).toBe(400);
         });
+
+        it("makes sure minY and maxY aren't the same", function() {
+            this.model = fixtures.boxplotTaskWithResult({
+                rows: [
+                    { bucket: 'beluga', min: -100, firstQuartile: -100, median: -100, thirdQuartile: -100, max: -100, percentage: "25.3%" }
+                ]
+            });
+            this.presenter = new chorus.presenters.visualizations.Boxplot(this.model);
+            this.data = this.presenter.present();
+            expect(this.data.minY).toBeLessThan(this.data.maxY);
+        });
     });
 
     describe("histogram", function() {
@@ -127,7 +138,7 @@ describe("chorus.presenters.visualizations", function() {
                     { bin: "30-39", frequency: 1 },
                     { bin: "40-49", frequency: 2000 }
                 ],
-                tabularData: fixtures.datasetSandboxTable()
+                tabularData: fixtures.datasetSandboxTable();
             });
             this.presenter = new chorus.presenters.visualizations.Histogram(this.model);
 
@@ -138,8 +149,8 @@ describe("chorus.presenters.visualizations", function() {
             var y = _.pluck(this.data, "frequency");
             expect(y).toEqual([5,8,0,1,2000]);
             expect(x).toEqual(["0-9","10-19","20-29","30-39","40-49"]);
-        })
-    })
+        });
+    });
 
     describe("Heatmap", function() {
         beforeEach(function() {

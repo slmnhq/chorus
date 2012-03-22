@@ -64,6 +64,10 @@
 
             orderedBoxes.minY = _.min(_.pluck(orderedBoxes, "min"));
             orderedBoxes.maxY = _.max(_.pluck(orderedBoxes, "max"));
+            if(orderedBoxes.minY == orderedBoxes.maxY) {
+                orderedBoxes.minY -= 1;
+                orderedBoxes.maxY += 1;
+            }
 
             return orderedBoxes;
         }
