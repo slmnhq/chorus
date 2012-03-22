@@ -11,13 +11,12 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             pageModel : new chorus.models.Workfile(),
             model: this.model
         });
-
+        $('#jasmine_content').append(this.dialog.el);
         stubDefer();
         spyOn($.fn, 'fileupload');
-        spyOn(this.dialog, "launchSubModal");
-        spyOn(this.dialog, "makeEditor");
+        spyOn(this.dialog, "launchSubModal")
+        spyOn(this.dialog, "makeEditor").andCallThrough();
         this.dialog.render();
-        $('#jasmine_content').append(this.dialog.el);
     });
 
     afterEach(function() {
@@ -55,7 +54,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         });
 
         it("makes a cl editor with toolbar", function() {
-            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", {width: 350});
+            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width : 350, controls : 'bold italic | bullets numbering | link unlink' } );
             expect(this.dialog.$('.toolbar')).toExist();
         });
 
@@ -632,11 +631,15 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     beforeEach(function() {
                         this.dialog.$("textarea[name=body]").val("");
                         this.dialog.$('button.submit').click();
-                        $('#jasmine_content').append(this.dialog.el);
+//                        $('#jasmine_content').append(this.dialog.el);
                     })
 
                     it("removes the spinner from the button", function() {
                         expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                    })
+
+                    it("shows the error at the correct position", function() {
+                        expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
                     })
                 });
             });

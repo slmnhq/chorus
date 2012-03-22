@@ -38,6 +38,19 @@ input.has_error, textarea.has_error {
     background-repeat: no-repeat;
     background-position: 99%;
     padding-right: 20px;
+
+}
+
+.cleditorMain.has_error {
+    border: 2px solid $error-background-color !important;
+    background-image: url("/images/error-exclamation.png");
+    background-repeat: no-repeat;
+    background-position: 99%;
+    padding-right: 20px;
+
+    iframe body {
+        margin-right: 20px;
+    }
 }
 
 .error_detail {

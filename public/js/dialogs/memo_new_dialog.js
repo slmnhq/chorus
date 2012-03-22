@@ -148,6 +148,22 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.saving = false;
     },
 
+    showErrors: function(model) {
+        this._super("showErrors");
+
+        if (!model) {
+            model = this.resource
+        }
+
+        if(model.errors){
+            var $input = this.$(".cleditorMain");
+            this.markInputAsInvalid($input, model.errors.body, true);
+
+            this.$("iframe").contents().find("body").css("margin-right", "20px")
+            this.$(".cleditorMain").css("width", "330px")
+        }
+    },
+
     additionalContext: function() {
         return {
             formUrl: this.model.url(),
