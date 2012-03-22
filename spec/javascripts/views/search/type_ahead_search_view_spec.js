@@ -32,6 +32,13 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(this.view.$("li.result:eq(1) .type").text()).toMatchTranslation("type_ahead.entity.hdfs");
         });
 
+        it("should display nothing for hdfs binary file", function(){
+            _.each(this.result.get("typeAhead").docs, function(hdfs) { hdfs.isBinary = true; });
+            this.view.model = this.result;
+            this.view.render();
+            expect(this.view.$("span.type")).not.toContainText("Hadoop");
+        });
+
         it("should display the correct name and type for workspace", function() {
             var workspace = this.result.get("typeAhead").docs[2];
             expect(this.view.$("li.result:eq(2) .name").html()).toBe(workspace.highlightedAttributes.name[0]);

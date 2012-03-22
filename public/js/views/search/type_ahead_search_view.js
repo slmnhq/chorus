@@ -13,10 +13,14 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     context: function() {
         var ctx = {query: this.model.get("query")};
         ctx.results = _.map(_.first(this.model.results(), this.resultLimit), function(result) {
+
+            var isBinaryHdfs = result.get('entityType') == 'hdfs' && ( result.get('isBinary') !== false )
+
             return {
                 name: result.highlightedName(),
                 type: t("type_ahead.entity." + result.get('entityType')),
-                url: result.showUrl()
+                url: result.showUrl(),
+                linkable : !isBinaryHdfs
             };
         });
 

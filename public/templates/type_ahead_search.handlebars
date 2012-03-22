@@ -5,11 +5,13 @@
         </div>
     </li>
 {{#each results}}
+    {{#if linkable }}
     <li class="result">
         <div class="container">
-            <a href="{{url}}" class="name">{{name}}</a>
+             <a href="{{url}}" class="name">{{name}}</a>
             <span class="type">{{type}}</span>
         </div>
     </li>
+    {{/if}}
 {{/each}}
 </ul>
