@@ -18,10 +18,20 @@ describe("chorus.models.Dataset", function() {
         expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"');
     });
 
+    it("creates the correct showUrl with an ugly ID", function() {
+        this.dataset.set({id: "foo#bar"});
+        expect(this.dataset.showUrl()).toBe('#/workspaces/44/datasets/foo%23bar');
+    });
+
     context("when the object has an id", function() {
         it("has the right url", function() {
             var url = encodeURI('/edc/workspace/44/dataset/"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"');
             expect(this.dataset.url()).toMatchUrl(url);
+        });
+
+        it("has the right url with an ugly ID", function() {
+            this.dataset.set({id: "foo#bar"});
+            expect(this.dataset.url()).toBe("/edc/workspace/44/dataset/foo%23bar");
         });
     });
 

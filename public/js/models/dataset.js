@@ -9,7 +9,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         ]
 
         if (this.get("id")) {
-            components.push(this.get("id"))
+            components.push(encodeURIComponent(this.get("id")));
         }
 
         return components.join("/");
@@ -20,7 +20,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             "workspaces",
             this.get("workspaceId") || this.get("workspace").id,
             "datasets",
-            this.get("compositeId") || this.get("id")
+            encodeURIComponent(this.get("compositeId") || this.get("id"))
         ].join("/");
     },
 
