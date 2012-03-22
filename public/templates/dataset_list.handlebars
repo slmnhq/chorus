@@ -5,14 +5,20 @@
     <li class="dataset">
     {{/if}}
         <span class="spacer_left"></span>
-        {{#if noCredentials}}
+        {{#if activeWorkspace}}
+            {{#if noCredentials}}
+                <span class="image">
+                    <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
+                </span>
+            {{else}}
+                <a class="image" href="{{showUrl}}">
+                     <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
+                </a>
+            {{/if}}
+        {{else}}
             <span class="image">
                 <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
             </span>
-        {{else}}
-            <a class="image" href="{{showUrl}}">
-                 <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
-            </a>
         {{/if}}
 
         <div class="right">
@@ -22,7 +28,9 @@
             {{#if noCredentials}}
                 <span class="name">{{objectName}}</span>
             {{else}}
-                <a href="{{showUrl}}" class="name">{{objectName}}</a>
+                {{#if activeWorkspace}}<a href="{{showUrl}}" class="name">{{/if}}
+                {{objectName}}
+                {{#if activeWorkspace}}</a>{{/if}}
             {{/if}}
             <div class="location">
                 {{tabularDataLocation model}}

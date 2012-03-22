@@ -6,10 +6,14 @@
     <div class="actions">
         <ul>
             <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}" data-active-only="true">{{t "actions.copy_to_another_workspace"}}</a></li>
+            {{#if activeWorkspace}}
             <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspaceId}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.delete"}}</a></li>
+            {{/if}}
             <li><a href="{{workfile.downloadUrl}}" class="download">{{t "actions.download"}}</a></li>
             {{#unless hideAddNoteLink}}
-                <li><a class="dialog" href="#" data-entity-id="{{workfile.id}}" data-entity-type="workfile" data-workspace-id={{workfile.workspaceId}} data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+                {{#if activeWorkspace}}
+                    <li><a class="dialog" href="#" data-entity-id="{{workfile.id}}" data-entity-type="workfile" data-workspace-id={{workfile.workspaceId}} data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+                {{/if}}
             {{/unless}}
         </ul>
     </div>

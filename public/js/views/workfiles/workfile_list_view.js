@@ -10,6 +10,8 @@ chorus.views.WorkfileList = chorus.views.SelectableList.extend({
     collectionModelContext:function (model) {
         var ctx = new chorus.presenters.Artifact(model, {iconSize:'large'});
 
+        ctx.activeWorkspace = this.options.activeWorkspace;
+
         var lastComment = model.lastComment();
         if (lastComment) {
             var date = Date.parseFromApi(lastComment.get("commentCreatedStamp"))

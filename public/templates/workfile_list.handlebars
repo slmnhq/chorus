@@ -1,14 +1,23 @@
 {{#each models}}
     <li data-id="{{id}}">
         <span class="spacer_left"/>
+        {{#if activeWorkspace}}
         <a class="image" href="{{url}}">
-            <img src="{{iconSrc}}"/>
+        {{/if}}
+            <img src="{{iconSrc}}" class="image"/>
+        {{#if activeWorkspace}}
         </a>
+        {{/if}}
+
         <div class="text">
             <div class="main">
-                <a title="{{fileName}}" class="name" href="{{url}}">
+                {{#if activeWorkspace}}
+                    <a title="{{fileName}}" class="name" href="{{url}}">
+                {{/if}}
                     <span>{{fileName}}</span>
-                </a>
+                {{#if activeWorkspace}}
+                    </a>
+                {{/if}}
             </div>
             <div class="details"/>
             {{#if lastComment}}

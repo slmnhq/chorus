@@ -73,6 +73,12 @@
 
             var targetButton = this.mainContent.options.buttons[0];
 
+            if (this.workspace.get("active")) {
+                this.mainContent.content.options.activeWorkspace = true;
+            } else {
+                this.mainContent.contentDetails.options.buttons = [];
+            }
+
             if (!this.workspace.canUpdate()) {
                 this.mainContent.contentDetails.options.buttons = [];
                 this.mainContent.contentDetails.render();

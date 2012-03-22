@@ -220,6 +220,23 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
             });
 
+            context("when there is an archived workspace", function() {
+                beforeEach(function() {
+                    this.view.options.listMode = true;
+                    this.view.options.workspace = fixtures.workspace({active: false, permission: ["update", "admin"]});
+                    this.view.render();
+                    this.dataset = fixtures.datasetSourceTable();
+                    chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                    this.server.completeFetchFor(this.view.importConfiguration, []);
+
+                });
+                it("has no action links except for 'Preview Data'", function() {
+                    expect(this.view.$(".actions a").length).toBe(1);
+                    expect(this.view.$(".actions a.tabular_data_preview")).toExist();
+                });
+
+            });
+
             context("when there is a workspace", function() {
                 beforeEach(function() {
                     this.view.options.workspace = fixtures.workspace();
@@ -232,7 +249,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
 
                     itShowsTheAppropriateDeleteLink(false)
-                })
+                });
 
                 it("doesn't display any import links by default", function() {
                     expect(this.view.$("a.create_schedule, a.edit_schedule, a.import_now")).not.toExist();

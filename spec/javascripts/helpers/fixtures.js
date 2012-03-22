@@ -1492,6 +1492,7 @@ beforeEach(function() {
                 ownerId: this.nextId().toString(),
                 ownerFirstName: "Dr",
                 ownerLastName: "Mario",
+                active: true,
                 "sandboxInfo": {
                     databaseId: databaseId,
                     databaseName: 'database' + databaseId,

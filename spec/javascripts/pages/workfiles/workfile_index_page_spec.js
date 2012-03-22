@@ -3,7 +3,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         this.workspace = fixtures.workspace();
         this.model = fixtures.sqlWorkfile({workspaceId: this.workspace.get('id')});
         this.page = new chorus.pages.WorkfileIndexPage(this.model.get('workspaceId'));
-    })
+    });
 
     it("has a helpId", function() {
         expect(this.page.helpId).toBe("workfiles")
@@ -197,12 +197,24 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                     spyOn(this.page.mainContent.model, 'canUpdate').andReturn(false);
                     this.server.completeFetchFor(this.workspace);
                     this.server.completeFetchFor(this.page.collection);
-                })
+                });
 
                 it("does not render buttons", function() {
                     expect(this.page.mainContent.contentDetails.$("button").length).toBe(0);
-                })
-            })
-        })
-    })
+                });
+            });
+
+            context("and the workspace is archived", function() {
+                beforeEach(function() {
+                    this.workspace.set({active: false});
+                    this.server.completeFetchFor(this.workspace);
+                    this.server.completeFetchFor(this.page.collection);
+                });
+
+                it("does not render buttons", function() {
+                    expect(this.page.mainContent.contentDetails.$("button").length).toBe(0);
+                });
+            });
+        });
+    });
 });

@@ -147,6 +147,25 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             })
         });
 
+        context("when the workspace is archived", function() {
+            beforeEach(function() {
+                spyOn(this.model, "workspaceAdmin").andReturn(true);
+                spyOn(this.view.model, "sandbox").andReturn(false);
+                this.view.model.set({active: false});
+                this.view.render();
+            });
+            it("does not have the 'add or edit members link'", function() {
+                expect(this.view.$('a[data-dialog="WorkspaceEditMembers"]')).not.toExist();
+            });
+            it("does not have the 'add a sandbox' link", function() {
+               expect(this.view.$('a[data-dialog="SandboxNew"]')).not.toExist();
+            });
+            it("does not have 'add a note' or 'ad an insight' link", function() {
+               expect(this.view.$('a[data-dialog="NotesNew"]')).not.toExist();
+               expect(this.view.$('a[data-dialog="InsightsNew"]')).not.toExist();
+            });
+        });
+
         it("has a link to add a note", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").text().trim()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-type")).toBe("workspace");

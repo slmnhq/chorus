@@ -435,38 +435,39 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                         it("sets the isPublic model attribute to false", function() {
                             expect(this.dialog.pageModel.get("isPublic")).toBe(false);
-                        })
-                    })
+                        });
+                    });
 
                     context("when the active radio is checked", function() {
                         beforeEach(function() {
                             this.dialog.$("input#workspace_active").prop("checked", true);
                             this.dialog.$('form').submit();
-                        })
+                        });
 
                         it("sets the active model attribute to true", function() {
                             expect(this.dialog.pageModel.get("active")).toBe(true);
-                        })
+                        });
 
                         it("sets the archived model attribute to false", function() {
                             expect(this.dialog.pageModel.get("archived")).toBe(false);
-                        })
-                    })
+                        });
+                    });
 
                     context("when the archived radio is checked", function() {
                         beforeEach(function() {
                             this.dialog.$("input#workspace_archived").prop("checked", true);
+                            this.dialog.$("input#workspace_active").prop("checked", false);
                             this.dialog.$('form').submit();
-                        })
+                        });
 
                         it("sets the active model attribute to false", function() {
                             expect(this.dialog.pageModel.get("active")).toBe(false);
-                        })
+                        });
 
                         it("sets the archived model attribute to true", function() {
                             expect(this.dialog.pageModel.get("archived")).toBe(true);
-                        })
-                    })
+                        });
+                    });
 
                     context("the server responds with success", function() {
                         beforeEach(function() {
@@ -481,7 +482,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                         it("triggers the 'invalidated' event on the model", function() {
                             expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
-                        })
+                        });
                     });
 
                     context("the server responds with failure", function() {

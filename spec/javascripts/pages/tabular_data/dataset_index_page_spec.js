@@ -325,6 +325,17 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 expect(this.page.mainContent.contentDetails.$("button")).not.toExist();
             });
         })
+
+        context("and the workspace is archived", function() {
+            beforeEach(function() {
+                this.workspace.set({ active: false});
+                this.server.completeFetchFor(this.workspace);
+            });
+
+            it("has no buttons", function() {
+                expect(this.page.$("button")).not.toExist();
+            });
+        });
     });
 
     describe("when the workfile:selected event is triggered on the list view", function() {

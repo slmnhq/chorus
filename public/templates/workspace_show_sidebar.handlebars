@@ -17,13 +17,17 @@
 
             {{#if workspaceAdmin}}
                 <li><a class="alert" href="#" data-alert="WorkspaceDelete">{{t "actions.delete_workspace"}}</a></li>
-                <li><a class="dialog" href="#" data-dialog="WorkspaceEditMembers">{{t "workspace.edit_members"}}</a></li>
-                {{#unless hasSandbox}}
-                    <li><a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="{{id}}">{{t "sandbox.create_a_sandbox"}}</a></li>
-                {{/unless}}
+                {{#if active}}
+                    <li><a class="dialog" href="#" data-dialog="WorkspaceEditMembers">{{t "workspace.edit_members"}}</a></li>
+                    {{#unless hasSandbox}}
+                        <li><a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="{{id}}">{{t "sandbox.create_a_sandbox"}}</a></li>
+                    {{/unless}}
+                {{/if}}
             {{/if}}
-            <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
-            <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="InsightsNew">{{t "actions.add_insight"}}</a></li>
+            {{#if active}}
+                <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+                <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="InsightsNew">{{t "actions.add_insight"}}</a></li>
+            {{/if}}
         </ul>
     </div>
 

@@ -34,9 +34,11 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
             workspaces: model.get("workspaceUsed") && model.get("workspaceUsed").workspaceList
         };
 
+        ctx.activeWorkspace = !!this.options.activeWorkspace;
+
         var recentComment = model.lastComment();
         if (recentComment) {
-            var date = Date.parseFromApi(recentComment.get("commentCreatedStamp"))
+            var date = Date.parseFromApi(recentComment.get("commentCreatedStamp"));
 
             ctx.lastComment = {
                 body: recentComment.get("body"),

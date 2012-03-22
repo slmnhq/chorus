@@ -110,6 +110,8 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
             ctx.workspaceId = this.options.workspace.id;
             ctx.isDeleteable = this.resource && this.resource.isDeleteable() && this.options.workspace.canUpdate();
 
+            ctx.activeWorkspace = this.options.workspace.get("active");
+
             if (this.resource) {
                 if (this.resource.get("type") == "CHORUS_VIEW") {
                     ctx.deleteMsgKey = "delete";

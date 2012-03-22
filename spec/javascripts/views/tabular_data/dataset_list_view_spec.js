@@ -15,8 +15,20 @@ describe("chorus.views.DatasetList", function() {
             view
         ]);
         this.collection.loaded = true;
-        this.view = new chorus.views.DatasetList({collection: this.collection});
-    })
+        this.view = new chorus.views.DatasetList({collection: this.collection, activeWorkspace: true});
+    });
+
+    describe("when the workspace is archived", function() {
+        beforeEach(function() {
+            this.view.options.activeWorkspace = false;
+            this.view.render();
+        });
+
+        it("does not have dataset links (still has instance links)", function() {
+            expect(this.view.$("a.image")).not.toExist();
+            expect(this.view.$("a.name")).not.toExist();
+        });
+    });
 
     describe("#render", function() {
         beforeEach(function() {
@@ -31,7 +43,7 @@ describe("chorus.views.DatasetList", function() {
 
         it("renders items without credentials with a no_credentials class", function() {
             expect(this.view.$('li.no_credentials').length).toBe(1);
-        })
+        });
 
         it("links the datasets to their show page", function() {
             _.each(this.collection.models, function(dataset, index) {
@@ -39,17 +51,17 @@ describe("chorus.views.DatasetList", function() {
                     expect(this.view.$("> li:eq(" + index + ") a.name")).toHaveAttr("href", this.collection.at(index).showUrl())
                 }
             }, this);
-        })
+        });
 
         it("datasets without credentials should not have links", function() {
             expect(this.view.$('li.no_credentials a').not(".found_in a")).not.toExist();
-        })
+        });
 
         it("displays the datasets' names", function() {
             for (var i = 0; i < this.collection.length; i++) {
                 expect(this.view.$(".name").eq(i).text().trim()).toBe(this.collection.models[i].get("objectName"));
             }
-        })
+        });
 
         it("links the small instance breadcrumb to the DatabaseIndexPage for that instance", function() {
             var instance = new chorus.models.Instance(this.instance);

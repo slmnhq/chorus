@@ -37,26 +37,30 @@
     <div class="actions">
         <ul>
             {{#if workspace}}
-                <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
+                {{#if activeWorkspace}}
+                    <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
+                {{/if}}
             {{else}}
                 <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}">{{t "actions.add_note"}}</a></li>
                 <li><a class="associate" href="#">{{t "actions.associate_with_workspace"}}</a></li>
             {{/if}}
 
-            {{#if canExport}}
-                {{#if hasSandbox}}
-                    <li><a class="import_now dialog" data-dialog="ImportScheduler" href="#">{{t "actions.import_now"}}</a></li>
-                    {{#if hasSchedule}}
-                        <li><a class="edit_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.edit_schedule"}}</a></li>
+            {{#if activeWorkspace}}
+                {{#if canExport}}
+                    {{#if hasSandbox}}
+                        <li><a class="import_now dialog" data-dialog="ImportScheduler" href="#">{{t "actions.import_now"}}</a></li>
+                        {{#if hasSchedule}}
+                            <li><a class="edit_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.edit_schedule"}}</a></li>
+                        {{else}}
+                            <li><a class="create_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.create_schedule"}}</a></li>
+                        {{/if}}
                     {{else}}
-                        <li><a class="create_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.create_schedule"}}</a></li>
-                    {{/if}}
-                {{else}}
-                    <li><span class="import_now disabled">{{t "actions.import_now"}}</span></li>
-                    {{#if hasSchedule}}
-                        <li><span class="edit_schedule disabled">{{t "actions.edit_schedule"}}</span></li>
-                    {{else}}
-                        <li><span class="create_schedule disabled">{{t "actions.create_schedule"}}</span></li>
+                        <li><span class="import_now disabled">{{t "actions.import_now"}}</span></li>
+                        {{#if hasSchedule}}
+                            <li><span class="edit_schedule disabled">{{t "actions.edit_schedule"}}</span></li>
+                        {{else}}
+                            <li><span class="create_schedule disabled">{{t "actions.create_schedule"}}</span></li>
+                        {{/if}}
                     {{/if}}
                 {{/if}}
             {{/if}}
@@ -67,7 +71,9 @@
                 {{/if}}
             {{/unless}}
 
-            {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey}}</a></li>{{/if}}
+            {{#if activeWorkspace}}
+                {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey}}</a></li>{{/if}}
+            {{/if}}
         </ul>
     </div>
 

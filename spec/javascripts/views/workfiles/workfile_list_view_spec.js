@@ -29,9 +29,21 @@ describe("WorkfileListView", function() {
                 this.model3 = fixtures.otherWorkfile();
                 this.model3.set({recentComments: [], commentCount: 0});
                 this.collection = new chorus.collections.WorkfileSet([this.model1, this.model2, this.model3], {workspaceId: 1234});
-                this.view = new chorus.views.WorkfileList({collection: this.collection});
+                this.view = new chorus.views.WorkfileList({collection: this.collection, activeWorkspace: true});
                 this.view.render();
                 this.li2 = this.view.$("li")[1];
+            });
+
+            context("when the workspace is archived", function() {
+                beforeEach(function() {
+                    this.view.options.activeWorkspace = false;
+                    this.view.render();
+                });
+
+                it("should not have links to the workfile", function() {
+                    expect(this.view.$('a.image')).not.toExist();
+                    expect(this.view.$('a.name')).not.toExist();
+                });
             });
 
             it("renders an li for each item in the collection", function() {
