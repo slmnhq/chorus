@@ -13,7 +13,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         var self = this;
 
         var params = {
-            type: this.model.get("type"),
+            type: "SOURCE_TABLE",
             instanceId: this.model.get("instance").id,
             databaseName: this.model.get("databaseName"),
             schemaName: this.model.get("schemaName"),

@@ -6,7 +6,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     it("does not re-render when the model changes", function() {
         var dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement : this.launchElement, model: fixtures.datasetSourceTable() });
         expect(dialog.persistent).toBeTruthy()
-    })
+    });
 
     describe("intialization", function() {
         it("should complain if it isn't given a model", function() {
@@ -18,7 +18,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
     describe("clicking Associate Dataset", function() {
         beforeEach(function() {
-            this.model = fixtures.datasetSourceTable();
+            this.model = fixtures.datasetSandboxTable();
             this.workspace = fixtures.workspace();
             this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement : this.launchElement, model: this.model });
             this.dialog.render();
