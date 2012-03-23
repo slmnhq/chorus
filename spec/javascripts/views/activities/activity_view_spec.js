@@ -332,7 +332,7 @@ describe("chorus.views.Activity", function() {
 
                 context("and is the author of the note", function() {
                     beforeEach(function() {
-                        setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.view.model.author().id});
+                        setLoggedInUser({id: this.view.model.author().id});
                         this.view.render();
                     });
 
@@ -343,7 +343,7 @@ describe("chorus.views.Activity", function() {
 
             context("when the delete link appears", function() {
                 beforeEach(function() {
-                    setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.view.model.author().id});
+                    setLoggedInUser({id: this.view.model.author().id});
 
                     // put view in page for correct alert click handling
                     this.page = new chorus.pages.Base();
@@ -353,35 +353,19 @@ describe("chorus.views.Activity", function() {
                 });
 
                 it("displays a hidden delete link", function() {
-                    var deleteLink = this.view.$(".delete_link");
+                    var deleteLink = this.view.$(".activity_content .delete_link");
                     expect(deleteLink).toExist();
                     expect(deleteLink.text()).toContainTranslation("actions.delete")
                     expect(deleteLink).toBeHidden();
+                    expect(deleteLink.find('img')).toExist();
                 });
 
-                context("clicking delete note/comment", function() {
+                context("clicking delete note", function() {
                     beforeEach(function() {
                         this.collection.attributes.entityType = "workspace";
                         this.collection.attributes.entityId = 10000;
                         stubModals();
-                        this.view.$(".delete_link").click();
-                    });
-
-                    it("launches a delete note confirm alert", function() {
-                        expect(chorus.modal).toBeA(chorus.alerts.DeleteNoteConfirmAlert);
-                        expect(chorus.modal.model).toBeA(chorus.models.Comment);
-                        expect(chorus.modal.model.id).toBe(this.model.id)
-                        expect(chorus.modal.model.attributes.entityId).toBe(10000)
-                        expect(chorus.modal.model.attributes.entityType).toBe("workspace")
-                    });
-                });
-
-                context("clicking delete note/comment trashcan icon", function() {
-                    beforeEach(function() {
-                        this.collection.attributes.entityType = "workspace";
-                        this.collection.attributes.entityId = 10000;
-                        stubModals();
-                        this.view.$(".delete_link img").click();
+                        this.view.$(".activity_content .delete_link").click();
                     });
 
                     it("launches a delete note confirm alert", function() {
@@ -397,6 +381,15 @@ describe("chorus.views.Activity", function() {
             it("renders items for the sub-comments", function() {
                 expect(this.model.get("comments").length).toBe(1);
                 expect(this.view.$(".comments li").length).toBe(1);
+            });
+
+            it("tells the comments whether the current user owns the note's workspace, so they can render a delete link", function() {
+                delete this.view.model.workspace()._owner;
+                this.view.model.workspace().set({ owner: { id: '987' } });
+                setLoggedInUser({ id: '987' });
+                this.view.render();
+
+                expect(this.view.commentList.options.currentUserOwnsWorkspace).toBeTruthy();
             });
 
             it("has a link to promote the note to an insight", function() {

@@ -17,16 +17,16 @@ chorus.views.CommentList = chorus.views.Base.extend({
         if (comment.note()) {
             return new chorus.presenters.Activity(comment, {displayStyle:this.options.displayStyle})
         } else {
-            var user = comment.author();
+            var author = comment.author();
             return  {
-                isOwner: user.id == chorus.session.user().id,
-                iconSrc: user.imageUrl({ size:"icon" }),
-                iconHref: user.showUrl(),
-                displayName: user.displayName(),
+                isOwner: (author.id == chorus.session.user().id) || this.options.currentUserOwnsWorkspace,
+                iconSrc: author.imageUrl({ size:"icon" }),
+                iconHref: author.showUrl(),
+                displayName: author.displayName(),
                 timestamp: comment.get("timestamp"),
                 id: comment.get("id"),
                 body: comment.get("text"),
-                headerHtml: new Handlebars.SafeString(t('activity_stream.comments.commented_on_note', {authorLink:chorus.helpers.linkTo(user.showUrl(), user.displayName(), {'class':'author'}).toString()}))
+                headerHtml: new Handlebars.SafeString(t('activity_stream.comments.commented_on_note', {authorLink:chorus.helpers.linkTo(author.showUrl(), author.displayName(), {'class':'author'}).toString()}))
             };
         }
     }

@@ -111,15 +111,9 @@ describe("chorus.views.CommentList", function() {
         })
 
         context("when the current user is not an admin", function() {
-            context("and is not the author of the note", function() {
-                it("does not display a delete link if user is not the owner", function() {
-                    expect(this.view.$(".delete_link")).not.toExist();
-                })
-            })
-
             context("and is the author of the note", function() {
                 beforeEach(function() {
-                    setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.comment1.get("author").id});
+                    setLoggedInUser({id: this.comment1.get("author").id});
                     this.view.render();
                 });
 
@@ -127,11 +121,28 @@ describe("chorus.views.CommentList", function() {
                     expect(this.view.$(".delete_link")).toExist();
                 })
             })
+
+            context("and is not the author of the note", function() {
+                it("does not display a delete link", function() {
+                    expect(this.view.$(".delete_link")).not.toExist();
+                })
+
+                context("but is the owner of the workspace", function() {
+                    beforeEach(function() {
+                        this.view.options.currentUserOwnsWorkspace = true;
+                        this.view.render();
+                    });
+
+                    it("displays a delete link", function() {
+                        expect(this.view.$(".delete_link")).toExist();
+                    });
+                })
+            })
         })
 
         context("when the delete link appears", function() {
             beforeEach(function() {
-                setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.comment1.get("author").id});
+                setLoggedInUser({id: this.comment1.get("author").id});
                 this.view.render();
 
                 var commentId = this.view.$(".delete_link").data("commentId");

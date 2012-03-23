@@ -19,7 +19,7 @@ chorus.views.Activity = chorus.views.Base.extend({
     },
 
     setupSubviews:function () {
-        this.commentList = new chorus.views.CommentList({ collection:this.model.comments() });
+        this.commentList = new chorus.views.CommentList({ collection: this.model.comments(), currentUserOwnsWorkspace: this.model.workspace() && this.model.workspace().currentUserIsOwner() });
         if (this.model.isUserGenerated()) {
             this.model.loaded = true;
             this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "text", attributeIsHtmlSafe: true});
