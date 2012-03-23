@@ -44,7 +44,7 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
 
     submit: function(e) {
         e && e.preventDefault()
-        this.$("button.submit").startLoading("notes.button.uploading");
+        this.$("button.submit").startLoading("actions.saving");
 
         var newText = this.$("textarea").val();
         var cleanText = _.trim($.stripHtml(newText));

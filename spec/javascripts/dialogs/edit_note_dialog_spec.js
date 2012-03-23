@@ -95,6 +95,7 @@ describe("chorus.dialogs.EditNote", function() {
 
         it("starts a spinner", function() {
             expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+            expect(this.dialog.$("button.submit").text()).toContainTranslation("actions.saving");
         })
 
         it("updates the note correctly", function() {

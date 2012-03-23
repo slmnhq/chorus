@@ -86,6 +86,7 @@ describe("chorus.views.Activity", function() {
 
         context("isReadOnly", function() {
             beforeEach(function() {
+                setLoggedInUser({ id: this.view.model.author().id })
                 this.presenter = new chorus.presenters.Activity(this.view.model);
                 this.view.model = fixtures.activities.NOTE_ON_WORKSPACE();
                 this.view.options.isReadOnly = true;
@@ -100,9 +101,8 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$(".activity_content > .links")).not.toExist();
             });
 
-            it("should not have a DeleteNoteConfirmAlert", function() {
-                expect(this.view.$("a[data-alert=DeleteNoteConfirmAlert]")).not.toExist();
-            });
+            itDoesNotDisplayDeleteLink();
+            itDoesNotDisplayEditLink();
         })
 
         context("type: MEMBERS_ADDED", function() {

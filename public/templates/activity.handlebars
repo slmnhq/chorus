@@ -37,14 +37,16 @@
             {{#if isNotification}}
                 <a class="delete_link alert" data-alert="NotificationDeleteAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
             {{else}}
-                {{#if isUserGenerated}}
-                    {{#if isOwner}}
-                        <a class="edit_link dialog" data-dialog="EditNote" href="#">{{t "actions.edit"}}</a>
+                {{#unless isReadOnly}}
+                    {{#if isUserGenerated}}
+                        {{#if isOwner}}
+                            <a class="edit_link dialog" data-dialog="EditNote" href="#">{{t "actions.edit"}}</a>
+                        {{/if}}
+                        {{#ifAdminOr isOwner}}
+                            <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
+                        {{/ifAdminOr}}
                     {{/if}}
-                    {{#ifAdminOr isOwner}}
-                        <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
-                    {{/ifAdminOr}}
-                {{/if}}
+                {{/unless}}
             {{/if}}
         </div>
         {{#unless isReadOnly}}
@@ -53,14 +55,14 @@
                 {{#if isNote}}
                     <span class="separator">|</span> <a class="promote" href="#">{{t "activity_stream.promote"}}</a>
                 {{/if}}
-                    {{#if isInsight}}
-                        {{#ifAdminOr isOwner}}
-                            {{#if isPublished}}
-                                <span class="separator">|</span> <a href="#" class="unpublish">{{t "insight.unpublish.link"}}</a>
-                            {{else}}
-                                <span class="separator">|</span> <a href="#" class="publish">{{t "insight.publish.link"}}</a>
-                            {{/if}}
-                        {{/ifAdminOr}}
+                {{#if isInsight}}
+                    {{#ifAdminOr isOwner}}
+                        {{#if isPublished}}
+                            <span class="separator">|</span> <a href="#" class="unpublish">{{t "insight.unpublish.link"}}</a>
+                        {{else}}
+                            <span class="separator">|</span> <a href="#" class="publish">{{t "insight.publish.link"}}</a>
+                        {{/if}}
+                    {{/ifAdminOr}}
                     <span class="separator">|</span> <span class="promoted_by">{{safeT "insight.promoted_by" promoterLink=promoterLink relativeTimestamp=promotionTimestamp}}</span>
                 {{/if}}
             </div>
