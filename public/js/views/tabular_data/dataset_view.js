@@ -29,6 +29,10 @@ chorus.views.Dataset = chorus.views.Base.extend({
 
     additionalContext: function() {
         var recentComment = this.model.lastComment();
+        // For database objects that are not in workspaces, active workspace is undefined, but the dataset should be viewable
+        var viewable = this.options.activeWorkspace !== false;
+
+
         var ctx = {
             dataset: this.model.asDataset(),
             showUrl: this.model.showUrl(),
@@ -36,7 +40,7 @@ chorus.views.Dataset = chorus.views.Base.extend({
             iconImgUrl: this.model.iconUrl(),
             importFrequency: chorus.helpers.importFrequencyForModel(this.model),
             workspaces: this.model.get("workspaceUsed") && this.model.get("workspaceUsed").workspaceList,
-            activeWorkspace: !!this.options.activeWorkspace
+            viewable: viewable
         };
 
         if (recentComment) {

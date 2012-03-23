@@ -1,6 +1,6 @@
 <span class="spacer_left"></span>
 
-{{#ifAll hasCredentials activeWorkspace}}
+{{#ifAll hasCredentials viewable}}
     <a class="image" href="{{showUrl}}">
         <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
     </a>
@@ -14,7 +14,7 @@
 
     {{importFrequencyTag importFrequency}}
 
-    {{#ifAll hasCredentials activeWorkspace}}
+    {{#ifAll hasCredentials viewable}}
         <a href="{{showUrl}}" class="name">{{objectName}}</a>
     {{else}}
         <span class="name">{{objectName}}</span>

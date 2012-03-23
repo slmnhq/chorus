@@ -145,6 +145,8 @@ describe("chorus.views.Dataset", function() {
         table.get("workspaceUsed").workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
         var view = new chorus.views.Dataset({ model: table });
         view.render();
+        expect(view.$(".name")).toHaveHref(table.showUrl());
+        expect(view.$(".image")).toHaveHref(table.showUrl());
     });
 
     function itRendersTheNameAndIcon() {
