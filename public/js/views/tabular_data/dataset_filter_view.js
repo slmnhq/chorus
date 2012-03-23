@@ -84,7 +84,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         });
 
         _.defer(function() {
-            chorus.styleSelect($comparator)
+            chorus.styleSelect($comparator, { menuWidth: 240 })
         });
 
         this.comparatorSelected();

@@ -31,6 +31,10 @@ describe("chorus.views.DatasetFilter", function() {
             expect(chorus.styleSelect).toHaveBeenCalled();
         });
 
+        it("gives long comparators enough room", function() {
+            expect(chorus.styleSelect.mostRecentCall.args[1].menuWidth).toBe(240);
+        });
+
         it("creates a datepicker widget associated with the year, month and day input fields", function() {
             expect(chorus.datePicker).toHaveBeenCalled();
 
