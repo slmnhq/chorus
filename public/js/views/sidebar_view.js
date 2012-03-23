@@ -1,8 +1,11 @@
 chorus.views.Sidebar = chorus.views.Base.extend({
     constructorName: "SidebarView",
+    preRender:function () {
+        this._super("preRender", arguments);
 
-    events: {
-        'click #sidebar_wrapper .jump_to_top': 'jumpToTop'
+        // We don't want to deal with having multiple declarations of `events`,
+        // so we unbind click in preRender and bind it in postRender.
+        $("#sidebar_wrapper").find(".jump_to_top").unbind("click");
     },
 
     template: function() {
@@ -18,12 +21,15 @@ chorus.views.Sidebar = chorus.views.Base.extend({
             contentWidth: sidebar.width()
         });
 
+        $("#sidebar_wrapper .jump_to_top").bind("click", _.bind(this.jumpToTop, this));
+
         if (chorus.isDevMode) {
             $("#sidebar_wrapper").attr("data-sidebar-template", this.className);
         }
     },
 
     jumpToTop: function(e) {
+        e.preventDefault()
         var api = $("#sidebar").data("jsp");
         if (api) {
             api.scrollTo(0, 0);
