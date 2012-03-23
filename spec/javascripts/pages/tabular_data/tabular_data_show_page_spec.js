@@ -286,6 +286,14 @@ describe("chorus.pages.TabularDataShowPage", function() {
                         expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass("tabular_data_visualization_boxplot_sidebar");
                     })
                 });
+
+                describe("when the cancel:sidebar event is triggered, without a sidebar (unclear whether this is a possible state of the app)", function() {
+                    it("does not throw exceptions", function() {
+                        expect(function() {
+                            chorus.PageEvents.broadcast('cancel:sidebar', 'boxplot');
+                        }).not.toThrow();
+                    });
+                });
             });
         });
     });

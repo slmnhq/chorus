@@ -29,7 +29,7 @@ describe("chorus.pages.DatasetShowPage", function() {
         this.datasetId = this.dataset.get('id');
 
         this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), this.datasetId);
-        spyOn(this.page, "fetchResources").andCallThrough();
+        spyOn(this.page, "drawColumns").andCallThrough();
     })
 
     it("has a helpId", function() {
@@ -95,12 +95,11 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                         describe("when user cancel edit dataset and dataset:cancelEdit is triggered", function() {
                             beforeEach(function() {
-                                this.page.fetchResources.reset();
                                 this.page.mainContent.contentDetails.trigger("dataset:cancelEdit");
                             });
 
-                            it("fetches the dataset again", function() {
-                                expect(this.page.fetchResources).toHaveBeenCalled();
+                            it("re-draws the page", function() {
+                                expect(this.page.drawColumns).toHaveBeenCalled();
                             })
                         })
                     });

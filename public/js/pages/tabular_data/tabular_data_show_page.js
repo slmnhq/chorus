@@ -74,7 +74,7 @@
 
         fetchColumnSet: function() {
             this.columnSet = this.tabularData.columns({type: "meta"});
-            this.columnSet.bind("loaded", this.columnSetFetched, this);
+            this.columnSet.bind("loaded", this.drawColumns, this);
             this.columnSet.fetchAll();
         },
 
@@ -90,7 +90,7 @@
             });
         },
 
-        columnSetFetched: function() {
+        drawColumns: function() {
             var serverErrors = this.columnSet.serverErrors
             this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
             this.columnSet.serverErrors = serverErrors;
@@ -178,8 +178,10 @@
 
         hideSidebar: function(type) {
             this.sidebar.disabled = false;
-            this.secondarySidebar.cleanup();
-            delete this.secondarySidebar;
+            if (this.secondarySidebar) {
+                this.secondarySidebar.cleanup();
+                delete this.secondarySidebar;
+            }
             this.mainContent.content.render();
             this.$('.sidebar_content.primary').removeClass("hidden")
             this.$('.sidebar_content.secondary').addClass("hidden")

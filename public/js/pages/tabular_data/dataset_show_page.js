@@ -13,6 +13,17 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
         ];
     },
 
+    setup: function() {
+        this._super('setup', arguments);
+
+        this.sidebarOptions = {
+            workspace: this.workspace,
+            requiredResources: [ this.workspace ]
+        };
+
+        this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
+    },
+
     makeModel: function(workspaceId, datasetId) {
         this.workspaceId = workspaceId;
         this.workspace = new chorus.models.Workspace({id: workspaceId});
@@ -21,17 +32,10 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
         var datasetImport = this.tabularData.getImport();
         this.requiredResources.push(datasetImport);
         datasetImport.fetchIfNotLoaded();
-
-        this.sidebarOptions = {workspace: this.workspace};
-        this.sidebarOptions.requiredResources = [ this.workspace ];
     },
 
-    columnSetFetched: function() {
-        this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
-
-        this._super('columnSetFetched');
-
-        this.sidebar.options.workspace = this.workspace;
+    drawColumns: function() {
+        this._super('drawColumns');
 
         this.mainContent.contentDetails.bind("dataset:edit", this.editChorusView, this);
     },
@@ -42,7 +46,7 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
             contentDetails: new chorus.views.TabularDataContentDetails({ tabularData: this.tabularData, collection: this.columnSet, inEditChorusView: true })
         });
 
-        this.mainContent.contentDetails.bind("dataset:cancelEdit", this.fetchResources, this);
+        this.mainContent.contentDetails.bind("dataset:cancelEdit", this.drawColumns, this);
         this.mainContent.contentDetails.forwardEvent("dataset:saveEdit", this.mainContent.content, this);
 
         this.renderSubview('mainContent');
