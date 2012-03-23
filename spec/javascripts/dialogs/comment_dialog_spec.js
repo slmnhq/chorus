@@ -5,6 +5,8 @@ describe("chorus.dialogs.CommentDialog", function() {
             launchElement : this.launchElement,
             pageModel : new chorus.models.Workfile()
         });
+        stubDefer();
+        spyOn(this.dialog, 'makeEditor');
     });
 
     it("does not re-render when the model changes", function() {
@@ -36,6 +38,11 @@ describe("chorus.dialogs.CommentDialog", function() {
 
         it("has the right placeholder", function() {
             expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("comments.placeholder", {commentSubject: "note"}));
+        });
+
+        it("makes a cl editor with toolbar", function() {
+            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width : 350 } );
+            expect(this.dialog.$('.toolbar')).toExist();
         });
     });
 
