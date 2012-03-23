@@ -36,10 +36,7 @@ window.Chorus = function chorus$Global() {
         self.startHistory();
     };
 
-    // to enable development mode,
-    //
-    // > echo 'window.CHORUS_DEV_MODE = true;' > ~/workspace/chorus/ofbiz/hot-deploy/client/public/js/environment.js
-    //
+    // to enable development mode, run `rake enable_dev_mode`
     self.isDevMode = function() {
         return !!window.CHORUS_DEV_MODE;
     };
