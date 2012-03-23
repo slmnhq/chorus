@@ -5,21 +5,18 @@ describe("chorus.models.TypeAheadSearchResult", function() {
 
     describe("fixtures", function() {
         it('gives us what we expect', function() {
-            expect(this.result.get('typeAhead').docs.length).toBe(8);
-
-            var expectation = [
+            var entityTypes = _.pluck(this.result.get('typeAhead').docs, 'entityType');
+            expect(entityTypes).toEqual([
+                'attachment',
+                'hdfs',
+                'workspace',
+                'instance',
                 'user',
                 'workfile',
-                'workspace',
-                'hdfs',
                 'databaseObject',
-                'chorusView',
-                'instance',
-                'attachment'
-            ];
-            var actual = _.pluck(this.result.get('typeAhead').docs, 'entityType');
-            expect(_.difference(expectation, actual).length).toBe(0);
-        })
+                'chorusView'
+            ]);
+        });
     });
 
     describe("results", function() {
@@ -27,16 +24,15 @@ describe("chorus.models.TypeAheadSearchResult", function() {
             this.searchResults = this.result.results();
         });
 
-        it("returns objects of the appropriate type", function() {
-            expect(this.searchResults[0]).toBeA(chorus.models.Artifact);
-            expect(this.searchResults[1]).toBeA(chorus.models.HdfsEntry);
-            expect(this.searchResults[2]).toBeA(chorus.models.Workspace);
-            expect(this.searchResults[3]).toBeA(chorus.models.Instance);
-            expect(this.searchResults[4]).toBeA(chorus.models.User);
-            expect(this.searchResults[5]).toBeA(chorus.models.Workfile);
-            expect(this.searchResults[6]).toBeA(chorus.models.DatabaseObject);
-            expect(this.searchResults[7]).toBeA(chorus.models.ChorusView);
-
+        it("returns objects of the appropriate type, excluding artifacts", function() {
+            expect(this.searchResults.length).toBe(7);
+            expect(this.searchResults[0]).toBeA(chorus.models.HdfsEntry);
+            expect(this.searchResults[1]).toBeA(chorus.models.Workspace);
+            expect(this.searchResults[2]).toBeA(chorus.models.Instance);
+            expect(this.searchResults[3]).toBeA(chorus.models.User);
+            expect(this.searchResults[4]).toBeA(chorus.models.Workfile);
+            expect(this.searchResults[5]).toBeA(chorus.models.DatabaseObject);
+            expect(this.searchResults[6]).toBeA(chorus.models.ChorusView);
         });
 
         it("expects all result objects to have a name and downloadUrl/showUrl method", function() {

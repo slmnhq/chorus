@@ -3,7 +3,7 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
     urlTemplate: "search/typeAhead/",
 
     results: function() {
-        return _.map(this.get('typeAhead').docs, function(result) {
+        return _.compact(_.map(this.get('typeAhead').docs, function(result) {
             switch (result.entityType) {
                 case "user":
                     return new chorus.models.User(result);
@@ -26,12 +26,9 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                 case "instance":
                     return new chorus.models.Instance(result);
                     break;
-                case "attachment":
-                    return new chorus.models.Artifact(result);
-                    break;
                 default:
                     break;
             }
-        });
+        }));
     }
 });

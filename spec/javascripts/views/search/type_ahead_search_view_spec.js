@@ -17,7 +17,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         });
 
         it("should have one entry for each item in the result", function() {
-            expect(this.view.$("li.result").length).toBe(this.result.get("typeAhead").docs.length);
+            expect(this.view.$("li.result").length).toBe(this.result.results().length);
         });
 
         it("should show the link to show all search result", function() {
@@ -27,9 +27,10 @@ describe("chorus.views.TypeAheadSearch", function() {
 
         it("should display the correct name and type for hdfs", function() {
             var hdfs = this.result.get("typeAhead").docs[1];
-            expect(this.view.$("li.result:eq(1) .name").html()).toBe(hdfs.highlightedAttributes.name[0]);
-            expect(this.view.$("li.result:eq(1) .name").attr("href")).toBe('#/instances/10020/browseFile' + hdfs.path + '/' + hdfs.name);
-            expect(this.view.$("li.result:eq(1) .type").text()).toMatchTranslation("type_ahead.entity.hdfs");
+            var result = this.view.$("li.result:eq(0)");
+            expect(result.find(".name").html()).toBe(hdfs.highlightedAttributes.name[0]);
+            expect(result.find(".name").attr("href")).toBe('#/instances/10020/browseFile' + hdfs.path + '/' + hdfs.name);
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hdfs");
         });
 
         it("should display nothing for hdfs binary file", function(){
@@ -41,44 +42,50 @@ describe("chorus.views.TypeAheadSearch", function() {
 
         it("should display the correct name and type for workspace", function() {
             var workspace = this.result.get("typeAhead").docs[2];
-            expect(this.view.$("li.result:eq(2) .name").html()).toBe(workspace.highlightedAttributes.name[0]);
-            expect(this.view.$("li.result:eq(2) .name").attr("href")).toBe((new chorus.models.Workspace(workspace)).showUrl());
-            expect(this.view.$("li.result:eq(2) .type").text()).toMatchTranslation("type_ahead.entity.workspace");
+            var result = this.view.$("li.result:eq(1)");
+            expect(result.find(".name").html()).toBe(workspace.highlightedAttributes.name[0]);
+            expect(result.find(".name").attr("href")).toBe((new chorus.models.Workspace(workspace)).showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workspace");
         });
 
         it("should display the correct name and type for instance", function() {
             var instance = this.result.get("typeAhead").docs[3];
-            expect(this.view.$("li.result:eq(3) .name").html()).toBe(instance.highlightedAttributes.name[0]);
-            expect(this.view.$("li.result:eq(3) .name").attr("href")).toBe((new chorus.models.Instance(instance)).showUrl());
-            expect(this.view.$("li.result:eq(3) .type").text()).toMatchTranslation("type_ahead.entity.instance");
+            var result = this.view.$("li.result:eq(2)");
+            expect(result.find(".name").html()).toBe(instance.highlightedAttributes.name[0]);
+            expect(result.find(".name").attr("href")).toBe((new chorus.models.Instance(instance)).showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.instance");
         });
 
         it("should display the correct name and type for user", function() {
             var user = this.result.get("typeAhead").docs[4];
-            expect(this.view.$("li.result:eq(4) .name").html()).toBe(user.highlightedAttributes.firstName[0] + ' ' + user.highlightedAttributes.lastName[0]);
-            expect(this.view.$("li.result:eq(4) .name").attr("href")).toBe((new chorus.models.User(user)).showUrl());
-            expect(this.view.$("li.result:eq(4) .type").text()).toMatchTranslation("type_ahead.entity.user");
+            var result = this.view.$("li.result:eq(3)");
+            expect(result.find(".name").html()).toBe(user.highlightedAttributes.firstName[0] + ' ' + user.highlightedAttributes.lastName[0]);
+            expect(result.find(".name").attr("href")).toBe((new chorus.models.User(user)).showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.user");
         });
 
         it("should display the correct name and type for workfile", function() {
             var workfile = this.result.get("typeAhead").docs[5];
-            expect(this.view.$("li.result:eq(5) .name").html()).toBe(workfile.highlightedAttributes.fileName[0]);
-            expect(this.view.$("li.result:eq(5) .name").attr("href")).toBe((new chorus.models.Workfile(workfile)).showUrl());
-            expect(this.view.$("li.result:eq(5) .type").text()).toMatchTranslation("type_ahead.entity.workfile");
+            var result = this.view.$("li.result:eq(4)");
+            expect(result.find(".name").html()).toBe(workfile.highlightedAttributes.fileName[0]);
+            expect(result.find(".name").attr("href")).toBe((new chorus.models.Workfile(workfile)).showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workfile");
         });
 
         it("should display the correct name and type for databaseObject", function() {
             var databaseObject = this.result.get("typeAhead").docs[6];
-            expect(this.view.$("li.result:eq(6) .name").html()).toBe(databaseObject.highlightedAttributes.objectName[0]);
-            expect(this.view.$("li.result:eq(6) .name").attr("href")).toBe((new chorus.models.DatabaseObject(databaseObject)).showUrl());
-            expect(this.view.$("li.result:eq(6) .type").text()).toMatchTranslation("type_ahead.entity.databaseObject");
+            var result = this.view.$("li.result:eq(5)");
+            expect(result.find(".name").html()).toBe(databaseObject.highlightedAttributes.objectName[0]);
+            expect(result.find(".name").attr("href")).toBe((new chorus.models.DatabaseObject(databaseObject)).showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.databaseObject");
         });
 
         it("should display the correct name and type for chorusView", function() {
             var chorusView = this.result.get("typeAhead").docs[7];
-            expect(this.view.$("li.result:eq(7) .name").html()).toBe(chorusView.highlightedAttributes.objectName[0]);
-            expect(this.view.$("li.result:eq(7) .name").attr("href")).toBe((new chorus.models.ChorusView(chorusView)).showUrl());
-            expect(this.view.$("li.result:eq(7) .type").text()).toMatchTranslation("type_ahead.entity.chorusView");
+            var result = this.view.$("li.result:eq(6)");
+            expect(result.find(".name").html()).toBe(chorusView.highlightedAttributes.objectName[0]);
+            expect(result.find(".name").attr("href")).toBe((new chorus.models.ChorusView(chorusView)).showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.chorusView");
         });
 
         describe("keyboard navigation", function() {
@@ -107,18 +114,17 @@ describe("chorus.views.TypeAheadSearch", function() {
                         this.view.downArrow();
                         this.view.downArrow();
                         this.view.downArrow();
+                        expectSelectedIndex(4);
                         this.view.downArrow();
                         expectSelectedIndex(5);
                         this.view.downArrow();
-                        expectSelectedIndex(6);
                         this.view.downArrow();
-                        this.view.downArrow();
-                        expectSelectedIndex(8);
+                        expectSelectedIndex(7);
                     });
 
                     it("does nothing", function() {
                         this.view.downArrow();
-                        expectSelectedIndex(8);
+                        expectSelectedIndex(7);
                     });
                 })
             });
