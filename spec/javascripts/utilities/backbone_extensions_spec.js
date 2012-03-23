@@ -18,6 +18,7 @@ describe("backbone_extensions", function() {
             this.model.url.reset();
             this.model.id = '24';
             this.model.save();
+            
             expect(this.model.url).toHaveBeenCalledWith({ method: 'update' });
         });
 
@@ -30,7 +31,7 @@ describe("backbone_extensions", function() {
             this.model.save({}, { method : 'update' });
             expect(this.server.lastUpdate().method).toBe("PUT");
         })
-        
+
         context("with a non-file upload model", function() {
             describe("#save", function() {
                 it("uses AJAX", function() {
