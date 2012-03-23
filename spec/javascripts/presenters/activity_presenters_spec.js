@@ -1219,6 +1219,19 @@ describe("chorus.presenters.Activity", function() {
             });
         });
 
+        describe("#headerTranslationKey with WORKSPACE_ADD_SANDBOX", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.WORKSPACE_ADD_SANDBOX();
+                this.presenter = new chorus.presenters.Activity(this.model);
+            });
+
+            it("returns the displayStyle when it exists", function() {
+                var expectedKey = 'activity_stream.header.html.WORKSPACE_ADD_SANDBOX.default';
+                expect(I18n.lookup(expectedKey)).toBeTruthy();
+                expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
+            });
+        });
+
         describe("#headerTranslationKey with note on workspace", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.NOTE_ON_WORKSPACE();

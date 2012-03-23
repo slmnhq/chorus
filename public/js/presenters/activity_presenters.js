@@ -129,9 +129,12 @@
 
             if (this.options.isNotification) prefix += "notification.";
 
+            var isSandboxMessage = type === "WORKSPACE_ADD_SANDBOX";
+            var isSameAsWorkspace = this.workspace != this.noteObject;
+
             var styles = _.flatten([
                 this.options.displayStyle,
-                this.workspace && (this.workspace != this.noteObject) ? 'default' : 'without_workspace'
+                this.workspace && (isSandboxMessage || isSameAsWorkspace) ? 'default' : 'without_workspace'
             ]);
             var style = _.find(styles, function(potentialStyle) {
                 return I18n.lookup(prefix + potentialStyle);
