@@ -1,8 +1,21 @@
-<div class="this_workspace"></div>
-<div class="workfile_list"></div>
-<div class="attachment_list"></div>
-<div class="hdfs_list"></div>
-<div class="dataset_list"></div>
-<div class="instance_list"></div>
-<div class="workspace_list"></div>
-<div class="user_list"></div>
+{{#if hasResults}}
+    <div class="this_workspace"></div>
+    <div class="workfile_list"></div>
+    <div class="attachment_list"></div>
+    <div class="hdfs_list"></div>
+    <div class="dataset_list"></div>
+    <div class="instance_list"></div>
+    <div class="workspace_list"></div>
+    <div class="user_list"></div>
+{{else}}
+    <div class="sorry">
+        <div class="header">{{t "search.no_results.header"}}</div>
+        <ul>
+            <li>{{t "search.no_results.check_spelling"}}</li>
+            <li>{{t "search.no_results.try_wildcards"}}</li>
+            {{#if isConstrained}}
+                <li><a href="{{expandHref}}">{{t "search.no_results.expand"}}</a></li>
+            {{/if}}
+        </ul>
+    </div>
+{{/if}}

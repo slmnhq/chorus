@@ -1,0 +1,127 @@
+@import "_common.scss";
+
+.search_result_list {
+    .list_content_details {
+        @include list-section-heading;
+        width: auto;
+        padding: 5px 10px;
+        @include background-image(linear-gradient(#ebeef2, #d7dfe9));
+        border-top: 1px solid #cbcbcb;
+        border-bottom: 1px solid #a4a4a4;
+        height: 20px;
+        line-height: 20px;
+        vertical-align: middle;
+
+        .pagination {
+            span, a {
+                font-size: 12px;
+                padding-left: 15px;
+            }
+        }
+    }
+
+    .count, .page_numbers {
+        font-size: 12px;
+        padding: 4px;
+        color: $color-text2;
+    }
+    .count {
+        font-weight: $semibold;
+    }
+
+    div.pagination .links .next {
+        padding-right: 10px;
+    }
+
+    span.previous, span.next {
+        color: $color-text4;
+    }
+
+    li {
+        min-height: 45px;
+        a.name {
+            font-size: 18px;
+        }
+
+        img {
+            vertical-align: top;
+            max-width: 32px;
+            max-height: 32px;
+        }
+
+        .description {
+            padding-left: 5px;
+            display: inline-block;
+            vertical-align: middle;
+
+            .found_in {
+                display: block;
+            }
+
+            em {
+                background-color: $search-highlight-color;
+                font-weight: $semibold;
+            }
+
+            .location {
+                padding: 5px 0;
+                color: $color-text2;
+                line-height: 15px;
+
+                a, span {
+                    font-size: 12px;
+                }
+
+                a {
+                    font-weight: $semibold;
+                }
+            }
+
+            .description_content {
+                @include font-normal-alpha;
+            }
+        }
+
+        .prefix {
+            @include font-content-details;
+        }
+
+        .content {
+            @include font-normal-alpha;
+        }
+
+        .supporting_message, .more_comments {
+            span {
+                line-height: 1.5em;
+                vertical-align: baseline;
+            }
+        }
+
+        .comments, .more_comments, .supporting_message, .more_supporting_message {
+            @include font-content-details;
+            margin: 0;
+
+            .comment {
+                padding: 3px 0;
+
+                .comment_type {
+                    padding-right: 5px;
+                }
+
+                .comment_content {
+                    @include font-normal-alpha;
+
+                    em {
+                        background: yellow;
+                    }
+                }
+            }
+
+            .has_more_comments, .more_comments {
+                a {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}

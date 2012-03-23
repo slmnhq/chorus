@@ -43,7 +43,7 @@
                 prefix = "workspaces/" + workspaceId + "/";
             }
 
-            if (this.isScoped() || this.hasSpecificEntityType()) {
+            if (this.isConstrained()) {
                 return prefix + "search/" + this.searchIn() + "/" + this.entityType() + "/" + this.get("query");
             } else {
                 return prefix + "search/" + this.get("query");
@@ -52,6 +52,10 @@
 
         isScoped: function() {
             return this.isScopedToSingleWorkspace() || this.isScopedToUserWorkspaces();
+        },
+
+        isConstrained: function() {
+            return this.isScoped() || this.hasSpecificEntityType();
         },
 
         isScopedToSingleWorkspace: function() {
@@ -150,6 +154,16 @@
 
         numPages: function(totalFound) {
             return Math.ceil(totalFound / NUM_RESULTS_PER_PAGE);
+        },
+
+        total: function() {
+            return _.reduce(_.values(this.attributes), function(sum, results) {
+                if (results && results.numFound) {
+                    return sum + results.numFound
+                } else {
+                    return sum;
+                }
+            }, 0)
         }
     });
 

@@ -3324,6 +3324,19 @@ beforeEach(function() {
             return new chorus.models.SearchResult(this.searchResultJson(overrides))
         },
 
+        emptySearchResult: function(overrides) {
+            var model = new chorus.models.SearchResult(this.searchResultJson(overrides));
+            _.each(_.keys(model.attributes), function(key) {
+                var results = model.get(key);
+                if (results.docs) {
+                    results.docs = [];
+                    results.numFound = 0;
+                }
+            });
+
+            return model;
+        },
+
         typeAheadSearchResultJson: function(overrides) {
             return _.extend({
                 "typeAhead": {

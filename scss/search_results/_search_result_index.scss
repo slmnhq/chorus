@@ -1,0 +1,18 @@
+@import "_common.scss";
+
+.search_results {
+    .sorry {
+        padding: (2 * $padding-y) $padding-x;
+        @include font-normal-alpha;
+
+        ul {
+            padding: (2 * $padding-y) $padding-x;
+            list-style: disc;
+            list-style-position: inside;
+
+            li {
+                padding: $padding-y $padding-x;
+            }
+        }
+    }
+}

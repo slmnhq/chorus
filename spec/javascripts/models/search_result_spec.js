@@ -373,6 +373,75 @@ describe("chorus.models.SearchResult", function() {
         });
     });
 
+    describe("#total", function() {
+        context("when there are results", function() {
+            beforeEach(function() {
+                this.model = fixtures.emptySearchResult();
+                this.model.set({
+                    thisWorkspace: {
+                        numFound: 3
+                    },
+                    attachment: {
+                        numFound: 4
+                    }
+                });
+            });
+
+            it("returns the sum of numFound", function() {
+                expect(this.model.total()).toBe(7)
+            });
+        });
+
+        context("when there are no results", function() {
+            beforeEach(function() {
+                this.model = fixtures.emptySearchResult();
+            })
+
+            it("returns 0", function() {
+                expect(this.model.total()).toBe(0)
+            });
+        });
+    })
+
+    describe("#isConstrained", function() {
+        beforeEach(function() {
+            this.model = fixtures.searchResult();
+        });
+
+        context("when isScoped returns true", function() {
+            beforeEach(function() {
+                spyOn(this.model, "isScoped").andReturn(true);
+                spyOn(this.model, "hasSpecificEntityType").andReturn(false);
+            })
+
+            it("return true", function() {
+                expect(this.model.isConstrained()).toBeTruthy();
+            });
+        });
+
+        context("when hasSpecificEntityType returns true", function() {
+            beforeEach(function() {
+                spyOn(this.model, "isScoped").andReturn(false);
+                spyOn(this.model, "hasSpecificEntityType").andReturn(true);
+            })
+
+            it("return true", function() {
+                expect(this.model.isConstrained()).toBeTruthy();
+            });
+        });
+
+        context("when isScoped and hasSpecificEntityType return false", function() {
+            beforeEach(function() {
+                spyOn(this.model, "isScoped").andReturn(false);
+                spyOn(this.model, "hasSpecificEntityType").andReturn(false);
+            })
+
+            it("return false", function() {
+                expect(this.model.isConstrained()).toBeFalsy();
+            });
+        });
+    })
+
     describe("triggering invalidated", function() {
         beforeEach(function() {
             var search = fixtures.searchResult()
