@@ -24,11 +24,11 @@ describe("chorus.Mixins.VisHelpers", function() {
             });
 
             it("truncates the string to the length if it is too long", function() {
-                expect(this.hostView.labelFormat("abcdef", 4)).toBe("abc…")
+                expect(this.hostView.labelFormat("abcdef", 4)).toBe("abc...")
             });
 
             it("truncates the string to 15 characters if no limit is specified", function() {
-                expect(this.hostView.labelFormat("abcdefghijklmnopqrstuvwxyz")).toBe("abcdefghijklmn…");
+                expect(this.hostView.labelFormat("abcdefghijklmnopqrstuvwxyz")).toBe("abcdefghijklmn...");
             });
         });
     });
