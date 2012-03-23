@@ -60,13 +60,13 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         }
     },
     {
-        buildFor:function (model) {
+        buildFor:function (model, contentView) {
             if (model.isImage()) {
                 return new chorus.views.ImageWorkfileContentDetails({ model:model });
             }
 
             if (model.isSql()) {
-                return new chorus.views.SqlWorkfileContentDetails({ model:model });
+                return new chorus.views.SqlWorkfileContentDetails({ model:model, contentView: contentView });
             }
 
             if (model.isAlpine()) {

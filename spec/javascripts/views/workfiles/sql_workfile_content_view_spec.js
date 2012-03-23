@@ -11,7 +11,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         }));
         this.view = new chorus.views.SqlWorkfileContent({model: this.workfile});
         stubDefer();
-    })
+    });
 
     describe("initialization", function() {
         it("has a TextWorkfileContent view", function() {
@@ -22,10 +22,10 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             expect(this.view.resultsConsole).toBeA(chorus.views.ResultsConsole);
         })
 
-        it("delcares hotkeys", function() {
+        it("declares hotkeys", function() {
             expect(this.view.hotkeys.r).toBeDefined();
         })
-    })
+    });
 
     describe("executing the workfile", function() {
         beforeEach(function() {
@@ -52,7 +52,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
                     expect(this.view.task.has("checkId")).toBeTruthy();
                 });
-            })
+            });
 
             describe("running in the default schema", function() {
                 context("when the workfile has a schema in which to execute", function() {
@@ -67,7 +67,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         }
 
                         chorus.PageEvents.broadcast("file:runCurrent");
-                    })
+                    });
 
                     it("creates a task with the right parameters", function() {
                         expect(this.view.task.get("sql")).toBe("select * from foos");
@@ -85,7 +85,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     it("broadcasts file:executionStarted", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionStarted", jasmine.any(chorus.models.SqlExecutionTask));
-                    })
+                    });
 
                     describe("when the task completes successfully", function() {
                         beforeEach(function() {
@@ -122,11 +122,13 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                                 expect(this.server.creates().length).toBe(2);
                             })
                         })
-                    })
+                    });
 
                     describe("when the task completion fails", function() {
                         beforeEach(function() {
-                            this.server.lastCreate().fail("it broke", [ { executionInfo: this.executionInfo }]);
+                            this.server.lastCreate().fail("it broke", [
+                                { executionInfo: this.executionInfo }
+                            ]);
                         })
 
                         it("broadcasts file:executionFailed", function() {
@@ -140,7 +142,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         it("broadcasts workfile:executed", function() {
                             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:executed", this.workfile, this.executionInfo);
                         })
-                    })
+                    });
 
                     describe("when the task is cancelled", function() {
                         beforeEach(function() {
@@ -159,7 +161,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         it("does not broadcast workfile:executed", function() {
                             expect(chorus.PageEvents.broadcast.callCount).toBe(1);
                         })
-                    })
+                    });
                 });
 
                 context("when the workfile has no schema in which to execute", function() {
@@ -168,6 +170,25 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         // should not raise error
                         chorus.PageEvents.broadcast("file:runCurrent");
                     });
+                });
+            });
+
+            describe("running selected text", function() {
+                beforeEach(function() {
+                    this.view.textContent.editor.getSelection = function() {
+                        return "select 1 from table";
+                    };
+                    chorus.PageEvents.broadcast("file:runSelected");
+                });
+
+                it("creates a task with the right parameters", function() {
+                    expect(this.view.task.get("sql")).toBe("select 1 from table");
+                    expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
+                    expect(this.view.task.has("checkId")).toBeTruthy();
+                });
+                it("saves the task", function() {
+                    expect(this.server.creates().length).toBe(1);
+                    expect(this.server.lastCreate().url).toBe(this.view.task.url());
                 });
             });
 
@@ -182,7 +203,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 it('does not start a new execution', function() {
                     expect(this.startedSpy).not.toHaveBeenCalled();
                 })
-            })
-        })
+            });
+        });
     });
 });

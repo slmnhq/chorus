@@ -114,6 +114,12 @@
             &:hover {
                 text-decoration: underline;
             }
+
+            &.disabled {
+                text-decoration: none;
+                cursor: default;
+                @include secondary-text-normal;
+            }
         }
 
         span.run_default {

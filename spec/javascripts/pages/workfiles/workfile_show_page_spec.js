@@ -53,19 +53,19 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
         describe("fetch failure", function() {
             beforeEach(function() {
-                spyOn(Backbone.history, "loadUrl")
-            })
+                spyOn(Backbone.history, "loadUrl");
+            });
 
             it("navigates to the 404 page for the model", function() {
                 this.page.model.trigger('fetchFailed', this.page.model);
-                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
-            })
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+            });
 
             it("navigates to the 404 page for the workspace", function() {
                 this.page.workspace.trigger('fetchFailed', this.page.workspace);
-                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
-            })
-        })
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+            });
+        });
 
         describe("when the workspace and workfile are fetched", function() {
             beforeEach(function() {
@@ -77,27 +77,27 @@ describe("chorus.pages.WorkfileShowPage", function() {
                 beforeEach(function() {
                     chorus.views.Base.prototype.render.reset();
                     this.server.completeFetchFor(this.model);
-                })
+                });
 
                 it("loads breadcrumbs, sidebar, subnavigation, and mainContent", function() {
-                    expect(this.page.breadcrumbs).toBeDefined()
-                    expect(this.page.sidebar).toBeDefined()
-                    expect(this.page.subNav).toBeDefined()
-                    expect(this.page.mainContent).toBeDefined()
-                })
+                    expect(this.page.breadcrumbs).toBeDefined();
+                    expect(this.page.sidebar).toBeDefined();
+                    expect(this.page.subNav).toBeDefined();
+                    expect(this.page.mainContent).toBeDefined();
+                });
 
                 it("instantiates the content details view", function() {
-                    expect(chorus.views.WorkfileContentDetails.buildFor).toHaveBeenCalledWith(this.page.model)
+                    expect(chorus.views.WorkfileContentDetails.buildFor).toHaveBeenCalledWith(this.page.model, this.page.mainContent.content);
                 });
 
                 it("instantiates the content view", function() {
-                    expect(chorus.views.WorkfileContent.buildFor).toHaveBeenCalledWith(this.page.model)
+                    expect(chorus.views.WorkfileContent.buildFor).toHaveBeenCalledWith(this.page.model);
                 });
 
                 it("renders again", function() {
                     expect(chorus.views.Base.prototype.render).toHaveBeenCalled();
                 });
-            })
+            });
 
             context('and the workfile has a draft', function() {
                 beforeEach(function() {
@@ -105,11 +105,11 @@ describe("chorus.pages.WorkfileShowPage", function() {
                     stubModals();
                     spyOn(chorus.Modal.prototype, 'launchModal').andCallThrough();
                     this.server.completeFetchFor(this.model);
-                })
+                });
 
                 it("shows an alert", function() {
                     expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
-                })
+                });
 
                 context("and the user chooses the draft", function() {
                     beforeEach(function() {
@@ -117,7 +117,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
                         chorus.Modal.prototype.launchModal.reset();
                         this.page.model.isDraft = true;
                         this.page.model.trigger('change');
-                    })
+                    });
 
                     it("does not show an alert", function() {
                         expect(chorus.Modal.prototype.launchModal).not.toHaveBeenCalled();

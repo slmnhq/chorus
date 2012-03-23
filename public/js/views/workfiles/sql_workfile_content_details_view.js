@@ -3,19 +3,31 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
 
     setup: function() {
         chorus.PageEvents.subscribe("workfile:executed", this.workfileExecuted, this);
+        this.contentView = this.options.contentView;
     },
 
     postRender: function() {
         this._super("postRender")
-        var self = this;
         chorus.menu(this.$('.run_file'), {
-            content: this.$(".run_workfile").html(),
+            content: this.$(".run_workfile"),
             orientation: "right",
+            qtipArgs: {
+                events: {
+                    show: _.bind(function(e) {
+                        $(".run_workfile .run_selection").toggleClass("disabled", !this.getContentSelection());
+                    }, this)
+                }
+            },
             contentEvents: {
                 "a.run_default": _.bind(this.runInExecutionSchema, this),
-                ".run_other_schema": _.bind(this.runOtherSchema, this)
+                "a.run_selection": _.bind(this.runSelectedInExecutionSchema, this),
+                "a.run_other_schema": _.bind(this.runOtherSchema, this)
             }
         });
+    },
+
+    getContentSelection: function() {
+        return this.contentView.getSelectedText();
     },
 
     additionalContext: function() {
@@ -31,6 +43,10 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
 
     runInExecutionSchema: function() {
         chorus.PageEvents.broadcast("file:runCurrent");
+    },
+
+    runSelectedInExecutionSchema: function() {
+        chorus.PageEvents.broadcast("file:runSelected");
     },
 
     runOtherSchema: function() {

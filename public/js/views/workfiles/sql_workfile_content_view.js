@@ -21,11 +21,17 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         this.textContent = new chorus.views.TextWorkfileContent({ model: this.model })
         this.resultsConsole = new chorus.views.ResultsConsole({ model: this.task });
         chorus.PageEvents.subscribe("file:runCurrent", this.runInDefault, this);
+        chorus.PageEvents.subscribe("file:runSelected", this.runSelected, this);
         chorus.PageEvents.subscribe("file:runInSchema", this.runInSchema, this);
     },
 
     runInSchema: function(options) {
         this.run(options);
+    },
+
+    runSelected: function() {
+        var selectedText = this.getSelectedText();
+        if (selectedText) this.run({selection: selectedText});
     },
 
     runInDefault: function() {
@@ -44,18 +50,21 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
             this.task.clear({ silent: true });
             this.task.set({
                 taskType: "workfileSQLExecution",
-                sql: this.textContent.editor.getValue(),
+                sql: options && options.selection ? options.selection : this.textContent.editor.getValue(),
                 entityId: this.model.get("id"),
                 schemaId: options.schema,
                 instanceId: options.instance,
                 databaseId: options.database,
                 checkId: (new Date().getTime().toString())
-            }, { silent: true })
+            }, { silent: true });
 
             this.task.save({}, { method: "create" });
             chorus.PageEvents.broadcast("file:executionStarted", this.task);
         }
+    },
 
+    getSelectedText: function() {
+        return this.textContent.editor.getSelection();
     },
 
     executionSucceeded: function(task) {

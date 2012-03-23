@@ -47,8 +47,8 @@
                     alert.launchModal();
                 }
                 if (!this.mainContent.contentDetails) {
-                    this.mainContent.contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
                     this.mainContent.content = chorus.views.WorkfileContent.buildFor(this.model);
+                    this.mainContent.contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model, this.mainContent.content);
                 }
 
                 this.render();

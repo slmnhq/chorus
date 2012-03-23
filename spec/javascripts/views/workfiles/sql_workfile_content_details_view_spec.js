@@ -1,6 +1,6 @@
 describe("chorus.views.SqlWorkfileContentDetails", function() {
     beforeEach(function() {
-        this.model = fixtures.workfile({ fileName: 'test.sql', content: "select * from foo" });
+        this.model = fixtures.sqlWorkfile({ fileName: 'test.sql', content: "select * from foo" });
         this.model.workspace().set({
             sandboxInfo: {
                 databaseId: '3',
@@ -11,7 +11,15 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 schemaId: '4',
                 schemaName: "schema"
             }});
-        this.view = new chorus.views.SqlWorkfileContentDetails({ model: this.model })
+        this.contentView = new chorus.views.SqlWorkfileContent({ model: this.model });
+        this.contentView.render();
+        this.contentView.textContent.editor = new Object();
+        this.contentView.textContent.editor.getValue = function() {
+            return "Chuck and Lenny wrote this"
+        }
+        this.contentView.textContent.editor.getSelection = function() { };
+
+        this.view = new chorus.views.SqlWorkfileContentDetails({ model: this.model, contentView: this.contentView });
         spyOn(this.view, 'runInExecutionSchema').andCallThrough();
         this.qtipElement = stubQtip()
     });
@@ -29,10 +37,53 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             expect(this.view.$(".execution_schema")).toHaveText(this.model.executionSchema().canonicalName())
         });
 
+        context("when the user has not selected any text", function() {
+            beforeEach(function() {
+                this.contentView.textContent.editor.getSelection = function() {
+                    return "";
+                };
+                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+            });
+
+            context("and opens the Run File menu", function() {
+                beforeEach(function() {
+                    this.view.$(".run_file").click()
+                });
+
+                it("disables the 'run selected sql' link in the menu", function() {
+                    expect(this.qtipElement.find(".run_selection")).toHaveClass("disabled");
+                });
+            });
+        });
+
+        context("when the user has selected some text", function() {
+            beforeEach(function() {
+                this.contentView.textContent.editor.getSelection = function() {
+                    return "Chuck and Lenny";
+                };
+                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+            });
+
+            context("and opens the Run File menu", function() {
+                beforeEach(function() {
+                    this.view.$(".run_file").click();
+                });
+
+                it("enables the 'run selected sql' link in the menu", function() {
+                    expect(this.qtipElement.find(".run_selection")).not.toHaveClass("disabled");
+                });
+
+                it("runs the selected sql when the user says to", function() {
+                    this.qtipElement.find(".run_selection").click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runSelected");
+                });
+            });
+        });
+
         context("opening the Run File menu", function() {
             beforeEach(function() {
                 this.view.$(".run_file").click()
-            })
+            });
 
             it("shows the 'run in another' schema link in the menu", function() {
                 expect(this.qtipElement).toContainTranslation("workfile.content_details.run_in_another_schema")
@@ -146,22 +197,22 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     databaseName: "rob",
                     schemaId: '53',
                     schemaName: "louis"
-                }
+                };
 
                 chorus.PageEvents.broadcast("workfile:executed", this.model, this.executionInfo);
             });
 
             it("updates the execution info in the workfile", function() {
                 expect(this.view.model.get("executionInfo")).toBe(this.executionInfo);
-            })
+            });
 
             it("re-renders", function() {
                 expect(this.view.render).toHaveBeenCalled();
-            })
+            });
 
             it("does not trigger change on the model", function() {
                 expect("change").not.toHaveBeenTriggeredOn(this.view.model);
-            })
-        })
+            });
+        });
     });
 });

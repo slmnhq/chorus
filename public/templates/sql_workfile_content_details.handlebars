@@ -3,20 +3,32 @@
 
 {{renderTemplate "workfile_content_details" .}}
 
-<div class="run_workfile hidden">
+<div class="hidden">
+<div class="run_workfile">
     <ul class="run_menu">
         <li>
             {{#if schemaName}}
                 <span class="menu_shortcut">{{hotKeyName "r"}}</span>
+                <a href="#" class="run_default">
                 {{#if executionSchemaIsSandbox}}
-                    <a href="#" class="run_default">{{t "workfile.content_details.run_workspace_sandbox"}}</a>
+                    {{t "workfile.content_details.run_workspace_sandbox"}}
                 {{else}}
-                    <a href="#" class="run_default">{{t "workfile.content_details.run_in_last_schema" schemaName=schemaName}}</a>
+                    {{t "workfile.content_details.run_in_last_schema" schemaName=schemaName}}
                 {{/if}}
+                </a>
             {{else}}
-                <span class="run_default">{{t "workfile.content_details.run_workspace_sandbox"}}</a>
+                <span class="run_default">{{t "workfile.content_details.run_workspace_sandbox"}}</span>
             {{/if}}
         </li>
+
+        <li><a href="#" class="run_selection disabled">
+            {{#if executionSchemaIsSandbox}}
+                {{t "workfile.content_details.run_selection_sandbox"}}
+            {{else}}
+                {{t "workfile.content_details.run_selection_schema" schemaName=schemaName}}
+            {{/if}}
+        </a></li>
         <li><a href="#" class="run_other_schema">{{t "workfile.content_details.run_in_another_schema"}}</a></li>
     </ul>
+</div>
 </div>

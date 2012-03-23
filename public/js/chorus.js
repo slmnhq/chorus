@@ -154,7 +154,7 @@ window.Chorus = function chorus$Global() {
         }
 
         if (options.contentEvents) {
-            qtipArgs.events = {};
+            qtipArgs.events || (qtipArgs.events = {});
             qtipArgs.events.render = function(event, api) {
                 _.each(options.contentEvents, function(callback, selector) {
                     var wrappedCallback = function(event) {
