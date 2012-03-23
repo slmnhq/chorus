@@ -7,5 +7,5 @@ def create_valid_workspace(name=nil)
         fill_in 'name', :with => name
         click_button "Create Workspace"
     end
-    wait_until { current_route =~ /workspaces\/\d+/ }
+    wait_until { current_route =~ /workspaces\/\d+/ && page.has_selector?("a[data-dialog=NotesNew]")}
 end

@@ -6,7 +6,6 @@ describe "creating a note on a workspace" do
     login('edcadmin', 'secret')
     create_valid_workspace
     click_link "Add a note"
-    wait_until { page.has_selector?("a.show_options") }
   end
 
   describe "launching the submodal dialog" do
@@ -20,7 +19,7 @@ describe "creating a note on a workspace" do
       page.find("body").native.send_keys :escape
       wait_until { page.find("#facebox .dialog h1").text == "Add a Note" }
       page.find("body").native.send_keys :escape
-      wait_until { !page.has_css?("#facebox") }
+      evaluate_script('$("#facebox").length').should be_zero
     end
   end
 
