@@ -1,29 +1,32 @@
 require File.expand_path("../to_from", __FILE__)
 
-chorus_dir = File.expand_path("../../../../../../..", __FILE__)
-spec_dir = 'spec/javascripts'
-src_dir  = 'public/js'
-spec_pattern = spec_dir + '/.*spec\.js$'
-src_pattern  = src_dir + '/.*\.js$'
+CHORUS_DIR ||= File.expand_path("../../../../../../..", __FILE__)
+SPEC_DIR ||= 'spec/javascripts'
+SRC_DIR  ||= 'public/js'
+SPEC_PATTERN ||= SPEC_DIR + '/.*spec\.js$'
+SRC_PATTERN  ||= SRC_DIR + '/.*\.js$'
 
-watch(spec_pattern) do |md|
-    run "#{chorus_dir}/launch_phantom_jasmine.sh '#{md[0]}'"
+watch(SPEC_PATTERN) do |md|
+    puts "Detected change to #{md[0]}"
+    run_spec md[0]
 end
 
-watch(src_pattern) do |md|
+watch(SRC_PATTERN) do |md|
+    puts "Detected change to #{md[0]}"
     name = File.basename(md[0])
     spec_path = to_from(
-        :src_dir => src_dir,
+        :src_dir => SRC_DIR,
         :file_ext => '.js',
-        :spec_dir => spec_dir,
+        :spec_dir => SPEC_DIR,
         :name => name,
         :spec_suffix => '_spec'
     ).first
-
-    run "#{chorus_dir}/launch_phantom_jasmine.sh '#{spec_path}'"
+    run_spec spec_path
 end
 
-def run(cmd)
-    puts cmd
-    system cmd
+
+def run_spec(spec_path)
+    puts "Running #{spec_path}"
+    system "#{CHORUS_DIR}/launch_phantom_jasmine.sh '#{spec_path}'"
+    puts
 end
