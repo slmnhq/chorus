@@ -14,7 +14,7 @@ describe("chorus.views.DatasetList", function() {
     });
 
     it("should broadcast tabularData:selected when itemSelected is called", function() {
-        var model = this.collection.at(2);
+        var model = this.collection.at(1);
         spyOn(chorus.PageEvents, "broadcast");
         this.view.itemSelected(model);
         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", model);

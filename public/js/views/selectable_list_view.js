@@ -38,5 +38,11 @@ chorus.views.SelectableList = chorus.views.Base.extend({
 
     postRender: function() {
         this.selectItem(this.$(">li").eq(this.selectedIndex));
+    },
+
+    itemSelected: function(model) {
+        if (this.eventName && model) {
+            chorus.PageEvents.broadcast(this.eventName + ":selected", model);
+        }
     }
 });

@@ -1,9 +1,6 @@
 chorus.views.SchemaList = chorus.views.SelectableList.extend({
     className: "schema_list",
-
-    itemSelected: function(model) {
-        chorus.PageEvents.broadcast("schema:selected", model);
-    },
+    eventName: "schema",
 
     collectionModelContext: function(model) {
         return {

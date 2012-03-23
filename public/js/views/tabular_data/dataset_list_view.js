@@ -1,6 +1,7 @@
 chorus.views.DatasetList = chorus.views.SelectableList.extend({
     className: "dataset_list",
     useLoadingSection: true,
+    eventName: "tabularData",
 
     postRender: function() {
         var $list = $(this.el);
@@ -9,9 +10,5 @@ chorus.views.DatasetList = chorus.views.SelectableList.extend({
             $list.append(view.render().el);
         }, this);
         this._super("postRender", arguments);
-    },
-
-    itemSelected: function(model) {
-        chorus.PageEvents.broadcast("tabularData:selected", model);
     }
 });

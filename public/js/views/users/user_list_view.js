@@ -2,6 +2,7 @@ chorus.views.UserList = chorus.views.SelectableList.extend({
     tagName:"ul",
     className:"user_list",
     additionalClass:"list",
+    eventName: "user",
 
     collectionModelContext:function (model) {
         return {
@@ -9,12 +10,6 @@ chorus.views.UserList = chorus.views.SelectableList.extend({
             showUrl:model.showUrl(),
             fullName:[model.get("firstName"), model.get("lastName")].join(' '),
             title:model.get("title")
-        }
-    },
-
-    itemSelected: function(model) {
-        if (model) {
-            chorus.PageEvents.broadcast("user:selected", model);
         }
     }
 });

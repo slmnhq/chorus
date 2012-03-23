@@ -2,12 +2,7 @@ chorus.views.WorkspaceList = chorus.views.SelectableList.extend({
     className:"workspace_list",
     tagName:"ul",
     additionalClass:"list",
-
-    itemSelected: function(model) {
-        if(model) {
-            chorus.PageEvents.broadcast("workspace:selected", model);
-        }
-    },
+    eventName: "workspace",
 
     collectionModelContext:function (model) {
         var date = Date.parseFromApi(model.get("archivedTimestamp"));

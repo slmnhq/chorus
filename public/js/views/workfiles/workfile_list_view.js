@@ -1,11 +1,6 @@
 chorus.views.WorkfileList = chorus.views.SelectableList.extend({
     className:"workfile_list",
-
-    itemSelected: function(model) {
-        if(model) {
-            chorus.PageEvents.broadcast("workfile:selected", model);
-        }
-    },
+    eventName: "workfile",
 
     filter:function (type) {
         this.collection.attributes.type = type;

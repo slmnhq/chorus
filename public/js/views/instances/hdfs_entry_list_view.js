@@ -2,6 +2,7 @@ chorus.views.HdfsEntryList = chorus.views.SelectableList.extend({
     constructorName: "HdfsEntryList",
     className: "hdfs_entry_list",
     useLoadingSection: true,
+    eventName: "hdfs_entry",
 
     collectionModelContext: function(model) {
         return {
@@ -13,9 +14,5 @@ chorus.views.HdfsEntryList = chorus.views.SelectableList.extend({
             dirInfo: t("hdfs.directory_files", {count: model.get("count")}),
             displayableFiletype: model.get('isBinary') === false
         }
-    },
-
-    itemSelected: function(model) {
-        chorus.PageEvents.broadcast("hdfs_entry:selected", model);
     }
 });
