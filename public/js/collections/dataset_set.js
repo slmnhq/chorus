@@ -9,11 +9,11 @@ chorus.collections.DatasetSet = chorus.collections.Base.extend({
     },
 
     urlParams: function() {
-        if (this.attributes.workspaceId){
-            return {}
-        } else {
-            return {type: "meta"}
+        var ctx = {namePattern: this.attributes.namePattern};
+        if (!this.attributes.workspaceId) {
+            ctx.type = "meta";
         }
+        return ctx;
     },
 
     comparator: function(dataset) {

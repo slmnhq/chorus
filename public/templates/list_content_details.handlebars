@@ -49,3 +49,9 @@
         {{/if}}
     {{/if}}
 {{/each}}
+{{#if search}}
+    <div class="chorus_search_container" style="display: inline-block; ">
+        <input type="text" class="search chorus_search" placeholder="{{search}}">
+        <a href="#" class="chorus_search_clear hidden"><img src="/images/icon_clear_search.png"></a>
+    </div>
+{{/if}}

@@ -264,8 +264,36 @@ describe("chorus.views.ListContentDetails", function() {
             })
 
             it("scrolls the viewport to the top of the page", function() {
-                expect(window.scroll).toHaveBeenCalledWith(0, 0)
+                expect(window.scroll).toHaveBeenCalledWith(0, 0);
             })
         })
     })
+
+    describe("type ahead search", function() {
+        beforeEach(function() {
+            spyOnEvent(this.view, "search:content");
+            this.view.options.search = t("dataset.search");
+            this.view.render();
+        });
+
+        it("renders the search field in the page", function() {
+            expect(this.view.$("input.search")).toExist();
+            expect(this.view.$("input.search").attr("placeholder")).toContainText(t("dataset.search"));
+        });
+
+        it("triggers search:content with the search text on change event", function() {
+            this.view.$("input.search").val("foo").change();
+            expect("search:content").toHaveBeenTriggeredOn(this.view, ["foo"]);
+        });
+
+        it("triggers search:content with the search text on keyup event", function() {
+            this.view.$("input.search").val("bar").keyup();
+            expect("search:content").toHaveBeenTriggeredOn(this.view, ["bar"]);
+        });
+
+        it("triggers search:content with the search text on paste event", function() {
+            this.view.$("input.search").val("sna").trigger("paste");
+            expect("search:content").toHaveBeenTriggeredOn(this.view, ["sna"]);
+        });
+    });
 });

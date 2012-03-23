@@ -20,7 +20,7 @@
 
             chorus.PageEvents.subscribe("csv_import:started", function() {
                 this.collection.fetch();
-            }, this)
+            }, this);
 
             this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
             this.mainContent = new chorus.views.MainContentList({
@@ -28,6 +28,7 @@
                 collection: this.collection,
                 model: this.workspace,
                 title: t("dataset.title"),
+                search: t("workspace.search"),
                 linkMenus: {
                     type: {
                         title: t("header.menu.filter.title"),
@@ -50,6 +51,11 @@
                     }
                 ]
             });
+
+            this.mainContent.contentDetails.bind("search:content", function(input) {
+                this.collection.attributes.namePattern = input;
+                this.collection.fetch({silent: true, success: _.bind(function() {this.mainContent.content.render()}, this)});
+            }, this);
 
             this.mainContent.contentHeader.bind("choice:filter", function(choice) {
                 this.collection.attributes.type = choice;

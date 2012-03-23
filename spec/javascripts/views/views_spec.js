@@ -741,6 +741,21 @@ describe("chorus.views.Base", function() {
                     expect(this.view.contentHeader).toBe(this.contentHeader);
                 })
             })
+
+            context("options.showSearchField", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.MainContentList({
+                        collection: this.collection,
+                        modelClass: "Workfile",
+                        search: "dataset.search"
+                    });
+                    this.view.render();
+                });
+
+                it("passes the search option to the list content details", function() {
+                    expect(this.view.contentDetails.options.search).toBe("dataset.search");
+                });
+            });
         })
     })
 

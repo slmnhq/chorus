@@ -474,8 +474,18 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
         if (options.contentDetails) {
             this.contentDetails = options.contentDetails;
         } else {
-            this.contentDetails = new chorus.views.ListContentDetails({collection: collection, modelClass: modelClass, buttons: options.buttons});
-            this.contentFooter = new chorus.views.ListContentDetails({collection: collection, modelClass: modelClass, hideCounts: true, hideIfNoPagination: true})
+            this.contentDetails = new chorus.views.ListContentDetails({
+                collection: collection,
+                modelClass: modelClass,
+                buttons: options.buttons,
+                search: options.search
+            });
+            this.contentFooter = new chorus.views.ListContentDetails({
+                collection: collection,
+                modelClass: modelClass,
+                hideCounts: true,
+                hideIfNoPagination: true
+            });
         }
     },
     additionalClass: "main_content_list"

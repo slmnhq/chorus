@@ -10,10 +10,25 @@ describe("chorus.collections.DatasetSet", function() {
 
         context("with filter type", function() {
             it("appends the filter type", function() {
-                this.collection.attributes.type = "SOURCE_TABLE"
-                expect(this.collection.url({rows: 10, page: 1})).toMatchUrl("/edc/workspace/10000/dataset?type=SOURCE_TABLE&rows=10&page=1");
-            })
-        })
+                this.collection.attributes.type = "SOURCE_TABLE";
+                expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({type: "SOURCE_TABLE", rows: "10", page: "1"});
+            });
+        });
+
+        context("with name pattern", function() {
+            it("appends the name pattern", function() {
+                this.collection.attributes.namePattern = "Foo";
+                expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({namePattern: "Foo", rows: "10", page:"1"});
+            });
+        });
+
+        context("with lots of url params", function() {
+            it("correctly builds the url", function() {
+                this.collection.attributes.type = "SOURCE_TABLE";
+                this.collection.attributes.namePattern = "Foo";
+                expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({type: "SOURCE_TABLE", namePattern: "Foo", rows: "10", page: "1"});
+            });
+        });
 
         context("when the url needs to be encoded", function() {
             beforeEach(function() {
@@ -30,12 +45,12 @@ describe("chorus.collections.DatasetSet", function() {
 
     describe("sorting", function() {
         beforeEach(function() {
-            this.collection.add(fixtures.datasetSandboxTable({objectName: 'zTable'}))
-            this.collection.add(fixtures.datasetSandboxTable({objectName: 'aTable'}))
-        })
+            this.collection.add(fixtures.datasetSandboxTable({objectName: 'zTable'}));
+            this.collection.add(fixtures.datasetSandboxTable({objectName: 'aTable'}));
+        });
 
         it("sorts by objectName", function() {
-            expect(this.collection.at(0).get("objectName")).toBe("aTable")
-        })
-    })
+            expect(this.collection.at(0).get("objectName")).toBe("aTable");
+        });
+    });
 });

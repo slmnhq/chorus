@@ -3,8 +3,15 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
     className:"list_content_details",
 
     events:{
+        "keyup input.search": "triggerSearch",
+        "change input.search": "triggerSearch",
+        "paste input.search": "triggerSearch",
         "click a.next":"fetchNextPage",
         "click a.previous":"fetchPreviousPage"
+    },
+
+    triggerSearch: function(e) {
+        this.trigger("search:content", this.$("input.search").val());
     },
 
     fetchNextPage:function () {
@@ -37,6 +44,7 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
             pagination:this.collection.length > 0 ? this.collection.pagination : undefined,
             records:this.collection.pagination ? parseInt(this.collection.pagination.records) : this.collection.length,
             hideCounts:this.options.hideCounts,
+            search:this.options.search,
             buttons:this.options.buttons
         }
 

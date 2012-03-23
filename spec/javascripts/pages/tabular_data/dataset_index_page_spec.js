@@ -172,6 +172,10 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 expect(this.page.$('.content_header h1').text().trim()).toEqual(t('dataset.title'));
             });
 
+            it("has a search bar in the content header", function() {
+                expect(this.page.$("input.search").attr("placeholder")).toMatchTranslation("workspace.search");
+            });
+
             it("fetches the collection when csv_import:started is triggered", function() {
                 spyOn(this.page.collection, 'fetch').andCallThrough();
                 chorus.PageEvents.broadcast("csv_import:started");
@@ -308,7 +312,29 @@ describe("chorus.pages.DatasetIndexPage", function() {
                             expect(this.page.collection.attributes.type).toBe("CHORUS_VIEW");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
                             expect(this.server.lastFetch().url).toContain("/edc/workspace/" + this.workspace.get("id") + "/dataset?type=CHORUS_VIEW");
+                        });
+                    });
 
+                    describe("search", function() {
+                        beforeEach(function() {
+                            this.page.$("input.search").val("foo").change();
+                        });
+
+                        it("re-fetches the collection with the search parameters", function() {
+                            expect(this.server.lastFetch().url).toContainQueryParams({namePattern: "foo"});
+                        });
+
+                        context("when the fetch completes", function() {
+                            beforeEach(function() {
+                                spyOn(this.page.mainContent, "render").andCallThrough();
+                                spyOn(this.page.mainContent.content, "render").andCallThrough();
+                                this.server.completeFetchFor(this.page.collection);
+                            });
+
+                            it("re-renders only the main content body", function() {
+                                expect(this.page.mainContent.render).not.toHaveBeenCalled();
+                                expect(this.page.mainContent.content.render).toHaveBeenCalled();
+                            });
                         });
                     });
                 });
