@@ -135,9 +135,7 @@ chorus.views.Bare = Backbone.View.include(
             subviews = this.subviews
         }
 
-        _.each(subviews, _.bind(function(property, selector) {
-            this.renderSubview(property, selector)
-        }, this));
+        _.each(subviews, this.renderSubview, this);
     },
 
     renderSubview: function(property, selector) {
