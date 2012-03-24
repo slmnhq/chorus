@@ -54,7 +54,10 @@
 
             this.mainContent.contentDetails.bind("search:content", function(input) {
                 this.collection.attributes.namePattern = input;
-                this.collection.fetch({silent: true, success: _.bind(function() {this.mainContent.content.render()}, this)});
+                this.collection.fetch({silent: true, success: _.bind(function() {
+                    this.mainContent.content.render();
+//                    this.mainContent.contentDetails.updatePagination();
+                }, this)});
             }, this);
 
             this.mainContent.contentHeader.bind("choice:filter", function(choice) {

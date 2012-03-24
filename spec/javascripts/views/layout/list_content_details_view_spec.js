@@ -45,7 +45,6 @@ describe("chorus.views.ListContentDetails", function() {
             });
         });
 
-
         context("when the collection is loaded", function() {
             context("and the hideCounts option is falsy", function() {
                 beforeEach(function() {
@@ -81,7 +80,7 @@ describe("chorus.views.ListContentDetails", function() {
                 })
 
                 it("does not display the pagination controls", function() {
-                    expect(this.view.$(".pagination")).not.toExist();
+                    expect(this.view.$(".pagination")).toHaveClass("hidden");
                 })
 
                 context("and the hideIfNoPagination option is falsy", function() {
@@ -115,7 +114,7 @@ describe("chorus.views.ListContentDetails", function() {
                 })
 
                 it("displays the pagination controls", function() {
-                    expect(this.view.$(".pagination")).toExist();
+                    expect(this.view.$(".pagination")).not.toHaveClass("hidden");
                 })
 
                 it("displays the page number of the collection", function() {
@@ -138,8 +137,8 @@ describe("chorus.views.ListContentDetails", function() {
                     })
 
                     it("renders the next page link", function() {
-                        expect(this.view.$(".pagination .links a.next")).toExist();
-                        expect(this.view.$(".pagination .links span.next")).not.toExist();
+                        expect(this.view.$(".pagination .links a.next")).not.toHaveClass("hidden");
+                        expect(this.view.$(".pagination .links span.next")).toHaveClass("hidden");
                     })
                 });
 
@@ -151,8 +150,8 @@ describe("chorus.views.ListContentDetails", function() {
                     })
 
                     it("renders the next page link, but not as a link", function() {
-                        expect(this.view.$(".pagination .links a.next")).not.toExist();
-                        expect(this.view.$(".pagination .links span.next")).toExist();
+                        expect(this.view.$(".pagination .links a.next")).toHaveClass("hidden");
+                        expect(this.view.$(".pagination .links span.next")).not.toHaveClass("hidden");
                     });
                 });
 
@@ -164,8 +163,8 @@ describe("chorus.views.ListContentDetails", function() {
                     })
 
                     it("renders the previous page link", function() {
-                        expect(this.view.$(".pagination .links a.previous")).toExist();
-                        expect(this.view.$(".pagination .links span.previous")).not.toExist();
+                        expect(this.view.$(".pagination .links a.previous")).not.toHaveClass("hidden");
+                        expect(this.view.$(".pagination .links span.previous")).toHaveClass("hidden");
                     })
                 })
 
@@ -177,21 +176,21 @@ describe("chorus.views.ListContentDetails", function() {
                     })
 
                     it("renders the previous page link, but not as a link", function() {
-                        expect(this.view.$(".pagination .links a.previous")).not.toExist();
-                        expect(this.view.$(".pagination .links span.previous")).toExist();
+                        expect(this.view.$(".pagination .links a.previous")).toHaveClass("hidden");
+                        expect(this.view.$(".pagination .links span.previous")).not.toHaveClass("hidden");
                     });
                 })
-
             });
 
             context("and the collection is empty", function() {
                 beforeEach(function() {
                     this.view.collection = new chorus.collections.UserSet();
+                    this.view.collection.loaded = true;
                     this.view.render();
                 })
 
                 it("does not display the pagination controls", function() {
-                    expect(this.view.$(".pagination")).not.toExist();
+                    expect(this.view.$(".pagination")).toHaveClass("hidden");
                 })
 
                 context("and the hideIfNoPagination option is falsy", function() {

@@ -31,31 +31,53 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
     },
 
     postRender:function (el) {
-        if (this.$(".pagination").length == 0 && this.options.hideIfNoPagination) {
+        this.updatePagination();
+        if (this.$(".pagination").hasClass("hidden") && this.options.hideIfNoPagination) {
             el.addClass("hidden");
         } else {
             el.removeClass("hidden")
         }
     },
 
+    updatePagination: function() {
+        var count = this.collection.pagination ? parseInt(this.collection.pagination.records) : this.collection.length;
+        this.$(".count").text(t("entity.name." + this.options.modelClass, {count: count}));
+
+        if (this.collection.loaded && this.collection.pagination) {
+            if (this.collection.length > 0) {
+                this.$(".current").text(this.collection.pagination.page);
+                this.$(".total").text(this.collection.pagination.total);
+            }
+
+            var page = parseInt(this.collection.pagination.page);
+            var total = parseInt(this.collection.pagination.total);
+
+            this.$(".pagination").toggleClass("hidden", !(total > 1));
+
+            var hasPreviousLink = page > 1;
+            this.$("a.previous").toggleClass("hidden", !hasPreviousLink);
+            this.$("span.previous").toggleClass("hidden", hasPreviousLink);
+
+            var hasNextLink = page < total;
+            this.$("a.next").toggleClass("hidden", !hasNextLink);
+            this.$("span.next").toggleClass("hidden", hasNextLink);
+        } else {
+            this.$(".pagination").addClass("hidden");
+        }
+    },
+
     additionalContext:function (ctx) {
         var hash = {
-            modelClass:this.options.modelClass,
-            pagination:this.collection.length > 0 ? this.collection.pagination : undefined,
-            records:this.collection.pagination ? parseInt(this.collection.pagination.records) : this.collection.length,
             hideCounts:this.options.hideCounts,
             search:this.options.search,
             buttons:this.options.buttons
         }
 
-        hash.entityTypePluralization = t("entity.name." + this.options.modelClass, {count: hash.records});
         if (this.collection.loaded && this.collection.pagination) {
             var page = parseInt(this.collection.pagination.page);
             var total = parseInt(this.collection.pagination.total);
 
             hash.nextPage = page < total;
-            hash.prevPage = page > 1;
-            hash.multiPage = total > 1;
         }
 
         return hash;
