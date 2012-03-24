@@ -53,7 +53,7 @@ if (phantom.args[0]) {
 }
 
 var loadedAnsi = false;
-var shouldColorize = true;
+var shouldColorize = fs.workingDirectory.indexOf(".cruise") < 0;
 
 page.open(url, function(status){
     if (status !== "success") {
