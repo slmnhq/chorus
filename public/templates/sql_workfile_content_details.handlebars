@@ -25,7 +25,11 @@
             {{#if executionSchemaIsSandbox}}
                 {{t "workfile.content_details.run_selection_sandbox"}}
             {{else}}
-                {{t "workfile.content_details.run_selection_schema" schemaName=schemaName}}
+                {{#if schemaName}}
+                    {{t "workfile.content_details.run_selection_schema" schemaName=schemaName}}
+                {{else}}
+                    {{t "workfile.content_details.run_selection_sandbox"}}
+                {{/if}}
             {{/if}}
         </a></li>
         <li><a href="#" class="run_other_schema">{{t "workfile.content_details.run_in_another_schema"}}</a></li>

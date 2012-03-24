@@ -14,7 +14,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
             qtipArgs: {
                 events: {
                     show: _.bind(function(e) {
-                        $(".run_workfile .run_selection").toggleClass("disabled", !this.getContentSelection());
+                        $(".run_workfile .run_selection").toggleClass("disabled", !this.enableRunSelection());
                     }, this)
                 }
             },
@@ -24,6 +24,10 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
                 "a.run_other_schema": _.bind(this.runOtherSchema, this)
             }
         });
+    },
+
+    enableRunSelection: function() {
+        return !!(this.contentView.getSelectedText() && this.model.executionSchema());
     },
 
     getContentSelection: function() {
@@ -46,7 +50,9 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     },
 
     runSelectedInExecutionSchema: function() {
+        if(this.enableRunSelection()) {
         chorus.PageEvents.broadcast("file:runSelected");
+        }
     },
 
     runOtherSchema: function() {

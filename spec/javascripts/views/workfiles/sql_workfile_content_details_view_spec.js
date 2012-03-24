@@ -63,19 +63,43 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 };
                 spyOn(chorus.PageEvents, "broadcast").andCallThrough();
             });
+            context("and there is a schema to run in", function() {
+                context("and opens the Run File menu", function() {
+                    beforeEach(function() {
+                        this.view.$(".run_file").click();
+                    });
 
-            context("and opens the Run File menu", function() {
-                beforeEach(function() {
-                    this.view.$(".run_file").click();
+                    it("enables the 'run selected sql' link in the menu", function() {
+                        expect(this.qtipElement.find(".run_selection")).not.toHaveClass("disabled");
+                    });
+
+                    it("runs the selected sql when the user says to", function() {
+                        this.qtipElement.find(".run_selection").click();
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runSelected");
+                    });
                 });
+            });
+            context("and there is no schema to run in", function() {
+                context("and opens the Run File menu", function() {
+                    beforeEach(function() {
+                        this.view.model.workspace().unset("sandboxInfo");
+                        delete this.view.model.workspace()._sandbox;
+                        this.view.render();
+                        this.view.$(".run_file").click();
+                    });
 
-                it("enables the 'run selected sql' link in the menu", function() {
-                    expect(this.qtipElement.find(".run_selection")).not.toHaveClass("disabled");
-                });
+                    it("disables the 'run selected sql' link in the menu", function() {
+                        expect(this.qtipElement.find(".run_selection")).toHaveClass("disabled");
+                    });
 
-                it("runs the selected sql when the user says to", function() {
-                    this.qtipElement.find(".run_selection").click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runSelected");
+                    it("has the right translation", function() {
+                        expect(this.qtipElement.find(".run_selection")).toContainTranslation("workfile.content_details.run_selection_sandbox");
+                    });
+
+                    it("does nothing when the user clicks run selection", function() {
+                        this.qtipElement.find(".run_selection").click();
+                        expect(chorus.PageEvents.broadcast).not.toHaveBeenCalled();
+                    });
                 });
             });
         });
@@ -89,7 +113,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 expect(this.qtipElement).toContainTranslation("workfile.content_details.run_in_another_schema")
             });
 
-            describe("when the workspace has been run in a schema other than its sandbox's schema", function() {
+            describe("when the workfile has been run in a schema other than its sandbox's schema", function() {
                 beforeEach(function() {
                     _.extend(this.model.get("executionInfo"), {
                         instanceId: '51',

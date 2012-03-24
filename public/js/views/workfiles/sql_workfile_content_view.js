@@ -31,7 +31,15 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
 
     runSelected: function() {
         var selectedText = this.getSelectedText();
-        if (selectedText) this.run({selection: selectedText});
+        var runOptions = {selection: selectedText};
+        var schema = this.model.executionSchema();
+        if(schema){
+            runOptions.instance = schema.get("instanceId");
+            runOptions.database = schema.get("databaseId");
+            runOptions.schema = schema.get("id");
+        }
+
+        if (selectedText) this.run(runOptions);
     },
 
     runInDefault: function() {
