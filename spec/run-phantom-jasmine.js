@@ -43,9 +43,8 @@ var page = require('webpage').create();
 var fs = require('fs');
 
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
-page.onConsoleMessage = function(msg) {
-    // console.log(msg);
-    fs.write( '/dev/stdout', msg, 'w' );
+page.onConsoleMessage = function(msg, lineNumber, sourceIdentifier) {
+    fs.write('/dev/stdout', msg, 'w');
 };
 
 var url = 'http://localhost:8888/'
@@ -53,11 +52,27 @@ if (phantom.args[0]) {
     url += '?spec=' + encodeURIComponent(phantom.args[0]);
 }
 
+var loadedAnsi = false;
+var shouldColorize = true;
+
 page.open(url, function(status){
     if (status !== "success") {
         console.log("Unable to access network");
         phantom.exit(1);
     } else {
+        if (!loadedAnsi) {
+            loadedAnsi = true;
+            if (shouldColorize) {
+                page.injectJs("phantom/ansi_colors.js");
+            } else {
+                page.evaluate(function(){
+                    window.colorize = function(str) {
+                        return str;
+                    }
+                });
+            }
+        }
+
         page.evaluate(function() {
             if (window.phantomInitialized) {
                 return;
@@ -72,14 +87,14 @@ page.open(url, function(status){
                     if (spec.results().skipped) {
                         // nothing for now!
                     } else if (spec.results().passed()) {
-                        console.log(".");
+                        console.log(colorize(".", "green"));
                     } else {
-                        console.log("\nF (" + spec.getFullName()  + ")\n");
+                        console.log("\n" + colorize("F (" + spec.getFullName()  + ")", "red") + "\n");
 
                         var resultItems = spec.results().getItems();
                         _.each(resultItems, function(result) {
                             if (result.type == 'expect' && result.passed && !result.passed()) {
-                                console.log(">>> " + result.message + "\n");
+                                console.log(colorize(">>> " + result.message + "\n", "white+red_bg"));
                             }
                         });
                     }
