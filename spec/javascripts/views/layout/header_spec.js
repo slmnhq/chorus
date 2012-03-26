@@ -541,7 +541,7 @@ describe("chorus.views.Header", function() {
 
             describe("the popup menu", function() {
                 it("has a link to 'Users'", function() {
-                    expect(this.view.$(".menu.popup_gear a[href='#/users']").text()).toBe(t("header.users_list"));
+                    expect(this.view.$(".menu.popup_gear a[href='#/users']").text()).toMatchTranslation("header.users_list");
                 });
 
                 it("has a link to instances", function() {
@@ -549,7 +549,11 @@ describe("chorus.views.Header", function() {
                 });
 
                 it("has a link to the workspaces list", function() {
-                    expect(this.view.$(".menu.popup_gear a[href='#/workspaces']").text()).toBe(t("header.workspaces"));
+                    expect(this.view.$(".menu.popup_gear a[href='#/workspaces']").text()).toMatchTranslation("header.workspaces");
+                });
+
+                it("has a link to the notifications", function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/notifications']").text()).toMatchTranslation("header.notifications");
                 });
             });
 
