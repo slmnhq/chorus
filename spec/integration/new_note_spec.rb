@@ -5,6 +5,7 @@ describe "creating a note on a workspace" do
   before(:each) do
     login('edcadmin', 'secret')
     create_valid_workspace
+    wait_until { page.find('a[data-dialog="NotesNew"]').text == "Add a note"}
     click_link "Add a note"
     wait_until { page.find("#facebox .dialog h1").text == "Add a Note" }
   end
