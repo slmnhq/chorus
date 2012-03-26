@@ -48,8 +48,18 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Dataset",
             collection: this.collection,
-            title: this.schema.canonicalName()
+            title: this.schema.canonicalName(),
+            search: t("schema.search")
         });
+
+        this.mainContent.contentDetails.bind("search:content", _.debounce(function(input) {
+            this.collection.attributes.filter = input;
+            this.collection.fetch({silent: true, success: _.bind(function() {
+                this.mainContent.content.render();
+                this.mainContent.contentFooter.render();
+                this.mainContent.contentDetails.updatePagination();
+            }, this)});
+        }, 300), this);
 
         this.render();
     }

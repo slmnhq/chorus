@@ -5,7 +5,11 @@ chorus.collections.DatabaseObjectSet = chorus.collections.Base.include(
     urlTemplate: "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}",
 
     urlParams: function() {
-        return {type: "meta"}
+        if (this.attributes && this.attributes.filter) {
+            return {type: "meta", filter: this.attributes.filter}
+        } else {
+            return {type: "meta"}
+        }
     },
 
     parse: function(resp) {

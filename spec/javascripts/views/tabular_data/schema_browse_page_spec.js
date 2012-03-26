@@ -1,5 +1,6 @@
 describe("chorus.pages.SchemaBrowsePage", function() {
     beforeEach(function() {
+        spyOn(_, "debounce").andCallThrough();
         this.schema = fixtures.schema();
         this.instance = fixtures.instance({id: this.schema.get("instanceId")});
         this.database = fixtures.database({name: this.schema.get("databaseName"), instanceId: this.instance.get("id")});
@@ -53,6 +54,10 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             ]);
         });
 
+        it("displays the search input", function() {
+            expect(this.page.$("input.search").attr("placeholder")).toMatchTranslation("schema.search");
+        });
+
         it("sets the instanceName on the schema", function() {
             expect(this.page.schema.get("instanceName")).toBe(this.instance.get("name"));
         });
@@ -101,5 +106,41 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             expect(this.page.collection.attributes.databaseName).toBe(this.schema.get("databaseName"))
             expect(this.page.collection.attributes.schemaName).toBe(this.schema.get("name"))
         })
+
+        describe("search", function() {
+            beforeEach(function() {
+                this.page.$("input.search").val("foo").change();
+            });
+
+            it("throttles the number of search requests", function() {
+                expect(_.debounce).toHaveBeenCalled();
+            });
+
+            it("re-fetches the collection with the search parameters", function() {
+                expect(this.server.lastFetch().url).toContainQueryParams({filter: "foo"});
+            });
+
+            context("when the fetch completes", function() {
+                beforeEach(function() {
+                    spyOn(this.page.mainContent, "render").andCallThrough();
+                    spyOn(this.page.mainContent.content, "render").andCallThrough();
+                    spyOn(this.page.mainContent.contentFooter, "render").andCallThrough();
+                    spyOn(this.page.mainContent.contentDetails, "render").andCallThrough();
+                    spyOn(this.page.mainContent.contentDetails, "updatePagination").andCallThrough();
+                    this.server.completeFetchFor(this.page.collection);
+                });
+
+                it("updates the header, footer, and body", function() {
+                    expect(this.page.mainContent.content.render).toHaveBeenCalled();
+                    expect(this.page.mainContent.contentFooter.render).toHaveBeenCalled();
+                    expect(this.page.mainContent.contentDetails.updatePagination).toHaveBeenCalled();
+                });
+
+                it("does not re-render the page or body", function() {
+                    expect(this.page.mainContent.render).not.toHaveBeenCalled();
+                    expect(this.page.mainContent.contentDetails.render).not.toHaveBeenCalled();
+                })
+            });
+        });
     });
 });
