@@ -80,7 +80,7 @@ describe("chorus.views.visualizations.Timeseries", function() {
                 expect(this.xs.length).toBe(this.data.length);
             });
 
-            xit("positions the points horizontally according to their time value", function() {
+            it("positions the points horizontally according to their time value", function() {
                 var times = _.map(this.data, function(d) { return Date.parse(d.time) });
                 var deltaX = rightX(this.xAxisLine) - leftX(this.xAxisLine);
                 var deltaTime = _.last(times) - _.first(times);

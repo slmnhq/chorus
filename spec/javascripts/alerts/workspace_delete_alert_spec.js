@@ -40,7 +40,6 @@ describe("chorus.alerts.WorkspaceDelete", function() {
             spyOn(chorus.router, "navigate");
             spyOn(chorus, 'toast');
             this.name = this.model.get("name");
-//            this.alert.model.trigger("destroy", this.alert.model);
             this.alert.model.destroy();
             this.alert.model.clear();
             this.server.lastDestroy().succeed();

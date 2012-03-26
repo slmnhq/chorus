@@ -632,7 +632,6 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     beforeEach(function() {
                         this.dialog.$("textarea[name=body]").val("");
                         this.dialog.$('button.submit').click();
-//                        $('#jasmine_content').append(this.dialog.el);
                     })
 
                     it("removes the spinner from the button", function() {
