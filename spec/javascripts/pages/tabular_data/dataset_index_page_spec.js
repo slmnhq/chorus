@@ -1,5 +1,6 @@
 describe("chorus.pages.DatasetIndexPage", function() {
     beforeEach(function() {
+        spyOn(_, "debounce").andCallThrough();
         this.modalSpy = stubModals();
         this.workspace = fixtures.workspace({
             id: 9999,
@@ -320,6 +321,10 @@ describe("chorus.pages.DatasetIndexPage", function() {
                             this.page.$("input.search").val("foo").change();
                         });
 
+                        it("throttles the number of search requests", function() {
+                            expect(_.debounce).toHaveBeenCalled();
+                        });
+
                         it("re-fetches the collection with the search parameters", function() {
                             expect(this.server.lastFetch().url).toContainQueryParams({namePattern: "foo"});
                         });
@@ -328,13 +333,22 @@ describe("chorus.pages.DatasetIndexPage", function() {
                             beforeEach(function() {
                                 spyOn(this.page.mainContent, "render").andCallThrough();
                                 spyOn(this.page.mainContent.content, "render").andCallThrough();
+                                spyOn(this.page.mainContent.contentFooter, "render").andCallThrough();
+                                spyOn(this.page.mainContent.contentDetails, "render").andCallThrough();
+                                spyOn(this.page.mainContent.contentDetails, "updatePagination").andCallThrough();
                                 this.server.completeFetchFor(this.page.collection);
                             });
 
-                            it("re-renders only the main content body", function() {
-                                expect(this.page.mainContent.render).not.toHaveBeenCalled();
+                            it("updates the header, footer, and body", function() {
                                 expect(this.page.mainContent.content.render).toHaveBeenCalled();
+                                expect(this.page.mainContent.contentFooter.render).toHaveBeenCalled();
+                                expect(this.page.mainContent.contentDetails.updatePagination).toHaveBeenCalled();
                             });
+
+                            it("does not re-render the page or body", function() {
+                                expect(this.page.mainContent.render).not.toHaveBeenCalled();
+                                expect(this.page.mainContent.contentDetails.render).not.toHaveBeenCalled();
+                            })
                         });
                     });
                 });
