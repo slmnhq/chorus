@@ -6,11 +6,13 @@ describe "creating a note on a workspace" do
     login('edcadmin', 'secret')
     create_valid_workspace
     click_link "Add a note"
+    wait_until { page.find("#facebox .dialog h1").text == "Add a Note" }
   end
 
   describe "launching the submodal dialog" do
     before do
       click_link "Show options"
+      wait_until { page.find("#facebox .dialog span.label").text == "Attach" }
       click_link "Work File"
       wait_until { page.find("#facebox .dialog h1").text == "Attach Work File" }
     end
