@@ -116,12 +116,14 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
                 if (this.resource.get("type") == "CHORUS_VIEW") {
                     ctx.deleteMsgKey = "delete";
                     ctx.deleteTextKey = "actions.delete";
-                } else if (this.resource.get("type") == "SOURCE_TABLE" && this.resource.get("objectType") == "VIEW") {
-                    ctx.deleteMsgKey = "disassociate_view";
-                    ctx.deleteTextKey = "actions.delete_association";
-                } else if (this.resource.get("type") == "SOURCE_TABLE" && this.resource.get("objectType") == "BASE_TABLE") {
-                    ctx.deleteMsgKey = "disassociate_table";
-                    ctx.deleteTextKey = "actions.delete_association";
+                } else if (this.resource.get("type") == "SOURCE_TABLE") {
+                    if (this.resource.get("objectType") == "VIEW") {
+                        ctx.deleteMsgKey = "disassociate_view";
+                        ctx.deleteTextKey = "actions.delete_association";
+                    } else {
+                        ctx.deleteMsgKey = "disassociate_table";
+                        ctx.deleteTextKey = "actions.delete_association";
+                    }
                 }
             }
         }

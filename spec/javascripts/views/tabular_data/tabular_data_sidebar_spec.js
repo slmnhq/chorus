@@ -668,6 +668,17 @@ describe("chorus.views.TabularDataSidebar", function() {
                     itShowsTheAppropriateDeleteLink(true, "chorus view");
                 });
 
+                context("when the dataset is a source table", function() {
+                    _.each(["BASE_TABLE", "EXTERNAL_TABLE", "MASTER_TABLE", "HDFS_EXTERNAL_TABLE"], function(type) {
+                        beforeEach(function() {
+                            this.dataset = fixtures.datasetSourceTable({ objectType : type});
+                            chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                        });
+
+                        itShowsTheAppropriateDeleteLink(true, type);
+                    })
+                })
+
                 it("has an associate with another workspace link", function() {
                     expect(this.view.$('.actions .associate')).toContainTranslation("actions.associate_with_another_workspace");
                 });
