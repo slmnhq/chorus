@@ -6,12 +6,25 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         "keyup input.search": "triggerSearch",
         "change input.search": "triggerSearch",
         "paste input.search": "triggerSearch",
-        "click a.next":"fetchNextPage",
-        "click a.previous":"fetchPreviousPage"
+        "click a.next": "fetchNextPage",
+        "click a.previous": "fetchPreviousPage",
+        "click .chorus_search_clear": "clearSearchInput"
     },
 
     triggerSearch: function(e) {
         this.trigger("search:content", this.$("input.search").val());
+        this.displayClearSearchInputIcon();
+    },
+
+    clearSearchInput: function(e) {
+        e && e.preventDefault();
+        this.$("input.search").val("");
+        this.triggerSearch();
+    },
+
+    displayClearSearchInputIcon: function() {
+        var length = this.$("input.search").val().length;
+        this.$(".chorus_search_clear").toggleClass("hidden", length == 0);
     },
 
     fetchNextPage:function () {

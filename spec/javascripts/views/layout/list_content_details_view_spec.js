@@ -294,5 +294,37 @@ describe("chorus.views.ListContentDetails", function() {
             this.view.$("input.search").val("sna").trigger("paste");
             expect("search:content").toHaveBeenTriggeredOn(this.view, ["sna"]);
         });
+
+        it("does not show the clear icon", function() {
+            expect(this.view.$(".chorus_search_clear")).toHaveClass("hidden");
+        });
+
+        describe("there is text entered in the search field", function() {
+            beforeEach(function() {
+                this.view.$("input.search").val("a search term").change();
+            });
+
+            it("shows the clear icon", function() {
+                expect(this.view.$(".chorus_search_clear")).not.toHaveClass("hidden");
+            });
+
+            context("when the clear input icon is clicked", function() {
+                beforeEach(function() {
+                    this.view.$(".chorus_search_clear").click();
+                });
+
+                it("clears the text from the input field", function() {
+                    expect(this.view.$("input.search").val()).toBe("");
+                });
+
+                it("does not show the clear icon", function() {
+                    expect(this.view.$(".chorus_search_clear")).toHaveClass("hidden");
+                });
+
+                it("triggers search:content with the search text on keyup event", function() {
+                    expect("search:content").toHaveBeenTriggeredOn(this.view, [""]);
+                });
+            });
+        });
     });
 });
