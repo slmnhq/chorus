@@ -37,7 +37,12 @@ describe("chorus.pages.DashboardPage", function() {
 
         context("when the users fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(new chorus.collections.UserSet([], {page:1, rows:1}), [fixtures.user()], null, {page:1, total: 1234, records: 1234});
+                this.server.completeFetchFor(
+                    new chorus.collections.UserSet([], {page:1, rows:1}),
+                    [fixtures.user()],
+                    null,
+                    {page:1, total: 1234, records: 1234}
+                );
             });
 
             it("shows the number of users", function() {

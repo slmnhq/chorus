@@ -33,6 +33,11 @@ chorus.views.Header = chorus.views.Base.extend({
         this.unreadNotifications.fetchAll();
         this.notifications.fetch();
 
+        if (chorus.isDevMode()) {
+            this.users = new chorus.collections.UserSet();
+            this.users.fetchAll();
+        }
+
         chorus.PageEvents.subscribe("notification:deleted", this.refreshNotifications, this);
     },
 
@@ -40,9 +45,10 @@ chorus.views.Header = chorus.views.Base.extend({
         this.notificationList.collection.reset(this.unreadNotifications.models, { silent: true });
         var numberToAdd = (5 - this.unreadNotifications.length);
         if (numberToAdd > 0) {
-            this.notificationList.collection.add(this.notifications.chain().reject(function(model) {
-                return !!this.unreadNotifications.get(model.get("id"));
-            }, this).first(numberToAdd).value());
+            this.notificationList.collection.add(this.notifications.chain().reject(
+                function(model) {
+                    return !!this.unreadNotifications.get(model.get("id"));
+                }, this).first(numberToAdd).value());
         }
 
         this.notificationList.collection.loaded = true;
@@ -52,6 +58,38 @@ chorus.views.Header = chorus.views.Base.extend({
     postRender: function() {
         this.$(".search input").unbind("textchange").bind("textchange", _.bind(this.displayResult, this));
         chorus.addClearButton(this.$(".search input"));
+
+        if (chorus.isDevMode()) {
+            this.users.onLoaded(addFastUserToggle, this);
+
+            function addFastUserToggle() {
+                $('select.switch_user').remove();
+                var $select = $("<select class='switch_user'></select>");
+
+                $select.append("<option>Switch to user..</option>")
+                this.users.each(function(user) {
+                    $select.append("<option value=" + user.get("userName") + ">" + user.displayName() + "</option>")
+                });
+
+                $select.css({position: 'fixed', bottom: 0, right: 0})
+                $("body").append($select);
+                $select.unbind("change").bind("change", function () {
+                    switchUser($(this).val());
+                });
+            }
+
+            var self = this;
+            var session = chorus.session;
+
+            function switchUser(userName) {
+                session.requestLogout(function() {
+                    // log back in as new user
+                    self.bindings.add(session, "saved", _.bind(chorus.router.reload, chorus.router))
+                    self.bindings.add(session, "saveFailed", function() { session.trigger("needsLogin"); });
+                    session.save({userName: userName, password: "secret"});
+                });
+            }
+        }
     },
 
     searchKeyPressed: function(event) {
@@ -99,7 +137,7 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     refreshNotifications: function() {
-        this.notifications.loaded= false;
+        this.notifications.loaded = false;
         this.unreadNotifications.loaded = false;
         this.requiredResources.add([this.unreadNotifications, this.notifications]);
         this.notifications.fetch();

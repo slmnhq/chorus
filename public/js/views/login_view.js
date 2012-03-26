@@ -19,9 +19,8 @@ chorus.views.Login = chorus.views.Base.extend({
     onLogin : function () {
         var targetDestination;
 
-        if (chorus.session && chorus.session.pathBeforeLoggedOut &&
-           (chorus.session.user() && chorus.session.previousUserId == chorus.session.user().get("id"))) {
-            targetDestination = chorus.session.pathBeforeLoggedOut;
+        if (chorus.session && chorus.session.shouldResume()) {
+            targetDestination = chorus.session.resumePath();
         } else {
             targetDestination = "/";
         }

@@ -4,7 +4,11 @@ describe("chorus global", function() {
         this.backboneSpy = spyOn(Backbone.history, "start")
     })
 
-    if (chorus.isDevMode()) {
+    context("in dev mode", function() {
+        beforeEach(function() {
+            chorus.isDevMode.andReturn(true);
+        });
+
         describe(".classExtend", function() {
             it("creates a constructor with the given name", function() {
                 var SomeClass = chorus.models.Base.extend({
@@ -14,7 +18,7 @@ describe("chorus global", function() {
                 expect(SomeClass.name).toBe("chorus$Foo");
             });
         });
-    }
+    });
 
     describe("#initialize", function() {
         it("should start the Backbone history after the session has been set", function() {
@@ -519,31 +523,21 @@ describe("chorus global", function() {
                 this.chorus.session.trigger("needsLogin");
             })
 
-            it("stores the pathBeforeLoggedOut", function() {
-                expect(this.chorus.session.pathBeforeLoggedOut).toBe("/foo")
-            })
-
-            it("stores the previousUser", function() {
-                expect(this.chorus.session.previousUserId).toBe("1")
+            it("stores the path to resume at", function() {
+                expect(this.chorus.session.resumePath()).toBe("/foo")
             })
         })
         describe("from manually logging out", function() {
             beforeEach(function() {
-                this.chorus.session.pathBeforeLoggedOut = "/bar";
+                this.chorus.session._pathBeforeLoggedOut = "/bar";
                 setLoggedInUser({id: "1", userName: "iAmNumberOne"}, this.chorus);
-
-                this.chorus.session.previousUserId = "1";
 
                 Backbone.history.fragment = "/logout";
                 this.chorus.session.trigger("needsLogin");
             })
 
-            it("does not store the pathBeforeLoggedOut", function() {
-                expect(this.chorus.session.pathBeforeLoggedOut).toBeUndefined();
-            })
-
-            it("clears out the previousUser", function() {
-                expect(this.chorus.session.previousUserId).toBeUndefined();
+            it("does not store a path to resume at", function() {
+                expect(this.chorus.session.resumePath()).toBeUndefined();
             })
         })
     })

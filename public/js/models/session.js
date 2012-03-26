@@ -1,13 +1,13 @@
 chorus.models.Session = chorus.models.Base.extend({
     constructorName: "Session",
-    urlTemplate:"auth/login/",
+    urlTemplate: "auth/login/",
 
-    initialize:function () {
+    initialize: function() {
         this.sandboxPermissionsCreated = {}
         _.bindAll(this, ['logout']);
     },
 
-    user:function () {
+    user: function() {
         if (!this._user && this.get("id")) {
             this._user = new chorus.models.User(this.attributes);
         }
@@ -15,22 +15,20 @@ chorus.models.Session = chorus.models.Base.extend({
         return this._user
     },
 
-    loggedIn:function () {
+    loggedIn: function() {
         return $.cookie("authid") && this._user && this._user.get("id");
     },
 
-    fetch:function (options) {
+    fetch: function(options) {
         options = _.extend(options || {}, {
-            url:"/edc/auth/checkLogin/?authid=" + $.cookie("authid")
+            url: "/edc/auth/checkLogin/?authid=" + $.cookie("authid")
         });
 
         var success = options.success;
         var self = this;
 
-        options.success = function (model, response, xhr) {
+        options.success = function(model, response, xhr) {
             if (response.status !== "ok") {
-                self.serverErrors = undefined;
-                delete self._user;
                 self.clear();
                 self.trigger("needsLogin");
             }
@@ -41,35 +39,66 @@ chorus.models.Session = chorus.models.Base.extend({
         return this._super('fetch', [options]);
     },
 
-    check:function (destinationRoute) {
+    check: function(destinationRoute) {
         if (destinationRoute != "Logout" && destinationRoute != "Login") {
             this.fetch();
         }
     },
 
-    logout:function () {
+    clear: function() {
+        delete this.serverErrors;
+        delete this._user;
+        delete this.id;
+        this.sandboxPermissionsCreated = {};
+        this._super('clear', arguments);
+    },
+
+    logout: function() {
         var self = this;
 
         if (!this.get("errors")) {
-            $.get("/edc/auth/logout/?authid=" + $.cookie("authid"), function () {
-                self.clear();
-                delete self._user;
-                self.sandboxPermissionsCreated = {};
+            this.requestLogout(function() {
                 self.trigger("needsLogin")
-            })
+            });
         } else {
-            chorus.session.pathBeforeLoggedOut = Backbone.history.fragment;
+            this.rememberPathBeforeLoggedOut();
             this.trigger("needsLogin")
         }
     },
 
-    declareValidations:function (newAttrs) {
+    requestLogout: function(logoutSucceeded) {
+        var self = this;
+        $.get("/edc/auth/logout/?authid=" + $.cookie("authid"), function() {
+            self.clear();
+            logoutSucceeded();
+        });
+    },
+
+    rememberPathBeforeLoggedOut: function() {
+        if (Backbone.history.fragment != "/logout") {
+            this._previousUserId = this.user() && this.user().id
+            this._pathBeforeLoggedOut = Backbone.history.fragment;
+        } else {
+            delete this._previousUserId;
+            delete this._pathBeforeLoggedOut;
+        }
+    },
+
+    shouldResume: function () {
+        return (this._pathBeforeLoggedOut && this.user() && this._previousUserId == this.user().id)
+    },
+
+    resumePath: function() {
+        return this._pathBeforeLoggedOut;
+    },
+
+    declareValidations: function(newAttrs) {
         this.require("userName", newAttrs);
         this.require("password", newAttrs);
     },
 
-    attrToLabel:{
-        "userName":"login.username",
-        "password":"login.password"
+    attrToLabel: {
+        "userName": "login.username",
+        "password": "login.password"
     }
 });

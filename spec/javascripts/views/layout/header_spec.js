@@ -34,7 +34,8 @@ describe("chorus.views.Header", function() {
 
         it("binds to the document for menu popup", function() {
             expect($(document).data("events")["chorus:menu:popup"]).toBeDefined();
-        })
+        });
+
     });
 
     describe("navigating away", function() {
@@ -568,6 +569,95 @@ describe("chorus.views.Header", function() {
                     expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
                 })
             })
+        })
+    });
+
+    context("when in dev mode", function() {
+        beforeEach(function() {
+            this.users = new chorus.collections.UserSet([
+                fixtures.user({firstName: "user", lastName: "one", id: "1", admin: false}),
+                fixtures.user({firstName: "user", lastName: "two", id:"2", admin: false})
+            ]);
+            chorus.isDevMode.andReturn(true);
+
+            this.view = new chorus.views.Header();
+            this.view.session.loaded = true;
+            this.server.completeFetchAllFor(this.view.unreadNotifications);
+            this.server.completeFetchFor(this.view.notifications);
+
+            this.view.render();
+        });
+
+        it("should fetch the users", function() {
+            expect(this.server.lastFetch().url).toBe(this.view.users.url({ page: 1, rows: 1000}));
+        })
+        
+        context("after fetches completes", function() {
+            beforeEach(function() {
+                stubDefer();
+                this.server.completeFetchAllFor(this.view.users, this.users.models);
+            });
+
+            afterEach(function () {
+                $("select.switch_user").remove();
+            });
+
+            it("should have a single switch user to x select box", function() {
+                expect($("select.switch_user")).toExist();
+            });
+
+            it("should have an option to switch to each user", function() {
+                this.users.each(function(user, i) {
+                    var option = $(".switch_user option").eq(i+1)
+                    expect(option).toContainText(user.displayName())
+                    expect(option.val()).toBe(user.get("userName"))
+                }, this);
+            });
+
+            context("selecting a user", function() {
+                beforeEach(function() {
+                    var select = $('.switch_user')
+                    this.selectedUserName = $('.switch_user option:eq(1)').val()
+                    select.val(this.selectedUserName)
+                    select.change();
+                });
+
+                it("should log the current user out", function() {
+                    expect(this.server.lastRequest().url).toMatchUrl('/edc/auth/logout/', {paramsToIgnore: "authid"});
+                });
+
+                context("when the logout and login finish", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.router, "reload");
+                        this.server.lastRequest().succeed(); // completes logout
+                    });
+
+                    context("when the login finish successfully", function() {
+                        beforeEach(function() {
+                            this.server.completeSaveFor(chorus.session, this.users.at(0));
+                        });
+
+                        it("updates the chorus.session.user model", function() {
+                            expect(chorus.session.user().get("userName")).toBe(this.selectedUserName);
+                        });
+
+                        it("reloads the current page", function() {
+                            expect(chorus.router.reload).toHaveBeenCalled();
+                        })
+                    });
+
+                    context("when the login failed", function() {
+                        beforeEach(function() {
+                            spyOnEvent(chorus.session, "needsLogin");
+                            chorus.session.trigger("saveFailed");
+                        });
+
+                        it("triggers needs Login", function() {
+                            expect("needsLogin").toHaveBeenTriggeredOn(chorus.session);
+                        });
+                    });
+                });
+            });
         })
     });
 });

@@ -71,9 +71,12 @@ describe("chorus.views.Login", function() {
     });
 
     describe("when the login succeeds", function() {
+        beforeEach(function() {
+            this.navigationSpy = spyOn(chorus.router, "navigate");
+        });
+
         context("with no prior logins", function() {
             beforeEach(function() {
-                this.navigationSpy = spyOn(chorus.router, "navigate");
                 this.view.model.trigger('saved', this.view.model);
             });
 
@@ -82,34 +85,36 @@ describe("chorus.views.Login", function() {
             });
         });
 
-        context("with a prior login from the same user that timed out", function() {
+        context("with a prior login", function() {
             beforeEach(function() {
-                chorus.session.previousUserId = "2";
-                chorus.session.pathBeforeLoggedOut = "/foo";
-                setLoggedInUser({id: "2", userName: "iAmNumberTwo"});
-
-                this.navigationSpy = spyOn(chorus.router, "navigate");
-                this.view.model.trigger('saved', this.view.model);
+                chorus.session._previousUserId = "2";
+                chorus.session._pathBeforeLoggedOut = "/foo";
             });
 
-            it("navigates to the page before forced logout", function() {
-                expect(this.navigationSpy).toHaveBeenCalledWith("/foo", true);
+            context("from the same user that timed out", function() {
+                beforeEach(function() {
+                    setLoggedInUser({id: "2", userName: "iAmNumberTwo"});
+
+                    this.view.model.trigger('saved', this.view.model);
+                });
+
+                it("navigates to the page before forced logout", function() {
+                    expect(this.navigationSpy).toHaveBeenCalledWith("/foo", true);
+                });
             });
+
+            context("from a different user that timed out", function() {
+                beforeEach(function() {
+                    setLoggedInUser({ id: "3", userName: "iAmNumberThree" });
+
+                    this.view.model.trigger('saved', this.view.model);
+                });
+
+                it("navigates to the dashboard", function() {
+                    expect(this.navigationSpy).toHaveBeenCalledWith("/", true);
+                });
+            })
         });
 
-        context("with a prior login from a different user that timed out", function() {
-            beforeEach(function() {
-                chorus.session.previousUserId = "2";
-                chorus.session.pathBeforeLoggedOut = "/foo";
-                setLoggedInUser({ id: "3", userName: "iAmNumberThree" });
-
-                spyOn(chorus.router, "navigate");
-                this.view.model.trigger('saved', this.view.model);
-            });
-
-            it("navigates to the dashboard", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith("/", true);
-            });
-        })
     })
 })
