@@ -274,5 +274,73 @@ describe("chorus.models.Session", function() {
 
     });
 
+    describe("resuming", function() {
+        beforeEach(function() {
+            this.session = new models.Session();
+            this.session._user = fixtures.user();
+        });
 
+        describe("#rememberPathBeforeLoggedOut", function() {
+            beforeEach(function() {
+                this.session.user().id = 2;
+            });
+
+            context("when navigating to logout", function() {
+                beforeEach(function() {
+                    Backbone.history.fragment = "/logout";
+                    this.session.rememberPathBeforeLoggedOut()
+                });
+
+                it("ignores the path", function() {
+                    expect(this.session.resumePath()).toBeFalsy();
+                });
+
+                it("forgets the previous user's id", function() {
+                    expect(this.session._previousUserId).toBeFalsy();
+                });
+            });
+
+            context("when navigating elsewhere", function() {
+                beforeEach(function() {
+                    Backbone.history.fragment = "/elsewhere";
+                    this.session.rememberPathBeforeLoggedOut()
+                });
+
+                it("remembers the path", function() {
+                    expect(this.session.resumePath()).toEqual("/elsewhere");
+                });
+
+                it("remembers the previous user's id, to allow for resuming after a timeout", function() {
+                    expect(this.session._previousUserId).toEqual(2);
+                });
+            });
+        });
+
+        describe("#shouldResume", function() {
+            beforeEach(function() {
+                this.session.user().id = 2;
+                this.session._previousUserId = 2;
+                this.session._pathBeforeLoggedOut = '/somewhere';
+            });
+
+            it("is true if it has somewhere to go, and the current user was timed out", function() {
+                expect(this.session.shouldResume()).toBeTruthy();
+            });
+
+            it("is false if it has nowhere to go", function() {
+                delete this.session._pathBeforeLoggedOut;
+                expect(this.session.shouldResume()).toBeFalsy();
+            });
+
+            it("is false if a different user was timed out", function() {
+                this.session._previousUserId = 3;
+                expect(this.session.shouldResume()).toBeFalsy();
+            });
+
+            it("is false if no one has tried to log in yet", function() {
+                delete this.session._user;
+                expect(this.session.shouldResume()).toBeFalsy();
+            });
+        });
+    })
 });

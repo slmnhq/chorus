@@ -515,31 +515,21 @@ describe("chorus global", function() {
     describe("#requireLogin", function() {
         beforeEach(function() {
             this.chorus.initialize();
+            Backbone.history.fragment = "/foo";
+            setLoggedInUser({id: "1", userName: "iAmNumberOne"}, this.chorus);
         })
-        describe("from a 'needslogin' from the api", function() {
-            beforeEach(function() {
-                Backbone.history.fragment = "/foo";
-                setLoggedInUser({id: "1", userName: "iAmNumberOne"}, this.chorus);
-                this.chorus.session.trigger("needsLogin");
-            })
 
-            it("stores the path to resume at", function() {
-                expect(this.chorus.session.resumePath()).toBe("/foo")
-            })
-        })
-        describe("from manually logging out", function() {
-            beforeEach(function() {
-                this.chorus.session._pathBeforeLoggedOut = "/bar";
-                setLoggedInUser({id: "1", userName: "iAmNumberOne"}, this.chorus);
+        it("tells the session to save the path of the page the user was trying to get to", function() {
+            spyOn(this.chorus.session, 'rememberPathBeforeLoggedOut');
+            this.chorus.requireLogin();
+            expect(this.chorus.session.rememberPathBeforeLoggedOut).toHaveBeenCalled();
+        });
 
-                Backbone.history.fragment = "/logout";
-                this.chorus.session.trigger("needsLogin");
-            })
-
-            it("does not store a path to resume at", function() {
-                expect(this.chorus.session.resumePath()).toBeUndefined();
-            })
-        })
+        it("navigates to the login page", function() {
+            spyOn(this.chorus.router, 'navigate');
+            this.chorus.requireLogin();
+            expect(this.chorus.router.navigate).toHaveBeenCalledWith("/login", true);
+        });
     })
 })
 ;
