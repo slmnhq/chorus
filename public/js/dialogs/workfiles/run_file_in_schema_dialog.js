@@ -17,7 +17,7 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
     setup:function () {
         this.workspace = this.model.workspace();
         this.bindings.add(this.workspace, "loaded", this.workspaceLoaded);
-        this.workspace.fetch();
+        this.workspace.fetchIfNotLoaded();
 
         this.schemaPicker = new chorus.views.SchemaPicker();
         this.schemaPicker.bind("change", this.onSchemaPickerChange, this);

@@ -10,9 +10,23 @@ describe("chorus.dialogs.RunFileInSchema", function () {
     })
 
     describe("#setup", function () {
-        it("fetches the workspace", function () {
-            expect(this.server.lastFetchFor(fixtures.workspace({ id:999}))).toBeDefined();
-        })
+        context("when the workspace has not been fetched", function() {
+            it("fetches the workspace", function () {
+                expect(this.server.lastFetchFor(fixtures.workspace({id: 999}))).toBeDefined();
+            });
+        });
+
+        context("when the workspace has already been fetched", function() {
+            beforeEach(function() {
+                this.server.reset();
+                this.workfile.loaded = true;
+                this.dialog = new chorus.dialogs.RunFileInSchema({ pageModel: this.workfile });
+            });
+
+            it("does not fetch the model", function() {
+                expect(this.server.lastFetchFor(fixtures.workspace({id: 999}))).not.toBeDefined();
+            });
+        });
     })
 
     describe("#render", function () {
