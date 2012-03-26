@@ -377,7 +377,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     });
 
                     it("does not display an image", function() {
-                        // expect(this.dialog.$("img")).not.toExist();
+                        expect(this.dialog.$("img")).toHaveClass("hidden");
                     });
 
                     it("displays the 'add image' link", function() {

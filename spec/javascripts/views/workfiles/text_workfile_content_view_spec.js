@@ -74,11 +74,12 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 expect(this.view.editor.getOption("mode")).toBe("text/plain");
             });
 
-            it("triggers a Ctrl+R keydown on the document when Ctrl+R keydown is received by the editor", function() {
-//            Cant find a way to trigger keydown events to CodeMirror
-//            spyOn(chorus, "triggerHotKey");
-//            $(this.view.$(".CodeMirror")[0].firstChild.firstChild).trigger(chorus.hotKeyEvent('r'));
-//            expect(chorus.triggerHotKey).toHaveBeenCalledWith('r');
+            xit("triggers a Ctrl+R keydown on the document when Ctrl+R keydown is received by the editor", function() {
+                // Can't find a way to trigger keydown events to CodeMirror
+                // Can't even figure out how to properly trigger a normal key in CodeMirror in the browser - maybe start there?
+                spyOn(chorus, "triggerHotKey");
+                $(this.view.$(".CodeMirror")[0].firstChild.firstChild).trigger(chorus.hotKeyEvent('r'));
+                expect(chorus.triggerHotKey).toHaveBeenCalledWith('r');
             })
 
             context("when the model is an SQL file", function() {
