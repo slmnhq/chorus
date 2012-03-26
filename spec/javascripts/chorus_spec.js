@@ -4,18 +4,54 @@ describe("chorus global", function() {
         this.backboneSpy = spyOn(Backbone.history, "start")
     })
 
-    context("in dev mode", function() {
+    context("classExtend", function() {
         beforeEach(function() {
-            chorus.isDevMode.andReturn(true);
+            this.oldDevMode = !!window.CHORUS_DEV_MODE;
         });
 
-        describe(".classExtend", function() {
-            it("creates a constructor with the given name", function() {
+        afterEach(function() {
+            window.CHORUS_DEV_MODE = this.oldDevMode;
+        });
+
+        // Once the global chorus object has been initialized, there's no simple way to test the effects of classExtend
+        // (other than on the current global object).
+        if (chorus.isDevMode()) {
+            it("applies the customized class name", function() {
                 var SomeClass = chorus.models.Base.extend({
                     constructorName: "Foo"
                 });
 
                 expect(SomeClass.name).toBe("chorus$Foo");
+            });
+        } else {
+            it("does not receive a custom name", function() {
+                var SomeClass = chorus.models.Base.extend({
+                    constructorName: "Foo"
+                });
+
+                expect(SomeClass.name).toBe("");
+            });
+        }
+
+        describe("when in Dev mode", function() {
+            beforeEach(function() {
+                window.CHORUS_DEV_MODE = true;
+                this.chorus = new Chorus();
+            });
+
+            it("uses a custom classExtend", function() {
+                expect(this.chorus.classExtend).not.toBe(Backbone.Model.extend);
+            });
+        });
+
+        describe("when not in dev mode", function() {
+            beforeEach(function() {
+                window.CHORUS_DEV_MODE = false;
+                this.chorus = new Chorus();
+            });
+
+            it("uses Backbone's extend", function() {
+                expect(this.chorus.classExtend).toBe(Backbone.Model.extend);
             });
         });
     });
@@ -264,7 +300,7 @@ describe("chorus global", function() {
                     "%Y": this.input3
                 }, {disableBeforeToday: true});
 
-                expect(datePickerController.setDisabledDates).toHaveBeenCalledWith(this.input1.attr("id"), {"00000101" : "20001224"});
+                expect(datePickerController.setDisabledDates).toHaveBeenCalledWith(this.input1.attr("id"), {"00000101": "20001224"});
             });
         });
     });
