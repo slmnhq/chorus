@@ -22,6 +22,7 @@
 
         checkUsernameClicked: function(e) {
             e.preventDefault();
+            this.clearErrors();
             this.checkUsername(this.ldapUsersFetched);
         },
 

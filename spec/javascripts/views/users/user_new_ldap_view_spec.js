@@ -184,8 +184,6 @@ describe("chorus.views.UserNewLdap", function() {
                                 ];
                                 this.view.$("form").submit();
                                 this.view.model.trigger("saveFailed");
-
-                                this.view.render();
                             });
 
                             it("doesn't redirect", function() {
@@ -199,6 +197,17 @@ describe("chorus.views.UserNewLdap", function() {
                                 expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
                                 expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");
                                 expect(this.view.$("input[name=admin]")).toBeChecked();
+                            });
+
+                            describe("check another user name", function(){
+                                beforeEach(function() {
+                                    this.view.$("input[name=userName]").val("max");
+                                    this.view.$("a.check_username").click();
+                                });
+
+                                it("clears the existing error", function() {
+                                    expect(this.view.$(".errors")).toBeEmpty();
+                                });
                             });
                         })
                     });
