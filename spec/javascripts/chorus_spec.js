@@ -515,7 +515,7 @@ describe("chorus global", function() {
         describe("from a 'needslogin' from the api", function() {
             beforeEach(function() {
                 Backbone.history.fragment = "/foo";
-                this.chorus.session.set({user: new chorus.models.User({id: "1", userName: "iAmNumberOne"})});
+                setLoggedInUser({id: "1", userName: "iAmNumberOne"}, this.chorus);
                 this.chorus.session.trigger("needsLogin");
             })
 
@@ -530,7 +530,7 @@ describe("chorus global", function() {
         describe("from manually logging out", function() {
             beforeEach(function() {
                 this.chorus.session.pathBeforeLoggedOut = "/bar";
-                this.chorus.session.set({user: new chorus.models.User({id: "1", userName: "iAmNumberOne"})});
+                setLoggedInUser({id: "1", userName: "iAmNumberOne"}, this.chorus);
 
                 this.chorus.session.previousUserId = "1";
 

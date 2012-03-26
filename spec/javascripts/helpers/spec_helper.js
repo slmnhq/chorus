@@ -362,12 +362,13 @@
         }
     };
 
-    window.setLoggedInUser = function(options) {
-        chorus.session._user = new chorus.models.User(_.extend({
+    window.setLoggedInUser = function(options, chorusInstance) {
+        var target = (chorusInstance || chorus);
+        target.session._user = new chorus.models.User(_.extend({
             userName: 'edcadmin',
             id: "10000"
         }, options));
-        chorus.session.set({id: chorus.session._user.get('id')});
+        target.session.set({id: target.session._user.get('id')});
     };
 
     window.stubView = function(html) {

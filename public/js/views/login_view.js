@@ -8,7 +8,7 @@ chorus.views.Login = chorus.views.Base.extend({
     persistent:true,
 
     setup:function () {
-        this.bindings.add(this.model, "saved", this.navigateToDashboard);
+        this.bindings.add(this.model, "saved", this.onLogin);
     },
 
     postRender : function() {
@@ -16,12 +16,17 @@ chorus.views.Login = chorus.views.Base.extend({
         _.defer(_.bind(function() {this.$("input[name='userName']").focus()}, this));
     },
 
-    navigateToDashboard:function (model) {
-        if(chorus.session && chorus.session.pathBeforeLoggedOut) {
-            chorus.router.navigate(chorus.session.pathBeforeLoggedOut, true)
+    onLogin : function () {
+        var targetDestination;
+
+        if (chorus.session && chorus.session.pathBeforeLoggedOut &&
+           (chorus.session.user() && chorus.session.previousUserId == chorus.session.user().get("id"))) {
+            targetDestination = chorus.session.pathBeforeLoggedOut;
         } else {
-            chorus.router.navigate("/", true);
+            targetDestination = "/";
         }
+
+        chorus.router.navigate(targetDestination, true);
     },
 
     submitLoginForm:function submitLoginForm(e) {

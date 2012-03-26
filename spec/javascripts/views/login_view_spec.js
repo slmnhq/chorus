@@ -86,7 +86,7 @@ describe("chorus.views.Login", function() {
             beforeEach(function() {
                 chorus.session.previousUserId = "2";
                 chorus.session.pathBeforeLoggedOut = "/foo";
-                chorus.session.set({user: new chorus.models.User({id: "2", userName: "iAmNumberTwo"})});
+                setLoggedInUser({id: "2", userName: "iAmNumberTwo"});
 
                 this.navigationSpy = spyOn(chorus.router, "navigate");
                 this.view.model.trigger('saved', this.view.model);
@@ -101,17 +101,15 @@ describe("chorus.views.Login", function() {
             beforeEach(function() {
                 chorus.session.previousUserId = "2";
                 chorus.session.pathBeforeLoggedOut = "/foo";
-                chorus.session.set({user: new chorus.models.User({id: "3", userName: "iAmNumberThree"})});
+                setLoggedInUser({ id: "3", userName: "iAmNumberThree" });
 
-                this.navigationSpy = spyOn(chorus.router, "navigate");
-                this.navigationSpy.reset();
+                spyOn(chorus.router, "navigate");
                 this.view.model.trigger('saved', this.view.model);
             });
 
-            xit("navigates to the dashboard", function() {
-                expect(this.navigationSpy).toHaveBeenCalledWith("/", true);
+            it("navigates to the dashboard", function() {
+                expect(chorus.router.navigate).toHaveBeenCalledWith("/", true);
             });
         })
-
     })
 })
