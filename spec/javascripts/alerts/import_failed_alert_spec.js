@@ -1,9 +1,7 @@
 describe("chorus.alerts.ImportFailed", function() {
     beforeEach(function() {
-        this.model = fixtures.datasetImportFailed();
         this.launchElement = $("<a/>");
-        this.launchElement.attr("data-id", this.model.get("datasetId"));
-        this.launchElement.attr("data-workspace-id", this.model.get("workspaceId"));
+        this.launchElement.attr("data-task-id", "123");
         this.alert = new chorus.alerts.ImportFailed({ launchElement: this.launchElement });
     });
 
@@ -12,33 +10,28 @@ describe("chorus.alerts.ImportFailed", function() {
             expect(this.alert.title).toMatchTranslation("import.failed.alert.title");
         });
 
-        it("fetches the failed import details", function() {
-            expect(this.server.lastFetchFor(this.model)).toBeDefined();
+        it("fetches the task with the given id", function() {
+            var task = new chorus.models.TaskReport({id: "123"});
+            expect(task).toHaveBeenFetched();
         });
 
-        it("declares the import details as a required resource", function() {
-            expect(this.alert.requiredResources).toContain(this.alert.model)
+        it("declares the task as a required resource", function() {
+            expect(this.alert.requiredResources.length).toBe(1);
+            expect(this.alert.requiredResources.at(0)).toBeA(chorus.models.TaskReport);
+            expect(this.alert.requiredResources.at(0).id).toBe(123);
         });
 
-        context("when the launchElement has data-import-type", function() {
+        describe("when the task is fetched", function() {
             beforeEach(function() {
-                this.launchElement.attr("data-import-type", "CSV");
-                this.alert = new chorus.alerts.ImportFailed({ launchElement: this.launchElement });
+                this.server.lastFetch().succeed(new chorus.models.TaskReport({
+                    result: "this failed",
+                    state: "failed"
+                }));
             });
 
-            it("sets urlParams", function() {
-                expect(this.alert.model.url()).toContainQueryParams({ importType: "CSV" })
+            it("renders the error details", function() {
+                expect(this.alert.$(".body p")).toHaveText("this failed");
             });
         });
     });
-
-    describe("#render", function() {
-        beforeEach(function() {
-            this.server.lastFetch().succeed(this.model);
-        });
-
-        it("renders the error details", function() {
-            expect(this.alert.$(".body p")).toHaveText(this.model.get("executionInfo").result)
-        });
-    });
-})
+});

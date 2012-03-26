@@ -871,8 +871,8 @@ beforeEach(function() {
                 })
             },
 
-            "IMPORT_FAILED_FILE": function() {
-                return new chorus.models.Activity({
+            "IMPORT_FAILED_FILE": function(overrides) {
+                return new chorus.models.Activity(_.extend({
                     author: {
                         firstName: "EDC",
                         id: "InitialUser",
@@ -886,6 +886,11 @@ beforeEach(function() {
                     import: {
                         id: fixtures.nextId().toString()
                     },
+                    task: {
+                        id: fixtures.nextId().toString(),
+                        isDeleted: false
+                    },
+
                     table: {
                         id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
                         name: "new_imported_table"
@@ -896,11 +901,11 @@ beforeEach(function() {
                         id: "10000",
                         name: "a"
                     }
-                })
+                }, overrides))
             },
 
-            "IMPORT_FAILED_SOURCE_TABLE": function() {
-                return new chorus.models.Activity({
+            "IMPORT_FAILED_SOURCE_TABLE": function(overrides) {
+                return new chorus.models.Activity(_.extend({
                     author: {
                         firstName: "EDC",
                         id: "InitialUser",
@@ -924,17 +929,21 @@ beforeEach(function() {
                         id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
+                    task: {
+                        id: fixtures.nextId().toString(),
+                        isDeleted: false
+                    },
                     timestamp: "2012-03-02 12:19:50",
                     type: "IMPORT_FAILED",
                     workspace: {
                         id: "10000",
                         name: "a"
                     }
-                })
+                }, overrides))
             },
 
-            "IMPORT_FAILED_VIEW": function() {
-                return new chorus.models.Activity({
+            "IMPORT_FAILED_VIEW": function(overrides) {
+                return new chorus.models.Activity(_.extend({
                     author: {
                         firstName: "EDC",
                         id: "InitialUser",
@@ -954,6 +963,10 @@ beforeEach(function() {
                     import: {
                         id: fixtures.nextId().toString()
                     },
+                    task: {
+                        id: fixtures.nextId().toString(),
+                        isDeleted: false
+                    },
                     table: {
                         id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
                         name: "new_imported_table"
@@ -964,7 +977,7 @@ beforeEach(function() {
                         id: "10000",
                         name: "a"
                     }
-                })
+                }, overrides))
             },
 
             "IMPORT_CREATED_FILE": function() {

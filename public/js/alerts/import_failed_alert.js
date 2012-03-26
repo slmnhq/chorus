@@ -2,15 +2,8 @@ chorus.alerts.ImportFailed = chorus.alerts.Error.extend({
     title: t("import.failed.alert.title"),
 
     makeModel: function() {
-        var id = this.options.launchElement.data("id")
-        var workspaceId = this.options.launchElement.data("workspace-id")
-        var importType = this.options.launchElement.data("import-type")
-
-        this.model = new chorus.models.DatasetImport({ workspaceId: workspaceId, datasetId: id });
-        if (importType){
-            this.model.urlParams = {"importType" : importType};
-        }
-
+        var taskId = this.options.launchElement.data("task-id");
+        this.model = new chorus.models.TaskReport({ id: taskId });
     },
 
     setup: function() {
@@ -19,10 +12,8 @@ chorus.alerts.ImportFailed = chorus.alerts.Error.extend({
     },
 
     additionalContext: function() {
-        return _.extend(this._super("additionalContext"),
-            {
-                body: this.model.get("executionInfo") && this.model.get("executionInfo").result
-            }
-        )
+        return _.extend(this._super("additionalContext"), {
+            body: this.model.get("result")
+        });
     }
 });

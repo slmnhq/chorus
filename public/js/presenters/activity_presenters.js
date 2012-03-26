@@ -156,17 +156,13 @@
 
         IMPORT_FAILED: function(model) {
             var ctx = importIsObject(model);
-            ctx.iconClass = ''
+            ctx.iconClass = '';
             ctx.iconSrc = "/images/med_red_alert.png";
-
-            var destinationTable = new chorus.models.Dataset(model.get("databaseObject"));
 
             ctx.detailsLink = chorus.helpers.linkTo('#', t("activity_stream.view_error_details"), {
                 "class": 'alert',
                 "data-alert": "ImportFailed",
-                "data-id": model.has("file") ? model.get("file").name : destinationTable.get("id"),
-                "data-workspace-id": model.workspace().get("id"),
-                "data-import-type": model.has("file") ? "CSV" : "DATASET"
+                "data-task-id": model.get("task").id
             });
 
             return ctx;

@@ -210,7 +210,7 @@ describe("chorus.presenters.Activity", function() {
     context(".IMPORT_FAILED", function() {
         context("when importing from a file", function() {
             beforeEach(function() {
-                this.model = fixtures.activities.IMPORT_FAILED_FILE();
+                this.model = fixtures.activities.IMPORT_FAILED_FILE({ task: { id: "34" } });
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 
@@ -232,15 +232,13 @@ describe("chorus.presenters.Activity", function() {
                 href: '#',
                 class: "alert",
                 "data-alert": "ImportFailed",
-                "data-id": "some.csv",
-                "data-workspace-id": "10000",
-                "data-import-type": "CSV"
+                "data-task-id": "34"
             });
         });
 
         context("when importing from a source table", function() {
             beforeEach(function() {
-                this.model = fixtures.activities.IMPORT_FAILED_SOURCE_TABLE();
+                this.model = fixtures.activities.IMPORT_FAILED_SOURCE_TABLE({ task: { id: "34" } });
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 
@@ -270,15 +268,13 @@ describe("chorus.presenters.Activity", function() {
                 href: '#',
                 class: "alert",
                 "data-alert": "ImportFailed",
-                "data-id": '"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"',
-                "data-workspace-id": "10000",
-                "data-import-type": "DATASET"
+                "data-task-id": "34"
             });
         });
 
         context("when importing from a view", function() {
             beforeEach(function() {
-                this.model = fixtures.activities.IMPORT_FAILED_VIEW();
+                this.model = fixtures.activities.IMPORT_FAILED_VIEW({ task: { id: "34" } });
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 
@@ -308,9 +304,7 @@ describe("chorus.presenters.Activity", function() {
                 href: '#',
                 class: "alert",
                 "data-alert": "ImportFailed",
-                "data-id": '"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"',
-                "data-workspace-id": "10000",
-                "data-import-type": "DATASET"
+                "data-task-id": "34"
             });
         });
     });
