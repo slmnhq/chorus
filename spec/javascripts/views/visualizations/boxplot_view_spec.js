@@ -171,13 +171,13 @@ describe("chorus.views.visualizations.BoxPlot", function() {
             });
         });
 
-        xit("renders no xtick lines by default", function() {
-            expect(this.view.$(".axis.south .grid line").length).toBe(0);
+        it("renders no xtick lines by default", function() {
+            expect(this.view.$(".xaxis line.grid").length).toBe(0);
         });
 
-        xit("renders ytick lines by default", function() {
-            expect(this.view.$(".axis.west .grid line").length).toBeGreaterThan(1);
+        it("renders ytick lines by default", function() {
+            expect(this.view.$(".yaxis line.grid").length).toBeGreaterThan(1);
         });
-    })
+    });
 });
 
