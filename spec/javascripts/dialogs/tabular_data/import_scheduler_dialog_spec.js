@@ -5,9 +5,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
             datasetId: this.dataset.get('id'),
             workspaceId: this.dataset.get('workspace').id
         });
+        this.workspace = fixtures.workspace(this.dataset.get('workspace'));
         this.datasetImport.unset('sampleCount');
         this.launchElement = $("<a/>");
         this.launchElement.data("dataset", this.dataset);
+        this.launchElement.data("workspace", this.workspace);
     });
 
     describe("#getNewModelAttrs", function() {
@@ -27,6 +29,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.dialog.$(".existing_table input:radio").prop("checked", true).change();
                 this.dialog.$(".existing_table input[name='schedule']").prop("checked", true).change();
                 this.attrs = this.dialog.getNewModelAttrs();
+            });
+
+            it("takes the workspace from the launch-element", function() {
+                expect(this.dialog.workspace).toBe(this.workspace);
             });
 
             it("has the 'importType' parameter set to 'schedule'", function() {
@@ -578,7 +584,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("should display the import destination", function() {
-                expect(this.dialog.$(".destination")).toContainTranslation("import.destination", {canonicalName: this.dataset.schema().canonicalName()})
+                expect(this.dialog.$(".destination")).toContainTranslation("import.destination", {canonicalName: this.workspace.sandbox().schema().canonicalName()})
             })
 
             it("should have a 'Begin Import' button", function() {

@@ -19,7 +19,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     makeModel: function() {
         this.dataset = this.options.launchElement.data("dataset");
-
+        this.workspace = this.options.launchElement.data("workspace");
         this.model = this.dataset.getImport();
         this.model.fetchIfNotLoaded();
         this.requiredResources.push(this.model);
@@ -135,7 +135,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         return {
             allowNewTruncate: !this.options.launchElement.hasClass("import_now"),
             sandboxTables: this.sandboxTables.pluck("objectName"),
-            canonicalName: this.dataset.schema().canonicalName(),
+            canonicalName: this.workspace.sandbox().schema().canonicalName(),
             showSchedule: this.showSchedule,
             hideScheduleCheckbox: !this.model.hasActiveSchedule(),
             submitText: this.submitText

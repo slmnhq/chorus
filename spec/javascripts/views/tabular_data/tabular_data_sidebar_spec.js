@@ -341,6 +341,10 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     it("should have the dataset attached as data-dataset", function() {
                                         expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
                                     });
+
+                                    it("should have the workspace attached as data-workspace", function() {
+                                        expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("workspace")).toBe(this.view.options.workspace);
+                                    });
                                 });
 
                                 context("and the workspace does not have a sandbox", function() {
