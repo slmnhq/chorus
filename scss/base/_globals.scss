@@ -88,6 +88,7 @@ img.disabled {
 
 .badge {
     div {
+        height: 15px;
         display: inline-block;
         @include secondary-text-small;
         font-weight: $semibold;
@@ -98,15 +99,12 @@ img.disabled {
     .left {
         background: url(/images/ribbons/counter_orange_round1.png) no-repeat;
         width: 6px;
-        height: 14px;
     }
     .center {
         background: url(/images/ribbons/counter_orange_2.png) repeat;
-        height: 14px;
     }
     .right {
         background: url(/images/ribbons/counter_orange_round3.png) no-repeat;
         width: 8px;
-        height: 14px;
     }
 }
