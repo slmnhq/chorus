@@ -30,7 +30,7 @@ describe("chorus.pages.DatabaseIndexPage", function() {
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.instance);
-            this.server.completeFetchAllFor(this.page.collection, [fixtures.database(), fixtures.database()]);
+            this.server.completeFetchFor(this.page.collection, [fixtures.database({name: "bar"}), fixtures.database({name: "foo"})]);
         });
 
         it("should have title in the mainContentList", function() {
@@ -51,6 +51,17 @@ describe("chorus.pages.DatabaseIndexPage", function() {
             expect(this.page.$(".breadcrumb:eq(1)")).toContainTranslation("breadcrumbs.instances");
 
             expect(this.page.$(".breadcrumb:eq(2)")).toContainText(this.instance.get("name"));
+        });
+
+        it("should have set up search correctly", function() {
+            expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Database", {count: 2});
+            expect(this.page.$("input.search")).toHaveAttr("placeholder", t("database.search_placeholder"));
+            expect(this.page.$(".list_content_details .explore")).toContainTranslation("actions.explore");
+
+            this.page.$("input.search").val("bar").trigger("keyup");
+
+            expect(this.page.$("li.database:eq(1)")).toHaveClass("hidden");
+            expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Database", {count: 1});
         });
 
         it("has a sidebar", function() {
