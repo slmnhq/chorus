@@ -61,7 +61,6 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
             title: this.schema.canonicalName(),
             search: {
                 placeholder: t("schema.search"),
-                label: t("actions.explore"),
                 onTextChange: onTextChangeFunction
             }
         });

@@ -274,10 +274,13 @@ describe("chorus.views.ListContentDetails", function() {
             spyOn(chorus, "search");
             this.view.options.search = {
                 list: this.$list,
-                label: "SearchLabel",
                 placeholder: "SearchPlaceholder"
             };
             this.view.render();
+        });
+
+        it("has a default label of 'explore'", function() {
+            expect(this.view.$(".explore")).toContainTranslation("actions.explore");
         });
 
         it("calls chorus.search on the input field", function() {

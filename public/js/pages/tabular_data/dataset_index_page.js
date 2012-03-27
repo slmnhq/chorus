@@ -40,7 +40,6 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
             title: t("dataset.title"),
             search: {
                 placeholder: t("workspace.search"),
-                label: t("actions.explore"),
                 onTextChange: onTextChangeFunction
             },
             linkMenus: {
