@@ -12,11 +12,15 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     defaultIconUrl:function () {
-        if (this.get("active") || this.get("state") == "1") {
+        if (this.isActive()) {
             return "/images/workspaces/workspace_large.png";
         } else {
             return "/images/workspaces/workspace_archived_large.png";
         }
+    },
+
+    isActive: function() {
+        return this.get("active") || this.get("state") == "1"
     },
 
     owner: function() {

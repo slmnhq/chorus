@@ -8,6 +8,22 @@ describe("chorus.models.Workspace", function() {
         expect(this.model.urlTemplate).toBe("workspace/{{id}}");
     });
 
+    describe("#isActive", function() {
+        it("return true when active:true", function() {
+            this.model.set({active: true});
+            expect(this.model.isActive()).toBeTruthy();
+        });
+
+        it("returns true when state:1", function() {
+            this.model.set({state: "1"});
+            expect(this.model.isActive()).toBeTruthy();
+        });
+
+        it("returns false otherwise", function() {
+            expect(this.model.isActive()).toBeFalsy();
+        });
+    });
+
     describe("#defaultIconUrl", function() {
         it("links to the active url when active:true", function() {
             this.model.set({active: true});
