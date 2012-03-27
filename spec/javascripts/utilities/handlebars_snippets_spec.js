@@ -416,6 +416,22 @@ describe("handlebars", function() {
             });
         });
 
+        describe("renderTemplateIf", function() {
+            beforeEach(function() {
+                this.template = '{{renderTemplateIf condition "plain_text" this }}';
+            });
+
+            it("renders the template if the condition is truthy", function() {
+                var output = Handlebars.compile(this.template)({ condition: true, text: "hello" });
+                expect(output).toBe("hello");
+            });
+
+            it("does not render the template if the condition is falsy", function() {
+                var output = Handlebars.compile(this.template)({ condition: false, text: "hello" });
+                expect(output).toBe("");
+            });
+        });
+
         describe("linkTo", function() {
             it("returns an html string with the right text and href", function() {
                 var link = $(Handlebars.helpers.linkTo("/users/1", "Charlie").toString());

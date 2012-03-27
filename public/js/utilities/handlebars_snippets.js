@@ -159,6 +159,14 @@
             return new Handlebars.SafeString(chorus.templates[templateName](context));
         },
 
+        renderTemplateIf: function(conditional, templateName, context) {
+            if(conditional) {
+                return Handlebars.helpers.renderTemplate(templateName, context);
+            } else {
+                return "";
+            }
+        },
+
         hotKeyName: function(hotKeyChar) {
             return _.str.capitalize(chorus.hotKeyMeta) + " + " + hotKeyChar;
         },
