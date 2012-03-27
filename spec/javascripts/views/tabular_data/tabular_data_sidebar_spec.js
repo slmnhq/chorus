@@ -670,6 +670,10 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
 
                     itShowsTheAppropriateDeleteLink(true, "chorus view");
+
+                    xit("shows the 'Create as a database view' link", function() {
+                        expect(this.view.$("a.create_database_view[data-dialog=CreateDatabaseView]")).toContainTranslation("actions.create_database_view");
+                    });
                 });
 
                 context("when the dataset is a source table", function() {

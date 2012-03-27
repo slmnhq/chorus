@@ -78,22 +78,23 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext: function() {
-        var ctx = _.extend({ typeString: Handlebars.helpers.humanizedTabularDataType(this.resource && this.resource.attributes) },
-            this.options);
+        var ctx = _.extend({
+                typeString: Handlebars.helpers.humanizedTabularDataType(this.resource && this.resource.attributes)
+            }, this.options);
 
-        if (this.resource) {
-            ctx.entityType = this.resource.entityType;
+        this.applyResourceContext(ctx);
+        this.applyStatisticsContext(ctx);
 
-            _.extend(ctx, this.importContext());
-
-            if (this.resource.get("hasCredentials") === false) {
-                ctx.noCredentials = true;
-                ctx.noCredentialsWarning = chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})})
-            }
-
-            ctx.displayEntityType = this.resource.metaType();
+        if (this.selectedColumn) {
+            ctx.column = this.selectedColumn.attributes;
         }
 
+        this.applyWorkspaceContext(ctx);
+
+        return ctx;
+    },
+
+    applyStatisticsContext: function(ctx) {
         if (this.statistics) {
             ctx.statistics = this.statistics.attributes;
             if (ctx.statistics.rows === 0) {
@@ -104,11 +105,9 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
                 ctx.statistics.columns = "0"
             }
         }
+    },
 
-        if (this.selectedColumn) {
-            ctx.column = this.selectedColumn.attributes;
-        }
-
+    applyWorkspaceContext: function(ctx) {
         if (this.options.workspace) {
             ctx.canExport = this.options.workspace.canUpdate() && !ctx.noCredentials && ctx.isImportConfigLoaded && this.resource.canBeImportSource();
             ctx.hasSandbox = this.options.workspace.sandbox();
@@ -132,69 +131,79 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
                 }
             }
         }
-
-        return ctx;
     },
 
-    importContext: function() {
-        var ctx = {};
-        if (!this.resource.canBeImportSourceOrDestination()) { return ctx; }
+    applyResourceContext: function(ctx) {
+        if (!this.resource) {
+            return;
+        }
 
-        ctx.isImportConfigLoaded = this.importConfiguration.loaded;
-        ctx.hasSchedule = this.importConfiguration.hasActiveSchedule();
-        ctx.hasImport = this.importConfiguration.has("id");
+        ctx.entityType = this.resource.entityType;
 
-        var destinationTable = new chorus.models.Dataset({
-            id: this.importConfiguration.get("destinationTable"),
-            workspaceId: this.resource.get("workspace").id
-        });
+        if (this.resource.canBeImportSourceOrDestination()) {
 
-        if (this.importConfiguration.get("nextImportTime")) {
-            ctx.nextImport = chorus.helpers.safeT("import.next_import", {
-                nextTime: chorus.helpers.relativeTimestamp(this.importConfiguration.get("nextImportTime")),
-                tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable"))
+            ctx.isImportConfigLoaded = this.importConfiguration.loaded;
+            ctx.hasSchedule = this.importConfiguration.hasActiveSchedule();
+            ctx.hasImport = this.importConfiguration.has("id");
+
+            var destinationTable = new chorus.models.Dataset({
+                id: this.importConfiguration.get("destinationTable"),
+                workspaceId: this.resource.get("workspace").id
             });
-        }
 
-        if (this.resource.id == this.importConfiguration.get("sourceId")) {
-            if (this.importConfiguration.has("executionInfo")) {
-                var importStatusKey;
-                var toTable = this.importConfiguration.get("executionInfo").toTable;
-                if (this.importConfiguration.wasSuccessfullyExecuted()) {
-                    importStatusKey = "import.last_imported";
-                } else {
-                    importStatusKey = "import.last_import_failed";
-                    ctx.importFailed = true;
-                }
-                ctx.lastImport = chorus.helpers.safeT(importStatusKey, {
-                    timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                    tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), ellipsize(toTable), {title: toTable})
-                });
-
-                if (this.importConfiguration.isInProgress()) {
-                    ctx.lastImport = chorus.helpers.safeT("import.began", {
-                        timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp)
-                    });
-                    ctx.inProgressText = chorus.helpers.safeT("import.in_progress", {
-                        tableLink: chorus.helpers.linkTo(destinationTable.showUrl(),
-                            ellipsize(toTable), {title: toTable})
-                    });
-                    ctx.importInProgress = true;
-                }
-
-            }
-        } else {
-            if (this.importConfiguration && this.importConfiguration.get("sourceId")) {
-                var sourceTable = new chorus.models.Dataset({id: this.importConfiguration.get("sourceId"), workspaceId: this.importConfiguration.get("workspaceId")});
-                var tableName = this.importConfiguration.get("sourceTable");
-                ctx.hasImport = true;
-                ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", {
-                    timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                    tableLink: chorus.helpers.linkTo(sourceTable.showUrl(), ellipsize(tableName), {title: tableName})
+            if (this.importConfiguration.get("nextImportTime")) {
+                ctx.nextImport = chorus.helpers.safeT("import.next_import", {
+                    nextTime: chorus.helpers.relativeTimestamp(this.importConfiguration.get("nextImportTime")),
+                    tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable"))
                 });
             }
+
+            if (this.resource.id == this.importConfiguration.get("sourceId")) {
+                if (this.importConfiguration.has("executionInfo")) {
+                    var importStatusKey;
+                    var toTable = this.importConfiguration.get("executionInfo").toTable;
+                    if (this.importConfiguration.wasSuccessfullyExecuted()) {
+                        importStatusKey = "import.last_imported";
+                    } else {
+                        importStatusKey = "import.last_import_failed";
+                        ctx.importFailed = true;
+                    }
+                    ctx.lastImport = chorus.helpers.safeT(importStatusKey, {
+                        timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
+                        tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), ellipsize(toTable), {title: toTable})
+                    });
+
+                    if (this.importConfiguration.isInProgress()) {
+                        ctx.lastImport = chorus.helpers.safeT("import.began", {
+                            timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp)
+                        });
+                        ctx.inProgressText = chorus.helpers.safeT("import.in_progress", {
+                            tableLink: chorus.helpers.linkTo(destinationTable.showUrl(),
+                                ellipsize(toTable), {title: toTable})
+                        });
+                        ctx.importInProgress = true;
+                    }
+
+                }
+            } else {
+                if (this.importConfiguration && this.importConfiguration.get("sourceId")) {
+                    var sourceTable = new chorus.models.Dataset({id: this.importConfiguration.get("sourceId"), workspaceId: this.importConfiguration.get("workspaceId")});
+                    var tableName = this.importConfiguration.get("sourceTable");
+                    ctx.hasImport = true;
+                    ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", {
+                        timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
+                        tableLink: chorus.helpers.linkTo(sourceTable.showUrl(), ellipsize(tableName), {title: tableName})
+                    });
+                }
+            }
         }
-        return ctx;
+
+        if (this.resource.get("hasCredentials") === false) {
+            ctx.noCredentials = true;
+            ctx.noCredentialsWarning = chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})})
+        }
+
+        ctx.displayEntityType = this.resource.metaType();
 
         function ellipsize(name) {
             if (!name) return "";
