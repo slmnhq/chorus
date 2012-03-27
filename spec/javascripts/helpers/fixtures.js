@@ -1382,6 +1382,7 @@ beforeEach(function() {
                 modifiedByLastName: modifiedByUser.lastName,
                 modifiedById: modifiedByUser.id,
                 versionOwner: "edcadmin",
+                "versionFilePath": "/Users/pivotal/workspace/chorus/ofbiz/runtime/data/workfile/10003/1332867012541_2971",
                 commitMessage: null,
                 isEditable: true
             }, overrides);
@@ -2399,6 +2400,7 @@ beforeEach(function() {
                             "lastName": "Admin",
                             "firstName": "EDC"
                         },
+                        "versionFilePath": "/Users/pivotal/workspace/chorus/ofbiz/runtime/data/workfile/10003/1332867012541_2971",
                         "versionOwner": "edcadmin",
                         "versionNum": 1
                     },
@@ -3222,6 +3224,7 @@ beforeEach(function() {
                             "lastName": "Admin",
                             "firstName": "EDC"
                         },
+                        "versionFilePath": "/Users/pivotal/workspace/chorus/ofbiz/runtime/data/workfile/10003/1332867012541_2971",
                         "versionOwner": "edcadmin",
                         "versionNum": 2
                     },
@@ -3460,6 +3463,7 @@ beforeEach(function() {
                                     "lastName": "Admin",
                                     "firstName": "EDC"
                                 },
+                                "versionFilePath": "/Users/pivotal/workspace/chorus/ofbiz/runtime/data/workfile/10003/1332867012541_2971",
                                 "versionOwner": "edcadmin",
                                 "versionNum": 1
                             },

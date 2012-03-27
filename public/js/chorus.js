@@ -21,7 +21,6 @@ window.Chorus = function chorus$Global() {
                 mode: "overlay"
             });
         }
-        self.workfileDir = "ofbiz/runtime/data/workfile";
         self.PageEvents = new chorus.utilities.PageEvents();
         self.session = new chorus.models.Session();
         self.router = new chorus.Router(self);

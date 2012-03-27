@@ -3,7 +3,7 @@ chorus.views.AlpineWorkfileContent = chorus.views.WorkfileContent.extend({
     useLoadingSection: true,
 
     setup: function() {
-        this.alpineFlowImage = new chorus.models.AlpineFlowImage({workfileDiskPath: this.model.diskPath()});
+        this.alpineFlowImage = new chorus.models.AlpineFlowImage({workfileDiskPath: this.model.get("versionInfo").versionFilePath});
 
         this.requiredResources.push(this.alpineFlowImage);
         this.alpineFlowImage.fetch();

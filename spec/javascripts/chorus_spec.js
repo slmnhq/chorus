@@ -71,11 +71,6 @@ describe("chorus global", function() {
             this.chorus.initialize()
             expect(this.chorus.session).toBeDefined();
         });
-
-        it("should set the workfileDir property", function() {
-            this.chorus.initialize();
-            expect(this.chorus.workfileDir).toBe("ofbiz/runtime/data/workfile");
-        });
     });
 
     describe("#afterNavigate", function() {

@@ -1,6 +1,7 @@
 describe("chorus.views.AlpineWorkfileContentDetails", function() {
     beforeEach(function() {
         this.model = fixtures.alpineWorkfile();
+        this.model.get("versionInfo").versionFilePath = "/tmp/run_file_test.afm";
         this.view = new chorus.views.AlpineWorkfileContentDetails({ model: this.model })
     });
 
@@ -11,7 +12,6 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
         });
 
         it("links the 'Run File' button to the Alpine Illuminator page", function() {
-            spyOn(this.model, 'diskPath').andReturn('/tmp/run_file_test.afm');
             this.view.render();
             expect(this.view.$('a.button.run_file')).toHaveHref('/AlpineIlluminator/alpine/result/runflow.jsp?flowFilePath=/tmp/run_file_test.afm');
         });
@@ -20,7 +20,5 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
             this.view.render();
             expect(this.view.$('a.button.run_file').attr('target')).toBe('alpine_illuminator');
         });
-
     });
-
 });

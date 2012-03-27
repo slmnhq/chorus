@@ -244,11 +244,6 @@
 
         hasOwnPage: function() {
             return true;
-        },
-
-        diskPath: function() {
-            // TODO: get this from the server.  See https://www.pivotaltracker.com/story/show/26669213
-            return chorus.workfileDir + "/" +  this.workspace().id + "/" + this.get("versionInfo").versionFileId;
         }
     });
 })();

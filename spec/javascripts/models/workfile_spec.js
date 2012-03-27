@@ -40,13 +40,6 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
-    describe("#diskPath", function() {
-        it("includes the root, plus the workspace id, plus the workfile id", function() {
-            chorus.workfileDir = "/tmp/test_workfile_dir"
-            expect(this.model.diskPath()).toBe("/tmp/test_workfile_dir/10000/5")
-        });
-    })
-
     describe("#executionSchema", function() {
         context("when the workfile is not loaded", function() {
             beforeEach(function() {
