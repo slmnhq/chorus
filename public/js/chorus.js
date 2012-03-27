@@ -219,7 +219,9 @@ window.Chorus = function chorus$Global() {
     self.search = function(options) {
         var input = options.input;
 
-        input.unbind("textchange.filter").bind("textchange.filter", _.bind(onTextChange, this, options));
+        var textChangeFunction = options.onTextChange || _.bind(onTextChange, this, options);
+
+        input.unbind("textchange.filter").bind("textchange.filter", textChangeFunction);
         input.addClass("chorus_search");
         input.each(function(i, el) {
             self.addClearButton(el);

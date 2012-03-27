@@ -318,7 +318,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
                     describe("search", function() {
                         beforeEach(function() {
-                            this.page.$("input.search").val("foo").change();
+                            this.page.$("input.search").val("foo").trigger("keyup");
                         });
 
                         it("throttles the number of search requests", function() {

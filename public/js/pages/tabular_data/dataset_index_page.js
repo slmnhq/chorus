@@ -21,13 +21,28 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
             this.collection.fetch();
         }, this);
 
+        var self = this;
+        var onTextChangeFunction = _.debounce(function(e) {
+            var input = $(e.target).val();
+            self.collection.attributes.namePattern = input;
+            self.collection.fetch({silent: true, success: function() {
+                self.mainContent.content.render();
+                self.mainContent.contentFooter.render();
+                self.mainContent.contentDetails.updatePagination();
+            }});
+        }, 300);
+
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Dataset",
             collection: this.collection,
             model: this.workspace,
             title: t("dataset.title"),
-            search: t("workspace.search"),
+            search: {
+                placeholder: t("workspace.search"),
+                label: t("actions.explore"),
+                onTextChange: onTextChangeFunction
+            },
             linkMenus: {
                 type: {
                     title: t("header.menu.filter.title"),
@@ -50,15 +65,6 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
                 }
             ]
         });
-
-        this.mainContent.contentDetails.bind("search:content", _.debounce(function(input) {
-            this.collection.attributes.namePattern = input;
-            this.collection.fetch({silent: true, success: _.bind(function() {
-                this.mainContent.content.render();
-                this.mainContent.contentFooter.render();
-                this.mainContent.contentDetails.updatePagination();
-            }, this)});
-        }, 300), this);
 
         this.mainContent.contentHeader.bind("choice:filter", function(choice) {
             this.collection.attributes.type = choice;

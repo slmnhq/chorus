@@ -345,6 +345,19 @@ describe("chorus global", function() {
             expect(this.input1).toHaveClass("chorus_search");
         });
 
+        context("with an onTextChange function supplied", function() {
+            beforeEach(function() {
+                this.onTextChange = jasmine.createSpy("onTextChange");
+                chorus.search({ input: this.input1, onTextChange: this.onTextChange });
+            })
+
+            it("should call the onTextChange function when the text changes", function() {
+                expect(this.onTextChange).not.toHaveBeenCalled();
+                this.input1.val("otherText").trigger("keyup");
+                expect(this.onTextChange).toHaveBeenCalled();
+            })
+        });
+
         context("with a selector", function() {
             beforeEach(function() {
                 chorus.search({ input: this.input1, list: this.list, selector: ".name" });
