@@ -19,7 +19,12 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
             modelClass: "Schema",
             collection: this.collection,
             title: this.databaseName,
-            imageUrl: "/images/instances/greenplum_database.png"
+            imageUrl: "/images/instances/greenplum_database.png",
+            search: {
+                selector: ".name",
+                placeholder: t("schema.search_placeholder"),
+                label: t("actions.explore")
+            }
         });
 
         this.sidebar = new chorus.views.SchemaListSidebar();

@@ -270,61 +270,22 @@ describe("chorus.views.ListContentDetails", function() {
 
     describe("type ahead search", function() {
         beforeEach(function() {
-            spyOnEvent(this.view, "search:content");
-            this.view.options.search = t("dataset.search");
+            this.$list = $("<ul/>");
+            spyOn(chorus, "search");
+            this.view.options.search = {
+                list: this.$list,
+                label: "SearchLabel",
+                placeholder: "SearchPlaceholder"
+            };
             this.view.render();
         });
 
-        it("renders the search field in the page", function() {
-            expect(this.view.$("input.search")).toExist();
-            expect(this.view.$("input.search").attr("placeholder")).toContainText(t("dataset.search"));
-        });
-
-        it("triggers search:content with the search text on change event", function() {
-            this.view.$("input.search").val("foo").change();
-            expect("search:content").toHaveBeenTriggeredOn(this.view, ["foo"]);
-        });
-
-        it("triggers search:content with the search text on keyup event", function() {
-            this.view.$("input.search").val("bar").keyup();
-            expect("search:content").toHaveBeenTriggeredOn(this.view, ["bar"]);
-        });
-
-        it("triggers search:content with the search text on paste event", function() {
-            this.view.$("input.search").val("sna").trigger("paste");
-            expect("search:content").toHaveBeenTriggeredOn(this.view, ["sna"]);
-        });
-
-        it("does not show the clear icon", function() {
-            expect(this.view.$(".chorus_search_clear")).toHaveClass("hidden");
-        });
-
-        describe("there is text entered in the search field", function() {
-            beforeEach(function() {
-                this.view.$("input.search").val("a search term").change();
-            });
-
-            it("shows the clear icon", function() {
-                expect(this.view.$(".chorus_search_clear")).not.toHaveClass("hidden");
-            });
-
-            context("when the clear input icon is clicked", function() {
-                beforeEach(function() {
-                    this.view.$(".chorus_search_clear").click();
-                });
-
-                it("clears the text from the input field", function() {
-                    expect(this.view.$("input.search").val()).toBe("");
-                });
-
-                it("does not show the clear icon", function() {
-                    expect(this.view.$(".chorus_search_clear")).toHaveClass("hidden");
-                });
-
-                it("triggers search:content with the search text on keyup event", function() {
-                    expect("search:content").toHaveBeenTriggeredOn(this.view, [""]);
-                });
-            });
+        it("calls chorus.search on the input field", function() {
+            expect(chorus.search).toHaveBeenCalledWith(_.extend({
+                    input: this.view.$("input.search:text"),
+                    afterFilter: jasmine.any(Function)
+                },
+                this.view.options.search));
         });
     });
 });

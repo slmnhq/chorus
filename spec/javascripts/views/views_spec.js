@@ -741,18 +741,19 @@ describe("chorus.views.Base", function() {
                 })
             })
 
-            context("options.showSearchField", function() {
+            context("search option", function() {
                 beforeEach(function() {
+                    this.searchOptions = {foo: "bar"};
                     this.view = new chorus.views.MainContentList({
                         collection: this.collection,
                         modelClass: "Workfile",
-                        search: "dataset.search"
+                        search: this.searchOptions
                     });
                     this.view.render();
                 });
 
                 it("passes the search option to the list content details", function() {
-                    expect(this.view.contentDetails.options.search).toBe("dataset.search");
+                    expect(this.view.contentDetails.options.search).toEqual({foo: "bar", list: $(this.view.content.el)});
                 });
             });
         })

@@ -3,28 +3,8 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
     className:"list_content_details",
 
     events:{
-        "keyup input.search": "triggerSearch",
-        "change input.search": "triggerSearch",
-        "paste input.search": "triggerSearch",
         "click a.next": "fetchNextPage",
-        "click a.previous": "fetchPreviousPage",
-        "click .chorus_search_clear": "clearSearchInput"
-    },
-
-    triggerSearch: function(e) {
-        this.trigger("search:content", this.$("input.search").val());
-        this.displayClearSearchInputIcon();
-    },
-
-    clearSearchInput: function(e) {
-        e && e.preventDefault();
-        this.$("input.search").val("");
-        this.triggerSearch();
-    },
-
-    displayClearSearchInputIcon: function() {
-        var length = this.$("input.search").val().length;
-        this.$(".chorus_search_clear").toggleClass("hidden", length == 0);
+        "click a.previous": "fetchPreviousPage"
     },
 
     fetchNextPage:function () {
@@ -50,6 +30,19 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         } else {
             el.removeClass("hidden")
         }
+
+        if (this.options.search) {
+            chorus.search(_.extend({
+                    input: this.$("input.search:text"),
+                    afterFilter: _.bind(this.updateFilterCount, this)
+                },
+                this.options.search));
+        }
+    },
+
+    updateFilterCount: function() {
+        var count = this.options.search.list.find("> li").not(".hidden").length;
+        this.$(".count").text(t("entity.name." + this.options.modelClass, {count: count}));
     },
 
     updatePagination: function() {
@@ -82,8 +75,8 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
     additionalContext:function (ctx) {
         var hash = {
             hideCounts:this.options.hideCounts,
-            search:this.options.search,
-            buttons:this.options.buttons
+            buttons:this.options.buttons,
+            search: this.options.search
         }
 
         if (this.collection.loaded && this.collection.pagination) {

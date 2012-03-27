@@ -478,7 +478,7 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
                 collection: collection,
                 modelClass: modelClass,
                 buttons: options.buttons,
-                search: options.search
+                search: options.search && _.extend({list: $(this.content.el)}, options.search)
             });
             this.contentFooter = new chorus.views.ListContentDetails({
                 collection: collection,

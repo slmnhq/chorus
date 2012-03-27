@@ -30,8 +30,8 @@ describe("chorus.pages.SchemaIndexPage", function() {
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.instance);
-            this.server.completeFetchAllFor(this.page.collection, [
-                fixtures.schema(), fixtures.schema()
+            this.server.completeFetchFor(this.page.collection, [
+                fixtures.schema({name: "bar"}), fixtures.schema({name: "foo"})
             ]);
         });
 
@@ -41,6 +41,17 @@ describe("chorus.pages.SchemaIndexPage", function() {
 
         it("should have the correct instance icon in the header ", function() {
             expect(this.page.mainContent.contentHeader.$("img")).toHaveAttr("src", "/images/instances/greenplum_database.png");
+        });
+
+        it("should have set up search correctly", function() {
+            expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Schema", {count: 2});
+            expect(this.page.$("input.search")).toHaveAttr("placeholder", t("schema.search_placeholder"));
+            expect(this.page.$(".list_content_details .explore")).toContainTranslation("actions.explore");
+
+            this.page.$("input.search").val("bar").trigger("keyup");
+
+            expect(this.page.$("li.schema:eq(1)")).toHaveClass("hidden");
+            expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Schema", {count: 1});
         });
 
         it("should have the correct breadcrumbs", function() {

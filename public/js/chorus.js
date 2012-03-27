@@ -217,9 +217,7 @@ window.Chorus = function chorus$Global() {
     };
 
     self.search = function(options) {
-        var input = options.input,
-            list = options.list,
-            selector = options.selector;
+        var input = options.input;
 
         input.unbind("textchange.filter").bind("textchange.filter", _.bind(onTextChange, this, options));
         input.addClass("chorus_search");
