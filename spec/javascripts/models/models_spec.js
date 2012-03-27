@@ -853,7 +853,7 @@ describe("chorus.models.Abstract", function() {
                     },
                     name: 'foo',
                     title: 'foop',
-                    trouble: '<script>alert("hi!")</script>bye'
+                    trouble: '<script>evilFunction()</script>bye'
                 });
             });
 
@@ -901,7 +901,7 @@ describe("chorus.models.Abstract", function() {
             context("when the model has a nameAttribute set", function() {
                 beforeEach(function() {
                     this.model.set({
-                        iAmAName: '<script>alert("hi!")</script>jerry',
+                        iAmAName: '<script>evilFunction("hi!")</script>jerry',
                         highlightedAttributes: {
                             iAmAName: '<em>jerry</em>'
                         }
@@ -916,7 +916,7 @@ describe("chorus.models.Abstract", function() {
 
                 it("returns the regular attribute when the highlighted one does not exist", function() {
                     delete this.model.get('highlightedAttributes').iAmAName;
-                    expect(this.model.highlightedName().toString()).toBe('&lt;script&gt;alert(&quot;hi!&quot;)&lt;/script&gt;jerry');
+                    expect(this.model.highlightedName().toString()).toBe('&lt;script&gt;evilFunction(&quot;hi!&quot;)&lt;/script&gt;jerry');
                     expect(this.model.highlightedName()).toBeA(Handlebars.SafeString);
                 });
             });
@@ -924,7 +924,7 @@ describe("chorus.models.Abstract", function() {
             context("when the model has a nameFunction set", function() {
                 beforeEach(function() {
                     this.model.set({
-                        fName: '<script>alert("hi!")</script>herbert',
+                        fName: '<script>evilFunction("hi!")</script>herbert',
                         lName: 'humphrey',
                         highlightedAttributes: {
                             fName: '<em>herbert</em>'
@@ -943,7 +943,7 @@ describe("chorus.models.Abstract", function() {
 
                 it("returns the function with regular attribute when the highlighted ones do not exist", function() {
                     delete this.model.get('highlightedAttributes').fName;
-                    expect(this.model.highlightedName().toString()).toBe('&lt;script&gt;alert(&quot;hi!&quot;)&lt;/script&gt;herbert humphrey');
+                    expect(this.model.highlightedName().toString()).toBe('&lt;script&gt;evilFunction(&quot;hi!&quot;)&lt;/script&gt;herbert humphrey');
                     expect(this.model.highlightedName()).toBeA(Handlebars.SafeString);
                 });
             });
@@ -1133,6 +1133,7 @@ describe("chorus.models.Abstract", function() {
             });
         });
 
+
         describe("#fetchAll", function() {
             beforeEach(function() {
                 this.collection.fetchAll();
@@ -1294,6 +1295,41 @@ describe("chorus.models.Abstract", function() {
             });
             fetchIfNotLoadedSpecs();
         })
+
+        describe("LastFetchWins", function() {
+            beforeEach(function() {
+                this.collection = new chorus.collections.LastFetchWins([], { foo: "bar" });
+                this.collection.urlTemplate = "lifo/{{foo}}";
+            });
+            it("ignores values returned by previous fetches", function() {
+                var foo = {x: 0};
+                this.collection.fetch({success: _.bind(function() {
+                    this.x = 1;
+                }, foo)});
+                var fetch1 = this.server.lastFetchFor(this.collection);
+
+                this.collection.fetch({success: _.bind(function() {
+                    this.x = 2;
+                }, foo)});
+                var fetch2 = this.server.lastFetchFor(this.collection);
+
+                expect(foo.x).toBe(0);
+
+                fetch2.succeed([], {});
+                expect(foo.x).toBe(2);
+
+                fetch1.succeed([], {});
+                expect(foo.x).toBe(2);
+
+                this.collection.fetch({success: _.bind(function() {
+                    this.x = 3;
+                }, foo)});
+                var fetch3 = this.server.lastFetchFor(this.collection);
+
+                fetch3.succeed([], {});
+                expect(foo.x).toBe(3);
+            });
+        });
     });
 
     function fetchIfNotLoadedSpecs() {

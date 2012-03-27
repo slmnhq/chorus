@@ -274,11 +274,8 @@ chorus.collections = {
             return uri.normalize().toString();
         },
 
-        fetch: function(options) {
-            this.fetching = true;
-            options || (options = {});
-            var success = options.success;
-            options.success = function(collection, resp) {
+        makeSuccessFunction: function(options, success) {
+            return function(collection, resp) {
                 if (collection.serverErrors) {
                     collection.trigger('fetchFailed', collection);
                 }
@@ -289,12 +286,18 @@ chorus.collections = {
                     success(collection, resp);
                 }
             };
+        },
+
+        fetch: function(options) {
+            this.fetching = true;
+            options || (options = {});
+            var success = options.success;
+            options.success = this.makeSuccessFunction(options, success);
             return this._super('fetch', [options])
                 .always(_.bind(function() {
                 this.fetching = false;
             }, this));
         },
-
 
         fetchPage: function(page, options) {
             var url = this.url({page: page});
@@ -359,3 +362,15 @@ chorus.collections = {
 };
 chorus.collections.Base.extend = chorus.classExtend;
 
+chorus.collections.LastFetchWins = chorus.collections.Base.extend({
+    lastFetchId: 0,
+
+    makeSuccessFunction: function(options, success) {
+        var fetchId = ++this.lastFetchId;
+        return _.bind(function(collection, resp) {
+            if (fetchId != this.lastFetchId) return;
+            var parentFunction = this._super("makeSuccessFunction", [options || {}, success]);
+            return parentFunction(collection, resp);
+        }, this);
+    }
+});

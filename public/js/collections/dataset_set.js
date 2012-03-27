@@ -1,4 +1,4 @@
-chorus.collections.DatasetSet = chorus.collections.Base.extend({
+chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
     model:chorus.models.Dataset,
     urlTemplate:function() {
         if (this.attributes.workspaceId) {
