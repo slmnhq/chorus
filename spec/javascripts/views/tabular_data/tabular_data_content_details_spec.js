@@ -47,6 +47,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
             expect(searchOptions.input).toBe(searchInput);
             expect(searchOptions.list).toBe(this.$columnList);
+            expect(this.view.$(".explore")).toContainTranslation("actions.explore");
         });
 
         context("when in Edit Chorus View mode", function() {
