@@ -18,6 +18,7 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
 
     setup:function () {
         this.bindings.add(this.resource, "saved", this.saved);
+        this.bindings.add(this.resource, "saveFailed", this.saveFailed);
     },
 
     create:function create(e) {
@@ -36,6 +37,10 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
     saved:function () {
         $(document).trigger("close.facebox");
         chorus.router.navigate(this.model.showUrl(), true);
+    },
+
+    saveFailed: function() {
+        this.$("button.submit").stopLoading();
     },
 
     checkInput: function() {
