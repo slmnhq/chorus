@@ -273,7 +273,9 @@ describe("chorus.views.TextWorkfileContentView", function() {
                     var model = this.view.model
                     var url = "/edc/workspace/" + model.get("workspaceId") + "/workfile/" +
                         model.get("id") + "/version/" + model.get("versionInfo").versionNum;
-                    this.failSaveFor(this.view.model, message, {url: url});
+                    _.find(this.server.updates(), function(request){
+                        return request.url === url ;
+                    }).fail([message]);
                 });
 
                 it("should show the version conflict dialog", function() {

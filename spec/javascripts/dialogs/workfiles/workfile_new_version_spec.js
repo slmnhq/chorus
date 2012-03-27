@@ -51,7 +51,7 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
 
             it("sets the versionNum and versionFileId to the page model", function() {
                 this.dialog.model.set({ "versionNum": 1000, "versionFileId" : "ID1"})
-                this.completeSaveFor(this.dialog.model)
+                this.server.lastCreate().succeed(this.dialog.model);
                 expect(this.dialog.pageModel.get("versionNum")).toBe(this.dialog.model.get("versionNum"));
                 expect(this.dialog.pageModel.get("versionFileId")).toBe(this.dialog.model.get("versionFileId"));
 

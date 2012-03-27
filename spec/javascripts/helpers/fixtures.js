@@ -6,38 +6,6 @@ beforeEach(function() {
             JSON.stringify(responseJSON)];
     };
 
-    this.completeSaveFor = function(model) {
-        var response = {
-            status: "ok",
-            resource: [
-                model.attributes
-            ]
-        };
-        var method = model.isNew() ? 'POST' : 'PUT'
-        this.server.respondWith(
-            method,
-            model.url(),
-            this.prepareResponse(response));
-        this.server.respond();
-    };
-
-    this.failSaveFor = function(model, message, overrides) {
-        var response = {
-            status: "fail",
-            message: [message],
-            resource: []
-        }
-        var method = overrides.method || (model.isNew() ? 'POST' : 'PUT');
-        var url = overrides.url || model.url();
-
-        this.server.respondWith(
-            method,
-            url,
-            this.prepareResponse(response)
-        );
-        this.server.respond();
-    }
-
     window.fixtures = {};
 
     $.extend(window.fixtures, {

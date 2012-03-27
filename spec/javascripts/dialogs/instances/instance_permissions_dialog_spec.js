@@ -589,7 +589,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                             context("after the save returns successfully", function() {
                                 beforeEach(function() {
-                                    this.completeSaveFor(this.dialog.account);
+                                    this.server.completeSaveFor(this.dialog.account);
                                 });
 
                                 it("re-renders the dialog", function() {
