@@ -39,7 +39,7 @@ chorus.views.Dataset = chorus.views.Base.extend({
             hasCredentials: this.model.hasCredentials(),
             iconImgUrl: this.model.iconUrl(),
             importFrequency: chorus.helpers.importFrequencyForModel(this.model),
-            workspaces: this.model.get("workspaceUsed") && this.model.get("workspaceUsed").workspaceList,
+            workspaces: this.model.workspacesAssociated(),
             viewable: viewable
         };
 

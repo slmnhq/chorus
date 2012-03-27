@@ -42,6 +42,7 @@ describe("chorus.views.Dataset", function() {
         context("when the dataset is not used in any workspace", function() {
             beforeEach(function() {
                 this.dataset.unset("workspaceUsed");
+                delete this.dataset._workspaceAssociated;
                 this.view.render();
             });
 

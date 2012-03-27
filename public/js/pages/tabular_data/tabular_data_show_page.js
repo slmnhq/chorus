@@ -9,8 +9,7 @@
         postRender: function() {
             this._super('postRender', arguments);
 
-            var workspaces = this.model.get("workspaceUsed") || [];
-            this.$('.menus').after(chorus.helpers.usedInWorkspaces(workspaces.workspaceList, this.model.asDataset()).toString());
+            this.$('.menus').after(chorus.helpers.usedInWorkspaces(this.model.workspacesAssociated(), this.model.asDataset()).toString());
             if (this.model.importFrequency && this.model.importFrequency()) {
                 $(this.el).addClass('has_import');
             }

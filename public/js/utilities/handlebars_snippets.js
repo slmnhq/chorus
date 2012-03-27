@@ -254,28 +254,32 @@
             return encodeURIComponent(value);
         },
 
-        usedInWorkspaces: function(workspaceList, contextObject) {
+        usedInWorkspaces: function(workspaceSet, contextObject) {
             contextObject = contextObject.clone();
-            if (!workspaceList || workspaceList.length == 0) { return ""; }
+            if (!workspaceSet || workspaceSet.length == 0) { return ""; }
 
-            function linkToContextObject(workspaceJson) {
-                var workspace = new chorus.models.Workspace(workspaceJson)
+            if (!(workspaceSet instanceof chorus.collections.WorkspaceSet)) {
+                workspaceSet = new chorus.collections.WorkspaceSet(workspaceSet);
+
+            }
+
+            function linkToContextObject(workspace) {
                 contextObject.setWorkspace(workspace);
                 return chorus.helpers.linkTo(contextObject.showUrl(), workspace.get('name'), {
                     title: workspace.get('name')
                 }).toString()
             }
 
-            var workspaceLink = linkToContextObject(workspaceList[0]);
+            var workspaceLink = linkToContextObject(workspaceSet.at(0));
 
             var result = $("<div></div>").addClass('found_in')
-            var otherWorkspacesMenu = chorus.helpers.linkTo('#', t('workspaces_used_in.other_workspaces', {count: workspaceList.length - 1}), {'class': 'open_other_menu'}).toString()
+            var otherWorkspacesMenu = chorus.helpers.linkTo('#', t('workspaces_used_in.other_workspaces', {count: workspaceSet.length - 1}), {'class': 'open_other_menu'}).toString()
 
-            result.append(t('workspaces_used_in.body', {workspaceLink: workspaceLink, otherWorkspacesMenu: otherWorkspacesMenu, count: workspaceList.length }));
-            if (workspaceList.length > 1) {
+            result.append(t('workspaces_used_in.body', {workspaceLink: workspaceLink, otherWorkspacesMenu: otherWorkspacesMenu, count: workspaceSet.length }));
+            if (workspaceSet.length > 1) {
                 var list = $('<ul></ul>').addClass('other_menu');
-                _.each(_.rest(workspaceList), function(workspaceJson) {
-                    list.append($('<li></li>').html(linkToContextObject(workspaceJson)));
+                _.each(_.rest(workspaceSet.models), function(workspace) {
+                    list.append($('<li></li>').html(linkToContextObject(workspace)));
                 })
                 result.append(list);
             }

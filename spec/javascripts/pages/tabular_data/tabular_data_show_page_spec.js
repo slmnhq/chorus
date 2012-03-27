@@ -1,7 +1,6 @@
 describe("chorus.pages.TabularDataShowPage", function() {
     beforeEach(function() {
         this.databaseObject = fixtures.databaseTable();
-        this.databaseObject.get('workspaceUsed').workspaceCount = 3;
         this.databaseObject.get('workspaceUsed').workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
         this.columnSet = this.databaseObject.columns({type: "meta"});
 

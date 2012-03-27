@@ -615,6 +615,24 @@ describe("handlebars", function() {
                 this.contextObject = new contextObjectClass();
             });
 
+            context("when the first arguments is an array", function() {
+                beforeEach(function() {
+                    this.workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()]
+                    this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
+                });
+
+                it("includes the 'found in workspace' information", function() {
+                    var workspace = this.workspaceList[0];
+                    expect($(this.result).find("a").attr("href")).toMatchUrl('#/' + workspace.id + '/contextObject');
+                    expect($(this.result).find("a")).toContainText(workspace.name);
+                    expect($(this.result).find("a")).toHaveAttr("title", workspace.name);
+                });
+
+                it("should indicate there is 1 other workspace", function() {
+                    expect($(this.result)).toContainTranslation("workspaces_used_in.other_workspaces", {count: 1});
+                });
+
+            });
             context("when there is no data", function() {
                 beforeEach(function() {
                     this.result = Handlebars.helpers.usedInWorkspaces(undefined, this.contextObject);
@@ -627,7 +645,7 @@ describe("handlebars", function() {
 
             context("when there aren't any 'found in' workspaces", function() {
                 beforeEach(function() {
-                    this.workspaceList = [];
+                    this.workspaceList = new chorus.collections.WorkspaceSet([]);
                     this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject);
                 });
 
@@ -638,9 +656,7 @@ describe("handlebars", function() {
 
             context("when there is exactly 1 'found in' workspace", function() {
                 beforeEach(function() {
-                    this.workspaceList = [
-                        fixtures.nestedWorkspaceJson()
-                    ];
+                    this.workspaceList = fixtures.workspaceSet([fixtures.workspace()]);
                     this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
                 itIncludesTheFoundInWorkspaceInformation();
@@ -656,10 +672,7 @@ describe("handlebars", function() {
 
             context("when there are exactly 2 'found in' workspaces", function() {
                 beforeEach(function() {
-                    this.workspaceList = [
-                        fixtures.nestedWorkspaceJson(),
-                        fixtures.nestedWorkspaceJson()
-                    ];
+                    this.workspaceList = fixtures.workspaceSet([fixtures.workspace(), fixtures.workspace()]);
                     this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
 
@@ -672,11 +685,7 @@ describe("handlebars", function() {
 
             context("when there are exactly 3 'found in' workspaces", function() {
                 beforeEach(function() {
-                    this.workspaceList = [
-                        fixtures.nestedWorkspaceJson(),
-                        fixtures.nestedWorkspaceJson(),
-                        fixtures.nestedWorkspaceJson()
-                    ];
+                    this.workspaceList = fixtures.workspaceSet([fixtures.workspace(), fixtures.workspace(), fixtures.workspace()]);
                     this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
 
@@ -689,7 +698,7 @@ describe("handlebars", function() {
                 it("includes a menu to the other workspaces", function() {
                     expect($(this.result).find("a.open_other_menu")).toExist();
                     expect($(this.result).find(".other_menu li").length).toBe(2);
-                    var workspace = fixtures.workspace(this.workspaceList[1]);
+                    var workspace = this.workspaceList.at(1);
                     expect($(this.result).find(".other_menu li a:eq(0)")).toHaveAttr('href', '#/' + workspace.get('id') + '/contextObject')
                     expect($(this.result).find(".other_menu li a:eq(0)")).toContainText(workspace.get('name'))
                 })
@@ -697,7 +706,7 @@ describe("handlebars", function() {
 
             function itIncludesTheFoundInWorkspaceInformation() {
                 it("includes the 'found in workspace' information", function() {
-                    var workspace = new chorus.models.Workspace(this.workspaceList[0]);
+                    var workspace = this.workspaceList.at(0);
                     expect($(this.result).find("a").attr("href")).toMatchUrl('#/' + workspace.get('id') + '/contextObject');
                     expect($(this.result).find("a")).toContainText(workspace.get('name'));
                     expect($(this.result).find("a")).toHaveAttr("title", workspace.get('name'));
@@ -717,7 +726,7 @@ describe("handlebars", function() {
                         workspaceLink: Handlebars.helpers.linkTo(this.model.workspace().showUrl(), this.model.workspace().name()),
                         tabularDataLink: Handlebars.helpers.linkTo(this.model.tabularData().showUrl(), this.model.tabularData().name())
                     });
-                })
+                });
             });
 
             context("on a tabularData not in a workspace", function() {
@@ -730,7 +739,7 @@ describe("handlebars", function() {
                     expect(this.result).toMatchTranslation('attachment.found_in.tabular_data_not_in_workspace', {
                         tabularDataLink: Handlebars.helpers.linkTo(this.model.tabularData().showUrl(), this.model.tabularData().name())
                     });
-                })
+                });
             });
         });
 
@@ -742,7 +751,7 @@ describe("handlebars", function() {
 
             it("includes the from text", function() {
                 expect($(this.result)).toContainTranslation('dataset.from', {location: ''});
-            })
+            });
 
             it("includes the instance name, database name, and schema name", function() {
                 var instance = new chorus.models.Instance({id: this.model.get("instance").id, name: this.model.get("instance").name});

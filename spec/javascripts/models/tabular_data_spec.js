@@ -483,6 +483,41 @@ describe("chorus.models.TabularData", function() {
         });
     });
 
+    describe("#workspacesAssociated", function() {
+        context("when there are workspaces associated", function() {
+            beforeEach(function() {
+              this.tabularData = fixtures.tabularData({workspaceUsed: {
+                  count: 2,
+                  workspaceList: [
+                      {id: "43", name: "working_hard"},
+                      {id: "54", name: "hardly_working"}
+                  ]
+              }});
+
+            });
+            it("returns a workspace set with the right data", function() {
+                var workspaces = this.tabularData.workspacesAssociated();
+                expect(workspaces).toBeA(chorus.collections.WorkspaceSet);
+                expect(workspaces.length).toBe(2);
+                expect(workspaces.at(0).get("id")).toBe("43");
+                expect(workspaces.at(1).get("id")).toBe("54");
+                expect(workspaces.at(0).get("name")).toBe("working_hard");
+                expect(workspaces.at(1).get("name")).toBe("hardly_working");
+            });
+        });
+
+        context("when there are NOT workspaces associated", function() {
+            beforeEach(function() {
+                this.tabularData.unset("workspaceUsed");
+                delete this.tabularData._workspaceAssociated;
+            });
+            it("returns an empty workspaceSet", function() {
+                var workspaces = this.tabularData.workspacesAssociated();
+                expect(workspaces.length).toBe(0);
+            });
+        });
+    });
+
     describe("#setDatasetNumber", function() {
         beforeEach(function() {
             this.tabularData.setDatasetNumber(4)

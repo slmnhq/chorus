@@ -76,6 +76,15 @@ chorus.models.TabularData = chorus.models.Base.include(
         return this._workspace;
     },
 
+    workspacesAssociated: function() {
+        if (!this._workspaceAssociated) {
+            var workspaceList = this.get("workspaceUsed") && this.get("workspaceUsed").workspaceList
+            this._workspaceAssociated = new chorus.collections.WorkspaceSet(workspaceList);
+        }
+        return this._workspaceAssociated;
+
+    },
+
     statistics: function() {
         if (!this._statistics) {
             this._statistics = new chorus.models.DatabaseObjectStatistics({
