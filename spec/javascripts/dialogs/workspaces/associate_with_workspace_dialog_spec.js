@@ -55,6 +55,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
             describe("when the API is successful", function() {
                 beforeEach(function() {
+                    spyOn(chorus.PageEvents, "broadcast");
                     this.server.lastCreate().succeed();
                 });
 
@@ -72,6 +73,10 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
                 it("fetch the activities for the dataset", function() {
                     expect(this.model.activities().fetch).toHaveBeenCalled();
+                });
+
+                it("broadcasts workspace:associated without arguments", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workspace:associated");
                 });
             });
 

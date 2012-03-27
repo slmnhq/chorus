@@ -17,6 +17,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         chorus.PageEvents.subscribe("tabularData:selected", this.setTabularData, this);
         chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
         chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this);
+        chorus.PageEvents.subscribe("workspace:associated", this.refetchModel, this);
         this.tabControl = new chorus.views.TabControl([
             {name: 'activity', selector: ".activity_list"},
             {name: 'statistics', selector: ".statistics_detail"}
@@ -27,6 +28,10 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         if (!this.disabled) {
             this._super("render", arguments);
         }
+    },
+
+    refetchModel: function() {
+        this.resource && this.resource.fetch();
     },
 
     setColumn: function(column) {

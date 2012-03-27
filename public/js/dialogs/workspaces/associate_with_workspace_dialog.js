@@ -39,6 +39,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
                     self.model.activities().fetch();
                     self.closeModal();
                     chorus.toast("dataset.associate.toast", {datasetTitle: params.objectName, workspaceNameTarget: self.picklistView.selectedItem().get("name")});
+                    chorus.PageEvents.broadcast("workspace:associated");
                 } else {
                     self.serverErrors = data.message;
                     self.render();
