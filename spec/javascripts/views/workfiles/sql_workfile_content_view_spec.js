@@ -10,6 +10,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     instanceName: "instance"
                 });
         spyOn(this.workfile, 'executionSchema').andCallFake(_.bind(function(){return this.schema}, this));
+        spyOn(chorus.views.SqlWorkfileContent.prototype, "runInDefault").andCallThrough();
+        spyOn(chorus.views.SqlWorkfileContent.prototype, "runSelected").andCallThrough();
         this.view = new chorus.views.SqlWorkfileContent({model: this.workfile});
         stubDefer();
     });
@@ -17,6 +19,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
     describe("initialization", function() {
         it("has a TextWorkfileContent view", function() {
             expect(this.view.textContent).toBeA(chorus.views.TextWorkfileContent);
+            expect(this.view.textContent.options.hotkeys).toBe(this.view.hotkeys);
         })
 
         it("has a ResultsConsole view", function() {
@@ -26,6 +29,27 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         it("declares hotkeys", function() {
             expect(this.view.hotkeys.r).toBeDefined();
         })
+    });
+
+    describe("hotkeys", function() {
+        beforeEach(function() {
+            // stop actually calling through (there's no clean way to do this in Jasmine)
+            this.view.runInDefault.andReturn();
+            this.view.runSelected.andReturn();
+            spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+        });
+
+        it("correctly binds the R hotkey to runInDefault", function() {
+            chorus.triggerHotKey('r');
+            expect(chorus.PageEvents.broadcast.calls[0].args[0]).toBe("file:runCurrent");
+            expect(this.view.runInDefault).toHaveBeenCalled();
+        });
+
+        it("correctly binds the E hotkey to runSelected", function() {
+            chorus.triggerHotKey('e');
+            expect(chorus.PageEvents.broadcast.calls[0].args[0]).toBe("file:runSelected");
+            expect(this.view.runSelected).toHaveBeenCalled();
+        });
     });
 
     describe("executing the workfile", function() {

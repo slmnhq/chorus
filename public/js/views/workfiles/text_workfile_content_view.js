@@ -32,9 +32,11 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
             extraKeys: {}
         };
 
-        opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-R"] = function() {
-            chorus.triggerHotKey("r");
-        };
+        _.each(this.options.hotkeys, function(_value, key) {
+            opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-" + key.toUpperCase()] = function() {
+                chorus.triggerHotKey(key);
+            };
+        });
 
         var preEditRefresh = function() {
             if (model.canEdit()) {

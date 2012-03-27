@@ -37,6 +37,11 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             expect(this.view.$(".execution_schema")).toHaveText(this.model.executionSchema().canonicalName())
         });
 
+        it("puts the shortcuts next to the menu items", function() {
+            expect(this.view.$("a.run_default").siblings(".menu_shortcut")).toContainText(chorus.helpers.hotKeyName("r"));
+            expect(this.view.$("a.run_selection").siblings(".menu_shortcut")).toContainText(chorus.helpers.hotKeyName("e"));
+        });
+
         context("when the user has not selected any text", function() {
             beforeEach(function() {
                 this.contentView.textContent.editor.getSelection = function() {

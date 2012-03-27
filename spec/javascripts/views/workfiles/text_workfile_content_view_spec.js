@@ -15,6 +15,20 @@ describe("chorus.views.TextWorkfileContentView", function() {
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
     })
 
+    describe("hotkey options", function() {
+        beforeEach(function() {
+            spyOn(chorus.views.CodeEditorView.prototype, "postRender");
+            this.view = new chorus.views.TextWorkfileContent({model: this.textfile, hotkeys: {a: "whatever", b: "something_else"}});
+            this.view.render();
+        });
+
+        it("correctly sets the extraKeys on the CodeMirror options", function() {
+            var opts = chorus.views.CodeEditorView.prototype.postRender.calls[0].args[0];
+            expect(opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-A"]).toBeDefined();
+            expect(opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-B"]).toBeDefined();
+        });
+    });
+
     context("without defer stubbed out", function() {
         it("defers call to CodeMirror", function() {
             this.view.render();

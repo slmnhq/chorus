@@ -41,7 +41,7 @@
 
     beforeEach(function() {
         loadTemplatesOnce();
-        stubHotkeys();
+//        stubHotkeys();
 
         var regexEqualityTester = function(a, b) {
             if(a instanceof RegExp && b instanceof RegExp) {

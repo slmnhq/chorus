@@ -7,7 +7,8 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     },
 
     hotkeys: {
-        'r': 'file:runCurrent'
+        'r': 'file:runCurrent',
+        'e': 'file:runSelected'
     },
 
     setup: function() {
@@ -18,7 +19,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         this.bindings.add(this.task, "saved", this.executionSucceeded);
         this.bindings.add(this.task, "saveFailed", this.executionFailed);
 
-        this.textContent = new chorus.views.TextWorkfileContent({ model: this.model })
+        this.textContent = new chorus.views.TextWorkfileContent({ model: this.model, hotkeys: this.hotkeys })
         this.resultsConsole = new chorus.views.ResultsConsole({ model: this.task });
         chorus.PageEvents.subscribe("file:runCurrent", this.runInDefault, this);
         chorus.PageEvents.subscribe("file:runSelected", this.runSelected, this);
@@ -31,15 +32,17 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
 
     runSelected: function() {
         var selectedText = this.getSelectedText();
-        var runOptions = {selection: selectedText};
-        var schema = this.model.executionSchema();
-        if(schema){
-            runOptions.instance = schema.get("instanceId");
-            runOptions.database = schema.get("databaseId");
-            runOptions.schema = schema.get("id");
-        }
+        if (selectedText) {
+            var runOptions = {selection: selectedText};
+            var schema = this.model.executionSchema();
+            if(schema){
+                runOptions.instance = schema.get("instanceId");
+                runOptions.database = schema.get("databaseId");
+                runOptions.schema = schema.get("id");
+            }
 
-        if (selectedText) this.run(runOptions);
+            this.run(runOptions);
+        }
     },
 
     runInDefault: function() {
