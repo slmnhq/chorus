@@ -9,6 +9,20 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         }
     },
 
+    workspacesFetched: function() {
+        if(this.model.has("workspace")) {
+            var currentWorkspace = this.collection.get(this.model.workspace().id);
+            this.collection.remove(currentWorkspace);
+        }
+
+        var workspaceList = this.model.get("workspaceUsed") && this.model.get("workspaceUsed").workspaceList;
+        _.each(workspaceList, function(workspace) {
+            this.collection.remove(this.collection.get(workspace.id));
+        }, this);
+
+        this._super("workspacesFetched", arguments);
+    },
+
     callback: function() {
         var self = this;
 

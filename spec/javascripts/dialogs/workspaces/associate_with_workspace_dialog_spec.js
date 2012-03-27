@@ -17,6 +17,64 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
         });
     });
 
+     describe("after workspaces are fetched", function() {
+        context("when the model is a source table/view with multiple workspaces", function() {
+            beforeEach(function() {
+                this.model = fixtures.datasetSourceTable({workspaceUsed: {
+                    workspaceCount: 2,
+                    workspaceList: [{id: "123", name: "im_also_the_current_one"},
+                        {id: "645", name: "yes_im_the_current_one"}]
+                }});
+                this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
+                this.server.completeFetchFor(chorus.session.user().workspaces(), [
+                    fixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
+                    fixtures.workspace({ name: "im_not_the_current_one" }),
+                    fixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                ]);
+            });
+            it("shows all workspaces except for the ones the source table is already associated with", function() {
+                expect(this.dialog.$('.collection_picklist li span.name')).not.toContainText("im_also_the_current_one");
+                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("im_not_the_current_one");
+                expect(this.dialog.$('.collection_picklist li span.name')).not.toContainText("yes_im_the_current_one");
+            });
+        });
+        context("when the model is a source table/view with no workspaces", function() {
+            beforeEach(function() {
+                this.model = fixtures.datasetSourceTable();
+                this.model.unset("workspaceUsed");
+                this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
+                this.server.completeFetchFor(chorus.session.user().workspaces(), [
+                    fixtures.workspace({ name: "im_not_the_current_one'" }),
+                    fixtures.workspace({ name: "me_neither" }),
+                    fixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                ]);
+            });
+
+            it("shows all workspaces", function() {
+                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("me_neither");
+                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("im_not_the_current_one");
+                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("yes_im_the_current_one");
+            });
+        });
+        context("when the model is a sandbox table/view or a chorus view (in a workspace)", function() {
+            beforeEach(function() {
+                this.model = fixtures.datasetSandboxTable({workspace: {id: "645"}});
+                this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
+                this.server.completeFetchFor(chorus.session.user().workspaces(), [
+                    fixtures.workspace({ name: "im_not_the_current_one'" }),
+                    fixtures.workspace({ name: "me_neither" }),
+                    fixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                ]);
+            });
+
+            it("it shows all workspaces except for the current workspace", function() {
+                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("me_neither");
+                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("im_not_the_current_one");
+                expect(this.dialog.$('.collection_picklist li span.name')).not.toContainText("yes_im_the_current_one");
+            });
+        });
+    });
+
     describe("clicking Associate Dataset", function() {
         context("for anything except a Chorus View", function() {
             beforeEach(function() {

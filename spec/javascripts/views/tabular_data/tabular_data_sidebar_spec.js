@@ -1,6 +1,6 @@
 describe("chorus.views.TabularDataSidebar", function() {
     beforeEach(function() {
-        stubModals();
+        this.modalSpy = stubModals();
         this.view = new chorus.views.TabularDataSidebar();
     });
 
@@ -681,6 +681,8 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 it("has an associate with another workspace link", function() {
                     expect(this.view.$('.actions .associate')).toContainTranslation("actions.associate_with_another_workspace");
+                    this.view.$('.actions .associate').click();
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.AssociateWithWorkspace);
                 });
 
                 it("has the 'add a note' link with the correct data", function() {
