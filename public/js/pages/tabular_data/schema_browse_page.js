@@ -45,11 +45,25 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
     instanceLoaded: function() {
         this.schema.set({instanceName: this.instance.get("name")});
 
+        var self = this;
+        var onTextChangeFunction = _.debounce(function(e) {
+            self.collection.attributes.filter = $(e.target).val();
+            self.collection.fetch({silent: true, success: function() {
+                self.mainContent.content.render();
+                self.mainContent.contentFooter.render();
+                self.mainContent.contentDetails.updatePagination();
+            }});
+        }, 300);
+
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Dataset",
             collection: this.collection,
             title: this.schema.canonicalName(),
-            search: t("schema.search")
+            search: {
+                placeholder: t("schema.search"),
+                label: t("actions.explore"),
+                onTextChange: onTextChangeFunction
+            }
         });
 
         this.mainContent.contentDetails.bind("search:content", _.debounce(function(input) {
