@@ -11,7 +11,7 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     subviews:{
         ".comment_list":"commentList",
-        ".truncated_text": "htmlContent"
+        ".activity_content > .truncated_text": "htmlContent"
     },
 
     context:function () {

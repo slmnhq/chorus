@@ -110,7 +110,7 @@ describe("chorus.views.ActivityList", function() {
 
             context("when there are less than three comments", function() {
                 it("does not render a 'more comments' link", function() {
-                    expect(this.view.$("li[data-activity-id]:eq(0) .comments a.more")).not.toExist();
+                    expect(this.view.$("li[data-activity-id]:eq(0) .morelinks a.more")).not.toExist();
                 })
 
                 it("does not apply the 'more' class to any comments", function() {

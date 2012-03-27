@@ -1,5 +1,6 @@
 describe("chorus.views.CommentList", function() {
     beforeEach(function() {
+        stubDefer();
         this.comment1 = fixtures.noteComment({
             text : "Yes we can",
             isInsight: true,
@@ -35,8 +36,8 @@ describe("chorus.views.CommentList", function() {
         });
 
         it("displays the text of each comment", function() {
-            expect(this.listItems.eq(0).find(".body")).toHaveText("Yes we can");
-            expect(this.listItems.eq(1).find(".body")).toHaveText("No hate plz");
+            expect(this.listItems.eq(0).find(".body")).toContainText("Yes we can");
+            expect(this.listItems.eq(1).find(".body")).toContainText("No hate plz");
         })
 
         it("displays the name of each comment's author", function() {
@@ -73,7 +74,7 @@ describe("chorus.views.CommentList", function() {
 
         context("when there are more comments than the specified 'initial limit'", function() {
             it("displays a 'more' link", function() {
-                expect(this.view.$("a.more")).toExist();
+                expect(this.view.$(".morelinks a.more")).toExist();
             });
 
             it("applies the 'more' class to the extra elements", function() {
@@ -91,7 +92,7 @@ describe("chorus.views.CommentList", function() {
             });
 
             it("does not render a 'more' link", function() {
-                expect(this.view.$("a.more")).not.toExist();
+                expect(this.view.$(".morelinks a.more")).not.toExist();
             });
 
             it("applies the 'more' class to the extra elements", function() {

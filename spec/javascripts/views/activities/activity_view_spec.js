@@ -1,11 +1,11 @@
 describe("chorus.views.Activity", function() {
     beforeEach(function() {
+        stubDefer();
         this.model = fixtures.activities.NOTE_ON_WORKSPACE();
         this.view = new chorus.views.Activity({ model: this.model });
     });
 
     describe("html content", function() {
-
         describe("#show", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.NOTE_ON_WORKSPACE();
@@ -30,8 +30,8 @@ describe("chorus.views.Activity", function() {
             });
 
             it("displays the body as html", function() {
-                expect(this.view.$(".activity_content .truncated_text")).toExist();
                 expect(this.view.$(".activity_content .body")).not.toExist();
+                expect(this.view.$(".activity_content .truncated_text")).toExist();
                 expect(this.view.$(".activity_content .truncated_text .styled_text")).toContainText(this.model.get("text"));
                 expect(this.view.htmlContent).toBeA(chorus.views.TruncatedText);
                 expect(this.view.htmlContent.options.attributeIsHtmlSafe).toBeTruthy();
