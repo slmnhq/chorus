@@ -60,36 +60,40 @@ chorus.views.Header = chorus.views.Base.extend({
         chorus.addClearButton(this.$(".search input"));
 
         if (chorus.isDevMode()) {
-            this.users.onLoaded(addFastUserToggle, this);
-
-            function addFastUserToggle() {
-                $('select.switch_user').remove();
-                var $select = $("<select class='switch_user'></select>");
-
-                $select.append("<option>Switch to user..</option>")
-                this.users.each(function(user) {
-                    $select.append("<option value=" + user.get("userName") + ">" + user.displayName() + "</option>")
-                });
-
-                $select.css({position: 'fixed', bottom: 0, right: 0})
-                $("body").append($select);
-                $select.unbind("change").bind("change", function () {
-                    switchUser($(this).val());
-                });
-            }
-
-            var self = this;
-            var session = chorus.session;
-
-            function switchUser(userName) {
-                session.requestLogout(function() {
-                    // log back in as new user
-                    self.bindings.add(session, "saved", _.bind(chorus.router.reload, chorus.router))
-                    self.bindings.add(session, "saveFailed", function() { session.trigger("needsLogin"); });
-                    session.save({userName: userName, password: "secret"});
-                });
-            }
+            this.addFastUserToggle();
         }
+    },
+
+    addFastUserToggle: function () {
+        function addDropdown() {
+            $('select.switch_user').remove();
+            var $select = $("<select class='switch_user'></select>");
+
+            $select.append("<option>Switch to user..</option>")
+            this.users.each(function(user) {
+                $select.append("<option value=" + user.get("userName") + ">" + user.displayName() + "</option>")
+            });
+
+            $select.css({position: 'fixed', bottom: 0, right: 0})
+            $("body").append($select);
+            $select.unbind("change").bind("change", function () {
+                switchUser($(this).val());
+            });
+        }
+
+        var self = this;
+        var session = chorus.session;
+
+        function switchUser(userName) {
+            session.requestLogout(function() {
+                // log back in as new user
+                self.bindings.add(session, "saved", _.bind(chorus.router.reload, chorus.router))
+                self.bindings.add(session, "saveFailed", function() { session.trigger("needsLogin"); });
+                session.save({userName: userName, password: "secret"});
+            });
+        }
+
+        this.users.onLoaded(addDropdown, this);
     },
 
     searchKeyPressed: function(event) {
