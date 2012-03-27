@@ -280,6 +280,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 executionInfo: {
                                     completedStamp: "2012-02-29 14:35:38.165"
                                 },
+                                id: "123",
                                 sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
                                 sourceTable: "some_source_table"
                             });

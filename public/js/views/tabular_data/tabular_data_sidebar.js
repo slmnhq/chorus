@@ -189,7 +189,6 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
                 if (this.importConfiguration && this.importConfiguration.get("sourceId")) {
                     var sourceTable = new chorus.models.Dataset({id: this.importConfiguration.get("sourceId"), workspaceId: this.importConfiguration.get("workspaceId")});
                     var tableName = this.importConfiguration.get("sourceTable");
-                    ctx.hasImport = true;
                     ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", {
                         timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
                         tableLink: chorus.helpers.linkTo(sourceTable.showUrl(), ellipsize(tableName), {title: tableName})
