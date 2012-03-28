@@ -26,6 +26,11 @@ end
 
 
 def run_spec(spec_path)
+    if spec_path.nil?
+        puts "No spec found, not running anything"
+        return
+    end
+
     puts "Running #{spec_path}"
     system "#{CHORUS_DIR}/launch_phantom_jasmine.sh '#{spec_path}'"
     puts
