@@ -10,7 +10,7 @@ map <D-S-F8> :!/Users/pivotal/workspace/chorus/launch_jasmine.sh %<CR>
 map <D-S-F9> :!/Users/pivotal/workspace/chorus/launch_phantom_jasmine.sh %<CR>
 map <D-k> :Gstatus<CR>
 
-set cursorline
+set nocursorline
 
 set foldmethod=indent
 
