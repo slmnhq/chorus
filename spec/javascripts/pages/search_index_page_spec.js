@@ -10,11 +10,11 @@ describe("chorus.pages.SearchIndexPage", function() {
 
     describe("URL escaping", function() {
         beforeEach(function(){
-            this.page = new chorus.pages.SearchIndexPage("100%");
+            this.page = new chorus.pages.SearchIndexPage("50%2F50");
         });
 
         it("has the right query for the model", function() {
-            expect(this.page.model.get("query")).toBe("100%");
+            expect(this.page.model.get("query")).toBe("50/50");
         });
     });
 

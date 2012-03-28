@@ -164,7 +164,7 @@ describe("chorus.views.Header", function() {
         describe("typing in the search bar", function() {
             beforeEach(function() {
                 spyOn(this.view.typeAheadView, "searchFor");
-                this.view.$(".search input:text").val("test_query").trigger("textchange");
+                this.view.$(".search input:text").val("test_query/with/slashes").trigger("textchange");
             });
 
 
@@ -174,7 +174,7 @@ describe("chorus.views.Header", function() {
             });
 
             it("sets the query in the typeAhead view", function() {
-                expect(this.view.typeAheadView.searchFor).toHaveBeenCalledWith("test_query");
+                expect(this.view.typeAheadView.searchFor).toHaveBeenCalledWith("test_query/with/slashes");
             });
 
             it("hides the search results if the input is empty", function() {
@@ -202,7 +202,7 @@ describe("chorus.views.Header", function() {
                 });
 
                 it("doesn't clear the search text", function() {
-                    expect(this.view.$(".search input:text").val()).toBe("test_query");
+                    expect(this.view.$(".search input:text").val()).toBe("test_query/with/slashes");
                 });
             });
 
@@ -222,7 +222,7 @@ describe("chorus.views.Header", function() {
                     this.view.$(".search form").trigger("submit");
                     expect(chorus.router.navigate).toHaveBeenCalled();
                     var url = chorus.router.navigate.mostRecentCall.args[0];
-                    expect(url).toMatch(/test_query/);
+                    expect(url).toMatch(/test_query%252Fwith%252Fslashes/);
                 });
 
                 context("when the header has a workspace id", function() {
@@ -234,7 +234,7 @@ describe("chorus.views.Header", function() {
                     it("navigates to the workspace search page", function() {
                         expect(chorus.router.navigate).toHaveBeenCalled();
                         var url = chorus.router.navigate.mostRecentCall.args[0];
-                        expect(url).toMatchUrl("#/workspaces/11/search/test_query");
+                        expect(url).toMatchUrl("#/workspaces/11/search/test_query%252Fwith%252Fslashes");
                     });
                 });
 
@@ -247,7 +247,7 @@ describe("chorus.views.Header", function() {
                     it("navigates to the global search page", function() {
                         expect(chorus.router.navigate).toHaveBeenCalled();
                         var url = chorus.router.navigate.mostRecentCall.args[0];
-                        expect(url).toMatchUrl("#/search/test_query");
+                        expect(url).toMatchUrl("#/search/test_query%252Fwith%252Fslashes");
                     });
                 });
             });

@@ -7,7 +7,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
     parseSearchParams: function(searchParams) {
         var attrs = {
-            query: searchParams[2] || searchParams[0]
+            query: decodeURIComponent(searchParams[2] || searchParams[0])
         };
         if (searchParams.length === 3) {
             attrs.searchIn = searchParams[0];

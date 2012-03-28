@@ -248,7 +248,7 @@ chorus.views.Header = chorus.views.Base.extend({
         e.preventDefault();
         var search = new chorus.models.SearchResult({
             workspaceId: this.options.workspaceId,
-            query: encodeURIComponent(this.$(".search input:text").val())
+            query: encodeURIComponent(encodeURIComponent(this.$(".search input:text").val()))
         });
         chorus.router.navigate(search.showUrl(), true);
     }
