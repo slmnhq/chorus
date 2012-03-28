@@ -116,7 +116,7 @@ chorus.views.Bare = Backbone.View.include(
         }
 
         $(this.el).html(this.template(evaluatedContext))
-            .addClass(this.className)
+            .addClass((this.className || "").replace("/", "_"))
             .addClass(this.additionalClass || "")
             .attr("data-template", this.className);
         this.renderSubviews();

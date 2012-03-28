@@ -152,9 +152,9 @@
 
         renderTemplate: function(templateName, context) {
             if (!chorus.templates[templateName]) {
-                var tag = $('#' + templateName + "_template");
-                if (!tag.length) throw "No template for " + templateName;
-                chorus.templates[templateName] = Handlebars.compile(tag.html());
+                var $element = $("#templates [data-template-path='" + templateName + "']")
+                if (!$element.length) throw "No template for " + templateName;
+                chorus.templates[templateName] = Handlebars.compile($element.html());
             }
             return new Handlebars.SafeString(chorus.templates[templateName](context));
         },

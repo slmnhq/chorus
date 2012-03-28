@@ -58,8 +58,8 @@ class TemplateMiddleware
   def call(env)
     response_lines = []
     Dir.glob("public/templates/**/*.handlebars") do |file|
-      template_name = File.basename(file, ".handlebars")
-      this_response = [%{<script type="x-handlebars-template" id="#{template_name}_template">}]
+      template_name = file[("public/templates".length + 1)...(-(".handlebars".length))]
+      this_response = [%{<script type="x-handlebars-template" data-template-path="#{template_name}">}]
       this_response << IO.read(file)
       this_response << %{</script>}
       response_lines << this_response.join()
