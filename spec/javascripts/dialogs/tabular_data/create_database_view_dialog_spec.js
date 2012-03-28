@@ -50,16 +50,39 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
         itAcceptsValidInput();
 
         function itAcceptsValidInput() {
-            it("accepts names that match the ChorusIdentifier64 rules", function() {
-                this.server.reset();
-                this.view.$("input#create_database_view_name").val("a_name");
-                this.view.$("button.submit").click();
-                expect(this.view.$("input#create_database_view_name")).not.toHaveClass("has_error");
-                expect(this.view.$("button.submit").isLoading()).toBeTruthy();
-                expect(this.view.$("button.submit")).toContainTranslation("actions.creating");
+            describe("valid input", function() {
+                beforeEach(function() {
+                    this.server.reset();
+                    this.view.$("input#create_database_view_name").val("a_name");
+                    this.view.$("button.submit").click();
+                });
 
-                expect(this.view.model.get("objectName")).toBe("a_name");
-                expect(this.view.model).toHaveBeenCreated();
+                it("accepts names that match the ChorusIdentifier64 rules", function() {
+                    expect(this.view.$("input#create_database_view_name")).not.toHaveClass("has_error");
+                    expect(this.view.$("button.submit").isLoading()).toBeTruthy();
+                    expect(this.view.$("button.submit")).toContainTranslation("actions.creating");
+
+                    expect(this.view.model.get("objectName")).toBe("a_name");
+                    expect(this.view.model).toHaveBeenCreated();
+                });
+
+                it("save succeeds", function() {
+                    spyOn(chorus, "toast");
+                    spyOn(this.view, "closeModal");
+
+                    this.server.completeSaveFor(this.view.model);
+                    expect(chorus.toast).toHaveBeenCalledWith("create_database_view.toast_success", {
+                        viewName: "a_name",
+                        canonicalName: this.launchElement.data("workspace").sandbox().schema().canonicalName()
+                    });
+                    expect(this.view.closeModal).toHaveBeenCalled();
+                });
+
+                it("save fails", function() {
+                    this.server.lastCreateFor(this.view.model).fail([{message: "foo"}]);
+                    expect(this.view.$(".errors")).toContainText("foo");
+                    expect(this.view.$("button.submit").isLoading()).toBeFalsy();
+                });
             });
         }
     });

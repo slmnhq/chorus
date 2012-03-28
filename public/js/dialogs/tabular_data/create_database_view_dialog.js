@@ -8,11 +8,13 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
 
     makeModel:function (options) {
         this.model = new chorus.models.DatabaseViewConverter({}, {from: this.options.pageModel});
+        this.bindings.add(this.model, "saved", this.saved);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
     },
 
     additionalContext: function() {
         return {
-            canonicalName: this.options.launchElement.data("workspace").sandbox().schema().canonicalName()
+            canonicalName: this.canonicalName()
         };
     },
 
@@ -29,5 +31,22 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
             this.markInputAsInvalid($name, t("validation.chorus64"), true);
             return false;
         }
+    },
+
+    saved: function() {
+        chorus.toast("create_database_view.toast_success", {
+            canonicalName: this.canonicalName(),
+            viewName: this.model.get("objectName")
+        })
+        this.closeModal();
+    },
+
+    saveFailed: function() {
+        this.$("button.submit").stopLoading();
+    },
+
+    canonicalName: function() {
+        return this.options.launchElement.data("workspace").sandbox().schema().canonicalName()
     }
+
 });
