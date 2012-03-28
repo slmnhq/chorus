@@ -407,6 +407,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                         jobName: "ScheduleJob_1330719934443",
                                         startTime: "2012-02-29 14:23:58.169"
                                     },
+                                    workspaceId: this.dataset.workspace().id,
                                     toTable: "our_destination",
                                     destinationTable: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"'
                                 });
@@ -533,7 +534,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 this.importResponse = fixtures.datasetImport({
                                     sourceId: this.dataset.id,
                                     scheduleInfo: null,
-                                    toTable: "our_destination"
+                                    toTable: "our_destination",
+                                    workspaceId: this.dataset.workspace().id
                                 });
                                 this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
                             });

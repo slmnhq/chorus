@@ -1,6 +1,6 @@
 chorus.presenters.TabularDataSidebar = function(sidebar) {
     var keys = ["resource", "statistics", "options", "selectedColumn", "importConfiguration"];
-    _.each(keys, function(key){
+    _.each(keys, function(key) {
         this[key] = sidebar[key];
     }, this);
 
@@ -81,54 +81,58 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
             ctx.hasSchedule = this.importConfiguration.hasActiveSchedule();
             ctx.hasImport = this.importConfiguration.has("id");
 
-            var destinationTable = new chorus.models.Dataset({
+            var nextDestinationTable = new chorus.models.Dataset({
                 id: this.importConfiguration.get("destinationTable"),
-                workspaceId: this.resource.get("workspace").id
+                workspaceId: this.importConfiguration.get("workspaceId"),
+                objectName: this.importConfiguration.get("toTable")
             });
 
             if (this.importConfiguration.get("nextImportTime")) {
                 ctx.nextImport = chorus.helpers.safeT("import.next_import", {
                     nextTime: chorus.helpers.relativeTimestamp(this.importConfiguration.get("nextImportTime")),
-                    tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), this.importConfiguration.get("toTable"))
+                    tableLink: chorus.helpers.linkTo(nextDestinationTable.showUrl(), nextDestinationTable.name())
                 });
             }
 
-            if (this.resource.id == this.importConfiguration.get("sourceId")) {
-                if (this.importConfiguration.has("executionInfo")) {
-                    var importStatusKey;
-                    var toTable = this.importConfiguration.get("executionInfo").toTable;
-                    if (this.importConfiguration.wasSuccessfullyExecuted()) {
-                        importStatusKey = "import.last_imported";
-                    } else {
-                        importStatusKey = "import.last_import_failed";
-                        ctx.importFailed = true;
-                    }
+            if (this.importConfiguration.has("executionInfo")) {
+                var lastImportRanAt = chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp)
 
-                    ctx.lastImport = chorus.helpers.safeT(importStatusKey, {
-                        timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                        tableLink: chorus.helpers.linkTo(destinationTable.showUrl(), ellipsize(toTable), {title: toTable})
+                if (this.resource.id == this.importConfiguration.get("sourceId")) {
+                    var lastDestinationTable = new chorus.models.Dataset({
+                        id: this.importConfiguration.get("destinationTable"), // TODO: This is a bug, because it points to the *next* destination table, but the API doesn't give us the *last* destination table's ID.  Waiting on https://www.pivotaltracker.com/story/show/27131461 for good data.
+                        objectName: this.importConfiguration.get("executionInfo").toTable,
+                        workspaceId: this.importConfiguration.get("workspaceId")
                     });
+
+                    var linkToLastDestination = chorus.helpers.linkTo(lastDestinationTable.showUrl(), ellipsize(lastDestinationTable.name()), {title: lastDestinationTable.name()})
 
                     if (this.importConfiguration.isInProgress()) {
-                        ctx.lastImport = chorus.helpers.safeT("import.began", {
-                            timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp)
-                        });
-                        ctx.inProgressText = chorus.helpers.safeT("import.in_progress", {
-                            tableLink: chorus.helpers.linkTo(destinationTable.showUrl(),
-                                ellipsize(toTable), {title: toTable})
-                        });
+                        ctx.lastImport = chorus.helpers.safeT("import.began", { timeAgo: lastImportRanAt });
+                        ctx.inProgressText = chorus.helpers.safeT("import.in_progress", { tableLink: linkToLastDestination });
                         ctx.importInProgress = true;
+
+                    } else {
+                        var importStatusKey;
+                        if (this.importConfiguration.wasSuccessfullyExecuted()) {
+                            importStatusKey = "import.last_imported";
+                        } else {
+                            importStatusKey = "import.last_import_failed";
+                            ctx.importFailed = true;
+                        }
+
+                        ctx.lastImport = chorus.helpers.safeT(importStatusKey, { timeAgo: lastImportRanAt, tableLink: linkToLastDestination });
                     }
-                }
-            } else {
-                if (this.importConfiguration && this.importConfiguration.get("sourceId")) {
-                    var sourceTable = new chorus.models.Dataset({id: this.importConfiguration.get("sourceId"), workspaceId: this.importConfiguration.get("workspaceId")});
-                    var tableName = this.importConfiguration.get("sourceTable");
-                    ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", {
-                        timeAgo: chorus.helpers.relativeTimestamp(this.importConfiguration.get("executionInfo").completedStamp),
-                        tableLink: chorus.helpers.linkTo(sourceTable.showUrl(), ellipsize(tableName), {title: tableName})
+                } else if (this.importConfiguration.get("sourceId")) {
+                    var sourceTable = new chorus.models.Dataset({
+                        id: this.importConfiguration.get("sourceId"),
+                        workspaceId: this.importConfiguration.get("workspaceId"),
+                        objectName: this.importConfiguration.get("sourceTable")
                     });
+                    var linkToSource = chorus.helpers.linkTo(sourceTable.showUrl(), ellipsize(sourceTable.name()), {title: sourceTable.name()});
+
+                    ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", { timeAgo: lastImportRanAt, tableLink: linkToSource });
                 }
+
             }
         }
 
