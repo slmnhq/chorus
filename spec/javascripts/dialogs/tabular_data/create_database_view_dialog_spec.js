@@ -1,8 +1,10 @@
 describe("chorus.dialogs.CreateDatabaseView", function() {
     beforeEach(function () {
         this.dataset = fixtures.chorusView();
+        this.schema = fixtures.schema();
+        spyOn(this.schema, "canonicalName").andReturn("I.D.S");
+        spyOn(this.dataset, "schema").andReturn(this.schema);
         this.launchElement = $("<a data-dialog='CreateDatabaseView'></a>")
-        this.launchElement.data("workspace", fixtures.workspace());
         this.view = new chorus.dialogs.CreateDatabaseView({
             launchElement: this.launchElement,
             pageModel: this.dataset
@@ -25,7 +27,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
 
     it("shows the target schema", function() {
         expect(this.view.$(".target_location")).toContainTranslation("create_database_view.target");
-        expect(this.view.$(".target_location .target_location_value")).toContainText(this.launchElement.data("workspace").sandbox().schema().canonicalName());
+        expect(this.view.$(".target_location .target_location_value")).toContainText("I.D.S");
     });
 
     it("has an input for the name", function() {
@@ -73,7 +75,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                     this.server.completeSaveFor(this.view.model);
                     expect(chorus.toast).toHaveBeenCalledWith("create_database_view.toast_success", {
                         viewName: "a_name",
-                        canonicalName: this.launchElement.data("workspace").sandbox().schema().canonicalName()
+                        canonicalName: "I.D.S"
                     });
                     expect(this.view.closeModal).toHaveBeenCalled();
                 });

@@ -147,7 +147,7 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
         }
 
         ctx.displayEntityType = this.resource.metaType();
-        ctx.isChorusView = this.resource.get("type") === "CHORUS_VIEW";
+        ctx.isChorusView = this.resource.isChorusView();
 
         return ctx;
     },
