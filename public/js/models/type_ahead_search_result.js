@@ -4,7 +4,10 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
 
     results: function() {
         var typeAhead = this.get('typeAhead');
-        return typeAhead && _.compact(_.map(typeAhead.docs, function(result) {
+
+        if (!typeAhead) { return []; }
+
+        return _.compact(_.map(typeAhead.docs, function(result) {
             switch (result.entityType) {
                 case "user":
                     return new chorus.models.User(result);

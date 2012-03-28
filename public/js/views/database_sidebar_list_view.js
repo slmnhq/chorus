@@ -99,7 +99,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
             }
         });
 
-        chorus.page && chorus.page.sidebar.bind("scroll", _.bind(function() {
+        chorus.page && chorus.page.sidebar && chorus.page.sidebar.bind("scroll", _.bind(function() {
             $(".hover").removeClass("hover");
             this.closeQtip();
         }, this));

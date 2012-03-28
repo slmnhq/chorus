@@ -19,6 +19,16 @@ describe("chorus.models.TypeAheadSearchResult", function() {
         });
     });
 
+    describe("when no fetch has been made", function() {
+        beforeEach(function() {
+            this.result = new chorus.models.TypeAheadSearchResult();
+        });
+
+        it("results are an empty array", function() {
+            expect(this.result.results()).toEqual([]);
+        });
+    });
+
     describe("results", function() {
         beforeEach(function() {
             this.searchResults = this.result.results();
