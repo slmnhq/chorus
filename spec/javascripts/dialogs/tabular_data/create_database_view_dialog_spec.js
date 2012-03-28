@@ -51,11 +51,15 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
 
         function itAcceptsValidInput() {
             it("accepts names that match the ChorusIdentifier64 rules", function() {
+                this.server.reset();
                 this.view.$("input#create_database_view_name").val("a_name");
                 this.view.$("button.submit").click();
                 expect(this.view.$("input#create_database_view_name")).not.toHaveClass("has_error");
                 expect(this.view.$("button.submit").isLoading()).toBeTruthy();
                 expect(this.view.$("button.submit")).toContainTranslation("actions.creating");
+
+                expect(this.view.model.get("objectName")).toBe("a_name");
+                expect(this.view.model).toHaveBeenCreated();
             });
         }
     });
