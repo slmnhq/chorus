@@ -21,6 +21,9 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
             requiredResources: [ this.workspace ]
         };
 
+        this.contentDetailsOptions = {
+            workspace: this.workspace
+        }
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
     },
 

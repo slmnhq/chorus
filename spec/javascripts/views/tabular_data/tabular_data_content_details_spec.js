@@ -457,95 +457,133 @@ describe("chorus.views.TabularDataContentDetails", function() {
             context("when the tabularData is not a chorus view", function() {
                 it("should not display the edit chorus view button", function() {
                     expect(this.view.$("button.edit")).not.toExist();
-                })
-            })
+                });
+
+                context("when the workspace is archived", function() {
+                    beforeEach(function() {
+                        var tabularData = fixtures.datasetSourceTable();
+                        var workspace = fixtures.workspace({active: false});
+                        tabularData.initialQuery = "select * from abc";
+                        this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
+                        this.server.completeFetchFor(tabularData.statistics());
+                        this.view.render();
+                    });
+                    it("should not display the derive chorus view button", function() {
+                        expect(this.view.$("button.derive")).not.toExist();
+                    });
+                });
+
+                context("when the workspace is active", function() {
+                    beforeEach(function() {
+                        var tabularData = fixtures.datasetSourceTable();
+                        var workspace = fixtures.workspace({active: true});
+                        tabularData.initialQuery = "select * from abc";
+                        this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
+                        this.server.completeFetchFor(tabularData.statistics());
+                        this.view.render();
+                    });
+                    it("should display the derive chorus view button", function() {
+                        expect(this.view.$("button.derive")).toExist();
+                    });
+                });
+            });
 
             context("when the tabularData is a chorus view", function() {
-                beforeEach(function() {
-                    var tabularData = fixtures.datasetChorusView();
-                    tabularData.initialQuery = "select * from abc";
-                    this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection});
-                    this.server.completeFetchFor(tabularData.statistics());
-                    this.view.render();
-                });
 
-                it("does not display the derive chorus view button", function() {
-                    expect(this.view.$("button.derive")).not.toExist();
-                })
-
-                context("and the edit button is clicked", function() {
+                context("when the workspace is archived", function() {
                     beforeEach(function() {
-                        this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");
-                        spyOnEvent(this.view, "dataset:edit");
-                        this.view.$("button.edit").click();
+                        var tabularData = fixtures.datasetChorusView();
+                        var workspace = fixtures.workspace({active: false});
+                        tabularData.initialQuery = "select * from abc";
+                        this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
+                        this.server.completeFetchFor(tabularData.statistics());
+                        this.view.render();
                     });
 
-                    it("swap the green definition bar to Edit chorus view bar", function() {
-                        expect(this.view.$(".edit_chorus_view")).not.toHaveClass("hidden");
-                        expect(this.view.$(".create_chorus_view")).toHaveClass("hidden");
-                        expect(this.view.$(".create_chart")).toHaveClass("hidden");
-                        expect(this.view.$(".definition")).toHaveClass("hidden");
-                        expect(this.view.$(".edit_chorus_view").find("button.save")).toExist();
+                    it("does not display the derive chorus view button", function() {
+                        expect(this.view.$("button.derive")).not.toExist();
                     });
 
-                    it("shows the edit chorus view info bar", function() {
-                        expect(this.view.$(".edit_chorus_view_info")).not.toHaveClass("hidden");
-                        expect(this.view.$(".info_bar")).toHaveClass("hidden");
-                        expect(this.view.$(".column_count")).toHaveClass("hidden");
-                        expect(this.view.$(".edit_chorus_view_info .left").text()).toContainTranslation("dataset.content_details.edit_chorus_view.info");
-                        expect(this.view.$(".edit_chorus_view button.preview").text()).toContainTranslation("dataset.run_sql");
+                    it("does not display the edit button", function() {
+                        expect(this.view.$("button.edit")).not.toExist();
                     });
-
-                    it("triggers dataset:edit", function() {
-                        expect("dataset:edit").toHaveBeenTriggeredOn(this.view);
-                    });
-
-                    it("triggers transform:sidebar", function() {
-                        expect(this.chorusViewSpy).toHaveBeenCalledWith("edit_chorus_view");
-                    });
-
-                    context("and cancel is clicked", function() {
-                        beforeEach(function() {
-                            spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
-                            spyOnEvent(this.view, "dataset:cancelEdit");
-                            this.view.$('.edit_chorus_view .cancel').click();
-                        });
-
-                        it("shows the definition bar and hides the create_chart bar", function() {
-                            expect(this.view.$('.definition')).not.toHaveClass('hidden');
-                            expect(this.view.$('.edit_chorus_view')).toHaveClass('hidden');
-                        });
-
-                        it("shows the column_count and hides info_bar", function() {
-                            expect(this.view.$('.column_count')).not.toHaveClass('hidden');
-                            expect(this.view.$('.edit_chorus_view_info')).toHaveClass('hidden');
-                        });
-
-                        it("triggers 'cancel:sidebar'", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
-                        });
-
-                        it("triggers dataset:cancelEdit", function() {
-                            expect("dataset:cancelEdit").toHaveBeenTriggeredOn(this.view);
-                        });
-
-                        it("resets the query to the initial query", function() {
-                            expect(this.view.tabularData.get("query")).toBe("select * from abc")
-                        })
-                    })
-
-                    context("and 'Save and Return' is clicked", function() {
-                        beforeEach(function() {
-                            spyOnEvent(this.view, "dataset:saveEdit");
-                            this.view.$(".save").click();
-                        });
-                        it("triggers dataset:saveEdit", function() {
-                            expect("dataset:saveEdit").toHaveBeenTriggeredOn(this.view)
-                        });
-                    })
                 });
-            })
-        })
+
+                context("when the workspace is not archived", function() {
+                    beforeEach(function() {
+                        var tabularData = fixtures.datasetChorusView();
+                        tabularData.initialQuery = "select * from abc";
+                        var workspace = fixtures.workspace({active: true})
+                        this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
+                        this.server.completeFetchFor(tabularData.statistics());
+                        this.view.render();
+                    });
+                    it("does not display the derive chorus view button", function() {
+                        expect(this.view.$("button.derive")).not.toExist();
+                    });
+                    context("and the edit button is clicked", function() {
+                        beforeEach(function() {
+                            this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");
+                            spyOnEvent(this.view, "dataset:edit");
+                            this.view.$("button.edit").click();
+                        });
+                        it("swap the green definition bar to Edit chorus view bar", function() {
+                            expect(this.view.$(".edit_chorus_view")).not.toHaveClass("hidden");
+                            expect(this.view.$(".create_chorus_view")).toHaveClass("hidden");
+                            expect(this.view.$(".create_chart")).toHaveClass("hidden");
+                            expect(this.view.$(".definition")).toHaveClass("hidden");
+                            expect(this.view.$(".edit_chorus_view").find("button.save")).toExist();
+                        });
+                        it("shows the edit chorus view info bar", function() {
+                            expect(this.view.$(".edit_chorus_view_info")).not.toHaveClass("hidden");
+                            expect(this.view.$(".info_bar")).toHaveClass("hidden");
+                            expect(this.view.$(".column_count")).toHaveClass("hidden");
+                            expect(this.view.$(".edit_chorus_view_info .left").text()).toContainTranslation("dataset.content_details.edit_chorus_view.info");
+                            expect(this.view.$(".edit_chorus_view button.preview").text()).toContainTranslation("dataset.run_sql");
+                        });
+                        it("triggers dataset:edit", function() {
+                            expect("dataset:edit").toHaveBeenTriggeredOn(this.view);
+                        });
+                        it("triggers transform:sidebar", function() {
+                            expect(this.chorusViewSpy).toHaveBeenCalledWith("edit_chorus_view");
+                        });
+                        context("and cancel is clicked", function() {
+                            beforeEach(function() {
+                                spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
+                                spyOnEvent(this.view, "dataset:cancelEdit");
+                                this.view.$('.edit_chorus_view .cancel').click();
+                            });
+                            it("shows the definition bar and hides the create_chart bar", function() {
+                                expect(this.view.$('.definition')).not.toHaveClass('hidden');
+                                expect(this.view.$('.edit_chorus_view')).toHaveClass('hidden');
+                            });
+                            it("shows the column_count and hides info_bar", function() {
+                                expect(this.view.$('.column_count')).not.toHaveClass('hidden');
+                                expect(this.view.$('.edit_chorus_view_info')).toHaveClass('hidden');
+                            });
+                            it("triggers 'cancel:sidebar'", function() {
+                                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
+                            });
+                            it("triggers dataset:cancelEdit", function() {
+                                expect("dataset:cancelEdit").toHaveBeenTriggeredOn(this.view);
+                            });
+                            it("resets the query to the initial query", function() {
+                                expect(this.view.tabularData.get("query")).toBe("select * from abc")
+                            })
+                        })
+                        context("and 'Save and Return' is clicked", function() {
+                            beforeEach(function() {
+                                spyOnEvent(this.view, "dataset:saveEdit");
+                                this.view.$(".save").click();
+                            });
+                            it("triggers dataset:saveEdit", function() {
+                                expect("dataset:saveEdit").toHaveBeenTriggeredOn(this.view)
+                            });
+                        })
+                    });
+                });
+            });
+        });
 
         describe("column count bar", function() {
             beforeEach(function() {

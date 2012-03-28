@@ -201,10 +201,11 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
+        var workspaceArchived = this.options.workspace && !this.options.workspace.isActive();
         return {
             definition: this.tabularData.isChorusView() ? this.tabularData.get("query") : this.statistics.get("definition"),
-            isChorusView: this.tabularData.isChorusView(),
-            showDerive: !this.tabularData.isChorusView() && !this.options.hideDeriveChorusView
+            showEdit: this.tabularData.isChorusView() && !workspaceArchived,
+            showDerive: !this.tabularData.isChorusView() && !this.options.hideDeriveChorusView && !workspaceArchived
         }
     },
 

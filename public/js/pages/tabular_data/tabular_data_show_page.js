@@ -24,6 +24,7 @@
         hideDeriveChorusView: true,
         additionalClass: 'tabular_data_show',
         sidebarOptions: {},
+        contentDetailsOptions: {},
 
         failurePageOptions: function() {
             return {
@@ -107,7 +108,9 @@
                 collection: this.columnSet,
                 persistent: true,
                 contentHeader: customHeaderView,
-                contentDetails: new chorus.views.TabularDataContentDetails({ tabularData: this.tabularData, collection: this.columnSet, hideDeriveChorusView: this.hideDeriveChorusView })
+                contentDetails: new chorus.views.TabularDataContentDetails(_.extend(
+                    { tabularData: this.tabularData, collection: this.columnSet, hideDeriveChorusView: this.hideDeriveChorusView},
+                    this.contentDetailsOptions))
             });
 
             this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);

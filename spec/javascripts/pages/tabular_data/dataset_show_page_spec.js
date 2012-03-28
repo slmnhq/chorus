@@ -45,6 +45,10 @@ describe("chorus.pages.DatasetShowPage", function() {
             expect(this.page.sidebarOptions.requiredResources[0].id).toBe(this.page.workspace.id)
         });
 
+        it("sets the workspace to pass into contentDetails", function() {
+           expect(this.page.contentDetailsOptions.workspace).toBe(this.page.workspace);
+        });
+
         context("when the workspace fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.workspace);
@@ -77,7 +81,11 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                     it("sets the sidebar's workspace", function() {
                         expect(this.page.sidebar.options.workspace.id).toBe(this.workspace.id);
-                    })
+                    });
+
+                    it("sets the contentDetail's workspace", function() {
+                        expect(this.page.mainContent.contentDetails.options.workspace.id).toBe(this.workspace.id);
+                    });
 
                     describe("when editing a chorus view", function() {
                         beforeEach(function() {
