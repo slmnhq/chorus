@@ -12,5 +12,8 @@ chorus.models.TabularDataPreview = chorus.models.Base.include(
         } else {
             return "workspace/{{workspaceId}}/dataset/{{encode datasetId}}/sample"
         }
+    },
+
+    cancel: function() {
     }
 });

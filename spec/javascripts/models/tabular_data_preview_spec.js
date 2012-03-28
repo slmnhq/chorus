@@ -44,4 +44,7 @@ describe("chorus.models.TabularDataPreview", function() {
         expect(this.model.columnOrientedData).toBeDefined();
     })
 
+    it("has a cancel method", function() {
+        expect(this.model.cancel).toBeDefined();
+    });
 });
