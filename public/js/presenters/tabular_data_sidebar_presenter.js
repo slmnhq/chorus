@@ -9,96 +9,102 @@ chorus.presenters.TabularDataSidebar = function(sidebar) {
 
 _.extend(chorus.presenters.TabularDataSidebar.prototype, {
     makeContext: function() {
-        var ctx = this.applyInitialContext();
-        this.applyResourceContext(ctx);
-        this.applyImportContext(ctx);
-        this.applyNextImportContext(ctx);
-        this.applyLastImportContext(ctx);
-        this.applyStatisticsContext(ctx);
-        this.applyColumnContext(ctx);
-        this.applyWorkspaceContext(ctx);
+        var additionalContexts = ['resource', 'import', 'nextImport', 'lastImport', 'statistics', 'column', 'workspace']
 
-        return ctx;
+        return _.reduce(additionalContexts,
+            function(result, context) { return _.extend(result, this[context + "Context"]()) },
+            this.initialContext(),
+            this)
     },
 
-    applyInitialContext: function() {
+    initialContext: function() {
         return _.extend({
             typeString: Handlebars.helpers.humanizedTabularDataType(this.resource && this.resource.attributes)
         }, this.options);
     },
 
-    applyStatisticsContext: function(ctx) {
-        if (this.statistics) {
-            ctx.statistics = this.statistics.attributes;
-            if (ctx.statistics.rows === 0) {
-                ctx.statistics.rows = "0"
-            }
+    statisticsContext: function() {
+        var ctx = {};
 
-            if (ctx.statistics.columns === 0) {
-                ctx.statistics.columns = "0"
-            }
+        if (!this.statistics) { return ctx; }
+
+        ctx.statistics = this.statistics.attributes;
+        if (ctx.statistics.rows === 0) {
+            ctx.statistics.rows = "0"
         }
-    },
 
-    applyColumnContext: function(ctx) {
-        if (this.selectedColumn) {
-            ctx.column = this.selectedColumn.attributes;
+        if (ctx.statistics.columns === 0) {
+            ctx.statistics.columns = "0"
         }
-    },
-
-    applyWorkspaceContext: function(ctx) {
-        if (this.options.workspace) {
-            ctx.canExport = this.options.workspace.canUpdate() && !ctx.noCredentials && ctx.isImportConfigLoaded && this.resource.canBeImportSource();
-            ctx.hasSandbox = this.options.workspace.sandbox();
-            ctx.workspaceId = this.options.workspace.id;
-            ctx.isDeleteable = this.resource && this.resource.isDeleteable() && this.options.workspace.canUpdate();
-
-            ctx.activeWorkspace = this.options.workspace.get("active");
-
-            if (this.resource) {
-                if (this.resource.get("type") == "CHORUS_VIEW") {
-                    ctx.deleteMsgKey = "delete";
-                    ctx.deleteTextKey = "actions.delete";
-                } else if (this.resource.get("type") == "SOURCE_TABLE") {
-                    if (this.resource.get("objectType") == "VIEW") {
-                        ctx.deleteMsgKey = "disassociate_view";
-                        ctx.deleteTextKey = "actions.delete_association";
-                    } else {
-                        ctx.deleteMsgKey = "disassociate_table";
-                        ctx.deleteTextKey = "actions.delete_association";
-                    }
-                }
-            }
-        }
-    },
-
-    applyImportContext: function(ctx) {
-        if (!this.resource || !this.resource.canBeImportSourceOrDestination()) { return ctx; }
-
-        var importConfig = this.importConfiguration;
-        ctx.isImportConfigLoaded = importConfig.loaded;
-        ctx.hasSchedule = importConfig.hasActiveSchedule();
-        ctx.hasImport = importConfig.has("id");
 
         return ctx;
     },
 
-    applyNextImportContext: function(ctx) {
+    columnContext: function() {
+        var ctx = {};
+        if (this.selectedColumn) {
+            ctx.column = this.selectedColumn.attributes;
+        }
+        return ctx;
+    },
+
+    workspaceContext: function() {
+        var ctx = {};
+        if (!this.options.workspace) { return ctx; }
+
+        ctx.canExport = this.options.workspace.canUpdate() && this.resource.hasCredentials() && this.isImportConfigLoaded() && this.resource.canBeImportSource();
+        ctx.hasSandbox = this.options.workspace.sandbox();
+        ctx.workspaceId = this.options.workspace.id;
+        ctx.isDeleteable = this.resource && this.resource.isDeleteable() && this.options.workspace.canUpdate();
+
+        ctx.activeWorkspace = this.options.workspace.get("active");
+
+        if (this.resource) {
+            if (this.resource.get("type") == "CHORUS_VIEW") {
+                ctx.deleteMsgKey = "delete";
+                ctx.deleteTextKey = "actions.delete";
+            } else if (this.resource.get("type") == "SOURCE_TABLE") {
+                if (this.resource.get("objectType") == "VIEW") {
+                    ctx.deleteMsgKey = "disassociate_view";
+                    ctx.deleteTextKey = "actions.delete_association";
+                } else {
+                    ctx.deleteMsgKey = "disassociate_table";
+                    ctx.deleteTextKey = "actions.delete_association";
+                }
+            }
+        }
+
+        return ctx;
+    },
+
+    importContext: function() {
+        var ctx = {};
+        if (!this.resource || !this.resource.canBeImportSourceOrDestination()) { return ctx; }
+
         var importConfig = this.importConfiguration;
+        ctx.isImportConfigLoaded = this.isImportConfigLoaded();
+        ctx.hasSchedule = importConfig.hasActiveSchedule();
+        ctx.hasImport = this.hasImport();
 
-        if (!ctx.hasImport || !importConfig.hasNextImport()) { return ctx; }
+        return ctx;
+    },
 
-        var destination = importConfig.nextDestination();
-        var runsAt = chorus.helpers.relativeTimestamp(importConfig.nextExecutionAt())
+    nextImportContext: function() {
+        var ctx = {};
+        if (!this.hasImport() || !this.importConfiguration.hasNextImport()) { return ctx; }
+
+        var destination = this.importConfiguration.nextDestination();
+        var runsAt = chorus.helpers.relativeTimestamp(this.importConfiguration.nextExecutionAt())
         ctx.nextImport = chorus.helpers.safeT("import.next_import", { nextTime: runsAt, tableLink: this._linkToModel(destination) });
 
         return ctx;
     },
 
-    applyLastImportContext: function(ctx) {
+    lastImportContext: function() {
+        var ctx = {};
         var importConfig = this.importConfiguration;
 
-        if (!ctx.hasImport || !importConfig.hasLastImport()) { return ctx; }
+        if (!this.hasImport() || !importConfig.hasLastImport()) { return ctx; }
 
         var ranAt = chorus.helpers.relativeTimestamp(importConfig.lastExecutionAt());
 
@@ -127,19 +133,29 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
         return ctx;
     },
 
-    applyResourceContext: function(ctx) {
-        if (!this.resource) {
-            return;
-        }
+    resourceContext: function() {
+        var ctx = {};
+        if (!this.resource) { return ctx; }
 
         ctx.entityType = this.resource.entityType;
 
-        if (this.resource.get("hasCredentials") === false) {
+        if (!this.resource.hasCredentials()) {
             ctx.noCredentials = true;
-            ctx.noCredentialsWarning = chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})})
+            var addCredentialsLink = chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})
+            ctx.noCredentialsWarning = chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink})
         }
 
         ctx.displayEntityType = this.resource.metaType();
+
+        return ctx;
+    },
+
+    isImportConfigLoaded: function() {
+        return this.importConfiguration && this.importConfiguration.loaded;
+    },
+
+    hasImport: function() {
+        return this.importConfiguration && this.importConfiguration.has("id");
     },
 
     // TODO: This is a foreign function... belongs in helpers? or on chorus?
