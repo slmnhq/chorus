@@ -1,5 +1,5 @@
 chorus.views.UserShow = chorus.views.Base.extend({
-    className:"user_show",
+    className:"user/show",
 
     additionalContext:function () {
         if (!this._fetchedWorkspaces) {

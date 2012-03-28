@@ -1,6 +1,6 @@
 (function () {
     chorus.views.UserEdit = chorus.views.Base.extend({
-        className:"user_edit",
+        className:"user/edit",
 
         events:{
             "submit form":'saveEditUser',

@@ -4,7 +4,7 @@ describe("chorus.views.Sidebar", function() {
         chorus.page = new chorus.pages.Base();
         this.page = chorus.page;
         this.page.sidebar = new chorus.views.Sidebar();
-        this.page.sidebar.className = "user_show_sidebar";
+        this.page.sidebar.className = "user/show_sidebar";
         this.page.sidebar.subviews = {
             '.foo' : 'fooView'
         };

@@ -6,7 +6,7 @@ describe("chorus.views.SelectableList", function() {
         });
 
         // normally would be set by subclass
-        this.view.className = "user_list";
+        this.view.className = "user/list";
         this.view.itemSelected = jasmine.createSpy();
         this.view.render();
     });

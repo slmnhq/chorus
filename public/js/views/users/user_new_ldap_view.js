@@ -1,6 +1,6 @@
 (function() {
     chorus.views.UserNewLdap = chorus.views.Base.extend({
-        className: "user_new_ldap",
+        className: "user/new_ldap",
         additionalClass: "user_new",
 
         persistent: true,
@@ -34,25 +34,6 @@
         checkUsername: function(callback) {
             var username = this.$("input[name=userName]").val();
             this.collection = new chorus.collections.LdapUserSet([], { userName: username });
-
-            // stubbing out server's ldap response
-
-//            var self = this;
-//            _.defer(function() {
-//                 self.collection.reset([
-//                     new chorus.models.User({
-//                         userName: username,
-//                         firstName: "Charles",
-//                         lastName: "HTTP",
-//                         emailAddress: "i@reset.headers"
-//                     })
-//                 ]);
-//            });
-//
-//            var self = this;
-//            _.defer(function() {
-//                 self.collection.reset([]);
-//            });
 
             this.collection.fetch();
 

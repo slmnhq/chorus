@@ -1,5 +1,5 @@
 chorus.views.UserListSidebar = chorus.views.Sidebar.extend({
-    className: "user_list_sidebar",
+    className: "user/list_sidebar",
     subviews:{
         '.activities':'activityList'
     },
