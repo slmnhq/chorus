@@ -48,6 +48,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         var self = this;
         var onTextChangeFunction = _.debounce(function(e) {
             self.collection.attributes.filter = $(e.target).val();
+            self.mainContent.contentDetails.startLoading(".count");
             self.collection.fetch({silent: true, success: function() {
                 self.mainContent.content.render();
                 self.mainContent.contentFooter.render();

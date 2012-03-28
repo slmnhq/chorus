@@ -25,6 +25,7 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
         var onTextChangeFunction = _.debounce(function(e) {
             var input = $(e.target).val();
             self.collection.attributes.namePattern = input;
+            self.mainContent.contentDetails.startLoading(".count");
             self.collection.fetch({silent: true, success: function() {
                 self.mainContent.content.render();
                 self.mainContent.contentFooter.render();

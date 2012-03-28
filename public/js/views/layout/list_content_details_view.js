@@ -40,6 +40,10 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         }
     },
 
+    startLoading: function(selector) {
+        this.$(selector).text(t("loading"));
+    },
+
     updateFilterCount: function() {
         var count = this.options.search.list.find("> li").not(".hidden").length;
         this.$(".count").text(t("entity.name." + this.options.modelClass, {count: count}));

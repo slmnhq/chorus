@@ -291,4 +291,15 @@ describe("chorus.views.ListContentDetails", function() {
                 this.view.options.search));
         });
     });
+
+    describe("#startLoading", function() {
+        beforeEach(function() {
+            this.view.render();
+        });
+        it("shows the loading text in the right place", function() {
+            expect(this.view.$(".count")).not.toContainTranslation("loading");
+            this.view.startLoading(".count");
+            expect(this.view.$(".count")).toContainTranslation("loading");
+        });
+    });
 });

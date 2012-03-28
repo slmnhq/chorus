@@ -116,6 +116,10 @@ describe("chorus.pages.SchemaBrowsePage", function() {
                 expect(_.debounce).toHaveBeenCalled();
             });
 
+            it("shows the Loading text in the count span", function() {
+                expect($(this.page.$(".count"))).toContainTranslation("loading");
+            });
+
             it("re-fetches the collection with the search parameters", function() {
                 expect(this.server.lastFetch().url).toContainQueryParams({filter: "foo"});
             });
@@ -139,7 +143,11 @@ describe("chorus.pages.SchemaBrowsePage", function() {
                 it("does not re-render the page or body", function() {
                     expect(this.page.mainContent.render).not.toHaveBeenCalled();
                     expect(this.page.mainContent.contentDetails.render).not.toHaveBeenCalled();
-                })
+                });
+
+                it("shows the Loading text in the count span", function() {
+                    expect($(this.page.$(".count"))).not.toContainTranslation("loading");
+                });
             });
         });
     });

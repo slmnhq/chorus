@@ -321,6 +321,10 @@ describe("chorus.pages.DatasetIndexPage", function() {
                             this.page.$("input.search").val("foo").trigger("keyup");
                         });
 
+                        it("shows the Loading text in the count span", function() {
+                            expect($(this.page.$(".count"))).toContainTranslation("loading");
+                        });
+
                         it("throttles the number of search requests", function() {
                             expect(_.debounce).toHaveBeenCalled();
                         });
@@ -348,7 +352,10 @@ describe("chorus.pages.DatasetIndexPage", function() {
                             it("does not re-render the page or body", function() {
                                 expect(this.page.mainContent.render).not.toHaveBeenCalled();
                                 expect(this.page.mainContent.contentDetails.render).not.toHaveBeenCalled();
-                            })
+                            });
+                            it("shows the Loading text in the count span", function() {
+                                expect($(this.page.$(".count"))).not.toMatchTranslation("loading");
+                            });
                         });
                     });
                 });
