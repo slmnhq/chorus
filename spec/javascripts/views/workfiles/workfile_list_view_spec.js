@@ -28,18 +28,6 @@ describe("chorus.views.WorkfileList", function() {
             this.view.render();
         });
 
-        context("when the workspace is archived", function() {
-            beforeEach(function() {
-                this.view.options.activeWorkspace = false;
-                this.view.render();
-            });
-
-            it("should not have links to the workfile", function() {
-                expect(this.view.$('a.image')).not.toExist();
-                expect(this.view.$('a.name')).not.toExist();
-            });
-        });
-
         it("renders an li for each item in the collection", function() {
             expect(this.view.$("li").length).toBe(3);
         });

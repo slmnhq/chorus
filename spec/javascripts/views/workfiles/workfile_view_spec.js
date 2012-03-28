@@ -17,18 +17,6 @@ describe("chorus.views.Workfile", function() {
         this.view.render();
     });
 
-    context("when the workspace is archived", function() {
-        beforeEach(function() {
-            this.view.options.activeWorkspace = false;
-            this.view.render();
-        });
-
-        it("should not have links to the workfile", function() {
-            expect(this.view.$('a.image')).not.toExist();
-            expect(this.view.$('a.name')).not.toExist();
-        });
-    });
-
     it("includes the data-id", function() {
         expect($(this.view.el).data("id")).toBe(24);
     });

@@ -45,104 +45,99 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                     schemaName: "schema"
                 }
             }));
+
+            this.view.render();
         });
 
-        describe("render", function() {
+        it("displays a link to copy the workfile to another workspace", function() {
+            var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
+            expect(copyLink).toExist();
+            expect(copyLink).toHaveAttr("data-workspace-id", this.view.model.get("workspaceId"))
+            expect(copyLink).toHaveAttr("data-workfile-id", this.view.model.get("id"))
+            expect(copyLink).toHaveAttr("data-active-only", 'true')
+        })
 
+        it("should have an activities tab", function() {
+            expect(this.view.$('.tab_control .activity_list')).toExist();
+        });
+
+        it("should have a functions tab", function() {
+            expect(this.view.$('.tab_control .database_function_list')).toExist();
+        });
+
+        it("should have a dataset tab", function() {
+            expect(this.view.$('.tab_control .datasets_and_columns')).toExist();
+        });
+
+        it("renders the functions subview", function() {
+            expect(this.view.functionList).toBeA(chorus.views.DatabaseFunctionSidebarList);
+        });
+
+        it("renders selected version", function() {
+            expect(this.view.$(".chosen").text()).toMatchTranslation("workfile.version_title", {versionNum: this.view.model.get("versionInfo").versionNum})
+        })
+
+        context("when the dataset tab is selected", function() {
             beforeEach(function() {
-                this.view.render();
+                this.view.$(".tab_control .database_dataset_list").click();
+                this.server.completeAllFetches();
+                this.view.$(".database_dataset_list input.search").val("searching for a table...");
             });
 
-            it("displays a link to copy the workfile to another workspace", function() {
-                var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
-                expect(copyLink).toExist();
-                expect(copyLink).toHaveAttr("data-workspace-id", this.view.model.get("workspaceId"))
-                expect(copyLink).toHaveAttr("data-workfile-id", this.view.model.get("id"))
-                expect(copyLink).toHaveAttr("data-active-only", 'true')
-            })
-
-            it("should have an activities tab", function() {
-                expect(this.view.$('.tab_control .activity_list')).toExist();
+            it("shows the dataset list view", function() {
+                expect(this.view.$(".database_dataset_list")).not.toHaveClass("hidden");
             });
 
-            it("should have a functions tab", function() {
-                expect(this.view.$('.tab_control .database_function_list')).toExist();
+            it("hides the column list view", function() {
+                expect(this.view.$(".database_column_list")).toHaveClass("hidden");
             });
 
-            it("should have a dataset tab", function() {
-                expect(this.view.$('.tab_control .datasets_and_columns')).toExist();
-            });
-
-            it("renders the functions subview", function() {
-                expect(this.view.functionList).toBeA(chorus.views.DatabaseFunctionSidebarList);
-            });
-
-            it("renders selected version", function() {
-                expect(this.view.$(".chosen").text()).toMatchTranslation("workfile.version_title", {versionNum: this.view.model.get("versionInfo").versionNum})
-            })
-
-            context("when the dataset tab is selected", function() {
+            context("when a table is selected in the dataset list", function() {
                 beforeEach(function() {
-                    this.view.$(".tab_control .database_dataset_list").click();
+                    this.table = fixtures.databaseTable();
+                    spyOnEvent(this.view.columnList, 'datasetSelected');
+                    this.view.datasetList.trigger("datasetSelected", this.table);
                     this.server.completeAllFetches();
-                    this.view.$(".database_dataset_list input.search").val("searching for a table...");
+                    this.view.$(".database_column_list input.search").val("searching for a column...");
                 });
 
-                it("shows the dataset list view", function() {
-                    expect(this.view.$(".database_dataset_list")).not.toHaveClass("hidden");
+                it("hides the metadata list", function() {
+                    expect(this.view.$(".database_dataset_list")).toHaveClass("hidden");
                 });
 
-                it("hides the column list view", function() {
-                    expect(this.view.$(".database_column_list")).toHaveClass("hidden");
+                it("shows the column list", function() {
+                    expect(this.view.$(".database_column_list")).not.toHaveClass("hidden");
                 });
 
-                context("when a table is selected in the dataset list", function() {
+                it("forwards the selection event to the column list view", function() {
+                    expect("datasetSelected").toHaveBeenTriggeredOn(this.view.columnList, [ this.table ]);
+                });
+
+                context("when the back link is clicked", function() {
                     beforeEach(function() {
-                        this.table = fixtures.databaseTable();
-                        spyOnEvent(this.view.columnList, 'datasetSelected');
-                        this.view.datasetList.trigger("datasetSelected", this.table);
-                        this.server.completeAllFetches();
-                        this.view.$(".database_column_list input.search").val("searching for a column...");
+                        this.view.columnList.trigger("back");
                     });
 
-                    it("hides the metadata list", function() {
-                        expect(this.view.$(".database_dataset_list")).toHaveClass("hidden");
+                    it("clears the search text", function() {
+                        expect(this.view.$(".database_dataset_list input.search").val()).toBe("");
                     });
 
-                    it("shows the column list", function() {
-                        expect(this.view.$(".database_column_list")).not.toHaveClass("hidden");
+                    it("should hide the column list", function() {
+                        expect(this.view.$(".database_column_list")).toHaveClass("hidden");
                     });
 
-                    it("forwards the selection event to the column list view", function() {
-                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view.columnList, [ this.table ]);
+                    it("should show the dataset list", function() {
+                        expect(this.view.$(".database_dataset_list")).not.toHaveClass("hidden");
                     });
 
-                    context("when the back link is clicked", function() {
+                    describe("clicking a table again", function() {
                         beforeEach(function() {
-                            this.view.columnList.trigger("back");
+                            this.view.$(".tab_control .database_dataset_list").click();
+                            this.server.completeAllFetches();
                         });
 
-                        it("clears the search text", function() {
-                            expect(this.view.$(".database_dataset_list input.search").val()).toBe("");
-                        });
-
-                        it("should hide the column list", function() {
-                            expect(this.view.$(".database_column_list")).toHaveClass("hidden");
-                        });
-
-                        it("should show the dataset list", function() {
-                            expect(this.view.$(".database_dataset_list")).not.toHaveClass("hidden");
-                        });
-
-                        describe("clicking a table again", function() {
-                            beforeEach(function() {
-                                this.view.$(".tab_control .database_dataset_list").click();
-                                this.server.completeAllFetches();
-                            });
-
-                            it("clears the search text for the columns", function() {
-                                expect(this.view.$(".database_column_list input.search").val()).toBe("");
-                            });
+                        it("clears the search text for the columns", function() {
+                            expect(this.view.$(".database_column_list input.search").val()).toBe("");
                         });
                     });
                 });
@@ -174,61 +169,82 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                     schemaName: "schema"
                 }
             }));
+
+            this.view.render();
         });
 
-        describe("render", function() {
-            beforeEach(function() {
-                this.view.render();
-            });
+        it("should not have function or dataset tabs", function() {
+            expect(this.view.$('.tab_control .activity_list')).toExist();
+            expect(this.view.$('.tab_control .database_function_list')).not.toExist();
+            expect(this.view.$('.tab_control .database_dataset_list')).not.toExist();
+        });
 
-            it("should not have function or dataset tabs", function() {
-                expect(this.view.$('.tab_control .activity_list')).toExist();
-                expect(this.view.$('.tab_control .database_function_list')).not.toExist();
-                expect(this.view.$('.tab_control .database_dataset_list')).not.toExist();
-            });
-
-            it("displays a link to copy the workfile to another workspace", function() {
-                var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
-                expect(copyLink).toExist();
-                expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
-                expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
-            })
-
-            it("displays the filename", function() {
-                expect(this.view.$(".fileName").text().trim()).toBe(this.workfile.get("fileName"))
-            });
-
-            it("displays the workfile's date", function() {
-                expect(this.view.$(".updated_on").text().trim()).toBe("November 22");
-            });
-
-            it("displays the name of the person who updated the workfile", function() {
-                expect(this.view.$(".updated_by").text().trim()).toBe(this.workfile.modifier().displayShortName());
-            });
-
-            it("links to the profile page of the modifier", function() {
-                expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedBy").id);
-            })
-
-            it("displays a link to delete the workfile", function() {
-                var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
-                expect(deleteLink).toExist();
-                expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
-                expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
-            });
-
-            it("displays a link to add a note", function() {
-                var addLink = this.view.$(".actions a.dialog[data-dialog=NotesNew]");
-                expect(addLink).toExist();
-                expect(addLink).toHaveAttr("data-entity-type", "workfile");
-                expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"));
-                expect(addLink).toHaveAttr("data-allow-workspace-attachments", "true");
-            });
-
-            it("displays the activity list", function() {
-                expect(this.view.$(".activity_list")).toExist();
-            });
+        it("displays a link to copy the workfile to another workspace", function() {
+            var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
+            expect(copyLink).toExist();
+            expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+            expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
         })
+
+        it("displays the filename", function() {
+            expect(this.view.$(".fileName").text().trim()).toBe(this.workfile.get("fileName"))
+        });
+
+        it("displays the workfile's date", function() {
+            expect(this.view.$(".updated_on").text().trim()).toBe("November 22");
+        });
+
+        it("displays the name of the person who updated the workfile", function() {
+            expect(this.view.$(".updated_by").text().trim()).toBe(this.workfile.modifier().displayShortName());
+        });
+
+        it("links to the profile page of the modifier", function() {
+            expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedBy").id);
+        })
+
+        it("displays a link to delete the workfile", function() {
+            var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
+            expect(deleteLink).toExist();
+            expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+            expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
+        });
+
+        it("displays a link to add a note", function() {
+            var addLink = this.view.$(".actions a.dialog[data-dialog=NotesNew]");
+            expect(addLink).toExist();
+            expect(addLink).toHaveAttr("data-entity-type", "workfile");
+            expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"));
+            expect(addLink).toHaveAttr("data-allow-workspace-attachments", "true");
+        });
+
+        it("displays the activity list", function() {
+            expect(this.view.$(".activity_list")).toExist();
+        });
+    });
+
+    context("with an archived workspace", function() {
+        beforeEach(function() {
+            this.model = fixtures.sqlWorkfile();
+            this.view = new chorus.views.WorkfileShowSidebar({ model : this.model });
+
+            this.model.fetch();
+            this.model.workspace().fetch();
+
+            this.server.completeFetchFor(this.model);
+            this.server.completeFetchFor(this.model.workspace(), fixtures.workspace({ active: false }));
+
+            this.view.render();
+        });
+
+        it("should not show the delete and add note links", function() {
+            expect(this.view.$(".actions a[data-alert=WorkfileDelete]")).not.toExist();
+            expect(this.view.$(".actions a[data-dialog=NotesNew]")).not.toExist();
+        });
+
+        it("should not show the functions or data tab", function() {
+            expect(this.view.$(".tab_control .database_dataset_list")).not.toExist();
+            expect(this.view.$(".tab_control .database_function_list")).not.toExist();
+        });
     });
 
     describe("when the model is invalidated", function() {

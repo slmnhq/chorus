@@ -38,7 +38,7 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
             {name:'activity_list'}
         ];
 
-        if (this.model.isSql()) {
+        if (this.model.isSql() && this.model.workspace().isActive()) {
             tabs.push({name:'database_function_list'});
             tabs.push({name:"datasets_and_columns"});
 
@@ -83,7 +83,8 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
         return {
             updatedBy: modifier.displayShortName(),
             modifierUrl: modifier.showUrl(),
-            downloadUrl: this.model.downloadUrl()
+            downloadUrl: this.model.downloadUrl(),
+            isActiveWorkspace: this.model.workspace().isActive()
         }
     }
 });
