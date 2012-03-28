@@ -178,6 +178,13 @@ $summary-line-height: 19px;
     color: black;
 }
 
+@mixin font-normal-delta {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: normal;
+    color: black;
+}
+
 @mixin font-content-details {
     @include debugging-mixin;
     font-size: 12px;

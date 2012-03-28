@@ -1,0 +1,28 @@
+.create_database_view_dialog {
+    .target_location {
+        @include font-normal-delta;
+    }
+
+    .target_location_value {
+        font-size: 13px;
+        font-weight: $semibold;
+        font-color: $color-text2;
+    }
+
+    .input {
+        @include after-clearfix;
+
+        label {
+            display: inline-block;
+            line-height: 45px;
+            @include font-normal-delta;
+        }
+
+        input[type=text] {
+            display: inline;
+            float: right;
+            width: 300px;
+            margin: 10px 0;
+        }
+    }
+}
