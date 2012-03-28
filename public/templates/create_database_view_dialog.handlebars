@@ -1,12 +1,10 @@
 <div class="target_location">
     {{t "create_database_view.target"}}
-    <span class="target_location_value">{{canonicalName}}</span>
+    <span class="target_location_value" title="{{canonicalName}}">{{canonicalName}}</span>
 </div>
 
-<div class="input">
-    <input id="create_database_view_name" type="text" name="name" tabindex="1" maxlength="64"/>
-    <label for="create_database_view_name">{{t "create_database_view.name"}}</label>
-</div>
+<label for="create_database_view_name">{{t "create_database_view.name"}}</label>
+<input id="create_database_view_name" type="text" name="name" tabindex="1" maxlength="64"/>
 
 <div class="modal_controls">
     <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
