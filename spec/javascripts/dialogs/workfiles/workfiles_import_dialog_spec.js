@@ -168,12 +168,22 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                     expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
                 });
 
-                it("display the correct error", function() {
+                it("displays the correct error", function() {
                     expect(this.dialog.$(".errors ul").text()).toBe("Workspace already has a workfile with this name. Specify a different name.")
                 });
 
-                it("sets the button text back to 'Uploading'", function() {
+                it("sets the button text back to 'Upload File'", function() {
                     expect(this.dialog.$("button.submit").text()).toMatchTranslation("workfiles.button.import");
+                });
+
+                context("when the user changes the description text", function() {
+                    beforeEach(function() {
+                        this.dialog.$("input[name='description']").change();
+                    });
+
+                    it("re-enables the button", function() {
+                        expect(this.dialog.$("button.submit").prop("disabled")).toBeFalsy();
+                    });
                 });
             });
         });

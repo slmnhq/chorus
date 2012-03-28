@@ -5,6 +5,9 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     persistent:true,
 
     events:{
+        "change input[name=description]": "descriptionChanged",
+        "paste input[name=description]": "descriptionChanged",
+        "keyup input[name=description]": "descriptionChanged",
         "click button.submit":"upload",
         "submit form":"upload"
     },
@@ -45,6 +48,10 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     chooseFile:function (e) {
         e.preventDefault();
         this.$("input").click();
+    },
+
+    descriptionChanged: function(e) {
+        this.$("button.submit").prop("disabled", false);
     },
 
     postRender:function () {
