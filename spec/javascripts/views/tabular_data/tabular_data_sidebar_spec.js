@@ -672,8 +672,9 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                     itShowsTheAppropriateDeleteLink(true, "chorus view");
 
-                    xit("shows the 'Create as a database view' link", function() {
+                    it("shows the 'Create as a database view' link", function() {
                         expect(this.view.$("a.create_database_view[data-dialog=CreateDatabaseView]")).toContainTranslation("actions.create_database_view");
+                        expect(this.view.$("a.create_database_view[data-dialog=CreateDatabaseView]").data("workspace")).toBe(this.view.options.workspace);
                     });
                 });
 

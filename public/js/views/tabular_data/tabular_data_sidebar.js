@@ -82,7 +82,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender: function() {
-        var $importLinks = this.$("a.create_schedule, a.edit_schedule, a.import_now");
+        var $importLinks = this.$("a.create_schedule, a.edit_schedule, a.import_now, a.create_database_view");
         $importLinks.data("dataset", this.resource);
         $importLinks.data("workspace", this.options.workspace);
         this._super("postRender");
