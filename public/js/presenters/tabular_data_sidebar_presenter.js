@@ -93,7 +93,7 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
             if (importConfig.hasLastImport()) {
                 var lastImportRanAt = chorus.helpers.relativeTimestamp(importConfig.lastExecutionAt());
 
-                if (this.resource.id == importConfig.get("sourceId")) {
+                if (importConfig.thisDatasetIsSource()) {
                     var lastDestinationTable = importConfig.lastDestination();
                     var linkToLastDestination = chorus.helpers.linkTo(lastDestinationTable.showUrl(), ellipsize(lastDestinationTable.name()), {title: lastDestinationTable.name()})
 
@@ -112,7 +112,7 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
 
                         ctx.lastImport = chorus.helpers.safeT(importStatusKey, { timeAgo: lastImportRanAt, tableLink: linkToLastDestination });
                     }
-                } else if (importConfig.get("sourceId")) {
+                } else if (importConfig.thisDatasetIsDestination()) {
                     var sourceTable = importConfig.importSource();
                     var linkToSource = chorus.helpers.linkTo(sourceTable.showUrl(), ellipsize(sourceTable.name()), {title: sourceTable.name()});
 

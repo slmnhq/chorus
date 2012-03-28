@@ -306,7 +306,6 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the dataset is a source table", function() {
                     beforeEach(function() {
-                        this.dataset = fixtures.datasetSourceTable();
                         this.view.importConfiguration.set({sourceId: this.dataset.id});
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });

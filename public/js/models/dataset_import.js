@@ -69,6 +69,14 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
         return this.has("nextImportTime")
     },
 
+    thisDatasetIsSource: function() {
+        return this.get("datasetId") === this.get("sourceId")
+    },
+
+    thisDatasetIsDestination: function() {
+        return !this.thisDatasetIsSource() && this.has("sourceId")
+    },
+
     nextDestination: function() {
         return new chorus.models.Dataset({
             id: this.get("destinationTable"),

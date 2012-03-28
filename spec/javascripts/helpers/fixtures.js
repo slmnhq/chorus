@@ -2020,7 +2020,6 @@ beforeEach(function() {
             var attributes = _.extend({
                 destinationTable: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"asdfsfsdf"',
                 id: this.nextId().toString(),
-                datasetId: this.nextId().toString(),
                 nextImportTime: in1yearStr,
                 sampleCount: 500,
                 sampleMethod: "RANDOM_COUNT",
