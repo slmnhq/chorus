@@ -76,14 +76,19 @@ _.extend(sinon.fakeServer, {
         options = options || {};
         options.method = 'read';
         return _.last(_.filter(this.fetches(), function(potentialRequest) {
-            var uri = new URI(potentialRequest.url).removeSearch("rows");
-            var modelUri = new URI(model.url(options)).removeSearch("rows");
+            var uri = new URI(potentialRequest.url);
+            var modelUri = new URI(model.url(options));
+
+            if (!options.requireRows) {
+                uri.removeSearch("rows");
+                modelUri.removeSearch("rows");
+            }
             return uri.equals(modelUri);
         }));
     },
 
     lastFetchAllFor: function(model, overrides) {
-        return this.lastFetchFor(model, _.extend({ rows: 1000}, overrides));
+        return this.lastFetchFor(model, _.extend({ rows: 1000, requireRows: true}, overrides));
     },
 
     makeFakeResponse: function(modelOrCollection, response) {

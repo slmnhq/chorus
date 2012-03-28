@@ -47,7 +47,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         if (this.selectedInstance) {
             this.showSection("database", { loading:true });
             this.databases = this.selectedInstance.databases();
-            this.databases.fetchIfNotLoaded();
+            this.databases.fetchAllIfNotLoaded();
             this.bindings.add(this.databases, "fetchFailed", this.databaseFetchFailed);
             this.databases.onLoaded(this.updateDatabases, this);
         }
@@ -63,7 +63,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         if (this.selectedDatabase) {
             this.showSection("schema", { loading:true });
             this.schemas = this.selectedDatabase.schemas();
-            this.schemas.fetchIfNotLoaded();
+            this.schemas.fetchAllIfNotLoaded();
             this.bindings.add(this.schemas, "fetchFailed", this.schemaFetchFailed);
             this.schemas.onLoaded(this.updateSchemas, this);
         }

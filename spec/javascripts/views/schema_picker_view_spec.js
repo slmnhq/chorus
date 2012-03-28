@@ -437,7 +437,7 @@ describe("chorus.views.SchemaPicker", function() {
                                         });
 
                                         it("hides the loading section", function() {
-                                            expect(this.view.$(".schema")).toHaveClass("hidden")
+                                            expect(this.view.$(".schema .loading_text")).toHaveClass("hidden")
                                         });
 
                                         it("triggers error with the message", function() {
@@ -454,7 +454,7 @@ describe("chorus.views.SchemaPicker", function() {
                                 });
 
                                 it("hides the loading section", function() {
-                                    expect(this.view.$(".database")).toHaveClass("hidden")
+                                    expect(this.view.$(".database .loading_text")).toHaveClass("hidden")
                                 });
 
                                 it("triggers error with the message", function() {

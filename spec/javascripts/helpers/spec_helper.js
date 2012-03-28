@@ -251,6 +251,10 @@
                     return !!this.spec.server.lastFetchFor(this.actual);
                 },
 
+                toHaveAllBeenFetched: function() {
+                    return !!this.spec.server.lastFetchAllFor(this.actual);
+                },
+
                 toHaveBeenCreated: function() {
                     return !!this.spec.server.lastCreateFor(this.actual);
                 },

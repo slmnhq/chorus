@@ -12,7 +12,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.collection = new chorus.collections.WorkfileSet([], {workspaceId: workspaceId});
         this.collection.fileType = "";
         this.collection.sortAsc("fileName");
-        this.collection.fetch();
+        this.collection.fetchAll();
 
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
         this.mainContent = new chorus.views.MainContentList({

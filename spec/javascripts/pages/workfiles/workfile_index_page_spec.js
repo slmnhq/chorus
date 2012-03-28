@@ -61,8 +61,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             expect(this.page.collection.fileType).toBe("");
         });
 
-        it("fetches the first page of the collection", function() {
-            expect(this.server.requests[1].url).toBe("/edc/workspace/" + this.model.get('workspaceId') + "/workfile?page=1&rows=50&sidx=fileName&sord=asc");
+        it("fetches the entire collection", function() {
+            expect(this.page.collection).toHaveAllBeenFetched();
         });
 
         it("goes to 404 when the workspace fetch fails", function() {
