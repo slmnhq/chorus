@@ -84,6 +84,24 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         });
     });
 
+    describe("search", function() {
+        beforeEach(function() {
+            this.server.completeFetchFor(this.workspace);
+            this.server.completeFetchAllFor(this.page.collection, [fixtures.workfile({fileName: "bar"}), fixtures.workfile({fileName: "foo"})]);
+        });
+
+        it("should have set up search correctly", function() {
+            expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Workfile", {count: 2});
+            expect(this.page.$("input.search")).toHaveAttr("placeholder", t("workfile.search_placeholder"));
+            expect(this.page.$(".list_content_details .explore")).toContainTranslation("actions.explore");
+
+            this.page.$("input.search").val("bar").trigger("keyup");
+
+            expect(this.page.$("li.workfile:eq(1)")).toHaveClass("hidden");
+            expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Workfile", {count: 1});
+        });
+    });
+
     describe("menus", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);

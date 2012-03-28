@@ -16,33 +16,35 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
 
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
         this.mainContent = new chorus.views.MainContentList({
-                modelClass: "Workfile",
-                collection: this.collection,
-                model: this.workspace,
-                title: t("workfiles.title"),
-                linkMenus: {
-                    type: {
-                        title: t("header.menu.filter.title"),
-                        options: [
-                            {data: "", text: t("workfiles.header.menu.filter.all")},
-                            {data: "SQL", text: t("workfiles.header.menu.filter.sql")},
-                            {data: "CODE", text: t("workfiles.header.menu.filter.code")},
-                            {data: "TEXT", text: t("workfiles.header.menu.filter.text")},
-                            {data: "OTHER", text: t("workfiles.header.menu.filter.other")}
-                        ],
-                        event: "filter"
-                    },
-                    sort: {
-                        title: t("workfiles.header.menu.sort.title"),
-                        options: [
-                            {data: "alpha", text: t("workfiles.header.menu.sort.alphabetically")},
-                            {data: "date", text: t("workfiles.header.menu.sort.by_date")}
-                        ],
-                        event: "sort"
-                    }
+            modelClass: "Workfile",
+            collection: this.collection,
+            model: this.workspace,
+            title: t("workfiles.title"),
+            linkMenus: {
+                type: {
+                    title: t("header.menu.filter.title"),
+                    options: [
+                        {data: "", text: t("workfiles.header.menu.filter.all")},
+                        {data: "SQL", text: t("workfiles.header.menu.filter.sql")},
+                        {data: "CODE", text: t("workfiles.header.menu.filter.code")},
+                        {data: "TEXT", text: t("workfiles.header.menu.filter.text")},
+                        {data: "OTHER", text: t("workfiles.header.menu.filter.other")}
+                    ],
+                    event: "filter"
+                },
+                sort: {
+                    title: t("workfiles.header.menu.sort.title"),
+                    options: [
+                        {data: "alpha", text: t("workfiles.header.menu.sort.alphabetically")},
+                        {data: "date", text: t("workfiles.header.menu.sort.by_date")}
+                    ],
+                    event: "sort"
                 }
+            },
+            search: {
+                placeholder: t("workfile.search_placeholder")
             }
-        );
+        });
         this.sidebar = new chorus.views.WorkfileListSidebar({workspace: this.workspace});
         chorus.PageEvents.subscribe("workfile:selected", this.setModel, this);
 

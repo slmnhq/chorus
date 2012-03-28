@@ -133,7 +133,7 @@ _.extend(sinon.fakeServer, {
 
     completeFetchAllFor: function(model, results, options, pagination) {
         options = options || {page: 1, rows: 1000};
-        pagination = pagination || {page: 1, total: 1, records: 1};
+        pagination = pagination || {page: 1, total: 1, records: results ? results.length : 1};
         this.completeFetchFor(model, results, options, pagination);
     },
 
