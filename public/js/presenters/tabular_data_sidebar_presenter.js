@@ -41,40 +41,41 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
     },
 
     columnContext: function() {
-        var ctx = {};
-        if (this.selectedColumn) {
-            ctx.column = this.selectedColumn.attributes;
+        return {
+            column: this.selectedColumn && this.selectedColumn.attributes
         }
-        return ctx;
     },
 
     workspaceContext: function() {
-        var ctx = {};
-        if (!this.options.workspace) { return ctx; }
+        if (!this.options.workspace) { return {}; }
 
-        ctx.canExport = this.options.workspace.canUpdate() && this.resource.hasCredentials() && this.isImportConfigLoaded() && this.resource.canBeImportSource();
-        ctx.hasSandbox = this.options.workspace.sandbox();
-        ctx.workspaceId = this.options.workspace.id;
-        ctx.isDeleteable = this.resource && this.resource.isDeleteable() && this.options.workspace.canUpdate();
-
-        ctx.activeWorkspace = this.options.workspace.get("active");
+        var deleteMsgKey;
+        var deleteTextKey;
 
         if (this.resource) {
             if (this.resource.get("type") == "CHORUS_VIEW") {
-                ctx.deleteMsgKey = "delete";
-                ctx.deleteTextKey = "actions.delete";
+                deleteMsgKey = "delete";
+                deleteTextKey = "actions.delete";
             } else if (this.resource.get("type") == "SOURCE_TABLE") {
                 if (this.resource.get("objectType") == "VIEW") {
-                    ctx.deleteMsgKey = "disassociate_view";
-                    ctx.deleteTextKey = "actions.delete_association";
+                    deleteMsgKey = "disassociate_view";
+                    deleteTextKey = "actions.delete_association";
                 } else {
-                    ctx.deleteMsgKey = "disassociate_table";
-                    ctx.deleteTextKey = "actions.delete_association";
+                    deleteMsgKey = "disassociate_table";
+                    deleteTextKey = "actions.delete_association";
                 }
             }
         }
 
-        return ctx;
+        return {
+            canExport: this.canExport(),
+            hasSandbox: this.options.workspace.sandbox(),
+            workspaceId: this.options.workspace.id,
+            activeWorkspace: this.options.workspace.get("active"),
+            isDeleteable: this.resource && this.resource.isDeleteable() && this.options.workspace.canUpdate(),
+            deleteMsgKey: deleteMsgKey,
+            deleteTextKey: deleteTextKey
+        }
     },
 
     importContext: function() {
@@ -158,8 +159,15 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
         return this.importConfiguration && this.importConfiguration.has("id");
     },
 
+    canExport: function canExport() {
+        return this.options.workspace.canUpdate()
+            && this.resource && this.resource.hasCredentials()
+            && this.isImportConfigLoaded()
+            && this.resource.canBeImportSource()
+    },
+
     // TODO: This is a foreign function... belongs in helpers? or on chorus?
-    _linkToModel: function (model) {
+    _linkToModel: function(model) {
         return chorus.helpers.linkTo(model.showUrl(), ellipsize(model.name()), {title: model.name()});
 
         function ellipsize(name) {
