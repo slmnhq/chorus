@@ -88,11 +88,9 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
 
         if (!ctx.hasImport || !importConfig.hasNextImport()) { return ctx; }
 
-        var nextDestinationTable = importConfig.nextDestination();
-        var nextImportRunsAt = chorus.helpers.relativeTimestamp(importConfig.nextExecutionAt())
-        var linkToNextDestination = chorus.helpers.linkTo(nextDestinationTable.showUrl(), nextDestinationTable.name())
-
-        ctx.nextImport = chorus.helpers.safeT("import.next_import", { nextTime: nextImportRunsAt, tableLink: linkToNextDestination });
+        var destination = importConfig.nextDestination();
+        var runsAt = chorus.helpers.relativeTimestamp(importConfig.nextExecutionAt())
+        ctx.nextImport = chorus.helpers.safeT("import.next_import", { nextTime: runsAt, tableLink: this._linkToModel(destination) });
 
         return ctx;
     },
@@ -102,15 +100,13 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
 
         if (!ctx.hasImport || !importConfig.hasLastImport()) { return ctx; }
 
-        var lastImportRanAt = chorus.helpers.relativeTimestamp(importConfig.lastExecutionAt());
+        var ranAt = chorus.helpers.relativeTimestamp(importConfig.lastExecutionAt());
 
         if (importConfig.thisDatasetIsSource()) {
-            var lastDestinationTable = importConfig.lastDestination();
-            var linkToLastDestination = chorus.helpers.linkTo(lastDestinationTable.showUrl(), ellipsize(lastDestinationTable.name()), {title: lastDestinationTable.name()})
-
+            var destination = importConfig.lastDestination();
             if (importConfig.isInProgress()) {
-                ctx.lastImport = chorus.helpers.safeT("import.began", { timeAgo: lastImportRanAt });
-                ctx.inProgressText = chorus.helpers.safeT("import.in_progress", { tableLink: linkToLastDestination });
+                ctx.lastImport = chorus.helpers.safeT("import.began", { timeAgo: ranAt });
+                ctx.inProgressText = chorus.helpers.safeT("import.in_progress", { tableLink: this._linkToModel(destination) });
                 ctx.importInProgress = true;
             } else {
                 var importStatusKey;
@@ -121,22 +117,14 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
                     ctx.importFailed = true;
                 }
 
-                ctx.lastImport = chorus.helpers.safeT(importStatusKey, { timeAgo: lastImportRanAt, tableLink: linkToLastDestination });
+                ctx.lastImport = chorus.helpers.safeT(importStatusKey, { timeAgo: ranAt, tableLink: this._linkToModel(destination) });
             }
         } else if (importConfig.thisDatasetIsDestination()) {
-            var sourceTable = importConfig.importSource();
-            var linkToSource = chorus.helpers.linkTo(sourceTable.showUrl(), ellipsize(sourceTable.name()), {title: sourceTable.name()});
-
-            ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", { timeAgo: lastImportRanAt, tableLink: linkToSource });
+            var source = importConfig.importSource();
+            ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", { timeAgo: ranAt, tableLink: this._linkToModel(source) });
         }
 
         return ctx;
-
-        function ellipsize(name) {
-            if (!name) return "";
-            var length = 15;
-            return (name.length < length) ? name : name.slice(0, length) + "...";
-        }
     },
 
     applyResourceContext: function(ctx) {
@@ -152,5 +140,16 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
         }
 
         ctx.displayEntityType = this.resource.metaType();
+    },
+
+    // TODO: This is a foreign function... belongs in helpers? or on chorus?
+    _linkToModel: function (model) {
+        return chorus.helpers.linkTo(model.showUrl(), ellipsize(model.name()), {title: model.name()});
+
+        function ellipsize(name) {
+            if (!name) return "";
+            var length = 15;
+            return (name.length < length) ? name : name.slice(0, length) + "...";
+        }
     }
 });
