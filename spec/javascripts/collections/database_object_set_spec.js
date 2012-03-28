@@ -9,6 +9,10 @@ describe("chorus.collections.DatabaseObjectSet", function() {
         expect(this.collection.instanceRequiringCredentials).toBe(chorus.Mixins.InstanceCredentials.model.instanceRequiringCredentials);
     });
 
+    it("extends chorus.collections.LastFetchWins", function() {
+        expect(this.collection).toBeA(chorus.collections.LastFetchWins);
+    });
+
     describe("#url", function() {
         it("is correct", function() {
             var url = this.collection.url({ rows: 10, page: 1});

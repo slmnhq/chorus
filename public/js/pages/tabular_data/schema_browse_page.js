@@ -66,15 +66,6 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
             }
         });
 
-        this.mainContent.contentDetails.bind("search:content", _.debounce(function(input) {
-            this.collection.attributes.filter = input;
-            this.collection.fetch({silent: true, success: _.bind(function() {
-                this.mainContent.content.render();
-                this.mainContent.contentFooter.render();
-                this.mainContent.contentDetails.updatePagination();
-            }, this)});
-        }, 300), this);
-
         this.render();
     }
 });

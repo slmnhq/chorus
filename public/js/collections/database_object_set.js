@@ -1,4 +1,4 @@
-chorus.collections.DatabaseObjectSet = chorus.collections.Base.include(
+chorus.collections.DatabaseObjectSet = chorus.collections.LastFetchWins.include(
     chorus.Mixins.InstanceCredentials.model
 ).extend({
     model: chorus.models.DatabaseObject,

@@ -3,6 +3,10 @@ describe("chorus.collections.DatasetSet", function() {
         this.collection = new chorus.collections.DatasetSet([], {workspaceId: 10000});
     });
 
+    it("extends chorus.collections.LastFetchWins", function() {
+        expect(this.collection).toBeA(chorus.collections.LastFetchWins);
+    });
+
     describe("#url", function() {
         it("is correct", function() {
             expect(this.collection.url({rows: 10, page: 1})).toMatchUrl("/edc/workspace/10000/dataset?rows=10&page=1");
