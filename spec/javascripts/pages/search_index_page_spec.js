@@ -1,6 +1,6 @@
 describe("chorus.pages.SearchIndexPage", function() {
     beforeEach(function() {
-        this.query = "foo";
+        this.query = "50%2F50";
     });
 
     it("has a helpId", function() {
@@ -42,7 +42,7 @@ describe("chorus.pages.SearchIndexPage", function() {
             });
 
             it("has the right title", function() {
-                expect(this.page.$(".default_content_header h1")).toContainTranslation("search.index.title", {query: this.query});
+                expect(this.page.$(".default_content_header h1")).toContainTranslation("search.index.title", {query: "50/50"});
             });
 
             it("has a 'Show All Results' link", function() {

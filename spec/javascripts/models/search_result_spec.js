@@ -121,6 +121,17 @@ describe("chorus.models.SearchResult", function() {
             });
         });
 
+        context("when query has % character", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.SearchResult({ query: "%%%"});
+            });
+
+            it("has the right url", function() {
+                expect(this.model.url()).toContain("/edc/search/global/?query=%25%25%25");
+            });
+            expectShowUrl("#/search/%2525%2525%2525");
+        });
+
         function expectUrl(url, paramsToIgnore) {
             it("has the right url", function() {
                 if (!paramsToIgnore) paramsToIgnore = [ "rows", "page" ];

@@ -43,10 +43,11 @@
                 prefix = "workspaces/" + workspaceId + "/";
             }
 
+            //If you don't double-encode, the router will crash.  The second encoding is for slashes
             if (this.isConstrained()) {
-                return prefix + "search/" + this.searchIn() + "/" + this.entityType() + "/" + this.get("query");
+                return prefix + "search/" + this.searchIn() + "/" + this.entityType() + "/" + encodeURIComponent(encodeURIComponent(this.get("query")));
             } else {
-                return prefix + "search/" + this.get("query");
+                return prefix + "search/" + encodeURIComponent(encodeURIComponent(this.get("query")));
             }
         },
 
