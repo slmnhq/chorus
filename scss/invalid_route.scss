@@ -1,6 +1,6 @@
 @import "_common.scss";
 
-.invalid_route_box {
+.invalid_route_box, .unauthorized_box {
     font-size: 12px;
     font-weight: $semibold;
     line-height: 16px;

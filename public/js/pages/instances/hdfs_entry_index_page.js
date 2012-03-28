@@ -10,6 +10,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
         this.bindings.add(this.instance, "loaded", this.entriesFetched);
 
         this.collection = new chorus.collections.HdfsEntrySet([], {instance: this.instance, path: this.path});
+        this.collection.bind("fetchFailed", this.fetchFailed);
         this.collection.fetch();
 
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this)
@@ -80,5 +81,11 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
 
     entrySelected : function(model) {
         this.model = model;
+    },
+
+    fetchFailed: function(model) {
+        if (model.serverErrors && model.serverErrors[0].msgkey === "HADOOP.NO_PERMISSION") {
+            chorus.router.navigate("/unauthorized", true, model);
+        }
     }
 });

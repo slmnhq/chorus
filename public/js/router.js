@@ -10,6 +10,7 @@
             // routes are evaluated in LIFO format, so adding a match-all route first will act as a fallback properly
             // (as long as `maps` is evaluated in order)
             ["*path", "InvalidRoute"],
+            ["/unauthorized", "Unauthorized"],
             ["/invalidRoute", "InvalidRoute"],
             ["", "Dashboard"],
             ["/", "Dashboard"],

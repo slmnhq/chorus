@@ -120,5 +120,33 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                 expect(this.page.model).toEqual(this.entry);
             })
         })
+
+        describe("when the fetch fails", function() {
+            beforeEach(function() {
+                spyOn(Backbone.history, "loadUrl");
+            });
+
+            context("for some unknown reason", function() {
+                beforeEach(function() {
+                    this.page.collection.serverErrors = [{ msgkey: "some_unknown_reason" }];
+                    this.page.collection.trigger("fetchFailed", this.page.collection);
+                });
+
+                it("does not navigate", function() {
+                    expect(Backbone.history.loadUrl).not.toHaveBeenCalled();
+                });
+            });
+
+            context("and the permissions are invalid", function() {
+                beforeEach(function() {
+                    this.page.collection.serverErrors = [{ msgkey: "HADOOP.NO_PERMISSION" }];
+                    this.page.collection.trigger("fetchFailed", this.page.collection);
+                });
+
+                it("should navigate to the AuthorizationDenied page", function() {
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/unauthorized");
+                });
+            });
+        });
     });
 });
