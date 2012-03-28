@@ -42,6 +42,17 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             expect(this.view.$("a.run_selection").siblings(".menu_shortcut")).toContainText(chorus.helpers.hotKeyName("e"));
         });
 
+        context("when the workspace is archived", function() {
+            beforeEach(function() {
+                this.model.workspace().set({ active: false });
+                this.view.render();
+            });
+
+            it("should disable the 'Run File' menu", function() {
+                expect(this.view.$(".run_file")).toBeDisabled();
+            });
+        });
+
         context("when the user has not selected any text", function() {
             beforeEach(function() {
                 this.contentView.textContent.editor.getSelection = function() {
@@ -84,6 +95,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     });
                 });
             });
+
             context("and there is no schema to run in", function() {
                 context("and opens the Run File menu", function() {
                     beforeEach(function() {

@@ -7,7 +7,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     },
 
     postRender: function() {
-        this._super("postRender")
+        this._super("postRender");
         chorus.menu(this.$('.run_file'), {
             content: this.$(".run_workfile"),
             orientation: "right",
@@ -24,6 +24,10 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
                 "a.run_other_schema": _.bind(this.runOtherSchema, this)
             }
         });
+
+        if (!this.model.workspace().isActive()) {
+            this.$(".run_file").attr("disabled", "disabled");
+        }
     },
 
     enableRunSelection: function() {

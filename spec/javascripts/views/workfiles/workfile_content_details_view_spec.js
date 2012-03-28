@@ -1,6 +1,7 @@
 describe("chorus.views.WorkfileContentDetails", function() {
     beforeEach(function() {
         this.model = fixtures.workfile();
+        this.model.workspace().set({ active: true });
     });
 
     describe(".buildFor", function() {
@@ -74,8 +75,8 @@ describe("chorus.views.WorkfileContentDetails", function() {
         });
 
         it("has the save_as button in the details bar", function() {
-            expect(this.view.$("button").length).toBe(1);
-            expect(this.view.$("button")).toContainTranslation('workfile.content_details.save_as');
+            expect(this.view.$("button.save_as").length).toBe(1);
+            expect(this.view.$("button.save_as")).toContainTranslation('workfile.content_details.save_as');
         });
 
         it("should not have disabled class from the save as link", function() {
@@ -101,6 +102,17 @@ describe("chorus.views.WorkfileContentDetails", function() {
                 spyOn(chorus.PageEvents, "broadcast");
                 this.view.workfileNewVersion();
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
+            });
+        });
+
+        context("when the workpsace is archived", function() {
+            beforeEach(function() {
+                this.model.workspace().set({ active: false });
+                this.view.render();
+            });
+
+            it("should disable the save button", function() {
+                expect(this.view.$(".save_as")).toBeDisabled();
             });
         });
 

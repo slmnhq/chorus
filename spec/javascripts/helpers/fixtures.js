@@ -1475,7 +1475,7 @@ beforeEach(function() {
                 ownerFirstName: "Dr",
                 ownerLastName: "Mario",
                 active: true,
-                "sandboxInfo": {
+                sandboxInfo: {
                     databaseId: databaseId,
                     databaseName: 'database' + databaseId,
                     instanceId: instanceId,
