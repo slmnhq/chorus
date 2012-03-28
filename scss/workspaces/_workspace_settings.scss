@@ -27,6 +27,12 @@ $image-width : 230px;
         width: $dialog-width;
     }
 
+    .file-wrapper {
+        a {
+            line-height: 16px;
+        }
+    }
+
     .edit_photo {
         width: $image-width;
         margin-right: $padding-x;
