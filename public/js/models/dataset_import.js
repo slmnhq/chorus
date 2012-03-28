@@ -72,15 +72,15 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     nextDestination: function() {
         return new chorus.models.Dataset({
             id: this.get("destinationTable"),
-            workspaceId: this.get("workspaceId"),
-            objectName: this.get("toTable")
+            objectName: this.get("toTable"),
+            workspaceId: this.get("workspaceId")
         });
     },
 
     lastDestination: function() {
-        // TODO: This is a bug, because the id points to the *next* destination
-        // table, but the API doesn't give us the *last* destination table's ID.
-        // Waiting on https://www.pivotaltracker.com/story/show/27131461 for good data.
+        // TODO: This is a bug, because the id points to the *next* destination table
+        // The API doesn't give us the *last* destination table's ID; waiting on
+        // https://www.pivotaltracker.com/story/show/27131461 for good data.
         // The correct value will probably look like this.get("executionInfo").destinationTable
         return new chorus.models.Dataset({
             id: this.get("destinationTable"),
@@ -92,8 +92,8 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     importSource: function() {
         return new chorus.models.Dataset({
             id: this.get("sourceId"),
-            workspaceId: this.get("workspaceId"),
-            objectName: this.get("sourceTable")
+            objectName: this.get("sourceTable"),
+            workspaceId: this.get("workspaceId")
         });
     },
 

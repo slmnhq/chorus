@@ -77,34 +77,33 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
         ctx.entityType = this.resource.entityType;
 
         if (this.resource.canBeImportSourceOrDestination()) {
-            ctx.isImportConfigLoaded = this.importConfiguration.loaded;
-            ctx.hasSchedule = this.importConfiguration.hasActiveSchedule();
-            ctx.hasImport = this.importConfiguration.has("id");
+            var importConfig = this.importConfiguration;
+            ctx.isImportConfigLoaded = importConfig.loaded;
+            ctx.hasSchedule = importConfig.hasActiveSchedule();
+            ctx.hasImport = importConfig.has("id");
 
-            var nextDestinationTable = this.importConfiguration.nextDestination();
-            if (this.importConfiguration.hasNextImport()) {
-                ctx.nextImport = chorus.helpers.safeT("import.next_import", {
-                    nextTime: chorus.helpers.relativeTimestamp(this.importConfiguration.nextExecutionAt()),
-                    tableLink: chorus.helpers.linkTo(nextDestinationTable.showUrl(), nextDestinationTable.name())
-                });
+            if (importConfig.hasNextImport()) {
+                var nextDestinationTable = importConfig.nextDestination();
+                var nextImportRunsAt = chorus.helpers.relativeTimestamp(importConfig.nextExecutionAt())
+                var linkToNextDestination = chorus.helpers.linkTo(nextDestinationTable.showUrl(), nextDestinationTable.name())
+
+                ctx.nextImport = chorus.helpers.safeT("import.next_import", { nextTime: nextImportRunsAt, tableLink: linkToNextDestination });
             }
 
-            if (this.importConfiguration.hasLastImport()) {
-                var lastImportRanAt = chorus.helpers.relativeTimestamp(this.importConfiguration.lastExecutionAt());
+            if (importConfig.hasLastImport()) {
+                var lastImportRanAt = chorus.helpers.relativeTimestamp(importConfig.lastExecutionAt());
 
-                if (this.resource.id == this.importConfiguration.get("sourceId")) {
-                    var lastDestinationTable = this.importConfiguration.lastDestination();
-
+                if (this.resource.id == importConfig.get("sourceId")) {
+                    var lastDestinationTable = importConfig.lastDestination();
                     var linkToLastDestination = chorus.helpers.linkTo(lastDestinationTable.showUrl(), ellipsize(lastDestinationTable.name()), {title: lastDestinationTable.name()})
 
-                    if (this.importConfiguration.isInProgress()) {
+                    if (importConfig.isInProgress()) {
                         ctx.lastImport = chorus.helpers.safeT("import.began", { timeAgo: lastImportRanAt });
                         ctx.inProgressText = chorus.helpers.safeT("import.in_progress", { tableLink: linkToLastDestination });
                         ctx.importInProgress = true;
-
                     } else {
                         var importStatusKey;
-                        if (this.importConfiguration.wasSuccessfullyExecuted()) {
+                        if (importConfig.wasSuccessfullyExecuted()) {
                             importStatusKey = "import.last_imported";
                         } else {
                             importStatusKey = "import.last_import_failed";
@@ -113,8 +112,8 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
 
                         ctx.lastImport = chorus.helpers.safeT(importStatusKey, { timeAgo: lastImportRanAt, tableLink: linkToLastDestination });
                     }
-                } else if (this.importConfiguration.get("sourceId")) {
-                    var sourceTable = this.importConfiguration.importSource();
+                } else if (importConfig.get("sourceId")) {
+                    var sourceTable = importConfig.importSource();
                     var linkToSource = chorus.helpers.linkTo(sourceTable.showUrl(), ellipsize(sourceTable.name()), {title: sourceTable.name()});
 
                     ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", { timeAgo: lastImportRanAt, tableLink: linkToSource });
