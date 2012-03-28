@@ -40,6 +40,7 @@
                 {{#if activeWorkspace}}
                     <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
                     <li><a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a></li>
+                    {{#if isChorusView}}<li><a class="create_database_view dialog" href="#" data-dialog="CreateDatabaseView">{{t "actions.create_database_view"}}</a></li>{{/if}}
                 {{/if}}
             {{else}}
                 <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}">{{t "actions.add_note"}}</a></li>
@@ -74,7 +75,6 @@
 
             {{#if activeWorkspace}}
                 {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey}}</a></li>{{/if}}
-                <li><a class="create_database_view dialog" href="#" data-dialog="CreateDatabaseView">{{t "actions.create_database_view"}}</a></li>
             {{/if}}
         </ul>
     </div>

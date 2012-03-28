@@ -249,6 +249,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
 
                     itShowsTheAppropriateDeleteLink(false)
+                    itDoesNotHaveACreateDatabaseViewLink();
                 });
 
                 it("doesn't display any import links by default", function() {
@@ -263,6 +264,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
 
                     itShowsTheAppropriateDeleteLink(false);
+                    itDoesNotHaveACreateDatabaseViewLink();
 
                     context("and the dataset has not received an import", function() {
                         beforeEach(function() {
@@ -311,6 +313,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
 
                     itShowsTheAppropriateDeleteLink(true, "table");
+                    itDoesNotHaveACreateDatabaseViewLink();
 
                     it("fetches the import configuration for the dataset", function() {
                         expect(this.dataset.getImport()).toHaveBeenFetched();
@@ -663,6 +666,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
 
                     itShowsTheAppropriateDeleteLink(true, "view");
+                    itDoesNotHaveACreateDatabaseViewLink();
                 });
 
                 context("when the dataset is a chorus view", function() {
@@ -687,6 +691,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                         });
 
                         itShowsTheAppropriateDeleteLink(true, type);
+                        itDoesNotHaveACreateDatabaseViewLink();
                     })
                 })
 
@@ -704,6 +709,12 @@ describe("chorus.views.TabularDataSidebar", function() {
                     expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
                     expect(notesNew.attr("data-allow-workspace-attachments")).toBeDefined();
                 });
+
+                function itDoesNotHaveACreateDatabaseViewLink() {
+                    it("does not have a create database view link", function() {
+                        expect(this.view.$("a.create_database_view")).not.toExist();
+                    });
+                }
 
                 function itShowsTheAppropriateDeleteLink(shouldBePresent, type) {
                     if (shouldBePresent) {
