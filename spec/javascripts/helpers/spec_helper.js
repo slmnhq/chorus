@@ -20,7 +20,7 @@
         }, "all templates to be loaded", 5000);
 
         function loadAllTemplates() {
-            var templateContainer = $("<div id='chorus_templates'/>");
+            var templateContainer = $("<div id='templates'/>");
             $("body").append(templateContainer);
             return $.ajax({
                 async: false,
