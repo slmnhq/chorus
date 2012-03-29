@@ -1,4 +1,4 @@
-describe("chorus.views.BinaryWorkfileContentDetails", function() {
+describe("chorus.views.ReadOnlyWorkfileContentDetails", function() {
     beforeEach(function() {
         this.model = fixtures.binaryWorkfile();
     });
@@ -7,7 +7,7 @@ describe("chorus.views.BinaryWorkfileContentDetails", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.qtipMenu = stubQtip();
-            this.view = new chorus.views.BinaryWorkfileContentDetails({model: this.model});
+            this.view = new chorus.views.ReadOnlyWorkfileContentDetails({model: this.model});
             this.view.render();
         });
 

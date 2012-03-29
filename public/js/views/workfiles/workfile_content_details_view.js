@@ -78,7 +78,7 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         }
 
         if (model.isBinary()) {
-            return new chorus.views.BinaryWorkfileContentDetails({ model:model });
+            return new chorus.views.ReadOnlyWorkfileContentDetails({ model:model });
         }
 
         return new chorus.views.WorkfileContentDetails({ model:model });

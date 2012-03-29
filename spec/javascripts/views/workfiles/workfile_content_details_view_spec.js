@@ -44,12 +44,12 @@ describe("chorus.views.WorkfileContentDetails", function() {
         context("when the workfile is a binary file", function() {
             beforeEach(function() {
                 this.model = fixtures.binaryWorkfile();
-                spyOn(chorus.views, "BinaryWorkfileContentDetails");
+                spyOn(chorus.views, "ReadOnlyWorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
 
-            it("instantiates a BinaryWorkfileContentDetails view with the given workfile", function() {
-                expect(chorus.views.BinaryWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+            it("instantiates a ReadOnlyWorkfileContentDetails view with the given workfile", function() {
+                expect(chorus.views.ReadOnlyWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
             });
         });
 
