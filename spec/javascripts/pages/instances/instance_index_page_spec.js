@@ -9,6 +9,24 @@ describe("chorus.pages.InstanceIndexPage", function() {
         })
     })
 
+    describe("pre-selection", function() {
+        it("pre-selects the first item by default", function() {
+            var page = new chorus.pages.InstanceIndexPage();
+            this.server.completeFetchAllFor(page.collection, [fixtures.instance(), fixtures.instance()]);
+            page.render();
+            expect(page.mainContent.content.$("li.instance:eq(0)")).toHaveClass("selected");
+        });
+
+        it("pre-selects the instance with ID specified in chorus.pageOptions, when available", function() {
+            var page = new chorus.pages.InstanceIndexPage();
+            page.pageOptions = {selectId: 123456};
+            this.server.completeFetchAllFor(page.collection, [fixtures.instance(), fixtures.instance({id: 123456})]);
+
+            page.render();
+            expect(page.mainContent.content.$("li.instance:eq(1)")).toHaveClass("selected");
+        });
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             this.page = new chorus.pages.InstanceIndexPage();

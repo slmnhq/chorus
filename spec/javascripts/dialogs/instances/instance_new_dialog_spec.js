@@ -238,11 +238,11 @@ describe("chorus.dialogs.InstanceNew", function() {
                     describe("when the save completes successfully", function() {
                         beforeEach(function() {
                             spyOn(chorus.router, "navigate");
-                            this.server.lastCreateFor(this.dialog.model).succeed();
+                            this.server.lastCreateFor(this.dialog.model).succeed({id: 123});
                         });
 
                         it("navigates to the instance list", function() {
-                            expect(chorus.router.navigate).toHaveBeenCalledWith("/instances", true);
+                            expect(chorus.router.navigate).toHaveBeenCalledWith("/instances", true, {selectId: 123});
                         });
                     });
 

@@ -69,7 +69,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         this.closeModal();
 
         if (this.provisioning) {
-            chorus.router.navigate("/instances", true);
+            chorus.router.navigate("/instances", true, { selectId: this.model.get("id") });
         }
     },
 
