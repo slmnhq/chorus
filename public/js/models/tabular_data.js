@@ -225,6 +225,20 @@ chorus.models.TabularData = chorus.models.Base.include(
         return this.get("objectType") === "BASE_TABLE";
     },
 
+    analyze: function() {
+        if (!this._analyze) {
+            this._analyze = new chorus.models.TabularDataAnalyze({
+                instanceId: this.instance().get("id"),
+                databaseName: this.database().get("name"),
+                schemaName: this.schema().get("name"),
+                objectName: this.name(),
+                metaType: this.metaType()
+            });
+        }
+
+        return this._analyze;
+    },
+
     makeBoxplotTask: function(taskAttrs) {
         return new chorus.models.BoxplotTask({
             xAxis: taskAttrs.xAxis,

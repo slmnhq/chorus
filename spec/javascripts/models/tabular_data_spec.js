@@ -736,4 +736,28 @@ describe("chorus.models.TabularData", function() {
             expect(this.tabularData.canAnalyze()).toBeFalsy();
         });
     });
+
+    describe("Analyze", function() {
+        beforeEach(function() {
+            this.tabularData = fixtures.tabularData({
+                instance: {id: "2"},
+                databaseName: "db",
+                schemaName: "myScheme",
+                objectName: "MrTable",
+                objectType: "BASE_TABLE"
+            });
+        });
+
+        it("returns a TabularDataAnalyze model", function() {
+            expect(this.tabularData.analyze()).toBeA(chorus.models.TabularDataAnalyze);
+        });
+
+        it("memoizes", function() {
+            expect(this.tabularData.analyze()).toBe(this.tabularData.analyze());
+        });
+
+        it("returns an analyze model with the right url", function() {
+           expect(this.tabularData.analyze().url()).toBe("/edc/data/2/database/db/schema/myScheme/table/MrTable/analyze")
+        });
+    });
 });
