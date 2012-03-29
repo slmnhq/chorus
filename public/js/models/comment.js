@@ -1,11 +1,11 @@
 chorus.models.Comment = chorus.models.Activity.extend({
     urlTemplate:function (options) {
         if (options && options.isFile) {
-            return "comment/{{entityType}}/{{entityId}}/{{id}}/file"
+            return "comment/{{entityType}}/{{encodeOnce entityId}}/{{id}}/file"
         } else if (this.isNew()) {
-            return "comment/{{entityType}}/{{entityId}}"
+            return "comment/{{entityType}}/{{encodeOnce entityId}}"
         } else {
-            return "comment/{{entityType}}/{{entityId}}/{{id}}";
+            return "comment/{{entityType}}/{{encodeOnce entityId}}/{{id}}";
         }
     },
 

@@ -13,8 +13,21 @@ describe("chorus.models.Comment", function() {
         );
     });
 
-    it("has the correct urlTemplate", function() {
-        expect(this.model.urlTemplate()).toBe("comment/{{entityType}}/{{entityId}}/{{id}}");
+    describe("#urlTemplate", function() {
+        it("correctly encodes the url", function() {
+            this.model.set({entityType: "foo", entityId: "a/b/c"});
+            expect(this.model.url()).toContain("/edc/comment/foo/a%2Fb%2Fc/41");
+        });
+
+        it("correctly encodes the url of new comments", function() {
+            this.model.set({id: null, entityType: "foo", entityId: "%bar"});
+            expect(this.model.url()).toContain("/edc/comment/foo/%25bar");
+        });
+
+        it("has the right url if it is a file", function() {
+            this.model.set({entityType: "foo", entityId: "a/b/c"});
+            expect(this.model.url({isFile: true})).toContain("/edc/comment/foo/a%2Fb%2Fc/41/file");
+        });
     });
 
     describe("validation", function() {

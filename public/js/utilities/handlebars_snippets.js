@@ -256,20 +256,17 @@
 
         encodeOnce: function(value){
             function isEncoded(value) {
-                var decodedValue;
                 try {
-                    decodedValue = decodeURIComponent(value);
+                    return !(decodeURIComponent(value) == value);
                 } catch(e) {
-                    decodedValue = value;
+                    return false;
                 }
-                return !(value === decodedValue);
             }
 
             if (!isEncoded(value)) {
                 return encodeURIComponent(value)
-            }
-            else {
-                if(!isEncoded(decodeURIComponent(value))) {
+            } else {
+                if (!isEncoded(decodeURIComponent(value))) {
                     return value;
                 } else {
                     return decodeURIComponent(value);
