@@ -12,6 +12,7 @@ chorus.dialogs.NameChorusView = chorus.dialogs.SqlPreview.extend({
         this.bindings.add(this.model, "saveFailed", this.chorusViewFailed);
         this.bindings.add(this.model, "validationFailed", this.chorusViewFailed);
 
+        this.events = _.clone(this.events);
         _.extend(this.events, {
             "keyup input[name=objectName]": "checkInput",
             "paste input[name=objectName]": "checkInput",

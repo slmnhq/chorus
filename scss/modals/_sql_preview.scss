@@ -1,13 +1,20 @@
+@import "../_common.scss";
+
 .sql_preview {
+    width: 885px;
+    min-height: 120px;
+    max-height: 430px;
+
     .dialog_content {
-        padding-left: 5px;
-        padding-right: 5px;
+        padding: 0;
+
+        .modal_controls {
+            padding: 5px;
+        }
     }
 
-    .container {
-        width: 845px;
-        min-height: 120px;
-        max-height: 430px;
+    .sql {
+        padding-top: 5px;
     }
 
     .CodeMirror-scroll {
@@ -17,5 +24,24 @@
 
     .CodeMirror-gutter {
         background-color: $body-background-color;
+    }
+
+    .preview_bar {
+        margin: 0;
+        border-collapse:collapse;
+        height: 30px;
+        padding: 2px 5px 0px 5px;
+        border-bottom: 1px solid #B2C7D6;
+        background-color: $content-details-info-bar-background-color;
+
+        button.preview {
+            position: absolute;
+            right: 0;
+            color: #314858;
+            font-weight: $semibold;
+            font-size: 13px;
+            @include content-details-button($content-details-action-link-border-color);
+            border: 1px solid #B2C7D6;
+        }
     }
 }
