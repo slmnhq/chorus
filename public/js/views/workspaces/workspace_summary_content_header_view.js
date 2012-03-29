@@ -15,20 +15,13 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
 
     resourcesLoaded : function() {
         this.truncatedSummary = new chorus.views.TruncatedText({model:this.model, attribute:"summary", attributeIsHtmlSafe: true});
-
         this.activityListHeader = new chorus.views.ActivityListHeader({
-            collection: this.model.activities(),
-            allTitle: t("workspace.recent_activity", {name: this.model.get("name")}),
-            insightsTitle: t("workspace.recent_insights", {name: this.model.get("name")}),
-            workspace: this.model
+            allTitle: this.model.get("name"),
+            insightsTitle: this.model.get("name"),
+            iconUrl: this.model.defaultIconUrl(),
+            workspace: this.model,
+            collection: this.model.activities()
         });
-    },
-
-    preRender: function() {
-        if (this.activityListHeader) {
-            this.activityListHeader.allTitle = t("workspace.recent_activity", {name: this.model.get("name")});
-            this.activityListHeader.insightsTitle = t("workspace.recent_insights", {name: this.model.get("name")});
-        }
     },
 
     postRender: function() {

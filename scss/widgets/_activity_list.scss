@@ -50,6 +50,15 @@ $system-action-color: #7C7D7D;
             display: inline-block;
         }
     }
+
+    .title {
+        img {
+            float: left;
+        }
+        h1 {
+            padding-left: 5px;
+        }
+    }
 }
 
 .activity_list {
@@ -214,7 +223,7 @@ $system-action-color: #7C7D7D;
 
 .popup_notifications li,
 li .activity_content,
-.comment_content 
+.comment_content
 {
     &:hover {
         a.edit_link, a.delete_link {

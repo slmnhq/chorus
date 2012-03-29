@@ -17,8 +17,8 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
             this.view.render();
         })
 
-        it("should default to showing recent activity", function() {
-            expect(this.view.$("h1")).toContainTranslation("workspace.recent_activity", {name: this.workspace.get("name")});
+        it("displays the workspace title", function() {
+            expect(this.view.$("h1")).toContainText(this.workspace.get("name"));
         });
 
         it("fills the activityListHeader subview", function() {
@@ -38,16 +38,6 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
             this.view.model.unset("summary");
             this.view.render();
             expect(this.view.$(".truncated_summary")).toHaveClass("hidden");
-        });
-
-        describe("when the 'insights' link is clicked", function() {
-            beforeEach(function() {
-                this.view.$("a.insights").click();
-            });
-
-            it("displays the right title for insights", function() {
-                expect(this.view.$("h1").text()).toMatchTranslation("workspace.recent_insights", {name: this.workspace.get("name")});
-            });
         });
     });
 })
