@@ -5,9 +5,9 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
     helpId: "instances",
 
     setup: function(instanceId, databaseName) {
-        this.databaseName = databaseName;
+        this.databaseName = decodeURIComponent(databaseName);
         this.instance = new chorus.models.Instance({id: instanceId});
-        this.collection = new chorus.collections.SchemaSet([], {instanceId: instanceId, databaseName: databaseName});
+        this.collection = new chorus.collections.SchemaSet([], {instanceId: instanceId, databaseName: this.databaseName});
 
         this.instance.fetch();
         this.collection.fetchAll();

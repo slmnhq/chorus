@@ -4,6 +4,10 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
     helpId: "schema",
 
     setup: function(instanceId, databaseName, schemaName) {
+        instanceId   = decodeURIComponent(instanceId);
+        databaseName = decodeURIComponent(databaseName);
+        schemaName   = decodeURIComponent(schemaName);
+
         this.schema = new chorus.models.Schema({
             instanceId: instanceId,
             databaseName: databaseName,

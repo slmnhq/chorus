@@ -1,12 +1,22 @@
 describe("chorus.pages.TabularDataShowPage", function() {
     beforeEach(function() {
-        this.databaseObject = fixtures.databaseTable();
+        this.databaseObject = fixtures.databaseTable({
+            instance: { id: "123", name: "bob_the_instance" },
+            databaseName: "Foo/",
+            schemaName: "Bar%",
+            objectType: "BASE_TABLE",
+            objectName: "slashes/"
+        });
         this.databaseObject.get('workspaceUsed').workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
         this.columnSet = this.databaseObject.columns({type: "meta"});
 
-        var a = this.databaseObject.attributes
-
-        this.page = new chorus.pages.TabularDataShowPage(a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName);
+        this.page = new chorus.pages.TabularDataShowPage(
+            "123",
+            "Foo%2F",
+            "Bar%25",
+            "BASE_TABLE",
+            "slashes%2F"
+        );
     });
 
     it("includes the InstanceCredentials mixin", function() {
@@ -21,6 +31,13 @@ describe("chorus.pages.TabularDataShowPage", function() {
         var options = this.page.failurePageOptions();
         expect(options.title).toMatchTranslation("invalid_route.tabular_data.title");
         expect(options.text).toMatchTranslation("invalid_route.tabular_data.content");
+    });
+
+    it("fetches a database object with the right parameters", function() {
+        expect(this.page.tabularData.get("databaseName")).toBe("Foo/");
+        expect(this.page.tabularData.get("schemaName")).toBe("Bar%");
+        expect(this.page.tabularData.get("objectName")).toBe("slashes/");
+        expect(this.page.tabularData).toHaveBeenFetched();
     });
 
     describe("#initialize", function() {
@@ -118,8 +135,13 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     });
 
                     it("renders successfully, without the workspace usage section", function() {
-                        var a = this.databaseObject.attributes;
-                        this.page = new chorus.pages.TabularDataShowPage(a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName);
+                        this.page = new chorus.pages.TabularDataShowPage(
+                            "123",
+                            "Foo%2F",
+                            "Bar%25",
+                            "BASE_TABLE",
+                            "slashes%2F"
+                        );
                         this.server.completeFetchFor(this.databaseObject);
                         this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
                         expect(this.page.$('.content_header .found_in')).not.toExist();
@@ -147,13 +169,13 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe("#/instances");
                     expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.instances"));
 
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveHref("#/instances/" + this.databaseObject.get("instance").id + "/databases");
+                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveHref(this.databaseObject.instance().databases().showUrl());
                     expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toContainText(this.databaseObject.get("instance").name);
 
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toHaveHref("#/instances/" + this.databaseObject.get("instance").id + "/databases/" + this.databaseObject.get("databaseName"));
+                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toHaveHref(this.databaseObject.database().showUrl());
                     expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toContainText(this.databaseObject.get("databaseName"));
 
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4).attr("href")).toBe("#/instances/" + this.databaseObject.get("instance").id + "/databases/" + this.databaseObject.get('databaseName') + "/schemas/" + this.databaseObject.get("schemaName"));
+                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4).attr("href")).toBe(this.databaseObject.schema().showUrl());
                     expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4)).toContainText(this.databaseObject.get('schemaName'))
 
                     expect(this.page.$("#breadcrumbs .breadcrumb .slug")).toContainText(this.databaseObject.get('objectName'));

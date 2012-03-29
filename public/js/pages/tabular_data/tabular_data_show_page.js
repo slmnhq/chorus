@@ -48,8 +48,8 @@
             return [
                 {label: t("breadcrumbs.home"), url: "#/"},
                 {label: t("breadcrumbs.instances"), url: '#/instances'},
-                {label: this.tabularData.get("instance").name, url: "#/instances/" + this.tabularData.get('instance').id + "/databases" },
-                {label: this.tabularData.get("databaseName"),  url: "#/instances/" + this.tabularData.get('instance').id + "/databases/" + this.tabularData.get('databaseName') },
+                {label: this.tabularData.get("instance").name, url: this.tabularData.instance().databases().showUrl() },
+                {label: this.tabularData.get("databaseName"),  url: this.tabularData.database().showUrl() },
                 {label: this.tabularData.get("schemaName"), url: this.tabularData.schema().showUrl()},
                 {label: this.tabularData.get("objectName")}
             ];
@@ -57,13 +57,11 @@
 
         makeModel: function(instanceId, databaseName, schemaName, objectType, objectName) {
             this.model = this.tabularData = new chorus.models.DatabaseObject({
-                instance: {
-                    id: instanceId
-                },
-                databaseName: databaseName,
-                schemaName: schemaName,
-                objectType: objectType,
-                objectName: objectName
+                instance: { id: instanceId },
+                databaseName: decodeURIComponent(databaseName),
+                schemaName:   decodeURIComponent(schemaName),
+                objectName:   decodeURIComponent(objectName),
+                objectType:   objectType,
             });
         },
 

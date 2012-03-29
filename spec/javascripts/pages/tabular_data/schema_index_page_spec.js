@@ -1,7 +1,7 @@
 describe("chorus.pages.SchemaIndexPage", function() {
     beforeEach(function() {
         this.instance = fixtures.instance({id: "1234"});
-        this.page = new chorus.pages.SchemaIndexPage("1234", "Foo");
+        this.page = new chorus.pages.SchemaIndexPage("1234", "Foo%2F");
         this.page.render();
     });
 
@@ -17,7 +17,9 @@ describe("chorus.pages.SchemaIndexPage", function() {
         expect(this.page.instance).toHaveBeenFetched();
     });
 
-    it("fetches the schemas for the database", function() {
+    it("fetches the schema set with the right instance id and database name", function() {
+        expect(this.page.collection.attributes.databaseName).toBe("Foo/");
+        expect(this.page.collection.attributes.instanceId).toBe("1234");
         expect(this.page.collection).toHaveBeenFetched();
     });
 

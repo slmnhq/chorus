@@ -1,15 +1,21 @@
 describe("chorus.pages.SchemaBrowsePage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
-        this.schema = fixtures.schema();
-        this.instance = fixtures.instance({id: this.schema.get("instanceId")});
-        this.database = fixtures.database({name: this.schema.get("databaseName"), instanceId: this.instance.get("id")});
-        this.page = new chorus.pages.SchemaBrowsePage(this.schema.get("instanceId"), this.schema.get("databaseName"), this.schema.get("name"));
-    })
+        this.schema = fixtures.schema({ instanceId: "123", databaseName: "Foo%", name: "Bar/" });
+        this.instance = fixtures.instance({ id: "123" });
+        this.database = fixtures.database({ name: "Foo%", instanceId: "123" });
+        this.page = new chorus.pages.SchemaBrowsePage("123", "Foo%25", "Bar%2F");
+    });
 
     it("has a helpId", function() {
         expect(this.page.helpId).toBe("schema")
-    })
+    });
+
+    it("fetches the database object set with the right (decoded) database name and schema names", function() {
+        expect(this.page.collection).toBeA(chorus.collections.DatabaseObjectSet);
+        expect(this.page.collection.attributes.databaseName).toBe("Foo%");
+        expect(this.page.collection.attributes.schemaName).toBe("Bar/");
+    });
 
     it("includes the InstanceCredentials mixin", function() {
         expect(this.page.requiredResourcesFetchFailed).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchFailed);
