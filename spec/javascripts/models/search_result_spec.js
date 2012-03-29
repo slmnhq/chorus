@@ -267,13 +267,6 @@ describe("chorus.models.SearchResult", function() {
                     expect(this.workspaceItems.loaded).toBeTruthy();
                 });
             });
-
-            context("when there are no workfile results", function() {
-                it("returns undefined", function() {
-                    this.model.unset("thisWorkspace");
-                    expect(this.model.workspaceItems()).toBeUndefined();
-                })
-            });
         });
 
         describe("#workfiles", function() {
@@ -301,13 +294,6 @@ describe("chorus.models.SearchResult", function() {
             it("returns a Search WorkspaceSet", function() {
                 expect(this.model.workspaces()).toBeA(chorus.collections.Search.WorkspaceSet)
             });
-
-            context("when there are no workspace results", function() {
-                it("returns undefined", function() {
-                    this.model.unset("workspace");
-                    expect(this.model.workspaces()).toBeUndefined();
-                });
-            });
         });
 
         describe("#hdfs", function() {
@@ -325,6 +311,29 @@ describe("chorus.models.SearchResult", function() {
         describe("#attachments", function() {
             it("returns a Search ArtifactSet", function() {
                 expect(this.model.attachments()).toBeA(chorus.collections.Search.ArtifactSet)
+            });
+        });
+
+        describe("when the model is empty (because the server returns an empty response)", function() {
+            it("returns an empty collection for each child collection method", function() {
+                var emptyModel = new chorus.models.SearchResult();
+
+                var methodCollectionPairs = {
+                    hdfs: "HdfsEntrySet",
+                    tabularData: "TabularDataSet",
+                    workfiles: "WorkfileSet",
+                    workspaces: "WorkspaceSet",
+                    workspaceItems: "WorkspaceItemSet",
+                    instances: "InstanceSet",
+                    users: "UserSet",
+                    attachments: "ArtifactSet"
+                };
+
+                _.each(methodCollectionPairs, function(collectionClass, funcName) {
+                    var result = emptyModel[funcName]();
+                    expect(result).toBeA(chorus.collections.Search[collectionClass]);
+                    expect(result.length).toBe(0);
+                });
             });
         });
     });

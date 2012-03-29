@@ -18,28 +18,28 @@ chorus.views.SearchResults = chorus.views.Base.extend({
     },
 
     setup: function() {
-        if (this.model.hdfs()) {
+        if (this.model.hdfs().length) {
             this.hdfsList = this.buildListView('hdfs', this.model.hdfs());
         }
-        if (this.model.users()) {
+        if (this.model.users().length) {
             this.userList = this.buildListView('user', this.model.users());
         }
-        if (this.model.workfiles()) {
+        if (this.model.workfiles().length) {
             this.workfileList = this.buildListView('workfile', this.model.workfiles());
         }
-        if (this.model.workspaces()) {
+        if (this.model.workspaces().length) {
             this.workspaceList = this.buildListView('workspace', this.model.workspaces());
         }
-        if (this.model.tabularData()) {
+        if (this.model.tabularData().length) {
             this.tabularDataList = this.buildListView('dataset', this.model.tabularData());
         }
-        if (this.model.instances()) {
+        if (this.model.instances().length) {
             this.instanceList = this.buildListView('instance', this.model.instances());
         }
-        if (this.model.attachments()) {
+        if (this.model.attachments().length) {
             this.attachmentList = this.buildListView('attachment', this.model.attachments());
         }
-        if (!this.model.hasSpecificEntityType() && this.model.workspaceItems()) {
+        if (!this.model.hasSpecificEntityType() && this.model.workspaceItems().length) {
             this.thisWorkspaceList = new chorus.views.WorkspaceSearchResultList({
                 collection: this.model.workspaceItems(),
                 search: this.model

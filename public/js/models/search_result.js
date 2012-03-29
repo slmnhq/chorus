@@ -175,11 +175,15 @@
         return function() {
             var ctor = chorus.collections.Search[constructorName];
             var searchKey = ctor.prototype.searchKey;
-            if (!this[memoizedName] && this.get(searchKey)) {
+
+            if (!this[memoizedName]) {
                 collection = this[memoizedName] = new ctor([], { search: this });
                 collection.loaded = true;
-                collection.refreshFromSearch();
+                if (this.get(searchKey)){
+                    collection.refreshFromSearch();
+                }
             }
+
             return this[memoizedName];
         };
     }
