@@ -14,6 +14,8 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.model, "saved", this.saveSuccess);
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
         this.bindings.add(this.model, "validationFailed", this.saveFailed);
+
+        this.requiredResources.push(chorus.models.Config.instance());
     },
 
     makeModel:function () {
@@ -22,7 +24,8 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            auroraInstalled: chorus.models.Instance.aurora().isInstalled()
+            auroraInstalled: chorus.models.Instance.aurora().isInstalled(),
+            provisionMaxSizeInGB: chorus.models.Config.instance().get("provisionMaxSizeInGB")
         }
     },
 
@@ -36,7 +39,13 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     createInstance:function (e) {
         e && e.preventDefault();
         this.$("button.submit").startLoading("instances.new_dialog.saving");
-        this.model.save(this.fieldValues());
+        var values = this.fieldValues();
+        this.model.save(values);
+
+        if (values.provisionType == "create") {
+            this.provisioning = true;
+            chorus.toast("instances.new_dialog.provisioning")
+        }
     },
 
     fieldValues: function() {
@@ -58,6 +67,10 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     saveSuccess:function () {
         chorus.PageEvents.broadcast("instance:added", this.model.get("id"));
         this.closeModal();
+
+        if (this.provisioning) {
+            chorus.router.navigate("/instances", true);
+        }
     },
 
     saveFailed:function () {

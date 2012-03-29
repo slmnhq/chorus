@@ -68,5 +68,9 @@
         .disabled {
             color : $color-text4;
         }
+
+        .max_size {
+            @include secondary-text-normal;
+        }
     }
 }

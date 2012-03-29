@@ -48,13 +48,15 @@
         <textarea rows="3" name="description"/>
 
         <label class="required" name="size">{{t "instances.dialog.size"}} </label>
-        <input type="text" name="size" maxlength="2000"/><br/>
+        <input type="text" name="size" maxlength="2000"/>
+        <span class="max_size">{{t "instances.new_dialog.max_size" max=provisionMaxSizeInGB}}</span>
+        <br/>
 
-        <label name="databaseName">{{t "instances.dialog.database_name"}} </label>
-        <label name="schemaName">{{t "instances.dialog.schema_name"}} </label>
+        <label name="databaseName" class="required">{{t "instances.dialog.database_name"}} </label>
+        <label name="schemaName" class="required">{{t "instances.dialog.schema_name"}} </label>
 
         <input type="text" name="databaseName" maxlength="256"/>
-        <input type="text" name="schemaName" maxlength="256"/>
+        <input type="text" name="schemaName" value = "public" maxlength="256"/>
     </form></div>
 </fieldset>
 {{/if}}

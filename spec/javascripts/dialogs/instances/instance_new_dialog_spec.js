@@ -4,6 +4,10 @@ describe("chorus.dialogs.InstanceNew", function() {
         this.dialog = new chorus.dialogs.InstancesNew({launchElement: this.launchElement});
     });
 
+    it("calls Config.instance to pre-fetch the config data", function() {
+        expect(this.dialog.requiredResources.models).toContain(chorus.models.Config.instance());
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             $('#jasmine_content').append(this.dialog.el);
@@ -42,8 +46,16 @@ describe("chorus.dialogs.InstanceNew", function() {
                 expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum")
             });
 
+            it("defaults the schema name to 'public'", function() {
+                expect(this.dialog.$(".create_new_greenplum input[name='schemaName']").val()).toBe("public");
+            });
+
             it("doesn't have class disabled", function() {
                 expect(this.dialog.$("label[for=create_new_greenplum]")).not.toHaveClass("disabled");
+            });
+
+            it("displays the maximum allowable size", function(){
+               expect(this.dialog.$(".create_new_greenplum ")).toContainTranslation("instances.new_dialog.max_size");
             });
         });
 
@@ -203,10 +215,12 @@ describe("chorus.dialogs.InstanceNew", function() {
                 context("saving", function() {
                     beforeEach(function() {
                         spyOn(this.dialog.model, "save").andCallThrough();
+                        spyOn(chorus, "toast");
+                        this.dialog.$("button.submit").click();
                     });
 
-                    it("calls save on the dialog's model", function() {
-                        this.dialog.$("button.submit").click();
+                    it("saves the dialog's model", function() {
+                        expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
                         expect(this.dialog.model.save).toHaveBeenCalled();
 
                         var attrs = this.dialog.model.save.calls[0].args[0];
@@ -217,6 +231,30 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(attrs.description).toBe("Instance Description");
                         expect(attrs.databaseName).toBe("dbTest");
                         expect(attrs.schemaName).toBe("schemaTest");
+
+                        expect(chorus.toast).toHaveBeenCalledWith("instances.new_dialog.provisioning")
+                    });
+
+                    describe("when the save completes successfully", function() {
+                        beforeEach(function() {
+                            spyOn(chorus.router, "navigate");
+                            this.server.lastCreateFor(this.dialog.model).succeed();
+                        });
+
+                        it("navigates to the instance list", function() {
+                            expect(chorus.router.navigate).toHaveBeenCalledWith("/instances", true);
+                        });
+                    });
+
+                    describe("when the save fails", function() {
+                        beforeEach(function() {
+                            this.server.lastCreateFor(this.dialog.model).fail([{message: "foobar"}]);
+                        });
+
+                        it("displays the errors", function() {
+                            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                            expect(this.dialog.$(".errors")).toContainText("foobar");
+                        });
                     });
 
                     context("when other forms fields from registering an existing greenplum are filled", function() {
