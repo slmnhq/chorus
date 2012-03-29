@@ -168,6 +168,16 @@ describe("chorus.views.TabularDataSidebar", function() {
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     expect(this.view.$(".actions a.analyze")).not.toExist();
                 });
+
+                context("when the run analyze link is clicked", function() {
+                    beforeEach(function() {
+                        this.view.$(".actions a.analyze").click();
+                    });
+
+                    it("displays an alert dialog", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.alerts.Analyze);
+                    });
+                });
             });
 
             context("when user does not have credentials", function() {

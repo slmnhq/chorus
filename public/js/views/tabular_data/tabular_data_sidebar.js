@@ -5,7 +5,8 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     events: {
         "click .no_credentials a.add_credentials": "launchAddCredentialsDialog",
         "click .associate": "launchAssociateWithWorkspaceDialog",
-        "click .tabular_data_preview": "launchTabularDataPreviewDialog"
+        "click .tabular_data_preview": "launchTabularDataPreviewDialog",
+        "click .actions a.analyze" : "launchAnalyzeAlert"
     },
 
     subviews: {
@@ -103,6 +104,13 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         e.preventDefault();
 
         new chorus.dialogs.TabularDataPreview({model: this.resource}).launchModal();
+    },
+
+    launchAnalyzeAlert: function(e) {
+        e && e.preventDefault();
+
+        var alert = new chorus.alerts.Analyze({model: this.resource});
+        alert.launchModal();
     },
 
     updateImportSchedule: function(importConfiguration) {
