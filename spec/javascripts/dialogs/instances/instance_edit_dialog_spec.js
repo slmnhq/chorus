@@ -230,7 +230,8 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.$("button.cancel")).toBeDisabled();
         });
 
-        context("with a provisioned instance", function() {
+        // skipping these tests because we haven't gotten updated story for editing provisioned instance
+        xcontext("with a provisioned instance", function() {
             beforeEach(function() {
                 this.dialog.model.set({ provisionType: "create"});
                 this.dialog.render();

@@ -20,7 +20,11 @@ chorus.ValidationRegexes = (function(){
             return chorusIdentifierLower64;
         },
 
-        ChorusIdentifier: function() {
+        ChorusIdentifier: function(length) {
+            if (length) {
+                return new RegExp("^[a-zA-Z][a-zA-Z0-9_]{0," + (length - 1) + "}$");
+            }
+
             return chorusIdentifier;
         },
 

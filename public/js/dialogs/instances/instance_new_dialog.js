@@ -20,6 +20,12 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         this.model = this.model || new chorus.models.Instance();
     },
 
+    additionalContext: function() {
+        return {
+            auroraInstalled: chorus.models.Instance.aurora().isInstalled()
+        }
+    },
+
     showFieldset:function (e) {
         this.$("fieldset").addClass("collapsed");
         $(e.currentTarget).closest("fieldset").removeClass("collapsed");

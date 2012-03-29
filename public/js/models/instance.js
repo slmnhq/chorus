@@ -42,8 +42,11 @@
                     break;
                 case "create" :
                     // validating create a new Greenplum instance
-                    this.require("size", newAttrs);
-                    this.requirePattern("size", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
+                    this.requireIntegerRange("size", 0, chorus.models.Config.instance().get("provisionMaxSizeInGB"), newAttrs);
+
+                    this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
+                    this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
+                    this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
                     break;
                 case "registerHadoop":
                     this.require("host", newAttrs);
@@ -161,5 +164,5 @@
             return this._aurora;
         }
     });
-    
+
 })();
