@@ -19,6 +19,7 @@ chorus.alerts.Analyze = chorus.alerts.Base.extend({
     },
 
     fetchCompleted: function() {
+        chorus.PageEvents.broadcast("analyze:running");
         chorus.toast("analyze.alert.toast", {name: this.model.name()});
         this.closeModal();
     }

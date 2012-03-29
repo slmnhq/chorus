@@ -19,6 +19,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
         chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this);
         chorus.PageEvents.subscribe("workspace:associated", this.refetchModel, this);
+        chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this)
         this.tabControl = new chorus.views.TabControl([
             {name: 'activity', selector: ".activity_list"},
             {name: 'statistics', selector: ".statistics_detail"}
@@ -78,6 +79,10 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         this.render();
     },
 
+    resetStatistics: function(){
+        this.statistics.fetch();
+    },
+
     additionalContext: function() {
         return new chorus.presenters.TabularDataSidebar(this);
     },
@@ -109,8 +114,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     launchAnalyzeAlert: function(e) {
         e && e.preventDefault();
 
-        var alert = new chorus.alerts.Analyze({model: this.resource});
-        alert.launchModal();
+        new chorus.alerts.Analyze({model: this.resource}).launchModal();
     },
 
     updateImportSchedule: function(importConfiguration) {

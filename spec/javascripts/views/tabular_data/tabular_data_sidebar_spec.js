@@ -2,6 +2,7 @@ describe("chorus.views.TabularDataSidebar", function() {
     beforeEach(function() {
         this.modalSpy = stubModals();
         this.view = new chorus.views.TabularDataSidebar();
+        spyOn(this.view, "postRender").andCallThrough();
     });
 
     describe("#render", function() {
@@ -176,6 +177,28 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                     it("displays an alert dialog", function() {
                         expect(this.modalSpy).toHaveModal(chorus.alerts.Analyze);
+                    });
+                });
+
+                context("when the analyze:running event is broadcast", function() {
+                    beforeEach(function() {
+                        this.view.postRender.reset();
+                        this.server.reset();
+                        chorus.PageEvents.broadcast("analyze:running");
+                    });
+
+                    it("re-fetches the dataset statistics", function() {
+                        expect(this.server.lastFetchFor(this.view.resource.statistics())).toBeDefined();
+                    });
+
+                    context("when the fetch completes", function() {
+                        beforeEach(function() {
+                            this.server.completeFetchFor(this.view.resource.statistics());
+                        });
+
+                        it("re-renders the information tab", function() {
+                            expect(this.view.postRender).toHaveBeenCalled();
+                        });
                     });
                 });
             });

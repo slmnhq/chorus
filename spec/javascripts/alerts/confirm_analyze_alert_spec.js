@@ -36,6 +36,7 @@ describe("chorus.alerts.Analyze", function() {
         context("when the post completes", function() {
             beforeEach(function() {
                 spyOn(this.alert, "closeModal");
+                spyOn(chorus.PageEvents, "broadcast");
                 this.server.completeFetchFor(this.model.analyze());
             });
 
@@ -45,6 +46,10 @@ describe("chorus.alerts.Analyze", function() {
 
             it("should close the alert", function() {
                 expect(this.alert.closeModal).toHaveBeenCalled();
+            });
+
+            it("broadcasts analyze:running", function() {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("analyze:running");
             });
         });
 
