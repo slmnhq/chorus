@@ -1,6 +1,6 @@
 chorus.models.Database = chorus.models.Base.extend({
     constructorName: "Database",
-    showUrlTemplate: "instances/{{instanceId}}/databases/{{encode name}}",
+    showUrlTemplate: "instances/{{instanceId}}/databases/{{doubleEncode name}}",
 
     schemas:function () {
         if(!this._schemas) {

@@ -254,6 +254,33 @@
             return encodeURIComponent(value);
         },
 
+        encodeOnce: function(value){
+            function isEncoded(value) {
+                var decodedValue;
+                try {
+                    decodedValue = decodeURIComponent(value);
+                } catch(e) {
+                    decodedValue = value;
+                }
+                return !(value === decodedValue);
+            }
+
+            if (!isEncoded(value)) {
+                return encodeURIComponent(value)
+            }
+            else {
+                if(!isEncoded(decodeURIComponent(value))) {
+                    return value;
+                } else {
+                    return decodeURIComponent(value);
+                }
+            }
+        },
+
+        doubleEncode: function(value) {
+            return encodeURIComponent(encodeURIComponent(value));
+        },
+
         usedInWorkspaces: function(workspaceSet, contextObject) {
             contextObject = contextObject.clone();
             if (!workspaceSet || workspaceSet.length == 0) { return ""; }

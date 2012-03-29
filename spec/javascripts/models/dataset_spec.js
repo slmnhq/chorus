@@ -15,12 +15,12 @@ describe("chorus.models.Dataset", function() {
     })
 
     it("creates the correct showUrl", function() {
-        expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"');
+        expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/'+encodeURIComponent(encodeURIComponent('"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"')));
     });
 
     it("creates the correct showUrl with an ugly ID", function() {
         this.dataset.set({id: "foo#bar"});
-        expect(this.dataset.showUrl()).toBe('#/workspaces/44/datasets/foo%23bar');
+        expect(this.dataset.showUrl()).toBe('#/workspaces/44/datasets/foo%2523bar');
     });
 
     context("when the object has an id", function() {

@@ -16,7 +16,7 @@ describe("chorus.views.SearchAttachment", function() {
 
     context("with a workspace and tabular data", function() {
         it("shows workspace and tabular data set", function() {
-            var encoded_id = encodeURIComponent('"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"2010_report_on_white_house"')
+            var encoded_id = encodeURIComponent(encodeURIComponent('"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"2010_report_on_white_house"'));
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.tabular_data_in_workspace",

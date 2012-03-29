@@ -44,12 +44,12 @@ describe("chorus.models.DatabaseObject", function() {
             });
 
             it("has the correct url", function() {
-                expect(this.databaseObject.showUrl()).toContain("instances/" + this.databaseObject.get("instance").id + "/databases/%25foo%25/schemas/b%2Fa%2Fr/BASE_TABLE/a%20space")
+                expect(this.databaseObject.showUrl()).toContain("instances/" + this.databaseObject.get("instance").id + "/databases/%2525foo%2525/schemas/b%252Fa%252Fr/BASE_TABLE/a%2520space")
             });
 
             it("works when there is markup in the name (e.g. result from type ahead search", function() {
                 this.databaseObject.set({objectName: "<em>a</em> space"})
-                expect(this.databaseObject.showUrl()).toContain("instances/" + this.databaseObject.get("instance").id + "/databases/%25foo%25/schemas/b%2Fa%2Fr/BASE_TABLE/a%20space");
+                expect(this.databaseObject.showUrl()).toContain("instances/" + this.databaseObject.get("instance").id + "/databases/%2525foo%2525/schemas/b%252Fa%252Fr/BASE_TABLE/a%2520space");
             })
         });
 
@@ -80,7 +80,7 @@ describe("chorus.models.DatabaseObject", function() {
             })
 
             it("removes the html", function() {
-                expect(this.databaseObject.showUrl()).toMatchUrl("#/instances/12/databases/database_name/schemas/schema_name/BASE_TABLE/mmmm good");
+                expect(this.databaseObject.showUrl()).toMatchUrl("#/instances/12/databases/database_name/schemas/schema_name/BASE_TABLE/mmmm%2520good");
             })
         })
     })

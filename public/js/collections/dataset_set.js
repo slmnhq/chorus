@@ -4,7 +4,7 @@ chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
         if (this.attributes.workspaceId) {
             return "workspace/{{workspaceId}}/dataset{{#if type}}?type={{type}}{{/if}}"
         } else {
-            return "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}";
+            return "data/{{instanceId}}/database/{{encodeOnce databaseName}}/schema/{{encodeOnce schemaName}}";
         }
     },
 

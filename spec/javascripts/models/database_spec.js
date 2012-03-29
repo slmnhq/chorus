@@ -10,7 +10,7 @@ describe("chorus.models.Database", function() {
 
         it("should encode the name in the url", function() {
             this.model.set({name: "%%%"});
-            expect(this.model.showUrl()).toBe("#/instances/1/databases/%25%25%25");
+            expect(this.model.showUrl()).toBe("#/instances/1/databases/%2525%2525%2525");
         });
     });
 

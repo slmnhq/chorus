@@ -29,7 +29,7 @@ describe("chorus.models.Artifact", function() {
 
         it("shows the URL for a tabularData set in a workspace", function() {
             var model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
-            var encoded_id = encodeURIComponent('"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"2010_report_on_white_house"')
+            var encoded_id = encodeURIComponent(encodeURIComponent('"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"2010_report_on_white_house"'));
             expect(model.showUrl()).toBe("#/workspaces/33333/datasets/" + encoded_id);
         });
 
