@@ -1,10 +1,6 @@
 chorus.models.DatabaseObject = chorus.models.TabularData.extend({
     constructorName: "DatabaseObject",
 
-    initialize: function() {
-        this._super('initialize', arguments);
-    },
-
     urlTemplate: function() {
         return "data/" + this.get("instance").id + "/database/{{encodeOnce databaseName}}/schema/{{encodeOnce schemaName}}/" + this.metaType() + "/{{encodeOnce objectName}}"
     },

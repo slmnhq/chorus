@@ -174,6 +174,22 @@ describe("chorus.models.TabularData", function() {
         });
     });
 
+    describe("#database", function() {
+        beforeEach(function() {
+            this.database = this.tabularData.database();
+        })
+
+        it("returns a new database with the right attributes", function() {
+            expect(this.database.get("instanceId")).toBe(this.tabularData.get("instance").id);
+            expect(this.database.get("instanceName")).toBe(this.tabularData.get("instance").name);
+            expect(this.database.get("name")).toBe(this.tabularData.get("databaseName"));
+        });
+
+        it("memoizes", function() {
+            expect(this.database).toBe(this.tabularData.database());
+        });
+    });
+
     describe("#schema", function() {
         beforeEach(function() {
             this.schema = this.tabularData.schema();

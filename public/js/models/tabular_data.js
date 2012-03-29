@@ -69,6 +69,17 @@ chorus.models.TabularData = chorus.models.Base.include(
         return this._schema;
     },
 
+    database: function() {
+        if (!this._database) {
+            this._database = new chorus.models.Database({
+                instanceId: this.get("instance").id,
+                name: this.get("databaseName"),
+                instanceName: this.get("instance").name
+            });
+        }
+        return this._database;
+    },
+
     workspace: function() {
         if (!this._workspace) {
             this._workspace = new chorus.models.Workspace(this.get("workspace"));
