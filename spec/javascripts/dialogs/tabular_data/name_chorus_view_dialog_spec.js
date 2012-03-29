@@ -1,22 +1,26 @@
 describe("chorus.dialogs.NameChorusView", function() {
     beforeEach(function() {
         stubModals();
-        this.chorusView = fixtures.datasetChorusView();
+        stubDefer();
+        spyOn(CodeMirror, "fromTextArea").andCallThrough();
+        this.chorusView = fixtures.datasetChorusView({query: "SELECT * FROM this.other.table"});
         this.dialog = new chorus.dialogs.NameChorusView({ model: this.chorusView});
         this.dialog.launchModal();
     });
 
-    it("has the right title", function() {
+    it("has the right title & submit button text", function() {
         expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.name_chorus_view.title");
-    });
-
-    it("has the correct submit button text", function() {
         expect(this.dialog.$("button.submit").text()).toMatchTranslation("dataset.name_chorus_view.create");
     })
 
     it("initializes the name", function() {
         expect(this.dialog.$("input[name=objectName]").val()).toBe(this.chorusView.get("objectName"))
     })
+
+    it("sets up the sql preview", function() {
+        expect(this.dialog.$("textarea.sql_preview")).toContainText("SELECT * FROM this.other.table");
+        expect(CodeMirror.fromTextArea).toHaveBeenCalled();
+    });
 
     it("starts with the submit button enabled", function() {
         expect(this.dialog.$("button.submit")).toBeEnabled();
@@ -48,6 +52,7 @@ describe("chorus.dialogs.NameChorusView", function() {
         beforeEach(function() {
             spyOn(this.dialog.model, "save")
             this.dialog.$("input[name=objectName]").val(" whatever  ").keyup();
+            this.dialog.editor.setValue("SELECT column1, column2 FROM other.table");
             this.dialog.$("form").submit();
         });
 
@@ -58,7 +63,11 @@ describe("chorus.dialogs.NameChorusView", function() {
 
         it("fills in the objectName, with trim", function() {
             expect(this.dialog.model.get("objectName")).toBe("whatever")
-        })
+        });
+
+        it("uses the SQL from the form", function() {
+            expect(this.dialog.model.get("query")).toBe("SELECT column1, column2 FROM other.table")
+        });
 
         it("saves the chorus view", function() {
             expect(this.dialog.model.save).toHaveBeenCalled()

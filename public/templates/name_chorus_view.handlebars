@@ -1,5 +1,15 @@
 <form action="#">
-    <input type="text" name="objectName" placeholder='{{t "dataset.name_chorus_view.placeholder"}}' tabindex="1" maxlength="64" value="{{objectName}}"></input>
+    <label for="name_chorus_view_name">{{t "dataset.name_chorus_view.name"}}</label>
+    <input id="name_chorus_view_name" type="text" name="objectName" placeholder='{{t "dataset.name_chorus_view.placeholder"}}' tabindex="1" maxlength="64" value="{{objectName}}"></input>
+
+    <div class="preview">
+        <button class="preview">{{t "dataset.name_chorus_view.preview"}}</button>
+    </div>
+
+    <div class="sql_preview">
+        <textarea class="sql_preview">{{query}}</textarea>
+    </div>
+
     <div class="modal_controls">
         <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
         <button type="submit" class="submit" tabindex="99">{{t "dataset.name_chorus_view.create"}}</button>
