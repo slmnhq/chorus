@@ -1,5 +1,6 @@
 chorus.ValidationRegexes = (function(){
     var chorusIdentifier64 = /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/;
+    var chorusIdentifierLower64 = /^[a-z][a-z0-9_]{0,63}$/;
     var chorusIdentifier = /^[a-zA-Z][a-zA-Z0-9_]*$/;
     var safePgName = /^[a-z_][a-z0-9_"]*$|^".*"$/; // TODO: catch quoted strings that contain unescaped quotes
     var allWhitespace = /^\s*$/;
@@ -13,6 +14,10 @@ chorus.ValidationRegexes = (function(){
     return {
         ChorusIdentifier64: function() {
             return chorusIdentifier64;
+        },
+
+        ChorusIdentifierLower64: function() {
+            return chorusIdentifierLower64;
         },
 
         ChorusIdentifier: function() {

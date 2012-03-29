@@ -23,7 +23,7 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
         this.clearErrors();
         var $name = this.$("#create_database_view_name");
 
-        if ($name.val().match(chorus.ValidationRegexes.ChorusIdentifier64())) {
+        if ($name.val().match(chorus.ValidationRegexes.ChorusIdentifierLower64())) {
             this.$("button.submit").startLoading("actions.creating");
             this.model.set({objectName: $name.val()}, {silent: true});
             this.model.save();

@@ -1,7 +1,12 @@
 describe("chorus.ValidationRegexes", function() {
     itWorks("ChorusIdentifier64", {
-        good: [ "a_valid_name", new Array(65).join("a"), "a2" ],
+        good: [ "a_valid_name", new Array(65).join("a"), "a2", "A2" ],
         bad: [ "some invalid name", new Array(66).join("a"), "123", "okay_until_$^#$%#$", "_leading_underscore" ]
+    });
+
+    itWorks("ChorusIdentifierLower64", {
+        good: [ "a_valid_name", new Array(65).join("a"), "a2" ],
+        bad: [ "some invalid name", new Array(66).join("a"), "123", "okay_until_$^#$%#$", "_leading_underscore", "aBc" ]
     });
 
     itWorks("ChorusIdentifier", {

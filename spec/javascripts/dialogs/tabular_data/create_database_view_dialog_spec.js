@@ -35,6 +35,21 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
         expect(this.view.$("input#create_database_view_name")).toExist();
     });
 
+    describe("validation", function() {
+        var invalids = ["something_UPPERCASE", "1234"];
+
+        _.each(invalids, function(input) {
+            it("does not accept " + input + " as valid input", function() {
+                this.server.reset();
+                this.view.$("#create_database_view_name").val(input);
+                this.view.$("button.submit").click();
+
+                expect(this.view.$("#create_database_view_name")).toHaveClass("has_error");
+                expect(this.server.requests.length).toBe(0);
+            });
+        });
+    });
+
     describe("input", function() {
         describe("invalid input", function() {
             beforeEach(function() {
