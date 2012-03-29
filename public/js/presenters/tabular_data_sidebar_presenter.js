@@ -71,7 +71,7 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
             canExport: this.canExport(),
             hasSandbox: this.options.workspace.sandbox(),
             workspaceId: this.options.workspace.id,
-            activeWorkspace: this.options.workspace.get("active"),
+            activeWorkspace: this.options.workspace.isActive(),
             isDeleteable: this.resource && this.resource.isDeleteable() && this.options.workspace.canUpdate(),
             deleteMsgKey: deleteMsgKey,
             deleteTextKey: deleteTextKey
@@ -146,8 +146,10 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
             ctx.noCredentialsWarning = chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink})
         }
 
+        var workspaceArchived = (this.options.workspace && !this.options.workspace.isActive());
         ctx.displayEntityType = this.resource.metaType();
         ctx.isChorusView = this.resource.isChorusView();
+        ctx.canAnalyze = this.resource.hasCredentials() && this.resource.canAnalyze() && !workspaceArchived;
 
         return ctx;
     },

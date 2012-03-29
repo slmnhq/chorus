@@ -707,7 +707,33 @@ describe("chorus.models.TabularData", function() {
             var dataset = this.tabularData.asDataset();
             expect(dataset).toBeA(chorus.models.Dataset);
             expect(dataset.attributes).toEqual(this.tabularData.attributes);
-        })
-    })
+        });
+    });
 
+    describe("#canAnalyze", function() {
+        it("returns true for a sandbox table", function() {
+            this.tabularData = fixtures.datasetSandboxTable();
+            expect(this.tabularData.canAnalyze()).toBeTruthy();
+        });
+
+        it("returns true for a source table", function() {
+            this.tabularData = fixtures.databaseTable();
+            expect(this.tabularData.canAnalyze()).toBeTruthy();
+        });
+
+        it("returns false for views", function() {
+            this.tabularData = fixtures.datasetSandboxView();
+            expect(this.tabularData.canAnalyze()).toBeFalsy();
+        });
+
+        it("returns false for Chorus views", function() {
+            this.tabularData = fixtures.chorusView();
+            expect(this.tabularData.canAnalyze()).toBeFalsy();
+        });
+
+        it("returns false for external tables", function() {
+            this.tabularData = fixtures.datasetExternalTable();
+            expect(this.tabularData.canAnalyze()).toBeFalsy();
+        });
+    });
 });

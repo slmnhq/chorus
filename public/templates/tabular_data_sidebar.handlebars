@@ -73,6 +73,10 @@
                 {{/if}}
             {{/unless}}
 
+             {{#if canAnalyze}}
+                <li><a class="analyze" href="#">{{t "dataset.actions.analyze"}}</a></li>
+             {{/if}}
+
             {{#if activeWorkspace}}
                 {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey}}</a></li>{{/if}}
             {{/if}}

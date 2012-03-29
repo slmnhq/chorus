@@ -221,6 +221,10 @@ chorus.models.TabularData = chorus.models.Base.include(
         return this.get('hasCredentials') !== false
     },
 
+    canAnalyze: function() {
+        return this.get("objectType") === "BASE_TABLE";
+    },
+
     makeBoxplotTask: function(taskAttrs) {
         return new chorus.models.BoxplotTask({
             xAxis: taskAttrs.xAxis,

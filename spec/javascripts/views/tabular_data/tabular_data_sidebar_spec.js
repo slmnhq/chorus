@@ -146,9 +146,34 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
             });
 
+            describe("analyze table", function() {
+                it("displays the analyze table action", function() {
+                    expect(this.view.$(".actions a.analyze")).toContainTranslation("dataset.actions.analyze")
+                });
+
+                it("does not display for a view", function() {
+                    this.dataset = fixtures.databaseView();
+                    chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                    expect(this.view.$(".actions a.analyze")).not.toExist();
+                });
+
+                it("does not display the action for a external table", function() {
+                    this.dataset = fixtures.datasetExternalTable();
+                    chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                    expect(this.view.$(".actions a.analyze")).not.toExist();
+                });
+
+                it("does not display the action for a external table", function() {
+                    this.dataset = fixtures.datasetHadoopExternalTable();
+                    chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
+                    expect(this.view.$(".actions a.analyze")).not.toExist();
+                });
+            });
+
             context("when user does not have credentials", function() {
                 beforeEach(function() {
                     this.dataset.set({hasCredentials: false});
+                    this.view.render();
                 });
 
                 it("does not show the preview data link even when on a list page", function() {
@@ -161,6 +186,10 @@ describe("chorus.views.TabularDataSidebar", function() {
                     this.view.options.workspace = fixtures.workspace();
                     this.view.render();
                     expect(this.view.$(".actions .import_now")).not.toExist();
+                });
+
+                it("does not show the analyze table action", function() {
+                    expect(this.view.$(".actions a.analyze")).not.toExist();
                 });
 
                 it("shows a no-permissions message", function() {
@@ -820,7 +849,6 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
                 });
             });
-
         });
 
         describe("column statistics", function() {
