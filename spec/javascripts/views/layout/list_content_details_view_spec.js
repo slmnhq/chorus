@@ -290,6 +290,13 @@ describe("chorus.views.ListContentDetails", function() {
                 },
                 this.view.options.search));
         });
+
+        it("doesn't render a search bar if the placeholder key is not present in the search hash", function() {
+            delete this.view.options.search.placeholder;
+            this.view.render();
+
+            expect(this.view.$("input.search:text")).not.toExist();
+        });
     });
 
     describe("#startLoading", function() {
