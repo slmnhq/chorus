@@ -442,6 +442,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                             },
                                             state: "success",
                                             toTable: 'our_destination',
+                                            toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"',
                                             creator: "InitialUser"
                                         }
                                     });
@@ -454,7 +455,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 it("has an 'imported xx ago' description", function() {
                                     var execInfo = this.view.importConfiguration.get("executionInfo")
                                     var destTable = new chorus.models.Dataset({
-                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        id: execInfo.toTableId,
                                         workspaceId: this.dataset.get("workspace").id})
                                     expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
@@ -466,7 +467,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     this.importResponse.set({
                                         executionInfo: {
                                             startedStamp: "2012-02-29 14:23:58.169",
-                                            toTable: 'our_destinationplusomemore',
+                                            toTable: 'our_destination_plus_some_more',
+                                            toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination_plus_some_more"',
                                             creator: "InitialUser",
                                             state: "success"
                                         }
@@ -480,7 +482,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 it("has an 'import in progress' description", function() {
                                     var execInfo = this.view.importConfiguration.get("executionInfo")
                                     var destTable = new chorus.models.Dataset({
-                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        id: execInfo.toTableId,
                                         workspaceId: this.dataset.get("workspace").id})
                                     expect(this.view.$(".last_import")).toContainTranslation("import.in_progress", {tableLink: "our_destination..."});
                                     expect(this.view.$(".last_import")).toContainTranslation("import.began", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp)});
@@ -495,6 +497,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     this.importResponse.set({
                                         executionInfo: {
                                             toTable: "bad_destination_table",
+                                            toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"bad_destination_table"',
                                             startedStamp: "2012-02-29 14:23:58.169",
                                             completedStamp: "2012-02-29 14:23:59.027",
                                             result: {
@@ -511,7 +514,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 it("has an 'import failed xx ago' description", function() {
                                     var execInfo = this.view.importConfiguration.get("executionInfo")
                                     var destTable = new chorus.models.Dataset({
-                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        id: execInfo.toTableId,
                                         workspaceId: this.dataset.get("workspace").id})
                                     expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "bad_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
@@ -552,6 +555,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                                 executeResult: "success"
                                             },
                                             toTable: 'our_destination',
+                                            toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"',
                                             state: "success",
                                             creator: "InitialUser"
                                         }
@@ -565,7 +569,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 it("has an 'imported xx ago' description", function() {
                                     var execInfo = this.view.importConfiguration.get("executionInfo")
                                     var destTable = new chorus.models.Dataset({
-                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        id: execInfo.toTableId,
                                         workspaceId: this.dataset.get("workspace").id})
                                     expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
@@ -583,6 +587,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                             },
                                             state: "failed",
                                             toTable: 'our_destination',
+                                            toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"',
                                             creator: "InitialUser"
                                         }
                                     })
@@ -595,7 +600,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 it("has an 'import failed xx ago' description", function() {
                                     var execInfo = this.view.importConfiguration.get("executionInfo")
                                     var destTable = new chorus.models.Dataset({
-                                        id: this.view.importConfiguration.get("destinationTable"),
+                                        id: execInfo.toTableId,
                                         workspaceId: this.dataset.get("workspace").id})
                                     expect(this.view.$(".last_import")).toContainTranslation("import.last_import_failed", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp), tableLink: "our_destination..."})
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())

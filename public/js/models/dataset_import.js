@@ -86,12 +86,8 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     lastDestination: function() {
-        // TODO: This is a bug, because the id points to the *next* destination table
-        // The API doesn't give us the *last* destination table's ID; waiting on
-        // https://www.pivotaltracker.com/story/show/27131461 for good data.
-        // The correct value will probably look like this.get("executionInfo").destinationTable
         return new chorus.models.Dataset({
-            id: this.get("destinationTable"),
+            id: this.get("executionInfo").toTableId,
             objectName: this.get("executionInfo").toTable,
             workspaceId: this.get("workspaceId")
         });
