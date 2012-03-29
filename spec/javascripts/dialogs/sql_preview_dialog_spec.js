@@ -20,7 +20,7 @@ describe("chorus.dialogs.SqlPreview", function() {
         describe("preview bar", function() {
             it("has a link to 'Data Preview'", function() {
                 expect(this.dialog.$("button.preview")).toExist();
-            })
+            });
 
             describe("opening the Data Preview", function() {
                 beforeEach(function() {
@@ -31,8 +31,18 @@ describe("chorus.dialogs.SqlPreview", function() {
 
                 it("shows a results console", function() {
                     expect(this.dialog.resultsConsole.execute).toHaveBeenCalledWith(this.dialog.model.preview(), true);
-                })
-            })
+                });
+
+                describe("closing the Data Preview", function() {
+                    beforeEach(function() {
+                        this.dialog.$(".results_console .close").click()
+                    });
+
+                    it("does not show the Data Preview any longer", function() {
+                        expect(this.dialog.$(".result_content")).toHaveClass("hidden")
+                    });
+                });
+            });
         });
 
         describe("generated sql", function() {
@@ -43,6 +53,6 @@ describe("chorus.dialogs.SqlPreview", function() {
             it("constructs the SQL correctly", function() {
                 expect(this.dialog.additionalContext().sql).toBe("select awesome from sql");
             });
-        })
+        });
     });
 });

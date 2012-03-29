@@ -29,12 +29,14 @@
         background: $body-background-color;
     }
 
-    .close {
-        position: absolute;
-        top: 18px;
-        right: 15px;
-        padding: 2px;
-        background: #fff;
+    .header {
+        .close {
+            position: absolute;
+            top: 18px;
+            right: 15px;
+            padding: 2px;
+            background: #fff;
+        }
     }
 
     &.alert_facebox .close {

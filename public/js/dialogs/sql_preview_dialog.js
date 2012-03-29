@@ -11,7 +11,12 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview"});
+        this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
+        this.resultsConsole.clickClose = function(e) {
+            e && e.preventDefault();
+
+            this.$(".result_content").addClass("hidden");
+        };
     },
 
     additionalContext : function() {
