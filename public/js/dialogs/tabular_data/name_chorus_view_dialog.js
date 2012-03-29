@@ -19,33 +19,6 @@ chorus.dialogs.NameChorusView = chorus.dialogs.SqlPreview.extend({
         });
     },
 
-    postRender: function() {
-        var opts = {
-            lineNumbers: true,
-            mode: "text/x-sql",
-            fixedGutter: true,
-            theme: "default",
-            lineWrapping: true
-        };
-
-        _.defer(_.bind(function() {
-            var textArea = this.$("textarea.sql_preview")[0];
-            if (textArea !== this.textArea) {
-                this.textArea = textArea;
-                this.editor = CodeMirror.fromTextArea(this.textArea, opts);
-
-                var ed = this.editor;
-                _.defer(function() {
-                    ed.refresh();
-                    ed.refresh();
-                    ed.refresh();
-                });
-
-                this.setupScrolling(this.$(".container"));
-            }
-        }, this));
-    },
-
     createChorusView: function(e) {
         e.preventDefault();
 

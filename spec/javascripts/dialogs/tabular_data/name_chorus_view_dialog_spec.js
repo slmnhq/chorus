@@ -27,11 +27,6 @@ describe("chorus.dialogs.NameChorusView", function() {
         expect(this.dialog.$("input[name=objectName]").val()).toBe(this.chorusView.get("objectName"))
     });
 
-    it("sets up the sql preview", function() {
-        expect(this.dialog.$("textarea.sql_preview")).toContainText("SELECT * FROM this.other.table");
-        expect(CodeMirror.fromTextArea).toHaveBeenCalled();
-    });
-
     it("starts with the submit button enabled", function() {
         expect(this.dialog.$("button.submit")).toBeEnabled();
     });
