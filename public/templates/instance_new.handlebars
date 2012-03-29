@@ -32,6 +32,33 @@
     </form></div>
 </fieldset>
 
+{{#if auroraInstalled}}
+<fieldset class="collapsed create_new_greenplum" >
+    <legend>
+        <input type="radio" name="instance_type" id="create_new_greenplum"/>
+        <label for="create_new_greenplum">{{t "instances.new_dialog.create_new_greenplum"}}</label>
+        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.create_new_greenplum_help_text"}}'/>
+    </legend>
+    <div><form>
+        <input type="hidden" name="provisionType" value="create" />
+        <label class="required">{{t "instances.dialog.instance_name"}}</label>
+        <input type="text" name="name" maxlength="44"/>
+
+        <label>{{t "instances.dialog.description"}}</label>
+        <textarea rows="3" name="description"/>
+
+        <label class="required" name="size">{{t "instances.dialog.size"}} </label>
+        <input type="text" name="size" maxlength="2000"/><br/>
+
+        <label name="databaseName">{{t "instances.dialog.database_name"}} </label>
+        <label name="schemaName">{{t "instances.dialog.schema_name"}} </label>
+
+        <input type="text" name="databaseName" maxlength="256"/>
+        <input type="text" name="schemaName" maxlength="256"/>
+    </form></div>
+</fieldset>
+{{/if}}
+
 <fieldset class="collapsed register_existing_hadoop">
     <legend>
         <input type="radio" name="instance_type" id="register_existing_hadoop"/>

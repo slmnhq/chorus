@@ -28,6 +28,36 @@ describe("chorus.dialogs.InstanceNew", function() {
             expect(this.dialog.$("button.submit")).toBeDisabled();
         });
 
+        context("when aurora is installed", function() {
+            beforeEach(function() {
+                chorus.models.Instance.aurora().set({ installationStatus: "install_succeed"});
+                this.dialog.render();
+            });
+
+            it("enables create a new Greenplum database instance", function() {
+                expect(this.dialog.$(".create_new_greenplum input[type=radio]")).toExist();
+            });
+
+            it("shows the correct text", function() {
+                expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum")
+            });
+
+            it("doesn't have class disabled", function() {
+                expect(this.dialog.$("label[for=create_new_greenplum]")).not.toHaveClass("disabled");
+            });
+        });
+
+        context("when aurora is not installed", function() {
+            beforeEach(function() {
+                chorus.models.Instance.aurora().set({ installationStatus: "not_installed"});
+                this.dialog.render();
+            });
+
+            it("does not show the 'create a new Greenplum database instance' option", function() {
+                expect(this.dialog.$(".create_new_greenplum input[type=radio]")).not.toExist();
+            });
+        });
+
         describe("selecting the 'register an existing instance' radio button", function() {
             beforeEach(function() {
                 this.dialog.$("input[type=radio]#register_existing_greenplum").attr('checked', true).change();
@@ -118,6 +148,11 @@ describe("chorus.dialogs.InstanceNew", function() {
         });
 
         describe("submitting the form", function() {
+            beforeEach(function() {
+                chorus.models.Instance.aurora().set({ installationStatus: "install_succeed"});
+                this.dialog.render();
+            });
+
             context("using register existing greenplum database", function() {
                 beforeEach(function() {
                     this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
@@ -155,6 +190,60 @@ describe("chorus.dialogs.InstanceNew", function() {
                 });
             });
 
+            context("using a new Greenplum database instance", function() {
+                beforeEach(function() {
+                    this.dialog.$(".create_new_greenplum input[type=radio]").attr('checked', true).change();
+                    this.dialog.$(".create_new_greenplum input[name=name]").val("new_greenplum_instance");
+                    this.dialog.$(".create_new_greenplum textarea[name=description]").val("Instance Description");
+                    this.dialog.$(".create_new_greenplum input[name=size]").val("1");
+                    this.dialog.$(".create_new_greenplum input[name=databaseName]").val("dbTest");
+                    this.dialog.$(".create_new_greenplum input[name=schemaName]").val("schemaTest");
+                });
+
+                context("saving", function() {
+                    beforeEach(function() {
+                        spyOn(this.dialog.model, "save").andCallThrough();
+                    });
+
+                    it("calls save on the dialog's model", function() {
+                        this.dialog.$("button.submit").click();
+                        expect(this.dialog.model.save).toHaveBeenCalled();
+
+                        var attrs = this.dialog.model.save.calls[0].args[0];
+
+                        expect(attrs.size).toBe("1");
+                        expect(attrs.name).toBe("new_greenplum_instance");
+                        expect(attrs.provisionType).toBe("create");
+                        expect(attrs.description).toBe("Instance Description");
+                        expect(attrs.databaseName).toBe("dbTest");
+                        expect(attrs.schemaName).toBe("schemaTest");
+                    });
+
+                    context("when other forms fields from registering an existing greenplum are filled", function() {
+                        beforeEach(function() {
+                            this.dialog.$("button.submit").click();
+
+                            this.dialog.$(".register_existing_greenplum input[name=name]").val("existing");
+                            this.dialog.$(".register_existing_greenplum textarea[name=description]").val("existing description");
+                            this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
+                        });
+                        it("sets only the fields for create new greenplum instance and calls save", function() {
+                            expect(this.dialog.model.save).toHaveBeenCalled();
+
+                            var attrs = this.dialog.model.save.calls[0].args[0];
+
+                            expect(attrs.size).toBe("1");
+                            expect(attrs.name).toBe("new_greenplum_instance");
+                            expect(attrs.provisionType).toBe("create");
+                            expect(attrs.description).toBe("Instance Description");
+                            expect(attrs.host).toBeUndefined();
+                        });
+                    });
+                });
+
+                testUpload();
+            });
+
             context("when the form is not valid", function() {
                 beforeEach(function() {
                     this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
@@ -181,8 +270,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.saving");
                     });
 
-                    it("disables the cancel button", function() {
-                        expect(this.dialog.$("button.cancel")).toBeDisabled();
+                    it("does not disable the cancel button", function() {
+                        expect(this.dialog.$("button.cancel")).not.toBeDisabled();
                     });
 
                     context("when save completes", function() {

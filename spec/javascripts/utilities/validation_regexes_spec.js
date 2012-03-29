@@ -69,4 +69,13 @@ describe("chorus.ValidationRegexes", function() {
             });
         });
     }
+
+    describe("ChorusIdentifer (when given a length argument)", function() {
+        it("returns a Chorus Identifier matcher with the supplied max length", function() {
+            var regex = chorus.ValidationRegexes.ChorusIdentifier(4);
+            expect("abc").toMatch(regex);
+            expect("a123").toMatch(regex);
+            expect("a1234").not.toMatch(regex);
+        });
+    });
 });

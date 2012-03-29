@@ -399,6 +399,10 @@ describe("chorus.models.Workfile", function() {
     });
 
     describe("canEdit", function() {
+        beforeEach(function() {
+            spyOn(this.model.workspace(), 'isActive').andReturn(true);
+        });
+
         it("returns false when its version is not the current version", function() {
             this.model.set({latestVersionNum: 6});
             this.model.get('versionInfo').versionNum = 3
@@ -409,6 +413,13 @@ describe("chorus.models.Workfile", function() {
             this.model.set({latestVersionNum: 6});
             this.model.get('versionInfo').versionNum = 6
             expect(this.model.canEdit()).toBeTruthy();
+        });
+
+        it("returns false when its workspace is archived", function() {
+            this.model.workspace().isActive.andReturn(false);
+            this.model.set({latestVersionNum: 6});
+            this.model.get('versionInfo').versionNum = 6
+            expect(this.model.canEdit()).toBeFalsy();
         });
     });
 
@@ -494,6 +505,10 @@ describe("chorus.models.Workfile", function() {
     })
 
     describe("#save", function() {
+        beforeEach(function() {
+            spyOn(this.model.workspace(), 'isActive').andReturn(true);
+        });
+
         context("with an old version", function() {
             beforeEach(function() {
                 this.model.get('versionInfo').versionNum = 88

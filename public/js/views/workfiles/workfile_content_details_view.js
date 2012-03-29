@@ -70,7 +70,11 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         }
 
         if (model.isSql()) {
-            return new chorus.views.SqlWorkfileContentDetails({ model:model, contentView: contentView });
+            if (model.workspace().isActive()) {
+                return new chorus.views.SqlWorkfileContentDetails({ model:model, contentView: contentView });
+            } else {
+                return new chorus.views.ArchivedWorkfileContentDetails({ model:model });
+            }
         }
 
         if (model.isAlpine()) {

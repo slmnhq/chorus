@@ -20,12 +20,24 @@ describe("chorus.views.WorkfileContentDetails", function() {
         context("when the given workfile is a SQL file", function() {
             beforeEach(function() {
                 this.model = fixtures.sqlWorkfile();
+                spyOn(chorus.views, "ArchivedWorkfileContentDetails");
                 spyOn(chorus.views, "SqlWorkfileContentDetails");
-                chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
 
-            it("instantiates a SqlWorkfileContentDetails view with the given workfile", function() {
-                expect(chorus.views.SqlWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+            context("when its workspace is active (not archived)", function() {
+                it("instantiates a SqlWorkfileContentDetails view with the given workfile", function() {
+                    spyOn(this.model.workspace(), 'isActive').andReturn(true);
+                    chorus.views.WorkfileContentDetails.buildFor(this.model);
+                    expect(chorus.views.SqlWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+                });
+            });
+
+            context("when its workspace is archived", function() {
+                it("instantiates a ArchivedWorkfileContentDetails view with the given workfile", function() {
+                    spyOn(this.model.workspace(), 'isActive').andReturn(false);
+                    chorus.views.WorkfileContentDetails.buildFor(this.model);
+                    expect(chorus.views.ArchivedWorkfileContentDetails).toHaveBeenCalledWith({ model: this.model });
+                });
             });
         });
 

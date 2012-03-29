@@ -199,7 +199,7 @@
         },
 
         canEdit: function() {
-            return this.get("canEdit") && this.isLatestVersion();
+            return this.get("canEdit") && this.isLatestVersion() && this.workspace().isActive();
         },
 
         isLatestVersion: function() {

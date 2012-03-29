@@ -25,7 +25,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender: function() {
-        this.$("a.preview").data("parent", this);
+        this.$("a.preview, button.create").data("parent", this);
         this.$("a.add_join").data("chorusView", this.chorusView)
         this._super("postRender")
     },
@@ -65,11 +65,14 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         dialog.launchModal();
     },
 
-    createChorusView: function() {
+    createChorusView: function(e) {
+        e && e.preventDefault();
+
         var chorusView = new chorus.models.ChorusView({
             type: "CHORUS_VIEW",
             query: this.sql(),
             instanceId: this.model.get("instance").id,
+            instance: this.model.get("instance"),
             databaseName: this.model.get("databaseName"),
             schemaName: this.model.get("schemaName"),
             objectName: _.uniqueId("chorus_view_"),
@@ -78,7 +81,8 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
             objectType: "QUERY"
         });
 
-        var dialog = new chorus.dialogs.NameChorusView({ model : chorusView });
+        var launchElement = $(e.target)
+        var dialog = new chorus.dialogs.NameChorusView({ model : chorusView, launchElement: launchElement });
         dialog.launchModal();
     },
 

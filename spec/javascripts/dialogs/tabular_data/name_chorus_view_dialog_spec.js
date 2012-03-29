@@ -3,23 +3,28 @@ describe("chorus.dialogs.NameChorusView", function() {
         stubModals();
         stubDefer();
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
-        this.chorusView = fixtures.datasetChorusView({query: "SELECT * FROM this.other.table"});
-        this.dialog = new chorus.dialogs.NameChorusView({ model: this.chorusView});
+        this.launchElement = $("<a></a>");
+        this.launchElement.data("parent", {
+            sql : function(){ return "select awesome from sql"; }
+        });
+        this.chorusView = fixtures.datasetChorusView();
+        this.dialog = new chorus.dialogs.NameChorusView({
+            model: this.chorusView,
+            launchElement: this.launchElement
+        });
         this.dialog.launchModal();
     });
 
-    it("has the right title & submit button text", function() {
-        expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.name_chorus_view.title");
+    it("has an editable CodeMirror", function() {
+        expect(CodeMirror.fromTextArea.calls[0].args[1].readOnly).toBeUndefined();
+    });
+
+    it("has the correct submit button text", function() {
         expect(this.dialog.$("button.submit").text()).toMatchTranslation("dataset.name_chorus_view.create");
-    })
+    });
 
     it("initializes the name", function() {
         expect(this.dialog.$("input[name=objectName]").val()).toBe(this.chorusView.get("objectName"))
-    })
-
-    it("sets up the sql preview", function() {
-        expect(this.dialog.$("textarea.sql_preview")).toContainText("SELECT * FROM this.other.table");
-        expect(CodeMirror.fromTextArea).toHaveBeenCalled();
     });
 
     it("starts with the submit button enabled", function() {
@@ -44,9 +49,21 @@ describe("chorus.dialogs.NameChorusView", function() {
 
             it("disables the submit button", function() {
                 expect(this.dialog.$("button.submit")).toBeDisabled();
-            })
-        })
-    })
+            });
+        });
+    });
+
+    describe("editing the SQL", function() {
+        beforeEach(function() {
+            this.dialog.editor.setValue("newquery");
+        });
+
+        it("uses the changed SQL for the Data Preview", function() {
+            this.dialog.$("button.preview").click();
+
+            expect(this.server.lastCreate().requestBody).toContain("query=newquery");
+        });
+    });
 
     describe("creating the chorus view", function() {
         beforeEach(function() {
@@ -71,7 +88,7 @@ describe("chorus.dialogs.NameChorusView", function() {
 
         it("saves the chorus view", function() {
             expect(this.dialog.model.save).toHaveBeenCalled()
-        })
+        });
 
         context("when chorus view creation is successful", function() {
             beforeEach(function() {
@@ -79,7 +96,7 @@ describe("chorus.dialogs.NameChorusView", function() {
                 spyOnEvent($(document), "close.facebox");
                 this.dialog.model.set({ id: "10102" }, { silent: true })
                 this.dialog.model.trigger("saved");
-            })
+            });
 
             it("redirects to the new chorus view show page", function() {
                 expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl(), true);
@@ -87,8 +104,8 @@ describe("chorus.dialogs.NameChorusView", function() {
 
             it("dismisses the dialog", function() {
                 expect("close.facebox").toHaveBeenTriggeredOn($(document))
-            })
-        })
+            });
+        });
 
         context("when chorus view creation fails", function() {
             beforeEach(function() {
@@ -106,15 +123,15 @@ describe("chorus.dialogs.NameChorusView", function() {
 
             it("does not dismiss the dialog", function() {
                 expect("close.facebox").not.toHaveBeenTriggeredOn($(document))
-            })
+            });
 
             it("doesn't navigate", function() {
                 expect(chorus.router.navigate).not.toHaveBeenCalled();
-            })
+            });
 
             it("stops loading", function() {
                 expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-            })
-        })
-    })
+            });
+        });
+    });
 });

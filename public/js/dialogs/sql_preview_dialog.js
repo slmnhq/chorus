@@ -18,8 +18,8 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
         return { sql: this.sql()}
     },
 
-    postRender: function() {
-        var opts = {
+    makeCodeMirrorOptions: function() {
+        return opts = {
             readOnly: "nocursor",
             lineNumbers: true,
             mode: "text/x-sql",
@@ -27,12 +27,14 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
             theme: "default",
             lineWrapping: true
         };
+    },
 
+    postRender: function() {
         _.defer(_.bind(function() {
             var textArea = this.$(".text_editor")[0];
             if (textArea !== this.textArea) {
                 this.textArea = textArea;
-                this.editor = CodeMirror.fromTextArea(this.textArea, opts);
+                this.editor = CodeMirror.fromTextArea(this.textArea, this.makeCodeMirrorOptions());
 
                 var ed = this.editor;
                 _.defer(function() {

@@ -216,7 +216,7 @@
             return {
                 objectName: model.workfile().get("name"),
                 objectUrl: model.workfile().showUrl(),
-                iconSrc: "/images/version_large.png",
+                iconSrc: "/images/new_version_icon.png",
                 iconHref: model.workfile().showUrl(),
                 iconClass: '',
                 versionName: t("workfile.version_title", { versionNum: model.get("version")}),

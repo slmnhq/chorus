@@ -20,6 +20,12 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         this.model = this.model || new chorus.models.Instance();
     },
 
+    additionalContext: function() {
+        return {
+            auroraInstalled: chorus.models.Instance.aurora().isInstalled()
+        }
+    },
+
     showFieldset:function (e) {
         this.$("fieldset").addClass("collapsed");
         $(e.currentTarget).closest("fieldset").removeClass("collapsed");
@@ -30,7 +36,6 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     createInstance:function (e) {
         e && e.preventDefault();
         this.$("button.submit").startLoading("instances.new_dialog.saving");
-        this.$("button.cancel").prop("disabled", true);
         this.model.save(this.fieldValues());
     },
 
@@ -57,7 +62,6 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     saveFailed:function () {
         this.$("button.submit").stopLoading();
-        this.$("button.cancel").prop("disabled", false);
     }
 });
 
