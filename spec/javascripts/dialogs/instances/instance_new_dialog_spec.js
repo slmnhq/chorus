@@ -181,8 +181,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.saving");
                     });
 
-                    it("disables the cancel button", function() {
-                        expect(this.dialog.$("button.cancel")).toBeDisabled();
+                    it("does not disable the cancel button", function() {
+                        expect(this.dialog.$("button.cancel")).not.toBeDisabled();
                     });
 
                     context("when save completes", function() {

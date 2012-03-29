@@ -30,7 +30,6 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     createInstance:function (e) {
         e && e.preventDefault();
         this.$("button.submit").startLoading("instances.new_dialog.saving");
-        this.$("button.cancel").prop("disabled", true);
         this.model.save(this.fieldValues());
     },
 
@@ -57,7 +56,6 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     saveFailed:function () {
         this.$("button.submit").stopLoading();
-        this.$("button.cancel").prop("disabled", false);
     }
 });
 
