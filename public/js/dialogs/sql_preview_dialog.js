@@ -2,9 +2,20 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
     className: "sql_preview",
     title: t("sql_preview.dialog.title"),
 
+    events: {
+        "click .preview" : "previewData"
+    },
+
+    subviews: {
+        ".results_console": "resultsConsole"
+    },
+
+    setup: function() {
+        this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview"});
+    },
+
     additionalContext : function() {
-        var parent = this.options.launchElement.data("parent");
-        return { sql: parent && parent.sql()}
+        return { sql: this.sql()}
     },
 
     postRender: function() {
@@ -33,5 +44,17 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
                 this.setupScrolling(this.$(".container"));
             }
         }, this));
+    },
+
+    previewData: function(e) {
+        e && e.preventDefault();
+        var preview = this.model.preview(true).set({query: this.sql()}, {silent: true})
+        this.resultsConsole.execute(preview, true);
+    },
+
+    sql: function() {
+        var parent = this.options.launchElement.data("parent");
+        var sql = parent && parent.sql()
+        return sql;
     }
 });
