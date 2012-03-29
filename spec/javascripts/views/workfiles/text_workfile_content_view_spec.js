@@ -2,6 +2,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
     beforeEach(function() {
         chorus._navigated();
         this.textfile = fixtures.textWorkfile();
+        spyOn(this.textfile.workspace(), 'isActive').andReturn(true);
         this.textfile.content("select * from foos where bar_id = 1;")
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
         this.saveInterval = this.view.saveInterval;

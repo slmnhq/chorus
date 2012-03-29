@@ -4,9 +4,16 @@ chorus.views.ReadOnlyWorkfileContentDetails = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
+            explanationText: this.explanationText,
             downloadUrl: this.model.downloadUrl()
         };
     }
 });
 
+chorus.views.BinaryWorkfileContentDetails = chorus.views.ReadOnlyWorkfileContentDetails.extend({
+    explanationText: t("workfile.not_previewable")
+});
 
+chorus.views.ArchivedWorkfileContentDetails = chorus.views.ReadOnlyWorkfileContentDetails.extend({
+    explanationText: t("workfile.workspace_archived")
+});

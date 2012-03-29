@@ -70,7 +70,11 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         }
 
         if (model.isSql()) {
-            return new chorus.views.SqlWorkfileContentDetails({ model:model, contentView: contentView });
+            if (model.workspace().isActive()) {
+                return new chorus.views.SqlWorkfileContentDetails({ model:model, contentView: contentView });
+            } else {
+                return new chorus.views.ArchivedWorkfileContentDetails({ model:model });
+            }
         }
 
         if (model.isAlpine()) {
@@ -78,7 +82,7 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         }
 
         if (model.isBinary()) {
-            return new chorus.views.ReadOnlyWorkfileContentDetails({ model:model });
+            return new chorus.views.BinaryWorkfileContentDetails({ model:model });
         }
 
         return new chorus.views.WorkfileContentDetails({ model:model });
