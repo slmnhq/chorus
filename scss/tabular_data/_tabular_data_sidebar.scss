@@ -13,6 +13,7 @@
 
     .last_import, .next_import {
         @include results-console-message;
+        line-height: 16px;
         margin-bottom: 10px;
         .icon {
             float: left;
