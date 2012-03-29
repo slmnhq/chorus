@@ -14,6 +14,7 @@ chorus.models = {
         url: function(options) {
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
             var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType });
+            if (_.isFunction(this.urlTemplateAttributes)) {_.extend(context, this.urlTemplateAttributes());}
             var uri = new URI("/edc/" + Handlebars.compile(template, {noEscape: true})(context));
             if (this.urlParams) {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;

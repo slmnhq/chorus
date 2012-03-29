@@ -6,7 +6,6 @@ describe("chorus.models.Abstract", function() {
         });
 
         describe("#url", function() {
-
             context("when the model's urlTemplate is a function", function() {
                 beforeEach(function() {
                     this.model.urlTemplate = function() {
@@ -33,6 +32,22 @@ describe("chorus.models.Abstract", function() {
                 this.model.entityId = "45";
                 this.model.urlTemplate = "data/{{entityId}}"
                 expect(this.model.url()).toBe("/edc/data/45");
+            });
+
+            context("when the model has a urlTemplateAttributes function", function() {
+                beforeEach(function() {
+                    this.model.urlTemplate = "data/{{param1}}/{{param2}}/baz"
+                    this.model.urlTemplateAttributes = function() {
+                        return {
+                            param1: "foo",
+                            param2: "bar"
+                        }
+                    }
+                });
+
+                it("should use the urlTemplateAttributes to construct the url", function() {
+                    expect(this.model.url()).toBe("/edc/data/foo/bar/baz");
+                });
             });
 
             context("when the model has additional url params", function() {
