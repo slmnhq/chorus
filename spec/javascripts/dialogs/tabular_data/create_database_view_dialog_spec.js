@@ -71,7 +71,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                 beforeEach(function() {
                     this.server.reset();
                     this.view.$("input#create_database_view_name").val("a_name");
-                    this.view.$("button.submit").click();
+                    this.view.$("form").submit();
                 });
 
                 it("accepts names that match the ChorusIdentifier64 rules", function() {
@@ -103,4 +103,4 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
             });
         }
     });
-});
+})

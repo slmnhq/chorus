@@ -3,6 +3,7 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
     title: t("create_database_view.title"),
 
     events: {
+        "submit form" : "performValidation",
         "click button.submit": "performValidation"
     },
 
@@ -19,7 +20,8 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
         };
     },
 
-    performValidation: function() {
+    performValidation: function(e) {
+        e && e.preventDefault();
         this.clearErrors();
         var $name = this.$("#create_database_view_name");
 
