@@ -876,7 +876,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right iconUrl", function() {
-            expect(this.presenter.iconSrc).toBe("/images/version_large.png");
+            expect(this.presenter.iconSrc).toBe("/images/new_version_icon.png");
         });
 
         it("should have the right iconHref", function() {
