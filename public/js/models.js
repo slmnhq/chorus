@@ -288,6 +288,10 @@ chorus.collections = {
             };
         },
 
+        isDeleted: function() {
+            return false;
+        },
+
         fetch: function(options) {
             this.fetching = true;
             options || (options = {});

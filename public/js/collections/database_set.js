@@ -2,7 +2,9 @@ chorus.collections.DatabaseSet = chorus.collections.Base.include(
     chorus.Mixins.InstanceCredentials.model
 ).extend({
     model:chorus.models.Database,
-    urlTemplate:"instance/{{instanceId}}/database",
+    urlTemplate: "instance/{{instanceId}}/database",
+    showUrlTemplate: "instances/{{instanceId}}/databases",
+
     setup:function () {
         this.bind("reset", this.applyInstanceIdToDatabases, this);
     },

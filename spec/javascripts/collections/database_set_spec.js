@@ -1,7 +1,11 @@
 describe("chorus.collections.DatabaseSet", function() {
     beforeEach(function() {
-        this.instanceId = '8675309'
+        this.instanceId = '86'
         this.collection = new chorus.collections.DatabaseSet([], {instanceId: this.instanceId});
+    });
+
+    it("has the right show url", function() {
+        expect(this.collection.showUrl()).toMatchUrl("#/instances/86/databases");
     });
 
     describe("reset", function() {
