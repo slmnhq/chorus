@@ -158,9 +158,8 @@ describe("chorus.views.InstanceListSidebar", function() {
                 it("does not display the delete instance link", function() {
                     expect(this.view.$(".actions .delete_instance")).not.toExist();
                 });
-
             });
-            
+
             context("when the fetched accounts triggers a 'reset' event", function() {
                 beforeEach(function() {
                     this.view.render.reset();
@@ -174,34 +173,34 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             context("when configuration is clicked", function() {
                 beforeEach(function() {
-                    expect(this.view.$(".configuration_detail")).not.toBeVisible();
+                    expect(this.view.$(".instance_configuration_details")).not.toBeVisible();
                     this.view.$(".tab_control li.configuration").click();
                 })
 
                 it("shows configuration", function() {
-                    expect(this.view.$(".configuration_detail")).not.toHaveClass("hidden")
+                    expect(this.view.$(".instance_configuration_details")).not.toHaveClass("hidden")
                     expect(this.view.$(".activity_list")).toHaveClass("hidden")
                 })
 
                 describe("for existing greenplum instance", function() {
-                    beforeEach(function() {
-                        this.view.render();
-                    });
-
                     context("and the instance has a shared account", function() {
                         beforeEach(function() {
-                            this.view.model = fixtures.instanceWithSharedAccount();
-                            this.view.render();
+                            var instance = fixtures.instanceWithSharedAccount();
+                            instance.loaded = true;
+                            this.view.setInstance(instance);
+                            this.server.completeFetchFor(instance.usage(), { workspaces: [] });
+                            this.server.completeAllFetches();
                         });
 
                         it("includes the shared account information", function() {
-                            expect(this.view.$(".configuration_detail").text().indexOf(t("instances.shared_account"))).not.toBe(-1);
+                            expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).not.toBe(-1);
                         });
                     });
 
                     context("and the instance does not have a shared account", function() {
                         it("does not include the shared account information", function() {
-                            expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.shared_account"))).toBe(-1);
+                            this.view.render();
+                            expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.shared_account"))).toBe(-1);
                         });
                     });
                 });
@@ -213,13 +212,13 @@ describe("chorus.views.InstanceListSidebar", function() {
                     });
 
                     it("includes greenplum db size information", function() {
-                        expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.size"))).not.toBe(-1);
+                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.size"))).not.toBe(-1);
                     });
 
                     it("does not include the port, host, or shared account information", function() {
-                        expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
-                        expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
-                        expect(this.view.$(".configuration_detail").text().indexOf(t("instances.sidebar.shared_account"))).toBe(-1);
+                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
+                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
+                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.shared_account"))).toBe(-1);
                     });
                 });
             })

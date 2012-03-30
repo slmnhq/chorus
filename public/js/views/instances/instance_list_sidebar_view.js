@@ -5,6 +5,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
     subviews:{
         '.activity_list':'activityList',
+        '.instance_configuration_details':'configurationView',
         '.tab_control':'tabControl'
     },
 
@@ -12,7 +13,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         chorus.PageEvents.subscribe("instance:selected", this.setInstance, this);
         this.tabControl = new chorus.views.TabControl([
             {name:'activity', selector:".activity_list"},
-            {name:'configuration', selector:".configuration_detail"}
+            {name:'configuration', selector:".instance_configuration_details"}
         ]);
     },
 
@@ -34,12 +35,14 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         };
     },
 
-    activityList:function () {
+    setupSubviews: function() {
         if (this.instance) {
-            return new chorus.views.ActivityList({
-                collection:this.model.activities(),
+            this.activityList = new chorus.views.ActivityList({
+                collection: this.instance.activities(),
                 displayStyle:'without_object'
             });
+
+            this.configurationView = new chorus.views.InstanceConfigurationDetails({ model: this.instance });
         }
     },
 
