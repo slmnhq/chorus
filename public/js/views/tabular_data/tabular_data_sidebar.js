@@ -11,6 +11,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
 
     subviews: {
         '.activity_list': 'activityList',
+        '.tabular_data_statistics': 'statisticsView',
         '.tab_control': 'tabControl'
     },
 
@@ -22,7 +23,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this)
         this.tabControl = new chorus.views.TabControl([
             {name: 'activity', selector: ".activity_list"},
-            {name: 'statistics', selector: ".statistics_detail"}
+            {name: 'statistics', selector: ".tabular_data_statistics"}
         ]);
     },
 
@@ -39,6 +40,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     setColumn: function(column) {
         if (column) {
             this.selectedColumn = column;
+            this.statisticsView.column = column;
         } else {
             delete this.selectedColumn;
         }
@@ -49,9 +51,6 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     setTabularData: function(tabularData) {
         this.resource = tabularData;
         if (tabularData) {
-            this.statistics = tabularData.statistics();
-            this.statistics.fetchIfNotLoaded();
-            this.statistics.onLoaded(this.render, this);
 
             var activities = tabularData.activities();
             activities.fetch();
@@ -62,8 +61,12 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
                 displayStyle: ['without_workspace'],
                 type: t("database_object." + tabularData.get('objectType'))
             });
-
             this.activityList.bind("content:changed", this.recalculateScrolling, this)
+
+            this.statisticsView = new chorus.views.TabularDataStatistics({
+                model: tabularData,
+                column: this.selectedColumn
+            });
 
             if (tabularData.canBeImportSourceOrDestination()) {
                 this.importConfiguration = tabularData.getImport();
@@ -71,7 +74,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
                 this.importConfiguration.fetch();
             }
         } else {
-            delete this.statistics;
+            delete this.statisticsView;
             delete this.activityList;
             delete this.importConfiguration;
         }
@@ -80,7 +83,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     },
 
     resetStatistics: function(){
-        this.statistics.fetch();
+        this.resource.statistics().fetch();
     },
 
     additionalContext: function() {

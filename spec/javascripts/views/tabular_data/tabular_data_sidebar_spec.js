@@ -2,7 +2,6 @@ describe("chorus.views.TabularDataSidebar", function() {
     beforeEach(function() {
         this.modalSpy = stubModals();
         this.view = new chorus.views.TabularDataSidebar();
-        spyOn(this.view, "postRender").andCallThrough();
     });
 
     describe("#render", function() {
@@ -41,89 +40,6 @@ describe("chorus.views.TabularDataSidebar", function() {
 
             it("displays the selected dataset type", function() {
                 expect(this.view.$(".type").text().trim()).toBe(Handlebars.helpers.humanizedTabularDataType(this.dataset.attributes));
-            });
-
-            describe("statistics", function() {
-
-                it("fetches the statistics for the dataset", function() {
-                    expect(this.dataset.statistics()).toHaveBeenFetched();
-                });
-
-                context("when the statistics arrive", function() {
-                    beforeEach(function() {
-                        this.stats = this.dataset.statistics();
-                        this.stats.set({
-                            rows: 0,
-                            columns: 0,
-                            lastAnalyzedTime: "2011-12-12 12:34:56",
-                            onDiskSize: "1 GB",
-                            desc: "foo",
-                            partitions: 2
-                        });
-                        this.server.completeFetchFor(this.stats);
-                    });
-
-                    it("displays rows when the value is 0", function() {
-                        expect(this.view.$(".statistics .rows .value").text().trim()).toBe("0");
-                    });
-
-                    it("displays columns when the value is 0", function() {
-                        expect(this.view.$(".statistics .columns .value").text().trim()).toBe("0");
-                    });
-
-                    it("displays the on disk size", function() {
-                        expect(this.view.$(".size .value").text().trim()).toBe("1 GB");
-                    });
-
-                    it("displays the description", function() {
-                        expect(this.view.$(".description p").text().trim()).toBe("foo");
-                    });
-
-                    it("displays the last analyzed time", function() {
-                        expect(this.view.$(".last_analyzed_time .value").text()).toBe(chorus.helpers.relativeTimestamp(this.stats.get("lastAnalyzedTime")));
-                    });
-
-                    it("displays the partitions", function() {
-                        expect(this.view.$(".partitions .value").text()).toBe("2")
-                    })
-
-                    it("displays the statistics in the correct order", function() {
-                        expect(this.view.$(".statistics .pair").eq(0).find(".key").text().trim()).toMatchTranslation("dataset.statistics.type");
-                        expect(this.view.$(".statistics .pair").eq(1).find(".key").text().trim()).toMatchTranslation("dataset.statistics.partitions");
-                        expect(this.view.$(".statistics .pair").eq(2).find(".key").text().trim()).toMatchTranslation("dataset.statistics.columns");
-                        expect(this.view.$(".statistics .pair").eq(3).find(".key").text().trim()).toMatchTranslation("dataset.statistics.last_analyzed_time");
-                        expect(this.view.$(".statistics .pair").eq(4).find(".key").text().trim()).toMatchTranslation("dataset.statistics.rows");
-                        expect(this.view.$(".statistics .pair").eq(5).find(".key").text().trim()).toMatchTranslation("dataset.statistics.size");
-                    });
-
-                    describe("when the partitions are 0", function() {
-                        beforeEach(function() {
-                            this.view = new chorus.views.TabularDataSidebar();
-                            this.view.setTabularData(this.dataset);
-                            this.stats.set({ partitions: 0 });
-                            this.view.render();
-                        });
-
-                        it("should not show the partitions pair", function() {
-                            expect(this.view.$(".partitions")).not.toExist();
-                        });
-                    });
-
-                    describe("when the lastAnalyzedTime is null", function() {
-                        beforeEach(function() {
-                            this.view = new chorus.views.TabularDataSidebar();
-                            this.view.setTabularData(this.dataset);
-                            this.stats.set({ lastAnalyzedTime: null, rows: 5837 });
-                            this.view.render();
-                        });
-
-                        it("should not display the lastAnalyzedTime or row count", function() {
-                            expect(this.view.$(".rows")).not.toExist();
-                            expect(this.view.$(".last_analyzed_time")).not.toExist();
-                        });
-                    });
-                });
-
             });
 
             describe("activities", function() {
@@ -181,24 +97,10 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
 
                 context("when the analyze:running event is broadcast", function() {
-                    beforeEach(function() {
-                        this.view.postRender.reset();
+                    it("re-fetches the dataset statistics", function() {
                         this.server.reset();
                         chorus.PageEvents.broadcast("analyze:running");
-                    });
-
-                    it("re-fetches the dataset statistics", function() {
                         expect(this.server.lastFetchFor(this.view.resource.statistics())).toBeDefined();
-                    });
-
-                    context("when the fetch completes", function() {
-                        beforeEach(function() {
-                            this.server.completeFetchFor(this.view.resource.statistics());
-                        });
-
-                        it("re-renders the information tab", function() {
-                            expect(this.view.postRender).toHaveBeenCalled();
-                        });
                     });
                 });
             });
@@ -901,7 +803,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
 
                 chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
-                this.view.statistics.set({lastAnalyzedTime: "2012-01-24 12:25:11.077"});
+                this.view.resource.statistics().set({lastAnalyzedTime: "2012-01-24 12:25:11.077"});
                 chorus.PageEvents.broadcast("column:selected", this.column);
                 this.view.render();
             });
@@ -930,7 +832,7 @@ describe("chorus.views.TabularDataSidebar", function() {
             describe("statistics values", function() {
                 context("when the dataset has never been analyzed", function() {
                     beforeEach(function() {
-                        this.view.statistics.set({
+                        this.view.resource.statistics().set({
                             lastAnalyzedTime: null
                         });
                         this.column.set({

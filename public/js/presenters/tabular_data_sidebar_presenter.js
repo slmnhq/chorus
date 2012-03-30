@@ -1,5 +1,5 @@
 chorus.presenters.TabularDataSidebar = function(sidebar) {
-    var keys = ["resource", "statistics", "options", "selectedColumn", "importConfiguration"];
+    var keys = ["resource", "options", "importConfiguration"];
     _.each(keys, function(key) {
         this[key] = sidebar[key];
     }, this);
@@ -9,7 +9,7 @@ chorus.presenters.TabularDataSidebar = function(sidebar) {
 
 _.extend(chorus.presenters.TabularDataSidebar.prototype, {
     makeContext: function() {
-        var additionalContexts = ['resource', 'import', 'nextImport', 'lastImport', 'statistics', 'column', 'workspace']
+        var additionalContexts = ['resource', 'import', 'nextImport', 'lastImport', 'workspace']
 
         return _.reduce(additionalContexts,
             function(result, context) { return _.extend(result, this[context + "Context"]()) },
@@ -21,29 +21,6 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
         return _.extend({
             typeString: Handlebars.helpers.humanizedTabularDataType(this.resource && this.resource.attributes)
         }, this.options);
-    },
-
-    statisticsContext: function() {
-        var ctx = {};
-
-        if (!this.statistics) { return ctx; }
-
-        ctx.statistics = this.statistics.attributes;
-        if (ctx.statistics.rows === 0) {
-            ctx.statistics.rows = "0"
-        }
-
-        if (ctx.statistics.columns === 0) {
-            ctx.statistics.columns = "0"
-        }
-
-        return ctx;
-    },
-
-    columnContext: function() {
-        return {
-            column: this.selectedColumn && this.selectedColumn.attributes
-        }
     },
 
     workspaceContext: function() {
