@@ -376,8 +376,11 @@
         target.session.set({id: target.session._user.get('id')});
     };
 
-    window.stubView = function(html) {
+    window.stubView = function(html, options) {
+        options || (options = {});
         var stubClass = Backbone.View.extend({
+            className: options.className,
+
             initialize: function() {
                 _.bindAll(this, "render")
             },
