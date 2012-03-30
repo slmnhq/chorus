@@ -47,7 +47,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
             },
             qtipArgs: {
                 events: {
-                    show: _.bind(function() {
+                    show: _.bind(function(event, api) {
                         this.schemas.fetchIfNotLoaded();
                         this.schemas.bind("loaded", function() {
                             _.each(this.schemas.models, function(schema) {
@@ -63,6 +63,11 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
                                 }
                                 $a.append(schema.get("name"));
 
+                                $a.click(function(e) {
+                                    e && e.preventDefault();
+                                    api.hide();
+                                });
+
                                 $li.append($a);
 
                                 $menuContent.append($li);
@@ -70,9 +75,6 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
                         }, this);
                     }, this)
                 }
-            },
-            contentEvents: {
-                // 'a.name': _.bind(self.destinationColumnSelected, self)
             }
         });
     },

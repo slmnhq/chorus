@@ -117,12 +117,31 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 });
 
                 it("clicking the link shows the schema-picker", function() {
+                    expect(this.qtip).toHaveVisibleQtip();
                     expect(this.qtip.find("ul li").length).toBe(3);
                 });
 
                 it("schema-picker has a check-mark beside the currently selected schema", function() {
                      expect(this.qtip.$("li:contains('" + this.schema.get("name") + "')")).toContain('.check');
-                     expect(this.qtip.$("li:contains('Bob')")).not.toContain('.check');
+                     expect(this.qtip.$("li:contains(Bob)")).not.toContain('.check');
+                });
+
+                context("when selecting a schema", function() {
+                    beforeEach(function() {
+                        this.qtip.$("li:contains(Bob) a").click();
+                    });
+
+                    it("hides the menu", function() {
+                        expect(this.qtip).not.toHaveVisibleQtip();
+                    });
+
+                    it("loads the schema's datasets", function() {
+
+                    });
+
+                    it("shows the loading spinner until the datasets have loaded", function() {
+                    });
+
                 });
             });
         });
