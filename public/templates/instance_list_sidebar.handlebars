@@ -61,28 +61,6 @@
 <div class="tab_control"></div>
 <div class="tabbed_area">
     <div class="activity_list"></div>
-    <div class="configuration_detail">
-        <dl>
-            {{#if host}}
-                <dt>{{t "instances.sidebar.host"}}</dt>
-                <dd title="{{host}}">{{host}}</dd>
-                <br />
-            {{/if}}
-            {{#if port}}
-                <dt>{{t "instances.sidebar.port"}}</dt>
-                <dd title="{{port}}">{{port}}</dd>
-                <br />
-            {{/if}}
-            {{#if size}}
-                <dt>{{t "instances.sidebar.size"}}</dt>
-                <dd title="{{size}}">{{size}}GB</dd>
-                <br />
-            {{/if}}
-            {{#if dbUserName}}
-                <dt>{{t "instances.shared_account"}}</dt>
-                <dd title="{{dbUserName}}">{{dbUserName}}</dd>
-            {{/if}}
-        </dl>
-    </div>
+    {{renderTemplate "instance_configuration_detail" this}}
 </div>
 {{/if}}
