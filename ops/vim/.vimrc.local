@@ -1,7 +1,4 @@
-set softtabstop=4
-set tabstop=4
-set smarttab
-set shiftwidth=4
+
 
 " don't blink cursor
 set gcr=n:blinkon0
@@ -9,6 +6,8 @@ set gcr=n:blinkon0
 map <D-S-F8> :!/Users/pivotal/workspace/chorus/launch_jasmine.sh %<CR>
 map <D-S-F9> :!/Users/pivotal/workspace/chorus/launch_phantom_jasmine.sh %<CR>
 map <D-k> :Gstatus<CR>
+
+map <C-Q> :vsp<CR><C-W>l<D-T>
 
 set nocursorline
 
