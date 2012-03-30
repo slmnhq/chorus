@@ -450,6 +450,7 @@
             });
         }
 
+        qtipElements[selector].$ = qtipElements[selector].find;
         return qtipElements[selector];
     }
 

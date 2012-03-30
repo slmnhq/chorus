@@ -113,11 +113,16 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             describe("opening the schema-picker", function() {
                 beforeEach(function() {
                     this.dialog.$(".canonical_name a.schema_qtip").click();
-                    this.server.completeFetchFor(this.dialog.schemas, [fixtures.schema(), fixtures.schema()]);
+                    this.server.completeFetchFor(this.dialog.schemas, [fixtures.schema({name: "Bob"}), this.schema, fixtures.schema({name: "Ted"})]);
                 });
 
                 it("clicking the link shows the schema-picker", function() {
-                    expect(this.qtip.find("ul li").length).toBe(2);
+                    expect(this.qtip.find("ul li").length).toBe(3);
+                });
+
+                it("schema-picker has a check-mark beside the currently selected schema", function() {
+                     expect(this.qtip.$("li:contains('" + this.schema.get("name") + "')")).toContain('.check');
+                     expect(this.qtip.$("li:contains('Bob')")).not.toContain('.check');
                 });
             });
         });

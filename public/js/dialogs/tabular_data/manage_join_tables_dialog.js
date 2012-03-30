@@ -51,8 +51,22 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
                         this.schemas.fetchIfNotLoaded();
                         this.schemas.bind("loaded", function() {
                             _.each(this.schemas.models, function(schema) {
-                                $menuContent.append($("<li class='menu_item' data-schema='" + schema.get("name") + "'>" + schema.get("name") + "</li>"))
-                            });
+                                $li = $("<li></li>");
+                                $li.addClass("menu_item");
+                                $li.data("schema", schema);
+
+                                $a = $("<a href='#'></a>")
+                                $a.addClass("schema");
+
+                                if (schema.get("name") == this.schema.get("name")) {
+                                    $a.append($("<div class='check'></div>"))
+                                }
+                                $a.append(schema.get("name"));
+
+                                $li.append($a);
+
+                                $menuContent.append($li);
+                            }, this);
                         }, this);
                     }, this)
                 }

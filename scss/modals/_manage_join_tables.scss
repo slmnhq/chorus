@@ -67,6 +67,14 @@
             }
         }
     }
+
+    .canonical_name {
+        a {
+            font-size: inherit;
+            border-bottom: dotted 1px;
+            @include menu-triangle;
+        }
+    }
 }
 
 .join_configuration {
