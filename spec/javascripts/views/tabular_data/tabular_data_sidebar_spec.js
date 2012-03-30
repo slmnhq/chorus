@@ -48,7 +48,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
 
                 it("prefers only the without_workspace type for the activity list", function() {
-                    expect(this.view.activityList.options.displayStyle).toEqual(['without_workspace']);
+                    expect(this.view.tabs.activity.options.displayStyle).toEqual(['without_workspace']);
                 });
 
                 context("when the activity fetch completes", function() {
@@ -57,8 +57,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
 
                     it("renders an activity list inside the tabbed area", function() {
-                        expect(this.view.activityList).toBeA(chorus.views.ActivityList);
-                        expect(this.view.activityList.el).toBe(this.view.$(".tabbed_area .activity_list")[0]);
+                        expect(this.view.tabs.activity).toBeA(chorus.views.ActivityList);
+                        expect(this.view.tabs.activity.el).toBe(this.view.$(".tabbed_area .activity_list")[0]);
                     });
                 });
             });
@@ -982,7 +982,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 it("does not have any missing translations for" + type, function() {
                     this.dataset = fixtures.datasetSourceTable({objectType: type});
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
-                    expect(this.view.activityList.options.type).not.toContain("missing");
+                    expect(this.view.tabs.activity.options.type).not.toContain("missing");
                 })
             }, this)
         })

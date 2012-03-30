@@ -76,8 +76,8 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
     describe("when the activity list collection is changed", function() {
         beforeEach(function() {
             spyOn(this.view, "postRender"); // check for #postRender because #render is bound
-            this.view.activityList.collection.trigger("changed")
-        })
+            this.view.tabs.activity.collection.trigger("changed")
+        });
 
         it("re-renders", function() {
             expect(this.view.postRender).toHaveBeenCalled();

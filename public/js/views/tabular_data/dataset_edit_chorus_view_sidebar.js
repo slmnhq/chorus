@@ -3,58 +3,29 @@ chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
     useLoadingSection: true,
 
     subviews: {
-        '.activity_list': 'activityList',
-        '.tab_control': 'tabControl'
+        '.tab_control': 'tabs'
     },
-
 
     setup: function(options) {
         this.collection = this.model.activities();
         this.collection.fetch();
-        this.activityList = new chorus.views.ActivityList({
-            collection: this.collection,
-            additionalClass: "sidebar",
-            displayStyle: ['without_object', 'without_workspace']
-        });
 
         this.bindings.add(this.collection, "changed", this.render);
         this.requiredResources.push(this.model);
     },
 
     resourcesLoaded: function() {
-        var tabs = [
-            {name: 'activity_list'},
-            {name: 'database_function_list'},
-            {name: "datasets_and_columns"}
-        ];
+        this.tabs = new chorus.views.TabControl(["activity", "database_function_list", "datasets_and_columns"]);
+        this.schema = this.model.schema();
 
-        this.schema = new chorus.models.Schema({
-            instanceId: this.model.get('instance').id,
-            databaseName: this.model.get('databaseName'),
-            name: this.model.get('schemaName')
-        })
+        this.tabs.database_function_list = new chorus.views.DatabaseFunctionSidebarList({schema: this.schema});
+        this.tabs.datasets_and_columns = new chorus.views.DatasetAndColumnList({model: this.schema})
+        this.tabs.activity = new chorus.views.ActivityList({
+            collection: this.collection,
+            additionalClass: "sidebar",
+            displayStyle: ['without_object', 'without_workspace']
+        });
 
-        this.functionList = new chorus.views.DatabaseFunctionSidebarList({schema: this.schema});
-        this.datasetList = new chorus.views.DatabaseDatasetSidebarList({ schema: this.schema });
-        this.columnList = new chorus.views.DatabaseColumnSidebarList({ schema: this.schema });
-
-        this.datasetList.bind("datasetSelected", function(tableOrView) {
-            this.columnList.trigger("datasetSelected", tableOrView);
-            this.$(".database_column_list").removeClass("hidden");
-            this.$(".database_dataset_list").addClass("hidden");
-        }, this);
-
-        this.columnList.bind("back", function() {
-            this.$("input.search").val("");
-            this.$(".database_dataset_list").removeClass("hidden");
-            this.$(".database_column_list").addClass("hidden");
-        }, this);
-
-        this.subviews[".tabbed_area .database_function_list"] = "functionList";
-        this.subviews[".tabbed_area .database_dataset_list"] = "datasetList";
-        this.subviews[".tabbed_area .database_column_list"] = "columnList";
-        this.tabControl = new chorus.views.TabControl(tabs);
-        this.tabControl.bind("selected", _.bind(this.recalculateScrolling, this))
+        this.tabs.bind("selected", _.bind(this.recalculateScrolling, this))
     }
-})
-;
+});

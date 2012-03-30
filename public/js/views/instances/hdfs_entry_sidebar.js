@@ -3,8 +3,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     className: "hdfs_entry_sidebar",
 
     subviews: {
-        '.activity_list': 'activityList',
-        '.tab_control': 'tabControl'
+        '.tab_control': 'tabs'
     },
 
     events : {
@@ -14,11 +13,11 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     setup: function() {
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.setEntry, this);
         chorus.PageEvents.subscribe("csv_import:started", this.refreshActivities, this);
-        this.tabControl = new chorus.views.TabControl([ {name: 'activity', selector: ".activity_list"} ]);
+        this.tabs = new chorus.views.TabControl(["activity"]);
     },
 
     refreshActivities: function() {
-        this.activityList && this.activityList.collection.fetch();
+        this.tabs.activity && this.tabs.activity.collection.fetch();
     },
 
     postRender: function() {
@@ -37,8 +36,8 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         if (entry) {
             entry.entityId = this.makeEncodedEntityId();
 
-            if (this.activityList) {
-                delete this.activityList;
+            if (this.tabs.activity ) {
+                delete this.tabs.activity ;
             }
 
             if (!entry.get("isDir")) {
@@ -48,16 +47,16 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
                 this.bindings.add(activities, "changed", this.render);
                 this.bindings.add(activities, "reset", this.render);
 
-                this.activityList = new chorus.views.ActivityList({
+                this.tabs.activity = new chorus.views.ActivityList({
                     collection: activities,
                     additionalClass: "sidebar",
                     type: t("hdfs." + (entry.get("isDir") ? "directory" : "file"))
                 });
 
-                this.activityList.bind("content:changed", this.recalculateScrolling, this)
+                this.tabs.activity.bind("content:changed", this.recalculateScrolling, this)
             }
         } else {
-            delete this.activityList;
+            delete this.tabs.activity;
         }
 
         this.render();

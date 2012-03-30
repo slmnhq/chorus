@@ -1,38 +1,30 @@
 chorus.views.TabControl = chorus.views.Base.extend({
     constructorName: "TabControlView",
     className:'tab_control',
-    tagName:'ul',
 
-    events:{"click li":'clickTab'},
+    events: { "click .tabs li": 'clickTab' },
 
-    setup:function (tabs) {
-        this.tabs = tabs;
-        _.each(this.tabs, function (tab) {
-            tab.selector = tab.selector || "." + tab.name;
-        });
+    setup: function(tabNames) {
+        this.tabNames = tabNames;
     },
 
     additionalContext:function () {
         return {
-            tabKeys:_.map(this.tabs, function (tabOptions) {
-                return {cssClass:tabOptions.name, text:t('tabs.' + tabOptions.name)}
+            tabKeys: _.map(this.tabNames, function(tabName) {
+                return { name: tabName, text: t('tabs.' + tabName) };
             })
         };
     },
 
-    removeTab:function (name) {
-        this.$("li." + name).remove();
-    },
-
-    clickTab:function (evt) {
+    clickTab: function(evt) {
         this.setSelectedTab($(evt.target));
-        if(chorus.page) {
+        if (chorus.page) {
             chorus.page.trigger('resized');
         }
     },
 
-    setSelectedTab:function (tab) {
-        tab.siblings().removeClass("selected")
+    setSelectedTab: function(tab) {
+        this.$(".tabs li").removeClass("selected")
         tab.addClass("selected")
 
         this.selectedTabName = tab.data('name');
@@ -41,20 +33,27 @@ chorus.views.TabControl = chorus.views.Base.extend({
         this.trigger("selected");
     },
 
-    selectedTab:function () {
-        return _.find(this.tabs, _.bind(function (tab) {
-            return tab.name == this.selectedTabName;
-        }, this))
-    },
+    postRender: function() {
+        _.each(this.tabNames, function(tabName) {
+            var view = this[tabName];
+            if (view) {
+                this.$(".tabbed_area").append(view.render().el);
+            }
+        }, this);
 
-    postRender:function () {
-        var tab = this.selectedTabName ? this.$("li." + this.selectedTabName) : this.$('li:first');
+        var tab = this.selectedTabName ? this.$("li[data-name=" + this.selectedTabName + "]") : this.$('li:first');
         this.setSelectedTab(tab);
     },
 
-    toggleTabbedArea:function () {
-        var element = $('.tabbed_area').find(this.selectedTab().selector);
-        element.siblings().addClass("hidden");
-        element.removeClass("hidden");
+    toggleTabbedArea: function () {
+        _.each(this.tabNames, function(tabName) {
+            var view = this[tabName];
+            if (view) $(view.el).addClass("hidden");
+        }, this);
+
+        if (this.selectedTabName) {
+            var view = this[this.selectedTabName];
+            if (view) $(view.el).removeClass("hidden");
+        }
     }
 });

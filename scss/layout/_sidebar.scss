@@ -134,7 +134,7 @@
                 margin: 4px 0px 17px 20px;
             }
 
-            .database_function_list, .database_dataset_list, .database_column_list {
+            .database_function_sidebar_list, .database_dataset_sidebar_list, .database_column_sidebar_list {
                 ul {
                     margin-top: 10px;
                 }
@@ -188,7 +188,7 @@
                 }
             }
 
-            .database_column_list {
+            .database_column_sidebar_list {
                 .context {
                     .table, .schema {
                         display: inline-block;
@@ -209,7 +209,7 @@
                 }
             }
 
-            .database_function_list, .database_dataset_list {
+            .database_function_sidebar_list, .database_dataset_sidebar_list {
                 .schema_menu {
                     display: none;
                 }

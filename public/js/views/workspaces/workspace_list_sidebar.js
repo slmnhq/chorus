@@ -3,14 +3,13 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
     className: "workspace_list_sidebar",
 
     subviews: {
-        '.activity_list': 'activityList',
-        '.tab_control': 'tabControl',
+        '.tab_control': 'tabs',
         ".workspace_member_list": "workspaceMemberList"
     },
 
     setup: function() {
         chorus.PageEvents.subscribe("workspace:selected", this.setWorkspace, this)
-        this.tabControl = new chorus.views.TabControl([ {name: 'activity', selector: ".activity_list"} ])
+        this.tabs = new chorus.views.TabControl(["activity"]);
         this.workspaceMemberList = new chorus.views.WorkspaceMemberList()
     },
 
@@ -32,14 +31,14 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
             this.bindings.add(activities, "changed", this.render);
             this.bindings.add(activities, "reset", this.render);
 
-            this.activityList = new chorus.views.ActivityList({
+            this.tabs.activity = new chorus.views.ActivityList({
                 collection: activities,
                 additionalClass: "sidebar"
             });
 
-            this.activityList.bind("content:changed", this.recalculateScrolling, this)
+            this.tabs.activity.bind("content:changed", this.recalculateScrolling, this)
         } else {
-            delete this.activityList;
+            delete this.tabs.activity;
         }
 
         this.render();

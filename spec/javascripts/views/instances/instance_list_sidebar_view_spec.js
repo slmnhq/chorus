@@ -18,7 +18,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             spyOn(this.instance.accounts(), 'fetch').andCallThrough();
             spyOn(this.instance.usage(), 'fetch').andCallThrough();
             spyOn(this.instance.activities(), 'fetch').andCallThrough();
-            this.activityViewStub = stubView("OMG I'm the activity list")
+            this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
 
             spyOn(chorus.views.Base.prototype, "render").andCallThrough();
@@ -67,7 +67,6 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             it("renders ActivityList subview", function() {
                 expect(this.view.$(".activity_list")).toBeVisible();
-                expect(this.view.$(".activity_list").text()).toBe("OMG I'm the activity list")
             });
 
             it("populates the ActivityList with the activities", function() {
@@ -174,7 +173,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             context("when configuration is clicked", function() {
                 beforeEach(function() {
                     expect(this.view.$(".instance_configuration_details")).not.toBeVisible();
-                    this.view.$(".tab_control li.configuration").click();
+                    this.view.$(".tab_control .tabs li[data-name=configuration]").click();
                 })
 
                 it("shows configuration", function() {

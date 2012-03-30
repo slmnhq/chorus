@@ -99,17 +99,17 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             });
 
             it("fetches the activity list", function() {
-                expect(this.view.activityList.collection).toHaveBeenFetched();
+                expect(this.view.tabs.activity.collection).toHaveBeenFetched();
             });
 
             it("re-fetches when csv_import:started is broadcast", function() {
                 this.server.reset();
                 chorus.PageEvents.broadcast("csv_import:started");
-                expect(this.view.activityList.collection).toHaveBeenFetched();
+                expect(this.view.tabs.activity.collection).toHaveBeenFetched();
             })
         } else {
             it("does not fetch the activity list", function() {
-                expect(this.view.activityList).toBeUndefined();
+                expect(this.view.tabs.activity).toBeUndefined();
             });
 
             it("hides the activity stream", function() {

@@ -2,29 +2,58 @@ describe("chorus.views.TabControl", function() {
     beforeEach(function() {
         this.tab1Spy = jasmine.createSpy('tab1Spy');
         this.tab2Spy = jasmine.createSpy('tab2Spy');
+        this.tab3Spy = jasmine.createSpy('tab3Spy');
         this.selectedSpy = jasmine.createSpy('selectedSpy');
-        this.view = new chorus.views.TabControl([{name: 'tab1'}, {name: 'tab2', selector: '.other_tab'}]);
-        this.view.bind('selected:tab1', this.tab1Spy);
-        this.view.bind('selected:tab2', this.tab2Spy);
+
+        this.tab1View = chorus.views.StaticTemplate("plain_text", { text: "tabText1" });
+        this.tab2View = chorus.views.StaticTemplate("plain_text", { text: "tabText2" });
+        this.tab3View = chorus.views.StaticTemplate("plain_text", { text: "tabText3" });
+
+        this.view = new chorus.views.TabControl(["activity", "statistics", "configuration"]);
+
+        this.view.activity = this.tab1View;
+        this.view.statistics = this.tab2View;
+        this.view.configuration = this.tab3View;
+
+        this.view.bind('selected:activity', this.tab1Spy);
+        this.view.bind('selected:statistics', this.tab2Spy);
+        this.view.bind('selected:configuration', this.tab3Spy);
         this.view.bind('selected', this.selectedSpy);
+
         $('#jasmine_content').append(this.view.el);
-        $('#jasmine_content').append('<div class="tabbed_area"><div class="tab1"></div><div class="other_tab"></div></div>')
 
         this.view.render();
     });
 
+    it("renders a tab for each of the given tab names", function() {
+        expect(this.view.$("ul.tabs li").length).toBe(3);
+
+        expect(this.view.$("ul.tabs li").eq(0)).toHaveData("name", "activity");
+        expect(this.view.$("ul.tabs li").eq(1)).toHaveData("name", "statistics");
+        expect(this.view.$("ul.tabs li").eq(2)).toHaveData("name", "configuration");
+
+        expect(this.view.$("ul.tabs li").eq(0).text()).toMatchTranslation("tabs.activity");
+        expect(this.view.$("ul.tabs li").eq(1).text()).toMatchTranslation("tabs.statistics");
+        expect(this.view.$("ul.tabs li").eq(2).text()).toMatchTranslation("tabs.configuration");
+    });
+
+    it("renders each view inside of its 'tabbed area'", function() {
+        expect(this.view.$(".tabbed_area div").length).toBe(3);
+        expect(this.view.$(".tabbed_area div").eq(0)).toHaveText("tabText1");
+        expect(this.view.$(".tabbed_area div").eq(1)).toHaveText("tabText2");
+        expect(this.view.$(".tabbed_area div").eq(2)).toHaveText("tabText3");
+    });
+
     it("renders has the first tab as selected", function() {
-        expect(this.view.$('li.tab1.selected').length).toBe(1);
-        expect(this.view.$('li.tab2.selected').length).toBe(0);
+        expect(this.view.$("ul.tabs li.selected").length).toBe(1);
+        expect(this.view.$("ul.tabs li").eq(0)).toHaveClass("selected");
         expect(this.tab1Spy).toHaveBeenCalled();
     });
 
     it("makes the first tabbed area visible", function() {
-        expect($('.tabbed_area .tab1')).toBeVisible();
-    });
-
-    it("hides the other tabbed areas", function() {
-        expect($('.tabbed_area .other_tab')).not.toBeVisible();
+        expect(this.view.$(".tabbed_area div").length).toBe(3);
+        expect(this.view.$(".tabbed_area div:visible").length).toBe(1);
+        expect(this.view.$('.tabbed_area div').eq(0)).toBeVisible();
     });
 
     context("clicking on a tab", function() {
@@ -32,7 +61,7 @@ describe("chorus.views.TabControl", function() {
             chorus.page = new chorus.pages.Base();
             spyOnEvent(chorus.page, 'resized');
             this.tab1Spy.reset()
-            this.view.$('li.tab2').click();
+            this.view.$('li').eq(1).click();
         });
 
         it("triggers 'resized' on the page", function() {
@@ -43,16 +72,18 @@ describe("chorus.views.TabControl", function() {
             expect(this.tab2Spy).toHaveBeenCalled();
             expect(this.selectedSpy).toHaveBeenCalled();
             expect(this.tab1Spy).not.toHaveBeenCalled();
+            expect(this.tab3Spy).not.toHaveBeenCalled();
         });
 
         it("updates the selected class", function() {
-            expect(this.view.$('.tab1')).not.toHaveClass('selected');
-            expect(this.view.$('.tab2')).toHaveClass('selected');
+            expect(this.view.$('li[data-name=activity]')).not.toHaveClass('selected');
+            expect(this.view.$('li[data-name=statistics]')).toHaveClass('selected');
+            expect(this.view.$('li[data-name=configuration]')).not.toHaveClass('selected');
         });
 
         it("unhides the appropriate tabbed_area and hides the others", function() {
-            expect($('.tabbed_area .tab1')).not.toBeVisible();
-            expect($('.tabbed_area .other_tab')).toBeVisible();
+            expect(this.view.$(".tabbed_area div:visible").length).toBe(1);
+            expect(this.view.$('.tabbed_area div').eq(1)).toBeVisible();
         });
 
         context("calling render a second time", function() {
@@ -61,29 +92,23 @@ describe("chorus.views.TabControl", function() {
                 this.tab2Spy.reset();
                 this.selectedSpy.reset();
                 this.view.render();
-            })
+            });
 
             it("keeps the current tab selected", function() {
                 expect(this.tab1Spy).not.toHaveBeenCalled();
                 expect(this.tab2Spy).toHaveBeenCalled();
+                expect(this.tab3Spy).not.toHaveBeenCalled();
                 expect(this.selectedSpy).toHaveBeenCalled();
-                expect(this.view.$('.tab2')).toHaveClass('selected');
+
+                expect(this.view.$("ul.tabs li.selected").length).toBe(1);
+                expect(this.view.$('li[data-name=statistics]')).toHaveClass('selected');
             });
 
             it("keeps the correct tabbed_area visibilities", function() {
-                expect($('.tabbed_area .tab1')).not.toBeVisible();
-                expect($('.tabbed_area .other_tab')).toBeVisible();
+                expect(this.view.$(".tabbed_area div").length).toBe(3);
+                expect(this.view.$(".tabbed_area div:visible").length).toBe(1);
+                expect(this.view.$('.tabbed_area div').eq(1)).toBeVisible();
             });
         })
-    });
-
-    describe("#removeTab", function() {
-        beforeEach(function() {
-            this.view.removeTab("tab1");
-        });
-
-        it("removes the specified tab", function() {
-            expect(this.view.$("li.tab1")).not.toExist();
-        });
     });
 });

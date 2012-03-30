@@ -7,13 +7,12 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
     },
 
     subviews:{
-        '.activity_list': 'activityList',
-        '.tab_control': 'tabControl'
+        '.tab_control': 'tabs'
     },
 
     setup: function() {
-        this.tabControl = new chorus.views.TabControl([ {name: 'activity', selector: ".activity_list"} ])
-        this.activityList && this.activityList.collection.fetch();
+        this.tabs = new chorus.views.TabControl(["activity"])
+        this.tabs.activity && this.tabs.activity.collection.fetch();
 
         this.model.entityId = this.makeEncodedEntityId();
 
@@ -23,13 +22,13 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
         this.bindings.add(activities, "changed", this.render);
         this.bindings.add(activities, "reset", this.render);
 
-        this.activityList = new chorus.views.ActivityList({
+        this.tabs.activity = new chorus.views.ActivityList({
             collection: activities,
             additionalClass: "sidebar",
             type: t("hdfs.file")
         });
 
-        this.activityList.bind("content:changed", this.recalculateScrolling, this);
+        this.tabs.activity.bind("content:changed", this.recalculateScrolling, this);
         chorus.PageEvents.subscribe("csv_import:started", function() {activities.fetch()}, this)
     },
 

@@ -1,3 +1,7 @@
-{{#each tabKeys}}
-    <li class="{{cssClass}}" data-name="{{cssClass}}">{{text}}</li>
-{{/each}}
+<ul class='tabs'>
+    {{#each tabKeys}}
+        <li data-name="{{name}}">{{text}}</li>
+    {{/each}}
+</ul>
+
+<div class="tabbed_area"/>
