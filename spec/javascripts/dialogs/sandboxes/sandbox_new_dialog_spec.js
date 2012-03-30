@@ -143,6 +143,8 @@ describe("chorus.dialogs.SandboxNew", function() {
         beforeEach(function() {
             chorus.models.Instance.aurora().set({ installationStatus: "install_succeed"});
             chorus.models.Config.instance().set({provisionMaxSizeInGB: 2000});
+            chorus.models.Instance.aurora().loaded = true;
+            chorus.models.Config.instance().loaded = true;
             this.dialog.render();
         })
 
@@ -159,6 +161,19 @@ describe("chorus.dialogs.SandboxNew", function() {
             it("should show the 'as a standalone' form", function() {
                 expect(this.dialog.$(".instance_mode")).toHaveClass("hidden");
                 expect(this.dialog.$(".standalone_mode")).not.toHaveClass("hidden");
+            });
+
+            it("enables the save button", function() {
+                expect(this.dialog.$("button.submit")).toBeEnabled();
+            });
+
+            it("validates the model", function() {
+                this.dialog.$("button.submit").click();
+                var $el = this.dialog.$(".standalone_mode");
+                expect($el.find("input[name=instanceName]")).toHaveClass("has_error");
+                expect($el.find("input[name=schemaName]")).not.toHaveClass("has_error");
+                expect($el.find("input[name=databaseName]")).toHaveClass("has_error");
+                expect($el.find("input[name=size]")).toHaveClass("has_error");
             });
         });
 

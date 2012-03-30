@@ -6,7 +6,10 @@ chorus.views.SandboxNewStandaloneMode = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
-        return { provisionMaxSizeInGB: chorus.models.Config.instance().get("provisionMaxSizeInGB") };
+        return {
+            addingSandbox: this.options.addingSandbox,
+            provisionMaxSizeInGB: chorus.models.Config.instance().get("provisionMaxSizeInGB")
+        };
     },
 
     fieldValues:function () {

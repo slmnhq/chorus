@@ -8,14 +8,43 @@ describe("chorus.dialogs.SandboxNewStandaloneMode", function() {
         expect(this.view.requiredResources.models).toContain(chorus.models.Config.instance());
     });
 
-    describe("#render", function() {
+    describe("#render (normal)", function() {
         beforeEach(function() {
             this.view.render();
         });
 
-        it("the default value of schema name to be public",function(){
+        it("sets the default value of schema name to be public",function(){
             expect(this.view.$("input[name='schemaName']").val()).toBe("public");
         })
+
+        it("renders the description field", function() {
+            expect(this.view.$("textarea")).toExist();
+        });
+
+        it("calls the name 'name'", function() {
+            expect(this.view.$("input[name='name']")).toExist();
+            expect(this.view.$("input[name='instanceName']")).not.toExist();
+        });
+    });
+
+    describe("#render (adding_sandbox mode)", function() {
+        beforeEach(function() {
+            this.view.options.addingSandbox = true;
+            this.view.render();
+        });
+
+        it("sets the default value of schema name to be public",function(){
+            expect(this.view.$("input[name='schemaName']").val()).toBe("public");
+        })
+
+        it("does not render the description field", function() {
+            expect(this.view.$("textarea")).not.toExist();
+        });
+
+        it("calls the name 'instanceName'", function() {
+            expect(this.view.$("input[name='name']")).not.toExist();
+            expect(this.view.$("input[name='instanceName']")).toExist();
+        });
     });
 
     describe("#fieldValues", function() {

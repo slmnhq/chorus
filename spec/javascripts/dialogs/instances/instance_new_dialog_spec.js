@@ -198,6 +198,19 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(attrs.maintenanceDb).toBe("foo");
                     });
 
+                    context("when the form is not valid", function() {
+                        beforeEach(function() {
+                            this.dialog.$(".register_existing_greenplum input[name=name]").val("");
+                            this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
+                            spyOn(Backbone.Model.prototype, 'save');
+                            this.dialog.$("button.submit").click();
+                        });
+
+                        it("doesn't save or toast", function() {
+                            expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
+                        });
+                    });
+
                     testUpload();
                 });
             });
@@ -261,10 +274,11 @@ describe("chorus.dialogs.InstanceNew", function() {
                         beforeEach(function() {
                             this.dialog.$("button.submit").click();
 
-                            this.dialog.$(".register_existing_greenplum input[name=name]").val("existing");
-                            this.dialog.$(".register_existing_greenplum textarea[name=description]").val("existing description");
-                            this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
+                            this.dialog.$(".create_new_greenplum input[name=name]").val("existing");
+                            this.dialog.$(".create_new_greenplum textarea[name=description]").val("existing description");
+                            this.dialog.$(".create_new_greenplum input[name=host]").val("foo.bar");
                         });
+
                         it("sets only the fields for create new greenplum instance and calls save", function() {
                             expect(this.dialog.model.save).toHaveBeenCalled();
 
@@ -277,21 +291,24 @@ describe("chorus.dialogs.InstanceNew", function() {
                             expect(attrs.host).toBeUndefined();
                         });
                     });
+
+                    context("when the form is not valid", function() {
+                        beforeEach(function() {
+                            this.dialog.$(".create_new_greenplum input[name=name]").val("");
+                            this.dialog.$(".create_new_greenplum input[type=radio]").attr('checked', true).change();
+                            chorus.toast.reset();
+                            spyOn(Backbone.Model.prototype, 'save');
+                            this.dialog.$("button.submit").click();
+                        });
+
+                        it("doesn't complete a save", function() {
+                            expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
+                            expect(chorus.toast).not.toHaveBeenCalled();
+                        });
+                    });
                 });
 
                 testUpload();
-            });
-
-            context("when the form is not valid", function() {
-                beforeEach(function() {
-                    this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
-                    spyOn(Backbone.Model.prototype, 'save');
-                    this.dialog.$("button.submit").click();
-                });
-
-                it("doesn't complete a save", function() {
-                    expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
-                });
             });
 
             function testUpload() {

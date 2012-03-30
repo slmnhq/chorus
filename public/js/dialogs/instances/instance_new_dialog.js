@@ -40,9 +40,8 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         e && e.preventDefault();
         this.$("button.submit").startLoading("instances.new_dialog.saving");
         var values = this.fieldValues();
-        this.model.save(values);
 
-        if (values.provisionType == "create") {
+        if (this.model.save(values) !== false && values.provisionType == "create") {
             this.provisioning = true;
             chorus.toast("instances.new_dialog.provisioning")
         }

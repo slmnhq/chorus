@@ -21,7 +21,8 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.instanceMode, "error", this.showErrors);
         this.bindings.add(this.instanceMode, "clearErrors", this.clearErrors);
 
-        this.standaloneMode = new chorus.views.SandboxNewStandaloneMode();
+        this.standaloneMode = new chorus.views.SandboxNewStandaloneMode({addingSandbox: true});
+        this.activeForm = this.instanceMode;
     },
 
     makeModel: function() {
@@ -39,7 +40,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     save: function(e) {
         this.$("button.submit").startLoading("sandbox.adding_sandbox");
-        this.model.save(this.instanceMode.fieldValues());
+        this.model.save(this.activeForm.fieldValues());
     },
 
     saved: function() {
@@ -58,10 +59,16 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     showInstanceMode: function() {
         this.$(".instance_mode").removeClass("hidden");
         this.$(".standalone_mode").addClass("hidden");
+
+        this.activeForm = this.instanceMode;
+        this.enableOrDisableSaveButton(this.instanceMode.ready())
     },
 
     showStandaloneMode: function() {
         this.$(".instance_mode").addClass("hidden");
         this.$(".standalone_mode").removeClass("hidden");
+
+        this.activeForm = this.standaloneMode;
+        this.enableOrDisableSaveButton(true);
     }
 });
