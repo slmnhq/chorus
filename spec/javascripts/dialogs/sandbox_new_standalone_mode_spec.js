@@ -4,6 +4,10 @@ describe("chorus.dialogs.SandboxNewStandaloneMode", function() {
         this.view = new chorus.views.SandboxNewStandaloneMode();
     });
 
+    it("requires the Config object", function() {
+        expect(this.view.requiredResources.models).toContain(chorus.models.Config.instance());
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             this.view.render();

@@ -1,9 +1,11 @@
 <input type="hidden" name="provisionType" value="create" />
-<label class="required">{{t "instances.dialog.instance_name"}}</label>
+<label class="required" name="name">{{t "instances.dialog.instance_name"}}</label>
 <input type="text" name="name" maxlength="44"/>
 
-<label>{{t "instances.dialog.description"}}</label>
-<textarea rows="3" name="description"/>
+<div class="description">
+    <label>{{t "instances.dialog.description"}}</label>
+    <textarea rows="3" name="description"/>
+</div>
 
 <label class="required" name="size">{{t "instances.dialog.size"}} </label>
 <input type="text" name="size" maxlength="2000"/>

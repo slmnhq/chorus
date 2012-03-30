@@ -1,24 +1,14 @@
-@import "common.scss";
-
-.dialog.instance_new {
-    $dialog-width : 515px;
-
+.dialog.sandbox_new {
+    $dialog-width: 425px;
     width: $dialog-width;
+
+    .description {
+        display: none;
+    }
 
     legend div {
         display: inline-block;
         margin: 0 8px;
-    }
-
-    fieldset.collapsed {
-        >div {
-            display: none;
-        }
-
-        border: none;
-        padding: 0 $dialog-padding;
-        margin-left: 1px;
-        margin-bottom: 0;
     }
 
     fieldset {
@@ -29,6 +19,11 @@
         $size_width : 75px;
 
         margin-bottom: $dialog-padding;
+
+        label[name=name], input[name=name] {
+            width: $fieldset-width;
+            display: inline-block;
+        }
 
         label[name=host], input[name=host],
         label[name=maintenanceDb], input[name=maintenanceDb] {
@@ -65,9 +60,9 @@
         }
 
         img.help {
-                display: inline-block;
-                margin-top: -3px;
-                vertical-align: middle;
+            display: inline-block;
+            margin-top: -3px;
+            vertical-align: middle;
         }
 
         .disabled {
