@@ -5,11 +5,14 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     persistent: true,
 
     events: {
+        "click input[value='within_instance']": "showInstanceMode",
+        "click input[value='as_standalone']": "showStandaloneMode",
         "click button.submit": "save"
     },
 
     subviews: {
-        "form > .instance_mode": "instanceMode"
+        "form > .instance_mode": "instanceMode",
+        "form > .standalone_mode": "standaloneMode"
     },
 
     setup: function() {
@@ -17,6 +20,8 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.instanceMode.bind("change", this.enableOrDisableSaveButton, this);
         this.bindings.add(this.instanceMode, "error", this.showErrors);
         this.bindings.add(this.instanceMode, "clearErrors", this.clearErrors);
+
+        this.standaloneMode = new chorus.views.SandboxNewStandaloneMode();
     },
 
     makeModel: function() {
@@ -26,6 +31,10 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.model, "saved", this.saved);
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
         this.bindings.add(this.model, "validationFailed", this.saveFailed);
+    },
+
+    additionalContext: function() {
+        return { configured: chorus.models.Instance.aurora().isInstalled() };
     },
 
     save: function(e) {
@@ -44,5 +53,15 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     enableOrDisableSaveButton: function(schemaVal) {
         this.$("button.submit").prop("disabled", !schemaVal);
+    },
+
+    showInstanceMode: function() {
+        this.$(".instance_mode").removeClass("hidden");
+        this.$(".standalone_mode").addClass("hidden");
+    },
+
+    showStandaloneMode: function() {
+        this.$(".instance_mode").addClass("hidden");
+        this.$(".standalone_mode").removeClass("hidden");
     }
 });

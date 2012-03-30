@@ -1,0 +1,17 @@
+<input type="hidden" name="provisionType" value="create" />
+<label class="required">{{t "instances.dialog.instance_name"}}</label>
+<input type="text" name="name" maxlength="44"/>
+
+<label>{{t "instances.dialog.description"}}</label>
+<textarea rows="3" name="description"/>
+
+<label class="required" name="size">{{t "instances.dialog.size"}} </label>
+<input type="text" name="size" maxlength="2000"/>
+<span class="max_size">{{t "instances.new_dialog.max_size" max=provisionMaxSizeInGB}}</span>
+<br/>
+
+<label name="databaseName" class="required">{{t "instances.dialog.database_name"}} </label>
+<label name="schemaName" class="required">{{t "instances.dialog.schema_name"}} </label>
+
+<input type="text" name="databaseName" maxlength="256"/>
+<input type="text" name="schemaName" value = "public" maxlength="256"/>

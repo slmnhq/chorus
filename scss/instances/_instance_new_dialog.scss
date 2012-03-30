@@ -1,9 +1,14 @@
 @import "common.scss";
 
-.dialog.instance_new {
+.dialog.instance_new, .dialog.sandbox_new {
     $dialog-width : 515px;
 
     width: $dialog-width;
+
+    legend div {
+        display: inline-block;
+        margin: 0 8px;
+    }
 
     fieldset.collapsed {
         >div {
