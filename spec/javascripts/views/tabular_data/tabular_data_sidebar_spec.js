@@ -240,7 +240,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                         });
                     });
 
-                    context("and the dataset has received an import", function() {
+                    context("and the dataset has received an import from a dataset", function() {
                         beforeEach(function() {
                             this.server.completeFetchFor(this.dataset.getImport(), {
                                 executionInfo: {
@@ -262,6 +262,36 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 tableLink: "some_source_tab..."
                             });
                             expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl())
+                        });
+
+                        it("doesn't display a 'import now' link", function() {
+                            expect(this.view.$(".import_now")).not.toExist();
+                        });
+                    });
+
+                    context("and the dataset has recieved an import from a file", function() {
+                        beforeEach(function() {
+                            this.server.completeFetchFor(this.dataset.getImport(), {
+                                executionInfo: {
+                                    completedStamp: "2012-02-29 14:35:38.165"
+                                },
+                                id: "123",
+                                sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
+                                sourceTable: "some_source_file.csv",
+                                sourceType: "upload_file"
+                            });
+                        });
+
+                        it("has an 'imported xx ago' description", function() {
+                            var sourceTable = new chorus.models.Dataset({
+                                id: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
+                                workspaceId: this.dataset.get("workspace").id
+                            });
+                            expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
+                                timeAgo: chorus.helpers.relativeTimestamp("2012-02-29 14:35:38.165"),
+                                tableLink: "some_source_fil..."
+                            });
+                            expect(this.view.$(".last_import a")).not.toExist();
                         });
 
                         it("doesn't display a 'import now' link", function() {

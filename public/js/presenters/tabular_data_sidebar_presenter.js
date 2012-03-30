@@ -105,7 +105,11 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
             }
         } else if (importConfig.thisDatasetIsDestination()) {
             var source = importConfig.importSource();
-            ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", { timeAgo: ranAt, tableLink: this._linkToModel(source) });
+            var tableLink = importConfig.get("sourceType") == "upload_file" ?
+                this.ellipsize(source.name()) :
+                this._linkToModel(source)
+
+            ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", { timeAgo: ranAt, tableLink: tableLink });
         }
 
         return ctx;
@@ -148,12 +152,12 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
 
     // TODO: This is a foreign function... belongs in helpers? or on chorus?
     _linkToModel: function(model) {
-        return chorus.helpers.linkTo(model.showUrl(), ellipsize(model.name()), {title: model.name()});
+        return chorus.helpers.linkTo(model.showUrl(), this.ellipsize(model.name()), {title: model.name()});
+    },
 
-        function ellipsize(name) {
-            if (!name) return "";
-            var length = 15;
-            return (name.length < length) ? name : name.slice(0, length) + "...";
-        }
+    ellipsize: function (name) {
+        if (!name) return "";
+        var length = 15;
+        return (name.length < length) ? name : name.slice(0, length) + "...";
     }
 });
