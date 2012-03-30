@@ -23,6 +23,7 @@
             ["/users/new", "UserNew"],
             ["/workspaces", "WorkspaceIndex"],
             ["/workspaces/:id", "WorkspaceShow"],
+            ["/workspaces/:id/quickstart", "WorkspaceQuickstart"],
             ["/workspaces/:workspaceId/workfiles", "WorkfileIndex"],
             ["/workspaces/:workspaceId/datasets/:datasetId", "DatasetShow"],
             ["/workspaces/:workspaceId/workfiles/:workfileId", "WorkfileShow"],

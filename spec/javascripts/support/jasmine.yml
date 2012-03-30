@@ -59,10 +59,9 @@ src_files:
   - js/collections/user_set.js
   - js/collections/workfile_set.js
   - js/collections/workspace_set.js
-
-
   - js/pages/tabular_data/tabular_data_show_page.js
   - js/pages/search_index_page.js
+  - js/pages/workspaces/workspace_show_page.js
   - js/**/*.js
   - help/**/*.js
 
