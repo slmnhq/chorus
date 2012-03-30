@@ -62,7 +62,6 @@ describe("chorus.pages.DatasetShowPage", function() {
             context("when the dataset fetch completes", function() {
                 beforeEach(function() {
                     this.server.completeFetchFor(this.dataset);
-                    this.server.completeFetchFor(this.dataset.getImport());
                 });
 
                 describe("when the columnSet fetch completes", function() {
@@ -122,7 +121,6 @@ describe("chorus.pages.DatasetShowPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.dataset);
-            this.server.completeFetchFor(this.dataset.getImport());
             this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
             this.server.completeFetchFor(this.dataset.statistics());
         })

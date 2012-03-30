@@ -61,7 +61,7 @@
                 databaseName: decodeURIComponent(databaseName),
                 schemaName:   decodeURIComponent(schemaName),
                 objectName:   decodeURIComponent(objectName),
-                objectType:   objectType,
+                objectType:   objectType
             });
         },
 

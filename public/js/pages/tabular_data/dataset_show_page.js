@@ -32,9 +32,6 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
         this.workspace = new chorus.models.Workspace({id: workspaceId});
         this.workspace.fetch();
         this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: workspaceId }, id: datasetId })
-        var datasetImport = this.tabularData.getImport();
-        this.requiredResources.push(datasetImport);
-        datasetImport.fetchIfNotLoaded();
     },
 
     drawColumns: function() {
