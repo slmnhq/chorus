@@ -31,6 +31,36 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         this.collection.fetchIfNotLoaded();
 
         this.joinTablePaginator = new chorus.views.ListContentDetails({collection:this.collection, modelClass:"Dataset", hideIfNoPagination:true});
+
+        this.schemas = new chorus.collections.SchemaSet([], {instanceId: this.schema.get("instanceId"), databaseName: this.schema.get("databaseName")});
+    },
+
+    postRender: function() {
+        this._super("postRender");
+
+        var $menuContent = $("<ul class='schema_menu'></ul>")
+        chorus.menu(this.$("a.schema_qtip"), {
+            content: $menuContent,
+            classes: "schema_menu",
+            style: {
+                width: "auto"
+            },
+            qtipArgs: {
+                events: {
+                    show: _.bind(function() {
+                        this.schemas.fetchIfNotLoaded();
+                        this.schemas.bind("loaded", function() {
+                            _.each(this.schemas.models, function(schema) {
+                                $menuContent.append($("<li class='menu_item' data-schema='" + schema.get("name") + "'>" + schema.get("name") + "</li>"))
+                            });
+                        }, this);
+                    }, this)
+                }
+            },
+            contentEvents: {
+                // 'a.name': _.bind(self.destinationColumnSelected, self)
+            }
+        });
     },
 
     tableClicked: function(e) {
@@ -62,7 +92,11 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function() {
-        return { canonicalName: this.schema.canonicalName() }
+        return {
+            instanceName: this.schema.get("instanceName"),
+            databaseName: this.schema.get("databaseName"),
+            schemaName: this.schema.get("name")
+        };
     },
 
     collectionModelContext: function(model) {

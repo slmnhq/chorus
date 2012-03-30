@@ -177,6 +177,7 @@ describe("chorus global", function() {
                 chorus.menu(this.element, {
                     content: "menu content<a class='test_link'></a>",
                     classes: "myClass",
+                    style: {foo: 'bar'},
                     mimic: "left center",
                     position: {
                         my: "left center",
@@ -222,6 +223,7 @@ describe("chorus global", function() {
                 expect(this.qtipArgs.position.at).toEqual("right center")
                 expect(this.qtipArgs.style).toEqual({
                     classes: "myClass tooltip-white",
+                    foo: "bar",
                     tip: {
                         mimic: "left center",
                         width: 20,

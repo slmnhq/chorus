@@ -120,14 +120,14 @@ window.Chorus = function chorus$Global() {
                 my: "top center",
                 at: "bottom center"
             },
-            style: {
+            style: _.extend({
                 classes: classes,
                 tip: {
                     mimic: options.mimic || "top center",
                     width: 20,
                     height: 15
                 }
-            }
+            }, options.style)
         };
 
         _.extend(qtipArgs, options.qtipArgs);

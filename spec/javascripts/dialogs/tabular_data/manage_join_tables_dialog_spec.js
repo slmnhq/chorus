@@ -1,5 +1,6 @@
 describe("chorus.dialogs.ManageJoinTables", function() {
     beforeEach(function() {
+        this.qtip = stubQtip();
         stubModals();
         this.originalDatabaseObject = fixtures.databaseObject({
             objectName: "original",
@@ -99,8 +100,26 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             expect(icons.eq(1)).toHaveAttr("src", this.databaseObject2.iconUrl({ size: "medium" }));
         });
 
-        it("shows the original table canonical name", function() {
-            expect(this.dialog.$(".canonical_name").text()).toBe(this.schema.canonicalName());
+        describe("database/instance/schema", function() {
+            it("shows the original table canonical name", function() {
+                expect(this.dialog.$(".canonical_name").text()).toBe(this.schema.canonicalName());
+            });
+
+            it("the schema is a link to a drop-down menu", function() {
+                var $link = this.dialog.$(".canonical_name a.schema_qtip")
+                expect($link).toContainText(this.schema.get("name"));
+            });
+
+            describe("opening the schema-picker", function() {
+                beforeEach(function() {
+                    this.dialog.$(".canonical_name a.schema_qtip").click();
+                    this.server.completeFetchFor(this.dialog.schemas, [fixtures.schema(), fixtures.schema()]);
+                });
+
+                it("clicking the link shows the schema-picker", function() {
+                    expect(this.qtip.find("ul li").length).toBe(2);
+                });
+            });
         });
 
         describe("when a table is clicked", function() {
