@@ -1,6 +1,6 @@
 describe("chorus.views.WorkspaceQuickstart", function() {
     beforeEach(function() {
-        this.model = fixtures.workspace();
+        this.model = fixtures.workspace({id: "999"});
         this.model.loaded = true;
         this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
         this.view.render();
@@ -26,6 +26,11 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         it("has a description", function() {
             expect(this.view.$(".add_team_members .text")).toContainTranslation("workspace.quickstart.add_team_members.text");
         });
+
+        it("launches the right dialog", function() {
+            expect(this.view.$(".add_team_members a")).toHaveClass("dialog");
+            expect(this.view.$(".add_team_members a").data("dialog")).toBe("WorkspaceEditMembers");
+        });
     });
 
     describe("the 'Edit Workspace Settings' section", function() {
@@ -40,5 +45,14 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         it("has a description", function() {
             expect(this.view.$(".edit_workspace_settings .text")).toContainTranslation("workspace.quickstart.edit_workspace_settings.text");
         });
+
+        it("launches the right dialog", function() {
+            expect(this.view.$(".edit_workspace_settings a")).toHaveClass("dialog");
+            expect(this.view.$(".edit_workspace_settings a").data("dialog")).toBe("WorkspaceSettings");
+        });
+    });
+
+    it("navigates to the normal workspace show page if the dismiss link is clicked", function() {
+        expect(this.view.$("a.dismiss")).toHaveHref("#/workspaces/999");
     });
 });

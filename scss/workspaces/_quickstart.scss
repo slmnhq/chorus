@@ -1,9 +1,10 @@
 @import "../_common.scss";
 
 .workspace_quickstart {
-    margin-left: 10px;
+    margin-left: 12px;
     margin-top: 20px;
     padding-bottom: 20px;
+    position: relative;
 
     h2 {
         @include heading-sidebar;
@@ -13,16 +14,27 @@
     .body {
         @include font-normal-beta;
         margin-bottom: 20px;
+        margin-right: 10px;
+    }
+    
+    a.dismiss {
+        font-size: 12px;
+        font-weight: $semibold;
+        position: absolute;
+        right: 10px;
+        top: 0px;
     }
 
     .info_box {
         padding: 15px;
+        padding-right: 5px;
+        margin-bottom: 10px;
         box-sizing:border-box;
         border: 1px solid $subheader-border-color;
         @include border-radius(4px, 4px);
         display: inline-block;
-        width: 360px;
-        height: 90px;
+        width: 340px;
+        height: 100px;
         vertical-align: middle;
 
         img {
@@ -34,7 +46,7 @@
             vertical-align: middle;
             display: inline-block;
             @include font-normal-beta;
-            width: 220px;
+            width: 210px;
 
             a {
                 display: block;
@@ -45,7 +57,7 @@
     }
 
     .add_team_members {
-        margin-left: 10px;
+        margin-left: 8px;
     }
 
     .edit_workspace_settings {
