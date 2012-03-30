@@ -31,6 +31,12 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             expect(this.view.$(".add_team_members a")).toHaveClass("dialog");
             expect(this.view.$(".add_team_members a").data("dialog")).toBe("WorkspaceEditMembers");
         });
+
+
+        it("hides the box when the link is clicked", function() {
+            this.view.$(".add_team_members a").click();
+            expect(this.view.$(".add_team_members")).toHaveClass("hidden");
+        })
     });
 
     describe("the 'Edit Workspace Settings' section", function() {
@@ -50,6 +56,11 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             expect(this.view.$(".edit_workspace_settings a")).toHaveClass("dialog");
             expect(this.view.$(".edit_workspace_settings a").data("dialog")).toBe("WorkspaceSettings");
         });
+
+        it("hides the box when the link is clicked", function() {
+            this.view.$(".edit_workspace_settings a").click();
+            expect(this.view.$(".edit_workspace_settings")).toHaveClass("hidden");
+        })
     });
 
     it("navigates to the normal workspace show page if the dismiss link is clicked", function() {
