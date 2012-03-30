@@ -28,6 +28,14 @@ chorus.ValidationRegexes = (function(){
             return chorusIdentifier;
         },
 
+        ChorusIdentifierLower: function(length) {
+            if (length) {
+                return new RegExp("^[a-z][a-z0-9_]{0," + (length - 1) + "}$");
+            }
+
+            return chorusIdentifier;
+        },
+
         SafePgName: function() {
             return safePgName;
         },

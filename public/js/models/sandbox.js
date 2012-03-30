@@ -29,7 +29,7 @@ chorus.models.Sandbox = chorus.models.Base.extend({
     declareValidations: function(attrs) {
         if (this.isCreatingNew("instance", attrs)) {
             this.require("instanceName", attrs);
-            this.requirePattern("instanceName", chorus.ValidationRegexes.ChorusIdentifier(), attrs);
+            this.requirePattern("instanceName", chorus.ValidationRegexes.ChorusIdentifier(44), attrs);
             this.require("size", attrs);
 
             if (this.maximumSize) {
@@ -40,13 +40,13 @@ chorus.models.Sandbox = chorus.models.Base.extend({
         }
         if (this.isCreatingNew('database', attrs)) {
             this.require("databaseName", attrs);
-            this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(), attrs);
+            this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifierLower(63), attrs);
             this.require("schemaName", attrs);
-            this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(), attrs);
+            this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifierLower(63), attrs);
         }
         if (this.isCreatingNew('schema', attrs)) {
             this.require("schemaName", attrs);
-            this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(), attrs);
+            this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifierLower(63), attrs);
         }
     },
 

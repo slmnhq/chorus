@@ -1,9 +1,11 @@
 describe("chorus.dialogs.SandboxNew", function() {
     beforeEach(function() {
         this.workspace = fixtures.workspace();
+        spyOn(chorus, "toast");
         spyOn(chorus, 'styleSelect');
-        var launchElement = $("<a data-workspace-id='45'></a>");
-        this.dialog = new chorus.dialogs.SandboxNew({launchElement: launchElement, pageModel: this.workspace});
+        spyOn(chorus.router, 'reload');
+        this.launchElement = $("<a data-workspace-id='45'></a>");
+        this.dialog = new chorus.dialogs.SandboxNew({launchElement: this.launchElement, pageModel: this.workspace});
         this.dialog.render();
     });
 
@@ -61,6 +63,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
             context("with a instance id, database id, and schema id", function() {
                 beforeEach(function() {
+                    spyOn(this.dialog, 'closeModal');
                     spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
                         instance: "4",
                         database: "5",
@@ -72,6 +75,10 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                 it("saves the sandbox", function() {
                     expect(this.sandbox.save).toHaveBeenCalled();
+                });
+
+                it("doesn't yet display a toast", function() {
+                    expect(chorus.toast).not.toHaveBeenCalled();
                 });
 
                 it("changes the button text to 'Adding...'", function() {
@@ -90,7 +97,6 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                 describe("when save fails", function() {
                     beforeEach(function() {
-                        spyOn(this.dialog, 'closeModal');
                         this.sandbox.trigger("saveFailed");
                     });
 
@@ -102,10 +108,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                 describe("when the model is saved successfully", function() {
                     beforeEach(function() {
                         spyOnEvent(this.workspace, 'invalidated');
-                        spyOn(this.dialog, 'closeModal');
                         spyOn(this.workspace, 'fetch');
-                        spyOn(chorus, 'toast');
-                        spyOn(chorus.router, 'reload');
                         this.sandbox.trigger("saved");
                     });
 
@@ -123,17 +126,17 @@ describe("chorus.dialogs.SandboxNew", function() {
                 beforeEach(function() {
                     spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
                         instance: "4",
-                        databaseName: "New_Database",
-                        schemaName: "New_Schema"
+                        databaseName: "new_database",
+                        schemaName: "new_schema"
                     });
 
-                    this.dialog.instanceMode.trigger("change", "New_Schema");
+                    this.dialog.instanceMode.trigger("change", "new_schema");
                     this.dialog.$("button.submit").click();
                 });
 
                 it("should set the database name and schema name on the model", function() {
-                    expect(this.sandbox.get("databaseName")).toBe("New_Database");
-                    expect(this.sandbox.get("schemaName")).toBe("New_Schema");
+                    expect(this.sandbox.get("databaseName")).toBe("new_database");
+                    expect(this.sandbox.get("schemaName")).toBe("new_schema");
                 });
             });
         });
@@ -145,6 +148,8 @@ describe("chorus.dialogs.SandboxNew", function() {
             chorus.models.Config.instance().set({provisionMaxSizeInGB: 2000});
             chorus.models.Instance.aurora().loaded = true;
             chorus.models.Config.instance().loaded = true;
+
+            this.dialog = new chorus.dialogs.SandboxNew({launchElement: this.launchElement, pageModel: this.workspace});
             this.dialog.render();
         })
 
@@ -168,12 +173,50 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             it("validates the model", function() {
-                this.dialog.$("button.submit").click();
                 var $el = this.dialog.$(".standalone_mode");
+                $el.find("input[name=size]").val("2500");
+
+                this.dialog.$("button.submit").click();
                 expect($el.find("input[name=instanceName]")).toHaveClass("has_error");
                 expect($el.find("input[name=schemaName]")).not.toHaveClass("has_error");
                 expect($el.find("input[name=databaseName]")).toHaveClass("has_error");
                 expect($el.find("input[name=size]")).toHaveClass("has_error");
+            });
+
+            describe("saving", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "closeModal");
+                    this.server.reset();
+                    var $el = this.dialog.$(".standalone_mode");
+                    $el.find("input[name=instanceName]").val("spiderman");
+                    $el.find("input[name=schemaName]").val("batman");
+                    $el.find("input[name=databaseName]").val("aquaman");
+                    $el.find("input[name=size]").val("1000");
+
+                    this.dialog.$("button.submit").click();
+                });
+
+                it("saves the model", function() {
+                    expect(this.server.lastCreateFor(this.dialog.model)).toBeDefined();
+                });
+
+                it("puts the button in a loading state", function() {
+                    expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+                });
+
+                it("displays a toast", function() {
+                    expect(chorus.toast).toHaveBeenCalledWith("instances.new_dialog.provisioning");
+                });
+
+                context("when the save completes", function() {
+                    beforeEach(function() {
+                        this.server.completeSaveFor(this.dialog.model);
+                    });
+
+                    it("dismisses the dialog", function() {
+                        expect(this.dialog.closeModal).toHaveBeenCalled();
+                    });
+                });
             });
         });
 

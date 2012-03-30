@@ -21,6 +21,12 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.instanceMode, "error", this.showErrors);
         this.bindings.add(this.instanceMode, "clearErrors", this.clearErrors);
 
+        if (chorus.models.Config.instance().loaded) {
+            this.resourcesLoaded();
+        } else {
+            this.requiredResources.push(chorus.models.Config.instance());
+        }
+
         this.standaloneMode = new chorus.views.SandboxNewStandaloneMode({addingSandbox: true});
         this.activeForm = this.instanceMode;
     },
@@ -34,18 +40,25 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.model, "validationFailed", this.saveFailed);
     },
 
+    resourcesLoaded: function() {
+        this.model.maximumSize = chorus.models.Config.instance().get("provisionMaxSizeInGB");
+    },
+
     additionalContext: function() {
         return { configured: chorus.models.Instance.aurora().isInstalled() };
     },
 
     save: function(e) {
         this.$("button.submit").startLoading("sandbox.adding_sandbox");
-        this.model.save(this.activeForm.fieldValues());
+        if (this.model.save(this.activeForm.fieldValues()) !== false && this.activeForm == this.standaloneMode) {
+            chorus.toast("instances.new_dialog.provisioning")
+        }
     },
 
     saved: function() {
         chorus.toast("sandbox.create.toast");
         chorus.router.reload();
+        this.closeModal();
     },
 
     saveFailed: function() {

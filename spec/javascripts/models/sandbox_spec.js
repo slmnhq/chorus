@@ -46,7 +46,7 @@ describe("chorus.models.Sandbox", function() {
             expect(this.database).toBe(this.model.database());
         });
     });
-    
+
     describe("#instance", function() {
         beforeEach(function() {
             this.instance = this.model.instance();
@@ -108,6 +108,21 @@ describe("chorus.models.Sandbox", function() {
 
             it("requires an instance name that starts with an alphabetic character", function() {
                 expectInvalid({ instanceName: "_asdf" }, this.model, [ "instanceName" ]);
+            });
+
+            it("requires an instance name that is less than 44 characters", function() {
+                this.model.unset("instance")
+                expectInvalid({instanceName: _.repeat("a", 45)}, this.model, ["instanceName"]);
+            });
+
+            it("requires an database name that is less than 63 characters", function() {
+                this.model.unset("database")
+                expectInvalid({databaseName: _.repeat("a", 64)}, this.model, ["databaseName"]);
+            });
+
+            it("requires an schema name that is less than 63 characters", function() {
+                this.model.unset("schema")
+                expectInvalid({schemaName: _.repeat("a", 64)}, this.model, ["schemaName"]);
             });
 
             it("requires size", function() {

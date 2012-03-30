@@ -78,4 +78,14 @@ describe("chorus.ValidationRegexes", function() {
             expect("a1234").not.toMatch(regex);
         });
     });
+
+    describe("ChorusIdentiferLower (when given a length argument)", function() {
+        it("returns a Chorus Identifier Lower matcher with the supplied max length", function() {
+            var regex = chorus.ValidationRegexes.ChorusIdentifierLower(4);
+            expect("abc").toMatch(regex);
+            expect("a123").toMatch(regex);
+            expect("a1234").not.toMatch(regex);
+            expect("aBC").not.toMatch(regex);
+        });
+    });
 });
