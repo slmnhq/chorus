@@ -74,7 +74,7 @@ describe("chorus.dialogs.WorkspacesNew", function() {
             })
 
             it("redirects to the new workspace show page", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith("/workspaces/10102", true);
+                expect(chorus.router.navigate).toHaveBeenCalledWith("/workspaces/10102/quickstart", true);
             });
 
             it("dismisses the dialog", function() {

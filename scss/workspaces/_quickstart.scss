@@ -1,5 +1,19 @@
 @import "../_common.scss";
 
+.workspace_quickstart_header {
+    vertical-align: middle;
+
+    img {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    h1 {
+        padding-top: 8px;
+        display: inline-block;
+    }
+}
+
 .workspace_quickstart {
     margin-left: 12px;
     margin-top: 20px;
