@@ -1,4 +1,5 @@
 chorus.models.DatabaseColumn = chorus.models.Base.extend({
+    constructorName: "DatabaseColumn",
     urlTemplate: "data/{{instanceId}}/database/{{encodeOnce databaseName}}/schema/{{encodeOnce schemaName}}/{{parentType}}/{{encodeOnce parentName}}/column",
 
     urlParams: function() {
