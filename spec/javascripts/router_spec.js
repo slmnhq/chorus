@@ -113,6 +113,7 @@ describe("chorus.router", function() {
             })
         })
     })
+
     describe("#navigate", function() {
         beforeEach(function() {
             spyOn(Backbone.history, "loadUrl").andCallThrough();
@@ -198,5 +199,28 @@ describe("chorus.router", function() {
             chorus.router.reload();
             expect(chorus.router.navigate).toHaveBeenCalledWith(Backbone.history.fragment);
         })
+    })
+
+    describe("route matching", function() {
+        var route = 'has%2Fslash';
+
+        beforeEach(function() {
+            setLoggedInUser()
+            this.chorus = new Chorus();
+            this.backboneSpy = spyOn(Backbone.history, "start")
+            this.chorus.initialize();
+            var session = this.chorus.session;
+            spyOn(this.chorus.session, "fetch").andCallFake(function(options) {
+                options.success(session, { status: "ok" });
+            })
+
+            spyOn(chorus.pages.SearchIndexPage.prototype, "setup").andCallThrough()
+        });
+
+        it("does not decode fragments before matching routes", function() {
+            this.chorus.router.navigate('/search/' + route, true);
+
+            expect(chorus.pages.SearchIndexPage.prototype.setup).toHaveBeenCalledWith(route);
+        });
     })
 });

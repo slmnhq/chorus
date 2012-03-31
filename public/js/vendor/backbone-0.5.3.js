@@ -753,6 +753,15 @@
     // twenty times a second.
     interval: 50,
 
+    // Gets the true hash value. Cannot use location.hash directly due to bug
+    // in Firefox where location.hash will always be decoded.
+    getHash: function(windowOverride) {
+      var loc = windowOverride ? windowOverride.location : window.location;
+      var hash = loc.href.split('#')[1] || '';
+
+      return hash;
+    },
+
     // Get the cross-browser normalized URL fragment, either from the URL,
     // the hash, or the override.
     getFragment : function(fragment, forcePushState) {
@@ -763,10 +772,10 @@
           if (search) fragment += search;
           if (fragment.indexOf(this.options.root) == 0) fragment = fragment.substr(this.options.root.length);
         } else {
-          fragment = window.location.hash;
+          fragment = this.getHash();
         }
       }
-      return decodeURIComponent(fragment.replace(hashStrip, ''));
+      return fragment.replace(hashStrip, '');
     },
 
     // Start the hash change handling, returning `true` if the current URL matches
@@ -808,8 +817,8 @@
         window.location.replace(this.options.root + '#' + this.fragment);
         // Return immediately as browser will do redirect to new url
         return true;
-      } else if (this._wantsPushState && this._hasPushState && atRoot && loc.hash) {
-        this.fragment = loc.hash.replace(hashStrip, '');
+      } else if (this._wantsPushState && this._hasPushState && atRoot && this.getHash()) {
+        this.fragment = this.getHash().replace(hashStrip, '');
         window.history.replaceState({}, document.title, loc.protocol + '//' + loc.host + this.options.root + this.fragment);
       }
 
@@ -828,10 +837,10 @@
     // calls `loadUrl`, normalizing across the hidden iframe.
     checkUrl : function(e) {
       var current = this.getFragment();
-      if (current == this.fragment && this.iframe) current = this.getFragment(this.iframe.location.hash);
+      if (current == this.fragment && this.iframe) current = this.getFragment(this.getHash(this.iframe));
       if (current == this.fragment || current == decodeURIComponent(this.fragment)) return false;
       if (this.iframe) this.navigate(current);
-      this.loadUrl() || this.loadUrl(window.location.hash);
+      this.loadUrl() || this.loadUrl(this.getHash());
     },
 
     // Attempt to load the current URL fragment. If a route succeeds with a
@@ -861,7 +870,7 @@
         window.history.pushState({}, document.title, loc.protocol + '//' + loc.host + frag);
       } else {
         window.location.hash = this.fragment = frag;
-        if (this.iframe && (frag != this.getFragment(this.iframe.location.hash))) {
+        if (this.iframe && (frag != this.getFragment(this.getHash(this.iframe)))) {
           this.iframe.document.open().close();
           this.iframe.location.hash = frag;
         }
