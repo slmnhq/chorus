@@ -1,12 +1,15 @@
 chorus.views.TabularDataVisualizationFrequencySidebar = chorus.views.TabularDataVisualizationSidebar.extend({
-    className: "tabular_data_visualization_frequency_sidebar",
+    constructorName: "TabularDataVisualizationFrequencySidebar",
+    className: "tabular_data_visualization_sidebar",
+    additionalClass: "frequency",
 
-    additionalContext: function() {
-        return {
-            chartType: "frequency",
-            allColumnNames: this.allColumnNames()
+    columnGroups: [
+        {
+            type: "all",
+            name: "category",
+            options: true
         }
-    },
+    ],
 
     chartOptions: function() {
         return {

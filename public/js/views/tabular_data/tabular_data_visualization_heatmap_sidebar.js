@@ -1,11 +1,29 @@
 chorus.views.TabularDataVisualizationHeatmapSidebar = chorus.views.TabularDataVisualizationSidebar.extend({
-    className:"tabular_data_visualization_heatmap_sidebar",
+    className:"tabular_data_visualization_sidebar",
+    additionalClass: "heatmap",
 
     postRender:function () {
         this.$(".x_axis option:eq(0)").attr('selected', 'selected');
         this.$(".y_axis option:eq(1)").attr('selected', 'selected');
         this._super('postRender');
     },
+
+    columnGroups: [
+        {
+            name: "x_axis",
+            type: "numeric",
+            options: {
+                key: "dataset.visualization.sidebar.number_of_bins"
+            }
+        },
+        {
+            name: "y_axis",
+            type: "numeric",
+            options: {
+                key: "dataset.visualization.sidebar.number_of_bins"
+            }
+        }
+    ],
 
     chartOptions: function() {
         return {
@@ -15,12 +33,6 @@ chorus.views.TabularDataVisualizationHeatmapSidebar = chorus.views.TabularDataVi
             yAxis: this.$(".y_axis select option:selected").text(),
             xBins: this.$(".x_axis .selected_value").text(),
             yBins: this.$(".y_axis .selected_value").text()
-        }    
-    },
-    
-    additionalContext:function () {
-        return {
-            numericColumnNames:this.numericColumnNames()
-        }
+        };
     }
 });

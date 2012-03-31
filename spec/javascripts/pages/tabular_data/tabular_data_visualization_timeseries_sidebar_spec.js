@@ -49,12 +49,12 @@ describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
 
             it("should display 'No numerical columns' instead of the numerical column selector for value", function() {
                 expect(this.view.$(".value select option")).not.toExist()
-                expect(this.view.$(".value .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_numerical_columns")
+                expect(this.view.$(".value .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_columns.numeric")
             })
 
             it("should display 'No time columns' instead of the numerical column selector for time", function() {
                 expect(this.view.$(".time select option")).not.toExist()
-                expect(this.view.$(".time .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_datetime_columns")
+                expect(this.view.$(".time .no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_columns.time")
             })
 
             it("should disable the button", function() {

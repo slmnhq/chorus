@@ -197,13 +197,13 @@
         },
 
         range_chooser: function(options) {
-            var max = options.hash.max || 20;
-            options.hash.initial = options.hash.initial || max;
-            return new Handlebars.SafeString(chorus.helpers.chooser_menu(_.range(1, max + 1), options));
         },
 
         chooser_menu: function(choices, options) {
             options = options.hash;
+            var max = options.max || 20;
+            options.initial = options.initial;
+            choices = choices || _.range(1, max + 1);
             var selected = options.initial || choices[0];
             var translationKey = options.translationKey || "dataset.visualization.sidebar.category_limit";
             var className = options.className || '';

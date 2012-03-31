@@ -27,6 +27,45 @@
             }
         },
 
+        additionalContext: function() {
+            var ctx = {};
+            ctx.columnGroups = _.map(this.columnGroups, function(group) {
+                return {
+                    columnNames: this.columnNamesOfType(group.type),
+                    groupName: group.name,
+                    hint: this.hintTextForColumnGroup(group),
+                    label: t("dataset.visualization.sidebar." + group.name),
+                    noColumnMessage: t("dataset.visualization.sidebar.no_columns." + group.type),
+                    secondaryOption: group.options
+                };
+            }, this);
+
+            ctx.noColumnsAvailable = _.any(ctx.columnGroups, function(group) {
+                return _.isEmpty(group.columnNames);
+            });
+
+            return ctx;
+        },
+
+        hintTextForColumnGroup: function(group) {
+            if (group.name === "category") {
+                return t("dataset.visualization.sidebar.hint.category");
+            } else {
+                return t("dataset.visualization.sidebar.hint." + group.type);
+            }
+        },
+
+        columnNamesOfType: function(type) {
+            switch (type) {
+                case "numeric":
+                    return this.numericColumnNames();
+                case "time":
+                    return this.datetimeColumnNames();
+                default:
+                    return this.allColumnNames();
+            }
+        },
+
         cleanup: function() {
             this._super("cleanup");
             this.clearSqlErrors();

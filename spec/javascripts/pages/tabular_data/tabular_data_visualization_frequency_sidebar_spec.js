@@ -38,7 +38,7 @@ describe("chorus.views.TabularDataVisualizationFrequencySidebar", function() {
 
             it("should display 'No columns' instead of the categorical column selector", function() {
                 expect(this.view.$(".category select option")).not.toExist()
-                expect(this.view.$(".no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_columns")
+                expect(this.view.$(".no_columns").text()).toContainTranslation("dataset.visualization.sidebar.no_columns.all")
             })
 
             it("should disable the button", function() {

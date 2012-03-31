@@ -1,0 +1,36 @@
+<fieldset>
+    <legend>{{t "dataset.visualization.sidebar.chart_display_settings"}}</legend>
+    <div>
+        {{#each columnGroups}}
+            <div class="{{groupName}} field">
+                <div class='labels'>
+                    <label>{{label}}</label>
+                    <span class="column_hint">{{hint}}</span>
+                </div>
+
+                {{#if columnNames.length}}
+                    <select>
+                        {{#each columnNames}}
+                            <option value='{{this}}'>{{this}}</option>
+                        {{/each}}
+                    </select>
+                    {{#if secondaryOption}}
+                        {{chooser_menu secondaryOption.values className=groupName translationKey=secondaryOption.key }}
+                    {{/if}}
+                {{else}}
+                    <span class='no_columns'>{{noColumnMessage}}</span>
+                {{/if}}
+            </div>
+        {{/each}}
+    </div>
+
+    <div class="button_wrapper">
+        <button class="create"
+            {{#if noColumnsAvailable}}
+                disabled="disabled"
+            {{/if}}
+                >{{t "dataset.visualization.sidebar.create_chart"}}</button>
+        <button class="cancel hidden">{{t "actions.cancel"}}</button>
+    </div>
+</fieldset>
+

@@ -1,10 +1,34 @@
 chorus.views.TabularDataVisualizationTimeSeriesSidebar = chorus.views.TabularDataVisualizationSidebar.extend({
-    className: "tabular_data_visualization_timeseries_sidebar",
+    className: "tabular_data_visualization_sidebar",
+    additionalClass: "timeseries",
 
     postRender: function() {
         this.$(".category option:eq(1)").attr('selected', 'selected');
         this._super('postRender');
     },
+
+    columnGroups: [
+        {
+            name: "value",
+            type: "numeric",
+            options: {
+                key: "dataset.visualization.sidebar.group_by",
+                values: _.map(["sum", "min", "max", "avg", "count"], function(name) {
+                    return t("dataset.group." + name);
+                })
+            }
+        },
+        {
+            name: "time",
+            type: "time",
+            options: {
+                key: "dataset.visualization.sidebar.interval",
+                values: _.map(["minute","hour","day","week","month","year"], function(name) {
+                    return t("time." + name);
+                })
+            }
+        }
+    ],
 
     chartOptions: function() {
         var aggMap = {}
@@ -25,19 +49,6 @@ chorus.views.TabularDataVisualizationTimeSeriesSidebar = chorus.views.TabularDat
             aggregation: aggMap[this.$(".value .selected_value").text()],
             timeInterval: this.$(".time .selected_value").text(),
             timeType: timeColumn.get("typeCategory").toLowerCase()
-        }
-    },
-
-    additionalContext: function() {
-        return {
-            numericColumnNames: this.numericColumnNames(),
-            datetimeColumnNames: this.datetimeColumnNames(),
-            dataGroupingChoices: _.map(["sum", "min", "max", "avg", "count"], function(name) {
-                return t("dataset.group." + name);
-            }),
-            dateTimeIntervals: _.map(["minute","hour","day","week","month","year"], function(name) {
-                return t("time." + name);
-            })
         }
     }
 });
