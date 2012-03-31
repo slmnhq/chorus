@@ -5,7 +5,7 @@ $list-border-width: 1px;
 $link-padding: 6px;
 
 .instance_permissions {
-    width: 460px;
+    width: 500px;
 
     input[type=submit] {
         height: 1px;
@@ -76,6 +76,10 @@ $link-padding: 6px;
 
                 .name {
                     @include ellipsis;
+                }
+
+                div.name {
+                    width: 200px;
                 }
 
                 .links {
