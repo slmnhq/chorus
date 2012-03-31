@@ -71,6 +71,22 @@ describe("chorus global", function() {
             this.chorus.initialize()
             expect(this.chorus.session).toBeDefined();
         });
+
+        describe("cache buster generation", function() {
+            beforeEach(function() {
+                this.time = new Date(2000, 11, 25).getTime();
+                this.clock = sinon.useFakeTimers(this.time, "Date");
+            });
+
+            afterEach(function() {
+                this.clock.restore();
+            });
+
+            it("is set in initialization", function() {
+                this.chorus.initialize();
+                expect(this.chorus.cachebuster).toBe(this.time);
+            });
+        });
     });
 
     describe("#afterNavigate", function() {

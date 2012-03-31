@@ -4,7 +4,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
 
     additionalContext:function () {
         return {
-            imageUrl:this.model.imageUrl() + "&buster=" + (new Date().getTime()),
+            imageUrl:this.model.imageUrl() + "&buster=" + chorus.cachebuster,
             hasImage:this.model.hasImage(),
             addImageKey:this.addImageKey,
             changeImageKey:this.changeImageKey,
@@ -80,7 +80,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
                 self.resource.serverErrors = [];
                 self.resource.trigger("validated");
                 self.model.trigger("image:change");
-                self.$("img").attr('src', originalUrl + "&buster=" + (new Date().getTime()));
+                self.$("img").attr('src', originalUrl + "&buster=" + chorus.cachebuster);
                 self.$("img").removeClass("hidden");
             } else {
                 self.resource.serverErrors = json.message;

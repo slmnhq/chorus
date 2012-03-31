@@ -85,6 +85,7 @@
                         page.pageOptions = self.app.pageOptions;
                         delete self.app.pageOptions;
                         self.app.page = page;
+                        self.app.cachebuster = $.now();
 
                         $("#page").html(page.render().el).attr("data-page", className);
 

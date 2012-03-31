@@ -14,6 +14,12 @@ describe("chorus.router", function() {
             $.cookie("authid", this.savedAuthCookie);
         })
 
+        it("generates a new cachebuster value when navigating", function() {
+            this.chorus.cachebuster = 0;
+            this.chorus.router.navigate("/login", true);
+            expect(this.chorus.cachebuster).not.toBe(0);
+        });
+
         context("with a valid session", function() {
             beforeEach(function() {
                 var session = this.chorus.session;
@@ -184,7 +190,6 @@ describe("chorus.router", function() {
             })
         })
     });
-
 
     describe("#reload", function() {
         it("navigates to the current url fragment", function() {

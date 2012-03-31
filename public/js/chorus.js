@@ -33,6 +33,7 @@ window.Chorus = function chorus$Global() {
         self.bindModalLaunchingClicks();
 
         self.startHistory();
+        self.cachebuster = $.now();
     };
 
     // to enable development mode, run `rake enable_dev_mode`
