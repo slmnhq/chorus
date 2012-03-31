@@ -52,6 +52,29 @@ describe("chorus.mixins.clEditor", function() {
         });
     });
 
+    describe("#getNormalizedText", function() {
+        it("does not change text that ends in something besides a 'newline'", function() {
+            var $textarea = $("<textarea/>");
+            $textarea.val("<div>foo</div>");
+
+            expect(chorus.Mixins.ClEditor.getNormalizedText($textarea)).toBe("<div>foo</div>");
+        });
+
+        it("removes a single trailing 'newline'", function() {
+            var $textarea = $("<textarea/>");
+            $textarea.val("Hello<div><br></div>");
+
+            expect(chorus.Mixins.ClEditor.getNormalizedText($textarea)).toBe("Hello");
+        });
+
+        it("removes multiple trailing 'newlines'", function() {
+            var $textarea = $("<textarea/>");
+            $textarea.val("Hello<div><br></div><div><br></div><div><br></div>");
+
+            expect(chorus.Mixins.ClEditor.getNormalizedText($textarea)).toBe("Hello");
+        });
+    });
+
     describe("toolbar helpers", function() {
         beforeEach(function() {
             this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, ".toolbar", "summary");

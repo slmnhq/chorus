@@ -120,7 +120,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.$("button.submit").startLoading("notes.button.uploading");
         this.saving = true;
         this.model.save({
-            body: this.$("textarea[name=body]").val().trim(),
+            body: this.getNormalizedText(this.$("textarea[name=body]")),
             recipients: this.$(".notification_recipients").is(".hidden") ? "" : this.notifications.getPickedUsers().join(",")
         });
     },

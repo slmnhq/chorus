@@ -71,7 +71,7 @@ describe("chorus.dialogs.CommentDialog", function() {
         });
 
         it("trims the comment", function(){
-            this.dialog.$("textarea[name=body]").val("  trim me  ");
+            this.dialog.$("textarea[name=body]").val("trim me<div><br></div>");
             this.dialog.$("form").trigger("submit");
             expect(this.dialog.model.get("body")).toBe("trim me")
         });

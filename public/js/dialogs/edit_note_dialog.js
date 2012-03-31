@@ -46,11 +46,12 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
         e && e.preventDefault()
         this.$("button.submit").startLoading("actions.saving");
 
-        var newText = this.$("textarea").val();
+        var newText = this.getNormalizedText(this.$("textarea"));
         var cleanText = _.trim($.stripHtml(newText));
 
         if (cleanText === "") {
-            newText = cleanText;
+            // if the user only has whitespace, force validation failure on the model
+            newText = "";
         }
 
         this.model.save({ body: newText })

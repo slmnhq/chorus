@@ -34,12 +34,11 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
 
     save:function (e) {
         e.preventDefault();
-        this.model.save({body:this.$("textarea[name=body]").val().trim()})
+        this.model.save({body: this.getNormalizedText(this.$("textarea[name=body]"))});
     },
 
     saved:function () {
         this.pageModel.trigger("invalidated");
         this.closeModal();
     }
-
 });

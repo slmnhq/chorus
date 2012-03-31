@@ -84,11 +84,11 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
         var active = !!this.$("input#workspace_active").is(":checked");
 
         var attrs = {
-            name:this.$("input[name=name]").val().trim(),
-            summary:this.$("textarea[name=summary]").val().trim(),
-            isPublic:!!this.$("input[name=isPublic]").is(":checked"),
-            active:active,
-            archived:!active
+            name: this.$("input[name=name]").val().trim(),
+            summary: this.getNormalizedText(this.$("textarea[name=summary]")),
+            isPublic: !!this.$("input[name=isPublic]").is(":checked"),
+            active: active,
+            archived: !active
         };
 
         if (this.$("select.owner").length > 0) {

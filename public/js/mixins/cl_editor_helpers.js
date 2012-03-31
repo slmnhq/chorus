@@ -46,5 +46,9 @@ chorus.Mixins.ClEditor = {
     onClickToolbarUnlink: function(e) {
         e && e.preventDefault();
         this.find(".cleditorButton[title='Remove Hyperlink']").click();
+    },
+
+    getNormalizedText: function($textarea) {
+        return $textarea.val().replace(/(<div><br><\/div>)+$/, "");
     }
 };
