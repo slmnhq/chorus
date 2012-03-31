@@ -23,6 +23,21 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         this.trigger("datasetSelected", dataset);
     },
 
+    postRender: function() {
+        this._super("postRender")
+
+        this.$("li").draggable({
+            cursor: "move",
+            containment: "window",
+            appendTo: "body",
+            helper: this.dragHelper
+        });
+    },
+
+    dragHelper : function(e) {
+        return '<div class="drag_helper">' + $(e.currentTarget).data("name") + '</div>'
+    },
+
     additionalContext:function () {
         this.collection && this.collection.models.sort(function (a, b) {
             return naturalSort(a.get("objectName").toLowerCase(), b.get("objectName").toLowerCase());
@@ -34,9 +49,10 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     collectionModelContext:function (model) {
         return {
             iconUrl: model.iconUrl({size:"medium"}),
-            type:model.get("type"),
-            name:model.get("objectName"),
-            cid:model.cid
+            type: model.get("type"),
+            name: model.get("objectName"),
+            cid: model.cid,
+            fullName: model.toText()
         }
     },
 

@@ -24,8 +24,17 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
                     ed.refresh();
                 });
             }
+
+            this.$(".CodeMirror").droppable({
+               drop: _.bind(this.acceptDrop, this)
+            });
         }, this)
+
         );
+    },
+
+    acceptDrop: function(e, ui) {
+        this.insertText(ui.draggable.data("fullname"));
     },
 
     insertText: function(text) {

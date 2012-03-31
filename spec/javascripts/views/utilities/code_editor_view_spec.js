@@ -31,6 +31,7 @@ describe("chorus.views.CodeEditorView", function() {
 
         describe("#render", function() {
             beforeEach(function() {
+                spyOn($.ui, "droppable");
                 this.view.render();
             });
 
@@ -58,6 +59,23 @@ describe("chorus.views.CodeEditorView", function() {
                     expect(this.view.editor.replaceSelection).toHaveBeenCalledWith("my awesome function");
                 })
             })
+
+            it("prepares the editor for drag/drop events", function() {
+                expect($($.ui.droppable.calls[0].args[1])[0]).toBe(this.view.$(".CodeMirror")[0]);
+            });
+
+            context("and the user drops a table name via drag and drop", function() {
+                beforeEach(function() {
+                    spyOn(this.view, "insertText");
+                    var draggable = $('<div data-fullname="test"></div>');
+                    var ui = {draggable: draggable};
+                    this.view.acceptDrop({}, ui);
+                });
+
+                it("inserts the text", function() {
+                    expect(this.view.insertText).toHaveBeenCalledWith("test");
+                });
+            });
         });
     });
 

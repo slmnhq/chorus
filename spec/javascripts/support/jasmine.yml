@@ -14,7 +14,9 @@ src_files:
   - js/vendor/jquery-1.7.1.js
   - js/vendor/underscore-1.2.1.js
   - js/vendor/backbone-0.5.3.js
+  - js/vendor/jquery.ui.core.js
   - js/vendor/jquery.ui.widget.js
+  - js/vendor/jquery.ui.mouse.js
   - js/vendor/jquery.ui.*.js
   - js/vendor/codemirror-2.16.js
   - js/vendor/es5-shim.js
