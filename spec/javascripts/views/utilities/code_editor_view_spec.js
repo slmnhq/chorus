@@ -12,9 +12,6 @@ describe("chorus.views.CodeEditorView", function() {
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
     })
 
-    context("#setup", function() {
-    })
-
     context("without defer stubbed out", function() {
         it("defers call to CodeMirror", function() {
             this.view.render();
@@ -24,59 +21,61 @@ describe("chorus.views.CodeEditorView", function() {
         });
     });
 
-    context("with defer stubbed out", function() {
+    describe("#render", function() {
         beforeEach(function() {
             stubDefer()
+            spyOn($.ui, "droppable");
+            this.view.render();
         });
 
-        describe("#render", function() {
+        context("when deferred CodeMirror creation happens twice in one dom render", function() {
             beforeEach(function() {
-                spyOn($.ui, "droppable");
-                this.view.render();
+                var deferredCodeMirror = _.defer.calls[0].args[0];
+                deferredCodeMirror();
             });
 
-            context("when deferred CodeMirror creation happens twice in one dom render", function() {
-                beforeEach(function() {
-                    var deferredCodeMirror = _.defer.calls[0].args[0];
-                    deferredCodeMirror();
-                });
+            it("only calls CodeMirror once", function() {
+                expect(CodeMirror.fromTextArea.callCount).toBe(1);
+            });
+        });
 
-                it("only calls CodeMirror once", function() {
-                    expect(CodeMirror.fromTextArea.callCount).toBe(1);
-                });
+        it("displays line numbers", function() {
+            expect(this.view.editor.getOption("lineNumbers")).toBe(true);
+        });
+
+        it("prepares the editor for drag/drop events", function() {
+            expect($($.ui.droppable.calls[0].args[1])[0]).toBe(this.view.$(".CodeMirror")[0]);
+        });
+
+        context("and the user clicks insert on a function", function() {
+            beforeEach(function() {
+                spyOn(this.view.editor, 'replaceSelection');
+                chorus.PageEvents.broadcast("file:insertText", "my awesome function");
             });
 
-            it("displays line numbers", function() {
-                expect(this.view.editor.getOption("lineNumbers")).toBe(true);
+            it("inserts the function", function() {
+                expect(this.view.editor.replaceSelection).toHaveBeenCalledWith("my awesome function");
+            });
+        });
+
+        describe("drag and drop", function() {
+            beforeEach(function() {
+                this.drag = {draggable: $('<div data-fullname="test"></div>')};
+                this.view.editor.replaceSelection("this is the first line\n\nthis is the third line");
+                expect(this.view.editor.lineCount()).toBe(3);
             });
 
-            context("and the user clicks insert on a function", function() {
-                beforeEach(function() {
-                    spyOn(this.view.editor, 'replaceSelection')
-                    chorus.PageEvents.broadcast("file:insertText", "my awesome function");
-                })
-                it("inserts the function", function() {
-                    expect(this.view.editor.replaceSelection).toHaveBeenCalledWith("my awesome function");
-                })
-            })
-
-            it("prepares the editor for drag/drop events", function() {
-                expect($($.ui.droppable.calls[0].args[1])[0]).toBe(this.view.$(".CodeMirror")[0]);
+            it("inserts text at the beginning of a line", function() {
+                var pos = this.view.editor.charCoords({line: 1, ch: 0});
+                this.view.acceptDrop({pageX: pos.x, pageY: pos.y}, this.drag);
+                expect(this.view.editor.getLine(1)).toBe("test");
             });
 
-            context("and the user drops a table name via drag and drop", function() {
-                beforeEach(function() {
-                    spyOn(this.view, "insertText");
-                    var draggable = $('<div data-fullname="test"></div>');
-                    var ui = {draggable: draggable};
-                    this.view.acceptDrop({}, ui);
-                });
-
-                it("inserts the text", function() {
-                    expect(this.view.insertText).toHaveBeenCalledWith("test");
-                });
+            it("inserts text in the middle of a line", function() {
+                var pos = this.view.editor.charCoords({line:2, ch: 12});
+                this.view.acceptDrop({pageX: pos.x, pageY: pos.y}, this.drag);
+                expect(this.view.editor.getLine(2)).toBe("this is the testthird line");
             });
         });
     });
-
 });

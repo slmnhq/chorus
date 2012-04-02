@@ -28,12 +28,12 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
             this.$(".CodeMirror").droppable({
                drop: _.bind(this.acceptDrop, this)
             });
-        }, this)
-
-        );
+        }, this));
     },
 
     acceptDrop: function(e, ui) {
+        var pos = this.editor.coordsChar({x: e.pageX, y: e.pageY});
+        this.editor.setCursor(pos);
         this.insertText(ui.draggable.data("fullname"));
     },
 
