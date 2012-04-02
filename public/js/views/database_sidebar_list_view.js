@@ -113,7 +113,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     },
 
     dragHelper : function(e) {
-        return '<div class="drag_helper">' + $(e.currentTarget).data("name") + '</div>'
+        return $(e.currentTarget).clone().addClass("drag_helper");
     },
 
     schemaSelected: function(e) {

@@ -31,8 +31,8 @@ jasmine.sharedExamples.DatabaseSidebarList = function() {
 
     it("the draggable helper has the name of the table", function() {
         var $li = this.view.$("ul.list li:eq(0)")
-        e = {currentTarget: $li};
-        var helper = this.view.dragHelper(e);
+        var helper = this.view.dragHelper({currentTarget: $li});
+        expect(helper).toHaveClass("drag_helper");
         expect(helper).toContainText($li.data("name"));
     });
 }
