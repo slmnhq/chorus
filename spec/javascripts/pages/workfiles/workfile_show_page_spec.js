@@ -142,8 +142,18 @@ describe("chorus.pages.WorkfileShowPage", function() {
             expect(this.page.mainContent.contentHeader.$("h1").attr("title")).toBe(this.model.get('fileName'));
         });
 
-        it("displays the file icon in the content header", function() {
-            expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('sql'));
+        describe("displays the file icon in the content header", function() {
+            it("shows a thumbnail when workfile is an image", function() {
+                spyOn(this.page.model, "isImage").andReturn(true);
+                this.page.render();
+                expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(this.page.model.thumbnailUrl());
+            });
+
+            it("shows an icon when workfile is not an image", function() {
+                spyOn(this.page.model, "isImage").andReturn(false);
+                this.page.render();
+                expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('sql'));
+            });
         });
 
         context("when the content broadcasts file:autosaved", function() {

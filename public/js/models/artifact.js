@@ -24,11 +24,15 @@ chorus.models.Artifact = chorus.models.Base.extend({
     },
 
     downloadUrl:function () {
-        return "/edc/file/" + this.get("id");
+        return "/edc/file/" + (this.get("fileId") || this.get("id"));
     },
 
     thumbnailUrl: function () {
-        return "/edc/file/" + this.get("id") + "/thumbnail";
+        return "/edc/file/" + (this.get("fileId") || this.get("id")) + "/thumbnail";
+    },
+
+    isImage: function() {
+        return this.get("type") === "IMAGE" || this.get("fileType") === "IMAGE";
     },
 
     workspace: function() {

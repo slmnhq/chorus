@@ -5,14 +5,18 @@ describe("chorus.views.SearchAttachment", function() {
         this.view.render()
     });
 
-    it("includes the correct attachment file icon", function() {
-        expect(this.view.$("img.icon").attr("src")).toBe("/images/workfiles/large/img.png");
+    it("shows the thumbnail for an image", function() {
+        expect(this.view.$("img.icon").attr("src")).toBe(this.result.thumbnailUrl());
+    });
+
+    it("shows the iconUrl for a non-image", function() {
+        this.result.set({fileType: "OTHER"})
+        expect(this.view.$("img.icon").attr("src")).toBe(this.result.iconUrl());
     });
 
     it("has a link to the download for the attachment", function() {
         expect(this.view.$('a.name').attr('href')).toBe(this.result.downloadUrl());
     });
-
 
     context("with a workspace and tabular data", function() {
         it("shows workspace and tabular data set", function() {

@@ -11,7 +11,14 @@ describe("chorus.views.SearchWorkfile", function() {
                     {highlightedAttributes: { "content": "nice <em>cool<\/em> comment"}, "content": "nice cool comment", "lastUpdatedStamp": "2012-02-28 14:07:46", "isPublished": false, "id": "10001", "workspaceId": "10000", "isComment": true, "isInsight": false, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
                     {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10002", "workspaceId": "10000", "isComment": false, "isInsight": true, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
                     {highlightedAttributes: { "content": "Nice <em>cool<\/em> insight"}, "content": "Nice cool insight", "lastUpdatedStamp": "2012-02-28 14:09:56", "isPublished": false, "id": "10003", "workspaceId": "10000", "isComment": false, "isInsight": true, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}}
-                ]
+                ],
+                versionInfo: {
+                    lastUpdatedStamp: "2012-04-02 14:56:19.34",
+                    modifiedBy: {id:"InitialUser", lastName:"Admin", firstName:"EDC"},
+                    versionFileId: "1333403779156_199",
+                    versionNum: 1,
+                    versionOwner: "edcadmin"
+                }
             },
             {
                 id: "4",
@@ -37,7 +44,7 @@ describe("chorus.views.SearchWorkfile", function() {
     });
 
     it("has a link to the workfile for each workfile in the collection", function() {
-        expect(this.view.$('a.name').attr('href')).toBe("#/workspaces/2/workfiles/1");
+        expect(this.view.$('a.name').attr('href')).toBe("#/workspaces/2/workfiles/1/versions/1");
     });
 
     it("shows which workspace each result was found in", function() {
@@ -53,6 +60,20 @@ describe("chorus.views.SearchWorkfile", function() {
 
     it("shows matching name", function() {
         expect(this.view.$(".name").html()).toContain("<em>cool</em> file");
+    });
+
+    describe("thumbnails", function() {
+        it("uses the thumbnail when the workfile is an image", function() {
+            spyOn(this.model, "isImage").andReturn(true);
+            this.view.render();
+            expect(this.view.$("img")).toHaveAttr("src", this.model.thumbnailUrl());
+        });
+
+        it("uses the icon when the workfile is not an image", function() {
+            spyOn(this.model, "isImage").andReturn(false);
+            this.view.render();
+            expect(this.view.$("img")).toHaveAttr("src", this.model.iconUrl());
+        });
     });
 
     describe("shows version commit messages in the comments area", function() {

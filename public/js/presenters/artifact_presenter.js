@@ -4,7 +4,7 @@ chorus.presenters.Artifact = chorus.presenters.Base.extend({
         var iconSize = (options && options.iconSize) || "medium";
         var result = {
             url: url,
-            iconSrc: model.iconUrl({size: iconSize})
+            iconSrc: (model.isImage && model.isImage()) ? model.thumbnailUrl() : model.iconUrl({size: iconSize})
         }
         if(model.get("objectName")) {
             result.name = model.get("objectName");

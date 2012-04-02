@@ -3,8 +3,15 @@ describe("chorus.models.Artifact", function() {
         this.model = fixtures.artifact({ id: "97", name: "helmut" });
     });
 
-    it("has the appropriate #downloadUrl", function() {
-        expect(this.model.downloadUrl()).toBe("/edc/file/97");
+    describe("#downloadUrl", function() {
+        it("prefers fileId over id", function() { // because search results are not consistent with "regular" attachments
+            this.model.set({fileId: "123"})
+            expect(this.model.downloadUrl()).toBe("/edc/file/123");
+        });
+
+        it("uses id when fileId is not present", function() {
+            expect(this.model.downloadUrl()).toBe("/edc/file/97");
+        });
     });
 
     it("uses type for the iconUrl", function() {
@@ -22,8 +29,25 @@ describe("chorus.models.Artifact", function() {
     });
 
     describe("#thumbnailUrl", function() {
-        it("has the correct one", function() {
+        it("prefers fileId over id", function() { // because search results are not consistent with "regular" attachments
+            this.model.set({fileId: "123"})
+            expect(this.model.thumbnailUrl()).toBe("/edc/file/123/thumbnail");
+        });
+
+        it("uses id when fileId is not present", function() {
             expect(this.model.thumbnailUrl()).toBe("/edc/file/97/thumbnail");
+        });
+    });
+
+    describe("#isImage", function() {
+        beforeEach(function() {
+            this.image = fixtures.artifact({ type: "IMAGE" });
+            this.noImage = fixtures.artifact({ type: "OTHER" });
+        });
+
+        it("returns the correct value", function() {
+            expect(this.image.isImage()).toBeTruthy();
+            expect(this.noImage.isImage()).toBeFalsy();
         });
     });
 

@@ -30,4 +30,28 @@ describe("chorus.presenters.Artifact", function() {
             expect(presenter.name).toBeUndefined();
         })
     })
+
+    describe("iconSrc", function() {
+        context("when the model is an image", function() {
+            beforeEach(function() {
+                this.model = fixtures.artifact({type: "IMAGE"});
+            });
+
+            it("uses the thumbnail url", function() {
+                var presenter = new chorus.presenters.Artifact(this.model);
+                expect(presenter.iconSrc).toBe(this.model.thumbnailUrl());
+            });
+        });
+
+        context("when the model is not an image", function() {
+            beforeEach(function() {
+                this.model = fixtures.artifact({type: "OTHER"});
+            });
+
+            it("uses the icon url", function() {
+                var presenter = new chorus.presenters.Artifact(this.model);
+                expect(presenter.iconSrc).toBe(this.model.iconUrl({size: "medium"}));
+            });
+        });
+    });
 });

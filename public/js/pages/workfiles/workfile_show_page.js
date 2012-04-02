@@ -60,7 +60,7 @@
         className:"workfile_header",
         additionalContext:function () {
             return {
-                iconUrl:this.model.iconUrl()
+                iconUrl: this.model.isImage() ? this.model.thumbnailUrl() : this.model.iconUrl()
             };
         }
     });
