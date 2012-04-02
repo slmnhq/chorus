@@ -1,20 +1,18 @@
 @import "../_common.scss";
 
-.name_chorus_view {
-    .name_input {
-        background-color: $shaded-background-color;
-        padding: 5px;
-        border-bottom: 1px solid #B2C7D6;
+.dialog.name_chorus_view {
+    .preview_bar {
+        position: relative;
+        height: 36px;
 
-        label {
-            display: inline-block;
-            margin-right: 10px;
-            height: 20px;
-            vertical-align: middle;
-        }
         input[type=text] {
             width: 400px;
             display: inline-block;
+        }
+
+        button {
+            top: 5px;
+            right: 3px;
         }
     }
 
