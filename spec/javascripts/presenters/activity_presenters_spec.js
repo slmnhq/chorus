@@ -359,6 +359,19 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("SUB_COMMENT", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.SUB_COMMENT();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("has the right text", function() {
+            expect(this.presenter.body).toBe(this.model.get("text"));
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context(".NOTE_ON_ANYTHING", function() {
         beforeEach(function() {
             this.model = fixtures.activities.NOTE_ON_DATASET_TABLE({
@@ -1166,6 +1179,14 @@ describe("chorus.presenters.Activity", function() {
     context("headerHtml", function() {
         beforeEach(function() {
             this.keyPrefix = 'activity_stream.header.html.';
+        });
+
+        describe("SUB_COMMENT", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.SUB_COMMENT();
+            });
+
+            itGetsTheTranslationKeyCorrectly('without_workspace');
         });
 
         describe("WORKSPACE_ADD_TABLE", function() {

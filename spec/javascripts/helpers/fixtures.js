@@ -34,6 +34,20 @@ beforeEach(function() {
         },
 
         activities: {
+            "SUB_COMMENT": function(overrides) {
+                var attrs = _.extend({
+                    artifacts: [],
+                    author: fixtures.authorJson(),
+                    id: "10109",
+                    isDeleted: false,
+                    isInsight: false,
+                    text: "This is a comment on a comment",
+                    timestamp: "2012-04-02 14:24:23",
+                    type: "SUB_COMMENT"
+                }, overrides);
+                return new chorus.models.Activity(attrs);
+            },
+
             "MEMBERS_ADDED": function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),

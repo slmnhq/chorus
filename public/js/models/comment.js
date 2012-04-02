@@ -31,8 +31,8 @@ chorus.models.Comment = chorus.models.Activity.extend({
         }
     },
 
-    note:function () {
-        return !!this.get('type');
+    note: function() {
+        return this.get('type') && this.get("type") == "NOTE";
     },
 
     addFileUpload:function (uploadModel) {

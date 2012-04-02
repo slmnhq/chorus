@@ -1,16 +1,13 @@
 describe("chorus.models.Comment", function() {
     beforeEach(function() {
-        this.model = fixtures.noteComment(
-            {
-                id: '41',
-                author :
-                {
-                    id : "45",
-                    firstName : "LeBron",
-                    lastName : "James"
-                }
+        this.model = fixtures.noteComment({
+            id: '41',
+            author: {
+                id: "45",
+                firstName: "LeBron",
+                lastName: "James"
             }
-        );
+        });
     });
 
     describe("#urlTemplate", function() {
@@ -38,6 +35,23 @@ describe("chorus.models.Comment", function() {
         it("should return a truthy value if there is a body", function() {
             this.model.set({ body : "foo" });
             expect(this.model.performValidation()).toBeTruthy();
+        });
+    });
+
+    describe("#note", function() {
+        it("should return true for a note", function() {
+            this.model.set({type: "NOTE"});
+            expect(this.model.note()).toBeTruthy();
+        });
+
+        it("should return false for everything else", function() {
+            this.model.set({type: "SUB_COMMENT"});
+            expect(this.model.note()).toBeFalsy();
+        });
+
+        it("should return false when undefined", function() {
+            this.model.unset("type");
+            expect(this.model.note()).toBeFalsy();
         });
     });
 
