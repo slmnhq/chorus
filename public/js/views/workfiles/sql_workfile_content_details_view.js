@@ -54,8 +54,8 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     },
 
     runSelectedInExecutionSchema: function() {
-        if(this.enableRunSelection()) {
-        chorus.PageEvents.broadcast("file:runSelected");
+        if (this.enableRunSelection()) {
+            chorus.PageEvents.broadcast("file:runSelected");
         }
     },
 

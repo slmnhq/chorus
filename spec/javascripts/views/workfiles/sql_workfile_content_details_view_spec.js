@@ -12,12 +12,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 schemaName: "schema"
             }});
         this.contentView = new chorus.views.SqlWorkfileContent({ model: this.model });
-        this.contentView.render();
-        this.contentView.textContent.editor = new Object();
-        this.contentView.textContent.editor.getValue = function() {
-            return "Chuck and Lenny wrote this"
-        }
-        this.contentView.textContent.editor.getSelection = function() { };
+        spyOn(this.contentView, 'run');
+        this.contentView.getSelectedText = function() {};
 
         this.view = new chorus.views.SqlWorkfileContentDetails({ model: this.model, contentView: this.contentView });
         spyOn(this.view, 'runInExecutionSchema').andCallThrough();
@@ -55,7 +51,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
         context("when the user has not selected any text", function() {
             beforeEach(function() {
-                this.contentView.textContent.editor.getSelection = function() {
+                this.contentView.getSelectedText = function() {
                     return "";
                 };
                 spyOn(chorus.PageEvents, "broadcast").andCallThrough();
@@ -74,11 +70,13 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
         context("when the user has selected some text", function() {
             beforeEach(function() {
-                this.contentView.textContent.editor.getSelection = function() {
+                this.contentView.getSelectedText = function() {
                     return "Chuck and Lenny";
                 };
+
                 spyOn(chorus.PageEvents, "broadcast").andCallThrough();
             });
+
             context("and there is a schema to run in", function() {
                 context("and opens the Run File menu", function() {
                     beforeEach(function() {
