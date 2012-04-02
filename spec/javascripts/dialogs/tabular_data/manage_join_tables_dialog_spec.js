@@ -113,7 +113,9 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             describe("opening the schema-picker", function() {
                 beforeEach(function() {
                     this.dialog.$(".canonical_name a.schema_qtip").click();
-                    this.server.completeFetchFor(this.dialog.schemas, [fixtures.schema({name: "Bob"}), this.schema, fixtures.schema({name: "Ted"})]);
+                    this.schemaBob = fixtures.schema({name: "Bob", databaseName: this.schema.get("databaseName")});
+                    this.schemaTed = fixtures.schema({name: "Ted", databaseName: this.schema.get("databaseName")});
+                    this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
                 });
 
                 it("clicking the link shows the schema-picker", function() {
@@ -126,6 +128,15 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                      expect(this.qtip.$("li:contains(Bob)")).not.toContain('.check');
                 });
 
+                it("clicking the link more than once returns the correct list", function() {
+                    this.qtip.hide();
+
+                    this.dialog.$(".canonical_name a.schema_qtip").click();
+                    this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
+
+                    expect(this.qtip.find("ul li").length).toBe(3);
+                });
+
                 context("when selecting a schema", function() {
                     beforeEach(function() {
                         this.qtip.$("li:contains(Bob) a").click();
@@ -136,12 +147,24 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                     });
 
                     it("loads the schema's datasets", function() {
-
+                        expect(this.schemaBob.databaseObjects()).toHaveBeenFetched();
                     });
 
                     it("shows the loading spinner until the datasets have loaded", function() {
+                        expect(this.dialog.$(".loading_section")).toExist();
+                        this.server.completeFetchFor(this.schemaBob.databaseObjects());
+                        expect(this.dialog.$(".loading_section")).not.toExist();
                     });
 
+                    it("changes the schema", function() {
+                        expect(this.dialog.schema.get("name")).toEqual("Bob");
+                    });
+
+                    it("keeps the instance and database", function() {
+                        expect(this.dialog.schema).not.toEqual(this.schema);
+                        expect(this.dialog.schema.get("instanceName")).toBe(this.schema.get("instanceName"));
+                        expect(this.dialog.schema.get("databaseName")).toBe(this.schema.get("databaseName"));
+                    });
                 });
             });
         });

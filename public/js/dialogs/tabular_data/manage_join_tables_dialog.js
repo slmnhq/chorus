@@ -21,7 +21,11 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.schema = this.pageModel.schema();
-        this.resource = this.collection = this.schema.databaseObjects();
+        this.fetchDatabaseObjects(this.schema.databaseObjects());
+    },
+
+    fetchDatabaseObjects: function(dbObjects) {
+        this.resource = this.collection = dbObjects;
 
         var urlParams = this.collection.urlParams;
         this.collection.urlParams = function() {
@@ -48,12 +52,14 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
             qtipArgs: {
                 events: {
                     show: _.bind(function(event, api) {
-                        this.schemas.fetchIfNotLoaded();
+                        this.schemas.fetch();
                         this.schemas.bind("loaded", function() {
+                            $menuContent.empty();
                             _.each(this.schemas.models, function(schema) {
+                                schema.set({ instanceName: this.schema.get("instanceName") });
+
                                 $li = $("<li></li>");
                                 $li.addClass("menu_item");
-                                $li.data("schema", schema);
 
                                 $a = $("<a href='#'></a>")
                                 $a.addClass("schema");
@@ -63,13 +69,18 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
                                 }
                                 $a.append(schema.get("name"));
 
-                                $a.click(function(e) {
+                                $a.click(_.bind(function(e) {
                                     e && e.preventDefault();
+                                    this.schema = schema;
+                                    var dbObjects = schema.databaseObjects();
+                                    this.bindings.add(dbObjects, "change reset remove", this.render);
+
+                                    this.fetchDatabaseObjects(dbObjects);
+                                    this.render();
                                     api.hide();
-                                });
+                                }, this));
 
                                 $li.append($a);
-
                                 $menuContent.append($li);
                             }, this);
                         }, this);
