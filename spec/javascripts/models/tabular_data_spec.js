@@ -44,6 +44,7 @@ describe("chorus.models.TabularData", function() {
             expect(this.tabularDataProperties.get('type')).toBe(this.tabularData.get("type"))
             expect(this.tabularDataProperties.get('objectType')).toBe(this.tabularData.get("objectType"))
             expect(this.tabularDataProperties.get('objectName')).toBe(this.tabularData.get("objectName"))
+            expect(this.tabularDataProperties.get("metaType")).toBe(this.tabularData.metaType())
         })
     })
 

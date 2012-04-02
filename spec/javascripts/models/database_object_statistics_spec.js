@@ -5,19 +5,32 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
         })
 
         describe("#url", function() {
-            it("should be right", function() {
+            it("should call the right API when the metaType is a table", function() {
                 this.databaseObjectStatistics.set({
                     instanceId: 1,
                     databaseName: "%foo%",
                     schemaName: "b/a",
                     type: "CHORUS_VIEW",
                     objectType: "",
-                    objectName: "a%pct"
+                    objectName: "a%pct",
+                    metaType: "table"
                 })
 
-                expect(this.databaseObjectStatistics.url()).toContain("/edc/data/1/database/%25foo%25/schema/b%2Fa");
-                expect(this.databaseObjectStatistics.url()).toContain("type=meta");
-                expect(this.databaseObjectStatistics.url()).toContain("filter=a%25pct");
+                expect(this.databaseObjectStatistics.url()).toContain("/edc/data/1/database/%25foo%25/schema/b%2Fa/table/a%25pct")
+            })
+
+            it("calls the right API when the metaType is a view", function() {
+                this.databaseObjectStatistics.set({
+                    instanceId: 1,
+                    databaseName: "%foo%",
+                    schemaName: "b/a",
+                    type: "CHORUS_VIEW",
+                    objectType: "",
+                    objectName: "a%pct",
+                    metaType: "view"
+                })
+
+                expect(this.databaseObjectStatistics.url()).toContain("/edc/data/1/database/%25foo%25/schema/b%2Fa/view/a%25pct")
             })
         })
 

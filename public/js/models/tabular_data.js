@@ -104,7 +104,8 @@ chorus.models.TabularData = chorus.models.Base.include(
                 schemaName: this.get("schemaName"),
                 type: this.get("type"),
                 objectType: this.get("objectType"),
-                objectName: this.get("objectName")
+                objectName: this.get("objectName"),
+                metaType: this.metaType()
             });
         }
 
