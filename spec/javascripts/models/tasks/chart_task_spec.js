@@ -1,6 +1,6 @@
 describe("chorus.models.ChartTask", function() {
     beforeEach(function() {
-        this.dataset = fixtures.datasetSandboxTable({objectName: 'dog_breeds'});
+        this.dataset = fixtures.datasetSandboxTable({schemaName: 'animals', objectName: 'dog_breeds'});
         var chartSubclass = chorus.models.ChartTask.extend({});
         chartSubclass.prototype.chartType = "fantastic";
         this.model = new chartSubclass({ tabularData: this.dataset });
@@ -22,13 +22,13 @@ describe("chorus.models.ChartTask", function() {
     it("honors the filters in the SELECT statement", function() {
         this.model.set({"filters": "WHERE ABC"});
         this.model.save();
-        expect(this.model.get("relation")).toEqual("SELECT * FROM dog_breeds WHERE ABC");
+        expect(this.model.get("relation")).toEqual("SELECT * FROM animals.dog_breeds WHERE ABC");
     });
 
-    it("escapes unsafe object names", function() {
-        this.dataset.set({objectName: "DOG_BREEDs"});
+    it("escapes unsafe schema and object names", function() {
+        this.dataset.set({objectName: "DOG_BREEDs", schemaName: "ANIMALS"});
         this.model.save();
-        expect(this.model.get("relation")).toEqual('SELECT * FROM "DOG_BREEDs"');
+        expect(this.model.get("relation")).toEqual('SELECT * FROM "ANIMALS"."DOG_BREEDs"');
     })
 
     describe("creating the task", function() {
@@ -36,9 +36,9 @@ describe("chorus.models.ChartTask", function() {
             this.model.save();
         });
 
-        it("generates the 'relation' field based on the object name", function() {
+        it("generates the 'relation' field based on the schema and object names", function() {
             var request = this.server.lastCreate();
-            expect(request.params().relation).toBe("SELECT * FROM dog_breeds");
+            expect(request.params().relation).toBe("SELECT * FROM animals.dog_breeds");
         });
     });
 

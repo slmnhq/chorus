@@ -453,8 +453,8 @@ describe("chorus.models.TabularData", function() {
 
     describe("#fromClause", function() {
         context("when a datasetNumber is not set", function() {
-            it("returns the quotedName", function() {
-                expect(this.tabularData.fromClause()).toBe(this.tabularData.quotedName());
+            it("returns the quoted schema name and table name", function() {
+                expect(this.tabularData.fromClause()).toBe(this.tabularData.get("schemaName") + "." + this.tabularData.quotedName());
             });
         });
 
@@ -464,7 +464,7 @@ describe("chorus.models.TabularData", function() {
             });
 
             it("returns the aliased from clause", function() {
-                expect(this.tabularData.fromClause()).toBe(this.tabularData.quotedName() + " AS a");
+                expect(this.tabularData.fromClause()).toBe(this.tabularData.get("schemaName") + "." + this.tabularData.quotedName() + " AS a");
             });
         });
 

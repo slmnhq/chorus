@@ -183,7 +183,7 @@ chorus.models.TabularData = chorus.models.Base.include(
         if (this.has("query")) {
             return "(" + this.get("query") + ")";
         }
-        return this.quotedName();
+        return this.safePGName(this.get("schemaName")) + "." + this.quotedName();
     },
 
     alias: function() {

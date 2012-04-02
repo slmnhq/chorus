@@ -230,9 +230,9 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         describe("when a 'join table' link is clicked", function() {
             beforeEach(function() {
                 spyOn(chorus.dialogs.JoinConfiguration.prototype, 'render').andCallThrough();
-                var link = this.dialog.$("a.join").eq(3)
+                var link = this.dialog.$("a.join").eq(3);
                 link.trigger("click");
-                var clickedId = link.closest('li').data('cid')
+                var clickedId = link.closest('li').data('cid');
                 this.selectedDataset = this.dialog.collection.getByCid(clickedId);
             });
 
@@ -240,7 +240,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 expect(chorus.dialogs.JoinConfiguration.prototype.render).toHaveBeenCalled();
             });
 
-            it("passes the right chorus view and destination object to the JoinConfiguration dialog", function() {
+            it("passes the right chorus view, schema and destination object to the JoinConfiguration dialog", function() {
                 var joinConfigurationDialog = chorus.dialogs.JoinConfiguration.prototype.render.mostRecentCall.object;
 
                 expect(joinConfigurationDialog.model).toBe(this.chorusView);

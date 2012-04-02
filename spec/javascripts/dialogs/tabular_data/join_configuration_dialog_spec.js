@@ -119,8 +119,6 @@ describe("chorus.dialogs.JoinConfiguration", function() {
             it("shows errors on the previous modal", function() {
                 expect(this.dialog.previousModal.showErrors).toHaveBeenCalledWith(this.dialog.model);
             });
-
-
         });
     });
 });
