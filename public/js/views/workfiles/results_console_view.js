@@ -25,7 +25,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             task.fetchIfNotLoaded();
         }
         this.executionStarted();
-        task.onLoaded(_.bind(this.executionSucceeded, this, task));
+        this.bindings.add(task, "loaded", _.bind(this.executionSucceeded, this, task));
         this.bindings.add(task, "saved", _.bind(this.executionSucceeded, this, task));
         this.bindings.add(task, "fetchFailed", _.bind(this.executionFailed, this, task));
         this.bindings.add(task, "saveFailed", _.bind(this.executionFailed, this, task));
@@ -37,6 +37,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.spinnerTimer = _.delay(_.bind(this.startSpinner, this), 250)
         this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
         this.$(".result_content").removeClass("hidden");
+        this.$(".result_table").html("");
         this.closeError();
     },
 

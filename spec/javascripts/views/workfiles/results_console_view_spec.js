@@ -95,6 +95,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             beforeEach(function() {
                 spyOn(window, "clearTimeout");
                 spyOn(this.view, "closeError").andCallThrough();
+                this.view.$(".result_table").html("<div class='data_table'/>");
 
                 chorus.PageEvents.broadcast("file:executionStarted")
             });
@@ -121,6 +122,10 @@ describe("chorus.views.ResultsConsoleView", function() {
 
             it("shows the result_content", function() {
                 expect(this.view.$(".result_content")).not.toHaveClass("hidden");
+            });
+
+            it("clears out any data that is already in the table", function() {
+                expect(this.view.$(".result_table")).toHaveHtml("");
             });
 
             it("closes the errors", function() {
@@ -543,6 +548,20 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         it("calls executionStarted", function() {
             expect(this.view.executionStarted).toHaveBeenCalled();
+        });
+
+        context("when the task was successfully executed previously", function() {
+            beforeEach(function() {
+
+                this.task = fixtures.task();
+                this.task.loaded = true;
+                _.delay.andCallFake(function(fn, timeout) { fn(); });
+                this.view.execute(this.task);
+            });
+
+            it("does not show the data table", function() {
+                expect(this.view.executionSucceeded).not.toHaveBeenCalled();
+            });
         });
 
         context("when isPostRequest is true", function() {
