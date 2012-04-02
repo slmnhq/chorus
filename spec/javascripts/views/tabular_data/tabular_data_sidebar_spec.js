@@ -291,7 +291,13 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 timeAgo: chorus.helpers.relativeTimestamp("2012-02-29 14:35:38.165"),
                                 tableLink: "some_source_fil..."
                             });
+                        });
+
+                        it("renders the filename as a span with a title", function() {
                             expect(this.view.$(".last_import a")).not.toExist();
+                            expect(this.view.$(".last_import .source_file")).toBe("span");
+                            expect(this.view.$(".last_import .source_file")).toHaveText("some_source_fil...");
+                            expect(this.view.$(".last_import .source_file")).toHaveAttr("title", "some_source_file.csv")
                         });
 
                         it("doesn't display a 'import now' link", function() {
