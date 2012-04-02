@@ -194,8 +194,12 @@ chorus.models.Activity = chorus.models.Base.extend({
         return this.get("type") === "INSIGHT_CREATED";
     },
 
+    isSubComment: function() {
+        return this.get("type") === "SUB_COMMENT";
+    },
+
     isUserGenerated: function () {
-        return this.isNote() || this.isInsight();
+        return this.isNote() || this.isInsight() || this.isSubComment();
     },
 
     isPublished: function() {

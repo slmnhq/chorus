@@ -68,6 +68,10 @@ describe("chorus.models.Activity", function() {
         it("returns false for other activities", function() {
             expect(fixtures.activities.MEMBERS_ADDED().isUserGenerated()).toBeFalsy();
         });
+
+        it("returns true for sub-comments", function() {
+            expect(fixtures.activities.SUB_COMMENT().isUserGenerated()).toBeTruthy();
+        });
     });
 
     describe("#toComment", function() {
@@ -148,6 +152,18 @@ describe("chorus.models.Activity", function() {
         it("returns false for non-insights", function() {
             this.model.set({ type: "WORKSPACE_MAKE_PUBLIC" });
             expect(this.model.isInsight()).toBeFalsy();
+        });
+    });
+
+    describe("#isSubComment", function() {
+        it("returns true for sub-comments", function() {
+            this.model.set({ type: "SUB_COMMENT" });
+            expect(this.model.isSubComment()).toBeTruthy();
+        });
+
+        it("returns false for anything else", function() {
+            this.model.set({ type: "NOTE" });
+            expect(this.model.isSubComment()).toBeFalsy();
         });
     });
 
