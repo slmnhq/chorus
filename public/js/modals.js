@@ -2,7 +2,15 @@
     chorus.Modal = chorus.views.Base.extend({
         constructorName: "Modal",
 
-        launchModal:function () {
+        launchModal: function() {
+            if (chorus.modal && this !== chorus.modal) {
+                chorus.modal.launchSubModal(this);
+            } else {
+                this.launchNewModal();
+            }
+        },
+
+        launchNewModal:function () {
             this.render();
             $(document).one('reveal.facebox', _.bind(this.revealed, this));
             $.facebox(this.el)
@@ -11,6 +19,18 @@
             chorus.modal = this;
 
             pushModalBindings(this);
+        },
+
+        launchSubModal: function(subModal) {
+            popModalBindings(this);
+
+            this.subModalId = "" + (new Date().getTime());
+            $("#facebox").attr("id", "facebox-" + this.subModalId).addClass("hidden");
+            $("#facebox_overlay").attr("id", "facebox_overlay-" + this.subModalId);
+            $.facebox.settings.inited = false;
+            subModal.isSubModal = true;
+            subModal.subModalId = this.subModalId;
+            subModal.launchNewModal();
         },
 
         postRender: function() {
@@ -27,18 +47,6 @@
 
         closeModal:function () {
             $(document).trigger("close.facebox");
-        },
-
-        launchSubModal:function (subModal) {
-            popModalBindings(this);
-
-            this.subModalId = "" + (new Date().getTime());
-            $("#facebox").attr("id", "facebox-" + this.subModalId).addClass("hidden");
-            $("#facebox_overlay").attr("id", "facebox_overlay-" + this.subModalId);
-            $.facebox.settings.inited = false;
-            subModal.isSubModal = true;
-            subModal.subModalId = this.subModalId;
-            subModal.launchModal();
         },
 
         keydownHandler:function (e) {

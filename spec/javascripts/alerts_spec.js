@@ -36,7 +36,7 @@ describe("chorus.alerts", function() {
         it("should not render the body section", function() {
             expect(this.alert.$(".body")).not.toExist();
         });
-        
+
         context("when a message body is provided", function() {
             beforeEach(function() {
                 this.alert.body = "Hello World!"
@@ -48,7 +48,7 @@ describe("chorus.alerts", function() {
                 expect(this.alert.$(".body p").text().trim()).toBe("Hello World!");
             });
         });
-        
+
         context("when a custom cancel is provided", function() {
             beforeEach(function() {
                 this.alert.cancel = "Don't do it!"
@@ -71,6 +71,7 @@ describe("chorus.alerts", function() {
 
     describe("#launchModal", function() {
         beforeEach(function() {
+            delete chorus.modal;
             spyOn($, "facebox")
             spyOn(this.alert, "render")
             spyOn(this.alert, "el")

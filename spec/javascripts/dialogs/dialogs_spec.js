@@ -43,6 +43,8 @@ describe("chorus.views.Dialog", function() {
 
     describe("#launchModal", function() {
         beforeEach(function() {
+            delete chorus.modal;
+
             spyOn($, "facebox")
             spyOn(this.dialog, "render")
             spyOn(this.dialog, "el")
@@ -53,7 +55,7 @@ describe("chorus.views.Dialog", function() {
             expect($.facebox).toHaveBeenCalledWith(this.dialog.el);
         })
 
-        it("creates a facebox", function() {
+        it("renders the dialog", function() {
             expect(this.dialog.render).toHaveBeenCalled();
         })
     })
