@@ -6,6 +6,8 @@ describe("chorus.dialogs.SqlPreview", function() {
                 launchElement: this.launchElement,
                 model : fixtures.datasetSandboxTable()
             });
+            spyOn(_, 'defer');
+            spyOn(CodeMirror, 'fromTextArea').andReturn({ refresh: $.noop });
             this.dialog.render();
             this.parent = {
                 sql : function(){ return "select awesome from sql"; }
@@ -15,6 +17,15 @@ describe("chorus.dialogs.SqlPreview", function() {
         it("has a close window button", function() {
             expect(this.dialog.$('.modal_controls button.cancel')).toExist();
             expect(this.dialog.$('.modal_controls button.cancel').text().trim()).toMatchTranslation("actions.close_window");
+        });
+
+        it("hides the sql text area until the codemirror editor is ready", function() {
+            var textarea = this.dialog.$("textarea");
+            expect(textarea).toHaveClass("hidden");
+            var deferredFn = _.defer.mostRecentCall.args[0];
+            deferredFn();
+            expect(CodeMirror.fromTextArea).toHaveBeenCalled();
+            expect(CodeMirror.fromTextArea.mostRecentCall.args[0]).toBe(textarea[0]);
         });
 
         describe("preview bar", function() {

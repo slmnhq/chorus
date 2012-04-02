@@ -35,21 +35,12 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
+        var textArea = this.$(".text_editor");
+        textArea.addClass('hidden');
         _.defer(_.bind(function() {
-            var textArea = this.$(".text_editor")[0];
-            if (textArea !== this.textArea) {
-                this.textArea = textArea;
-                this.editor = CodeMirror.fromTextArea(this.textArea, this.makeCodeMirrorOptions());
-
-                var ed = this.editor;
-                _.defer(function() {
-                    ed.refresh();
-                    ed.refresh();
-                    ed.refresh();
-                });
-
-                this.setupScrolling(this.$(".container"));
-            }
+            this.editor = CodeMirror.fromTextArea(textArea[0], this.makeCodeMirrorOptions());
+            this.editor.refresh();
+            this.setupScrolling(this.$(".container"));
         }, this));
     },
 
