@@ -73,6 +73,12 @@ describe("chorus.mixins.clEditor", function() {
 
             expect(chorus.Mixins.ClEditor.getNormalizedText($textarea)).toBe("Hello");
         });
+
+        it("removes single break tags if there is no text", function() {
+            var $textarea = $("<textarea/>");
+            $textarea.val("<br>");
+            expect(chorus.Mixins.ClEditor.getNormalizedText($textarea)).toBe("");
+        });
     });
 
     describe("toolbar helpers", function() {

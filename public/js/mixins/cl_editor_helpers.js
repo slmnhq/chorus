@@ -49,6 +49,8 @@ chorus.Mixins.ClEditor = {
     },
 
     getNormalizedText: function($textarea) {
-        return $textarea.val().replace(/(<div><br><\/div>)+$/, "");
+        return $textarea.val()
+            .replace(/(<div><br><\/div>)+$/, "")
+            .replace(/^<br>$/, "");
     }
 };
