@@ -32,7 +32,6 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             expect(this.view.$(".add_team_members a").data("dialog")).toBe("WorkspaceEditMembers");
         });
 
-
         it("hides the box when the link is clicked", function() {
             this.view.$(".add_team_members a").click();
             expect(this.view.$(".add_team_members")).toHaveClass("hidden");
@@ -56,11 +55,23 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             expect(this.view.$(".edit_workspace_settings a")).toHaveClass("dialog");
             expect(this.view.$(".edit_workspace_settings a").data("dialog")).toBe("WorkspaceSettings");
         });
+    });
 
-        it("hides the box when the link is clicked", function() {
+    describe("when the 'edit workspace' dialog is launched", function() {
+        beforeEach(function() {
             this.view.$(".edit_workspace_settings a").click();
+        });
+
+        it("hides the edit workspace box", function() {
             expect(this.view.$(".edit_workspace_settings")).toHaveClass("hidden");
-        })
+        });
+
+        describe("when the page re-renders", function() {
+            it("still hides the box", function() {
+                this.view.render();
+                expect(this.view.$(".edit_workspace_settings")).toHaveClass("hidden");
+            });
+        });
     });
 
     it("navigates to the normal workspace show page if the dismiss link is clicked", function() {
