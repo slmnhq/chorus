@@ -97,9 +97,11 @@ describe("chorus.views.ImageUpload", function() {
 
             context("when the upload has finished successfully", function() {
                 beforeEach(function() {
+                    this.originalImgSrc = this.view.$("img").attr("src");
                     this.validatedSpy = jasmine.createSpy("validated");
                     this.imageChangedSpy = jasmine.createSpy("imageChange");
                     spyOn(this.user, "change");
+                    spyOn(chorus, "updateCachebuster").andCallThrough();
                     this.user.bind("validated", this.validatedSpy);
                     this.user.bind("image:change", this.imageChangedSpy)
                     this.fileUploadOptions.done(null, this.successfulResponse);
@@ -117,12 +119,14 @@ describe("chorus.views.ImageUpload", function() {
                     expect(this.view.$("img")).not.toHaveClass('hidden')
                 })
 
+                it("updates the cachebuster", function() {
+                    expect(chorus.updateCachebuster).toHaveBeenCalled();
+                });
+
                 it("changes/adds the cache-buster on the original image's URL", function() {
-                    var originalUrl = this.view.model.imageUrl();
                     var newUrl = this.view.$("img").attr("src");
 
-                    expect(newUrl).not.toBe(originalUrl);
-                    expect(newUrl).toContain("buster=");
+                    expect(newUrl).not.toBe(this.originalImgSrc);
                 });
 
                 it("triggers 'validated' on the model", function() {

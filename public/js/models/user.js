@@ -53,7 +53,7 @@ chorus.models.User = chorus.models.Base.extend({
     imageUrl:function (options) {
         options = (options || {});
         var url = new URI("/edc/userimage/" + this.get("id") + "?size=" + (options.size || "original"));
-        window.jasmine || url.addSearch({iebuster: chorus.cachebuster});
+        url.addSearch({iebuster: chorus.cachebuster()});
         return url.toString();
     },
 

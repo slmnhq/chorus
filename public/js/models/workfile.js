@@ -189,7 +189,7 @@
             }
 
             url.addSearch({ download: "true" })
-            url.addSearch({iebuster: window.jasmine ? 12345 : chorus.cachebuster});
+            url.addSearch({ iebuster: chorus.cachebuster() });
 
             return url.normalizeSearch().toString();
         },

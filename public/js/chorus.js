@@ -33,7 +33,7 @@ window.Chorus = function chorus$Global() {
         self.bindModalLaunchingClicks();
 
         self.startHistory();
-        self.cachebuster = $.now();
+        self.updateCachebuster();
     };
 
     // to enable development mode, run `rake enable_dev_mode`
@@ -326,6 +326,14 @@ window.Chorus = function chorus$Global() {
                 grossHack.groupEnd();
             }
         }
+    }
+
+    self.cachebuster = function() {
+        return self._cachebuster;
+    }
+
+    self.updateCachebuster = function() {
+        self._cachebuster = $.now();
     }
 }
 

@@ -20,7 +20,7 @@ chorus.models = {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
                 uri.addSearch(params);
             }
-            if (!window.jasmine) { uri.addSearch({iebuster: chorus.cachebuster}); }
+            if (!window.jasmine) { uri.addSearch({iebuster: chorus.cachebuster()}); }
             return uri.normalize().toString();
         },
 
@@ -269,7 +269,7 @@ chorus.collections = {
 
             // this ensures that IE doesn't cache 'needs_login' responses
             if (!window.jasmine) {
-                uri.addSearch({iebuster: chorus.cachebuster});
+                uri.addSearch({iebuster: chorus.cachebuster()});
             }
 
             return uri.normalize().toString();

@@ -250,6 +250,10 @@ describe("chorus.models.Workfile", function() {
         });
 
         describe("#downloadUrl", function() {
+            beforeEach(function() {
+                spyOn(chorus, "cachebuster").andReturn(12345);
+            });
+
             it("has the right download URL", function() {
                 expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true&iebuster=12345");
             });
@@ -265,6 +269,7 @@ describe("chorus.models.Workfile", function() {
         context("when the workfile is a draft", function() {
             beforeEach(function() {
                 this.model.set({ hasDraft: true })
+                spyOn(chorus, "cachebuster").andReturn(12345);
             });
 
             it("has the right download URL", function() {

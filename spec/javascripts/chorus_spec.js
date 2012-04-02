@@ -74,6 +74,7 @@ describe("chorus global", function() {
 
         describe("cache buster generation", function() {
             beforeEach(function() {
+                this.chorus.updateCachebuster();
                 this.time = new Date(2000, 11, 25).getTime();
                 this.clock = sinon.useFakeTimers(this.time, "Date");
             });
@@ -84,7 +85,12 @@ describe("chorus global", function() {
 
             it("is set in initialization", function() {
                 this.chorus.initialize();
-                expect(this.chorus.cachebuster).toBe(this.time);
+                expect(this.chorus.cachebuster()).toBe(this.time);
+            });
+
+            it("can be set through chorus#updateCachebuster", function() {
+                this.chorus.updateCachebuster();
+                expect(this.chorus.cachebuster()).toBe(this.time);
             });
         });
     });

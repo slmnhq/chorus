@@ -4,7 +4,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
 
     additionalContext:function () {
         return {
-            imageUrl:this.model.imageUrl() + "&buster=" + chorus.cachebuster,
+            imageUrl:this.model.imageUrl(),
             hasImage:this.model.hasImage(),
             addImageKey:this.addImageKey,
             changeImageKey:this.changeImageKey,
@@ -69,18 +69,19 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
         }
 
         function uploadFinished(e, data) {
-            var originalUrl = self.model.imageUrl();
             self.spinner.stop();
             self.$("img").removeClass("disabled");
             self.$("input[type=file]").prop("disabled", false);
             self.$("a.action").removeClass("disabled");
+
+            chorus.updateCachebuster();
 
             var json = $.parseJSON(data.result);
             if (json.status == "ok") {
                 self.resource.serverErrors = [];
                 self.resource.trigger("validated");
                 self.model.trigger("image:change");
-                self.$("img").attr('src', originalUrl + "&buster=" + chorus.cachebuster);
+                self.$("img").attr('src', self.model.imageUrl());
                 self.$("img").removeClass("hidden");
             } else {
                 self.resource.serverErrors = json.message;

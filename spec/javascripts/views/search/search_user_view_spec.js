@@ -15,7 +15,7 @@ describe("chorus.views.SearchUser", function() {
     });
 
     it("includes the user icon", function() {
-        expect(this.view.$("img.icon").attr("src")).toBe("/edc/userimage/"+ this.model.get("id") + "?size=icon");
+        expect(this.view.$("img.icon").attr("src")).toBe(this.model.imageUrl({size: "icon"}));
     });
 
     it("has a link to the profile", function() {

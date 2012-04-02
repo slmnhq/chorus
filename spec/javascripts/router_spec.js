@@ -15,9 +15,9 @@ describe("chorus.router", function() {
         })
 
         it("generates a new cachebuster value when navigating", function() {
-            this.chorus.cachebuster = 0;
+            spyOn(this.chorus, "updateCachebuster").andCallThrough();
             this.chorus.router.navigate("/login", true);
-            expect(this.chorus.cachebuster).not.toBe(0);
+            expect(this.chorus.updateCachebuster).toHaveBeenCalled();
         });
 
         context("with a valid session", function() {

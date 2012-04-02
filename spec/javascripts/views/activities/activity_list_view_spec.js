@@ -76,6 +76,7 @@ describe("chorus.views.ActivityList", function() {
 
         describe("comment rendering", function() {
             beforeEach(function() {
+                spyOn(chorus, "cachebuster").andReturn(555);
                 var comments = this.collection.at(0).comments();
                 comments.add([
                     new chorus.models.Comment({
@@ -99,11 +100,11 @@ describe("chorus.views.ActivityList", function() {
 
             it("displays information for each comment", function() {
                 expect(this.view.$("li[data-comment-id]:eq(0) .icon a")).toHaveAttr("href", "#/users/1234")
-                expect(this.view.$("li[data-comment-id]:eq(0) .icon a img")).toHaveAttr("src", "/edc/userimage/1234?size=icon")
+                expect(this.view.$("li[data-comment-id]:eq(0) .icon a img")).toHaveAttr("src", "/edc/userimage/1234?size=icon&iebuster=555")
                 expect(this.view.$("li[data-comment-id]:eq(0) .comment_header a")).toHaveText("Bob Smith");
                 expect(this.view.$("li[data-comment-id]:eq(0) .comment_content .actions .timestamp")).toExist();
                 expect(this.view.$("li[data-comment-id]:eq(1) .icon a")).toHaveAttr("href", "#/users/10101")
-                expect(this.view.$("li[data-comment-id]:eq(1) .icon a img")).toHaveAttr("src", "/edc/userimage/10101?size=icon")
+                expect(this.view.$("li[data-comment-id]:eq(1) .icon a img")).toHaveAttr("src", "/edc/userimage/10101?size=icon&iebuster=555")
                 expect(this.view.$("li[data-comment-id]:eq(1) .comment_header a")).toHaveText("John Commenter");
                 expect(this.view.$("li[data-comment-id]:eq(1) .comment_content .timestamp")).toExist();
             });
