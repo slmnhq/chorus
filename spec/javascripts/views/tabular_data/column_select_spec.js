@@ -12,6 +12,10 @@ describe("chorus.views.ColumnSelect", function() {
         this.view = new chorus.views.ColumnSelect({collection: this.columns});
     });
 
+    it("does not re-render whenever columns are added to the collection (which happens a LOT)", function() {
+        expect(this.view.persistent).toBeTruthy();
+    });
+
     describe("#render", function() {
         context("when the tabularData has a datasetNumber and the showAliasedName option is disabled", function() {
             beforeEach(function() {
