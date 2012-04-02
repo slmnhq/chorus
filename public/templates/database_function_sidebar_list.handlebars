@@ -7,7 +7,7 @@
     {{#if models}}{{#if models.length}}
         <ul class="list">
             {{#each models}}
-                <li data-cid="{{cid}}">
+                <li data-cid="{{cid}}" data-fullname="{{fullName}}" data-name="{{name}}">
                     <span class="spacer_left"/>
                     <img src="images/function.png">
                     <div class="name" title="{{hintText}}">{{functionName}}</div>

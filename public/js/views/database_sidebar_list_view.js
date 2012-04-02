@@ -103,6 +103,17 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
             $(".hover").removeClass("hover");
             this.closeQtip();
         }, this));
+
+        this.$("ul.list li").draggable({
+            cursor: "move",
+            containment: "window",
+            appendTo: "body",
+            helper: this.dragHelper
+        });
+    },
+
+    dragHelper : function(e) {
+        return '<div class="drag_helper">' + $(e.currentTarget).data("name") + '</div>'
     },
 
     schemaSelected: function(e) {

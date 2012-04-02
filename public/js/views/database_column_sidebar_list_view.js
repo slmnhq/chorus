@@ -40,5 +40,12 @@ chorus.views.DatabaseColumnSidebarList = chorus.views.DatabaseSidebarList.extend
             schemaSpan:chorus.helpers.spanFor(schemaName, { 'class':"schema", title:schemaName }),
             tableOrViewSpan:chorus.helpers.spanFor(tableOrViewName, { 'class':"table", title:tableOrViewName })
         };
+    },
+
+    collectionModelContext: function(model) {
+        return {
+            cid: model.cid,
+            fullName: model.toText()
+        }
     }
 });

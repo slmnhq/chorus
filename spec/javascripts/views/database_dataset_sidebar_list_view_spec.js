@@ -82,8 +82,6 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                             fixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
                             fixtures.databaseObject({ objectName: "apple", type: "SANDBOX_TABLE", objectType: "BASE_TABLE"})
                         ]);
-                        spyOn($.ui, "draggable");
-
                         this.view.render();
                     });
 
@@ -117,19 +115,6 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                         expect($lisAlphabeticallySorted.eq(1).find("img").attr("src")).toContain("sandbox_view_medium.png");
                         expect($lisAlphabeticallySorted.eq(2).find("img").attr("src")).toContain("sandbox_table_medium.png");
                         expect($lisAlphabeticallySorted.eq(3).find("img").attr("src")).toContain("sandbox_view_medium.png");
-                    });
-
-                    it("LIs have been made draggable", function() {
-                        expect($.ui.draggable.callCount).toBe(4);
-                        _.each($.ui.draggable.calls, function(call, i){
-                            expect($(call.args[1])[0]).toBe(this.view.$("li").eq(i)[0]);
-                        }, this);
-                    });
-
-                    it("the draggable helper has the name of the table", function() {
-                        e = {currentTarget: this.view.$("li:eq(0)")};
-                        var helper = this.view.dragHelper(e);
-                        expect(helper).toContainText("apple");
                     });
 
                     it("should not display a message saying there are no tables/views", function() {

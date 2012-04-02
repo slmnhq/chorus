@@ -3,10 +3,12 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
     className:"database_function_sidebar_list",
     useLoadingSection:true,
 
-    collectionModelContext:function (schemaFunction) {
+    collectionModelContext: function(model) {
         return {
-            hintText:schemaFunction.toHintText(),
-            cid:schemaFunction.cid
+            hintText: model.toHintText(),
+            cid: model.cid,
+            name: model.get("functionName"),
+            fullName: model.toText()
         }
     },
 
