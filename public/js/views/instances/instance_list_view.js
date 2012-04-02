@@ -13,6 +13,7 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         }, this);
         this.bindings.add(this.collection, "remove", function(model) {
             if (this.selectedInstanceId === model.get("id")) delete this.selectedInstanceId;
+            this.render();
         });
     },
 

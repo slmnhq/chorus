@@ -307,7 +307,7 @@ chorus.views.Base = chorus.views.Bare.extend({
             this.bindings.add(this.resource, "saveFailed validationFailed", this.showErrors);
             this.bindings.add(this.resource, "validated", this.clearErrors);
             if (!this.persistent) {
-                this.bindings.add(this.resource, "change reset remove", this.render);
+                this.bindings.add(this.resource, "change reset", this.render);
             }
         }
     },
