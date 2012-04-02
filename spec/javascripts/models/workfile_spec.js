@@ -12,6 +12,13 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
+    describe("#thumbnailUrl", function() {
+        it("is correct", function() {
+            this.model.get("versionInfo").versionNum = 6
+            expect(this.model.thumbnailUrl()).toBe("/edc/workspace/10000/workfile/10020/version/6/thumbnail");
+        });
+    });
+
     describe("#workspace", function() {
         it("returns a workspace", function() {
             expect(this.model.workspace()).toBeA(chorus.models.Workspace);

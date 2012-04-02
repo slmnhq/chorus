@@ -33,6 +33,10 @@
             }
         },
 
+        thumbnailUrl: function() {
+            return "/edc/workspace/" + this.get('workspaceId') + "/workfile/" + this.get('id') + "/version/" + this.get('versionInfo').versionNum + "/thumbnail";
+        },
+
         initialize: function() {
             if (this.collection && this.collection.attributes && this.collection.attributes.workspaceId) {
                 this.set({workspaceId: this.collection.attributes.workspaceId}, {silent: true});

@@ -21,6 +21,12 @@ describe("chorus.models.Artifact", function() {
         expect(this.model.name()).toBe("helmut");
     });
 
+    describe("#thumbnailUrl", function() {
+        it("has the correct one", function() {
+            expect(this.model.thumbnailUrl()).toBe("/edc/file/97/thumbnail");
+        });
+    });
+
     describe("#showUrlTemplate", function() {
         it("shows the URL for a workspace", function() {
             var model = fixtures.attachmentOnWorkspaceSearchResult();
