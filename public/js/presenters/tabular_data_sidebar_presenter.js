@@ -105,8 +105,8 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
             }
         } else if (importConfig.thisDatasetIsDestination()) {
             var source = importConfig.importSource();
-            var tableLink = importConfig.get("sourceType") == "upload_file" ?
-                chorus.helpers.spanFor(this.ellipsize(source.name()), {class: "source_file", title: source.name()}) :
+            var tableLink = (importConfig.get("sourceType") === "upload_file") ?
+                chorus.helpers.spanFor(this.ellipsize(source.name()), { 'class': "source_file", title: source.name() }) :
                 this._linkToModel(source)
 
             ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", { timeAgo: ranAt, tableLink: tableLink });
