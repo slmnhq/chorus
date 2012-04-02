@@ -15,7 +15,7 @@
         {{/if}}
         <li><a class="download" href="{{downloadUrl}}">{{t "actions.download"}}</a></li>
         {{#if isActiveWorkspace}}
-            <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workfile" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+            <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workfile" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
         {{/if}}
     </ul>
 </div>

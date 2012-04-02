@@ -139,6 +139,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             expect(addLink).toExist();
             expect(addLink).toHaveAttr("data-entity-type", "workfile");
             expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"));
+            expect(addLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"));
             expect(addLink).toHaveAttr("data-allow-workspace-attachments", "true");
         });
 

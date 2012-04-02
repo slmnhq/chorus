@@ -1,4 +1,5 @@
 chorus.models.Comment = chorus.models.Activity.extend({
+    constructorName: "Comment",
     urlTemplate:function (options) {
         if (options && options.isFile) {
             return "comment/{{entityType}}/{{encodeOnce entityId}}/{{id}}/file"

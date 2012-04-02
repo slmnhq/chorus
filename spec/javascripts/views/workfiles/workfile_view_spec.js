@@ -26,8 +26,18 @@ describe("chorus.views.Workfile", function() {
         expect(this.view.$("a.name")).toHaveHref(this.model.showUrl());
     });
 
-    it("includes the correct workspace file icon", function() {
-        expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/sql.png");
+    describe("the icon/thumbnail", function() {
+        it("includes the correct workfile icon (non-image)", function() {
+            spyOn(this.view.model, "isImage").andReturn(false);
+            this.view.render();
+            expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/sql.png");
+        });
+
+        it("includes the correct thumbnail (image)", function() {
+            spyOn(this.view.model, "isImage").andReturn(true);
+            this.view.render();
+            expect(this.view.$("img")).toHaveAttr("src", this.view.model.thumbnailUrl());
+        });
     });
 
     it("includes the most recent comment body", function() {

@@ -1,4 +1,5 @@
 chorus.dialogs.WorkfilesAttach = chorus.dialogs.Attach.extend({
+    constructorName: "WorkfilesAttachDialog",
     submitButtonTranslationKey: "workfiles.button.attach_file",
     emptyListTranslationKey: "workfiles.none",
     title:t("workfiles.attach"),
@@ -12,7 +13,7 @@ chorus.dialogs.WorkfilesAttach = chorus.dialogs.Attach.extend({
 
     collectionModelContext: function (model) {
         return {
-            iconUrl: model.iconUrl({size:"medium"}),
+            iconUrl: model.isImage() ? model.thumbnailUrl() : model.iconUrl({size:"medium"}),
             name: model.get("fileName")
         }
     },

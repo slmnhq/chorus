@@ -154,10 +154,11 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             describe("when workfiles are selected", function() {
                 beforeEach(function() {
                     this.workfileSet = new chorus.collections.WorkfileSet([
-                        new chorus.models.Workfile({ id: 1, fileName: "greed.sql", fileType: "sql" }),
-                        new chorus.models.Workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" }),
-                        new chorus.models.Workfile({ id: 3, fileName: "sloth.afm", fileType: "N/A" })
+                        fixtures.workfile({ id: 1, fileName: "greed.sql", fileType: "sql" }),
+                        fixtures.workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" }),
+                        fixtures.workfile({ id: 3, fileName: "sloth.afm", fileType: "N/A" })
                     ]);
+                    spyOn(this.workfileSet.at(1), "isImage").andReturn(true);
                     this.workfilesDialog = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
                     this.workfilesDialog.trigger("files:selected", this.workfileSet);
                 });
@@ -171,7 +172,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 it("displays the appropriate file icons", function() {
                     var fileIcons = this.dialog.$(".file_details:visible img.icon");
                     expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
-                    expect(fileIcons.eq(1).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("cpp", "medium"));
+                    expect(fileIcons.eq(1).attr("src")).toBe(this.workfileSet.at(1).thumbnailUrl());
                     expect(fileIcons.eq(2).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("afm", "medium"));
                 });
 

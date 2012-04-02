@@ -212,7 +212,8 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.$(".file_details.workfile").remove();
         this.model.workfiles = workfileSet;
         this.model.workfiles.each(function(workfile) {
-            this.showFile(workfile, workfile.get("fileName"), workfile.iconUrl({size: 'medium'}));
+            var iconUrl = workfile.isImage() ? workfile.thumbnailUrl() : workfile.iconUrl({size: 'medium'});
+            this.showFile(workfile, workfile.get("fileName"), iconUrl);
         }, this);
     },
 
