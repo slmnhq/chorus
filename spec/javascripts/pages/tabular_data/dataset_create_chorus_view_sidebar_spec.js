@@ -55,8 +55,8 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
         });
 
-        it("disables the create button by default", function() {
-            expect(this.view.$("button.create")).toBeDisabled();
+        it("always enables the create chorus view button", function() {
+            expect(this.view.$("button.create")).not.toBeDisabled();
         });
 
         context("when there are no filters or columns selected", function() {
@@ -125,10 +125,6 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.view.$(".columns li a.remove").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.remove");
             })
 
-            it("enables the create button", function() {
-                expect(this.view.$("button.create")).not.toBeDisabled();
-            });
-
             describe("selecting another column", function() {
                 beforeEach(function(){
                     this.databaseColumn2 = this.dataset.columns().models[1];
@@ -158,10 +154,6 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                         it("removes the name of that column, and displays the no columns div", function() {
                             expect(this.view.$(".no_columns_selected")).not.toHaveClass("hidden");
                             expect(this.view.$(".columns li").length).toBe(0)
-                        });
-
-                        it("disables the create button", function() {
-                            expect(this.view.$("button.create")).toBeDisabled();
                         });
                     });
                 });
@@ -204,15 +196,6 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
             it("displays only the one remaining column", function() {
                 expect(this.view.$(".columns li").length).toBe(1);
-            });
-
-            it("doesn't disable the create button bc there is still a column", function() {
-                expect(this.view.$("button.create")).not.toBeDisabled();
-            });
-
-            it("disables the create button when the last column is removed", function() {
-                this.view.$("a.remove").eq(0).click();
-                expect(this.view.$("button.create")).toBeDisabled();
             });
 
             context("clicking the 'Remove' link for a joined column", function() {
