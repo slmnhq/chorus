@@ -38,6 +38,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
         this.$(".execution").removeClass("hidden");
         this.$(".bottom_gutter").addClass("hidden");
+        this.$(".result_table").addClass("hidden");
         this.$(".result_table").html("");
         this.closeError();
     },

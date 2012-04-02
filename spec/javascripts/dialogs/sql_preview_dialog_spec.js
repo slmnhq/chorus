@@ -39,7 +39,7 @@ describe("chorus.dialogs.SqlPreview", function() {
                     });
 
                     it("does not show the Data Preview any longer", function() {
-                        expect(this.dialog.$(".result_content")).toHaveClass("hidden")
+                        expect(this.dialog.$(".result_table")).toHaveClass("hidden")
                     });
                 });
             });
