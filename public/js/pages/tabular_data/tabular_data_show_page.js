@@ -116,24 +116,8 @@
             this.sidebar.setTabularData(this.tabularData);
 
             this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
-            this.mainContent.contentDetails.bind("column:select_all", this.mainContent.content.selectAll, this.mainContent.content);
-            this.mainContent.contentDetails.bind("column:select_none", this.mainContent.content.deselectAll, this.mainContent.content);
-            this.mainContent.content.bind("column:selected", this.forwardSelectedToSidebar, this);
-            this.mainContent.content.bind("column:deselected", this.forwardDeselectedToSidebar, this);
 
             this.render();
-        },
-
-        forwardSelectedToSidebar: function(column) {
-            if (this.secondarySidebar) {
-                this.secondarySidebar.trigger("column:selected", column);
-            }
-        },
-
-        forwardDeselectedToSidebar: function(column) {
-            if (this.secondarySidebar) {
-                this.secondarySidebar.trigger("column:deselected", column);
-            }
         },
 
         showSidebar: function(type) {

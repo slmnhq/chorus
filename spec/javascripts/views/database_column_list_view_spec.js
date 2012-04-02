@@ -92,11 +92,11 @@ describe("chorus.views.DatabaseColumnList", function() {
                         expect(this.view.$("li:eq(1)")).toHaveClass("selected");
                     })
 
-                    it("triggers the column:selected event with the corresponding model as an argument", function() {
+                    it("broadcasts the column:selected page event with the corresponding model as an argument", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", this.collection.at(1));
                     });
 
-                    it("triggers the column:deselected event with the corresponding model as an argument", function() {
+                    it("broadcasts the column:deselected page event with the corresponding model as an argument", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:deselected", this.collection.at(0));
                     });
 
@@ -145,7 +145,7 @@ describe("chorus.views.DatabaseColumnList", function() {
                         expect(this.view.$("li:eq(1)")).toHaveClass("selected");
                     });
 
-                    it("triggers the column:selected event with the corresponding model as an argument", function() {
+                    it("broadcasts the column:selected page event with the corresponding model as an argument", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", this.collection.at(0));
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", this.collection.at(1));
                     });

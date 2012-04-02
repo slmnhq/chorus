@@ -253,7 +253,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                         expect(this.page.mainContent.content.$("li.selected").length).toBe(this.page.mainContent.content.$("li").length);
                     });
 
-                    it("triggers column:selected once for each li", function() {
+                    it("broadcasts the column:selected page event once for each li", function() {
                         expect(this.selectSpy.callCount).toBe(this.page.mainContent.content.$("li.selected").length);
                     });
 

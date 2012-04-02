@@ -402,7 +402,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         this.view.$(".select_all").click();
                     })
 
-                    it("should trigger the column:select_all event", function() {
+                    it("broadcasts the column:select_all page event", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:select_all");
                     });
                 });
@@ -413,7 +413,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         this.view.$(".select_none").click();
                     })
 
-                    it("should trigger the column:select_none event", function() {
+                    it("broadcasts the column:select_none page event", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:select_none");
                     });
                 });
