@@ -36,7 +36,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".right").addClass("executing")
         this.spinnerTimer = _.delay(_.bind(this.startSpinner, this), 250)
         this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
-        this.$(".result_content").removeClass("hidden");
+        this.$(".execution").removeClass("hidden");
+        this.$(".bottom_gutter").addClass("hidden");
         this.$(".result_table").html("");
         this.closeError();
     },
@@ -70,7 +71,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     showResultTable: function(task) {
         this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, hideExpander: this.options.hideExpander, model: task});
         this.dataTable.render();
-        this.$(".result_content").removeClass("hidden");
+        this.$(".result_table").removeClass("hidden");
         this.$(".result_table").html(this.dataTable.el);
         this.$(".controls").removeClass("hidden");
         this.minimizeTable();
@@ -83,7 +84,9 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     showErrors: function() {
         this.$(".sql_errors").removeClass("hidden");
-        this.$(".result_content").addClass("hidden");
+        this.$(".result_table").addClass("hidden");
+        this.$(".bottom_gutter").addClass("hidden");
+        this.$(".execution").addClass("hidden");
         this.$(".message").empty();
     },
 

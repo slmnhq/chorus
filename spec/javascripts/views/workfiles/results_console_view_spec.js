@@ -95,7 +95,6 @@ describe("chorus.views.ResultsConsoleView", function() {
             beforeEach(function() {
                 spyOn(window, "clearTimeout");
                 spyOn(this.view, "closeError").andCallThrough();
-                this.view.$(".result_table").html("<div class='data_table'/>");
 
                 chorus.PageEvents.broadcast("file:executionStarted")
             });
@@ -120,13 +119,10 @@ describe("chorus.views.ResultsConsoleView", function() {
                 expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 1000);
             });
 
-            it("shows the result_content", function() {
-                expect(this.view.$(".result_content")).not.toHaveClass("hidden");
+            it("shows the execution bar", function() {
+                expect(this.view.$(".execution")).not.toHaveClass("hidden");
             });
 
-            it("clears out any data that is already in the table", function() {
-                expect(this.view.$(".result_table")).toHaveHtml("");
-            });
 
             it("closes the errors", function() {
                 expect(this.view.closeError).toHaveBeenCalled();
@@ -252,7 +248,9 @@ describe("chorus.views.ResultsConsoleView", function() {
                     })
 
                     it("should hide the execution content area", function() {
-                        expect(this.view.$(".result_content")).toHaveClass("hidden");
+                        expect(this.view.$(".result_table")).toHaveClass("hidden");
+                        expect(this.view.$(".bottom_gutter")).toHaveClass("hidden");
+                        expect(this.view.$(".execution")).toHaveClass("hidden");
                     });
 
                     describe("clicking on the close button", function() {
@@ -275,8 +273,9 @@ describe("chorus.views.ResultsConsoleView", function() {
                             chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
                         })
 
-                        it("should show the execution content area", function() {
-                            expect(this.view.$(".result_content")).not.toHaveClass("hidden");
+                        it("should show the data table", function() {
+                            expect(this.view.$(".result_table")).not.toHaveClass("hidden");
+                            expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
                         });
                     })
 
@@ -291,7 +290,24 @@ describe("chorus.views.ResultsConsoleView", function() {
                         });
                     });
                 });
-            })
+
+                describe("starting another execution", function() {
+                    beforeEach(function() {
+                        this.task = fixtures.task();
+                        this.view.execute(this.task);
+                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
+                        chorus.PageEvents.broadcast("file:executionStarted")
+                    });
+
+                    it("hides the gutter", function() {
+                        expect(this.view.$(".bottom_gutter")).toHaveClass("hidden");
+                    });
+
+                    it("clears out any data that is already in the table", function() {
+                        expect(this.view.$(".result_table")).toHaveHtml("");
+                    });
+                });
+            });
 
             function itRemovesExecutionUI(shouldCancelTimers) {
                 it("removes the executing class", function() {

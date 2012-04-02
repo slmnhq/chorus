@@ -6,39 +6,37 @@
         <a href="#" class="action view_details">{{t "actions.view_details"}}</a> | <a href="#" class="action close_errors">{{t "actions.close"}}</a>
     </div>
 </div>
-<div class="result_content hidden">
-    <div class="execution">
-        <div class="right">
-            <span class="controls hidden">
-                {{#if result}}
-                    <a href="#" class="action view_details">{{t "actions.view_details"}}</a>
-                    <span class="separator">|</span>
-                {{/if}}
-
-                <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
-                <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
-                {{#if enableClose}}
-                    <span class="separator">|</span>
-                    <a class="close" href='#'>{{t "actions.close"}}</a>
-                {{/if}}
-            </span>
-
-            <span class='execution_info'>
-                <span class="elapsed_time"/>
-                <span class="spinner"/>
-                <span class="task_loading">{{t "results_console_view.executing"}}</span>
+<div class="execution">
+    <div class="right">
+        <span class="controls hidden">
+            {{#if result}}
+                <a href="#" class="action view_details">{{t "actions.view_details"}}</a>
                 <span class="separator">|</span>
-                <a class="cancel" href='#'>{{t "actions.cancel"}}</a>
-            </span>
-        </div>
-        <h1 class="title">{{t titleKey}}</h1>
+            {{/if}}
+
+            <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
+            <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
+            {{#if enableClose}}
+                <span class="separator">|</span>
+                <a class="close" href='#'>{{t "actions.close"}}</a>
+            {{/if}}
+        </span>
+
+        <span class='execution_info'>
+            <span class="elapsed_time"/>
+            <span class="spinner"/>
+            <span class="task_loading">{{t "results_console_view.executing"}}</span>
+            <span class="separator">|</span>
+            <a class="cancel" href='#'>{{t "actions.cancel"}}</a>
+        </span>
     </div>
-    <div class="result_table collapsed"/>
-    <div class="bottom_gutter hidden">
-        {{#if expander}}
-        <div class="expander_button">
-            <div class="arrow down"></div>
-        </div>
-        {{/if}}
+    <h1 class="title">{{t titleKey}}</h1>
+</div>
+<div class="result_table collapsed"/>
+<div class="bottom_gutter hidden">
+    {{#if expander}}
+    <div class="expander_button">
+        <div class="arrow down"></div>
     </div>
+    {{/if}}
 </div>
