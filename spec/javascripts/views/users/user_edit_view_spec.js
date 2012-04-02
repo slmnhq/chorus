@@ -11,6 +11,12 @@ describe("chorus.views.userEdit", function() {
             expect(imageUpload instanceof chorus.views.ImageUpload).toBeTruthy();
             expect(imageUpload.model).toBe(this.view.model);
         });
+
+        it("triggers 'invalidated' on the user after 'image:change' is triggered", function() {
+            spyOnEvent(this.user, "invalidated");
+            this.user.trigger("image:change");
+            expect("invalidated").toHaveBeenTriggeredOn(this.user);
+        });
     });
 
     describe("#render", function() {
