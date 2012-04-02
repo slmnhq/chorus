@@ -180,6 +180,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     importSaved: function() {
         if (this.oneTimeImport()) {
+            this.dataset.setImport(undefined);
             chorus.toast("import.success");
         } else {
             chorus.toast("import.schedule.toast");

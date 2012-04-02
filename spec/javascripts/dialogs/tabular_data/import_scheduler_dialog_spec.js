@@ -715,6 +715,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
                                 it("should close the dialog", function() {
                                     expect(this.dialog.closeModal).toHaveBeenCalled();
                                 });
+
+                                it("should clear the dataset import field", function() {
+                                    expect(this.dataset.getImport().get("id")).toBeUndefined();
+                                });
                             });
 
                             context("and the save is not successful", function() {
