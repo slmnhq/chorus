@@ -288,7 +288,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                 describe("when the cancel:sidebar event is triggered", function() {
                     beforeEach(function() {
                         this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
-                        expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass("tabular_data_visualization_boxplot_sidebar");
+                        expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass("tabular_data_visualization_sidebar");
                         this.resizedSpy.reset();
 
                         chorus.PageEvents.broadcast('cancel:sidebar', 'boxplot');
@@ -304,7 +304,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     });
 
                     it("removes all classes added when transform:sidebar is triggered", function() {
-                        expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass("tabular_data_visualization_boxplot_sidebar");
+                        expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass("tabular_data_visualization_sidebar");
                     })
                 });
 

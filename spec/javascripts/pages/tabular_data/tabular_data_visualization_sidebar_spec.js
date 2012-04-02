@@ -8,12 +8,7 @@ describe("chorus.views.TabularDataVisualizationSidebar", function() {
         this.column6 = fixtures.databaseColumn({typeCategory: "DATETIME", name: "the time & date"})
 
         this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3, this.column4, this.column5, this.column6]);
-        this.view = new chorus.views.TabularDataVisualizationSidebar({collection: this.columns});
-        this.view.className = 'tabular_data_visualization_frequency_sidebar';
-        this.view.additionalContext = function() {
-            return {allColumnNames: ['col1', 'col2']};
-        }
-        this.view.chartOptions = chorus.views.TabularDataVisualizationFrequencySidebar.prototype.chartOptions;
+        this.view = new chorus.views.TabularDataVisualizationFrequencySidebar({collection: this.columns});
     });
 
     it("should not modify the collection order", function() {

@@ -196,14 +196,11 @@
             return new Handlebars.SafeString(markup)
         },
 
-        range_chooser: function(options) {
-        },
-
-        chooser_menu: function(choices, options) {
+        chooserMenu: function(choices, options) {
             options = options.hash;
             var max = options.max || 20;
-            options.initial = options.initial;
             choices = choices || _.range(1, max + 1);
+            options.initial = options.initial || _.last(choices);
             var selected = options.initial || choices[0];
             var translationKey = options.translationKey || "dataset.visualization.sidebar.category_limit";
             var className = options.className || '';

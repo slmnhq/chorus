@@ -495,37 +495,64 @@ describe("handlebars", function() {
             });
         });
 
-        describe("range_chooser", function() {
-            it("returns a list of numbers up to the max specified", function() {
-                var html = Handlebars.compile("{{range_chooser max=3}}")();
-                var chooser = $(html);
-                expect(chooser.find('.limiter_menu_container ul.limiter_menu li').length).toBe(3);
-                expect(chooser.find('li:first')).toContainText('1');
-            });
-
+        describe("chooserMenu", function() {
             it("has a limiter class", function() {
-                var html = Handlebars.compile("{{range_chooser max=1}}")();
+                var html = Handlebars.compile("{{chooserMenu false max=1}}")();
                 var chooser = $(html);
                 expect(chooser).toHaveClass('limiter');
             });
 
-            it("sets the default to the provided value", function() {
-                var html = Handlebars.compile("{{range_chooser max=3 initial=2}}")();
-                var chooser = $(html);
-                expect(chooser.find('a')).toContainText('2');
-            })
-
-            it("sets the default to max if no default provided", function() {
-                var html = Handlebars.compile("{{range_chooser max=3}}")();
-                var chooser = $(html);
-                expect(chooser.find('a')).toContainText('3');
-            })
-
             it("sets the className if provided", function() {
-                var html = Handlebars.compile('{{range_chooser max=3 className="foo"}}')();
+                var html = Handlebars.compile('{{chooserMenu false max=3 className="foo"}}')();
                 var chooser = $(html);
                 expect(chooser).toHaveClass('foo');
             })
+
+            context("when an array of choices is specified", function() {
+                var chooser;
+
+                beforeEach(function() {
+                    var choices = ["foo", "bar", "baz"];
+                    var html = Handlebars.compile("{{chooserMenu choices}}")({ choices: choices });
+                    chooser = $(html);
+                });
+
+                it("uses the specified choices", function() {
+                    expect(chooser.find('.limiter_menu_container ul.limiter_menu li').length).toBe(3);
+                    expect(chooser.find('li').eq(0)).toContainText('foo');
+                    expect(chooser.find('li').eq(1)).toContainText('bar');
+                    expect(chooser.find('li').eq(2)).toContainText('baz');
+                });
+
+                it("uses the last choice by default", function() {
+                    expect(chooser.find('a')).toContainText('baz');
+                });
+            });
+
+            context("when no choices are specified", function() {
+                it("uses an array of numbers up to the max specified", function() {
+                    var html = Handlebars.compile("{{chooserMenu false max=3}}")();
+                    var chooser = $(html);
+                    expect(chooser.find('.limiter_menu_container ul.limiter_menu li').length).toBe(3);
+                    expect(chooser.find('li').eq(0)).toContainText('1');
+                    expect(chooser.find('li').eq(1)).toContainText('2');
+                    expect(chooser.find('li').eq(2)).toContainText('3');
+                });
+
+                it("sets the default to the provided value", function() {
+                    var html = Handlebars.compile("{{chooserMenu false max=3 initial=2}}")();
+                    var chooser = $(html);
+                    expect(chooser.find('a')).toContainText('2');
+                })
+
+                it("sets the default to max if no default provided", function() {
+                    var html = Handlebars.compile("{{chooserMenu false max=3}}")();
+                    var chooser = $(html);
+                    expect(chooser.find('a')).toContainText('3');
+                })
+            });
+
+
         });
 
         describe("renderTableData", function() {

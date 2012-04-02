@@ -190,7 +190,7 @@
         },
 
         removeOldSecondaryClasses: function(type) {
-            this.$('.sidebar_content.secondary').removeClass("tabular_data_visualization_" + type + "_sidebar");
+            this.$('.sidebar_content.secondary').removeClass("tabular_data_visualization_sidebar");
         }
     });
 })();

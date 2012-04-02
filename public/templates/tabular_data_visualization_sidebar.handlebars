@@ -15,7 +15,7 @@
                         {{/each}}
                     </select>
                     {{#if secondaryOption}}
-                        {{chooser_menu secondaryOption.values className=groupName translationKey=secondaryOption.key }}
+                        {{chooserMenu secondaryOption.values className=groupName translationKey=secondaryOption.key }}
                     {{/if}}
                 {{else}}
                     <span class='no_columns'>{{noColumnMessage}}</span>

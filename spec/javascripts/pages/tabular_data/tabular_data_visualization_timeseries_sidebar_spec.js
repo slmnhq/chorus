@@ -8,6 +8,8 @@ describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
 
                 this.model = fixtures.datasetChorusView({objectName: "Foo"});
+                this.valueMenuQtip = stubQtip(".value .limiter a");
+                this.timeMenuQtip = stubQtip(".time .limiter a");
                 this.view = new chorus.views.TabularDataVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
                 this.view.render();
             })
@@ -28,7 +30,13 @@ describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
 
             describe("#chartOptions", function() {
                 it("should return all the chart options for a timeseries", function() {
+                    this.view.$(".value .limiter a").click();
+                    this.valueMenuQtip.find(".limiter_menu li:contains('sum')").click();
+                    this.view.$(".time .limiter a").click();
+                    this.timeMenuQtip.find(".limiter_menu li:contains('minute')").click();
+
                     var options = this.view.chartOptions();
+
                     expect(options.name).toBe("Foo");
                     expect(options.type).toBe("timeseries");
                     expect(options.yAxis).toBe("Sandwich");
@@ -36,7 +44,7 @@ describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
                     expect(options.aggregation).toBe("sum");
                     expect(options.timeInterval).toBe("minute");
                     expect(options.timeType).toBe("time");
-                })
+                });
             });
         })
 
