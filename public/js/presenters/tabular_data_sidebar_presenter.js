@@ -162,6 +162,6 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
     ellipsize: function (name) {
         if (!name) return "";
         var length = 15;
-        return (name.length < length) ? name : name.slice(0, length) + "...";
+        return ((name.length < length) ? name : name.slice(0, length-3)).trim() + "...";
     }
 });
