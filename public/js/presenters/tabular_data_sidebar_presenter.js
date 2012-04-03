@@ -92,6 +92,10 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
                 ctx.lastImport = chorus.helpers.safeT("import.began", { timeAgo: ranAt });
                 ctx.inProgressText = chorus.helpers.safeT("import.in_progress", { tableLink: this._linkToModel(destination) });
                 ctx.importInProgress = true;
+            } else if (!importConfig.get("executionInfo").toTable) {
+                ctx.importInProgress = true;
+                ctx.inProgressText = chorus.helpers.safeT("import.in_progress", { tableLink: importConfig.get("toTable") });
+                ctx.lastImport = chorus.helpers.safeT("import.began", { timeAgo: new Date().toString() });
             } else {
                 var importStatusKey;
                 if (importConfig.wasSuccessfullyExecuted()) {

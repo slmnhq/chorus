@@ -491,7 +491,6 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 });
                             });
 
-
                             context("when the import has failed to execute", function() {
                                 beforeEach(function() {
                                     this.importResponse.set({
@@ -526,8 +525,15 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                             context("when the import has not yet executed", function() {
                                 beforeEach(function() {
-                                    this.importResponse.set({executionInfo: null });
+                                    this.importResponse.set({executionInfo: {} });
                                     this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                });
+
+                                it("has an 'import in progress' description", function() {
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.in_progress", {tableLink: "our_destination"});
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.began", {timeAgo: new Date().toString()});
+                                    expect(this.view.$(".last_import a")).not.toExist();
+                                    expect(this.view.$(".last_import img").attr("src")).toBe("/images/in_progress.png");
                                 });
 
                                 itHasActionLinks(["import_now", "edit_schedule"]);
