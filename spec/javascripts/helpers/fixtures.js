@@ -1489,6 +1489,7 @@ beforeEach(function() {
                 ownerFirstName: "Dr",
                 ownerLastName: "Mario",
                 active: true,
+                isPublic: true,
                 sandboxInfo: {
                     databaseId: databaseId,
                     databaseName: 'database' + databaseId,

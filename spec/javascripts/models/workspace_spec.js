@@ -24,20 +24,46 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
+    describe("#isPublic", function() {
+        it("return true when isPublic: true", function() {
+            this.model.set({isPublic: true});
+            expect(this.model.isPublic()).toBeTruthy();
+        });
+
+        it("returns false otherwise", function() {
+            expect(this.model.isPublic()).toBeFalsy();
+        });
+    })
+
     describe("#defaultIconUrl", function() {
         it("links to the active url when active:true", function() {
-            this.model.set({active: true});
+            this.model.set({active: true, isPublic: true});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_large.png");
         });
 
         it("links to the active url when state:1", function() {
-            this.model.set({state: "1"});
+            this.model.set({state: "1", isPublic: true});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_large.png");
         });
 
-        it("links to the archive url otherwise", function() {
-            this.model.set({active: false, state: "0"});
+        it("links to the archive url active:false or state not equal to 1", function() {
+            this.model.set({active: false, state: "0", isPublic: true});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_archived_large.png");
+        });
+
+        it("links to the private active url when active:true and isPublic:false", function() {
+            this.model.set({active: true, isPublic: false});
+            expect(this.model.defaultIconUrl()).toBe("/images/workspaces/private_workspace_large.png");
+        });
+
+        it("links to the private active url when state:1 and isPublic:false", function() {
+            this.model.set({state: "1", isPublic: false});
+            expect(this.model.defaultIconUrl()).toBe("/images/workspaces/private_workspace_large.png");
+        });
+
+        it("links to the private archive url otherwise", function() {
+            this.model.set({active: false, state: "0", isPublic: false});
+            expect(this.model.defaultIconUrl()).toBe("/images/workspaces/private_workspace_archived_large.png");
         });
     });
 
@@ -251,14 +277,24 @@ describe("chorus.models.Workspace", function() {
     });
 
     describe("picklistImageUrl", function() {
-        it("returns the correct URL when the workspace is archived", function() {
-            this.model.set({active: false});
+        it("returns the correct URL when the workspace is archived and is public", function() {
+            this.model.set({active: false, isPublic: true});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/workspace_archived_small.png');
         });
 
-        it("returns the correct URL when the workspace is not archived", function() {
-            this.model.set({active: true});
+        it("returns the correct URL when the workspace is not archived and is public", function() {
+            this.model.set({active: true, isPublic: true});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/workspace_small.png');
+        });
+
+        it("returns the correct URL when the workspace is archived and is private", function() {
+            this.model.set({active: false, isPublic: false});
+            expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/private_workspace_archived_small.png');
+        });
+
+        it("returns the correct URL when the workspace is not archived and is private", function() {
+            this.model.set({active: true, isPublic: false});
+            expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/private_workspace_small.png');
         });
     });
 

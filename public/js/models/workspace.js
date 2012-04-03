@@ -11,16 +11,20 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
     },
 
-    defaultIconUrl:function () {
-        if (this.isActive()) {
-            return "/images/workspaces/workspace_large.png";
-        } else {
-            return "/images/workspaces/workspace_archived_large.png";
-        }
+    defaultIconUrl:function (size) {
+        var iconSize = size || "large";
+        var activeIcon = this.isActive() ? "" : "_archived";
+        var publicIcon = this.isPublic() ? "" : "private_";
+
+        return "/images/workspaces/" + publicIcon + "workspace" + activeIcon + "_"+ iconSize +".png";
     },
 
     isActive: function() {
         return this.get("active") || this.get("state") == "1"
+    },
+
+    isPublic: function() {
+        return this.get("isPublic");
     },
 
     owner: function() {
@@ -109,7 +113,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     picklistImageUrl:function () {
-        return this.get('active') ? "/images/workspaces/workspace_small.png" : "/images/workspaces/workspace_archived_small.png";
+        return this.defaultIconUrl("small");
     },
 
     datasetsUrl: function() {
