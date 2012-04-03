@@ -1,8 +1,10 @@
 .create_database_view_dialog {
+    width: 450px;
+
     .target_location {
+        width: 450px;
         @include results-console-message;
         @include ellipsis;
-        max-width: 400px;
         padding-bottom: 10px;
     }
 
