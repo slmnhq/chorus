@@ -1,10 +1,11 @@
 chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
     className:"workfile_list_sidebar",
     subviews:{
-        '.activities':'activityList'
+        '.tab_control': 'tabs'
     },
 
     setup:function () {
+        this.tabs = new chorus.views.TabControl(["activity"]);
         chorus.PageEvents.subscribe("workfile:selected", this.setWorkfile, this);
     },
 
@@ -18,17 +19,17 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
             this.bindings.add(this.collection, "changed", this.render);
             this.bindings.add(this.workfile, "changed", this.render);
 
-            this.activityList = new chorus.views.ActivityList({
+            this.tabs.activity = new chorus.views.ActivityList({
                 collection:this.collection,
                 additionalClass:"sidebar",
                 displayStyle:['without_object', 'without_workspace']
             });
 
-            this.activityList.bind("content:changed", this.recalculateScrolling, this)
+            this.tabs.activity.bind("content:changed", this.recalculateScrolling, this)
 
         } else {
             delete this.collection;
-            delete this.activityList;
+            delete this.tabs.activity;
         }
 
         this.render();
