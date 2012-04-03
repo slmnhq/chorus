@@ -441,6 +441,13 @@ describe("chorus.dialogs.DatasetImport", function() {
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
                         });
 
+                        it("closes itself when the 'import new table' dialog closes", function() {
+                            var importCsvDialog = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.object;
+                            importCsvDialog.closeModal();
+                            chorus.PageEvents.broadcast("csv_import:started");
+                            expect(this.dialog.modalClosed).toHaveBeenCalled();
+                        });
+
                         it("does not show an alert dialog", function() {
                             expect(chorus.alerts.EmptyCSV.prototype.setup).not.toHaveBeenCalled();
                             expect(this.modalSpy).not.toHaveModal(chorus.alerts.EmptyCSV);
