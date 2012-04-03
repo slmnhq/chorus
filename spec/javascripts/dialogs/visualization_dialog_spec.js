@@ -3,9 +3,19 @@ describe("chorus.dialogs.Visualization", function() {
         this.qtip = stubQtip();
         this.modalSpy = stubModals();
         spyOn(chorus.Modal.prototype, "closeModal");
+
         this.dataset = fixtures.datasetSourceTable();
+        this.columns = fixtures.databaseColumnSet([
+            fixtures.databaseColumn(),
+            fixtures.databaseColumn(),
+            fixtures.databaseColumn()
+        ], {tabularData: this.dataset});
+
         this.chartOptions = {type: "boxplot", name: "Foo"};
-        this.filters = {whereClause: function() {return "ABC";}, filterCount: function() {return 7;}};
+
+        this.filters = new chorus.views.DatasetFilterWizard({collection: this.columns});
+        spyOn(this.filters, "filterStrings").andReturn(["A", "B"]);
+
         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
         this.dialog.task = fixtures.boxplotTaskWithResult();
     });
@@ -22,20 +32,25 @@ describe("chorus.dialogs.Visualization", function() {
                     spyOn(this.dialog, "isValidData").andReturn(true);
                     this.dialog.render();
                     this.dialog.onExecutionComplete();
-                })
+                });
 
                 it("should draw the chart", function() {
                     expect(this.dialog.drawChart).toHaveBeenCalled();
-                })
+                });
 
                 it("enables the Save Chart button", function() {
                     expect(this.dialog.$("button.save")).toBeEnabled();
-                })
+                });
 
                 it("shows the Show Data link", function() {
                     expect(this.dialog.$("a.show")).not.toHaveClass('hidden');
-                })
-            })
+                });
+
+                it("shows the 'Show Options' link", function() {
+                    expect(this.filters.filterCount()).toBe(2);
+                    expect(this.dialog.$("a.show_options")).toContainTranslation("visualization.show_options", {count: 2});
+                });
+            });
 
             describe("when the task data is not valid", function() {
                 beforeEach(function() {
@@ -90,11 +105,60 @@ describe("chorus.dialogs.Visualization", function() {
     })
 
     describe("#render", function() {
+        beforeEach(function() {
+            this.dialog.render();
+        });
+
+        it("should show the 'Show Options' link by default", function() {
+            expect(this.dialog.$("a.show_options")).not.toHaveClass("hidden");
+            expect(this.dialog.$("a.hide_options")).toHaveClass("hidden");
+        });
+
+        context("clicking on the 'Show Options' link", function() {
+            beforeEach(function() {
+                this.dialog.$("a.show_options").click();
+            });
+
+            it("shows the filter section", function() {
+                expect(this.dialog.$(".filter_options")).not.toHaveClass("hidden");
+            });
+
+            it("renders the correct number of filters", function() {
+                // Really add filters to dialog - not a stub
+                this.dialog.filters.addFilter()
+                this.dialog.filters.addFilter()
+                this.dialog.filters.render();
+                this.dialog.filters.$(".filter input").val("AA");
+                this.dialog.render();
+
+                expect(this.dialog.$(".filter_options li").length).toBe(2);
+            });
+
+            it("swaps out show/hide options links", function() {
+                expect(this.dialog.$("a.show_options")).toHaveClass('hidden');
+                expect(this.dialog.$("a.hide_options")).not.toHaveClass('hidden');
+            });
+
+            context("clicking the 'Hide Options' link", function() {
+                beforeEach(function() {
+                    this.dialog.$("a.hide_options").click();
+                });
+
+                it("hides the filter section", function() {
+                    expect(this.dialog.$(".filter_options")).toHaveClass("hidden");
+                });
+
+                it("swaps out show/hide options links", function() {
+                    expect(this.dialog.$("a.show_options")).not.toHaveClass('hidden');
+                    expect(this.dialog.$("a.hide_options")).toHaveClass('hidden');
+                });
+            });
+        });
+
         context("when the rows are empty", function() {
             beforeEach(function() {
                 spyOn(this.dialog, "isValidData").andReturn(false)
                 this.dialog.onExecutionComplete()
-                this.dialog.render()
             });
 
             it("disables the 'Save' button", function() {
@@ -108,8 +172,7 @@ describe("chorus.dialogs.Visualization", function() {
 
         context("when the rows are valid", function() {
             beforeEach(function() {
-                this.dialog.onExecutionComplete()
-                this.dialog.render();
+                this.dialog.onExecutionComplete();
             });
 
             it("should have a title", function() {

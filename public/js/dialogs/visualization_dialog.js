@@ -6,16 +6,18 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     events:{
-        "click a.show":"showTabularData",
-        "click a.hide":"hideTabularData",
-        "click button.close_dialog":"closeModal"
+        "click a.show": "showTabularData",
+        "click a.hide": "hideTabularData",
+        "click a.show_options": "showFilterOptions",
+        "click a.hide_options": "hideFilterOptions",
+        "click button.close_dialog": "closeModal"
     },
 
     setup: function () {
         this.type = this.options.chartOptions.type;
-        this.title = t("visualization.title", {name:this.options.chartOptions.name});
-
-        this.tableData = new chorus.views.ResultsConsole({shuttle:false, hideExpander:true, footerSize: _.bind(this.footerSize, this)});
+        this.title = t("visualization.title", {name: this.options.chartOptions.name});
+        this.filters = this.options.filters;
+        this.tableData = new chorus.views.ResultsConsole({shuttle: false, hideExpander: true, footerSize: _.bind(this.footerSize, this)});
     },
 
     footerSize: function() {
@@ -25,6 +27,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     postRender: function () {
         this.tableData.showResultTable(this.task);
         this.tableData.$('.expander_button').remove();
+        this.$(".filter_options").append($(this.filters.el).clone());
         this.$('.chart_icon.' + this.type).addClass("selected");
         chorus.menu(this.$('button.save'), {
             content: this.$(".save_options"),
@@ -98,13 +101,29 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     additionalContext:function () {
-        var filterCount = this.options.filters ? this.options.filters.filterCount() : 0;
+        var filterCount = this.filters ? this.filters.filterCount() : 0;
 
         return {
             filterCount: filterCount,
             chartType:t("dataset.visualization.names." + this.type),
             hasChart: !!this.chart
         }
+    },
+
+    showFilterOptions: function(e) {
+        e && e.preventDefault();
+
+        this.$("a.show_options").addClass("hidden");
+        this.$("a.hide_options").removeClass("hidden");
+        this.$(".filter_options").removeClass("hidden");
+    },
+
+    hideFilterOptions: function(e) {
+        e && e.preventDefault();
+
+        this.$("a.show_options").removeClass("hidden");
+        this.$("a.hide_options").addClass("hidden");
+        this.$(".filter_options").addClass("hidden");
     },
 
     showTabularData:function (e) {

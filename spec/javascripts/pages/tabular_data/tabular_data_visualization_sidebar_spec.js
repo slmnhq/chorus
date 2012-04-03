@@ -1,5 +1,6 @@
 describe("chorus.views.TabularDataVisualizationSidebar", function() {
     beforeEach(function() {
+        this.dataset = fixtures.datasetSourceTable();
         this.column1 = fixtures.databaseColumn({typeCategory: "ANIMAL", name: "B Liger"})
         this.column2 = fixtures.databaseColumn({typeCategory: "REAL_NUMBER", name: "a Speed"})
         this.column3 = fixtures.databaseColumn({typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"})
@@ -7,8 +8,12 @@ describe("chorus.views.TabularDataVisualizationSidebar", function() {
         this.column5 = fixtures.databaseColumn({typeCategory: "TIME", name: "the time"})
         this.column6 = fixtures.databaseColumn({typeCategory: "DATETIME", name: "the time & date"})
 
-        this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3, this.column4, this.column5, this.column6]);
+        this.columns = fixtures.databaseColumnSet([
+            this.column1, this.column2, this.column3, this.column4, this.column5, this.column6
+        ], {tabularData: this.dataset});
+
         this.view = new chorus.views.TabularDataVisualizationFrequencySidebar({collection: this.columns});
+        this.view.filters = new chorus.views.DatasetFilterWizard({collection: this.columns});
     });
 
     it("should not modify the collection order", function() {
