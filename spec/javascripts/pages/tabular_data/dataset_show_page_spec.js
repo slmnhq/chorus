@@ -88,12 +88,17 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                     describe("when editing a chorus view", function() {
                         beforeEach(function() {
+                            this.oldHeader = this.page.mainContent.contentHeader;
                             spyOn(this.page, 'render');
                             this.page.mainContent.contentDetails.trigger("dataset:edit");
                         });
 
                         it("sets the main content to DatasetEditChorusView", function() {
                             expect(this.page.mainContent.content).toBeA(chorus.views.DatasetEditChorusView);
+                        });
+
+                        it("keeps the header", function() {
+                            expect(this.page.mainContent.contentHeader).toBe(this.oldHeader);
                         });
 
                         it("should not re-render", function() {
@@ -280,7 +285,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", 'edit_chorus_view');
                 });
 
-                it("should swap out the sidebar for the dataset edit chorus view sidebar", function() {
+                it("swaps out the sidebar for the dataset edit chorus view sidebar", function() {
                     expect(this.page.secondarySidebar).toBeA(chorus.views.DatasetEditChorusViewSidebar)
                 });
             });

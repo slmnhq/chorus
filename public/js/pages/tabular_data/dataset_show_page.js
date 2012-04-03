@@ -41,8 +41,10 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
     },
 
     editChorusView: function() {
+        var sameHeader = this.mainContent.contentHeader;
         this.mainContent = new chorus.views.MainContentView({
             content: new chorus.views.DatasetEditChorusView({model: this.tabularData}),
+            contentHeader: sameHeader,
             contentDetails: new chorus.views.TabularDataContentDetails({ tabularData: this.tabularData, collection: this.columnSet, inEditChorusView: true })
         });
 
