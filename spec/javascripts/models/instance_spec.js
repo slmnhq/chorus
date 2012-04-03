@@ -383,6 +383,24 @@ describe("chorus.models.Instance", function() {
         });
     })
 
+    describe("#hasWorkspaceUsageInfo", function() {
+        it("returns true when the instance's usage is loaded", function() {
+            this.instance.usage().set({workspaces: []});
+            expect(this.instance.hasWorkspaceUsageInfo()).toBeTruthy();
+        });
+
+        it("returns false when the instances's usage is not loaded", function() {
+            this.instance.usage().unset("workspaces");
+            expect(this.instance.hasWorkspaceUsageInfo()).toBeFalsy();
+        });
+
+        it("returns false for hadoop instances", function() {
+            this.instance = fixtures.hadoopInstance();
+            this.instance.usage().set({workspaces: []});
+            expect(this.instance.hasWorkspaceUsageInfo()).toBeFalsy();
+        });
+    });
+
     describe("#isHadoop", function() {
         context("when the instance is a hadoop instance", function() {
             {

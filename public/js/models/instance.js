@@ -155,6 +155,10 @@
 
         isHadoop: function() {
             return this.get("instanceProvider") == "Hadoop";
+        },
+
+        hasWorkspaceUsageInfo: function() {
+            return !this.isHadoop() && this.usage().has("workspaces");
         }
     }, {
         aurora:function () {

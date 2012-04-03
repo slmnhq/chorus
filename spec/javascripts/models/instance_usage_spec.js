@@ -18,5 +18,17 @@ describe("chorus.models.InstanceUsage", function() {
                 expect(workspace.percentageUsed).toBe(expectedPercent);
             }, this))
         })
-    })
+    });
+
+    describe("workspaceCount", function() {
+        it("returns the number of workspaces in which the instance is used", function() {
+            this.usage.set({ workspaces: [{}, {}, {}] })
+            expect(this.usage.workspaceCount()).toBe(3);
+        });
+
+        it("returns undefined when the model doesn't have a 'workspaces' attribute", function() {
+            this.usage.unset("workspaces");
+            expect(this.usage.workspaceCount()).toBeUndefined();
+        });
+    });
 });

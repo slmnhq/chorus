@@ -24,9 +24,9 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             userCanEditPermissions:this.canEditPermissions(),
             userCanEditInstance:this.canEditInstance(),
             instanceAccountsCount:this.instance.accounts().length,
-            workspaceCount:this.instance.usage().get('workspaces').length,
+            workspaceCount:this.instance.usage().workspaceCount(),
             deleteable:this.instance.get("state") == "fault" && this.instance.get("provisionType") == "create",
-            isHadoop: this.model.isHadoop()
+            hasWorkspaceUsageInfo: this.model.hasWorkspaceUsageInfo()
         };
     },
 
@@ -54,7 +54,6 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         this.requiredResources.reset();
         this.requiredResources.push(this.instance.accounts())
         this.requiredResources.push(account)
-        this.requiredResources.push(instanceUsage)
 
         this.bindings.removeAll();
         this.bindings.add(this.instance.accounts(), "reset", this.render);
