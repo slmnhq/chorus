@@ -31,7 +31,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
     });
 
     it("has an input for the name", function() {
-        expect(this.view.$("label[for=create_database_view_name]")).toContainTranslation("create_database_view.name");
+        expect(this.view.$("input").attr("placeholder")).toMatchTranslation("create_database_view.name");
         expect(this.view.$("input#create_database_view_name")).toExist();
     });
 
