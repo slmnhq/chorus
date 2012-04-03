@@ -1,8 +1,7 @@
 @import "../_common.scss";
 
 #sidebar{
-    .user_list_sidebar, .user_show_sidebar {
-
+    .user_sidebar {
         .info {
             .full_name {
                 @include ellipsis;

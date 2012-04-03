@@ -42,6 +42,6 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
             this.collection.fetch();
         }, this);
 
-        this.sidebar = new chorus.views.UserListSidebar();
+        this.sidebar = new chorus.views.UserSidebar({listMode: true});
     }
 });

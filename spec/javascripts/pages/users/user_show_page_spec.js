@@ -68,8 +68,8 @@ describe("chorus.pages.UserShow", function(){
                 this.view.render();
             });
 
-            it("puts a UserShowSidebar in the sidebar", function(){
-                expect(this.view.sidebar instanceof chorus.views.UserShowSidebar).toBeTruthy();
+            it("puts a UserSidebar in the sidebar", function(){
+                expect(this.view.sidebar instanceof chorus.views.UserSidebar).toBeTruthy();
             })
 
             it("sets the sidebar's model to the user", function(){
