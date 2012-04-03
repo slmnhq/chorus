@@ -8,9 +8,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     events:{
         "click a.show":"showTabularData",
         "click a.hide":"hideTabularData",
-        "click button.close_dialog":"closeModal",
-        "click button.save":"downloadVisualization",
-        "click button.save_as_workfile":"createWorkfileFromVisualization"
+        "click button.close_dialog":"closeModal"
     },
 
     setup: function () {
@@ -28,6 +26,14 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.tableData.showResultTable(this.task);
         this.tableData.$('.expander_button').remove();
         this.$('.chart_icon.' + this.type).addClass("selected");
+        chorus.menu(this.$('button.save'), {
+            content: this.$(".save_options"),
+            orientation: "right",
+            contentEvents: {
+                "a.save_as_workfile": _.bind(this.saveAsWorkfile, this),
+                "a.save_to_desktop": _.bind(this.saveToDesktop, this)
+            }
+        });
     },
 
     onExecutionComplete: function () {
@@ -72,7 +78,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     saveWorkfile: function(workspace) {
-        this.$('button.save_as_workfile').startLoading("actions.saving");
+        this.$('button.save').startLoading("actions.saving");
 
         var workspaceId = workspace ? workspace.get("id") : this.task.get("workspaceId");
 
@@ -87,7 +93,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     onWorkfileSaved: function() {
-        this.$('button.save_as_workfile').stopLoading();
+        this.$('button.save').stopLoading();
         chorus.toast("dataset.visualization.toast.workfile_from_chart", {fileName: this.workfile.get("fileName")})
     },
 
@@ -116,7 +122,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.$(".modal_controls a.hide").addClass("hidden");
     },
 
-    downloadVisualization:function (event) {
+    saveToDesktop:function (event) {
         event.preventDefault();
         var form = this.createDownloadForm()
         form.hide();
@@ -124,7 +130,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         form.submit();
     },
 
-    createWorkfileFromVisualization: function(e) {
+    saveAsWorkfile: function(e) {
         e.preventDefault();
 
         if (!this.task.get("workspaceId")) {

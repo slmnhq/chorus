@@ -30,12 +30,20 @@
                 {{#unless hasChart}}
                     disabled="disabled"
                 {{/unless}}
-                >{{t "actions.save_chart"}}</button>
-            <button class="save_as_workfile"
-                {{#unless hasChart}}
-                    disabled="disabled"
-                {{/unless}}
-                >{{t "actions.save_as_workfile"}}</button>
+                >{{t "actions.save_as"}}</button>
         </div>
+    </div>
+</div>
+
+<div class="hidden">
+    <div class="save_options">
+        <ul class="save_menu">
+            <li>
+                <a href="#" class="save_as_workfile">{{t "visualization.save_as_workfile"}}</a>
+            </li>
+            <li>
+                <a href="#" class="save_to_desktop">{{t "visualization.save_to_desktop"}}</a>
+            </li>
+        </ul>
     </div>
 </div>
