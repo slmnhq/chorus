@@ -4,7 +4,8 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
     persistent:true,
 
     events:{
-        "click button.submit":"doCallback"
+        "click button.submit": "doCallback",
+        "dblclick li": "doubleClick"
     },
 
     additionalContext:function (ctx) {
@@ -49,5 +50,10 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
 
     doCallback : function () {
         this.callback && this.callback();
+    },
+
+    doubleClick: function(e) {
+        this.picklistView.selectItem(e);
+        this.doCallback();
     }
 });

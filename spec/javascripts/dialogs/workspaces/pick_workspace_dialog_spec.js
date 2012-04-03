@@ -118,4 +118,20 @@ describe("chorus.dialogs.PickWorkspace", function() {
             expect(this.dialog.callback).toHaveBeenCalled();
         })
     });
+
+    describe("double-clicking a workspace", function() {
+        beforeEach(function() {
+            this.server.completeFetchFor(this.dialog.collection, [fixtures.workspace(), fixtures.workspace()]);
+            this.dialog.render();
+        });
+
+        it("sets the selected item on the pick-list view and calls the callback", function() {
+            var self = this;
+            this.dialog.callback = jasmine.createSpy("callback").andCallFake(function() {
+                expect(self.dialog.picklistView.selectedItem()).toBe(self.dialog.collection.at(1));
+            })
+            this.dialog.$("li:eq(1)").dblclick();
+            expect(this.dialog.callback).toHaveBeenCalled();
+        });
+    })
 })
