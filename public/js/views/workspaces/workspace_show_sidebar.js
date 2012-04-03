@@ -17,7 +17,7 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
     additionalContext:function () {
         return {
             workspaceAdmin:this.model.workspaceAdmin(),
-            imageUrl:this.model.imageUrl() + "&buster=" + chorus.cachebuster,
+            imageUrl:this.model.imageUrl() + "&buster=" + chorus.cachebuster(),
             hasImage:this.model.hasImage(),
             hasSandbox:!!this.model.sandbox(),
             currentUserIsMember: this.model.currentUserIsMember()
