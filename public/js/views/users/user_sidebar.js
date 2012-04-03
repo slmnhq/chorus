@@ -1,15 +1,18 @@
 chorus.views.UserSidebar = chorus.views.Sidebar.extend({
     className:"user/sidebar",
     entityType:"user",
+
     subviews:{
-        '.activities':'activityList'
+        '.tab_control': 'tabs'
     },
 
     setup: function() {
-        if (this.model) this.setUser(this.model);
-
         this.config = chorus.models.Config.instance();
         this.requiredResources.push(this.config);
+
+        this.tabs = new chorus.views.TabControl(["activity"]);
+        if (this.model) this.setUser(this.model);
+
         chorus.PageEvents.subscribe("user:selected", this.setUser, this);
     },
 
@@ -37,7 +40,7 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
         this.collection = this.model.activities();
         this.collection.fetch();
         this.bindings.add(this.collection, "changed", this.render);
-        this.activityList = new chorus.views.ActivityList({ collection:this.collection, additionalClass:"sidebar" });
+        this.tabs.activity = new chorus.views.ActivityList({ collection:this.collection, additionalClass:"sidebar" });
         this.render();
     }
 });

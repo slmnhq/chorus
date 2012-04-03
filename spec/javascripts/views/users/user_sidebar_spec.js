@@ -8,17 +8,18 @@ describe("chorus.views.UserSidebar", function() {
         this.view.render();
     });
 
-    it("has an activity list", function() {
-        expect(this.view.activityList).toBeDefined();
-    });
-
     it("fetches the activity stream", function() {
         expect(this.server.lastFetchFor(this.view.collection)).toBeDefined();
     });
 
-    context("when the config fetch completes", function() {
+    context("when the fetch completes", function() {
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.Config.instance());
+            this.server.completeFetchFor(this.view.collection, [fixtures.activitySet()]);
+        });
+
+        it("has an activity list", function() {
+            expect(this.view.$(".tab_control .activity_list")).toExist();
         });
 
         context("when logged in as an admin", function() {
@@ -39,13 +40,7 @@ describe("chorus.views.UserSidebar", function() {
             });
 
             context("and the user being shown is not the current user", function() {
-                it("shouldn't have actions", function() {
-                    expect(this.view.$(".actions")).not.toExist();
-                });
-
-                it("should not show change password option", function() {
-                    expect(this.view.$("a.change_password")).not.toExist();
-                });
+                itShouldNotHaveActionLinks();
             });
 
             context("and the user being shown is the current user", function() {
@@ -92,9 +87,7 @@ describe("chorus.views.UserSidebar", function() {
                 this.view.render();
             });
 
-            it("should not render the action links", function() {
-                expect(this.view.$(".actions")).not.toExist();
-            });
+            itShouldNotHaveActionLinks();
         });
 
         describe("#setUser(user)", function() {
@@ -131,4 +124,12 @@ describe("chorus.views.UserSidebar", function() {
             expect(this.view.$(".info")).toExist();
         });
     });
+
+    function itShouldNotHaveActionLinks() {
+        it("should not render the action links", function() {
+            expect(this.view.$(".actions .edit_user")).not.toExist();
+            expect(this.view.$(".actions .delete_user")).not.toExist();
+            expect(this.view.$(".actions .change_password")).not.toExist();
+        });
+    }
 });
