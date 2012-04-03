@@ -16,7 +16,6 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     setup: function() {
         this.resource = this.csv = this.options.csv;
         this.tableName = this.csv.get("toTable");
-        chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
         this.dataset = new chorus.models.Dataset({ workspace: {id: this.csv.get("workspaceId")}, id: this.options.datasetId })
 
         this.requiredResources.add(this.dataset);
