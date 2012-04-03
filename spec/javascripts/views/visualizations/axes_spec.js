@@ -760,8 +760,8 @@ describe("chorus.views.visualizations.Axes", function() {
 
         describe("axis positioning", function() {
             it("positions the x and y axes so that they meet at the origin", function() {
-                expect(leftX(this.xAxisLine)).toEqual(leftX(this.yAxisLine));
-                expect(bottomY(this.yAxisLine)).toEqual(bottomY(this.xAxisLine));
+                expect(leftX(this.xAxisLine)).toBeWithinDeltaOf(leftX(this.yAxisLine), 3);
+                expect(bottomY(this.yAxisLine)).toBeWithinDeltaOf(bottomY(this.xAxisLine), 3);
             });
 
             it("keeps labels inside the padding", function() {
