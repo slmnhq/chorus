@@ -1,5 +1,17 @@
 @import "../_common.scss";
 
+body .ui-draggable-dragging {
+    .name {
+        max-width: 60%;
+    }
+
+    .type {
+        float: right;
+        margin-top: 8px;
+        color: $color-text3;
+    }
+}
+
 #sidebar {
     &:focus {
         outline: none;
