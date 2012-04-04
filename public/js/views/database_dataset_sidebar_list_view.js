@@ -17,7 +17,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         e.preventDefault();
         var li = $(e.currentTarget).closest("li"),
             type = li.data("type"),
-            name = li.data("name");
+            name = li.data("name").toString();
 
         var dataset = this.collection.findWhere({ type:type, objectName: name });
         this.trigger("datasetSelected", dataset);

@@ -80,7 +80,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                             fixtures.databaseObject({ objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
                             fixtures.databaseObject({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW"}),
                             fixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
-                            fixtures.databaseObject({ objectName: "apple", type: "SANDBOX_TABLE", objectType: "BASE_TABLE"})
+                            fixtures.databaseObject({ objectName: "1234", type: "SANDBOX_TABLE", objectType: "BASE_TABLE"})
                         ]);
                         this.view.render();
                     });
@@ -96,14 +96,14 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     });
 
                     it("sorts the data by name", function() {
-                        expect(this.view.$("li").eq(0).text().trim()).toBe("apple");
+                        expect(this.view.$("li").eq(0).text().trim()).toBe("1234");
                         expect(this.view.$("li").eq(1).text().trim()).toBe("Data1");
                         expect(this.view.$("li").eq(2).text().trim()).toBe("Data2");
                         expect(this.view.$("li").eq(3).text().trim()).toBe("zebra");
                     });
 
                     it("renders the correct data-fullname for each item", function() {
-                        expect(this.view.$("li").eq(0).data("fullname")).toBe("schema_name.apple");
+                        expect(this.view.$("li").eq(0).data("fullname")).toBe('schema_name."1234"');
                         expect(this.view.$("li").eq(1).data("fullname")).toBe('schema_name."Data1"');
                         expect(this.view.$("li").eq(2).data("fullname")).toBe('schema_name."Data2"');
                         expect(this.view.$("li").eq(3).data("fullname")).toBe("schema_name.zebra");
@@ -144,6 +144,18 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                             expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedTable]);
                         });
                     });
+
+                    describe("user clicks on a table with a numeric name", function() {
+                        beforeEach(function() {
+                            this.clickedTable = this.schema.databaseObjects().findWhere({ objectName: "1234" });
+                            spyOnEvent(this.view, "datasetSelected");
+                            this.view.$("li:eq(0) a").click();
+                        });
+
+                        it("triggers a 'datasetSelected' event on itself, with the table", function() {
+                            expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedTable]);
+                        });
+                    })
                 });
 
                 context("and no data was fetched", function() {
