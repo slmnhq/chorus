@@ -90,6 +90,10 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             it("reparses the file with " + separator + " as the separator", function() {
                 expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
             });
+
+            it("updates the total columns in the progress section", function() {
+                expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", { count: 0, total: 5 });
+            });
         };
     }
 
