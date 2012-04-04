@@ -43,6 +43,10 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         expect(this.schema.databaseObjects()).toHaveBeenFetched();
     });
 
+    it("fetches the list of schemas in the same instance as the original schema", function() {
+        expect(this.dialog.schemas).toHaveBeenFetched();
+    });
+
     describe("when the fetch of the tables and views completes", function() {
         beforeEach(function() {
             this.databaseObject1 = fixtures.databaseObject({
@@ -100,72 +104,84 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             expect(icons.eq(1)).toHaveAttr("src", this.databaseObject2.iconUrl({ size: "medium" }));
         });
 
-        describe("database/instance/schema", function() {
+        describe("the schema picker menu", function() {
             it("shows the original table canonical name", function() {
                 expect(this.dialog.$(".canonical_name").text()).toBe(this.schema.canonicalName());
             });
 
-            it("the schema is a link to a drop-down menu", function() {
-                var $link = this.dialog.$(".canonical_name a.schema_qtip")
-                expect($link).toContainText(this.schema.get("name"));
-            });
-
-            describe("opening the schema-picker", function() {
+            context("when the fetch for the schemas completes", function() {
                 beforeEach(function() {
-                    this.dialog.$(".canonical_name a.schema_qtip").click();
                     this.schemaBob = fixtures.schema({name: "Bob", databaseName: this.schema.get("databaseName")});
                     this.schemaTed = fixtures.schema({name: "Ted", databaseName: this.schema.get("databaseName")});
                     this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
                 });
 
-                it("clicking the link shows the schema-picker", function() {
+                it("the schema is a link to a drop-down menu", function() {
+                    var $link = this.dialog.$(".canonical_name a.schema_qtip")
+                    expect($link).toContainText(this.schema.get("name"));
+                    $link.click();
                     expect(this.qtip).toHaveVisibleQtip();
-                    expect(this.qtip.find("ul li").length).toBe(3);
                 });
 
-                it("schema-picker has a check-mark beside the currently selected schema", function() {
-                     expect(this.qtip.$("li:contains('" + this.schema.get("name") + "')")).toContain('.check');
-                     expect(this.qtip.$("li:contains(Bob)")).not.toContain('.check');
-                });
-
-                it("clicking the link more than once returns the correct list", function() {
-                    this.qtip.hide();
-
-                    this.dialog.$(".canonical_name a.schema_qtip").click();
-                    this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
-
-                    expect(this.qtip.find("ul li").length).toBe(3);
-                });
-
-                context("when selecting a schema", function() {
+                describe("opening the schema-picker", function() {
                     beforeEach(function() {
-                        this.qtip.$("li:contains(Bob) a").click();
+                        this.dialog.$(".canonical_name a.schema_qtip").click();
                     });
 
-                    it("hides the menu", function() {
-                        expect(this.qtip).not.toHaveVisibleQtip();
+                    it("clicking the link shows the schema-picker", function() {
+                        expect(this.qtip).toHaveVisibleQtip();
+                        expect(this.qtip.find(".ui-tooltip:eq(0) ul li").length).toBe(3);
                     });
 
-                    it("loads the schema's datasets", function() {
-                        expect(this.schemaBob.databaseObjects()).toHaveBeenFetched();
+                    it("schema-picker has a check-mark beside the currently selected schema", function() {
+                        expect(this.qtip.$("li:contains('" + this.schema.get("name") + "')")).toContain('.check');
+                        expect(this.qtip.$("li:contains(Bob)")).not.toContain('.check');
                     });
 
-                    it("shows the loading spinner until the datasets have loaded", function() {
-                        expect(this.dialog.$(".loading_section")).toExist();
-                        this.server.completeFetchFor(this.schemaBob.databaseObjects());
-                        expect(this.dialog.$(".loading_section")).not.toExist();
+                    it("clicking the link more than once returns the correct list", function() {
+                        this.qtip.hide();
+
+                        this.dialog.$(".canonical_name a.schema_qtip").click();
+
+                        expect(this.qtip.find(".ui-tooltip:eq(0) ul li").length).toBe(3);
                     });
 
-                    it("changes the schema", function() {
-                        expect(this.dialog.schema.get("name")).toEqual("Bob");
-                    });
+                    context("when selecting a schema", function() {
+                        beforeEach(function() {
+                            this.qtip.$("li:contains(Bob) a").click();
+                        });
 
-                    it("keeps the instance and database", function() {
-                        expect(this.dialog.schema).not.toEqual(this.schema);
-                        expect(this.dialog.schema.get("instanceName")).toBe(this.schema.get("instanceName"));
-                        expect(this.dialog.schema.get("databaseName")).toBe(this.schema.get("databaseName"));
+                        it("hides the menu", function() {
+                            expect(this.qtip).not.toHaveVisibleQtip();
+                        });
+
+                        it("loads the schema's datasets", function() {
+                            expect(this.schemaBob.databaseObjects()).toHaveBeenFetched();
+                        });
+
+                        it("shows the loading spinner until the datasets have loaded", function() {
+                            expect(this.dialog.$(".loading_section")).toExist();
+                            this.server.completeFetchFor(this.schemaBob.databaseObjects());
+                            expect(this.dialog.$(".loading_section")).not.toExist();
+                        });
+
+                        it("changes the schema", function() {
+                            expect(this.dialog.schema.get("name")).toEqual("Bob");
+                        });
+
+                        it("keeps the instance and database", function() {
+                            expect(this.dialog.schema).not.toEqual(this.schema);
+                            expect(this.dialog.schema.get("instanceName")).toBe(this.schema.get("instanceName"));
+                            expect(this.dialog.schema.get("databaseName")).toBe(this.schema.get("databaseName"));
+                        });
                     });
                 });
+            });
+
+            it("the schema is not a qtip link if the schemas aren't loaded yet", function() {
+                var $link2 = this.dialog.$(".canonical_name a.schema_qtip")
+                $link2.click();
+                expect(this.qtip).not.toHaveVisibleQtip();
             });
         });
 

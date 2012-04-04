@@ -2,10 +2,10 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     className: "manage_join_tables",
     additionalClass: "with_sub_header",
     title: t("dataset.manage_join_tables.title"),
-    useLoadingSection:true,
+    useLoadingSection: true,
 
     events: {
-        "click li":     "tableClicked",
+        "click li": "tableClicked",
         "click a.join": "joinLinkClicked",
         "click a.preview_columns": "onClickPreviewColumns"
     },
@@ -34,60 +34,53 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
 
         this.collection.fetchIfNotLoaded();
 
-        this.joinTablePaginator = new chorus.views.ListContentDetails({collection:this.collection, modelClass:"Dataset", hideIfNoPagination:true});
+        this.joinTablePaginator = new chorus.views.ListContentDetails({collection: this.collection, modelClass: "Dataset", hideIfNoPagination: true});
 
         this.schemas = new chorus.collections.SchemaSet([], {instanceId: this.schema.get("instanceId"), databaseName: this.schema.get("databaseName")});
+        this.schemas.fetch();
+    },
+
+    schemasLoaded: function() {
+        var $menuContent = $("<ul class='schema_menu'></ul>")
+
+        this.schemas.each(function(schema) {
+            schema.set({ instanceName: this.schema.get("instanceName") });
+
+            $li = $("<li></li>");
+            $li.addClass("menu_item");
+
+            $a = $("<a href='#'></a>")
+            $a.addClass("schema");
+
+            if (schema.get("name") == this.schema.get("name")) {
+                $a.append($("<div class='check'></div>"))
+            }
+            $a.append(schema.get("name"));
+
+            $a.click(_.bind(function(e) {
+                e && e.preventDefault();
+                this.schema = schema;
+                var dbObjects = schema.databaseObjects();
+                this.bindings.add(dbObjects, "change reset remove", this.render);
+
+                this.fetchDatabaseObjects(dbObjects);
+                this.render();
+            }, this));
+
+            $li.append($a);
+            $menuContent.append($li);
+        }, this);
+
+        chorus.menu(this.$("a.schema_qtip"), {
+            content: $menuContent
+        });
+
     },
 
     postRender: function() {
         this._super("postRender");
 
-        var $menuContent = $("<ul class='schema_menu'></ul>")
-        chorus.menu(this.$("a.schema_qtip"), {
-            content: $menuContent,
-            classes: "schema_menu",
-            style: {
-                width: "auto"
-            },
-            qtipArgs: {
-                events: {
-                    show: _.bind(function(event, api) {
-                        this.schemas.fetch();
-                        this.schemas.bind("loaded", function() {
-                            $menuContent.empty();
-                            _.each(this.schemas.models, function(schema) {
-                                schema.set({ instanceName: this.schema.get("instanceName") });
-
-                                $li = $("<li></li>");
-                                $li.addClass("menu_item");
-
-                                $a = $("<a href='#'></a>")
-                                $a.addClass("schema");
-
-                                if (schema.get("name") == this.schema.get("name")) {
-                                    $a.append($("<div class='check'></div>"))
-                                }
-                                $a.append(schema.get("name"));
-
-                                $a.click(_.bind(function(e) {
-                                    e && e.preventDefault();
-                                    this.schema = schema;
-                                    var dbObjects = schema.databaseObjects();
-                                    this.bindings.add(dbObjects, "change reset remove", this.render);
-
-                                    this.fetchDatabaseObjects(dbObjects);
-                                    this.render();
-                                    api.hide();
-                                }, this));
-
-                                $li.append($a);
-                                $menuContent.append($li);
-                            }, this);
-                        }, this);
-                    }, this)
-                }
-            }
-        });
+        this.schemas.onLoaded(this.schemasLoaded, this);
     },
 
     tableClicked: function(e) {
@@ -128,7 +121,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
 
     collectionModelContext: function(model) {
         return {
-            isView:  model.metaType() == "view",
+            isView: model.metaType() == "view",
             iconUrl: model.iconUrl({ size: "medium" })
         };
     }
