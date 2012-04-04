@@ -87,7 +87,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
             context("when the model changes", function(){
                 beforeEach(function(){
-                    this.page.model.set({name: "bar"})
+                    this.page.model.set({name: "bar", isPublic: false});
                 });
 
                 it("displays the new breadcrumb automatically", function(){
@@ -96,6 +96,10 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
                 it("updates the title", function() {
                     expect(this.page.$("h1")).toContainText("bar");
+                });
+
+                it("changes the icon", function() {
+                    expect(this.page.$(".activity_list_header .title img").attr("src")).toBe("/images/workspaces/private_workspace_large.png");
                 });
             });
         });

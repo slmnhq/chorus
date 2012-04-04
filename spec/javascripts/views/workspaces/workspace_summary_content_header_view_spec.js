@@ -39,5 +39,9 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
             this.view.render();
             expect(this.view.$(".truncated_summary")).toHaveClass("hidden");
         });
+
+        it("displays the correct title", function() {
+            expect(this.view.$("h1")).toContainText(this.workspace.get("name"));
+        });
     });
 })

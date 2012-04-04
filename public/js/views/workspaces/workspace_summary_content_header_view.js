@@ -10,17 +10,16 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
 
     setup: function() {
         this.model.activities().fetchIfNotLoaded();
+        this.bindings.add(this.model, "saved", this.render);
         this.requiredResources.push(this.model);
     },
 
     resourcesLoaded : function() {
         this.truncatedSummary = new chorus.views.TruncatedText({model:this.model, attribute:"summary", attributeIsHtmlSafe: true});
         this.activityListHeader = new chorus.views.ActivityListHeader({
-            allTitle: this.model.get("name"),
-            insightsTitle: this.model.get("name"),
-            iconUrl: this.model.defaultIconUrl(),
-            workspace: this.model,
-            collection: this.model.activities()
+              model: this.model,
+              allTitle: this.model.get("name"),
+              insightsTitle: this.model.get("name")
         });
     },
 

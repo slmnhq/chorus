@@ -1671,7 +1671,8 @@ beforeEach(function() {
         workspace: function(overrides) {
             var id = this.nextId().toString()
             var attributes = _.extend(this.workspaceJson(), {
-                _owner: this.user()
+                _owner: this.user(),
+                entityType: "workspace"
             }, overrides);
             return new chorus.models.Workspace(attributes);
         },

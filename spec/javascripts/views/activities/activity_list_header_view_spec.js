@@ -1,13 +1,13 @@
 describe("chorus.views.ActivityListHeader", function() {
     beforeEach(function() {
         this.workspace = fixtures.workspace();
-        this.collection = new chorus.collections.ActivitySet();
+        this.collection = new chorus.collections.ActivitySet([], { entityType: "workspace" });
+        this.workspace._activities = this.collection;
+
         this.view = new chorus.views.ActivityListHeader({
-            iconUrl: this.workspace.defaultIconUrl(),
+            model: this.workspace,
             allTitle: "the_all_title_i_passed",
-            insightsTitle: "the_insights_title_i_passed",
-            collection: this.collection,
-            workspace: this.workspace
+            insightsTitle: "the_insights_title_i_passed"
         });
     });
 
@@ -21,7 +21,7 @@ describe("chorus.views.ActivityListHeader", function() {
         });
 
         it("configures the insight count for that workspace", function() {
-            expect(this.view.insightCount.url()).toContainQueryParams({ workspaceId: this.view.options.workspace.get("id") })
+            expect(this.view.insightCount.url()).toContainQueryParams({ workspaceId: this.view.model.get("id") })
         });
 
         context("when the fetch completes", function() {
