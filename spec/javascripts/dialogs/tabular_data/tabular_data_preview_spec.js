@@ -1,15 +1,12 @@
 describe("chorus.dialogs.TabularDataPreview", function () {
     beforeEach(function () {
         this.dataset = fixtures.datasetSandboxTable();
-        this.launchElement = $("<a data-dialog='TabularDataPreview'></a>")
         spyOn(chorus.views.ResultsConsole.prototype, 'execute').andCallThrough();
         spyOn(chorus.dialogs.TabularDataPreview.prototype, "closeModal");
         this.view = new chorus.dialogs.TabularDataPreview({
-            launchElement: this.launchElement,
             pageModel: this.dataset
         });
         this.view.render();
-        $('#jasmine_content').append(this.view.el);
     });
 
     it('should have a close link', function () {
