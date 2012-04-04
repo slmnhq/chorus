@@ -53,32 +53,32 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         switch (type) {
             case "STRING":
             case "LONG_STRING":
-                this.model = new chorus.models.DatasetFilterMaps.String
+                this.map = new chorus.models.DatasetFilterMaps.String
                 break;
             case "BOOLEAN":
-                this.model = new chorus.models.DatasetFilterMaps.Boolean
+                this.map = new chorus.models.DatasetFilterMaps.Boolean
                 break;
             case "WHOLE_NUMBER":
             case "REAL_NUMBER":
-                this.model = new chorus.models.DatasetFilterMaps.Numeric
+                this.map = new chorus.models.DatasetFilterMaps.Numeric
                 break;
             case "DATE":
-                this.model = new chorus.models.DatasetFilterMaps.Date
+                this.map = new chorus.models.DatasetFilterMaps.Date
                 break;
             case "TIME":
-                this.model = new chorus.models.DatasetFilterMaps.Time
+                this.map = new chorus.models.DatasetFilterMaps.Time
                 break;
             case "DATETIME":
-                this.model = new chorus.models.DatasetFilterMaps.Timestamp
+                this.map = new chorus.models.DatasetFilterMaps.Timestamp
                 break;
             default:
-                this.model = new chorus.models.DatasetFilterMaps.Other
+                this.map = new chorus.models.DatasetFilterMaps.Other
                 break;
         }
 
-        if (!this.model) { return; }
+        if (!this.map) { return; }
 
-        _.each(this.model.comparators, function(value, key) {
+        _.each(this.map.comparators, function(value, key) {
             var el = $("<option/>").text(t("dataset.filter." + key)).attr("value", key);
             $comparator.append(el);
         });
@@ -92,9 +92,9 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
 
     comparatorSelected: function() {
         var comparatorName = this.$("select.comparator option:selected").val();
-        if (!this.model) { return; }
+        if (!this.map) { return; }
 
-        var comparator = this.model.comparators[comparatorName];
+        var comparator = this.map.comparators[comparatorName];
         this.$(".filter.default").toggleClass("hidden", !comparator.usesInput);
         this.$(".filter.time").toggleClass("hidden", !comparator.usesTimeInput);
         this.$(".filter.date").toggleClass("hidden", !comparator.usesDateInput);
@@ -107,11 +107,11 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         var comparatorName = this.$("select.comparator").val();
         var inputValue = this.fieldValues().value;
 
-        return this.model.comparators[comparatorName].generate(columnName, inputValue);
+        return this.map.comparators[comparatorName].generate(columnName, inputValue);
     },
 
     fieldValues: function() {
-        switch (this.model.type) {
+        switch (this.map.type) {
             case "Time":
                 return { value: this.$(".filter.time input").val() };
                 break;
@@ -133,15 +133,30 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     },
 
     validateInput: function() {
-        if (!this.model) { return; }
-        if (this.model.performValidation(this.fieldValues())) {
+        if (!this.map) { return; }
+        if (this.map.performValidation(this.fieldValues())) {
             this.clearErrors();
         } else {
-            this.showErrors(this.model);
+            this.showErrors(this.map);
         }
     },
 
     valid: function() {
         return this.columnFilter.valid();
+    },
+
+    serialize: function() {
+        var type = this.columnFilter.getSelectedColumn().get('typeCategory')
+        var value = type == "DATE" ?
+            _.map(this.$(".filter.date input"), function(input){return $(input).val()}) :
+            this.$(".filter input").val()
+
+        var model = new chorus.models.TabularDataFilter({
+            column: this.columnFilter.getSelectedColumn().get("name"),
+            comparator: this.$("select.comparator option:selected").val(),
+            value: value
+        });
+
+        return model;
     }
 });
