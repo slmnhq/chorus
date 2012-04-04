@@ -1,5 +1,6 @@
 chorus.views.visualizations.Axis = function(options) {
     this._labels = options.labels;
+    this._longLabels = options.longLabels;
     this.axisLabel = options.axisLabel;
     this.hasGrids = options.hasGrids;
     this.width = options.el.attr("width");
@@ -48,6 +49,10 @@ _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
                 return this.scale().ticks(8);
             }
         } else {
+            if(this._longLabels){
+                return this._longLabels;
+            }
+
             return this._labels;
         }
     },
@@ -72,7 +77,7 @@ _.extend(chorus.views.visualizations.Axis.prototype, chorus.Mixins.VisHelpers, {
                 .range(this.range());
         } else {
             return d3.scale.ordinal()
-                .domain(this.labels())
+                .domain(this._longLabels || this._labels)
                 .rangeBands(this.range());
         }
     }
@@ -182,7 +187,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             });
         } else {
             tickLabels.text(function(d) {
-                return self.labelFormat(d)
+                return self.labelFormatKeepPercentage(d)
             });
         }
 
@@ -358,15 +363,14 @@ chorus.views.visualizations.Axes = function(options) {
             maxValue: options.maxXValue,
             scaleType: options.xScaleType,
             labels: options.xLabels,
+            longLabels: options.xLongLabels,
             axisLabel: options.xAxisLabel,
             hasGrids: options.hasXGrids,
             timeFormat: options.timeFormat,
             timeType: options.timeType,
             paddingX: options.paddingX,
             paddingY: options.paddingY
-        }
-    )
-        ;
+    });
 
     this.yAxis = new chorus.views.visualizations.YAxis({
         el: options.el,

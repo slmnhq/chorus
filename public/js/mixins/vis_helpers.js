@@ -11,5 +11,15 @@ chorus.Mixins.VisHelpers = {
         } else {
             return label.toString();
         }
+    },
+
+    labelFormatKeepPercentage: function(label, maxLength) {
+        if (/.*\(\d*%\)/.test(label)){
+            var percentage = label.match(/\(\d*%\)/)[0];
+            var name = label.split(/\(\d*%\)/)[0].trim();
+            return this.labelFormat(name, 6) + " " + percentage;
+        } else {
+            return this.labelFormat(label, maxLength);
+        }
     }
 };

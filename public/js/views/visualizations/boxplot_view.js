@@ -25,6 +25,11 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.include(
         var xLabels = _.map(buckets, function(bucket, i){
             return this.labelFormat(bucket, 6) + " (" + percentages[i]+ ")";
         }, this)
+
+        var xLongLabels = _.map(buckets, function(bucket, i){
+            return this.labelFormat(bucket, 1000) + " (" + percentages[i]+ ")";
+        }, this)
+
         this.axes = new chorus.views.visualizations.Axes({
             el: svg,
             yScaleType: "numeric",
@@ -32,6 +37,7 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.include(
             maxYValue: data.maxY,
             minYValue: data.minY,
             xLabels: xLabels,
+            xLongLabels: xLongLabels,
             xAxisLabel: this.model.get("xAxis"),
             yAxisLabel: this.model.get("yAxis"),
             hasYGrids: true,

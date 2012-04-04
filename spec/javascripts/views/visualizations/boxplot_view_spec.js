@@ -115,6 +115,44 @@ describe("chorus.views.visualizations.BoxPlot", function() {
             });
         });
 
+        describe("the x positions when the ellipsized names are all the same", function() {
+            beforeEach(function() {
+                this.task = fixtures.boxplotTaskWithResult({
+                    rows: [
+                        { bucket: 'thelongname_aardvark', min: 1, firstQuartile: 1, median: 2.5, thirdQuartile: 3, max: 4, percentage: "25%" },
+                        { bucket: 'thelongname_beluga', min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "25%" },
+                        { bucket: 'thelongname_chupacabra', min: 10, firstQuartile: 10, median: 25, thirdQuartile: 30, max: 40, percentage: "25%" }
+                    ],
+                    xAxis: "foo",
+                    yAxis: "bar"
+                });
+
+                this.view = new chorus.views.visualizations.Boxplot({ model: this.task });
+                $("#jasmine_content").append(this.view.el);
+                this.view.render();
+            });
+
+            it("has different x positions for each bucket", function() {
+                var aardvark = this.view.$("g.box line.midline").eq(0)
+                var beluga = this.view.$("g.box line.midline").eq(1)
+                var chupacabra = this.view.$("g.box line.midline").eq(2)
+
+                expect(aardvark.attr("x1")).not.toEqual(beluga.attr("x1"));
+                expect(aardvark.attr("x1")).not.toEqual(chupacabra.attr("x1"));
+                expect(beluga.attr("x1")).not.toEqual(chupacabra.attr("x1"));
+            });
+
+            it("has different x positions for each tick label", function() {
+                var aardvark = this.view.$("g.label text").eq(0)
+                var beluga = this.view.$("g.label text").eq(1)
+                var chupacabra = this.view.$("g.label text").eq(2)
+
+                expect(aardvark.attr("x")).not.toEqual(beluga.attr("x"));
+                expect(aardvark.attr("x")).not.toEqual(chupacabra.attr("x"));
+                expect(beluga.attr("x")).not.toEqual(chupacabra.attr("x"));
+            });
+        });
+
         describe("the whiskers", function() {
             it("draws a minimum and a maximum whisker for each bucket", function() {
                 expect(this.maxWhiskers.length).toBe(3);
