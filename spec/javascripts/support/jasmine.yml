@@ -90,7 +90,11 @@ stylesheets:
 # helpers:
 #   - helpers/**/*.js
 #
-# helpers:
+helpers:
+  - helpers/fixture_data.js
+  - helpers/fixture_definitions.js
+  - helpers/fixture_generator.js
+  - helpers/**/*.js
 
 # spec_files
 #
