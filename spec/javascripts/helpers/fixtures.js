@@ -1271,6 +1271,33 @@ beforeEach(function() {
                     "type": "DATASET_CHANGED_QUERY",
                     "comments": []
                 });
+            },
+
+            VIEW_CREATED: function() {
+                return new chorus.models.Activity({
+                    "timestamp": "2012-02-22 10:19:24",
+                    "id": 10150,
+                    "author": fixtures.authorJson(),
+                    "workspace": {
+                        "id": "10000",
+                        "name": "!!!"
+                    },
+                    "chorusView": {
+                        "workspaceId": "10000",
+                        "id": '"10000"|"Analytics"|"analytics"|"QUERY"|"chorus_view_277"',
+                        "objectName": "chorus_view_277",
+                        "query": "SELECT name FROM people",
+                        "name": "chorus_view_277",
+                        "type": "CHORUS_VIEW",
+                        "objectType": "QUERY"
+                    },
+                    "view": {
+                        "id": '"10000"|"Analytics"|"analytics"|"VIEW"|"my_view"',
+                        "name": "my_view"
+                    },
+                    "type": "VIEW_CREATED",
+                    "comments": []
+                });
             }
         },
 

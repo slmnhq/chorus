@@ -113,6 +113,10 @@
                 header.hdfsLink = chorus.helpers.linkTo(this.presenter.hdfsUrl, this.presenter.hdfsName).toString();
             }
 
+            if (this.presenter.chorusViewName) {
+                header.chorusViewLink = chorus.helpers.linkTo(this.presenter.chorusViewUrl, this.presenter.chorusViewName).toString();
+            }
+
             return header;
         },
 
@@ -283,6 +287,15 @@
             return {
                 objectName: this.noteObject.get('objectName'),
                 objectUrl: this.noteObject.showUrl()
+            };
+        },
+
+        VIEW_CREATED: function(model) {
+            return {
+                objectName: this.noteObject.get('objectName'),
+                objectUrl: this.noteObject.showUrl(),
+                chorusViewName: model.chorusViewDataset().get("objectName"),
+                chorusViewUrl: model.chorusViewDataset().showUrl()
             };
         }
     });

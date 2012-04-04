@@ -1176,6 +1176,43 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".VIEW_CREATED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.VIEW_CREATED();
+            this.dataset = this.model.dataset();
+            this.workspace = this.model.workspace();
+            this.chorusView = this.model.chorusViewDataset();
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right workspaceName", function() {
+            expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the right workspaceUrl", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+            expect(this.presenter.workspaceUrl).toBe(url);
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
+        });
+
+        it("should have the right objectUrl", function() {
+            expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+        });
+
+        it("should have the right chorusViewName", function() {
+            expect(this.presenter.chorusViewName).toBe(this.chorusView.get("objectName"));
+        });
+
+        it("should have the right chorusViewUrl", function() {
+            expect(this.presenter.chorusViewUrl).toBe(this.chorusView.showUrl());
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context("headerHtml", function() {
         beforeEach(function() {
             this.keyPrefix = 'activity_stream.header.html.';
