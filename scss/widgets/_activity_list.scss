@@ -75,9 +75,9 @@ $system-action-color: #7C7D7D;
 }
 
 .activity {
-        &.unread {
-            background: #ffface;
-        }
+    &.unread {
+        background: #ffface;
+    }
 
     .activity_item {
         padding: $activity-gutter;
@@ -223,8 +223,7 @@ $system-action-color: #7C7D7D;
 
 .popup_notifications li,
 li .activity_content,
-.comment_content
-{
+.comment_content {
     &:hover {
         a.edit_link, a.delete_link {
             display: inline;
@@ -240,7 +239,7 @@ li .activity_content,
     font-size: 16px;
 }
 
-.activity_list.workspace_detail, .activity_list.dashboard {
+.activity_list.workspace_detail, .activity_list.dashboard, .recent_comments_list {
     .comments {
         margin-left: ($icon-image-width + (2 * $activity-gutter));
     }
@@ -256,6 +255,24 @@ li .activity_content,
                 border-bottom: 1px dotted $list-border-color;
                 .activity_item {
                     padding-top: 12px;
+                }
+            }
+        }
+    }
+}
+
+.recent_comments_list {
+    .ui-tooltip-content {
+        padding: 9px 0 0 7px;
+
+        ul.activities {
+            > li {
+                &.insight {
+                    border-right: none;
+                }
+
+                &:last-child {
+                    border-bottom: none;
                 }
             }
         }

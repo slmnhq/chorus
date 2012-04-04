@@ -84,7 +84,7 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
                     at: "left center"
                 },
                 style: {
-                    classes: "tooltip-white",
+                    classes: "tooltip-white recent_comments_list",
                     tip: {
                         width: 15,
                         height: 20
