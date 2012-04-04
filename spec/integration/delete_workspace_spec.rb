@@ -7,6 +7,7 @@ describe "deleting a workspace" do
   end
   it "deletes the workspace" do
     click_link "Delete this Workspace"
+    wait_until { page.has_selector?(".submit") }
     find(".submit").click
   end
 end
