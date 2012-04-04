@@ -3,6 +3,7 @@ describe("chorus.dialogs.TabularDataPreview", function () {
         this.dataset = fixtures.datasetSandboxTable();
         this.launchElement = $("<a data-dialog='TabularDataPreview'></a>")
         spyOn(chorus.views.ResultsConsole.prototype, 'execute').andCallThrough();
+        spyOn(chorus.dialogs.TabularDataPreview.prototype, "closeModal");
         this.view = new chorus.dialogs.TabularDataPreview({
             launchElement: this.launchElement,
             pageModel: this.dataset
@@ -24,4 +25,15 @@ describe("chorus.dialogs.TabularDataPreview", function () {
         expect(this.view.$('.dialog_header h1')).toContainTranslation('dataset.data_preview_title', {name: this.dataset.get('objectName')});
     });
 
+    describe("event handling", function() {
+        describe("action:closePreview", function() {
+            beforeEach(function() {
+                this.view.$(".cancel").click();
+            });
+
+            it("dismisses the dialog", function() {
+                expect(this.view.closeModal).toHaveBeenCalled();
+            });
+        });
+    });
 });
