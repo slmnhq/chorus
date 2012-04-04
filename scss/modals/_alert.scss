@@ -12,6 +12,7 @@
             .left {
                 float: left;
                 max-width: 360px;
+                word-wrap: break-word;
                 @include after-clearfix;
 
                 h1 {
