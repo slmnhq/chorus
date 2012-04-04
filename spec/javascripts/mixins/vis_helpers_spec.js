@@ -31,6 +31,12 @@ describe("chorus.Mixins.VisHelpers", function() {
                 expect(this.hostView.labelFormat("abcdefghijklmnopqrstuvwxyz")).toBe("abcdefghijklmn...");
             });
         });
+
+        describe("when given a null", function() {
+            it("returns an empty string", function() {
+                expect(this.hostView.labelFormat(null, 5)).toBe("")
+            });
+        });
     });
 })
 
