@@ -76,16 +76,14 @@ chorus.models.Session = chorus.models.Base.extend({
 
     rememberPathBeforeLoggedOut: function() {
         if (Backbone.history.fragment != "/logout") {
-            this._previousUserId = this.user() && this.user().id
             this._pathBeforeLoggedOut = Backbone.history.fragment;
         } else {
-            delete this._previousUserId;
             delete this._pathBeforeLoggedOut;
         }
     },
 
     shouldResume: function () {
-        return (this._pathBeforeLoggedOut && this.user() && this._previousUserId == this.user().id)
+        return this._pathBeforeLoggedOut;
     },
 
     resumePath: function() {

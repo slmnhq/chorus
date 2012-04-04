@@ -294,10 +294,6 @@ describe("chorus.models.Session", function() {
                 it("ignores the path", function() {
                     expect(this.session.resumePath()).toBeFalsy();
                 });
-
-                it("forgets the previous user's id", function() {
-                    expect(this.session._previousUserId).toBeFalsy();
-                });
             });
 
             context("when navigating elsewhere", function() {
@@ -309,10 +305,6 @@ describe("chorus.models.Session", function() {
                 it("remembers the path", function() {
                     expect(this.session.resumePath()).toEqual("/elsewhere");
                 });
-
-                it("remembers the previous user's id, to allow for resuming after a timeout", function() {
-                    expect(this.session._previousUserId).toEqual(2);
-                });
             });
         });
 
@@ -323,7 +315,7 @@ describe("chorus.models.Session", function() {
                 this.session._pathBeforeLoggedOut = '/somewhere';
             });
 
-            it("is true if it has somewhere to go, and the current user was timed out", function() {
+            it("is true if it has somewhere to go", function() {
                 expect(this.session.shouldResume()).toBeTruthy();
             });
 
@@ -332,14 +324,14 @@ describe("chorus.models.Session", function() {
                 expect(this.session.shouldResume()).toBeFalsy();
             });
 
-            it("is false if a different user was timed out", function() {
+            it("is true even if a different user was timed out", function() {
                 this.session._previousUserId = 3;
-                expect(this.session.shouldResume()).toBeFalsy();
+                expect(this.session.shouldResume()).toBeTruthy();
             });
 
-            it("is false if no one has tried to log in yet", function() {
+            it("is true if no one has tried to log in yet", function() {
                 delete this.session._user;
-                expect(this.session.shouldResume()).toBeFalsy();
+                expect(this.session.shouldResume()).toBeTruthy();
             });
         });
     })

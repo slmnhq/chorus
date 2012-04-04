@@ -110,8 +110,8 @@ describe("chorus.views.Login", function() {
                     this.view.model.trigger('saved', this.view.model);
                 });
 
-                it("navigates to the dashboard", function() {
-                    expect(this.navigationSpy).toHaveBeenCalledWith("/", true);
+                it("navigates to the page before forced logout", function() {
+                    expect(this.navigationSpy).toHaveBeenCalledWith("/foo", true);
                 });
             })
         });
