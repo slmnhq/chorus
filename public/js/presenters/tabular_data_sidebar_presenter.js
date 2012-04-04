@@ -82,21 +82,17 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
         var ctx = {};
         var importConfig = this.importConfiguration;
 
-        if (!this.hasImport() || !importConfig.hasLastImport()) { return ctx; }
-
-        var ranAt = chorus.helpers.relativeTimestamp(importConfig.lastExecutionAt());
-
+        if (!importConfig || (!this.hasImport() && !importConfig.hasLastImport())) { return ctx; }
         if (importConfig.thisDatasetIsSource()) {
             var destination = importConfig.lastDestination();
             if (importConfig.isInProgress()) {
+                var ranAt = chorus.helpers.relativeTimestamp(importConfig.get("executionInfo").startedStamp);
                 ctx.lastImport = chorus.helpers.safeT("import.began", { timeAgo: ranAt });
                 ctx.inProgressText = chorus.helpers.safeT("import.in_progress", { tableLink: this._linkToModel(destination) });
                 ctx.importInProgress = true;
-            } else if (!importConfig.get("executionInfo").toTable) {
-                ctx.importInProgress = true;
-                ctx.inProgressText = chorus.helpers.safeT("import.in_progress", { tableLink: importConfig.get("toTable") });
-                ctx.lastImport = chorus.helpers.safeT("import.began", { timeAgo: new Date().toString() });
-            } else {
+            } else if (importConfig.hasLastImport()) {
+                var ranAt = chorus.helpers.relativeTimestamp(importConfig.lastExecutionAt());
+
                 var importStatusKey;
                 if (importConfig.wasSuccessfullyExecuted()) {
                     importStatusKey = "import.last_imported";
@@ -113,6 +109,7 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
                 chorus.helpers.spanFor(this.ellipsize(source.name()), { 'class': "source_file", title: source.name() }) :
                 this._linkToModel(source)
 
+            var ranAt = chorus.helpers.relativeTimestamp(importConfig.lastExecutionAt());
             ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", { timeAgo: ranAt, tableLink: tableLink });
         }
 

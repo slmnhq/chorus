@@ -244,6 +244,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                         beforeEach(function() {
                             this.server.completeFetchFor(this.dataset.getImport(), {
                                 executionInfo: {
+                                    startedStamp: "2012-02-29 14:35:38.100",
                                     completedStamp: "2012-02-29 14:35:38.165"
                                 },
                                 id: "123",
@@ -269,10 +270,11 @@ describe("chorus.views.TabularDataSidebar", function() {
                         });
                     });
 
-                    context("and the dataset has recieved an import from a file", function() {
+                    context("and the dataset has received an import from a file", function() {
                         beforeEach(function() {
                             this.server.completeFetchFor(this.dataset.getImport(), {
                                 executionInfo: {
+                                    startedStamp: "2012-02-29 14:35:38.100",
                                     completedStamp: "2012-02-29 14:35:38.165"
                                 },
                                 id: "123",
@@ -306,9 +308,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                     });
                 });
 
-                context("when the dataset is a source table", function() {
+                context("when the dataset is the source of this import", function() {
                     beforeEach(function() {
-                        this.view.importConfiguration.set({sourceId: this.dataset.id});
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
@@ -403,6 +404,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                             beforeEach(function() {
                                 this.importResponse = fixtures.datasetImport({
                                     sourceId: this.dataset.id,
+                                    executionInfo: {},
                                     scheduleInfo: {
                                         endTime: "2013-06-02",
                                         frequency: "WEEKLY",
@@ -485,7 +487,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                         id: execInfo.toTableId,
                                         workspaceId: this.dataset.get("workspace").id})
                                     expect(this.view.$(".last_import")).toContainTranslation("import.in_progress", {tableLink: "our_destinat..."});
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.began", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.completedStamp)});
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.began", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.startedStamp)});
                                     expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
                                     expect(this.view.$(".last_import img").attr("src")).toBe("/images/in_progress.png");
                                 });
@@ -529,23 +531,14 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
                                 });
 
-                                it("has an 'import in progress' description", function() {
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.in_progress", {tableLink: "our_destination"});
-                                    expect(this.view.$(".last_import")).toContainTranslation("import.began", {timeAgo: new Date().toString()});
-                                    expect(this.view.$(".last_import a")).not.toExist();
-                                    expect(this.view.$(".last_import img").attr("src")).toBe("/images/in_progress.png");
-                                });
-
                                 itHasActionLinks(["import_now", "edit_schedule"]);
                             });
                         });
 
                         context("when the dataset does not have an import schedule", function() {
                             beforeEach(function() {
-                                this.importResponse = fixtures.datasetImport({
-                                    sourceId: this.dataset.id,
-                                    scheduleInfo: null,
-                                    toTable: "our_destination",
+                                this.importResponse = new chorus.models.DatasetImport({
+                                    datasetId: this.dataset.get("id"),
                                     workspaceId: this.dataset.workspace().id
                                 });
                                 this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
@@ -566,7 +559,6 @@ describe("chorus.views.TabularDataSidebar", function() {
                                             creator: "InitialUser"
                                         }
                                     })
-
                                     this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
                                 });
 
@@ -614,9 +606,33 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 });
                             });
 
+                            context("when an Import Now is in progress", function() {
+                                beforeEach(function() {
+                                    this.importResponse.set({executionInfo: {
+                                        startedStamp: "2012-02-29 14:23:58.169",
+                                        toTable: "our_destination",
+                                        toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"bad_destination_table"'
+                                    }});
+
+                                    this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
+                                });
+
+                                it("says the import is in progress", function() {
+                                    var execInfo = this.view.importConfiguration.get("executionInfo");
+                                    var destTable = new chorus.models.Dataset({ id: execInfo.toTableId, workspaceId: this.dataset.get("workspace").id});
+
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.in_progress", {tableLink: "our_destinat..."});
+                                    expect(this.view.$(".last_import")).toContainTranslation("import.began", {timeAgo: chorus.helpers.relativeTimestamp(execInfo.startedStamp), tableLink: "our_destination..."});
+                                    expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl())
+                                    expect(this.view.$(".last_import img").attr("src")).toBe("/images/in_progress.png");
+                                });
+
+                                itHasActionLinks(["import_now", "create_schedule"]);
+                            });
+
                             context("when the import has not yet executed", function() {
                                 beforeEach(function() {
-                                    this.importResponse.set({ executionInfo: null });
+                                    this.importResponse.set({ executionInfo: {} });
                                     this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
                                 });
 

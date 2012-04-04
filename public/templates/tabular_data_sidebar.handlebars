@@ -8,31 +8,30 @@
         <div class="notice no_credentials"><span class="bottom">{{noCredentialsWarning}}</span></div>
     {{/if}}
 
-    {{#if hasImport}}
-        <div class="last_import">
-            {{#if importFailed}}
-                <div class="icon">
-                    <img src="/images/message_error_small.png" />
-                </div>
-            {{/if}}
-
-            {{#if importInProgress}}
-                <div class="icon">
-                    <img src="/images/in_progress.png" />
-                </div>
-                <div class="import_in_progress right">
-                    {{inProgressText}}
-                </div>
-            {{/if}}
-            <div class="last_import_text {{#if importInProgress}}right{{/if}}">
-                {{lastImport}}
+    <div class="last_import">
+        {{#if importFailed}}
+            <div class="icon">
+                <img src="/images/message_error_small.png" />
             </div>
-        </div>
+        {{/if}}
 
-        <div class="next_import">
-            {{nextImport}}
+        {{#if importInProgress}}
+            <div class="icon">
+                <img src="/images/in_progress.png" />
+            </div>
+            <div class="import_in_progress right">
+                {{inProgressText}}
+            </div>
+        {{/if}}
+        <div class="last_import_text {{#if importInProgress}}right{{/if}}">
+            {{lastImport}}
         </div>
-    {{/if}}
+    </div>
+
+    <div class="next_import">
+        {{nextImport}}
+    </div>
+
 
     <div class="actions">
         <ul>

@@ -58,7 +58,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     hasLastImport: function() {
-        return this.has("executionInfo")
+        return this.has("executionInfo") && this.get("executionInfo").startedStamp;
     },
 
     nextExecutionAt: function() {
@@ -70,7 +70,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     thisDatasetIsSource: function() {
-        return this.get("datasetId") === this.get("sourceId")
+        return this.get("datasetId") === this.get("sourceId") || !this.get("sourceId");
     },
 
     thisDatasetIsDestination: function() {
