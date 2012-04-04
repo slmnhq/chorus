@@ -34,6 +34,20 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
         return this.collection.getByCid(selectedCid)
     },
 
+    selectColumn: function(cid) {
+        if(cid) {
+            this.$("select option[data-cid="+cid+"]").prop('selected', true).change();
+        } else {
+            this.$("select option:eq(0)").prop('selected', true).change();
+        }
+
+        this.refresh();
+    },
+
+    refresh: function() {
+        this.$('select').selectmenu();
+    },
+
     columnSelected: function() {
         this.selectedColumn = this.getSelectedColumn()
         this.trigger("columnSelected", this.selectedColumn)

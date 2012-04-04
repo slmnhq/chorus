@@ -58,7 +58,7 @@ describe("chorus.views.ColumnSelect", function() {
                 beforeEach(function() {
                     spyOnEvent(this.view, 'columnSelected');
                     this.selectedColumn = this.columns.models[2];
-                    this.view.$("select option[data-cid="+this.selectedColumn.cid+"]").prop('selected', true).change();
+                    this.view.selectColumn(this.selectedColumn.cid);
                 });
 
                 it("triggers columnSelected", function() {
@@ -78,8 +78,31 @@ describe("chorus.views.ColumnSelect", function() {
 
                     it("keeps the same column selected", function() {
                         expect(this.view.$("select option[data-cid="+this.selectedColumn.cid+"]")).toBeSelected();
-                    })
-                })
+                        expect(this.view.getSelectedColumn()).toBe(this.selectedColumn);
+                    });
+                });
+            });
+
+            describe("#selectColumn", function() {
+                beforeEach(function() {
+                    spyOn(this.view, 'refresh');
+                });
+
+                it("should select the given column", function() {
+                    var selectedCid = this.columns.at(2).cid
+                    this.view.selectColumn(selectedCid);
+                    expect(this.view.$('select option:selected').data('cid')).toBe(selectedCid);
+                    expect(this.view.getSelectedColumn()).toBe(this.columns.at(2));
+
+                    expect(this.view.refresh).toHaveBeenCalled();
+                });
+
+                it("should select the first column if given nothing", function() {
+                    this.view.selectColumn();
+                    expect(this.view.$('select option:selected').data('cid')).toBe(this.columns.at(0).cid);
+                    expect(this.view.getSelectedColumn()).toBe(this.columns.at(0));
+                    expect(this.view.refresh).toHaveBeenCalled();
+                });
             });
         });
 
@@ -103,7 +126,7 @@ describe("chorus.views.ColumnSelect", function() {
 
             it("has the aliased_name", function() {
                 expect(this.selectMenuStub.find(".aliased_name")).toExist();
-            })
+            });
         });
     });
 
@@ -122,7 +145,7 @@ describe("chorus.views.ColumnSelect", function() {
             it('returns true', function() {
                 expect(this.view.valid()).toBeTruthy();
             });
-        })
+        });
 
         context("when the selectedColumn is not in the collection", function() {
             beforeEach(function() {
@@ -133,6 +156,6 @@ describe("chorus.views.ColumnSelect", function() {
             it('returns false', function() {
                 expect(this.view.valid()).toBeFalsy();
             });
-        })
-    })
+        });
+    });
 });

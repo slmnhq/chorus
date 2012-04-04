@@ -16,12 +16,15 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     },
 
     setup: function() {
+        this.model = this.model || new chorus.models.TabularDataFilter();
         this.columnFilter = new chorus.views.ColumnSelect({
             collection: this.collection,
             showAliasedName: this.options.showAliasedName,
             disableOtherTypeCategory: false
         });
         this.bindings.add(this.columnFilter, "columnSelected", this.columnSelected);
+        this.bindings.add(this.collection, "remove", this.render);
+        this.bindings.add(this.model, "change", this.render);
     },
 
     postRender: function() {
@@ -35,8 +38,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             return;
         }
 
-        this.columnSelected();
-        this.comparatorSelected();
+        this.columnFilter.selectColumn(this.model.get("columnCid"));
     },
 
     removeSelf: function(e) {
@@ -45,7 +47,9 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     },
 
     columnSelected: function() {
-        var type = this.columnFilter.getSelectedColumn().get('typeCategory');
+        var selectedColumn = this.columnFilter.getSelectedColumn();
+        var type = selectedColumn.get('typeCategory');
+        this.model.setColumnCid(selectedColumn.cid);
 
         var $comparator = this.$("select.comparator");
         $comparator.empty();
@@ -87,11 +91,22 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
             chorus.styleSelect($comparator, { menuWidth: 240 })
         });
 
-        this.comparatorSelected();
+        this.selectComparator();
+    },
+
+    selectComparator: function() {
+        var name = this.model.get("comparator");
+        if (name) {
+            this.$("select.comparator option[value=" + name + "]").prop('selected', true).change();
+        } else {
+            this.$("select.comparator option:eq(0)").prop('selected', true).change();
+        }
+        this.$("select.comparator").selectmenu();
     },
 
     comparatorSelected: function() {
         var comparatorName = this.$("select.comparator option:selected").val();
+        this.model.set({comparator: comparatorName}, {silent: true});
         if (!this.map) { return; }
 
         var comparator = this.map.comparators[comparatorName];
@@ -99,6 +114,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         this.$(".filter.time").toggleClass("hidden", !comparator.usesTimeInput);
         this.$(".filter.date").toggleClass("hidden", !comparator.usesDateInput);
 
+        this.fillInput();
         this.validateInput();
     },
 
@@ -141,6 +157,14 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         }
     },
 
+    fillInput: function() {
+        var comparator = this.map.comparators[this.model.get("comparator")];
+        var inputs = this.inputsForComparator(comparator);
+        _.each(this.model.get("value"), function(value, i) {
+            $(inputs[i]).val(value);
+        }, this);
+    },
+
     valid: function() {
         return this.columnFilter.valid();
     },
@@ -148,7 +172,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
     serialize: function() {
         var type = this.columnFilter.getSelectedColumn().get('typeCategory')
         var value = type == "DATE" ?
-            _.map(this.$(".filter.date input"), function(input){return $(input).val()}) :
+            _.map(this.$(".filter.date input"), function(input) {return $(input).val()}) :
             this.$(".filter input").val()
 
         var model = new chorus.models.TabularDataFilter({
@@ -158,5 +182,17 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         });
 
         return model;
+    },
+
+    inputsForComparator: function(comparator) {
+        if (comparator.usesInput) {
+            return $('.filter.default input');
+        }
+        if (comparator.usesTimeInput) {
+            return $('.filter.time input');
+        }
+        if (comparator.usesDateInput) {
+            return $('.filter.date input');
+        }
     }
 });
