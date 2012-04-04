@@ -6,7 +6,7 @@ describe "creating a note on a workspace" do
     create_valid_workspace
     wait_until { page.find('a[data-dialog="WorkspaceEditMembers"]').text == "Add or Edit Members"}
     click_link "Add or Edit Members"
-    wait_until { page.find("#facebox .dialog h1").text == "Edit Workspace Members" }
+    wait_until { page.has_selector?("#facebox") && page.find("#facebox .dialog h1").text == "Edit Workspace Members" }
   end
   it "Adds Members" do
     within("#facebox") do
@@ -14,7 +14,7 @@ describe "creating a note on a workspace" do
     click_button "Save Changes"
     end
     click_link "Add or Edit Members"
-    wait_until { page.find("#facebox .dialog h1").text == "Edit Workspace Members" }
+    wait_until { page.has_selector?("#facebox") && page.find("#facebox .dialog h1").text == "Edit Workspace Members" }
     within("#facebox") do
     click_link "Remove all"
     click_button "Save Changes"
