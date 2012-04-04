@@ -554,12 +554,12 @@ describe("chorus.views.ResultsConsoleView", function() {
             spyOn(this.view, 'executionStarted');
             spyOn(this.view, 'executionSucceeded');
             spyOn(this.view, 'executionFailed');
-            spyOn(this.executionModel, 'fetchIfNotLoaded').andCallThrough();
+            spyOn(this.executionModel, 'fetch').andCallThrough();
             this.view.execute(this.executionModel);
         });
 
         it("fetches the executionModel", function() {
-            expect(this.executionModel.fetchIfNotLoaded).toHaveBeenCalled();
+            expect(this.executionModel.fetch).toHaveBeenCalled();
         });
 
         it("calls executionStarted", function() {
@@ -582,13 +582,13 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         context("when isPostRequest is true", function() {
             beforeEach(function() {
-                this.executionModel.fetchIfNotLoaded.reset();
+                this.executionModel.fetch.reset();
                 spyOn(this.executionModel, "save").andCallThrough();
                 this.view.execute(this.executionModel, true);
             });
             it("should make a post request", function() {
                 expect(this.executionModel.save).toHaveBeenCalled();
-                expect(this.executionModel.fetchIfNotLoaded).not.toHaveBeenCalled();
+                expect(this.executionModel.fetch).not.toHaveBeenCalled();
             })
         })
 

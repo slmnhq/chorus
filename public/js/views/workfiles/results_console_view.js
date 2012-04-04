@@ -22,7 +22,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         if(isPostRequest) {
             task.save();
         } else {
-            task.fetchIfNotLoaded();
+            task.fetch();
         }
         this.executionStarted();
         this.bindings.add(task, "loaded", _.bind(this.executionSucceeded, this, task));
