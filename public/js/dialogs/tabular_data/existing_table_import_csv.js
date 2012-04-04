@@ -20,7 +20,10 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
         this.requiredResources.add(this.dataset);
         this.dataset.fetch();
-        this.destinations = [];
+        var columns = this.csv.columnOrientedData();
+        this.numberOfColumns = columns.length;
+        this.destinationColumns = _.map(columns, function() { return null });
+        this.destinationMenus = [];
 
         this.bindings.add(this.csv, "saved", this.saved);
         this.bindings.add(this.csv, "saveFailed", this.saveFailed);
@@ -57,18 +60,14 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             this.validateColumns();
         }
 
-        var self = this;
         _.each(this.$(".column_mapping .map"), function(map, i) {
-            var content = $("<ul></ul>");
-            _.each(self.dataset.get("columnNames"), function(column) {
-                content.append(_.bind(self.createQtipContent, self, column, self.destinations[i].name));
-            });
-
+            var menuContent = this.$(".menu_content ul").clone();
+            this.destinationMenus[i] = menuContent;
             chorus.menu($(map), {
-                content: content,
+                content: menuContent,
                 classes: "table_import_csv",
                 contentEvents: {
-                    'a.name': _.bind(self.destinationColumnSelected, self)
+                    'a.name': _.bind(this.destinationColumnSelected, this)
                 },
                 position: {
                     my: "left center",
@@ -76,66 +75,101 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
                 },
                 mimic: "left center"
             });
-        })
+        }, this);
+        this.updateDestinations();
 
-        self.$("input.delimiter").prop("checked", false);
-        if (_.contains([",", "\t", ";", " "], self.delimiter)) {
-            self.$("input.delimiter[value='" + self.delimiter + "']").prop("checked", true);
+        this.$("input.delimiter").prop("checked", false);
+        if (_.contains([",", "\t", ";", " "], this.delimiter)) {
+            this.$("input.delimiter[value='" + this.delimiter + "']").prop("checked", true);
         } else {
-            self.$("input#delimiter_other").prop("checked", true);
+            this.$("input#delimiter_other").prop("checked", true);
         }
 
-        var invalidMapping = _.any(this.destinations, function(destination) {
-            return destination.frequency != 1;
-        });
-        this.$("button.submit").prop("disabled", !!invalidMapping);
     },
 
     destinationColumnSelected: function(e, api) {
         e.preventDefault();
-        var qtip_launch_link = api.elements.target.find("a");
-        qtip_launch_link.text($(e.target).attr("title"));
-        this.destinations = _.map(this.$(".column_mapping .map a"), function(link) {
-            return {name: $(link).text()};
+        var destinationColumnLinks = this.$(".column_mapping .map a");
+        var qtipLaunchLink = api.elements.target.find("a");
+        var selectedColumnName = $(e.target).attr("title");
+        var selectedColumnIndex = destinationColumnLinks.index(qtipLaunchLink);
+        this.destinationColumns[selectedColumnIndex] = selectedColumnName;
+        this.updateDestinations();
+    },
+
+    updateDestinations: function() {
+        var frequenciesByDestinationColumn = {};
+        _.each(this.destinationColumns, function(name) {
+            if (!name) return;
+            frequenciesByDestinationColumn[name] = _.filter(this.destinationColumns, function(name2) {
+                return name && name === name2;
+            }).length;
+        }, this);
+
+        var frequenciesBySourceColumn = _.map(this.destinationColumns, function(name) {
+            return frequenciesByDestinationColumn[name];
         });
 
-        var self = this;
+        this.updateDestinationLinks(frequenciesByDestinationColumn);
+        this.updateDestinationMenus(frequenciesByDestinationColumn);
+        this.updateDestinationCount();
 
-        this.destinations = _.map(this.destinations, function(destination) {
-            var frequency = (_.filter(self.destinations, function(destination_loop) {
-                return (destination.name != t("dataset.import.table.existing.select_one")) &&
-                    ( destination.name === destination_loop.name)
-            })).length;
-            return _.extend(destination, {frequency: frequency});
-        })
+        var invalidMapping = _.any(frequenciesBySourceColumn, function(f) { return f !== 1; });
+        this.$("button.submit").prop("disabled", invalidMapping);
+    },
 
-        this.render();
+    updateDestinationLinks: function(frequencies) {
+        var launchLinks = this.$(".column_mapping .map a");
+        _.each(launchLinks, function(launchLink, i) {
+            launchLink = $(launchLink);
+            var columnName = this.destinationColumns[i];
+            var frequency = frequencies[columnName];
+
+            launchLink.text(columnName || t("dataset.import.table.existing.select_one"));
+            launchLink.toggleClass("selected", (frequency === 1));
+            launchLink.toggleClass("selection_conflict", (frequency != 1));
+            launchLink.next(".arrow").toggleClass("selected", (frequency === 1));
+            launchLink.next(".arrow").toggleClass("selection_conflict", (frequency != 1));
+        }, this);
+    },
+
+    updateDestinationMenus: function(frequencies) {
+        _.each(this.destinationMenus, function(menu, i) {
+            menu.find(".count").text("");
+            menu.find(".name").removeClass("selected");
+            _.each(this.destinationColumns, function(name) {
+                var frequency = frequencies[name];
+                if (frequency > 0) {
+                    menu.find("li[name=" + name + "] .count").text(" (" + frequency + ")");
+                }
+                if (frequency > 1) {
+                    menu.find("li[name=" + name + "] .name").addClass("selection_conflict");
+                }
+            });
+
+            var $selectedLi = menu.find("li[name=" + this.destinationColumns[i] + "]");
+            menu.find(".check").addClass("hidden");
+            $selectedLi.find(".check").removeClass("hidden");
+            $selectedLi.find(".name").addClass("selected");
+        }, this);
+    },
+
+    updateDestinationCount: function() {
+        var count = _.compact(this.destinationColumns).length;
+        var total = this.numberOfColumns;
+        this.$(".progress").text(t("dataset.import.table.progress", {count: count, total: total}));
     },
 
     additionalContext: function() {
-        var self = this;
-
-        var columns = this.csv.columnOrientedData();
-        columns = _.map(columns, function(column, index) {
-            if (index >= self.destinations.length) {
-                self.destinations.push({name: t("dataset.import.table.existing.select_one"), frequency: 0});
-            }
-            var selected_status = (self.destinations[index].frequency == 1) ? "selected" : "selection_conflict";
-
-            return _.extend(column, {destination: self.destinations[index].name, selected_status: selected_status});
-        });
-
         return {
-            columns: columns,
+            columns: this.csv.columnOrientedData(),
+            destinationColumns: _.map(this.dataset.get("columnNames"), function(column) {
+                return { name: column.name, type: chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory] };
+            }),
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: t("dataset.import.table.existing.directions", {
                 toTable: this.csv.get("toTable")
-            }),
-            count: (_.filter(self.destinations, function(destination) {
-                    return destination.name != t("dataset.import.table.existing.select_one")
-                }
-            )).length,
-            total: columns.length
+            })
         }
     },
 
@@ -143,22 +177,23 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.$('button.submit').startLoading("dataset.import.importing");
         var self = this;
 
-        var columnData = _.map(this.destinations, function(destination, i) {
+        var columnData = _.map(this.destinationColumns, function(destination, i) {
             var column = _.find(self.dataset.get("columnNames"), function(column) {
-                return column.name === destination.name;
+                return column.name === destination;
             });
 
             return {
                 sourceOrder: i + 1,
                 targetOrder: column ? column.ordinalPosition : 0
             }
-        })
+        });
+
         this.csv.set({
             delimiter: this.delimiter,
             type: "existingTable",
             hasHeader: !!(this.$("#hasHeader").prop("checked")),
             columnsMap: JSON.stringify(columnData)
-        }, {silent: true})
+        }, { silent: true });
 
         this.$("button.submit").startLoading("dataset.import.importing");
 
@@ -220,28 +255,6 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.$(".thead").css({ "left": -this.scrollPosX });
 
         this.setupScrolling(this.$(".tbody"));
-    },
-
-    createQtipContent: function(column, selectedName) {
-        var check_wrapper = $('<div class="check_wrapper"><span class="check hidden"></span></div>')
-
-        if (column.name === selectedName) {
-            check_wrapper.find(".check").removeClass("hidden");
-        }
-        var frequency = (_.filter(this.destinations, function(destination) {
-            return destination.name === column.name
-        })).length;
-        var frequency_text = "";
-
-        var selected_status = "unselected";
-        if (frequency) {
-            selected_status = frequency > 1 ? "selection_conflict" : "selected";
-            frequency_text = " (" + frequency + ")";
-        }
-
-        return ($("<li>").append($(check_wrapper.outerHtml() +
-            '<a class="name ' + selected_status + '" href="#" title="' + column.name + '">' + column.name + frequency_text + '</a>' +
-            '<span class="type">' + chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory] + '</span>')));
     },
 
     validateColumns: function() {

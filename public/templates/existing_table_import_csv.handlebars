@@ -1,7 +1,7 @@
 <div class="directions">
     {{directions}}:
 </div>
-<div class="progress">{{t "dataset.import.table.progress" count=count total=total}}</div>
+<div class="progress"></div>
 <div class="options">
     <div class="header_options">
         <input id="hasHeader" type="checkbox" {{#if hasHeader}}checked{{/if}}></input>
@@ -36,8 +36,7 @@
             </div>
             <div class="column_mapping">
                 {{#each columns}}<div class="th"><div class="map"><span>{{t "dataset.import.table.existing.map_to"}}</span>
-                <a href="#" class="{{selected_status}}">{{destination}}</a>
-                <div class="arrow {{selected_status}}"/></div></div>{{/each}}
+                        <a href="#">{{destination}}</a><div class="arrow"/></div></div>{{/each}}
             </div>
         </div>
 
@@ -49,6 +48,18 @@
             </div>{{/each}}
         </div>
     </div>
+</div>
+
+<div class="menu_content hidden">
+    <ul>
+        {{#each destinationColumns}}
+            <li name={{name}}>
+                <div class="check_wrapper"><span class="check hidden"></span></div>
+                <a class="name" href="#" title="{{name}}">{{name}}</a><span class="count"/>
+                <span class="type">{{type}}</span>
+            </li>
+        {{/each}}
+    </ul>
 </div>
 
 <div class="modal_controls">
