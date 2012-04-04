@@ -248,6 +248,10 @@
         max-width: 450px;
         vertical-align: middle;
         padding-bottom: 2px;
+
+        .destination {
+            font-weight: $semibold;
+        }
     }
 
     .progress {
@@ -257,6 +261,13 @@
         margin-bottom: 5px;
         padding-bottom: 2px;
     }
+
+    .automap {
+        font-size: 12px;
+        font-weight: $semibold;
+        padding-left: 10px;
+    }
+
     .data_table {
         .tbody {
             top: 66px;
@@ -293,13 +304,10 @@
             max-width: 250px;
             display: inline-block;
             height: 16px;
+            color: $color-text1;
 
             &:hover {
                 text-decoration: underline;
-            }
-
-            &.unselected {
-                color: $color-text1;
             }
 
             &.selected {
@@ -315,5 +323,4 @@
             float: right;
         }
     }
-
 }

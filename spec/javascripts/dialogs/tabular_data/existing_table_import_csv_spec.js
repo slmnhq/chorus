@@ -170,6 +170,27 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 0, total: 5});
     })
 
+    it("has an auto-map link", function() {
+        expect(this.dialog.$("a.automap")).toContainTranslation("dataset.import.table.automap")
+    });
+
+    describe("clicking the 'automap' link", function() {
+        beforeEach(function() {
+            this.dialog.$("a.automap").click();
+        });
+
+        it("selects destination columns in the dataset's DDL order", function() {
+            var columnNameLinks = this.dialog.$(".column_mapping .map a");
+            expect(columnNameLinks.eq(0)).toHaveText("col1");
+            expect(columnNameLinks.eq(1)).toHaveText("col2");
+            expect(columnNameLinks.eq(2)).toHaveText("col3");
+            expect(columnNameLinks.eq(3)).toHaveText("col4");
+            expect(columnNameLinks.eq(4)).toHaveText("col5");
+
+            expect(columnNameLinks).not.toHaveClass("selection_conflict");
+        });
+    });
+
     it("checked the include header row checkbox by default", function() {
         expect(this.dialog.$("#hasHeader")).toBeChecked();
     });

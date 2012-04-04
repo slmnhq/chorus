@@ -10,7 +10,8 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         "keyup input.delimiter[name=custom_delimiter]": "setOtherDelimiter",
         "paste input.delimiter[name=custom_delimiter]": "setOtherDelimiter",
         "click input.delimiter[type=radio]": "setDelimiter",
-        "click input#delimiter_other": "focusOtherInputField"
+        "click input#delimiter_other": "focusOtherInputField",
+        "click a.automap": "automap"
     },
 
     setup: function() {
@@ -168,7 +169,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             }),
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: t("dataset.import.table.existing.directions", {
-                toTable: this.csv.get("toTable")
+                toTable: new Handlebars.SafeString(chorus.helpers.spanFor(this.csv.get("toTable"), {"class": "destination"}))
             })
         }
     },
@@ -277,6 +278,14 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
                 this.resource.serverErrors = errors;
             }
         }
+    },
+
+    automap: function(e) {
+        e && e.preventDefault();
+        _.each(this.dataset.get("columnNames"), function(column, index) {
+            this.destinationColumns[index] = column.name;
+        }, this);
+
+        this.updateDestinations();
     }
-})
-;
+});
