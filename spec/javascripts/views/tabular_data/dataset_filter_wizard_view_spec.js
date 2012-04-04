@@ -125,16 +125,17 @@ describe("chorus.views.DatasetFilterWizard", function() {
     describe("#removeInvalidFilters", function() {
         beforeEach(function() {
             this.view.render();
+            this.selectedColumn = this.collection.at(1);
+            this.view.filterViews[0].columnFilter.selectColumn(this.selectedColumn.cid);
             this.view.addFilter();
             this.selectedColumn = this.collection.at(0);
-            this.view.filterViews[1].columnFilter.$('options[data-cid=' + this.selectedColumn.cid + ']').prop('selected', true);
-            this.view.filterViews[1].columnFilter.$('select').change();
+            this.view.filterViews[1].columnFilter.selectColumn(this.selectedColumn.cid);
             this.collection.remove(this.selectedColumn);
-        })
+        });
 
         it("removes the invalid filter", function() {
             expect(this.view.filterViews.length).toBe(1);
             expect(this.view.$('.column_filter select').get(0).selectedIndex).toBe(0);
-        })
-    })
+        });
+    });
 });
