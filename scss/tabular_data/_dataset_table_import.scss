@@ -67,6 +67,7 @@
 
         .th, .td {
             width: $cell-width - 20px;
+            height: 40px;
         }
         border-top: 1px solid $list-border-color;
         border-bottom: 1px solid $list-border-color;
@@ -74,7 +75,7 @@
         min-height: 225px;
 
         .tbody {
-            top: 50px;
+            top: 60px;
         }
 
         .column_names {
