@@ -15,6 +15,40 @@ describe("chorus.views.ActivityListHeader", function() {
         expect(this.view.persistent).toBeTruthy();
     });
 
+    describe("#pickTitle", function() {
+        context("with a workspace", function() {
+            beforeEach(function() {
+                this.workspace = fixtures.workspace({ name: "a cool workspace" })
+                this.view.model = this.workspace;
+            });
+
+            it("has the right 'insight' title", function() {
+                this.collection.attributes.insights = true;
+                expect(this.view.pickTitle()).toBe("a cool workspace");
+            });
+
+            it("has the right 'all activities' title", function() {
+                this.collection.attributes.insights = false;
+                expect(this.view.pickTitle()).toBe("a cool workspace");
+            });
+        });
+
+        context("without a workspace", function() {
+            beforeEach(function() {
+                this.view.model = undefined;
+            });
+            it("has the right 'insight' title", function() {
+                this.collection.attributes.insights = true;
+                expect(this.view.pickTitle()).toBe("the_insights_title_i_passed");
+            });
+
+            it("has the right 'all activities' title", function() {
+                this.collection.attributes.insights = false;
+                expect(this.view.pickTitle()).toBe("the_all_title_i_passed");
+            });
+        });
+    });
+
     describe("#setup", function() {
         it("fetches the number of insights", function() {
             expect(this.view.insightCount).toHaveBeenFetched();
@@ -36,8 +70,8 @@ describe("chorus.views.ActivityListHeader", function() {
             describe("#render", function() {
                 context("when insights mode is false", function() {
                     it("displays the title for 'all' mode by default", function() {
-                        expect(this.view.$("h1")).toContainText("the_all_title_i_passed");
-                        expect(this.view.$("h1")).toHaveAttr("title", "the_all_title_i_passed");
+                        expect(this.view.$("h1")).toContainText(this.view.pickTitle());
+                        expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
                     });
 
                     it("displays the workspace icon", function() {
@@ -58,8 +92,8 @@ describe("chorus.views.ActivityListHeader", function() {
                         });
 
                         it("displays the title for 'insights' mode by default", function() {
-                            expect(this.view.$("h1")).toContainText("the_insights_title_i_passed");
-                            expect(this.view.$("h1")).toHaveAttr("title", "the_insights_title_i_passed");
+                            expect(this.view.$("h1")).toContainText(this.view.pickTitle());
+                            expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
                         });
 
                         it("displays the 'Insights' link as active", function() {
@@ -91,8 +125,8 @@ describe("chorus.views.ActivityListHeader", function() {
                         });
 
                         it("switches to the title for 'insights' mode", function() {
-                            expect(this.view.$("h1")).toContainText("the_insights_title_i_passed");
-                            expect(this.view.$("h1")).toHaveAttr("title", "the_insights_title_i_passed");
+                            expect(this.view.$("h1")).toContainText(this.view.pickTitle());
+                            expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
                         });
 
                         describe("clicking on 'All Activity'", function() {
@@ -112,8 +146,8 @@ describe("chorus.views.ActivityListHeader", function() {
                             });
 
                             it("switches back to the title for 'all' mode", function() {
-                                expect(this.view.$("h1")).toContainText("the_all_title_i_passed");
-                                expect(this.view.$("h1")).toHaveAttr("title", "the_all_title_i_passed");
+                                expect(this.view.$("h1")).toContainText(this.view.pickTitle());
+                                expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
                             });
                         });
                     });

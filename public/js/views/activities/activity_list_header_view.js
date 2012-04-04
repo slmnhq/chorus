@@ -24,10 +24,16 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            title: this.collection.attributes.insights ? this.insightsTitle : this.allTitle,
+            title: this.pickTitle(),
             count: this.insightCount.get("numberOfInsight"),
             iconUrl: this.model && this.model.defaultIconUrl()
         };
+    },
+
+    pickTitle: function() {
+        return this.model && this.model.entityType === "workspace" ?
+            this.model.get("name") :
+            this.collection.attributes.insights ? this.insightsTitle : this.allTitle;
     },
 
     postRender: function() {
@@ -52,8 +58,6 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
         this.$(".insights").removeClass("active");
         this.$(".all").addClass("active");
-        this.$("h1").text(this.allTitle);
-        this.$("h1").attr("title", this.allTitle);
 
         this.collection.attributes.insights = false;
         delete this.collection.attributes.workspace;
@@ -65,8 +69,6 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
         this.$(".all").removeClass("active");
         this.$(".insights").addClass("active");
-        this.$("h1").text(this.insightsTitle);
-        this.$("h1").attr("title", this.insightsTitle);
 
         this.collection.attributes.insights = true;
         this.collection.attributes.workspace = this.model;
