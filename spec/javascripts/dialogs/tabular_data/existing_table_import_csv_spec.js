@@ -219,15 +219,17 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         })
 
         describe("clicking a destination column menu link", function() {
+            var menuLinks, menus;
+
             beforeEach(function() {
-                this.menuLinks = this.dialog.$(".column_mapping .map a");
-                this.menuLinks.click(); // just to initialize all qtips
-                this.menus = this.qtip.find("ul");
+                menuLinks = this.dialog.$(".column_mapping .map a");
+                menuLinks.click(); // just to initialize all qtips
+                menus = this.qtip.find("ul");
             });
 
             it("populates the qtip with the destination columns and column types", function() {
-                expect(this.menus.eq(0).find("li").length).toBe(5);
-                _.each(this.menus.eq(0).find("li"), function(li, i) {
+                expect(menus.eq(0).find("li").length).toBe(5);
+                _.each(menus.eq(0).find("li"), function(li, i) {
                     var $li = $(li);
                     var type = chorus.models.DatabaseColumn.humanTypeMap[this.columns[i].typeCategory];
                     expect($li.find("a")).toContainText("col" + (i + 1));
@@ -237,30 +239,16 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             context("selecting a destination column", function() {
                 beforeEach(function() {
-                    this.menus.eq(0).find("li:eq(1) a").click();
+                    menus.eq(0).find("li:eq(1) a").click();
                 });
 
-                it("names the correct destination column", function() {
-                    expect(this.menuLinks.eq(0)).toContainText("col2");
-                    expect(this.menuLinks.eq(0)).toHaveClass("selected");
-                    expect(this.menuLinks.eq(0)).not.toHaveClass("selection_conflict");
-                });
+                itSelectsDestinationColumn(0, 1, "col2");
+                itHasSelectedCounts([0, 1, 0, 0, 0]);
 
                 it("does not update the text of a different destination column link", function() {
-                    expect(this.menuLinks.eq(1)).toContainTranslation("dataset.import.table.existing.select_one");
-                    expect(this.menuLinks.eq(1)).not.toHaveClass("selected");
-                    expect(this.menuLinks.eq(1)).toHaveClass("selection_conflict");
-                });
-
-                it("marks the column as selected", function() {
-                    expect(this.menus.eq(0).find("li:eq(0) .check")).toHaveClass("hidden");
-                    expect(this.menus.eq(0).find("li:eq(1) .check")).not.toHaveClass("hidden");
-                });
-
-                it("updates the count in the selected destination column (for all qtips)", function() {
-                    expect(this.menus.eq(0).find("li:eq(1) .name")).toContainText("col2");
-                    expect(this.menus.eq(0).find("li:eq(1) .count")).toContainText("(1)");
-                    expect(this.menus.eq(0).find("li:eq(1) .name")).toHaveClass("selected");
+                    expect(menuLinks.eq(1)).toContainTranslation("dataset.import.table.existing.select_one");
+                    expect(menuLinks.eq(1)).not.toHaveClass("selected");
+                    expect(menuLinks.eq(1)).toHaveClass("selection_conflict");
                 });
 
                 it("updates the progress tracker", function() {
@@ -273,74 +261,35 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
                 context("choosing the same destination column again", function() {
                     beforeEach(function() {
-                        this.menus.eq(0).find("li:eq(1) a").click();
+                        menus.eq(0).find("li:eq(1) a").click();
                     });
 
-                    it("does not change the destination link text", function() {
-                        expect(this.menuLinks.eq(0)).toContainText("col2");
-                        expect(this.menuLinks.eq(0)).toHaveClass("selected");
-                        expect(this.menuLinks.eq(0)).not.toHaveClass("selection_conflict");
-                    });
+                    itSelectsDestinationColumn(0, 1, "col2");
+                    itHasSelectedCounts([0, 1, 0, 0, 0]);
 
                     it("does not double-count the column", function() {
-                        expect(this.menus.eq(0).find("li:eq(1) .count")).toContainText("(1)");
+                        expect(menus.eq(0).find("li:eq(1) .count")).toContainText("(1)");
                         expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 1, total: 5});
                     });
                 });
 
                 context("when choosing a different destination column for the same source column", function() {
                     beforeEach(function() {
-                        this.menus.eq(0).find("li:eq(2) a").click();
+                        menus.eq(0).find("li:eq(2) a").click();
                     });
 
-                    it("updates the menu link", function() {
-                        expect(this.menuLinks.eq(0)).toContainText("col3");
-                        expect(this.menuLinks.eq(0)).toHaveClass("selected");
-                        expect(this.menuLinks.eq(0)).not.toHaveClass("selection_conflict");
-                    });
-
-                    it("marks the column as selected in the menu", function() {
-                        expect(this.menus.eq(0).find("li:eq(2) .name")).toHaveClass("selected");
-                        expect(this.menus.eq(0).find("li:eq(2) .check")).not.toHaveClass("hidden");
-                        expect(this.menus.eq(0).find("li:eq(1) .check")).toHaveClass("hidden");
-                        expect(this.menus.eq(0).find("li:eq(1) .name")).not.toHaveClass("selected");
-                    });
-
-                    it("updates the count for all menus", function() {
-                        expect(this.menus.eq(0).find("li:eq(2) .name")).toContainText("col3");
-                        expect(this.menus.eq(0).find("li:eq(2) .count")).toContainText("(1)");
-                        expect(this.menus.eq(0).find("li:eq(1) .name")).toContainText("col2");
-                        expect(this.menus.eq(0).find("li:eq(1) .count")).toHaveText("");
-
-                        expect(this.menus.eq(2).find("li:eq(2) .name")).toContainText("col3");
-                        expect(this.menus.eq(2).find("li:eq(2) .count")).toContainText("(1)");
-                        expect(this.menus.eq(2).find("li:eq(1) .name")).toContainText("col2");
-                        expect(this.menus.eq(2).find("li:eq(1) .count")).toHaveText("");
-                    });
+                    itSelectsDestinationColumn(0, 2, "col3")
+                    itHasSelectedCounts([0, 0, 1, 0, 0]);
                 });
 
                 context("when mapping another source column to the same destination column", function() {
                     beforeEach(function() {
-                        this.menus.eq(1).find("li:eq(1) a").click();
+                        menus.eq(1).find("li:eq(1) a").click();
                     });
 
-                    it("names the correct destination column", function() {
-                        expect(this.menuLinks.eq(0).text()).toBe("col2");
-                        expect(this.menuLinks.eq(0)).not.toHaveClass("selected");
-                        expect(this.menuLinks.eq(0)).toHaveClass("selection_conflict");
-
-                        expect(this.menuLinks.eq(1).text()).toBe("col2");
-                        expect(this.menuLinks.eq(1)).not.toHaveClass("selected");
-                        expect(this.menuLinks.eq(1)).toHaveClass("selection_conflict");
-                    });
-
-                    it("updates the count in the selected destination column (for all qtips)", function() {
-                        expect(this.menus.eq(1).find("li:eq(0) .name")).toHaveText("col1")
-                        expect(this.menus.eq(1).find("li:eq(0) .name")).not.toHaveClass("selected");
-                        expect(this.menus.eq(1).find("li:eq(1) .name")).toHaveText("col2")
-                        expect(this.menus.eq(1).find("li:eq(1) .count")).toContainText("(2)")
-                        expect(this.menus.eq(1).find("li:eq(1) .name")).toHaveClass("selection_conflict");
-                    })
+                    itSelectsDestinationColumn(0, 1, "col2", { conflict: true });
+                    itSelectsDestinationColumn(1, 1, "col2", { conflict: true });
+                    itHasSelectedCounts([0, 2, 0, 0, 0]);
 
                     it("updates the progress tracker", function() {
                         expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 2, total: 5});
@@ -350,19 +299,59 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 context("when all source columns but one are mapped", function() {
                     beforeEach(function() {
                         for (var i = 0; i < 4; i++) {
-                            this.menus.eq(i).find("li a").eq(i).click();
+                            menus.eq(i).find("li a").eq(i).click();
                         }
                     });
 
+                    itHasSelectedCounts([1, 1, 1, 1, 0]);
+
                     it("the last unselected column map is still displayed with red", function() {
-                        expect(this.menuLinks.eq(0)).toHaveClass("selected");
-                        expect(this.menuLinks.eq(1)).toHaveClass("selected");
-                        expect(this.menuLinks.eq(2)).toHaveClass("selected");
-                        expect(this.menuLinks.eq(3)).toHaveClass("selected");
-                        expect(this.menuLinks.eq(4)).toHaveClass("selection_conflict");
+                        expect(menuLinks.eq(0)).toHaveClass("selected");
+                        expect(menuLinks.eq(1)).toHaveClass("selected");
+                        expect(menuLinks.eq(2)).toHaveClass("selected");
+                        expect(menuLinks.eq(3)).toHaveClass("selected");
+                        expect(menuLinks.eq(4)).toHaveClass("selection_conflict");
                     });
                 });
             });
+
+            function itSelectsDestinationColumn(sourceIndex, destinationIndex, destinationName, options) {
+                it("shows the right destination column as selected", function() {
+                    expect(menuLinks.eq(sourceIndex)).toHaveText(destinationName);
+
+                    var menu = menus.eq(sourceIndex);
+                    expect(menu.find(".check").not(".hidden").length).toBe(1);
+                    expect(menu.find(".name.selected").length).toBe(1);
+                    var selectedLi = menu.find("li[name=" + destinationName + "]");
+                    expect(selectedLi.find(".check")).not.toHaveClass("hidden");
+                    expect(selectedLi.find(".name")).toHaveClass("selected");
+                });
+
+                if (options && options.conflict) {
+                    it("marks that source column as having a selection conflict", function() {
+                        expect(menuLinks.eq(sourceIndex)).not.toHaveClass("selected");
+                        expect(menuLinks.eq(sourceIndex)).toHaveClass("selection_conflict");
+                    });
+                } else {
+                    it("marks that source column as having been mapped", function() {
+                        expect(menuLinks.eq(sourceIndex)).toHaveClass("selected");
+                        expect(menuLinks.eq(sourceIndex)).not.toHaveClass("selection_conflict");
+                    });
+                }
+            }
+
+            function itHasSelectedCounts(counts) {
+                it("updates the counts in all of the menus", function() {
+                    _.each(menus, function(menu) {
+                        _.each($(menu).find(".count"), function(el, index) {
+                            var count = counts[index];
+                            if (count > 0) {
+                                expect($(el).text()).toContainText("(" + count + ")");
+                            }
+                        });
+                    });
+                });
+            }
         });
     });
 
