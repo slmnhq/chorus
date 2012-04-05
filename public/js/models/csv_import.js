@@ -65,6 +65,6 @@ chorus.models.CSVImport = chorus.models.Base.extend({
     }
 }, {
     normalizeForDatabase: function(str) {
-        return _.str.underscored(str.toLowerCase()).replace(".", "_");
+        return str.toLowerCase().replace(/[\s.]/g, "_").replace(/[^a-z0-9_]/g, '').substring(0,64);
     }
 });

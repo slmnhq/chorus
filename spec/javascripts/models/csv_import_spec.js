@@ -267,8 +267,24 @@ describe("chorus.models.CSVImport", function() {
     }
 
     describe("#normalizeForDatabase", function() {
-        it("replaces dots with underscores", function() {
-            expect(chorus.models.CSVImport.normalizeForDatabase("filename.ext")).toBe("filename_ext")
-        })
+        it("converts to lower case", function() {
+            expect(chorus.models.CSVImport.normalizeForDatabase("FILENAME")).toBe("filename")
+        });
+
+        it("converts spaces to underscores", function() {
+            expect(chorus.models.CSVImport.normalizeForDatabase("file name")).toBe("file_name")
+        });
+
+        it("converts periods to underscores", function() {
+            expect(chorus.models.CSVImport.normalizeForDatabase("file.name")).toBe("file_name")
+        });
+
+        it("discards invalid characters", function() {
+            expect(chorus.models.CSVImport.normalizeForDatabase("file^$name*&22_+33")).toBe("filename22_33")
+        });
+
+        it("truncates at 64 characters", function() {
+            expect(chorus.models.CSVImport.normalizeForDatabase("0123456789012345678901234567890123456789012345678901234567890123456789")).toBe("0123456789012345678901234567890123456789012345678901234567890123")
+        });
     })
 })
