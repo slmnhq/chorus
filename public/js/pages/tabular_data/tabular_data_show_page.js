@@ -133,7 +133,7 @@
             this.constructSidebarForType(type);
 
             if (this.secondarySidebar) {
-                this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView;
+                this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView.collection;
                 this.secondarySidebar.errorContainer = this.mainContent.contentDetails;
                 this.renderSubview('secondarySidebar');
                 this.trigger('resized');

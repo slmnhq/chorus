@@ -66,21 +66,7 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
         $ul.find("li:last-child").addClass("last");
     },
 
-    filterStrings: function() {
-        var wheres = this.collection.map(function(filter) {
-            return filter.sqlString();
-        })
-
-        wheres = _.without(wheres, "");
-        return wheres;
-    },
-
-    whereClause: function() {
-        var wheres = this.filterStrings();
-        return wheres.length ? ("WHERE " + wheres.join(" AND ")) : "";
-    },
-
     filterCount: function() {
-        return this.filterStrings().length;
+        return this.collection.count();
     }
 });

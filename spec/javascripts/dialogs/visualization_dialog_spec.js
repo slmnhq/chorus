@@ -15,10 +15,13 @@ describe("chorus.dialogs.Visualization", function() {
 
         this.chartOptions = {type: "boxplot", name: "Foo"};
 
-        this.filters = new chorus.views.DatasetFilterWizard({columnSet: this.columns});
-        spyOn(this.filters, "filterStrings").andReturn(["A", "B"]);
+        var filter1 = new chorus.models.TabularDataFilter({column: this.columns.at(0), comparator: "equal", input: {value: "A"}});
+        var filter2 = new chorus.models.TabularDataFilter({column: this.columns.at(1), comparator: "not_equal", input: {value: "B"}});
 
-        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
+        this.filters = new chorus.collections.TabularDataFilterSet([filter1, filter2]);
+
+        spyOn(this.filters, "clone").andCallThrough();
+        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
         this.dialog.task = fixtures.boxplotTaskWithResult();
 
         spyOn(this.dialog, "launchSubModal").andCallThrough();
@@ -51,8 +54,13 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("shows the 'Show Options' link", function() {
-                    expect(this.filters.filterCount()).toBe(2);
+                    expect(this.dialog.filters.length).toBe(2);
                     expect(this.dialog.$("a.show_options")).toContainTranslation("visualization.show_options", {count: 2});
+                });
+
+                it("clones the filters", function() {
+                    expect(this.dialog.filters).not.toBe(this.filters);
+                    expect(this.filters.clone).toHaveBeenCalled();
                 });
             });
 
@@ -86,7 +94,7 @@ describe("chorus.dialogs.Visualization", function() {
         describe("it has rows", function() {
             beforeEach(function() {
                 this.chartOptions["type"] = "histogram";
-                this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
+                this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
                 this.dialog.task = fixtures.boxplotTaskWithResult();
             })
 
@@ -98,7 +106,7 @@ describe("chorus.dialogs.Visualization", function() {
         describe("it has no rows", function() {
             beforeEach(function() {
                 this.chartOptions["type"] = "histogram";
-                this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
+                this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
                 this.dialog.task = fixtures.task({result: {rows: []}});
             })
 
@@ -127,15 +135,27 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.$(".filter_options")).not.toHaveClass("hidden");
             });
 
-            it("renders the correct number of filters", function() {
+            context("when there are existing filters", function() {
+                it("shows them properly in the filter section", function() {
+                    expect(this.dialog.$(".filter_options li").length).toBe(2);
+                    expect(this.dialog.$(".filter_options li:eq(0) .column_filter option:selected").text()).toBe(this.columns.at(0).get("name"));
+                    expect(this.dialog.$(".filter_options li:eq(1) .column_filter option:selected").text()).toBe(this.columns.at(1).get("name"));
+                    expect(this.dialog.$(".filter_options li:eq(0) select.comparator option:selected").val()).toBe("equal");
+                    expect(this.dialog.$(".filter_options li:eq(1) select.comparator option:selected").val()).toBe("not_equal");
+                    expect(this.dialog.$(".filter_options li:eq(0) input").val()).toBe("A");
+                    expect(this.dialog.$(".filter_options li:eq(1) input").val()).toBe("B");
+                });
+            });
+
+            it("renders the correct number of filters when adding", function() {
                 // Really add filters to dialog - not a stub
-                this.dialog.filters.addFilter()
-                this.dialog.filters.addFilter()
-                this.dialog.filters.render();
-                this.dialog.filters.$(".filter input").val("AA");
+                this.dialog.filterWizard.addFilter()
+                this.dialog.filterWizard.addFilter()
+                this.dialog.filterWizard.render();
+                this.dialog.filterWizard.$(".filter input").val("AA");
                 this.dialog.render();
 
-                expect(this.dialog.$(".filter_options li").length).toBe(2);
+                expect(this.dialog.$(".filter_options li").length).toBe(4);
             });
 
             it("swaps out show/hide options links", function() {

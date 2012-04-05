@@ -22,26 +22,6 @@ describe("chorus.views.DatasetFilterWizard", function() {
             expect(this.view.$("li.dataset_filter")).toHaveClass("last");
         });
 
-        describe("#whereClause", function() {
-            beforeEach(function() {
-                spyOn(this.view.collection.at(0), "sqlString").andReturn("foo = 1");
-            });
-
-            it("joins the individual filters' conditions", function() {
-                expect(this.view.whereClause()).toBe("WHERE foo = 1");
-            });
-
-            describe("when all filterViews return an empty string", function() {
-                beforeEach(function() {
-                    this.view.collection.at(0).sqlString.andReturn("");
-                });
-
-                it("returns an empty string (not 'WHERE ')", function() {
-                    expect(this.view.whereClause()).toBe("");
-                });
-            });
-        });
-
         describe("#filterCount", function() {
             beforeEach(function() {
                 this.view.addFilter();
@@ -53,18 +33,6 @@ describe("chorus.views.DatasetFilterWizard", function() {
 
             it("eliminates empty filters", function() {
                 expect(this.view.filterCount()).toBe(2);
-            });
-        });
-
-        describe("removing the only filter", function() {
-            beforeEach(function() {
-                this.view.$(".remove").click();
-            });
-
-            describe("#whereClause", function() {
-                it("returns an empty string", function() {
-                    expect(this.view.whereClause()).toBe("");
-                });
             });
         });
 
@@ -80,17 +48,6 @@ describe("chorus.views.DatasetFilterWizard", function() {
             it("adds the last class to the new filter and removes it from the old", function() {
                 expect(this.view.$("li.dataset_filter:eq(0)")).not.toHaveClass("last");
                 expect(this.view.$("li.dataset_filter:eq(1)")).toHaveClass("last");
-            });
-
-            describe("#whereClause", function() {
-                beforeEach(function() {
-                    spyOn(this.view.collection.at(0), "sqlString").andReturn("foo = 1");
-                    spyOn(this.view.collection.at(1), "sqlString").andReturn("bar = 2");
-                });
-
-                it("joins the individual filters' conditions", function() {
-                    expect(this.view.whereClause()).toBe("WHERE foo = 1 AND bar = 2");
-                });
             });
 
             describe("resetting the wizard", function() {

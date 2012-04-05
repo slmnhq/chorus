@@ -105,7 +105,7 @@
             this.clearSqlErrors();
             this.startVisualization()
 
-            var dialog = new chorus.dialogs.Visualization({model: this.model, chartOptions: this.chartOptions(), filters: this.filters });
+            var dialog = new chorus.dialogs.Visualization({model: this.model, chartOptions: this.chartOptions(), filters: this.filters, columnSet: this.collection });
             this.dialog = dialog
             var func = 'make' + _.capitalize(this.chartOptions().type) + 'Task';
             this.task = dialog.task = this.model[func](this.chartOptions());

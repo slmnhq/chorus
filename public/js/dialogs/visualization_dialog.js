@@ -2,7 +2,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     className:"visualization",
 
     subviews:{
-        ".tabledata": "tableData"
+        ".tabledata": "tableData",
+        ".filter_options": "filterWizard"
     },
 
     events:{
@@ -16,7 +17,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     setup: function () {
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
-        this.filters = this.options.filters;
+        this.filters = this.options.filters.clone();
+        this.filterWizard = new chorus.views.DatasetFilterWizard({collection: this.filters, columnSet: this.options.columnSet});
         this.tableData = new chorus.views.ResultsConsole({shuttle: false, hideExpander: true, footerSize: _.bind(this.footerSize, this)});
     },
 
@@ -27,7 +29,6 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     postRender: function () {
         this.tableData.showResultTable(this.task);
         this.tableData.$('.expander_button').remove();
-        this.$(".filter_options").append($(this.filters.el).clone());
         this.$('.chart_icon.' + this.type).addClass("selected");
         chorus.menu(this.$('button.save'), {
             content: this.$(".save_options"),
@@ -106,10 +107,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     additionalContext:function () {
-        var filterCount = this.filters ? this.filters.filterCount() : 0;
-
         return {
-            filterCount: filterCount,
+            filterCount: this.filters.length,
             chartType:t("dataset.visualization.names." + this.type),
             workspaceId: this.task.get("workspaceId"),
             hasChart: !!this.chart,
