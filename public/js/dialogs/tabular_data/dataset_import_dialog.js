@@ -73,7 +73,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.$(".existing_table .select").removeClass("hidden");
 
 
-        chorus.styleSelect(self.$("select"));
+        chorus.styleSelect(this.$("select"));
     },
 
     additionalContext: function() {
