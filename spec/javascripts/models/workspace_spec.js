@@ -1,7 +1,7 @@
 describe("chorus.models.Workspace", function() {
     var models = chorus.models;
     beforeEach(function() {
-        this.model = new models.Workspace();
+        this.model = newFixtures.workspace({ active: true, state: null });
     });
 
     it("has the correct urlTemplate", function() {
@@ -20,6 +20,7 @@ describe("chorus.models.Workspace", function() {
         });
 
         it("returns false otherwise", function() {
+            this.model.set({ active: false, state: 0 });
             expect(this.model.isActive()).toBeFalsy();
         });
     });
@@ -31,6 +32,7 @@ describe("chorus.models.Workspace", function() {
         });
 
         it("returns false otherwise", function() {
+            this.model.set({ isPublic: false });
             expect(this.model.isPublic()).toBeFalsy();
         });
     })
@@ -169,8 +171,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#comments", function() {
         beforeEach(function() {
-            this.model.set(fixtures.workspaceJson({latestCommentList: [fixtures.commentJson()]}));
-            this.model.set({id: 5});
+            this.model.set({ id: 5, latestCommentList: [fixtures.commentJson()] });
             this.comments = this.model.comments();
         });
 
@@ -220,7 +221,6 @@ describe("chorus.models.Workspace", function() {
         });
 
         it("should return a truthy value for a valid workspace", function() {
-            this.model.set(fixtures.workspaceJson());
             expect(this.model.performValidation()).toBeTruthy();
         });
 
@@ -232,7 +232,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#displayName", function() {
         beforeEach(function() {
-            this.model = fixtures.workspace();
+            this.model = newFixtures.workspace();
         })
 
         it("returns the name", function() {
@@ -243,7 +243,7 @@ describe("chorus.models.Workspace", function() {
     describe("#displayShortName", function() {
         context("with a short name", function() {
             beforeEach(function() {
-                this.model = fixtures.workspace({name: "Short Name"});
+                this.model = newFixtures.workspace({name: "Short Name"});
             });
 
             it("returns the full name", function() {
@@ -253,7 +253,7 @@ describe("chorus.models.Workspace", function() {
 
         context("with a long name", function() {
             beforeEach(function() {
-                this.model = fixtures.workspace({name: "A Much, Much Longer Name"});
+                this.model = newFixtures.workspace({name: "A Much, Much Longer Name"});
             });
 
             it("returns the shortened name", function() {
@@ -264,7 +264,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#imageUrl", function() {
         beforeEach(function() {
-            this.model = fixtures.workspace({id: 10013});
+            this.model = newFixtures.workspace({id: 10013});
         })
 
         it("uses the right URL", function() {
@@ -301,7 +301,7 @@ describe("chorus.models.Workspace", function() {
     describe("#sandbox", function() {
         context("when the workspace has a sandbox", function() {
             beforeEach(function() {
-                this.model = fixtures.workspace({
+                this.model = newFixtures.workspace({
                     sandboxInfo: {
                         databaseId: 4,
                         databaseName: "db",
@@ -330,7 +330,7 @@ describe("chorus.models.Workspace", function() {
 
         context("when the workspace does not have a sandbox", function() {
             beforeEach(function() {
-                this.model = fixtures.workspace({
+                this.model = newFixtures.workspace({
                     sandboxInfo: {
                         databaseId: null,
                         databaseName: null,
@@ -358,9 +358,9 @@ describe("chorus.models.Workspace", function() {
         describe("#currentUserIsMember", function() {
             it("returns true iff the current logged-in user is a member", function() {
                 this.model.members().add([
-                    fixtures.user({ id: "31" }),
-                    fixtures.user({ id: "32" }),
-                    fixtures.user({ id: "33" }),
+                    newFixtures.user({ id: "31" }),
+                    newFixtures.user({ id: "32" }),
+                    newFixtures.user({ id: "33" }),
                 ]);
 
                 setLoggedInUser({ id: "31" });
