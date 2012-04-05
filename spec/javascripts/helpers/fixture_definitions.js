@@ -6,6 +6,6 @@ window.fixtureDefinitions = {
 
     workspace: {
         model: "Workspace",
-        unique: [ "id", "sandboxId" ]
+        unique: [ "id", "sandboxInfo.sandboxId" ]
     }
 };

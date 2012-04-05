@@ -29,45 +29,97 @@ describe("newFixtures", function() {
             var user2 = newFixtures.user();
             expect(user2.get("id")).not.toEqual(user.get("id"));
         });
+
+        it("uses the override id, if one is specified", function() {
+            var user2 = newFixtures.user({ id: '501' });
+            expect(user2.get("id")).toBe("501");
+        });
     });
 
-    describe("#addUniqueAttrs(attributes, names)", function() {
+    describe("#addUniqueAttrs(attributes, nameStrings)", function() {
         var attributes1, attributes2;
 
-        beforeEach(function() {
-            attributes1 = {
-                id: "101",
-                name: "foo",
-                workspace: {
-                    id: "102",
-                    name: "Bums",
-                    sandbox: {
-                        id: "103",
-                        name: "data-land"
+        context("when the object already contains the attributes specified as unique", function() {
+            beforeEach(function() {
+                attributes1 = {
+                    id: "101",
+                    name: "foo",
+                    workspace: {
+                        workspaceId: "102",
+                        name: "Bums",
+                        sandbox: {
+                            sandboxId: null,
+                            name: "data-land"
+                        }
                     }
-                }
-            };
+                };
 
-            attributes2 = _.clone(attributes1);
-            attributes2.workspace = _.clone(attributes1.workspace);
-            attributes2.workspace.sandbox = _.clone(attributes1.workspace.sandbox);
+                newFixtures.addUniqueAttrs(attributes1, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
+            });
 
-            newFixtures.addUniqueAttrs(attributes1, [ "id" ]);
-            newFixtures.addUniqueAttrs(attributes2, [ "id" ]);
+            it("does not change the properties (even if they are null)", function() {
+                expect(attributes1).toEqual({
+                    id: "101",
+                    name: "foo",
+                    workspace: {
+                        workspaceId: "102",
+                        name: "Bums",
+                        sandbox: {
+                            sandboxId: null,
+                            name: "data-land"
+                        }
+                    }
+                });
+            });
         });
 
-        it("replaces the values of matching properties with unique string ids", function() {
-            expect(attributes1.id).toBeA("string");
+        context("when the object does not contain the attributes specified as unique", function() {
+            beforeEach(function() {
+                attributes1 = {
+                    name: "foo",
+                    workspace: {
+                        name: "Bums",
+                        sandbox: {
+                            name: "data-land"
+                        }
+                    }
+                };
 
-            expect(attributes1.id).not.toEqual(attributes2.id);
-            expect(attributes1.workspace.id).not.toEqual(attributes2.workspace.id);
-            expect(attributes1.workspace.sandbox.id).not.toEqual(attributes2.workspace.sandbox.id);
+                attributes2 = _.clone(attributes1);
+                attributes2.workspace = _.clone(attributes1.workspace);
+                attributes2.workspace.sandbox = _.clone(attributes1.workspace.sandbox);
+
+                newFixtures.addUniqueAttrs(attributes1, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
+                newFixtures.addUniqueAttrs(attributes2, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
+            });
+
+            it("gives the object unique values for those attributes", function() {
+                expect(attributes1.id).toBeA("string");
+                expect(attributes1.workspace.workspaceId).toBeA("string");
+                expect(attributes1.workspace.sandbox.sandboxId).toBeA("string");
+
+                expect(attributes1.id).not.toEqual(attributes2.id);
+                expect(attributes1.workspace.workspaceId).not.toEqual(attributes2.workspace.workspaceId);
+                expect(attributes1.workspace.sandbox.sandboxId).not.toEqual(attributes2.workspace.sandbox.sandboxId);
+            });
+
+            it("leaves the object's other properties as they were", function() {
+                expect(attributes1.name).toBe("foo");
+                expect(attributes1.workspace.name).toBe("Bums");
+                expect(attributes1.workspace.sandbox.name).toBe("data-land");
+            });
         });
 
-        it("leaves non-matching properties as they are", function() {
-            expect(attributes1.name).toBe("foo");
-            expect(attributes1.workspace.name).toBe("Bums");
-            expect(attributes1.workspace.sandbox.name).toBe("data-land");
+        context("when the object does not have one of the nested objects specified in the unique list", function() {
+            it("creates the nested object and the unique id inside of it", function() {
+                attributes1 = { name: "foo" };
+                attributes2 = { name: "foo" };
+                newFixtures.addUniqueAttrs(attributes1, [ "workspace.sandbox.id" ]);
+                newFixtures.addUniqueAttrs(attributes2, [ "workspace.sandbox.id" ]);
+                expect(attributes1.workspace.sandbox.id).toBeA("string")
+                expect(attributes2.workspace.sandbox.id).toBeA("string")
+                expect(attributes1.workspace.sandbox.id).not.toEqual(attributes2.workspace.sandbox.id);
+            });
         });
     });
 

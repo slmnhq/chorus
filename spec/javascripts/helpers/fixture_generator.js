@@ -7,9 +7,10 @@
     _.each(window.fixtureDefinitions, function(definition, name) {
         var modelClass = chorus.models[definition.model];
         window.newFixtures[name] = function(overrides) {
+            overrides || (overrides = {});
             var rawData = getFixture(name);
+            addUniqueAttrs(overrides, definition.unique);
             var attrs = safeExtend(rawData, overrides, name);
-            addUniqueAttrs(attrs, definition.unique);
             return new modelClass(attrs);
         };
     });
@@ -23,15 +24,16 @@
         return window.fixtureData[name];
     }
 
-    function addUniqueAttrs(attributes, keyNames) {
-        _.each(attributes, function(value, key) {
-            if (_.isObject(value)) {
-                addUniqueAttrs(value, keyNames);
-            } else {
-                if (_.include(keyNames, key)) {
-                    attributes[key] = _.uniqueId() + "";
-                }
-            }
+    function addUniqueAttrs(attributes, keyStrings) {
+        _.each(keyStrings, function(keyString) {
+            var keys = keyString.split(".");
+            var lastKey = keys.pop();
+            var nested = attributes;
+            _.each(keys, function(key) {
+                nested[key] || (nested[key] = {});
+                nested = nested[key];
+            });
+            if (nested[lastKey] === undefined) nested[lastKey] = _.uniqueId() + "";
         });
     }
 
