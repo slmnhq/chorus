@@ -1,111 +1,107 @@
-(function() {
-    chorus.Modal = chorus.views.Base.extend({
-        constructorName: "Modal",
+chorus.Modal = chorus.views.Base.extend({
+    constructorName: "Modal",
 
-        launchModal: function() {
-            if (chorus.modal && this !== chorus.modal) {
-                chorus.modal.launchSubModal(this);
-            } else {
-                this.launchNewModal();
-            }
-        },
+    launchModal: function() {
+        if (chorus.modal && this !== chorus.modal) {
+            chorus.modal.launchSubModal(this);
+        } else {
+            this.launchNewModal();
+        }
+    },
 
-        launchNewModal:function () {
-            this.render();
-            $(document).one('reveal.facebox', _.bind(this.revealed, this));
-            $.facebox(this.el)
+    launchNewModal:function () {
+        this.render();
+        $(document).one('reveal.facebox', _.bind(this.revealed, this));
+        $.facebox(this.el)
 
-            this.previousModal = chorus.modal;
-            chorus.modal = this;
+        this.previousModal = chorus.modal;
 
-            pushModalBindings(this);
-        },
+        this.restore();
+    },
 
-        launchSubModal: function(subModal) {
-            popModalBindings(this);
+    launchSubModal: function(subModal) {
+        this.ignoreFacebox();
+        this.background();
 
-            this.background();
+        $.facebox.settings.inited = false;
+        subModal.launchNewModal();
+    },
+
+    postRender: function() {
+        this._super("postRender");
+        $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .popup').width() / 2))
+    },
+
+    makeModel:function (options) {
+        if (options && options.pageModel) {
+            this.pageModel = options.pageModel;
+            this.model = this.model || this.pageModel;
+        }
+    },
+
+    closeModal:function () {
+        $(document).trigger("close.facebox");
+    },
+
+    keydownHandler:function (e) {
+        if (e.keyCode == 27) {
+            this.escapePressed();
+        }
+    },
+
+    escapePressed:function () {
+        $(document).trigger("close.facebox");
+    },
+
+    modalClosed:function () {
+        if (this == chorus.modal) {
+            this.bindings.removeAll();
+            this.close();
+            $("#facebox").remove();
             $.facebox.settings.inited = false;
-            subModal.isSubModal = true;
-            subModal.launchNewModal();
-        },
+            chorus.PageEvents.broadcast("modal:closed");
+            delete chorus.modal;
 
-        postRender: function() {
-            this._super("postRender");
-            $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .popup').width() / 2))
-        },
-
-        makeModel:function (options) {
-            if (options && options.pageModel) {
-                this.pageModel = options.pageModel;
-                this.model = this.model || this.pageModel;
+            if (this.previousModal) {
+                this.previousModal.restore();
             }
-        },
 
-        closeModal:function () {
-            $(document).trigger("close.facebox");
-        },
+            this.ignoreFacebox();
+        }
+    },
 
-        keydownHandler:function (e) {
-            if (e.keyCode == 27) {
-                this.escapePressed();
-            }
-        },
+    restore:function () {
+        this.foreground();
+        chorus.modal = this;
 
-        escapePressed:function () {
-            $(document).trigger("close.facebox");
-        },
+        this.listenToFacebox();
+    },
 
-        modalClosed:function () {
-            if (this == chorus.modal) {
-                this.bindings.removeAll();
-                this.close();
-                $("#facebox").remove();
-                $.facebox.settings.inited = false;
-                chorus.PageEvents.broadcast("modal:closed");
-                delete chorus.modal;
+    foreground: function () {
+        $("#facebox-" + this.faceboxCacheId).attr("id", "facebox").removeClass("hidden");
+        $("#facebox_overlay-" + this.faceboxCacheId).attr("id", "facebox_overlay");
+    },
 
-                if (this.isSubModal) {
-                    this.subModalClosed();
-                }
+    background: function () {
+        this.faceboxCacheId = "" + (new Date().getTime());
+        $("#facebox").attr("id", "facebox-" + this.faceboxCacheId).addClass("hidden");
+        $("#facebox_overlay").attr("id", "facebox_overlay-" + this.faceboxCacheId);
+    },
 
-                popModalBindings(this);
-            }
-        },
+    listenToFacebox: function() {
+        this.boundModalClosed = _.bind(this.modalClosed, this);
+        this.boundKeyDownHandler = _.bind(this.keydownHandler, this);
+        $(document).one("close.facebox", this.boundModalClosed);
+        $(document).bind("keydown.facebox", this.boundKeyDownHandler);
+    },
 
-        subModalClosed:function () {
-            this.previousModal.foreground();
-            chorus.modal = this.previousModal;
+    ignoreFacebox: function() {
+        $(document).unbind("close.facebox", this.boundModalClosed);
+        $(document).unbind("keydown.facebox", this.boundKeyDownHandler);
+        delete this.boundModalClosed;
+        delete this.boundKeyDownHandler;
+    },
 
-            pushModalBindings(this.previousModal);
-        },
-
-        foreground: function () {
-            $("#facebox-" + this.faceboxCacheId).attr("id", "facebox").removeClass("hidden");
-            $("#facebox_overlay-" + this.faceboxCacheId).attr("id", "facebox_overlay");
-        },
-
-        background: function () {
-            this.faceboxCacheId = "" + (new Date().getTime());
-            $("#facebox").attr("id", "facebox-" + this.faceboxCacheId).addClass("hidden");
-            $("#facebox_overlay").attr("id", "facebox_overlay-" + this.faceboxCacheId);
-        },
-
-        close:$.noop,
-        revealed:$.noop
-    });
-
-    function pushModalBindings(modal) {
-        modal.boundModalClosed = _.bind(modal.modalClosed, modal);
-        modal.boundKeyDownHandler = _.bind(modal.keydownHandler, modal);
-        $(document).one("close.facebox", modal.boundModalClosed);
-        $(document).bind("keydown.facebox", modal.boundKeyDownHandler);
-    }
-
-    function popModalBindings(modal) {
-        $(document).unbind("close.facebox", modal.boundModalClosed);
-        $(document).unbind("keydown.facebox", modal.boundKeyDownHandler);
-        delete modal.boundModalClosed;
-        delete modal.boundKeyDownHandler;
-    }
-})();
+    close:$.noop,
+    revealed:$.noop
+});

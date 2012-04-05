@@ -42,7 +42,7 @@ describe("chorus.Modal", function() {
 
             it("displays the new dialog", function() {
                 expect(chorus.modal).toBe(this.modal);
-                expect(this.modal.isSubModal).toBeTruthy();
+                expect(this.modal.previousModal).toBe(this.parentModal);
             });
         });
 
@@ -59,7 +59,7 @@ describe("chorus.Modal", function() {
 
             it("sets chorus.modal", function() {
                 expect(chorus.modal).toBe(this.modal)
-            })
+            });
 
             describe("re-rendering", function() {
                 beforeEach(function() {
@@ -95,11 +95,11 @@ describe("chorus.Modal", function() {
 
                 it("resets facebox", function() {
                     expect($.facebox.settings.inited).toBeFalsy();
-                })
+                });
 
                 it("removes the #facebox element from the DOM", function() {
                     expect($("#facebox")).not.toExist();
-                })
+                });
 
                 it("triggers the modal:closed page event", function() {
                     expect(this.modalClosedSpy).toHaveBeenCalled()
@@ -134,19 +134,19 @@ describe("chorus.Modal", function() {
             spyOn(this.subModal, "launchNewModal").andCallThrough();
             $.facebox.settings.inited = true;
             this.modal.launchSubModal(this.subModal)
-        })
+        });
 
         it("backgrounds this modal", function() {
             expectBackgrounded(this.faceboxProxy, this.faceboxOverlayProxy)
-        })
+        });
 
         it("resets facebox", function() {
             expect($.facebox.settings.inited).toBeFalsy();
-        })
+        });
 
         it("launches the sub modal", function() {
             expect(this.subModal.launchNewModal).toHaveBeenCalled();
-        })
+        });
 
         describe("when the sub modal is closed", function() {
             beforeEach(function() {
