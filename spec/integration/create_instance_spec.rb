@@ -9,7 +9,7 @@ describe " add an instance " do
       page.find("a.add.dialog").click
       within("#facebox") do
        choose("register_existing_greenplum")
-       sleep 1
+       wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
        fill_in 'name', :with => "GPDB_inst_sel_test#{Time.now.to_i}"
        fill_in 'description', :with => "GPDB instance creation"
        fill_in 'host', :with => "gillette.sf.pivotallabs.com"
@@ -25,7 +25,7 @@ describe " add an instance " do
       page.find("a.add.dialog").click
       within("#facebox") do
        choose("register_existing_hadoop")
-       sleep 1
+       wait_until { page.has_selector?(".register_existing_hadoop input[name=name]")}
        fill_in 'name', :with => "Hadoop_inst_sel_test#{Time.now.to_i}"
        fill_in 'description', :with => "Hadoop Instance Creation"
        fill_in 'host', :with => "gillette.sf.pivotallabs.com"
