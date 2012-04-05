@@ -495,6 +495,10 @@
         return stubContainer;
     }
 
+    window.stubClEditor = function() {
+        spyOn($.fn, "cleditor").andReturn([0])
+    }
+
     if ($.browser.msie && !window['con' + 'sole']) {
         (function(F, i, r, e, b, u, g, L, I, T, E) {
             if (F.getElementById(b))return;
