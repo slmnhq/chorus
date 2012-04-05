@@ -1,6 +1,6 @@
 describe("chorus.views.WorkspaceQuickstartHeader", function() {
     beforeEach(function() {
-        this.model = fixtures.workspace({ name: "Fancy Workspace" });
+        this.model = newFixtures.workspace({ name: "Fancy Workspace" });
         this.view = new chorus.views.WorkspaceQuickstartHeader({ model: this.model });
         this.view.render();
     });

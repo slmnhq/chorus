@@ -1,6 +1,6 @@
 describe("chorus.views.WorkspaceListSidebar", function() {
     beforeEach(function() {
-        this.workspace = fixtures.workspace();
+        this.workspace = newFixtures.workspace();
         this.view = new chorus.views.WorkspaceListSidebar();
 
         chorus.PageEvents.broadcast("workspace:selected", this.workspace);

@@ -1,6 +1,6 @@
 describe("chorus.Mixins.Urls", function() {
     beforeEach(function() {
-        this.object = fixtures.workspace({ id: '45' });
+        this.object = newFixtures.workspace({ id: '45' });
         this.object.isDeleted = function() { return false; }
     });
 

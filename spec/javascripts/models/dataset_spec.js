@@ -231,7 +231,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#setWorkspace", function() {
         beforeEach(function() {
-            this.newWorkspace = fixtures.workspace();
+            this.newWorkspace = newFixtures.workspace();
             this.dataset.setWorkspace(this.newWorkspace);
         });
 

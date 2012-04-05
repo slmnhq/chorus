@@ -1,7 +1,7 @@
 describe("chorus.views.DashboardWorkspaceList", function() {
     beforeEach(function() {
-        this.workspace1 = fixtures.workspace({ name: "Broccoli", latestCommentList: [] });
-        this.workspace2 = fixtures.workspace({ name: "Camels", latestCommentList: [] });
+        this.workspace1 = newFixtures.workspace({ name: "Broccoli", latestCommentList: [] });
+        this.workspace2 = newFixtures.workspace({ name: "Camels", latestCommentList: [] });
         this.collection = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2]);
         this.collection.loaded = true;
         this.view = new chorus.views.DashboardWorkspaceList({collection: this.collection});
@@ -92,14 +92,14 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
             context("when there are no insights or comments", function() {
                 it("displays no insights or comments when 0", function() {
-                    this.workspace1.set({numComments: 0, numInsights: 0});
+                    this.workspace1.set({numberOfComment: 0, numInsights: 0});
                     this.view.render();
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
                         "dashboard.workspaces.no_recent_comments_or_insights")
                 })
 
                 it("displays no insights or comments when null", function() {
-                    this.workspace1.set({numComments: null, numInsights: null});
+                    this.workspace1.set({numberOfComment: null, numInsights: null});
                     this.view.render();
                     expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
                         "dashboard.workspaces.no_recent_comments_or_insights")

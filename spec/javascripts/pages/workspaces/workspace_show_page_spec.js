@@ -50,7 +50,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
         context("when the model has loaded", function(){
             beforeEach(function(){
-                this.server.completeFetchFor(this.page.model, fixtures.workspace({summary: "this is a summary", name : "Cool Workspace"}))
+                this.server.completeFetchFor(this.page.model, newFixtures.workspace({summary: "this is a summary", name : "Cool Workspace"}))
                 this.server.completeFetchFor(this.page.model.activities(), [fixtures.activities.NOTE_ON_WORKFILE(), fixtures.activities.INSIGHT_CREATED()])
                 this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightCount, { numberOfInsight: 5 });
                 this.page.render();

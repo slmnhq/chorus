@@ -1,6 +1,6 @@
 describe("chorus.views.ActivityListHeader", function() {
     beforeEach(function() {
-        this.workspace = fixtures.workspace();
+        this.workspace = newFixtures.workspace();
         this.collection = new chorus.collections.ActivitySet([], { entityType: "workspace" });
         this.workspace._activities = this.collection;
 
@@ -18,7 +18,7 @@ describe("chorus.views.ActivityListHeader", function() {
     describe("#pickTitle", function() {
         context("with a workspace", function() {
             beforeEach(function() {
-                this.workspace = fixtures.workspace({ name: "a cool workspace" })
+                this.workspace = newFixtures.workspace({ name: "a cool workspace" })
                 this.view.model = this.workspace;
             });
 

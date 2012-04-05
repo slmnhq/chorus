@@ -2,7 +2,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
     beforeEach(function() {
         this.launchElement = $("<a></a>");
 
-        this.workspace = fixtures.workspace({
+        this.workspace = newFixtures.workspace({
             name: "my name",
             summary: "my summary",
             id: "457",

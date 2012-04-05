@@ -1,6 +1,6 @@
 describe("chorus.pages.DatasetShowPage", function() {
     beforeEach(function() {
-        this.workspace = fixtures.workspace({
+        this.workspace = newFixtures.workspace({
             id: '100',
             "sandboxInfo": {
                 databaseId: "4",

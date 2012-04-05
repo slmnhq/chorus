@@ -1,6 +1,6 @@
 describe("chorus.views.WorkspaceShowSidebar", function() {
     beforeEach(function() {
-            this.model = fixtures.workspace({name: "A Cool Workspace", id: '123', iconId: '123'});
+            this.model = newFixtures.workspace({name: "A Cool Workspace", id: '123', iconId: '123'});
     });
 
     describe("#setup", function() {

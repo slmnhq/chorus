@@ -6,7 +6,7 @@ describe("chorus.views.TruncatedText", function() {
             '</div><div><span style="font-weight: normal; ">some </span><b>great</b> stuff <div style="font-weight: normal; "><ul>' +
             '<li><span style="font-size: 10pt; ">one</span></li><li><span style="font-size: 10pt; ">two</span></li><li>' +
             '<span style="font-size: 10pt;">three</span> </li></ul><a href="http://example.com">hi</a></div></div>';
-        this.model = fixtures.workspace({ summary: this.text });
+        this.model = newFixtures.workspace({ summary: this.text });
 
         this.view = new chorus.views.TruncatedText({model: this.model, attribute: "summary", attributeIsHtmlSafe: true})
 

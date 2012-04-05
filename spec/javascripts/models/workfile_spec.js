@@ -144,7 +144,7 @@ describe("chorus.models.Workfile", function() {
     describe("#sandbox", function() {
         context("when the workfile's workspace has been fetched", function() {
             beforeEach(function() {
-                spyOn(this.model, "workspace").andReturn(fixtures.workspace({
+                spyOn(this.model, "workspace").andReturn(newFixtures.workspace({
                     sandboxInfo: {
                         databaseId: 4,
                         databaseName: "db",
@@ -648,7 +648,7 @@ describe("chorus.models.Workfile", function() {
 
     describe("#setWorkspace", function() {
         beforeEach(function() {
-            this.newWorkspace = fixtures.workspace();
+            this.newWorkspace = newFixtures.workspace();
             this.model.setWorkspace(this.newWorkspace);
         });
 

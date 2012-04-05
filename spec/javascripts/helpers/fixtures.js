@@ -1529,13 +1529,6 @@ beforeEach(function() {
             }, overrides);
         },
 
-        user: function(overrides) {
-            return new chorus.models.User(this.userJson(_.extend({
-                admin: true,
-                use_external_ldap: false
-            }, overrides)));
-        },
-
         comment: function(overrides) {
             var id = this.nextId().toString();
             var attributes = _.extend({
@@ -1544,7 +1537,7 @@ beforeEach(function() {
                 artifacts: [],
                 timestamp: '2011-01-01 12:00:00'
             }, overrides);
-            attributes.author = _.extend(this.user().attributes, overrides && overrides.author);
+            attributes.author = _.extend(newFixtures.user().attributes, overrides && overrides.author);
             return new chorus.models.Comment(attributes);
         },
 
@@ -1563,7 +1556,7 @@ beforeEach(function() {
                 entityType: 'instance',
                 entityId: this.nextId().toString(),
                 type: "NOTE",
-                workspace: fixtures.workspace()
+                workspace: newFixtures.workspace()
             }, overrides)
             return fixtures.comment(commentOverrides);
         },
@@ -1668,15 +1661,6 @@ beforeEach(function() {
             return collection;
         },
 
-        workspace: function(overrides) {
-            var id = this.nextId().toString()
-            var attributes = _.extend(this.workspaceJson(), {
-                _owner: this.user(),
-                entityType: "workspace"
-            }, overrides);
-            return new chorus.models.Workspace(attributes);
-        },
-
         workfile: function(overrides) {
             var attributes = this.workfileJson(overrides);
             return new chorus.models.Workfile(attributes);
@@ -1746,7 +1730,7 @@ beforeEach(function() {
         },
 
         workspaceSet: function(models) {
-            models = models || [this.workspace(), this.workspace()];
+            models = models || [newFixtures.workspace(), newFixtures.workspace()];
             return new chorus.collections.WorkspaceSet(models);
         },
 
@@ -2301,11 +2285,6 @@ beforeEach(function() {
                 recipient: "nancy",
                 isDeleted: false
             }, overrides);
-        },
-
-        userSet: function(models, modelOverrides, attrs) {
-            models = models || [newFixtures.user(modelOverrides), newFixtures.user(modelOverrides)];
-            return new chorus.collections.UserSet(models, attrs || {});
         },
 
         notification: function(overrides) {

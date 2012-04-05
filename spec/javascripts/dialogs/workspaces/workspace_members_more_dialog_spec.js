@@ -1,7 +1,7 @@
 describe("chorus.dialogs.WorkspaceMembersMore", function() {
     var workspace, dialog, members;
     beforeEach(function() {
-        workspace = fixtures.workspace();
+        workspace = newFixtures.workspace();
         dialog = new chorus.dialogs.WorkspaceMembersMore({ pageModel: workspace });
         members = workspace.members();
         _.times(25, function() {

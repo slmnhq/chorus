@@ -118,7 +118,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
 
                 it("does not have the 'Import Now' action even if there's a workspace", function() {
-                    this.view.options.workspace = fixtures.workspace();
+                    this.view.options.workspace = newFixtures.workspace();
                     this.view.render();
                     expect(this.view.$(".actions .import_now")).not.toExist();
                 });
@@ -187,7 +187,7 @@ describe("chorus.views.TabularDataSidebar", function() {
             context("when there is an archived workspace", function() {
                 beforeEach(function() {
                     this.view.options.listMode = true;
-                    this.view.options.workspace = fixtures.workspace({active: false, permission: ["update", "admin"]});
+                    this.view.options.workspace = newFixtures.workspace({active: false, state: 0, permission: ["update", "admin"]});
                     this.view.render();
                     this.dataset = fixtures.datasetSourceTable();
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
@@ -203,7 +203,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
             context("when there is a workspace", function() {
                 beforeEach(function() {
-                    this.view.options.workspace = fixtures.workspace();
+                    this.view.options.workspace = newFixtures.workspace();
                     this.view.render();
                 });
 
@@ -223,7 +223,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 context("when the dataset is a sandbox table or view", function() {
                     beforeEach(function() {
                         this.dataset = fixtures.datasetSandboxTable({ importInfo: null });
-                        this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                        this.view.options.workspace = newFixtures.workspace({ permission: ["update"] })
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
@@ -328,7 +328,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                             context("and the current user has update permissions on the workspace", function() {
                                 beforeEach(function() {
-                                    this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                                    this.view.options.workspace = newFixtures.workspace({ permission: ["update"] })
                                     this.view.render();
                                 });
 
@@ -382,7 +382,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                             context("and the current user does not have update permissions on the workspace", function() {
                                 beforeEach(function() {
-                                    this.view.options.workspace = fixtures.workspace({ permission: ["read"] })
+                                    this.view.options.workspace = newFixtures.workspace({ permission: ["read"] })
                                     this.view.render();
                                 });
 
@@ -415,7 +415,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     toTable: "our_destination",
                                     destinationTable: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"'
                                 });
-                                this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                                this.view.options.workspace = newFixtures.workspace({ permission: ["update"] })
                             });
 
                             it("shows the next import time", function() {
@@ -541,7 +541,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     datasetId: this.dataset.get("id"),
                                     workspaceId: this.dataset.workspace().id
                                 });
-                                this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                                this.view.options.workspace = newFixtures.workspace({ permission: ["update"] })
                             });
 
                             context("when the import has been successfully executed", function() {
@@ -645,7 +645,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                             context("when the user has permission to update in the workspace", function() {
                                 beforeEach(function() {
-                                    this.view.options.workspace = fixtures.workspace({ permission: ["update"] })
+                                    this.view.options.workspace = newFixtures.workspace({ permission: ["update"] })
                                     this.view.render();
                                 });
 
@@ -672,7 +672,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                             context("when the user does not have permission to update things in the workspace", function() {
                                 beforeEach(function() {
-                                    this.view.options.workspace = fixtures.workspace({ permission: ["read"] })
+                                    this.view.options.workspace = newFixtures.workspace({ permission: ["read"] })
                                     this.view.render();
                                 });
 
@@ -759,7 +759,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                         context("and the logged-in user has update permission on the workspace", function() {
                             beforeEach(function() {
-                                this.view.options.workspace = fixtures.workspace({ permission: ["update"] });
+                                this.view.options.workspace = newFixtures.workspace({ permission: ["update"] });
                                 this.view.render();
                             });
 
@@ -772,7 +772,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                         context("and the logged-in user does not have update permission on the workspace", function() {
                             beforeEach(function() {
-                                this.view.options.workspace = fixtures.workspace({ permission: ["read"] });
+                                this.view.options.workspace = newFixtures.workspace({ permission: ["read"] });
                                 this.view.render();
                             });
 

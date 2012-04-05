@@ -2,7 +2,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
         this.workspaceId = 4;
         this.workfileId = 5;
-        this.workspace = fixtures.workspace({id: this.workspaceId});
+        this.workspace = newFixtures.workspace({id: this.workspaceId});
         this.model = fixtures.sqlWorkfile({id: this.workfileId, workspaceId: this.workspaceId});
         stubDefer();
    });

@@ -4,8 +4,12 @@ describe("chorus.views.NotificationRecipient", function() {
         this.user2 = newFixtures.user();
         this.loggedInUser = newFixtures.user();
         setLoggedInUser({ id: this.loggedInUser.get("id") });
-        
-        this.users = fixtures.userSet([this.user1, this.user2, this.loggedInUser]);
+
+        this.users = new chorus.collections.UserSet([
+            this.user1,
+            this.user2,
+            this.loggedInUser
+        ]);
         this.users.sortAsc("firstName");
 
         this.view = new chorus.views.NotificationRecipient();

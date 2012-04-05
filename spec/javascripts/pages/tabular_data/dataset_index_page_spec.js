@@ -2,7 +2,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
         this.modalSpy = stubModals();
-        this.workspace = fixtures.workspace({
+        this.workspace = newFixtures.workspace({
             id: 9999,
             permission: [
                 "update"

@@ -1,7 +1,7 @@
 describe("chorus.views.WorkspaceSummaryContentHeader", function() {
     beforeEach(function() {
         stubDefer();
-        this.workspace = fixtures.workspace();
+        this.workspace = newFixtures.workspace();
         this.workspace.loaded = true;
         this.view = new chorus.views.WorkspaceSummaryContentHeader({model: this.workspace});
     });

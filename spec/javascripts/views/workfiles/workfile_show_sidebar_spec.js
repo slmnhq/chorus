@@ -27,7 +27,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             this.view.model.workspace().fetch();
 
             this.server.completeFetchFor(this.workfile);
-            this.server.completeFetchFor(this.workfile.workspace(), fixtures.workspace({
+            this.server.completeFetchFor(this.workfile.workspace(), newFixtures.workspace({
                 sandboxInfo : {
                     databaseId: 4,
                     databaseName: "db",
@@ -83,7 +83,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             this.view.model.workspace().fetch();
 
             this.server.completeFetchFor(this.workfile);
-            this.server.completeFetchFor(this.workfile.workspace(), fixtures.workspace({
+            this.server.completeFetchFor(this.workfile.workspace(), newFixtures.workspace({
                 sandboxInfo : {
                     databaseId: 4,
                     databaseName: "db",
@@ -157,7 +157,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             this.model.workspace().fetch();
 
             this.server.completeFetchFor(this.model);
-            this.server.completeFetchFor(this.model.workspace(), fixtures.workspace({ active: false }));
+            this.server.completeFetchFor(this.model.workspace(), newFixtures.workspace({ active: false, state: "0" }));
 
             this.view.render();
         });
