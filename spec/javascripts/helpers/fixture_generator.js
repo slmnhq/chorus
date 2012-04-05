@@ -8,7 +8,7 @@
         var modelClass = chorus.models[definition.model];
         window.newFixtures[name] = function(overrides) {
             var rawData = getFixture(name);
-            var attrs = safeExtend(rawData, overrides);
+            var attrs = safeExtend(rawData, overrides, name);
             addUniqueAttrs(attrs);
             return new modelClass(attrs);
         };
@@ -35,7 +35,7 @@
         });
     }
 
-    function safeExtend(target, source) {
+    function safeExtend(target, source, name) {
         var result = _.clone(target);
 
         _.each(source, function(value, key) {
@@ -44,12 +44,12 @@
                     result[key] = value;
                     return;
                 } else {
-                    throw "Object has no key " + key + "!";
+                    throw "The fixture '" + name + "' has no key '" + key + "'";
                 }
             }
 
             if (_.isObject(target[key])) {
-                result[key] = safeExtend(target[key], source[key]);
+                result[key] = safeExtend(target[key], source[key], name + "." + key);
             } else {
                 result[key] = value;
             }

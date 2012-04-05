@@ -113,10 +113,12 @@ describe("newFixtures", function() {
                 expect(result.baz).toBe("quux");
             });
 
-            it("does not allow keys that aren't present in the original object", function() {
-                expect(function() {
-                    newFixtures.safeExtend(target, { whippedCream: "lots" });
-                }).toThrow();
+            context("when the overrides contain a key that is not present in the original object", function() {
+                it("throws an exception containing the specified name", function() {
+                    expect(function() {
+                        newFixtures.safeExtend(target, { whippedCream: "lots" }, "user");
+                    }).toThrow("The fixture 'user' has no key 'whippedCream'");
+                });
             });
         });
 
@@ -144,10 +146,15 @@ describe("newFixtures", function() {
                 expect(result.nestedObject.id).toBe(5);
             });
 
+            context("when the overrides contain a key that is not present in the nested object", function() {
+                it("throws an exception containing the specified name", function() {
+                    expect(function() {
+                        newFixtures.safeExtend(target, { nestedObject: { hamburger: "double" }}, "user")
+                    }).toThrow("The fixture 'user.nestedObject' has no key 'hamburger'");
+                });
+            });
+
             it("does not allow keys that aren't present in the nested object", function() {
-                expect(function() {
-                    newFixtures.safeExtend(target, { nestedObject: { hamburger: "double" }})
-                }).toThrow();
             });
         });
 
