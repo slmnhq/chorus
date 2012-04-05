@@ -1,6 +1,11 @@
 window.fixtureDefinitions = {
     user: {
         model: "User",
-        ids: [ "id" ]
+        unique: [ "id" ]
+    },
+
+    workspace: {
+        model: "Workspace",
+        unique: [ "id", "sandboxId" ]
     }
 };

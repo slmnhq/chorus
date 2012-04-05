@@ -26,6 +26,46 @@ describe("newFixtures", function() {
         });
     });
 
+    describe("#addUniqueAttrs(attributes, names)", function() {
+        var attributes1, attributes2;
+
+        beforeEach(function() {
+            attributes1 = {
+                id: "101",
+                name: "foo",
+                workspace: {
+                    id: "102",
+                    name: "Bums",
+                    sandbox: {
+                        id: "103",
+                        name: "data-land"
+                    }
+                }
+            };
+
+            attributes2 = _.clone(attributes1);
+            attributes2.workspace = _.clone(attributes1.workspace);
+            attributes2.workspace.sandbox = _.clone(attributes1.workspace.sandbox);
+
+            newFixtures.addUniqueAttrs(attributes1, [ "id" ]);
+            newFixtures.addUniqueAttrs(attributes2, [ "id" ]);
+        });
+
+        it("replaces the values of matching properties with unique string ids", function() {
+            expect(attributes1.id).toBeA("string");
+
+            expect(attributes1.id).not.toEqual(attributes2.id);
+            expect(attributes1.workspace.id).not.toEqual(attributes2.workspace.id);
+            expect(attributes1.workspace.sandbox.id).not.toEqual(attributes2.workspace.sandbox.id);
+        });
+
+        it("leaves non-matching properties as they are", function() {
+            expect(attributes1.name).toBe("foo");
+            expect(attributes1.workspace.name).toBe("Bums");
+            expect(attributes1.workspace.sandbox.name).toBe("data-land");
+        });
+    });
+
     describe("#safeExtend", function() {
         var result, target;
 
@@ -55,14 +95,14 @@ describe("newFixtures", function() {
 
         context("when no overrides are specified", function() {
             it("returns the target", function() {
-                var result = window.newFixtures.safeExtend(target, undefined);
+                var result = newFixtures.safeExtend(target, undefined);
                 expect(result).toEqual(target);
             });
         });
 
         context("when a property is overriden", function() {
             beforeEach(function() {
-                result = window.newFixtures.safeExtend(target, { foo: "pizza" });
+                result = newFixtures.safeExtend(target, { foo: "pizza" });
             });
 
             it("uses the override", function() {
@@ -75,17 +115,24 @@ describe("newFixtures", function() {
 
             it("does not allow keys that aren't present in the original object", function() {
                 expect(function() {
-                    window.newFixtures.safeExtend(target, { whippedCream: "lots" });
+                    newFixtures.safeExtend(target, { whippedCream: "lots" });
                 }).toThrow();
             });
         });
 
         context("when overriding a key in a nested object", function() {
             beforeEach(function() {
-                result = window.newFixtures.safeExtend(target, {
+                result = newFixtures.safeExtend(target, {
                     nestedObject: {
                         name: "pizza"
                     }
+                });
+            });
+
+            it("does not mutate the original object", function() {
+                expect(target.nestedObject).toEqual({
+                    name: "joe",
+                    id: 5
                 });
             });
 
@@ -99,14 +146,14 @@ describe("newFixtures", function() {
 
             it("does not allow keys that aren't present in the nested object", function() {
                 expect(function() {
-                    window.newFixtures.safeExtend(target, { nestedObject: { hamburger: "double" }})
+                    newFixtures.safeExtend(target, { nestedObject: { hamburger: "double" }})
                 }).toThrow();
             });
         });
 
         context("when overriding a value in a nested array", function() {
             beforeEach(function() {
-                result = window.newFixtures.safeExtend(target, {
+                result = newFixtures.safeExtend(target, {
                     nestedStringArray: [
                         "Pivotal", "Labs", "Is", "Awesome"
                     ]
@@ -121,7 +168,7 @@ describe("newFixtures", function() {
         context("when overriding an object in a nested array", function() {
             context("when the length of the override array is less than or equal to the original arrays' length", function() {
                 beforeEach(function() {
-                    result = window.newFixtures.safeExtend(target, {
+                    result = newFixtures.safeExtend(target, {
                         nestedObjectArray: [
                             { name: "bazillionaire" }
                         ]
@@ -144,7 +191,7 @@ describe("newFixtures", function() {
 
             context("when the override array is longer than the original array", function() {
                 beforeEach(function() {
-                    result = window.newFixtures.safeExtend(target, {
+                    result = newFixtures.safeExtend(target, {
                         nestedObjectArray: [
                             { name: "bazillionaire" },
                             { name: "gajillionaire" },
