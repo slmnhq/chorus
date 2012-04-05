@@ -36,7 +36,7 @@ describe("newFixtures", function() {
         });
     });
 
-    describe("#addUniqueAttrs(attributes, nameStrings)", function() {
+    describe("#addUniqueDefaults(attributes, nameStrings)", function() {
         var attributes1, attributes2;
 
         context("when the object already contains the attributes specified as unique", function() {
@@ -54,7 +54,7 @@ describe("newFixtures", function() {
                     }
                 };
 
-                newFixtures.addUniqueAttrs(attributes1, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
+                newFixtures.addUniqueDefaults(attributes1, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
             });
 
             it("does not change the properties (even if they are null)", function() {
@@ -89,8 +89,8 @@ describe("newFixtures", function() {
                 attributes2.workspace = _.clone(attributes1.workspace);
                 attributes2.workspace.sandbox = _.clone(attributes1.workspace.sandbox);
 
-                newFixtures.addUniqueAttrs(attributes1, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
-                newFixtures.addUniqueAttrs(attributes2, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
+                newFixtures.addUniqueDefaults(attributes1, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
+                newFixtures.addUniqueDefaults(attributes2, [ "id", "workspace.workspaceId", "workspace.sandbox.sandboxId" ]);
             });
 
             it("gives the object unique values for those attributes", function() {
@@ -114,8 +114,8 @@ describe("newFixtures", function() {
             it("creates the nested object and the unique id inside of it", function() {
                 attributes1 = { name: "foo" };
                 attributes2 = { name: "foo" };
-                newFixtures.addUniqueAttrs(attributes1, [ "workspace.sandbox.id" ]);
-                newFixtures.addUniqueAttrs(attributes2, [ "workspace.sandbox.id" ]);
+                newFixtures.addUniqueDefaults(attributes1, [ "workspace.sandbox.id" ]);
+                newFixtures.addUniqueDefaults(attributes2, [ "workspace.sandbox.id" ]);
                 expect(attributes1.workspace.sandbox.id).toBeA("string")
                 expect(attributes2.workspace.sandbox.id).toBeA("string")
                 expect(attributes1.workspace.sandbox.id).not.toEqual(attributes2.workspace.sandbox.id);

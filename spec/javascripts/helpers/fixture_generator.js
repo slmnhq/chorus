@@ -2,14 +2,14 @@
     window.newFixtures = {};
     window.fixtureData = {};
     window.newFixtures.safeExtend = safeExtend;
-    window.newFixtures.addUniqueAttrs = addUniqueAttrs;
+    window.newFixtures.addUniqueDefaults = addUniqueDefaults;
 
     _.each(window.fixtureDefinitions, function(definition, name) {
         var modelClass = chorus.models[definition.model];
         window.newFixtures[name] = function(overrides) {
             overrides || (overrides = {});
             var rawData = getFixture(name);
-            addUniqueAttrs(overrides, definition.unique);
+            addUniqueDefaults(overrides, definition.unique);
             var attrs = safeExtend(rawData, overrides, name);
             return new modelClass(attrs);
         };
@@ -24,7 +24,7 @@
         return window.fixtureData[name];
     }
 
-    function addUniqueAttrs(attributes, keyStrings) {
+    function addUniqueDefaults(attributes, keyStrings) {
         _.each(keyStrings, function(keyString) {
             var keys = keyString.split(".");
             var lastKey = keys.pop();
