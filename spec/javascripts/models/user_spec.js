@@ -1,7 +1,6 @@
 describe("chorus.models.User", function() {
-    var models = chorus.models;
     beforeEach(function() {
-        this.model = new models.User();
+        this.model = new chorus.models.User();
     });
 
     it("has the correct showUrlTemplate", function() {
@@ -14,7 +13,7 @@ describe("chorus.models.User", function() {
 
     describe("#workspaces", function() {
         beforeEach(function() {
-            this.user = new models.User({userName: "dr_charlzz", id: "457"});
+            this.user = newFixtures.user({userName: "dr_charlzz", id: "457"});
             this.workspaces = this.user.workspaces();
         });
 
@@ -57,7 +56,7 @@ describe("chorus.models.User", function() {
 
     describe("#activeWorkspaces", function() {
         beforeEach(function() {
-            this.user = new models.User({userName: "dr_charlzz", id: "457"});
+            this.user = newFixtures.user({userName: "dr_charlzz", id: "457"});
             this.workspaces = this.user.activeWorkspaces();
         });
 
@@ -83,7 +82,7 @@ describe("chorus.models.User", function() {
 
     describe("#savePassword", function() {
         it("PUTs to the right URL", function() {
-            this.model = fixtures.user({id: 42})
+            this.model = newFixtures.user({id: 42})
             this.model.savePassword({
                 password: "w1zZz4rd",
                 passwordConfirmation: "w1zZz4rd"
@@ -126,11 +125,9 @@ describe("chorus.models.User", function() {
             expect(this.model.requirePattern).toHaveBeenCalledWith("emailAddress", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, undefined);
         });
 
-
         context("when the user is new", function() {
             beforeEach(function() {
-                this.model = new chorus.models.User();
-                this.model.set({
+                this.model = new chorus.models.User({
                     firstName: "bob",
                     lastName: "jenkins",
                     userName: "bobjenk",
@@ -155,8 +152,7 @@ describe("chorus.models.User", function() {
 
         context("when the user is in LDAP", function() {
             beforeEach(function() {
-                this.model = new chorus.models.User();
-                this.model.set({
+                this.model = newFixtures.user({
                     firstName: "bob",
                     lastName: "jenkins",
                     userName: "bobjenk",
@@ -183,17 +179,17 @@ describe("chorus.models.User", function() {
 
         context("when the user is already saved", function() {
             beforeEach(function() {
-                this.model = new chorus.models.User();
-                this.model.set({
-                    id: 5,
+                this.model = newFixtures.user({
+                    id: "5",
                     firstName: "bob",
                     lastName: "jenkins",
                     userName: "bobjenk",
-                    password: "original_password",
-                    passwordConfirmation: "original_password",
                     emailAddress: "bobj@raisetheroof.us"
                 });
-                this.model.save();
+                this.model.save({
+                    password: "original_password",
+                    passwordConfirmation: "original_password"
+                });
                 this.model.change();
             });
 
@@ -217,19 +213,19 @@ describe("chorus.models.User", function() {
         });
 
         it("uses the right URL", function() {
-            var user = new models.User({userName: 'foo', id: "bar"});
+            var user = newFixtures.user({userName: 'foo', id: "bar"});
             expect(user.imageUrl()).toBe("/edc/userimage/bar?size=original&iebuster=12345");
         });
 
         it("accepts the size argument", function() {
-            var user = new models.User({userName: 'foo', id: "bar"});
+            var user = newFixtures.user({userName: 'foo', id: "bar"});
             expect(user.imageUrl({size: "icon"})).toBe("/edc/userimage/bar?size=icon&iebuster=12345");
         });
     });
 
     describe("#picklistImageUrl", function() {
         it("uses the right URL", function() {
-            var user = new models.User({userName: 'foo', id: "bar"});
+            var user = newFixtures.user({userName: 'foo', id: "bar"});
             expect(user.picklistImageUrl()).toBe(user.imageUrl({ size: "original" }));
         });
     })
@@ -245,11 +241,11 @@ describe("chorus.models.User", function() {
 
         context("when firstName and lastName are blank, but fullName exists", function() {
             it("uses fullName", function() {
-                var user = fixtures.user({
+                var user = newFixtures.user({
                     firstName: '',
-                    lastName: '',
-                    fullName: 'SomeGuy'
+                    lastName: ''
                 });
+                user.set({fullName: "SomeGuy"});
                 expect(user.displayName()).toBe('SomeGuy');
             });
         })
