@@ -58,12 +58,12 @@
         });
     }
 
-    function safeExtend(target, source, name) {
-        var result = _.clone(target);
+    function safeExtend(original, overrides, name) {
+        var result = _.isArray(original) ? [] : _.clone(original);
 
-        _.each(source, function(value, key) {
-            if (target[key] === undefined) {
-                if (_.isArray(target)) {
+        _.each(overrides, function(value, key) {
+            if (original[key] === undefined) {
+                if (_.isArray(original)) {
                     result[key] = value;
                     return;
                 } else {
@@ -71,8 +71,8 @@
                 }
             }
 
-            if (_.isObject(target[key])) {
-                result[key] = safeExtend(target[key], source[key], name + "." + key);
+            if (_.isObject(original[key])) {
+                result[key] = safeExtend(original[key], overrides[key], name + "." + key);
             } else {
                 result[key] = value;
             }

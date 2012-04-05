@@ -214,10 +214,10 @@ describe("newFixtures", function() {
     });
 
     describe("#safeExtend", function() {
-        var result, target;
+        var result, original;
 
         beforeEach(function() {
-            target = {
+            original = {
                 foo: "bar",
                 baz: "quux",
                 nestedObjectArray: [
@@ -241,15 +241,15 @@ describe("newFixtures", function() {
         });
 
         context("when no overrides are specified", function() {
-            it("returns the target", function() {
-                var result = newFixtures.safeExtend(target, undefined);
-                expect(result).toEqual(target);
+            it("returns the original", function() {
+                var result = newFixtures.safeExtend(original, undefined);
+                expect(result).toEqual(original);
             });
         });
 
         context("when a property is overriden", function() {
             beforeEach(function() {
-                result = newFixtures.safeExtend(target, { foo: "pizza" });
+                result = newFixtures.safeExtend(original, { foo: "pizza" });
             });
 
             it("uses the override", function() {
@@ -263,7 +263,7 @@ describe("newFixtures", function() {
             context("when the overrides contain a key that is not present in the original object", function() {
                 it("throws an exception containing the specified name", function() {
                     expect(function() {
-                        newFixtures.safeExtend(target, { whippedCream: "lots" }, "user");
+                        newFixtures.safeExtend(original, { whippedCream: "lots" }, "user");
                     }).toThrow("The fixture 'user' has no key 'whippedCream'");
                 });
             });
@@ -271,7 +271,7 @@ describe("newFixtures", function() {
 
         context("when overriding a key in a nested object", function() {
             beforeEach(function() {
-                result = newFixtures.safeExtend(target, {
+                result = newFixtures.safeExtend(original, {
                     nestedObject: {
                         name: "pizza"
                     }
@@ -279,7 +279,7 @@ describe("newFixtures", function() {
             });
 
             it("does not mutate the original object", function() {
-                expect(target.nestedObject).toEqual({
+                expect(original.nestedObject).toEqual({
                     name: "joe",
                     id: 5
                 });
@@ -296,7 +296,7 @@ describe("newFixtures", function() {
             context("when the overrides contain a key that is not present in the nested object", function() {
                 it("throws an exception containing the specified name", function() {
                     expect(function() {
-                        newFixtures.safeExtend(target, { nestedObject: { hamburger: "double" }}, "user")
+                        newFixtures.safeExtend(original, { nestedObject: { hamburger: "double" }}, "user")
                     }).toThrow("The fixture 'user.nestedObject' has no key 'hamburger'");
                 });
             });
@@ -307,7 +307,7 @@ describe("newFixtures", function() {
 
         context("when overriding a value in a nested array", function() {
             beforeEach(function() {
-                result = newFixtures.safeExtend(target, {
+                result = newFixtures.safeExtend(original, {
                     nestedStringArray: [
                         "Pivotal", "Labs", "Is", "Awesome"
                     ]
@@ -320,9 +320,9 @@ describe("newFixtures", function() {
         });
 
         context("when overriding an object in a nested array", function() {
-            context("when the length of the override array is less than or equal to the original arrays' length", function() {
+            context("when the override array is shorter than the original array", function() {
                 beforeEach(function() {
-                    result = newFixtures.safeExtend(target, {
+                    result = newFixtures.safeExtend(original, {
                         nestedObjectArray: [
                             { name: "bazillionaire" }
                         ]
@@ -337,15 +337,14 @@ describe("newFixtures", function() {
                     expect(result.nestedObjectArray[0].id).toBe(3);
                 });
 
-                it("keeps any elements in the original array which were not overridden", function() {
-                    expect(result.nestedObjectArray[1].name).toBe('bleicke');
-                    expect(result.nestedObjectArray[1].id).toBe(4);
+                it("returns an array the same length as the override array", function() {
+                    expect(result.nestedObjectArray.length).toBe(1);
                 });
             });
 
             context("when the override array is longer than the original array", function() {
                 beforeEach(function() {
-                    result = newFixtures.safeExtend(target, {
+                    result = newFixtures.safeExtend(original, {
                         nestedObjectArray: [
                             { name: "bazillionaire" },
                             { name: "gajillionaire" },
