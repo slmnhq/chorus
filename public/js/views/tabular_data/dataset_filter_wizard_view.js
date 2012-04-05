@@ -2,66 +2,62 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
     className: "dataset_filter_wizard",
     persistent: true,
     events: {
-        "click .add_filter": "addFilterAndRender"
+        "click .add_filter": "addFilter"
     },
 
     setup: function() {
         this.options = this.options || {}
-        this.filters = new chorus.collections.TabularDataFilterSet();
-        this.bindings.add(this.collection, 'remove', this.removeInvalidFilters);
+        this.columnSet = this.options.columnSet;
+        this.collection = this.collection || new chorus.collections.TabularDataFilterSet();
+        this.bindings.add(this.columnSet, 'remove', this.removeInvalidFilters);
     },
 
     postRender: function() {
-        if (!this.filters.length) {
+        if (!this.collection.length) {
             this.addFilter();
+        } else {
+            this.collection.each(function(filter) {
+                this.renderFilterView(filter);
+            }, this);
         }
-
-        this.filters.each(function(filter) {
-            this.renderFilterView(filter);
-        }, this);
 
         this.tagLastLi();
     },
 
     resetFilters: function() {
-        this.filters.reset();
+        this.collection.reset();
         this.render();
     },
 
     renderFilterView: function(filter) {
         var $ul = this.$(".filters");
-        var filterView = new chorus.views.DatasetFilter({model: filter, collection: this.collection, showAliasedName: this.options.showAliasedName});
+        var filterView = new chorus.views.DatasetFilter({model: filter, collection: this.columnSet, showAliasedName: this.options.showAliasedName});
         $ul.append(filterView.render().el);
         this.bindings.add(filterView, "deleted", function() {this.removeFilterView(filterView)}, this);
     },
 
-    addFilter: function() {
-        var filter = new chorus.models.TabularDataFilter()
-        this.filters.add(filter);
-    },
-
-    addFilterAndRender: function(e) {
+    addFilter: function(e) {
         e && e.preventDefault();
-        this.addFilter();
-        this.renderFilterView(this.filters.last());
+        this.collection.add(new chorus.models.TabularDataFilter());
+        this.renderFilterView(this.collection.last());
         this.tagLastLi();
     },
 
     removeFilterView: function(filterView) {
-        this.filters.remove(filterView.model);
+        this.collection.remove(filterView.model);
         $(filterView.el).remove();
         this.tagLastLi();
     },
 
     removeInvalidFilters: function() {
-        var badFilters = 0;
-        this.filters.each(function(filter) {
-            if(!this.collection.include(filter.get("column"))) {
-                this.filters.remove(filter);
-                badFilters++;
-            }
+        var badFilters = this.collection.filter(function(filter) {
+            return !this.columnSet.include(filter.get("column"));
         }, this);
-        if(badFilters) {this.render();}
+
+        if(badFilters) {
+            this.collection.remove(badFilters);
+            this.render();
+        }
     },
 
     tagLastLi: function() {
@@ -71,12 +67,12 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
     },
 
     filterStrings: function() {
-        var wheres = this.filters.map(function(filter) {
-            return filter.sqlString()
+        var wheres = this.collection.map(function(filter) {
+            return filter.sqlString();
         })
 
-        wheres = _.without(wheres, "")
-        return wheres
+        wheres = _.without(wheres, "");
+        return wheres;
     },
 
     whereClause: function() {

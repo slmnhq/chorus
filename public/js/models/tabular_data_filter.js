@@ -7,6 +7,14 @@ chorus.models.TabularDataFilter = chorus.models.Base.extend({
         }
     },
 
+    setComparator: function(comparator) {
+        this.set({comparator: comparator}, {silent: true});
+    },
+
+    setInput: function(inputHash) {
+        this.set({input: inputHash}, {silent: true});
+    },
+
     getFilterMap: function() {
         switch (this.get("column").get("typeCategory")) {
             case "STRING":

@@ -13,7 +13,7 @@ describe("chorus.views.TabularDataVisualizationSidebar", function() {
         ], {tabularData: this.dataset});
 
         this.view = new chorus.views.TabularDataVisualizationFrequencySidebar({collection: this.columns});
-        this.view.filters = new chorus.views.DatasetFilterWizard({collection: this.columns});
+        this.view.filters = new chorus.views.DatasetFilterWizard({columnSet: this.columns});
     });
 
     it("should not modify the collection order", function() {

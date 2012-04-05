@@ -30,7 +30,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
 
         this.tabularData = this.options.tabularData;
         this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
-        this.filterWizardView = new chorus.views.DatasetFilterWizard({collection: this.collection});
+        this.filterWizardView = new chorus.views.DatasetFilterWizard({columnSet: this.collection});
 
         this.statistics = this.tabularData.statistics();
         this.statistics.fetchIfNotLoaded();

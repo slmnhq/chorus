@@ -1,8 +1,8 @@
 describe("chorus.views.DatasetFilterWizard", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetSandboxTable();
-        this.collection = this.dataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
-        this.view = new chorus.views.DatasetFilterWizard({collection: this.collection});
+        this.columnSet = this.dataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
+        this.view = new chorus.views.DatasetFilterWizard({columnSet: this.columnSet});
     });
 
     describe("#render", function() {
@@ -24,7 +24,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
 
         describe("#whereClause", function() {
             beforeEach(function() {
-                spyOn(this.view.filters.at(0), "sqlString").andReturn("foo = 1");
+                spyOn(this.view.collection.at(0), "sqlString").andReturn("foo = 1");
             });
 
             it("joins the individual filters' conditions", function() {
@@ -33,7 +33,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
 
             describe("when all filterViews return an empty string", function() {
                 beforeEach(function() {
-                    this.view.filters.at(0).sqlString.andReturn("");
+                    this.view.collection.at(0).sqlString.andReturn("");
                 });
 
                 it("returns an empty string (not 'WHERE ')", function() {
@@ -46,9 +46,9 @@ describe("chorus.views.DatasetFilterWizard", function() {
             beforeEach(function() {
                 this.view.addFilter();
                 this.view.addFilter();
-                spyOn(this.view.filters.at(0), "sqlString").andReturn("foo = 2");
-                spyOn(this.view.filters.at(1), "sqlString").andReturn("");
-                spyOn(this.view.filters.at(2), "sqlString").andReturn("foo = 4");
+                spyOn(this.view.collection.at(0), "sqlString").andReturn("foo = 2");
+                spyOn(this.view.collection.at(1), "sqlString").andReturn("");
+                spyOn(this.view.collection.at(2), "sqlString").andReturn("foo = 4");
             });
 
             it("eliminates empty filters", function() {
@@ -84,8 +84,8 @@ describe("chorus.views.DatasetFilterWizard", function() {
 
             describe("#whereClause", function() {
                 beforeEach(function() {
-                    spyOn(this.view.filters.at(0), "sqlString").andReturn("foo = 1");
-                    spyOn(this.view.filters.at(1), "sqlString").andReturn("bar = 2");
+                    spyOn(this.view.collection.at(0), "sqlString").andReturn("foo = 1");
+                    spyOn(this.view.collection.at(1), "sqlString").andReturn("bar = 2");
                 });
 
                 it("joins the individual filters' conditions", function() {
@@ -117,13 +117,13 @@ describe("chorus.views.DatasetFilterWizard", function() {
 
         describe("when a filter is deleted", function() {
             beforeEach(function() {
-                this.view.addFilterAndRender();
-                this.view.addFilterAndRender();
+                this.view.addFilter();
+                this.view.addFilter();
                 this.view.$(".remove").eq(0).click();
             });
 
             it("removes the view for filter", function() {
-                expect(this.view.filters.length).toBe(2);
+                expect(this.view.collection.length).toBe(2);
                 expect(this.view.$(".dataset_filter").length).toBe(2);
             });
         });
@@ -132,12 +132,11 @@ describe("chorus.views.DatasetFilterWizard", function() {
     describe("#removeInvalidFilters", function() {
         beforeEach(function() {
             this.view.render();
-            this.selectedColumn = this.collection.at(1);
-            this.view.filters.at(0).set({column : this.selectedColumn});
-            this.view.addFilterAndRender();
-            this.selectedColumn = this.collection.at(0);
-            this.view.filters.at(1).set({column : this.selectedColumn});
-            this.collection.remove(this.selectedColumn);
+            this.view.collection.at(0).set({column : this.columnSet.at(1)});
+            this.view.addFilter();
+            this.selectedColumn = this.columnSet.at(0);
+            this.view.collection.at(1).set({column : this.selectedColumn});
+            this.columnSet.remove(this.selectedColumn);
         });
 
         it("removes the invalid filter", function() {

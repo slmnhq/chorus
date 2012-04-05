@@ -79,7 +79,7 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
 
     comparatorSelected: function() {
         var comparatorName = this.$("select.comparator option:selected").val();
-        this.model.set({comparator: comparatorName}, {silent: true});
+        this.model.setComparator(comparatorName);
         if (!this.map) { return; }
 
         var comparator = this.map.comparators[comparatorName];
@@ -124,31 +124,23 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
 
     fillInput: function() {
         var comparator = this.map.comparators[this.model.get("comparator")];
-        var inputs = this.filtersForComparator(comparator);
-        var input = this.model.get("input")
-        if (!input || _.isEmpty(inputs)) {return;}
+        var $filters = this.filtersForComparator(comparator);
+        var input = this.model.get("input");
+        if (!input || _.isEmpty($filters)) {return;}
 
         if (this.model.get("column").get("typeCategory") == "DATE") {
-            _.each(['day', 'month', 'year'], function(word) {
-                var dateInput = _.find(inputs, function(i) {
-                    return $(i).find('input[name=' + word + ']')
-                });
-                $(dateInput).find('input[name=' + word + ']').val(input[word]);
-            })
+            $filters.find("input[name='day']").val(input.day);
+            $filters.find("input[name='month']").val(input.month);
+            $filters.find("input[name='year']").val(input.year);
         } else {
-            inputs.eq(0).find("input").val(input.value);
+            $filters.eq(0).find("input").val(input.value);
         }
     },
 
     updateInput: function() {
-        this.model.set({input: this.fieldValues()}, {silent: true});
+        this.model.setInput(this.fieldValues());
         this.validateInput();
     },
-
-    valid: function() {
-        return this.columnFilter.valid();
-    },
-
 
     filtersForComparator: function(comparator) {
         if (comparator.usesInput) {

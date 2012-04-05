@@ -13,7 +13,7 @@ describe("chorus.dialogs.Visualization", function() {
 
         this.chartOptions = {type: "boxplot", name: "Foo"};
 
-        this.filters = new chorus.views.DatasetFilterWizard({collection: this.columns});
+        this.filters = new chorus.views.DatasetFilterWizard({columnSet: this.columns});
         spyOn(this.filters, "filterStrings").andReturn(["A", "B"]);
 
         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
