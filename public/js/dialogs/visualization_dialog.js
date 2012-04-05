@@ -34,6 +34,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             orientation: "right",
             contentEvents: {
                 "a.save_as_workfile": _.bind(this.saveAsWorkfile, this),
+                "a.save_as_note": _.bind(this.saveAsNoteAttachment, this),
                 "a.save_to_desktop": _.bind(this.saveToDesktop, this)
             }
         });
@@ -64,6 +65,10 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         return !_.isEmpty(this.task.get("rows"));
     },
 
+    makeFilename: function() {
+        return this.sanitizeFilename(this.options.chartOptions.name + "-" + this.options.chartOptions.type) + ".png";
+    },
+
     makeSvgData: function() {
         var svg = this.$(".chart_area.visualization svg")[0];
         if (BrowserDetect.browser != "Explorer") {
@@ -89,7 +94,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             workspaceId: workspaceId,
             source: "visualization",
             svgData: this.makeSvgData(),
-            fileName: this.sanitizeFilename(this.options.chartOptions.name + "-" + this.options.chartOptions.type) + ".png"
+            fileName: this.makeFilename()
         });
         this.workfile.save();
         this.workfile.bindOnce('saved', this.onWorkfileSaved, this);
@@ -106,7 +111,9 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         return {
             filterCount: filterCount,
             chartType:t("dataset.visualization.names." + this.type),
-            hasChart: !!this.chart
+            workspaceId: this.task.get("workspaceId"),
+            hasChart: !!this.chart,
+            hasWorkspace: !!this.task.get("workspaceId")
         }
     },
 
@@ -149,6 +156,21 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         form.submit();
     },
 
+    saveAsNoteAttachment: function(event) {
+        event.preventDefault();
+
+        var launchElement = $(event.target);
+        this.notesNewDialog = new chorus.dialogs.VisualizationNotesNew({
+            pageModel: this.model,
+            launchElement: launchElement,
+            attachVisualization: {
+                fileName: this.makeFilename(),
+                svgData: this.makeSvgData()
+            }
+        })
+        this.launchSubModal(this.notesNewDialog);
+    },
+
     saveAsWorkfile: function(e) {
         e.preventDefault();
 
@@ -156,7 +178,6 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             this.workspacePicker = new chorus.dialogs.VisualizationWorkspacePicker();
             this.launchSubModal(this.workspacePicker);
             this.workspacePicker.bindOnce("workspace:selected", this.saveWorkfile, this);
-
         } else {
             this.saveWorkfile();
         }

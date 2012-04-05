@@ -6,7 +6,7 @@
     <div class="chart_icon heatmap"/>
     <div class="chart_icon timeseries"/>
     <div class="chart_icon boxplot"/>
-    
+
     <div class="text label">{{chartType}}</div>
 
     <div class="right">
@@ -44,6 +44,9 @@
         <ul class="save_menu">
             <li>
                 <a href="#" class="save_as_workfile">{{t "visualization.save_as_workfile"}}</a>
+            </li>
+            <li>
+                <a href="#" class="save_as_note" data-entity-type="databaseObject" data-allow-workspace-attachments='{{hasWorkspace}}' data-entity-id="{{id}}" data-workspace-id='{{workspaceId}}'>{{t "visualization.save_as_note"}}</a>
             </li>
             <li>
                 <a href="#" class="save_to_desktop">{{t "visualization.save_to_desktop"}}</a>

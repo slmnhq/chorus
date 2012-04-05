@@ -18,6 +18,8 @@ describe("chorus.dialogs.Visualization", function() {
 
         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters});
         this.dialog.task = fixtures.boxplotTaskWithResult();
+
+        spyOn(this.dialog, "launchSubModal").andCallThrough();
     });
 
     describe("#initialization", function() {
@@ -190,6 +192,10 @@ describe("chorus.dialogs.Visualization", function() {
 
                 it("should have a 'Save Chart Image as Workfile' link", function() {
                     expect(this.qtip.find("a.save_as_workfile")).toContainTranslation("visualization.save_as_workfile");
+                });
+
+                it("should have a 'Save Chart Image as attachment' link", function() {
+                    expect(this.qtip.find("a.save_as_note")).toContainTranslation("visualization.save_as_note");
                 });
 
                 it("should have a 'Save Chart Image to Desktop' link", function() {
@@ -394,6 +400,49 @@ describe("chorus.dialogs.Visualization", function() {
                     });
                 });
             });
+
+            describe("saving as attachment to a note on this dataset", function() {
+                beforeEach(function() {
+                    this.dialog.$("button.save").prop("disabled", false);
+                    this.dialog.$("button.save").click();
+                    this.qtip.find("a.save_as_note").click();
+                });
+
+                it("opens the Add Note dialog with correct parameters", function() {
+                    expect(this.dialog.launchSubModal).toHaveBeenCalledWith(this.dialog.notesNewDialog);
+
+                    expect(this.dialog.notesNewDialog).toBeA(chorus.dialogs.VisualizationNotesNew);
+                    expect(this.dialog.notesNewDialog.pageModel).toBe(this.dialog.model);
+                    expect(this.dialog.notesNewDialog.options.launchElement).toBe(this.qtip.find("a.save_as_note"));
+                    expect(this.dialog.notesNewDialog.options.launchElement.data("allow-workspace-attachments")).toBeTruthy();
+                    expect(this.dialog.notesNewDialog.options.attachVisualization.fileName).toBe(this.dialog.makeFilename());
+                    expect(this.dialog.notesNewDialog.options.attachVisualization.svgData).toBe(this.dialog.makeSvgData())
+                });
+
+                context("when the dialog is launched outside workspace context", function() {
+                    beforeEach(function() {
+                        this.dialog.task.unset("workspaceId");
+                        this.dialog.render();
+                        this.dialog.$("button.save").prop("disabled", false);
+                        this.dialog.$("button.save").click();
+                        this.qtip.find("a.save_as_note").click();
+                    });
+
+                    it("should not allow workspace attachments", function() {
+                        expect(this.dialog.notesNewDialog.options.launchElement.data("allow-workspace-attachments")).toBeFalsy();
+                    });
+                });
+            });
+        });
+    });
+
+    describe("#makeFileName", function() {
+        beforeEach(function() {
+            this.dialog.options.chartOptions = { name: "%Foo", type: "frequency"};
+        });
+
+        it("returns a fileName", function() {
+            expect(this.dialog.makeFilename()).toBe("Foo-frequency.png");
         });
     });
 

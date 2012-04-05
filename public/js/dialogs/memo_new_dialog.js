@@ -174,7 +174,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     },
 
     showOptions: function(e) {
-        e.preventDefault();
+        e && e.preventDefault();
         this.$(".options_text").addClass("hidden")
         this.$(".options_area").removeClass("hidden")
     },
