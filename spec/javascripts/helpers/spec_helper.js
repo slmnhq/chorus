@@ -1,6 +1,7 @@
 (function() {
     var loadTemplatesOnce = _.once(function() {
         var allTemplatesLoaded = false;
+        var allFixturesLoaded = false;
 
         // Code that only needs to be run once before all the tests run
         _.debounce = function(func) { return func; }
@@ -15,15 +16,35 @@
         });
 
         runs(loadAllTemplates);
+        runs(loadAllFixtures);
         waitsFor(function() {
-            return allTemplatesLoaded;
-        }, "all templates to be loaded", 5000);
+            return allTemplatesLoaded && allFixturesLoaded;
+        }, "all templates and fixtures to be loaded", 5000);
+
+        function loadAllFixtures() {
+            var fixtureContainer = $("<div id='fixtures'/>");
+            $("body").append(fixtureContainer);
+            return $.ajax({
+                async: true,
+                cache: false,
+                dataType: 'html',
+                url: '/__fixtures',
+                success: function(data) {
+                    fixtureContainer.append(data);
+                    allFixturesLoaded = true;
+                },
+                error: function(data) {
+                    alert("Sorry but I couldn't load the fixtures! Things will go REALLY poorly from here...");
+                    allFixturesLoaded = true;
+                }
+            });
+        }
 
         function loadAllTemplates() {
             var templateContainer = $("<div id='templates'/>");
             $("body").append(templateContainer);
             return $.ajax({
-                async: false,
+                async: true,
                 cache: false,
                 dataType: 'html',
                 url: '/__templates',

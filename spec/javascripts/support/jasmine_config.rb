@@ -68,6 +68,24 @@ class TemplateMiddleware
   end
 end
 
+class FixtureMiddleware
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    response_lines = []
+    Dir.glob("spec/javascripts/fixtures/**/*.json") do |file|
+      fixture_name = File.basename(file, ".json")
+      this_response = [%{<script type="application/json" data-fixture-path="#{fixture_name}">}]
+      this_response << IO.read(file)
+      this_response << %{</script>}
+      response_lines << this_response.join()
+    end
+    [200, {"Content-Type" => "text/html"}, response_lines]
+  end
+end
+
 module Jasmine
   def self.app(config)
     puts("Constructing custom Jasmine app from jasmine_config.rb")
@@ -89,6 +107,10 @@ module Jasmine
 
       map("/images") do
         run DummyMiddleware.new(self)
+      end
+
+      map("/__fixtures") do
+        run FixtureMiddleware.new(self)
       end
 
       map("/__templates") do
