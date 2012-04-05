@@ -5,15 +5,32 @@
     window.newFixtures.addUniqueDefaults = addUniqueDefaults;
 
     _.each(window.fixtureDefinitions, function(definition, name) {
-        var modelClass = chorus.models[definition.model];
+        var klass = getClass(definition);
+
         window.newFixtures[name] = function(overrides) {
-            overrides || (overrides = {});
             var rawData = getFixture(name);
+            overrides || (overrides = defaultOverridesFor(rawData));
             addUniqueDefaults(overrides, definition.unique);
             var attrs = safeExtend(rawData, overrides, name);
-            return new modelClass(attrs);
+            return new klass(attrs);
         };
     });
+
+    function getClass(fixtureDefinition) {
+        if (fixtureDefinition.model) {
+            return chorus.models[fixtureDefinition.model];
+        } else {
+            return chorus.collections[fixtureDefinition.collection];
+        }
+    }
+
+    function defaultOverridesFor(rawData) {
+        if (_.isArray(rawData)) {
+            return _.map(rawData, function() { return {}; });
+        } else {
+            return {};
+        }
+    }
 
     function getFixture(name) {
         if (!window.fixtureData[name]) {
@@ -24,16 +41,20 @@
         return window.fixtureData[name];
     }
 
-    function addUniqueDefaults(attributes, keyStrings) {
+    function addUniqueDefaults(attributeObjects, keyStrings) {
+        if (!_.isArray(attributeObjects)) attributeObjects = [attributeObjects];
         _.each(keyStrings, function(keyString) {
             var keys = keyString.split(".");
             var lastKey = keys.pop();
-            var nested = attributes;
-            _.each(keys, function(key) {
-                nested[key] || (nested[key] = {});
-                nested = nested[key];
+
+            _.each(attributeObjects, function(attributeObject) {
+                var nested = attributeObject;
+                _.each(keys, function(key) {
+                    nested[key] || (nested[key] = {});
+                    nested = nested[key];
+                });
+                if (nested[lastKey] === undefined) nested[lastKey] = _.uniqueId() + "";
             });
-            if (nested[lastKey] === undefined) nested[lastKey] = _.uniqueId() + "";
         });
     }
 

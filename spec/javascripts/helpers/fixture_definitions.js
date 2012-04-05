@@ -7,5 +7,10 @@ window.fixtureDefinitions = {
     workspace: {
         model: "Workspace",
         unique: [ "id", "sandboxInfo.sandboxId" ]
+    },
+
+    userSet: {
+        collection: "UserSet",
+        unique: [ "id" ]
     }
 };

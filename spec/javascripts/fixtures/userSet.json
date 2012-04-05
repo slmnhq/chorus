@@ -1,0 +1,50 @@
+[
+   {
+      "id":"10010",
+      "userName":"u1",
+      "firstName":"u1",
+      "lastName":"u1",
+      "admin":false,
+      "notes":null,
+      "lastLogin":"2012-04-03 11:56:26",
+      "isDeleted":false,
+      "title":null,
+      "createdStamp":"2012-04-03 11:55:58.775"
+   },
+   {
+      "id":"10001",
+      "userName":"nonadmin",
+      "firstName":"Non",
+      "lastName":"admin",
+      "admin":false,
+      "notes":null,
+      "lastLogin":"2012-04-02 16:59:12",
+      "isDeleted":false,
+      "title":null,
+      "createdStamp":"2012-04-02 16:47:15.046"
+   },
+   {
+      "id":"10000",
+      "userName":"partyman1333403592",
+      "firstName":"Joe",
+      "lastName":"Blow",
+      "admin":false,
+      "notes":null,
+      "lastLogin":null,
+      "isDeleted":false,
+      "title":null,
+      "createdStamp":"2012-04-02 14:53:12.652"
+   },
+   {
+      "id":"InitialUser",
+      "userName":"edcadmin",
+      "firstName":"EDC",
+      "lastName":"Admin",
+      "admin":true,
+      "notes":null,
+      "lastLogin":"2012-04-05 14:04:34",
+      "isDeleted":false,
+      "title":null,
+      "createdStamp":"2012-03-29 16:00:32.173"
+   }
+]
