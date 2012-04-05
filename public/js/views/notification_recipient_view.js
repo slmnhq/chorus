@@ -2,15 +2,18 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
     constructorName: "NotificationRecipientView",
     className: "notification_recipient",
     useLoadingSection: true,
+
     events: {
-        "click a.add_user" : "onAddUserClicked",
-        "click .remove" : "onRemoveClicked"
+        "click a.add"    : "onAddUserClicked",
+        "click a.remove" : "onRemoveUserClicked"
     },
 
     makeModel: function() {
         this.collection = new chorus.collections.UserSet();
         this.collection.sortAsc("firstName");
         this.collection.fetchAll();
+
+        this.selectedUsers = new chorus.collections.UserSet();
     },
 
     preRender: function() {
@@ -18,44 +21,65 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        chorus.styleSelect(this.$("select"));
+        this.updateAvailableUserList();
     },
 
     onAddUserClicked: function(e) {
         e && e.preventDefault();
 
-        var $select = this.$("select");
-        var id = $select.val();
-        if (id && this.$("li[data-id='" + id + "']").length == 0) {
+        var id = this.$("select").val();
+        if (id) {
+            var user = this.collection.get(id);
 
-            var name = this.$("select option:selected").text();
-            var $span = this.$("<span class='name'></span>").text(name);
+            this.selectedUsers.add(user);
+            this.updateSelectedUserList();
+            this.collection.remove(user);
+            this.updateAvailableUserList();
+        }
+    },
+
+    onRemoveUserClicked : function(e) {
+        e && e.preventDefault();
+
+        var $li = $(e.target).parent();
+        var user = this.selectedUsers.get($li.data("id"));
+
+        this.collection.add(user);
+        this.updateAvailableUserList();
+        this.selectedUsers.remove(user);
+        this.updateSelectedUserList();
+    },
+
+    updateAvailableUserList: function() {
+        this.$("select").empty();
+        this.$("select").append($("<option></option>"));
+
+        _.each(this.collection.models, function(user) {
+            var $option = this.$("<option class='name'></span>").text(user.displayName());
+            $option.attr("value", user.get("id").toString());
+            this.$("select").append($option);
+        }, this);
+
+        chorus.styleSelect(this.$("select"));
+    },
+
+    updateSelectedUserList: function() {
+        this.$(".picked_users").empty();
+
+        _.each(this.selectedUsers.models, function(user) {
+            var id = user.get("id");
+            var $span = this.$("<span class='name'></span>").text(user.displayName());
             var $remove = $('<a href="#" class="remove"/>').text(t("notification_recipient.remove"));
             var $li = this.$("<li></li>").append($span).append($remove).attr("data-id", id.toString());
 
             this.$(".picked_users").append($li);
-
-            $select.val("");
-            chorus.styleSelect($select);
-        }
-    },
-
-    onRemoveClicked : function(e) {
-        e && e.preventDefault();
-        $(e.target).parent().remove();
+        }, this);
     },
 
     getPickedUsers : function() {
-        var ids = _.map(this.$(".picked_users li"), function(li){
-            return $(li).attr("data-id");
+        return _.map(this.selectedUsers.models, function(user) {
+            return user.get("id");
         });
-
-        var $selected = this.$("option:selected");
-        if ($selected.val() && $selected.length) {
-            ids.push($selected.val());
-        }
-
-        return _.uniq(ids);
     }
 });
 

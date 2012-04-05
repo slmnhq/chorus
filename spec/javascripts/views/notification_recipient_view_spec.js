@@ -3,9 +3,11 @@ describe("chorus.views.NotificationRecipient", function() {
         this.user1 = newFixtures.user();
         this.user2 = newFixtures.user();
         this.loggedInUser = newFixtures.user();
-        setLoggedInUser({ id: this.loggedInUser.get("id") })
+        setLoggedInUser({ id: this.loggedInUser.get("id") });
+        
         this.users = fixtures.userSet([this.user1, this.user2, this.loggedInUser]);
         this.users.sortAsc("firstName");
+
         this.view = new chorus.views.NotificationRecipient();
     });
 
@@ -33,17 +35,17 @@ describe("chorus.views.NotificationRecipient", function() {
             });
 
             it("shows the add another person link", function() {
-                expect(this.view.$(".add_user")).not.toHaveClass("hidden");
+                expect(this.view.$("a.add")).not.toHaveClass("hidden");
             });
 
             it("should display a dropdown containing all elligible recipients", function() {
                 expect(this.view.$("select")).not.toHaveClass("hidden");
                 expect(this.view.$("select option").length).toBe(3);
 
-                expect(this.view.$("select option:eq(1)").text()).toContain(this.user1.displayName());
+                expect(this.view.$("select option:eq(1)")).toContainText(this.user1.displayName());
                 expect(this.view.$("select option:eq(1)").val()).toContain(this.user1.get("id"));
 
-                expect(this.view.$("select option:eq(2)").text()).toContain(this.user2.displayName());
+                expect(this.view.$("select option:eq(2)")).toContainText(this.user2.displayName());
                 expect(this.view.$("select option:eq(2)").val()).toContain(this.user2.get("id"));
 
                 expect(this.view.$("select").val()).toBe("");
@@ -55,9 +57,10 @@ describe("chorus.views.NotificationRecipient", function() {
 
             context("when the add user link is clicked", function() {
                 beforeEach(function() {
+                    this.oldSelectableUserCount = this.view.$("select option").length - 1;
                     spyOn(chorus, "styleSelect");
                     this.view.$("select").val(this.user1.id.toString());
-                    this.view.$(".add_user").click();
+                    this.view.$("a.add").click();
                 });
 
                 itHasOnlyTheFirstUser();
@@ -69,48 +72,38 @@ describe("chorus.views.NotificationRecipient", function() {
 
                 context("trying to add the blank user option", function() {
                     beforeEach(function() {
-                        this.view.$("a.add_user").click();
+                        this.view.$("a.add").click();
                     });
 
                     itHasOnlyTheFirstUser();
+                });
+
+                it("removes the selected user from the list of possible users", function() {
+                    expect(this.view.$("select option").length - 1).toBe(this.oldSelectableUserCount - 1);
                 });
 
                 context("adding the same user", function() {
                     beforeEach(function() {
                         this.view.$("select").val(this.user1.id.toString());
-                        this.view.$(".add_user").click();
+                        this.view.$("a.add").click();
                     });
 
                     itHasOnlyTheFirstUser();
                 });
 
-                context("calling render again", function() {
-                    beforeEach(function() {
-                        this.view.render();
-                    });
-
-                    it("doesn't have any names in the list", function() {
-                        expect(this.view.$(".picked_users li").length).toBe(0);
-                    });
-
-                    it("returns only the id of the current selection", function() {
-                        expect(this.view.getPickedUsers()).toEqual([]);
-                    });
-                });
-
                 context("adding another user", function() {
                     beforeEach(function() {
                         this.view.$("select").val(this.user2.id);
-                        this.view.$(".add_user").click();
+                        this.view.$("a.add").click();
                     });
 
                     it("makes an entry with that user at the bottom the picked_users list", function() {
                         expect(this.view.$(".picked_users li").length).toBe(2);
-                        expect(this.view.$(".picked_users li:eq(0) .name").text().trim()).toBe(this.user1.displayName());
-                        expect(this.view.$(".picked_users li:eq(1) .name").text().trim()).toBe(this.user2.displayName());
+                        expect(this.view.$(".picked_users li:eq(0) .name")).toContainText(this.user1.displayName());
+                        expect(this.view.$(".picked_users li:eq(1) .name")).toContainText(this.user2.displayName());
                     });
 
-                    it("returns an array containing both selected users' IDs", function(){
+                    it("returns an array containing both selected users' IDs", function() {
                         expect(this.view.getPickedUsers().length).toBe(2);
                         expect(this.view.getPickedUsers()).toContain(this.user1.id.toString());
                         expect(this.view.getPickedUsers()).toContain(this.user2.id.toString());
@@ -143,10 +136,10 @@ describe("chorus.views.NotificationRecipient", function() {
                 function itHasOnlyTheFirstUser() {
                     it("has an entry with that user in the picked_users list", function() {
                         expect(this.view.$(".picked_users li").length).toBe(1);
-                        expect(this.view.$(".picked_users li:eq(0) .name").text().trim()).toBe(this.user1.displayName());
+                        expect(this.view.$(".picked_users li:eq(0) .name")).toContainText(this.user1.displayName());
                     });
 
-                    it("returns an array containing only that user's ID", function(){
+                    it("returns an array containing only that user's ID", function() {
                         expect(this.view.getPickedUsers().length).toBe(1);
                         expect(this.view.getPickedUsers()).toContain(this.user1.id.toString());
                     });
