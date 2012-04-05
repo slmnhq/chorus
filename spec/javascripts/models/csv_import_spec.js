@@ -283,6 +283,10 @@ describe("chorus.models.CSVImport", function() {
             expect(chorus.models.CSVImport.normalizeForDatabase("file^$name*&22_+33")).toBe("filename22_33")
         });
 
+        it("trims the white spaces", function() {
+            expect(chorus.models.CSVImport.normalizeForDatabase(" file^$name* &22_+33 ")).toBe("filename_22_33")
+        });
+
         it("truncates at 64 characters", function() {
             expect(chorus.models.CSVImport.normalizeForDatabase("0123456789012345678901234567890123456789012345678901234567890123456789")).toBe("0123456789012345678901234567890123456789012345678901234567890123")
         });
