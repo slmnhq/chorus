@@ -65,6 +65,17 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     describe("click the 'semicolon' separator", hasRightSeparator(';'));
     describe("click the 'space' separator", hasRightSeparator(' '));
 
+    describe("changing the separator", function() {
+        beforeEach(function() {
+            expect(this.dialog.csv.get("types").length).toBe(5);
+            this.dialog.$("input.delimiter[value=';']").click();
+        });
+
+        it("recalculates the column types", function() {
+            expect(this.dialog.csv.get("types").length).toBe(1);
+        });
+    });
+
     function hasRightSeparator(separator) {
         return function() {
             beforeEach(function() {

@@ -203,6 +203,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     refreshCSV: function() {
         this.csv.set({hasHeader: !!(this.$("#hasHeader").prop("checked")), delimiter: this.delimiter});
+        this.csv.unset("types")
         this.numberOfColumns = this.csv.columnOrientedData().length;
         this.render();
         this.recalculateScrolling();

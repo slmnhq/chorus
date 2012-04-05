@@ -167,6 +167,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             delimiter: this.delimiter,
             toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val())
         });
+        this.csv.unset("types")
         this.render();
         this.recalculateScrolling();
     },
