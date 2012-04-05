@@ -12,10 +12,9 @@ chorus.Modal = chorus.views.Base.extend({
     launchNewModal:function () {
         this.render();
         $(document).one('reveal.facebox', _.bind(this.revealed, this));
-        $.facebox(this.el)
+        $.facebox(this.el);
 
         this.previousModal = chorus.modal;
-
         this.restore();
     },
 
@@ -60,20 +59,19 @@ chorus.Modal = chorus.views.Base.extend({
             $("#facebox").remove();
             $.facebox.settings.inited = false;
             chorus.PageEvents.broadcast("modal:closed");
+
             delete chorus.modal;
+            this.ignoreFacebox();
 
             if (this.previousModal) {
                 this.previousModal.restore();
             }
-
-            this.ignoreFacebox();
         }
     },
 
-    restore:function () {
-        this.foreground();
+    restore: function () {
         chorus.modal = this;
-
+        this.foreground();
         this.listenToFacebox();
     },
 
