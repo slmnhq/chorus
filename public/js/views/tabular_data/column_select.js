@@ -7,6 +7,12 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
         "change select": "columnSelected"
     },
 
+    setup: function() {
+        if(this.collection) {
+        this.bindings.add(this.collection, "join:added", this.render);
+        }
+    },
+
     postRender: function() {
         var self = this;
         _.defer(function() {
@@ -34,9 +40,9 @@ chorus.views.ColumnSelect = chorus.views.Base.extend({
         return this.collection.getByCid(selectedCid)
     },
 
-    selectColumn: function(cid) {
-        if(cid) {
-            this.$("select option[data-cid="+cid+"]").prop('selected', true).change();
+    selectColumn: function(column) {
+        if(column) {
+            this.$("select option[data-cid="+column.cid+"]").prop('selected', true).change();
         } else {
             this.$("select option:eq(0)").prop('selected', true).change();
         }

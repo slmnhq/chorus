@@ -32,6 +32,17 @@ describe("chorus.views.ColumnSelect", function() {
                 expect(this.view.$('option').length).toBe(4);
             });
 
+            context("when the collection is modified by a join", function() {
+                beforeEach(function() {
+                    spyOn(this.view, "postRender");
+                    this.columns.trigger("join:added");
+                });
+
+                it("re-renders", function() {
+                    expect(this.view.postRender).toHaveBeenCalled();
+                });
+            });
+
             context("when disableOtherTypeCategory is set", function() {
                 beforeEach(function() {
                     this.view.options.disableOtherTypeCategory = true;
@@ -58,7 +69,7 @@ describe("chorus.views.ColumnSelect", function() {
                 beforeEach(function() {
                     spyOnEvent(this.view, 'columnSelected');
                     this.selectedColumn = this.columns.models[2];
-                    this.view.selectColumn(this.selectedColumn.cid);
+                    this.view.selectColumn(this.selectedColumn);
                 });
 
                 it("triggers columnSelected", function() {
@@ -89,9 +100,9 @@ describe("chorus.views.ColumnSelect", function() {
                 });
 
                 it("should select the given column", function() {
-                    var selectedCid = this.columns.at(2).cid
-                    this.view.selectColumn(selectedCid);
-                    expect(this.view.$('select option:selected').data('cid')).toBe(selectedCid);
+                    var selected = this.columns.at(2)
+                    this.view.selectColumn(selected);
+                    expect(this.view.$('select option:selected').data('cid')).toBe(selected.cid);
                     expect(this.view.getSelectedColumn()).toBe(this.columns.at(2));
 
                     expect(this.view.refresh).toHaveBeenCalled();

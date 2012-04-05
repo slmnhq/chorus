@@ -24,7 +24,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
 
         describe("#whereClause", function() {
             beforeEach(function() {
-                spyOn(this.view.filterViews[0], "filterString").andReturn("foo = 1");
+                spyOn(this.view.filters.at(0), "sqlString").andReturn("foo = 1");
             });
 
             it("joins the individual filters' conditions", function() {
@@ -33,7 +33,7 @@ describe("chorus.views.DatasetFilterWizard", function() {
 
             describe("when all filterViews return an empty string", function() {
                 beforeEach(function() {
-                    this.view.filterViews[0].filterString.andReturn("");
+                    this.view.filters.at(0).sqlString.andReturn("");
                 });
 
                 it("returns an empty string (not 'WHERE ')", function() {
@@ -44,17 +44,17 @@ describe("chorus.views.DatasetFilterWizard", function() {
 
         describe("#filterCount", function() {
             beforeEach(function() {
-                this.view.filterViews = [
-                    {filterString: function() {return "foo = 2"}},
-                    {filterString: function() {return ""}},
-                    {filterString: function() {return "foo = 4"}}
-                ]
-            })
+                this.view.addFilter();
+                this.view.addFilter();
+                spyOn(this.view.filters.at(0), "sqlString").andReturn("foo = 2");
+                spyOn(this.view.filters.at(1), "sqlString").andReturn("");
+                spyOn(this.view.filters.at(2), "sqlString").andReturn("foo = 4");
+            });
 
             it("eliminates empty filters", function() {
                 expect(this.view.filterCount()).toBe(2);
-            })
-        })
+            });
+        });
 
         describe("removing the only filter", function() {
             beforeEach(function() {
@@ -84,8 +84,8 @@ describe("chorus.views.DatasetFilterWizard", function() {
 
             describe("#whereClause", function() {
                 beforeEach(function() {
-                    spyOn(this.view.filterViews[0], "filterString").andReturn("foo = 1");
-                    spyOn(this.view.filterViews[1], "filterString").andReturn("bar = 2");
+                    spyOn(this.view.filters.at(0), "sqlString").andReturn("foo = 1");
+                    spyOn(this.view.filters.at(1), "sqlString").andReturn("bar = 2");
                 });
 
                 it("joins the individual filters' conditions", function() {
@@ -102,7 +102,6 @@ describe("chorus.views.DatasetFilterWizard", function() {
 
             describe("removing the filter", function() {
                 beforeEach(function() {
-                    this.oldView = this.view.filterViews[1];
                     this.view.$(".remove:eq(1)").click();
                 });
 
@@ -113,11 +112,19 @@ describe("chorus.views.DatasetFilterWizard", function() {
                 it("adds the 'last' class to the only li", function() {
                     expect(this.view.$("li.dataset_filter")).toHaveClass("last");
                 });
+            });
+        });
 
-                it("removes the filterView from the view's filterViews collection", function() {
-                    expect(this.view.filterViews.length).toBe(1);
-                    expect(this.view.filterViews[0]).not.toBe(this.oldView);
-                });
+        describe("when a filter is deleted", function() {
+            beforeEach(function() {
+                this.view.addFilterAndRender();
+                this.view.addFilterAndRender();
+                this.view.$(".remove").eq(0).click();
+            });
+
+            it("removes the view for filter", function() {
+                expect(this.view.filters.length).toBe(2);
+                expect(this.view.$(".dataset_filter").length).toBe(2);
             });
         });
     });
@@ -126,15 +133,15 @@ describe("chorus.views.DatasetFilterWizard", function() {
         beforeEach(function() {
             this.view.render();
             this.selectedColumn = this.collection.at(1);
-            this.view.filterViews[0].columnFilter.selectColumn(this.selectedColumn.cid);
-            this.view.addFilter();
+            this.view.filters.at(0).set({column : this.selectedColumn});
+            this.view.addFilterAndRender();
             this.selectedColumn = this.collection.at(0);
-            this.view.filterViews[1].columnFilter.selectColumn(this.selectedColumn.cid);
+            this.view.filters.at(1).set({column : this.selectedColumn});
             this.collection.remove(this.selectedColumn);
         });
 
         it("removes the invalid filter", function() {
-            expect(this.view.filterViews.length).toBe(1);
+            expect(this.view.$('.dataset_filter').length).toBe(1);
             expect(this.view.$('.column_filter select').get(0).selectedIndex).toBe(0);
         });
     });

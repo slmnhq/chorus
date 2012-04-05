@@ -23,15 +23,15 @@ describe("chorus.views.DatasetFilter", function() {
         });
 
         context("when the model is filled with valid data", function() {
-            var selectedColumnCid;
+            var selectedColumn;
             beforeEach(function() {
                 spyOn(this.view.columnFilter, "selectColumn").andCallThrough();
-                selectedColumnCid = this.collection.at(1).cid
-                this.model.set({columnCid: selectedColumnCid, comparator: "not_equal", value: ["jellyfish"]});
+                selectedColumn = this.collection.at(1)
+                this.model.set({column: selectedColumn, comparator: "not_equal", input: {value: "jellyfish"}});
             });
 
             it("selects that column", function() {
-                expect(this.view.columnFilter.selectColumn).toHaveBeenCalledWith(selectedColumnCid);
+                expect(this.view.columnFilter.selectColumn).toHaveBeenCalledWith(selectedColumn);
             });
 
             it("selects that comparator", function() {
@@ -80,11 +80,11 @@ describe("chorus.views.DatasetFilter", function() {
 
         context("when a column is selected", function() {
             beforeEach(function() {
-                this.view.columnFilter.selectColumn(this.collection.at(1).cid);
+                this.view.columnFilter.selectColumn(this.collection.at(1));
             });
 
             it("should update the model", function() {
-                expect(this.view.model.get("columnCid")).toBe(this.collection.at(1).cid);
+                expect(this.view.model.get("column")).toEqual(this.collection.at(1));
             });
 
             describe("#select comparator", function() {
@@ -126,39 +126,78 @@ describe("chorus.views.DatasetFilter", function() {
                 });
                 context("and it has default inputs", function() {
                     beforeEach(function() {
-                        this.model.set({value: ["jellyfish"]});
+                        this.model.set({input: {value: "jellyfish"}});
                     });
 
                     it("fills in the values", function() {
                         this.view.$("select.comparator option[value=not_equal]").prop('selected', true).change();
                         expect(this.view.$('.filter.default input').val()).toBe("jellyfish")
                     });
+
+                    context("when a user types in the input field", function() {
+                        beforeEach(function() {
+                            this.model.unset('input');
+                            this.view.$('.filter.default input').val('hello').trigger('keyup');
+                        });
+
+                        it("saves the value on the model", function() {
+                            expect(this.model.get("input").value).toBe('hello');
+                        });
+                    });
                 });
                 context("and it has date inputs", function() {
-                    var values;
+                    var inputs;
                     beforeEach(function() {
                         this.collection.at(0).set({typeCategory: "DATE"});
-                        this.view.columnFilter.selectColumn(this.collection.at(0).cid);
-                        values = ["1", "02", "3333"]
-                        this.model.set({value: values});
+                        this.view.columnFilter.selectColumn(this.collection.at(0));
+                        inputs = {day: "1", month: "02", year: "3333", value: "in the future"}
+                        this.model.set({input: inputs});
                     });
                     it("fills in the values", function() {
                         this.view.$("select.comparator option[value=before]").prop('selected', true).change();
-                        _.each(values, function(value, i) {
-                            expect(this.view.$('.filter.date input').eq(i).val()).toBe(value);
-                        }, this);
+                        expect(this.view.$(".filter.date input[name='day']").val()).toBe("1")
+                        expect(this.view.$(".filter.date input[name='month']").val()).toBe("02")
+                        expect(this.view.$(".filter.date input[name='year']").val()).toBe("3333")
+                    });
+
+
+                    context("when a user types in the input field", function() {
+                        beforeEach(function() {
+                            this.model.unset('input');
+                            this.view.$('.filter.date input[name="day"]').val('20').trigger('keyup');
+                            this.view.$('.filter.date input[name="month"]').val('03').trigger('keyup');
+                            this.view.$('.filter.date input[name="year"]').val('2002').trigger('keyup');
+                        });
+
+                        it("saves the value on the model", function() {
+                            expect(this.model.get("input").value).toBe(["2002", "03", "20"].join("/"));
+                            expect(this.model.get("input").day).toBe("20");
+                            expect(this.model.get("input").month).toBe("03");
+                            expect(this.model.get("input").year).toBe("2002");
+                        });
                     });
                 });
                 context("and it has time inputs", function() {
                     beforeEach(function() {
                         this.collection.at(0).set({typeCategory: "TIME"});
-                        this.view.columnFilter.selectColumn(this.collection.at(0).cid);
-                        this.model.set({value: ["1:02:3333"]});
+                        this.view.columnFilter.selectColumn(this.collection.at(0));
+                        this.model.set({input: {value: "1:02:3333"}});
                     });
 
                     it("fills in the values", function() {
                         this.view.$("select.comparator option[value=before]").prop('selected', true).change();
                         expect(this.view.$('.filter.time input').val()).toBe("1:02:3333");
+                    });
+
+                    context("when a user types in the input field", function() {
+                        beforeEach(function() {
+                            this.model.unset('input');
+                            this.view.$('.filter.time input').val('1:23:04').trigger('keyup');
+                        });
+
+                        it("saves the value on the model", function() {
+                            expect(this.model.get("input").value).toBe('1:23:04');
+                        });
                     });
                 });
             });
@@ -191,24 +230,12 @@ describe("chorus.views.DatasetFilter", function() {
 
         describe("clicking on the remove button", function() {
             beforeEach(function() {
-                spyOnEvent(this.view, "filterview:deleted");
+                spyOnEvent(this.view, "deleted");
                 this.view.$(".remove").click();
             });
 
-            it("raises the filterview:deleted event", function() {
-                expect("filterview:deleted").toHaveBeenTriggeredOn(this.view, [this.view]);
-            });
-        });
-
-        describe("columns with typeCategory: OTHER", function() {
-            beforeEach(function() {
-                this.collection.models[1].set({typeCategory: "OTHER"});
-                this.view.columnFilter.selectColumn(this.collection.at(1).cid);
-            });
-
-            it("does not disable the option for the 'other' column", function() {
-                expect(this.view.$(".column_filter option:eq(1)")).not.toBeDisabled();
-                expect(this.view.$(".column_filter option:eq(0)")).not.toBeDisabled();
+            it("raises the deleted event", function() {
+                expect("deleted").toHaveBeenTriggeredOn(this.view);
             });
         });
 
@@ -298,10 +325,22 @@ describe("chorus.views.DatasetFilter", function() {
             });
         });
 
+        describe("columns with typeCategory: OTHER", function() {
+            beforeEach(function() {
+                this.collection.models[1].set({typeCategory: "OTHER"});
+                this.view.columnFilter.selectColumn(this.collection.at(1));
+            });
+
+            it("does not disable the option for the 'other' column", function() {
+                expect(this.view.$(".column_filter option:eq(1)")).not.toBeDisabled();
+                expect(this.view.$(".column_filter option:eq(0)")).not.toBeDisabled();
+            });
+        });
+
         describe("columns with typeCategory: STRING, LONG_STRING", function() {
             beforeEach(function() {
                 this.collection.models[0].set({typeCategory: "STRING"});
-                this.view.columnFilter.selectColumn(this.collection.at(0).cid);
+                this.view.columnFilter.selectColumn(this.collection.at(0));
 
                 this.keys = [
                     "equal",
@@ -486,24 +525,6 @@ describe("chorus.views.DatasetFilter", function() {
             });
         });
 
-        describe("#filterString", function() {
-            beforeEach(function() {
-                this.collection.models[0].set({typeCategory: "STRING"});
-                this.view.render();
-
-                this.view.$(".comparator").val("not_equal").change();
-                this.view.$(".filter.default input").val("test")
-                spyOn(this.view.map.comparators.not_equal, "generate");
-                this.view.filterString();
-            });
-
-            it("calls the generate function of the correct filter type", function() {
-                var model = this.collection.at(0);
-                var qualifiedName = chorus.Mixins.dbHelpers.safePGName(model.get("parentName"), model.get("name"));
-                expect(this.view.map.comparators.not_equal.generate).toHaveBeenCalledWith(qualifiedName, "test");
-            });
-        });
-
         describe("#fieldValues", function() {
             beforeEach(function() {
                 this.view.$(".filter.default input").val("123");
@@ -566,118 +587,6 @@ describe("chorus.views.DatasetFilter", function() {
         })
     });
 
-    describe("#serialize", function() {
-        context("with a numeric column", function() {
-            beforeEach(function() {
-                this.collection.at(1).set({ typeCategory: "NUMERIC", name: "Roman" });
-                this.view.render();
-
-                this.view.$('.column_filter select').prop("selectedIndex", 1).change();
-                this.view.$(".comparator").val("equal").change();
-                this.view.$(".filter.default input").val("sandwich");
-            });
-
-            it("saves the state of the view", function() {
-                var model = this.view.serialize();
-                expect(model.get("column")).toBe("Roman");
-                expect(model.get("comparator")).toBe("equal");
-                expect(model.get("value")).toBe("sandwich");
-            });
-        });
-
-        context("with a boolean column", function() {
-            beforeEach(function() {
-                this.collection.at(1).set({ typeCategory: "BOOLEAN", name: "truthy" });
-                this.view.render();
-
-                this.view.$('.column_filter select').prop("selectedIndex", 1).change();
-                this.view.$(".comparator").val("null").change();
-            });
-
-            it("saves the state of the model", function() {
-                var model = this.view.serialize();
-                expect(model.get("column")).toBe("truthy");
-                expect(model.get("comparator")).toBe("null");
-            });
-        });
-
-        context("with a real number column", function() {
-            beforeEach(function() {
-                this.collection.at(1).set({ typeCategory: "REAL_NUMBER", name: "0.001" });
-                this.view.render();
-
-                this.view.$('.column_filter select').prop("selectedIndex", 1).change();
-                this.view.$(".comparator").val("less").change();
-                this.view.$(".filter input").val("1.12");
-            });
-
-            it("saves the state of the model", function() {
-                var model = this.view.serialize();
-                expect(model.get("column")).toBe("0.001");
-                expect(model.get("comparator")).toBe("less");
-                expect(model.get("value")).toBe("1.12");
-            });
-        });
-
-        context("with a date column", function() {
-            context("with a comparator that requires an argument", function() {
-                beforeEach(function() {
-                    this.collection.at(1).set({ typeCategory: "DATE", name: "Sunday" });
-                    this.view.render();
-
-                    this.view.$('.column_filter select').prop("selectedIndex", 1).change();
-                    this.view.$(".comparator").val("before").change();
-                    this.view.$(".filter.date input[name='month']").val("11");
-                    this.view.$(".filter.date input[name='day']").val("18");
-                    this.view.$(".filter.date input[name='year']").val("2010");
-                });
-
-                it("saves the state of the model", function() {
-                    var model = this.view.serialize();
-                    expect(model.get("column")).toBe("Sunday");
-                    expect(model.get("comparator")).toBe("before");
-                    expect(model.get("value")).toEqual(["11", "18", "2010"]);
-                });
-
-
-            });
-            context("with a comparator that doesn't require an argument", function() {
-                beforeEach(function() {
-                    this.collection.at(1).set({ typeCategory: "DATE", name: "Sunday" });
-                    this.view.render();
-
-                    this.view.$('.column_filter select').prop("selectedIndex", 1).change();
-                });
-
-                it("saves the state of the model when the comparator doesn't require an argument", function() {
-                    this.view.$(".comparator").val("null").change();
-
-                    var model = this.view.serialize();
-                    expect(model.get("column")).toBe("Sunday");
-                    expect(model.get("comparator")).toBe("null");
-                    expect(model.get("value")).toEqual(["", "", ""]);
-                });
-            });
-        });
-
-        context("with a timestamp column", function() {
-            beforeEach(function() {
-                this.collection.at(1).set({ typeCategory: "DATETIME", name: "Time" });
-                this.view.render();
-
-                this.view.$('.column_filter select').prop("selectedIndex", 1).change();
-                this.view.$(".comparator").val("less").change();
-                this.view.$(".filter input").val("today");
-            });
-
-            it("saves the state of the model", function() {
-                var model = this.view.serialize();
-                expect(model.get("column")).toBe("Time");
-                expect(model.get("comparator")).toBe("less");
-                expect(model.get("value")).toEqual("today");
-            });
-        });
-    });
 
     describe("#valid", function() {
         context("when the columnFilter is valid", function() {

@@ -17,6 +17,7 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
         this.trigger("change");
         this.aggregateColumnSet.add(destinationColumn.tabularData.columns().models);
         this.aggregateColumnSet.trigger("change");
+        this.aggregateColumnSet.trigger("join:added");
     },
 
     addColumn: function(column) {

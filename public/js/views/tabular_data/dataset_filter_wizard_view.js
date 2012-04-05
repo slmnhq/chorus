@@ -6,58 +6,62 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.filterViews = [];
+        this.options = this.options || {}
+        this.filters = new chorus.collections.TabularDataFilterSet();
         this.bindings.add(this.collection, 'remove', this.removeInvalidFilters);
     },
 
     postRender: function() {
-        var $ul = this.$(".filters");
-        if (!this.filterViews.length) {
+        if (!this.filters.length) {
             this.addFilter();
         }
 
-        _.each(this.filterViews, function(filterView) {
-            $ul.append(filterView.el);
-            filterView.render();
-            filterView.delegateEvents();
-        });
+        this.filters.each(function(filter) {
+            this.renderFilterView(filter);
+        }, this);
 
         this.tagLastLi();
     },
 
     resetFilters: function() {
-        this.filterViews = [];
+        this.filters.reset();
         this.render();
     },
 
-    addFilter: function() {
-        var filterView = new chorus.views.DatasetFilter({collection: this.collection, showAliasedName: this.options.showAliasedName});
-        filterView.render();
-        filterView.owner = this;
+    renderFilterView: function(filter) {
+        var $ul = this.$(".filters");
+        var filterView = new chorus.views.DatasetFilter({model: filter, collection: this.collection, showAliasedName: this.options.showAliasedName});
+        $ul.append(filterView.render().el);
+        this.bindings.add(filterView, "deleted", function() {this.removeFilterView(filterView)}, this);
+    },
 
-        filterView.bindOnce("filterview:deleted", this.removeFilterView, this);
-        this.filterViews.push(filterView);
+    addFilter: function() {
+        var filter = new chorus.models.TabularDataFilter()
+        this.filters.add(filter);
     },
 
     addFilterAndRender: function(e) {
         e && e.preventDefault();
         this.addFilter();
-        this.$(".filters").append(_.last(this.filterViews).el);
+        this.renderFilterView(this.filters.last());
         this.tagLastLi();
     },
 
-    removeFilterView: function(view) {
-        this.filterViews = _.without(this.filterViews, view);
-        $(view.el).remove();
+    removeFilterView: function(filterView) {
+        this.filters.remove(filterView.model);
+        $(filterView.el).remove();
         this.tagLastLi();
     },
 
     removeInvalidFilters: function() {
-        _.each(this.filterViews, _.bind(function(filterView) {
-            if(!filterView.valid()) {
-                this.removeFilterView(filterView);
+        var badFilters = 0;
+        this.filters.each(function(filter) {
+            if(!this.collection.include(filter.get("column"))) {
+                this.filters.remove(filter);
+                badFilters++;
             }
-        }, this));
+        }, this);
+        if(badFilters) {this.render();}
     },
 
     tagLastLi: function() {
@@ -67,9 +71,10 @@ chorus.views.DatasetFilterWizard = chorus.views.Base.extend({
     },
 
     filterStrings: function() {
-        var wheres = _.map(this.filterViews, function(filterView) {
-            return filterView.filterString();
-        });
+        var wheres = this.filters.map(function(filter) {
+            return filter.sqlString()
+        })
+
         wheres = _.without(wheres, "")
         return wheres
     },

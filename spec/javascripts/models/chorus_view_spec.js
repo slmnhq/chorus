@@ -31,6 +31,7 @@ describe("chorus.models.ChorusView", function() {
         beforeEach(function() {
             this.changeEvent = spyOnEvent(this.model, 'change');
             spyOnEvent(this.model.aggregateColumnSet, 'change');
+            spyOnEvent(this.model.aggregateColumnSet, 'join:added');
             this.sourceColumn = this.sourceDataset.columns().models[0];
             this.destinationColumn = addJoin(this, this.sourceColumn);
             this.destinationDataset = this.destinationColumn.tabularData;
@@ -54,8 +55,9 @@ describe("chorus.models.ChorusView", function() {
             expect(thirdDestinationColumn.tabularData.datasetNumber).toBe(3);
         });
 
-        it("triggers change on the aggregate column set (so that column list views re-render)", function() {
+        it("triggers change and join:added on the aggregate column set (so that column list views re-render)", function() {
             expect("change").toHaveBeenTriggeredOn(this.model.aggregateColumnSet);
+            expect("join:added").toHaveBeenTriggeredOn(this.model.aggregateColumnSet);
         });
 
         it("adds the destination dataset's columns to the aggregate column set", function() {
