@@ -17,6 +17,9 @@ $list-border-width: 1px;
     .items {
         ul {
             li {
+                &:hover {
+                    cursor: pointer;
+                }
 
                 &.selected {
                     background-color: $picklist-selected-background-color;
