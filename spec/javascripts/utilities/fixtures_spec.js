@@ -24,6 +24,11 @@ describe("newFixtures", function() {
         it("does not allow overrides for non-existant attributes", function() {
             expect(function() {newFixtures.user({foo: "Bar"})}).toThrow();
         });
+
+        it("gives each user a unique id", function() {
+            var user2 = newFixtures.user();
+            expect(user2.get("id")).not.toEqual(user.get("id"));
+        });
     });
 
     describe("#addUniqueAttrs(attributes, names)", function() {

@@ -9,7 +9,7 @@
         window.newFixtures[name] = function(overrides) {
             var rawData = getFixture(name);
             var attrs = safeExtend(rawData, overrides, name);
-            addUniqueAttrs(attrs);
+            addUniqueAttrs(attrs, definition.unique);
             return new modelClass(attrs);
         };
     });
