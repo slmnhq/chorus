@@ -103,7 +103,7 @@ describe("chorus.views.SearchResultList", function() {
 
                 context("has no results at all", function() {
                     beforeEach(function() {
-                        var collection = fixtures.userSet([], {total: 0});
+                        var collection = newFixtures.userSet([], {total: 0});
                         collection.pagination = { records: 0 };
                         this.view = new chorus.views.SearchResultList({
                             collection: collection,

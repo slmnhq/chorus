@@ -1,9 +1,9 @@
 describe("chorus.views.CollectionPicklist", function() {
     beforeEach(function() {
-        this.collection = fixtures.userSet([
-            newFixtures.user({firstName: "xyz", lastName: "3 ab"}),
-            newFixtures.user({firstName: "EFG", lastName: "1"}),
-            newFixtures.user({firstName: "hij", lastName: "2 a"})
+        this.collection = newFixtures.userSet([
+            {firstName: "xyz", lastName: "3 ab"},
+            {firstName: "EFG", lastName: "1"},
+            {firstName: "hij", lastName: "2 a"}
         ]);
         this.view = new chorus.views.CollectionPicklist({ collection : this.collection })
     })
