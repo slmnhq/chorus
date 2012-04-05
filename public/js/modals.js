@@ -24,12 +24,9 @@
         launchSubModal: function(subModal) {
             popModalBindings(this);
 
-            this.subModalId = "" + (new Date().getTime());
-            $("#facebox").attr("id", "facebox-" + this.subModalId).addClass("hidden");
-            $("#facebox_overlay").attr("id", "facebox_overlay-" + this.subModalId);
+            this.background();
             $.facebox.settings.inited = false;
             subModal.isSubModal = true;
-            subModal.subModalId = this.subModalId;
             subModal.launchNewModal();
         },
 
@@ -77,11 +74,21 @@
         },
 
         subModalClosed:function () {
-            $("#facebox-" + this.subModalId).attr("id", "facebox").removeClass("hidden");
-            $("#facebox_overlay-" + this.subModalId).attr("id", "facebox_overlay");
+            this.previousModal.foreground();
             chorus.modal = this.previousModal;
 
             pushModalBindings(this.previousModal);
+        },
+
+        foreground: function () {
+            $("#facebox-" + this.faceboxCacheId).attr("id", "facebox").removeClass("hidden");
+            $("#facebox_overlay-" + this.faceboxCacheId).attr("id", "facebox_overlay");
+        },
+
+        background: function () {
+            this.faceboxCacheId = "" + (new Date().getTime());
+            $("#facebox").attr("id", "facebox-" + this.faceboxCacheId).addClass("hidden");
+            $("#facebox_overlay").attr("id", "facebox_overlay-" + this.faceboxCacheId);
         },
 
         close:$.noop,

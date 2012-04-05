@@ -109,26 +109,35 @@ describe("chorus.Modal", function() {
     });
 
     describe("launching a sub modal", function() {
+        function expectForegrounded(faceboxProxy, faceboxOverlayProxy) {
+            expect(faceboxProxy.attr("id")).toBe("facebox");
+            expect(faceboxOverlayProxy.attr("id")).toBe("facebox_overlay");
+            expect(faceboxProxy).not.toHaveClass("hidden");
+        }
+
+        function expectBackgrounded(faceboxProxy, faceboxOverlayProxy) {
+            expect(faceboxProxy.attr("id")).not.toBe("facebox");
+            expect(faceboxOverlayProxy.attr("id")).not.toBe("facebox_overlay");
+            expect(faceboxProxy).toHaveClass("hidden");
+        }
+
         beforeEach(function() {
             this.modal.className = "plain_text"
             this.modal.launchModal();
+
             this.faceboxProxy = $("<div id='facebox'/>");
             this.faceboxOverlayProxy = $("<div id='facebox_overlay'/>");
             $("#jasmine_content").append(this.faceboxProxy).append(this.faceboxOverlayProxy);
+
             this.subModal = new chorus.Modal({ pageModel: this.model });
-            this.subModal.className = "plain_text"
-            spyOn(this.subModal, "launchNewModal");
+            this.subModal.className = this.modal.className
+            spyOn(this.subModal, "launchNewModal").andCallThrough();
             $.facebox.settings.inited = true;
             this.modal.launchSubModal(this.subModal)
         })
 
-        it("changes the id on the existing dialog to something other than #facebox", function() {
-            expect(this.faceboxProxy.attr("id")).not.toBe("facebox");
-            expect(this.faceboxOverlayProxy.attr("id")).not.toBe("facebox_overlay");
-        })
-
-        it("adds the 'hidden' class to the existing dialog", function() {
-            expect(this.faceboxProxy).toHaveClass("hidden")
+        it("backgrounds this modal", function() {
+            expectBackgrounded(this.faceboxProxy, this.faceboxOverlayProxy)
         })
 
         it("resets facebox", function() {
@@ -139,19 +148,64 @@ describe("chorus.Modal", function() {
             expect(this.subModal.launchNewModal).toHaveBeenCalled();
         })
 
-        xdescribe("when the sub modal is closed", function() {
+        describe("when the sub modal is closed", function() {
             beforeEach(function() {
                 $(document).trigger("close.facebox");
             });
 
-            it("restores the ids on the preceeding dialog", function() {
-                expect(this.faceboxProxy.attr("id")).toBe("facebox");
-                expect(this.faceboxOverlayProxy.attr("id")).toBe("facebox_overlay");
+            it("foregrounds the preceeding dialog", function() {
+                expectForegrounded(this.faceboxProxy, this.faceboxOverlayProxy)
+            });
+        });
+
+        context("launching a sub-sub modal", function() {
+            beforeEach(function() {
+                this.faceboxProxy2 = $("<div id='facebox'/>");
+                this.faceboxOverlayProxy2 = $("<div id='facebox_overlay'/>");
+                $("#jasmine_content").append(this.faceboxProxy2).append(this.faceboxOverlayProxy2);
+
+                this.subSubModal = new chorus.Modal({ pageModel: this.model });
+                this.subSubModal.className = this.modal.className;
+                spyOn(this.subSubModal, "launchNewModal").andCallThrough();
+                $.facebox.settings.inited = true;
+                this.subModal.launchSubModal(this.subSubModal)
+            });
+
+            it("keeps original modal in background", function() {
+                expectBackgrounded(this.faceboxProxy, this.faceboxOverlayProxy)
+            });
+
+            it("backgrounds this modal", function() {
+                expectBackgrounded(this.faceboxProxy2, this.faceboxOverlayProxy2)
             })
 
-            it("removes the 'hidden' class from the preceeding dialog", function() {
-                expect(this.faceboxProxy).not.toHaveClass("hidden");
+            it("launches the sub modal", function() {
+                expect(this.subSubModal.launchNewModal).toHaveBeenCalled();
             })
-        })
-    })
+
+            describe("when the sub-sub modal is closed", function() {
+                beforeEach(function() {
+                    $(document).trigger("close.facebox");
+                });
+
+                it("keeps original modal in background", function() {
+                    expectBackgrounded(this.faceboxProxy, this.faceboxOverlayProxy)
+                });
+
+                it("foregrounds the preceeding dialog", function() {
+                    expectForegrounded(this.faceboxProxy2, this.faceboxOverlayProxy2)
+                });
+
+                context("when the sub modal is closed", function() {
+                    beforeEach(function() {
+                        $(document).trigger("close.facebox");
+                    });
+
+                    it("foregrounds the original modal", function() {
+                        expectForegrounded(this.faceboxProxy, this.faceboxOverlayProxy)
+                    });
+                });
+            });
+        });
+    });
 });
