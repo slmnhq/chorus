@@ -1,6 +1,6 @@
 describe("chorus.dialogs.RunFileInSchema", function () {
     beforeEach(function () {
-        chorus.page = { workspace:fixtures.workspace({ id:999 }) };
+        chorus.page = { workspace:newFixtures.workspace({ id:999 }) };
         this.workfile = fixtures.workfile({ fileType:"SQL", workspaceId:chorus.page.workspace.get("id") });
         this.dialog = new chorus.dialogs.RunFileInSchema({ pageModel:this.workfile });
     });
@@ -12,7 +12,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
     describe("#setup", function () {
         context("when the workspace has not been fetched", function() {
             it("fetches the workspace", function () {
-                expect(this.server.lastFetchFor(fixtures.workspace({id: 999}))).toBeDefined();
+                expect(this.server.lastFetchFor(newFixtures.workspace({id: 999}))).toBeDefined();
             });
         });
 
@@ -24,7 +24,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
             });
 
             it("does not fetch the model", function() {
-                expect(this.server.lastFetchFor(fixtures.workspace({id: 999}))).not.toBeDefined();
+                expect(this.server.lastFetchFor(newFixtures.workspace({id: 999}))).not.toBeDefined();
             });
         });
     })
@@ -77,7 +77,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
         context("after the workspace fetch completes", function () {
             context("when the workspace has a sandbox", function () {
                 beforeEach(function () {
-                    this.server.completeFetchFor(fixtures.workspace({id:999, sandboxInfo:{
+                    this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
                         instanceId:44,
                         instanceName:"instance",
                         databaseId:55,
@@ -120,7 +120,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
 
             context("when the workspace does not have a sandbox", function () {
                 beforeEach(function () {
-                    this.server.completeFetchFor(fixtures.workspace({id:999, sandboxInfo:{
+                    this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
                         instanceId:null,
                         instanceName:null,
                         databaseId:null,
@@ -138,7 +138,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
 
             describe("button handling", function () {
                 beforeEach(function () {
-                    this.server.completeFetchFor(fixtures.workspace({id:999, sandboxInfo:{
+                    this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
                         instanceId:44,
                         instanceName:"instance",
                         databaseId:55,
@@ -257,7 +257,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                 });
                 context("and then selecting 'within the workspace sandbox'", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(fixtures.workspace({id: 999, sandboxInfo: {
+                        this.server.completeFetchFor(newFixtures.workspace({id: 999, sandboxInfo: {
                             instanceId: 44,
                             instanceName: "instance",
                             databaseId: 55,

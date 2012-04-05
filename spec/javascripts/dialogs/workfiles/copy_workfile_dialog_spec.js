@@ -4,7 +4,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
         this.workfileId = '10';
         this.launchElement = $("<a data-workspace-id='" + this.workspaceId + "' data-workfile-id='" + this.workfileId + "'></a>")
         this.workfile = fixtures.workfile({ id: this.workfileId, workspaceId: this.workspaceId });
-        this.workspace = fixtures.workspace({ id: this.workspaceId });
+        this.workspace = newFixtures.workspace({ id: this.workspaceId });
         setLoggedInUser({id: 4003});
         chorus.session.trigger("saved")
         this.dialog = new chorus.dialogs.CopyWorkfile({launchElement: this.launchElement });
@@ -24,9 +24,9 @@ describe("chorus.dialogs.CopyWorkfile", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workfile);
             this.server.completeFetchFor(chorus.session.user().workspaces(), [
-                fixtures.workspace({ name: "im_not_the_current_one'" }),
-                fixtures.workspace({ name: "me_neither" }),
-                fixtures.workspace({ name: "yes_im_the_current_one", id: this.workspaceId })
+                newFixtures.workspace({ name: "im_not_the_current_one'" }),
+                newFixtures.workspace({ name: "me_neither" }),
+                newFixtures.workspace({ name: "yes_im_the_current_one", id: this.workspaceId })
             ]);
         });
 

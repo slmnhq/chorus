@@ -27,9 +27,9 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 }});
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
-                    fixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
-                    fixtures.workspace({ name: "im_not_the_current_one" }),
-                    fixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                    newFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
+                    newFixtures.workspace({ name: "im_not_the_current_one" }),
+                    newFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
                 ]);
             });
             it("shows all workspaces except for the ones the source table is already associated with", function() {
@@ -44,9 +44,9 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 this.model.unset("workspaceUsed");
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
-                    fixtures.workspace({ name: "im_not_the_current_one'" }),
-                    fixtures.workspace({ name: "me_neither" }),
-                    fixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                    newFixtures.workspace({ name: "im_not_the_current_one'" }),
+                    newFixtures.workspace({ name: "me_neither" }),
+                    newFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
                 ]);
             });
 
@@ -61,9 +61,9 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 this.model = fixtures.datasetSandboxTable({workspace: {id: "645"}});
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
-                    fixtures.workspace({ name: "im_not_the_current_one'" }),
-                    fixtures.workspace({ name: "me_neither" }),
-                    fixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                    newFixtures.workspace({ name: "im_not_the_current_one'" }),
+                    newFixtures.workspace({ name: "me_neither" }),
+                    newFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
                 ]);
             });
 
@@ -79,7 +79,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
         context("for anything except a Chorus View", function() {
             beforeEach(function() {
                 this.model = fixtures.datasetSandboxTable();
-                this.workspace = fixtures.workspace();
+                this.workspace = newFixtures.workspace();
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.dialog.render();
 
@@ -167,8 +167,8 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
         context("when the dataset is a Chorus View", function() {
             beforeEach(function() {
-                this.model = fixtures.datasetChorusView({workspace: fixtures.workspace({id: "987"})});
-                this.workspace = fixtures.workspace();
+                this.model = fixtures.datasetChorusView({workspace: newFixtures.workspace({id: "987"})});
+                this.workspace = newFixtures.workspace();
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.dialog.render();
 

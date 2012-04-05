@@ -1,6 +1,6 @@
 describe("chorus.dialogs.SandboxNew", function() {
     beforeEach(function() {
-        this.workspace = fixtures.workspace();
+        this.workspace = newFixtures.workspace();
         spyOn(chorus, "toast");
         spyOn(chorus, 'styleSelect');
         spyOn(chorus.router, 'reload');

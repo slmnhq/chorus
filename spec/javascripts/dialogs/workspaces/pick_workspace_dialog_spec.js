@@ -102,7 +102,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
 
     describe("clicking the choose workspace button", function() {
         beforeEach(function() {
-            this.workspace = fixtures.workspace();
+            this.workspace = newFixtures.workspace();
             this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement });
             this.dialog.render();
 
@@ -121,7 +121,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
 
     describe("double-clicking a workspace", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.dialog.collection, [fixtures.workspace(), fixtures.workspace()]);
+            this.server.completeFetchFor(this.dialog.collection, [newFixtures.workspace(), newFixtures.workspace()]);
             this.dialog.render();
         });
 

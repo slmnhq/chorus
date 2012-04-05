@@ -7,7 +7,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             databaseName: "myDatabase",
             instanceName: "myInstance"
         })
-        chorus.page.workspace = fixtures.workspace();
+        chorus.page.workspace = newFixtures.workspace();
         this.csv = new chorus.models.CsvHdfs({lines: [
             "COL1,col2, col3 ,col 4,Col_5",
             "val1.1,val1.2,val1.3,val1.4,val1.5",
@@ -40,10 +40,10 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
     context("when the workspace fetch completes and there are workspaces", function() {
         beforeEach(function() {
             spyOn(chorus, "styleSelect")
-            this.workspace1 = fixtures.workspace();
-            this.workspace2 = fixtures.workspace();
+            this.workspace1 = newFixtures.workspace();
+            this.workspace2 = newFixtures.workspace();
             this.workspace2.unset("sandboxInfo");
-            this.workspace3 = fixtures.workspace();
+            this.workspace3 = newFixtures.workspace();
             this.server.completeFetchAllFor(new chorus.collections.WorkspaceSet([], {userId: "54321"}), [this.workspace1, this.workspace2, this.workspace3]);
         });
 

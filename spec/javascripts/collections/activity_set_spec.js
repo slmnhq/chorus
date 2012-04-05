@@ -25,7 +25,7 @@ describe("chorus.collections.ActivitySet", function() {
 
         context("when the workspace attribute is set", function() {
             beforeEach(function() {
-                this.collection.attributes.workspace = fixtures.workspace();
+                this.collection.attributes.workspace = newFixtures.workspace();
             });
 
             it("includes the workspace id in the url parameters", function() {

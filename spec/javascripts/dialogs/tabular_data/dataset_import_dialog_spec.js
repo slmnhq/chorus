@@ -1,21 +1,21 @@
 describe("chorus.dialogs.DatasetImport", function() {
     beforeEach(function() {
         chorus.page = {};
-        chorus.page.workspace = fixtures.workspace({id: 242});
+        chorus.page.workspace = newFixtures.workspace({id: 242});
         this.modalSpy = stubModals();
         spyOn($.fn, 'fileupload');
         this.launchElement = $('<button data-workspace-id="242">Import File</button>');
         this.launchElement.data("canonicalName", "FooBar");
         this.validDatasets = [
-            fixtures.datasetSandboxTable({workspace: {id: 242}}),
-            fixtures.datasetSandboxTable({workspace: {id: 243}})
+            fixtures.datasetSandboxTable({objectName: "table_a", workspace: {id: 242}}),
+            fixtures.datasetSandboxTable({objectName: "table_b", workspace: {id: 243}})
         ];
         this.invalidDatasets = [
             fixtures.datasetExternalTable(),
             fixtures.datasetSandboxView(),
             fixtures.datasetHadoopExternalTable()
         ];
-        this.collection = this.validDatasets.concat(this.invalidDatasets);
+        this.datasets = this.validDatasets.concat(this.invalidDatasets);
         this.dialog = new chorus.dialogs.DatasetImport({launchElement: this.launchElement});
         spyOn(this.dialog, "modalClosed").andCallThrough();
         this.dialog.launchModal();
@@ -161,7 +161,7 @@ describe("chorus.dialogs.DatasetImport", function() {
             });
 
             it("should enable the upload file button when selecting existing table if table name is already selected", function() {
-                this.server.completeFetchFor(this.dialog.sandboxTables, this.collection);
+                this.server.completeFetchFor(this.dialog.sandboxTables, this.datasets);
                 this.selectedOption = this.dialog.$('option:eq(1)').val();
                 this.dialog.$("select").val(this.selectedOption).change();
 
@@ -196,7 +196,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                 context("when fetch has been completed", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dialog.sandboxTables, this.collection);
+                        this.server.completeFetchFor(this.dialog.sandboxTables, this.datasets);
                     });
 
                     it("filters out views, external tables, and Hadoop tables", function() {

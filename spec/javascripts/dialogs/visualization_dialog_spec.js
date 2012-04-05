@@ -385,7 +385,7 @@ describe("chorus.dialogs.Visualization", function() {
 
                     context("when a workspace is selected", function() {
                         beforeEach(function() {
-                            this.workspace = fixtures.workspace({id: "543"});
+                            this.workspace = newFixtures.workspace({id: "543"});
                             this.dialog.workspacePicker.trigger("workspace:selected", this.workspace);
                         });
 

@@ -7,8 +7,8 @@ describe("chorus.dialogs.VisualizationWorkspacePicker", function() {
         this.dialog = new chorus.dialogs.VisualizationWorkspacePicker();
         this.dialog.launchModal();
 
-        this.workspace1 = fixtures.workspace({name: "Foo"});
-        this.workspace2 = fixtures.workspace({name: "Bar"});
+        this.workspace1 = newFixtures.workspace({name: "Foo"});
+        this.workspace2 = newFixtures.workspace({name: "Bar"});
         this.workspaces = fixtures.workspaceSet([this.workspace1, this.workspace2]);
     });
 
