@@ -7,9 +7,9 @@ describe("chorus.views.UserList", function() {
         describe("when the collection has loaded", function() {
             beforeEach(function() {
                 this.collection = fixtures.userSet([
-                    fixtures.user({id: 10000, firstName: "a", lastName: "a", admin: false}),
-                    fixtures.user({id: 10001, firstName: "a", lastName: "b", admin: true}),
-                    fixtures.user({id: 10002, firstName: "a", lastName: "b", admin: false})
+                    newFixtures.user({id: 10000, firstName: "a", lastName: "a", admin: false}),
+                    newFixtures.user({id: 10001, firstName: "a", lastName: "b", admin: true}),
+                    newFixtures.user({id: 10002, firstName: "a", lastName: "b", admin: false})
                 ]);
                 this.collection.loaded = true;
                 this.view = new chorus.views.UserList({collection: this.collection});
@@ -74,7 +74,7 @@ describe("chorus.views.UserList", function() {
 
             it("broadcasts user:selected when a user's entry is selected", function() {
                 spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
-                var user = fixtures.user();
+                var user = newFixtures.user();
                 this.view.itemSelected(user);
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", user);
             });

@@ -1,7 +1,7 @@
 describe("chorus.RequiredResources", function() {
     beforeEach(function() {
         this.requiredResources = new chorus.RequiredResources();
-        this.model = fixtures.user();
+        this.model = newFixtures.user();
         this.collection = fixtures.workfileSet();
     });
 

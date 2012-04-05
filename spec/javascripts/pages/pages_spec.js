@@ -106,7 +106,7 @@ describe("chorus.pages.Base", function() {
 
         context("when the page has required resources", function() {
             beforeEach(function() {
-                this.resource = fixtures.user();
+                this.resource = newFixtures.user();
                 this.view.requiredResources.push(this.resource);
             });
 

@@ -1,6 +1,6 @@
 describe("chorus.views.DisplayNameHeader", function() {
     beforeEach(function() {
-        this.model = fixtures.user()
+        this.model = newFixtures.user()
         this.view = new chorus.views.DisplayNameHeader({ model : this.model })
     })
 

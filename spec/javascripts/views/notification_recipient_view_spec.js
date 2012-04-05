@@ -1,8 +1,8 @@
 describe("chorus.views.NotificationRecipient", function() {
     beforeEach(function() {
-        this.user1 = fixtures.user();
-        this.user2 = fixtures.user();
-        this.loggedInUser = fixtures.user();
+        this.user1 = newFixtures.user();
+        this.user2 = newFixtures.user();
+        this.loggedInUser = newFixtures.user();
         setLoggedInUser({ id: this.loggedInUser.get("id") })
         this.users = fixtures.userSet([this.user1, this.user2, this.loggedInUser]);
         this.users.sortAsc("firstName");

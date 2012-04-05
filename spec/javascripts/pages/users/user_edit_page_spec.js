@@ -17,7 +17,7 @@ describe("chorus.pages.UserEditPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.user = fixtures.user()
+            this.user = newFixtures.user()
             setLoggedInUser(this.user.attributes);
 
             this.view = new chorus.pages.UserEditPage(this.user.get("id"));

@@ -1,6 +1,6 @@
 describe("chorus.views.SelectableList", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.UserSet([fixtures.user(), fixtures.user()]);
+        this.collection = new chorus.collections.UserSet([newFixtures.user(), newFixtures.user()]);
         this.view = new chorus.views.SelectableList({
             collection: this.collection
         });

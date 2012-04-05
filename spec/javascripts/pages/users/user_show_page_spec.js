@@ -30,7 +30,7 @@ describe("chorus.pages.UserShow", function(){
 
     describe("#render", function(){
         beforeEach(function(){
-            this.user = fixtures.user({userName: "edcadmin", id: "42", firstName: "EDC", lastName: "Admin"});
+            this.user = newFixtures.user({userName: "edcadmin", id: "42", firstName: "EDC", lastName: "Admin"});
             this.view = new chorus.pages.UserShowPage(this.user.get("id"));
             this.view.model.set(this.user.attributes);
             this.view.model.loaded = true;

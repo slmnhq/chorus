@@ -845,7 +845,7 @@ describe("chorus.models.Abstract", function() {
 
         describe("behavior shared with collection", function() {
             beforeEach(function() {
-                this.resource = fixtures.user();
+                this.resource = newFixtures.user();
             });
             fetchIfNotLoadedSpecs();
         })
@@ -1073,9 +1073,9 @@ describe("chorus.models.Abstract", function() {
 
         describe("#findWhere", function() {
             beforeEach(function() {
-                this.m1 = fixtures.user({ firstName: "john", lastName: "coltrane", id: "5", admin: false });
-                this.m2 = fixtures.user({ firstName: "ravi", lastName: "coltrane", id: "6", admin: true });
-                this.m3 = fixtures.user({ firstName: "john", lastName: "medeski", id: "7", admin: true  });
+                this.m1 = newFixtures.user({ firstName: "john", lastName: "coltrane", id: "5", admin: false });
+                this.m2 = newFixtures.user({ firstName: "ravi", lastName: "coltrane", id: "6", admin: true });
+                this.m3 = newFixtures.user({ firstName: "john", lastName: "medeski", id: "7", admin: true  });
                 this.collection.reset([ this.m1, this.m2, this.m3 ]);
             });
 

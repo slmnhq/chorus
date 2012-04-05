@@ -92,7 +92,7 @@ describe("chorus.views.UserSidebar", function() {
 
         describe("#setUser(user)", function() {
             beforeEach(function() {
-                this.user2 = fixtures.user({ title: "Lame Test-Driver" })
+                this.user2 = newFixtures.user({ title: "Lame Test-Driver" })
                 this.view.setUser(this.user2);
             });
 
@@ -107,7 +107,7 @@ describe("chorus.views.UserSidebar", function() {
 
             it("is called when user:selected is triggered", function() {
                 this.view.setUser.reset();
-                chorus.PageEvents.broadcast("user:selected", fixtures.user());
+                chorus.PageEvents.broadcast("user:selected", newFixtures.user());
                 expect(this.view.setUser).toHaveBeenCalled();
             });
         });

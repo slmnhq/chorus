@@ -263,7 +263,7 @@ describe("chorus.views.Base", function() {
 
                     context("when the subview has required resources", function() {
                         beforeEach(function() {
-                            this.subviewModel = fixtures.user();
+                            this.subviewModel = newFixtures.user();
                             this.subview.requiredResources.add(this.subviewModel);
                         })
 
@@ -958,7 +958,7 @@ describe("chorus.views.Base", function() {
 
                 context("when there are requiredResources", function() {
                     beforeEach(function() {
-                        this.resource = fixtures.user();
+                        this.resource = newFixtures.user();
                         this.view.requiredResources.push(this.resource);
                         spyOn(this.view.requiredResources, 'allLoaded');
                     })

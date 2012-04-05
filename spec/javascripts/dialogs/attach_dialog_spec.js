@@ -4,13 +4,13 @@ describe("chorus.dialogs.Attach", function() {
         this.dialog.collectionClass = chorus.collections.Base;
         this.dialog.submitButtonTranslationKey = "loading";
         this.dialog.emptyListTranslationKey = "test.mouse";
-        this.dialog.collection = this.dialog.resource = new chorus.collections.Base([fixtures.user(), fixtures.user()]);
+        this.dialog.collection = this.dialog.resource = new chorus.collections.Base([newFixtures.user(), newFixtures.user()]);
         this.dialog.collection.loaded = true;
     });
 
     context("when selectedAttachments have been passed", function() {
         beforeEach(function() {
-            var collection = new chorus.collections.Base([fixtures.user(), fixtures.user()]);
+            var collection = new chorus.collections.Base([newFixtures.user(), newFixtures.user()]);
             this.dialog = new chorus.dialogs.Attach({ workspaceId : '33', selectedAttachments: collection});
             this.dialog.collection = this.dialog.resource = collection;
             this.dialog.collection.loaded = true;

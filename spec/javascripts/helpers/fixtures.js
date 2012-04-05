@@ -2304,7 +2304,7 @@ beforeEach(function() {
         },
 
         userSet: function(models, modelOverrides, attrs) {
-            models = models || [fixtures.user(modelOverrides), fixtures.user(modelOverrides)];
+            models = models || [newFixtures.user(modelOverrides), newFixtures.user(modelOverrides)];
             return new chorus.collections.UserSet(models, attrs || {});
         },
 
