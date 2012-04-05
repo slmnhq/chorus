@@ -65,6 +65,7 @@
                 this.close();
                 $("#facebox").remove();
                 $.facebox.settings.inited = false;
+                chorus.PageEvents.broadcast("modal:closed");
                 delete chorus.modal;
 
                 if (this.isSubModal) {

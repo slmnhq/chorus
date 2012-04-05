@@ -2,6 +2,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
     beforeEach(function() {
         this.model = fixtures.workspace({id: "999"});
         this.model.loaded = true;
+        spyOn(chorus.router, "navigate")
         this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
         this.view.render();
     });
@@ -73,6 +74,30 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             });
         });
     });
+    
+    describe("when dialogs are dismissed", function() {
+        context("and there are still unhidden info boxes", function() {
+            beforeEach(function() {
+                this.view.$(".info_box.edit_workspace_settings").addClass("hidden")
+                chorus.PageEvents.broadcast("modal:closed")
+            });
+
+            it("does not navigate", function() {
+                expect(chorus.router.navigate).not.toHaveBeenCalled();
+            });
+        });
+
+        context("and all info boxes are hidden", function() {
+            beforeEach(function() {
+                this.view.$(".info_box").addClass("hidden")
+                chorus.PageEvents.broadcast("modal:closed")
+            });
+
+            it("navigates to the normal workspace show page", function() {
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl(), true)
+            });
+        });
+    })
 
     it("navigates to the normal workspace show page if the dismiss link is clicked", function() {
         expect(this.view.$("a.dismiss")).toHaveHref("#/workspaces/999");

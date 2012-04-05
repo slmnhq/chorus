@@ -77,6 +77,8 @@ describe("chorus.Modal", function() {
 
             describe("when the facebox closes", function() {
                 beforeEach(function() {
+                    this.modalClosedSpy = jasmine.createSpy("modal:closed")
+                    chorus.PageEvents.subscribe("modal:closed", this.modalClosedSpy)
                     spyOn(this.modal, 'close');
                     $("#jasmine_content").append("<div id='facebox'/>")
                     $.facebox.settings.inited = true;
@@ -98,6 +100,10 @@ describe("chorus.Modal", function() {
                 it("removes the #facebox element from the DOM", function() {
                     expect($("#facebox")).not.toExist();
                 })
+
+                it("triggers the modal:closed page event", function() {
+                    expect(this.modalClosedSpy).toHaveBeenCalled()
+                });
             });
         });
     });

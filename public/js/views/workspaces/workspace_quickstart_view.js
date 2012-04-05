@@ -15,6 +15,7 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
     },
 
     setup: function() {
+        chorus.PageEvents.subscribe("modal:closed", this.dismissQuickStart, this);
         this.clickedDialogs = [];
     },
 
@@ -33,6 +34,15 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
 
     getContainingBox: function(link) {
         return link.closest(".info_box");
-    }
+    },
 
+    dismissQuickStart: function() {
+        var allHidden = _.all(this.$(".info_box"), function(node) {
+            return $(node).hasClass("hidden");
+        });
+
+        if(allHidden) {
+            chorus.router.navigate(this.model.showUrl(), true);
+        }
+    }
 });
