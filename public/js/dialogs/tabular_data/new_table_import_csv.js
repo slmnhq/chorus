@@ -148,6 +148,8 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         var $names = this.$(".column_names input:text");
         var pattern = chorus.ValidationRegexes.ChorusIdentifier64();
         var allValid = true;
+
+        this.clearErrors();
         _.each($names, function(name, i) {
             var $name = $names.eq(i);
             if (!$name.val().match(pattern)) {

@@ -290,6 +290,18 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             expect(this.$input2).toHaveClass("has_error");
         });
 
+        describe("correcting part of the invalid data", function() {
+            beforeEach(function() {
+                this.$input2.val('a');
+                this.dialog.$("button.submit").click();
+            });
+
+            it("removes the error warning from the corrected element", function() {
+                expect(this.$input).toHaveClass("has_error");
+                expect(this.$input2).not.toHaveClass("has_error");
+            });
+        });
+
         context("when the table name is invalid", function() {
             beforeEach(function() {
                 this.$input.val('ok');
