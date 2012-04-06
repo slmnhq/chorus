@@ -1,6 +1,6 @@
 describe("chorus.collections.WorkspaceSet", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.WorkspaceSet();
+        this.collection = newFixtures.workspaceSet();
     });
 
     describe("without filtering", function() {

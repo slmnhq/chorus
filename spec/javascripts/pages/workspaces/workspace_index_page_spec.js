@@ -1,6 +1,6 @@
 describe("chorus.pages.WorkspaceIndexPage", function() {
     beforeEach(function() {
-        this.workspaces = fixtures.workspaceSet();
+        this.workspaces = newFixtures.workspaceSet();
         this.page = new chorus.pages.WorkspaceIndexPage();
     });
 

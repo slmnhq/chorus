@@ -1729,11 +1729,6 @@ beforeEach(function() {
             return new chorus.collections.WorkfileSet(models);
         },
 
-        workspaceSet: function(models) {
-            models = models || [newFixtures.workspace(), newFixtures.workspace()];
-            return new chorus.collections.WorkspaceSet(models);
-        },
-
         artifact: function(overrides) {
             var attributes = _.extend({
                 id: this.nextId().toString(),

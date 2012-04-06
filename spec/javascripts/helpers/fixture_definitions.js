@@ -9,6 +9,11 @@ window.fixtureDefinitions = {
         unique: [ "id", "sandboxInfo.sandboxId" ]
     },
 
+    workspaceSet: {
+        collection: "WorkspaceSet",
+        unique: [ "id", "sandboxInfo.sandboxId" ]
+    },
+
     userSet: {
         collection: "UserSet",
         unique: [ "id" ]

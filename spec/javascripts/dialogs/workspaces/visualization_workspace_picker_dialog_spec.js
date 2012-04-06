@@ -9,7 +9,7 @@ describe("chorus.dialogs.VisualizationWorkspacePicker", function() {
 
         this.workspace1 = newFixtures.workspace({name: "Foo"});
         this.workspace2 = newFixtures.workspace({name: "Bar"});
-        this.workspaces = fixtures.workspaceSet([this.workspace1, this.workspace2]);
+        this.workspaces = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2]);
     });
 
     it("has the correct title and button", function() {
