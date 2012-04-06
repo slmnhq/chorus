@@ -14,6 +14,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         "click button.close_dialog": "closeModal",
         "click button.refresh": "refreshChart",
         "click .overlay:not(.disabled)": "refreshChart",
+        "click button.stop": "cancelRefresh"
     },
 
     setup: function() {
@@ -74,6 +75,12 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.drawChart();
         this.$("button.refresh").stopLoading();
         this.showButtons(["save", "close_dialog"]);
+    },
+
+    cancelRefresh: function() {
+        this.task.cancel();
+        this.bindings.add(this.task, "canceled", this.filtersChanged);
+        this.$("button.refresh").stopLoading();
     },
 
     showButtons: function(buttonClasses) {

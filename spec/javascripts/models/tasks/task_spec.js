@@ -34,5 +34,13 @@ describe("chorus.models.Task", function() {
             expect(cancelRequest.params()['action']).toBe('cancel');
             expect(this.model.has('action')).toBeFalsy();
         })
+
+        describe("when the request completes", function() {
+            it("triggers the 'canceled' event on the task", function() {
+                spyOnEvent(this.model, 'canceled');
+                this.server.lastUpdate().succeed();
+                expect('canceled').toHaveBeenTriggeredOn(this.model);
+            });
+        });
     })
 });

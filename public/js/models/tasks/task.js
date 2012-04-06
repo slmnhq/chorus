@@ -11,10 +11,15 @@ chorus.models.Task = chorus.models.Base.include(
     },
 
     cancel : function() {
-        Backbone.sync('update', this, {data: {
-            taskType: this.get('taskType'),
-            checkId: this.get('checkId'),
-            action: 'cancel'
-        }});
+        Backbone.sync('update', this, {
+            data: {
+                taskType: this.get('taskType'),
+                checkId: this.get('checkId'),
+                action: 'cancel'
+            },
+            success: _.bind(function() {
+                this.trigger("canceled")
+            }, this)
+        });
     }
 });

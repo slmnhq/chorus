@@ -535,22 +535,7 @@ describe("chorus.dialogs.Visualization", function() {
     });
 
     function itRespondsToFilterUpdates() {
-        it("overlays some stuff on the chart", function() {
-            expect(this.dialog.$('.overlay')).not.toHaveClass('hidden');
-            expect(this.dialog.$('.overlay')).toContainTranslation("visualization.overlay");
-        });
-
-        it("swaps out the 'Save As..' button for a 'Refresh Visualization' button", function() {
-            expect(this.dialog.$('button.refresh')).not.toHaveClass('hidden');
-            expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refresh")
-            expect(this.dialog.$('button.save')).toHaveClass('hidden');
-        });
-
-        it("swaps out the 'Close' button for a 'Revert' button", function() {
-            expect(this.dialog.$('button.revert')).not.toHaveClass('hidden');
-            expect(this.dialog.$('button.revert')).toContainTranslation("visualization.revert")
-            expect(this.dialog.$('button.close_dialog')).toHaveClass('hidden');
-        });
+        itShowsThatOptionsHaveChanged();
 
         it("refreshes the chart when clicking the 'refresh visualization' button", function() {
             this.dialog.$("button.refresh").click();
@@ -594,6 +579,25 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.task.get("filters")).toBe("newSql");
             });
 
+            describe("clicking the 'cancel' button", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog.task, 'cancel').andCallThrough();
+                    this.dialog.$("button.stop").click();
+                });
+
+                it("cancels the task", function() {
+                    expect(this.dialog.task.cancel).toHaveBeenCalled();
+                });
+
+                describe("when the cancel completes", function() {
+                    beforeEach(function() {
+                        this.server.lastUpdate().succeed();
+                    });
+
+                    itShowsThatOptionsHaveChanged();
+                });
+            });
+
             context("and the task save completes", function() {
                 beforeEach(function() {
                     this.server.completeSaveFor(this.dialog.task);
@@ -620,5 +624,25 @@ describe("chorus.dialogs.Visualization", function() {
                 });
             });
         });
+
+        function itShowsThatOptionsHaveChanged() {
+            it("overlays some stuff on the chart", function() {
+                expect(this.dialog.$('.overlay')).not.toHaveClass('hidden');
+                expect(this.dialog.$(".overlay")).not.toHaveClass("disabled");
+                expect(this.dialog.$('.overlay')).toContainTranslation("visualization.overlay");
+            });
+
+            it("swaps out the 'Save As..' button for a 'Refresh Visualization' button", function() {
+                expect(this.dialog.$('button.refresh')).not.toHaveClass('hidden');
+                expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refresh")
+                expect(this.dialog.$('button.save')).toHaveClass('hidden');
+            });
+
+            it("swaps out the 'Close' button for a 'Revert' button", function() {
+                expect(this.dialog.$('button.revert')).not.toHaveClass('hidden');
+                expect(this.dialog.$('button.revert')).toContainTranslation("visualization.revert")
+                expect(this.dialog.$('button.close_dialog')).toHaveClass('hidden');
+            });
+        }
     }
 });
