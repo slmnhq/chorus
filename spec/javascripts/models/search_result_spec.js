@@ -129,7 +129,7 @@ describe("chorus.models.SearchResult", function() {
             it("has the right url", function() {
                 expect(this.model.url()).toContain("/edc/search/global/?query=%25%25%25");
             });
-            expectShowUrl("#/search/%2525%2525%2525");
+            expectShowUrl("#/search/%25%25%25");
         });
 
         function expectUrl(url, paramsToIgnore) {

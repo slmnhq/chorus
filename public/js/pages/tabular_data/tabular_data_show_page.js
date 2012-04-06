@@ -58,9 +58,9 @@
         makeModel: function(instanceId, databaseName, schemaName, objectType, objectName) {
             this.model = this.tabularData = new chorus.models.DatabaseObject({
                 instance: { id: instanceId },
-                databaseName: decodeURIComponent(databaseName),
-                schemaName:   decodeURIComponent(schemaName),
-                objectName:   decodeURIComponent(objectName),
+                databaseName: databaseName,
+                schemaName:   schemaName,
+                objectName:   objectName,
                 objectType:   objectType
             });
         },

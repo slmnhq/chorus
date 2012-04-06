@@ -222,7 +222,7 @@ describe("chorus.views.Header", function() {
                     this.view.$(".search form").trigger("submit");
                     expect(chorus.router.navigate).toHaveBeenCalled();
                     var url = chorus.router.navigate.mostRecentCall.args[0];
-                    expect(url).toMatch(/test_query%252Fwith%252Fslashes/);
+                    expect(url).toMatch(/test_query%2Fwith%2Fslashes/);
                 });
 
                 context("when the header has a workspace id", function() {

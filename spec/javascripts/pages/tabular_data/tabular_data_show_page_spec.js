@@ -12,10 +12,10 @@ describe("chorus.pages.TabularDataShowPage", function() {
 
         this.page = new chorus.pages.TabularDataShowPage(
             "123",
-            "Foo%2F",
-            "Bar%25",
+            "Foo/",
+            "Bar%",
             "BASE_TABLE",
-            "slashes%2F"
+            "slashes/"
         );
     });
 
@@ -33,10 +33,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
         expect(options.text).toMatchTranslation("invalid_route.tabular_data.content");
     });
 
-    it("fetches a database object with the right parameters", function() {
-        expect(this.page.tabularData.get("databaseName")).toBe("Foo/");
-        expect(this.page.tabularData.get("schemaName")).toBe("Bar%");
-        expect(this.page.tabularData.get("objectName")).toBe("slashes/");
+    it("fetches a database object", function() {
         expect(this.page.tabularData).toHaveBeenFetched();
     });
 

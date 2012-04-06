@@ -633,57 +633,6 @@ describe("handlebars", function() {
             });
         });
 
-        describe("doubleEncode", function() {
-            beforeEach(function() {
-                this.template = "{{doubleEncode value}}";
-            });
-
-            it("encodes the appropriate entities", function() {
-                var context = {value: "% /xyz"}
-                var string = Handlebars.compile(this.template)(context);
-                expect(string).toBe("%2525%2520%252Fxyz");
-            });
-
-            it("handles html-ish stuff correctly", function() {
-                var context = {value: "<stuff>"}
-                var string = Handlebars.compile(this.template)(context);
-                expect(string).toBe("%253Cstuff%253E");
-            });
-        });
-
-        describe("encodeOnce", function() {
-            beforeEach(function() {
-                this.template = "{{encodeOnce value}}";
-            });
-            context("when the value is not encoded", function() {
-                beforeEach(function() {
-                   var context = {value: "%/%"}
-                   this.string = Handlebars.compile(this.template)(context);
-                });
-                it("encodes it once", function() {
-                   expect(this.string).toBe("%25%2F%25");
-                });
-            });
-            context("when the value is encoded once", function() {
-                beforeEach(function() {
-                    var context = {value: "%25%2F%25"}
-                    this.string = Handlebars.compile(this.template)(context);
-                });
-                it("returns the original value", function() {
-                    expect(this.string).toBe("%25%2F%25");
-                });
-            });
-            context("when the value is double encoded", function() {
-                beforeEach(function() {
-                    var context = {value: "%2525%252F%2525"}
-                    this.string = Handlebars.compile(this.template)(context);
-                });
-                it("decodes it once", function() {
-                    expect(this.string).toBe("%25%2F%25");
-                });
-            });
-        });
-
         describe("usedInWorkspaces", function() {
             var contextObjectClass = chorus.models.Base.extend({
                 showUrlTemplate: "{{workspaceId}}/contextObject",

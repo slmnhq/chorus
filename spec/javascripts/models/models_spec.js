@@ -34,6 +34,12 @@ describe("chorus.models.Abstract", function() {
                 expect(this.model.url()).toBe("/edc/data/45");
             });
 
+            it("does not unescape %2b to +, or otherwise bypass escaping", function() {
+                this.model.entityId = "+";
+                this.model.urlTemplate = "data/{{encode entityId}}"
+                expect(this.model.url()).toBe("/edc/data/%2B");
+            });
+
             context("when the model has a urlTemplateAttributes function", function() {
                 beforeEach(function() {
                     this.model.urlTemplate = "data/{{param1}}/{{param2}}/baz"
@@ -968,7 +974,7 @@ describe("chorus.models.Abstract", function() {
     describe("Collection", function() {
         beforeEach(function() {
             this.collection = new chorus.collections.Base([], { foo: "bar" });
-            this.collection.urlTemplate = "bar/{{foo}}";
+            this.collection.urlTemplate = "bar/{{encode foo}}";
         });
 
         describe("#url", function() {
@@ -1008,6 +1014,11 @@ describe("chorus.models.Abstract", function() {
                 it("fetches the first page of the collection", function() {
                     expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50");
                 });
+            });
+
+            it("does not unescape %2b to +, or otherwise bypass escaping", function() {
+                this.collection.attributes.foo = "+";
+                expect(this.collection.url()).toBe("/edc/bar/%2B?page=1&rows=50");
             });
 
             it("takes an optional page size", function() {

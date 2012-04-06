@@ -14,7 +14,7 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
         this.tabs = new chorus.views.TabControl(["activity"])
         this.tabs.activity && this.tabs.activity.collection.fetch();
 
-        this.model.entityId = this.makeEncodedEntityId();
+        this.model.entityId = this.getEntityId();
 
         var activities = this.model.activities();
         activities.fetch();
@@ -35,13 +35,13 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
     additionalContext: function() {
         return {
             fileName: this.model.fileNameFromPath(),
-            encodedEntityId: this.makeEncodedEntityId(),
+            entityId: this.getEntityId(),
             lastUpdated: t("hdfs.last_updated", { when: chorus.helpers.relativeTimestamp(this.model.get('lastModificationTime')) })
         }
     },
 
-    makeEncodedEntityId: function() {
-        return encodeURIComponent(this.model.get("instanceId") + "|" + this.model.get("path"));
+    getEntityId: function() {
+        return this.model.get("instanceId") + "|" + this.model.get("path");
     },
 
     createExternalTable: function(e) {

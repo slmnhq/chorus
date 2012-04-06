@@ -38,8 +38,8 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             itHasTheRightDefaultBehavior(true);
 
-            it("encodes the entity id", function() {
-                expect(this.view.$("a.add_note").attr("data-entity-id")).toBe("123%7C%2Ffoo%2Fmy_file.sql");
+            it("adds the entity id", function() {
+                expect(this.view.$("a.add_note").attr("data-entity-id")).toBe("123|/foo/my_file.sql");
             });
 
             describe("clicking the external table link", function() {

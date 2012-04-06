@@ -45,7 +45,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent(encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"')));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
             });
 
 
@@ -76,7 +76,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent(encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"')));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"'));
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -134,7 +134,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent(encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"')));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
             });
 
 
@@ -165,7 +165,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent(encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"')));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"'));
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -196,7 +196,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right importSourceUrl", function() {
-            expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10006/datasets/'+encodeURIComponent(encodeURIComponent('"10002"|"Analytics"|"analytics"|"QUERY"|"a_chorus_view"')));
+            expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10006/datasets/'+encodeURIComponent('"10002"|"Analytics"|"analytics"|"QUERY"|"a_chorus_view"'));
         });
 
         it("should have an importSourceLink in the header", function() {
@@ -255,7 +255,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent(encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"')));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -291,7 +291,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent(encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"')));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"'));
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -442,7 +442,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            expect(this.presenter.objectUrl).toMatchUrl('#/workspaces/4/datasets/'+encodeURIComponent(encodeURIComponent('"10014"|"silverware"|"forks"|"shiny"')));
+            expect(this.presenter.objectUrl).toMatchUrl('#/workspaces/4/datasets/'+encodeURIComponent('"10014"|"silverware"|"forks"|"shiny"'));
         });
 
         it("should have the right objectType", function() {

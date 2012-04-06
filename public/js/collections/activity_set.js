@@ -6,7 +6,7 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
         if (this.attributes.insights) {
             return "commentinsight/"
         } else {
-            return "activitystream/{{entityType}}/{{encodeOnce entityId}}"
+            return "activitystream/{{entityType}}/{{encode entityId}}"
         }
     },
 

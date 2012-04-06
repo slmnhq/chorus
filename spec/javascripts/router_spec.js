@@ -186,10 +186,10 @@ describe("chorus.router", function() {
                         this.chorus.router.navigate("#/foo/%271%27%7C2", true);
                         expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo/%271%27%7C2");
                         expect(Backbone.history.navigate).not.toHaveBeenCalled();
-                    })
+                    });
                 });
-            })
-        })
+            });
+        });
     });
 
     describe("#reload", function() {
@@ -201,9 +201,7 @@ describe("chorus.router", function() {
         })
     })
 
-    describe("route matching", function() {
-        var route = 'has%2Fslash';
-
+    describe("url decoding", function() {
         beforeEach(function() {
             setLoggedInUser()
             this.chorus = new Chorus();
@@ -218,9 +216,13 @@ describe("chorus.router", function() {
         });
 
         it("does not decode fragments before matching routes", function() {
-            this.chorus.router.navigate('/search/' + route, true);
-
-            expect(chorus.pages.SearchIndexPage.prototype.setup).toHaveBeenCalledWith(route);
+            this.chorus.router.navigate('/search/has%2Fslash', true);
+            expect(chorus.pages.SearchIndexPage.prototype.setup).toHaveBeenCalled();
         });
-    })
+
+        it("decodes parameters before constructing pages", function() {
+            this.chorus.router.navigate('/search/has%2Fslash', true);
+            expect(chorus.pages.SearchIndexPage.prototype.setup).toHaveBeenCalledWith('has/slash');
+        });
+    });
 });

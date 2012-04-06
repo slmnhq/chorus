@@ -4,7 +4,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         this.schema = fixtures.schema({ instanceId: "123", databaseName: "Foo%", name: "Bar/" });
         this.instance = fixtures.instance({ id: "123" });
         this.database = fixtures.database({ name: "Foo%", instanceId: "123" });
-        this.page = new chorus.pages.SchemaBrowsePage("123", "Foo%25", "Bar%2F");
+        this.page = new chorus.pages.SchemaBrowsePage("123", "Foo%", "Bar/");
     });
 
     it("has a helpId", function() {

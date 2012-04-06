@@ -73,7 +73,9 @@
         generateRouteCallback:function (className) {
             var self = this;
             return function () {
-                var args = arguments;
+                var args = _.map(_.toArray(arguments), function(arg) {
+                    return decodeURIComponent(arg);
+                });
                 var navFunction = function () {
                     chorus.PageEvents.reset();
                     if (className == "Login" && self.app.session.loggedIn()) {

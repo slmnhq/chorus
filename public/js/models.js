@@ -21,7 +21,7 @@ chorus.models = {
                 uri.addSearch(params);
             }
             if (!window.jasmine) { uri.addSearch({iebuster: chorus.cachebuster()}); }
-            return uri.normalize().toString();
+            return uri.toString();
         },
 
         activities: function(entityType) {
@@ -272,7 +272,7 @@ chorus.collections = {
                 uri.addSearch({iebuster: chorus.cachebuster()});
             }
 
-            return uri.normalize().toString();
+            return uri.toString();
         },
 
         makeSuccessFunction: function(options, success) {

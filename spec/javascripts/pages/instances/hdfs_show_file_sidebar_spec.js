@@ -32,7 +32,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
         it("shows the 'add a note' link", function() {
             expect(this.view.$("a.dialog").data("dialog")).toBe("NotesNew");
-            expect(this.view.$("a.dialog").data("entity-id")).toBe("9876%7C%2Ffolder%2Ffilename.txt");
+            expect(this.view.$("a.dialog").data("entity-id")).toBe("9876|/folder/filename.txt");
             expect(this.view.$("a.dialog").data("entity-type")).toBe("hdfs");
         })
 
@@ -83,10 +83,4 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
             expect(this.view.postRender).toHaveBeenCalled();
         })
     });
-
-    describe("#makeEncodedEntityId", function() {
-        it("encodes the string correctly", function() {
-            expect(this.view.makeEncodedEntityId()).toBe("9876%7C%2Ffolder%2Ffilename.txt")
-        })
-    })
 })
