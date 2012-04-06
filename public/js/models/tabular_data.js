@@ -131,26 +131,30 @@ chorus.models.TabularData = chorus.models.Base.include(
         }
     },
 
-    preview: function(inEditChorusView) {
+    preview: function() {
         if (!this._preview) {
-            this._preview = new chorus.models.TabularDataPreview({
-                instanceId: this.get("instance").id,
+            this._preview = new chorus.models.Task({
+                InstanceId: this.get("instance").id,
                 databaseName: this.get("databaseName"),
                 schemaName: this.get("schemaName")
             });
         }
 
-        var objectName = this.get("objectName");
-        var metaType = this.metaType();
-        if (inEditChorusView) {
-            this._preview.set({query: this.get("query"), workspaceId: this.get("workspace").id}, {silent: true});
-        } else if (metaType == "table") {
-            this._preview.set({tableName: objectName}, {silent: true});
-        } else if (metaType == "view") {
-            this._preview.set({viewName: objectName}, {silent: true});
+        var additionalAttrs;
+        if (this.has("query")) {
+            additionalAttrs = {
+                taskType: "getDatasetPreview",
+                query: this.get("query"),
+                workspaceId: this.get("workspace").id
+            };
         } else {
-            this._preview.set({datasetId: this.get("id"), workspaceId: this.get("workspace").id}, {silent: true});
+            additionalAttrs = {
+                taskType: "previewTableOrView",
+                objectName: this.get("objectName"),
+                objectType: this.get("objectType")
+            };
         }
+        this._preview.set(additionalAttrs, {silent: true});
 
         return this._preview;
     },

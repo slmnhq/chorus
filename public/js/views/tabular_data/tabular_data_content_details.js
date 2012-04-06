@@ -45,11 +45,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
         this.$(".column_count").addClass("hidden");
         this.$(".edit_chorus_view_info").addClass("hidden");
         this.$(".data_preview").removeClass("hidden");
-        if (!this.options.inEditChorusView) {
-            this.resultsConsole.execute(this.tabularData.preview());
-        } else {
-            this.resultsConsole.execute(this.tabularData.preview(this.options.inEditChorusView), true);
-        }
+        this.resultsConsole.execute(this.tabularData.preview());
     },
 
     closeDataPreview: function() {

@@ -41,7 +41,7 @@ describe("chorus.dialogs.SqlPreview", function() {
                 });
 
                 it("shows a results console", function() {
-                    expect(this.dialog.resultsConsole.execute).toHaveBeenCalledWith(this.dialog.model.preview(), true);
+                    expect(this.dialog.resultsConsole.execute).toHaveBeenCalledWith(this.dialog.model.preview());
                 });
 
                 describe("closing the Data Preview", function() {

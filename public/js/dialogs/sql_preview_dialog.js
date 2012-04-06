@@ -46,8 +46,8 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
 
     previewData: function(e) {
         e && e.preventDefault();
-        var preview = this.model.preview(true).set({query: this.sql()}, {silent: true})
-        this.resultsConsole.execute(preview, true);
+        var preview = this.model.preview().set({query: this.sql()}, {silent: true})
+        this.resultsConsole.execute(preview);
     },
 
     sql: function() {

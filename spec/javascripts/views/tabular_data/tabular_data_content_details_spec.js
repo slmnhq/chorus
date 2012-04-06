@@ -188,7 +188,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         });
 
                         it("should execute database preview model", function() {
-                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.tabularData.preview(this.view.options.inEditChorusView), true);
+                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.tabularData.preview());
                         });
                     });
                 })

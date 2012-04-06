@@ -4,8 +4,10 @@ chorus.models.Task = chorus.models.Base.include(
     urlTemplate: "task/sync/",
 
     initialize: function(attrs) {
-        this.set({ taskType: this.taskType });
-        this.set({ checkId: Math.random().toString() });
+        this.set({
+            taskType: attrs.taskType || this.taskType,
+            checkId: Math.random().toString()
+        });
     },
 
     cancel : function() {

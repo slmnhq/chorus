@@ -554,12 +554,12 @@ describe("chorus.views.ResultsConsoleView", function() {
             spyOn(this.view, 'executionStarted');
             spyOn(this.view, 'executionSucceeded');
             spyOn(this.view, 'executionFailed');
-            spyOn(this.executionModel, 'fetch').andCallThrough();
+            spyOn(this.executionModel, 'save').andCallThrough();
             this.view.execute(this.executionModel);
         });
 
-        it("fetches the executionModel", function() {
-            expect(this.executionModel.fetch).toHaveBeenCalled();
+        it("saves the executionModel", function() {
+            expect(this.executionModel.save).toHaveBeenCalled();
         });
 
         it("calls executionStarted", function() {
@@ -568,7 +568,6 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         context("when the task was successfully executed previously", function() {
             beforeEach(function() {
-
                 this.task = fixtures.task();
                 this.task.loaded = true;
                 _.delay.andCallFake(function(fn, timeout) { fn(); });
@@ -580,29 +579,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             });
         });
 
-        context("when isPostRequest is true", function() {
-            beforeEach(function() {
-                this.executionModel.fetch.reset();
-                spyOn(this.executionModel, "save").andCallThrough();
-                this.view.execute(this.executionModel, true);
-            });
-            it("should make a post request", function() {
-                expect(this.executionModel.save).toHaveBeenCalled();
-                expect(this.executionModel.fetch).not.toHaveBeenCalled();
-            })
-        })
-
         context("when execution is successful", function() {
-            context("when fetch returns successfully", function() {
-                beforeEach(function() {
-                    this.server.completeFetchFor(this.executionModel);
-                });
-
-                it("calls executionSucceeded", function() {
-                    expect(this.view.executionSucceeded).toHaveBeenCalledWith(this.executionModel);
-                });
-            })
-
             context("when save request returns successfully", function() {
                 beforeEach(function() {
                     this.view.model.trigger("saved");
@@ -611,13 +588,12 @@ describe("chorus.views.ResultsConsoleView", function() {
                 it("calls executionSucceeded", function() {
                     expect(this.view.executionSucceeded).toHaveBeenCalledWith(this.executionModel);
                 });
-            })
-
+            });
         });
 
         context("when execution fails", function() {
             beforeEach(function() {
-                this.server.lastFetchFor(this.executionModel).fail([
+                this.server.lastCreateFor(this.executionModel).fail([
                     {message: "broke!"}
                 ]);
             });
