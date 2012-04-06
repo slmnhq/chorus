@@ -14,6 +14,7 @@
 
     .right {
         float: right;
+        padding: 10px 10px 0;
     }
 
     .headerbar {
@@ -22,7 +23,7 @@
         font-size: 0;
 
         .text {
-            padding: 12px 10px 0;
+            padding: 10px 10px 0;
             display: inline-block;
             vertical-align: top;
         }
@@ -64,6 +65,10 @@
         @include chart_icon(heatmap);
         @include chart_icon(histogram);
         @include chart_icon(timeseries);
+    }
+
+    .filter_content {
+        line-height: 32px;
     }
 
     .modal_controls {
@@ -113,6 +118,10 @@
         left: 0;
         text-align: center;
         padding-top: 131px;
+        cursor: pointer;
+        &.disabled {
+            cursor: default;
+        }
     }
 
     .chart_area {
