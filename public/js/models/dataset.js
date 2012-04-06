@@ -76,7 +76,11 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
     },
 
     importFrequency: function() {
-        return this.getImport().frequency() || this.get('importFrequency')
+        if (this.getImport().loaded) {
+            if (this.getImport().hasActiveSchedule()) { return this.getImport().frequency(); }
+        } else {
+            return this.get("importFrequency");
+        }
     },
 
     columns: function(options) {
