@@ -405,17 +405,5 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             })
         })
     })
-
-    describe("event handling", function() {
-        describe("modal:closed", function() {
-            beforeEach(function() {
-                chorus.PageEvents.broadcast("modal:closed");
-            });
-
-            it("clears the model", function() {
-                expect(this.csv.has("lines")).toBeFalsy();
-            });
-        });
-    });
 })
 ;
