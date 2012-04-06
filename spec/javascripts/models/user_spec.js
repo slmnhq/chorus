@@ -108,7 +108,7 @@ describe("chorus.models.User", function() {
         });
 
         it("should return a truthy value for a valid user", function() {
-            this.model.set(fixtures.userJson());
+            this.model.set(newFixtures.userJson());
             this.model.set({ password: "foo", passwordConfirmation: "foo" });
             expect(this.model.performValidation()).toBeTruthy();
         });

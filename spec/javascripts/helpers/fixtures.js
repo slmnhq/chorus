@@ -21,7 +21,7 @@ beforeEach(function() {
                     id: "10000",
                     timestamp: "2012-02-28 11:51:42.14",
                     type: "BE_MEMBER",
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 }, overrides));
             }
         },
@@ -71,7 +71,7 @@ beforeEach(function() {
                             name: "Method Man"
                         }
                     ],
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 });
             },
 
@@ -98,7 +98,7 @@ beforeEach(function() {
                             name: "Method Man"
                         }
                     ],
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 });
             },
 
@@ -115,7 +115,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 });
             },
 
@@ -132,7 +132,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 });
             },
 
@@ -149,7 +149,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 });
             },
 
@@ -166,12 +166,12 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 });
             },
 
             "WORKSPACE_ADD_TABLE": function(overrides) {
-                var workspace = fixtures.workspaceJson()
+                var workspace = newFixtures.workspaceJson()
                 var attrs = _.extend({
                     type: "WORKSPACE_ADD_TABLE",
                     author: fixtures.authorJson(),
@@ -212,7 +212,7 @@ beforeEach(function() {
                         path: '/data',
                         name: "import.csv"
                     },
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 }, overrides);
 
                 return new chorus.models.Activity(attrs);
@@ -231,7 +231,7 @@ beforeEach(function() {
                     id: fixtures.nextId().toString(),
                     isDeleted: false,
                     timestamp: "2012-03-15 17:27:52",
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 }, overrides));
             },
 
@@ -505,7 +505,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: fixtures.workspaceJson(),
+                    workspace: newFixtures.workspaceJson(),
                     artifacts: [
                         {
                             entityId: "10101",
@@ -540,7 +540,7 @@ beforeEach(function() {
                         }
                     ],
                     workfile: fixtures.nestedWorkfileJson(),
-                    workspace: fixtures.workspaceJson(),
+                    workspace: newFixtures.workspaceJson(),
                     artifacts: [
                         {
                             entityId: fixtures.nextId().toString(),
@@ -1164,7 +1164,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 });
             },
 
@@ -1181,7 +1181,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 });
             },
 
@@ -1198,7 +1198,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: fixtures.workspaceJson()
+                    workspace: newFixtures.workspaceJson()
                 });
             },
 
@@ -1390,22 +1390,6 @@ beforeEach(function() {
             }, overrides);
         },
 
-        userJson: function(overrides) {
-            var id = this.nextId().toString();
-            return _.extend({
-                id: id,
-                userName: "user" + id,
-                firstName: "EDC" + id,
-                lastName: "Admin" + id,
-                emailAddress: "user" + id + "@example.com",
-                createdStamp: "2012-01-24 17:21:02.597",
-                isDeleted: false,
-                lastLogin: "2012-02-15 15:08:55",
-                notes: null,
-                title: null
-            }, overrides)
-        },
-
         nestedWorkfileJson: function() {
             var id = this.nextId().toString();
             return {
@@ -1466,8 +1450,8 @@ beforeEach(function() {
         workfileJson: function(overrides) {
             var id = this.nextId().toString();
             var name = 'Workfile ' + id;
-            var modifiedByUser = this.userJson();
-            var ownerUser = this.userJson();
+            var modifiedByUser = newFixtures.userJson();
+            var ownerUser = newFixtures.userJson();
             return _.extend({
                 id: id,
                 fileName: name,
@@ -1500,32 +1484,6 @@ beforeEach(function() {
                 source: "empty",
                 lastUpdatedStamp: "2011-11-29 10:46:03.152",
                 createdStamp: "2011-11-29 10:46:03.152"
-            }, overrides);
-        },
-
-        workspaceJson: function(overrides) {
-            overrides = overrides || {};
-            var id = overrides.id || this.nextId();
-            var databaseId = this.nextId();
-            var instanceId = this.nextId();
-            var schemaId = this.nextId();
-            return _.extend({
-                id: id.toString(),
-                name: 'Workspace ' + id,
-                ownerId: this.nextId().toString(),
-                ownerFirstName: "Dr",
-                ownerLastName: "Mario",
-                active: true,
-                isPublic: true,
-                sandboxInfo: {
-                    databaseId: databaseId,
-                    databaseName: 'database' + databaseId,
-                    instanceId: instanceId,
-                    instanceName: 'instance' + instanceId,
-                    sandboxId: this.nextId().toString(),
-                    schemaId: schemaId,
-                    schemaName: 'schema' + schemaId
-                }
             }, overrides);
         },
 
@@ -1827,7 +1785,7 @@ beforeEach(function() {
                 shared: "yes",
                 expiration: null,
                 instanceId: this.nextId().toString(),
-                user: _.extend(this.userJson(), overrides.user),
+                user: _.extend(newFixtures.userJson(), overrides.user),
                 dbUserName: "gpadmin"
             }, overrides);
             return new chorus.models.InstanceAccount(attributes);
@@ -1897,7 +1855,7 @@ beforeEach(function() {
                 workspace: {id: fixtures.nextId(), name: "some_workspace"},
                 workspaceUsed: {
                     workspaceCount: 1,
-                    workspaceList: [fixtures.workspaceJson()]
+                    workspaceList: [newFixtures.workspaceJson()]
                 }
             }, overrides);
             attributes.id = _.map([
