@@ -6,12 +6,17 @@
 
     _.each(window.fixtureDefinitions, function(definition, name) {
         var klass = getClass(definition);
+        var jsonMethodName = name + "Json";
 
-        window.newFixtures[name] = function(overrides) {
+        window.newFixtures[jsonMethodName] = function(overrides) {
             var rawData = getFixture(name);
             overrides || (overrides = defaultOverridesFor(rawData));
             addUniqueDefaults(overrides, definition.unique);
-            var attrs = safeExtend(rawData, overrides, name);
+            return safeExtend(rawData, overrides, name);
+        };
+
+        window.newFixtures[name] = function(overrides) {
+            var attrs = newFixtures[jsonMethodName].apply(this, arguments);
             return new klass(attrs);
         };
     });

@@ -1,38 +1,44 @@
 describe("newFixtures", function() {
-    describe("#user", function() {
-        var user;
+    describe("#userJson", function() {
+        var userJson;
 
         beforeEach(function() {
-            user = newFixtures.user();
+            userJson = newFixtures.userJson();
         });
 
-        it("should create a user model", function() {
-            expect(user).toBeA(chorus.models.User);
-        });
-
-        it("sets attributes of the model based on the fixtureData", function() {
+        it("includes the user fixture data", function() {
             expect(window.fixtureData.user).toBeDefined();
             expect(window.fixtureData.user.userName).toBeDefined();
-            expect(user.get("userName")).toBe(window.fixtureData.user.userName);
+            expect(userJson.userName).toBe(window.fixtureData.user.userName);
         });
 
         it("allows for overrides", function() {
-            user = newFixtures.user({userName: "Foo Bar"});
-            expect(user.get("userName")).toBe("Foo Bar");
+            userJson = newFixtures.userJson({userName: "Foo Bar"});
+            expect(userJson.userName).toBe("Foo Bar");
         });
 
         it("does not allow overrides for non-existant attributes", function() {
-            expect(function() {newFixtures.user({foo: "Bar"})}).toThrow();
+            expect(function() { newFixtures.userJson({ foo: "Bar" }) }).toThrow();
         });
 
         it("gives each user a unique id", function() {
-            var user2 = newFixtures.user();
-            expect(user2.get("id")).not.toEqual(user.get("id"));
+            var userJson2 = newFixtures.userJson();
+            expect(userJson2.id).not.toEqual(userJson.id);
         });
 
         it("uses the override id, if one is specified", function() {
-            var user2 = newFixtures.user({ id: '501' });
-            expect(user2.get("id")).toBe("501");
+            var userJson2 = newFixtures.userJson({ id: '501' });
+            expect(userJson2.id).toBe("501");
+        });
+    });
+
+    describe("#user", function() {
+        it("creates a user model with attributes given by #userJson", function() {
+            var fakeAttrs = { ping: "pong", paddle: "ball" };
+            spyOn(newFixtures, 'userJson').andReturn(fakeAttrs);
+            var user = newFixtures.user();
+            expect(user.attributes).toEqual(fakeAttrs);
+            expect(user).toBeA(chorus.models.User);
         });
     });
 
