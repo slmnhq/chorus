@@ -28,6 +28,7 @@ describe("chorus.views.DatasetFilter", function() {
                 spyOn(this.view.columnFilter, "selectColumn").andCallThrough();
                 selectedColumn = this.collection.at(1)
                 this.model.set({column: selectedColumn, comparator: "not_equal", input: {value: "jellyfish"}});
+                this.view.render();
             });
 
             it("selects that column", function() {

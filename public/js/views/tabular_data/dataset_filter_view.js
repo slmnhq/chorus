@@ -24,7 +24,6 @@ chorus.views.DatasetFilter = chorus.views.Base.extend({
         });
         this.bindings.add(this.columnFilter, "columnSelected", this.columnSelected);
         this.bindings.add(this.collection, "remove", this.render);
-        this.bindings.add(this.model, "change", this.render);
     },
 
     postRender: function() {

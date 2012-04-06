@@ -12,7 +12,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         "click a.show_options": "showFilterOptions",
         "click a.hide_options": "hideFilterOptions",
         "click button.close_dialog": "closeModal",
-        "click button.refresh": "refreshChart"
+        "click button.refresh": "refreshChart",
+        "click .overlay": "refreshChart"
     },
 
     setup: function() {
@@ -62,8 +63,24 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     refreshChart: function() {
         this.task.set({filters: this.filters && this.filters.whereClause()});
         this.task.save();
+        this.showButtons(["stop", "refresh"]);
         this.$("button.refresh").startLoading("visualization.refreshing");
-        this.bindings.add(this.task, "saved", this.drawChart, this);
+        this.bindings.add(this.task, "saved", this.chartRefreshed, this);
+    },
+
+    chartRefreshed: function() {
+        this.$(".overlay").addClass('hidden');
+        this.drawChart();
+        this.$("button.refresh").stopLoading();
+        this.showButtons(["save", "close_dialog"]);
+    },
+
+    showButtons: function(buttonClasses) {
+        var buttons = this.$("button");
+        buttons.addClass("hidden");
+        _.each(buttonClasses, function(buttonClass) {
+            buttons.filter("." + buttonClass).removeClass("hidden");
+        });
     },
 
     displayEmptyChartWarning: function() {
@@ -143,11 +160,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     filtersChanged: function() {
         this.$(".overlay").removeClass("hidden");
-        this.$("button.refresh").removeClass("hidden");
-        this.$("button.revert").removeClass("hidden");
-        this.$("button.save").addClass("hidden");
-        this.$("button.close_dialog").addClass("hidden");
-
+        this.showButtons(["refresh", "revert"]);
     },
 
     showTabularData: function(e) {
