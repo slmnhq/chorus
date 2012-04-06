@@ -1,20 +1,32 @@
 describe("chorus.dialogs.Attach", function() {
     beforeEach(function() {
-        this.dialog = new chorus.dialogs.Attach({ workspaceId : "33" });
+        this.user1 = newFixtures.user({ firstName: "A Unique", lastName: "snowflake" });
+        this.user2 = newFixtures.user({ firstName: "B Tyler", lastName: "Durden" });
+        this.users = new chorus.collections.Base([this.user1, this.user2]);
+        this.users.loaded = true;
+
+        this.subclass = chorus.dialogs.Attach.extend({
+            picklistCollectionModelContext: function(model) {
+                return {
+                    name: model.displayName(),
+                    imageUrl: model.picklistImageUrl()
+                }
+            }
+        });
+
+        this.dialog = new this.subclass({ workspaceId : "33", collection: this.users });
         this.dialog.collectionClass = chorus.collections.Base;
         this.dialog.submitButtonTranslationKey = "loading";
-        this.dialog.emptyListTranslationKey = "test.mouse";
-        this.dialog.collection = this.dialog.resource = new chorus.collections.Base([newFixtures.user(), newFixtures.user()]);
-        this.dialog.collection.loaded = true;
     });
 
     context("when selectedAttachments have been passed", function() {
         beforeEach(function() {
-            var collection = new chorus.collections.Base([newFixtures.user(), newFixtures.user()]);
-            this.dialog = new chorus.dialogs.Attach({ workspaceId : '33', selectedAttachments: collection});
-            this.dialog.collection = this.dialog.resource = collection;
-            this.dialog.collection.loaded = true;
+            this.users = new chorus.collections.Base([newFixtures.user(), newFixtures.user()]);
+            this.users.loaded = true;
+
+            this.dialog = new this.subclass({ workspaceId : '33', collection: this.users, selectedAttachments: this.users});
             this.dialog.submitButtonTranslationKey = "loading";
+
             this.dialog.render();
         });
 
@@ -24,21 +36,8 @@ describe("chorus.dialogs.Attach", function() {
         });
     });
 
-    it("when there are no attachable items", function() {
-        this.dialog.collection.reset();
-        this.dialog.render();
-
-        expect(this.dialog.$(".collection_list")).toContainTranslation("test.mouse");
-    });
-
     describe("render", function() {
         beforeEach(function() {
-            this.dialog.collectionModelContext = function() {
-                return {
-                    iconUrl: '/images/emc-logo.png',
-                    name: 'my name'
-                }
-            }
             this.dialog.render();
         });
 
@@ -47,15 +46,17 @@ describe("chorus.dialogs.Attach", function() {
         })
 
         it("includes an image for each entry", function() {
-            var images = this.dialog.$(".collection_list img");
+            var images = this.dialog.$("li img");
             expect(images.length).toBe(this.dialog.collection.length);
-            expect(images.eq(0)).toHaveAttr("src", '/images/emc-logo.png');
+            expect(images.eq(0)).toHaveAttr("src", this.user1.imageUrl())
+            expect(images.eq(1)).toHaveAttr("src", this.user2.imageUrl());
         });
 
         it("includes a name for each entry", function() {
-            var names = this.dialog.$('.name');
+            var names = this.dialog.$("li .name");
             expect(names.length).toBe(this.dialog.collection.length);
-            expect(names.eq(0)).toContainText("my name");
+            expect(names.eq(0)).toContainText("Unique snowflake");
+            expect(names.eq(1)).toContainText("Tyler Durden");
         })
 
         it("has a close window button that cancels the dialog", function() {
@@ -64,6 +65,11 @@ describe("chorus.dialogs.Attach", function() {
 
         it("has the 'Attach File' button disabled by default", function() {
             expect(this.dialog.$('button.submit')).toBeDisabled();
+        });
+
+        it("has a CollectionPicklist", function() {
+            expect(this.dialog.$(".picklist")).toExist();
+            expect(this.dialog.picklistView).toBeA(chorus.views.CollectionPicklist);
         });
     });
 
@@ -100,7 +106,6 @@ describe("chorus.dialogs.Attach", function() {
                 expect(this.dialog.$('button.submit')).toBeDisabled();
             });
         });
-
     });
 
     describe("submit", function() {

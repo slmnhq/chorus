@@ -1,14 +1,18 @@
 {{#if loaded}}
-<div class="search">
-    <input type="text" placeholder="{{t "workfile.copy_dialog.search_placeholder"}}"/>
-</div>
-<div class="items collection_list">
-    <ul>
-     {{#each models}}
-        <li data-id={{id}}><img src="{{imageUrl}}"/><span class="name" title="{{name}}">{{name}}</span></li>
-     {{/each}}
-    </ul>
-</div>
+    <div class="search">
+        <input type="text" placeholder="{{t "workfile.copy_dialog.search_placeholder"}}"/>
+    </div>
+    {{#if models.length}}
+        <div class="items collection_list">
+            <ul>
+             {{#each models}}
+                <li data-id={{id}}><img src="{{imageUrl}}"/><span class="name" title="{{name}}">{{name}}</span></li>
+             {{/each}}
+            </ul>
+        </div>
+    {{else}}
+        <div class="none">{{t view.emptyListTranslationKey}}</div>
+    {{/if}}
 {{else}}
     <div class="loading">{{t "loading"}}</div>
 {{/if}}

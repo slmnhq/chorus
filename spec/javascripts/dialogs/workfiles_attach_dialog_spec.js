@@ -1,19 +1,31 @@
 describe("chorus.dialogs.WorkfilesAttach", function() {
     beforeEach(function() {
-        this.workfiles = fixtures.workfileSet([
-            fixtures.workfile({lastUpdatedStamp: "2011-11-29 10:46:03.152"}),
-            fixtures.workfile({lastUpdatedStamp: "2012-11-29 10:46:03.152"})
-        ]);
+        this.workfile1 = fixtures.workfile({
+            mimeType: "image/png",
+            lastUpdatedStamp: "2011-11-29 10:46:03.152",
+            workspaceId: "33",
+            versionInfo: {
+                versionNum: "1"
+            }
+        });
+        this.workfile2 = fixtures.workfile({
+            fileType: "SANDWICH",
+            lastUpdatedStamp: "2012-11-29 10:46:03.152",
+            workspaceId: "33",
+            versionInfo: {
+                versionNum: "5"
+            }
+        });
+
+        this.workfiles = fixtures.workfileSet([this.workfile1, this.workfile2]);
         this.dialog = new chorus.dialogs.WorkfilesAttach({ workspaceId : "33" });
         this.server.completeFetchAllFor(this.dialog.collection, this.workfiles.models);
-        spyOn(this.dialog.collection.at(0), "isImage").andReturn(true);
-        spyOn(this.dialog.collection.at(1), "isImage").andReturn(false);
         this.dialog.render();
     });
 
     it("sorts workfiles by last modified date", function() {
-        expect(this.dialog.$("li:eq(0)")).toHaveAttr("data-id", this.workfiles.at(1).get('id'));
-        expect(this.dialog.$("li:eq(1)")).toHaveAttr("data-id", this.workfiles.at(0).get('id'));
+        expect(this.dialog.$("li:eq(0)")).toHaveAttr("data-id", this.workfile2.get('id'));
+        expect(this.dialog.$("li:eq(1)")).toHaveAttr("data-id", this.workfile1.get('id'));
     });
 
     it("has the correct submit button text", function() {
@@ -21,11 +33,11 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
     });
 
     it("has the correct iconUrl", function() {
-        expect(this.dialog.$('.collection_list img:eq(0)')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl(this.workfiles.at(1).get("fileType"), 'medium'));
-        expect(this.dialog.$('.collection_list img:eq(1)')).toHaveAttr('src', this.dialog.collection.at(0).thumbnailUrl());
+        expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl(this.workfile2.get("fileType"), 'medium'));
+        expect(this.dialog.$('li:eq(1) img')).toHaveAttr('src', this.workfile1.thumbnailUrl());
     });
 
     it("has the correct name", function() {
-        expect(this.dialog.$('.name:eq(0)')).toContainText(this.workfiles.at(1).get("fileName"));
+        expect(this.dialog.$('li:eq(0) .name')).toContainText(this.workfiles.at(1).get("fileName"));
     });
 });

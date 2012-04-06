@@ -1,17 +1,12 @@
 chorus.dialogs.Attach = chorus.dialogs.Base.extend({
     className: 'attach_dialog',
-    emptyListTranslationKey: "none",
     useLoadingSection: true,
-
-    events:{
-        "click li":"toggleSelection",
-        "click .submit":"submit"
+    events: {
+        "click .submit" : "submit"
     },
 
-    toggleSelection:function (event) {
-        event.preventDefault();
-        $(event.target).closest("li").toggleClass("selected");
-        if (this.$('li.selected').length > 0) {
+    enableButtons: function(items) {
+        if (items && items.length > 0) {
             this.$('button.submit').removeAttr('disabled');
         } else {
             this.$('button.submit').attr('disabled', 'disabled');
@@ -24,19 +19,24 @@ chorus.dialogs.Attach = chorus.dialogs.Base.extend({
             return this.collection.get(id);
         }, this);
 
-        this.selectedAttachments = new this.collectionClass(attachments, { workspaceId:this.collection.get("workspaceId") });
+        this.selectedAttachments = new this.collectionClass(attachments, { workspaceId: this.collection.get("workspaceId") });
         this.trigger(this.selectedEvent, this.selectedAttachments);
         this.closeModal();
     },
 
+    setup: function() {
+        this.picklistView = new chorus.views.CollectionPicklist({ collection: this.collection, defaultSelection: this.options.selectedAttachments, multiSelection: true });
+        this.picklistView.collectionModelContext = this.picklistCollectionModelContext;
+        this.picklistView.collectionModelComparator = this.picklistCollectionModelComparator;
+        this.picklistView.bind("item:selected", this.enableButtons, this);
+    },
+
     postRender:function () {
-        if (!this.options.selectedAttachments) {
-            return;
-        }
-        _.each(this.$('li'), function (li) {
-            if (this.options.selectedAttachments.get($(li).data('id'))) {
-                $(li).addClass('selected');
-            }
-        }, this);
-    }
+        this.picklistView.render();
+        this.$(".dialog_content .picklist").append(this.picklistView.el);
+        this.picklistView.delegateEvents();
+    },
+
+    picklistCollectionModelContext: $.noop,
+    picklistCollectionModelComparator: $.noop
 })

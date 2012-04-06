@@ -11,18 +11,14 @@ chorus.dialogs.WorkfilesAttach = chorus.dialogs.Attach.extend({
         this.collection.fetchAll();
     },
 
-    collectionModelContext: function (model) {
+    picklistCollectionModelContext: function (model) {
         return {
-            iconUrl: model.isImage() ? model.thumbnailUrl() : model.iconUrl({size:"medium"}),
-            name: model.get("fileName")
+            name: model.get("fileName"),
+            imageUrl: model.isImage() ? model.thumbnailUrl() : model.iconUrl({size:"medium"})
         }
     },
 
-    additionalContext:function (ctx) {
-        return {
-            models:_.sortBy(ctx.models, function (model) {
-                return -(Date.parseFromApi(model.lastUpdatedStamp).getTime())
-            })
-        }
+    picklistCollectionModelComparator: function(model) {
+        return -(Date.parseFromApi(model.get("lastUpdatedStamp")).getTime());
     }
 })

@@ -10,10 +10,10 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.Attach.extend({
         this.collection.fetchAll();
     },
 
-    collectionModelContext: function (model) {
+    picklistCollectionModelContext: function (model) {
         return {
-            iconUrl: model.iconUrl({size: 'medium'}),
-            name: model.get("objectName")
+            name: model.get("objectName"),
+            imageUrl: model.iconUrl({size: 'medium'})
         }
     }
 })

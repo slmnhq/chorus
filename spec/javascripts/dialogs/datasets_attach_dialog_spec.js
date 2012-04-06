@@ -11,11 +11,10 @@ describe("chorus.dialogs.DatasetsAttach", function() {
     });
 
     it("has the correct iconUlr", function() {
-        expect(this.dialog.$('.collection_list img:eq(0)')).toHaveAttr('src', this.datasets.at(0).iconUrl({size: 'medium'}));
+        expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', this.datasets.at(0).iconUrl({size: 'medium'}));
     });
 
     it("has the correct name", function() {
-        expect(this.dialog.$('.name:eq(0)')).toContainText(this.datasets.at(0).get("objectName"));
+        expect(this.dialog.$('li:eq(0) .name')).toContainText(this.datasets.at(0).get("objectName"));
     });
-
 });

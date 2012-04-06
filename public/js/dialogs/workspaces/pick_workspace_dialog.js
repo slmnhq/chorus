@@ -1,6 +1,5 @@
 chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
     className:"pick_workspace",
-
     persistent:true,
 
     events:{
