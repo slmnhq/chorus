@@ -142,7 +142,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         });
 
                         it("should execute database preview model", function() {
-                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.tabularData.preview());
+                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWithSorta(this.view.tabularData.preview(), ["checkId"]);
                         });
                     });
                 })
@@ -188,7 +188,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         });
 
                         it("should execute database preview model", function() {
-                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.view.tabularData.preview());
+                            expect(this.view.resultsConsole.execute).toHaveBeenCalledWithSorta(this.view.tabularData.preview(), ["checkId"]);
                         });
                     });
                 })

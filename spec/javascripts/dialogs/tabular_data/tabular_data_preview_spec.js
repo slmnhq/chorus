@@ -6,7 +6,8 @@ describe("chorus.dialogs.TabularDataPreview", function () {
         this.view = new chorus.dialogs.TabularDataPreview({
             pageModel: this.dataset
         });
-        this.view.render();
+        stubModals();
+        this.view.launchModal();
     });
 
     it('should have a close link', function () {
@@ -14,7 +15,7 @@ describe("chorus.dialogs.TabularDataPreview", function () {
     });
 
     it("should pass the dataset to execute on the results console", function () {
-        expect(this.view.resultsConsole.execute).toHaveBeenCalledWith(this.dataset.preview());
+        expect(this.view.resultsConsole.execute).toHaveBeenCalledWithSorta(this.dataset.preview(), ["checkId"]);
         expect(this.view.resultsConsole.el).toBe(this.view.$('.results_console').get(0));
     });
 
@@ -25,6 +26,7 @@ describe("chorus.dialogs.TabularDataPreview", function () {
     describe("event handling", function() {
         beforeEach(function() {
             spyOn(this.view.task, "cancel");
+            spyOn(chorus.PageEvents, "unsubscribe");
         });
 
         describe("action:closePreview", function() {
@@ -43,11 +45,15 @@ describe("chorus.dialogs.TabularDataPreview", function () {
 
         describe("closing the window any other way", function() {
             beforeEach(function() {
-                chorus.PageEvents.broadcast("modal:closed");
+                this.view.modalClosed();
             });
 
             it("cancels the task", function() {
                 expect(this.view.task.cancel).toHaveBeenCalled();
+            });
+
+            it("unsubscribes from the modal:closed event", function() {
+                expect(chorus.PageEvents.unsubscribe).toHaveBeenCalledWith(this.view.modalClosedHandle);
             });
         });
     });

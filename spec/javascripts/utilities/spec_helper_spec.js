@@ -119,6 +119,79 @@ describe("spec_helper", function() {
         });
     });
 
+    describe("#toHaveBeenCalledWithSorta", function() {
+        beforeEach(function() {
+            this.theObject = { test: function() {} };
+            spyOn(this.theObject, "test");
+        });
+
+        it("mis-match", function() {
+            var foo = {abc: "xyz"};
+            this.theObject.test({});
+            expect(this.theObject.test).not.toHaveBeenCalledWithSorta(foo);
+        });
+
+
+        it("identity", function() {
+            var foo = {abc: "xyz"};
+            this.theObject.test(foo);
+            expect(this.theObject.test).toHaveBeenCalledWithSorta(foo);
+        });
+
+        it("field equivalence", function() {
+            var foo = {abc: "xyz"};
+            var bar = {abc: "xyz"};
+            this.theObject.test(foo);
+            expect(this.theObject.test).toHaveBeenCalledWithSorta(bar);
+        });
+
+        it("removes fields from both", function() {
+            var foo = {abc: "xyz", def: "should disappear", number: 1, favourite_ice_cream_flavour: "chocolate"};
+            var bar = {abc: "xyz", def: "bc I said so", number: 51, favourite_ice_cream_flavour: "strawberry"};
+
+            this.theObject.test(foo);
+            expect(this.theObject.test).toHaveBeenCalledWithSorta(bar, ["def", "number", "favourite_ice_cream_flavour"]);
+        });
+
+        it("removes fields from actual", function() {
+            var foo = {abc: "xyz", def: "should disappear"};
+            var bar = {abc: "xyz"};
+
+            this.theObject.test(foo);
+            expect(this.theObject.test).toHaveBeenCalledWithSorta(bar, ["def"]);
+        });
+
+        it("removes fields from expected", function() {
+            var foo = {abc: "xyz"};
+            var bar = {abc: "xyz", def: "should disappear"};
+
+            this.theObject.test(foo);
+            expect(this.theObject.test).toHaveBeenCalledWithSorta(bar, ["def"]);
+        });
+
+        it("can compare same backbone model", function() {
+            var foo = new chorus.models.User({ a: "a", b: "b" });
+            this.theObject.test(foo);
+            expect(this.theObject.test).toHaveBeenCalledWithSorta(foo);
+        });
+
+        it("can compare similar backbone models", function() {
+            var foo = new chorus.models.User({ a: "a", b: "b" });
+            var bar = new chorus.models.User({ a: "a", b: "b" });
+
+            this.theObject.test(foo);
+            expect(this.theObject.test).toHaveBeenCalledWithSorta(bar);
+        });
+
+        it("can handle backbone models with field exceptions", function() {
+            var foo = new chorus.models.User({ a: "a", b: "b" });
+            var bar = new chorus.models.User({ a: "a", b: "c" });
+
+            this.theObject.test(foo);
+            expect(this.theObject.test).toHaveBeenCalledWithSorta(bar, ["b"]);
+        });
+    });
+
     describe("#toHaveHref", function() {
         it("passes if the element has the href", function() {
             var elem = $("<a/>").attr("href", "http://example.com/foo/bar")

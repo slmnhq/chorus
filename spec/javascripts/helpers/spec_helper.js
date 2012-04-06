@@ -150,6 +150,31 @@
                     })
                 },
 
+                toHaveBeenCalledWithSorta: function(object, exceptions) { // only works with 1-argument calls
+                    function cleanser(object) {
+                        object = _.clone(object);
+                        _.each(exceptions, function(exception) {
+                            if (object.attributes) object.attributes[exception] = undefined;
+                            else object[exception] = undefined;
+                        });
+                        return object;
+                    }
+
+                    var argumentsUsed = "";
+                    object = cleanser(object);
+                    if (_.any(this.actual.calls, function(call) {
+                        var arg0 = cleanser(call.args[0]);
+                        argumentsUsed += "\n" + jasmine.pp(arg0);
+                        return arg0.attributes ? _.isEqual(arg0.attributes, object.attributes) : _.isEqual(arg0, object);
+                    })) {
+                        return true;
+                    }
+                    this.message = function() {
+                        var foo = " to have been called with\n" + jasmine.pp(object) + "\n(ignoring fields " + jasmine.pp(exceptions) + ") as its first argument but was called with " + argumentsUsed + "\n as first arguments";
+                        return [ "Expected" + foo , "Expected not" + foo ];
+                    };
+                },
+
                 toContainText: function(text) {
                     var actualText = _.isString(this.actual) ? this.actual : this.actual.text()
                     this.message = function() {

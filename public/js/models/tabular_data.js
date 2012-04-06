@@ -132,13 +132,11 @@ chorus.models.TabularData = chorus.models.Base.include(
     },
 
     preview: function() {
-        if (!this._preview) {
-            this._preview = new chorus.models.Task({
-                InstanceId: this.get("instance").id,
-                databaseName: this.get("databaseName"),
-                schemaName: this.get("schemaName")
-            });
-        }
+        var preview = new chorus.models.Task({
+            InstanceId: this.get("instance").id,
+            databaseName: this.get("databaseName"),
+            schemaName: this.get("schemaName")
+        });
 
         var additionalAttrs;
         if (this.has("query")) {
@@ -154,9 +152,9 @@ chorus.models.TabularData = chorus.models.Base.include(
                 objectType: this.get("objectType")
             };
         }
-        this._preview.set(additionalAttrs, {silent: true});
+        preview.set(additionalAttrs, {silent: true});
 
-        return this._preview;
+        return preview;
     },
 
     refetchAfterInvalidated: function() {

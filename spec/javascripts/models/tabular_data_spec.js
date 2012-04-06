@@ -358,8 +358,8 @@ describe("chorus.models.TabularData", function() {
                 expect(this.preview.get("checkId")).not.toBeUndefined();
             });
 
-            it("should memoize the database preview", function() {
-                expect(this.preview).toBe(this.tabularData.preview());
+            it("should not memoize the database preview", function() {
+                expect(this.preview).not.toBe(this.tabularData.preview());
             });
         }
     });

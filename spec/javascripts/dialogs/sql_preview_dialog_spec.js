@@ -2,15 +2,16 @@ describe("chorus.dialogs.SqlPreview", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.launchElement = $("<a></a>");
+            var model = fixtures.datasetChorusView({query: "select awesome from sql"});
             this.dialog = new chorus.dialogs.SqlPreview({
                 launchElement: this.launchElement,
-                model : fixtures.datasetSandboxTable()
+                model : model
             });
             spyOn(_, 'defer');
             spyOn(CodeMirror, 'fromTextArea').andReturn({ refresh: $.noop });
             this.dialog.render();
             this.parent = {
-                sql : function(){ return "select awesome from sql"; }
+                sql : function(){ return model.get("query"); }
             }
         });
 
@@ -41,7 +42,7 @@ describe("chorus.dialogs.SqlPreview", function() {
                 });
 
                 it("shows a results console", function() {
-                    expect(this.dialog.resultsConsole.execute).toHaveBeenCalledWith(this.dialog.model.preview());
+                    expect(this.dialog.resultsConsole.execute).toHaveBeenCalledWithSorta(this.dialog.model.preview(), ["checkId"]);
                 });
 
                 describe("closing the Data Preview", function() {

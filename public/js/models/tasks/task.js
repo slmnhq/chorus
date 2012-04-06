@@ -11,6 +11,8 @@ chorus.models.Task = chorus.models.Base.include(
     },
 
     cancel : function() {
+        if (this.cancelled || this.loaded) return;
+        this.cancelled = true;
         Backbone.sync('update', this, {
             data: {
                 taskType: this.get('taskType'),

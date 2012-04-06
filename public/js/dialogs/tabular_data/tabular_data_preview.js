@@ -13,8 +13,8 @@ chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
     setup: function() {
         _.bindAll(this, 'title');
         this.resultsConsole = new chorus.views.ResultsConsole({footerSize: _.bind(this.footerSize, this)});
-        chorus.PageEvents.subscribe("action:closePreview", this.closeModal, this);
-        chorus.PageEvents.subscribe("modal:closed", this.cancelTask, this);
+        this.closePreviewHandle = chorus.PageEvents.subscribe("action:closePreview", this.closeModal, this);
+        this.modalClosedHandle = chorus.PageEvents.subscribe("modal:closed", this.cancelTask, this);
     },
 
     footerSize: function() {
@@ -28,5 +28,10 @@ chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
 
     cancelTask: function(e) {
         this.task && this.task.cancel();
+        chorus.PageEvents.unsubscribe(this.modalClosedHandle);
+    },
+
+    close: function() {
+        chorus.PageEvents.unsubscribe(this.closePreviewHandle);
     }
 });

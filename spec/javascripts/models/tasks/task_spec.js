@@ -24,7 +24,7 @@ describe("chorus.models.Task", function() {
         beforeEach(function() {
             this.model = new taskSubclass();
             this.model.cancel();
-        })
+        });
 
         it("creates a cancel request", function() {
             var cancelRequest = this.server.lastUpdate();
@@ -33,7 +33,12 @@ describe("chorus.models.Task", function() {
             expect(cancelRequest.params()['checkId']).toBe(this.model.get('checkId'));
             expect(cancelRequest.params()['action']).toBe('cancel');
             expect(this.model.has('action')).toBeFalsy();
-        })
+        });
+
+        it("ignores subsequent calls to cancel", function() {
+            this.model.cancel();
+            expect(this.server.requests.length).toBe(1);
+        });
 
         describe("when the request completes", function() {
             it("triggers the 'canceled' event on the task", function() {
@@ -42,5 +47,12 @@ describe("chorus.models.Task", function() {
                 expect('canceled').toHaveBeenTriggeredOn(this.model);
             });
         });
-    })
+    });
+
+    it("won't cancel after the data has loaded", function() {
+        this.model = new taskSubclass();
+        this.model.loaded = true;
+        this.model.cancel();
+        expect(this.server.requests.length).toBe(0);
+    });
 });
