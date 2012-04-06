@@ -57,7 +57,6 @@
     }
 
     .file_details, .dataset_details {
-        vertical-align: middle;
         line-height: 32px;
         img {
             vertical-align: middle;
@@ -66,6 +65,7 @@
         }
         .remove {
             float: right;
+            line-height: 32px;
         }
         .progress_bar {
             display: inline-block;
