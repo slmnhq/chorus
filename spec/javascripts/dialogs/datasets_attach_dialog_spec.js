@@ -17,4 +17,8 @@ describe("chorus.dialogs.DatasetsAttach", function() {
     it("has the correct name", function() {
         expect(this.dialog.$('li:eq(0) .name')).toContainText(this.datasets.at(0).get("objectName"));
     });
+
+    it("has the correct search placeholder text", function() {
+        expect(this.dialog.$("input").attr("placeholder")).toMatchTranslation("dataset.dialog.search");
+    });
 });

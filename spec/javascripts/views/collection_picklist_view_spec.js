@@ -1,21 +1,14 @@
 describe("chorus.views.CollectionPicklist", function() {
     beforeEach(function() {
+        stubDefer();
+
         this.user1 = newFixtures.user({firstName: "xyz", lastName: "3 ab"});
         this.user2 = newFixtures.user({firstName: "EFG", lastName: "1"});
         this.user3 = newFixtures.user({firstName: "hij", lastName: "2 a"});
 
         this.collection = new chorus.collections.UserSet([this.user1, this.user2, this.user3]);
-        this.view = new chorus.views.CollectionPicklist({ collection : this.collection })
-        this.view.collectionModelContext = function(model) {
-            return {
-                name: model.displayName(),
-                imageUrl: model.picklistImageUrl()
-            }
-        };
-        this.view.collectionModelComparator = function(model) {
-            return model.displayName().toLowerCase();
-        };
-    })
+        this.view = new chorus.views.CollectionPicklist({ collection: this.collection })
+    });
 
     describe("#render", function() {
         context("when the collection is not loaded", function() {
@@ -56,6 +49,12 @@ describe("chorus.views.CollectionPicklist", function() {
                 expect(this.view.$(".items li").length).toBe(this.collection.length);
             })
 
+            it("uses the supplied text for the search input placeholder", function() {
+                this.view.searchPlaceholderKey = "test.mouse";
+                this.view.render();
+                expect(this.view.$("input").attr("placeholder")).toMatchTranslation("test.mouse");
+            });
+
             it("uses the displayName for each collection item", function() {
                 var items = this.view.$(".items li .name");
                 expect(items).toExist();
@@ -71,24 +70,10 @@ describe("chorus.views.CollectionPicklist", function() {
                 }, this)
             })
 
-            it("displays an image for each collection item", function() {
-                var items = this.view.$(".items li img");
-                expect(items).toExist();
-                _.each(items, function(item, index) {
-                    expect($(item).attr("src")).toBe(this.collection.at(index).imageUrl())
-                }, this)
-            })
-
-            it("sorts the items alphabetically, case-insensitively", function() {
-                expect(this.view.$("li .name").eq(0).text().trim()).toBe("EFG 1");
-                expect(this.view.$("li .name").eq(1).text().trim()).toBe("hij 2 a");
-                expect(this.view.$("li .name").eq(2).text().trim()).toBe("xyz 3 ab");
-            })
-
             context("selecting items by default", function() {
                 beforeEach(function() {
                     this.defaultUsers = new chorus.collections.UserSet([this.user1, this.user2]);
-                    this.view = new chorus.views.CollectionPicklist({ collection : this.collection, defaultSelection: this.defaultUsers });
+                    this.view = new chorus.views.CollectionPicklist({ collection: this.collection, defaultSelection: this.defaultUsers });
                     this.view.render();
                 });
 
@@ -101,7 +86,7 @@ describe("chorus.views.CollectionPicklist", function() {
             describe("multiselection", function() {
                 beforeEach(function() {
                     this.defaultUsers = new chorus.collections.UserSet([this.user1, this.user2]);
-                    this.view = new chorus.views.CollectionPicklist({ collection : this.collection, multiSelection: true });
+                    this.view = new chorus.views.CollectionPicklist({ collection: this.collection, multiSelection: true });
                     this.view.render();
 
                     this.view.$("li:eq(0)").click();
@@ -125,6 +110,53 @@ describe("chorus.views.CollectionPicklist", function() {
             });
         })
     })
+
+    describe("sorting", function() {
+        beforeEach(function() {
+            this.collection.loaded = true;
+        });
+
+        context("when a sort function is provided by the collection", function() {
+            beforeEach(function() {
+                this.collection.comparator = function(model) {
+                    return model.displayName().toLowerCase();
+                };
+                spyOn(this.collection, "comparator").andCallThrough();
+                this.view = new chorus.views.CollectionPicklist({ collection: this.collection });
+            });
+
+            it("uses the comparator to sort the collection", function() {
+                expect(this.collection.comparator).toHaveBeenCalled();
+            });
+        });
+
+        context("when a sort function is not provided by the collection", function() {
+            beforeEach(function() {
+                spyOn(chorus.views.CollectionPicklist.prototype, "collectionComparator").andCallThrough();
+                this.collection.comparator = undefined;
+                this.view = new chorus.views.CollectionPicklist({ collection: this.collection });
+                this.view.collectionModelContext = function(model) {
+                    return {
+                        name: model.displayName(),
+                        imageUrl: model.picklistImageUrl()
+                    }
+                };
+
+                this.view.render();
+            });
+
+            it("falls back to the default sort (name)", function() {
+                expect(this.view.collectionComparator).toHaveBeenCalled();
+            });
+
+            it("sorts the items alphabetically, case-insensitively", function() {
+                expect(this.view.$("li").length).toBe(3);
+                expect(this.view.$("li .name").eq(0)).toContainText("EFG 1");
+                expect(this.view.$("li .name").eq(1)).toContainText("hij 2 a");
+                expect(this.view.$("li .name").eq(2)).toContainText("xyz 3 ab");
+            });
+        });
+    });
 
     describe("#collectionModelContext", function() {
         it("includes the displayName as 'name'", function() {
@@ -165,7 +197,7 @@ describe("chorus.views.CollectionPicklist", function() {
                 expect(this.view.selectedItem()).toBe(this.collection.at(0));
             })
 
-            describe("clicking on another list item", function () {
+            describe("clicking on another list item", function() {
                 beforeEach(function() {
                     this.itemSelectedSpy.reset();
                     this.view.$("li:last").click();
@@ -228,9 +260,9 @@ describe("chorus.views.CollectionPicklist", function() {
             })
 
             it("hides items not containing that character", function() {
-                expect(this.view.$("li:eq(0)")).toHaveClass("hidden");
-                expect(this.view.$("li:eq(1)")).not.toHaveClass("hidden");
-                expect(this.view.$("li:eq(2)")).not.toHaveClass("hidden");
+                expect(this.view.$("li .name[title='xyz 3 ab']").parent("li")).not.toHaveClass("hidden");
+                expect(this.view.$("li .name[title='EFG 1']").parent("li")).toHaveClass("hidden");
+                expect(this.view.$("li .name[title='hij 2 a']").parent("li")).not.toHaveClass("hidden");
             })
 
             describe("typing another character", function() {
@@ -242,9 +274,9 @@ describe("chorus.views.CollectionPicklist", function() {
                 })
 
                 it("hides items not containing the adjacent character sequence", function() {
-                    expect(this.view.$("li:eq(0)")).toHaveClass("hidden");
-                    expect(this.view.$("li:eq(1)")).toHaveClass("hidden");
-                    expect(this.view.$("li:eq(2)")).not.toHaveClass("hidden");
+                    expect(this.view.$("li .name[title='xyz 3 ab']").parent("li")).not.toHaveClass("hidden");
+                    expect(this.view.$("li .name[title='EFG 1']").parent("li")).toHaveClass("hidden");
+                    expect(this.view.$("li .name[title='hij 2 a']").parent("li")).toHaveClass("hidden");
                 })
 
                 it("triggers item:selected with undefined", function() {
@@ -258,9 +290,9 @@ describe("chorus.views.CollectionPicklist", function() {
                     })
 
                     it("hides items not containing that character", function() {
-                        expect(this.view.$("li:eq(0)")).toHaveClass("hidden");
-                        expect(this.view.$("li:eq(1)")).not.toHaveClass("hidden");
-                        expect(this.view.$("li:eq(2)")).not.toHaveClass("hidden");
+                        expect(this.view.$("li .name[title='xyz 3 ab']").parent("li")).not.toHaveClass("hidden");
+                        expect(this.view.$("li .name[title='EFG 1']").parent("li")).toHaveClass("hidden");
+                        expect(this.view.$("li .name[title='hij 2 a']").parent("li")).not.toHaveClass("hidden");
                     })
                 })
             })
@@ -273,7 +305,7 @@ describe("chorus.views.CollectionPicklist", function() {
 
             describe("when the filter text matches the selected item", function() {
                 beforeEach(function() {
-                    this.view.$("input").val("E");
+                    this.view.$("input").val("a");
                     this.view.$(".search input").trigger("textchange");
                 })
 

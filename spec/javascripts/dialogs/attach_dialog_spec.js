@@ -3,7 +3,6 @@ describe("chorus.dialogs.Attach", function() {
         this.user1 = newFixtures.user({ firstName: "A Unique", lastName: "snowflake" });
         this.user2 = newFixtures.user({ firstName: "B Tyler", lastName: "Durden" });
         this.users = new chorus.collections.Base([this.user1, this.user2]);
-        this.users.loaded = true;
 
         this.subclass = chorus.dialogs.Attach.extend({
             picklistCollectionModelContext: function(model) {
@@ -41,40 +40,58 @@ describe("chorus.dialogs.Attach", function() {
             this.dialog.render();
         });
 
-        it("renders an item for each collection entry", function() {
-            expect(this.dialog.$("li").length).toBe(this.dialog.collection.length);
-        })
-
-        it("includes an image for each entry", function() {
-            var images = this.dialog.$("li img");
-            expect(images.length).toBe(this.dialog.collection.length);
-            expect(images.eq(0)).toHaveAttr("src", this.user1.imageUrl())
-            expect(images.eq(1)).toHaveAttr("src", this.user2.imageUrl());
+        it("uses a loading section", function() {
+            expect(this.dialog.$(".loading_section")).toExist();
         });
 
-        it("includes a name for each entry", function() {
-            var names = this.dialog.$("li .name");
-            expect(names.length).toBe(this.dialog.collection.length);
-            expect(names.eq(0)).toContainText("Unique snowflake");
-            expect(names.eq(1)).toContainText("Tyler Durden");
-        })
+        context("when the fetch completes", function() {
+            beforeEach(function() {
+                this.users.loaded = true;
+                this.dialog.render();
+            });
 
-        it("has a close window button that cancels the dialog", function() {
-            expect(this.dialog.$("button.cancel").length).toBe(1);
-        });
+            it("has the correct search placeholder text", function() {
+                this.dialog.searchPlaceholderKey = "test.mouse";
+                this.dialog.render();
+                expect(this.dialog.$("input").attr("placeholder")).toMatchTranslation("test.mouse");
+            });
 
-        it("has the 'Attach File' button disabled by default", function() {
-            expect(this.dialog.$('button.submit')).toBeDisabled();
-        });
+            it("renders an item for each collection entry", function() {
+                expect(this.dialog.$("li").length).toBe(this.dialog.collection.length);
+            })
 
-        it("has a CollectionPicklist", function() {
-            expect(this.dialog.$(".picklist")).toExist();
-            expect(this.dialog.picklistView).toBeA(chorus.views.CollectionPicklist);
+            it("includes an image for each entry", function() {
+                var images = this.dialog.$("li img");
+                expect(images.length).toBe(this.dialog.collection.length);
+                expect(images.eq(0)).toHaveAttr("src", this.user1.imageUrl())
+                expect(images.eq(1)).toHaveAttr("src", this.user2.imageUrl());
+            });
+
+            it("includes a name for each entry", function() {
+                var names = this.dialog.$("li .name");
+                expect(names.length).toBe(this.dialog.collection.length);
+                expect(names.eq(0)).toContainText("Unique snowflake");
+                expect(names.eq(1)).toContainText("Tyler Durden");
+            })
+
+            it("has a close window button that cancels the dialog", function() {
+                expect(this.dialog.$("button.cancel").length).toBe(1);
+            });
+
+            it("has the 'Attach File' button disabled by default", function() {
+                expect(this.dialog.$('button.submit')).toBeDisabled();
+            });
+
+            it("has a CollectionPicklist", function() {
+                expect(this.dialog.$(".picklist")).toExist();
+                expect(this.dialog.picklistView).toBeA(chorus.views.CollectionPicklist);
+            });
         });
     });
 
     describe("selecting attachments", function() {
         beforeEach(function() {
+            this.users.loaded = true;
             this.dialog.render();
             this.dialog.$("li").eq(0).click();
             this.dialog.$("li").eq(1).click();
@@ -110,6 +127,7 @@ describe("chorus.dialogs.Attach", function() {
 
     describe("submit", function() {
         beforeEach(function() {
+            this.users.loaded = true;
             this.dialog.render();
             this.dialog.$("li").eq(1).click();
         });

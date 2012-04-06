@@ -32,6 +32,10 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
         expect(this.dialog.$('button.submit')).toContainTranslation("workfiles.button.attach_file")
     });
 
+    it("has the correct search placeholder text", function() {
+        expect(this.dialog.$("input").attr("placeholder")).toMatchTranslation("workfiles.dialog.search");
+    });
+
     it("has the correct iconUrl", function() {
         expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl(this.workfile2.get("fileType"), 'medium'));
         expect(this.dialog.$('li:eq(1) img')).toHaveAttr('src', this.workfile1.thumbnailUrl());

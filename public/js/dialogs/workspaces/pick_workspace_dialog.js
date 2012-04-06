@@ -34,6 +34,12 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
 
     setup:function () {
         this.picklistView = new chorus.views.CollectionPicklist({ collection:this.collection });
+        this.picklistView.collectionModelContext = function(model) {
+            return {
+                name: model.name(),
+                imageUrl: model.defaultIconUrl("small")
+            }
+        }
         this.picklistView.bind("item:selected", this.itemSelected, this);
     },
 

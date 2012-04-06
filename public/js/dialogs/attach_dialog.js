@@ -25,13 +25,18 @@ chorus.dialogs.Attach = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.picklistView = new chorus.views.CollectionPicklist({ collection: this.collection, defaultSelection: this.options.selectedAttachments, multiSelection: true });
-        this.picklistView.collectionModelContext = this.picklistCollectionModelContext;
-        this.picklistView.collectionModelComparator = this.picklistCollectionModelComparator;
+        var self = this;
+        var picklist = chorus.views.CollectionPicklist.extend({
+            collectionComparator: self.picklistCollectionModelComparator,
+            collectionModelContext: self.picklistCollectionModelContext
+        });
+
+        this.picklistView = new picklist({ collection: this.collection, defaultSelection: this.options.selectedAttachments, multiSelection: true });
         this.picklistView.bind("item:selected", this.enableButtons, this);
     },
 
     postRender:function () {
+        this.picklistView.searchPlaceholderKey = this.searchPlaceholderKey;
         this.picklistView.render();
         this.$(".dialog_content .picklist").append(this.picklistView.el);
         this.picklistView.delegateEvents();

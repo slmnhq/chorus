@@ -4,6 +4,7 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.Attach.extend({
     title: t("dataset.attach"),
     collectionClass:chorus.collections.DatasetSet,
     selectedEvent: 'datasets:selected',
+    searchPlaceholderKey: "dataset.dialog.search",
 
     makeModel: function() {
         this.collection = new chorus.collections.DatasetSet([], {workspaceId: this.options.workspaceId});

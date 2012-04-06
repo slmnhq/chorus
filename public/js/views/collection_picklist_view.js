@@ -7,14 +7,12 @@ chorus.views.CollectionPicklist = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.multiSelection = this.options.multiSelection || false;
-    },
-
-    preRender:function () {
         if (!this.collection.comparator) {
-            this.collection.comparator = this.collectionModelComparator
-            this.collection.sort();
+            this.collection.comparator = this.collectionComparator;
         }
+
+        this.multiSelection = this.options.multiSelection || false;
+        this.collection.onLoaded(this.collection.sort, this.collection);
     },
 
     postRender:function () {
@@ -32,12 +30,10 @@ chorus.views.CollectionPicklist = chorus.views.Base.extend({
         }
     },
 
-    collectionModelContext: $.noop,
-    collectionModelComparator: $.noop,
-
     additionalContext: function() {
         return {
-            emptyListTranslationKey: this.emptyListTranslationKey || "none"
+            emptyListTranslationKey: this.emptyListTranslationKey || "none",
+            placeholderTranslation: this.searchPlaceholderKey ? t(this.searchPlaceholderKey) : ""
         }
     },
 
@@ -51,7 +47,7 @@ chorus.views.CollectionPicklist = chorus.views.Base.extend({
         }
     },
 
-    selectItem:function (e) {
+    selectItem: function(e) {
         if (!this.multiSelection) {
             this.$("li").removeClass("selected");
         }
@@ -60,7 +56,7 @@ chorus.views.CollectionPicklist = chorus.views.Base.extend({
         this.trigger("item:selected", this.selectedItem())
     },
 
-    selectedItem:function () {
+    selectedItem: function() {
         var ids = _.map(this.$("ul li.selected"), function(item) {
             return $(item).data("id");
         });
@@ -72,6 +68,16 @@ chorus.views.CollectionPicklist = chorus.views.Base.extend({
 
         } else {
             return this.collection.get(ids[0]) || undefined;
+        }
+    },
+
+    collectionComparator: function(model) {
+        return model.name().toLowerCase();
+    },
+
+    collectionModelContext: function(model) {
+        return {
+            name: model.name()
         }
     }
 });
