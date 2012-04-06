@@ -1,5 +1,5 @@
-chorus.views.TabularDataVisualizationBoxplotSidebar = chorus.views.TabularDataVisualizationSidebar.extend({
-    className: "tabular_data_visualization_sidebar",
+chorus.views.BoxplotChartConfiguration = chorus.views.ChartConfiguration.extend({
+    className: "chart_configuration",
     additionalClass: "boxplot",
 
     columnGroups: [

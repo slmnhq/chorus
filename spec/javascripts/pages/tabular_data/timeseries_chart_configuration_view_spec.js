@@ -1,4 +1,4 @@
-describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
+describe("chorus.views.TimeSeriesChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
@@ -10,7 +10,7 @@ describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
                 this.model = fixtures.datasetChorusView({objectName: "Foo"});
                 this.valueMenuQtip = stubQtip(".value .limiter a");
                 this.timeMenuQtip = stubQtip(".time .limiter a");
-                this.view = new chorus.views.TabularDataVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
+                this.view = new chorus.views.TimeSeriesChartConfiguration({model: this.model, collection: this.columns})
                 this.view.render();
             })
 
@@ -24,8 +24,8 @@ describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
                     expect(this.view.$(".time .labels").text()).toContainTranslation("dataset.visualization.sidebar.time")
                 })
 
-                itBehavesLike.TabularDataVisualizationSidebarChooser(2, "maximum", ".value .limiter");
-                itBehavesLike.TabularDataVisualizationSidebarChooser(2, "day", ".time .limiter");
+                itBehavesLike.ChartConfigurationChooser(2, "maximum", ".value .limiter");
+                itBehavesLike.ChartConfigurationChooser(2, "day", ".time .limiter");
             })
 
             describe("#chartOptions", function() {
@@ -51,7 +51,7 @@ describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.TabularDataVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
+                this.view = new chorus.views.TimeSeriesChartConfiguration({model: this.model, collection: this.columns})
                 this.view.render();
             })
 
@@ -74,7 +74,7 @@ describe("chorus.views.TabularDataVisualizationTimeSeriesSidebar", function() {
             beforeEach(function() {
                 this.column1 = fixtures.databaseColumn({typeCategory: 'REAL_NUMBER', name: "Sandwich"});
                 this.columns = new chorus.collections.DatabaseColumnSet([this.column1]);
-                this.view = new chorus.views.TabularDataVisualizationTimeSeriesSidebar({model: this.model, collection: this.columns})
+                this.view = new chorus.views.TimeSeriesChartConfiguration({model: this.model, collection: this.columns})
                 this.view.render();
             });
 

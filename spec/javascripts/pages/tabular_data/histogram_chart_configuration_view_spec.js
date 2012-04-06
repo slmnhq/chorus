@@ -1,10 +1,10 @@
-describe("chorus.views.TabularDataVisualizationHistogramSidebar", function() {
+describe("chorus.views.HistogramChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
                 this.columns = fixtures.databaseColumnSet();
                 this.columns.add(fixtures.databaseColumn({typeCategory: 'SmellyThings'}));
-                this.view = new chorus.views.TabularDataVisualizationHistogramSidebar({collection: this.columns})
+                this.view = new chorus.views.HistogramChartConfiguration({collection: this.columns})
                 this.view.render();
             })
 
@@ -17,13 +17,13 @@ describe("chorus.views.TabularDataVisualizationHistogramSidebar", function() {
             it("has # of bins", function() {
                 expect(this.view.$('.limiter')).toContainTranslation('dataset.visualization.sidebar.number_of_bins');
             })
-            itBehavesLike.TabularDataVisualizationSidebarRangeChooser();
+            itBehavesLike.ChartConfigurationRangeChooser();
         })
 
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.TabularDataVisualizationHistogramSidebar({collection: this.columns})
+                this.view = new chorus.views.HistogramChartConfiguration({collection: this.columns})
                 this.view.render();
             })
 

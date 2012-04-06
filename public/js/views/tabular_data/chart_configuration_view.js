@@ -1,7 +1,6 @@
-;
-(function() {
-    chorus.views.TabularDataVisualizationSidebar = chorus.views.Sidebar.extend({
-        additionalClass: "tabular_data_visualization_sidebar",
+;(function() {
+    chorus.views.ChartConfiguration = chorus.views.Sidebar.extend({
+        additionalClass: "chart_configuration",
 
         events: {
             "click button.create": "launchVisualizationDialog",

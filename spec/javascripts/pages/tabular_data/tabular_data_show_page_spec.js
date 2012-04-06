@@ -233,7 +233,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     });
 
                     it("should swap out the sidebar for the boxplot sidebar", function() {
-                        expect(this.page.secondarySidebar).toBeA(chorus.views.TabularDataVisualizationBoxplotSidebar)
+                        expect(this.page.secondarySidebar).toBeA(chorus.views.BoxplotChartConfiguration)
                         expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                     });
                 });
@@ -244,7 +244,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     });
 
                     it("should swap out the sidebar for the frequency sidebar", function() {
-                        expect(this.page.secondarySidebar).toBeA(chorus.views.TabularDataVisualizationFrequencySidebar)
+                        expect(this.page.secondarySidebar).toBeA(chorus.views.FrequencyChartConfiguration)
                         expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                     });
                 });
@@ -255,7 +255,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     });
 
                     it("should swap out the sidebar for the histogram sidebar", function() {
-                        expect(this.page.secondarySidebar).toBeA(chorus.views.TabularDataVisualizationHistogramSidebar)
+                        expect(this.page.secondarySidebar).toBeA(chorus.views.HistogramChartConfiguration)
                         expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                     });
                 });
@@ -266,7 +266,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     });
 
                     it("should swap out the sidebar for the heatmap sidebar", function() {
-                        expect(this.page.secondarySidebar).toBeA(chorus.views.TabularDataVisualizationHeatmapSidebar)
+                        expect(this.page.secondarySidebar).toBeA(chorus.views.HeatmapChartConfiguration)
                         expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                     });
                 });
@@ -277,7 +277,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     });
 
                     it("should swap out the sidebar for the time series sidebar", function() {
-                        expect(this.page.secondarySidebar).toBeA(chorus.views.TabularDataVisualizationTimeSeriesSidebar)
+                        expect(this.page.secondarySidebar).toBeA(chorus.views.TimeSeriesChartConfiguration)
                         expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                     });
                 });
@@ -285,7 +285,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                 describe("when the cancel:sidebar event is triggered", function() {
                     beforeEach(function() {
                         this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
-                        expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass("tabular_data_visualization_sidebar");
+                        expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass("chart_configuration");
                         this.resizedSpy.reset();
 
                         chorus.PageEvents.broadcast('cancel:sidebar', 'boxplot');
@@ -301,7 +301,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     });
 
                     it("removes all classes added when transform:sidebar is triggered", function() {
-                        expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass("tabular_data_visualization_sidebar");
+                        expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toHaveClass("chart_configuration");
                     })
                 });
 

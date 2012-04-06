@@ -1,6 +1,6 @@
-chorus.views.TabularDataVisualizationFrequencySidebar = chorus.views.TabularDataVisualizationSidebar.extend({
-    constructorName: "TabularDataVisualizationFrequencySidebar",
-    className: "tabular_data_visualization_sidebar",
+chorus.views.FrequencyChartConfiguration = chorus.views.ChartConfiguration.extend({
+    constructorName: "FrequencyChartConfiguration",
+    className: "chart_configuration",
     additionalClass: "frequency",
 
     columnGroups: [

@@ -1,4 +1,4 @@
-describe("chorus.views.TabularDataVisualizationSidebar", function() {
+describe("chorus.views.ChartConfiguration", function() {
     beforeEach(function() {
         this.dataset = fixtures.datasetSourceTable();
         this.column1 = fixtures.databaseColumn({typeCategory: "ANIMAL", name: "B Liger"})
@@ -12,7 +12,7 @@ describe("chorus.views.TabularDataVisualizationSidebar", function() {
             this.column1, this.column2, this.column3, this.column4, this.column5, this.column6
         ], {tabularData: this.dataset});
 
-        this.view = new chorus.views.TabularDataVisualizationFrequencySidebar({collection: this.columns});
+        this.view = new chorus.views.FrequencyChartConfiguration({collection: this.columns});
         this.view.filters = new chorus.collections.TabularDataFilterSet();
     });
 

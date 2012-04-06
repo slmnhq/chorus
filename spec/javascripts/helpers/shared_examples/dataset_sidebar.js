@@ -1,4 +1,4 @@
-jasmine.sharedExamples.TabularDataVisualizationSidebarChooser = function(menuItemPosition, menuItemText, selector) {
+jasmine.sharedExamples.ChartConfigurationChooser = function(menuItemPosition, menuItemText, selector) {
     selector = (selector || '.limiter')
 
     describe("picking a limit for " + selector, function() {
@@ -22,8 +22,8 @@ jasmine.sharedExamples.TabularDataVisualizationSidebarChooser = function(menuIte
     })
 }
 
-jasmine.sharedExamples.TabularDataVisualizationSidebarRangeChooser = function(selector) {
+jasmine.sharedExamples.ChartConfigurationRangeChooser = function(selector) {
     describe("works", function() {
-        itBehavesLike.TabularDataVisualizationSidebarChooser(2, "3", selector)
+        itBehavesLike.ChartConfigurationChooser(2, "3", selector)
     })
 }

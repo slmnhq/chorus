@@ -1,5 +1,5 @@
-chorus.views.TabularDataVisualizationTimeSeriesSidebar = chorus.views.TabularDataVisualizationSidebar.extend({
-    className: "tabular_data_visualization_sidebar",
+chorus.views.TimeSeriesChartConfiguration = chorus.views.ChartConfiguration.extend({
+    className: "chart_configuration",
     additionalClass: "timeseries",
 
     postRender: function() {

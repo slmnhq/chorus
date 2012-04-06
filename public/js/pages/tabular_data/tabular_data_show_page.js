@@ -143,19 +143,19 @@
         constructSidebarForType: function(type) {
             switch (type) {
                 case 'boxplot':
-                    this.secondarySidebar = new chorus.views.TabularDataVisualizationBoxplotSidebar({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.BoxplotChartConfiguration({model: this.model, collection: this.columnSet});
                     break;
                 case 'frequency':
-                    this.secondarySidebar = new chorus.views.TabularDataVisualizationFrequencySidebar({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.FrequencyChartConfiguration({model: this.model, collection: this.columnSet});
                     break;
                 case 'histogram':
-                    this.secondarySidebar = new chorus.views.TabularDataVisualizationHistogramSidebar({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.HistogramChartConfiguration({model: this.model, collection: this.columnSet});
                     break;
                 case 'heatmap':
-                    this.secondarySidebar = new chorus.views.TabularDataVisualizationHeatmapSidebar({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.HeatmapChartConfiguration({model: this.model, collection: this.columnSet});
                     break;
                 case 'timeseries':
-                    this.secondarySidebar = new chorus.views.TabularDataVisualizationTimeSeriesSidebar({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.TimeSeriesChartConfiguration({model: this.model, collection: this.columnSet});
                     break;
             }
         },
@@ -174,7 +174,7 @@
         },
 
         removeOldSecondaryClasses: function(type) {
-            this.$('.sidebar_content.secondary').removeClass("tabular_data_visualization_sidebar");
+            this.$('.sidebar_content.secondary').removeClass("chart_configuration");
         }
     });
 })();

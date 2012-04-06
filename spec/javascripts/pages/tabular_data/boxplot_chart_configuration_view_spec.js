@@ -1,4 +1,4 @@
-describe("chorus.views.TabularDataVisualizationBoxplotSidebar", function() {
+describe("chorus.views.BoxplotChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
@@ -8,7 +8,7 @@ describe("chorus.views.TabularDataVisualizationBoxplotSidebar", function() {
 
                 this.model = fixtures.datasetChorusView({objectName: "Foo"});
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
-                this.view = new chorus.views.TabularDataVisualizationBoxplotSidebar({model: this.model, collection: this.columns})
+                this.view = new chorus.views.BoxplotChartConfiguration({model: this.model, collection: this.columns})
                 spyOn(chorus, 'styleSelect').andCallFake(_.bind(function() {
                     this.styledSelected = this.view.$(".category select").val()
                 }, this));
@@ -16,7 +16,7 @@ describe("chorus.views.TabularDataVisualizationBoxplotSidebar", function() {
                 this.view.$(".limiter .selected_value").text("3")
             })
 
-            itBehavesLike.TabularDataVisualizationSidebarRangeChooser();
+            itBehavesLike.ChartConfigurationRangeChooser();
 
             describe("#chartOptions", function() {
                 it("should return all the chart options for a boxplot", function() {
@@ -91,7 +91,7 @@ describe("chorus.views.TabularDataVisualizationBoxplotSidebar", function() {
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.TabularDataVisualizationBoxplotSidebar({collection: this.columns})
+                this.view = new chorus.views.BoxplotChartConfiguration({collection: this.columns})
                 spyOn(chorus, 'styleSelect');
                 this.view.render();
             })
@@ -117,7 +117,7 @@ describe("chorus.views.TabularDataVisualizationBoxplotSidebar", function() {
 
                 this.model = fixtures.datasetChorusView({objectName: "Foo"});
                 this.columns = fixtures.databaseColumnSet([this.column2]);
-                this.view = new chorus.views.TabularDataVisualizationBoxplotSidebar({model: this.model, collection: this.columns})
+                this.view = new chorus.views.BoxplotChartConfiguration({model: this.model, collection: this.columns})
                 this.view.render();
             })
 
@@ -130,7 +130,7 @@ describe("chorus.views.TabularDataVisualizationBoxplotSidebar", function() {
         describe("'create chart' button", function() {
             beforeEach(function() {
                 this.columns = fixtures.databaseColumnSet([]);
-                this.view = new chorus.views.TabularDataVisualizationBoxplotSidebar({collection: this.columns})
+                this.view = new chorus.views.BoxplotChartConfiguration({collection: this.columns})
                 spyOn(chorus, 'styleSelect');
                 this.view.render();
             })

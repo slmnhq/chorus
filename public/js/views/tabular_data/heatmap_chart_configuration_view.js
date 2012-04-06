@@ -1,5 +1,5 @@
-chorus.views.TabularDataVisualizationHeatmapSidebar = chorus.views.TabularDataVisualizationSidebar.extend({
-    className:"tabular_data_visualization_sidebar",
+chorus.views.HeatmapChartConfiguration = chorus.views.ChartConfiguration.extend({
+    className:"chart_configuration",
     additionalClass: "heatmap",
 
     postRender:function () {

@@ -1,5 +1,5 @@
-chorus.views.TabularDataVisualizationHistogramSidebar = chorus.views.TabularDataVisualizationSidebar.extend({
-    className: "tabular_data_visualization_sidebar",
+chorus.views.HistogramChartConfiguration = chorus.views.ChartConfiguration.extend({
+    className: "chart_configuration",
     additionalClass: "histogram",
 
     columnGroups: [
