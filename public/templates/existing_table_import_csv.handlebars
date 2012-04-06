@@ -1,8 +1,10 @@
 <div class="directions">
     {{{directions}}}
 </div>
-<div class="progress"></div>
-<a class="automap">{{t "dataset.import.table.automap"}}</a>
+<div class="progress_wrapper">
+    <div class="progress"></div>
+    <a class="automap">{{t "dataset.import.table.automap"}}</a>
+</div>
 <div class="options">
     <div class="header_options">
         <input id="hasHeader" type="checkbox" {{#if hasHeader}}checked{{/if}}></input>

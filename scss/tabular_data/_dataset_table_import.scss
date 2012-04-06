@@ -246,7 +246,7 @@
 .existing_table_import_csv.table_import_csv {
     .directions {
         @include ellipsis;
-        max-width: 450px;
+        max-width: 610px;
         vertical-align: middle;
         padding-bottom: 2px;
 
@@ -254,19 +254,22 @@
             font-weight: $semibold;
         }
     }
+    .progress_wrapper {
+        margin-left: 15px;
 
-    .progress {
-        display: inline-block;
-        @include results-console;
-        vertical-align: middle;
-        margin-bottom: 5px;
-        padding-bottom: 2px;
-    }
+        .progress {
+            display: inline-block;
+            @include results-console;
+            vertical-align: middle;
+            margin-bottom: 5px;
+            padding-bottom: 2px;
+        }
 
-    .automap {
-        font-size: 12px;
-        font-weight: $semibold;
-        padding-left: 10px;
+        .automap {
+            font-size: 12px;
+            font-weight: $semibold;
+            padding-left: 10px;
+        }
     }
 
     .data_table {
