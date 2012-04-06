@@ -15,7 +15,7 @@ describe("chorus.models.Dataset", function() {
     })
 
     it("creates the correct showUrl", function() {
-        expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/'+(encodeURIComponent('"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"'));
+        expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/'+(encodeURIComponent('"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"')));
     });
 
     it("creates the correct showUrl with an ugly ID", function() {
