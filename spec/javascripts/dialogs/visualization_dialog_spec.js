@@ -549,5 +549,34 @@ describe("chorus.dialogs.Visualization", function() {
             expect(this.dialog.$('button.revert')).toContainTranslation("visualization.revert")
             expect(this.dialog.$('button.close_dialog')).toHaveClass('hidden');
         });
+
+        context("clicking the refresh button", function() {
+            beforeEach(function() {
+                this.server.reset();
+                spyOn(this.dialog.filters, "whereClause").andReturn("newSql");
+                spyOn(this.dialog, "drawChart");
+                this.dialog.$('button.refresh').click();
+            });
+            it("submits a new task", function() {
+                expect(this.server.lastCreate().url).toBe(this.dialog.task.url());
+                expect(this.dialog.$('button.refresh').isLoading()).toBeTruthy();
+                expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refreshing");
+            });
+
+            it("updates the task sql", function() {
+               expect(this.dialog.task.get("filters")).toBe("newSql");
+            });
+
+            context("and the task save completes", function() {
+                beforeEach(function() {
+                    this.server.completeSaveFor(this.dialog.task);
+                });
+
+                it("re-draws the chart", function() {
+                    expect(this.dialog.drawChart).toHaveBeenCalled();
+                });
+            });
+        });
+
     }
 });

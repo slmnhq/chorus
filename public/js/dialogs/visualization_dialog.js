@@ -1,20 +1,21 @@
 chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
-    className:"visualization",
+    className: "visualization",
 
-    subviews:{
+    subviews: {
         ".tabledata": "tableData",
         ".filter_options": "filterWizard"
     },
 
-    events:{
+    events: {
         "click a.show": "showTabularData",
         "click a.hide": "hideTabularData",
         "click a.show_options": "showFilterOptions",
         "click a.hide_options": "hideFilterOptions",
-        "click button.close_dialog": "closeModal"
+        "click button.close_dialog": "closeModal",
+        "click button.refresh": "refreshChart"
     },
 
-    setup: function () {
+    setup: function() {
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
         this.filters = this.options.filters.clone();
@@ -27,7 +28,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         return this.$('.modal_controls').outerHeight(true);
     },
 
-    postRender: function () {
+    postRender: function() {
         this.tableData.showResultTable(this.task);
         this.tableData.$('.expander_button').remove();
         this.$('.chart_icon.' + this.type).addClass("selected");
@@ -42,20 +43,27 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         });
     },
 
-    onExecutionComplete: function () {
+    onExecutionComplete: function() {
         this.launchModal();
 
         this.drawChart();
     },
 
-    drawChart: function () {
+    drawChart: function() {
         if (this.isValidData()) {
-            this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model:this.task});
+            this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model: this.task});
             this.subviews[".chart_area"] = "chart";
         } else {
             this.displayEmptyChartWarning()
         }
         this.render();
+    },
+
+    refreshChart: function() {
+        this.task.set({filters: this.filters && this.filters.whereClause()});
+        this.task.save();
+        this.$("button.refresh").startLoading("visualization.refreshing");
+        this.bindings.add(this.task, "saved", this.drawChart, this);
     },
 
     displayEmptyChartWarning: function() {
@@ -79,7 +87,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         return new XMLSerializer().serializeToString(svg);
     },
 
-    createDownloadForm: function () {
+    createDownloadForm: function() {
         var form = $("<form action='/downloadChart.jsp' method='post'></form>");
         form.append($("<input name='svg' type='hidden'/>").val(this.makeSvgData()));
         form.append($("<input name='chart-name' type='hidden'/>").val(this.options.chartOptions.name));
@@ -107,10 +115,10 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         chorus.toast("dataset.visualization.toast.workfile_from_chart", {fileName: this.workfile.get("fileName")})
     },
 
-    additionalContext:function () {
+    additionalContext: function() {
         return {
             filterCount: this.filters.length,
-            chartType:t("dataset.visualization.names." + this.type),
+            chartType: t("dataset.visualization.names." + this.type),
             workspaceId: this.task.get("workspaceId"),
             hasChart: !!this.chart,
             hasWorkspace: !!this.task.get("workspaceId")
@@ -142,7 +150,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     },
 
-    showTabularData:function (e) {
+    showTabularData: function(e) {
         e && e.preventDefault();
         this.$('.results_console').removeClass("hidden");
         this.$(".modal_controls a.hide").removeClass("hidden");
@@ -150,14 +158,14 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.recalculateScrolling();
     },
 
-    hideTabularData:function (e) {
+    hideTabularData: function(e) {
         e && e.preventDefault();
         this.$('.results_console').addClass("hidden")
         this.$(".modal_controls a.show").removeClass("hidden");
         this.$(".modal_controls a.hide").addClass("hidden");
     },
 
-    saveToDesktop:function (event) {
+    saveToDesktop: function(event) {
         event.preventDefault();
         var form = this.createDownloadForm()
         form.hide();
