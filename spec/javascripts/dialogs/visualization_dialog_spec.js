@@ -576,6 +576,14 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refreshing");
             });
 
+            it("disables clicking the overlay", function() {
+                this.dialog.refreshChart.reset();
+                this.dialog.$(".overlay").click();
+                expect(this.dialog.$(".overlay")).not.toHaveClass("hidden");
+                expect(this.dialog.$(".overlay")).toHaveClass("disabled");
+                expect(this.dialog.refreshChart).not.toHaveBeenCalled();
+            });
+
             it("shows the cancel button and hides the revert button", function() {
                 expect(this.dialog.$("button.revert")).toHaveClass("hidden");
                 expect(this.dialog.$("button.stop")).not.toHaveClass("hidden");

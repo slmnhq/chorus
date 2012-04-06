@@ -13,7 +13,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         "click a.hide_options": "hideFilterOptions",
         "click button.close_dialog": "closeModal",
         "click button.refresh": "refreshChart",
-        "click .overlay": "refreshChart"
+        "click .overlay:not(.disabled)": "refreshChart",
     },
 
     setup: function() {
@@ -61,6 +61,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     refreshChart: function() {
+        this.$(".overlay").addClass("disabled");
         this.task.set({filters: this.filters && this.filters.whereClause()});
         this.task.save();
         this.showButtons(["stop", "refresh"]);
@@ -160,6 +161,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     filtersChanged: function() {
         this.$(".overlay").removeClass("hidden");
+        this.$(".overlay").removeClass("disabled");
         this.showButtons(["refresh", "revert"]);
     },
 
