@@ -20,6 +20,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.filters = this.options.filters.clone();
         this.filterWizard = new chorus.views.DatasetFilterWizard({collection: this.filters, columnSet: this.options.columnSet});
         this.tableData = new chorus.views.ResultsConsole({shuttle: false, hideExpander: true, footerSize: _.bind(this.footerSize, this)});
+        this.bindings.add(this.filters, "add remove change", this.filtersChanged, this);
     },
 
     footerSize: function() {
@@ -130,6 +131,15 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.$("a.show_options").removeClass("hidden");
         this.$("a.hide_options").addClass("hidden");
         this.$(".filter_options").addClass("hidden");
+    },
+
+    filtersChanged: function() {
+        this.$(".overlay").removeClass("hidden");
+        this.$("button.refresh").removeClass("hidden");
+        this.$("button.revert").removeClass("hidden");
+        this.$("button.save").addClass("hidden");
+        this.$("button.close_dialog").addClass("hidden");
+
     },
 
     showTabularData:function (e) {

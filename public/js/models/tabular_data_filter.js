@@ -1,18 +1,18 @@
 chorus.models.TabularDataFilter = chorus.models.Base.extend({
     setColumn: function(column) {
         if (!this.get("column") || (this.get("column").cid !== column.cid)) {
-            this.set({column: column}, {silent: true});
-            this.unset("comparator", {silent: true});
-            this.unset("input", {silent: true});
+            this.set({column: column});
+            this.unset("comparator");
+            this.unset("input");
         }
     },
 
     setComparator: function(comparator) {
-        this.set({comparator: comparator}, {silent: true});
+        this.set({comparator: comparator});
     },
 
     setInput: function(inputHash) {
-        this.set({input: inputHash}, {silent: true});
+        this.set({input: inputHash});
     },
 
     getFilterMap: function() {

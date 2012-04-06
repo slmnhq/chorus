@@ -1,8 +1,8 @@
-@mixin chart_icon($name) {
+@mixin chart_icon($name){
     .#{$name}.chart_icon {
         background-image: url("/images/visualizations/dialog/#{$name}_off.png");
         &.selected {
-           background-image: url("/images/visualizations/dialog/#{$name}_on.png");
+            background-image: url("/images/visualizations/dialog/#{$name}_on.png");
         }
     }
 }
@@ -90,6 +90,29 @@
                 }
             }
         }
+    }
+
+    .chart_container{
+       width: 940px;
+       height: 340px;
+       padding: 0;
+       margin: 0;
+       position: relative;
+    }
+
+    .overlay {
+        background-color: #000;
+        @include opacity(.71);
+        color: #FFF;
+        font-size: 14px;
+        font-weight: $semibold;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        text-align: center;
+        padding-top: 131px;
     }
 
     .chart_area {

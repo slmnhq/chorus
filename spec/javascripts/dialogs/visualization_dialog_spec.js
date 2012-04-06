@@ -135,6 +135,15 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.$(".filter_options")).not.toHaveClass("hidden");
             });
 
+            it("does not show the overlay by default", function() {
+                expect(this.dialog.$('.overlay')).toHaveClass('hidden');
+            });
+
+            it("hides the refresh/revert buttons by default", function() {
+               expect(this.dialog.$("button.refresh")).toHaveClass("hidden");
+               expect(this.dialog.$("button.revert")).toHaveClass("hidden");
+            });
+
             context("when there are existing filters", function() {
                 it("shows them properly in the filter section", function() {
                     expect(this.dialog.$(".filter_options li").length).toBe(2);
@@ -147,15 +156,28 @@ describe("chorus.dialogs.Visualization", function() {
                 });
             });
 
-            it("renders the correct number of filters when adding", function() {
-                // Really add filters to dialog - not a stub
-                this.dialog.filterWizard.addFilter()
-                this.dialog.filterWizard.addFilter()
-                this.dialog.filterWizard.render();
-                this.dialog.filterWizard.$(".filter input").val("AA");
-                this.dialog.render();
+            context("adding filters", function() {
+                beforeEach(function() {
+                    // Really add filters to dialog - not a stub
+                    this.dialog.filterWizard.addFilter()
+                    this.dialog.filterWizard.addFilter()
+                    this.dialog.filterWizard.render();
+                    this.dialog.filterWizard.$(".filter input").val("AA");
+                });
 
-                expect(this.dialog.$(".filter_options li").length).toBe(4);
+                it("renders the correct number of filters when adding", function() {
+                    expect(this.dialog.$(".filter_options li").length).toBe(4);
+                });
+
+                itRespondsToFilterUpdates();
+            });
+
+            context("changing filters", function() {
+                beforeEach(function() {
+                    this.dialog.filterWizard.$(".filter input").val("AA").trigger("keyup");
+                });
+
+                itRespondsToFilterUpdates();
             });
 
             it("swaps out show/hide options links", function() {
@@ -509,4 +531,23 @@ describe("chorus.dialogs.Visualization", function() {
             });
         });
     });
+
+    function itRespondsToFilterUpdates() {
+        it("overlays some stuff on the chart", function() {
+            expect(this.dialog.$('.overlay')).not.toHaveClass('hidden');
+            expect(this.dialog.$('.overlay')).toContainTranslation("visualization.overlay");
+        });
+
+        it("swaps out the 'Save As..' button for a 'Refresh Visualization' button", function() {
+            expect(this.dialog.$('button.refresh')).not.toHaveClass('hidden');
+            expect(this.dialog.$('button.refresh')).toContainTranslation("visualization.refresh")
+            expect(this.dialog.$('button.save')).toHaveClass('hidden');
+        });
+
+        it("swaps out the 'Close' button for a 'Revert' button", function() {
+            expect(this.dialog.$('button.revert')).not.toHaveClass('hidden');
+            expect(this.dialog.$('button.revert')).toContainTranslation("visualization.revert")
+            expect(this.dialog.$('button.close_dialog')).toHaveClass('hidden');
+        });
+    }
 });

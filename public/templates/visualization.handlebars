@@ -18,7 +18,11 @@
 <div class="filter_options hidden">
 </div>
 
-<div class="chart_area">
+<div class="chart_container">
+    <div class="overlay hidden"><span>{{t "visualization.overlay"}}</span></div>
+
+    <div class="chart_area">
+    </div>
 </div>
 
 <div class="tabledata hidden">
@@ -35,6 +39,8 @@
                     disabled="disabled"
                 {{/unless}}
                 >{{t "actions.save_as"}}</button>
+            <button class="refresh hidden">{{t "visualization.refresh"}}</button>
+            <button class="revert hidden">{{t "visualization.revert"}}</button>
         </div>
     </div>
 </div>
