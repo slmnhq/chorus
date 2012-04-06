@@ -1,13 +1,15 @@
 describe("chorus.views.NotificationRecipient", function() {
     beforeEach(function() {
-        this.user1 = newFixtures.user();
-        this.user2 = newFixtures.user();
-        this.loggedInUser = newFixtures.user();
+        this.user1 = newFixtures.user({ firstName: "Aaron", lastName: "Jenkins"});
+        this.user2 = newFixtures.user({ firstName: "Bob", lastName: "Jenkins"});
+        this.user3 = newFixtures.user({ firstName: "Matt", lastName: "Jenkins"});
+        this.loggedInUser = newFixtures.user({ firstName: "Xavier", lastName: "Jenkins"});
         setLoggedInUser({ id: this.loggedInUser.get("id") });
 
         this.users = new chorus.collections.UserSet([
             this.user1,
             this.user2,
+            this.user3,
             this.loggedInUser
         ]);
         this.users.sortAsc("firstName");
@@ -38,19 +40,18 @@ describe("chorus.views.NotificationRecipient", function() {
                 this.server.completeFetchAllFor(this.users, this.users.models);
             });
 
-            it("shows the add another person link", function() {
-                expect(this.view.$("a.add")).not.toHaveClass("hidden");
-            });
-
             it("should display a dropdown containing all elligible recipients", function() {
                 expect(this.view.$("select")).not.toHaveClass("hidden");
-                expect(this.view.$("select option").length).toBe(3);
+                expect(this.view.$("select option").length).toBe(4);
 
                 expect(this.view.$("select option:eq(1)")).toContainText(this.user1.displayName());
                 expect(this.view.$("select option:eq(1)").val()).toContain(this.user1.get("id"));
 
                 expect(this.view.$("select option:eq(2)")).toContainText(this.user2.displayName());
                 expect(this.view.$("select option:eq(2)").val()).toContain(this.user2.get("id"));
+
+                expect(this.view.$("select option:eq(3)")).toContainText(this.user3.displayName());
+                expect(this.view.$("select option:eq(3)").val()).toContain(this.user3.get("id"));
 
                 expect(this.view.$("select").val()).toBe("");
             });
@@ -59,12 +60,11 @@ describe("chorus.views.NotificationRecipient", function() {
                 expect(this.view.$("option[value=" + this.loggedInUser.get("id") + "]")).not.toExist();
             })
 
-            context("when the add user link is clicked", function() {
+            context("when a user is selected", function() {
                 beforeEach(function() {
                     this.oldSelectableUserCount = this.view.$("select option").length - 1;
                     spyOn(chorus, "styleSelect");
-                    this.view.$("select").val(this.user1.id.toString());
-                    this.view.$("a.add").click();
+                    this.view.$("select").val(this.user1.id).change();
                 });
 
                 itHasOnlyTheFirstUser();
@@ -76,7 +76,7 @@ describe("chorus.views.NotificationRecipient", function() {
 
                 context("trying to add the blank user option", function() {
                     beforeEach(function() {
-                        this.view.$("a.add").click();
+                        this.view.$("select").val("").change();
                     });
 
                     itHasOnlyTheFirstUser();
@@ -86,19 +86,9 @@ describe("chorus.views.NotificationRecipient", function() {
                     expect(this.view.$("select option").length - 1).toBe(this.oldSelectableUserCount - 1);
                 });
 
-                context("adding the same user", function() {
-                    beforeEach(function() {
-                        this.view.$("select").val(this.user1.id.toString());
-                        this.view.$("a.add").click();
-                    });
-
-                    itHasOnlyTheFirstUser();
-                });
-
                 context("adding another user", function() {
                     beforeEach(function() {
-                        this.view.$("select").val(this.user2.id);
-                        this.view.$("a.add").click();
+                        this.view.$("select").val(this.user2.id).change();
                     });
 
                     it("makes an entry with that user at the bottom the picked_users list", function() {
@@ -113,13 +103,38 @@ describe("chorus.views.NotificationRecipient", function() {
                         expect(this.view.getPickedUsers()).toContain(this.user2.id.toString());
                     });
 
-                    context("removing the new user", function() {
+                    context("removing the most recently added user", function() {
                         beforeEach(function() {
-                            this.view.$("select").val(this.user1.id);
                             this.view.$(".picked_users li:eq(1) .remove").click();
                         });
 
                         itHasOnlyTheFirstUser();
+
+                        it("puts back the user in the right position", function() {
+                            expect(this.view.$("select option").length - 1).toBe(this.oldSelectableUserCount - 1);
+                            expect(this.view.$("select option:eq(1)")).toContainText(this.user2.displayName());
+                            expect(this.view.$("select option:eq(2)")).toContainText(this.user3.displayName());
+                        });
+                    });
+
+                    describe("adding all users", function() {
+                        beforeEach(function() {
+                            this.view.$("select").val(this.user3.id).change();
+                        });
+
+                        it("hides the select control", function() {
+                            expect(this.view.$(".ui-selectmenu.users")).toHaveClass("hidden")
+                        });
+
+                        context("removing a user", function() {
+                            beforeEach(function() {
+                                this.view.$(".picked_users li:eq(1) .remove").click();
+                            });
+
+                            it("shows the select control", function() {
+                                expect(this.view.$(".ui-selectmenu.users")).not.toHaveClass("hidden")
+                            });
+                        });
                     });
                 });
 

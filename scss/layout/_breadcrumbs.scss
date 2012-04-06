@@ -20,6 +20,10 @@
         margin-right : $padding-x;
     }
 
+    .slug {
+        @include font-normal-delta;
+    }
+
     .spacer {
         margin-right : $padding-x;
         background-image : url("/images/breadcrumb-separator.png");

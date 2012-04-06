@@ -4,7 +4,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
     useLoadingSection: true,
 
     events: {
-        "click a.add"    : "onAddUserClicked",
+        "change select"    : "onUserSelected",
         "click a.remove" : "onRemoveUserClicked"
     },
 
@@ -24,9 +24,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         this.updateAvailableUserList();
     },
 
-    onAddUserClicked: function(e) {
-        e && e.preventDefault();
-
+    onUserSelected: function() {
         var id = this.$("select").val();
         if (id) {
             var user = this.collection.get(id);
@@ -52,7 +50,11 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
 
     updateAvailableUserList: function() {
         this.$("select").empty();
-        this.$("select").append($("<option></option>"));
+        this.$("select").append($("<option value=''>Select a user</option>"));
+
+        this.collection && this.collection.models.sort(function(a, b) {
+            return naturalSort(a.get("firstName").toLowerCase(), b.get("firstName").toLowerCase());
+        });
 
         _.each(this.collection.models, function(user) {
             var $option = this.$("<option class='name'></span>").text(user.displayName());
@@ -61,6 +63,9 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         }, this);
 
         chorus.styleSelect(this.$("select"));
+
+        var $availableUser = this.$(".ui-selectmenu.users");
+        this.collection.length == 0 ? $availableUser.addClass("hidden") : $availableUser.removeClass("hidden");
     },
 
     updateSelectedUserList: function() {
