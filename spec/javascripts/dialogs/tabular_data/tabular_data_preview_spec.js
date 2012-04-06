@@ -23,13 +23,31 @@ describe("chorus.dialogs.TabularDataPreview", function () {
     });
 
     describe("event handling", function() {
+        beforeEach(function() {
+            spyOn(this.view.task, "cancel");
+        });
+
         describe("action:closePreview", function() {
             beforeEach(function() {
-                this.view.$(".cancel").click();
+                this.view.$("button.cancel").click();
             });
 
             it("dismisses the dialog", function() {
                 expect(this.view.closeModal).toHaveBeenCalled();
+            });
+
+            it("cancels the task", function() {
+                expect(this.view.task.cancel).toHaveBeenCalled()
+            });
+        });
+
+        describe("closing the window any other way", function() {
+            beforeEach(function() {
+                chorus.PageEvents.broadcast("modal:closed");
+            });
+
+            it("cancels the task", function() {
+                expect(this.view.task.cancel).toHaveBeenCalled();
             });
         });
     });

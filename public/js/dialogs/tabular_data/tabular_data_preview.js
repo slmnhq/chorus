@@ -2,6 +2,10 @@ chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
     className: 'tabular_data_preview',
     title: function() {return t("dataset.data_preview_title", {name: this.model.get("objectName")}); },
 
+    events: {
+        "click button.cancel": "cancelTask"
+    },
+
     subviews: {
         '.results_console': 'resultsConsole'
     },
@@ -10,6 +14,7 @@ chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
         _.bindAll(this, 'title');
         this.resultsConsole = new chorus.views.ResultsConsole({footerSize: _.bind(this.footerSize, this)});
         chorus.PageEvents.subscribe("action:closePreview", this.closeModal, this);
+        chorus.PageEvents.subscribe("modal:closed", this.cancelTask, this);
     },
 
     footerSize: function() {
@@ -17,6 +22,11 @@ chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
-        this.resultsConsole.execute(this.model.preview());
+        this.task = this.model.preview();
+        this.resultsConsole.execute(this.task);
+    },
+
+    cancelTask: function(e) {
+        this.task && this.task.cancel();
     }
 });
