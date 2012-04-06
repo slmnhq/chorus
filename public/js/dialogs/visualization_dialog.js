@@ -14,6 +14,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         "click button.close_dialog": "closeModal",
         "click button.refresh": "refreshChart",
         "click .overlay:not(.disabled)": "refreshChart",
+        "click button.revert": "revertFilters",
         "click button.stop": "cancelRefresh"
     },
 
@@ -21,6 +22,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
         this.filters = this.options.filters.clone();
+        this.lastSavedFilters = this.options.filters.clone();
         this.filterWizard = new chorus.views.DatasetFilterWizard({collection: this.filters, columnSet: this.options.columnSet});
         this.tableData = new chorus.views.ResultsConsole({shuttle: false, hideExpander: true, footerSize: _.bind(this.footerSize, this)});
         this.bindings.add(this.filters, "add remove change", this.filtersChanged, this);
@@ -71,8 +73,13 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     chartRefreshed: function() {
-        this.$(".overlay").addClass('hidden');
         this.drawChart();
+        this.chartUpToDate();
+    },
+
+    chartUpToDate: function() {
+        this.lastSavedFilters = this.filters.clone();
+        this.$(".overlay").addClass('hidden');
         this.$("button.refresh").stopLoading();
         this.showButtons(["save", "close_dialog"]);
     },
@@ -170,6 +177,14 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.$(".overlay").removeClass("hidden");
         this.$(".overlay").removeClass("disabled");
         this.showButtons(["refresh", "revert"]);
+    },
+
+    revertFilters: function() {
+        this.filters = this.lastSavedFilters;
+        this.bindings.add(this.filters, "add remove change", this.filtersChanged, this);
+        this.filterWizard.collection = this.filters;
+        this.filterWizard.render();
+        this.chartUpToDate();
     },
 
     showTabularData: function(e) {

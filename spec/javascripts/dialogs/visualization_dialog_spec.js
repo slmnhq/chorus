@@ -15,8 +15,8 @@ describe("chorus.dialogs.Visualization", function() {
 
         this.chartOptions = {type: "boxplot", name: "Foo"};
 
-        var filter1 = new chorus.models.TabularDataFilter({column: this.columns.at(0), comparator: "equal", input: {value: "A"}});
-        var filter2 = new chorus.models.TabularDataFilter({column: this.columns.at(1), comparator: "not_equal", input: {value: "B"}});
+        var filter1 = new chorus.models.TabularDataFilter({column: this.columns.at(0), comparator: "equal", input: {value: "original_filter_value_a"}});
+        var filter2 = new chorus.models.TabularDataFilter({column: this.columns.at(1), comparator: "not_equal", input: {value: "original_filter_value_b"}});
 
         this.filters = new chorus.collections.TabularDataFilterSet([filter1, filter2]);
 
@@ -153,8 +153,8 @@ describe("chorus.dialogs.Visualization", function() {
                     expect(this.dialog.$(".filter_options li:eq(1) .column_filter option:selected").text()).toBe(this.columns.at(1).get("name"));
                     expect(this.dialog.$(".filter_options li:eq(0) select.comparator option:selected").val()).toBe("equal");
                     expect(this.dialog.$(".filter_options li:eq(1) select.comparator option:selected").val()).toBe("not_equal");
-                    expect(this.dialog.$(".filter_options li:eq(0) input").val()).toBe("A");
-                    expect(this.dialog.$(".filter_options li:eq(1) input").val()).toBe("B");
+                    expect(this.dialog.$(".filter_options li:eq(0) input").val()).toBe("original_filter_value_a");
+                    expect(this.dialog.$(".filter_options li:eq(1) input").val()).toBe("original_filter_value_b");
                 });
             });
 
@@ -164,7 +164,7 @@ describe("chorus.dialogs.Visualization", function() {
                     this.dialog.filterWizard.addFilter()
                     this.dialog.filterWizard.addFilter()
                     this.dialog.filterWizard.render();
-                    this.dialog.filterWizard.$(".filter input").val("AA");
+                    this.dialog.filterWizard.$(".default input").val("AA").keyup();
                 });
 
                 it("renders the correct number of filters when adding", function() {
@@ -547,6 +547,20 @@ describe("chorus.dialogs.Visualization", function() {
             expect(this.dialog.refreshChart).toHaveBeenCalled();
         });
 
+        describe("clicking the revert button", function() {
+            beforeEach(function() {
+                this.dialog.$("button.revert").click();
+            });
+
+            it("sets the filters as they were when the dialog was initialized", function() {
+                var valueInputs = this.dialog.$(".filter_options li .default input");
+                expect(valueInputs.eq(0).val()).toBe("original_filter_value_a");
+                expect(valueInputs.eq(1).val()).toBe("original_filter_value_b");
+            });
+
+            itReturnsToOriginalState();
+        });
+
         describe("#refreshChart", function() {
             beforeEach(function() {
                 this.server.reset();
@@ -607,23 +621,48 @@ describe("chorus.dialogs.Visualization", function() {
                     expect(this.dialog.drawChart).toHaveBeenCalled();
                 });
 
-                it("hides the overlay", function() {
-                    expect(this.dialog.$('.overlay')).toHaveClass("hidden");
-                });
+                itReturnsToOriginalState();
 
-                it("stops the spinner on the refresh button", function() {
-                    expect(this.dialog.$('button.refresh').isLoading()).toBeFalsy();
-                });
+                describe("changing the filters again and clicking 'revert'", function() {
+                    beforeEach(function() {
+                        this.dialog.filters.whereClause.andCallThrough();
+                        this.previousWhereClause = this.dialog.filters.whereClause();
+                        this.dialog.filterWizard.$(".filter input").val("even_newer").trigger("keyup");
+                        expect(this.dialog.filters.whereClause()).not.toBe(this.previousWhereClause);
+                    });
 
-                it("swaps out the buttons", function() {
-                    expect(this.dialog.$('button.refresh')).toHaveClass('hidden');
-                    expect(this.dialog.$('button.save')).not.toHaveClass('hidden');
-                    expect(this.dialog.$('button.revert')).toHaveClass('hidden');
-                    expect(this.dialog.$('button.stop')).toHaveClass('hidden');
-                    expect(this.dialog.$('button.close_dialog')).not.toHaveClass('hidden');
+                    it("returns the filters to their last saved state", function() {
+                        this.dialog.$("button.revert").click();
+                        expect(this.dialog.filters.whereClause()).toBe(this.previousWhereClause);
+                    });
+
+                    it("can be used multiple times in a row without saving", function() {
+                        this.dialog.$("button.revert").click();
+                        this.dialog.filterWizard.$(".filter input").val("even_newer").trigger("keyup");
+                        this.dialog.$("button.revert").click();
+                        expect(this.dialog.filters.whereClause()).toBe(this.previousWhereClause);
+                    })
                 });
             });
         });
+
+        function itReturnsToOriginalState() {
+            it("hides the overlay", function() {
+                expect(this.dialog.$('.overlay')).toHaveClass("hidden");
+            });
+
+            it("stops the spinner on the refresh button", function() {
+                expect(this.dialog.$('button.refresh').isLoading()).toBeFalsy();
+            });
+
+            it("swaps out the buttons", function() {
+                expect(this.dialog.$('button.refresh')).toHaveClass('hidden');
+                expect(this.dialog.$('button.save')).not.toHaveClass('hidden');
+                expect(this.dialog.$('button.revert')).toHaveClass('hidden');
+                expect(this.dialog.$('button.stop')).toHaveClass('hidden');
+                expect(this.dialog.$('button.close_dialog')).not.toHaveClass('hidden');
+            });
+        }
 
         function itShowsThatOptionsHaveChanged() {
             it("overlays some stuff on the chart", function() {
