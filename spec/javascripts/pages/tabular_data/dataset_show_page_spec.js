@@ -49,6 +49,13 @@ describe("chorus.pages.DatasetShowPage", function() {
            expect(this.page.contentDetailsOptions.workspace).toBe(this.page.workspace);
         });
 
+        it("marks the workspace as a required resource", function() {
+            expect(this.page.requiredResources.find(function(resource) {
+                return resource instanceof chorus.models.Workspace && resource.get("id") == '100'
+            }, this)).toBeTruthy();
+        });
+
+
         context("when the workspace fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.workspace);
