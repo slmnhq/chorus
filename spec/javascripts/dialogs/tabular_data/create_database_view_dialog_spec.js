@@ -1,5 +1,5 @@
 describe("chorus.dialogs.CreateDatabaseView", function() {
-    beforeEach(function () {
+    beforeEach(function() {
         this.dataset = fixtures.chorusView();
         this.schema = fixtures.schema();
         spyOn(this.schema, "canonicalName").andReturn("I.D.S");
@@ -16,7 +16,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
         expect(this.view.$("h1")).toContainTranslation("create_database_view.title");
     });
 
-    it('should have a close link', function () {
+    it('should have a close link', function() {
         var $cancelButton = this.view.$('.modal_controls .cancel')
         expect($cancelButton).toContainTranslation("actions.cancel");
     });
@@ -83,20 +83,37 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                     expect(this.view.model).toHaveBeenCreated();
                 });
 
-                it("save succeeds", function() {
-                    spyOn(chorus, "toast");
-                    spyOn(this.view, "closeModal");
-
-                    this.server.completeSaveFor(this.view.model);
-                    expect(chorus.toast).toHaveBeenCalledWith("create_database_view.toast_success", {
-                        viewName: "a_name",
-                        canonicalName: "I.D.S"
+                context("save succeeds", function() {
+                    it("shows a toast", function() {
+                        spyOn(chorus, "toast");
+                        this.server.completeSaveFor(this.view.model, {id: 'foo', workspace: {id: 25} });
+                        expect(chorus.toast).toHaveBeenCalledWith("create_database_view.toast_success", {
+                            viewName: "a_name",
+                            canonicalName: "I.D.S"
+                        });
                     });
-                    expect(this.view.closeModal).toHaveBeenCalled();
+
+                    context("and returned data includes a workspace", function() {
+                        it("navigates to show page of new db view", function() {
+                            spyOn(chorus.router, 'navigate')
+                            this.server.completeSaveFor(this.view.model, {id: 'foo', workspace: {id: 25} });
+                            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/25/datasets/foo", true);
+                        });
+                    });
+
+                    context("and returned data does not have a workspace", function() {
+                        it("closes the dialog", function() {
+                            spyOn(this.view, 'closeModal')
+                            this.server.completeSaveFor(this.view.model, { });
+                            expect(this.view.closeModal).toHaveBeenCalled();
+                        });
+                    });
                 });
 
                 it("save fails", function() {
-                    this.server.lastCreateFor(this.view.model).fail([{message: "foo"}]);
+                    this.server.lastCreateFor(this.view.model).fail([
+                        {message: "foo"}
+                    ]);
                     expect(this.view.$(".errors")).toContainText("foo");
                     expect(this.view.$("button.submit").isLoading()).toBeFalsy();
                 });
