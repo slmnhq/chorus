@@ -30,15 +30,11 @@
 
 <div class="modal_controls">
     <div class="vertical">
-        <a href="#" class="show{{#unless hasChart}} hidden{{/unless}}">{{t "visualization.show_table"}}</a>
+        <a href="#" class="show hidden">{{t "visualization.show_table"}}</a>
         <a href="#" class="hide hidden">{{t "visualization.hide_table"}}</a>
         <div class="right">
             <button class="close_dialog">{{t "actions.close"}}</button>
-            <button class="save"
-                {{#unless hasChart}}
-                    disabled="disabled"
-                {{/unless}}
-                >{{t "actions.save_as"}}</button>
+            <button class="save" disabled="disabled">{{t "actions.save_as"}}</button>
             <button class="stop hidden">{{t "actions.cancel"}}</button>
             <button class="revert hidden">{{t "visualization.revert"}}</button>
             <button class="refresh hidden">{{t "visualization.refresh"}}</button>

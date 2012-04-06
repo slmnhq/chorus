@@ -49,18 +49,23 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     onExecutionComplete: function() {
         this.launchModal();
-
         this.drawChart();
     },
 
     drawChart: function() {
         if (this.isValidData()) {
+            this.$(".modal_controls a.hide").addClass("hidden");
+            this.$(".modal_controls a.show").removeClass("hidden");
+            this.$("button.save").prop("disabled", false);
+            this.$("button.save").prop("disabled", false);
             this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model: this.task});
             this.subviews[".chart_area"] = "chart";
+            this.renderSubview("chart");
         } else {
-            this.displayEmptyChartWarning()
+            this.emptyDataWarning = new chorus.views.visualizations.EmptyDataWarning()
+            this.subviews[".chart_area"] = "emptyDataWarning";
+            this.renderSubview("emptyDataWarning");
         }
-        this.render();
     },
 
     refreshChart: function() {
@@ -96,11 +101,6 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         _.each(buttonClasses, function(buttonClass) {
             buttons.filter("." + buttonClass).removeClass("hidden");
         });
-    },
-
-    displayEmptyChartWarning: function() {
-        this.emptyDataWarning = new chorus.views.visualizations.EmptyDataWarning()
-        this.subviews[".chart_area"] = "emptyDataWarning";
     },
 
     isValidData: function() {

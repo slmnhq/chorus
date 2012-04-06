@@ -38,7 +38,6 @@ describe("chorus.dialogs.Visualization", function() {
             describe("when the task data is valid", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "isValidData").andReturn(true);
-                    this.dialog.render();
                     this.dialog.onExecutionComplete();
                 });
 
@@ -565,7 +564,7 @@ describe("chorus.dialogs.Visualization", function() {
             beforeEach(function() {
                 this.server.reset();
                 spyOn(this.dialog.filters, "whereClause").andReturn("newSql");
-                spyOn(this.dialog, "drawChart");
+                spyOn(this.dialog, "drawChart").andCallThrough();
                 this.dialog.refreshChart();
             });
 
@@ -619,6 +618,10 @@ describe("chorus.dialogs.Visualization", function() {
 
                 it("re-draws the chart", function() {
                     expect(this.dialog.drawChart).toHaveBeenCalled();
+                });
+
+                it("does not hide the filter options", function() {
+                   expect(this.dialog.$(".filter_options")).not.toHaveClass("hidden");
                 });
 
                 itReturnsToOriginalState();
