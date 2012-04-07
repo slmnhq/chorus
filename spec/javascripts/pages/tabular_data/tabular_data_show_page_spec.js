@@ -277,7 +277,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     });
 
                     it("should swap out the sidebar for the time series sidebar", function() {
-                        expect(this.page.secondarySidebar).toBeA(chorus.views.TimeSeriesChartConfiguration)
+                        expect(this.page.secondarySidebar).toBeA(chorus.views.TimeseriesChartConfiguration)
                         expect(this.page.secondarySidebar.collection).toBe(this.page.columnSet);
                     });
                 });

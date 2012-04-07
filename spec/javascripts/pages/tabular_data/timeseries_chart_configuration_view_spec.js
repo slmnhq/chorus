@@ -1,4 +1,4 @@
-describe("chorus.views.TimeSeriesChartConfiguration", function() {
+describe("chorus.views.TimeseriesChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
@@ -10,7 +10,7 @@ describe("chorus.views.TimeSeriesChartConfiguration", function() {
                 this.model = fixtures.datasetChorusView({objectName: "Foo"});
                 this.valueMenuQtip = stubQtip(".value .limiter a");
                 this.timeMenuQtip = stubQtip(".time .limiter a");
-                this.view = new chorus.views.TimeSeriesChartConfiguration({model: this.model, collection: this.columns})
+                this.view = new chorus.views.TimeseriesChartConfiguration({model: this.model, collection: this.columns})
                 this.view.render();
             })
 
@@ -51,7 +51,7 @@ describe("chorus.views.TimeSeriesChartConfiguration", function() {
         context("with no columns", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.view = new chorus.views.TimeSeriesChartConfiguration({model: this.model, collection: this.columns})
+                this.view = new chorus.views.TimeseriesChartConfiguration({model: this.model, collection: this.columns})
                 this.view.render();
             })
 
@@ -74,7 +74,7 @@ describe("chorus.views.TimeSeriesChartConfiguration", function() {
             beforeEach(function() {
                 this.column1 = fixtures.databaseColumn({typeCategory: 'REAL_NUMBER', name: "Sandwich"});
                 this.columns = new chorus.collections.DatabaseColumnSet([this.column1]);
-                this.view = new chorus.views.TimeSeriesChartConfiguration({model: this.model, collection: this.columns})
+                this.view = new chorus.views.TimeseriesChartConfiguration({model: this.model, collection: this.columns})
                 this.view.render();
             });
 

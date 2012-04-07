@@ -155,7 +155,7 @@
                     this.secondarySidebar = new chorus.views.HeatmapChartConfiguration({model: this.model, collection: this.columnSet});
                     break;
                 case 'timeseries':
-                    this.secondarySidebar = new chorus.views.TimeSeriesChartConfiguration({model: this.model, collection: this.columnSet});
+                    this.secondarySidebar = new chorus.views.TimeseriesChartConfiguration({model: this.model, collection: this.columnSet});
                     break;
             }
         },

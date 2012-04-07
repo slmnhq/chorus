@@ -1,4 +1,4 @@
-chorus.views.TimeSeriesChartConfiguration = chorus.views.ChartConfiguration.extend({
+chorus.views.TimeseriesChartConfiguration = chorus.views.ChartConfiguration.extend({
     className: "chart_configuration",
     additionalClass: "timeseries",
 
