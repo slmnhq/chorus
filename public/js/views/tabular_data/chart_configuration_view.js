@@ -1,4 +1,5 @@
-;(function() {
+;
+(function() {
     chorus.views.ChartConfiguration = chorus.views.Sidebar.extend({
         additionalClass: "chart_configuration",
 
@@ -140,11 +141,16 @@
         },
 
         onSqlError: function() {
-            this.errorContainer.showError(this.task, chorus.alerts.VisualizationError)
+            this.options.errorContainer.showError(this.task, chorus.alerts.VisualizationError)
         },
 
         clearSqlErrors: function() {
-            this.errorContainer.closeError()
+            this.options.errorContainer.closeError()
+        }
+    }, {
+        buildForType: function(chartType, options) {
+            var className = _.capitalize(chartType) + "ChartConfiguration";
+            return new chorus.views[className](options);
         }
     });
 

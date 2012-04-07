@@ -211,8 +211,8 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
             context("and the visualize button is clicked", function() {
                 beforeEach(function() {
+                    spyOn(this.view, 'showVisualizationConfig');
                     this.view.filterWizardView.resetFilters.reset();
-                    this.visualizeSpy = spyOnEvent(this.view, "transform:sidebar");
                     this.view.$("button.visualize").click();
                 })
 
@@ -220,9 +220,9 @@ describe("chorus.views.TabularDataContentDetails", function() {
                     expect(this.view.$('.create_chart .chart_icon:eq(0)')).toHaveClass('selected');
                 });
 
-                it("triggers the transform:sidebar event for the first chart type", function() {
+                it("calls 'showVisualizationConfig' with the first chart type", function() {
                     var chartType = this.view.$('.create_chart .chart_icon:eq(0)').data('chart_type');
-                    expect("transform:sidebar").toHaveBeenTriggeredOn(this.view, [chartType]);
+                    expect(this.view.showVisualizationConfig).toHaveBeenCalledWith(chartType);
                 });
 
                 it("hides the definition bar and shows the create_chart bar", function() {
@@ -267,15 +267,13 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         expect(this.view.$('.info_bar')).toHaveClass('hidden');
                     });
 
-                    it("triggers the cancel:sidebar event for the chart type", function() {
-                        var chartType = this.view.$('.create_chart .chart_icon:eq(0)').data('chart_type');
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', chartType);
-                    })
+                    it("hides the chart config view", function() {
+                        expect(this.view.$(".chart_config")).toHaveClass("hidden");
+                    });
                 })
 
                 context("and a chart type is clicked", function() {
                     beforeEach(function() {
-                        this.visualizeSpy.reset();
                         var chartIcon = this.view.$('.create_chart .chart_icon:eq(3)').click();
                         this.firstChartType = chartIcon.data('chart_type');
                     });
@@ -284,9 +282,9 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         expect(this.view.$('.create_chart .chart_icon.' + this.firstChartType)).toHaveClass('selected');
                     });
 
-                    it("triggers the transform:sidebar event for the chart type", function() {
-                        expect("transform:sidebar").toHaveBeenTriggeredOn(this.view, [this.firstChartType]);
-                    })
+                    it("calls #showVisualizationConfig with that chart type", function() {
+                        expect(this.view.showVisualizationConfig).toHaveBeenCalledWith(this.firstChartType);
+                    });
 
                     it("shows the title for that chart type", function() {
                         var chartType =
@@ -677,6 +675,34 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         expect(this.view.$(".sql_errors")).toHaveClass('hidden');
                     });
                 });
+            });
+        });
+
+        describe("#showVisualizationConfig(type)", function() {
+            beforeEach(function() {
+                this.type = "frequency";
+                var renderSpy = spyOn(
+                    chorus.views.ChartConfiguration.prototype, 'postRender'
+                ).andCallThrough();
+                this.view.showVisualizationConfig(this.type);
+
+                expect(renderSpy).toHaveBeenCalled();
+                this.configView = renderSpy.mostRecentCall.object;
+            });
+
+            it("renders a visualization configuration view for the given chart type", function() {
+                expect(this.configView).toBeA(chorus.views.FrequencyChartConfiguration);
+                expect(this.view.$(".chart_config")).not.toHaveClass('hidden');
+            });
+
+            it("passes the tabular data, column set and filter set to the config view", function() {
+                expect(this.configView.model).toBe(this.view.tabularData);
+                expect(this.configView.collection).toBe(this.view.collection);
+                expect(this.configView.filters).toBe(this.view.filterWizardView.collection);
+            });
+
+            it("passes a reference to itself as the config view's 'error container'", function() {
+                expect(this.configView.options.errorContainer).toBe(this.view);
             });
         });
     });

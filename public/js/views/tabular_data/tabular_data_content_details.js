@@ -4,7 +4,8 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
 
     subviews: {
         ".data_preview": "resultsConsole",
-        ".filters": "filterWizardView"
+        ".filters": "filterWizardView",
+        ".chart_config": "chartConfig"
     },
 
     events: {
@@ -97,11 +98,12 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
     },
 
     selectVisualization: function(e) {
-        this.trigger("transform:sidebar", $(e.target).data('chart_type'))
-        $(e.target).siblings(".cancel").data("type", $(e.target).data('chart_type'));
+        var type = $(e.target).data('chart_type');
+        $(e.target).siblings(".cancel").data("type", type);
         $(e.target).siblings('.chart_icon').removeClass('selected');
         $(e.target).addClass('selected');
         this.showTitle(e);
+        this.showVisualizationConfig(type);
     },
 
     cancelVisualization: function(e) {
@@ -111,7 +113,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
         this.$(".filters").addClass("hidden");
         this.$('.column_count').removeClass("hidden")
         this.$('.info_bar').addClass('hidden');
-        chorus.PageEvents.broadcast('cancel:sidebar', $(e.target).data('type'));
+        this.$(".chart_config").addClass('hidden');
     },
 
     startCreateChorusViewWizard: function() {
@@ -188,6 +190,15 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
     showTitle: function(e) {
         $(e.target).siblings('.title').addClass('hidden');
         $(e.target).siblings('.title.' + $(e.target).data('chart_type')).removeClass('hidden');
+    },
+
+    showVisualizationConfig: function(chartType) {
+        var options = { model: this.tabularData, collection: this.collection, errorContainer: this };
+        this.chartConfig = chorus.views.ChartConfiguration.buildForType(chartType, options);
+        this.chartConfig.filters = this.filterWizardView.collection;
+
+        this.$(".chart_config").removeClass("hidden");
+        this.renderSubview("chartConfig");
     },
 
     showSelectedTitle: function(e) {

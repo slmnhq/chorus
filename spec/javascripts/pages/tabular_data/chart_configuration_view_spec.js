@@ -20,6 +20,25 @@ describe("chorus.views.ChartConfiguration", function() {
         expect(this.columns.pluck('name')).toEqual([ 'B Liger', 'a Speed', 'A Milk Duds', 'the date', 'the time', 'the time & date']);
     });
 
+    describe("#buildForType(chartType)", function() {
+        it("returns an instance of the subclass for the given chart type", function() {
+            var options = {collection: fixtures.databaseColumnSet()}
+            var views = [
+                chorus.views.ChartConfiguration.buildForType("frequency", options),
+                chorus.views.ChartConfiguration.buildForType("boxplot", options),
+                chorus.views.ChartConfiguration.buildForType("histogram", options),
+                chorus.views.ChartConfiguration.buildForType("timeseries", options),
+                chorus.views.ChartConfiguration.buildForType("heatmap", options)
+            ];
+
+            expect(views[0]).toBeA(chorus.views.FrequencyChartConfiguration);
+            expect(views[1]).toBeA(chorus.views.BoxplotChartConfiguration);
+            expect(views[2]).toBeA(chorus.views.HistogramChartConfiguration);
+            expect(views[3]).toBeA(chorus.views.TimeseriesChartConfiguration);
+            expect(views[4]).toBeA(chorus.views.HeatmapChartConfiguration);
+        });
+    });
+
     describe("allColumnNames", function() {
         it("returns a sorted array of column names", function() {
             expect(this.view.allColumnNames()).toEqual(['A Milk Duds', 'a Speed', 'B Liger', 'the date', 'the time', 'the time & date']);
