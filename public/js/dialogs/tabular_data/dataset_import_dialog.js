@@ -185,20 +185,22 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                     chorus.router.navigate(workfile.hasOwnPage() ? workfile.showUrl() : workfile.workfilesUrl(), true);
                 }
             } else {
-                self.csv.set(self.csv.parse(data.result), {silent: true});
-                if (self.csv.serverErrors) {
+                var workingCsv = self.csv.clone();
+                workingCsv.set(workingCsv.parse(data.result), {silent: true});
+                if (workingCsv.serverErrors) {
+                    self.csv.serverErrors = workingCsv.serverErrors;
                     self.csv.trigger("saveFailed");
                     fileChosen(e, data);
                 } else {
-                    if ((self.csv.columnOrientedData().length === 0) && !self.csv.serverErrors) {
+                    if ((workingCsv.columnOrientedData().length === 0) && !workingCsv.serverErrors) {
                         var alert = new chorus.alerts.EmptyCSV();
                         alert.launchModal();
                     } else {
                         var dialog;
                         if (self.importTarget === "existing") {
-                            dialog = new chorus.dialogs.ExistingTableImportCSV({csv: self.csv, datasetId: self.datasetId});
+                            dialog = new chorus.dialogs.ExistingTableImportCSV({csv: workingCsv, datasetId: self.datasetId});
                         } else {
-                            dialog = new chorus.dialogs.NewTableImportCSV({csv: self.csv});
+                            dialog = new chorus.dialogs.NewTableImportCSV({csv: workingCsv});
                         }
                         chorus.PageEvents.subscribe("csv_import:started", self.closeModal, self);
                         dialog.launchModal();

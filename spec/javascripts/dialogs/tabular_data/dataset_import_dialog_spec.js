@@ -271,11 +271,13 @@ describe("chorus.dialogs.DatasetImport", function() {
                                 });
 
                                 it("launches the import to existing table dialog", function() {
-                                    expect(chorus.dialogs.ExistingTableImportCSV.prototype.setup).toHaveBeenCalledWith(
-                                        {
-                                            csv: this.dialog.csv,
-                                            datasetId: this.selectedId
-                                        });
+                                    expect(chorus.dialogs.ExistingTableImportCSV.prototype.setup).toHaveBeenCalled();
+
+                                    var dialogArgs = chorus.dialogs.ExistingTableImportCSV.prototype.setup.mostRecentCall.args[0]
+                                    expect(dialogArgs.datasetId).toBe(this.selectedId);
+                                    expect(dialogArgs.csv.get("toTable")).toBe('table_a');
+                                    expect(dialogArgs.csv.get("lines").length).toBe(2);
+
                                     expect(this.modalSpy).toHaveModal(chorus.dialogs.ExistingTableImportCSV);
                                 });
                             });
@@ -432,12 +434,16 @@ describe("chorus.dialogs.DatasetImport", function() {
                             expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
                         });
 
-                        it("sets the lines in the CSV", function() {
-                            expect(this.dialog.csv.get('lines').length).toBe(2);
+                        it("does not modify the existing CSV (so that if someone cancels back to this modal, old data doesn't bleed through to future versions of import)", function() {
+                            expect(this.dialog.csv.has('lines')).toBeFalsy();
                         });
 
                         it("launches the import new table dialog", function() {
-                            expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalledWith({csv: this.dialog.csv});
+                            expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalled();
+
+                            var dialogArgs = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.args[0]
+                            expect(dialogArgs.csv.get("lines").length).toBe(2);
+
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
                         });
 
@@ -479,8 +485,8 @@ describe("chorus.dialogs.DatasetImport", function() {
                             expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
                         });
 
-                        it("sets the lines in the CSV", function() {
-                            expect(this.dialog.csv.get('lines').length).toBe(0);
+                        it("does not modify the dialog's CSV (to avoid weirdness when cancelling)", function() {
+                            expect(this.dialog.csv.has('lines')).toBeFalsy();
                         });
 
                         it("does not launch the import new table dialog", function() {
