@@ -3,7 +3,8 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
     title: t("sql_preview.dialog.title"),
 
     events: {
-        "click .preview" : "previewData"
+        "click .preview" : "previewData",
+        "click button.cancel": "cancelTask"
     },
 
     subviews: {
@@ -17,6 +18,8 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
 
             this.$(".result_content").addClass("hidden");
         };
+
+        this.modalClosedHandle = chorus.PageEvents.subscribe("modal:closed", this.cancelTask, this);
     },
 
     additionalContext : function() {
@@ -54,5 +57,10 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
         var parent = this.options.launchElement.data("parent");
         var sql = parent && parent.sql()
         return sql;
+    },
+
+    cancelTask: function() {
+        this.resultsConsole.cancelExecution();
+        chorus.PageEvents.unsubscribe(this.modalClosedHandle);
     }
 });

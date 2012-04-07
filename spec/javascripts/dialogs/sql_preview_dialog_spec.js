@@ -9,7 +9,10 @@ describe("chorus.dialogs.SqlPreview", function() {
             });
             spyOn(_, 'defer');
             spyOn(CodeMirror, 'fromTextArea').andReturn({ refresh: $.noop });
-            this.dialog.render();
+
+            stubModals();
+            this.dialog.launchModal();
+
             this.parent = {
                 sql : function(){ return model.get("query"); }
             }
@@ -64,6 +67,33 @@ describe("chorus.dialogs.SqlPreview", function() {
 
             it("constructs the SQL correctly", function() {
                 expect(this.dialog.additionalContext().sql).toBe("select awesome from sql");
+            });
+        });
+
+        describe("clicking the close button", function() {
+            beforeEach(function() {
+                spyOn(this.dialog.resultsConsole, "cancelExecution");
+                this.dialog.$("button.cancel").click();
+            });
+
+            it("cancels the task", function() {
+                expect(this.dialog.resultsConsole.cancelExecution).toHaveBeenCalled()
+            });
+        });
+
+        describe("dismissing the dialog any other way", function() {
+            beforeEach(function() {
+                spyOn(this.dialog.resultsConsole, "cancelExecution");
+                spyOn(chorus.PageEvents, "unsubscribe");
+                this.dialog.modalClosed();
+            });
+
+            it("cancels the task", function() {
+                expect(this.dialog.resultsConsole.cancelExecution).toHaveBeenCalled()
+            });
+
+            it("unsubscribes from the modal:closed event", function() {
+                expect(chorus.PageEvents.unsubscribe).toHaveBeenCalledWith(this.dialog.modalClosedHandle);
             });
         });
     });
