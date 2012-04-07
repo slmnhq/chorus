@@ -458,18 +458,6 @@ describe("chorus.dialogs.DatasetImport", function() {
                             expect(chorus.alerts.EmptyCSV.prototype.setup).not.toHaveBeenCalled();
                             expect(this.modalSpy).not.toHaveModal(chorus.alerts.EmptyCSV);
                         })
-
-                        context("when coming back from 'Configure Table Columns' subModal dialog", function() {
-                            describe("modal:closed", function() {
-                                beforeEach(function() {
-                                    chorus.PageEvents.broadcast("modal:closed");
-                                });
-
-                                it("clears the model", function() {
-                                    expect(this.dialog.csv.has("lines")).toBeFalsy();
-                                });
-                            });
-                        });
                     });
 
                     context("when the csv contains no column data", function() {

@@ -14,7 +14,6 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.sandboxTables = new chorus.collections.DatasetSet([], {workspaceId: workspaceId, type: "SANDBOX_TABLE"});
         this.sandboxTables.bind("loaded", this.filterTables, this);
         this.sandboxTables.fetchAll();
-        chorus.PageEvents.subscribe("modal:closed", this.clearModel, this);
     },
 
     filterTables: function() {
@@ -83,20 +82,11 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         }
     },
 
-    clearModel: function() {
-        this.model.clear();
-        this.model.set(this.modelAttributes());
-    },
-
     makeModel: function() {
-        this.resource = this.model = this.csv = new chorus.models.CSVImport(this.modelAttributes());
-    },
-
-    modelAttributes: function() {
-        return {
+        this.resource = this.model = this.csv = new chorus.models.CSVImport({
             workspaceId: this.options.launchElement.data("workspaceId"),
             hasHeader: true
-        }
+        });
     },
 
     uploadFile: function(e) {
