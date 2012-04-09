@@ -11,7 +11,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     },
 
     subviews: {
-        '.join_pagination': 'joinTablePaginator'
+        '.paginated_join_tables' : 'paginatedJoinTables'
     },
 
     makeModel: function() {
@@ -34,7 +34,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
 
         this.collection.fetchIfNotLoaded();
 
-        this.joinTablePaginator = new chorus.views.ListContentDetails({collection: this.collection, modelClass: "Dataset", hideIfNoPagination: true});
+        this.paginatedJoinTables = new chorus.views.PaginatedJoinTablesList({collection: this.collection})
 
         this.schemas = new chorus.collections.SchemaSet([], {instanceId: this.schema.get("instanceId"), databaseName: this.schema.get("databaseName")});
         this.schemas.fetch();
@@ -87,9 +87,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
             var input = $(e.target).val();
             self.collection.attributes.filter = input;
             self.collection.fetch({silent: true, success: function() {
-                var lastSearch = self.$(".search input").val();
-                self.render()
-                self.$(".search input").val(lastSearch).focus();
+                self.paginatedJoinTables.render();
             }});
         }, 300);
 
@@ -132,13 +130,6 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
             instanceName: this.schema.get("instanceName"),
             databaseName: this.schema.get("databaseName"),
             schemaName: this.schema.get("name")
-        };
-    },
-
-    collectionModelContext: function(model) {
-        return {
-            isView: model.metaType() == "view",
-            iconUrl: model.iconUrl({ size: "medium" })
         };
     }
 });

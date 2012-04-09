@@ -4,40 +4,7 @@
 <div class="search">
     <input type="text" placeholder="{{t "dataset.dialog.search_schema" }}"/>
 </div>
-<div class="join_pagination content_details"></div>
-<ul class="list">
-    {{#each models}}
-        <li data-cid="{{model.cid}}">
-            <span class="spacer_left"/>
-
-            <div class="actions">
-                <a href="#" class="preview_columns">{{t "dataset.manage_join_tables.preview_columns"}}</a>
-                <span class="separator">|</span>
-                <a class="join" href="#">
-                    {{#if isView}}
-                        {{t "dataset.manage_join_tables.join_view"}}
-                    {{else}}
-                        {{t "dataset.manage_join_tables.join_table"}}
-                    {{/if}}
-                </a>
-            </div>
-
-            <img class="image" src="{{iconUrl}}"/>
-
-            <div class="text">
-                <div class="main">
-                    <span class="name" title="{{objectName}}">{{objectName}}</span>
-                </div>
-                <div class="details">
-                    <span class="column_count">{{pluralize columns "dataset.manage_join_tables.column_count" count=columns}}</span>
-                </div>
-            </div>
-
-            <span class="spacer_right"/>
-        </li>
-    {{/each}}
-</ul>
-
+<div class="paginated_join_tables"></div>
 <div class="join_configuration hidden"></div>
 
 <div class="modal_controls">
