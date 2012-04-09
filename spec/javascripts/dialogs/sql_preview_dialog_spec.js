@@ -26,7 +26,7 @@ describe("chorus.dialogs.SqlPreview", function() {
         it("hides the sql text area until the codemirror editor is ready", function() {
             var textarea = this.dialog.$("textarea");
             expect(textarea).toHaveClass("hidden");
-            var deferredFn = _.defer.mostRecentCall.args[0];
+            var deferredFn = _.defer.calls[0].args[0];
             deferredFn();
             expect(CodeMirror.fromTextArea).toHaveBeenCalled();
             expect(CodeMirror.fromTextArea.mostRecentCall.args[0]).toBe(textarea[0]);
