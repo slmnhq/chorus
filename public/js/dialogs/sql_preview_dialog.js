@@ -13,12 +13,8 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
-        this.resultsConsole.clickClose = function(e) {
-            e && e.preventDefault();
 
-            this.$(".result_content").addClass("hidden");
-        };
-
+        chorus.PageEvents.subscribe("action:closePreview", this.hidePreviewData, this);
         this.modalClosedHandle = chorus.PageEvents.subscribe("modal:closed", this.cancelTask, this);
     },
 
@@ -47,8 +43,13 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
         }, this));
     },
 
+    hidePreviewData: function() {
+        this.$(".results_console").addClass("hidden");
+    },
+
     previewData: function(e) {
         e && e.preventDefault();
+        this.$(".results_console").removeClass("hidden");
         var preview = this.model.preview().set({query: this.sql()}, {silent: true});
         this.resultsConsole.execute(preview);
     },

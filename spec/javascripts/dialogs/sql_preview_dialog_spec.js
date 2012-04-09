@@ -5,7 +5,7 @@ describe("chorus.dialogs.SqlPreview", function() {
             var model = fixtures.datasetChorusView({query: "select awesome from sql"});
             this.dialog = new chorus.dialogs.SqlPreview({
                 launchElement: this.launchElement,
-                model : model
+                model: model
             });
             spyOn(_, 'defer');
             spyOn(CodeMirror, 'fromTextArea').andReturn({ refresh: $.noop });
@@ -14,7 +14,7 @@ describe("chorus.dialogs.SqlPreview", function() {
             this.dialog.launchModal();
 
             this.parent = {
-                sql : function(){ return model.get("query"); }
+                sql: function() { return model.get("query"); }
             }
         });
 
@@ -40,24 +40,43 @@ describe("chorus.dialogs.SqlPreview", function() {
             describe("opening the Data Preview", function() {
                 beforeEach(function() {
                     this.launchElement.data("parent", this.parent);
-                    spyOn(this.dialog.resultsConsole, "execute").andCallThrough();
                     this.dialog.$("button.preview").click();
                 });
 
-                it("shows a results console", function() {
-                    expect(this.dialog.resultsConsole.execute).toHaveBeenCalledWithSorta(this.dialog.model.preview(), ["checkId"]);
+                it("sends the data preview command", function() {
+                    expect(this.server.lastCreateFor(this.dialog.resultsConsole.model)).toBeDefined();
                 });
 
-                describe("closing the Data Preview", function() {
+                describe("when the data preview succeeds", function() {
                     beforeEach(function() {
-                        this.dialog.$(".results_console .close").click()
+                        this.server.completeSaveFor(this.dialog.resultsConsole.model, fixtures.taskWithResult())
                     });
 
-                    it("does not show the Data Preview any longer", function() {
-                        expect(this.dialog.$(".result_table")).toHaveClass("hidden")
+                    it("shows the result table", function() {
+                        expect(this.dialog.$(".result_table")).not.toHaveClass("hidden")
+                    });
+
+                    describe("closing the Data Preview", function() {
+                        beforeEach(function() {
+                            this.dialog.$(".results_console .close").click()
+                        });
+
+                        it("does not show the Data Preview any longer", function() {
+                            expect(this.dialog.$(".results_console")).toHaveClass("hidden");
+                        });
+
+                        describe("clicking on the data preview again", function() {
+                            beforeEach(function() {
+                                this.dialog.$("button.preview").click();
+                            });
+
+                            it("shows the result console", function() {
+                                expect(this.dialog.$(".results_console")).not.toHaveClass("hidden");
+                            })
+                        })
                     });
                 });
-            });
+            })
         });
 
         describe("generated sql", function() {
