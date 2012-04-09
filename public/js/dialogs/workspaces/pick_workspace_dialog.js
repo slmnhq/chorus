@@ -5,6 +5,7 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
     emptyListTranslationKey: "dataset.associate.empty.placeholder",
     searchPlaceholderKey: "dataset.associate.search",
     selectedEvent: 'files:selected',
+    modelClass: "Workspace",
 
     events: {
         "click button.submit": "doCallback"

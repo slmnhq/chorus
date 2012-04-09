@@ -5,6 +5,7 @@ chorus.dialogs.WorkfilesAttach = chorus.dialogs.PickItems.extend({
     emptyListTranslationKey: "workfiles.none",
     searchPlaceholderKey: "workfiles.dialog.search",
     selectedEvent: 'files:selected',
+    modelClass: "Workfile",
 
     makeModel:function () {
         this.collection = new chorus.collections.WorkfileSet([], {workspaceId:this.options.workspaceId || this.options.launchElement.data("workspace-id")});

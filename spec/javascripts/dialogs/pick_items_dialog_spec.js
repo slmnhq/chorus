@@ -6,8 +6,9 @@ describe("chorus.dialogs.PickItems", function() {
         this.user2 = newFixtures.user({ firstName: "B", lastName: "User" });
         this.user3 = newFixtures.user({ firstName: "C", lastName: "User" });
 
-        this.users = new chorus.collections.Base([this.user1, this.user2, this.user3]);
-        this.dialog = new chorus.dialogs.PickItems({ workspaceId: "33", collection: this.users });
+        this.users = new chorus.collections.UserSet([this.user1, this.user2, this.user3]);
+        var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "User" });
+        this.dialog = new Subclass({ workspaceId: "33", collection: this.users });
     });
 
     describe("render", function() {
@@ -25,8 +26,10 @@ describe("chorus.dialogs.PickItems", function() {
                 this.dialog.render();
             });
 
-            it("renders a search input", function() {
-                expect(this.dialog.$(".search input")).toExist();
+            it("renders a list content details view", function() {
+                expect(this.dialog.$(".list_content_details")).toExist();
+                expect(this.dialog.paginationView).toBeA(chorus.views.ListContentDetails);
+                expect(this.dialog.paginationView.collection).toBe(this.users);
             });
 
             it("defaults to no selection", function() {
@@ -39,18 +42,6 @@ describe("chorus.dialogs.PickItems", function() {
 
             it("disables the submit button by default", function() {
                 expect(this.dialog.$("button.submit")).toBeDisabled();
-            });
-
-            it("uses the default search placeholder text", function() {
-                expect(this.dialog.$("input").attr("placeholder")).toMatchTranslation("pickitem.dialog.search.placeholder");
-            });
-
-            context("when the search placeholder text is supplied", function() {
-                it("uses the supplied text", function() {
-                    this.dialog.searchPlaceholderKey = "test.mouse";
-                    this.dialog.render();
-                    expect(this.dialog.$("input").attr("placeholder")).toMatchTranslation("test.mouse");
-                });
             });
 
             it("includes a name for each entry", function() {
@@ -235,81 +226,56 @@ describe("chorus.dialogs.PickItems", function() {
                 newFixtures.user({firstName: "hij", lastName: "2 a"})
             ]);
             this.users.loaded = true;
-            this.dialog = new chorus.dialogs.PickItems({ collection: this.users });
+            var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "User" });
+            this.dialog = new Subclass({ collection: this.users });
             this.dialog.render();
-        })
 
-        describe("typing the first character", function() {
+            this.dialog.$("li:eq(2)").click();
+        });
+
+        it("passes the correct search options to the list content details view", function() {
+            expect(this.dialog.paginationView.options.search.placeholder).toBeDefined();
+            expect(this.dialog.paginationView.options.search.list).toBe(this.dialog.$(".items ul"));
+        });
+
+        it("passes the right model class option to the ListContentDetails view", function() {
+            expect(this.dialog.paginationView.options.modelClass).toBe("User");
+        });
+
+        it("uses the default search placeholder text", function() {
+            expect(this.dialog.$("input").attr("placeholder")).toMatchTranslation("pickitem.dialog.search.placeholder");
+        });
+
+        context("when the search placeholder text is supplied", function() {
+            it("uses the supplied text", function() {
+                var Subclass = chorus.dialogs.PickItems.extend({ searchPlaceholderKey: "test.mouse" });
+                this.dialog = new Subclass({ collection: this.users });
+                this.dialog.render();
+                expect(this.dialog.$("input").attr("placeholder")).toMatchTranslation("test.mouse");
+            });
+        });
+
+        describe("when the filter text matches the selected item", function() {
+            it("retains the selection", function() {
+                this.dialog.$("input").val("a").trigger("textchange");
+                expect(this.dialog.$("li:eq(2)")).toHaveClass("selected");
+            });
+        });
+
+        describe("when the filter text does not match the selected item", function() {
             beforeEach(function() {
-                this.dialog.$("input").val("A");
-                this.dialog.$(".search input").trigger("textchange");
-            })
+                this.dialog.$("input").val("m").trigger("textchange");
+            });
 
-            it("hides items not containing that character", function() {
-                expect(this.dialog.$("li .name[title='xyz 3 ab']").parent("li")).not.toHaveClass("hidden");
-                expect(this.dialog.$("li .name[title='EFG 1']").parent("li")).toHaveClass("hidden");
-                expect(this.dialog.$("li .name[title='hij 2 a']").parent("li")).not.toHaveClass("hidden");
-            })
+            it("clears the selection", function() {
+                expect(this.dialog.$("li.selected")).not.toExist();
+            });
 
-            describe("typing another character", function() {
-                beforeEach(function() {
-                    this.dialog.$("input").val("ab");
-                    this.dialog.$(".search input").trigger("textchange");
-                })
-
-                it("hides items not containing the adjacent character sequence", function() {
-                    expect(this.dialog.$("li .name[title='xyz 3 ab']").parent("li")).not.toHaveClass("hidden");
-                    expect(this.dialog.$("li .name[title='EFG 1']").parent("li")).toHaveClass("hidden");
-                    expect(this.dialog.$("li .name[title='hij 2 a']").parent("li")).toHaveClass("hidden");
-                })
-
-                describe("backspacing", function() {
-                    beforeEach(function() {
-                        this.dialog.$("input").val("a");
-                        this.dialog.$(".search input").trigger("textchange");
-                    })
-
-                    it("hides items not containing that character", function() {
-                        expect(this.dialog.$("li .name[title='xyz 3 ab']").parent("li")).not.toHaveClass("hidden");
-                        expect(this.dialog.$("li .name[title='EFG 1']").parent("li")).toHaveClass("hidden");
-                        expect(this.dialog.$("li .name[title='hij 2 a']").parent("li")).not.toHaveClass("hidden");
-                    })
-                })
-            })
-        })
-
-        describe("with a selection", function() {
-            beforeEach(function() {
-                this.dialog.$("li:eq(2)").click();
-            })
-
-            describe("when the filter text matches the selected item", function() {
-                beforeEach(function() {
-                    this.dialog.$("input").val("a");
-                    this.dialog.$(".search input").trigger("textchange");
-                })
-
-                it("retains the selection", function() {
-                    expect(this.dialog.$("li:eq(2)")).toHaveClass("selected");
-                })
-            })
-
-            describe("when the filter text does not match the selected item", function() {
-                beforeEach(function() {
-                    this.dialog.$("input").val("m");
-                    this.dialog.$(".search input").trigger("textchange");
-                })
-
-                it("clears the selection", function() {
-                    expect(this.dialog.$("li.selected")).not.toExist();
-                })
-
-                it("should disable the submit button", function() {
-                    expect(this.dialog.$("button.submit")).toBeDisabled();
-                });
-            })
-        })
-    })
+            it("should disable the submit button", function() {
+                expect(this.dialog.$("button.submit")).toBeDisabled();
+            });
+        });
+    });
 
     describe("submit", function() {
         beforeEach(function() {

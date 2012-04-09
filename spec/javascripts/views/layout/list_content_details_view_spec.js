@@ -268,7 +268,7 @@ describe("chorus.views.ListContentDetails", function() {
         })
     })
 
-    describe("type ahead search", function() {
+    describe("search", function() {
         beforeEach(function() {
             this.$list = $("<ul/>");
             spyOn(chorus, "search");

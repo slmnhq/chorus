@@ -4,11 +4,8 @@
 .pick_items {
     width: 500px;
 
-    .search {
-        padding: 4px 12px;
-        margin: 0;
-        height: 25px;
-        border-bottom: 1px solid $pagination-border-color;
+    .list_content_details {
+        width: auto;
     }
 
     .items {

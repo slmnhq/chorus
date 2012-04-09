@@ -32,12 +32,18 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         }
 
         if (this.options.search) {
-            chorus.search(_.extend({
-                    input: this.$("input.search:text"),
-                    afterFilter: _.bind(this.updateFilterCount, this)
-                },
-                this.options.search));
+            this.setupSearch();
         }
+    },
+
+    setupSearch: function() {
+        chorus.search(_.extend(
+            {
+                input: this.$("input.search:text"),
+                afterFilter: _.bind(this.updateFilterCount, this)
+            },
+            this.options.search)
+        );
     },
 
     startLoading: function(selector) {
