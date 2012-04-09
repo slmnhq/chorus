@@ -95,6 +95,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
         this.$(".filters").removeClass("hidden");
         this.filterWizardView.options.showAliasedName = false;
         this.filterWizardView.resetFilters();
+        chorus.PageEvents.broadcast("start:visualization");
     },
 
     selectVisualization: function(e) {

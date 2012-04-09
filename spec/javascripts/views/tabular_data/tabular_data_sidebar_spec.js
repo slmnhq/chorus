@@ -1014,5 +1014,29 @@ describe("chorus.views.TabularDataSidebar", function() {
                 })
             }, this)
         })
+
+        describe("event handing", function() {
+            describe("start:visualization", function() {
+                beforeEach(function() {
+                    expect($(this.view.el)).not.toHaveClass("visualizing");
+                    chorus.PageEvents.broadcast("start:visualization");
+                });
+
+                it("adds the 'visualizing' class to sidebar_content", function() {
+                    expect($(this.view.el)).toHaveClass("visualizing");
+                });
+            });
+            describe("cancel:visualization", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("start:visualization")
+                    expect($(this.view.el)).toHaveClass("visualizing")
+                    chorus.PageEvents.broadcast("cancel:visualization")
+                });
+
+                it("removes the 'visualizing' class from sidebar_content", function() {
+                    expect($(this.view.el)).not.toHaveClass("visualizing")
+                });
+            });
+        });
     });
 });

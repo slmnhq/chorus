@@ -19,6 +19,8 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this);
         chorus.PageEvents.subscribe("workspace:associated", this.refetchModel, this);
         chorus.PageEvents.subscribe("analyze:running", this.resetStatistics, this)
+        chorus.PageEvents.subscribe("start:visualization", this.enterVisualizationMode, this)
+        chorus.PageEvents.subscribe("cancel:visualization", this.endVisualizationMode, this)
         this.tabs = new chorus.views.TabControl(['activity', 'statistics']);
     },
 
@@ -119,5 +121,13 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     updateImportSchedule: function(importConfiguration) {
         this.importConfiguration = importConfiguration;
         this.render();
+    },
+
+    enterVisualizationMode: function() {
+        $(this.el).addClass("visualizing");
+    },
+
+    endVisualizationMode: function() {
+        $(this.el).removeClass("visualizing");
     }
 });

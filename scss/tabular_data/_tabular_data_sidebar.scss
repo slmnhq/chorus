@@ -32,6 +32,12 @@
         }
     }
 
+    &.visualizing {
+        .actions, .last_import, .next_import {
+            display: none;
+        }
+    }
+
     .activity_list {
         .heading {
             display: none;

@@ -212,6 +212,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
             context("and the visualize button is clicked", function() {
                 beforeEach(function() {
                     spyOn(this.view, 'showVisualizationConfig');
+                    spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
                     this.view.filterWizardView.resetFilters.reset();
                     this.view.$("button.visualize").click();
                 });
@@ -247,9 +248,13 @@ describe("chorus.views.TabularDataContentDetails", function() {
                     expect(this.view.filterWizardView.resetFilters).toHaveBeenCalled();
                 });
 
+                it("broadcasts start:visualization", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("start:visualization");
+                })
+
+
                 context("and cancel is clicked", function() {
                     beforeEach(function() {
-                        spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
                         this.view.$('.create_chart .cancel').click();
                     });
 
