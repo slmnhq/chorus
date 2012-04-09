@@ -6,17 +6,9 @@ describe("chorus.dialogs.PickWorkspace", function() {
         this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement});
     });
 
-    it("does not re-render when the model changes", function() {
-        expect(this.dialog.persistent).toBeTruthy()
-    })
-
     describe("#setup", function() {
         it("fetches all the workspaces", function() {
             expect(this.server.lastFetch().url).toBe("/edc/workspace/?user=4003&page=1&rows=1000");
-        })
-
-        it("instantiates a CollectionPicklist with the workspace collection", function() {
-            expect(this.dialog.picklistView.collection).toBe(this.dialog.collection);
         })
 
         it("only gets the chorus.session.users()'s workspaces", function() {
@@ -48,24 +40,8 @@ describe("chorus.dialogs.PickWorkspace", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement});
-            this.dialog.buttonTitle = "Some button";
-            spyOn(this.dialog.picklistView, "render");
             this.dialog.render();
         })
-
-        it("renders the picklist view", function() {
-            expect(this.dialog.picklistView.render).toHaveBeenCalled();
-        })
-
-        it("re-renders when the collection has been fetched", function() {
-            this.dialog.picklistView.render.reset();
-            this.dialog.collection.trigger("reset")
-            expect(this.dialog.picklistView.render).toHaveBeenCalled();
-        })
-
-        it("uses the supplied buttonTitle for the submit button's text", function() {
-            expect(this.dialog.$("button.submit").text().trim()).toBe("Some button");
-        });
 
         context("when the fetch completes", function() {
             beforeEach(function() {
@@ -74,6 +50,10 @@ describe("chorus.dialogs.PickWorkspace", function() {
                     newFixtures.workspace({name: "Bar"}),
                     newFixtures.workspace({name: "Baz"})
                 ]);
+            });
+
+            it("has the correct submit button text", function() {
+                expect(this.dialog.$("button.submit")).toContainTranslation("dataset.associate.button");
             });
 
             it("renders the name of the workspace", function() {
@@ -88,72 +68,29 @@ describe("chorus.dialogs.PickWorkspace", function() {
                 expect(this.dialog.$("li:eq(1) img")).toHaveAttr("src", "/images/workspaces/workspace_small.png");
                 expect(this.dialog.$("li:eq(2) img")).toHaveAttr("src", "/images/workspaces/workspace_small.png");
             });
-        });
-    });
 
-    describe("choose workspace button", function() {
-        beforeEach(function() {
-            this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement });
-            this.dialog.render();
-        })
-
-        it("is initially disabled", function() {
-            expect(this.dialog.$("button.submit")).toBeDisabled();
-        })
-
-        describe("when an item is selected", function() {
-            beforeEach(function() {
-                this.dialog.picklistView.trigger("item:selected", true);
-            })
-
-            it("should enable the button", function() {
-                expect(this.dialog.$("button.submit")).not.toBeDisabled();
-            })
-
-            describe("and it is subsequently deselected", function() {
+            describe("clicking the choose workspace button", function() {
                 beforeEach(function() {
-                    this.dialog.picklistView.trigger("item:selected", undefined);
+                    this.dialog.callback = jasmine.createSpy("callback");
+                    this.dialog.$("li:eq(0)").click();
+                    this.dialog.$("button.submit").click();
+                });
+
+                it("calls the callback", function() {
+                    expect(this.dialog.callback).toHaveBeenCalled();
                 })
+            });
 
-                it("should disable the button", function() {
-                    expect(this.dialog.$("button.submit")).toBeDisabled();
-                })
-            })
-        })
-    })
+            describe("double-clicking a workspace", function() {
+                beforeEach(function() {
+                    this.dialog.callback = jasmine.createSpy("callback");
+                    this.dialog.$("li:eq(0)").dblclick();
+                });
 
-    describe("clicking the choose workspace button", function() {
-        beforeEach(function() {
-            this.workspace = newFixtures.workspace();
-            this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement });
-            this.dialog.render();
-
-            spyOn(chorus, "toast");
-            spyOn(this.dialog.picklistView, "selectedItem").andReturn(this.workspace);
-            this.dialog.picklistView.trigger("item:selected", this.workspace);
-
-            this.dialog.callback = jasmine.createSpy("callback");
-            this.dialog.$("button.submit").click();
+                it("calls the callback", function() {
+                    expect(this.dialog.callback).toHaveBeenCalled();
+                });
+            });
         });
-
-        it("calls the callback", function() {
-            expect(this.dialog.callback).toHaveBeenCalled();
-        })
     });
-
-    describe("double-clicking a workspace", function() {
-        beforeEach(function() {
-            this.server.completeFetchFor(this.dialog.collection, [newFixtures.workspace(), newFixtures.workspace()]);
-            this.dialog.render();
-        });
-
-        it("sets the selected item on the pick-list view and calls the callback", function() {
-            var self = this;
-            this.dialog.callback = jasmine.createSpy("callback").andCallFake(function() {
-                expect(self.dialog.picklistView.selectedItem()).toBe(self.dialog.collection.at(1));
-            })
-            this.dialog.$("li:eq(1)").dblclick();
-            expect(this.dialog.callback).toHaveBeenCalled();
-        });
-    })
-})
+});

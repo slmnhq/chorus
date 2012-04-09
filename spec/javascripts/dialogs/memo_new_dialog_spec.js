@@ -153,14 +153,13 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
             describe("when workfiles are selected", function() {
                 beforeEach(function() {
-                    this.workfileSet = new chorus.collections.WorkfileSet([
-                        fixtures.workfile({ id: 1, fileName: "greed.sql", fileType: "sql" }),
-                        fixtures.workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" }),
-                        fixtures.workfile({ id: 3, fileName: "sloth.afm", fileType: "N/A" })
-                    ]);
-                    spyOn(this.workfileSet.at(1), "isImage").andReturn(true);
+                    this.workfile1 = fixtures.workfile({ id: 1, fileName: "greed.sql", fileType: "sql" });
+                    this.workfile2 = fixtures.workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" });
+                    this.workfile3 = fixtures.workfile({ id: 3, fileName: "sloth.afm", fileType: "N/A" });
+
+                    spyOn(this.workfile2, "isImage").andReturn(true);
                     this.workfilesDialog = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
-                    this.workfilesDialog.trigger("files:selected", this.workfileSet);
+                    this.workfilesDialog.trigger("files:selected", [this.workfile1, this.workfile2, this.workfile3]);
                 });
 
                 it("displays the names of the workfiles", function() {
@@ -172,12 +171,15 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 it("displays the appropriate file icons", function() {
                     var fileIcons = this.dialog.$(".file_details:visible img.icon");
                     expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
-                    expect(fileIcons.eq(1).attr("src")).toBe(this.workfileSet.at(1).thumbnailUrl());
+                    expect(fileIcons.eq(1).attr("src")).toBe(this.workfile2.thumbnailUrl());
                     expect(fileIcons.eq(2).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("afm", "medium"));
                 });
 
                 it("stores the collection", function() {
-                    expect(this.dialog.model.workfiles).toBe(this.workfileSet);
+                    expect(this.dialog.model.workfiles.length).toBe(3);
+                    expect(this.dialog.model.workfiles.at(0)).toBe(this.workfile1);
+                    expect(this.dialog.model.workfiles.at(1)).toBe(this.workfile2);
+                    expect(this.dialog.model.workfiles.at(2)).toBe(this.workfile3);
                 });
 
                 context("when the 'attach workfile' link is clicked again", function() {
@@ -189,20 +191,27 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     it("is populated with the previously selected workfiles", function() {
                         expect(chorus.dialogs.WorkfilesAttach.prototype.initialize).toHaveBeenCalled();
                         var options = chorus.dialogs.WorkfilesAttach.prototype.initialize.mostRecentCall.args[0];
-                        expect(options.selectedAttachments.models[0].get('fileName')).toBe('greed.sql');
-                        expect(options.selectedAttachments.models[1].get('fileName')).toBe('generosity.cpp');
+                        expect(options.defaultSelection.at(0).get('fileName')).toBe('greed.sql');
+                        expect(options.defaultSelection.at(1).get('fileName')).toBe('generosity.cpp');
                     });
+
                     context("when new files are selected", function() {
                         beforeEach(function() {
+                            this.newWorkfile = fixtures.workfile();
                             this.workfilesDialog = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
-                            this.workfilesDialog.trigger("files:selected", this.workfileSet);
+                            this.workfilesDialog.trigger("files:selected", [this.newWorkfile]);
                         });
 
                         it("clears any existing workfiles", function() {
-                            expect(this.dialog.$(".file_details").length).toBe(3);
+                            expect(this.dialog.$(".file_details").length).toBe(1);
                         });
-                    })
-                })
+
+                        it("stores the new workfiles in the collection", function() {
+                            expect(this.dialog.model.workfiles.length).toBe(1);
+                            expect(this.dialog.model.workfiles.at(0)).toBe(this.newWorkfile);
+                        });
+                    });
+                });
 
                 describe("when a workfile remove link is clicked", function() {
                     it("removes only that workfile", function() {
@@ -266,12 +275,12 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
             describe("when datasets are selected", function() {
                 beforeEach(function() {
-                    this.datasetSet = new chorus.collections.DatasetSet([
+                    this.datasets = [
                         fixtures.datasetSandboxTable({objectName: 'table1', id: '1'}),
                         fixtures.datasetSandboxTable({objectName: 'table2', id: '2'})
-                    ]);
+                    ];
                     this.datasetsDialog = chorus.dialogs.DatasetsAttach.prototype.render.mostRecentCall.object;
-                    this.datasetsDialog.trigger("datasets:selected", this.datasetSet);
+                    this.datasetsDialog.trigger("datasets:selected", this.datasets);
                 });
 
                 it("displays the names of the datasets", function() {
@@ -282,12 +291,14 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                 it("displays the appropriate icons", function() {
                     var datasetIcons = this.dialog.$(".dataset_details:visible img.icon");
-                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasetSet.at(0).iconUrl({size: 'medium'}));
-                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasetSet.at(1).iconUrl({size: 'medium'}));
+                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasets[0].iconUrl({size: 'medium'}));
+                    expect(datasetIcons.eq(0).attr("src")).toBe(this.datasets[1].iconUrl({size: 'medium'}));
                 });
 
                 it("stores the collection", function() {
-                    expect(this.dialog.model.datasets).toBe(this.datasetSet);
+                    expect(this.dialog.model.datasets.length).toBe(2);
+                    expect(this.dialog.model.datasets.at(0)).toBe(this.datasets[0]);
+                    expect(this.dialog.model.datasets.at(1)).toBe(this.datasets[1]);
                 });
 
                 context("when the 'attach dataset' link is clicked again", function() {
@@ -299,13 +310,13 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     it("is populated with the previously selected datasets", function() {
                         expect(chorus.dialogs.DatasetsAttach.prototype.initialize).toHaveBeenCalled();
                         var options = chorus.dialogs.DatasetsAttach.prototype.initialize.mostRecentCall.args[0];
-                        expect(options.selectedAttachments.models[0].get('objectName')).toBe('table1');
-                        expect(options.selectedAttachments.models[1].get('objectName')).toBe('table2');
+                        expect(options.defaultSelection.models[0].get('objectName')).toBe('table1');
+                        expect(options.defaultSelection.models[1].get('objectName')).toBe('table2');
                     });
                     context("when new datasets are selected", function() {
                         beforeEach(function() {
                             this.datasetsDialog = chorus.dialogs.DatasetsAttach.prototype.render.mostRecentCall.object;
-                            this.datasetsDialog.trigger("datasets:selected", this.datasetSet);
+                            this.datasetsDialog.trigger("datasets:selected", this.datasets);
                         });
 
                         it("clears any existing datasets", function() {
@@ -448,11 +459,11 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
             describe("when a workfile is selected later", function() {
                 beforeEach(function() {
-                    this.workfileSet = new chorus.collections.WorkfileSet([
+                    this.workfiles = [
                         new chorus.models.Workfile({ id: 1, fileName: "greed.sql", fileType: "sql" }),
                         new chorus.models.Workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" })
-                    ]);
-                    this.dialog.workfileChosen(this.workfileSet);
+                    ];
+                    this.dialog.workfileChosen(this.workfiles);
                 });
 
                 it("does not remove the desktop files from the view", function() {
