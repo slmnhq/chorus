@@ -182,7 +182,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     launchWorkfileDialog: function(e) {
         e.preventDefault();
         if (!this.saving) {
-            var workfileDialog = new chorus.dialogs.WorkfilesAttach({ workspaceId: this.workspaceId, selectedAttachments: this.model.workfiles });
+            var workfileDialog = new chorus.dialogs.WorkfilesAttach({ workspaceId: this.workspaceId, defaultSelection: this.model.workfiles });
             workfileDialog.bind("files:selected", this.workfileChosen, this);
             this.launchSubModal(workfileDialog);
         }
@@ -191,7 +191,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     launchDatasetDialog: function(e) {
         e.preventDefault();
         if (!this.saving) {
-            var datasetDialog = new chorus.dialogs.DatasetsAttach({ workspaceId: this.workspaceId, selectedAttachments: this.model.datasets});
+            var datasetDialog = new chorus.dialogs.DatasetsAttach({ workspaceId: this.workspaceId, defaultSelection: this.model.datasets});
             datasetDialog.bind("datasets:selected", this.datasetsChosen, this);
             this.launchSubModal(datasetDialog);
         }
@@ -210,16 +210,16 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
 
     workfileChosen: function(workfiles) {
         this.$(".file_details.workfile").remove();
-        this.model.workfiles = workfiles;
+        this.model.workfiles = new chorus.collections.WorkfileSet(workfiles);
         this.model.workfiles.each(function(workfile) {
             var iconUrl = workfile.isImage() ? workfile.thumbnailUrl() : workfile.iconUrl({size: 'medium'});
             this.showFile(workfile, workfile.get("fileName"), iconUrl);
         }, this);
     },
 
-    datasetsChosen: function(datasetSet) {
+    datasetsChosen: function(datasets) {
         this.$(".dataset_details.dataset").remove();
-        this.model.datasets = datasetSet;
+        this.model.datasets = new chorus.collections.DatasetSet(datasets);
         this.model.datasets.each(function(dataset) {
             this.showDataset(dataset);
         }, this);
