@@ -1,6 +1,7 @@
 chorus.collections.DatabaseObjectSet = chorus.collections.LastFetchWins.include(
     chorus.Mixins.InstanceCredentials.model
 ).extend({
+    constructorName: 'DatabaseObjectSet',
     model: chorus.models.DatabaseObject,
     urlTemplate: "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}",
 

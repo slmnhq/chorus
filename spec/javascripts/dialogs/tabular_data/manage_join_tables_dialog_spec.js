@@ -104,6 +104,37 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             expect(icons.eq(1)).toHaveAttr("src", this.databaseObject2.iconUrl({ size: "medium" }));
         });
 
+        it("renders a search input", function() {
+            expect(this.dialog.$(".search input")).toExist();
+        });
+
+        describe("entering a seach term", function() {
+            beforeEach(function() {
+                this.dialog.$(".search input").val("a query").trigger("textchange");
+            });
+
+            it("fetches filtered database objects", function() {
+                expect(this.server.lastFetch().url).toMatchUrl(
+                    "/edc/data/11/database/dca_demo/schema/some_schema?filter=a+query",
+                    { paramsToIgnore: ["page", "rows", "type"] }
+                );
+            });
+
+            context("after the results come back", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.schema.databaseObjects(), [ this.databaseObject1 ]);
+                });
+
+                it("updates the list items", function() {
+                    expect(this.dialog.$(".name").length).toBe(1);
+                });
+
+                it("keeps the search term around", function() {
+                    expect(this.dialog.$(".search input").val()).toBe("a query")
+                });
+            });
+        });
+
         describe("the schema picker menu", function() {
             it("shows the original table canonical name", function() {
                 expect(this.dialog.$(".canonical_name").text()).toBe(this.schema.canonicalName());

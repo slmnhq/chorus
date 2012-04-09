@@ -29,7 +29,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
 
         var urlParams = this.collection.urlParams;
         this.collection.urlParams = function() {
-            return _.extend({rows: 9}, urlParams && urlParams());
+            return _.extend({rows: 9}, urlParams && urlParams.call(this));
         };
 
         this.collection.fetchIfNotLoaded();
@@ -81,6 +81,22 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         this._super("postRender");
 
         this.schemas.onLoaded(this.schemasLoaded, this);
+
+        var self = this;
+        var onTextChangeFunction = _.debounce(function(e) {
+            var input = $(e.target).val();
+            self.collection.attributes.filter = input;
+            self.collection.fetch({silent: true, success: function() {
+                var lastSearch = self.$(".search input").val();
+                self.render()
+                self.$(".search input").val(lastSearch).focus();
+            }});
+        }, 300);
+
+        chorus.search({
+            input: this.$(".search input:text"),
+            onTextChange: onTextChangeFunction
+        });
     },
 
     tableClicked: function(e) {
