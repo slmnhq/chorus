@@ -1,37 +1,62 @@
 .chart_configuration {
     padding: 15px;
+    position: relative;
 
-    form label {
-        margin-top: 8px;
+    .chart_columns {
+        display: inline-block;
+    }
+    .field {
+        display: inline-block;
+        padding-right: 20px;
+        vertical-align: top;
     }
 
-    form label, input {
+    .labels {
+        line-height: 12px;
         display: inline-block;
+        width: 250px;
+        .label{
+            display: inline-block;
+        }
+
+        .column_hint {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: $semibold;
+            color: $color-text4;
+            float: right;
+        }
     }
 
     select, .ui-selectmenu {
         display: block;
-        width: 215px;
+        width: 250px;
         margin-bottom: 10px;
         margin-right: 0;
     }
 
-    button.create {
-
-    }
-
-    .column_hint {
-        font-size: 12px;
-        font-weight: $semibold;
-        color: $color-text3;
-        /*float: right;*/
-        right: 0px;
+    .button_wrapper {
+        display: inline-block;
         position: absolute;
-        bottom: 0;
+        top: 47px;
+        left: 570px;
+    }
+    button.create, button.cancel {
+    /* need to override the content-details style*/
+        @include border-radius(0px);
+        border: 1px solid $border-color;
+        background: white;
+        color: $link-color;
+        display: inline-block;
+        float: none;
+        &.is_loading {
+            color: $color-text4;
+        }
     }
 
     .no_columns {
-        display: inline-block;
+        display: block;
+        width: 215px;
         padding-bottom: 10px;
     }
 
@@ -40,6 +65,7 @@
         color: $color-text2;
         font-weight: $semibold;
         margin-bottom: 10px;
+        line-height: 12px;
 
         a {
             font-size: 12px;

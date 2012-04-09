@@ -31,7 +31,7 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
             
             describe("value select box", function() {
                 it("has the right label", function() {
-                    expect(this.view.$(".value label").text()).toMatchTranslation("dataset.visualization.sidebar.value")
+                    expect(this.view.$(".value .label").text()).toMatchTranslation("dataset.visualization.sidebar.value")
                 });
 
                 it("has the right hint text", function() {
@@ -51,7 +51,7 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
 
             describe("category select box", function() {
                 it("has the right label", function() {
-                    expect(this.view.$(".category label").text()).toMatchTranslation("dataset.visualization.sidebar.category")
+                    expect(this.view.$(".category .label").text()).toMatchTranslation("dataset.visualization.sidebar.category")
                 });
 
                 it("has the right hint text", function() {
