@@ -191,19 +191,19 @@ describe("chorus.views.TabularDataContentDetails", function() {
                             expect(this.view.resultsConsole.execute).toHaveBeenCalledWithSorta(this.view.tabularData.preview(), ["checkId"]);
                         });
                     });
-                })
-            })
-        })
+                });
+            });
+        });
 
         describe("definition bar", function() {
             it("renders", function() {
                 expect(this.view.$(".definition")).toExist();
-            })
+            });
 
             it("renders the 'Visualize' button", function() {
                 expect(this.view.$("button.visualize")).toExist();
                 expect(this.view.$("button.visualize").text()).toMatchTranslation("dataset.content_details.visualize");
-            })
+            });
 
             it("doesn't render the chorus view info bar", function() {
                 expect(this.view.$(".chorus_view_info")).toHaveClass("hidden");
@@ -214,7 +214,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                     spyOn(this.view, 'showVisualizationConfig');
                     this.view.filterWizardView.resetFilters.reset();
                     this.view.$("button.visualize").click();
-                })
+                });
 
                 it("selects the first chart type", function() {
                     expect(this.view.$('.create_chart .chart_icon:eq(0)')).toHaveClass('selected');
@@ -270,6 +270,10 @@ describe("chorus.views.TabularDataContentDetails", function() {
                     it("hides the chart config view", function() {
                         expect(this.view.$(".chart_config")).toHaveClass("hidden");
                     });
+
+                    it("broadcasts cancel:visualization", function() {
+                       expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("cancel:visualization");
+                    });
                 })
 
                 context("and a chart type is clicked", function() {
@@ -289,7 +293,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                     it("shows the title for that chart type", function() {
                         var chartType =
                             expect(this.view.$('.title.' + this.firstChartType)).not.toHaveClass('hidden');
-                    })
+                    });
 
                     context("and a different chart type is hovered over", function() {
                         beforeEach(function() {
@@ -330,10 +334,10 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         it("shows that title and hides the other visible ones", function() {
                             expect(this.view.$('.title.' + this.secondChartType)).not.toHaveClass('hidden');
                             expect(this.view.$('.title.' + this.firstChartType)).toHaveClass('hidden');
-                        })
-                    })
-                })
-            })
+                        });
+                    });
+                });
+            });
 
             context("and the derive a chorus view button is clicked", function() {
                 beforeEach(function() {
@@ -684,10 +688,17 @@ describe("chorus.views.TabularDataContentDetails", function() {
                 var renderSpy = spyOn(
                     chorus.views.ChartConfiguration.prototype, 'postRender'
                 ).andCallThrough();
+                this.view.chartConfig = new chorus.views.Base();
+                this.originalChartConfig = this.view.chartConfig
+                spyOn(this.originalChartConfig, "cleanup");
                 this.view.showVisualizationConfig(this.type);
 
                 expect(renderSpy).toHaveBeenCalled();
                 this.configView = renderSpy.mostRecentCall.object;
+            });
+
+            it("cleans up the old chartConfig", function() {
+               expect(this.originalChartConfig.cleanup).toHaveBeenCalled();
             });
 
             it("renders a visualization configuration view for the given chart type", function() {

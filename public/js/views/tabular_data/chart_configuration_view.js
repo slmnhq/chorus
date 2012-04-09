@@ -1,6 +1,6 @@
 ;
 (function() {
-    chorus.views.ChartConfiguration = chorus.views.Sidebar.extend({
+    chorus.views.ChartConfiguration = chorus.views.Base.extend({
         additionalClass: "chart_configuration",
 
         events: {
@@ -17,7 +17,7 @@
             this.numericalColumns = filterColumns(['WHOLE_NUMBER', 'REAL_NUMBER'], this.columns)
             this.datetimeColumns = filterColumns(['DATE', 'TIME', "DATETIME"], this.columns);
 
-            this.cancelVisualizationHandle = chorus.PageEvents.subscribe("cancel:sidebar", this.cancelVisualization, this);
+            this.cancelVisualizationHandle = chorus.PageEvents.subscribe("cancel:visualization", this.cancelVisualization, this);
 
             function filterColumns(types, columns) {
                 return _.filter(columns, function(col) {

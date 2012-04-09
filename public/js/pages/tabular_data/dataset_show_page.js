@@ -35,6 +35,11 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
         this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: workspaceId }, id: datasetId })
     },
 
+    bindCallbacks: function() {
+        this._super('bindCallbacks');
+        chorus.PageEvents.subscribe("cancel:sidebar", this.hideSidebar, this);
+    },
+
     drawColumns: function() {
         this._super('drawColumns');
 
@@ -74,16 +79,44 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
         }
     },
 
+    showSidebar: function(type) {
+        this.$('.sidebar_content.primary').addClass("hidden")
+        this.$('.sidebar_content.secondary').removeClass("hidden")
+
+        if (this.secondarySidebar) {
+            this.secondarySidebar.cleanup()
+            delete this.secondarySidebar;
+        }
+
+        this.mainContent.content.selectMulti = false;
+        this.constructSidebarForType(type);
+
+        if (this.secondarySidebar) {
+            this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView.collection;
+            this.secondarySidebar.errorContainer = this.mainContent.contentDetails;
+            this.renderSubview('secondarySidebar');
+            this.trigger('resized');
+        }
+    },
+
     hideSidebar: function(type) {
         this.tabularData.clearDatasetNumber();
         this.columnSet.reset(this.tabularData.columns().models);
         this.mainContent.content.selectMulti = false;
         this.mainContent.content.showDatasetName = false;
-        this._super('hideSidebar', arguments);
+        this.sidebar.disabled = false;
+        if (this.secondarySidebar) {
+            this.secondarySidebar.cleanup();
+            delete this.secondarySidebar;
+        }
+        this.mainContent.content.render();
+        this.$('.sidebar_content.primary').removeClass("hidden")
+        this.$('.sidebar_content.secondary').addClass("hidden")
+        this.removeOldSecondaryClasses(type);
+        this.trigger('resized');
     },
 
     removeOldSecondaryClasses: function(type) {
-        this._super('removeOldSecondaryClasses', arguments);
         this.$('.sidebar_content.secondary').removeClass("dataset_create_" + type + "_sidebar");
     }
 });

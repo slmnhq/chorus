@@ -183,8 +183,16 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             context("for a chorus view", function() {
                 beforeEach(function() {
+                    this.page.secondarySidebar = new chorus.views.Base();
+                    this.originalSidebar = this.page.secondarySidebar;
+                    spyOn(this.originalSidebar, "cleanup");
                     spyOn(this.page.mainContent.content, 'render').andCallThrough();
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", 'chorus_view');
+                });
+
+
+                it("calls cleanup on the old sidebar", function() {
+                    expect(this.originalSidebar.cleanup).toHaveBeenCalled();
                 });
 
                 it("disables the sidebar", function() {
@@ -226,9 +234,13 @@ describe("chorus.pages.DatasetShowPage", function() {
                         chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
                     });
 
+                    it("calls cleanup on the old sidebar", function() {
+                        expect(this.originalSidebar.cleanup).toHaveBeenCalled();
+                    });
+
                     it("enables the sidebar", function() {
                         expect(this.page.sidebar.disabled).toBeFalsy();
-                    })
+                    });
 
                     it("clears the datasetNumber", function() {
                         expect(this.page.tabularData.datasetNumber).toBeUndefined();
@@ -299,11 +311,11 @@ describe("chorus.pages.DatasetShowPage", function() {
 
             describe("when the cancel:sidebar event is triggered", function() {
                 beforeEach(function() {
-                    this.page.mainContent.contentDetails.trigger("transform:sidebar", "boxplot");
-                    expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass("chart_configuration");
+                    this.page.mainContent.contentDetails.trigger("transform:sidebar", "edit_chorus_view");
+                    expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass("dataset_edit_chorus_view_sidebar");
                     this.resizedSpy.reset();
 
-                    chorus.PageEvents.broadcast('cancel:sidebar', 'boxplot');
+                    chorus.PageEvents.broadcast('cancel:sidebar', 'edit_chorus_view');
                 });
 
                 it("triggers 'resized' on the page", function() {

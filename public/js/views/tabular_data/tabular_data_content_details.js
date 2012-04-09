@@ -114,6 +114,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
         this.$('.column_count').removeClass("hidden")
         this.$('.info_bar').addClass('hidden');
         this.$(".chart_config").addClass('hidden');
+        chorus.PageEvents.broadcast('cancel:visualization');
     },
 
     startCreateChorusViewWizard: function() {
@@ -193,6 +194,8 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
     },
 
     showVisualizationConfig: function(chartType) {
+        if(this.chartConfig) { this.chartConfig.cleanup();}
+
         var options = { model: this.tabularData, collection: this.collection, errorContainer: this };
         this.chartConfig = chorus.views.ChartConfiguration.buildForType(chartType, options);
         this.chartConfig.filters = this.filterWizardView.collection;

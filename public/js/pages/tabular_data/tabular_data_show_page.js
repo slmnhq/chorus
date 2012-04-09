@@ -19,162 +19,100 @@
     chorus.pages.TabularDataShowPage = chorus.pages.Base.include(
         chorus.Mixins.InstanceCredentials.page
     ).extend({
-        constructorName: "TabularDataShowPage",
-        helpId: "databaseObject",
-        hideDeriveChorusView: true,
-        additionalClass: 'tabular_data_show',
-        sidebarOptions: {},
-        contentDetailsOptions: {},
+            constructorName: "TabularDataShowPage",
+            helpId: "databaseObject",
+            hideDeriveChorusView: true,
+            additionalClass: 'tabular_data_show',
+            sidebarOptions: {},
+            contentDetailsOptions: {},
 
-        failurePageOptions: function() {
-            return {
-                title: t("invalid_route.tabular_data.title"),
-                text: t("invalid_route.tabular_data.content")
-            };
-        },
+            failurePageOptions: function() {
+                return {
+                    title: t("invalid_route.tabular_data.title"),
+                    text: t("invalid_route.tabular_data.content")
+                };
+            },
 
-        title: function() {
-            return this.tabularData.get('objectName')
-        },
+            title: function() {
+                return this.tabularData.get('objectName')
+            },
 
-        setup: function() {
-            this.makeModel.apply(this, arguments)
-            this.dependOn(this.tabularData);
-            this.fetchResources();
-            this.mainContent = new chorus.views.LoadingSection();
-        },
+            setup: function() {
+                this.makeModel.apply(this, arguments)
+                this.dependOn(this.tabularData);
+                this.fetchResources();
+                this.mainContent = new chorus.views.LoadingSection();
+            },
 
-        crumbs: function() {
-            return [
-                {label: t("breadcrumbs.home"), url: "#/"},
-                {label: t("breadcrumbs.instances"), url: '#/instances'},
-                {label: this.tabularData.get("instance").name, url: this.tabularData.instance().databases().showUrl() },
-                {label: this.tabularData.get("databaseName"),  url: this.tabularData.database().showUrl() },
-                {label: this.tabularData.get("schemaName"), url: this.tabularData.schema().showUrl()},
-                {label: this.tabularData.get("objectName")}
-            ];
-        },
+            crumbs: function() {
+                return [
+                    {label: t("breadcrumbs.home"), url: "#/"},
+                    {label: t("breadcrumbs.instances"), url: '#/instances'},
+                    {label: this.tabularData.get("instance").name, url: this.tabularData.instance().databases().showUrl() },
+                    {label: this.tabularData.get("databaseName"), url: this.tabularData.database().showUrl() },
+                    {label: this.tabularData.get("schemaName"), url: this.tabularData.schema().showUrl()},
+                    {label: this.tabularData.get("objectName")}
+                ];
+            },
 
-        makeModel: function(instanceId, databaseName, schemaName, objectType, objectName) {
-            this.model = this.tabularData = new chorus.models.DatabaseObject({
-                instance: { id: instanceId },
-                databaseName: databaseName,
-                schemaName:   schemaName,
-                objectName:   objectName,
-                objectType:   objectType
-            });
-        },
+            makeModel: function(instanceId, databaseName, schemaName, objectType, objectName) {
+                this.model = this.tabularData = new chorus.models.DatabaseObject({
+                    instance: { id: instanceId },
+                    databaseName: databaseName,
+                    schemaName: schemaName,
+                    objectName: objectName,
+                    objectType: objectType
+                });
+            },
 
-        fetchResources: function() {
-            this.tabularData.fetch();
-            this.bindings.add(this.tabularData, "change", this.fetchColumnSet);
-        },
+            fetchResources: function() {
+                this.tabularData.fetch();
+                this.bindings.add(this.tabularData, "change", this.fetchColumnSet);
+            },
 
-        fetchColumnSet: function() {
-            this.columnSet = this.tabularData.columns({type: "meta"});
-            this.columnSet.bind("loaded", this.drawColumns, this);
-            this.columnSet.fetchAll();
-        },
+            fetchColumnSet: function() {
+                this.columnSet = this.tabularData.columns({type: "meta"});
+                this.columnSet.bind("loaded", this.drawColumns, this);
+                this.columnSet.fetchAll();
+            },
 
-        bindCallbacks: function() {
-            this._super('bindCallbacks');
-            chorus.PageEvents.subscribe("cancel:sidebar", this.hideSidebar, this);
-        },
+            postRender: function() {
+                chorus.menu(this.$('.found_in .open_other_menu'), {
+                    content: this.$('.found_in .other_menu'),
+                    classes: "found_in_other_workspaces_menu"
+                });
+            },
 
-        postRender: function() {
-            chorus.menu(this.$('.found_in .open_other_menu'), {
-                content: this.$('.found_in .other_menu'),
-                classes: "found_in_other_workspaces_menu"
-            });
-        },
+            drawColumns: function() {
+                var serverErrors = this.columnSet.serverErrors
+                this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
+                this.columnSet.serverErrors = serverErrors;
+                this.columnSet.loaded = true;
 
-        drawColumns: function() {
-            var serverErrors = this.columnSet.serverErrors
-            this.columnSet = new chorus.collections.DatabaseColumnSet(this.columnSet.models);
-            this.columnSet.serverErrors = serverErrors;
-            this.columnSet.loaded = true;
+                var customHeaderView = new headerView({
+                    model: this.tabularData,
+                    title: this.title(),
+                    imageUrl: this.tabularData.iconUrl(),
+                    imageTitle: Handlebars.helpers.humanizedTabularDataType(this.tabularData.attributes)
+                });
 
-            var customHeaderView = new headerView({
-                model: this.tabularData,
-                title: this.title(),
-                imageUrl: this.tabularData.iconUrl(),
-                imageTitle: Handlebars.helpers.humanizedTabularDataType(this.tabularData.attributes)
-            });
+                this.mainContent = new chorus.views.MainContentList({
+                    modelClass: "DatabaseColumn",
+                    collection: this.columnSet,
+                    persistent: true,
+                    contentHeader: customHeaderView,
+                    contentDetails: new chorus.views.TabularDataContentDetails(_.extend(
+                        { tabularData: this.tabularData, collection: this.columnSet, hideDeriveChorusView: this.hideDeriveChorusView},
+                        this.contentDetailsOptions))
+                });
 
-            this.mainContent = new chorus.views.MainContentList({
-                modelClass: "DatabaseColumn",
-                collection: this.columnSet,
-                persistent: true,
-                contentHeader: customHeaderView,
-                contentDetails: new chorus.views.TabularDataContentDetails(_.extend(
-                    { tabularData: this.tabularData, collection: this.columnSet, hideDeriveChorusView: this.hideDeriveChorusView},
-                    this.contentDetailsOptions))
-            });
+                this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);
+                this.sidebar = new chorus.views.TabularDataSidebar(this.sidebarOptions);
+                this.sidebar.setTabularData(this.tabularData);
 
-            this.mainContent.contentDetails.options.$columnList = $(this.mainContent.content.el);
-            this.sidebar = new chorus.views.TabularDataSidebar(this.sidebarOptions);
-            this.sidebar.setTabularData(this.tabularData);
+                this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
 
-            this.mainContent.contentDetails.bind("transform:sidebar", this.showSidebar, this);
-
-            this.render();
-        },
-
-        showSidebar: function(type) {
-            this.$('.sidebar_content.primary').addClass("hidden")
-            this.$('.sidebar_content.secondary').removeClass("hidden")
-
-            if (this.secondarySidebar) {
-                this.secondarySidebar.cleanup()
-                delete this.secondarySidebar;
+                this.render();
             }
-
-            this.mainContent.content.selectMulti = false;
-            this.constructSidebarForType(type);
-
-            if (this.secondarySidebar) {
-                this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView.collection;
-                this.secondarySidebar.errorContainer = this.mainContent.contentDetails;
-                this.renderSubview('secondarySidebar');
-                this.trigger('resized');
-            }
-        },
-
-        constructSidebarForType: function(type) {
-            switch (type) {
-                case 'boxplot':
-                    this.secondarySidebar = new chorus.views.BoxplotChartConfiguration({model: this.model, collection: this.columnSet});
-                    break;
-                case 'frequency':
-                    this.secondarySidebar = new chorus.views.FrequencyChartConfiguration({model: this.model, collection: this.columnSet});
-                    break;
-                case 'histogram':
-                    this.secondarySidebar = new chorus.views.HistogramChartConfiguration({model: this.model, collection: this.columnSet});
-                    break;
-                case 'heatmap':
-                    this.secondarySidebar = new chorus.views.HeatmapChartConfiguration({model: this.model, collection: this.columnSet});
-                    break;
-                case 'timeseries':
-                    this.secondarySidebar = new chorus.views.TimeseriesChartConfiguration({model: this.model, collection: this.columnSet});
-                    break;
-            }
-        },
-
-        hideSidebar: function(type) {
-            this.sidebar.disabled = false;
-            if (this.secondarySidebar) {
-                this.secondarySidebar.cleanup();
-                delete this.secondarySidebar;
-            }
-            this.mainContent.content.render();
-            this.$('.sidebar_content.primary').removeClass("hidden")
-            this.$('.sidebar_content.secondary').addClass("hidden")
-            this.removeOldSecondaryClasses(type);
-            this.trigger('resized');
-        },
-
-        removeOldSecondaryClasses: function(type) {
-            this.$('.sidebar_content.secondary').removeClass("chart_configuration");
-        }
-    });
+        });
 })();
