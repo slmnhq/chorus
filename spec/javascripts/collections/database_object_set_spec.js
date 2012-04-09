@@ -64,4 +64,22 @@ describe("chorus.collections.DatabaseObjectSet", function() {
             expect(this.collection.at(1).get("schemaName")).toBe("some_schema");
         });
     });
+
+    describe("#search", function() {
+        it("triggers an API query for the given term", function() {
+            this.collection.search("search term");
+            expect(this.server.lastFetch().url).toMatchUrl(
+                "/edc/data/10000/database/some_database/schema/some_schema?filter=search+term",
+                {paramsToIgnore: ["type", "page", "rows"]}
+            );
+        });
+
+        it("broadcasts 'searched' when API query returns", function() {
+            var eventListener = jasmine.createSpy();
+            this.collection.bind('searched', eventListener)
+            this.collection.search("search term");
+            this.server.completeFetchFor(this.collection, []);
+            expect(eventListener).toHaveBeenCalled();
+        });
+    });
 });
