@@ -43,7 +43,7 @@ window.Chorus = function chorus$Global() {
 
     self.bindGlobalCallbacks = function() {
         $(window).resize(_.debounce(function() {
-            self.page && self.page.trigger && self.page.trigger("resized");
+            self.page && self.page.trigger && self.page.trigger("resized", $(window).width(), $(window).height());
         }, 100));
     }
 

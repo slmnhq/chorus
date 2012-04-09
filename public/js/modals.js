@@ -26,6 +26,27 @@ chorus.Modal = chorus.views.Base.extend({
         subModal.launchNewModal();
     },
 
+    resize: function(windowWidth, windowHeight) {
+        var $popup = $("#facebox .popup");
+        var $facebox = $('#facebox');
+        var $window = $(window);
+
+        if (!windowHeight) windowHeight = $window.height();
+
+        $facebox.css('top', 30);
+        $popup.css("max-height", windowHeight - 60);
+    },
+
+    preRender: function() {
+        var result = this._super('preRender', arguments);
+
+        $(window).resize(this.resize);
+
+        $("body").css("overflow", "hidden");
+
+        return result;
+    },
+
     postRender: function() {
         this._super("postRender");
         $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .popup').width() / 2))
@@ -65,6 +86,8 @@ chorus.Modal = chorus.views.Base.extend({
 
             if (this.previousModal) {
                 this.previousModal.restore();
+            } else {
+                $("body").css("overflow", "visible");
             }
         }
     },
@@ -73,11 +96,13 @@ chorus.Modal = chorus.views.Base.extend({
         chorus.modal = this;
         this.foreground();
         this.listenToFacebox();
+        _.defer(this.resize);
     },
 
     foreground: function () {
         $("#facebox-" + this.faceboxCacheId).attr("id", "facebox").removeClass("hidden");
         $("#facebox_overlay-" + this.faceboxCacheId).attr("id", "facebox_overlay");
+        this.resize();
     },
 
     background: function () {

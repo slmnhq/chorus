@@ -2,7 +2,9 @@ describe("chorus.Modal", function() {
     beforeEach(function() {
         this.model = new chorus.models.Base();
         this.modal = new chorus.Modal({ pageModel: this.model });
+        spyOn(chorus.Modal.prototype, "resize").andCallThrough();
         stubModals();
+        stubDefer();
     });
 
     describe("intialization", function() {
@@ -61,17 +63,56 @@ describe("chorus.Modal", function() {
                 expect(chorus.modal).toBe(this.modal)
             });
 
+            it("makes the body unable to scroll", function() {
+                expect($("body").css("overflow")).toBe("hidden");
+            });
+
+            describe("#resize", function() {
+                beforeEach(function() {
+                    this.faceboxProxy = $("<div id='facebox'><div class='popup'></div></div>");
+                    this.faceboxOverlayProxy = $("<div id='facebox_overlay'/>");
+                    $("#jasmine_content").append(this.faceboxProxy).append(this.faceboxOverlayProxy);
+
+                    this.modal.render();
+                });
+
+                it("sets the dialog.top to 30", function() {
+                    this.modal.resize();
+                    expect($("#facebox").css("top")).toBe("30px");
+                });
+
+
+                it("with no arguments uses window.height", function() {
+                    this.modal.resize();
+                    expect($("#facebox .popup").css("max-height")).toBe(($(window).height() - 60) + "px");
+                });
+
+                it("has a max-height smaller than the window's height by twice the dialog's distance from the top of the window", function() {
+                    this.modal.resize(0, 100);
+                    expect($("#facebox .popup").css("max-height")).toBe("40px");
+
+                    this.modal.resize(0, 1000);
+                    expect($("#facebox .popup").css("max-height")).toBe("940px");
+
+                    this.modal.resize(0, 500);
+                    expect($("#facebox .popup").css("max-height")).toBe("440px");
+                });
+            });
+
             describe("re-rendering", function() {
                 beforeEach(function() {
-                    spyOn($.fn, "css")
+                    spyOn($.fn, "css");
                     this.modal.render();
                 });
 
                 it("re-centers the modal", function() {
-                    var calls = $.fn.css.calls;
-                    expect(calls.length).toBe(1);
-                    expect(calls[0].args).toEqual(["left", jasmine.any(Number)])
-                    expect(calls[0].object.selector).toBe("#facebox")
+                    var lastCall = $.fn.css.mostRecentCall;
+                    expect(lastCall.args).toEqual(["left", jasmine.any(Number)])
+                    expect(lastCall.object.selector).toBe("#facebox")
+                });
+
+                it("calls #resize", function() {
+                    expect(this.modal.resize).toHaveBeenCalled();
                 });
             });
 
@@ -103,6 +144,10 @@ describe("chorus.Modal", function() {
 
                 it("triggers the modal:closed page event", function() {
                     expect(this.modalClosedSpy).toHaveBeenCalled()
+                });
+
+                it("resets the body's ability to scroll'", function() {
+                    expect($("body").css("overflow")).toBe("visible");
                 });
             });
         });
@@ -154,7 +199,11 @@ describe("chorus.Modal", function() {
             });
 
             it("foregrounds the preceeding dialog", function() {
-                expectForegrounded(this.faceboxProxy, this.faceboxOverlayProxy)
+                expectForegrounded(this.faceboxProxy, this.faceboxOverlayProxy);
+            });
+
+            it("calls #resize", function() {
+                expect(this.modal.resize).toHaveBeenCalled();
             });
         });
 

@@ -1,11 +1,13 @@
 @import "../_common.scss";
 
 #facebox {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: $dialog-z-index;
     text-align: left;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     .popup {
         position: relative;
