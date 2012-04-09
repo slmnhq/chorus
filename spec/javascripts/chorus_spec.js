@@ -382,6 +382,18 @@ describe("chorus global", function() {
             })
         });
 
+        context("when called multiple times on the same element", function() {
+            beforeEach(function() {
+                chorus.search({ input: this.input1, list: this.list});
+                chorus.search({ input: this.input1, list: this.list});
+            });
+
+            it("doesn't change the dom more than once", function() {
+                var wrapper = this.container.find(".chorus_search_container");
+                expect(wrapper).not.toContain(".chorus_search_container");
+            });
+        });
+
         context("with a selector", function() {
             beforeEach(function() {
                 chorus.search({ input: this.input1, list: this.list, selector: ".name" });
