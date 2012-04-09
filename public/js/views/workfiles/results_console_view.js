@@ -17,6 +17,11 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         chorus.PageEvents.subscribe("file:executionFailed", this.executionFailed, this);
     },
 
+    beforeNavigateAway: function() {
+        this.model && this.model.cancel();
+        this._super("beforeNavigateAway", arguments);
+    },
+
     execute: function(task) {
         this.resource = this.model = task;
         task.save();

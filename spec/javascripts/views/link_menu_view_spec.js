@@ -168,5 +168,5 @@ describe("chorus.views.LinkMenu", function() {
                 expect(($(document).data("events")["chorus:menu:popup"] || []).length).toBe(this.oldChorusMenuPopupCount - 1);
             });
         });
-    })
+    });
 });

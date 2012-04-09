@@ -1,12 +1,12 @@
 describe("chorus.views.ResultsConsoleView", function() {
     beforeEach(function() {
-        var task = fixtures.task({
+        this.task = fixtures.task({
             checkId: "foo",
             result: {
                 message: "hi there"
             }
         });
-        this.view = new chorus.views.ResultsConsole({ model: task });
+        this.view = new chorus.views.ResultsConsole({ model: this.task });
         this.timerId = 1;
         spyOn(_, "delay").andReturn(this.timerId++)
     });
@@ -96,7 +96,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 spyOn(window, "clearTimeout");
                 spyOn(this.view, "closeError").andCallThrough();
 
-                chorus.PageEvents.broadcast("file:executionStarted")
+                chorus.PageEvents.broadcast("file:executionStarted");
             });
 
             it("sets the executing class", function() {
@@ -512,6 +512,17 @@ describe("chorus.views.ResultsConsoleView", function() {
                 })
             }
         });
+
+        describe("#beforeNavigateAway", function() {
+            beforeEach(function() {
+                spyOn(this.task, "cancel").andCallThrough();
+                this.view.beforeNavigateAway();
+            });
+
+            it("cancels the task", function() {
+                expect(this.task.cancel).toHaveBeenCalled();
+            });
+        });
     });
 
     describe("#startSpinner", function() {
@@ -549,7 +560,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
     describe("#execute", function() {
         beforeEach(function() {
-            this.executionModel = new chorus.models.Base();
+            this.executionModel = new chorus.models.Task();
             spyOn(this.executionModel, 'url').andReturn('super_great_thing');
             spyOn(this.view, 'executionStarted');
             spyOn(this.view, 'executionSucceeded');
