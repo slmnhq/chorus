@@ -9,7 +9,7 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.PickItems.extend({
 
     makeModel: function() {
         this.collection = new chorus.collections.DatasetSet([], {workspaceId: this.options.workspaceId});
-        this.collection.fetchAll();
+        this.collection.fetch();
     },
 
     collectionModelContext: function (model) {
