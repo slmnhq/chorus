@@ -40,13 +40,11 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
             viewName: this.model.get("objectName")
         })
 
-        if (this.model.databaseView().has("workspace")) {
-            chorus.router.navigate(this.model.databaseView().showUrl(), true)
-        } else {
-            // TODO: temporary - we should always have a workspace for navigation,
-            // but waiting on the API to provide that data.
-            this.closeModal();
+        var databaseView = this.model.databaseView()
+        if (!databaseView.has("workspace")) {
+            databaseView.set({"workspace": this.dataset.get("workspace")});
         }
+        chorus.router.navigate(databaseView.showUrl(), true);
     },
 
     saveFailed: function() {

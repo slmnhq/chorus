@@ -1,6 +1,6 @@
 describe("chorus.dialogs.CreateDatabaseView", function() {
     beforeEach(function() {
-        this.dataset = fixtures.chorusView();
+        this.dataset = fixtures.chorusView({workspace: {id: "42"}});
         this.schema = fixtures.schema();
         spyOn(this.schema, "canonicalName").andReturn("I.D.S");
         spyOn(this.dataset, "schema").andReturn(this.schema);
@@ -102,10 +102,10 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                     });
 
                     context("and returned data does not have a workspace", function() {
-                        it("closes the dialog", function() {
-                            spyOn(this.view, 'closeModal')
-                            this.server.completeSaveFor(this.view.model, { });
-                            expect(this.view.closeModal).toHaveBeenCalled();
+                        it("uses the Chorus View's workspace to navigate to the show page of the new db view", function() {
+                            spyOn(chorus.router, 'navigate')
+                            this.server.completeSaveFor(this.view.model, { id: 'foo' });
+                            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/42/datasets/foo", true);
                         });
                     });
                 });
@@ -120,4 +120,4 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
             });
         }
     });
-})
+});
