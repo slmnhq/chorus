@@ -26,12 +26,6 @@ describe("chorus.dialogs.PickItems", function() {
                 this.dialog.render();
             });
 
-            it("renders a list content details view", function() {
-                expect(this.dialog.$(".list_content_details")).toExist();
-                expect(this.dialog.paginationView).toBeA(chorus.views.ListContentDetails);
-                expect(this.dialog.paginationView.collection).toBe(this.users);
-            });
-
             it("defaults to no selection", function() {
                 expect(this.dialog.$("li.selected")).not.toExist();
             });
@@ -60,6 +54,41 @@ describe("chorus.dialogs.PickItems", function() {
 
             it("has the 'Attach File' button disabled by default", function() {
                 expect(this.dialog.$('button.submit')).toBeDisabled();
+            });
+
+            context("when pagination is enabled", function() {
+                beforeEach(function() {
+                    var subclass = chorus.dialogs.PickItems.extend({
+                        modelClass: "User",
+                        pagination: true
+                    });
+                    this.dialog = new subclass({ workspaceId: "33", collection: this.users });
+                    this.dialog.render();
+                });
+
+                it("renders a pagination bar", function() {
+                    expect(this.dialog.$(".pagination.list_content_details")).toExist();
+                    expect(this.dialog.paginationView).toBeA(chorus.views.ListContentDetails);
+                    expect(this.dialog.paginationView.collection).toBe(this.users);
+                });
+
+                it("passes the 'modelClass' to the pagination view", function() {
+                    expect(this.dialog.paginationView.options.modelClass).toBe("User");
+                });
+            });
+
+            context("when pagination is disabled", function() {
+                beforeEach(function() {
+                    var subclass = chorus.dialogs.PickItems.extend({
+                        pagination: false
+                    });
+                    this.dialog = new subclass({ workspaceId: "33", collection: this.users });
+                    this.dialog.render();
+                });
+
+                it("doesn't render a pagination bar", function() {
+                    expect(this.dialog.$(".pagination")).not.toExist();
+                });
             });
 
             context("when the collection is empty", function() {
@@ -231,15 +260,6 @@ describe("chorus.dialogs.PickItems", function() {
             this.dialog.render();
 
             this.dialog.$("li:eq(2)").click();
-        });
-
-        it("passes the correct search options to the list content details view", function() {
-            expect(this.dialog.paginationView.options.search.placeholder).toBeDefined();
-            expect(this.dialog.paginationView.options.search.list).toBe(this.dialog.$(".items ul"));
-        });
-
-        it("passes the right model class option to the ListContentDetails view", function() {
-            expect(this.dialog.paginationView.options.modelClass).toBe("User");
         });
 
         it("uses the default search placeholder text", function() {

@@ -1,5 +1,10 @@
 {{> errorDiv }}
-<div class="pagination content_details"></div>
+<div class="sub_header">
+    <input type="text" placeholder="{{t placeholderTranslation}}"/>
+</div>
+{{#if pagination}}
+    <div class="pagination content_details"></div>
+{{/if}}
 {{#if models.length}}
     <div class="items collection_list">
         <ul>

@@ -1,6 +1,7 @@
 chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
     className: 'pick_items',
     useLoadingSection: true,
+    additionalClass: "with_sub_header",
 
     events: {
         "click .submit": "submit",
@@ -20,15 +21,12 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
         this.multiSelection = this.options.multiSelection || false;
         this.collection.onLoaded(this.collection.sort, this.collection);
 
-        this.paginationView = new chorus.views.ListContentDetails({
-            collection: this.collection,
-            modelClass: this.modelClass,
-            search: {
-                placeholder: t(this.searchPlaceholderKey || "pickitem.dialog.search.placeholder"),
-                onFilter: this.deselectItem,
-                afterFilter: _.bind(this.afterFilter, this)
-            }
-        });
+        if (this.pagination) {
+            this.paginationView = new chorus.views.ListContentDetails({
+                collection: this.collection,
+                modelClass: this.modelClass
+            });
+        }
     },
 
     submit: function() {
@@ -42,8 +40,12 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
-        this.paginationView.options.search.list = this.$(".items ul");
-        this.paginationView.setupSearch();
+        chorus.search({
+            input: this.$("input"),
+            list: this.$(".items ul"),
+            onFilter: this.deselectItem,
+            afterFilter: _.bind(this.afterFilter, this)
+        });
 
         if (this.options.defaultSelection) {
             _.each(this.options.defaultSelection.models, function(model) {
@@ -67,6 +69,8 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
+            pagination: this.pagination,
+            placeholderTranslation: this.searchPlaceholderKey || "pickitem.dialog.search.placeholder",
             emptyListTranslationKey: this.emptyListTranslationKey || "pickitem.dialog.empty",
             submitButtonTranslationKey: this.submitButtonTranslationKey || "pickitem.dialog.submit"
         }
