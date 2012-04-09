@@ -318,7 +318,7 @@ describe("chorus.models.TabularData", function() {
 
         context("with a chorus view", function() {
             beforeEach(function() {
-                this.tabularData.set({id: '"2"|"dca_demo"|"some_schema"|"BASE_TABLE"|"Dataset1"', query: "select * from hello_world", objectType: "QUERY", objectName: "my_chorusview", workspace: {id:"234", name: "abc"}});
+                this.tabularData.set({id: '"2"|"dca_demo"|"some_schema"|"BASE_TABLE"|"Dataset1"', query: "select * from hello_world", objectType: "QUERY", objectName: "my_chorusview", workspace: {id: "234", name: "abc"}});
                 this.preview = this.tabularData.preview();
             });
 
@@ -336,7 +336,7 @@ describe("chorus.models.TabularData", function() {
 
         context("with a chorus view query ( when editing a chorus view )", function() {
             beforeEach(function() {
-                this.tabularData.set({workspace: {id: "111", name: "abc"} , query: "select * from hello_world"});
+                this.tabularData.set({workspace: {id: "111", name: "abc"}, query: "select * from hello_world"});
                 this.preview = this.tabularData.preview();
             });
 
@@ -516,13 +516,13 @@ describe("chorus.models.TabularData", function() {
     describe("#workspacesAssociated", function() {
         context("when there are workspaces associated", function() {
             beforeEach(function() {
-              this.tabularData = fixtures.tabularData({workspaceUsed: {
-                  count: 2,
-                  workspaceList: [
-                      {id: "43", name: "working_hard"},
-                      {id: "54", name: "hardly_working"}
-                  ]
-              }});
+                this.tabularData = fixtures.tabularData({workspaceUsed: {
+                    count: 2,
+                    workspaceList: [
+                        {id: "43", name: "working_hard"},
+                        {id: "54", name: "hardly_working"}
+                    ]
+                }});
 
             });
             it("returns a workspace set with the right data", function() {
@@ -544,6 +544,28 @@ describe("chorus.models.TabularData", function() {
             it("returns an empty workspaceSet", function() {
                 var workspaces = this.tabularData.workspacesAssociated();
                 expect(workspaces.length).toBe(0);
+            });
+        });
+
+        describe("when the workspaceUsed attribute is changed", function() {
+            beforeEach(function() {
+                this.tabularData.unset("workspaceUsed");
+                delete this.tabularData._workspaceAssociated;
+                this.oldWorkspaces = this.tabularData.workspacesAssociated();
+                expect(this.oldWorkspaces.length).toBe(0);
+
+                this.tabularData.set({workspaceUsed: {
+                    count: 2,
+                    workspaceList: [
+                        {id: "43", name: "working_hard"},
+                        {id: "54", name: "hardly_working"}
+                    ]
+                }});
+            });
+
+            it("is invalidated", function() {
+                expect(this.tabularData.workspacesAssociated()).not.toEqual(this.oldWorkspaces);
+                expect(this.tabularData.workspacesAssociated().length).toBe(2);
             });
         });
     });
@@ -577,7 +599,7 @@ describe("chorus.models.TabularData", function() {
         })
     })
 
-    describe("#isDeleteable", function () {
+    describe("#isDeleteable", function() {
         it("is true when the tabular data is a source table", function() {
             expect(fixtures.datasetSourceTable().isDeleteable()).toBeTruthy();
         });
@@ -771,7 +793,7 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("returns an analyze model with the right url", function() {
-           expect(this.tabularData.analyze().url()).toBe("/edc/data/2/database/db/schema/myScheme/table/MrTable/analyze")
+            expect(this.tabularData.analyze().url()).toBe("/edc/data/2/database/db/schema/myScheme/table/MrTable/analyze")
         });
     });
 });
