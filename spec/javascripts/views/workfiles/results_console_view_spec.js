@@ -81,6 +81,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             beforeEach(function() {
                 this.view.options.enableClose = true;
                 this.view.render();
+                this.view.$(".controls").removeClass("hidden")
 
                 spyOn(chorus.PageEvents, "broadcast");
                 this.view.$("a.close").click();
@@ -88,6 +89,10 @@ describe("chorus.views.ResultsConsoleView", function() {
 
             it("broadcasts action:closePreview", function() {
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("action:closePreview");
+            });
+
+            it("hides the control section", function() {
+                expect(this.view.$(".controls")).toHaveClass("hidden");
             });
         });
 

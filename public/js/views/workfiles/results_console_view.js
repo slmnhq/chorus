@@ -196,6 +196,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     clickClose: function(e) {
         e && e.preventDefault();
+        this.$(".controls").addClass("hidden");
         chorus.PageEvents.broadcast("action:closePreview");
     },
 
