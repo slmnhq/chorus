@@ -1,64 +1,50 @@
-chorus.dialogs.PickWorkspace = chorus.dialogs.Base.extend({
-    className:"pick_workspace",
-    persistent:true,
+chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
+    title: t("dataset.associate.title"),
+    constructorName: "PickWorkspaceDialog",
+    submitButtonTranslationKey: "dataset.associate.button",
+    emptyListTranslationKey: "dataset.associate.empty.placeholder",
+    searchPlaceholderKey: "dataset.associate.search",
+    selectedEvent: 'files:selected',
 
-    events:{
-        "click button.submit": "doCallback",
-        "dblclick li": "doubleClick"
+    events: {
+        "click button.submit": "doCallback"
     },
 
-    additionalContext:function (ctx) {
-        return {
-            serverErrors:this.serverErrors,
-            buttonTitle: this.buttonTitle
-        }
+    setup: function() {
+        this._super("setup");
+        this.bindings.add(this, "item:doubleclick", this.doCallback, this);
     },
 
-    makeModel:function () {
+    additionalContext: function() {
+        var ctx = this._super("additionalContext", arguments);
+
+        return _.extend(ctx, {
+            serverErrors: this.serverErrors
+        });
+    },
+
+    makeModel: function() {
         this.pageModel = this.options.pageModel;
         this.collection = this.collection || this.defaultWorkspaces();
         this.collection.fetchAll();
-        this.bindings.add(this.collection, "reset", this.workspacesFetched);
+        this.bindings.add(this.collection, "reset", this.render);
     },
 
     defaultWorkspaces: function() {
-        if(this.options.activeOnly || (this.options.launchElement && this.options.launchElement.data("activeOnly"))) {
+        if (this.options.activeOnly || (this.options.launchElement && this.options.launchElement.data("activeOnly"))) {
             return chorus.session.user().activeWorkspaces();
         }
         return chorus.session.user().workspaces();
     },
 
-    workspacesFetched: function() {
-        this.render();
-    },
-
-    setup:function () {
-        this.picklistView = new chorus.views.CollectionPicklist({ collection:this.collection });
-        this.picklistView.collectionModelContext = function(model) {
-            return {
-                name: model.name(),
-                imageUrl: model.defaultIconUrl("small")
-            }
-        }
-        this.picklistView.bind("item:selected", this.itemSelected, this);
-    },
-
-    postRender:function () {
-        this.picklistView.render();
-        this.$(".dialog_content .picklist").append(this.picklistView.el);
-        this.picklistView.delegateEvents();
-    },
-
-    itemSelected:function (item) {
-        this.$("button.submit").prop("disabled", !item);
-    },
-
-    doCallback : function () {
+    doCallback: function() {
         this.callback && this.callback();
     },
 
-    doubleClick: function(e) {
-        this.picklistView.selectItem(e);
-        this.doCallback();
+    collectionModelContext: function(model) {
+        return {
+            name: model.name(),
+            imageUrl: model.defaultIconUrl("small")
+        }
     }
 });

@@ -5,7 +5,7 @@ chorus.dialogs.Attach = chorus.dialogs.Base.extend({
         "click .submit" : "submit"
     },
 
-    enableButtons: function(items) {
+    enableOrDisableSubmitButton: function(items) {
         if (items && items.length > 0) {
             this.$('button.submit').removeAttr('disabled');
         } else {
@@ -32,7 +32,7 @@ chorus.dialogs.Attach = chorus.dialogs.Base.extend({
         });
 
         this.picklistView = new picklist({ collection: this.collection, defaultSelection: this.options.selectedAttachments, multiSelection: true });
-        this.picklistView.bind("item:selected", this.enableButtons, this);
+        this.picklistView.bind("item:selected", this.enableOrDisableSubmitButton, this);
     },
 
     postRender:function () {

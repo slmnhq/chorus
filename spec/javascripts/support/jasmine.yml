@@ -46,6 +46,7 @@ src_files:
   - js/views/search/search_result_list_base.js
   - js/views/search/search_item_base.js
   - js/views/**/*.js
+  - js/dialogs/pick_items_dialog.js
   - js/dialogs/workspaces/pick_workspace_dialog.js
   - js/dialogs/memo_new_dialog.js
   - js/dialogs/tabular_data/new_table_import_csv.js

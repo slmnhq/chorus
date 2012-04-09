@@ -208,9 +208,9 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.showFile(file, file.name, iconSrc, uploadModel);
     },
 
-    workfileChosen: function(workfileSet) {
+    workfileChosen: function(workfiles) {
         this.$(".file_details.workfile").remove();
-        this.model.workfiles = workfileSet;
+        this.model.workfiles = workfiles;
         this.model.workfiles.each(function(workfile) {
             var iconUrl = workfile.isImage() ? workfile.thumbnailUrl() : workfile.iconUrl({size: 'medium'});
             this.showFile(workfile, workfile.get("fileName"), iconUrl);

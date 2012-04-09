@@ -3,28 +3,17 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
         this.launchElement = $("<a></a>")
     });
 
-    it("does not re-render when the model changes", function() {
-        var dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: fixtures.datasetSourceTable() });
-        expect(dialog.persistent).toBeTruthy()
-    });
-
-    describe("intialization", function() {
-        it("should complain if it isn't given a model", function() {
-            expect(
-                function() {
-                    new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement });
-                }).toThrow();
-        });
-    });
-
-     describe("after workspaces are fetched", function() {
+    describe("after workspaces are fetched", function() {
         context("when the model is a source table/view with multiple workspaces", function() {
             beforeEach(function() {
                 this.model = fixtures.datasetSourceTable({workspaceUsed: {
                     workspaceCount: 2,
-                    workspaceList: [{id: "123", name: "im_also_the_current_one"},
-                        {id: "645", name: "yes_im_the_current_one"}]
+                    workspaceList: [
+                        {id: "123", name: "im_also_the_current_one"},
+                        {id: "645", name: "yes_im_the_current_one"}
+                    ]
                 }});
+
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     newFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
@@ -32,12 +21,13 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                     newFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
                 ]);
             });
+
             it("shows all workspaces except for the ones the source table is already associated with", function() {
-                expect(this.dialog.$('.collection_picklist li span.name')).not.toContainText("im_also_the_current_one");
-                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("im_not_the_current_one");
-                expect(this.dialog.$('.collection_picklist li span.name')).not.toContainText("yes_im_the_current_one");
+                expect(this.dialog.$("li").length).toBe(1);
+                expect(this.dialog.$('li:eq(0) .name')).toContainText("im_not_the_current_one");
             });
         });
+
         context("when the model is a source table/view with no workspaces", function() {
             beforeEach(function() {
                 this.model = fixtures.datasetSourceTable();
@@ -51,9 +41,10 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             });
 
             it("shows all workspaces", function() {
-                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("me_neither");
-                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("im_not_the_current_one");
-                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("yes_im_the_current_one");
+                expect(this.dialog.$("li").length).toBe(3);
+                expect(this.dialog.$('li:eq(0) .name')).toContainText("im_not_the_current_one");
+                expect(this.dialog.$('li:eq(1) .name')).toContainText("me_neither");
+                expect(this.dialog.$('li:eq(2) .name')).toContainText("yes_im_the_current_one");
             });
         });
         context("when the model is a sandbox table/view or a chorus view (in a workspace)", function() {
@@ -68,9 +59,9 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             });
 
             it("it shows all workspaces except for the current workspace", function() {
-                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("me_neither");
-                expect(this.dialog.$('.collection_picklist li span.name')).toContainText("im_not_the_current_one");
-                expect(this.dialog.$('.collection_picklist li span.name')).not.toContainText("yes_im_the_current_one");
+                expect(this.dialog.$("li").length).toBe(2);
+                expect(this.dialog.$('li:eq(0) .name')).toContainText("im_not_the_current_one");
+                expect(this.dialog.$('li:eq(1) .name')).toContainText("me_neither");
             });
         });
     });
@@ -79,16 +70,22 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
         context("for anything except a Chorus View", function() {
             beforeEach(function() {
                 this.model = fixtures.datasetSandboxTable();
-                this.workspace = newFixtures.workspace();
-                this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
-                this.dialog.render();
+                this.workspace = newFixtures.workspace({ name: "im_not_the_current_one" });
 
-                spyOn(chorus, "toast");
-                spyOn(this.model.activities(), "fetch");
-                spyOn(this.dialog.picklistView, "selectedItem").andReturn(this.workspace);
-                this.dialog.picklistView.trigger("item:selected", this.workspace);
+                this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
+                this.server.completeFetchFor(chorus.session.user().workspaces(), [
+                    newFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
+                    this.workspace,
+                    newFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                ]);
+
                 spyOn(chorus.router, "navigate");
+                spyOn(chorus, "toast");
                 spyOn(this.dialog, "closeModal");
+
+                this.dialog.render();
+                spyOn(this.model.activities(), "fetch");
+                this.dialog.$('li:eq(1)').click();
                 this.dialog.$("button.submit").click();
             });
 
@@ -140,11 +137,10 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
             describe("when the API fails", function() {
                 beforeEach(function() {
-                    this.server.lastRequest().fail([
-                        {
-                            "message": "Workspace already has a workfile with this name. Specify a different name."
-                        }
-                    ])
+                    this.dialog.closeModal.reset();
+                    this.server.lastRequest().fail([{
+                        "message": "Workspace already has a workfile with this name. Specify a different name."
+                    }]);
                 });
 
                 it("does not close the dialog", function() {
@@ -167,17 +163,25 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
         context("when the dataset is a Chorus View", function() {
             beforeEach(function() {
-                this.model = fixtures.datasetChorusView({workspace: newFixtures.workspace({id: "987"})});
-                this.workspace = newFixtures.workspace();
+                this.currentWorkspace = newFixtures.workspace({ name: "im_also_the_current_one'", id: "987" });
+                this.workspace = newFixtures.workspace({ name: "im_not_the_current_one", id: "123"});
+                this.model = fixtures.datasetChorusView({workspace: this.currentWorkspace});
+
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.dialog.render();
 
+                this.server.completeFetchFor(chorus.session.user().workspaces(), [
+                    this.currentWorkspace,
+                    this.workspace,
+                    newFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                ]);
+
                 spyOn(chorus, "toast");
                 spyOn(this.model.activities(), "fetch");
-                spyOn(this.dialog.picklistView, "selectedItem").andReturn(this.workspace);
-                this.dialog.picklistView.trigger("item:selected", this.workspace);
                 spyOn(chorus.router, "navigate");
                 spyOn(this.dialog, "closeModal");
+
+                this.dialog.$("li:eq(0)").click();
                 this.dialog.$("button.submit").click();
             });
 

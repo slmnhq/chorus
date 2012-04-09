@@ -9,7 +9,7 @@ chorus.dialogs.VisualizationWorkspacePicker = chorus.dialogs.PickWorkspace.exten
     },
 
     callback : function() {
-        this.trigger("workspace:selected", this.picklistView.selectedItem());
+        this.trigger("workspace:selected", this.selectedItem());
         this.closeModal();
     }
 });
