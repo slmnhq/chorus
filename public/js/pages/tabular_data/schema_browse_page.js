@@ -29,6 +29,12 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         chorus.PageEvents.subscribe("tabularData:selected", function(dataset) {
             this.model = dataset;
         }, this);
+
+        this.bindings.add(this.collection, 'searched', function() {
+            this.mainContent.content.render();
+            this.mainContent.contentFooter.render();
+            this.mainContent.contentDetails.updatePagination();
+        })
     },
 
     crumbs: function() {
@@ -45,16 +51,10 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
     instanceLoaded: function() {
         this.schema.set({instanceName: this.instance.get("name")});
 
-        var self = this;
-        var onTextChangeFunction = _.debounce(function(e) {
-            self.collection.attributes.filter = $(e.target).val();
-            self.mainContent.contentDetails.startLoading(".count");
-            self.collection.fetch({silent: true, success: function() {
-                self.mainContent.content.render();
-                self.mainContent.contentFooter.render();
-                self.mainContent.contentDetails.updatePagination();
-            }});
-        }, 300);
+        var onTextChangeFunction = _.debounce(_.bind(function(e) {
+            this.collection.search($(e.target).val());
+            this.mainContent.contentDetails.startLoading(".count");
+        }, this), 300);
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Dataset",
