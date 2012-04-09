@@ -1,6 +1,11 @@
 .manage_join_tables {
     width: 480px;
 
+    .search {
+        padding: 5px 10px;
+        border-bottom: 1px solid $menu-border-color;
+    }
+
     .list_content_details {
         width: auto;
     }

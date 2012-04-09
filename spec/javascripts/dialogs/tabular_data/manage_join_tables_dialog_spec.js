@@ -106,6 +106,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
         it("renders a search input", function() {
             expect(this.dialog.$(".search input")).toExist();
+            expect(this.dialog.$(".search input").attr("placeholder")).toContainTranslation("dataset.dialog.search_schema");
         });
 
         describe("entering a seach term", function() {
