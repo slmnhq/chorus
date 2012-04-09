@@ -18,7 +18,6 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
             this.collection.comparator = this.collectionComparator;
         }
 
-        this.multiSelection = this.options.multiSelection || false;
         this.collection.onLoaded(this.collection.sort, this.collection);
 
         if (this.pagination) {

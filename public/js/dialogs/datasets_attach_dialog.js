@@ -7,6 +7,7 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.PickItems.extend({
     selectedEvent: 'datasets:selected',
     modelClass: "Dataset",
     pagination: true,
+    multiSelection: true,
 
     makeModel: function() {
         this.collection = new chorus.collections.DatasetSet([], {workspaceId: this.options.workspaceId});

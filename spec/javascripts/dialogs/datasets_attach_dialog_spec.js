@@ -8,6 +8,10 @@ describe("chorus.dialogs.DatasetsAttach", function() {
         this.dialog.render();
     });
 
+    it("enables multi-selection", function() {
+        expect(this.dialog.multiSelection).toBeTruthy();
+    });
+
     it("fetches the first page of datasets", function() {
         expect(this.datasets).toHaveBeenFetched();
     });

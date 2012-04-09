@@ -128,8 +128,12 @@ describe("chorus.dialogs.PickItems", function() {
                     this.users = new chorus.collections.UserSet([this.user1, this.user2, this.user3]);
                     this.users.loaded = true;
 
-                    this.dialog = new chorus.dialogs.PickItems({ workspaceId: "33", collection: this.users, multiSelection: true });
+                    var subclass = chorus.dialogs.PickItems.extend({
+                        multiSelection: true
+                    });
+                    this.dialog = new subclass({ workspaceId: "33", collection: this.users });
                     this.dialog.render();
+
                     this.dialog.$("li:eq(0)").click();
                     this.dialog.$("li:eq(2)").click();
                 });

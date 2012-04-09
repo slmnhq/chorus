@@ -191,7 +191,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     launchDatasetDialog: function(e) {
         e.preventDefault();
         if (!this.saving) {
-            var datasetDialog = new chorus.dialogs.DatasetsAttach({ workspaceId: this.workspaceId, defaultSelection: this.model.datasets});
+            var datasetDialog = new chorus.dialogs.DatasetsAttach({ workspaceId: this.workspaceId, defaultSelection: this.model.datasets });
             datasetDialog.bind("datasets:selected", this.datasetsChosen, this);
             this.launchSubModal(datasetDialog);
         }

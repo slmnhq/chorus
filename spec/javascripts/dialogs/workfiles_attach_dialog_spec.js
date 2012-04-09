@@ -23,6 +23,10 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
         this.dialog.render();
     });
 
+    it("allows multiple selections", function() {
+        expect(this.dialog.multiSelection).toBeTruthy();
+    });
+
     it("sorts workfiles by last modified date", function() {
         expect(this.dialog.$("li:eq(0)")).toHaveAttr("data-id", this.workfile2.get('id'));
         expect(this.dialog.$("li:eq(1)")).toHaveAttr("data-id", this.workfile1.get('id'));
