@@ -72,6 +72,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
     },
 
     afterFilter: function() {
+        this.enableOrDisableSubmitButton();
         if (this.$("li.selected").length == 0) {
             this.trigger("item:selected", undefined);
         }

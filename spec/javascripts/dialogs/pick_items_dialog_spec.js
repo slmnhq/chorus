@@ -303,6 +303,10 @@ describe("chorus.dialogs.PickItems", function() {
                 it("clears the selection", function() {
                     expect(this.dialog.$("li.selected")).not.toExist();
                 })
+
+                it("should disable the submit button", function() {
+                    expect(this.dialog.$("button.submit")).toBeDisabled();
+                });
             })
         })
     })
