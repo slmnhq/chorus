@@ -18,5 +18,11 @@ chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
 
     comparator: function(dataset) {
         return dataset.get("objectName").toLowerCase();
+    },
+
+    search: function(term) {
+        var self = this;
+        self.attributes.namePattern = term;
+        self.fetch({silent: true, success: function() { self.trigger('searched'); }});
     }
 });
