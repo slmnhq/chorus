@@ -4,7 +4,8 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     useLoadingSection: true,
 
     events: {
-        "click li a":"datasetSelected"
+        "click li a":"datasetSelected",
+        "click a.more":"fetchMoreDatasets"
     },
 
     setup: function() {
@@ -27,7 +28,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     fetchResourceAfterSchemaSelected: function() {
         this.resource = this.collection = this.schema.databaseObjects();
-        this.collection.fetchAllIfNotLoaded();
+        this.collection.fetchIfNotLoaded();
         this.bindings.add(this.collection, "reset", this.render);
     },
 
@@ -47,7 +48,12 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
             return naturalSort(a.get("objectName").toLowerCase(), b.get("objectName").toLowerCase());
         });
 
-        return this._super("additionalContext", arguments);
+        var ctx = this._super("additionalContext", arguments);
+        if (this.collection.pagination) {
+            ctx.showMoreLink = this.collection.pagination.page < this.collection.pagination.total;
+        }
+
+        return ctx;
     },
 
     collectionModelContext:function (model) {
@@ -58,6 +64,12 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
             cid: model.cid,
             fullName: model.toText()
         }
+    },
+
+    fetchMoreDatasets: function(e) {
+        e && e.preventDefault();
+        var next = parseInt(this.collection.pagination.page) + 1;
+        this.collection.fetchPage(next, { add: true , success: _.bind(this.render, this) });
     },
 
     displayLoadingSection: function () {

@@ -237,8 +237,66 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
                 });
             });
-
         });
 
+        describe("pagination", function() {
+            beforeEach(function() {
+                this.view.schema = fixtures.schema();
+                this.view.fetchResourceAfterSchemaSelected();
+                this.view.render();
+            });
+
+            context("when there is more than one page of results", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.view.collection, [
+                        fixtures.databaseTable({objectName: "Table 1"}),
+                        fixtures.databaseTable({objectName: "Table 2"})
+                    ], {}, { page: "1", total: "2"});
+                });
+
+                it("shows the more link", function() {
+                    expect(this.view.$("a.more")).toContainTranslation("schema.metadata.more");
+                });
+
+                context("when the more link is clicked", function() {
+                    beforeEach(function() {
+                        this.view.$("a.more").click();
+                    });
+
+                    it("fetches another page of results", function() {
+                        expect(this.server.lastFetchFor(this.view.collection, { page: "2" })).toBeDefined();
+                    });
+
+                    context("when the fetch completes", function() {
+                        beforeEach(function() {
+                            this.server.completeFetchFor(this.view.collection, [
+                                fixtures.databaseTable({objectName: "Table 3"}),
+                                fixtures.databaseTable({objectName: "Table 4"})
+                            ], { page: "2" }, { page: "2", total: "2"});
+                        });
+
+                        it("shows combined results (from pages 1 & 2)", function() {
+                            expect(this.view.$("li").length).toBe(4);
+                            expect(this.view.$("li:eq(0) .name")).toContainText("Table 1");
+                            expect(this.view.$("li:eq(1) .name")).toContainText("Table 2");
+                            expect(this.view.$("li:eq(2) .name")).toContainText("Table 3");
+                            expect(this.view.$("li:eq(3) .name")).toContainText("Table 4");
+                        });
+                    });
+                });
+            });
+
+            context("when there is only one page of results", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.view.collection, [
+                        fixtures.databaseTable({objectName: "Table 1"}),
+                    ], {}, { page: "1", total: "1"});
+                });
+
+                it("doesn't show the more link", function() {
+                    expect(this.view.$("a.more")).not.toExist();
+                });
+            });
+        });
     });
 });
