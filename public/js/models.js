@@ -260,6 +260,13 @@ chorus.collections = {
                 rows: options.rows
             });
 
+            if (options.sidx && options.sord) {
+                uri.addSearch({
+                    sidx: options.sidx,
+                    sord: options.sord
+                });
+            }
+
             if (this.sortIndex && this.sortOrder) {
                 uri.addSearch({
                     sidx: this.sortIndex,

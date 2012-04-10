@@ -3,8 +3,9 @@ describe("chorus.dialogs.DatasetsAttach", function() {
         this.datasets = new chorus.collections.DatasetSet([
             fixtures.datasetSandboxTable(),
             fixtures.datasetSandboxTable()
-        ]);
-        this.dialog = new chorus.dialogs.DatasetsAttach([], { workspaceId : "33" });
+        ], {workspaceId: "33"});
+
+        this.dialog = new chorus.dialogs.DatasetsAttach({ workspaceId : "33" });
         this.dialog.render();
     });
 
@@ -12,13 +13,15 @@ describe("chorus.dialogs.DatasetsAttach", function() {
         expect(this.dialog.multiSelection).toBeTruthy();
     });
 
-    it("fetches the first page of datasets", function() {
-        expect(this.datasets).toHaveBeenFetched();
+    it("fetches the results sorted by objectName", function() {
+        var url = this.server.lastFetch().url
+        expect(url).toHaveUrlPath("/edc/workspace/33/dataset");
+        expect(url).toContainQueryParams({ sidx: "objectName", sord: "asc" });
     });
 
     describe("when the fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.datasets, this.datasets.models, { records: 2, total: 5 });
+            this.server.completeFetchFor(this.datasets, this.datasets.models, { sidx: "objectName", sord: "asc" });
         });
 
         it("only fetches one page initially", function() {
