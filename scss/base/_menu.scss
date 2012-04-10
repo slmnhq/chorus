@@ -1,17 +1,39 @@
 @import "../_common.scss";
 
 .components_menu {
+    width: 400px;
+
+    li {
+        padding: 5px;
+
+        a, span {
+            @include font-menu;
+        }
+
+        a {
+            &:hover {
+                text-decoration: underline;
+            }
+
+            &.disabled {
+                text-decoration: none;
+                cursor: default;
+                @include secondary-text-normal;
+            }
+        }
+
+        &.selected {
+            .check {
+                display: inline-block;
+            }
+        }
+    }
+
     .check {
         width: 10px;
         height: 10px;
         background: blue;
         display: none;
-    }
-
-    li.selected {
-        .check {
-            display: inline-block;
-        }
     }
 }
 

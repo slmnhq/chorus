@@ -36,14 +36,26 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.tableData.showResultTable(this.task);
         this.tableData.$('.expander_button').remove();
         this.$('.chart_icon.' + this.type).addClass("selected");
-        chorus.menu(this.$('button.save'), {
-            content: this.$(".save_options"),
+
+        new chorus.views.Menu({
+            launchElement: this.$('button.save'),
             orientation: "right",
-            contentEvents: {
-                "a.save_as_workfile": _.bind(this.saveAsWorkfile, this),
-                "a.save_as_note": _.bind(this.saveAsNoteAttachment, this),
-                "a.save_to_desktop": _.bind(this.saveToDesktop, this)
-            }
+            items: [
+                {
+                    name: "save_as_workfile",
+                    text: t("visualization.save_as_workfile"),
+                    onSelect: _.bind(this.saveAsWorkfile, this)
+                },
+                {   name: "save_as_note",
+                    text: t("visualization.save_as_note"),
+                    onSelect: _.bind(this.saveAsNoteAttachment, this)
+                },
+                {
+                    name: "save_to_desktop",
+                    text: t("visualization.save_to_desktop"),
+                    onSelect: _.bind(this.saveToDesktop, this)
+                }
+            ]
         });
     },
 
@@ -153,7 +165,6 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             chartType: t("dataset.visualization.names." + this.type),
             workspaceId: this.task.get("workspaceId"),
             hasChart: !!this.chart,
-            hasWorkspace: !!this.task.get("workspaceId"),
             entityName: this.model.get("objectName")
         }
     },
@@ -207,21 +218,21 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.$(".modal_controls a.hide").addClass("hidden");
     },
 
-    saveToDesktop: function(event) {
-        event.preventDefault();
+    saveToDesktop: function() {
         var form = this.createDownloadForm()
         form.hide();
         $("body").append(form)
         form.submit();
     },
 
-    saveAsNoteAttachment: function(event) {
-        event.preventDefault();
-
-        var launchElement = $(event.target);
+    saveAsNoteAttachment: function() {
         this.notesNewDialog = new chorus.dialogs.VisualizationNotesNew({
             pageModel: this.model,
-            launchElement: launchElement,
+            entityId: this.model.get("id"),
+            entityName: this.model.name(),
+            entityType: "databaseObject",
+            workspaceId: this.model.get("workspace").id,
+            allowWorkspaceAttachments: !!this.task.get("workspaceId"),
             attachVisualization: {
                 fileName: this.makeFilename(),
                 svgData: this.makeSvgData()
@@ -230,9 +241,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.launchSubModal(this.notesNewDialog);
     },
 
-    saveAsWorkfile: function(e) {
-        e.preventDefault();
-
+    saveAsWorkfile: function() {
         if (!this.task.get("workspaceId")) {
             this.workspacePicker = new chorus.dialogs.VisualizationWorkspacePicker();
             this.launchSubModal(this.workspacePicker);

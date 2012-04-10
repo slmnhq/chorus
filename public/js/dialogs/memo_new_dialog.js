@@ -169,7 +169,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
             formUrl: this.model.url(),
             placeholder: this.placeholder,
             submitButton: this.submitButton || "Submit",
-            allowWorkspaceAttachments: this.options.launchElement.data("allowWorkspaceAttachments")
+            allowWorkspaceAttachments: this.options.launchElement ? this.options.launchElement.data("allowWorkspaceAttachments") : this.options.allowWorkspaceAttachments
         };
     },
 

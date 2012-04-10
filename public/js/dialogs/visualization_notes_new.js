@@ -4,11 +4,11 @@ chorus.dialogs.VisualizationNotesNew = chorus.dialogs.NotesNew.extend({
 
     makeModel:function () {
         this.model = new chorus.models.Comment({
-            entityType:this.options.launchElement.data("entity-type"),
-            entityId:this.options.launchElement.data("entity-id"),
-            workspaceId: this.options.launchElement.data("workspace-id")
+            entityId:this.options.entityId,
+            entityType:this.options.entityType,
+            workspaceId: this.options.workspaceId
         });
-        var subject = this.options.launchElement.data("displayEntityType") || this.model.get("entityType");
+        var subject = this.model.get("entityType");
 
         this.placeholder = t("notes.placeholder", {noteSubject: subject});
         this._super("makeModel", arguments);
@@ -51,6 +51,6 @@ chorus.dialogs.VisualizationNotesNew = chorus.dialogs.NotesNew.extend({
 
     svgSaved: function() {
         this.pageModel.activities().fetch();
-        chorus.toast("dataset.visualization.toast.note_from_chart", {datasetName: this.options.launchElement.data("entity-name") });
+        chorus.toast("dataset.visualization.toast.note_from_chart", {datasetName: this.options.entityName });
     }
 });

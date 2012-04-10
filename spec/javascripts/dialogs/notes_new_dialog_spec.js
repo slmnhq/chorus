@@ -50,4 +50,24 @@ describe("chorus.dialogs.NotesNewDialog", function() {
             });
         });
     });
+
+    describe("when the options are not specified in the launchElement", function() {
+        beforeEach(function() {
+            this.dialog = new chorus.dialogs.NotesNew({
+                entityId: "1",
+                entityType: "workfile",
+                workspaceId: "22",
+                allowWorkspaceAttachments: true,
+                pageModel: new chorus.models.Workfile()
+            });
+            $('#jasmine_content').append(this.dialog.el);
+            this.dialog.render();
+        });
+
+        it("sets the correct properties on the model", function() {
+            expect(this.dialog.model.get("entityId")).toBe("1");
+            expect(this.dialog.model.get("entityType")).toBe("workfile");
+            expect(this.dialog.model.get("workspaceId")).toBe("22");
+        });
+    });
 });

@@ -3,9 +3,13 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
         beforeEach(function() {
             stubDelay();
             spyOn(chorus.dialogs.NotesNew.prototype, "modelSaved").andCallThrough();
-            this.launchElement = $("<a data-entity-type='databaseObject' data-allow-workspace-attachments='true' data-entity-id='1' data-workspace-id='22' data-entity-name='my dataset'></a>");
+
             this.dialog = new chorus.dialogs.VisualizationNotesNew({
-                launchElement: this.launchElement,
+                entityId: "1",
+                entityName: "my dataset",
+                workspaceId: "22",
+                entityType: "databaseObject",
+                allowWorkspaceAttachments: "true",
                 pageModel: fixtures.datasetSandboxTable({datasetId: "abc|123"}),
                 attachVisualization: {
                     fileName: "hello-frequency.png",
@@ -22,8 +26,8 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
             });
 
             it("sets the correct properties on the model", function() {
+                expect(this.dialog.model.get("entityId")).toBe("1")
                 expect(this.dialog.model.get("entityType")).toBe("databaseObject");
-                expect(this.dialog.model.get("entityId")).toBe(1)
             });
         });
 
