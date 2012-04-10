@@ -22,6 +22,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
 
     postRender: function() {
         this.updateAvailableUserList();
+        this.updateSelectedUserList();
     },
 
     onUserSelected: function() {

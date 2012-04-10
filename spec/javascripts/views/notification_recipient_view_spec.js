@@ -58,7 +58,7 @@ describe("chorus.views.NotificationRecipient", function() {
 
             it("does not display the logged in user as an elligible recipient", function() {
                 expect(this.view.$("option[value=" + this.loggedInUser.get("id") + "]")).not.toExist();
-            })
+            });
 
             context("when a user is selected", function() {
                 beforeEach(function() {
@@ -68,6 +68,14 @@ describe("chorus.views.NotificationRecipient", function() {
                 });
 
                 itHasOnlyTheFirstUser();
+
+                context("and then the view is re-rendered", function() {
+                    beforeEach(function() {
+                        this.view.render();
+                    });
+                    itHasOnlyTheFirstUser();
+                });
+
 
                 it("goes back to the blank select option", function() {
                     expect(this.view.$("select").val()).toBe("");
