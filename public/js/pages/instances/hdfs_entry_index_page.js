@@ -85,9 +85,9 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
 
     fetchFailed: function() {
         if (this.collection.serverErrors && this.collection.serverErrors[0].msgkey === "HADOOP.NO_PERMISSION") {
-            chorus.router.navigate("/unauthorized", true, this.collection);
+            chorus.router.navigate("/unauthorized", this.collection);
         } else {
-            chorus.router.navigate("/invalidRoute", true);
+            chorus.router.navigate("/invalidRoute");
         }
     }
 });

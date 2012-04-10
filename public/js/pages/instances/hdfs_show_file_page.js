@@ -78,9 +78,9 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
 
     fetchFailed: function() {
         if (this.model.serverErrors && this.model.serverErrors[0].msgkey === "HADOOP.NO_PERMISSION") {
-            chorus.router.navigate("/unauthorized", true, this.model);
+            chorus.router.navigate("/unauthorized", this.model);
         } else {
-            chorus.router.navigate("/invalidRoute", true);
+            chorus.router.navigate("/invalidRoute");
         }
     }
 })

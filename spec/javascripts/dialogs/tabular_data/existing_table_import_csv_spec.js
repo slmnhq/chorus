@@ -523,7 +523,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 });
 
                 it("should navigate to the destination sandbox table", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.dataset.showUrl(), true)
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.dataset.showUrl())
                 });
             })
 

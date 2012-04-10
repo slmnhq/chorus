@@ -34,7 +34,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.closeModal();
         chorus.toast("dataset.import.started");
         chorus.PageEvents.broadcast("csv_import:started");
-        chorus.router.navigate(this.dataset.showUrl(), true);
+        chorus.router.navigate(this.dataset.showUrl());
     },
 
     saveFailed: function() {

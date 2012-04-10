@@ -44,7 +44,7 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
         if (!databaseView.has("workspace")) {
             databaseView.set({"workspace": this.dataset.get("workspace")});
         }
-        chorus.router.navigate(databaseView.showUrl(), true);
+        chorus.router.navigate(databaseView.showUrl());
     },
 
     saveFailed: function() {

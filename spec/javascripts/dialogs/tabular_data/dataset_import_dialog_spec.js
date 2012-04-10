@@ -347,7 +347,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             });
 
                             it("navigates to the new workfile page", function() {
-                                expect(chorus.router.navigate).toHaveBeenCalledWith(this.workfile.showUrl(), true);
+                                expect(chorus.router.navigate).toHaveBeenCalledWith(this.workfile.showUrl());
                             });
                         });
 
@@ -362,7 +362,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             });
 
                             it("navigates to the workfile list page", function() {
-                                expect(chorus.router.navigate).toHaveBeenCalledWith(this.workfile.workfilesUrl(), true);
+                                expect(chorus.router.navigate).toHaveBeenCalledWith(this.workfile.workfilesUrl());
                             });
                         });
                     });

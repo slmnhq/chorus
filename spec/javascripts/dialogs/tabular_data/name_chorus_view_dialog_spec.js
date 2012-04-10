@@ -99,7 +99,7 @@ describe("chorus.dialogs.NameChorusView", function() {
             });
 
             it("redirects to the new chorus view show page", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl(), true);
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl());
             });
 
             it("dismisses the dialog", function() {

@@ -81,7 +81,7 @@ describe("chorus.views.Login", function() {
             });
 
             it("navigates to the dashboard", function() {
-                expect(this.navigationSpy).toHaveBeenCalledWith("/", true);
+                expect(this.navigationSpy).toHaveBeenCalledWith("/");
             });
         });
 
@@ -99,7 +99,7 @@ describe("chorus.views.Login", function() {
                 });
 
                 it("navigates to the page before forced logout", function() {
-                    expect(this.navigationSpy).toHaveBeenCalledWith("/foo", true);
+                    expect(this.navigationSpy).toHaveBeenCalledWith("/foo");
                 });
             });
 
@@ -111,7 +111,7 @@ describe("chorus.views.Login", function() {
                 });
 
                 it("navigates to the page before forced logout", function() {
-                    expect(this.navigationSpy).toHaveBeenCalledWith("/foo", true);
+                    expect(this.navigationSpy).toHaveBeenCalledWith("/foo");
                 });
             })
         });

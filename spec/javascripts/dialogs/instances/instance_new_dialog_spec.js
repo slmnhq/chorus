@@ -255,7 +255,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                         });
 
                         it("navigates to the instance list", function() {
-                            expect(chorus.router.navigate).toHaveBeenCalledWith("/instances", true, {selectId: 123});
+                            expect(chorus.router.navigate).toHaveBeenCalledWith("/instances", {selectId: 123});
                         });
                     });
 

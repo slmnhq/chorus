@@ -25,7 +25,7 @@ describe("chorus.alerts.WorkfileDelete", function() {
 
 
         it("navigates to the workfile list page", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/10/workfiles", true);
+            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/10/workfiles");
         });
     })
 })

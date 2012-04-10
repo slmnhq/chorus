@@ -15,7 +15,7 @@ chorus.pages.Error = chorus.pages.Bare.extend({
     },
 
     navigateToHome: function() {
-        chorus.router.navigate("#", true);
+        chorus.router.navigate("#");
     },
 
     context: function() {

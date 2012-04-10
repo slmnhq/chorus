@@ -56,13 +56,13 @@
             self.route("/logout", "Logout", self.app.session.logout);
         },
 
-        navigate:function (fragment, triggerRoute, pageOptions) {
+        navigate:function (fragment, pageOptions) {
             this.app.pageOptions = pageOptions;
             fragment = fragment.match(/#?(.+)/)[1];
             if (Backbone.history.fragment == fragment || Backbone.history.fragment == decodeURIComponent(fragment)) {
                 Backbone.history.loadUrl(fragment);
             } else {
-                Backbone.Router.prototype.navigate(fragment, triggerRoute);
+                Backbone.Router.prototype.navigate(fragment, true);
             }
         },
 
@@ -79,7 +79,7 @@
                 var navFunction = function () {
                     chorus.PageEvents.reset();
                     if (className == "Login" && self.app.session.loggedIn()) {
-                        self.navigate("/", true);
+                        self.navigate("/");
                     } else {
                         self.trigger("leaving");
                         var pageClass = chorus.pages[className + "Page"];

@@ -250,6 +250,6 @@ chorus.views.Header = chorus.views.Base.extend({
             workspaceId: this.options.workspaceId,
             query: this.$(".search input:text").val()
         });
-        chorus.router.navigate(search.showUrl(), true);
+        chorus.router.navigate(search.showUrl());
     }
 });

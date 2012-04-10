@@ -96,7 +96,7 @@ describe("chorus.views.SearchResultList", function() {
                         });
 
                         it("should navigate to the appropriate results page", function() {
-                            expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl(), true);
+                            expect(chorus.router.navigate).toHaveBeenCalledWith(this.result.showUrl());
                         });
                     });
                 });

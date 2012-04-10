@@ -176,7 +176,7 @@ describe("chorus.views.TypeAheadSearch", function() {
                 it("navigates to the page for the selected search result", function() {
                     this.view.enterKey();
                     var href = this.view.$("li.selected a").attr("href");
-                    expect(chorus.router.navigate).toHaveBeenCalledWith(href, true);
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(href);
                 });
             });
 
