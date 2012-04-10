@@ -608,7 +608,7 @@ describe("chorus global", function() {
         it("navigates to the login page", function() {
             spyOn(this.chorus.router, 'navigate');
             this.chorus.requireLogin();
-            expect(this.chorus.router.navigate).toHaveBeenCalledWith("/login", true);
+            expect(this.chorus.router.navigate).toHaveBeenCalledWith("/login");
         });
     })
 })

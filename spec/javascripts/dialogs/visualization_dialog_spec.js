@@ -252,17 +252,17 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("should have a 'Save Chart Image as Workfile' link", function() {
-                    var menu = this.qtip.find("a[menu-name='save_as_workfile']")
+                    var menu = this.qtip.find("a[data-menu-name='save_as_workfile']")
                     expect(menu).toContainTranslation("visualization.save_as_workfile");
                 });
 
                 it("should have a 'Save Chart Image as attachment' link", function() {
-                    var menu = this.qtip.find("a[menu-name='save_as_note']");
+                    var menu = this.qtip.find("a[data-menu-name='save_as_note']");
                     expect(menu).toContainTranslation("visualization.save_as_note");
                 });
 
                 it("should have a 'Save Chart Image to Desktop' link", function() {
-                    var menu = this.qtip.find("a[menu-name='save_to_desktop']")
+                    var menu = this.qtip.find("a[data-menu-name='save_to_desktop']")
                     expect(menu).toContainTranslation("visualization.save_to_desktop");
                 });
             });
@@ -339,7 +339,7 @@ describe("chorus.dialogs.Visualization", function() {
                         spyOn(this.dialog, "createDownloadForm").andReturn(this.fakeForm)
                         this.dialog.$("button.save").prop("disabled", false);
                         this.dialog.$("button.save").click();
-                        this.qtip.find("a[menu-name='save_to_desktop']").click();
+                        this.qtip.find("a[data-menu-name='save_to_desktop']").click();
                     });
 
                     it("constructs a form for download", function() {
@@ -381,7 +381,7 @@ describe("chorus.dialogs.Visualization", function() {
                             this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                             this.dialog.$("button.save").prop("disabled", false);
                             this.dialog.$("button.save").click();
-                            this.qtip.find("a[menu-name='save_as_workfile']").click();
+                            this.qtip.find("a[data-menu-name='save_as_workfile']").click();
                         });
 
                         it("disables the save as workfile button and shows the loading spinner", function() {
@@ -400,7 +400,7 @@ describe("chorus.dialogs.Visualization", function() {
                                 this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                                 this.dialog.$("button.save").prop("disabled", false);
                                 this.dialog.$("button.save").click();
-                                this.qtip.find("a[menu-name='save_as_workfile']").click();
+                                this.qtip.find("a[data-menu-name='save_as_workfile']").click();
                             });
 
                             it("strips the offending characters", function() {
@@ -436,7 +436,7 @@ describe("chorus.dialogs.Visualization", function() {
                         this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                         this.dialog.$("button.save").prop("disabled", false);
                         this.dialog.$("button.save").click();
-                        this.qtip.find("a[menu-name='save_as_workfile']").click();
+                        this.qtip.find("a[data-menu-name='save_as_workfile']").click();
                     });
 
                     it("should display the workspace picker", function() {
@@ -469,7 +469,7 @@ describe("chorus.dialogs.Visualization", function() {
                 beforeEach(function() {
                     this.dialog.$("button.save").prop("disabled", false);
                     this.dialog.$("button.save").click();
-                    this.qtip.find("a[menu-name='save_as_note']").click();
+                    this.qtip.find("a[data-menu-name='save_as_note']").click();
                 });
 
                 it("opens the Add Note dialog with correct parameters", function() {
@@ -488,7 +488,7 @@ describe("chorus.dialogs.Visualization", function() {
                         this.dialog.render();
                         this.dialog.$("button.save").prop("disabled", false);
                         this.dialog.$("button.save").click();
-                        this.qtip.find("a[menu-name='save_as_note']").click();
+                        this.qtip.find("a[data-menu-name='save_as_note']").click();
                     });
 
                     it("should not allow workspace attachments", function() {

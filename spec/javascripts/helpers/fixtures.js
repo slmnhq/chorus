@@ -1919,17 +1919,6 @@ beforeEach(function() {
             return new chorus.models.Dataset(attributes);
         },
 
-        datasetSandboxTable: function(overrides) {
-            var datasetCommonAttributes = _.extend({
-                modifiedBy: {},
-                objectType: "BASE_TABLE",
-                owner: {},
-                type: "SANDBOX_TABLE"
-            }, overrides)
-            var attributes = _.extend(fixtures.datasetCommonJson(datasetCommonAttributes), overrides);
-            return new chorus.models.Dataset(attributes);
-        },
-
         datasetSandboxView: function(overrides) {
             var datasetCommonAttributes = _.extend({
                 modifiedBy: {},
@@ -2107,7 +2096,7 @@ beforeEach(function() {
 
         timeseriesTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: this.datasetSandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.datasetSandboxTable({objectName: 'pirates'}),
                 yAxis: "num_hands",
                 xAxis: "per_year",
 
@@ -2125,7 +2114,7 @@ beforeEach(function() {
 
         frequencyTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: this.datasetSandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.datasetSandboxTable({objectName: 'pirates'}),
                 yAxis: "num_hands",
 
                 columns: [
@@ -2142,7 +2131,7 @@ beforeEach(function() {
 
         boxplotTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: this.datasetSandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.datasetSandboxTable({objectName: 'pirates'}),
                 xAxis: "gender",
                 yAxis: "age",
                 columns: [
@@ -2164,7 +2153,7 @@ beforeEach(function() {
 
         heatmapTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: this.datasetSandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.datasetSandboxTable({objectName: 'pirates'}),
                 xAxis: "hair_length",
                 yAxis: "kill_count",
                 xBins: "4",

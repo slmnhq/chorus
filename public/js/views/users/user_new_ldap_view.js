@@ -84,7 +84,7 @@
     });
 
     function userSuccessfullySaved() {
-        chorus.router.navigate("/users", true);
+        chorus.router.navigate("/users");
     }
 })();
 

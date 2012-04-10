@@ -16,7 +16,7 @@ describe("chorus.alerts.UserDelete", function() {
         });
 
         it("navigates to the user list page", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith("/users", true);
+            expect(chorus.router.navigate).toHaveBeenCalledWith("/users");
         });
     })
 })

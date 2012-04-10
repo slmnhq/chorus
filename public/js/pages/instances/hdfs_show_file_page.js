@@ -6,8 +6,9 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
         this.path = "/" + path;
 
         this.model = new chorus.models.HdfsFile({ instanceId: instanceId, path: this.path });
+        this.bindings.add(this.model, "fetchFailed", this.fetchFailed);
+        this.bindings.add(this.model, "change", this.render);
         this.model.fetch()
-        this.dependOn(this.model);
 
         this.instance = new chorus.models.Instance({id: instanceId});
         this.instance.fetch();
@@ -72,6 +73,14 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
             return "/" + folders[1] + "/.../" + folders[folders.length - 1]
         } else {
             return this.path
+        }
+    },
+
+    fetchFailed: function() {
+        if (this.model.serverErrors && this.model.serverErrors[0].msgkey === "HADOOP.NO_PERMISSION") {
+            chorus.router.navigate("/unauthorized", this.model);
+        } else {
+            chorus.router.navigate("/invalidRoute");
         }
     }
 })

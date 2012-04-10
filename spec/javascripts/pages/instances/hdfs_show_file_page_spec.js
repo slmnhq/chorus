@@ -29,24 +29,51 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         });
     });
 
-    context("fetches fail", function() {
+    context("when the fetch fails", function() {
         beforeEach(function() {
-            spyOn(Backbone.history, "loadUrl")
-            this.page.model.trigger('fetchFailed')
-        })
+            spyOn(Backbone.history, "loadUrl");
+        });
 
-        it("navigates to the 404 page", function() {
-            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
-        })
-    })
+        context("for some unknown reason", function() {
+            beforeEach(function() {
+                this.page.model.serverErrors = [
+                    { msgkey: "some_unknown_reason" }
+                ];
+                this.page.model.trigger("fetchFailed", this.page.collection);
+            });
 
-    context("fetches complete", function(){
+            it("navigates to the 404 page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+            });
+        });
+
+        context("and the permissions are invalid", function() {
+            beforeEach(function() {
+                Backbone.history.loadUrl.reset();
+                this.page.model.serverErrors = [
+                    { msgkey: "HADOOP.NO_PERMISSION" }
+                ];
+                this.page.model.trigger("fetchFailed", this.page.collection);
+            });
+
+            it("should navigate to the AuthorizationDenied page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/unauthorized");
+            });
+
+            it("should not then navigate again to the /invalidRoute page", function() {
+                expect(Backbone.history.loadUrl).not.toHaveBeenCalledWith("/invalidRoute");
+                expect(Backbone.history.loadUrl.callCount).toBe(1);
+            });
+        });
+    });
+
+    context("fetches complete", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.page.instance, this.instance);
             this.server.completeFetchFor(this.page.model, this.file);
         });
 
-        it("has the breadcrumbs", function (){
+        it("has the breadcrumbs", function() {
             expect(this.page.model.loaded).toBeTruthy();
             expect(this.page.$(".breadcrumbs .spacer").length).toBe(3);
 

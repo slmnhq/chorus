@@ -94,7 +94,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             });
 
             it("navigates to the normal workspace show page", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl(), true)
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl())
             });
         });
     })

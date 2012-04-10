@@ -173,7 +173,7 @@ describe("chorus.views.UserNewLdap", function() {
                             it("redirects to user index", function() {
                                 spyOn(chorus.router, "navigate");
                                 this.server.completeSaveFor(this.user);
-                                expect(chorus.router.navigate).toHaveBeenCalledWith("/users", true);
+                                expect(chorus.router.navigate).toHaveBeenCalledWith("/users");
                             });
                         });
 

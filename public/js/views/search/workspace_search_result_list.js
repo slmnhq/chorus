@@ -22,7 +22,7 @@
         showAll: function(e) {
             e.preventDefault();
             this.search.set({ searchIn: "this_workspace" });
-            chorus.router.navigate(this.search.showUrl(), true);
+            chorus.router.navigate(this.search.showUrl());
         }
     });
 })();

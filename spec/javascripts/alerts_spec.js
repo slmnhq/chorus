@@ -163,7 +163,7 @@ describe("chorus.alerts.ModelDelete", function() {
 
             it("navigates to the redirectUrl", function() {
                 this.alert.model.trigger("destroy", this.alert.model);
-                expect(chorus.router.navigate).toHaveBeenCalledWith("/partyTime", true);
+                expect(chorus.router.navigate).toHaveBeenCalledWith("/partyTime");
             });
 
             it("displays the delete success toast message", function() {

@@ -42,7 +42,7 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
         });
 
         if(allHidden) {
-            chorus.router.navigate(this.model.showUrl(), true);
+            chorus.router.navigate(this.model.showUrl());
         }
     }
 });

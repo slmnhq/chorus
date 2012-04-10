@@ -46,6 +46,6 @@ chorus.views.UserNew = chorus.views.Base.extend({
     },
 
     userSaved: function() {
-        chorus.router.navigate("/users", true);
+        chorus.router.navigate("/users");
     }
 });

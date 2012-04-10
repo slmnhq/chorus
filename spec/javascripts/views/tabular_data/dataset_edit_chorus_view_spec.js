@@ -92,7 +92,7 @@ describe("chorus.views.DatasetEditChorusView", function() {
             });
 
             it("should return the user to the standard page view", function() {
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl(), true)
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl())
             });
         });
 

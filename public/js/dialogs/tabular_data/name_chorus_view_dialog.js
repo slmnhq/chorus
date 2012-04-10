@@ -34,7 +34,7 @@ chorus.dialogs.NameChorusView = chorus.dialogs.SqlPreview.extend({
 
     chorusViewCreated: function() {
         $(document).trigger("close.facebox");
-        chorus.router.navigate(this.model.showUrl(), true);
+        chorus.router.navigate(this.model.showUrl());
     },
 
     chorusViewFailed: function() {

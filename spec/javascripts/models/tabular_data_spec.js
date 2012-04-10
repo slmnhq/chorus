@@ -136,7 +136,7 @@ describe("chorus.models.TabularData", function() {
             var table = fixtures.databaseObject();
             expect(table.canBeImportSource()).toBeFalsy();
 
-            var dataset = fixtures.datasetSandboxTable();
+            var dataset = newFixtures.datasetSandboxTable();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
             dataset = fixtures.datasetSandboxView();
@@ -158,7 +158,7 @@ describe("chorus.models.TabularData", function() {
             var table = fixtures.databaseObject();
             expect(table.canBeImportDestination()).toBeFalsy();
 
-            var dataset = fixtures.datasetSandboxTable();
+            var dataset = newFixtures.datasetSandboxTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
             dataset = fixtures.datasetSandboxView();
@@ -635,7 +635,7 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("is false otherwise", function() {
-            expect(fixtures.datasetSandboxTable().isDeleteable()).toBeFalsy();
+            expect(newFixtures.datasetSandboxTable().isDeleteable()).toBeFalsy();
         });
     });
 
@@ -770,7 +770,7 @@ describe("chorus.models.TabularData", function() {
 
     describe("#canAnalyze", function() {
         it("returns true for a sandbox table", function() {
-            this.tabularData = fixtures.datasetSandboxTable();
+            this.tabularData = newFixtures.datasetSandboxTable();
             expect(this.tabularData.canAnalyze()).toBeTruthy();
         });
 

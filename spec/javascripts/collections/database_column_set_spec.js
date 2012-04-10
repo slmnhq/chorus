@@ -1,7 +1,7 @@
 describe("chorus.collections.DatabaseColumnSet", function() {
     describe("database table column", function() {
         beforeEach(function() {
-            var table = fixtures.datasetSandboxTable({
+            var table = newFixtures.datasetSandboxTable({
                 instance: {
                     id: '2',
                     name: 'instance2'
@@ -19,7 +19,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("when the names need to be url encoded", function() {
             beforeEach(function() {
-                var table = fixtures.datasetSandboxTable({
+                var table = newFixtures.datasetSandboxTable({
                     instance: {
                         id: '2',
                         name: '%foo%'
@@ -138,7 +138,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
     describe("#errorMessage", function() {
         it("returns the server errors on the collection", function() {
-            var table = fixtures.datasetSandboxTable({
+            var table = newFixtures.datasetSandboxTable({
                 instance: {
                     id: '2',
                     name: 'instance2'
@@ -171,11 +171,11 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         context("with multiple dataset", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.dataset1 = fixtures.datasetSandboxTable();
+                this.dataset1 = newFixtures.datasetSandboxTable();
                 this.dataset1.datasetNumber = 1;
                 this.dataset1Columns = this.dataset1.columns();
                 this.dataset1Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2}), fixtures.databaseColumn({ordinalPosition: 3})]);
-                this.dataset2 = fixtures.datasetSandboxTable();
+                this.dataset2 = newFixtures.datasetSandboxTable();
                 this.dataset2.datasetNumber = 2;
                 this.dataset2Columns = this.dataset2.columns()
                 this.dataset2Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2})]);

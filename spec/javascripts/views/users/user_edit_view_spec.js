@@ -91,7 +91,7 @@ describe("chorus.views.userEdit", function() {
                             it("redirects to user index", function() {
                                 spyOn(chorus.router, "navigate");
                                 this.view.model.trigger("saved");
-                                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl(), true);
+                                expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.model.showUrl());
                             });
                         })
                     });

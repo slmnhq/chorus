@@ -25,7 +25,7 @@ chorus.views.Login = chorus.views.Base.extend({
             targetDestination = "/";
         }
 
-        chorus.router.navigate(targetDestination, true);
+        chorus.router.navigate(targetDestination);
     },
 
     submitLoginForm:function submitLoginForm(e) {

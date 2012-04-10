@@ -70,7 +70,7 @@ window.Chorus = function chorus$Global() {
     self.requireLogin = function requireLogin() {
         self.session.rememberPathBeforeLoggedOut();
 
-        self.router.navigate("/login", true);
+        self.router.navigate("/login");
     };
 
     self.detectFeatures = function() {

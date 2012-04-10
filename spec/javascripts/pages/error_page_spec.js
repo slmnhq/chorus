@@ -23,6 +23,6 @@ describe("chorus.pages.ErrorPage", function() {
 
     it("navigates to the homepage on clicking the button", function() {
         this.page.$('button.submit').click();
-        expect(chorus.router.navigate).toHaveBeenCalledWith("#", true)
+        expect(chorus.router.navigate).toHaveBeenCalledWith("#")
     });
 });

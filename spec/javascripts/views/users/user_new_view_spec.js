@@ -77,7 +77,7 @@ describe("chorus.views.userNew", function() {
                         it("redirects to user index", function() {
                             spyOn(chorus.router, "navigate");
                             this.view.model.trigger("saved");
-                            expect(chorus.router.navigate).toHaveBeenCalledWith("/users", true);
+                            expect(chorus.router.navigate).toHaveBeenCalledWith("/users");
                         });
                     })
 
