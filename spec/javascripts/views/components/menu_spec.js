@@ -33,12 +33,17 @@ describe("chorus.views.Menu", function() {
 
     describe("when the launch element is clicked", function() {
         beforeEach(function() {
+            spyOn(jQuery.Event.prototype, 'preventDefault');
             launchElement.click();
         });
 
         it("shows the menu", function() {
             expect(menuContainer).toHaveVisibleQtip();
             expect(menuContainer.find(menu.el)).toExist();
+        });
+
+        it("prevents the click from causing a navigation", function() {
+            expect(jQuery.Event.prototype.preventDefault).toHaveBeenCalled();
         });
     });
 
@@ -101,30 +106,12 @@ describe("chorus.views.Menu", function() {
             });
 
             context("when an item is clicked", function() {
-                beforeEach(function() {
+                it("selects that item", function() {
                     menu.$("li:eq(1) a").click();
-                });
+                    expectSelectedItem(1);
 
-                it("it adds the 'selected' class to the li", function() {
-                    expect(menu.$("li:eq(1)")).toHaveClass("selected");
-                });
-
-                it("shows the check for that item", function() {
-                    expect(menu.$("li:eq(1) .check")).not.toBeHidden();
-                });
-
-                context("when a different item is clicked", function() {
-                    beforeEach(function() {
-                        menu.$("li:eq(2) a").click();
-                    });
-
-                    it("it adds the 'selected' class to the new li", function() {
-                        expect(menu.$("li:eq(2)")).toHaveClass("selected");
-                    });
-
-                    it("removes the 'selected' class from the previous li", function() {
-                        expect(menu.$("li:eq(1)")).not.toHaveClass("selected");
-                    });
+                    menu.$("li:eq(1) a").click();
+                    expectSelectedItem(1);
                 });
             });
         });
@@ -152,5 +139,23 @@ describe("chorus.views.Menu", function() {
                 });
             });
         });
+
+        describe("#selectItem(name)", function() {
+            it("acts like the item with the given name was clicked", function() {
+                menu.selectItem("one");
+                expectSelectedItem(0);
+
+                menu.selectItem("two");
+                expectSelectedItem(1);
+
+                menu.selectItem("three");
+                expectSelectedItem(2);
+            });
+        });
+
+        function expectSelectedItem(i) {
+            expect(menu.$("li.selected").length).toBe(1);
+            expect(menu.$("li").eq(i)).toHaveClass("selected");
+        }
     });
 });
