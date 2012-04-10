@@ -28,6 +28,11 @@ describe("chorus.Modal", function() {
     });
 
     describe("#launchModal", function() {
+        beforeEach(function() {
+            spyOn(this.modal, 'preventScrollingBody');
+            spyOn(this.modal, 'restoreScrollingBody');
+        });
+
         describe("when chorus.modal already exists", function() {
             beforeEach(function() {
                 this.parentModal = new chorus.Modal();
@@ -64,7 +69,7 @@ describe("chorus.Modal", function() {
             });
 
             it("makes the body unable to scroll", function() {
-                expect($("body").css("overflow")).toBe("hidden");
+                expect(this.modal.preventScrollingBody).toHaveBeenCalled();
             });
 
             describe("#resize", function() {
@@ -147,7 +152,7 @@ describe("chorus.Modal", function() {
                 });
 
                 it("resets the body's ability to scroll'", function() {
-                    expect($("body").css("overflow")).toBe("visible");
+                    expect(this.modal.restoreScrollingBody).toHaveBeenCalled();
                 });
             });
         });
