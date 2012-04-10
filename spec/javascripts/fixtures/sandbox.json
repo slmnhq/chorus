@@ -1,0 +1,13 @@
+{
+    "id" : "10030",
+    "workspaceId" : "10022",
+    "instanceId" : "10000",
+    "instanceName" : "gillette",
+    "databaseName" : "dca_demo",
+    "schemaName" : "ddemo",
+    "status" : "ok",
+    "databaseId" : "10006",
+    "schemaId" : "10011",
+    "type" : "000",
+    "instanceStatus" : "online"
+}

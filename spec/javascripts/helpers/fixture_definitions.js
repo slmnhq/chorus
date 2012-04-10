@@ -27,5 +27,19 @@ window.fixtureDefinitions = {
     schemaSet: {
         collection: "SchemaSet",
         unique: ["id"]
+    },
+
+    sandbox: {
+        model: "Sandbox",
+        unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ]
+    },
+
+    datasetSandboxTable: {
+        model: "Dataset",
+        unique: [ "id" ]
+    },
+
+    csvImport: {
+        model: "CSVImport"
     }
 };
