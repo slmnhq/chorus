@@ -17,8 +17,10 @@ describe("chorus.dialogs.Visualization", function() {
 
         var filter1 = new chorus.models.TabularDataFilter({column: this.columns.at(0), comparator: "equal", input: {value: "original_filter_value_a"}});
         var filter2 = new chorus.models.TabularDataFilter({column: this.columns.at(1), comparator: "not_equal", input: {value: "original_filter_value_b"}});
+        var incompleteFilter1 = new chorus.models.TabularDataFilter({column: this.columns.at(2), comparator: "not_equal" });
+        var incompleteFilter2 = new chorus.models.TabularDataFilter({column: this.columns.at(2), comparator: "not_equal", input: {} });
 
-        this.filters = new chorus.collections.TabularDataFilterSet([filter1, filter2]);
+        this.filters = new chorus.collections.TabularDataFilterSet([filter1, filter2, incompleteFilter1, incompleteFilter2]);
 
         spyOn(this.filters, "clone").andCallThrough();
         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
@@ -54,7 +56,8 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("shows the 'Show Options' link", function() {
-                    expect(this.dialog.filters.length).toBe(2);
+                    expect(this.dialog.filters.length).toBe(4);
+                    expect(this.dialog.effectiveFilterLength()).toBe(2);
                     expect(this.dialog.$("a.show_options")).toContainTranslation("visualization.show_options", {count: 2});
                 });
 
@@ -147,7 +150,7 @@ describe("chorus.dialogs.Visualization", function() {
 
             context("when there are existing filters", function() {
                 it("shows them properly in the filter section", function() {
-                    expect(this.dialog.$(".filter_options li").length).toBe(2);
+                    expect(this.dialog.$(".filter_options li").length).toBe(4);
                     expect(this.dialog.$(".filter_options li:eq(0) .column_filter option:selected").text()).toBe(this.columns.at(0).get("name"));
                     expect(this.dialog.$(".filter_options li:eq(1) .column_filter option:selected").text()).toBe(this.columns.at(1).get("name"));
                     expect(this.dialog.$(".filter_options li:eq(0) select.comparator option:selected").val()).toBe("equal");
@@ -167,7 +170,7 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("renders the correct number of filters when adding", function() {
-                    expect(this.dialog.$(".filter_options li").length).toBe(4);
+                    expect(this.dialog.$(".filter_options li").length).toBe(6);
                 });
 
                 itRespondsToFilterUpdates();

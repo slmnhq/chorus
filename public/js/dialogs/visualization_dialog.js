@@ -149,7 +149,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            filterCount: this.filters.length,
+            filterCount: this.effectiveFilterLength(),
             chartType: t("dataset.visualization.names." + this.type),
             workspaceId: this.task.get("workspaceId"),
             hasChart: !!this.chart,
@@ -172,6 +172,10 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.$("a.show_options").removeClass("hidden");
         this.$("a.hide_options").addClass("hidden");
         this.$(".filter_options").addClass("hidden");
+    },
+
+    effectiveFilterLength: function(){
+        return _.compact(_.map(this.filters.models, function(model) {return model.isComplete(); })).length;
     },
 
     filtersChanged: function() {

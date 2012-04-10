@@ -1,4 +1,6 @@
 chorus.models.TabularDataFilter = chorus.models.Base.extend({
+    constructorName: "TabularDataFilter",
+
     setColumn: function(column) {
         if (!this.get("column") || (this.get("column").cid !== column.cid)) {
             this.set({column: column});
@@ -49,5 +51,12 @@ chorus.models.TabularDataFilter = chorus.models.Base.extend({
         var inputValue = this.get("input") && this.get("input").value;
 
         return this.getFilterMap().comparators[comparatorName].generate(columnName, inputValue);
+    },
+
+    isComplete: function() {
+        if (this.getFilterMap().comparators[this.get('comparator')].usesInput){
+            return !!(this.get("input") && this.get("input").value);
+        }
+        return true;
     }
 });
