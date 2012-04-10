@@ -54,9 +54,8 @@ chorus.models.TabularDataFilter = chorus.models.Base.extend({
     },
 
     isComplete: function() {
-        if (this.getFilterMap().comparators[this.get('comparator')].usesInput){
-            return !!(this.get("input") && this.get("input").value);
-        }
-        return true;
+        var usesInput = this.getFilterMap().comparators[this.get('comparator')].usesInput;
+        var input = this.get("input") && this.get("input").value;
+        return !!(!usesInput || input);
     }
 });
