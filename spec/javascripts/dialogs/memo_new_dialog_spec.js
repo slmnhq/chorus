@@ -276,8 +276,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             describe("when datasets are selected", function() {
                 beforeEach(function() {
                     this.datasets = [
-                        fixtures.datasetSandboxTable({objectName: 'table1', id: '1'}),
-                        fixtures.datasetSandboxTable({objectName: 'table2', id: '2'})
+                        newFixtures.datasetSandboxTable({objectName: 'table1', id: '1'}),
+                        newFixtures.datasetSandboxTable({objectName: 'table2', id: '2'})
                     ];
                     this.datasetsDialog = chorus.dialogs.DatasetsAttach.prototype.render.mostRecentCall.object;
                     this.datasetsDialog.trigger("datasets:selected", this.datasets);

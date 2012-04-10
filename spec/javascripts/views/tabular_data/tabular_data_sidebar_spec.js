@@ -222,7 +222,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the dataset is a sandbox table or view", function() {
                     beforeEach(function() {
-                        this.dataset = fixtures.datasetSandboxTable({ importInfo: null });
+                        this.dataset = newFixtures.datasetSandboxTable();
                         this.view.options.workspace = newFixtures.workspace({ permission: ["update"] })
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });

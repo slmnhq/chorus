@@ -7,8 +7,8 @@ describe("chorus.dialogs.DatasetImport", function() {
         this.launchElement = $('<button data-workspace-id="242">Import File</button>');
         this.launchElement.data("canonicalName", "FooBar");
         this.validDatasets = [
-            fixtures.datasetSandboxTable({objectName: "table_a", workspace: {id: 242}}),
-            fixtures.datasetSandboxTable({objectName: "table_b", workspace: {id: 243}})
+            newFixtures.datasetSandboxTable({objectName: "table_a", workspace: {id: 242}}),
+            newFixtures.datasetSandboxTable({objectName: "table_b", workspace: {id: 243}})
         ];
         this.invalidDatasets = [
             fixtures.datasetExternalTable(),

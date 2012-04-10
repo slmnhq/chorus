@@ -19,7 +19,7 @@ describe("chorus.presenters.Artifact", function() {
 
     describe("name", function() {
         it("uses objectName if available", function() {
-            var model = fixtures.datasetSandboxTable();
+            var model = newFixtures.datasetSandboxTable();
             var presenter = new chorus.presenters.Artifact(model);
             expect(presenter.name).toBe(model.get('objectName'));
         })
