@@ -3,7 +3,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
         beforeEach(function() {
             stubDelay();
             spyOn(chorus.dialogs.NotesNew.prototype, "modelSaved").andCallThrough();
-            this.launchElement = $("<a data-entity-type='databaseObject' data-allow-workspace-attachments='true' data-entity-id='1' data-workspace-id='22'></a>");
+            this.launchElement = $("<a data-entity-type='databaseObject' data-allow-workspace-attachments='true' data-entity-id='1' data-workspace-id='22' data-entity-name='my dataset'></a>");
             this.dialog = new chorus.dialogs.VisualizationNotesNew({
                 launchElement: this.launchElement,
                 pageModel: fixtures.datasetSandboxTable({datasetId: "abc|123"}),
@@ -60,10 +60,24 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
                 expect(this.server.lastCreate().params()).toEqual({ fileName : 'hello-frequency.png', svgData : '<svg/>' });
             });
 
-            it("refreshes the dataset's activity stream after the v11n attachment has been saved", function() {
-                this.server.lastCreate().succeed();
-                expect(this.dialog.pageModel.activities()).toHaveBeenFetched();
+            describe("after the v11n attachment has been saved", function() {
+                beforeEach(function() {
+                    spyOn(chorus, "toast");
+                    this.server.lastCreate().succeed();
+                });
+
+                it("refreshes the dataset's activity stream after the v11n attachment has been saved", function() {
+                    this.server.lastCreate().succeed();
+                    expect(this.dialog.pageModel.activities()).toHaveBeenFetched();
+                });
+
+                it("pops toast", function() {
+                    expect(chorus.toast).toHaveBeenCalledWith("dataset.visualization.toast.note_from_chart", {
+                        datasetName: 'my dataset'
+                    });
+                });
             });
+
         });
     });
 });

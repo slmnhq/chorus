@@ -241,6 +241,7 @@ describe("chorus.dialogs.Visualization", function() {
 
                 it("should have a 'Save Chart Image as attachment' link", function() {
                     expect(this.qtip.find("a.save_as_note")).toContainTranslation("visualization.save_as_note");
+                    expect(this.qtip.find("a.save_as_note")).toHaveData("entity-name", this.dataset.get("objectName"))
                 });
 
                 it("should have a 'Save Chart Image to Desktop' link", function() {

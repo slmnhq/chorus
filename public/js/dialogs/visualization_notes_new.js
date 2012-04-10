@@ -43,9 +43,14 @@ chorus.dialogs.VisualizationNotesNew = chorus.dialogs.NotesNew.extend({
              // weirdly, the note knows how to generate urls for its attachments;
             return note.url({isFile: true});
         };
-        svgFile.bind("saved", function() { this.pageModel.activities().fetch(); }, this);
+        svgFile.bind("saved", this.svgSaved, this);
         svgFile.save();
 
         this._super("modelSaved");
+    },
+
+    svgSaved: function() {
+        this.pageModel.activities().fetch();
+        chorus.toast("dataset.visualization.toast.note_from_chart", {datasetName: this.options.launchElement.data("entity-name") });
     }
 });

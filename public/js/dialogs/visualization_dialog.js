@@ -153,7 +153,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             chartType: t("dataset.visualization.names." + this.type),
             workspaceId: this.task.get("workspaceId"),
             hasChart: !!this.chart,
-            hasWorkspace: !!this.task.get("workspaceId")
+            hasWorkspace: !!this.task.get("workspaceId"),
+            entityName: this.model.get("objectName")
         }
     },
 
