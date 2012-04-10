@@ -32,6 +32,10 @@ describe("chorus.dialogs.SqlPreview", function() {
             expect(CodeMirror.fromTextArea.mostRecentCall.args[0]).toBe(textarea[0]);
         });
 
+        it("hides the data preview area", function() {
+            expect(this.dialog.$(".results_console")).toHaveClass("hidden")
+        });
+
         describe("preview bar", function() {
             it("has a link to 'Data Preview'", function() {
                 expect(this.dialog.$("button.preview")).toExist();
@@ -56,6 +60,10 @@ describe("chorus.dialogs.SqlPreview", function() {
                         expect(this.dialog.$(".result_table")).not.toHaveClass("hidden")
                     });
 
+                    it("hides the preview button", function() {
+                        expect(this.dialog.$("button.preview")).toHaveClass("hidden");
+                    });
+
                     describe("closing the Data Preview", function() {
                         beforeEach(function() {
                             this.dialog.$(".results_console .close").click()
@@ -63,6 +71,10 @@ describe("chorus.dialogs.SqlPreview", function() {
 
                         it("does not show the Data Preview any longer", function() {
                             expect(this.dialog.$(".results_console")).toHaveClass("hidden");
+                        });
+
+                        it("shows the preview button", function() {
+                            expect(this.dialog.$("button.preview")).not.toHaveClass("hidden");
                         });
 
                         describe("clicking on the data preview again", function() {

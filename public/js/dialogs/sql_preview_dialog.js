@@ -41,15 +41,18 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
             this.editor.refresh();
             this.setupScrolling(this.$(".container"));
         }, this));
+        this.hidePreviewData();
     },
 
     hidePreviewData: function() {
         this.$(".results_console").addClass("hidden");
+        this.$("button.preview").removeClass("hidden")
     },
 
     previewData: function(e) {
         e && e.preventDefault();
         this.$(".results_console").removeClass("hidden");
+        this.$("button.preview").addClass("hidden");
         var preview = this.model.preview().set({query: this.sql()}, {silent: true});
         this.resultsConsole.execute(preview);
     },
