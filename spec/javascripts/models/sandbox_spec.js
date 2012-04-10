@@ -1,6 +1,6 @@
 describe("chorus.models.Sandbox", function() {
     beforeEach(function() {
-        this.model = fixtures.sandbox();
+        this.model = newFixtures.sandbox();
     });
 
     describe("#url", function() {

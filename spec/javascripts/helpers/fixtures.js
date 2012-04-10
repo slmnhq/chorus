@@ -1811,26 +1811,6 @@ beforeEach(function() {
             });
         },
 
-        sandbox: function(overrides) {
-            var databaseId = this.nextId().toString();
-            var instanceId = this.nextId().toString();
-            var schemaId = this.nextId().toString();
-            var attributes = _.extend({
-                id: this.nextId().toString(),
-                databaseId: databaseId,
-                databaseName: "database" + databaseId,
-                instanceId: instanceId,
-                instanceName: "instance" + instanceId,
-                instanceStatus: "online",
-                schemaId: schemaId,
-                schemaName: "schema" + schemaId,
-                status: "ok",
-                type: "000",
-                workspaceId: this.nextId().toString()
-            }, overrides);
-            return new chorus.models.Sandbox(attributes);
-        },
-
         tabularDataJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({

@@ -30,7 +30,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             object0.cid = 'c44';
             object1.cid = 'c55';
 
-            this.schema = fixtures.sandbox({ schemaName: "righteous_tables" }).schema();
+            this.schema = newFixtures.sandbox({ schemaName: "righteous_tables" }).schema();
             this.collection = new chorus.collections.Base([object0, object1]);
 
             spyOn(this.collection.models[0], 'toText').andReturn('object1');

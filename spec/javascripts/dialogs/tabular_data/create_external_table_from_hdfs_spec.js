@@ -2,7 +2,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
     beforeEach(function() {
         setLoggedInUser({id: '54321'});
         chorus.page = {};
-        this.sandbox = fixtures.sandbox({
+        this.sandbox = newFixtures.sandbox({
             schemaName: "mySchema",
             databaseName: "myDatabase",
             instanceName: "myInstance"

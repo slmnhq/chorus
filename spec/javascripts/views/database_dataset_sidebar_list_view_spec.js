@@ -1,7 +1,7 @@
 describe("chorus.views.DatabaseDatasetSidebarList", function() {
     beforeEach(function() {
         chorus.page = { workspace: newFixtures.workspace() };
-        var sandbox = fixtures.sandbox();
+        var sandbox = newFixtures.sandbox();
         this.schema = sandbox.schema();
         this.modalSpy = stubModals();
         this.view = new chorus.views.DatabaseDatasetSidebarList({schema: this.schema});

@@ -13,7 +13,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: fixtures.sandbox() });
+            this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: newFixtures.sandbox() });
             this.view.render();
         });
 
