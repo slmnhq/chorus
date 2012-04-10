@@ -61,7 +61,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             this.validateColumns();
         }
 
-        _.each(this.$(".column_mapping .map"), function(map, i) {
+        _.each(this.$(".column_mapping .map a"), function(map, i) {
             var menuContent = this.$(".menu_content ul").clone();
             this.destinationMenus[i] = menuContent;
             chorus.menu($(map), {
@@ -91,7 +91,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     destinationColumnSelected: function(e, api) {
         e.preventDefault();
         var destinationColumnLinks = this.$(".column_mapping .map a");
-        var qtipLaunchLink = api.elements.target.find("a");
+        var qtipLaunchLink = api.elements.target;
         var selectedColumnName = $(e.target).attr("title");
         var selectedColumnIndex = destinationColumnLinks.index(qtipLaunchLink);
         this.destinationColumns[selectedColumnIndex] = selectedColumnName;
@@ -126,11 +126,9 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             var columnName = this.destinationColumns[i];
             var frequency = frequencies[columnName];
 
-            launchLink.text(columnName || t("dataset.import.table.existing.select_one"));
+            launchLink.find(".column_name").text(columnName || t("dataset.import.table.existing.select_one"));
             launchLink.toggleClass("selected", (frequency === 1));
             launchLink.toggleClass("selection_conflict", (frequency != 1));
-            launchLink.next(".arrow").toggleClass("selected", (frequency === 1));
-            launchLink.next(".arrow").toggleClass("selection_conflict", (frequency != 1));
         }, this);
     },
 

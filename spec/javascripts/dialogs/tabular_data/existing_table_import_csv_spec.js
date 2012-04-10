@@ -250,7 +250,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 expect($(el).text()).toContainTranslation("dataset.import.table.existing.map_to");
                 expect($(el).find("a").text()).toContainTranslation("dataset.import.table.existing.select_one");
                 expect($(el).find("a")).toHaveClass("selection_conflict");
-                expect($(el).find(".arrow")).toHaveClass("selection_conflict");
             });
         })
 
@@ -466,7 +465,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             spyOn(this.dialog, "closeModal");
             this.expectedColumnsMap = []
             for (var i = 0; i < 5; i++) {
-                this.dialog.$(".column_mapping .map:eq(" + i + ")").click();
+                this.dialog.$(".column_mapping .map a:eq(" + i + ")").click();
                 this.qtip.find(".qtip:last .ui-tooltip-content li:eq(" + (i) + ") a").click();
                 this.expectedColumnsMap.push({sourceOrder: (i + 1), targetOrder: this.columns[i].ordinalPosition})
             }
