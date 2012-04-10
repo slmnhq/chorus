@@ -113,7 +113,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
                                 schemaName: "harry_the_schema"
                             });
 
-                            this.view.trigger("datasetSelected", table1);
+                            chorus.PageEvents.broadcast("datasetSelected", table1);
 
                             this.server.completeFetchAllFor(table1.columns(), [
                                 fixtures.databaseColumn({name: "column_a"}),
@@ -128,7 +128,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
 
                         describe("when switching back to the first dataset", function() {
                             beforeEach(function() {
-                                this.view.trigger("datasetSelected", this.table);
+                                chorus.PageEvents.broadcast("datasetSelected", this.table);
                                 this.server.completeFetchAllFor(this.table.columns(), [
                                     fixtures.databaseColumn({name: "column_1"}),
                                     fixtures.databaseColumn({name: "column_2"})
