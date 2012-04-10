@@ -1,5 +1,6 @@
 describe("chorus.views.WorkfileShowSidebar", function() {
     beforeEach(function() {
+        chorus.page = { workspace: newFixtures.workspace() };
         this.workfile = fixtures.textWorkfile();
         this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
     });

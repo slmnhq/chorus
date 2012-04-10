@@ -17,5 +17,15 @@ window.fixtureDefinitions = {
     userSet: {
         collection: "UserSet",
         unique: [ "id" ]
+    },
+
+    schema: {
+        model: "Schema",
+        unique: [ "id", "instance.id"]
+    },
+
+    schemaSet: {
+        collection: "SchemaSet",
+        unique: ["id"]
     }
 };

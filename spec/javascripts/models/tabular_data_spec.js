@@ -447,6 +447,28 @@ describe("chorus.models.TabularData", function() {
         });
     });
 
+    describe("#toText", function() {
+        context("with lowercase names", function() {
+            beforeEach(function() {
+                this.tabularData.set({objectName: "tabler", schemaName: "party_schema" })
+            });
+
+            it("formats the string to put into the sql editor", function() {
+                expect(this.tabularData.toText()).toBe('party_schema.tabler');
+            });
+        });
+
+        context("with uppercase names", function() {
+            beforeEach(function() {
+                this.tabularData.set({objectName: "Tabler", schemaName: "PartyMAN"});
+            });
+
+            it("puts quotes around the uppercase names", function() {
+                expect(this.tabularData.toText()).toBe('"PartyMAN"."Tabler"');
+            });
+        });
+    });
+
     describe("#selectName", function() {
         context("when a datasetNumber is not set", function() {
             it("returns the quotedName", function() {

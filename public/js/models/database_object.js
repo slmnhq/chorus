@@ -18,10 +18,6 @@ chorus.models.DatabaseObject = chorus.models.TabularData.extend({
         }
     },
 
-    toText: function() {
-        return this.safePGName(this.get("schemaName")) + '.' + this.safePGName(this.get("objectName"));
-    },
-
     isChorusView: function() {
         return false;
     }

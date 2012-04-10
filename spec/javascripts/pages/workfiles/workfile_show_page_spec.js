@@ -1,5 +1,6 @@
 describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
+        chorus.page = { workspace: newFixtures.workspace() };
         this.workspaceId = 4;
         this.workfileId = 5;
         this.workspace = newFixtures.workspace({id: this.workspaceId});

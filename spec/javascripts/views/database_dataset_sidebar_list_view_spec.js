@@ -1,10 +1,12 @@
 describe("chorus.views.DatabaseDatasetSidebarList", function() {
     beforeEach(function() {
+        chorus.page = { workspace: newFixtures.workspace() };
         var sandbox = fixtures.sandbox();
         this.schema = sandbox.schema();
         this.modalSpy = stubModals();
         this.view = new chorus.views.DatabaseDatasetSidebarList({schema: this.schema});
         stubDefer();
+        this.schemaMenuQtip = stubQtip(".context a");
     });
 
     describe("when a schema is selected (which calls #fetchResourceAfterSchemaSelected)", function() {
@@ -34,6 +36,53 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
     });
 
     describe("#render", function() {
+        describe("the schema drop-down menu", function() {
+            var datasetSet
+            beforeEach(function() {
+                datasetSet = new chorus.collections.DatasetSet([fixtures.datasetChorusView(), fixtures.datasetSourceTable()]);
+                this.server.completeFetchFor(this.view.workspaceDatasets, datasetSet.models);
+                this.server.completeFetchFor(this.view.schemas, newFixtures.schemaSetJson());
+                this.schema.databaseObjects().loaded = true;
+                this.view.render();
+                this.view.$(".context a").click();
+            });
+
+            it("shows 'this workspace' as the default schema in the top position", function() {
+                expect(this.schemaMenuQtip.$("a:eq(0)")).toContainTranslation("database.sidebar.this_workspace");
+            });
+
+            it("shows all the schemas it fetched", function() {
+                this.view.schemas.each(function(schema, i) {
+                    expect(this.schemaMenuQtip.$("a").eq(i)).toContainText(schema.get('name'));
+                }, this)
+            });
+
+            describe("clicking on 'this workspace'", function() {
+                beforeEach(function() {
+                    this.schemaMenuQtip.$("a:eq(0)").click();
+                });
+
+                it("shows items associated with the workspace in the sidebar", function() {
+                    datasetSet.each(function(dataset, i) {
+                         expect(this.view.$("li").eq(i)).toContainText(dataset.get('objectName'));
+                    }, this);
+                });
+
+                describe("clicking on a dataset item", function () {
+                    beforeEach(function() {
+                        this.spy = spyOnEvent(this.view, "datasetSelected");
+
+                        this.view.$("li a").eq(0).click();
+                    });
+
+                    it("triggers a 'datasetSelected' event on itself, with the view", function() {
+                        var clickedDataset = this.view.collection.findWhere({objectName: datasetSet.at(0).get("objectName")});
+                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [clickedDataset]);
+                    });
+                });
+            });
+        });
+
         context("when there's no schema associated", function() {
             beforeEach(function() {
                 this.view.schema = null;
@@ -173,7 +222,9 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
             context("if the tables and views fetch fails", function() {
                 beforeEach(function() {
-                    this.server.lastFetchFor(this.schema.databaseObjects()).fail([{message: "Account map needed"}]);
+                    this.server.lastFetchFor(this.schema.databaseObjects()).fail([
+                        {message: "Account map needed"}
+                    ]);
                     this.view.render();
                 });
 

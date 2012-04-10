@@ -1,5 +1,6 @@
 describe("chorus.views.DatasetAndColumnList", function() {
     beforeEach(function() {
+        chorus.page = { workspace: newFixtures.workspace() };
         this.dataset = fixtures.datasetChorusView();
         this.view = new chorus.views.DatasetAndColumnList({ model: this.dataset.schema() });
         this.view.render();

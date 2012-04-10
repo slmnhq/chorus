@@ -12,6 +12,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                 sandboxId: "99"
             }
         });
+        chorus.page = {workspace: this.workspace};
 
         var sanboxInfo = this.workspace.get("sandboxInfo")
 

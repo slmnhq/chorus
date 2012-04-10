@@ -33,6 +33,19 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
             });
         })
 
+        describe("when rendered with a chorus view", function() {
+            var chorusView;
+            beforeEach(function() {
+                chorusView = fixtures.datasetChorusView({ objectName: "tobias_the_chorus_view" });
+                this.view.trigger("datasetSelected", chorusView);
+                this.server.completeFetchAllFor(chorusView.columns(), [fixtures.databaseColumn()]);
+            });
+
+            it("renders successfully", function() {
+                expect(this.view.$("li")).toExist();
+            });
+        });
+
         describe("when the 'datasetSelected' event is triggered", function() {
             beforeEach(function() {
                 this.table = fixtures.databaseTable({ objectName: "brian_the_table", schemaName: "john_the_schema" });

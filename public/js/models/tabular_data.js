@@ -169,7 +169,11 @@ chorus.models.TabularData = chorus.models.Base.include(
         quotedName: function() {
             return this.safePGName(this.get("objectName"));
         },
-
+        
+        toText: function() {
+            return this.safePGName(this.get("schemaName")) + '.' + this.safePGName(this.get("objectName"));
+        },
+        
         selectName: function() {
             if (this.aliasedName) {
                 return this.aliasedName;

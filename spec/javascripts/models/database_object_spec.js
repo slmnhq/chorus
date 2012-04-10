@@ -106,27 +106,6 @@ describe("chorus.models.DatabaseObject", function() {
         });
     });
 
-    describe("#toText", function() {
-        context("with lowercase names", function() {
-            beforeEach(function() {
-                this.databaseObject.set({objectName: "tabler", schemaName: "party_schema" })
-            });
-
-            it("formats the string to put into the sql editor", function() {
-                expect(this.databaseObject.toText()).toBe('party_schema.tabler');
-            });
-        });
-
-        context("with uppercase names", function() {
-            beforeEach(function() {
-                this.databaseObject.set({objectName: "Tabler", schemaName: "PartyMAN"});
-            });
-
-            it("puts quotes around the uppercase names", function() {
-                expect(this.databaseObject.toText()).toBe('"PartyMAN"."Tabler"');
-            });
-        });
-    });
 
     describe("#isChorusView", function() {
         it("is always false", function() {

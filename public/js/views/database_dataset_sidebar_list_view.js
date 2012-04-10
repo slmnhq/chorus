@@ -7,6 +7,24 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         "click li a":"datasetSelected"
     },
 
+    setup: function() {
+        this._super("setup", arguments);
+        this.workspaceDatasets = new chorus.collections.DatasetSet([], {workspaceId: chorus.page.workspace.id});
+        this.workspaceDatasets.fetch();
+        this.bindings.add(this.workspaceDatasets, "loaded", this.workspaceDatasetsLoaded);
+    },
+
+    workspaceDatasetsLoaded: function() {
+        this.schemas.onLoaded(this.addThisWorkspace, this);
+    },
+
+    addThisWorkspace: function() {
+        var schema = new chorus.models.Schema({id: "workspaceSchema", name: t("database.sidebar.this_workspace")});
+        schema._databaseObjects = this.workspaceDatasets;
+        this.schemas.add(schema, { at: 0 });
+        this.render();
+    },
+
     fetchResourceAfterSchemaSelected: function() {
         this.resource = this.collection = this.schema.databaseObjects();
         this.collection.fetchAllIfNotLoaded();
