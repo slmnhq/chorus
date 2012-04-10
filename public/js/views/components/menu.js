@@ -3,7 +3,7 @@ chorus.views.Menu = chorus.views.Bare.extend({
     className: "components/menu",
 
     events: {
-        "click li a": "itemClicked"
+        "click li a:not([disabled=disabled])": "itemClicked"
     },
 
     setup: function(options) {
@@ -26,8 +26,10 @@ chorus.views.Menu = chorus.views.Bare.extend({
 
     postRender: function() {
         _.each(this.$("li a"), function(el, index) {
-            $(el).data("menu-data", this.options.items[index].data);
-            $(el).data("menu-callback", this.options.items[index].onSelect);
+            var item = this.options.items[index];
+            $(el).attr("menu-name", item.name);
+            $(el).data("menu-data", item.data);
+            $(el).data("menu-callback", item.onSelect);
         }, this);
     },
 
@@ -55,5 +57,13 @@ chorus.views.Menu = chorus.views.Bare.extend({
         return {
             items: this.options.items
         }
+    },
+
+    disableItem: function(name) {
+        this.$("li a[menu-name='" + name + "']").attr("disabled", "disabled");
+    },
+
+    enableItem: function(name) {
+        this.$("li a[menu-name='" + name + "']").attr("disabled", false);
     }
 });
