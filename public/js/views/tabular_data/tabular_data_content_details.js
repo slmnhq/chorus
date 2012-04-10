@@ -11,7 +11,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
     events: {
         "click .preview": "dataPreview",
         "click .create_chart .cancel": "cancelVisualization",
-        "click .create_chorus_view .cancel": "cancelChorusView",
+        "click .create_chorus_view .cancel": "cancelCreateChorusView",
         "click .edit_chorus_view .cancel": "cancelEditChorusView",
         "click .edit_chorus_view .save": "saveChorusView",
         "click .chart_icon": "selectVisualization",
@@ -27,7 +27,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
     },
 
     setup: function() {
-        chorus.PageEvents.subscribe("action:closePreview", this.closeDataPreview, this);
+        this.closePreviewHandle = chorus.PageEvents.subscribe("action:closePreview", this.closeDataPreview, this);
 
         this.tabularData = this.options.tabularData;
         this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true});
@@ -130,10 +130,12 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
         this.filterWizardView.options.showAliasedName = true;
         this.filterWizardView.resetFilters();
 
+        chorus.PageEvents.unsubscribe(this.closePreviewHandle);
+
         this.$(".chorus_view_info input.search").trigger("textchange");
     },
 
-    cancelChorusView: function(e) {
+    cancelCreateChorusView: function(e) {
         e.preventDefault();
         chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
         this.$('.definition').removeClass("hidden")
@@ -143,6 +145,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
         this.$('.chorus_view_info').addClass('hidden');
 
         this.$(".column_count input.search").trigger("textchange");
+        this.closePreviewHandle = chorus.PageEvents.subscribe("action:closePreview", this.closeDataPreview, this);
     },
 
     startEditChorusViewWizard: function() {

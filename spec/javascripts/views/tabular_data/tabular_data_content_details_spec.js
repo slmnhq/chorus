@@ -352,7 +352,11 @@ describe("chorus.views.TabularDataContentDetails", function() {
                     spyOnEvent(".chorus_view_info input.search", "textchange");
 
                     this.view.$('button.derive').click();
-                })
+                });
+
+                it("unsubscribes from the action:closePreview broadcast", function() {
+                    expect(chorus.PageEvents.hasSubscription("action:closePreview", this.view.closeDataPreview, this.view)).toBeFalsy();
+                });
 
                 it("swap the green definition bar to Create Bar", function() {
                     expect(this.view.$(".create_chorus_view")).not.toHaveClass("hidden");
@@ -436,6 +440,10 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         this.view.$(".create_chorus_view .cancel").click();
                     });
 
+                    it("subscribes to the action:closePreview broadcast", function() {
+                        expect(chorus.PageEvents.hasSubscription("action:closePreview", this.view.closeDataPreview, this.view)).toBeTruthy();
+                    });
+
                     it("swap the Create Bar to green definition bar", function() {
                         expect(this.view.$(".create_chorus_view")).toHaveClass("hidden");
                         expect(this.view.$(".definition")).not.toHaveClass("hidden");
@@ -457,7 +465,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
                     it("triggers 'cancel:sidebar'", function() {
                         expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
-                    })
+                    });
                 });
             })
 
