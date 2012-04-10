@@ -40,6 +40,7 @@ chorus.views.Menu = chorus.views.Bare.extend({
 
         options.launchElement.on("click", function(e) { e.preventDefault(); });
         options.launchElement.qtip(args);
+        this.qtip = options.launchElement.data("qtip");
         this.render();
     },
 
@@ -47,12 +48,15 @@ chorus.views.Menu = chorus.views.Bare.extend({
         _.each(this.$("li a"), function(el, i) {
             $(el).attr("data-menu-name", this.options.items[i].name);
         }, this);
+
+        $(this.el).addClass(this.options.additionalClass);
     },
 
     itemClicked: function(e) {
         e.preventDefault();
         var itemName = $(e.currentTarget).attr("data-menu-name");
         this.selectItem(itemName);
+        this.qtip.hide()
     },
 
     context: function() {

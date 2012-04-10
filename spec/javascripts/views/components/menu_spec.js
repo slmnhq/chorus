@@ -45,6 +45,11 @@ describe("chorus.views.Menu", function() {
         it("prevents the click from causing a navigation", function() {
             expect(jQuery.Event.prototype.preventDefault).toHaveBeenCalled();
         });
+
+        it("hides the menu when an item is clicked", function() {
+            menu.$("li:eq(1) a").click();
+            expect(menuContainer).not.toHaveVisibleQtip();
+        });
     });
 
     describe("the menu content", function() {
@@ -60,58 +65,60 @@ describe("chorus.views.Menu", function() {
             expect(lis.eq(2)).toContainText("option 3");
         });
 
-        describe("when an item is clicked", function() {
-            beforeEach(function() {
-                menu.$("li:eq(1) a").click();
+        describe("clicking an item", function() {
+
+            context("when the item has an 'onSelect' handler", function() {
+                it("calls that handler with the item's data", function() {
+                    menu.$("li:eq(1) a").click();
+                    expect(onSelectSpies[1]).toHaveBeenCalledWith(models[1]);
+                });
             });
 
-            it("calls the item's 'onSelect' handler with the item's data", function() {
-                expect(onSelectSpies[1]).toHaveBeenCalledWith(models[1]);
-            });
-
-            it("calls the menu's 'onChange' handler with that item's data", function() {
-                expect(onChangeSpy).toHaveBeenCalledWith(models[1]);
-            });
-
-            it("does not throw an error when the menu has no 'onChange' handler", function() {
-                delete menu.options.onChange;
-
-                expect(function() {
+            context("when the item does not have an 'onSelect' handler", function() {
+                it("only calls the menu's 'onChange' handler", function() {
                     menu.$("li:eq(2) a").click();
-                }).not.toThrow();
-            });
-        });
-
-        describe("when an item without a callback is clicked", function() {
-            beforeEach(function() {
-                menu.$("li:eq(2) a").click();
+                    expect(onChangeSpy).toHaveBeenCalledWith(models[2]);
+                    expect(onSelectSpies[0]).not.toHaveBeenCalled();
+                    expect(onSelectSpies[1]).not.toHaveBeenCalled();
+                });
             });
 
-            it("only calls the menu's 'onChange' handler", function() {
-                expect(onChangeSpy).toHaveBeenCalledWith(models[2]);
-                expect(onSelectSpies[0]).not.toHaveBeenCalled();
-                expect(onSelectSpies[1]).not.toHaveBeenCalled();
-            });
-        });
-
-        describe("checking a menu item", function() {
-            beforeEach(function() {
-                menu.options.checkable = true;
-                menu.render();
-            });
-
-            it("renders a hidden check next to each li", function() {
-                expect(menu.$("li .check").length).toBe(3);
-                expect(menu.$("li .check")).toBeHidden();
-            });
-
-            context("when an item is clicked", function() {
-                it("selects that item", function() {
+            context("when the menu has an 'onChange' handler", function() {
+                it("calls that handler with that item's data", function() {
                     menu.$("li:eq(1) a").click();
-                    expectSelectedItem(1);
+                    expect(onChangeSpy).toHaveBeenCalledWith(models[1]);
+                });
+            });
 
-                    menu.$("li:eq(1) a").click();
-                    expectSelectedItem(1);
+            context("when the menu has no 'onChange' handler", function() {
+                it("does not throw an error", function() {
+                    delete menu.options.onChange;
+
+                    expect(function() {
+                        menu.$("li:eq(2) a").click();
+                    }).not.toThrow();
+                });
+            });
+
+            context("when the menu is 'checkable'", function() {
+                beforeEach(function() {
+                    menu.options.checkable = true;
+                    menu.render();
+                });
+
+                it("renders a hidden check next to each li", function() {
+                    expect(menu.$("li .check").length).toBe(3);
+                    expect(menu.$("li .check")).toBeHidden();
+                });
+
+                context("when an item is clicked", function() {
+                    it("selects that item", function() {
+                        menu.$("li:eq(1) a").click();
+                        expectSelectedItem(1);
+
+                        menu.$("li:eq(1) a").click();
+                        expectSelectedItem(1);
+                    });
                 });
             });
         });
@@ -150,6 +157,26 @@ describe("chorus.views.Menu", function() {
 
                 menu.selectItem("three");
                 expectSelectedItem(2);
+            });
+        });
+
+        context("when an additional class is specified", function() {
+            beforeEach(function() {
+                menu = new chorus.views.Menu({
+                    launchElement: launchElement,
+                    items: [
+                        { name: "one",   text: "option 1", data: models[0], onSelect: onSelectSpies[0] },
+                        { name: "two",   text: "option 2", data: models[1], onSelect: onSelectSpies[1] },
+                        { name: "three", text: "option 3", data: models[2] }
+                    ],
+                    onChange: onChangeSpy,
+                    checkable: true,
+                    additionalClass: "foo"
+                });
+            });
+
+            it("adds that class to the menu", function() {
+                expect($(menu.el)).toHaveClass("foo");
             });
         });
 
