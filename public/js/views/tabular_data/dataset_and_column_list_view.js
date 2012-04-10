@@ -10,8 +10,7 @@ chorus.views.DatasetAndColumnList = chorus.views.Base.extend({
         this.datasetList = new chorus.views.DatabaseDatasetSidebarList({ schema: this.model });
         this.columnList = new chorus.views.DatabaseColumnSidebarList({ schema: this.model });
 
-        this.datasetList.bind("datasetSelected", function(tableOrView) {
-            this.columnList.trigger("datasetSelected", tableOrView);
+        chorus.PageEvents.subscribe("datasetSelected", function(tableOrView) {
             this.$(".database_column_list").removeClass("hidden");
             this.$(".database_dataset_list").addClass("hidden");
         }, this);

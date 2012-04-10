@@ -38,7 +38,8 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
             name = li.data("name").toString();
 
         var dataset = this.collection.findWhere({ type:type, objectName: name });
-        this.trigger("datasetSelected", dataset);
+
+        chorus.PageEvents.broadcast("datasetSelected", dataset);
     },
 
     additionalContext:function () {

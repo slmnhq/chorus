@@ -1,5 +1,6 @@
 describe("chorus.views.WorkfileShowSidebar", function() {
     beforeEach(function() {
+        spyOn(chorus.views.Sidebar.prototype, "jumpToTop");
         chorus.page = { workspace: newFixtures.workspace() };
         this.workfile = fixtures.textWorkfile();
         this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
@@ -68,6 +69,16 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
         it("renders selected version", function() {
             expect(this.view.$(".chosen").text()).toMatchTranslation("workfile.version_title", {versionNum: this.view.model.get("versionInfo").versionNum})
+        })
+
+        context("when a dataset is selected", function() {
+            beforeEach(function() {
+                var sandboxTable = fixtures.datasetSandboxTable();
+                chorus.PageEvents.broadcast("datasetSelected", sandboxTable);
+            });
+            it("should scroll to the top", function() {
+                expect(this.view.jumpToTop).toHaveBeenCalled();
+            });
         })
     });
 

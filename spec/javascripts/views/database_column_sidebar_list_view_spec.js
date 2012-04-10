@@ -24,7 +24,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
         describe("when rendered with a databaseView", function() {
             beforeEach(function() {
                 this.databaseView = fixtures.databaseView({ objectName: "brian_the_view", schemaName: "john_the_schema" });
-                this.view.trigger("datasetSelected", this.databaseView);
+                chorus.PageEvents.broadcast("datasetSelected", this.databaseView);
                 this.server.completeFetchAllFor(this.databaseView.columns(), [fixtures.databaseColumn()]);
             });
 
@@ -37,7 +37,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
             var chorusView;
             beforeEach(function() {
                 chorusView = fixtures.datasetChorusView({ objectName: "tobias_the_chorus_view" });
-                this.view.trigger("datasetSelected", chorusView);
+                chorus.PageEvents.broadcast("datasetSelected", chorusView);
                 this.server.completeFetchAllFor(chorusView.columns(), [fixtures.databaseColumn()]);
             });
 
@@ -46,10 +46,10 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
             });
         });
 
-        describe("when the 'datasetSelected' event is triggered", function() {
+        describe("when the 'datasetSelected' event is broadcast", function() {
             beforeEach(function() {
                 this.table = fixtures.databaseTable({ objectName: "brian_the_table", schemaName: "john_the_schema" });
-                this.view.trigger("datasetSelected", this.table);
+                chorus.PageEvents.broadcast("datasetSelected", this.table);
             });
 
             it("should fetch the columns for the table", function() {
