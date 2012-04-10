@@ -80,7 +80,7 @@
                 margin-right: 5px;
                 vertical-align: middle;
             }
-            
+
             .sql_content {
                 @include ellipsis;
                 display: inline-block;
@@ -204,6 +204,10 @@
         .select {
             @include font-normal-alpha;
         }
+    }
+
+    .info_bar {
+        border-bottom:1px solid $menu-border-color;
     }
 
     .edit_chorus_view_info {

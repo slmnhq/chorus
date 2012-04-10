@@ -14,7 +14,7 @@
     .labels {
         line-height: 12px;
         display: inline-block;
-        width: 250px;
+        width: 225px;
         .label{
             display: inline-block;
         }
@@ -30,7 +30,7 @@
 
     select, .ui-selectmenu {
         display: block;
-        width: 250px;
+        width: 225px;
         margin-bottom: 10px;
         margin-right: 0;
     }
@@ -39,7 +39,7 @@
         display: inline-block;
         position: absolute;
         top: 47px;
-        left: 570px;
+        left: 520px;
     }
     button.create, button.cancel {
     /* need to override the content-details style*/
