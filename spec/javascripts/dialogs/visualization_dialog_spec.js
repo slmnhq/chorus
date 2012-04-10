@@ -61,6 +61,19 @@ describe("chorus.dialogs.Visualization", function() {
                     expect(this.dialog.$("a.show_options")).toContainTranslation("visualization.show_options", {count: 2});
                 });
 
+                describe("there's only 1 filter", function() {
+                    beforeEach(function() {
+                        var filter1 = new chorus.models.TabularDataFilter({column: this.columns.at(0), comparator: "equal", input: {value: "original_filter_value_a"}});
+                        var filters = new chorus.collections.TabularDataFilterSet([filter1]);
+                        this.dialog.filters = filters;
+                        this.dialog.onExecutionComplete();
+                    });
+
+                    it("shows the singular form of 'filter', not 'filters'", function() {
+                        expect(this.dialog.$("a.show_options")).toContainTranslation("visualization.show_options.one", {count: 1});
+                    });
+                });
+
                 it("clones the filters", function() {
                     expect(this.dialog.filters).not.toBe(this.filters);
                     expect(this.filters.clone).toHaveBeenCalled();
