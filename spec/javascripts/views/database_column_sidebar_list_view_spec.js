@@ -105,6 +105,41 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
                             expect("back").toHaveBeenTriggeredOn(this.view);
                         });
                     });
+
+                    describe("when switching to another dataset", function() {
+                        beforeEach(function() {
+                            var table1 = fixtures.databaseTable({
+                                objectName: "jack_the_table",
+                                schemaName: "harry_the_schema"
+                            });
+
+                            this.view.trigger("datasetSelected", table1);
+
+                            this.server.completeFetchAllFor(table1.columns(), [
+                                fixtures.databaseColumn({name: "column_a"}),
+                                fixtures.databaseColumn({name: "column_b"}),
+                                fixtures.databaseColumn({name: "column_c"})
+                            ]);
+                        });
+
+                        it("re-fetches the correct columns", function() {
+                            expect(this.view.$("li").length).toBe(3);
+                        });
+
+                        describe("when switching back to the first dataset", function() {
+                            beforeEach(function() {
+                                this.view.trigger("datasetSelected", this.table);
+                                this.server.completeFetchAllFor(this.table.columns(), [
+                                    fixtures.databaseColumn({name: "column_1"}),
+                                    fixtures.databaseColumn({name: "column_2"})
+                                ]);
+                            });
+
+                            it("has the correct columns", function() {
+                                expect(this.view.$("li").length).toBe(2);
+                            });
+                        });
+                    });
                 });
             });
         });
