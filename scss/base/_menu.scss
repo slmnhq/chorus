@@ -1,5 +1,20 @@
 @import "../_common.scss";
 
+.components_menu {
+    .check {
+        width: 10px;
+        height: 10px;
+        background: blue;
+        display: none;
+    }
+
+    li.selected {
+        .check {
+            display: inline-block;
+        }
+    }
+}
+
 .menu {
     display: inline;
     position: absolute;
@@ -64,7 +79,7 @@
         padding: 9px 7px 9px 2px;
         z-index : $link-menu-z-index;
         line-height: 16px;
-        
+
         .pointer {
             left: 100px;
         }
