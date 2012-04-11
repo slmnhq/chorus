@@ -36,10 +36,7 @@
     }
 
     .button_wrapper {
-        display: inline-block;
-        position: absolute;
-        top: 47px;
-        left: 520px;
+        display: block;
     }
     button.create, button.cancel {
     /* need to override the content-details style*/
@@ -52,6 +49,8 @@
         &.is_loading {
             color: $color-text4;
         }
+        font-size: 16px;
+        font-weight: normal;
     }
 
     .no_columns {
