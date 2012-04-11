@@ -12,7 +12,9 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.PickItems.extend({
 
     makeModel: function() {
         this._super("makeModel", arguments);
-        this.collection = new chorus.collections.DatasetSet([], {workspaceId: this.options.workspaceId});
+        this.collection = new chorus.collections.DatasetSet([], {
+            workspaceId: this.options.workspaceId
+        });
         this.collection.sortAsc("objectName");
         this.collection.fetch();
     },
@@ -23,4 +25,4 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.PickItems.extend({
             imageUrl: model.iconUrl({size: 'medium'})
         }
     }
-})
+});

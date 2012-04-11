@@ -1,6 +1,9 @@
 describe("chorus.dialogs.PickItems", function() {
     beforeEach(function() {
         stubDefer();
+        spyOn(chorus.dialogs.PickItems.prototype, "selectItem").andCallThrough();
+        spyOn(chorus.dialogs.PickItems.prototype, "doCallback").andCallThrough();
+        spyOn(chorus.dialogs.PickItems.prototype, "submit").andCallThrough();
 
         this.user1 = newFixtures.user({ firstName: "A", lastName: "User" });
         this.user2 = newFixtures.user({ firstName: "B", lastName: "User" });
@@ -105,21 +108,46 @@ describe("chorus.dialogs.PickItems", function() {
             });
 
             context("default selection", function() {
-                beforeEach(function() {
-                    this.selected = new chorus.collections.UserSet([this.user1, this.user2]);
-                    this.dialog = new chorus.dialogs.PickItems({ workspaceId: "33", collection: this.users, defaultSelection: this.selected });
-                    this.dialog.render();
-                });
+                context("when a collection is selected", function() {
+                    beforeEach(function() {
+                        this.selected = new chorus.collections.UserSet([this.user1, this.user2]);
+                        this.dialog = new chorus.dialogs.PickItems({
+                            workspaceId: "33",
+                            collection: this.users,
+                            defaultSelection: this.selected
+                        });
+                        this.dialog.render();
+                    });
+                    it("selects the supplied users by default", function() {
+                        expect(this.dialog.$("li").length).toBe(3);
+                        expect(this.dialog.$("li.selected").length).toBe(2);
+                        expect(this.dialog.$("li:eq(0).selected")).toContainText(this.user1.name());
+                        expect(this.dialog.$("li:eq(1).selected")).toContainText(this.user2.name());
+                    });
 
-                it("selects the supplied users by default", function() {
-                    expect(this.dialog.$("li").length).toBe(3);
-                    expect(this.dialog.$("li.selected").length).toBe(2);
-                    expect(this.dialog.$("li:eq(0).selected")).toContainText(this.user1.name());
-                    expect(this.dialog.$("li:eq(1).selected")).toContainText(this.user2.name());
+                    it("enables the submit button", function() {
+                        expect(this.dialog.$('button.submit')).not.toBeDisabled();
+                    });
                 });
+                context("when a single model is selected", function() {
+                    beforeEach(function() {
+                        this.selected = this.user2;
+                        this.dialog = new chorus.dialogs.PickItems({
+                            workspaceId: "33",
+                            collection: this.users,
+                            defaultSelection: this.selected
+                        });
+                        this.dialog.render();
+                    });
+                    it("selects the supplied users by default", function() {
+                        expect(this.dialog.$("li").length).toBe(3);
+                        expect(this.dialog.$("li.selected").length).toBe(1);
+                        expect(this.dialog.$("li.selected").eq(0)).toContainText(this.user2.name());
+                    });
 
-                it("enables the submit button", function() {
-                    expect(this.dialog.$('button.submit')).not.toBeDisabled();
+                    it("enables the submit button", function() {
+                        expect(this.dialog.$('button.submit')).not.toBeDisabled();
+                    });
                 });
             });
 
@@ -202,10 +230,27 @@ describe("chorus.dialogs.PickItems", function() {
             });
 
             describe("double-clicking", function() {
-                it("triggers an item:doubleclick event", function() {
+                beforeEach(function() {
                     spyOnEvent(this.dialog, "item:doubleclick");
                     this.dialog.$("li:eq(1)").dblclick();
-                    expect("item:doubleclick").toHaveBeenTriggeredOn(this.dialog, [[this.user2]])
+                });
+
+                it("triggers an item:doubleclick event", function() {
+                    expect("item:doubleclick").toHaveBeenTriggeredOn(this.dialog, [
+                        [this.user2]
+                    ]);
+                });
+
+                it("calls selectItem", function() {
+                    expect(this.dialog.selectItem).toHaveBeenCalled();
+                });
+
+                it("calls doCallback", function() {
+                    expect(this.dialog.doCallback).toHaveBeenCalled();
+                });
+
+                it("calls submit", function() {
+                    expect(this.dialog.submit).toHaveBeenCalled();
                 });
             })
         });

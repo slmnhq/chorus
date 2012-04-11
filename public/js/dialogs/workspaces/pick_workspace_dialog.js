@@ -13,7 +13,6 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
 
     setup: function() {
         this._super("setup");
-        this.bindings.add(this, "item:doubleclick", this.doCallback, this);
     },
 
     additionalContext: function() {
@@ -36,10 +35,6 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
             return chorus.session.user().activeWorkspaces();
         }
         return chorus.session.user().workspaces();
-    },
-
-    doCallback: function() {
-        this.callback && this.callback();
     },
 
     collectionModelContext: function(model) {

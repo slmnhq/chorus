@@ -54,14 +54,23 @@
             display: inline-block;
         }
 
+        label.main {
+            vertical-align: top;
+            margin-top: 10px;
+        }
+
         .dataset_picked {
             font-size: 13px;
             font-weight: $semibold;
             margin-right: 5px;
+            display: inline-block;
+            line-height: 14px;
         }
 
         a.dataset_picked {
             border-bottom: 1px dotted gray;
+            display: inline-block;
+            line-height: 14px;
         }
     }
 

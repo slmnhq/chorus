@@ -29,6 +29,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
         this.pickItemsList.collectionModelContext = this.collectionModelContext; // forwarding inheritance on to pickItemsList
 
         this.bindings.add(this.collection, 'searched', this.enableOrDisableSubmitButton);
+        this.bindings.add(this, "item:doubleclick", this.doCallback, this);
     },
 
     submit: function() {
@@ -46,10 +47,15 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
             this.renderClientSideSearch();
         }
 
-        if (this.options.defaultSelection) {
-            _.each(this.options.defaultSelection.models, function(model) {
-                this.$("li[data-id='" + model.get("id") + "']").addClass("selected");
-            }, this);
+        var preSelected = this.options.defaultSelection;
+        if (preSelected) {
+            if(preSelected.models) {
+                _.each(this.options.defaultSelection.models, function(model) {
+                    this.$("li[data-id='" + model.get("id") + "']").addClass("selected");
+                }, this);
+            } else {
+                this.$("li[data-id='" + preSelected.get("id") + "']").addClass("selected");
+            }
         }
 
         this.enableOrDisableSubmitButton();
@@ -107,7 +113,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
     },
 
     doubleClick: function(e) {
-        $(e.currentTarget).toggleClass("selected");
+        this.selectItem(e);
         this.trigger("item:doubleclick", _.flatten([this.selectedItem()]));
     },
 
@@ -140,5 +146,13 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
             onFilter: deselectItem,
             afterFilter: _.bind(afterFilter, this)
         });
+    },
+
+    doCallback: function() {
+        this.callback && this.callback();
+    },
+
+    callback: function() {
+        this.submit();
     }
 });

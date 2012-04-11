@@ -73,8 +73,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         if (!this.saving) {
             var datasetDialog = new chorus.dialogs.DatasetsPicker({
                 workspaceId: this.workspace.get('id'),
-                collection: this.realSandboxTables()
-                //defaultSelection: this.model.datasets,
+                defaultSelection: this.model.nextDestination()
             });
             this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
             this.launchSubModal(datasetDialog);
@@ -88,16 +87,17 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     changeSelectedDataset: function(name) {
         this.$(".existing_table a.dataset_picked").text(_.prune(name, 20));
         this.$(".existing_table span.dataset_picked").text(_.prune(name, 20));
-        this.$(".existing_table input.hidden_dataset_picked").text(name);
     },
 
-    setExistingTableLink: function(asLink) {
-        var $el = this.$(".existing_table .dataset_picked");
-        var text = $el.text();
+    enableExistingTableLink: function(asLink) {
+        var $a = this.$(".existing_table a.dataset_picked");
+        var $span = this.$(".existing_table span.dataset_picked");
         if (asLink) {
-            $el.replaceWith($("<a href='#'>" + text + "</a>").addClass("dataset_picked"));
+            $a.removeClass("hidden");
+            $span.addClass("hidden");
         } else {
-            $el.replaceWith($("<span>" + text + "</span>").addClass("dataset_picked"));
+            $a.addClass("hidden");
+            $span.removeClass("hidden");
         }
     },
 
@@ -159,17 +159,12 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         }
 
         this.onInputFieldChanged();
-        this.setExistingTableLink(!disableExisting);
-    },
-
-    realSandboxTables: function() {
-        return this.sandboxTables.pluck("objectName");
+        this.enableExistingTableLink(!disableExisting);
     },
 
     additionalContext: function() {
         return {
             allowNewTruncate: !this.options.launchElement.hasClass("import_now"),
-            sandboxTables: this.realSandboxTables(),
             canonicalName: this.workspace.sandbox().schema().canonicalName(),
             showSchedule: this.showSchedule,
             hideScheduleCheckbox: !this.model.hasActiveSchedule(),
@@ -228,12 +223,17 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     getNewModelAttrs: function() {
         var updates = {};
         var $enabledFieldSet = this.$("fieldset").not(".disabled");
-        _.each($enabledFieldSet.find("input:text, input[type=hidden], select"), function(i) {
+        _.each($enabledFieldSet.find("input:text, input[type=hidden]"), function(i) {
             var input = $(i);
             if (input.is(":enabled") && input.closest(".schedule_widget").length == 0) {
                 updates[input.attr("name")] = input.val() && input.val().trim();
             }
         });
+
+        var $existingTable = $enabledFieldSet.find("a.dataset_picked");
+        if($existingTable.length) {
+            updates.toTable = $existingTable.text();
+        }
 
         var $truncateCheckbox = $enabledFieldSet.find(".truncate");
         if ($truncateCheckbox.length) {

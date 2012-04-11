@@ -41,8 +41,8 @@
         <legend class="row">
             <input type="radio" name="imports" id="import_scheduler_existing_table"/>
             <label class="main" for="import_scheduler_existing_table">{{t "import.existing_table"}}</label>
-            <span href="#" class="dataset_picked">{{t "dataset.import.select_dataset"}}</span>
-            <input class="hidden_dataset_picked" type="hidden"></input>
+            <span class="dataset_picked" name="toTable">{{t "dataset.import.select_dataset"}}</span>
+            <a href="#" class="dataset_picked hidden" name="toTable">{{t "dataset.import.select_dataset"}}</a>
         </legend>
 
         <div class="inputs">

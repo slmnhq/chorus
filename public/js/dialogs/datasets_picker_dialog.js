@@ -8,6 +8,7 @@ chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
     modelClass: "Table",
     pagination: true,
     multiSelection: false,
+    serverSideSearch: true,
 
     makeModel: function() {
         this._super("makeModel", arguments);
@@ -25,5 +26,5 @@ chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
             name: model.get("objectName"),
             imageUrl: model.iconUrl({size: 'medium'})
         }
-    }
-})
+    },
+});
