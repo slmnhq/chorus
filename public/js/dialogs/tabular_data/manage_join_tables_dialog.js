@@ -20,11 +20,11 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.schema = this.pageModel.schema();
-        this.schemas = this.schema.database().schemas();
+        var schema = this.pageModel.schema();
+        this.schemas = schema.database().schemas();
         this.requiredResources.add(this.schemas);
         this.schemas.fetch();
-        this.fetchDatabaseObjects(this.schema.databaseObjects());
+        this.fetchDatabaseObjects(schema.databaseObjects());
     },
 
     fetchDatabaseObjects: function(dbObjects) {
@@ -35,24 +35,20 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     },
 
     schemaSelected: function(schema) {
-        this.schema = schema;
         var dbObjects = schema.databaseObjects();
         this.fetchDatabaseObjects(dbObjects);
-        this.displayCanonicalName();
+        this.displaySchemaName(schema.get("name"));
     },
 
     joinableDatasetsSelected: function() {
         var workspace = this.pageModel.workspace();
         var datasets = workspace.datasetsInDatabase(this.pageModel.schema().database());
         this.fetchDatabaseObjects(datasets);
-        this.displayCanonicalName(t("dataset.manage_join_tables.this_workspace"));
+        this.displaySchemaName(t("dataset.manage_join_tables.this_workspace"));
     },
 
-    displayCanonicalName: function(schemaName) {
-        var canonicalNameEl = this.$(".canonical_name");
-        canonicalNameEl.find(".instance").text(this.schema.get("instanceName"));
-        canonicalNameEl.find(".database").text(this.schema.get("databaseName"));
-        canonicalNameEl.find(".schema_qtip").text(schemaName || this.schema.get("name"));
+    displaySchemaName: function(schemaName) {
+        this.$(".schema_qtip").text(schemaName);
     },
 
     postRender: function() {
@@ -84,7 +80,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
             additionalClass: "join_schemas"
         });
 
-        menu.selectItem(this.schema.get("name"));
+        menu.selectItem(this.pageModel.schema().get("name"));
 
         chorus.search({
             input: this.$(".search input:text"),
@@ -121,10 +117,10 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function() {
+        var schema = this.pageModel.schema();
         return {
-            instanceName: this.schema.get("instanceName"),
-            databaseName: this.schema.get("databaseName"),
-            schemaName: this.schema.get("name")
+            instanceName: schema.get("instanceName"),
+            databaseName: schema.get("databaseName")
         };
     }
 });

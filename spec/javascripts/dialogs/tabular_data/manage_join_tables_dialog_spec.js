@@ -9,8 +9,13 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             objectType: "BASE_TABLE",
             id: "abc"
         });
+        this.instanceName = "john";
         var dataset = fixtures.datasetSourceTable({
             objectName: "original",
+            instance: {
+                name: this.instanceName,
+                id: 11
+            },
             columns: 23,
             type: "SOURCE_TABLE",
             objectType: "BASE_TABLE",
@@ -42,8 +47,8 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
     describe("when the fetches complete", function() {
         beforeEach(function() {
-            this.schemaBob = fixtures.schema({name: "Bob", databaseName: this.schema.get("databaseName"), instanceName: "john" });
-            this.schemaTed = fixtures.schema({name: "Ted", databaseName: this.schema.get("databaseName"), instanceName: "john" });
+            this.schemaBob = fixtures.schema({name: "Bob", databaseName: this.schema.get("databaseName"), instanceName: this.instanceName });
+            this.schemaTed = fixtures.schema({name: "Ted", databaseName: this.schema.get("databaseName"), instanceName: this.instanceName });
             this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
 
             this.databaseObject1 = fixtures.databaseObject({
@@ -208,11 +213,6 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
                         it("loads the schema's datasets", function() {
                             expect(this.schemaBob.databaseObjects()).toHaveBeenFetched();
-                        });
-
-                        it("changes the schema", function() {
-                            expect(this.dialog.schema.get("name")).toEqual("Bob");
-                            expect(this.dialog.schema).not.toEqual(this.schema);
                         });
 
                         it("updates the instance, database and schema names in the sub header", function() {
