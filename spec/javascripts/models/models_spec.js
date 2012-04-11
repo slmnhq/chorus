@@ -1325,6 +1325,15 @@ describe("chorus.models.Abstract", function() {
                     var options = this.collection.fetch.mostRecentCall.args[0];
                     expect(options.rows).toBeUndefined();
                 });
+
+                it("stores the number of rows, and fetches number next time", function() {
+                    this.collection.fetchPage(2, { rows: 13 });
+                    this.collection.fetchPage(3);
+                    expect(this.server.lastFetch().url).toBe("/edc/bar/bar?page=3&rows=13");
+
+                    this.collection.fetch();
+                    expect(this.server.lastFetch().url).toContainQueryParams({ rows: 13 });
+                });
             });
         })
 
