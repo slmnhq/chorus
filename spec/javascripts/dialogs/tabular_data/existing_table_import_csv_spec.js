@@ -221,6 +221,29 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             expect(columnNameLinks).not.toHaveClass("selection_conflict");
         });
     });
+    
+    describe("clicking the 'automap' link when the csv has fewer columns than the table", function() {
+        beforeEach(function() {
+            this.csv = newFixtures.csvImport({
+                lines: [
+                    "COL1, col2, col3",
+                    "val1.1, val1.2, val1.3",
+                    "val2.1, val2.2, val2.3",
+                    "val3.1, val3.2, val3.3"
+                ]
+            }, {
+                toTable: "existingTable"
+            });
+            this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
+            this.server.completeFetchFor(this.dataset);
+            this.dialog.render();
+            this.dialog.$("a.automap").click();
+        });
+
+        it("displays the correct progress text", function() {
+            expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 3, total: 3});
+        });
+    });
 
     it("checked the include header row checkbox by default", function() {
         expect(this.dialog.$("#hasHeader")).toBeChecked();

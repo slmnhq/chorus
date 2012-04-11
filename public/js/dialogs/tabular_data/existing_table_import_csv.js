@@ -157,6 +157,9 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     updateDestinationCount: function() {
         var count = _.compact(this.destinationColumns).length;
         var total = this.numberOfColumns;
+        if (count > total) {
+            count = total;
+        }
         this.$(".progress").text(t("dataset.import.table.progress", {count: count, total: total}));
     },
 
