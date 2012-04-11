@@ -13,31 +13,33 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     },
 
     setup: function() {
-        this.recipients = new chorus.views.LinkMenu({
-            options: [
-                {data: "none", text: t("notification_recipient.none")},
-                {data: "some", text: t("notification_recipient.some")}
-            ],
-            title: t("notification_recipient.title"),
-            event: "choice"
-        });
         this.notifications = new chorus.views.NotificationRecipient();
         this.subviews[".notification_recipients"] = "notifications";
         this.subviews[".recipients_menu"] = "recipients";
-
-        this.recipients.bind("choice", this.onSelectRecipients, this);
     },
 
-    onSelectRecipients: function(eventName, data) {
-        var shouldHide = (data == "none");
+    onSelectRecipients: function(selection) {
+        var shouldHide = (selection == "none");
         this.$(".notification_recipients").toggleClass("hidden", shouldHide);
 
         if (!shouldHide) {
             this.notifications.render();
         }
+        this.$(".recipients_menu .chosen").text(t("notification_recipient."+selection));
     },
 
     postRender: function() {
+        var menu = new chorus.views.Menu({
+            launchElement: this.$("a.recipients_menu"),
+            items: [
+                {name: "none", text: t("notification_recipient.none"), data: "none", checked: true},
+                {name: "some", text: t("notification_recipient.some"), data: "some"}
+            ],
+            checkable: true,
+            onChange: _.bind(this.onSelectRecipients, this)
+        });
+        menu.selectItem("none");
+
         this.$("input[type=file]").fileupload({
             add: _.bind(this.desktopFileChosen, this),
             dataType: "json",

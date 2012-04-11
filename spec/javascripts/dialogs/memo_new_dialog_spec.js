@@ -16,6 +16,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         spyOn($.fn, 'fileupload');
         spyOn(this.dialog, "launchSubModal");
         spyOn(this.dialog, "makeEditor").andCallThrough();
+        this.qtip = stubQtip()
         stubDefer();
         this.dialog.render();
     });
@@ -59,11 +60,21 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.$('.toolbar')).toExist();
         });
 
+        describe("selecting recipients menu", function() {
+            it("has 'Nobody' checked by default", function() {
+                this.dialog.$("a.recipients_menu").click();
+                expect(this.qtip.find("li:eq(0)")).toHaveClass("selected");
+            });
+        });
 
         describe("selecting recipients", function() {
             beforeEach(function() {
-                this.dialog.recipients.trigger("choice", "choice", "some");
+                this.dialog.onSelectRecipients("some");
                 this.dialog.$("textarea[name=body]").val("blah");
+            });
+
+            it("should say 'Selected Recipients' in the link", function() {
+                expect(this.dialog.$(".recipients_menu .chosen")).toContainTranslation("notification_recipient.some");
             });
 
             it("should display the notification content area", function() {
@@ -83,7 +94,11 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
             describe("selecting 'Nobody'", function() {
                 beforeEach(function() {
-                    this.dialog.recipients.trigger("choice", "choice", "none");
+                    this.dialog.onSelectRecipients("none");
+                });
+
+                it("should say 'Nobody' in the link", function() {
+                    expect(this.dialog.$(".recipients_menu .chosen")).toContainTranslation("notification_recipient.none");
                 });
 
                 it("should hide the notification content area", function() {
