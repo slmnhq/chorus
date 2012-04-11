@@ -15,7 +15,7 @@ describe "creating a note on a workspace" do
       click_link "Show options"
       wait_until { page.find("#facebox .dialog span.label").text == "Attach" }
       click_link "Work File"
-      wait_until { page.find("#facebox .dialog h1").text == "Attach Work File" }
+      wait_until { page.find("#facebox .dialog h1").text == "Attach Work Files" }
     end
 
     it "dismisses each modal with each press of escape" do
