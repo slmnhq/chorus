@@ -25,6 +25,11 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 expect(this.schema.databaseObjects()).toHaveBeenFetched();
             });
 
+            it("should have the correct fetch url", function() {
+                var url = this.server.lastFetchFor(this.view.datasets).url;
+                expect(url).toContainQueryParams({ sidx: "objectName", sord: "asc" });
+            });
+
             context("when the schema fetches complete", function() {
                 var datasets, schemas;
                 beforeEach(function() {

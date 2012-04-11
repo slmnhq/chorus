@@ -10,7 +10,8 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     setup: function() {
         this._super("setup", arguments);
 
-        this.datasets = new chorus.collections.DatasetSet([], {workspaceId: chorus.page.workspace.id});
+        this.datasets = new chorus.collections.DatasetSet([], { workspaceId: chorus.page.workspace.id });
+        this.datasets.sortAsc("objectName");
         this.datasets.fetch();
 
         this.bindings.add(this.datasets, "loaded", this.workspaceDatasetsLoaded);
