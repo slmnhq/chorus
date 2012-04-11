@@ -4,8 +4,8 @@ describe("chorus.dialogs.DatasetsPicker", function() {
         stubModals();
         dialog = new chorus.dialogs.DatasetsPicker({ workspaceId : "33" });
         datasets = new chorus.collections.DatasetSet([
-            fixtures.datasetSandboxTable(),
-            fixtures.datasetSandboxTable()
+            newFixtures.datasetSandboxTable(),
+            newFixtures.datasetSandboxTable()
         ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" });
     });
 
