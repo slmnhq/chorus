@@ -1,6 +1,7 @@
 chorus.views.DatabaseDatasetSidebarListItem = chorus.views.Base.extend({
     constructorName: "DatabaseDatasetSidebarListItemView",
     className: "database_dataset_sidebar_list_item",
+    useLoadingSection: true,
 
     events: {
         "click li a"    : "datasetSelected",
@@ -48,5 +49,9 @@ chorus.views.DatabaseDatasetSidebarListItem = chorus.views.Base.extend({
             fullName: model.toText(),
             iconUrl: model.iconUrl({size: "medium"})
         }
+    },
+
+    displayLoadingSection: function () {
+        return !(this.collection && this.collection.loaded || this.collection.serverErrors);
     }
 });

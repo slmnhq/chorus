@@ -1,7 +1,6 @@
 chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.extend({
     constructorName: "DatabaseDatasetSidebarListView",
     className:"database_dataset_sidebar_list",
-    useLoadingSection: true,
 
     subviews: {
         ".list_contents": "listview"
@@ -32,12 +31,12 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     },
 
     fetchResourceAfterSchemaSelected: function() {
-        this.resource = this.collection = this.schema.databaseObjects();
+        this.collection = this.schema.databaseObjects();
         this.collection.fetchIfNotLoaded();
+        this.bindings.add(this.collection, "searched", this.onSearchComplete);
 
         this.listview = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
         this.bindings.add(this.listview, "fetch:more", this.fetchMoreDatasets);
-        this.bindings.add(this.collection, "searched", this.onSearchComplete);
     },
 
     setSchemaToCurrentWorkspace: function() {
@@ -48,7 +47,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     fetchMoreDatasets: function(e) {
         e && e.preventDefault();
         var next = parseInt(this.collection.pagination.page) + 1;
-        this.collection.fetchPage(next, { add: true , success: _.bind(this.render, this) });
+        this.collection.fetchPage(next, { add: true , success: _.bind(this.listview.render, this) });
     },
 
     searchTextChanged: function(e) {
@@ -57,9 +56,5 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     onSearchComplete: function() {
         this.listview.render();
-    },
-
-    displayLoadingSection: function () {
-        return this.schema && !(this.collection && (this.collection.loaded || this.collection.serverErrors));
     }
 });

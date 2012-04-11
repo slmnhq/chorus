@@ -99,21 +99,6 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
     });
 
     context("when there's sandbox/default schema associated", function() {
-        context("before the tables and views have loaded", function() {
-            beforeEach(function() {
-                this.schema.databaseObjects().loaded = false;
-                this.view.render();
-            })
-
-            it("should not display the 'no database/schema associated' message", function() {
-                expect(this.view.$(".empty_selection")).not.toExist();
-            });
-
-            it("should display a loading spinner", function() {
-                expect(this.view.$(".loading_section")).toExist();
-            });
-        });
-
         context("after the tables and views are loaded", function() {
             beforeEach(function() {
                 this.schema.databaseObjects().loaded = true;
@@ -203,10 +188,6 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     {message: "Account map needed"}
                 ]);
                 this.view.render();
-            });
-
-            it("should not display the loading spinner", function() {
-                expect(this.view.$(".loading_section")).not.toExist();
             });
 
             it("should display an option to enter credentials", function() {
