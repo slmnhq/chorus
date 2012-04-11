@@ -68,6 +68,7 @@ chorus.views.Menu = chorus.views.Bare.extend({
             return item.name === name;
         });
 
+        if (!selectedItem) { return; }
         if (selectedItem.onSelect) { selectedItem.onSelect.call(this, selectedItem.data); }
         if (this.options.onChange) { this.options.onChange.call(this, selectedItem.data); }
 

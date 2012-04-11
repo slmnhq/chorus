@@ -158,6 +158,12 @@ describe("chorus.views.Menu", function() {
                 menu.selectItem("three");
                 expectSelectedItem(2);
             });
+
+            it("does nothing when there is no matching item", function() {
+                expect(function() {
+                    menu.selectItem("asdfdasf");
+                }).not.toThrow();
+            });
         });
 
         context("when an additional class is specified", function() {
