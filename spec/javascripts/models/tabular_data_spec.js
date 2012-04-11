@@ -492,7 +492,7 @@ describe("chorus.models.TabularData", function() {
             });
 
             it("creates an appropriate string (trimmed, remove semicolon, and alias to pg-quoted CV name)", function() {
-                expect(this.tabularData.toText()).toBe('(SELECT a,b FROM XYZ) AS "Chorus_View"');
+                expect(this.tabularData.toText()).toBe('(SELECT a,b FROM xyz) AS "ChorusView"');
             });
         });
     });
