@@ -31,4 +31,3 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
         return this.schema && !(this.collection && (this.collection.loaded || this.collection.serverErrors));
     }
 });
-

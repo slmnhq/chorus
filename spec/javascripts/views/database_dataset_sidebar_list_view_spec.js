@@ -68,6 +68,17 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                         expect(this.view.fetchResourceAfterSchemaSelected).toHaveBeenCalled();
                     });
                 });
+
+                describe("searching for a dataset", function() {
+                    beforeEach(function() {
+                        this.server.reset();
+                        this.view.$("input.search").val("foo").trigger("keyup");
+                    });
+
+                    it("should re-fetch the collection using the search parameters", function() {
+                        expect(this.server.lastFetch().url).toContainQueryParams({filter: "foo"});
+                    });
+                });
             });
         });
     });

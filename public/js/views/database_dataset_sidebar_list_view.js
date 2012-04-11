@@ -54,9 +54,11 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     },
 
     searchTextChanged: function(e) {
+        this.collection.search($(e.target).val());
     },
 
     onSearchComplete: function() {
+        this.listview.render();
     },
 
     displayLoadingSection: function () {

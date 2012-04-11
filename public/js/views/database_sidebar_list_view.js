@@ -42,8 +42,6 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     fetchResourceAfterSchemaSelected: $.noop,
 
-    searchTextChanged: chorus.searchTextChanged,
-
     postRender: function() {
         chorus.menu(this.$(".context a"), {
             content: this.$(".schema_menu_container").html(),
