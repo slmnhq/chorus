@@ -25,6 +25,20 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
+    describe("#datasetsInDatabase(database)", function() {
+        beforeEach(function() {
+            var database = newFixtures.schema({ databaseName: "foo" }).database();
+            this.datasets = this.model.datasetsInDatabase(database)
+        });
+
+        it("returns a dataset set with the right workspace and database", function() {
+            expect(this.datasets).toBeA(chorus.collections.DatasetSet);
+            expect(this.datasets.attributes.workspaceId).toBe(this.model.id);
+            expect(this.datasets.attributes.databaseName).toBe("foo");
+        });
+    });
+
+
     describe("#isPublic", function() {
         it("return true when isPublic: true", function() {
             this.model.set({isPublic: true});

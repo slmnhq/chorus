@@ -60,6 +60,13 @@ chorus.models.Workspace = chorus.models.Base.extend({
         }
     },
 
+    datasetsInDatabase: function(database) {
+        return new chorus.collections.DatasetSet([], {
+            workspaceId: this.id,
+            databaseName: database.get("name")
+        });
+    },
+
     comments:function () {
         this._comments || (this._comments = new chorus.collections.CommentSet(this.get("latestCommentList")));
         return this._comments;

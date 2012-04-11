@@ -35,10 +35,12 @@ describe("chorus.collections.DatasetSet", function() {
                 this.collection.attributes.type = "SOURCE_TABLE";
                 this.collection.attributes.objectType = "BASE_TABLE";
                 this.collection.attributes.namePattern = "Foo";
+                this.collection.attributes.databaseName = "dbName";
                 expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({
                     type: "SOURCE_TABLE",
                     objectType: "BASE_TABLE",
                     namePattern: "Foo",
+                    databaseName: "dbName",
                     rows: "10",
                     page: "1"
                 });
@@ -56,34 +58,6 @@ describe("chorus.collections.DatasetSet", function() {
                 expect(this.collection.url()).toContain("/edc/data/10000/database/%25foo%25/schema/%20bar%20");
             });
         });
-    });
-
-    describe("#addParams", function() {
-        context("has both parameters", function() {
-            beforeEach(function() {
-                this.collection = new chorus.collections.DatasetSet([], {
-                    instanceId: 10000, databaseName: "%foo%", schemaName: " bar ",
-                    type: "CHRISTMAS", objectType: "HOLIDAY"
-                });
-            });
-
-            it("shows both", function() {
-                expect(this.collection.addParams()).toBe("?type=CHRISTMAS&objectType=HOLIDAY");
-            });
-        })
-
-        context("has only one parameter", function() {
-            beforeEach(function() {
-                this.collection = new chorus.collections.DatasetSet([], {
-                    instanceId: 10000, databaseName: "%foo%", schemaName: " bar ",
-                    type: "BEAR", objectType: undefined
-                });
-            });
-
-            it("shows only that", function() {
-                expect(this.collection.addParams()).toBe("?type=BEAR");
-            });
-        })
     });
 
     describe("sorting", function() {
