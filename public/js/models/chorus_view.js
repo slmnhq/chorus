@@ -20,6 +20,9 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
         this.aggregateColumnSet.trigger("join:added");
     },
 
+    schema: function() { return this.sourceObject.schema(); },
+    workspace: function() { return this.sourceObject.workspace(); },
+
     addColumn: function(column) {
         var columnList = this._columnListForDataset(column.tabularData);
 

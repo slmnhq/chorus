@@ -6,6 +6,12 @@ describe("chorus.models.ChorusView", function() {
         this.model.aggregateColumnSet = new chorus.collections.DatabaseColumnSet(this.sourceDataset.columns().models);
     });
 
+
+    it("delegates to the source object for #schema and #workspace", function() {
+        expect(this.model.schema()).toBe(this.sourceDataset.schema());
+        expect(this.model.workspace()).toBe(this.sourceDataset.workspace());
+    });
+
     it("extends Dataset", function() {
         expect(this.model).toBeA(chorus.models.Dataset);
     });
