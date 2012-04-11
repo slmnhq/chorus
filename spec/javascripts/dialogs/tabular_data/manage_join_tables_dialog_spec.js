@@ -23,32 +23,29 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         var launchElement = $("<a class='add_join'></a>").data("chorusView", this.chorusView);
 
         this.dialog = new chorus.dialogs.ManageJoinTables({ pageModel: dataset, launchElement: launchElement });
-        this.dialog.render();
         $("#jasmine_content").append(this.dialog.el);
-    });
-
-    it("sets urlParams rows=", function() {
-        expect(this.dialog.collection.urlParams().rows).toBe(9);
     });
 
     it("retrieves the chorus view model from the launch element", function() {
         expect(this.dialog.model).toBe(this.chorusView);
     });
 
-    it("has the right title", function() {
-        expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.manage_join_tables.title");
+    it("fetches the list of schemas in the same instance as the original schema", function() {
+        expect(this.schema.database().schemas()).toHaveBeenFetched();
     });
 
     it("fetches the schema's tables and views", function() {
-        expect(this.schema.databaseObjects()).toHaveBeenFetched();
+        var datasetFetch = this.server.lastFetchFor(this.schema.databaseObjects());
+        expect(datasetFetch.params().rows).toBe('9');
+        expect(datasetFetch.params().page).toBe('1');
     });
 
-    it("fetches the list of schemas in the same instance as the original schema", function() {
-        expect(this.dialog.schemas).toHaveBeenFetched();
-    });
-
-    describe("when the fetch of the tables and views completes", function() {
+    describe("when the fetches complete", function() {
         beforeEach(function() {
+            this.schemaBob = fixtures.schema({name: "Bob", databaseName: this.schema.get("databaseName"), instanceName: "john" });
+            this.schemaTed = fixtures.schema({name: "Ted", databaseName: this.schema.get("databaseName"), instanceName: "john" });
+            this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
+
             this.databaseObject1 = fixtures.databaseObject({
                 objectName: "cats",
                 columns: 21,
@@ -79,6 +76,10 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 this.originalDatabaseObject,
                 this.databaseObject3
             ]);
+        });
+
+        it("has the right title", function() {
+            expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.manage_join_tables.title");
         });
 
         it("has a 'done' button", function() {
@@ -123,7 +124,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             context("after the results come back", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.schema.databaseObjects(), [ this.databaseObject1 ]);
+                    this.server.lastFetch().succeed([ this.databaseObject1 ]);
                 });
 
                 it("updates the list items", function() {
@@ -138,36 +139,40 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
         describe("the schema picker menu", function() {
             it("shows the original table canonical name", function() {
-                expect(this.dialog.$(".canonical_name").text()).toBe(this.schema.canonicalName());
+                expect(this.dialog.$(".canonical_name")).toContainText(this.schema.canonicalName());
             });
 
             context("when the fetch for the schemas completes", function() {
                 beforeEach(function() {
-                    this.schemaBob = fixtures.schema({name: "Bob", databaseName: this.schema.get("databaseName")});
-                    this.schemaTed = fixtures.schema({name: "Ted", databaseName: this.schema.get("databaseName")});
-                    this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
                 });
 
-                it("the schema is a link to a drop-down menu", function() {
+                it("shows a drop-down menu when the schema link is clicked", function() {
                     var $link = this.dialog.$(".canonical_name a.schema_qtip")
                     expect($link).toContainText(this.schema.get("name"));
                     $link.click();
                     expect(this.qtip).toHaveVisibleQtip();
                 });
 
-                describe("opening the schema-picker", function() {
+                describe("the schema-picker", function() {
                     beforeEach(function() {
                         this.dialog.$(".canonical_name a.schema_qtip").click();
+                        this.schemaMenu = this.qtip.find(".qtip").eq(0);
                     });
 
-                    it("clicking the link shows the schema-picker", function() {
-                        expect(this.qtip).toHaveVisibleQtip();
-                        expect(this.qtip.find(".ui-tooltip:eq(0) ul li").length).toBe(3);
+                    xit("has an item for 'this workspace'", function() {
+                        expect(this.schemaMenu.find("li").eq(0)).toContainTranslation("dataset.manage_join_tables.this_workspace");
                     });
 
-                    it("schema-picker has a check-mark beside the currently selected schema", function() {
-                        expect(this.qtip.$("li:contains('" + this.schema.get("name") + "')")).toContain('.check');
-                        expect(this.qtip.$("li:contains(Bob)")).not.toContain('.check');
+                    it("has an item for each schema in the database", function() {
+                        var lis = this.schemaMenu.find("li");
+                        this.dialog.schemas.each(function(schema, i) {
+                            expect(lis.eq(i)).toContainText(schema.get("name"));
+                        });
+                    });
+
+                    it("selects the current schema", function() {
+                        expect(this.schemaMenu.find("li:contains('" + this.schema.get("name") + "')")).toHaveClass("selected");
+                        expect(this.schemaMenu.find("li:contains(Bob)")).not.toHaveClass("selected");
                     });
 
                     it("clicking the link more than once returns the correct list", function() {
@@ -191,29 +196,38 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                             expect(this.schemaBob.databaseObjects()).toHaveBeenFetched();
                         });
 
-                        it("shows the loading spinner until the datasets have loaded", function() {
-                            expect(this.dialog.$(".loading_section")).toExist();
-                            this.server.completeFetchFor(this.schemaBob.databaseObjects());
-                            expect(this.dialog.$(".loading_section")).not.toExist();
-                        });
-
                         it("changes the schema", function() {
                             expect(this.dialog.schema.get("name")).toEqual("Bob");
+                            expect(this.dialog.schema).not.toEqual(this.schema);
                         });
 
-                        it("keeps the instance and database", function() {
-                            expect(this.dialog.schema).not.toEqual(this.schema);
-                            expect(this.dialog.schema.get("instanceName")).toBe(this.schema.get("instanceName"));
-                            expect(this.dialog.schema.get("databaseName")).toBe(this.schema.get("databaseName"));
+                        it("updates the instance, database and schema names in the sub header", function() {
+                            expect(this.dialog.$(".canonical_name")).toContainText(this.schemaBob.canonicalName());
+                        });
+
+                        describe("when the datasets are fetched", function() {
+                            beforeEach(function() {
+                                this.server.completeFetchFor(this.schemaBob.databaseObjects(), [
+                                    fixtures.databaseObject({ objectName: "fred" }),
+                                    fixtures.databaseObject({ objectName: "lou" }),
+                                    fixtures.databaseObject({ objectName: "bryan" })
+                                ]);
+                            });
+
+                            it("stops the loading spinner", function() {
+                                expect(this.dialog.$(".loading_section")).not.toExist();
+                            });
+
+                            it("shows the schema's datasets in the list", function() {
+                                var names = this.dialog.$(".paginated_join_tables .name");
+                                expect(names.length).toBe(3);
+                                expect(names.eq(0)).toContainText("fred");
+                                expect(names.eq(1)).toContainText("lou");
+                                expect(names.eq(2)).toContainText("bryan");
+                            });
                         });
                     });
                 });
-            });
-
-            it("the schema is not a qtip link if the schemas aren't loaded yet", function() {
-                var $link2 = this.dialog.$(".canonical_name a.schema_qtip")
-                $link2.click();
-                expect(this.qtip).not.toHaveVisibleQtip();
             });
         });
 

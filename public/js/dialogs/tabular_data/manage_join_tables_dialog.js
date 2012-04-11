@@ -2,7 +2,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     className: "manage_join_tables",
     additionalClass: "with_sub_header",
     title: t("dataset.manage_join_tables.title"),
-    useLoadingSection: true,
+    // useLoadingSection: true,
 
     events: {
         "click li": "tableClicked",
@@ -21,70 +21,57 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.schema = this.pageModel.schema();
+        this.schemas = this.schema.database().schemas();
+        this.requiredResources.add(this.schemas);
+        this.schemas.fetch();
         this.fetchDatabaseObjects(this.schema.databaseObjects());
     },
 
     fetchDatabaseObjects: function(dbObjects) {
         this.resource = this.collection = dbObjects;
-
-        var urlParams = this.collection.urlParams;
-        this.collection.urlParams = function() {
-            return _.extend({rows: 9}, urlParams && urlParams.call(this));
-        };
-
-        this.collection.fetchIfNotLoaded();
-
-        this.paginatedJoinTables = new chorus.views.PaginatedJoinTablesList({collection: this.collection})
-
-        this.schemas = new chorus.collections.SchemaSet([], {instanceId: this.schema.get("instanceId"), databaseName: this.schema.get("databaseName")});
-        this.schemas.fetch();
+        this.paginatedJoinTables = new chorus.views.PaginatedJoinTablesList({collection: dbObjects });
+        this.renderSubviews();
+        this.collection.fetchPage(1, { rows: 9 });
     },
 
-    schemasLoaded: function() {
-        var $menuContent = $("<ul class='schema_menu'></ul>")
+    schemaSelected: function(schema) {
+        this.schema = schema;
+        var dbObjects = schema.databaseObjects();
+        this.fetchDatabaseObjects(dbObjects);
+        this.displayCanonicalName();
+    },
 
-        this.schemas.each(function(schema) {
-            schema.set({ instanceName: this.schema.get("instanceName") });
-
-            $li = $("<li></li>");
-            $li.addClass("menu_item");
-
-            $a = $("<a href='#'></a>")
-            $a.addClass("schema");
-
-            if (schema.get("name") == this.schema.get("name")) {
-                $a.append($("<div class='check'></div>"))
-            }
-            $a.append(schema.get("name"));
-
-            $a.click(_.bind(function(e) {
-                e && e.preventDefault();
-                this.schema = schema;
-                var dbObjects = schema.databaseObjects();
-                this.bindings.add(dbObjects, "change reset remove", this.render);
-
-                this.fetchDatabaseObjects(dbObjects);
-                this.render();
-            }, this));
-
-            $li.append($a);
-            $menuContent.append($li);
-        }, this);
-
-        chorus.menu(this.$("a.schema_qtip"), {
-            content: $menuContent
-        });
-
+    displayCanonicalName: function() {
+        var canonicalNameEl = this.$(".canonical_name");
+        canonicalNameEl.find(".instance").text(this.schema.get("instanceName"));
+        canonicalNameEl.find(".database").text(this.schema.get("databaseName"));
+        canonicalNameEl.find(".schema_qtip").text(this.schema.get("name"));
     },
 
     postRender: function() {
         this._super("postRender");
 
-        this.schemas.onLoaded(this.schemasLoaded, this);
-
         var onTextChangeFunction = _.debounce(_.bind(function(e) {
             this.collection.search($(e.target).val());
         }, this), 300);
+
+        var menuItems = this.schemas.map(function(schema) {
+            return {
+                name: schema.get("name"),
+                text: schema.get("name"),
+                data: schema,
+                onSelect: _.bind(this.schemaSelected, this)
+            };
+        }, this);
+
+        var menu = new chorus.views.Menu({
+            launchElement: this.$("a.schema_qtip"),
+            items: menuItems,
+            checkable: true,
+            additionalClass: "join_schemas"
+        });
+
+        menu.selectItem(this.schema.get("name"));
 
         chorus.search({
             input: this.$(".search input:text"),
