@@ -1811,26 +1811,6 @@ beforeEach(function() {
             });
         },
 
-        sandbox: function(overrides) {
-            var databaseId = this.nextId().toString();
-            var instanceId = this.nextId().toString();
-            var schemaId = this.nextId().toString();
-            var attributes = _.extend({
-                id: this.nextId().toString(),
-                databaseId: databaseId,
-                databaseName: "database" + databaseId,
-                instanceId: instanceId,
-                instanceName: "instance" + instanceId,
-                instanceStatus: "online",
-                schemaId: schemaId,
-                schemaName: "schema" + schemaId,
-                status: "ok",
-                type: "000",
-                workspaceId: this.nextId().toString()
-            }, overrides);
-            return new chorus.models.Sandbox(attributes);
-        },
-
         tabularDataJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
@@ -1934,17 +1914,6 @@ beforeEach(function() {
                 lastUpdatedTxStamp: "2012-01-24 12:25:10.701",
                 objectType: "BASE_TABLE",
                 type: "SOURCE_TABLE"
-            }, overrides)
-            var attributes = _.extend(fixtures.datasetCommonJson(datasetCommonAttributes), overrides);
-            return new chorus.models.Dataset(attributes);
-        },
-
-        datasetSandboxTable: function(overrides) {
-            var datasetCommonAttributes = _.extend({
-                modifiedBy: {},
-                objectType: "BASE_TABLE",
-                owner: {},
-                type: "SANDBOX_TABLE"
             }, overrides)
             var attributes = _.extend(fixtures.datasetCommonJson(datasetCommonAttributes), overrides);
             return new chorus.models.Dataset(attributes);
@@ -2127,7 +2096,7 @@ beforeEach(function() {
 
         timeseriesTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: this.datasetSandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.datasetSandboxTable({objectName: 'pirates'}),
                 yAxis: "num_hands",
                 xAxis: "per_year",
 
@@ -2145,7 +2114,7 @@ beforeEach(function() {
 
         frequencyTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: this.datasetSandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.datasetSandboxTable({objectName: 'pirates'}),
                 yAxis: "num_hands",
 
                 columns: [
@@ -2162,7 +2131,7 @@ beforeEach(function() {
 
         boxplotTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: this.datasetSandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.datasetSandboxTable({objectName: 'pirates'}),
                 xAxis: "gender",
                 yAxis: "age",
                 columns: [
@@ -2184,7 +2153,7 @@ beforeEach(function() {
 
         heatmapTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: this.datasetSandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.datasetSandboxTable({objectName: 'pirates'}),
                 xAxis: "hair_length",
                 yAxis: "kill_count",
                 xBins: "4",

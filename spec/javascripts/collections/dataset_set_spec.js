@@ -88,8 +88,8 @@ describe("chorus.collections.DatasetSet", function() {
 
     describe("sorting", function() {
         beforeEach(function() {
-            this.collection.add(fixtures.datasetSandboxTable({objectName: 'zTable'}));
-            this.collection.add(fixtures.datasetSandboxTable({objectName: 'aTable'}));
+            this.collection.add(newFixtures.datasetSandboxTable({objectName: 'zTable'}));
+            this.collection.add(newFixtures.datasetSandboxTable({objectName: 'aTable'}));
         });
 
         it("sorts by objectName", function() {

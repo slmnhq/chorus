@@ -19,8 +19,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
                 this.server.completeFetchFor(this.datasetImport);
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                    fixtures.datasetSandboxTable(),
-                    fixtures.datasetSandboxTable(),
+                    newFixtures.datasetSandboxTable(),
+                    newFixtures.datasetSandboxTable(),
                     fixtures.datasetSandboxView(),
                     fixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
@@ -46,8 +46,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
                 this.server.completeFetchFor(this.datasetImport);
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                    fixtures.datasetSandboxTable(),
-                    fixtures.datasetSandboxTable(),
+                    newFixtures.datasetSandboxTable(),
+                    newFixtures.datasetSandboxTable(),
                     fixtures.datasetSandboxView(),
                     fixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
@@ -79,8 +79,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
             beforeEach(function() {
                 this.dialog = new chorus.dialogs.ImportScheduler({launchElement: this.launchElement});
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                    fixtures.datasetSandboxTable(),
-                    fixtures.datasetSandboxTable(),
+                    newFixtures.datasetSandboxTable(),
+                    newFixtures.datasetSandboxTable(),
                     fixtures.datasetSandboxView(),
                     fixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
@@ -111,8 +111,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
         context("when the fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                    fixtures.datasetSandboxTable(),
-                    fixtures.datasetSandboxTable(),
+                    newFixtures.datasetSandboxTable(),
+                    newFixtures.datasetSandboxTable(),
                     fixtures.datasetSandboxView(),
                     fixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
@@ -309,9 +309,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 context("and the toTable is not an existing Table", function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                            fixtures.datasetSandboxTable({ objectName: "your_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"your_table"' }),
-                            fixtures.datasetSandboxTable({ objectName: "not_my_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"not_my_table"' }),
-                            fixtures.datasetSandboxTable({ objectName: "her_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"her_table"' })
+                            newFixtures.datasetSandboxTable({ objectName: "your_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"your_table"' }),
+                            newFixtures.datasetSandboxTable({ objectName: "not_my_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"not_my_table"' }),
+                            newFixtures.datasetSandboxTable({ objectName: "her_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"her_table"' })
                         ]);
                     });
 
@@ -346,9 +346,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 context("and the toTable is an existing Table", function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                            fixtures.datasetSandboxTable({ objectName: "your_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"your_table"' }),
-                            fixtures.datasetSandboxTable({ objectName: "my_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"my_table"' }),
-                            fixtures.datasetSandboxTable({ objectName: "her_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"her_table"' })
+                            newFixtures.datasetSandboxTable({ objectName: "your_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"your_table"' }),
+                            newFixtures.datasetSandboxTable({ objectName: "my_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"my_table"' }),
+                            newFixtures.datasetSandboxTable({ objectName: "her_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"her_table"' })
                         ]);
                     });
 
@@ -488,9 +488,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 context("and the toTable is not an existing Table", function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.dialog.sandboxTables, [
-                            fixtures.datasetSandboxTable({ objectName: "your_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"your_table"' }),
-                            fixtures.datasetSandboxTable({ objectName: "not_my_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"not_my_table"' }),
-                            fixtures.datasetSandboxTable({ objectName: "her_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"her_table"' })
+                            newFixtures.datasetSandboxTable({ objectName: "your_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"your_table"' }),
+                            newFixtures.datasetSandboxTable({ objectName: "not_my_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"not_my_table"' }),
+                            newFixtures.datasetSandboxTable({ objectName: "her_table", id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"her_table"' })
                         ]);
                     });
 
@@ -529,7 +529,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.server.completeFetchFor(this.datasetImport);
                 spyOn(this.dialog.model, "isNew").andReturn(false)
                 this.dialog.render();
-                this.server.completeFetchAllFor(this.dialog.sandboxTables, [fixtures.datasetSandboxTable(), fixtures.datasetSandboxTable()]);
+                this.server.completeFetchAllFor(this.dialog.sandboxTables, [newFixtures.datasetSandboxTable(), newFixtures.datasetSandboxTable()]);
                 this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
                 expect(this.dialog.$("button.submit")).toBeEnabled();
             });
@@ -578,7 +578,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         context("when the fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchAllFor(this.dialog.sandboxTables, [fixtures.datasetSandboxTable(), fixtures.datasetSandboxTable()]);
+                this.server.completeFetchAllFor(this.dialog.sandboxTables, [newFixtures.datasetSandboxTable(), newFixtures.datasetSandboxTable()]);
             });
 
             it("should display the import destination", function() {

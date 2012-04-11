@@ -21,17 +21,16 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
             this.collection.fetch();
         }, this);
 
-        var self = this;
-        var onTextChangeFunction = _.debounce(function(e) {
-            var input = $(e.target).val();
-            self.collection.attributes.namePattern = input;
-            self.mainContent.contentDetails.startLoading(".count");
-            self.collection.fetch({silent: true, success: function() {
-                self.mainContent.content.render();
-                self.mainContent.contentFooter.render();
-                self.mainContent.contentDetails.updatePagination();
-            }});
-        }, 300);
+        this.bindings.add(this.collection, 'searched', function() {
+            this.mainContent.content.render();
+            this.mainContent.contentFooter.render();
+            this.mainContent.contentDetails.updatePagination();
+        });
+
+        var onTextChangeFunction = _.debounce(_.bind(function(e) {
+            this.mainContent.contentDetails.startLoading(".count");
+            this.collection.search($(e.target).val());
+        }, this), 300);
 
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
         this.mainContent = new chorus.views.MainContentList({

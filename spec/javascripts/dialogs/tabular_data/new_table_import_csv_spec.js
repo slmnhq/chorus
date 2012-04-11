@@ -1,7 +1,7 @@
 describe("chorus.dialogs.NewTableImportCSV", function() {
     beforeEach(function() {
         chorus.page = {};
-        this.sandbox = fixtures.sandbox({
+        this.sandbox = newFixtures.sandbox({
             schemaName: "mySchema",
             databaseName: "myDatabase",
             instanceName: "myInstance"

@@ -1,7 +1,8 @@
 describe("chorus.views.DatabaseDatasetSidebarList", function() {
     beforeEach(function() {
         chorus.page = { workspace: newFixtures.workspace() };
-        var sandbox = fixtures.sandbox();
+        spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+        var sandbox = newFixtures.sandbox();
         this.schema = sandbox.schema();
         this.modalSpy = stubModals();
         this.view = new chorus.views.DatabaseDatasetSidebarList({schema: this.schema});
@@ -70,14 +71,12 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
                 describe("clicking on a dataset item", function () {
                     beforeEach(function() {
-                        this.spy = spyOnEvent(this.view, "datasetSelected");
-
                         this.view.$("li a").eq(0).click();
                     });
 
-                    it("triggers a 'datasetSelected' event on itself, with the view", function() {
+                    it("broadcasts a 'datasetSelected' event, with the view", function() {
                         var clickedDataset = this.view.collection.findWhere({objectName: datasetSet.at(0).get("objectName")});
-                        expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [clickedDataset]);
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("datasetSelected", clickedDataset);
                     });
                 });
             });
@@ -173,36 +172,33 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     describe("user clicks a view in the list", function() {
                         beforeEach(function() {
                             this.clickedView = this.schema.databaseObjects().findWhere({ objectName: "Data1" });
-                            spyOnEvent(this.view, "datasetSelected");
                             this.view.$("li:contains('Data1') a").click();
                         });
 
-                        it("triggers a 'datasetSelected' event on itself, with the view", function() {
-                            expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedView]);
+                        it("broadcasts a 'datasetSelected' event, with the view", function() {
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("datasetSelected", this.clickedView);
                         });
                     });
 
                     describe("user clicks on a table in the list", function() {
                         beforeEach(function() {
                             this.clickedTable = this.schema.databaseObjects().findWhere({ objectName: "Data2" });
-                            spyOnEvent(this.view, "datasetSelected");
                             this.view.$("li:contains('Data2') a").click();
                         });
 
-                        it("triggers a 'datasetSelected' event on itself, with the table", function() {
-                            expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedTable]);
+                        it("broadcasts a 'datasetSelected' event, with the table", function() {
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("datasetSelected", this.clickedTable);
                         });
                     });
 
                     describe("user clicks on a table with a numeric name", function() {
                         beforeEach(function() {
                             this.clickedTable = this.schema.databaseObjects().findWhere({ objectName: "1234" });
-                            spyOnEvent(this.view, "datasetSelected");
                             this.view.$("li:eq(0) a").click();
                         });
 
-                        it("triggers a 'datasetSelected' event on itself, with the table", function() {
-                            expect("datasetSelected").toHaveBeenTriggeredOn(this.view, [this.clickedTable]);
+                        it("broadcasts a 'datasetSelected' event, with the table", function() {
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("datasetSelected", this.clickedTable);
                         });
                     })
                 });
@@ -241,8 +237,66 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
                 });
             });
-
         });
 
+        describe("pagination", function() {
+            beforeEach(function() {
+                this.view.schema = fixtures.schema();
+                this.view.fetchResourceAfterSchemaSelected();
+                this.view.render();
+            });
+
+            context("when there is more than one page of results", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.view.collection, [
+                        fixtures.databaseTable({objectName: "Table 1"}),
+                        fixtures.databaseTable({objectName: "Table 2"})
+                    ], {}, { page: "1", total: "2"});
+                });
+
+                it("shows the more link", function() {
+                    expect(this.view.$("a.more")).toContainTranslation("schema.metadata.more");
+                });
+
+                context("when the more link is clicked", function() {
+                    beforeEach(function() {
+                        this.view.$("a.more").click();
+                    });
+
+                    it("fetches another page of results", function() {
+                        expect(this.server.lastFetchFor(this.view.collection, { page: "2" })).toBeDefined();
+                    });
+
+                    context("when the fetch completes", function() {
+                        beforeEach(function() {
+                            this.server.completeFetchFor(this.view.collection, [
+                                fixtures.databaseTable({objectName: "Table 3"}),
+                                fixtures.databaseTable({objectName: "Table 4"})
+                            ], { page: "2" }, { page: "2", total: "2"});
+                        });
+
+                        it("shows combined results (from pages 1 & 2)", function() {
+                            expect(this.view.$("li").length).toBe(4);
+                            expect(this.view.$("li:eq(0) .name")).toContainText("Table 1");
+                            expect(this.view.$("li:eq(1) .name")).toContainText("Table 2");
+                            expect(this.view.$("li:eq(2) .name")).toContainText("Table 3");
+                            expect(this.view.$("li:eq(3) .name")).toContainText("Table 4");
+                        });
+                    });
+                });
+            });
+
+            context("when there is only one page of results", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.view.collection, [
+                        fixtures.databaseTable({objectName: "Table 1"}),
+                    ], {}, { page: "1", total: "1"});
+                });
+
+                it("doesn't show the more link", function() {
+                    expect(this.view.$("a.more")).not.toExist();
+                });
+            });
+        });
     });
 });

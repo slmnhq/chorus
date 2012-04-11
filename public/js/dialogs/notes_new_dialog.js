@@ -2,14 +2,20 @@ chorus.dialogs.NotesNew = chorus.dialogs.MemoNew.extend({
     title:t("notes.new_dialog.title"),
     submitButton: t("notes.button.create"),
 
-    makeModel:function () {
+    makeModel: function() {
         this.model = new chorus.models.Comment({
-            entityType:this.options.launchElement.data("entity-type"),
-            entityId:this.options.launchElement.data("entity-id"),
-            workspaceId: this.options.launchElement.data("workspace-id")
+            entityId: this.options.launchElement ? this.options.launchElement.data("entity-id") : this.options.entityId,
+            entityType: this.options.launchElement ? this.options.launchElement.data("entity-type") : this.options.entityType,
+            workspaceId: this.options.launchElement ? this.options.launchElement.data("workspace-id") : this.options.workspaceId
         });
-        var subject = this.options.launchElement.data("displayEntityType") || this.model.get("entityType");
-        
+
+        var subject;
+        if (this.options.launchElement) {
+            subject = this.options.launchElement.data("displayEntityType") || this.model.get("entityType");
+        } else {
+            subject = this.model.get("entityType");
+        }
+
         this.placeholder = t("notes.placeholder", {noteSubject: subject});
         this._super("makeModel", arguments);
     }

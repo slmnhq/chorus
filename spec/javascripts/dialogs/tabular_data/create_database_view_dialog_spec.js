@@ -97,7 +97,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                         it("navigates to show page of new db view", function() {
                             spyOn(chorus.router, 'navigate')
                             this.server.completeSaveFor(this.view.model, {id: 'foo', workspace: {id: 25} });
-                            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/25/datasets/foo", true);
+                            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/25/datasets/foo");
                         });
                     });
 
@@ -105,7 +105,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                         it("uses the Chorus View's workspace to navigate to the show page of the new db view", function() {
                             spyOn(chorus.router, 'navigate')
                             this.server.completeSaveFor(this.view.model, { id: 'foo' });
-                            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/42/datasets/foo", true);
+                            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/42/datasets/foo");
                         });
                     });
                 });

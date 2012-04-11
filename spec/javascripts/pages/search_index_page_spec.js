@@ -58,7 +58,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 it("should navigate to the filtered result type page", function() {
                     expect(this.page.search.entityType()).toBe("workspace");
                     expect(this.page.search.searchIn()).toBe("all");
-                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.page.search.showUrl(), true);
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.page.search.showUrl());
                 });
             });
 
@@ -77,7 +77,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 chorus.PageEvents.broadcast("choice:search_in", "my_workspaces");
                 expect(this.page.search.entityType()).toBe("all");
                 expect(this.page.search.searchIn()).toBe("my_workspaces");
-                expect(chorus.router.navigate).toHaveBeenCalledWith(this.page.search.showUrl(), true);
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.page.search.showUrl());
             });
 
             describe("the workfile section", function() {

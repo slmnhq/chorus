@@ -38,7 +38,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     showAll: function(e) {
         e.preventDefault();
         this.search.set({entityType: $(e.currentTarget).data("type")})
-        chorus.router.navigate(this.search.showUrl(), true);
+        chorus.router.navigate(this.search.showUrl());
     },
 
     makeListItemView: function(model) {

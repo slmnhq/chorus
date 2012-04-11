@@ -48,7 +48,7 @@ describe("chorus.alerts.DatasetDelete", function() {
         });
 
         it("navigates to the dataset list page", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/" + this.alert.model.get('workspace').id + "/datasets", true);
+            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/" + this.alert.model.get('workspace').id + "/datasets");
         });
     })
 })

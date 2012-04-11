@@ -1,5 +1,5 @@
 chorus.views.Menu = chorus.views.Bare.extend({
-    tagName: "ol",
+    tagName: "ul",
     className: "components/menu",
 
     events: {
@@ -7,63 +7,86 @@ chorus.views.Menu = chorus.views.Bare.extend({
     },
 
     setup: function(options) {
-        var launchElement = options.launchElement;
-        $(launchElement).qtip({
+        var args = {
             content: $(this.el),
-            show: { event: 'click', delay: 0 },
+            show: {
+                event: 'click',
+                delay: 0
+            },
             hide: 'unfocus',
             style: {
+                classes: "tooltip-white tooltip-modal",
                 tip: {
                     mimic: "top center",
                     width: 20,
                     height: 15
                 }
+            },
+            position: {
+                container: this.el,
+                my: "top center",
+                at: "bottom center"
             }
-        });
+        };
 
+        if (options.orientation === "right") {
+            args.position.my = "top left";
+            args.style.tip.offset = 40;
+
+        } else if (options.orientation === "left") {
+            args.position.my = "top right";
+            args.style.tip.offset = 40;
+        }
+
+        options.launchElement.on("click", function(e) { e.preventDefault(); });
+        options.launchElement.qtip(args);
+        this.qtip = options.launchElement.data("qtip");
         this.render();
     },
 
     postRender: function() {
-        _.each(this.$("li a"), function(el, index) {
-            var item = this.options.items[index];
-            $(el).attr("menu-name", item.name);
-            $(el).data("menu-data", item.data);
-            $(el).data("menu-callback", item.onSelect);
+        _.each(this.$("li a"), function(el, i) {
+            $(el).attr("data-menu-name", this.options.items[i].name);
         }, this);
+
+        $(this.el).addClass(this.options.additionalClass);
     },
 
     itemClicked: function(e) {
-        e && e.preventDefault();
-
-        var target = $(e.currentTarget);
-        var callback = target.data("menu-callback");
-        var data = target.data("menu-data");
-
-        if (this.options.checkable) {
-            this.$("li").removeClass("selected");
-            target.parent().addClass("selected");
-        }
-
-        if (callback) {
-            callback(data);
-        }
-        if (this.options.onChange) {
-            this.options.onChange(data);
-        }
+        e.preventDefault();
+        var itemName = $(e.currentTarget).attr("data-menu-name");
+        this.selectItem(itemName);
+        this.qtip.hide()
     },
 
     context: function() {
-        return {
-            items: this.options.items
+        return { items: this.options.items };
+    },
+
+    selectItem: function(name) {
+        var selectedItem = _.find(this.options.items, function(item) {
+            return item.name === name;
+        });
+
+        if (selectedItem.onSelect) { selectedItem.onSelect.call(this, selectedItem.data); }
+        if (this.options.onChange) { this.options.onChange.call(this, selectedItem.data); }
+
+        this.showSelectedItem(name);
+    },
+
+    showSelectedItem: function(name) {
+        if (this.options.checkable) {
+            var li = this.$("li a[data-menu-name=" + name + "]").parent();
+            this.$("li").removeClass("selected");
+            li.addClass("selected");
         }
     },
 
     disableItem: function(name) {
-        this.$("li a[menu-name='" + name + "']").attr("disabled", "disabled");
+        this.$("li a[data-menu-name='" + name + "']").attr("disabled", "disabled");
     },
 
     enableItem: function(name) {
-        this.$("li a[menu-name='" + name + "']").attr("disabled", false);
+        this.$("li a[data-menu-name='" + name + "']").attr("disabled", false);
     }
 });

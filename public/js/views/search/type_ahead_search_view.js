@@ -70,7 +70,7 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     enterKey: function() {
         var selectedLi = this.$("li.selected");
         if (selectedLi.length) {
-            chorus.router.navigate(selectedLi.find("a").attr("href"), true);
+            chorus.router.navigate(selectedLi.find("a").attr("href"));
         }
     },
 

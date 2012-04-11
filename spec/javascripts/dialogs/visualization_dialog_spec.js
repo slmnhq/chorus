@@ -252,16 +252,18 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("should have a 'Save Chart Image as Workfile' link", function() {
-                    expect(this.qtip.find("a.save_as_workfile")).toContainTranslation("visualization.save_as_workfile");
+                    var menu = this.qtip.find("a[data-menu-name='save_as_workfile']")
+                    expect(menu).toContainTranslation("visualization.save_as_workfile");
                 });
 
                 it("should have a 'Save Chart Image as attachment' link", function() {
-                    expect(this.qtip.find("a.save_as_note")).toContainTranslation("visualization.save_as_note");
-                    expect(this.qtip.find("a.save_as_note")).toHaveData("entity-name", this.dataset.get("objectName"))
+                    var menu = this.qtip.find("a[data-menu-name='save_as_note']");
+                    expect(menu).toContainTranslation("visualization.save_as_note");
                 });
 
                 it("should have a 'Save Chart Image to Desktop' link", function() {
-                    expect(this.qtip.find("a.save_to_desktop")).toContainTranslation("visualization.save_to_desktop");
+                    var menu = this.qtip.find("a[data-menu-name='save_to_desktop']")
+                    expect(menu).toContainTranslation("visualization.save_to_desktop");
                 });
             });
 
@@ -337,7 +339,7 @@ describe("chorus.dialogs.Visualization", function() {
                         spyOn(this.dialog, "createDownloadForm").andReturn(this.fakeForm)
                         this.dialog.$("button.save").prop("disabled", false);
                         this.dialog.$("button.save").click();
-                        this.qtip.find("a.save_to_desktop").click();
+                        this.qtip.find("a[data-menu-name='save_to_desktop']").click();
                     });
 
                     it("constructs a form for download", function() {
@@ -379,7 +381,7 @@ describe("chorus.dialogs.Visualization", function() {
                             this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                             this.dialog.$("button.save").prop("disabled", false);
                             this.dialog.$("button.save").click();
-                            this.qtip.find("a.save_as_workfile").click();
+                            this.qtip.find("a[data-menu-name='save_as_workfile']").click();
                         });
 
                         it("disables the save as workfile button and shows the loading spinner", function() {
@@ -398,7 +400,7 @@ describe("chorus.dialogs.Visualization", function() {
                                 this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                                 this.dialog.$("button.save").prop("disabled", false);
                                 this.dialog.$("button.save").click();
-                                this.qtip.find("a.save_as_workfile").click();
+                                this.qtip.find("a[data-menu-name='save_as_workfile']").click();
                             });
 
                             it("strips the offending characters", function() {
@@ -434,7 +436,7 @@ describe("chorus.dialogs.Visualization", function() {
                         this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                         this.dialog.$("button.save").prop("disabled", false);
                         this.dialog.$("button.save").click();
-                        this.qtip.find("a.save_as_workfile").click();
+                        this.qtip.find("a[data-menu-name='save_as_workfile']").click();
                     });
 
                     it("should display the workspace picker", function() {
@@ -467,7 +469,7 @@ describe("chorus.dialogs.Visualization", function() {
                 beforeEach(function() {
                     this.dialog.$("button.save").prop("disabled", false);
                     this.dialog.$("button.save").click();
-                    this.qtip.find("a.save_as_note").click();
+                    this.qtip.find("a[data-menu-name='save_as_note']").click();
                 });
 
                 it("opens the Add Note dialog with correct parameters", function() {
@@ -475,8 +477,7 @@ describe("chorus.dialogs.Visualization", function() {
 
                     expect(this.dialog.notesNewDialog).toBeA(chorus.dialogs.VisualizationNotesNew);
                     expect(this.dialog.notesNewDialog.pageModel).toBe(this.dialog.model);
-                    expect(this.dialog.notesNewDialog.options.launchElement).toBe(this.qtip.find("a.save_as_note"));
-                    expect(this.dialog.notesNewDialog.options.launchElement.data("allow-workspace-attachments")).toBeTruthy();
+                    expect(this.dialog.notesNewDialog.options.allowWorkspaceAttachments).toBeTruthy();
                     expect(this.dialog.notesNewDialog.options.attachVisualization.fileName).toBe(this.dialog.makeFilename());
                     expect(this.dialog.notesNewDialog.options.attachVisualization.svgData).toBe(this.dialog.makeSvgData())
                 });
@@ -487,11 +488,11 @@ describe("chorus.dialogs.Visualization", function() {
                         this.dialog.render();
                         this.dialog.$("button.save").prop("disabled", false);
                         this.dialog.$("button.save").click();
-                        this.qtip.find("a.save_as_note").click();
+                        this.qtip.find("a[data-menu-name='save_as_note']").click();
                     });
 
                     it("should not allow workspace attachments", function() {
-                        expect(this.dialog.notesNewDialog.options.launchElement.data("allow-workspace-attachments")).toBeFalsy();
+                        expect(this.dialog.notesNewDialog.options.allowWorkspaceAttachments).toBeFalsy();
                     });
                 });
             });

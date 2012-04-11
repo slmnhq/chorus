@@ -50,7 +50,7 @@ describe("chorus.alerts.WorkspaceDelete", function() {
         });
 
         it("navigates to the dashboard", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith("/", true);
+            expect(chorus.router.navigate).toHaveBeenCalledWith("/");
         });
     })
 })

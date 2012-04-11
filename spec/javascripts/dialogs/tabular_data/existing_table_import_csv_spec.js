@@ -1,21 +1,24 @@
 describe("chorus.dialogs.ExistingTableImportCSV", function() {
     beforeEach(function() {
         chorus.page = {};
-        this.sandbox = fixtures.sandbox({
+        this.sandbox = newFixtures.sandbox({
             schemaName: "mySchema",
             databaseName: "myDatabase",
             instanceName: "myInstance"
         })
         chorus.page.workspace = newFixtures.workspace();
-        this.csv = fixtures.csvImport({lines: [
-            "COL1,col2, col3 ,col 4,Col_5",
-            "val1.1,val1.2,val1.3,val1.4,val1.5",
-            "val2.1,val2.2,val2.3,val2.4,val2.5",
-            "val3.1,val3.2,val3.3,val3.4,val3.5",
-            "val4.1,val4.2,val4.3,val4.4,val4.5"
-        ],
+        this.csv = newFixtures.csvImport({
+            lines: [
+                "COL1,col2, col3 ,col 4,Col_5",
+                "val1.1,val1.2,val1.3,val1.4,val1.5",
+                "val2.1,val2.2,val2.3,val2.4,val2.5",
+                "val3.1,val3.2,val3.3,val3.4,val3.5",
+                "val4.1,val4.2,val4.3,val4.4,val4.5"
+            ]
+        }, {
             toTable: "existingTable",
-            truncate: true
+            truncate: true,
+            hasHeader: true
         });
         this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
         this.columns = [
@@ -25,7 +28,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             {name: "col4", typeCategory: "WHOLE_NUMBER", ordinalPosition: "2"},
             {name: "col5", typeCategory: "WHOLE_NUMBER", ordinalPosition: "5"}
         ]
-        this.dataset = fixtures.datasetSandboxTable({
+        this.dataset = newFixtures.datasetSandboxTable({
             id: "dat-id",
             workspace: {id: this.csv.get("workspaceId")},
             columnNames: this.columns
@@ -79,12 +82,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     function hasRightSeparator(separator) {
         return function() {
             beforeEach(function() {
-                this.csv = fixtures.csvImport({lines: [
-                    "COL1" + separator + "col2" + separator + "col3" + separator + "col_4" + separator + "Col_5",
-                    "val1.1" + separator + "val1.2" + separator + "val1.3" + separator + "val1.4" + separator + "val1.5",
-                    "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
-                    "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
-                ],
+                this.csv = newFixtures.csvImport({
+                    lines: [
+                        "COL1" + separator + "col2" + separator + "col3" + separator + "col_4" + separator + "Col_5",
+                        "val1.1" + separator + "val1.2" + separator + "val1.3" + separator + "val1.4" + separator + "val1.5",
+                        "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
+                        "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
+                    ]
+                }, {
                     toTable: "existingTable"
                 });
                 this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
@@ -142,12 +147,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             describe("entering 'z' as a separator", function() {
                 beforeEach(function() {
-                    this.csv = fixtures.csvImport({lines: [
-                        "COL1zcol2zcol3zcol_4zCol_5",
-                        "val1.1zval1.2zval1.3zval1.4zval1.5",
-                        "val2.1zval2.2zval2.3zval2.4zval2.5",
-                        "val3.1zval3.2zval3.3zval3.4zval3.5"
-                    ],
+                    this.csv = newFixtures.csvImport({
+                        lines: [
+                            "COL1zcol2zcol3zcol_4zCol_5",
+                            "val1.1zval1.2zval1.3zval1.4zval1.5",
+                            "val2.1zval2.2zval2.3zval2.4zval2.5",
+                            "val3.1zval3.2zval3.3zval3.4zval3.5"
+                        ]
+                    }, {
                         toTable: "existingTable"
                     });
                     this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
@@ -250,7 +257,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 expect($(el).text()).toContainTranslation("dataset.import.table.existing.map_to");
                 expect($(el).find("a").text()).toContainTranslation("dataset.import.table.existing.select_one");
                 expect($(el).find("a")).toHaveClass("selection_conflict");
-                expect($(el).find(".arrow")).toHaveClass("selection_conflict");
             });
         })
 
@@ -466,7 +472,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             spyOn(this.dialog, "closeModal");
             this.expectedColumnsMap = []
             for (var i = 0; i < 5; i++) {
-                this.dialog.$(".column_mapping .map:eq(" + i + ")").click();
+                this.dialog.$(".column_mapping .map a:eq(" + i + ")").click();
                 this.qtip.find(".qtip:last .ui-tooltip-content li:eq(" + (i) + ") a").click();
                 this.expectedColumnsMap.push({sourceOrder: (i + 1), targetOrder: this.columns[i].ordinalPosition})
             }
@@ -517,7 +523,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 });
 
                 it("should navigate to the destination sandbox table", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.dataset.showUrl(), true)
+                    expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.dataset.showUrl())
                 });
             })
 

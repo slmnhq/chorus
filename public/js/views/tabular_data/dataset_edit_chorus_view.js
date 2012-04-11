@@ -35,6 +35,6 @@ chorus.views.DatasetEditChorusView = chorus.views.CodeEditorView.extend({
     },
 
     navigateToChorusViewShowPage: function() {
-        chorus.router.navigate( this.model.showUrl(), true);
+        chorus.router.navigate( this.model.showUrl());
     }
 });

@@ -13,7 +13,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: fixtures.sandbox() });
+            this.view = new chorus.views.DatabaseColumnSidebarList({ sandbox: newFixtures.sandbox() });
             this.view.render();
         });
 
@@ -24,7 +24,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
         describe("when rendered with a databaseView", function() {
             beforeEach(function() {
                 this.databaseView = fixtures.databaseView({ objectName: "brian_the_view", schemaName: "john_the_schema" });
-                this.view.trigger("datasetSelected", this.databaseView);
+                chorus.PageEvents.broadcast("datasetSelected", this.databaseView);
                 this.server.completeFetchAllFor(this.databaseView.columns(), [fixtures.databaseColumn()]);
             });
 
@@ -37,7 +37,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
             var chorusView;
             beforeEach(function() {
                 chorusView = fixtures.datasetChorusView({ objectName: "tobias_the_chorus_view" });
-                this.view.trigger("datasetSelected", chorusView);
+                chorus.PageEvents.broadcast("datasetSelected", chorusView);
                 this.server.completeFetchAllFor(chorusView.columns(), [fixtures.databaseColumn()]);
             });
 
@@ -46,14 +46,14 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
             });
         });
 
-        describe("when the 'datasetSelected' event is triggered", function() {
+        describe("when the 'datasetSelected' event is broadcast", function() {
             beforeEach(function() {
                 this.table = fixtures.databaseTable({ objectName: "brian_the_table", schemaName: "john_the_schema" });
-                this.view.trigger("datasetSelected", this.table);
+                chorus.PageEvents.broadcast("datasetSelected", this.table);
             });
 
             it("should fetch the columns for the table", function() {
-                expect(this.server.lastFetchFor(this.table.columns(), {page: 1, rows: 1000})).not.toBeUndefined();
+                expect(this.server.lastFetchFor(this.table.columns(), {page: 1, rows: 1000})).toBeDefined();
             });
 
             context("when the fetch completes", function() {
@@ -108,35 +108,52 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
 
                     describe("when switching to another dataset", function() {
                         beforeEach(function() {
-                            var table1 = fixtures.databaseTable({
+                            this.newTable = fixtures.databaseTable({
                                 objectName: "jack_the_table",
                                 schemaName: "harry_the_schema"
                             });
 
-                            this.view.trigger("datasetSelected", table1);
-
-                            this.server.completeFetchAllFor(table1.columns(), [
-                                fixtures.databaseColumn({name: "column_a"}),
-                                fixtures.databaseColumn({name: "column_b"}),
-                                fixtures.databaseColumn({name: "column_c"})
-                            ]);
+                            chorus.PageEvents.broadcast("datasetSelected", this.newTable);
                         });
 
-                        it("re-fetches the correct columns", function() {
-                            expect(this.view.$("li").length).toBe(3);
+                        it("fetches the new columns", function() {
+                            expect(this.server.lastFetchFor(this.newTable.columns())).toBeDefined();
                         });
 
-                        describe("when switching back to the first dataset", function() {
+                        context("when the fetch completes", function() {
                             beforeEach(function() {
-                                this.view.trigger("datasetSelected", this.table);
-                                this.server.completeFetchAllFor(this.table.columns(), [
-                                    fixtures.databaseColumn({name: "column_1"}),
-                                    fixtures.databaseColumn({name: "column_2"})
+                                this.server.completeFetchAllFor(this.newTable.columns(), [
+                                    fixtures.databaseColumn({name: "column_a"}),
+                                    fixtures.databaseColumn({name: "column_b"}),
+                                    fixtures.databaseColumn({name: "column_c"})
                                 ]);
                             });
 
-                            it("has the correct columns", function() {
-                                expect(this.view.$("li").length).toBe(2);
+                            it("re-renders the column list", function() {
+                                expect(this.view.$("li").length).toBe(3);
+                            });
+
+                            describe("when switching back to the first dataset", function() {
+                                beforeEach(function() {
+                                    chorus.PageEvents.broadcast("datasetSelected", this.table);
+                                });
+
+                                it("fetches the new columns", function() {
+                                    expect(this.server.lastFetchFor(this.table.columns())).toBeDefined();
+                                });
+
+                                context("when the fetch completes", function() {
+                                    beforeEach(function() {
+                                        this.server.completeFetchAllFor(this.table.columns(), [
+                                            fixtures.databaseColumn({name: "column_1"}),
+                                            fixtures.databaseColumn({name: "column_2"})
+                                        ]);
+                                    });
+
+                                    it("re-renders the column list", function() {
+                                        expect(this.view.$("li").length).toBe(2);
+                                    });
+                                });
                             });
                         });
                     });

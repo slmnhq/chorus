@@ -30,15 +30,31 @@ describe("newFixtures", function() {
             var userJson2 = newFixtures.userJson({ id: '501' });
             expect(userJson2.id).toBe("501");
         });
+
+        it("allows arbitrary overrides passed as a second argument", function() {
+            var userJson2 = newFixtures.userJson({ id: 1 }, { coolName: "dude1" })
+            expect(userJson2.coolName).toBe("dude1");
+        });
     });
 
     describe("#user", function() {
-        it("creates a user model with attributes given by #userJson", function() {
-            var fakeAttrs = { ping: "pong", paddle: "ball" };
+        var fakeAttrs;
+
+        beforeEach(function() {
+            fakeAttrs = { ping: "pong", paddle: "ball" };
             spyOn(newFixtures, 'userJson').andReturn(fakeAttrs);
+        });
+
+        it("creates a user model with attributes given by #userJson", function() {
             var user = newFixtures.user();
             expect(user.attributes).toEqual(fakeAttrs);
             expect(user).toBeA(chorus.models.User);
+        });
+
+        it("passes all of its arguments to #userJson", function() {
+            var args = [{ foo: 1 }, { bar: 2 }];
+            var user = newFixtures.user(args[0], args[1]);
+            expect(newFixtures.userJson).toHaveBeenCalledWith(args[0], args[1]);
         });
     });
 

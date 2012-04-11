@@ -89,32 +89,34 @@
 
         .column_mapping {
             .map {
-                height: 32px;
-                width: $cell-width -20px;
                 @include font-content-details;
-                vertical-align: middle;
-                span {
+                > span, a {
                     display: inline-block;
                     vertical-align: middle;
+                    padding-top: 4px;
                 }
 
                 a {
                     @include ellipsis;
-                    display: inline-block;
                     font-size: 12px;
                     font-weight: $semibold;
-                    margin-right: 5px;
                     max-width: $cell-width - 68px;
-                    vertical-align: middle;
+                    height: 32px;
                     &.selection_conflict {
                         color: #cc0000;
+
+                        .arrow {
+                            @include triangle(down, #cc0000, 4px, 4px);
+                        }
                     }
-                }
-                .arrow {
-                    display: inline-block;
-                    @include triangle(down, $link-color, 4px, 4px);
-                    &.selection_conflict {
-                        @include triangle(down, #cc0000, 4px, 4px);
+
+                    .column_name {
+                        margin-right: 5px;
+                    }
+
+                    .arrow {
+                        display: inline-block;
+                        @include triangle(down, $link-color, 4px, 4px);
                     }
                 }
             }

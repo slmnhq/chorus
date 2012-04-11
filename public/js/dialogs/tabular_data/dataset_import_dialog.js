@@ -172,7 +172,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                     self.showErrors(workfile);
                 } else {
                     chorus.toast("dataset.import.workfile_success", {fileName: workfile.get("fileName")});
-                    chorus.router.navigate(workfile.hasOwnPage() ? workfile.showUrl() : workfile.workfilesUrl(), true);
+                    chorus.router.navigate(workfile.hasOwnPage() ? workfile.showUrl() : workfile.workfilesUrl());
                 }
             } else {
                 var workingCsv = self.csv.clone();

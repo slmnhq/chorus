@@ -33,7 +33,7 @@ chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.extend({
 
     workspaceSaved:function () {
         $(document).trigger("close.facebox");
-        chorus.router.navigate("/workspaces/" + this.model.get("id") + "/quickstart", true);
+        chorus.router.navigate("/workspaces/" + this.model.get("id") + "/quickstart");
     },
 
     checkInput : function() {

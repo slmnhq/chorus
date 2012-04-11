@@ -59,7 +59,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
 
         it("navigates to the show page of the workfile", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl(), true);
+            expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl());
         });
     });
 

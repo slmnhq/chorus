@@ -87,7 +87,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
                 self.model = new chorus.models.Workfile(json.resource[0]);
                 chorus.toast('workfiles.uploaded', {fileName:self.model.get("fileName")});
                 self.closeModal();
-                chorus.router.navigate(self.model.showUrl(), true);
+                chorus.router.navigate(self.model.showUrl());
             }
             else {
                 e.preventDefault();

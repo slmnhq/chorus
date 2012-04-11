@@ -20,7 +20,7 @@ describe("chorus.models.DatabaseColumn", function() {
 
         context("when there is tabularData", function() {
             beforeEach(function() {
-                this.tabularData = fixtures.datasetSandboxTable({objectName: 'taaab', schemaName: 'partyman'});
+                this.tabularData = newFixtures.datasetSandboxTable({objectName: 'taaab', schemaName: 'partyman'});
                 this.model.tabularData = this.tabularData;
                 this.model.initialize();
             });

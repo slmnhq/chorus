@@ -23,6 +23,8 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
         this.bindings.add(this.model, "invalidated", this.allVersions.fetch, this.allVersions);
         this.bindings.add(this.allVersions, "changed", this.render);
 
+        chorus.PageEvents.subscribe("datasetSelected", this.jumpToTop, this);
+
         this.requiredResources.push(this.model);
         this.requiredResources.push(this.model.workspace());
     },

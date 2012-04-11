@@ -132,8 +132,8 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                     this.page.collection.trigger("fetchFailed", this.page.collection);
                 });
 
-                it("does not navigate", function() {
-                    expect(Backbone.history.loadUrl).not.toHaveBeenCalled();
+                it("navigates to the 404 page", function() {
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
                 });
             });
 

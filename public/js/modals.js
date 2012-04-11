@@ -42,7 +42,7 @@ chorus.Modal = chorus.views.Base.extend({
 
         $(window).resize(this.resize);
 
-        $("body").css("overflow", "hidden");
+        this.preventScrollingBody();
 
         return result;
     },
@@ -87,7 +87,7 @@ chorus.Modal = chorus.views.Base.extend({
             if (this.previousModal) {
                 this.previousModal.restore();
             } else {
-                $("body").css("overflow", "visible");
+                this.restoreScrollingBody();
             }
         }
     },
@@ -125,6 +125,19 @@ chorus.Modal = chorus.views.Base.extend({
         delete this.boundKeyDownHandler;
     },
 
+    preventScrollingBody: function() {
+        $("body").css("overflow", "hidden");
+    },
+
+    restoreScrollingBody: function() {
+        $("body").css("overflow", "visible");
+    },
+
     close:$.noop,
     revealed:$.noop
 });
+
+if (window.jasmine) {
+    chorus.Modal.prototype.preventScrollingBody = $.noop;
+    chorus.Modal.prototype.restoreScrollingBody = $.noop;
+}

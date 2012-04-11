@@ -140,11 +140,11 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
     scopeSearchResults: function(data) {
         this.search.set({ searchIn: data });
-        chorus.router.navigate(this.search.showUrl(), true);
+        chorus.router.navigate(this.search.showUrl());
     },
 
     filterSearchResults: function(entityType) {
         this.search.set({ entityType: entityType });
-        chorus.router.navigate(this.search.showUrl(), true);
+        chorus.router.navigate(this.search.showUrl());
     }
 });

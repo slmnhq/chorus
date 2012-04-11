@@ -10,7 +10,7 @@ describe("chorus.models.Schema", function() {
 
     context("from a sandbox", function() {
         beforeEach(function() {
-            this.sandbox = fixtures.sandbox();
+            this.sandbox = newFixtures.sandbox();
             this.model = this.sandbox.schema();
         });
 

@@ -43,7 +43,7 @@ describe("chorus.views.WorkspaceSearchResultList", function() {
 
         it("navigates to the 'this workspace' search page", function() {
             expect(this.view.search.searchIn()).toBe("this_workspace");
-            expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.search.showUrl(), true);
+            expect(chorus.router.navigate).toHaveBeenCalledWith(this.view.search.showUrl());
         });
     });
 });

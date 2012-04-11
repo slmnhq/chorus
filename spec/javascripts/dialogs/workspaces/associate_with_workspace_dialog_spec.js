@@ -49,7 +49,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
         });
         context("when the model is a sandbox table/view or a chorus view (in a workspace)", function() {
             beforeEach(function() {
-                this.model = fixtures.datasetSandboxTable({workspace: {id: "645"}});
+                this.model = newFixtures.datasetSandboxTable({workspace: {id: "645"}});
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     newFixtures.workspace({ name: "im_not_the_current_one'" }),
@@ -69,7 +69,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     describe("clicking Associate Dataset", function() {
         context("for anything except a Chorus View", function() {
             beforeEach(function() {
-                this.model = fixtures.datasetSandboxTable();
+                this.model = newFixtures.datasetSandboxTable();
                 this.workspace = newFixtures.workspace({ name: "im_not_the_current_one" });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });

@@ -82,7 +82,7 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
                 })
 
                 it("redirects to the new workspace show page", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles/10108", true);
+                    expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles/10108");
                 });
 
                 it("dismisses the dialog", function() {

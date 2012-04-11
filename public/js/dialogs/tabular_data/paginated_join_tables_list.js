@@ -11,6 +11,8 @@ chorus.views.PaginatedJoinTablesList = chorus.views.Base.extend({
             modelClass: "Dataset",
             hideIfNoPagination: true
         });
+
+        this.bindings.add(this.collection, 'searched', this.render);
     },
 
     collectionModelContext: function(model) {

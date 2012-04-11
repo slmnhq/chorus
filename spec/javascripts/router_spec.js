@@ -16,7 +16,7 @@ describe("chorus.router", function() {
 
         it("generates a new cachebuster value when navigating", function() {
             spyOn(this.chorus, "updateCachebuster").andCallThrough();
-            this.chorus.router.navigate("/login", true);
+            this.chorus.router.navigate("/login");
             expect(this.chorus.updateCachebuster).toHaveBeenCalled();
         });
 
@@ -32,7 +32,7 @@ describe("chorus.router", function() {
             context("when navigating to the login page", function() {
                 beforeEach(function() {
                     spyOn(chorus.pages.DashboardPage.prototype, "initialize").andCallThrough();
-                    this.chorus.router.navigate("/login", true);
+                    this.chorus.router.navigate("/login");
                 })
 
                 it("navigates to the dashboard", function() {
@@ -47,7 +47,7 @@ describe("chorus.router", function() {
             context("when navigating to any page other than login", function() {
                 beforeEach(function() {
                     spyOn(chorus.pages.UserNewPage.prototype, "initialize").andCallThrough();
-                    this.chorus.router.navigate("/users/new", true);
+                    this.chorus.router.navigate("/users/new");
                 })
 
                 it("fetches the session", function() {
@@ -63,18 +63,18 @@ describe("chorus.router", function() {
                 });
 
                 it("sets the scroll position to (0,0)", function() {
-                    this.chorus.router.navigate("/users/new", true);
+                    this.chorus.router.navigate("/users/new");
                     expect(window.scroll).toHaveBeenCalledWith(0, 0);
                 })
 
                 it("triggers the 'leaving' event on itself", function() {
                     spyOnEvent(this.chorus.router, "leaving");
-                    this.chorus.router.navigate("/users/new", true);
+                    this.chorus.router.navigate("/users/new");
                     expect("leaving").toHaveBeenTriggeredOn(this.chorus.router);
                 });
 
                 it("sets chorus.page.pageOptions to chorus.pageOptions", function() {
-                    this.chorus.router.navigate("/users/new", true, { foo: "bar" });
+                    this.chorus.router.navigate("/users/new", { foo: "bar" });
                     expect(this.chorus.page.pageOptions).toEqual({ foo: "bar" })
                     expect(this.chorus.pageOptions).toBeUndefined();
                 })
@@ -92,7 +92,7 @@ describe("chorus.router", function() {
 
             context("when navigating to the login page", function() {
                 beforeEach(function() {
-                    this.chorus.router.navigate("/login", true);
+                    this.chorus.router.navigate("/login");
                     this.server.respond();
                 })
 
@@ -103,7 +103,7 @@ describe("chorus.router", function() {
 
             context("when navigating to any page other than login", function() {
                 beforeEach(function() {
-                    this.chorus.router.navigate("/users/new", true);
+                    this.chorus.router.navigate("/users/new");
                     this.server.respond();
                 })
 
@@ -128,19 +128,19 @@ describe("chorus.router", function() {
         })
 
         it("renders the page with parameters", function() {
-            this.chorus.router.navigate("/workspaces/5", true);
+            this.chorus.router.navigate("/workspaces/5");
             expect(this.chorus.page.model.get("id")).toBe("5");
         });
 
         it("closes the current modal", function() {
             this.chorus.modal = new chorus.dialogs.ChangePassword();
             spyOn(this.chorus.modal, "closeModal");
-            this.chorus.router.navigate("/", true);
+            this.chorus.router.navigate("/");
             expect(this.chorus.modal.closeModal).toHaveBeenCalled();
         });
 
         it("sets chorus.pageOptions to the third argument", function() {
-            this.chorus.router.navigate("/workspaces/5", true, {foo: "bar"});
+            this.chorus.router.navigate("/workspaces/5", {foo: "bar"});
             expect(this.chorus.page.pageOptions).toEqual({foo: "bar"});
         });
 
@@ -151,20 +151,20 @@ describe("chorus.router", function() {
 
             describe("and the target fragment is not the current fragment", function() {
                 it("delegates to the Backbone.router implementation", function() {
-                    this.chorus.router.navigate("/bar", true);
+                    this.chorus.router.navigate("/bar");
                     expect(Backbone.history.navigate).toHaveBeenCalledWith("/bar", true);
                 })
             })
 
             describe("and the target fragment is the current fragment", function() {
                 it("calls loadUrl on the fragment", function() {
-                    this.chorus.router.navigate("/foo", true);
+                    this.chorus.router.navigate("/foo");
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
                     expect(Backbone.history.navigate).not.toHaveBeenCalled();
                 })
 
                 it("calls loadUrl on the fragment, even if the target fragment is prefixed by #", function() {
-                    this.chorus.router.navigate("#/foo", true);
+                    this.chorus.router.navigate("#/foo");
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
                     expect(Backbone.history.navigate).not.toHaveBeenCalled();
                 })
@@ -177,13 +177,13 @@ describe("chorus.router", function() {
 
                 describe("and the target fragment is the current fragment", function() {
                     it("calls loadUrl on the fragment", function() {
-                        this.chorus.router.navigate("/foo/%271%27%7C2", true);
+                        this.chorus.router.navigate("/foo/%271%27%7C2");
                         expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo/%271%27%7C2");
                         expect(Backbone.history.navigate).not.toHaveBeenCalled();
                     })
 
                     it("calls loadUrl on the fragment, even if the target fragment is prefixed by #", function() {
-                        this.chorus.router.navigate("#/foo/%271%27%7C2", true);
+                        this.chorus.router.navigate("#/foo/%271%27%7C2");
                         expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo/%271%27%7C2");
                         expect(Backbone.history.navigate).not.toHaveBeenCalled();
                     });
@@ -216,12 +216,12 @@ describe("chorus.router", function() {
         });
 
         it("does not decode fragments before matching routes", function() {
-            this.chorus.router.navigate('/search/has%2Fslash', true);
+            this.chorus.router.navigate('/search/has%2Fslash');
             expect(chorus.pages.SearchIndexPage.prototype.setup).toHaveBeenCalled();
         });
 
         it("decodes parameters before constructing pages", function() {
-            this.chorus.router.navigate('/search/has%2Fslash', true);
+            this.chorus.router.navigate('/search/has%2Fslash');
             expect(chorus.pages.SearchIndexPage.prototype.setup).toHaveBeenCalledWith('has/slash');
         });
     });

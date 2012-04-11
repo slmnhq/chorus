@@ -8,14 +8,15 @@
         var klass = getClass(definition);
         var jsonMethodName = name + "Json";
 
-        window.newFixtures[jsonMethodName] = function(overrides) {
+        window.newFixtures[jsonMethodName] = function(overrides, uncheckedOverrides) {
             var rawData = getFixture(name);
             overrides || (overrides = defaultOverridesFor(rawData));
             addUniqueDefaults(overrides, definition.unique);
-            return safeExtend(rawData, overrides, name);
+            var safeAttrs = safeExtend(rawData, overrides, name);
+            return _.extend(safeAttrs, uncheckedOverrides);
         };
 
-        window.newFixtures[name] = function(overrides) {
+        window.newFixtures[name] = function() {
             var attrs = newFixtures[jsonMethodName].apply(this, arguments);
             return new klass(attrs);
         };

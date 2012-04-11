@@ -25,8 +25,7 @@ describe("chorus.views.DatasetAndColumnList", function() {
     context("when a table is selected in the dataset list", function() {
         beforeEach(function() {
             this.table = fixtures.databaseTable();
-            spyOnEvent(this.view.columnList, 'datasetSelected');
-            this.view.datasetList.trigger("datasetSelected", this.table);
+            chorus.PageEvents.broadcast("datasetSelected", this.table);
             this.server.completeAllFetches();
             this.view.$(".database_column_list input.search").val("searching for a column...");
         });
@@ -37,10 +36,6 @@ describe("chorus.views.DatasetAndColumnList", function() {
 
         it("shows the column list", function() {
             expect(this.view.$(".database_column_list")).not.toHaveClass("hidden");
-        });
-
-        it("forwards the selection event to the column list view", function() {
-            expect("datasetSelected").toHaveBeenTriggeredOn(this.view.columnList, [ this.table ]);
         });
 
         context("when the back link is clicked", function() {

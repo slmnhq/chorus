@@ -194,6 +194,14 @@ body .ui-draggable-dragging {
                     }
                 }
 
+                a.more {
+                    display: block;
+                    font-size: 13px;
+                    font-weight: $semibold;
+                    text-align: center;
+                    margin-top: 10px;
+                }
+
                 .empty_selection {
                     .top {
                         @include secondary-text-small-semibold;
@@ -203,6 +211,7 @@ body .ui-draggable-dragging {
 
             .database_column_sidebar_list {
                 .context {
+                    line-height: 1.2;
                     .table, .schema {
                         display: inline-block;
                         max-width: 80px;

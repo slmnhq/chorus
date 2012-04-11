@@ -82,14 +82,9 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
 
         this.schemas.onLoaded(this.schemasLoaded, this);
 
-        var self = this;
-        var onTextChangeFunction = _.debounce(function(e) {
-            var input = $(e.target).val();
-            self.collection.attributes.filter = input;
-            self.collection.fetch({silent: true, success: function() {
-                self.paginatedJoinTables.render();
-            }});
-        }, 300);
+        var onTextChangeFunction = _.debounce(_.bind(function(e) {
+            this.collection.search($(e.target).val());
+        }, this), 300);
 
         chorus.search({
             input: this.$(".search input:text"),

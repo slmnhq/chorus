@@ -13,9 +13,10 @@ chorus.collections.SchemaSet = chorus.collections.Base.include(
         var resource = this._super("parse", arguments)
         return _.map(resource, function (model) {
             return _.extend({
-                instanceId:this.attributes.instanceId,
-                databaseId:this.attributes.databaseId,
-                databaseName:this.attributes.databaseName
+                instanceId: this.attributes.instanceId,
+                instanceName: this.attributes.instanceName,
+                databaseId: this.attributes.databaseId,
+                databaseName: this.attributes.databaseName
             }, model)
         }, this)
     }
