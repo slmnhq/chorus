@@ -1,27 +1,40 @@
 describe("chorus.models.CSVImport", function() {
 
     describe("validation", function() {
+        var badNames;
         beforeEach(function() {
             this.model = fixtures.csvImport();
+
+            badNames = [
+                "6",
+                "a table name",
+                new Array(100).join("a"),
+                ""
+            ];
         });
+
         it("is valid with a valid toTable", function() {
             this.model.set({toTable: "a_happyTable123"});
             expect(this.model.performValidation()).toBeTruthy();
-        })
+        });
 
-        var badNames = [
-            "6",
-            "a table name",
-            new Array(100).join("a"),
-            ""
-        ];
-
-        _.each(badNames, function(name) {
-            it("is invalid for a name of " + name, function() {
-                this.model.set({toTable: name});
-                expect(this.model.performValidation()).toBeFalsy();
+        context("for a new table", function() {
+            it("is invalid for funny names", function() {
+                _.each(badNames, function(name) {
+                    this.model.set({toTable: name});
+                    expect(this.model.performValidation()).toBeFalsy();
+                }, this);
             });
-        }, this);
+        });
+
+        context("for an existing table", function() {
+            it("is valid for funny names", function() {
+                _.each(badNames, function(name) {
+                    this.model.set({toTable: name, type: "existingTable"});
+                    expect(this.model.performValidation()).toBeTruthy();
+                }, this);
+            });
+        });
     });
 
     it("has the right url", function() {

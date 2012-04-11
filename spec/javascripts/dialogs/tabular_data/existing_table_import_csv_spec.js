@@ -63,6 +63,19 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         expect(this.dialog.$(".errors")).not.toBeEmpty();
     });
 
+    describe("with an existing toTable that has a funny name", function() {
+        beforeEach(function() {
+            this.dialog.csv.set({ toTable: "!@#$%^&*()_+" });
+            this.dialog.$("a.automap").click();
+            this.server.reset();
+            this.dialog.$("button.submit").click();
+        });
+
+        it("still imports and passes client side validation", function() {
+            expect(this.server.lastCreateFor(this.dialog.csv).url.length).toBeGreaterThan(0);
+        });
+    });
+
     describe("click the 'tab' separator", hasRightSeparator('\t'));
     describe("click the 'comma' separator", hasRightSeparator(','));
     describe("click the 'semicolon' separator", hasRightSeparator(';'));
@@ -481,6 +494,18 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         it("enables the import button", function() {
             expect(this.dialog.$('button.submit')).toBeEnabled();
         })
+
+        context("clicking import button with invalid fields", function() {
+            beforeEach(function() {
+                spyOn(this.dialog.csv, "performValidation").andReturn(false);
+                this.dialog.$("button.submit").click();
+            });
+
+            it("re-enables the submit button", function() {
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("dataset.import.table.submit");
+            });
+        });
 
         describe("clicking the import button", function() {
             beforeEach(function() {
