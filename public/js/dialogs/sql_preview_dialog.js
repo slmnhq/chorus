@@ -18,10 +18,6 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
         this.modalClosedHandle = chorus.PageEvents.subscribe("modal:closed", this.cancelTask, this);
     },
 
-    additionalContext : function() {
-        return { sql: this.sql()}
-    },
-
     makeCodeMirrorOptions: function() {
         return opts = {
             readOnly: "nocursor",
@@ -53,14 +49,12 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
         e && e.preventDefault();
         this.$(".results_console").removeClass("hidden");
         this.$("button.preview").addClass("hidden");
-        var preview = this.model.preview().set({query: this.sql()}, {silent: true});
+        var preview = this.model.preview().set({ query: this.sql() }, {silent: true});
         this.resultsConsole.execute(preview);
     },
 
     sql: function() {
-        var parent = this.options.launchElement.data("parent");
-        var sql = parent && parent.sql()
-        return sql;
+        return this.model.get("query");
     },
 
     cancelTask: function() {

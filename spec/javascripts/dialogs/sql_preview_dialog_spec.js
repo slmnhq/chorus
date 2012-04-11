@@ -12,10 +12,6 @@ describe("chorus.dialogs.SqlPreview", function() {
 
             stubModals();
             this.dialog.launchModal();
-
-            this.parent = {
-                sql: function() { return model.get("query"); }
-            }
         });
 
         it("has a close window button", function() {
@@ -43,7 +39,6 @@ describe("chorus.dialogs.SqlPreview", function() {
 
             describe("opening the Data Preview", function() {
                 beforeEach(function() {
-                    this.launchElement.data("parent", this.parent);
                     this.dialog.$("button.preview").click();
                 });
 
@@ -97,7 +92,7 @@ describe("chorus.dialogs.SqlPreview", function() {
             });
 
             it("constructs the SQL correctly", function() {
-                expect(this.dialog.additionalContext().sql).toBe("select awesome from sql");
+                expect(this.dialog.$("textarea").val()).toBe("select awesome from sql");
             });
         });
 

@@ -32,6 +32,10 @@ chorus.dialogs.NameChorusView = chorus.dialogs.SqlPreview.extend({
         this.model.save();
     },
 
+    sql: function() {
+        return this.editor.getValue();
+    },
+
     chorusViewCreated: function() {
         $(document).trigger("close.facebox");
         chorus.router.navigate(this.model.showUrl());
@@ -50,9 +54,5 @@ chorus.dialogs.NameChorusView = chorus.dialogs.SqlPreview.extend({
         var options = this._super("makeCodeMirrorOptions");
         delete options.readOnly;
         return options;
-    },
-
-    sql: function() {
-        return (this.editor ? this.editor.getValue() : this._super("sql"));
     }
 });
