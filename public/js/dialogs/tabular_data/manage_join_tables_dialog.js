@@ -41,11 +41,18 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         this.displayCanonicalName();
     },
 
-    displayCanonicalName: function() {
+    joinableDatasetsSelected: function() {
+        var workspace = this.pageModel.workspace();
+        var datasets = workspace.datasetsInDatabase(this.pageModel.schema().database());
+        this.fetchDatabaseObjects(datasets);
+        this.displayCanonicalName(t("dataset.manage_join_tables.this_workspace"));
+    },
+
+    displayCanonicalName: function(schemaName) {
         var canonicalNameEl = this.$(".canonical_name");
         canonicalNameEl.find(".instance").text(this.schema.get("instanceName"));
         canonicalNameEl.find(".database").text(this.schema.get("databaseName"));
-        canonicalNameEl.find(".schema_qtip").text(this.schema.get("name"));
+        canonicalNameEl.find(".schema_qtip").text(schemaName || this.schema.get("name"));
     },
 
     postRender: function() {
@@ -63,6 +70,12 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
                 onSelect: _.bind(this.schemaSelected, this)
             };
         }, this);
+
+        menuItems.unshift({
+            name: "this_workspace",
+            text: t("dataset.manage_join_tables.this_workspace"),
+            onSelect: _.bind(this.joinableDatasetsSelected, this)
+        });
 
         var menu = new chorus.views.Menu({
             launchElement: this.$("a.schema_qtip"),

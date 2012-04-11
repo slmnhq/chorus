@@ -159,14 +159,14 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                         this.schemaMenu = this.qtip.find(".qtip").eq(0);
                     });
 
-                    xit("has an item for 'this workspace'", function() {
+                    it("has an item for 'this workspace'", function() {
                         expect(this.schemaMenu.find("li").eq(0)).toContainTranslation("dataset.manage_join_tables.this_workspace");
                     });
 
                     it("has an item for each schema in the database", function() {
                         var lis = this.schemaMenu.find("li");
                         this.dialog.schemas.each(function(schema, i) {
-                            expect(lis.eq(i)).toContainText(schema.get("name"));
+                            expect(lis.eq(i+1)).toContainText(schema.get("name"));
                         });
                     });
 
@@ -177,10 +177,24 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
                     it("clicking the link more than once returns the correct list", function() {
                         this.qtip.hide();
-
                         this.dialog.$(".canonical_name a.schema_qtip").click();
+                        expect(this.qtip.find(".qtip").eq(0)).toBe(this.schemaMenu);
+                    });
 
-                        expect(this.qtip.find(".ui-tooltip:eq(0) ul li").length).toBe(3);
+                    describe("clicking the 'this workspace' option", function() {
+                        beforeEach(function() {
+                            this.schemaMenu.find("li a").eq(0).click();
+                        });
+
+                        it("fetches the datasets in the schema's database, associated with the workspace", function() {
+                            var database = this.chorusView.schema().database();
+                            var datasetsInDatabase = this.chorusView.workspace().datasetsInDatabase(database);
+                            expect(datasetsInDatabase).toHaveBeenFetched();
+                        });
+
+                        it("shows the right text for the schema menu link", function() {
+                            expect(this.dialog.$(".canonical_name .schema_qtip")).toContainTranslation("dataset.manage_join_tables.this_workspace");
+                        });
                     });
 
                     context("when selecting a schema", function() {
