@@ -312,7 +312,8 @@ chorus.collections = {
         },
 
         fetchPage: function(page, options) {
-            var url = this.url({page: page});
+            var url = this.url({ page: page, rows: options && options.rows });
+            options && delete options.rows;
             options = _.extend({}, options, { url: url });
             this.fetch(options);
             this.trigger("paginate");

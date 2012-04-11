@@ -1313,6 +1313,19 @@ describe("chorus.models.Abstract", function() {
                 expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=1&rows=50");
             })
 
+            context("when the 'rows' option is passed", function() {
+                it("fetches the given number of rows", function() {
+                    this.collection.fetchPage(2, { rows: 13 });
+                    expect(this.server.lastFetch().url).toBe("/edc/bar/bar?page=2&rows=13");
+                });
+
+                it("does not pass the 'rows' option through to Backbone.Collection#fetch", function() {
+                    spyOn(this.collection, "fetch");
+                    this.collection.fetchPage(2, { rows: 13 });
+                    var options = this.collection.fetch.mostRecentCall.args[0];
+                    expect(options.rows).toBeUndefined();
+                });
+            });
         })
 
         describe("behavior shared with models", function() {
