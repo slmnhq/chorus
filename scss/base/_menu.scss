@@ -4,7 +4,7 @@
     width: 400px;
 
     li {
-        padding: 5px;
+        padding: 5px 0;
 
         a, span {
             @include font-menu;
@@ -24,7 +24,7 @@
 
         &.selected {
             .check {
-                display: inline-block;
+                visibility: visible;
             }
         }
     }
@@ -32,7 +32,8 @@
     .check {
         background-repeat: no-repeat;
         background-image: url("/images/check.png");
-        display: none;
+        display: inline-block;
+        visibility: hidden;
         width: 10px;
         height: 10px;
         // margin-left: -14px;

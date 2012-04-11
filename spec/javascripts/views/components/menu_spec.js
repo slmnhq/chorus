@@ -106,9 +106,8 @@ describe("chorus.views.Menu", function() {
                     menu.render();
                 });
 
-                it("renders a hidden check next to each li", function() {
+                it("renders a check next to each li (hidden/shown with CSS)", function() {
                     expect(menu.$("li .check").length).toBe(3);
-                    expect(menu.$("li .check")).toBeHidden();
                 });
 
                 context("when an item is clicked", function() {
