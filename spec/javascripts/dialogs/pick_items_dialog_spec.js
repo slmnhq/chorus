@@ -68,12 +68,12 @@ describe("chorus.dialogs.PickItems", function() {
 
                 it("renders a pagination bar", function() {
                     expect(this.dialog.$(".pagination.list_content_details")).toExist();
-                    expect(this.dialog.paginationView).toBeA(chorus.views.ListContentDetails);
-                    expect(this.dialog.paginationView.collection).toBe(this.users);
+                    expect(this.dialog.pickItemsList.paginationView).toBeA(chorus.views.ListContentDetails);
+                    expect(this.dialog.pickItemsList.paginationView.collection).toBe(this.users);
                 });
 
                 it("passes the 'modelClass' to the pagination view", function() {
-                    expect(this.dialog.paginationView.options.modelClass).toBe("User");
+                    expect(this.dialog.pickItemsList.paginationView.options.modelClass).toBe("User");
                 });
             });
 
@@ -93,7 +93,7 @@ describe("chorus.dialogs.PickItems", function() {
 
             context("when the collection is empty", function() {
                 beforeEach(function() {
-                    this.dialog.emptyListTranslationKey = "test.mouse";
+                    this.dialog.pickItemsList.options.emptyListTranslationKey = "test.mouse";
                     this.dialog.collection.reset();
                     this.dialog.collection.loaded = true;
                     this.dialog.render();
@@ -252,15 +252,21 @@ describe("chorus.dialogs.PickItems", function() {
     });
 
     describe("search", function() {
+        var dataset1, dataset2, dataset3;
+
         beforeEach(function() {
-            this.users = new chorus.collections.UserSet([
-                newFixtures.user({firstName: "xyz", lastName: "3 ab"}),
-                newFixtures.user({firstName: "EFG", lastName: "1"}),
-                newFixtures.user({firstName: "hij", lastName: "2 a"})
-            ]);
-            this.users.loaded = true;
-            var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "User" });
-            this.dialog = new Subclass({ collection: this.users });
+            dataset1 = newFixtures.datasetSandboxTable();
+            dataset2 = newFixtures.datasetSandboxTable();
+            dataset3 = newFixtures.datasetSandboxTable();
+
+            this.datasets = new chorus.collections.DatasetSet([
+                dataset1,
+                dataset2,
+                dataset3
+            ], {workspaceId: '1'});
+            this.datasets.loaded = true;
+            var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "Dataset" });
+            this.dialog = new Subclass({ collection: this.datasets });
             this.dialog.render();
 
             this.dialog.$("li:eq(2)").click();
@@ -273,30 +279,77 @@ describe("chorus.dialogs.PickItems", function() {
         context("when the search placeholder text is supplied", function() {
             it("uses the supplied text", function() {
                 var Subclass = chorus.dialogs.PickItems.extend({ searchPlaceholderKey: "test.mouse" });
-                this.dialog = new Subclass({ collection: this.users });
+                this.dialog = new Subclass({ collection: this.datasets });
                 this.dialog.render();
                 expect(this.dialog.$("input").attr("placeholder")).toMatchTranslation("test.mouse");
             });
         });
 
-        describe("when the filter text matches the selected item", function() {
-            it("retains the selection", function() {
-                this.dialog.$("input").val("a").trigger("textchange");
-                expect(this.dialog.$("li:eq(2)")).toHaveClass("selected");
+        describe("client side", function() {
+            describe("when the filter text matches the selected item", function() {
+                it("retains the selection", function() {
+                    this.dialog.$("input").val("e").trigger("textchange");
+                    expect(this.dialog.$("li:eq(2)")).toHaveClass("selected");
+                });
+            });
+
+            describe("when the filter text does not match the selected item", function() {
+                beforeEach(function() {
+                    this.dialog.$("input").val("z").trigger("textchange");
+                });
+
+                it("clears the selection", function() {
+                    expect(this.dialog.$("li.selected")).not.toExist();
+                });
+
+                it("should disable the submit button", function() {
+                    expect(this.dialog.$("button.submit")).toBeDisabled();
+                });
             });
         });
 
-        describe("when the filter text does not match the selected item", function() {
+        describe("server side", function() {
             beforeEach(function() {
-                this.dialog.$("input").val("m").trigger("textchange");
+                var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "Dataset", serverSideSearch: true });
+                this.dialog = new Subclass({ collection: this.datasets });
+                this.dialog.render();
+
+                this.dialog.$("li:eq(2)").click();
             });
 
-            it("clears the selection", function() {
-                expect(this.dialog.$("li.selected")).not.toExist();
+            it("renders a search input", function() {
+                expect(this.dialog.$(".sub_header input")).toExist();
             });
 
-            it("should disable the submit button", function() {
-                expect(this.dialog.$("button.submit")).toBeDisabled();
+            describe("entering a seach term", function() {
+                beforeEach(function() {
+                    this.dialog.$(".sub_header input").val("a query").trigger("textchange");
+                });
+
+                it("fetches filtered database objects", function() {
+                    expect(this.server.lastFetch().url).toMatchUrl(
+                        "/edc/workspace/1/dataset?namePattern=a+query",
+                        { paramsToIgnore: ["page", "rows"] }
+                    );
+                });
+
+                context("after the results come back", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(this.datasets, [ dataset1 ]);
+                    });
+
+                    it("updates the list items", function() {
+                        expect(this.dialog.$(".name").length).toBe(1);
+                    });
+
+                    it("keeps the search term around", function() {
+                        expect(this.dialog.$(".sub_header input").val()).toBe("a query")
+                    });
+
+                    it("disables the submit button", function() {
+                        expect(this.dialog.$("button.submit")).toBeDisabled();
+                    });
+                });
             });
         });
     });

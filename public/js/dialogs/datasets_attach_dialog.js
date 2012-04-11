@@ -6,6 +6,7 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.PickItems.extend({
     searchPlaceholderKey: "dataset.dialog.search",
     selectedEvent: 'datasets:selected',
     modelClass: "Dataset",
+    serverSideSearch: true,
     pagination: true,
     multiSelection: true,
 

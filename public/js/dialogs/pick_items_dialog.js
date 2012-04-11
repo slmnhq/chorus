@@ -10,7 +10,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
     },
 
     subviews: {
-        ".pagination": "paginationView"
+        ".pick_items_list": "pickItemsList"
     },
 
     setup: function() {
@@ -20,31 +20,31 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
 
         this.collection.onLoaded(this.collection.sort, this.collection);
 
-        if (this.pagination) {
-            this.paginationView = new chorus.views.ListContentDetails({
-                collection: this.collection,
-                modelClass: this.modelClass
-            });
-        }
+        this.pickItemsList = new chorus.views.PickItemsList({
+            collection: this.collection,
+            modelClass: this.modelClass,
+            pagination: this.pagination,
+            emptyListTranslationKey: this.emptyListTranslationKey
+        });
+        this.pickItemsList.collectionModelContext = this.collectionModelContext; // forwarding inheritance on to pickItemsList
+
+        this.bindings.add(this.collection, 'searched', this.enableOrDisableSubmitButton);
     },
 
     submit: function() {
-        var attachments = _.map(this.$("li.selected"), function(li) {
-            var id = $(li).data("id");
-            return this.collection.get(id);
-        }, this);
+        var listOrItem = this.selectedItem();
+        var selectedItems = _.isArray(listOrItem) ? listOrItem : [listOrItem];
 
-        this.trigger(this.selectedEvent, attachments);
+        this.trigger(this.selectedEvent, selectedItems);
         this.closeModal();
     },
 
     postRender: function() {
-        chorus.search({
-            input: this.$("input"),
-            list: this.$(".items ul"),
-            onFilter: this.deselectItem,
-            afterFilter: _.bind(this.afterFilter, this)
-        });
+        if (this.serverSideSearch) {
+            this.renderServerSideSearch();
+        } else {
+            this.renderClientSideSearch();
+        }
 
         if (this.options.defaultSelection) {
             _.each(this.options.defaultSelection.models, function(model) {
@@ -68,9 +68,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            pagination: this.pagination,
             placeholderTranslation: this.searchPlaceholderKey || "pickitem.dialog.search.placeholder",
-            emptyListTranslationKey: this.emptyListTranslationKey || "pickitem.dialog.empty",
             submitButtonTranslationKey: this.submitButtonTranslationKey || "pickitem.dialog.submit"
         }
     },
@@ -81,17 +79,6 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
         } else {
             this.$('button.submit').attr('disabled', 'disabled');
         }
-    },
-
-    afterFilter: function() {
-        this.enableOrDisableSubmitButton();
-        if (this.$("li.selected").length == 0) {
-            this.trigger("item:selected", undefined);
-        }
-    },
-
-    deselectItem: function(el) {
-        el.removeClass("selected");
     },
 
     selectItem: function(e) {
@@ -122,5 +109,36 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
     doubleClick: function(e) {
         $(e.currentTarget).toggleClass("selected");
         this.trigger("item:doubleclick", _.flatten([this.selectedItem()]));
+    },
+
+    renderServerSideSearch: function() {
+        var onTextChangeFunction = _.debounce(_.bind(function(e) {
+            this.collection.search($(e.target).val());
+        }, this), 300);
+
+        chorus.search({
+            input: this.$(".sub_header input:text"),
+            onTextChange: onTextChangeFunction
+        });
+    },
+
+    renderClientSideSearch: function () {
+        var afterFilter = function() {
+            this.enableOrDisableSubmitButton();
+            if (this.$("li.selected").length == 0) {
+                this.trigger("item:selected", undefined);
+            }
+        }
+
+        var deselectItem = function(el) {
+            el.removeClass("selected");
+        }
+
+        chorus.search({
+            input: this.$("input"),
+            list: this.$(".items ul"),
+            onFilter: deselectItem,
+            afterFilter: _.bind(afterFilter, this)
+        });
     }
 });

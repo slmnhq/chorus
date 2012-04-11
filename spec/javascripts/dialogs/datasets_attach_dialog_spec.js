@@ -13,6 +13,11 @@ describe("chorus.dialogs.DatasetsAttach", function() {
         expect(this.dialog.multiSelection).toBeTruthy();
     });
 
+    it("enables server-side search", function() {
+        expect(this.dialog.serverSideSearch).toBeTruthy();
+    });
+
+
     it("fetches the results sorted by objectName", function() {
         var url = this.server.lastFetch().url
         expect(url).toHaveUrlPath("/edc/workspace/33/dataset");
