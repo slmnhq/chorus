@@ -86,17 +86,28 @@ describe("chorus.models.Dataset", function() {
     });
 
     describe("#createDuplicateChorusView", function() {
-        it("returns a chorus view with the right data", function() {
+        beforeEach(function() {
             this.model = fixtures.datasetChorusView();
+            this.copy = this.model.createDuplicateChorusView();
 
-            var copy = this.model.createDuplicateChorusView();
-            expect(copy).toBeA(chorus.models.ChorusView);
-//            expect(copy.get("objectName")).toBe(this.model.get("objectName") + "_copy");
-            expect(copy.get("objectName")).toMatchTranslation("dataset.chorusview.copy_name", { name: this.model.get("objectName") });
+        });
 
-            _.each(["instanceId", "workspace", "databaseName", "schemaName"], function(attrName) {
-                expect(copy.get(attrName)).toBe(this.model.get(attrName));
+        it("returns a chorus view with the right data", function() {
+            expect(this.copy).toBeA(chorus.models.ChorusView);
+            expect(this.copy.get("objectName")).toMatchTranslation("dataset.chorusview.copy_name", { name: this.model.get("objectName") });
+
+            _.each(["workspace", "databaseName", "schemaName"], function(attrName) {
+                expect(this.copy.get(attrName)).toBe(this.model.get(attrName));
+                    expect(this.copy.get(attrName)).toBeDefined();
             }, this);
+        });
+
+        it("returns a chorus view with the right instanceId", function() {
+            expect(this.copy.get("instanceId")).toBe(this.model.get("instance").id);
+        });
+
+        it("returns a chorus view without an id", function() {
+            expect(this.copy.get("id")).toBeUndefined();
         });
     });
 

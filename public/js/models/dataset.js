@@ -52,8 +52,11 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
 
     createDuplicateChorusView: function() {
         var attrs = _.extend({},  this.attributes, {
-            objectName: t("dataset.chorusview.copy_name", { name: this.get("objectName") })
+            objectName: t("dataset.chorusview.copy_name", { name: this.get("objectName") }),
+            instanceId: this.get("instance").id,
+
         });
+        delete attrs.id;
         return new chorus.models.ChorusView(attrs);
     },
 
