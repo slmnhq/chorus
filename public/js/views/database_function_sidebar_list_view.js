@@ -3,6 +3,15 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
     className:"database_function_sidebar_list",
     useLoadingSection:true,
 
+    postRender: function() {
+        this._super("postRender", arguments);
+
+        chorus.search({
+            list: this.$('ul'),
+            input: this.$('input.search')
+        });
+    },
+
     collectionModelContext: function(model) {
         return {
             hintText: model.toHintText(),

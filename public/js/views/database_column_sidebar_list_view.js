@@ -17,6 +17,15 @@ chorus.views.DatabaseColumnSidebarList = chorus.views.DatabaseSidebarList.extend
         chorus.PageEvents.subscribe("datasetSelected", this.setTableOrView, this);
     },
 
+    postRender: function() {
+        this._super("postRender", arguments);
+
+        chorus.search({
+            list: this.$('ul'),
+            input: this.$('input.search')
+        });
+    },
+
     setTableOrView:function (tableOrView) {
         this.resource = this.collection = tableOrView.columns();
         this.collection.fetchAll();

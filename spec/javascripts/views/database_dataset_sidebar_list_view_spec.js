@@ -1,301 +1,205 @@
 describe("chorus.views.DatabaseDatasetSidebarList", function() {
     beforeEach(function() {
-        chorus.page = { workspace: newFixtures.workspace() };
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
-        var sandbox = newFixtures.sandbox();
-        this.schema = sandbox.schema();
-        this.modalSpy = stubModals();
+
+        chorus.page = { workspace: newFixtures.workspace({name: "new_workspace"}) };
+        this.schema = newFixtures.sandbox().schema();
         this.view = new chorus.views.DatabaseDatasetSidebarList({schema: this.schema});
+
         stubDefer();
+        this.modalSpy = stubModals();
         this.schemaMenuQtip = stubQtip(".context a");
     });
 
-    describe("when a schema is selected (which calls #fetchResourceAfterSchemaSelected)", function() {
-        beforeEach(function() {
-            this.schema2 = fixtures.schema();
-            this.view.schema = this.schema2;
-            this.view.fetchResourceAfterSchemaSelected();
-        });
-
-        it("should fetch the schema's tables and views", function() {
-            expect(this.schema2.databaseObjects()).toHaveBeenFetched();
-        });
-
-        describe("when the fetch for the tables and views completes", function() {
+    describe("the schema drop-down menu", function() {
+        context("when a schema is selected", function() {
             beforeEach(function() {
-                spyOn(this.view, 'postRender');
-                this.server.completeFetchFor(this.schema2.databaseObjects(), [
-                    fixtures.databaseObject({ objectType: "SANDBOX_TABLE" }),
-                    fixtures.databaseObject({ objectType: "VIEW"})
-                ]);
+                this.view.fetchResourceAfterSchemaSelected();
             });
 
-            it("re-renders", function() {
-                expect(this.view.postRender).toHaveBeenCalled();
+            it("should fetch all the schemas", function() {
+                expect(this.server.lastFetchFor(this.schema.database().schemas())).toBeDefined();
+            });
+
+            it("should fetch the schema's tables and views", function() {
+                expect(this.schema.databaseObjects()).toHaveBeenFetched();
+            });
+
+            context("when the schema fetches complete", function() {
+                var datasets, schemas;
+                beforeEach(function() {
+                    datasets = new chorus.collections.DatasetSet([
+                        fixtures.datasetChorusView(),
+                        fixtures.datasetSourceTable()
+                    ]);
+                    schemas = new chorus.collections.SchemaSet([
+                        newFixtures.schema({name: "Schema 1"}),
+                        newFixtures.schema({name: "Schema 2"})
+                    ]);
+
+                    this.server.completeFetchFor(this.view.datasets, datasets.models);
+                    this.server.completeFetchFor(this.view.schemas, schemas.models);
+                    this.schema.databaseObjects().loaded = true;
+                    this.view.render();
+
+                    // Just to get the qtip to exist in the dom
+                    this.view.$(".context a").click();
+                });
+
+                it("shows all the schemas in the popup menu", function() {
+                    expect(this.schemaMenuQtip.find("a").length).toBe(3);
+                    expect(this.schemaMenuQtip.find("a").eq(0)).toContainTranslation("database.sidebar.this_workspace");
+                    expect(this.schemaMenuQtip.find("a").eq(1)).toContainText("Schema 1");
+                    expect(this.schemaMenuQtip.find("a").eq(2)).toContainText("Schema 2");
+                });
+
+                describe("clicking on a schema", function() {
+                    beforeEach(function() {
+                        spyOn(this.view, "fetchResourceAfterSchemaSelected").andCallThrough();
+                        this.schemaMenuQtip.$("a:eq(0)").click();
+                    });
+
+                    it("re-renders the list of datasets for the new schema", function() {
+                        expect(this.view.fetchResourceAfterSchemaSelected).toHaveBeenCalled();
+                    });
+                });
             });
         });
     });
 
-    describe("#render", function() {
-        describe("the schema drop-down menu", function() {
-            var datasetSet
+    context("when there's no schema associated", function() {
+        beforeEach(function() {
+            this.view.schema = null;
+            this.view.render();
+        });
+
+        it("should display 'no database/schema associated' message", function() {
+            expect(this.view.$(".empty_selection")).toExist();
+        })
+
+        it("should not display the loading section", function() {
+            expect(this.view.$(".loading_section")).not.toExist();
+        })
+    });
+
+    context("when there's sandbox/default schema associated", function() {
+        context("before the tables and views have loaded", function() {
             beforeEach(function() {
-                datasetSet = new chorus.collections.DatasetSet([fixtures.datasetChorusView(), fixtures.datasetSourceTable()]);
-                this.server.completeFetchFor(this.view.workspaceDatasets, datasetSet.models);
-                this.server.completeFetchFor(this.view.schemas, newFixtures.schemaSetJson());
+                this.schema.databaseObjects().loaded = false;
+                this.view.render();
+            })
+
+            it("should not display the 'no database/schema associated' message", function() {
+                expect(this.view.$(".empty_selection")).not.toExist();
+            });
+
+            it("should display a loading spinner", function() {
+                expect(this.view.$(".loading_section")).toExist();
+            });
+        });
+
+        context("after the tables and views are loaded", function() {
+            beforeEach(function() {
                 this.schema.databaseObjects().loaded = true;
-                this.view.render();
-                this.view.$(".context a").click();
             });
 
-            it("shows 'this workspace' as the default schema in the top position", function() {
-                expect(this.schemaMenuQtip.$("a:eq(0)")).toContainTranslation("database.sidebar.this_workspace");
-            });
-
-            it("shows all the schemas it fetched", function() {
-                this.view.schemas.each(function(schema, i) {
-                    expect(this.schemaMenuQtip.$("a").eq(i)).toContainText(schema.get('name'));
-                }, this)
-            });
-
-            describe("clicking on 'this workspace'", function() {
-                beforeEach(function() {
-                    this.schemaMenuQtip.$("a:eq(0)").click();
-                });
-
-                it("shows items associated with the workspace in the sidebar", function() {
-                    datasetSet.each(function(dataset, i) {
-                         expect(this.view.$("li").eq(i)).toContainText(dataset.get('objectName'));
-                    }, this);
-                });
-
-                describe("clicking on a dataset item", function () {
-                    beforeEach(function() {
-                        this.view.$("li a").eq(0).click();
-                    });
-
-                    it("broadcasts a 'datasetSelected' event, with the view", function() {
-                        var clickedDataset = this.view.collection.findWhere({objectName: datasetSet.at(0).get("objectName")});
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("datasetSelected", clickedDataset);
-                    });
-                });
-            });
-        });
-
-        context("when there's no schema associated", function() {
-            beforeEach(function() {
-                this.view.schema = null;
-                this.view.render();
-            });
-
-            it("should display 'no database/schema associated' message", function() {
-                expect(this.view.$(".empty_selection")).toExist();
-            })
-
-            it("should not display the loading section", function() {
+            it("doesn't display a loading spinner", function() {
                 expect(this.view.$(".loading_section")).not.toExist();
-            })
-        });
-
-        context("when there's sandbox/default schema associated", function() {
-            context("before the tables and views have loaded", function() {
-                beforeEach(function() {
-                    this.schema.databaseObjects().loaded = false;
-                    this.view.render();
-                })
-
-                it("should not display the 'no database/schema associated' message", function() {
-                    expect(this.view.$(".empty_selection")).not.toExist();
-                });
-
-                it("should display a loading spinner", function() {
-                    expect(this.view.$(".loading_section")).toExist();
-                });
             });
 
-            context("after the tables and views are loaded", function() {
+            context("and some data was fetched", function() {
                 beforeEach(function() {
-                    this.schema.databaseObjects().loaded = true;
-                });
+                    this.qtip = stubQtip("li");
+                    spyOn(this.view, 'closeQtip');
 
-                it("doesn't display a loading spinner", function() {
-                    expect(this.view.$(".loading_section")).not.toExist();
-                });
-
-                context("and some data was fetched", function() {
-                    beforeEach(function() {
-                        this.server.completeFetchFor(this.schema.databaseObjects(), [
-                            fixtures.databaseObject({ objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
-                            fixtures.databaseObject({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW"}),
-                            fixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
-                            fixtures.databaseObject({ objectName: "1234", type: "SANDBOX_TABLE", objectType: "BASE_TABLE"})
-                        ]);
-                        this.view.render();
-                    });
-
-                    jasmine.sharedExamples.DatabaseSidebarList();
-
-                    it("should not display the loading spinner", function() {
-                        expect(this.view.$(".loading_section")).not.toExist();
-                    });
-
-                    it("renders an li for each item in the collection", function() {
-                        expect(this.view.$("li").length).toBe(this.view.collection.length);
-                    });
-
-                    it("sorts the data by name", function() {
-                        expect(this.view.$("li").eq(0).text().trim()).toBe("1234");
-                        expect(this.view.$("li").eq(1).text().trim()).toBe("Data1");
-                        expect(this.view.$("li").eq(2).text().trim()).toBe("Data2");
-                        expect(this.view.$("li").eq(3).text().trim()).toBe("zebra");
-                    });
-
-                    it("renders the correct data-fullname for each item", function() {
-                        expect(this.view.$("li").eq(0).data("fullname")).toBe('schema_name."1234"');
-                        expect(this.view.$("li").eq(1).data("fullname")).toBe('schema_name."Data1"');
-                        expect(this.view.$("li").eq(2).data("fullname")).toBe('schema_name."Data2"');
-                        expect(this.view.$("li").eq(3).data("fullname")).toBe("schema_name.zebra");
-                    });
-
-                    it("renders appropriate icon for each item in the collection", function() {
-                        var $lisAlphabeticallySorted = this.view.$("li");
-                        expect($lisAlphabeticallySorted.eq(0).find("img").attr("src")).toContain("sandbox_table_medium.png");
-                        expect($lisAlphabeticallySorted.eq(1).find("img").attr("src")).toContain("sandbox_view_medium.png");
-                        expect($lisAlphabeticallySorted.eq(2).find("img").attr("src")).toContain("sandbox_table_medium.png");
-                        expect($lisAlphabeticallySorted.eq(3).find("img").attr("src")).toContain("sandbox_view_medium.png");
-                    });
-
-                    it("should not display a message saying there are no tables/views", function() {
-                        expect(this.view.$('.none_found')).not.toExist();
-                    });
-
-                    describe("user clicks a view in the list", function() {
-                        beforeEach(function() {
-                            this.clickedView = this.schema.databaseObjects().findWhere({ objectName: "Data1" });
-                            this.view.$("li:contains('Data1') a").click();
-                        });
-
-                        it("broadcasts a 'datasetSelected' event, with the view", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("datasetSelected", this.clickedView);
-                        });
-                    });
-
-                    describe("user clicks on a table in the list", function() {
-                        beforeEach(function() {
-                            this.clickedTable = this.schema.databaseObjects().findWhere({ objectName: "Data2" });
-                            this.view.$("li:contains('Data2') a").click();
-                        });
-
-                        it("broadcasts a 'datasetSelected' event, with the table", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("datasetSelected", this.clickedTable);
-                        });
-                    });
-
-                    describe("user clicks on a table with a numeric name", function() {
-                        beforeEach(function() {
-                            this.clickedTable = this.schema.databaseObjects().findWhere({ objectName: "1234" });
-                            this.view.$("li:eq(0) a").click();
-                        });
-
-                        it("broadcasts a 'datasetSelected' event, with the table", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("datasetSelected", this.clickedTable);
-                        });
-                    })
-                });
-
-                context("and no data was fetched", function() {
-                    beforeEach(function() {
-                        this.view.collection.models = [];
-                        this.view.render();
-                    });
-
-                    it("should display a message saying there are no tables/views", function() {
-                        expect(this.view.$('.none_found')).toExist();
-                        expect(this.view.$('.none_found').text().trim()).toMatchTranslation("schema.metadata.list.empty");
-                    })
-                });
-            });
-
-            context("if the tables and views fetch fails", function() {
-                beforeEach(function() {
-                    this.server.lastFetchFor(this.schema.databaseObjects()).fail([
-                        {message: "Account map needed"}
+                    this.server.completeFetchFor(this.schema.databaseObjects(), [
+                        fixtures.databaseObject({ objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
+                        fixtures.databaseObject({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" }),
+                        fixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
+                        fixtures.databaseObject({ objectName: "1234",  type: "SANDBOX_TABLE", objectType: "BASE_TABLE" })
                     ]);
                     this.view.render();
                 });
 
-                it("should not display the loading spinner", function() {
-                    expect(this.view.$(".loading_section")).not.toExist();
+                jasmine.sharedExamples.DatabaseSidebarList();
+
+                context("when hovering over an li", function() {
+                    beforeEach(function() {
+                        this.view.$('.list li:eq(1)').mouseenter();
+                    });
+
+                    it("has the insert text in the insert arrow", function() {
+                        expect(this.qtip.find("a")).toContainTranslation('database.sidebar.insert')
+                    })
+
+                    context("when clicking the insert arrow", function() {
+                        beforeEach(function() {
+                            this.qtip.find("a").click()
+                        })
+
+                        it("broadcasts a file:insertText with the string representation", function() {
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:insertText", this.view.collection.at(1).toText());
+                        })
+                    })
+
+                    context("when clicking a link within the li", function() {
+                        beforeEach(function() {
+                            this.view.$('.list li:eq(1) a').click()
+                        })
+
+                        it("closes the open insert arrow", function() {
+                            expect(this.view.closeQtip).toHaveBeenCalled();
+                        })
+                    });
+
+                    context("when scrolling", function() {
+                        beforeEach(function() {
+                            chorus.page = new chorus.pages.Base();
+                            chorus.page.sidebar = new chorus.views.Sidebar();
+
+                            this.view.render();
+                            chorus.page.sidebar.trigger("scroll");
+                        });
+
+                        it("closes the open insert arrow", function() {
+                            expect(this.view.closeQtip).toHaveBeenCalled();
+                        });
+                    });
+                });
+            });
+
+            context("and no data was fetched", function() {
+                beforeEach(function() {
+                    this.view.collection.models = [];
+                    this.view.render();
                 });
 
-                it("should display an option to enter credentials", function() {
-                    expect(this.view.$('.no_credentials')).toExist();
-                });
-
-                it("launches the correct dialog when the 'click here' credentials link is clicked", function() {
-                    this.view.$('.no_credentials .add_credentials').click();
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
-                });
+                it("should display a message saying there are no tables/views", function() {
+                    expect(this.view.$('.none_found')).toExist();
+                    expect(this.view.$('.none_found').text().trim()).toMatchTranslation("schema.metadata.list.empty");
+                })
             });
         });
 
-        describe("pagination", function() {
+        context("if the tables and views fetch fails", function() {
             beforeEach(function() {
-                this.view.schema = fixtures.schema();
-                this.view.fetchResourceAfterSchemaSelected();
+                this.server.lastFetchFor(this.schema.databaseObjects()).fail([
+                    {message: "Account map needed"}
+                ]);
                 this.view.render();
             });
 
-            context("when there is more than one page of results", function() {
-                beforeEach(function() {
-                    this.server.completeFetchFor(this.view.collection, [
-                        fixtures.databaseTable({objectName: "Table 1"}),
-                        fixtures.databaseTable({objectName: "Table 2"})
-                    ], {}, { page: "1", total: "2"});
-                });
-
-                it("shows the more link", function() {
-                    expect(this.view.$("a.more")).toContainTranslation("schema.metadata.more");
-                });
-
-                context("when the more link is clicked", function() {
-                    beforeEach(function() {
-                        this.view.$("a.more").click();
-                    });
-
-                    it("fetches another page of results", function() {
-                        expect(this.server.lastFetchFor(this.view.collection, { page: "2" })).toBeDefined();
-                    });
-
-                    context("when the fetch completes", function() {
-                        beforeEach(function() {
-                            this.server.completeFetchFor(this.view.collection, [
-                                fixtures.databaseTable({objectName: "Table 3"}),
-                                fixtures.databaseTable({objectName: "Table 4"})
-                            ], { page: "2" }, { page: "2", total: "2"});
-                        });
-
-                        it("shows combined results (from pages 1 & 2)", function() {
-                            expect(this.view.$("li").length).toBe(4);
-                            expect(this.view.$("li:eq(0) .name")).toContainText("Table 1");
-                            expect(this.view.$("li:eq(1) .name")).toContainText("Table 2");
-                            expect(this.view.$("li:eq(2) .name")).toContainText("Table 3");
-                            expect(this.view.$("li:eq(3) .name")).toContainText("Table 4");
-                        });
-                    });
-                });
+            it("should not display the loading spinner", function() {
+                expect(this.view.$(".loading_section")).not.toExist();
             });
 
-            context("when there is only one page of results", function() {
-                beforeEach(function() {
-                    this.server.completeFetchFor(this.view.collection, [
-                        fixtures.databaseTable({objectName: "Table 1"}),
-                    ], {}, { page: "1", total: "1"});
-                });
+            it("should display an option to enter credentials", function() {
+                expect(this.view.$('.no_credentials')).toExist();
+            });
 
-                it("doesn't show the more link", function() {
-                    expect(this.view.$("a.more")).not.toExist();
-                });
+            it("launches the correct dialog when the 'click here' credentials link is clicked", function() {
+                this.view.$('.no_credentials .add_credentials').click();
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
             });
         });
     });

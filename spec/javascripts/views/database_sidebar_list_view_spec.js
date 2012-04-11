@@ -45,111 +45,50 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
         context("when the fetch completes", function() {
             beforeEach(function() {
+                this.qtip = stubQtip(".context a");
+                spyOn(this.view, 'closeQtip');
+
                 this.server.completeFetchFor(this.schema.database().schemas(), [
                     this.schema,
                     fixtures.schema({ name: "awesome_tables", id: "5" }),
                     fixtures.schema({ name: "orphaned_tables", id: "6" })
                 ]);
+
+                this.view.render();
             });
 
-            context("render", function() {
+            context("selecting a schema", function() {
                 beforeEach(function() {
-                    this.schemaMenuQtip = stubQtip(".context a");
-                    this.insertArrowQtip = stubQtip("li");
-                    spyOn(this.view, 'closeQtip');
-                    this.view.render();
+                    spyOn(this.view, 'fetchResourceAfterSchemaSelected');
+                    this.view.$(".context a").click();
                 });
 
-                context("after schemas have loaded", function() {
-                    beforeEach(function() {
-                        this.server.completeFetchFor(this.schema.database().schemas(), [
-                            this.schema,
-                            fixtures.schema({ name: "awesome_tables", id: "5" }),
-                            fixtures.schema({ name: "orphaned_tables", id: "6" })
-                        ]);
-                        this.view.render();
-                    });
-
-                    describe("selecting a schema", function() {
-                        beforeEach(function() {
-                            spyOn(this.view, 'fetchResourceAfterSchemaSelected');
-                            this.view.$(".context a").click();
-                        });
-
-                        it("opens a chorus menu", function() {
-                            expect(this.schemaMenuQtip).toHaveVisibleQtip();
-                        });
-
-                        it("shows a check mark next to the current schema", function() {
-                            expect(this.view.$("li:contains('righteous_tables')")).toContain('.check')
-                            expect(this.view.$("li:contains('awesome_tables')")).not.toContain('.check')
-                        })
-
-                        it("shows the names of all of the workspace's database's schemas", function() {
-                            expect(this.schemaMenuQtip.find("li").length).toBe(3);
-                            expect(this.schemaMenuQtip).toContainText("righteous_tables");
-                            expect(this.schemaMenuQtip).toContainText("awesome_tables");
-                            expect(this.schemaMenuQtip).toContainText("orphaned_tables");
-                        });
-
-                        describe("when a schema is clicked", function() {
-                            beforeEach(function() {
-                                this.schemaMenuQtip.find("a[data-id=5]").click()
-                                this.otherSchema = this.view.schemas.get("5");
-                            });
-
-                            it("calls the 'fetchResourceAfterSchemaSelected' hook", function() {
-                                expect(this.view.fetchResourceAfterSchemaSelected).toHaveBeenCalled();
-                            });
-                        });
-                    });
+                it("opens a chorus menu", function() {
+                    expect(this.qtip).toHaveVisibleQtip();
                 });
 
-                context("when hovering over a collection li", function() {
-                    beforeEach(function() {
-                        this.collection.trigger("reset");
-                        this.view.$('.list li:eq(1)').mouseenter();
-                    });
-
-                    it("has the insert text in the insert arrow", function() {
-                        expect(this.insertArrowQtip.find("a")).toContainTranslation('database.sidebar.insert')
-                    })
-
-                    context("when clicking the insert arrow", function() {
-                        beforeEach(function() {
-                            spyOn(chorus.PageEvents, "broadcast").andCallThrough();
-                            this.insertArrowQtip.find("a").click()
-                        })
-
-                        it("broadcasts a file:insertText with the string representation", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:insertText", this.view.collection.models[1].toText());
-                        })
-                    })
-
-                    context("when clicking a link within the li", function() {
-                        beforeEach(function() {
-                            this.view.$('.list li:eq(1) a').click()
-                        })
-
-                        it("closes the open insert arrow", function() {
-                            expect(this.view.closeQtip).toHaveBeenCalled();
-                        })
-                    });
-
-                    context("when scrolling", function() {
-                        beforeEach(function() {
-                            chorus.page = new chorus.pages.Base();
-                            chorus.page.sidebar = new chorus.views.Sidebar();
-
-                            this.view.render();
-                            chorus.page.sidebar.trigger("scroll");
-                        });
-
-                        it("closes the open insert arrow", function() {
-                            expect(this.view.closeQtip).toHaveBeenCalled();
-                        });
-                    });
+                it("shows a check mark next to the current schema", function() {
+                    expect(this.view.$("li:contains('righteous_tables')")).toContain('.check')
+                    expect(this.view.$("li:contains('awesome_tables')")).not.toContain('.check')
                 })
+
+                it("shows the names of all of the workspace's database's schemas", function() {
+                    expect(this.qtip.find("li").length).toBe(3);
+                    expect(this.qtip).toContainText("righteous_tables");
+                    expect(this.qtip).toContainText("awesome_tables");
+                    expect(this.qtip).toContainText("orphaned_tables");
+                });
+
+                describe("when a schema is clicked", function() {
+                    beforeEach(function() {
+                        this.qtip.find("a[data-id=5]").click()
+                        this.otherSchema = this.view.schemas.get("5");
+                    });
+
+                    it("calls the 'fetchResourceAfterSchemaSelected' hook", function() {
+                        expect(this.view.fetchResourceAfterSchemaSelected).toHaveBeenCalled();
+                    });
+                });
             });
 
             describe("event handling", function() {

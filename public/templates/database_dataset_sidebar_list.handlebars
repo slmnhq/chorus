@@ -4,26 +4,7 @@
     {{/if}}
     <input class="search" placeholder='{{t "schema.metadata.list.hint.datasets"}}'/>
     <div class="context">{{safeT "schema.functions.search_in" schemaLink=schemaLink}}</div>
-    {{#if models.length}}
-        <ul class="list">
-            {{#each models}}
-                <li data-name="{{name}}" data-fullname="{{fullName}}" data-type="{{type}}" data-cid="{{cid}}" title="{{name}}">
-                    <span class="spacer_left"/>
-                    <img src="{{iconUrl}}"/>
-                    <div class="name">
-                        <a href="#" title="{{name}}">{{name}}</a>
-                    </div>
-                    <span class="spacer_right"/>
-                </li>
-            {{/each}}
-        </ul>
-
-        {{#if showMoreLink}}
-            <a href="#" class="more">{{t "schema.metadata.more"}}</a>
-        {{/if}}
-    {{else}}
-        <div class="none_found">{{t "schema.metadata.list.empty"}}</div>
-    {{/if}}
+    <div class="list_contents"></div>
 
     <div class="schema_menu_container">
         <ul class="schema_menu">
