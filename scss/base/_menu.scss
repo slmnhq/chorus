@@ -30,10 +30,14 @@
     }
 
     .check {
+        background-repeat: no-repeat;
+        background-image: url("/images/check.png");
+        display: none;
         width: 10px;
         height: 10px;
-        background: blue;
-        display: none;
+        // margin-left: -14px;
+        position: relative;
+        top: 1px;
     }
 }
 
