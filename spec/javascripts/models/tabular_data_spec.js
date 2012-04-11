@@ -334,6 +334,24 @@ describe("chorus.models.TabularData", function() {
             });
         });
 
+        context("with a chorus view (from search API)", function() {
+            beforeEach(function() {
+                this.tabularData.set({id: '"2"|"dca_demo"|"some_schema"|"BASE_TABLE"|"Dataset1"', query: undefined, content: "select * from hello_world", objectType: "QUERY", objectName: "my_chorusview", workspace: {id: "234", name: "abc"}});
+                this.preview = this.tabularData.preview();
+            });
+
+            checkPreview();
+
+            it("should return a dataset preview", function() {
+                expect(this.preview.get("taskType")).toBe("getDatasetPreview");
+                expect(this.preview.get("workspaceId")).toBe("234");
+                expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
+                expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
+                expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
+                expect(this.preview.get("query")).toBe("select * from hello_world");
+            });
+        });
+
         context("with a chorus view query ( when editing a chorus view )", function() {
             beforeEach(function() {
                 this.tabularData.set({workspace: {id: "111", name: "abc"}, query: "select * from hello_world"});

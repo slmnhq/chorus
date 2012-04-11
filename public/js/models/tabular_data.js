@@ -144,10 +144,16 @@ chorus.models.TabularData = chorus.models.Base.include(
             });
 
             var additionalAttrs;
-            if (this.has("query")) {
+            if (this.has("query")) { // dataset API for Chorus View calls it "query"
                 additionalAttrs = {
                     taskType: "getDatasetPreview",
                     query: this.get("query"),
+                    workspaceId: this.get("workspace").id
+                };
+            } else if (this.has("content")) { // search API for Chorus View calls it "content"
+                additionalAttrs = {
+                    taskType: "getDatasetPreview",
+                    query: this.get("content"),
                     workspaceId: this.get("workspace").id
                 };
             } else {
