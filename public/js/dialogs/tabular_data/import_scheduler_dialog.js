@@ -14,7 +14,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         "keyup input:text": "onInputFieldChanged",
         "paste input:text": "onInputFieldChanged",
         "click button.submit": "beginImport",
-        "click button.cancel": "onClickCancel"
+        "click button.cancel": "onClickCancel",
+        "click .existing_table a.dataset_picked": "launchDatasetPickerDialog"
     },
 
     makeModel: function() {
@@ -59,12 +60,44 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     postRender: function() {
         this.setFieldValues(this.model);
-        _.defer(_.bind(function() {chorus.styleSelect(this.$("select.names"))}, this));
 
         if (this.options.launchElement.hasClass("create_schedule")) {
             this.$("input[name='schedule']").prop("checked", true);
             this.activeScheduleView.enable();
             this.$("input[name='schedule']").prop("disabled", true);
+        }
+    },
+
+    launchDatasetPickerDialog: function(e) {
+        e.preventDefault();
+        if (!this.saving) {
+            var datasetDialog = new chorus.dialogs.DatasetsPicker({
+                workspaceId: this.workspace.get('id'),
+                collection: this.realSandboxTables()
+                //defaultSelection: this.model.datasets,
+            });
+            this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
+            this.launchSubModal(datasetDialog);
+        }
+    },
+
+    datasetsChosen: function(datasets){
+        this.changeSelectedDataset(datasets && datasets[0] && datasets[0].get('objectName'));
+    },
+
+    changeSelectedDataset: function(name) {
+        this.$(".existing_table a.dataset_picked").text(_.prune(name, 20));
+        this.$(".existing_table span.dataset_picked").text(_.prune(name, 20));
+        this.$(".existing_table input.hidden_dataset_picked").text(name);
+    },
+
+    setExistingTableLink: function(asLink) {
+        var $el = this.$(".existing_table .dataset_picked");
+        var text = $el.text();
+        if (asLink) {
+            $el.replaceWith($("<a href='#'>" + text + "</a>").addClass("dataset_picked"));
+        } else {
+            $el.replaceWith($("<span>" + text + "</span>").addClass("dataset_picked"));
         }
     },
 
@@ -74,7 +107,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         if (toTableExists) {
             this.$("input[type='radio']#import_scheduler_existing_table").prop("checked", true).change();
             this.activeScheduleView = this.scheduleViewExisting;
-            this.$("select[name='toTable']").val(model.get("toTable"));
+            this.changeSelectedDataset(model.get("toTable"));
         } else {
             this.activeScheduleView = this.scheduleViewNew;
             this.$(".new_table input.name").val(model.get("toTable"));
@@ -118,23 +151,25 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         $tableName.prop("disabled", !disableExisting);
         $tableName.closest("fieldset").toggleClass("disabled", !disableExisting);
 
-        var $tableSelect = this.$(".existing_table select.names");
-        $tableSelect.prop("disabled", disableExisting);
-        $tableSelect.closest("fieldset").toggleClass("disabled", disableExisting);
+        this.$("fieldset.existing_table").toggleClass("disabled", disableExisting);
 
         this.activeScheduleView = disableExisting ? this.scheduleViewNew : this.scheduleViewExisting;
         if (this.options.launchElement.hasClass("create_schedule")) {
             this.activeScheduleView.enable();
         }
 
-        chorus.styleSelect(this.$("select.names"));
         this.onInputFieldChanged();
+        this.setExistingTableLink(!disableExisting);
+    },
+
+    realSandboxTables: function() {
+        return this.sandboxTables.pluck("objectName");
     },
 
     additionalContext: function() {
         return {
             allowNewTruncate: !this.options.launchElement.hasClass("import_now"),
-            sandboxTables: this.sandboxTables.pluck("objectName"),
+            sandboxTables: this.realSandboxTables(),
             canonicalName: this.workspace.sandbox().schema().canonicalName(),
             showSchedule: this.showSchedule,
             hideScheduleCheckbox: !this.model.hasActiveSchedule(),

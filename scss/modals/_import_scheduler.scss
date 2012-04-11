@@ -53,6 +53,16 @@
             width: 200px;
             display: inline-block;
         }
+
+        .dataset_picked {
+            font-size: 13px;
+            font-weight: $semibold;
+            margin-right: 5px;
+        }
+
+        a.dataset_picked {
+            border-bottom: 1px dotted gray;
+        }
     }
 
     .limit {

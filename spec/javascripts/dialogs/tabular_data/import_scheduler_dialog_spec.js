@@ -148,7 +148,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             });
 
             it("should not include views, external tables, or Hadoop tables in the dropdown", function() {
-                expect(this.dialog.$(".existing_table .names option").length).toBe(2);
+                expect(this.dialog.realSandboxTables().length).toBe(2);
             });
 
             it("sets the time fields to the model defaults", function() {
@@ -180,6 +180,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         this.dialog.$("input:checked[name='truncate']").prop("checked", false).change();
 
                         this.dialog.$("select[name='toTable']").eq(0).attr("selected", true);
+                        this.dialog.$(".existing_table input.dataset_picked").text("a");
 
                         this.dialog.$("input[name='limit_num_rows']").prop("checked", true).change();
                         this.dialog.$("input[name='sampleCount']").val(123);
@@ -255,7 +256,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         this.dialog.$(".new_table input:radio").prop("checked", false);
                         this.dialog.$(".existing_table input:radio").prop("checked", true).change();
                     })
-                    
+
                     it("clears the errors", function() {
                         expect(this.dialog.clearErrors).toHaveBeenCalled();
                     })
@@ -272,7 +273,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         this.dialog.$(".new_table input:radio").prop("checked", true).change();
                         this.dialog.$(".existing_table input:radio").prop("checked", false);
                     })
-                    
+
                     it("clears the errors", function() {
                         expect(this.dialog.clearErrors).toHaveBeenCalled();
                     })
@@ -393,7 +394,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     });
 
                     it("pre-populates the destination table and truncation fields with the import's settings", function() {
-                        expect(this.dialog.$("select[name='toTable']").val()).toBe("my_table");
+                        expect(this.dialog.$(".existing_table a.dataset_picked").text()).toBe("my_table");
+                        expect(this.dialog.$(".existing_table input.hidden_dataset_picked").text()).toBe("my_table");
                         expect(this.dialog.$(".truncate")).toBeChecked();
                     });
 
@@ -579,10 +581,6 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [fixtures.datasetSandboxTable(), fixtures.datasetSandboxTable()]);
             });
 
-            it("should populate the table dropdown", function() {
-                expect(this.dialog.$(".existing_table .names option").length).toBe(2);
-            });
-
             it("should display the import destination", function() {
                 expect(this.dialog.$(".destination")).toContainTranslation("import.destination", {canonicalName: this.workspace.sandbox().schema().canonicalName()})
             })
@@ -616,8 +614,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 expect(this.dialog.$(".existing_table label")).toContainTranslation("import.existing_table");
             });
 
-            it("should have a dropdown selector for existing tables", function() {
-                expect(this.dialog.$(".existing_table .names")).toBeDisabled();
+            it("should have a disabled selector (ie a span, not a link) for existing tables", function() {
+                expect(this.dialog.$(".existing_table a.dataset_picked")).not.toExist();
+                expect(this.dialog.$(".existing_table span.dataset_picked")).toExist();
             });
 
             context("when 'Import into Existing Table' is checked", function() {
@@ -627,8 +626,39 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 });
 
                 it("should enable the select", function() {
-                    expect(this.dialog.$(".existing_table .names")).toBeEnabled();
-                    expect(this.dialog.$(".new_table .name")).toBeDisabled();
+                    expect(this.dialog.$(".existing_table a.dataset_picked")).toExist();
+                    expect(this.dialog.$(".existing_table span.dataset_picked")).not.toExist();
+                });
+
+                context("when clicking the dataset picker link", function() {
+                    beforeEach(function() {
+                        stubModals();
+                        spyOn(chorus.Modal.prototype, 'launchSubModal').andCallThrough();
+                        spyOn(this.dialog, "datasetsChosen").andCallThrough();
+                        this.dialog.$(".existing_table a.dataset_picked").click();
+                    });
+
+                    it("should have a link to the dataset picker dialog", function() {
+                        expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
+                    });
+
+
+                    it("should launch the dataset picker dialog", function() {
+                        expect(chorus.Modal.prototype.launchSubModal).toHaveBeenCalled();
+                    });
+
+                    describe("when a dataset is selected", function() {
+                        var datasets;
+                        beforeEach(function() {
+                            datasets = [fixtures.datasetSourceTable({ objectName: "myDataset" })];
+                            chorus.modal.trigger("datasets:selected", datasets);
+                        });
+
+                        it("it should show the selected dataset in the link", function() {
+                            expect(this.dialog.datasetsChosen).toHaveBeenCalled()
+                            expect(this.dialog.$(".existing_table a.dataset_picked")).toContainText("myDataset");
+                        });
+                    });
                 });
 
                 it("should enable the submit button", function() {
@@ -653,9 +683,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         this.dialog.$(".new_table input.name").val("Foo").trigger("keyup");
                     });
 
-                    it("should disable the 'Existing Table' dropdown", function() {
-                        expect(this.dialog.$(".new_table .name")).toBeEnabled();
-                        expect(this.dialog.$(".existing_table .names")).toBeDisabled();
+                    it("should disable the 'Existing table' link", function(){
+                        expect(this.dialog.$(".existing_table a.dataset_picked")).not.toExist();
                     });
 
                     context("checking the limit rows checkbox", function() {

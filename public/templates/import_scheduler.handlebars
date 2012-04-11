@@ -37,15 +37,12 @@
 </div>
 
 <div class="existing_table">
-    <fieldset class="disabled">
+    <fieldset class="disabled existing_table">
         <legend class="row">
             <input type="radio" name="imports" id="import_scheduler_existing_table"/>
             <label class="main" for="import_scheduler_existing_table">{{t "import.existing_table"}}</label>
-            <select class="names" disabled="disabled" name="toTable">
-                {{#each sandboxTables}}
-                    <option value="{{this}}">{{this}}</option>
-                {{/each}}
-            </select>
+            <span href="#" class="dataset_picked">{{t "dataset.import.select_dataset"}}</span>
+            <input class="hidden_dataset_picked" type="hidden"></input>
         </legend>
 
         <div class="inputs">
