@@ -485,6 +485,16 @@ describe("chorus.models.TabularData", function() {
                 expect(this.tabularData.toText()).toBe('"PartyMAN"."Tabler"');
             });
         });
+
+        context("with chorus view", function() {
+            beforeEach(function() {
+                this.tabularData = fixtures.chorusView({objectName: "ChorusView", query: "SELECT a,b FROM xyz;"});
+            });
+
+            it("creates an appropriate string (trimmed, remove semicolon, and alias to pg-quoted CV name)", function() {
+                expect(this.tabularData.toText()).toBe('(SELECT a,b FROM XYZ) AS "Chorus_View"');
+            });
+        });
     });
 
     describe("#selectName", function() {

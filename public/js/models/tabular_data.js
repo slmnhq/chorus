@@ -177,7 +177,10 @@ chorus.models.TabularData = chorus.models.Base.include(
         },
 
         toText: function() {
-            return this.safePGName(this.get("schemaName")) + '.' + this.safePGName(this.get("objectName"));
+            if (this.has("query")) {
+                var query = this.get("query").trim().replace(/;$/, "").trim();
+                return "(" + query + ") AS " + this.safePGName(this.name());
+            } else return this.safePGName(this.get("schemaName")) + '.' + this.safePGName(this.get("objectName"));
         },
 
         selectName: function() {
