@@ -4,10 +4,7 @@ describe("chorus.dialogs.NameChorusView", function() {
         stubDefer();
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
         this.launchElement = $("<a></a>");
-        this.launchElement.data("parent", {
-            sql : function(){ return "select awesome from sql"; }
-        });
-        this.chorusView = fixtures.datasetChorusView();
+        this.chorusView = fixtures.datasetChorusView({ query: "select name, quantity from shipments;" });
         this.dialog = new chorus.dialogs.NameChorusView({
             model: this.chorusView,
             launchElement: this.launchElement
@@ -17,6 +14,10 @@ describe("chorus.dialogs.NameChorusView", function() {
 
     it("has an editable CodeMirror", function() {
         expect(CodeMirror.fromTextArea.calls[0].args[1].readOnly).toBeUndefined();
+    });
+
+    it("displays the model's query in the sql editor", function() {
+        expect(this.dialog.$("textarea").val()).toBe(this.chorusView.get("query"));
     });
 
     it("has the correct submit button text", function() {

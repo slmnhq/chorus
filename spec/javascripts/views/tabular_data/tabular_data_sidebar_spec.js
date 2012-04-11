@@ -194,11 +194,11 @@ describe("chorus.views.TabularDataSidebar", function() {
                     this.server.completeFetchFor(this.view.importConfiguration, []);
 
                 });
+
                 it("has no action links except for 'Preview Data'", function() {
                     expect(this.view.$(".actions a").length).toBe(1);
                     expect(this.view.$(".actions a.tabular_data_preview")).toExist();
                 });
-
             });
 
             context("when there is a workspace", function() {
@@ -227,6 +227,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
+                    itDoesNotShowTheDuplicateChorusViewLink();
                     itShowsTheAppropriateDeleteLink(false);
                     itDoesNotHaveACreateDatabaseViewLink();
 
@@ -692,17 +693,38 @@ describe("chorus.views.TabularDataSidebar", function() {
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
+                    itDoesNotShowTheDuplicateChorusViewLink();
                     itShowsTheAppropriateDeleteLink(true, "view");
                     itDoesNotHaveACreateDatabaseViewLink();
                 });
 
                 context("when the dataset is a chorus view", function() {
                     beforeEach(function() {
-                        this.dataset = fixtures.datasetChorusView();
+                        this.dataset = fixtures.datasetChorusView({ objectName: "annes_table", query: "select * from foos;" });
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
                     itShowsTheAppropriateDeleteLink(true, "chorus view");
+
+                    it("shows the 'duplicate' link'", function() {
+                        expect(this.view.$("a.duplicate").text()).toMatchTranslation("dataset.chorusview.duplicate");
+                    });
+
+                    describe("clicking the 'duplicate' link", function() {
+                        beforeEach(function() {
+                            this.modalSpy = spyOn(chorus.dialogs.NameChorusView.prototype, 'launchModal').andCallThrough();
+                            this.view.$("a.duplicate").click();
+                            this.dialog = this.modalSpy.mostRecentCall.object;
+                        });
+
+                        it("launches the name chorus view dialog", function() {
+                            expect(this.modalSpy).toHaveBeenCalled();
+                        });
+
+                        it("passes the dialog a duplicate of the chorus view", function() {
+                            expect(this.dialog.model.attributes).toEqual(this.dataset.createDuplicateChorusView().attributes);
+                        });
+                    });
 
                     it("shows the 'Create as a database view' link", function() {
                         expect(this.view.$("a.create_database_view[data-dialog=CreateDatabaseView]")).toContainTranslation("actions.create_database_view");
@@ -718,6 +740,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                         itShowsTheAppropriateDeleteLink(true, type);
                         itDoesNotHaveACreateDatabaseViewLink();
+                        itDoesNotShowTheDuplicateChorusViewLink();
                     })
                 })
 
@@ -787,6 +810,12 @@ describe("chorus.views.TabularDataSidebar", function() {
                         });
                     };
                 };
+
+                function itDoesNotShowTheDuplicateChorusViewLink() {
+                    it("does not show the 'duplicate' link", function() {
+                        expect(this.view.$("a.duplicate")).not.toExist();
+                    });
+                }
             });
 
             context("when there is not a workspace", function() {

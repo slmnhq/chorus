@@ -85,6 +85,21 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
+    describe("#createDuplicateChorusView", function() {
+        it("returns a chorus view with the right data", function() {
+            this.model = fixtures.datasetChorusView();
+
+            var copy = this.model.createDuplicateChorusView();
+            expect(copy).toBeA(chorus.models.ChorusView);
+//            expect(copy.get("objectName")).toBe(this.model.get("objectName") + "_copy");
+            expect(copy.get("objectName")).toMatchTranslation("dataset.chorusview.copy_name", { name: this.model.get("objectName") });
+
+            _.each(["instanceId", "workspace", "databaseName", "schemaName"], function(attrName) {
+                expect(copy.get(attrName)).toBe(this.model.get(attrName));
+            }, this);
+        });
+    });
+
     describe("#statistics", function() {
         context("for a chorus view", function() {
             beforeEach(function() {
