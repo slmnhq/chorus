@@ -75,15 +75,25 @@
         min-height: 225px;
 
         .tbody {
-            top: 60px;
+            top: 47px;
         }
 
         .column_names {
+            .th {
+                height: 29px;
+                width: $cell-width;
+                padding: 0;
+            }
+
             .field_name {
                 display: inline-block;
-                width: 95%;
+                width: 100%;
                 @include ellipsis;
 
+                input {
+                    width: 100%;
+                    margin: 0;
+                }
             }
         }
 
@@ -123,6 +133,8 @@
         }
 
         .data_types {
+            line-height: 12px;
+
             .th {
                 height: 16px;
                 line-height: 16px;
@@ -133,7 +145,6 @@
                 .link_menu {
                     padding: 0;
                     .chosen {
-                        padding: 0;
                         color: white;
                         border: none;
                         width: $cell-width - 4px;
