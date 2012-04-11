@@ -73,10 +73,12 @@ describe("chorus.views.DatabaseSidebarList", function() {
                 })
 
                 it("shows the names of all of the workspace's database's schemas", function() {
-                    expect(this.qtip.find("li").length).toBe(3);
-                    expect(this.qtip).toContainText("righteous_tables");
-                    expect(this.qtip).toContainText("awesome_tables");
-                    expect(this.qtip).toContainText("orphaned_tables");
+                    var $lis = this.qtip.find("li a");
+                    expect($lis.length).toBe(4);
+                    expect($lis.eq(0)).toContainText("this workspace");
+                    expect($lis.eq(1)).toContainText("awesome_tables");
+                    expect($lis.eq(2)).toContainText("orphaned_tables");
+                    expect($lis.eq(3)).toContainText("righteous_tables");
                 });
 
                 describe("when a schema is clicked", function() {

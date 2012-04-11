@@ -40,6 +40,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         }
     },
 
+    setSchemaToCurrentWorkspace: $.noop,
     fetchResourceAfterSchemaSelected: $.noop,
 
     postRender: function() {
@@ -113,8 +114,15 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     schemaSelected: function(e) {
         var schemaId = $(e.target).data("id")
-        this.schema = this.schemas.get(schemaId)
-        this.fetchResourceAfterSchemaSelected();
+        if (schemaId === "workspaceSchema") {
+            this.setSchemaToCurrentWorkspace();
+            this.fetchResourceAfterSchemaSelected();
+
+        } else {
+            this.schema = this.schemas.get(schemaId)
+            this.fetchResourceAfterSchemaSelected();
+        }
+
         this.render();
     },
 

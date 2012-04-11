@@ -8,6 +8,12 @@
 
     <div class="schema_menu_container">
         <ul class="schema_menu">
+            <li>
+                {{#if isWorkspaceSchema}}
+                    <div class="check"></div>
+                {{/if}}
+                <a class="schema" data-id="workspaceSchema">{{t "database.sidebar.this_workspace"}}</a>
+            </li>
             {{#each schemas}}
                 <li>
                     {{#if isCurrent}}

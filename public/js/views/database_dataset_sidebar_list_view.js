@@ -13,8 +13,6 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         this.datasets = new chorus.collections.DatasetSet([], { workspaceId: chorus.page.workspace.id });
         this.datasets.sortAsc("objectName");
         this.datasets.fetch();
-
-        this.bindings.add(this.datasets, "loaded", this.workspaceDatasetsLoaded);
     },
 
     postRender: function() {
@@ -27,15 +25,10 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         });
     },
 
-    workspaceDatasetsLoaded: function() {
-        this.schemas.onLoaded(this.addThisWorkspace, this);
-    },
-
-    addThisWorkspace: function() {
-        var schema = new chorus.models.Schema({id: "workspaceSchema", name: t("database.sidebar.this_workspace")});
-        schema._databaseObjects = this.datasets;
-        this.schemas.add(schema, { at: 0 });
-        this.render();
+    additionalContext: function() {
+        var ctx = this._super("additionalContext", arguments);
+        ctx.isWorkspaceSchema = (this.schema && this.schema.get("id") === "workspaceSchema");
+        return ctx;
     },
 
     fetchResourceAfterSchemaSelected: function() {
@@ -45,6 +38,11 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         this.listview = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
         this.bindings.add(this.listview, "fetch:more", this.fetchMoreDatasets);
         this.bindings.add(this.collection, "searched", this.onSearchComplete);
+    },
+
+    setSchemaToCurrentWorkspace: function() {
+        this.schema = new chorus.models.Schema({id: "workspaceSchema", name: t("database.sidebar.this_workspace")});
+        this.schema._databaseObjects = this.datasets;
     },
 
     fetchMoreDatasets: function(e) {
