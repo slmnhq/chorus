@@ -53,7 +53,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
                 this.activities.push(view);
                 ul.append(view.render().el);
             } catch (err) {
-                chorus.log(err);
+                chorus.log("error", err, "processing activity", model);
             }
         }, this);
     },
