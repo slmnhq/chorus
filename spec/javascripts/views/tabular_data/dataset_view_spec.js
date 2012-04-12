@@ -2,15 +2,6 @@ describe("chorus.views.Dataset", function() {
     beforeEach(function() {
         this.dataset = newFixtures.datasetSourceTable({
             objectName: "john_the_table"
-        }, {
-            workspaceUsed: {
-                count: 5,
-                workspaceList: [
-                    { id: '1', name: "Hoge" },
-                    { id: '2', name: "Fuga" },
-                    { id: '3', name: "Piyo" },
-                ]
-            }
         });
         this.qtipSpy = stubQtip();
         this.view = new chorus.views.Dataset({ model: this.dataset, activeWorkspace: true });
@@ -28,7 +19,24 @@ describe("chorus.views.Dataset", function() {
         expect(this.view.$(".database").data("instance")).toBe(this.dataset.get("instance"));
     });
 
-    describe("found in workspaces tooltip (only appears on the search result page)", function() {
+    describe("found in workspaces tooltip (when rendered from the schema browse page)", function() {
+        beforeEach(function() {
+            this.databaseObject = fixtures.databaseObject({
+                objectName: "john_the_table",
+                workspaceUsed: {
+                    count: 5,
+                    workspaceList: [
+                        { id: '1', name: "Hoge" },
+                        { id: '2', name: "Fuga" },
+                        { id: '3', name: "Piyo" },
+                    ]
+                }
+            });
+
+            this.view = new chorus.views.Dataset({ model: this.databaseObject, activeWorkspace: true });
+            this.view.render();
+        });
+
         it("is rendered", function() {
             expect(this.view.$(".found_in")).toContainText("Hoge");
         });
@@ -42,8 +50,8 @@ describe("chorus.views.Dataset", function() {
 
         context("when the dataset is not used in any workspace", function() {
             beforeEach(function() {
-                this.dataset.unset("workspaceUsed");
-                delete this.dataset._workspaceAssociated;
+                this.databaseObject.unset("workspaceUsed");
+                delete this.databaseObject._workspaceAssociated;
                 this.view.render();
             });
 
