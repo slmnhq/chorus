@@ -36,6 +36,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
         this.bindings.add(this.collection, "searched", this.onSearchComplete);
 
         this.listview = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
+        this.collection.bind("loaded", this.postRender, this);
         this.bindings.add(this.listview, "fetch:more", this.fetchMoreDatasets);
     },
 
@@ -61,5 +62,6 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     onSearchComplete: function() {
         this.listview.render();
+        this.postRender();
     }
 });

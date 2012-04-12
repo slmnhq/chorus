@@ -78,6 +78,18 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     it("should re-fetch the collection using the search parameters", function() {
                         expect(this.server.lastFetch().url).toContainQueryParams({filter: "foo"});
                     });
+
+                    context("when the fetch completes", function() {
+                        beforeEach(function() {
+                            spyOn($.fn, "draggable").andCallThrough();
+                            spyOn(this.view.listview, "render");
+                            this.server.lastFetch().succeed();
+                        });
+
+                        it("makes items draggable", function() {
+                            expect($.fn.draggable).toHaveBeenCalled();
+                        });
+                    });
                 });
 
                 describe("fetching more datasets", function() {
@@ -96,6 +108,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
                     context("when the fetch succeeds", function() {
                         beforeEach(function() {
+                            spyOn($.fn, "draggable").andCallThrough();
                             this.view.listview.render.reset();
                             this.server.lastFetch().succeed();
                         });
@@ -106,6 +119,10 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
                         it("recalculates scrolling", function() {
                             expect(this.view.recalculateScrolling).toHaveBeenCalledWith($("#sidebar"));
+                        });
+
+                        it("makes items draggable", function() {
+                            expect($.fn.draggable).toHaveBeenCalled();
                         });
                     });
                 });
