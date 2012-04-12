@@ -21,7 +21,7 @@ window.fixtureDefinitions = {
 
     schema: {
         model: "Schema",
-        unique: [ "id", "instance.id"]
+        unique: [ "id", "instance.id" ]
     },
 
     schemaSet: {
@@ -34,37 +34,29 @@ window.fixtureDefinitions = {
         unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ]
     },
 
-    datasetExternalTable: {
-        model: "Dataset",
-        unique: [ "id" ]
-    },
-
-    datasetSourceView: {
-        model: "Dataset",
-        unique: [ "id" ]
-    },
-
-    datasetSourceTable: {
-        model: "Dataset",
-        unique: [ "id" ]
-    },
-
-    datasetSandboxView: {
-        model: "Dataset",
-        unique: [ "id" ]
-    },
-
-    datasetSandboxTable: {
-        model: "Dataset",
-        unique: [ "id" ]
-    },
-
-    datasetChorusView: {
-        model: "Dataset",
-        unique: [ "id" ]
-    },
-
     csvImport: {
         model: "CSVImport"
     }
 };
+
+fixtureDefinitions.datasetSourceTable   =
+fixtureDefinitions.datasetSourceView    =
+fixtureDefinitions.datasetSandboxTable  =
+fixtureDefinitions.datasetSandboxView   =
+fixtureDefinitions.datasetChorusView    =
+fixtureDefinitions.datasetExternalTable = {
+    model: "Dataset",
+    derived: {
+        id: function(attrs) {
+            return '"' + [
+                attrs.instance.id,
+                attrs.databaseName,
+                attrs.schemaName,
+                attrs.objectType,
+                attrs.objectName,
+            ].join('"|"') + '"';
+        }
+    }
+};
+
+

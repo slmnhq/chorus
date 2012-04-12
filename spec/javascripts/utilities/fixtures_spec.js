@@ -37,6 +37,47 @@ describe("newFixtures", function() {
         });
     });
 
+    describe("#datasetJson", function() {
+        it("generates its id based on the instance, database, schema, type and table name", function() {
+            var datasetJson = newFixtures.datasetSourceTableJson({
+                instance: { id: "45" },
+                databaseName: "chorus_events",
+                schemaName: "plague",
+                objectType: "BASE_TABLE",
+                objectName: "outbreaks"
+            });
+
+            expect(datasetJson.id).toBe('"45"|"chorus_events"|"plague"|"BASE_TABLE"|"outbreaks"');
+        });
+
+        context("when the id is overridden manually", function() {
+            it("uses the override", function() {
+                var datasetJson = newFixtures.datasetSourceTableJson({
+                    id: "foo",
+                    instance: { id: "45" },
+                    databaseName: "chorus_events",
+                    schemaName: "plague",
+                    objectName: "outbreaks"
+                });
+                expect(datasetJson.id).toBe("foo");
+            });
+        });
+
+        context("when some of the id parameters are not overridden", function() {
+            it("uses the default parameter to generate the id", function() {
+                var datasetJson = newFixtures.datasetSourceTableJson({
+                    databaseName: "chorus_events",
+                    schemaName: "plague",
+                    objectName: "outbreaks"
+                });
+
+                var instanceId = '"' + datasetJson.instance.id + '"';
+
+                expect(datasetJson.id).toBe(instanceId + '|"chorus_events"|"plague"|"BASE_TABLE"|"outbreaks"');
+            });
+        });
+    });
+
     describe("#user", function() {
         var fakeAttrs;
 

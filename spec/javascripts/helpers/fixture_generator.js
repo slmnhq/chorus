@@ -12,8 +12,10 @@
             var rawData = getFixture(name);
             overrides || (overrides = defaultOverridesFor(rawData));
             addUniqueDefaults(overrides, definition.unique);
-            var safeAttrs = safeExtend(rawData, overrides, name);
-            return _.extend(safeAttrs, uncheckedOverrides);
+            var attrs = safeExtend(rawData, overrides, name);
+            _.extend(attrs, uncheckedOverrides);
+            addDerivedAttributes(attrs, overrides, definition.derived);
+            return attrs;
         };
 
         window.newFixtures[name] = function() {
@@ -21,6 +23,14 @@
             return new klass(attrs);
         };
     });
+
+    function addDerivedAttributes(attrs, overrides, derivationMethods) {
+        _.each(derivationMethods, function(method, attrName) {
+            if (!overrides[attrName]) {
+                attrs[attrName] = method(attrs);
+            }
+        });
+    }
 
     function getClass(fixtureDefinition) {
         if (fixtureDefinition.model) {

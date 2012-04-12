@@ -1,7 +1,6 @@
 describe("chorus.models.Dataset", function() {
     beforeEach(function() {
         this.dataset = newFixtures.datasetSourceView({
-            id: '"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"',
             workspace: {
                 id: "44"
             },
