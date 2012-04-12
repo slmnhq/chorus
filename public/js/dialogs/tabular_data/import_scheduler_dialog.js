@@ -25,12 +25,6 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.model.fetchIfNotLoaded();
         this.requiredResources.push(this.model);
 
-        var workspaceId = this.dataset.get("workspace").id;
-        this.sandboxTables = new chorus.collections.DatasetSet([], {workspaceId: workspaceId, type: "SANDBOX_TABLE"});
-        this.requiredResources.push(this.sandboxTables);
-        this.sandboxTables.sortAsc("objectName");
-        this.sandboxTables.fetchAll();
-
         this.bindings.add(this.model, "saved", this.importSaved);
         this.bindings.add(this.model, "saveFailed validationFailed", function() {
             this.$("button.submit").stopLoading();
@@ -103,7 +97,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     setFieldValues: function(model) {
         this.$("input[type='radio']").prop("checked", false);
-        var toTableExists = !!(this.sandboxTables.findWhere({id: model.get("destinationTable")}));
+        var toTableExists = this.model.get("toTableExists");
         if (toTableExists) {
             this.$("input[type='radio']#import_scheduler_existing_table").prop("checked", true).change();
             this.activeScheduleView = this.scheduleViewExisting;
@@ -135,12 +129,6 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
             this.$("input[name='sampleCount']").prop("disabled", false);
             this.$("input[name='sampleCount']").val(model.get("sampleCount"));
         }
-    },
-
-    resourcesLoaded: function() {
-        this.sandboxTables.models = _.filter(this.sandboxTables.models, _.bind(function(table) {
-            return _.include(["BASE_TABLE", "MASTER_TABLE"], table.get("objectType"));
-        }, this));
     },
 
     onDestinationChosen: function() {
