@@ -116,7 +116,7 @@
                         color: #cc0000;
 
                         .arrow {
-                            @include triangle(down, #cc0000, 4px, 4px);
+                            @include triangle(down, #cc0000, 6px, 6px);
                         }
                     }
 
@@ -126,7 +126,7 @@
 
                     .arrow {
                         display: inline-block;
-                        @include triangle(down, $link-color, 4px, 4px);
+                        @include triangle(down, $link-color, 6px, 6px);
                     }
                 }
             }
@@ -295,7 +295,7 @@
 .table_import_csv.qtip {
 
     .ui-tooltip-content {
-        max-height: 500px;
+        max-height: 420px;
         overflow-y: auto;
         width: 280px;
     }
