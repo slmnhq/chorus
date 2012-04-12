@@ -1,10 +1,10 @@
-describe("chorus.views.Dataset", function() {
+describe("chorus.views.TabularData", function() {
     beforeEach(function() {
         this.dataset = newFixtures.datasetSourceTable({
             objectName: "john_the_table"
         });
         this.qtipSpy = stubQtip();
-        this.view = new chorus.views.Dataset({ model: this.dataset, activeWorkspace: true });
+        this.view = new chorus.views.TabularData({ model: this.dataset, activeWorkspace: true });
         this.view.render();
     });
 
@@ -33,7 +33,7 @@ describe("chorus.views.Dataset", function() {
                 }
             });
 
-            this.view = new chorus.views.Dataset({ model: this.databaseObject, activeWorkspace: true });
+            this.view = new chorus.views.TabularData({ model: this.databaseObject, activeWorkspace: true });
             this.view.render();
         });
 
@@ -153,7 +153,7 @@ describe("chorus.views.Dataset", function() {
         var table = fixtures.databaseTable({objectName: 'yyy'});
         table.get("workspaceUsed").workspaceCount = 3;
         table.get("workspaceUsed").workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
-        var view = new chorus.views.Dataset({ model: table });
+        var view = new chorus.views.TabularData({ model: table });
         view.render();
         expect(view.$(".name")).toHaveHref(table.showUrl());
         expect(view.$(".image")).toHaveHref(table.showUrl());

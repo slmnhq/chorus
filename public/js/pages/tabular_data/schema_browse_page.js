@@ -22,7 +22,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         this.sidebar = new chorus.views.TabularDataSidebar({listMode: true});
 
         this.mainContent = new chorus.views.MainContentList({
-            modelClass: "Dataset",
+            modelClass: "TabularData",
             collection: this.collection
         });
 
@@ -57,7 +57,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         }, this), 300);
 
         this.mainContent = new chorus.views.MainContentList({
-            modelClass: "Dataset",
+            modelClass: "TabularData",
             collection: this.collection,
             title: this.schema.canonicalName(),
             search: {

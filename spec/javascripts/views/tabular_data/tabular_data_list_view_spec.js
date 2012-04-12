@@ -1,11 +1,11 @@
-describe("chorus.views.DatasetList", function() {
+describe("chorus.views.TabularDataList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatasetSet([
             newFixtures.datasetChorusView({ hasCredentials: true }),
             newFixtures.datasetSandboxTable({ hasCredentials: true })
         ]);
         this.collection.loaded = true;
-        this.view = new chorus.views.DatasetList({ collection: this.collection, activeWorkspace: true });
+        this.view = new chorus.views.TabularDataList({ collection: this.collection, activeWorkspace: true });
         this.view.render();
     });
 
@@ -28,7 +28,7 @@ describe("chorus.views.DatasetList", function() {
         expect(this.view.$("li a.image").length).toBe(2);
         expect(this.view.$("li a.name").length).toBe(2);
 
-        this.view = new chorus.views.DatasetList({ collection: this.collection, activeWorkspace: false });
+        this.view = new chorus.views.TabularDataList({ collection: this.collection, activeWorkspace: false });
         this.view.render();
 
         expect(this.view.$("li a.image").length).toBe(0);
