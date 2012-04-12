@@ -39,6 +39,41 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         })
     });
 
+    describe("the 'Add a Sandbox' section", function() {
+        var link;
+
+        beforeEach(function() {
+            link = this.view.$(".add_sandbox a");
+        });
+
+        it("has a link", function() {
+            expect(this.view.$(".add_sandbox a")).toContainTranslation("workspace.quickstart.add_sandbox.link");
+        });
+
+        it("has an image", function() {
+            expect(this.view.$(".add_sandbox img")).toHaveAttr("src", "images/workspaces/sandbox_quick_start.png");
+        });
+
+        it("has a description", function() {
+            expect(this.view.$(".add_sandbox .text")).toContainTranslation("workspace.quickstart.add_sandbox.text");
+        });
+
+        it("launches the right dialog", function() {
+            expect(link).toHaveClass("dialog");
+            expect(link).toHaveData("dialog", "SandboxNew");
+            expect(link).toHaveData("workspaceId", 999);
+        });
+
+        it("makes the sandbox dialog *not* reload the page on completion", function() {
+            expect(link).toHaveData("noReload", true);
+        });
+
+        it("hides the box when the link is clicked", function() {
+            link.click();
+            expect(this.view.$(".add_sandbox")).toHaveClass("hidden");
+        })
+    });
+
     describe("the 'Edit Workspace Settings' section", function() {
         it("has a link", function() {
             expect(this.view.$(".edit_workspace_settings a")).toContainTranslation("workspace.quickstart.edit_workspace_settings.link");

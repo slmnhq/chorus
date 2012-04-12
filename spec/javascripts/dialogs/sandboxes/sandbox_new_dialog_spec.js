@@ -112,8 +112,19 @@ describe("chorus.dialogs.SandboxNew", function() {
                         this.sandbox.trigger("saved");
                     });
 
-                    it("reloads the page", function() {
-                        expect(chorus.router.reload).toHaveBeenCalled();
+                    context("when the 'noReload' option is set", function() {
+                        it("does not reload the page", function() {
+                            chorus.router.reload.reset();
+                            this.dialog.options.launchElement.data("noReload", true);
+                            this.sandbox.trigger("saved");
+                            expect(chorus.router.reload).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    context("when the 'noReload' option is falsy", function() {
+                        it("reloads the page", function() {
+                            expect(chorus.router.reload).toHaveBeenCalled();
+                        });
                     });
 
                     it("shows a toast message", function() {

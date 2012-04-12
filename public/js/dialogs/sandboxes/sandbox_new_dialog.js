@@ -57,7 +57,9 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     saved: function() {
         chorus.toast("sandbox.create.toast");
-        chorus.router.reload();
+        if (!this.options.launchElement.data("noReload")) {
+            chorus.router.reload();
+        }
         this.closeModal();
     },
 
