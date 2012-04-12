@@ -42,30 +42,30 @@ describe("chorus.views.ChartConfiguration", function() {
     describe("allColumnNames", function() {
         it("returns a sorted array of column names", function() {
             expect(this.view.allColumnNames()).toEqual(['A Milk Duds', 'a Speed', 'B Liger', 'the date', 'the time', 'the time & date']);
-        })
-    })
+        });
+    });
 
     describe("numericColumnNames", function() {
         it("returns a sorted array of numeric column names", function() {
             expect(this.view.numericColumnNames()).toEqual(['A Milk Duds', 'a Speed']);
-        })
-    })
+        });
+    });
 
     describe("datetimeColumnNames", function() {
         it("returns a sorted array of date/time column names", function() {
             expect(this.view.datetimeColumnNames()).toEqual(["the date", "the time", "the time & date"]);
-        })
-    })
+        });
+    });
 
     describe("#render", function() {
         beforeEach(function() {
             this.modalSpy = stubModals();
             this.view.render();
-        })
+        });
 
         it("has a create chart button", function() {
             expect(this.view.$('button.create')).toExist();
-        })
+        });
 
         describe("Creating a Visualization", function() {
             beforeEach(function() {
@@ -75,7 +75,7 @@ describe("chorus.views.ChartConfiguration", function() {
                 this.view.$('button.create').click();
                 this.task = this.view.task;
                 spyOn(this.task, 'cancel').andCallThrough();
-            })
+            });
 
             it("should clear the sql error bar", function() {
                 expect(this.view.clearSqlErrors).toHaveBeenCalled();
@@ -83,65 +83,65 @@ describe("chorus.views.ChartConfiguration", function() {
 
             it("should have a spinner", function() {
                 expect(this.view.$("button.create")).toHaveSpinner();
-            })
+            });
 
             it("should disable the create button", function() {
                 expect(this.view.$("button.create")).toBeDisabled();
-            })
+            });
 
             it("should show the cancel button", function() {
                 expect(this.view.$("button.cancel")).not.toHaveClass('hidden');
-            })
+            });
 
             describe("cancel:visualization", function() {
                 beforeEach(function() {
                     chorus.PageEvents.broadcast('cancel:visualization');
-                })
+                });
 
                 it("cancels the task", function() {
                     expect(this.task.cancel).toHaveBeenCalled();
-                })
+                });
             });
 
             describe("when the user clicks the cancel button", function() {
                 beforeEach(function() {
                     this.view.$('button.cancel').click();
-                })
+                });
                 it("should remove the spinner from the create button", function() {
                     expect(this.view.$('button.create')).not.toHaveSpinner()
-                })
+                });
 
                 it("should enable the create button", function() {
                     expect(this.view.$("button.create")).not.toBeDisabled();
-                })
+                });
 
                 it("should hide the cancel button", function() {
                     expect(this.view.$("button.cancel")).toHaveClass('hidden');
-                })
+                });
 
                 it("cancels the task", function() {
                     expect(this.task.cancel).toHaveBeenCalled();
-                })
+                });
 
                 describe("when the cancel is successful", function() {
                     beforeEach(function() {
                         this.server.lastCreateFor(this.task).fail("The task is cancelled");
-                    })
+                    });
 
                     it("does not render errors", function() {
                         expect(this.view.onSqlError).not.toHaveBeenCalled();
-                    })
+                    });
 
                     it("unsets the task from the view", function() {
                         expect(this.view.task).toBeUndefined();
-                    })
-                })
-            })
+                    });
+                });
+            });
 
             describe("when the save completes", function() {
                 beforeEach(function() {
                     this.server.completeSaveFor(this.view.task);
-                })
+                });
 
                 it("starts up the visualization dialog", function() {
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.Visualization);
@@ -149,20 +149,20 @@ describe("chorus.views.ChartConfiguration", function() {
 
                 it("should remove the spinner from the create button", function() {
                     expect(this.view.$('button.create')).not.toHaveSpinner()
-                })
+                });
 
                 it("should enable the create button", function() {
                     expect(this.view.$("button.create")).not.toBeDisabled();
-                })
+                });
 
                 it("should hide the cancel button", function() {
                     expect(this.view.$("button.cancel")).toHaveClass('hidden');
-                })
+                });
 
                 it("unsets the task from the view", function() {
                     expect(this.view.task).toBeUndefined();
-                })
-            })
+                });
+            });
 
             describe("when the save fails", function() {
                 beforeEach(function() {
@@ -175,30 +175,44 @@ describe("chorus.views.ChartConfiguration", function() {
 
                 it("should remove the spinner from the create button", function() {
                     expect(this.view.$('button.create')).not.toHaveSpinner()
-                })
+                });
 
                 it("should enable the create button", function() {
                     expect(this.view.$("button.create")).not.toBeDisabled();
-                })
+                });
 
                 it("should hide the cancel button", function() {
                     expect(this.view.$("button.cancel")).toHaveClass('hidden');
-                })
+                });
 
                 it("unsets the task from the view", function() {
                     expect(this.view.task).toBeUndefined();
-                })
+                });
             });
-        })
-
+        });
 
         context("not creating a visualization", function() {
-
             it("does not blow up when cancel:sidebar is triggered", function() {
                 chorus.PageEvents.broadcast('cancel:sidebar');
-            })
-        })
-    })
+            });
+        });
+
+        context("options", function() {
+            it("has an option for each column name", function() {
+                var $options = this.view.$("option");
+                expect($options.length).toEqual(this.view.collection.length);
+            });
+
+            it("each option has its text as the value=, title= and content", function() {
+                this.view.$("option").each(_.bind(function(index, option) {
+                    var data = this.view.columns[index].get("name");
+                    expect($(option).attr("title")).toBe(data);
+                    expect($(option).attr("value")).toBe(data);
+                    expect($(option).text()).toBe(data);
+                }, this));
+            });
+        });
+    });
 
     describe("errors", function() {
         beforeEach(function() {

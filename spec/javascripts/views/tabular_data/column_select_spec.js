@@ -24,6 +24,13 @@ describe("chorus.views.ColumnSelect", function() {
                 this.view.render();
             });
 
+            it("creates a title= attribute on each option tag", function() {
+                var self = this;
+                this.view.$("option").each(function(index, option) {
+                    expect($(option).attr("title")).toBe(self.view.collection.at(index).get("name"));
+                });
+            });
+
             it("does not have the aliased_name", function() {
                 expect(this.selectMenuStub.find(".aliased_name")).not.toExist();
             });
