@@ -24,7 +24,6 @@
                 content: new chorus.views.LoadingSection(),
                 contentHeader:new chorus.views.WorkfileHeader({model:this.model})
             });
-            this.bindings.add(this.model, "change", this.modelChanged);
 
             this.sidebar = new chorus.views.WorkfileShowSidebar({model:this.model});
             this.subNav = new chorus.views.SubNav({workspace:this.workspace, tab:"workfiles"});
