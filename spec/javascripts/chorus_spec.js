@@ -162,6 +162,44 @@ describe("chorus global", function() {
         });
     });
 
+    describe("#styleSelect", function() {
+        var $selectMenu1, $selectMenu2;
+        beforeEach(function() {
+            $selectMenu1 = $("<select></select>").append("<option title='first'>1</option><option title='second'>2</option>");
+            $selectMenu2 = $("<select></select>").append("<option title='1st'>One</option><option title='2nd'>Two</option>");
+
+            $("#jasmine_content").append($selectMenu1);
+            $("#jasmine_content").append($selectMenu2);
+
+            chorus.styleSelect($selectMenu1);
+            chorus.styleSelect($selectMenu2);
+        });
+
+        it("carries over the titles from the correct selectMenu", function() {
+            var id1 = $selectMenu1.next().find("a.ui-selectmenu").attr("aria-owns");
+            var id2 = $selectMenu2.next().find("a.ui-selectmenu").attr("aria-owns");
+
+            expect(id1).toBeDefined();
+            expect(id2).toBeDefined();
+            expect(id1).not.toBe(id2);
+
+            var $uiMenu1 = $("#"+id1);
+            var $uiMenu2 = $("#"+id2);
+
+            expect($uiMenu1.find("li").eq(0)).toContainText("1");
+            expect($uiMenu1.find("li").eq(1)).toContainText("2");
+
+            expect($uiMenu1.find("li").eq(0)).toHaveAttr("title", "first");
+            expect($uiMenu1.find("li").eq(1)).toHaveAttr("title", "second");
+
+            expect($uiMenu2.find("li").eq(0)).toContainText("One");
+            expect($uiMenu2.find("li").eq(1)).toContainText("Two");
+
+            expect($uiMenu2.find("li").eq(0)).toHaveAttr("title", "1st");
+            expect($uiMenu2.find("li").eq(1)).toHaveAttr("title", "2nd");
+        });
+    });
+
     describe("#menu", function() {
         context("when the menu is in a modal", function() {
             beforeEach(function() {

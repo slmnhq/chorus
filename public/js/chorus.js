@@ -176,6 +176,13 @@ window.Chorus = function chorus$Global() {
         }
         var newOptions = _.extend({}, options, {change: changeFunction, positionOptions: {offset: "0 -1"}})
         $element.selectmenu(newOptions);
+
+        var id = $element.next("span").find("a.ui-selectmenu").attr("aria-owns");
+        var $selectmenu = $("#"+id);
+
+        _.each($element.find("option"), function(option, i) {
+           $selectmenu.find("li").eq(i).prop("title", $(option).attr("title"));
+        });
     }
 
     self.datePicker = function(selectors, options) {
