@@ -1,6 +1,6 @@
 describe("chorus.dialogs.ImportScheduler", function() {
     beforeEach(function() {
-        this.dataset = fixtures.datasetSourceTable();
+        this.dataset = newFixtures.datasetSourceTable();
         this.datasetImport = fixtures.datasetImport({
             datasetId: this.dataset.get('id'),
             workspaceId: this.dataset.get('workspace').id
@@ -21,7 +21,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxTable(),
-                    fixtures.datasetSandboxView(),
+                    newFixtures.datasetSandboxView(),
                     fixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
                 ]);
@@ -48,7 +48,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxTable(),
-                    fixtures.datasetSandboxView(),
+                    newFixtures.datasetSandboxView(),
                     fixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
                 ]);
@@ -86,7 +86,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxTable(),
-                    fixtures.datasetSandboxView(),
+                    newFixtures.datasetSandboxView(),
                     fixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
                 ]);
@@ -118,7 +118,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 this.server.completeFetchAllFor(this.dialog.sandboxTables, [
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxTable(),
-                    fixtures.datasetSandboxView(),
+                    newFixtures.datasetSandboxView(),
                     fixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
                 ]);
@@ -657,7 +657,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     describe("when a dataset is selected", function() {
                         var datasets;
                         beforeEach(function() {
-                            datasets = [fixtures.datasetSourceTable({ objectName: "myDataset" })];
+                            datasets = [newFixtures.datasetSourceTable({ objectName: "myDataset" })];
                             chorus.modal.trigger("datasets:selected", datasets);
                         });
 

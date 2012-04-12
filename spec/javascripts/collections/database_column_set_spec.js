@@ -54,7 +54,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
     describe("database view column", function() {
         beforeEach(function() {
-            var view = fixtures.datasetSandboxView({
+            var view = newFixtures.datasetSandboxView({
                 instance: {
                     id: '2',
                     name: 'instance2'
@@ -72,7 +72,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("when the names need to be url encoded", function() {
             beforeEach(function() {
-                var table = fixtures.datasetSandboxView({
+                var table = newFixtures.datasetSandboxView({
                     instance: {
                         id: '2',
                         name: '%foo%'
@@ -117,7 +117,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
     describe("#urlParams", function() {
         context("when type attribute is meta", function() {
             beforeEach(function() {
-                this.columns = fixtures.datasetSandboxView().columns({type: "meta"});
+                this.columns = newFixtures.datasetSandboxView().columns({type: "meta"});
             });
 
             it("should include the 'type' parameter in the url", function() {
@@ -127,7 +127,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("when type attribute is unspecified", function() {
             beforeEach(function() {
-                this.columns = fixtures.datasetSandboxView().columns();
+                this.columns = newFixtures.datasetSandboxView().columns();
             });
 
             it("should not include the 'type' parameter in the url", function() {

@@ -139,13 +139,13 @@ describe("chorus.models.TabularData", function() {
             var dataset = newFixtures.datasetSandboxTable();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
-            dataset = fixtures.datasetSandboxView();
+            dataset = newFixtures.datasetSandboxView();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
-            dataset = fixtures.datasetSourceTable();
+            dataset = newFixtures.datasetSourceTable();
             expect(dataset.canBeImportSource()).toBeTruthy();
 
-            dataset = fixtures.datasetSourceView();
+            dataset = newFixtures.datasetSourceView();
             expect(dataset.canBeImportSource()).toBeTruthy();
 
             dataset = newFixtures.datasetChorusView();
@@ -161,13 +161,13 @@ describe("chorus.models.TabularData", function() {
             var dataset = newFixtures.datasetSandboxTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = fixtures.datasetSandboxView();
+            dataset = newFixtures.datasetSandboxView();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = fixtures.datasetSourceTable();
+            dataset = newFixtures.datasetSourceTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = fixtures.datasetSourceView();
+            dataset = newFixtures.datasetSourceView();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
             dataset = newFixtures.datasetChorusView();
@@ -651,11 +651,11 @@ describe("chorus.models.TabularData", function() {
 
     describe("#isDeleteable", function() {
         it("is true when the tabular data is a source table", function() {
-            expect(fixtures.datasetSourceTable().isDeleteable()).toBeTruthy();
+            expect(newFixtures.datasetSourceTable().isDeleteable()).toBeTruthy();
         });
 
         it("is true when the tabular data is a source view", function() {
-            expect(fixtures.datasetSourceView().isDeleteable()).toBeTruthy();
+            expect(newFixtures.datasetSourceView().isDeleteable()).toBeTruthy();
         });
 
         it("is true when the tabular data is a chorus view", function() {
@@ -808,7 +808,7 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("returns false for views", function() {
-            this.tabularData = fixtures.datasetSandboxView();
+            this.tabularData = newFixtures.datasetSandboxView();
             expect(this.tabularData.canAnalyze()).toBeFalsy();
         });
 

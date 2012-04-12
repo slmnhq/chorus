@@ -6,7 +6,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     describe("after workspaces are fetched", function() {
         context("when the model is a source table/view with multiple workspaces", function() {
             beforeEach(function() {
-                this.model = fixtures.datasetSourceTable({workspaceUsed: {
+                this.model = fixtures.databaseObject({workspaceUsed: {
                     workspaceCount: 2,
                     workspaceList: [
                         {id: "123", name: "im_also_the_current_one"},
@@ -30,7 +30,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
         context("when the model is a source table/view with no workspaces", function() {
             beforeEach(function() {
-                this.model = fixtures.datasetSourceTable();
+                this.model = newFixtures.datasetSourceTable();
                 this.model.unset("workspaceUsed");
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [

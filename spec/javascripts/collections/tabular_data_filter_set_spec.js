@@ -1,7 +1,7 @@
 describe("chorus.collections.TabularDataFilterSet", function() {
     beforeEach(function() {
 
-        this.dataset = fixtures.datasetSourceTable();
+        this.dataset = newFixtures.datasetSourceTable();
         this.columns = fixtures.databaseColumnSet([
             fixtures.databaseColumn(),
             fixtures.databaseColumn(),

@@ -1,7 +1,8 @@
 describe("chorus.views.Dataset", function() {
     beforeEach(function() {
-        this.dataset = fixtures.datasetSourceTable({
-            objectName: "john_the_table",
+        this.dataset = newFixtures.datasetSourceTable({
+            objectName: "john_the_table"
+        }, {
             workspaceUsed: {
                 count: 5,
                 workspaceList: [
@@ -27,7 +28,7 @@ describe("chorus.views.Dataset", function() {
         expect(this.view.$(".database").data("instance")).toBe(this.dataset.get("instance"));
     });
 
-    describe("found in workspaces tooltip", function() {
+    describe("found in workspaces tooltip (only appears on the search result page)", function() {
         it("is rendered", function() {
             expect(this.view.$(".found_in")).toContainText("Hoge");
         });

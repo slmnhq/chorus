@@ -30,7 +30,7 @@ describe("chorus.views.TabularDataSidebar", function() {
         context("when a dataset is selected", function() {
             beforeEach(function() {
                 this.server.reset();
-                this.dataset = fixtures.datasetSourceTable();
+                this.dataset = newFixtures.datasetSourceTable();
                 chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
             });
 
@@ -189,7 +189,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                     this.view.options.listMode = true;
                     this.view.options.workspace = newFixtures.workspace({active: false, state: 0, permission: ["update", "admin"]});
                     this.view.render();
-                    this.dataset = fixtures.datasetSourceTable();
+                    this.dataset = newFixtures.datasetSourceTable();
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     this.server.completeFetchFor(this.view.importConfiguration, []);
 
@@ -689,7 +689,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the dataset is a source view", function() {
                     beforeEach(function() {
-                        this.dataset = fixtures.datasetSourceView();
+                        this.dataset = newFixtures.datasetSourceView();
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
@@ -734,7 +734,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 context("when the dataset is a source table", function() {
                     _.each(["BASE_TABLE", "EXTERNAL_TABLE", "MASTER_TABLE", "HDFS_EXTERNAL_TABLE"], function(type) {
                         beforeEach(function() {
-                            this.dataset = fixtures.datasetSourceTable({ objectType : type});
+                            this.dataset = newFixtures.datasetSourceTable({ objectType : type});
                             chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                         });
 
@@ -753,7 +753,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 it("has the 'add a note' link with the correct data", function() {
                     var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
 
-                    expect(notesNew.data("entity-id")).toBe(this.dataset.get("id"));
+                    expect(notesNew.data("entity-id") + "").toBe(this.dataset.get("id"));
                     expect(notesNew.data("entity-type")).toBe(this.dataset.entityType);
                     expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
                     expect(notesNew.attr("data-allow-workspace-attachments")).toBeDefined();
@@ -875,7 +875,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
         describe("column statistics", function() {
             beforeEach(function() {
-                this.dataset = fixtures.datasetSourceTable();
+                this.dataset = newFixtures.datasetSourceTable();
                 this.column = fixtures.databaseColumn({
                     avg: 719719.111,
                     commonValues: [46, 38],
@@ -1037,7 +1037,7 @@ describe("chorus.views.TabularDataSidebar", function() {
         describe("has all the translations for all objectTypes", function() {
             _.each(["QUERY", "VIEW", "TABLE", "BASE_TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
                 it("does not have any missing translations for" + type, function() {
-                    this.dataset = fixtures.datasetSourceTable({objectType: type});
+                    this.dataset = newFixtures.datasetSourceTable({objectType: type});
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     expect(this.view.tabs.activity.options.type).not.toContain("missing");
                 })

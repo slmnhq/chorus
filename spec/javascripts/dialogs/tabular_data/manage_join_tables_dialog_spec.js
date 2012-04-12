@@ -10,13 +10,12 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             id: "abc"
         });
         this.instanceName = "john";
-        var dataset = fixtures.datasetSourceTable({
+        var dataset = newFixtures.datasetSourceTable({
             objectName: "original",
             instance: {
                 name: this.instanceName,
                 id: 11
             },
-            columns: 23,
             type: "SOURCE_TABLE",
             objectType: "BASE_TABLE",
             id: "abc"
@@ -122,7 +121,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             it("fetches filtered database objects", function() {
                 expect(this.server.lastFetch().url).toMatchUrl(
-                    "/edc/data/11/database/dca_demo/schema/some_schema?filter=a+query",
+                   "/edc/data/11/database/Analytics/schema/public?type=meta&filter=a+query&page=1&rows=9",
                     { paramsToIgnore: ["page", "rows", "type"] }
                 );
             });

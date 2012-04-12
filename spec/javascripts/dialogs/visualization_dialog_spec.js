@@ -6,7 +6,7 @@ describe("chorus.dialogs.Visualization", function() {
         stubClEditor();
         spyOn(chorus.Modal.prototype, "closeModal");
 
-        this.dataset = fixtures.datasetSourceTable();
+        this.dataset = newFixtures.datasetSourceTable();
         this.columns = fixtures.databaseColumnSet([
             fixtures.databaseColumn(),
             fixtures.databaseColumn(),

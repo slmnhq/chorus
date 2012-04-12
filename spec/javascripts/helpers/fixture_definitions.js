@@ -34,6 +34,21 @@ window.fixtureDefinitions = {
         unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ]
     },
 
+    datasetSourceView: {
+        model: "Dataset",
+        unique: [ "id" ]
+    },
+
+    datasetSourceTable: {
+        model: "Dataset",
+        unique: [ "id" ]
+    },
+
+    datasetSandboxView: {
+        model: "Dataset",
+        unique: [ "id" ]
+    },
+
     datasetSandboxTable: {
         model: "Dataset",
         unique: [ "id" ]

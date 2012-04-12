@@ -16,11 +16,12 @@ describe("chorus.pages.DatasetShowPage", function() {
 
         var sanboxInfo = this.workspace.get("sandboxInfo")
 
-        this.dataset = fixtures.datasetSourceTable({
+        this.dataset = newFixtures.datasetSourceTable({
             id: this.datasetId,
             instance: { id: sanboxInfo.instanceId, name: sanboxInfo.instanceName},
             databaseName: sanboxInfo.databaseName,
             schemaName: sanboxInfo.schemaName,
+            importFrequency: null,
             objectName: 'tableName',
             workspace: { id: this.workspace.get("id") }
         })

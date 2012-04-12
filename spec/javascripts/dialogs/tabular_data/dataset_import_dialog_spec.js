@@ -12,7 +12,7 @@ describe("chorus.dialogs.DatasetImport", function() {
         ];
         this.invalidDatasets = [
             fixtures.datasetExternalTable(),
-            fixtures.datasetSandboxView(),
+            newFixtures.datasetSandboxView(),
             fixtures.datasetHadoopExternalTable()
         ];
         this.datasets = this.validDatasets.concat(this.invalidDatasets);

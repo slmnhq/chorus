@@ -1848,19 +1848,6 @@ beforeEach(function() {
             return attributes;
         },
 
-        datasetChorusView: function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
-                createdStamp: "2012-01-24 12:25:46.994",
-                createdTxStamp: "2012-01-24 12:25:46.627",
-                lastUpdatedStamp: "2012-01-24 12:25:46.994",
-                lastUpdatedTxStamp: "2012-01-24 12:25:46.627",
-                objectType: "QUERY",
-                query: "select * from cust",
-                type: "CHORUS_VIEW"
-            }, overrides);
-            return new chorus.models.Dataset(attributes);
-        },
-
         chorusView: function(overrides) {
             var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
             }, overrides);
@@ -1892,42 +1879,6 @@ beforeEach(function() {
                 type: "SOURCE_TABLE"
             }, overrides);
             return new chorus.models.DatabaseObjectStatistics(attributes);
-        },
-
-        datasetSourceView: function(overrides) {
-            var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
-                createdStamp: "2012-01-24 12:25:11.077",
-                createdTxStamp: "2012-01-24 12:25:10.701",
-                lastUpdatedStamp: "2012-01-24 12:25:11.077",
-                lastUpdatedTxStamp: "2012-01-24 12:25:10.701",
-                objectType: "VIEW",
-                type: "SOURCE_TABLE"
-            }, overrides);
-            return new chorus.models.Dataset(attributes);
-        },
-
-        datasetSourceTable: function(overrides) {
-            var datasetCommonAttributes = _.extend({
-                createdStamp: "2012-01-24 12:25:11.077",
-                createdTxStamp: "2012-01-24 12:25:10.701",
-                lastUpdatedStamp: "2012-01-24 12:25:11.077",
-                lastUpdatedTxStamp: "2012-01-24 12:25:10.701",
-                objectType: "BASE_TABLE",
-                type: "SOURCE_TABLE"
-            }, overrides)
-            var attributes = _.extend(fixtures.datasetCommonJson(datasetCommonAttributes), overrides);
-            return new chorus.models.Dataset(attributes);
-        },
-
-        datasetSandboxView: function(overrides) {
-            var datasetCommonAttributes = _.extend({
-                modifiedBy: {},
-                objectType: "VIEW",
-                owner: {},
-                type: "SANDBOX_TABLE"
-            }, overrides)
-            var attributes = _.extend(fixtures.datasetCommonJson(datasetCommonAttributes), overrides);
-            return new chorus.models.Dataset(attributes);
         },
 
         datasetExternalTable: function(overrides) {
