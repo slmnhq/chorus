@@ -65,7 +65,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
         this.sandboxTables.each(function(model) {
             select.append($("<option/>").prop('value', model.get("objectName")).data("id", model.id).
-                text(model.get("objectName")));
+                text(model.get("objectName")).prop("title", model.get("objectName")));
 
             this.tableMap[model.get("objectName")] = model.get("id");
         }, this);

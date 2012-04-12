@@ -232,6 +232,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             expect(option).toContainText(model.get("objectName"));
                             expect(option).toHaveAttr("value", model.get("objectName"));
                             expect(option.data("id")).toBe(model.id);
+                            expect(option).toHaveAttr("title", model.get("objectName"));
                         }, this);
                     });
 
