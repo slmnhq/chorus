@@ -83,7 +83,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.$(".existing_table span.dataset_picked").text(_.prune(name, 20));
     },
 
-    enableExistingTableLink: function(asLink) {
+    toggleExistingTableLink: function(asLink) {
         var $a = this.$(".existing_table a.dataset_picked");
         var $span = this.$(".existing_table span.dataset_picked");
         if (asLink) {
@@ -147,7 +147,10 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         }
 
         this.onInputFieldChanged();
-        this.enableExistingTableLink(!disableExisting);
+        this.toggleExistingTableLink(!disableExisting);
+        if (disableExisting && !this.existingTableSelected()) {
+            this.$(".existing_table .dataset_picked").addClass("hidden");
+        }
     },
 
     additionalContext: function() {
@@ -246,5 +249,9 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     onClickCancel: function() {
         this.model.clearErrors();
         this.closeModal();
+    },
+
+    existingTableSelected: function() {
+        return this.$("a.dataset_picked").text() != t("dataset.import.select_dataset");
     }
 });

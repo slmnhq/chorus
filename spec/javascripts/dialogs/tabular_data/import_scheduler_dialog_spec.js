@@ -126,6 +126,10 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
         context("when 'Import into New Table' is checked", function() {
             itShouldHaveAllTheFields(".new_table");
+
+            it("doesn't show 'Select a table' menu/link", function() {
+                expect(this.dialog.$("span.dataset_picked")).toHaveClass("hidden");
+            });
         });
 
         context("when 'Import into Existing Table' is checked", function() {
@@ -551,9 +555,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
             expect(this.dialog.$(".existing_table label")).toContainTranslation("import.existing_table");
         });
 
-        it("should have a disabled selector (ie a span, not a link) for existing tables", function() {
+        it("should not have anything after 'Import into an existing table' for existing tables", function() {
             expect(this.dialog.$(".existing_table a.dataset_picked")).toHaveClass("hidden");
-            expect(this.dialog.$(".existing_table span.dataset_picked")).not.toHaveClass("hidden");
+            expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
         });
 
         context("when 'Import into Existing Table' is checked", function() {
@@ -597,6 +601,17 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     it("it should show the selected dataset in the link", function() {
                         expect(this.dialog.datasetsChosen).toHaveBeenCalled()
                         expect(this.dialog.$(".existing_table a.dataset_picked")).toContainText("myDataset");
+                    });
+
+                    context("and then 'import into new table is checked", function() {
+                        beforeEach(function() {
+                            this.dialog.$(".existing_table input:radio").prop("checked", false);
+                            this.dialog.$(".new_table input:radio").prop("checked", true).change();
+                        });
+
+                        it("still shows the selected table name in the existing table section", function() {
+                           expect(this.dialog.$(".existing_table span.dataset_picked")).not.toHaveClass('hidden');
+                        });
                     });
                 });
             });
