@@ -22,7 +22,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxView(),
-                    fixtures.datasetExternalTable(),
+                    newFixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
                 ]);
                 this.dialog.$(".new_table input:radio").prop("checked", false);
@@ -49,7 +49,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxView(),
-                    fixtures.datasetExternalTable(),
+                    newFixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
                 ]);
                 this.dialog.$(".new_table input:radio").prop("checked", false);
@@ -87,7 +87,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxView(),
-                    fixtures.datasetExternalTable(),
+                    newFixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
                 ]);
                 this.server.completeFetchFor(this.datasetImport);
@@ -119,7 +119,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxTable(),
                     newFixtures.datasetSandboxView(),
-                    fixtures.datasetExternalTable(),
+                    newFixtures.datasetExternalTable(),
                     fixtures.datasetHadoopExternalTable()
                 ]);
                 this.dialog.$(".new_table input.name").val("abc").trigger("keyup");

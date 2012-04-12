@@ -818,7 +818,7 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("returns false for external tables", function() {
-            this.tabularData = fixtures.datasetExternalTable();
+            this.tabularData = newFixtures.datasetExternalTable();
             expect(this.tabularData.canAnalyze()).toBeFalsy();
         });
     });

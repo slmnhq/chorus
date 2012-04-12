@@ -75,7 +75,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
 
                 it("does not display the action for a external table", function() {
-                    this.dataset = fixtures.datasetExternalTable();
+                    this.dataset = newFixtures.datasetExternalTable();
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     expect(this.view.$(".actions a.analyze")).not.toExist();
                 });

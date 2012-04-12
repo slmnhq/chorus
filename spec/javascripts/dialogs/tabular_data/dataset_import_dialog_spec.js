@@ -11,7 +11,7 @@ describe("chorus.dialogs.DatasetImport", function() {
             newFixtures.datasetSandboxTable({objectName: "table_b", workspace: {id: 243}})
         ];
         this.invalidDatasets = [
-            fixtures.datasetExternalTable(),
+            newFixtures.datasetExternalTable(),
             newFixtures.datasetSandboxView(),
             fixtures.datasetHadoopExternalTable()
         ];

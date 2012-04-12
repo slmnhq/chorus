@@ -34,6 +34,11 @@ window.fixtureDefinitions = {
         unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ]
     },
 
+    datasetExternalTable: {
+        model: "Dataset",
+        unique: [ "id" ]
+    },
+
     datasetSourceView: {
         model: "Dataset",
         unique: [ "id" ]
