@@ -52,11 +52,11 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             this.databaseObject1 = fixtures.databaseObject({
                 objectName: "cats",
-                columns: 21,
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
                 id: '"10000"|"dca_demo"|"ddemo"|"VIEW"|"cats"'
             });
+            this.databaseObject1.unset("columns");
 
             this.databaseObject2 = fixtures.databaseObject({
                 objectName: "dogs",
@@ -99,7 +99,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
         it("shows the column count for each table/view", function() {
             var columnCounts = this.dialog.$(".column_count");
-            expect(columnCounts.eq(0).text().trim()).toMatchTranslation("dataset.manage_join_tables.column_count_plural", { count: 21 });
+            expect(columnCounts.eq(0).text().trim()).toBe("");
             expect(columnCounts.eq(1).text().trim()).toMatchTranslation("dataset.manage_join_tables.column_count_plural", { count: 22 });
         });
 

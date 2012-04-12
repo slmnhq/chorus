@@ -23,7 +23,11 @@
                     <span class="name" title="{{objectName}}">{{objectName}}</span>
                 </div>
                 <div class="details">
-                    <span class="column_count">{{pluralize columns "dataset.manage_join_tables.column_count" count=columns}}</span>
+                    <span class="column_count">
+                        {{#if columns}}
+                        {{pluralize columns "dataset.manage_join_tables.column_count" count=columns}}
+                        {{/if}}
+                    </span>
                 </div>
             </div>
 
