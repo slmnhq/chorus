@@ -39,6 +39,11 @@ window.fixtureDefinitions = {
         unique: [ "id" ]
     },
 
+    datasetChorusView: {
+        model: "Dataset",
+        unique: [ "id" ]
+    },
+
     csvImport: {
         model: "CSVImport"
     }

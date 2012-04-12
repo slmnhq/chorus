@@ -6,7 +6,7 @@ describe("chorus.views.HeatmapChartConfiguration", function() {
                 this.column2 = fixtures.databaseColumn({typeCategory: 'REAL_NUMBER', name: "Zesty Eggs"});
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2]);
 
-                this.model = fixtures.datasetChorusView({objectName: "Foo"});
+                this.model = newFixtures.datasetChorusView({objectName: "Foo"});
                 this.view = new chorus.views.HeatmapChartConfiguration({model: this.model, collection: this.columns})
 
                 spyOn(chorus, 'styleSelect').andCallFake(_.bind(function() {

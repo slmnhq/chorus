@@ -1,6 +1,6 @@
 describe("chorus.views.CodeEditorView", function() {
     beforeEach(function() {
-        this.dataset = fixtures.datasetChorusView();
+        this.dataset = newFixtures.datasetChorusView();
         this.view = new chorus.views.CodeEditorView();
         $("#jasmine_content").append(this.view.el);
         this.clock = sinon.useFakeTimers();

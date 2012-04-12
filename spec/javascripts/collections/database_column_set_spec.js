@@ -100,13 +100,13 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
     describe("database chorus view column", function() {
         beforeEach(function() {
-            var chrousView = fixtures.datasetChorusView({
+            var chorusView = newFixtures.datasetChorusView({
                 workspace: {
                     id: '10'
                 },
                 id: '"10000"|"dca_demo"|"ddemo"|"QUERY"|"chorus_view"'
             })
-            this.columns = chrousView.columns();
+            this.columns = chorusView.columns();
         })
 
         it("has the correct urlTemplate", function() {

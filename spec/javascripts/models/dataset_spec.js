@@ -87,7 +87,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#createDuplicateChorusView", function() {
         beforeEach(function() {
-            this.model = fixtures.datasetChorusView();
+            this.model = newFixtures.datasetChorusView();
             this.copy = this.model.createDuplicateChorusView();
 
         });

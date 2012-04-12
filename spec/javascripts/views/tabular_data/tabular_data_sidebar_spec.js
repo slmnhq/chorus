@@ -700,7 +700,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the dataset is a chorus view", function() {
                     beforeEach(function() {
-                        this.dataset = fixtures.datasetChorusView({ objectName: "annes_table", query: "select * from foos;" });
+                        this.dataset = newFixtures.datasetChorusView({ objectName: "annes_table", query: "select * from foos;" });
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 

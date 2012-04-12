@@ -36,7 +36,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
         describe("when rendered with a chorus view", function() {
             var chorusView;
             beforeEach(function() {
-                chorusView = fixtures.datasetChorusView({ objectName: "tobias_the_chorus_view" });
+                chorusView = newFixtures.datasetChorusView({ objectName: "tobias_the_chorus_view" });
                 chorus.PageEvents.broadcast("datasetSelected", chorusView);
                 this.server.completeFetchAllFor(chorusView.columns(), [fixtures.databaseColumn()]);
             });

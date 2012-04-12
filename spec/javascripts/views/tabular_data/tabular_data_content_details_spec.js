@@ -89,7 +89,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
             context("when the object is a CHORUS VIEW", function() {
                 beforeEach(function() {
-                    var tabularData = fixtures.datasetChorusView();
+                    var tabularData = newFixtures.datasetChorusView();
                     this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection});
                     this.server.completeFetchFor(tabularData.statistics());
                     this.view.render();
@@ -507,7 +507,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
                 context("when the workspace is archived", function() {
                     beforeEach(function() {
-                        var tabularData = fixtures.datasetChorusView();
+                        var tabularData = newFixtures.datasetChorusView();
                         var workspace = newFixtures.workspace({ active: false, state: 0 });
                         tabularData.initialQuery = "select * from abc";
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
@@ -526,7 +526,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
                 context("when the workspace is not archived", function() {
                     beforeEach(function() {
-                        var tabularData = fixtures.datasetChorusView();
+                        var tabularData = newFixtures.datasetChorusView();
                         tabularData.initialQuery = "select * from abc";
                         var workspace = newFixtures.workspace({active: true})
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});

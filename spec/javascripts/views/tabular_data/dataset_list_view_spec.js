@@ -1,7 +1,7 @@
 describe("chorus.views.DatasetList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatasetSet([
-            fixtures.datasetChorusView({ hasCredentials: true }),
+            newFixtures.datasetChorusView({ hasCredentials: true }),
             newFixtures.datasetSandboxTable({ hasCredentials: true })
         ]);
         this.collection.loaded = true;

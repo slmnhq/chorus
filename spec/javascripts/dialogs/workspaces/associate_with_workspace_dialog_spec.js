@@ -165,7 +165,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             beforeEach(function() {
                 this.currentWorkspace = newFixtures.workspace({ name: "im_also_the_current_one'", id: "987" });
                 this.workspace = newFixtures.workspace({ name: "im_not_the_current_one", id: "123"});
-                this.model = fixtures.datasetChorusView({workspace: this.currentWorkspace});
+                this.model = newFixtures.datasetChorusView({ workspace: { id: "987" } });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.dialog.render();

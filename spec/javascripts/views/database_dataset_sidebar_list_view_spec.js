@@ -34,7 +34,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 var datasets, schemas;
                 beforeEach(function() {
                     datasets = new chorus.collections.DatasetSet([
-                        fixtures.datasetChorusView(),
+                        newFixtures.datasetChorusView(),
                         fixtures.datasetSourceTable()
                     ]);
                     schemas = new chorus.collections.SchemaSet([

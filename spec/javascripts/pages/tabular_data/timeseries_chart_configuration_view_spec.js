@@ -7,7 +7,7 @@ describe("chorus.views.TimeseriesChartConfiguration", function() {
                 this.column3 = fixtures.databaseColumn({typeCategory: 'FOO', name: "A Foo"});
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
 
-                this.model = fixtures.datasetChorusView({objectName: "Foo"});
+                this.model = newFixtures.datasetChorusView({objectName: "Foo"});
                 this.valueMenuQtip = stubQtip(".value .limiter a");
                 this.timeMenuQtip = stubQtip(".time .limiter a");
                 this.view = new chorus.views.TimeseriesChartConfiguration({model: this.model, collection: this.columns})

@@ -5,7 +5,7 @@ describe("chorus.views.FrequencyChartConfiguration", function() {
                 this.column = fixtures.databaseColumn({typeCategory: "STRING", name: "Sandwich"});
                 this.columns = fixtures.databaseColumnSet([this.column]);
 
-                this.model = fixtures.datasetChorusView({objectName: "Foo"})
+                this.model = newFixtures.datasetChorusView({objectName: "Foo"})
                 this.view = new chorus.views.FrequencyChartConfiguration({collection: this.columns, model: this.model})
                 this.view.render();
                 this.view.$(".limiter .selected_value").text("3")
