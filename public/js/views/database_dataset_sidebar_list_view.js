@@ -47,7 +47,12 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     fetchMoreDatasets: function(e) {
         e && e.preventDefault();
         var next = parseInt(this.collection.pagination.page) + 1;
-        this.collection.fetchPage(next, { add: true , success: _.bind(this.listview.render, this) });
+        this.collection.fetchPage(next, { add: true , success: _.bind(this.datasetsAdded, this) });
+    },
+
+    datasetsAdded: function() {
+        this.listview.render();
+        this.recalculateScrolling($("#sidebar"));
     },
 
     searchTextChanged: function(e) {

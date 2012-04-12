@@ -79,6 +79,36 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                         expect(this.server.lastFetch().url).toContainQueryParams({filter: "foo"});
                     });
                 });
+
+                describe("fetching more datasets", function() {
+                    beforeEach(function() {
+                        spyOn(this.view.listview, "render");
+                        spyOn(this.view, "recalculateScrolling");
+                        this.view.collection.pagination = {page: 1, total:2, records:51};
+                        this.server.reset();
+                        this.view.listview.trigger('fetch:more');
+
+                    });
+
+                    it("fetches more of the collection", function() {
+                       expect(this.server.lastFetch().url).toContainQueryParams({page: 2});
+                    });
+
+                    context("when the fetch succeeds", function() {
+                        beforeEach(function() {
+                            this.view.listview.render.reset();
+                            this.server.lastFetch().succeed();
+                        });
+
+                        it("renders the list view", function() {
+                            expect(this.view.listview.render).toHaveBeenCalled();
+                        });
+
+                        it("recalculates scrolling", function() {
+                            expect(this.view.recalculateScrolling).toHaveBeenCalledWith($("#sidebar"));
+                        });
+                    });
+                });
             });
         });
     });
@@ -91,11 +121,11 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
         it("should display 'no database/schema associated' message", function() {
             expect(this.view.$(".empty_selection")).toExist();
-        })
+        });
 
         it("should not display the loading section", function() {
             expect(this.view.$(".loading_section")).not.toExist();
-        })
+        });
     });
 
     context("when there's sandbox/default schema associated", function() {
@@ -130,27 +160,27 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     });
 
                     it("has the insert text in the insert arrow", function() {
-                        expect(this.qtip.find("a")).toContainTranslation('database.sidebar.insert')
-                    })
+                        expect(this.qtip.find("a")).toContainTranslation('database.sidebar.insert');
+                    });
 
                     context("when clicking the insert arrow", function() {
                         beforeEach(function() {
-                            this.qtip.find("a").click()
-                        })
+                            this.qtip.find("a").click();
+                        });
 
                         it("broadcasts a file:insertText with the string representation", function() {
                             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:insertText", this.view.collection.at(1).toText());
-                        })
-                    })
+                        });
+                    });
 
                     context("when clicking a link within the li", function() {
                         beforeEach(function() {
-                            this.view.$('.list li:eq(1) a').click()
-                        })
+                            this.view.$('.list li:eq(1) a').click();
+                        });
 
                         it("closes the open insert arrow", function() {
                             expect(this.view.closeQtip).toHaveBeenCalled();
-                        })
+                        });
                     });
 
                     context("when scrolling", function() {
@@ -178,7 +208,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 it("should display a message saying there are no tables/views", function() {
                     expect(this.view.$('.none_found')).toExist();
                     expect(this.view.$('.none_found').text().trim()).toMatchTranslation("schema.metadata.list.empty");
-                })
+                });
             });
         });
 
