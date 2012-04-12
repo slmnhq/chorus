@@ -89,7 +89,6 @@ describe("chorus.models.Dataset", function() {
         beforeEach(function() {
             this.model = newFixtures.datasetChorusView();
             this.copy = this.model.createDuplicateChorusView();
-
         });
 
         it("returns a chorus view with the right data", function() {
@@ -98,15 +97,14 @@ describe("chorus.models.Dataset", function() {
 
             _.each(["workspace", "databaseName", "schemaName"], function(attrName) {
                 expect(this.copy.get(attrName)).toBe(this.model.get(attrName));
-                    expect(this.copy.get(attrName)).toBeDefined();
+                expect(this.copy.get(attrName)).toBeDefined();
             }, this);
-        });
 
-        it("returns a chorus view with the right instanceId", function() {
             expect(this.copy.get("instanceId")).toBe(this.model.get("instance").id);
+            expect(this.copy.get("sourceObjectId")).toBe(this.model.id);
         });
 
-        it("returns a chorus view without an id", function() {
+        it("does not give the chorus view an id", function() {
             expect(this.copy.get("id")).toBeUndefined();
         });
     });

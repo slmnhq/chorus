@@ -54,7 +54,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         var attrs = _.extend({},  this.attributes, {
             objectName: t("dataset.chorusview.copy_name", { name: this.get("objectName") }),
             instanceId: this.get("instance").id,
-
+            sourceObjectId: this.id
         });
         delete attrs.id;
         return new chorus.models.ChorusView(attrs);
