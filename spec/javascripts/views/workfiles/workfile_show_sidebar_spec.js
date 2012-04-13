@@ -3,6 +3,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         spyOn(chorus.views.Sidebar.prototype, "jumpToTop");
         chorus.page = { workspace: newFixtures.workspace() };
         this.workfile = fixtures.textWorkfile();
+        spyOn(chorus.views.WorkfileShowSidebar.prototype, "recalculateScrolling").andCallThrough();
         this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
     });
 

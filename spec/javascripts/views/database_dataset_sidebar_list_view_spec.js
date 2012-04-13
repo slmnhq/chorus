@@ -25,24 +25,14 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 expect(this.schema.databaseObjects()).toHaveBeenFetched();
             });
 
-            it("should have the correct fetch url", function() {
-                var url = this.server.lastFetchFor(this.view.datasets).url;
-                expect(url).toContainQueryParams({ sidx: "objectName", sord: "asc" });
-            });
-
             context("when the schema fetches complete", function() {
                 var datasets, schemas;
                 beforeEach(function() {
-                    datasets = new chorus.collections.DatasetSet([
-                        newFixtures.datasetChorusView(),
-                        newFixtures.datasetSourceTable()
-                    ]);
                     schemas = new chorus.collections.SchemaSet([
                         newFixtures.schema({name: "Schema 1"}),
                         newFixtures.schema({name: "Schema 2"})
                     ]);
 
-                    this.server.completeFetchFor(this.view.datasets, datasets.models);
                     this.server.completeFetchFor(this.view.schemas, schemas.models);
                     this.schema.databaseObjects().loaded = true;
                     this.view.render();
@@ -95,7 +85,6 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 describe("fetching more datasets", function() {
                     beforeEach(function() {
                         spyOn(this.view.listview, "render");
-                        spyOn(this.view, "recalculateScrolling");
                         this.view.collection.pagination = {page: 1, total:2, records:51};
                         this.server.reset();
                         this.view.listview.trigger('fetch:more');
@@ -117,10 +106,6 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                             expect(this.view.listview.render).toHaveBeenCalled();
                         });
 
-                        it("recalculates scrolling", function() {
-                            expect(this.view.recalculateScrolling).toHaveBeenCalledWith($("#sidebar"));
-                        });
-
                         it("makes items draggable", function() {
                             expect($.fn.draggable).toHaveBeenCalled();
                         });
@@ -128,11 +113,53 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 });
             });
         });
+
+        context("when the 'this workspace' schema is selected", function() {
+            context("and there is a focus schema", function() {
+                beforeEach(function() {
+                    this.view.focusSchema = this.schema;
+                    this.view.setSchemaToCurrentWorkspace();
+                    this.view.fetchResourceAfterSchemaSelected();
+                });
+
+                it("fetches all the datasets in the workspace, scoped to the database of the focus schema", function() {
+                    var datasetSet = new chorus.collections.DatasetSet([], { workspaceId: chorus.page.workspace.get("id") })
+                    datasetSet.sortAsc("objectName");
+                    datasetSet.urlParams = {
+                        databaseName: this.view.focusSchema.get("databaseName")
+                    }
+
+                    expect(this.server.lastFetchFor(datasetSet)).toBeDefined();
+                });
+
+                it("does not sort the datasets on the client side", function() {
+                    expect(this.view.collection.attributes.unsorted).toBeTruthy();
+                });
+            });
+
+            context("and there is no focus schema", function() {
+                beforeEach(function() {
+                    delete this.view.focusSchema;
+                    this.view.setSchemaToCurrentWorkspace();
+                    this.view.fetchResourceAfterSchemaSelected();
+                });
+
+                it("fetches all the datasets in the workspace", function() {
+                    var datasetSet = new chorus.collections.DatasetSet([], { workspaceId: chorus.page.workspace.get("id") })
+                    datasetSet.sortAsc("objectName")
+                    expect(this.server.lastFetchFor(datasetSet)).toBeDefined();
+                });
+
+                it("does not sort the datasets on the client side", function() {
+                    expect(this.view.collection.attributes.unsorted).toBeTruthy();
+                });
+            })
+        });
     });
 
     context("when there's no schema associated", function() {
         beforeEach(function() {
-            this.view.schema = null;
+            this.view = new chorus.views.DatabaseDatasetSidebarList({schema: null});
             this.view.render();
         });
 
@@ -166,7 +193,8 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                         fixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
                         fixtures.databaseObject({ objectName: "1234",  type: "SANDBOX_TABLE", objectType: "BASE_TABLE" })
                     ]);
-                    this.view.render();
+
+                    this.server.completeFetchFor(this.schema.database().schemas());
                 });
 
                 jasmine.sharedExamples.DatabaseSidebarList();
@@ -218,6 +246,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
             context("and no data was fetched", function() {
                 beforeEach(function() {
+                    this.server.completeFetchFor(this.schema.database().schemas(), []);
                     this.view.collection.models = [];
                     this.view.render();
                 });
@@ -231,6 +260,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
         context("if the tables and views fetch fails", function() {
             beforeEach(function() {
+                this.server.completeFetchFor(this.schema.database().schemas());
                 this.server.lastFetchFor(this.schema.databaseObjects()).fail([
                     {message: "Account map needed"}
                 ]);
@@ -245,6 +275,17 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 this.view.$('.no_credentials .add_credentials').click();
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
             });
+        });
+    });
+
+    describe("after workfile execution", function() {
+        beforeEach(function() {
+            this.executionSchema = newFixtures.sandbox().schema();
+            chorus.PageEvents.broadcast("workfile:executed", fixtures.workfile(), this.executionSchema)
+        });
+
+        it("updates focusSchema", function() {
+            expect(this.view.focusSchema.canonicalName()).toBe(this.executionSchema.canonicalName())
         });
     });
 });

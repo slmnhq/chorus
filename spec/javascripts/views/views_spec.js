@@ -221,12 +221,12 @@ describe("chorus.views.Base", function() {
             describe("#render", function() {
                 beforeEach(function() {
                     this.view.className = "plain_text"
-                    spyOnEvent(this.view, "rendered");
+                    spyOnEvent(this.view, "content:changed");
                     this.view.render();
                 })
 
-                it("triggers a 'rendered' event on itself", function() {
-                    expect("rendered").toHaveBeenTriggeredOn(this.view);
+                it("triggers a 'content:changed' event on itself", function() {
+                    expect("content:changed").toHaveBeenTriggeredOn(this.view);
                 })
 
                 it("adds the className as a class name", function() {
@@ -1060,6 +1060,7 @@ describe("chorus.views.Base", function() {
                     $.fn.hide.reset();
                     $.fn.jScrollPane.reset();
                     $.fn.bind.reset();
+                    spyOn(this.view.subfoo, "bind").andCallThrough();
                     this.view.setupScrolling(".foo")
                 });
 
@@ -1078,6 +1079,10 @@ describe("chorus.views.Base", function() {
 
                 it("does not re-bind to the mousewheel event on the container", function() {
                     expect($.fn.bind).not.toHaveBeenCalledOnSelector(".foo .jspContainer");
+                })
+
+                it("re-bind content:changed event to it's subview", function() {
+                    expect(this.view.subfoo.bind).toHaveBeenCalled();
                 })
             })
 

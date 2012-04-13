@@ -17,7 +17,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
     describe("render", function() {
         context("when there's no schema associated", function() {
             beforeEach(function() {
-                this.view.schema = null;
+                this.view = new chorus.views.DatabaseFunctionSidebarList({schema: null});
                 this.view.render();
             });
 
@@ -179,6 +179,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
 
             context("when the schema has no functions", function() {
                 beforeEach(function() {
+                    this.server.completeFetchFor(this.schema.database().schemas());
                     this.server.completeFetchFor(this.view.collection, []);
                 });
 

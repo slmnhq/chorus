@@ -25,7 +25,7 @@ describe("chorus.collections.DatasetSet", function() {
                 expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({
                     namePattern: "Foo",
                     rows: "10",
-                    page:"1"
+                    page: "1"
                 });
             });
         });
@@ -61,13 +61,29 @@ describe("chorus.collections.DatasetSet", function() {
     });
 
     describe("sorting", function() {
-        beforeEach(function() {
-            this.collection.add(newFixtures.datasetSandboxTable({objectName: 'zTable'}));
-            this.collection.add(newFixtures.datasetSandboxTable({objectName: 'aTable'}));
+        context("without a sorting override", function() {
+            beforeEach(function() {
+                this.collection.add(newFixtures.datasetSandboxTable({objectName: 'zTable'}));
+                this.collection.add(newFixtures.datasetSandboxTable({objectName: 'aTable'}));
+            });
+
+            it("sorts by objectName", function() {
+                expect(this.collection.at(0).get("objectName")).toBe("aTable");
+                expect(this.collection.at(1).get("objectName")).toBe("zTable");
+            });
         });
 
-        it("sorts by objectName", function() {
-            expect(this.collection.at(0).get("objectName")).toBe("aTable");
+        context("with a sorting override", function() {
+            beforeEach(function() {
+                this.collection = new chorus.collections.DatasetSet([], {workspaceId: 10000, unsorted: true});
+                this.collection.add(newFixtures.datasetSandboxTable({objectName: 'zTable'}));
+                this.collection.add(newFixtures.datasetSandboxTable({objectName: 'aTable'}));
+            });
+
+            it("does not sort", function() {
+                expect(this.collection.at(0).get("objectName")).toBe("zTable");
+                expect(this.collection.at(1).get("objectName")).toBe("aTable");
+            });
         });
     });
 });

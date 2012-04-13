@@ -122,7 +122,7 @@ chorus.views.Bare = Backbone.View.include(
         this.renderSubviews();
         this.postRender($(this.el));
         this.renderHelps();
-        this.trigger("rendered");
+        this.trigger("content:changed");
         return this;
     },
 
@@ -161,6 +161,9 @@ chorus.views.Bare = Backbone.View.include(
                     view.render()
                 }
                 view.delegateEvents();
+                view.bind("content:changed", function() {
+                    this.trigger("content:changed")
+                }, this)
             }
         }
     },
@@ -235,6 +238,15 @@ chorus.views.Bare = Backbone.View.include(
 
                 el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
 
+                if (this.subviews) {
+                    _.each(this.subviews, _.bind(function(property, selector) {
+                        var view = this.getSubview(property);
+                        if (view) {
+                            view.unbind("content:changed").bind("content:changed", function() { this.recalculateScrolling(el) }, this)
+                        }
+                    }, this));
+                }
+
                 if (!alreadyInitialized) {
                     el.addClass("custom_scroll");
                     el.unbind('hover').hover(function() {
@@ -249,15 +261,6 @@ chorus.views.Bare = Backbone.View.include(
                         chorus.page.bind("resized", function() { this.recalculateScrolling(el) }, this);
                     }
 
-                    if (this.subviews) {
-                        _.each(this.subviews, _.bind(function(property, selector) {
-                            var view = this.getSubview(property);
-                            if (view) {
-                                view.bind("rendered", function() { this.recalculateScrolling(el) }, this)
-                                view.bind("content:changed", function() { this.recalculateScrolling(el) }, this)
-                            }
-                        }, this));
-                    }
                 }
             }
         }, this))

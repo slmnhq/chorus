@@ -25,8 +25,6 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
                 displayStyle:['without_object', 'without_workspace']
             });
 
-            this.tabs.activity.bind("content:changed", this.recalculateScrolling, this)
-
         } else {
             delete this.collection;
             delete this.tabs.activity;

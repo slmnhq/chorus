@@ -1,5 +1,12 @@
 chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
     model:chorus.models.Dataset,
+
+    setup: function() {
+        if(this.attributes.unsorted) {
+            this.comparator = undefined;
+        }
+    },
+
     urlTemplate:function() {
         if (this.attributes.workspaceId) {
             return "workspace/{{workspaceId}}/dataset";

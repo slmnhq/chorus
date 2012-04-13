@@ -2,10 +2,10 @@ describe("chorus.views.DatabaseDatasetSidebarListItem", function() {
     beforeEach(function() {
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
         this.collection = new chorus.collections.DatabaseObjectSet([
+            fixtures.databaseObject({ objectName: "1234",  type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
             fixtures.databaseObject({ objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
-            fixtures.databaseObject({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" }),
             fixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
-            fixtures.databaseObject({ objectName: "1234",  type: "SANDBOX_TABLE", objectType: "BASE_TABLE" })
+            fixtures.databaseObject({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" })
         ]);
         this.view = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
         this.view.render();
@@ -23,14 +23,6 @@ describe("chorus.views.DatabaseDatasetSidebarListItem", function() {
 
         it("renders an li for each item in the list", function() {
             expect(this.view.$("li").length).toBe(4);
-        });
-
-        it("sorts the data by name", function() {
-            var $lis = this.view.$("li .name")
-            expect($lis.eq(0)).toContainText("1234");
-            expect($lis.eq(1)).toContainText("Data1");
-            expect($lis.eq(2)).toContainText("Data2");
-            expect($lis.eq(3)).toContainText("zebra");
         });
 
         it("renders the correct data-fullname for each item", function() {

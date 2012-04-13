@@ -37,16 +37,21 @@ describe("chorus.views.DatabaseSidebarList", function() {
             spyOn(this.collection.models[1], 'toText').andReturn('object2');
             this.view = new chorus.views.DatabaseSidebarList({collection: this.collection, schema: this.schema });
             this.view.className = "database_dataset_sidebar_list";
+            spyOn(this.view, "postRender").andCallThrough();
+            this.view.render();
         });
 
         it("fetches the schemas", function() {
             expect(this.server.lastFetchFor(this.schema.database().schemas())).toBeDefined();
         });
 
+        it("does not render", function() {
+            expect(this.view.postRender).not.toHaveBeenCalled();
+        });
+
         context("when the fetch completes", function() {
             beforeEach(function() {
                 this.qtip = stubQtip(".context a");
-                spyOn(this.view, "postRender").andCallThrough();
                 spyOn(this.view, 'closeQtip');
 
                 this.server.completeFetchFor(this.schema.database().schemas(), [

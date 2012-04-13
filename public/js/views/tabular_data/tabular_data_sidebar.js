@@ -60,7 +60,6 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
                 displayStyle: ['without_workspace'],
                 type: t("database_object." + tabularData.get('objectType'))
             });
-            this.tabs.activity.bind("content:changed", this.recalculateScrolling, this)
 
             this.tabs.statistics = new chorus.views.TabularDataStatistics({
                 model: tabularData,

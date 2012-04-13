@@ -35,8 +35,6 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
                 collection: activities,
                 additionalClass: "sidebar"
             });
-
-            this.tabs.activity.bind("content:changed", this.recalculateScrolling, this)
         } else {
             delete this.tabs.activity;
         }

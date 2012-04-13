@@ -27,12 +27,6 @@ chorus.views.DatabaseDatasetSidebarListItem = chorus.views.Base.extend({
         this.trigger("fetch:more");
     },
 
-    preRender: function() {
-        this.collection && this.collection.models.sort(function (a, b) {
-            return naturalSort(a.get("objectName").toLowerCase(), b.get("objectName").toLowerCase());
-        });
-    },
-
     additionalContext:function () {
         var ctx = {};
         if (this.collection.pagination) {

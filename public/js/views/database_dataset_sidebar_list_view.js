@@ -8,10 +8,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     setup: function() {
         this._super("setup", arguments);
-
-        this.datasets = new chorus.collections.DatasetSet([], { workspaceId: chorus.page.workspace.id });
-        this.datasets.sortAsc("objectName");
-        this.datasets.fetch();
+        this.focusSchema = this.schema;
     },
 
     postRender: function() {
@@ -31,10 +28,21 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     },
 
     fetchResourceAfterSchemaSelected: function() {
-        this.collection = this.schema.databaseObjects();
-        this.collection.fetchIfNotLoaded();
-        this.bindings.add(this.collection, "searched", this.onSearchComplete);
+        if (this.schema.get("id") == "workspaceSchema") {
+            this.collection = new chorus.collections.DatasetSet([], { workspaceId: chorus.page.workspace.id, unsorted: true })
+            this.collection.sortAsc("objectName");
 
+            if (this.focusSchema) {
+                this.collection.attributes.databaseName = this.focusSchema.get("databaseName")
+            }
+
+            this.collection.fetch();
+        } else {
+            this.collection = this.schema.databaseObjects();
+            this.collection.fetchIfNotLoaded();
+        }
+
+        this.bindings.add(this.collection, "searched", this.onSearchComplete);
         this.listview = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
         this.collection.bind("loaded", this.postRender, this);
         this.bindings.add(this.listview, "fetch:more", this.fetchMoreDatasets);
@@ -42,7 +50,6 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     setSchemaToCurrentWorkspace: function() {
         this.schema = new chorus.models.Schema({id: "workspaceSchema", name: t("database.sidebar.this_workspace")});
-        this.schema._databaseObjects = this.datasets;
     },
 
     fetchMoreDatasets: function(e) {
@@ -53,7 +60,6 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     datasetsAdded: function() {
         this.listview.render();
-        this.recalculateScrolling($("#sidebar"));
     },
 
     searchTextChanged: function(e) {
@@ -63,5 +69,10 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
     onSearchComplete: function() {
         this.listview.render();
         this.postRender();
+    },
+
+    setSchema:function(schema) {
+        this._super("setSchema", arguments);
+        this.focusSchema = schema;
     }
 });

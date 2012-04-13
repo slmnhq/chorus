@@ -52,8 +52,6 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
                     additionalClass: "sidebar",
                     type: t("hdfs." + (entry.get("isDir") ? "directory" : "file"))
                 });
-
-                this.tabs.activity.bind("content:changed", this.recalculateScrolling, this)
             }
         } else {
             delete this.tabs.activity;

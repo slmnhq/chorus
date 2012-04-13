@@ -38,7 +38,11 @@ chorus.views.TabControl = chorus.views.Base.extend({
             var view = this[tabName];
             if (view) {
                 this.$(".tabbed_area").append(view.render().el);
+                view.bind("content:changed", _.bind(function() {
+                    this.trigger("content:changed")
+                }, this))
             }
+
         }, this);
 
         var tab = this.selectedTabName ? this.$("li[data-name=" + this.selectedTabName + "]") : this.$('li:first');

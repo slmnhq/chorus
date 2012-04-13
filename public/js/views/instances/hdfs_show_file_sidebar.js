@@ -28,7 +28,6 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
             type: t("hdfs.file")
         });
 
-        this.tabs.activity.bind("content:changed", this.recalculateScrolling, this);
         chorus.PageEvents.subscribe("csv_import:started", function() {activities.fetch()}, this)
     },
 
