@@ -244,33 +244,6 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             });
         });
 
-        describe("when a table is clicked", function() {
-            beforeEach(function() {
-                this.lis = this.dialog.$("li");
-                this.lis.eq(1).trigger("click");
-            });
-
-            it("highlights the table", function() {
-                expect(this.lis.eq(0)).not.toHaveClass("selected");
-                expect(this.lis.eq(1)).toHaveClass("selected");
-                expect(this.lis.eq(2)).not.toHaveClass("selected");
-                expect(this.lis.eq(3)).not.toHaveClass("selected");
-            });
-
-            describe("when another table is clicked", function() {
-                beforeEach(function() {
-                    this.lis.eq(3).trigger("click");
-                });
-
-                it("un-highlights the first table and highlights the table that was just clicked", function() {
-                    expect(this.lis.eq(0)).not.toHaveClass("selected");
-                    expect(this.lis.eq(1)).not.toHaveClass("selected");
-                    expect(this.lis.eq(2)).not.toHaveClass("selected");
-                    expect(this.lis.eq(3)).toHaveClass("selected");
-                });
-            });
-        });
-
         it("has a 'join table'/'join view' link for every database object", function() {
             var joinLinks = this.dialog.$("a.join");
             expect(joinLinks.eq(0).text().trim()).toMatchTranslation("dataset.manage_join_tables.join_view");

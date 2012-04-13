@@ -2,10 +2,8 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     className: "manage_join_tables",
     additionalClass: "with_sub_header",
     title: t("dataset.manage_join_tables.title"),
-    // useLoadingSection: true,
 
     events: {
-        "click li": "tableClicked",
         "click a.join": "joinLinkClicked",
         "click a.preview_columns": "onClickPreviewColumns"
     },
@@ -86,12 +84,6 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
             input: this.$(".search input:text"),
             onTextChange: onTextChangeFunction
         });
-    },
-
-    tableClicked: function(e) {
-        var clickedLi = $(e.target).closest("li");
-        this.$("li").removeClass("selected");
-        clickedLi.addClass("selected");
     },
 
     joinLinkClicked: function(e) {
