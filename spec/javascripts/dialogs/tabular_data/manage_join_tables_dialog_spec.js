@@ -40,7 +40,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
     it("fetches the schema's tables and views", function() {
         var datasetFetch = this.server.lastFetchFor(this.schema.databaseObjects());
-        expect(datasetFetch.params().rows).toBe('50');
+        expect(datasetFetch.params().rows).toBe('7');
         expect(datasetFetch.params().page).toBe('1');
     });
 
@@ -303,7 +303,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             it("shows pagination controls", function() {
                 expect(this.dialog.$(".list_content_details")).toBeHidden();
                 expect(this.dialog.$(".list_content_details .count")).toContainText("4");
-                expect(this.server.lastFetchFor(this.schema.databaseObjects()).url).toContain("rows=50")
+                expect(this.server.lastFetchFor(this.schema.databaseObjects()).url).toContain("rows=7")
             })
         });
     });

@@ -15,12 +15,9 @@
     }
 
     .list {
-        max-height: 363px;
         overflow: auto;
-
+        max-height: 363px;
         li {
-            padding-right:10px;
-
             .actions {
                 float: right;
                 height: 35px;
@@ -39,7 +36,7 @@
 
             .text {
                 .main {
-                    width: 220px;
+                    width: 210px;
                     @include ellipsis;
                     .name {
                         @include font-normal-alpha;
