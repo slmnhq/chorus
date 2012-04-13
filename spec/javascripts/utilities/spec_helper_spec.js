@@ -208,4 +208,21 @@ describe("spec_helper", function() {
             expect(elem).not.toHaveHref("http://yahoo.com")
         });
     });
+
+    describe("#toHaveAttrs", function() {
+        var model;
+        beforeEach(function() {
+            model = new chorus.models.Base({ key1: "foo", key2: "bar", key3: "baz" });
+        });
+
+        it("checks that the actual object contains all the attrs from the expected object", function() {
+            expect(model).toHaveAttrs({ key1: "foo", key2: "bar", key3: "baz" });
+            expect(model).not.toHaveAttrs({ key4: "qux" });
+            expect(model).not.toHaveAttrs({ key1: "baz" });
+        });
+
+        it("allows other unspecified attributes", function() {
+            expect(model).toHaveAttrs({ key1: "foo", key3: "baz" });
+        });
+    });
 });

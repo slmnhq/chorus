@@ -307,9 +307,14 @@
 
                 toHaveBeenUpdated: function() {
                     return !!this.spec.server.lastUpdateFor(this.actual);
+                },
+
+                toHaveAttrs: function(args) {
+                    return _.all(args, function(val, key) {
+                        return this.actual.attributes[key] == val;
+                    }, this);
                 }
             });
-
 
             var fakeSpinner = {
                 spin: jasmine.createSpy('MockSpinner.spin').andCallFake(function(parentEl) {
