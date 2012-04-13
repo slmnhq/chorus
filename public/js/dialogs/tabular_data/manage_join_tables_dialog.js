@@ -29,7 +29,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         this.resource = this.collection = dbObjects;
         this.paginatedJoinTables = new chorus.views.PaginatedJoinTablesList({collection: dbObjects });
         this.renderSubviews();
-        this.collection.fetchPage(1, { rows: 9 });
+        this.collection.fetchPage(1);
     },
 
     schemaSelected: function(schema) {
