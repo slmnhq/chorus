@@ -221,7 +221,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             expect(columnNameLinks).not.toHaveClass("selection_conflict");
         });
     });
-    
+
     describe("clicking the 'automap' link when the csv has fewer columns than the table", function() {
         beforeEach(function() {
             this.csv = newFixtures.csvImport({
@@ -242,6 +242,17 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
         it("displays the correct progress text", function() {
             expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 3, total: 3});
+        });
+
+        it("displays the correct mapping counts in the destination column menus", function() {
+            this.dialog.$(".column_mapping .map a").click();
+            var menu = this.qtip.find("ul");
+            var counts = menu.find(".count");
+            expect(counts.eq(0)).toContainText("(1)");
+            expect(counts.eq(1)).toContainText("(1)");
+            expect(counts.eq(2)).toContainText("(1)");
+            expect(counts.eq(3)).toHaveText("");
+            expect(counts.eq(4)).toHaveText("");
         });
     });
 

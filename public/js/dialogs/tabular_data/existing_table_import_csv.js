@@ -285,9 +285,10 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     automap: function(e) {
         e && e.preventDefault();
-        _.each(this.dataset.get("columnNames"), function(column, index) {
-            this.destinationColumns[index] = column.name;
-        }, this);
+
+        for(var i = 0; i< this.numberOfColumns; i++) {
+            this.destinationColumns[i] = this.dataset.get("columnNames")[i].name;
+        }
 
         this.updateDestinations();
     }
