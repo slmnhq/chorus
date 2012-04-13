@@ -891,7 +891,7 @@ describe("chorus.models.Abstract", function() {
             });
         });
 
-        describe("name", function() {
+        describe("#name", function() {
             context("when the model has a nameAttribute set", function() {
                 beforeEach(function() {
                     this.model.set({iAmAName: 'jerry'});
@@ -914,6 +914,17 @@ describe("chorus.models.Abstract", function() {
 
                 it("returns the result of that function", function() {
                     expect(this.model.name()).toBe('herbert humphrey');
+                });
+            });
+
+            context("when the model doesn't have a nameAttribute or nameFunction", function() {
+                beforeEach(function() {
+                    delete this.model.nameAttribute;
+                    delete this.model.nameFunction;
+                    this.model.set({name : "Mark"});
+                });
+                it("returns the name attribute", function() {
+                   expect(this.model.name()).toBe("Mark");
                 });
             });
         });

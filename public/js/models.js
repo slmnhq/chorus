@@ -203,7 +203,7 @@ chorus.models = {
             if (this.nameFunction) {
                 return this[this.nameFunction]();
             }
-            return this.get(this.nameAttribute);
+            return this.get(this.nameAttribute || "name");
         },
 
         highlightedName: function() {
