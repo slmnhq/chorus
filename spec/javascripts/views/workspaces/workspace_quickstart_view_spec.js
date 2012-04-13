@@ -74,6 +74,37 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         })
     });
 
+    describe("the 'Add Work Files' section", function() {
+        var link;
+
+        beforeEach(function() {
+            link = this.view.$(".add_workfiles a");
+        });
+
+        it("has a link", function() {
+            expect(this.view.$(".add_workfiles a")).toContainTranslation("workspace.quickstart.add_workfiles.link");
+        });
+
+        it("has an image", function() {
+            expect(this.view.$(".add_workfiles img")).toHaveAttr("src", "images/workspaces/work_files_quick_start.png");
+        });
+
+        it("has a description", function() {
+            expect(this.view.$(".add_workfiles .text")).toContainTranslation("workspace.quickstart.add_workfiles.text");
+        });
+
+        it("launches the right dialog", function() {
+            expect(link).toHaveClass("dialog");
+            expect(link).toHaveData("dialog", "WorkfilesImport");
+            expect(link).toHaveData("workspaceId", 999);
+        });
+
+        it("hides the box when the link is clicked", function() {
+            link.click();
+            expect(this.view.$(".add_workfiles")).toHaveClass("hidden");
+        })
+    });
+
     describe("the 'Edit Workspace Settings' section", function() {
         it("has a link", function() {
             expect(this.view.$(".edit_workspace_settings a")).toContainTranslation("workspace.quickstart.edit_workspace_settings.link");
