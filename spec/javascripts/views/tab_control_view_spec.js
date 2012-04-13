@@ -9,6 +9,11 @@ describe("chorus.views.TabControl", function() {
         this.tab2View = chorus.views.StaticTemplate("plain_text", { text: "tabText2" });
         this.tab3View = chorus.views.StaticTemplate("plain_text", { text: "tabText3" });
 
+        this.tabSubviews = [this.tab1View,this.tab2View,this.tab3View];
+        _(this.tabSubviews).each(function(view) {
+            spyOn(view, "delegateEvents").andCallThrough();
+        });
+
         this.view = new chorus.views.TabControl(["activity", "statistics", "configuration"]);
 
         this.view.activity = this.tab1View;
@@ -44,7 +49,13 @@ describe("chorus.views.TabControl", function() {
         expect(this.view.$(".tabbed_area div").eq(2)).toHaveText("tabText3");
     });
 
-    it("renders has the first tab as selected", function() {
+    it("calls #delegateEvents on each view (bc otherwise the events of a subview don't propogate to its subviews)", function() {
+        _(this.tabSubviews).each(function(view) {
+            expect(view.delegateEvents).toHaveBeenCalled();
+        });
+    });
+
+    it("renders the first tab as selected", function() {
         expect(this.view.$("ul.tabs li.selected").length).toBe(1);
         expect(this.view.$("ul.tabs li").eq(0)).toHaveClass("selected");
         expect(this.tab1Spy).toHaveBeenCalled();
@@ -109,6 +120,6 @@ describe("chorus.views.TabControl", function() {
                 expect(this.view.$(".tabbed_area div:visible").length).toBe(1);
                 expect(this.view.$('.tabbed_area div').eq(1)).toBeVisible();
             });
-        })
+        });
     });
 });
