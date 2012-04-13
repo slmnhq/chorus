@@ -6,6 +6,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             entityId:this.launchElement.data("entity-id"),
             workspaceId: this.launchElement.data("workspace-id")
         });
+
         this.dialog = new chorus.dialogs.MemoNew({
             launchElement : this.launchElement,
             pageModel : new chorus.models.Workfile(),
@@ -149,21 +150,14 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         describe("when the 'attach workfile' link is clicked", function() {
             beforeEach(function() {
                 this.dialog.$('.show_options').click();
-                this.fakeModal = stubModals();
+                this.modalSpy = stubModals();
                 this.dialog.launchSubModal.andCallThrough();
-                spyOn(chorus.dialogs.WorkfilesAttach.prototype, 'render').andCallThrough();
                 this.dialog.$("a.add_workfile").click();
             });
 
             it("launches the workfile picker dialog", function() {
-                expect(this.fakeModal).toHaveBeenCalled();
-                expect(chorus.dialogs.WorkfilesAttach.prototype.render).toHaveBeenCalled();
-
-                var modalElement = this.fakeModal.mostRecentCall.args[0];
-                var view = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
-
-                expect(modalElement).toBe(view.el);
-                expect(view.options.workspaceId).toBe(22);
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfilesAttach);
+                expect(this.modalSpy.lastModal().options.workspaceId).toBe(22);
             });
 
             describe("when workfiles are selected", function() {
@@ -173,8 +167,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     this.workfile3 = fixtures.workfile({ id: 3, fileName: "sloth.afm", fileType: "N/A" });
 
                     spyOn(this.workfile2, "isImage").andReturn(true);
-                    this.workfilesDialog = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
-                    this.workfilesDialog.trigger("files:selected", [this.workfile1, this.workfile2, this.workfile3]);
+                    this.modalSpy.lastModal().trigger("files:selected", [this.workfile1, this.workfile2, this.workfile3]);
                 });
 
                 it("displays the names of the workfiles", function() {
@@ -199,22 +192,19 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                 context("when the 'attach workfile' link is clicked again", function() {
                     beforeEach(function() {
-                        spyOn(chorus.dialogs.WorkfilesAttach.prototype, 'initialize').andCallThrough();
                         this.dialog.$("a.add_workfile").click();
                     });
 
                     it("is populated with the previously selected workfiles", function() {
-                        expect(chorus.dialogs.WorkfilesAttach.prototype.initialize).toHaveBeenCalled();
-                        var options = chorus.dialogs.WorkfilesAttach.prototype.initialize.mostRecentCall.args[0];
-                        expect(options.defaultSelection.at(0).get('fileName')).toBe('greed.sql');
-                        expect(options.defaultSelection.at(1).get('fileName')).toBe('generosity.cpp');
+                        var modal = this.modalSpy.lastModal();
+                        expect(modal.options.defaultSelection.at(0).get('fileName')).toBe('greed.sql');
+                        expect(modal.options.defaultSelection.at(1).get('fileName')).toBe('generosity.cpp');
                     });
 
                     context("when new files are selected", function() {
                         beforeEach(function() {
                             this.newWorkfile = fixtures.workfile();
-                            this.workfilesDialog = chorus.dialogs.WorkfilesAttach.prototype.render.mostRecentCall.object;
-                            this.workfilesDialog.trigger("files:selected", [this.newWorkfile]);
+                            this.modalSpy.lastModal().trigger("files:selected", [this.newWorkfile]);
                         });
 
                         it("clears any existing workfiles", function() {
@@ -270,22 +260,14 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
         describe("when the 'attach dataset' link is clicked", function() {
             beforeEach(function() {
+                this.modalSpy = stubModals();
                 this.dialog.$('.show_options').click();
-                this.fakeModal = stubModals();
-                this.dialog.launchSubModal.andCallThrough();
-                spyOn(chorus.dialogs.DatasetsAttach.prototype, 'render').andCallThrough();
                 this.dialog.$("a.add_dataset").click();
             });
 
             it("launches the dataset picker dialog", function() {
-                expect(this.fakeModal).toHaveBeenCalled();
-                expect(chorus.dialogs.DatasetsAttach.prototype.render).toHaveBeenCalled();
-
-                var modalElement = this.fakeModal.mostRecentCall.args[0];
-                var view = chorus.dialogs.DatasetsAttach.prototype.render.mostRecentCall.object;
-
-                expect(modalElement).toBe(view.el);
-                expect(view.options.workspaceId).toBe(22);
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetsAttach);
+                expect(this.modalSpy.lastModal().options.workspaceId).toBe(22);
             });
 
             describe("when datasets are selected", function() {
@@ -294,8 +276,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         newFixtures.datasetSandboxTable({objectName: 'table1', id: '1'}),
                         newFixtures.datasetSandboxTable({objectName: 'table2', id: '2'})
                     ];
-                    this.datasetsDialog = chorus.dialogs.DatasetsAttach.prototype.render.mostRecentCall.object;
-                    this.datasetsDialog.trigger("datasets:selected", this.datasets);
+                    this.modalSpy.lastModal().trigger("datasets:selected", this.datasets);
                 });
 
                 it("displays the names of the datasets", function() {
@@ -318,20 +299,17 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                 context("when the 'attach dataset' link is clicked again", function() {
                     beforeEach(function() {
-                        spyOn(chorus.dialogs.DatasetsAttach.prototype, 'initialize').andCallThrough();
                         this.dialog.$("a.add_dataset").click();
                     });
 
                     it("is populated with the previously selected datasets", function() {
-                        expect(chorus.dialogs.DatasetsAttach.prototype.initialize).toHaveBeenCalled();
-                        var options = chorus.dialogs.DatasetsAttach.prototype.initialize.mostRecentCall.args[0];
-                        expect(options.defaultSelection.models[0].get('objectName')).toBe('table1');
-                        expect(options.defaultSelection.models[1].get('objectName')).toBe('table2');
+                        var modal = this.modalSpy.lastModal();
+                        expect(modal.options.defaultSelection.models[0].get('objectName')).toBe('table1');
+                        expect(modal.options.defaultSelection.models[1].get('objectName')).toBe('table2');
                     });
                     context("when new datasets are selected", function() {
                         beforeEach(function() {
-                            this.datasetsDialog = chorus.dialogs.DatasetsAttach.prototype.render.mostRecentCall.object;
-                            this.datasetsDialog.trigger("datasets:selected", this.datasets);
+                            this.modalSpy.lastModal().trigger("datasets:selected", this.datasets);
                         });
 
                         it("clears any existing datasets", function() {

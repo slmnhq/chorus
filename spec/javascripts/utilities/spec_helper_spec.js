@@ -31,6 +31,40 @@ describe("spec_helper", function() {
         });
     });
 
+    describe("stubModals", function() {
+        beforeEach(function() {
+            this.modals = stubModals();
+
+            this.modal1 = new chorus.alerts.EmptyCSV();
+            this.modal2 = new chorus.alerts.NoLdapUser();
+            this.modal1.launchModal();
+            this.modal2.launchModal();
+        });
+
+        describe("#lastModal", function() {
+            it("returns the most recently launched modal view", function() {
+                expect(this.modals.lastModal()).toBe(this.modal2);
+            });
+        });
+
+        describe("#reset", function() {
+            it("resets the modal spy call count", function() {
+                expect(this.modals.lastModal()).toBe(this.modal2);
+                this.modals.reset();
+                expect(this.modals.lastModal()).toBeUndefined();
+            });
+        });
+
+        describe("the toHaveModal matcher", function() {
+            it("checks if an instance of the given modal class has ever been launched", function() {
+                expect(this.modals).toHaveModal(chorus.alerts.NoLdapUser);
+                expect(this.modals).toHaveModal(chorus.alerts.EmptyCSV);
+
+                expect(this.modals).not.toHaveModal(chorus.alerts.RemoveJoinConfirmAlert);
+            });
+        });
+    });
+
     describe("#toBeA", function() {
         context("when passed a string", function() {
             it("does a 'typeof' check", function() {

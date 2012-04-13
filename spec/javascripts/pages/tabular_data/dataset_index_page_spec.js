@@ -239,19 +239,18 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
                     context('navigating to the page a second time', function() {
                         beforeEach(function() {
-                            this.server.reset();
                             this.modalSpy.reset();
+                            this.server.reset();
                             this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
                             this.server.completeFetchFor(this.workspace);
                             this.server.completeFetchFor(this.page.account, fixtures.emptyInstanceAccount())
                         });
 
                         it("should not pop up the WorkspaceInstanceAccountDialog", function() {
-                            expect(this.modalSpy).not.toHaveBeenCalled();
+                            expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
                         });
                     });
                 });
-
 
                 context("when the account loads and is empty and the instance is shared", function() {
                     beforeEach(function() {
@@ -271,7 +270,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                     });
 
                     it("does not pop up the WorkspaceInstanceAccountDialog", function() {
-                        expect(this.modalSpy).not.toHaveBeenCalled();
+                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
                     });
 
                     describe("filtering", function() {

@@ -103,25 +103,24 @@ describe("chorus.pages.WorkfileShowPage", function() {
             context('and the workfile has a draft', function() {
                 beforeEach(function() {
                     this.model.set({'draftInfo': fixtures.workfileDraft(), hasDraft: true});
-                    stubModals();
-                    spyOn(chorus.Modal.prototype, 'launchModal').andCallThrough();
+                    this.modalSpy = stubModals();
                     this.server.completeFetchFor(this.model);
                 });
 
-                it("shows an alert", function() {
-                    expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+                it("shows a workfile draft alert", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileDraft);
                 });
 
                 context("and the user chooses the draft", function() {
                     beforeEach(function() {
+                        this.modalSpy.reset();
                         spyOn(this.page, "render");
-                        chorus.Modal.prototype.launchModal.reset();
                         this.page.model.isDraft = true;
                         this.page.model.trigger('change');
                     });
 
                     it("does not show an alert", function() {
-                        expect(chorus.Modal.prototype.launchModal).not.toHaveBeenCalled();
+                        expect(this.modalSpy).not.toHaveModal(chorus.alerts.WorkfileDraft);
                     })
                 })
             })

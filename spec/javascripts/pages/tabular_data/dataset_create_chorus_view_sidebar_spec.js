@@ -6,7 +6,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         aggregateColumnSet.reset(this.dataset.columns().models);
         this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset, aggregateColumnSet: aggregateColumnSet});
         this.chorusView = this.view.chorusView;
-        stubModals();
+        this.modals = stubModals();
     });
 
     describe("#render", function() {
@@ -231,20 +231,18 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         describe("clicking 'preview sql'", function() {
             beforeEach(function() {
                 spyOn(this.view, 'sql').andReturn("I add the where clause right now.");
-                this.modalSpy = spyOn(chorus.dialogs.SqlPreview.prototype, 'launchModal').andCallThrough();
                 this.view.$("a.preview").click();
             });
 
             it("launches a preview sql dialog with the chorus view as its model", function() {
-                expect(this.modalSpy).toHaveBeenCalled();
-                var dialog = this.modalSpy.mostRecentCall.object;
-                expect(dialog.model).toBe(this.view.chorusView);
+                var lastModal = this.modals.lastModal();
+                expect(lastModal).toBeA(chorus.dialogs.SqlPreview);
+                expect(lastModal.model).toBe(this.view.chorusView);
             });
 
             it("sets the right sql on the chorus view", function() {
-                expect(this.modalSpy).toHaveBeenCalled();
-                var dialog = this.modalSpy.mostRecentCall.object;
-                expect(dialog.model.get("query")).toBe(this.view.sql());
+                var lastModal = this.modals.lastModal();
+                expect(lastModal.model.get("query")).toBe(this.view.sql());
             });
         });
 

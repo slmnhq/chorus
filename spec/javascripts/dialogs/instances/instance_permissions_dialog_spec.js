@@ -400,9 +400,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 this.otherAccount = this.accounts.get(1);
                 this.liBeingRemoved = this.dialog.$("li[data-id=2]");
                 this.otherLi = this.dialog.$("li[data-id=1]");
-                this.modalSpy.reset()
                 spyOn(chorus, "toast");
-                spyOn(this.dialog, "launchSubModal").andCallThrough();
                 this.liBeingRemoved.find("a.remove_credentials").click();
             });
 
@@ -412,7 +410,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             context("when removeIndividualAccount is triggered", function() {
                 beforeEach(function() {
-                    this.dialog.launchSubModal.calls[0].args[0].trigger("removeIndividualAccount");
+                    this.modalSpy.lastModal().trigger("removeIndividualAccount");
                 });
 
                 it("should call delete on the accountmap", function() {

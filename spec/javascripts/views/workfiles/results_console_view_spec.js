@@ -230,10 +230,9 @@ describe("chorus.views.ResultsConsoleView", function() {
                         var fakeModal = stubModals();
                         this.view.$(".execution a.view_details").click();
 
-                        expect(fakeModal).toHaveBeenCalled();
-                        var alertEl = $(fakeModal.mostRecentCall.args[0]);
-                        expect(alertEl).toBe(".info.alert");
-                        expect(alertEl).toContainText("hi there");
+                        var alert = fakeModal.lastModal();
+                        expect(alert).toBeA(chorus.alerts.ExecutionMessage);
+                        expect($(alert.el)).toContainText("hi there");
                     });
                 });
 
@@ -285,13 +284,10 @@ describe("chorus.views.ResultsConsoleView", function() {
                     })
 
                     describe("clicking on view details", function() {
-                        beforeEach(function() {
-                            spyOn(chorus.Modal.prototype, "launchModal");
+                        it("should open an execution message alert", function() {
+                            this.modalSpy = stubModals();
                             this.view.$(".view_details").click();
-                        });
-
-                        it("should open a dialog", function() {
-                            expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+                            expect(this.modalSpy).toHaveModal(chorus.alerts.ExecutionMessage);
                         });
                     });
                 });

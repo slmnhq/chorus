@@ -66,8 +66,8 @@ describe("chorus.Mixins.InstanceCredentials", function() {
             this.page.requiredResources.push(this.model);
             this.page.requiredResources.push(this.otherModel);
 
+            this.modalSpy = stubModals();
             spyOn(Backbone.history, 'loadUrl');
-            spyOn(chorus.Modal.prototype, 'launchModal');
 
             this.model.fetch();
             this.otherModel.fetch();
@@ -86,15 +86,14 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                 });
 
                 it("launches the 'add credentials' dialog, and reloads after the credentials have been added", function() {
-                    expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled()
-                    var dialog = chorus.Modal.prototype.launchModal.mostRecentCall.object;
+                    var dialog = this.modalSpy.lastModal();
                     expect(dialog).toBeA(chorus.dialogs.InstanceAccount);
                     expect(dialog.options.instance).toBe(this.instance);
                     expect(dialog.options.title).toMatchTranslation("instances.account.add.title");
                 });
 
                 it("configure the dialog to reload after credentials are added and navigate back on dismissal", function() {
-                    var dialog = chorus.Modal.prototype.launchModal.mostRecentCall.object;
+                    var dialog = this.modalSpy.lastModal();
                     expect(dialog.options.reload).toBeTruthy();
                     expect(dialog.options.goBack).toBeTruthy();
                 });
@@ -125,7 +124,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                 });
 
                 it("does not launch any dialog", function() {
-                    expect(chorus.Modal.prototype.launchModal).not.toHaveBeenCalled()
+                    expect(this.modalSpy.lastModal()).not.toBeDefined();
                 });
             }
         });

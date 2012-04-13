@@ -772,13 +772,12 @@ describe("chorus.views.Activity", function() {
 
             context("when the unpublish link is clicked", function() {
                 beforeEach(function() {
-                    stubModals();
-                    spyOn(chorus.Modal.prototype, 'launchModal').andCallThrough();
+                    this.modalSpy = stubModals();
                     this.view.$("a.unpublish").click();
                 });
 
                 it("launches the confirmation alert", function() {
-                    expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+                    expect(this.modalSpy).toHaveModal(chorus.alerts.PublishInsight);
                 });
 
                 context("when the unpublish completes", function() {
@@ -802,13 +801,12 @@ describe("chorus.views.Activity", function() {
 
             context("when the publish link is clicked", function() {
                 beforeEach(function() {
-                    stubModals();
-                    spyOn(chorus.Modal.prototype, 'launchModal').andCallThrough();
+                    this.modalSpy = stubModals();
                     this.view.$("a.publish").click();
                 });
 
                 it("launches the confirmation alert", function() {
-                    expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+                    expect(this.modalSpy).toHaveModal(chorus.alerts.PublishInsight);
                 });
 
                 context("when the publish completes", function() {

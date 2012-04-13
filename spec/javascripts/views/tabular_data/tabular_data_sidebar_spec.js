@@ -712,17 +712,16 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                     describe("clicking the 'duplicate' link", function() {
                         beforeEach(function() {
-                            this.modalSpy = spyOn(chorus.dialogs.NameChorusView.prototype, 'launchModal').andCallThrough();
+                            this.modalSpy.reset();
                             this.view.$("a.duplicate").click();
-                            this.dialog = this.modalSpy.mostRecentCall.object;
                         });
 
                         it("launches the name chorus view dialog", function() {
-                            expect(this.modalSpy).toHaveBeenCalled();
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.NameChorusView);
                         });
 
                         it("passes the dialog a duplicate of the chorus view", function() {
-                            expect(this.dialog.model.attributes).toEqual(this.dataset.createDuplicateChorusView().attributes);
+                            expect(this.modalSpy.lastModal().model.attributes).toEqual(this.dataset.createDuplicateChorusView().attributes);
                         });
                     });
 

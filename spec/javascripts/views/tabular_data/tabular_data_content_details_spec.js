@@ -670,16 +670,14 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
                 describe("clicking view_error_details", function() {
                     beforeEach(function() {
-                        stubModals()
-                        spyOn(chorus.Modal.prototype, 'launchModal');
+                        this.modalSpy = stubModals()
                         this.view.$('.view_error_details').click();
                     });
 
                     it("launches the alertClass with the task as the model", function() {
-                        expect(this.alertClass.prototype.launchModal).toHaveBeenCalled();
-                        $("#jasmine_content").append(this.view.el);
-                        expect(this.alertClass.prototype.launchModal.mostRecentCall.object).toBeA(this.alertClass);
-                        expect(this.alertClass.prototype.launchModal.mostRecentCall.object.model).toBe(this.taskWithErrors);
+                        var modal = this.modalSpy.lastModal();
+                        expect(modal).toBeA(this.alertClass);
+                        expect(modal.model).toBe(this.taskWithErrors);
                     });
                 });
 

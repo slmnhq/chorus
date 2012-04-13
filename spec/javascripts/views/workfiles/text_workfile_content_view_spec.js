@@ -279,8 +279,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
             context("when there is a version conflict", function() {
                 beforeEach(function() {
-                    stubModals();
-                    spyOn(chorus.Modal.prototype, 'launchModal').andCallThrough();
+                    this.modalSpy = stubModals();
                     message = {
                         "message" : "Bad version, bro",
                         "msgkey" : "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH"
@@ -293,8 +292,8 @@ describe("chorus.views.TextWorkfileContentView", function() {
                     }).fail([message]);
                 });
 
-                it("should show the version conflict dialog", function() {
-                    expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+                it("should show the version conflict alert", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
                 });
             });
         });
@@ -336,7 +335,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 this.view.editor.setValue("new content");
 
                 spyOn(this.view, "stopTimer");
-                spyOn(chorus.dialogs.WorkfileNewVersion.prototype, "launchModal");
+                this.modalSpy = stubModals();
                 chorus.PageEvents.broadcast("file:createWorkfileNewVersion");
             });
 
@@ -349,12 +348,11 @@ describe("chorus.views.TextWorkfileContentView", function() {
             });
 
             it("launches save workfile as new version dialog", function() {
-                expect(chorus.dialogs.WorkfileNewVersion.prototype.launchModal).toHaveBeenCalled();
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfileNewVersion);
             });
 
             it("launches the new dialog with the correct model", function() {
                 expect(this.view.dialog.model).toBeA(chorus.models.Workfile);
-
             });
         });
     });

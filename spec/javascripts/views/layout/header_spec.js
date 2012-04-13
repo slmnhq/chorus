@@ -456,7 +456,7 @@ describe("chorus.views.Header", function() {
 
                     describe("clicking the confirmation", function() {
                         beforeEach(function() {
-                            $(this.modalSpy.mostRecentCall.args[0]).find("button.submit").click();
+                            this.modalSpy.lastModal().$("button.submit").click();
                         });
 
                         it("deletes the notification", function() {

@@ -1,9 +1,8 @@
 describe("chorus.alerts.WorkfileConflict", function() {
     beforeEach(function() {
-        stubModals();
+        this.modalSpy = stubModals();
         this.clock = sinon.useFakeTimers();
 
-        spyOn(chorus.Modal.prototype, "launchModal").andCallThrough();
         this.workfile = fixtures.workfile({ content : "version content" });
         this.message = "This work file has been modified by Christine Klunk"
         this.workfile.serverErrors = [{message: this.message}];
@@ -39,7 +38,7 @@ describe("chorus.alerts.WorkfileConflict", function() {
         });
 
         it("should show the workfile new version dialog", function() {
-            expect(chorus.Modal.prototype.launchModal).toHaveBeenCalled();
+            expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfileNewVersion);
         });
     });
 

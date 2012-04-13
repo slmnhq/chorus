@@ -192,126 +192,54 @@ describe("chorus.pages.Base", function() {
         });
     });
 
-    context("dialogs", function() {
+    context("dialogs and alerts", function() {
+        beforeEach(function() {
+            this.modalSpy = stubModals();
+
+            this.view = new chorus.pages.Base();
+            chorus.page = this.view;
+            this.view.mainContent = new Backbone.View();
+            chorus.bindModalLaunchingClicks(this.view);
+        });
+
         context("from buttons", function() {
             beforeEach(function() {
-                this.view = new chorus.pages.Base();
-                this.view.mainContent = new Backbone.View();
-                chorus.bindModalLaunchingClicks(this.view);
-
-                var spy = this.fooDialogSpy = new chorus.dialogs.Base();
-                spyOn(spy, "launchModal");
-
-
-                chorus.dialogs.Foo = function(opts) {
-                    spy.launchElement = opts.launchElement;
-                    spy.pageModel = opts.pageModel;
-                    return spy
-                };
-
-                this.view.sidebar = stubView("<button type='button' class='dialog' data-dialog='Foo'>Create a Foo</button>");
+                this.view.sidebar = stubView("<button type='button' class='alert' data-alert='NoLdapUser'>Create a Foo</button>");
                 this.view.render();
-            })
-
-            it("instantiates dialogs from dialog buttons", function() {
-                this.view.$("button.dialog").click();
-                expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
-            })
-
-            it("passes the launch element to the dialog", function() {
-                var elem = this.view.$("button.dialog");
-                elem.click();
-
-                expect(this.fooDialogSpy.launchElement).toBe(elem);
+                this.elementToClick = this.view.$("button.alert");
             });
 
-            it("passes the pageModel to the dialog", function() {
-                this.view.model = new chorus.models.User();
-                var elem = this.view.$("button.dialog");
-                elem.click();
-
-                expect(this.fooDialogSpy.pageModel).toBe(this.view.model);
-            });
-        })
+            itLaunchesTheModalCorrectly(chorus.alerts.NoLdapUser);
+        });
 
         context("from links", function() {
             beforeEach(function() {
-                this.view = new chorus.pages.Base();
-                this.view.mainContent = new Backbone.View();
-                chorus.bindModalLaunchingClicks(this.view);
-
-                var spy = this.fooDialogSpy = new chorus.dialogs.Base();
-                spyOn(spy, "launchModal");
-
-                chorus.dialogs.Foo = function(opts) {
-                    spy.launchElement = opts.launchElement;
-                    spy.pageModel = opts.pageModel;
-                    return spy
-                };
-
-                this.view.sidebar = stubView("<a class='dialog' data-dialog='Foo'>Create a Foo</button>");
+                this.view.sidebar = stubView("<a class='dialog' data-dialog='WorkfilesSqlNew'>Create a Workfile</a>");
                 this.view.render();
-            })
-
-            it("instantiates dialogs from dialog buttons", function() {
-                this.view.$("a.dialog").click();
-                expect(this.fooDialogSpy.launchModal).toHaveBeenCalled();
-            })
-
-            it("passes the launch element to the dialog", function() {
-                var elem = this.view.$("a.dialog");
-                elem.click();
-                expect(this.fooDialogSpy.launchElement).toBe(elem);
-            })
-
-            it("passes the pageModel to the dialog", function() {
-                this.view.model = new chorus.models.User();
-                var elem = this.view.$("a.dialog");
-                elem.click();
-
-                expect(this.fooDialogSpy.pageModel).toBe(this.view.model);
+                this.elementToClick = this.view.$("a.dialog");
             });
-        })
-    })
 
-    context("alerts", function() {
-        beforeEach(function() {
-            this.view = new chorus.pages.Base();
-            this.view.mainContent = new Backbone.View();
-            chorus.bindModalLaunchingClicks(this.view);
-
-            var spy = this.fooAlertSpy = new chorus.alerts.Base();
-            spyOn(spy, "launchModal");
-
-            chorus.alerts.Foo = function(opts) {
-                spy.launchElement = opts.launchElement;
-                spy.pageModel = opts.pageModel;
-                return spy
-            };
-
-            this.view.sidebar = stubView("<a class='alert' data-alert='Foo'>Create a Foo</button>");
-            this.view.render();
-        })
-
-        it("instantiates alerts from alert links", function() {
-            this.view.$("a.alert").click();
-            expect(this.fooAlertSpy.launchModal).toHaveBeenCalled();
-        })
-
-        it("passses the launch element to the alert", function() {
-            var elem = this.view.$("a.alert");
-            elem.click();
-            expect(this.fooAlertSpy.launchElement).toBe(elem);
-        })
-
-        it("passes the pageModel to the dialog", function() {
-            this.view.model = new chorus.models.User();
-            var elem = this.view.$("a.alert");
-            elem.click();
-
-            expect(this.fooAlertSpy.pageModel).toBe(this.view.model);
+            itLaunchesTheModalCorrectly(chorus.dialogs.WorkfilesSqlNew);
         });
-    })
+
+        function itLaunchesTheModalCorrectly(modalClass) {
+            it("instantiates modals from buttons", function() {
+                this.elementToClick.click();
+                expect(this.modalSpy).toHaveModal(modalClass);
+            })
+
+            it("passes the launch element to the modal", function() {
+                this.elementToClick.click();
+                expect(this.modalSpy.lastModal().options.launchElement).toBe(this.elementToClick);
+            });
+
+            it("passes the pageModel to the modal", function() {
+                this.view.model = new chorus.models.User();
+                this.elementToClick.click();
+                expect(this.modalSpy.lastModal().options.pageModel).toBe(this.view.model);
+            });
+        }
+    });
 
     describe("help", function() {
         beforeEach(function() {

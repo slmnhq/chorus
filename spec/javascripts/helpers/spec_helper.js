@@ -198,14 +198,15 @@
 
                 toHaveModal: function(modalClass) {
                     if (!modalClass) { throw "expected undefined modal class to have been launched."; }
-                    var modalClassName = modalClass.prototype.className;
                     this.message = function() {
                         return [
-                            'Expected to have a modal with class ' + modalClassName,
-                            'Expected not to have a modal with class ' + modalClassName
+                            "Expected modal '" + modalClass.prototype.constructorName + "' to have been launched",
+                            "Expected modal '" + modalClass.prototype.constructorName + "' not to have been launched"
                         ]
                     }
-                    return this.actual.mostRecentCall && this.actual.mostRecentCall.args && this.actual.mostRecentCall.args[0] && $(this.actual.mostRecentCall.args[0]).hasClass(modalClassName);
+                    return _.any(this.actual.modals(), function(modal) {
+                        return modal instanceof modalClass;
+                    })
                 },
 
                 toHaveBeenTriggeredOn: function(target, args) {
@@ -446,9 +447,25 @@
     }
 
     window.stubModals = function() {
-        var spy = spyOn($, "facebox");
-        spy.settings = {}
-        return spy;
+        spyOn($, "facebox");
+        $.facebox.settings = {};
+        var launchModalSpy = spyOn(chorus.Modal.prototype, "initialize").andCallThrough();
+
+        return {
+            lastModal: function() {
+                return launchModalSpy.mostRecentCall.object;
+            },
+
+            modals: function() {
+                return _.map(launchModalSpy.calls, function(call) {
+                    return call.object;
+                });
+            },
+
+            reset: function() {
+                launchModalSpy.reset();
+            }
+        };
     };
 
     window.stubDelay = function() {
