@@ -154,6 +154,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         this.schema = schema;
         if (this.schema) {
             this.schemas = this.schema.database().schemas();
+            this.bindings.add(this.schemas, "loaded", this.render);
             this.schemas.fetch();
             this.fetchResourceAfterSchemaSelected();
         }

@@ -41,11 +41,12 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
         it("fetches the schemas", function() {
             expect(this.server.lastFetchFor(this.schema.database().schemas())).toBeDefined();
-        })
+        });
 
         context("when the fetch completes", function() {
             beforeEach(function() {
                 this.qtip = stubQtip(".context a");
+                spyOn(this.view, "postRender").andCallThrough();
                 spyOn(this.view, 'closeQtip');
 
                 this.server.completeFetchFor(this.schema.database().schemas(), [
@@ -53,10 +54,11 @@ describe("chorus.views.DatabaseSidebarList", function() {
                     fixtures.schema({ name: "awesome_tables", id: "5" }),
                     fixtures.schema({ name: "orphaned_tables", id: "6" })
                 ]);
-
-                this.view.render();
             });
 
+            it("renders", function() {
+               expect(this.view.postRender).toHaveBeenCalled();
+            });
             context("selecting a schema", function() {
                 beforeEach(function() {
                     spyOn(this.view, 'fetchResourceAfterSchemaSelected');
