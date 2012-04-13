@@ -1,5 +1,5 @@
 chorus.views.SelectableList = chorus.views.Base.extend({
-    additionalClass: "list",
+    additionalClass: "selectable list",
     tagName: "ul",
 
     setup: function() {

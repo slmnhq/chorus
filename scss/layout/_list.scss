@@ -10,38 +10,11 @@
         position: relative;
         @include after-clearfix;
 
-        &:hover {
-            background: $list-hover-color;
-
-            .spacer_left {
-                background: $list-hover-color;
-                bottom: -1px;
-            }
-        }
-
         &:last-child {
             border-bottom: none;
 
             .spacer-left {
                 bottom: 0;
-            }
-        }
-
-        &.selected {
-            $border-width: 2px;
-
-            background: white;
-            padding-bottom: $padding-y - ($border-width - 1px); // default border is 1px
-            border-bottom: $border-width solid $border-color;
-
-            .spacer_left {
-                background: white;
-                bottom: -$border-width;
-                border-bottom: $border-width solid $border-color;
-            }
-
-            .spacer_right {
-                border-left: 2px solid $border-color;
             }
         }
 
@@ -140,4 +113,36 @@
             font-style: italic;
         }
     }
+
+    &.selectable {
+        li {
+            &:hover {
+                background: $list-hover-color;
+
+                .spacer_left {
+                    background: $list-hover-color;
+                    bottom: -1px;
+                }
+            }
+
+            &.selected {
+                $border-width: 2px;
+
+                background: white;
+                padding-bottom: $padding-y - ($border-width - 1px); // default border is 1px
+                border-bottom: $border-width solid $border-color;
+
+                .spacer_left {
+                    background: white;
+                    bottom: -$border-width;
+                    border-bottom: $border-width solid $border-color;
+                }
+
+                .spacer_right {
+                    border-left: 2px solid $border-color;
+                }
+            }
+        }
+    }
 }
+
