@@ -110,13 +110,17 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
             delete this.secondarySidebar;
         }
         this.mainContent.content.render();
-        this.$('.sidebar_content.primary').removeClass("hidden")
-        this.$('.sidebar_content.secondary').addClass("hidden")
+        this.$('.sidebar_content.primary').removeClass("hidden");
+        this.$('.sidebar_content.secondary').addClass("hidden");
         this.removeOldSecondaryClasses(type);
         this.trigger('resized');
     },
 
     removeOldSecondaryClasses: function(type) {
         this.$('.sidebar_content.secondary').removeClass("dataset_create_" + type + "_sidebar");
+    },
+
+    getHeaderView: function(options) {
+        return new chorus.views.TabularDataShowContentHeader(_.extend({showLocation: true}, options));
     }
 });

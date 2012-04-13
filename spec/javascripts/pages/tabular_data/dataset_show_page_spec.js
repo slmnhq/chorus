@@ -336,6 +336,23 @@ describe("chorus.pages.DatasetShowPage", function() {
         });
 
         describe("#contentHeader", function() {
+            describe("the links at the top", function() {
+                it("includes the link to the instance", function() {
+                    expect(this.page.$(".content_header a.instance")).toHaveHref(this.page.model.instance().showUrl());
+                    expect(this.page.$(".content_header a.instance")).toHaveText(this.page.model.instance().name());
+                });
+
+                it("includes the link to the database", function() {
+                    expect(this.page.$(".content_header a.database")).toHaveHref(this.page.model.database().showUrl());
+                    expect(this.page.$(".content_header a.database")).toHaveText(this.page.model.database().name());
+                });
+
+                it("includes the link to the schema", function() {
+                    expect(this.page.$(".content_header a.schema")).toHaveHref(this.page.model.schema().showUrl());
+                    expect(this.page.$(".content_header a.schema")).toHaveText(this.page.model.schema().name());
+                });
+            });
+
             context("when the dataset has an import schedule", function() {
                 beforeEach(function() {
                     this.server.completeFetchFor(this.page.tabularData.getImport(), fixtures.datasetImport());
@@ -347,8 +364,8 @@ describe("chorus.pages.DatasetShowPage", function() {
                     expect(this.page.$(".tag.import_frequency")).toContainText("Weekly")
                 });
 
-                it("sets a has_import class on the default_content_header", function() {
-                    expect(this.page.$(".default_content_header.has_import")).toExist();
+                it("sets a has_import class on the content_header", function() {
+                    expect(this.page.$(".content_header .has_import")).toExist();
                 })
             });
 
@@ -362,8 +379,8 @@ describe("chorus.pages.DatasetShowPage", function() {
                     expect(this.page.$(".tag.import_frequency")).not.toExist();
                 });
 
-                it("does not set a has_import class on the default_content_header", function() {
-                    expect(this.page.$(".default_content_header.has_import")).not.toExist();
+                it("does not set a has_import class on the content_header", function() {
+                    expect(this.page.$(".content_header.has_import")).not.toExist();
                 })
             });
         });
