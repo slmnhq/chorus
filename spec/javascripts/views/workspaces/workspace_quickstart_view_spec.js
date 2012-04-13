@@ -1,5 +1,6 @@
 describe("chorus.views.WorkspaceQuickstart", function() {
     beforeEach(function() {
+        $.cookie("quickstart_999", null);
         this.model = newFixtures.workspace({id: "999"});
         this.model.loaded = true;
         spyOn(chorus.router, "navigate")
@@ -13,6 +14,71 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
     it("has the right body text", function() {
         expect(this.view.$(".body")).toContainTranslation("workspace.quickstart.body");
+    });
+
+    context("when the quickstart cookie does not yet exist", function() {
+        beforeEach(function() {
+            $.cookie("quickstart_999", null);
+            this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
+        });
+
+        it("creates the corresponding quickstart cookie", function() {
+            var jsonString = $.cookie("quickstart_999");
+            var cookie = JSON.parse(jsonString);
+            expect(cookie).toEqual({
+                WorkspaceEditMembersDone: false,
+                WorkspaceSettingsDone: false,
+                SandboxNewDone: false,
+                WorkfilesImportDone: false
+            });
+        });
+    });
+
+    context("when the quickstart cookie already exists", function() {
+        beforeEach(function() {
+            var quickstartCookie = {
+                WorkspaceEditMembersDone: true,
+                WorkspaceSettingsDone: false,
+                SandboxNewDone: true,
+                WorkfilesImportDone: false
+            }
+            $.cookie("quickstart_999", JSON.stringify(quickstartCookie));
+            this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
+        });
+
+        it("keeps the original cookie values", function() {
+            var jsonString = $.cookie("quickstart_999");
+            var cookie = JSON.parse(jsonString);
+            expect(cookie).toEqual({
+                WorkspaceEditMembersDone: true,
+                WorkspaceSettingsDone: false,
+                SandboxNewDone: true,
+                WorkfilesImportDone: false
+            });
+        });
+
+        it("hides the correct boxes", function() {
+            this.view.render();
+            expect(this.view.$(".add_team_members")).toHaveClass("hidden");
+            expect(this.view.$(".edit_workspace_settings")).not.toHaveClass("hidden");
+            expect(this.view.$(".add_sandbox")).toHaveClass("hidden");
+            expect(this.view.$(".add_workfiles")).not.toHaveClass("hidden");
+
+            //make sure the other boxes are also hidden correctly
+            var quickstartCookie = {
+                WorkspaceEditMembersDone: false,
+                WorkspaceSettingsDone: true,
+                SandboxNewDone: false,
+                WorkfilesImportDone: true
+            }
+            $.cookie("quickstart_999", JSON.stringify(quickstartCookie));
+            this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
+            this.view.render();
+            expect(this.view.$(".add_team_members")).not.toHaveClass("hidden");
+            expect(this.view.$(".edit_workspace_settings")).toHaveClass("hidden");
+            expect(this.view.$(".add_sandbox")).not.toHaveClass("hidden");
+            expect(this.view.$(".add_workfiles")).toHaveClass("hidden");
+        });
     });
 
     describe("the 'Add Team Members' section", function() {
@@ -36,6 +102,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         it("hides the box when the link is clicked", function() {
             this.view.$(".add_team_members a").click();
             expect(this.view.$(".add_team_members")).toHaveClass("hidden");
+            expect(JSON.parse($.cookie("quickstart_999")).WorkspaceEditMembersDone).toBeTruthy();
         })
     });
 
@@ -71,6 +138,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         it("hides the box when the link is clicked", function() {
             link.click();
             expect(this.view.$(".add_sandbox")).toHaveClass("hidden");
+            expect(JSON.parse($.cookie("quickstart_999")).SandboxNewDone).toBeTruthy();
         })
     });
 
@@ -82,7 +150,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         });
 
         it("has a link", function() {
-            expect(this.view.$(".add_workfiles a")).toContainTranslation("workspace.quickstart.add_workfiles.link");
+            expect(link).toContainTranslation("workspace.quickstart.add_workfiles.link");
         });
 
         it("has an image", function() {
@@ -102,12 +170,17 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         it("hides the box when the link is clicked", function() {
             link.click();
             expect(this.view.$(".add_workfiles")).toHaveClass("hidden");
+            expect(JSON.parse($.cookie("quickstart_999")).WorkfilesImportDone).toBeTruthy();
         })
     });
 
     describe("the 'Edit Workspace Settings' section", function() {
+        var link
+        beforeEach(function() {
+            link = this.view.$(".edit_workspace_settings a")
+        });
         it("has a link", function() {
-            expect(this.view.$(".edit_workspace_settings a")).toContainTranslation("workspace.quickstart.edit_workspace_settings.link");
+            expect(link).toContainTranslation("workspace.quickstart.edit_workspace_settings.link");
         });
 
         it("has an image", function() {
@@ -119,8 +192,8 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         });
 
         it("launches the right dialog", function() {
-            expect(this.view.$(".edit_workspace_settings a")).toHaveClass("dialog");
-            expect(this.view.$(".edit_workspace_settings a").data("dialog")).toBe("WorkspaceSettings");
+            expect(this.view.$(link)).toHaveClass("dialog");
+            expect(this.view.$(link).data("dialog")).toBe("WorkspaceSettings");
         });
     });
 
@@ -131,6 +204,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
         it("hides the edit workspace box", function() {
             expect(this.view.$(".edit_workspace_settings")).toHaveClass("hidden");
+            expect(JSON.parse($.cookie("quickstart_999")).WorkspaceSettingsDone).toBeTruthy();
         });
 
         describe("when the page re-renders", function() {
@@ -140,7 +214,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             });
         });
     });
-    
+
     describe("when dialogs are dismissed", function() {
         context("and there are still unhidden info boxes", function() {
             beforeEach(function() {
@@ -165,7 +239,65 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         });
     })
 
-    it("navigates to the normal workspace show page if the dismiss link is clicked", function() {
-        expect(this.view.$("a.dismiss")).toHaveHref("#/workspaces/999");
+    describe("clicking the dismiss link", function() {
+        beforeEach(function() {
+            chorus.router.navigate.reset();
+            this.view.$("a.dismiss").click();
+        });
+
+        it("navigates to the normal workspace show page", function() {
+            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/999");
+        });
+
+        it("deletes the quickstart cookie", function() {
+            expect($.cookie("quickstart_999")).toBeNull();
+        });
+    });
+});
+
+describe("chorus.views.WorkspaceQuickstart class methods", function() {
+    describe("#quickstartFinishedFor", function() {
+        context("when all of the values are true", function() {
+            beforeEach(function() {
+                var cookie = JSON.stringify({
+                    WorkspaceEditMembersDone: true,
+                    WorkspaceSettingsDone: true,
+                    SandboxNewDone: true,
+                    WorkfilesImportDone: true
+                });
+
+                $.cookie("quickstart_5", cookie);
+            });
+
+            it("returns true", function() {
+                expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor(5)).toBeTruthy();
+            });
+        });
+
+        context("when not all of the values are true", function() {
+            beforeEach(function() {
+                var cookie = JSON.stringify({
+                    WorkspaceEditMembersDone: true,
+                    WorkspaceSettingsDone: true,
+                    SandboxNewDone: false,
+                    WorkfilesImportDone: true
+                });
+
+                $.cookie("quickstart_5", cookie);
+            });
+            it("returns false", function() {
+                expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor(5)).toBeFalsy();
+            });
+        });
+
+        context("when the cookie does not exist", function() {
+            beforeEach(function() {
+                $.cookie("quickstart_5", null);
+            });
+
+            it("returns true", function() {
+                expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor(5)).toBeTruthy();
+            });
+        });
     });
 });

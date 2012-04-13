@@ -2,6 +2,11 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
     helpId: "workspace_summary",
 
     setup: function(workspaceId) {
+        if (!this.quickstartNavigated && !chorus.views.WorkspaceQuickstart.quickstartFinishedFor(workspaceId)) {
+            chorus.router.navigate("/workspaces/" + workspaceId + "/quickstart");
+            return;
+        }
+
         this.workspaceId = workspaceId;
         this.model = new chorus.models.Workspace({id: workspaceId});
         this.model.fetch();
@@ -20,7 +25,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.workspaces"), url: "#/workspaces"},
-            {label: this.model.loaded ? this.model.displayShortName() : "..."}
+            {label: this.model && this.model.loaded ? this.model.displayShortName() : "..."}
         ];
     }
 });

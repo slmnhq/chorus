@@ -19,20 +19,51 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         it("sets the workspaceId, for prioritizing search", function() {
             expect(this.page.workspaceId).toBe('4');
         });
+
+        describe("when we are in quickstart mode", function() {
+            beforeEach(function() {
+                spyOn(chorus.views.WorkspaceQuickstart, "quickstartFinishedFor").andReturn(false);
+                spyOn(chorus.router, "navigate");
+                this.page = new chorus.pages.WorkspaceShowPage('4');
+            });
+
+            it("navigates to the quickstart page", function() {
+                expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor).toHaveBeenCalledWith('4');
+                expect(chorus.router.navigate).toHaveBeenCalledWith("/workspaces/4/quickstart");
+            });
+
+            it("doesn't break the breadcrumbs", function() {
+                var page = this.page;
+                expect(function(){ page.crumbs() }).not.toThrow();
+            });
+        });
+
+        describe("when we are not in quickstart mode", function() {
+            beforeEach(function() {
+                spyOn(chorus.views.WorkspaceQuickstart, "quickstartFinishedFor").andReturn(true);
+                spyOn(chorus.router, "navigate");
+                this.page = new chorus.pages.WorkspaceShowPage('4');
+            });
+
+            it("navigates to the quickstart page", function() {
+                expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor).toHaveBeenCalledWith('4');
+                expect(chorus.router.navigate).not.toHaveBeenCalled();
+            });
+        });
     });
 
     describe("#render", function() {
         beforeEach(function() {
             this.page = new chorus.pages.WorkspaceShowPage(4);
-        })
+        });
 
-        context("while the model is loading", function(){
-            beforeEach(function(){
+        context("while the model is loading", function() {
+            beforeEach(function() {
                 this.page.model.loaded = false;
                 this.page.render();
             });
 
-            it("displays some breadcrumbs", function(){
+            it("displays some breadcrumbs", function() {
                 expect(this.page.$(".breadcrumb")).toContainTranslation("breadcrumbs.home")
             });
         });
@@ -48,17 +79,17 @@ describe("chorus.pages.WorkspaceShowPage", function() {
             })
         })
 
-        context("when the model has loaded", function(){
-            beforeEach(function(){
-                this.server.completeFetchFor(this.page.model, newFixtures.workspace({summary: "this is a summary", name : "Cool Workspace"}))
-                this.server.completeFetchFor(this.page.model.activities(), [fixtures.activities.NOTE_ON_WORKFILE(), fixtures.activities.INSIGHT_CREATED()])
+        context("when the model has loaded", function() {
+            beforeEach(function() {
+                this.server.completeFetchFor(this.page.model, newFixtures.workspace({summary: "this is a summary", name: "Cool Workspace"}));
+                this.server.completeFetchFor(this.page.model.activities(), [fixtures.activities.NOTE_ON_WORKFILE(), fixtures.activities.INSIGHT_CREATED()]);
                 this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightCount, { numberOfInsight: 5 });
                 this.page.render();
             });
 
             it("displays all activities by default", function() {
                 expect(this.page.mainContent.content.$("ul.activities li.activity").length).toBe(2);
-            })
+            });
 
             describe("clicking the insight/activity links", function() {
                 beforeEach(function() {
@@ -75,7 +106,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 expect(this.page.mainContent.contentHeader.$(".original").text()).toBe(this.page.model.get("summary"));
             });
 
-            it("displays the breadcrumbs", function(){
+            it("displays the breadcrumbs", function() {
                 expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
                 expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toBe(t("breadcrumbs.home"));
 
@@ -85,12 +116,12 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("Cool Workspace");
             });
 
-            context("when the model changes", function(){
-                beforeEach(function(){
+            context("when the model changes", function() {
+                beforeEach(function() {
                     this.page.model.set({name: "bar", isPublic: false});
                 });
 
-                it("displays the new breadcrumb automatically", function(){
+                it("displays the new breadcrumb automatically", function() {
                     expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("bar");
                 });
 
