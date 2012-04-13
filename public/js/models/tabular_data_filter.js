@@ -18,7 +18,7 @@ chorus.models.TabularDataFilter = chorus.models.Base.extend({
     },
 
     getFilterMap: function() {
-        switch (this.get("column").get("typeCategory")) {
+        switch (this.has("column") && this.get("column").get("typeCategory")) {
             case "STRING":
             case "LONG_STRING":
                 return new chorus.models.DatasetFilterMaps.String
@@ -50,7 +50,7 @@ chorus.models.TabularDataFilter = chorus.models.Base.extend({
         var comparatorName = this.get("comparator");
         var inputValue = this.get("input") && this.get("input").value;
 
-        return this.getFilterMap().comparators[comparatorName].generate(columnName, inputValue);
+        return (columnName && comparatorName) ? this.getFilterMap().comparators[comparatorName].generate(columnName, inputValue) : "";
     },
 
     isComplete: function() {

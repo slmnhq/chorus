@@ -190,14 +190,18 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     filtersChanged: function() {
-        this.$(".overlay").removeClass("hidden");
-        this.$(".overlay").removeClass("disabled");
-        this.showButtons(["refresh", "revert"]);
+        if (this.filters.whereClause() == this.lastSavedFilters.whereClause()) {
+            this.chartUpToDate();
+        } else {
+            this.$(".overlay").removeClass("hidden");
+            this.$(".overlay").removeClass("disabled");
+            this.showButtons(["refresh", "revert"]);
+        }
     },
 
     revertFilters: function() {
         this.filters = this.lastSavedFilters;
-        this.bindings.add(this.filters, "add remove change", this.filtersChanged, this);
+        this.bindings.add(this.filters, "remove change", this.filtersChanged, this);
         this.filterWizard.collection = this.filters;
         this.filterWizard.render();
         this.chartUpToDate();

@@ -116,5 +116,14 @@ describe("chorus.models.TabularDataFilter", function() {
             this.model.sqlString();
         });
 
+        it("when there is no column", function() {
+            this.model.unset("column");
+            expect(this.model.sqlString()).toBe("");
+        });
+
+        it("when there is no comparator", function() {
+            this.model.unset("column");
+            expect(this.model.sqlString()).toBe("");
+        });
     });
 });

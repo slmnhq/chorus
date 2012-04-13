@@ -174,27 +174,60 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             context("adding filters", function() {
-                beforeEach(function() {
-                    // Really add filters to dialog - not a stub
-                    this.dialog.filterWizard.addFilter()
-                    this.dialog.filterWizard.addFilter()
-                    this.dialog.filterWizard.render();
-                    this.dialog.filterWizard.$(".default input").val("AA").keyup();
+                context("empty filters", function() {
+                    beforeEach(function() {
+                        this.dialog.filterWizard.addFilter()
+                        this.dialog.filterWizard.render();
+                    });
+
+                    itDoesNotShowRefreshOverlay()
                 });
 
-                it("renders the correct number of filters when adding", function() {
-                    expect(this.dialog.$(".filter_options li").length).toBe(6);
-                });
+                context("real filters", function() {
+                    beforeEach(function() {
+                        // Really add filters to dialog - not a stub
+                        this.dialog.filterWizard.addFilter()
+                        this.dialog.filterWizard.addFilter()
+                        this.dialog.filterWizard.render();
+                        this.dialog.filterWizard.$(".default input").val("AA").keyup();
+                    });
 
-                itRespondsToFilterUpdates();
+                    it("renders the correct number of filters when adding", function() {
+                        expect(this.dialog.$(".filter_options li").length).toBe(6);
+                    });
+
+                    itRespondsToFilterUpdates();
+                });
             });
 
             context("changing filters", function() {
-                beforeEach(function() {
-                    this.dialog.filterWizard.$(".filter input").val("AA").trigger("keyup");
+                context("in a meaningless way", function() {
+                    beforeEach(function() {
+                        this.dialog.filterWizard.$(".filter input").each(function(index, filter) {
+                            $(filter).val($(filter).val()).trigger("change");
+                        });
+                    });
+
+                    itDoesNotShowRefreshOverlay();
                 });
 
-                itRespondsToFilterUpdates();
+                context("in a meaningful way", function() {
+                    var originalFilterVal
+                    beforeEach(function() {
+                        originalFilterVal = this.dialog.filterWizard.$(".filter input:eq(0)").val();
+                        this.dialog.filterWizard.$(".filter input:eq(0)").val("AA").trigger("keyup");
+                    });
+
+                    itRespondsToFilterUpdates();
+
+                    context("and then reverting to the original values", function() {
+                        beforeEach(function() {
+                            this.dialog.filterWizard.$(".filter input:eq(0)").val(originalFilterVal).trigger("keyup");
+                        });
+
+                        itDoesNotShowRefreshOverlay();
+                    });
+                });
             });
 
             it("swaps out show/hide options links", function() {
@@ -550,6 +583,12 @@ describe("chorus.dialogs.Visualization", function() {
             });
         });
     });
+
+    function itDoesNotShowRefreshOverlay() {
+        it("does not show refresh overlay", function() {
+            expect(this.dialog.$('.overlay')).toHaveClass('hidden');
+        });
+    }
 
     function itRespondsToFilterUpdates() {
         itShowsThatOptionsHaveChanged();
