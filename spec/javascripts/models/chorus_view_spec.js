@@ -12,6 +12,14 @@ describe("chorus.models.ChorusView", function() {
         expect(this.model.workspace()).toBe(this.sourceDataset.workspace());
     });
 
+    it("initializes its 'type' and 'object type' attributes correctly", function() {
+        var model = new chorus.models.ChorusView();
+        expect(model).toHaveAttrs({
+            type: "CHORUS_VIEW",
+            objectType: "QUERY"
+        });
+    });
+
     it("extends Dataset", function() {
         expect(this.model).toBeA(chorus.models.Dataset);
     });

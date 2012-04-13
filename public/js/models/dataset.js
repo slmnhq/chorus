@@ -51,8 +51,6 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             databaseName: this.get("databaseName"),
             schemaName: this.get("schemaName"),
             workspace: this.get("workspace"),
-            type: "CHORUS_VIEW",
-            objectType: "QUERY",
             instance: this.get("instance"),
             objectName: _.uniqueId("chorus_" + this.get("objectName") + "_"),
         });

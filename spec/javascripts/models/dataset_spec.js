@@ -203,8 +203,6 @@ describe("chorus.models.Dataset", function() {
 
         it("has the right data from the dataset", function() {
             expect(this.chorusView).toHaveAttrs({
-                type: "CHORUS_VIEW",
-                objectType: "QUERY",
                 instanceId: this.dataset.get("instance").id,
                 databaseName: this.dataset.get("databaseName"),
                 schemaName: this.dataset.get("schemaName"),

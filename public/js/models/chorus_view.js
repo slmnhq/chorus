@@ -4,6 +4,8 @@ chorus.models.ChorusView = chorus.models.Dataset.extend({
         this._super('initialize');
         this.joins = []
         this.sourceObjectColumns = []
+        this.attributes.type = "CHORUS_VIEW";
+        this.attributes.objectType = "QUERY";
     },
 
     declareValidations: function(newAttrs) {
