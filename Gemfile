@@ -2,9 +2,7 @@ source :rubygems
 
 gem 'rails', '3.2.3'
 
-gem 'activerecord-jdbcpostgresql-adapter'
-
-gem 'jruby-openssl'
+gem 'pg'
 gem 'json'
 
 group :assets do
