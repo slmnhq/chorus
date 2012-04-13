@@ -175,6 +175,19 @@ describe("chorus global", function() {
             chorus.styleSelect($selectMenu2);
         });
 
+        it("puts a title= attribute on the link-element", function() {
+            var $linkToMenu1 = $selectMenu1.next().find("a.ui-selectmenu");
+            expect($linkToMenu1).toContainText("1");
+            expect($linkToMenu1.attr("title")).toContainText("first");
+        });
+
+        it("updates the title= attribute on link-element when a selection has been made", function() {
+            $selectMenu1.find("option:selected").attr("title", "cheat");
+            $selectMenu1.trigger("change");
+
+            expect($selectMenu1.next().find("a.ui-selectmenu").attr("title")).toContainText("cheat");
+        });
+
         it("carries over the titles from the correct selectMenu", function() {
             var id1 = $selectMenu1.next().find("a.ui-selectmenu").attr("aria-owns");
             var id2 = $selectMenu2.next().find("a.ui-selectmenu").attr("aria-owns");
