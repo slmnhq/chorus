@@ -1,4 +1,6 @@
 chorus.dialogs.WorkspaceInstanceAccount = chorus.dialogs.Account.extend({
+    constructorName: "WorkspaceInstanceAccount",
+
     translationKeys: {
         cancel: 'workspace.instance.account.continue_without_credentials',
         body: 'workspace.instance.account.body'

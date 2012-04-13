@@ -1,4 +1,6 @@
 chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
+    constructorName: "AssociateWithWorkspace",
+
     title: t("dataset.associate.title"),
     buttonTitle: t("dataset.associate.button"),
 

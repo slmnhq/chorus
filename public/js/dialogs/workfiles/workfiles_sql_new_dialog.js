@@ -1,4 +1,6 @@
 chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
+    constructorName: "WorkfilesSqlNew",
+
     className:"workfiles_sql_new",
     title:t("workfiles.sql_dialog.title"),
 

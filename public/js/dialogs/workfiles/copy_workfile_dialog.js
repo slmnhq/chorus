@@ -1,4 +1,6 @@
 chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
+    constructorName: "CopyWorkfile",
+
     title: t("workfile.copy_dialog.title"),
     buttonTitle: t("workfile.copy_dialog.copy_file"),
 

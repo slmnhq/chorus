@@ -1,4 +1,6 @@
 chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
+    constructorName: "InstanceEdit",
+
     className:"instance_edit",
     title:t("instances.edit_dialog.title"),
     events:{

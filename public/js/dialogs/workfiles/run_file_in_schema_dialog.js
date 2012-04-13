@@ -1,4 +1,6 @@
 chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
+    constructorName: "RunFileInSchema",
+
     className:"run_file_in_schema",
     title:t("workfile.run_in_schema.title"),
 

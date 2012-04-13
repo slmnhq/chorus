@@ -1,4 +1,6 @@
 chorus.views.PickItemsList = chorus.views.Base.extend({
+    constructorName: "PickItemsList",
+
     className: 'pick_items_list',
 
     subviews: {

@@ -1,4 +1,6 @@
 chorus.alerts.RemoveIndividualAccount = chorus.alerts.Base.extend({
+    constructorName: "RemoveIndividualAccount",
+
     ok:t("instances.remove_individual_account.remove"),
 
     setup: function() {

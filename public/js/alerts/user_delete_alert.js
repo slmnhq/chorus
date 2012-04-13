@@ -1,4 +1,6 @@
 chorus.alerts.UserDelete = chorus.alerts.ModelDelete.extend({
+    constructorName: "UserDelete",
+
     redirectUrl:"/users",
     text:t("user.delete.text"),
     title:t("user.delete.title"),

@@ -1,4 +1,6 @@
 chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.extend({
+    constructorName: "WorkspacesNew",
+
     className:"workspaces_new",
     title:"Create a New Workspace",
 

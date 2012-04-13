@@ -1,4 +1,6 @@
 chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
+    constructorName: "WorkfilesImport",
+
     className:"workfiles_import",
     title:t("workfiles.import_dialog.title"),
 

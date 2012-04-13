@@ -1,4 +1,6 @@
 chorus.dialogs.WorkfileNewVersion = chorus.dialogs.Base.extend({
+    constructorName: "WorkfileNewVersion",
+
     className:"workfile_new_version",
     title:t("workfile.new_version_dialog.title"),
 

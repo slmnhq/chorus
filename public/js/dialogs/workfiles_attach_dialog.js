@@ -1,4 +1,6 @@
 chorus.dialogs.WorkfilesAttach = chorus.dialogs.PickItems.extend({
+    constructorName: "WorkfilesAttach",
+
     title:t("workfiles.attach"),
     constructorName: "WorkfilesAttachDialog",
     submitButtonTranslationKey: "workfiles.button.attach_file",

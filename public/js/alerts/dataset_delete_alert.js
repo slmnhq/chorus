@@ -1,4 +1,6 @@
 chorus.alerts.DatasetDelete = chorus.alerts.ModelDelete.extend({
+    constructorName: "DatasetDelete",
+
     setup: function() {
         this._super("setup")
 

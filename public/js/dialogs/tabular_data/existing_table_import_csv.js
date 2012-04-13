@@ -1,4 +1,6 @@
 chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
+    constructorName: "ExistingTableImportCSV",
+
     className: "existing_table_import_csv",
     additionalClass: "table_import_csv",
     title: t("dataset.import.table.title"),

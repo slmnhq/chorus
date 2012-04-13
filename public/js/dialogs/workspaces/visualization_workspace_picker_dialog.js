@@ -1,4 +1,6 @@
 chorus.dialogs.VisualizationWorkspacePicker = chorus.dialogs.PickWorkspace.extend({
+    constructorName: "VisualizationWorkspacePicker",
+
     title: t("visualization.workspace_picker.title"),
     buttonTitle: t("visualization.workspace_picker.button"),
 

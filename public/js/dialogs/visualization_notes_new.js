@@ -1,4 +1,6 @@
 chorus.dialogs.VisualizationNotesNew = chorus.dialogs.NotesNew.extend({
+    constructorName: "VisualizationNotesNew",
+
     title:t("notes.new_dialog.title"),
     submitButton: t("notes.button.create"),
 

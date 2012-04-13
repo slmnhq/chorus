@@ -1,4 +1,6 @@
 chorus.views.PaginatedJoinTablesList = chorus.views.Base.extend({
+    constructorName: "PaginatedJoinTablesList",
+
     className: "paginated_join_tables",
 
     subviews: {

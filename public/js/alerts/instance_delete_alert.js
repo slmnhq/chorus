@@ -1,4 +1,6 @@
 chorus.alerts.InstanceDelete = chorus.alerts.ModelDelete.extend({
+    constructorName: "InstanceDelete",
+
     text:t("instances.delete.text"),
     title:t("instances.delete.title"),
     ok:t("actions.delete"),

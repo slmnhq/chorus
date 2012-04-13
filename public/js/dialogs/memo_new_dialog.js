@@ -1,6 +1,8 @@
 chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     chorus.Mixins.ClEditor
 ).extend({
+    constructorName: "MemoNew",
+
     className: "notes_new",
     persistent: true,
     events: {

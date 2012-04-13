@@ -1,4 +1,6 @@
 chorus.alerts.WorkfileDraft = chorus.alerts.Base.extend({
+    constructorName: "WorkfileDraft",
+
     text:t("workfile.alert.text"),
     title:t("workfile.alert.title"),
     ok:t("workfile.alert.open_draft"),

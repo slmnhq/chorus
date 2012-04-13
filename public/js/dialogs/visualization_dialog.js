@@ -1,4 +1,6 @@
 chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
+    constructorName: "Visualization",
+
     className: "visualization",
 
     subviews: {

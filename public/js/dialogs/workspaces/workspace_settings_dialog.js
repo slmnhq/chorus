@@ -1,6 +1,8 @@
 chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
     chorus.Mixins.ClEditor
 ).extend({
+    constructorName: "WorkspaceSettings",
+
     className:"workspace_settings",
     title:t("workspace.settings.title"),
     persistent:true,

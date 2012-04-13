@@ -1,4 +1,6 @@
 chorus.alerts.ImportFailed = chorus.alerts.Error.extend({
+    constructorName: "ImportFailed",
+
     title: t("import.failed.alert.title"),
 
     makeModel: function() {

@@ -1,4 +1,6 @@
 chorus.dialogs.InstanceAccount = chorus.dialogs.Account.extend({
+    constructorName: "InstanceAccount",
+
     translationKeys: {
         cancel: 'actions.cancel',
         body: 'instances.account.enter_credentials'

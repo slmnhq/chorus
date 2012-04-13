@@ -1,4 +1,6 @@
 chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
+    constructorName: "InstancePermissions",
+
     className:"instance_permissions",
     title:t("instances.permissions_dialog.title"),
     additionalClass:'with_sub_header',

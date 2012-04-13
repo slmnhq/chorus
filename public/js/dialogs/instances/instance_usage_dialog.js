@@ -1,4 +1,6 @@
 chorus.dialogs.InstanceUsage = chorus.dialogs.Base.extend({
+    constructorName: "InstanceUsage",
+
     className:"instance_usage",
     title:t("instances.usage.title"),
     useLoadingSection:true,

@@ -1,4 +1,6 @@
 chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
+    constructorName: "DeleteNoteConfirmAlert",
+
     makeModel: function() {
         this._super("makeModel", arguments);
 

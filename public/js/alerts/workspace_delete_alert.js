@@ -1,4 +1,6 @@
 chorus.alerts.WorkspaceDelete = chorus.alerts.ModelDelete.extend({
+    constructorName: "WorkspaceDelete",
+
     text:t("workspace.delete.text"),
     title:t("workspace.delete.title"),
     ok:t("workspace.delete.button"),

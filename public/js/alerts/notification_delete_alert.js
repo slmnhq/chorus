@@ -1,4 +1,6 @@
 chorus.alerts.NotificationDeleteAlert = chorus.alerts.ModelDelete.extend({
+    constructorName: "NotificationDeleteAlert",
+
     ok: t("notification.delete.ok"),
     title: t("notification.delete.title"),
     text: t("notification.delete.text"),

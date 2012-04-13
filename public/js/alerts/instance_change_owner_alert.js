@@ -1,4 +1,6 @@
 chorus.alerts.InstanceChangeOwner = chorus.alerts.Base.extend({
+    constructorName: "InstanceChangeOwner",
+
     text:t("instances.confirm_change_owner.text"),
     ok:t("instances.confirm_change_owner.change_owner"),
 

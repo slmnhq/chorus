@@ -1,5 +1,5 @@
 chorus.dialogs.WorkspaceEditMembers = chorus.dialogs.Base.extend({
-    constructorName: "WorkspaceEditMembersDialog",
+    constructorName: "WorkspaceEditMembers",
     className:"workspace_edit_members",
     title:t("workspace.edit_members_dialog.title"),
     persistent:true,

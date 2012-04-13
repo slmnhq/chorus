@@ -1,4 +1,6 @@
 chorus.alerts.WorkfileConflict = chorus.alerts.Base.extend({
+    constructorName: "WorkfileConflict",
+
     text:t("workfile.conflict.alert.text"),
     ok:t("workfile.conflict.alert.submit"),
     cancel:t("workfile.conflict.alert.cancel"),
