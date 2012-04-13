@@ -3,7 +3,6 @@
 .sql_preview {
     width: 885px;
     min-height: 120px;
-    max-height: 430px;
 
     .dialog_content {
         padding: 0;
@@ -15,6 +14,14 @@
 
     .sql {
         padding-top: 5px;
+        max-height: 140px;
+        overflow-y: auto;
+    }
+
+    .results_console {
+        a.minimize, a.maximize, .separator {
+            display: none;
+        }
     }
 
     .CodeMirror-scroll {
