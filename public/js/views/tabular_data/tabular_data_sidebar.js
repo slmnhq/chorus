@@ -120,7 +120,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     launchDuplicateChorusView: function(e) {
         e.preventDefault();
         var launchElement = $(e.target)
-        var dialog = new chorus.dialogs.NameChorusView({ model : this.resource.createDuplicateChorusView(), launchElement: launchElement });
+        var dialog = new chorus.dialogs.VerifyChorusView({ model : this.resource.createDuplicateChorusView(), launchElement: launchElement });
         dialog.launchModal();
     },
 

@@ -75,7 +75,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     createChorusView: function(e) {
         e && e.preventDefault();
         this.chorusView.set({ query: this.sql() });
-        var dialog = new chorus.dialogs.NameChorusView({ model : this.chorusView });
+        var dialog = new chorus.dialogs.VerifyChorusView({ model : this.chorusView });
         dialog.launchModal();
     },
 

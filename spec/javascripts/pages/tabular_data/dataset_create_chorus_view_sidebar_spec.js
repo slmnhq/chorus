@@ -251,7 +251,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 chorus.PageEvents.broadcast("column:selected", this.dataset.columns().models[0]);
                 spyOn(this.view, "sql").andReturn("SELECT * FROM FOO");
                 this.launchModalSpy = jasmine.createSpy("launchModal")
-                spyOn(chorus.dialogs, "NameChorusView").andCallFake(_.bind(function(options) {
+                spyOn(chorus.dialogs, "VerifyChorusView").andCallFake(_.bind(function(options) {
                     this.chorusView = options.model;
                     return {
                         launchModal: this.launchModalSpy
@@ -261,7 +261,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
 
             it("constructs a ChorusView and reveals the naming dialog", function() {
-                expect(chorus.dialogs.NameChorusView).toHaveBeenCalled()
+                expect(chorus.dialogs.VerifyChorusView).toHaveBeenCalled()
                 expect(this.launchModalSpy).toHaveBeenCalled();
                 expect(this.chorusView.get("type")).toBe("CHORUS_VIEW")
                 expect(this.chorusView.get("query")).toBe("SELECT * FROM FOO");

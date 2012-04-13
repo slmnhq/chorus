@@ -717,7 +717,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                         });
 
                         it("launches the name chorus view dialog", function() {
-                            expect(this.modalSpy).toHaveModal(chorus.dialogs.NameChorusView);
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.VerifyChorusView);
                         });
 
                         it("passes the dialog a duplicate of the chorus view", function() {

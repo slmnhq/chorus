@@ -1,11 +1,11 @@
-describe("chorus.dialogs.NameChorusView", function() {
+describe("chorus.dialogs.VerifyChorusView", function() {
     beforeEach(function() {
         stubModals();
         stubDefer();
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
         this.launchElement = $("<a></a>");
         this.chorusView = newFixtures.datasetChorusView({ query: "select name, quantity from shipments;" });
-        this.dialog = new chorus.dialogs.NameChorusView({
+        this.dialog = new chorus.dialogs.VerifyChorusView({
             model: this.chorusView,
             launchElement: this.launchElement
         });

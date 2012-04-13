@@ -1,7 +1,7 @@
-chorus.dialogs.NameChorusView = chorus.dialogs.SqlPreview.extend({
-    constructorName: "NameChorusView",
+chorus.dialogs.VerifyChorusView = chorus.dialogs.SqlPreview.extend({
+    constructorName: "VerifyChorusView",
 
-    className: "name_chorus_view",
+    className: "verify_chorus_view",
     title: t("dataset.verify_chorus_view.title"),
     additionalClass: "sql_preview",
 
