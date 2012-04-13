@@ -45,7 +45,17 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
     },
 
     deriveChorusView: function() {
-        var chorusView = new chorus.models.ChorusView({sourceObjectId: this.id});
+        var chorusView = new chorus.models.ChorusView({
+            sourceObjectId: this.id,
+            instanceId: this.get("instance").id,
+            databaseName: this.get("databaseName"),
+            schemaName: this.get("schemaName"),
+            workspace: this.get("workspace"),
+            type: "CHORUS_VIEW",
+            objectType: "QUERY",
+            instance: this.get("instance"),
+            objectName: _.uniqueId("chorus_" + this.get("objectName") + "_"),
+        });
         chorusView.sourceObject = this;
         return chorusView;
     },

@@ -6,6 +6,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         aggregateColumnSet.reset(this.dataset.columns().models);
         this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset, aggregateColumnSet: aggregateColumnSet});
         this.chorusView = this.view.chorusView;
+        stubModals();
     });
 
     describe("#render", function() {
@@ -15,13 +16,6 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         it("displays correct title", function() {
             expect(this.view.$("legend").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.title")
-        });
-
-        it("displays the preview SQL link", function() {
-            expect(this.view.$("a.preview")).toExist();
-            expect(this.view.$("a.preview")).toHaveClass("dialog");
-            expect(this.view.$("a.preview").data("dialog")).toBe("SqlPreview");
-            expect(this.view.$("a.preview").text()).toContainTranslation("dataset.preview_sql");
         });
 
         it("adds a reference to the parent to the preview SQL link's data", function() {
@@ -86,7 +80,6 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
             context("removing the join", function() {
                 beforeEach(function() {
-                    stubModals()
                     spyOn(this.chorusView, "removeJoin");
                     this.view.$(".join .delete").click();
                 })
@@ -229,6 +222,30 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             it("should return the concatenated sql string", function() {
                 expect(this.view.sql()).toBe("foo\nbar\nbaz");
             })
+        });
+
+        it("displays the preview SQL link", function() {
+            expect(this.view.$("a.preview").text()).toContainTranslation("dataset.preview_sql");
+        });
+
+        describe("clicking 'preview sql'", function() {
+            beforeEach(function() {
+                spyOn(this.view, 'sql').andReturn("I add the where clause right now.");
+                this.modalSpy = spyOn(chorus.dialogs.SqlPreview.prototype, 'launchModal').andCallThrough();
+                this.view.$("a.preview").click();
+            });
+
+            it("launches a preview sql dialog with the chorus view as its model", function() {
+                expect(this.modalSpy).toHaveBeenCalled();
+                var dialog = this.modalSpy.mostRecentCall.object;
+                expect(dialog.model).toBe(this.view.chorusView);
+            });
+
+            it("sets the right sql on the chorus view", function() {
+                expect(this.modalSpy).toHaveBeenCalled();
+                var dialog = this.modalSpy.mostRecentCall.object;
+                expect(dialog.model.get("query")).toBe(this.view.sql());
+            });
         });
 
         describe("clicking 'Create Dataset'", function() {

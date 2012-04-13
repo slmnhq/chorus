@@ -87,10 +87,6 @@ describe("chorus.dialogs.SqlPreview", function() {
         });
 
         describe("generated sql", function() {
-            beforeEach(function() {
-                this.launchElement.data("parent", this.parent);
-            });
-
             it("constructs the SQL correctly", function() {
                 expect(this.dialog.$("textarea").val()).toBe("select awesome from sql");
             });

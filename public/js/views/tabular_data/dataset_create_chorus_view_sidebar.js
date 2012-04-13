@@ -4,7 +4,8 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     events: {
         "click button.create": "createChorusView",
         "click a.remove": "removeColumnClicked",
-        "click img.delete": "removeJoinClicked"
+        "click img.delete": "removeJoinClicked",
+        "click a.preview": "previewSqlLinkClicked"
     },
 
     setup: function() {
@@ -64,24 +65,17 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         dialog.launchModal();
     },
 
+    previewSqlLinkClicked: function(e) {
+        e.preventDefault();
+        this.chorusView.set({ query: this.sql() });
+        var dialog = new chorus.dialogs.SqlPreview({ model: this.chorusView });
+        dialog.launchModal();
+    },
+
     createChorusView: function(e) {
         e && e.preventDefault();
-
-        var chorusView = new chorus.models.ChorusView({
-            type: "CHORUS_VIEW",
-            query: this.sql(),
-            instanceId: this.model.get("instance").id,
-            instance: this.model.get("instance"),
-            databaseName: this.model.get("databaseName"),
-            schemaName: this.model.get("schemaName"),
-            objectName: _.uniqueId("chorus_" + this.model.get("objectName") + "_"),
-            workspace: this.model.get("workspace"),
-            sourceObjectId: this.chorusView.get("sourceObjectId"),
-            objectType: "QUERY"
-        });
-
-        var launchElement = $(e.target)
-        var dialog = new chorus.dialogs.NameChorusView({ model : chorusView, launchElement: launchElement });
+        this.chorusView.set({ query: this.sql(), });
+        var dialog = new chorus.dialogs.NameChorusView({ model : this.chorusView });
         dialog.launchModal();
     },
 

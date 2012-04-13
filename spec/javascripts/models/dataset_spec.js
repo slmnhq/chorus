@@ -195,6 +195,23 @@ describe("chorus.models.Dataset", function() {
         it('sets the sourceObjectId', function() {
             expect(this.chorusView.get('sourceObjectId')).toBe(this.dataset.get('id'));
         });
+
+        it("gives the chorus view a default name", function() {
+            expect(this.chorusView.get('objectName')).toContain(this.dataset.get("objectName"));
+            expect(this.chorusView.get('objectName')).not.toBe(this.dataset.get("objectName"));
+        });
+
+        it("has the right data from the dataset", function() {
+            expect(this.chorusView).toHaveAttrs({
+                type: "CHORUS_VIEW",
+                objectType: "QUERY",
+                instanceId: this.dataset.get("instance").id,
+                databaseName: this.dataset.get("databaseName"),
+                schemaName: this.dataset.get("schemaName"),
+                workspace: this.dataset.get("workspace"),
+                instance: this.dataset.get("instance")
+            });
+        });
     });
 
     describe("#hasOwnPage", function() {
