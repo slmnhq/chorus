@@ -1,6 +1,7 @@
 source :rubygems
 
 gem 'rails', '3.2.3'
+gem 'bcrypt-ruby'
 
 gem 'pg'
 gem 'json'
