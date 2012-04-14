@@ -24,9 +24,9 @@ describe UserMigrator, :type => :data_migration do
       it "copies the correct data fields from the legacy user" do
         Legacy.connection.select_all("SELECT * FROM edc_user").each do |legacy_user|
           user = User.find_by_username(legacy_user["user_name"])
-          user.should_not be_nil
-          user.username.should_not be_nil
-          user.password_digest.should_not be_nil
+          user.should be_present
+          user.username.should be_present
+          user.password_digest.should be_present
         end
       end
 
