@@ -2,16 +2,7 @@
 
 .dialog.verify_chorus_view {
     .preview_bar {
-        position: relative;
-        height: 36px;
-
-        input[type=text] {
-            width: 400px;
-            display: inline-block;
-        }
-
         button {
-            top: 5px;
             right: 3px;
         }
     }
