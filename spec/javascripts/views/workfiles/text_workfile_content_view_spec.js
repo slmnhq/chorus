@@ -7,7 +7,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
         this.saveInterval = this.view.saveInterval;
         $("#jasmine_content").append(this.view.el);
-        this.clock = sinon.useFakeTimers();
+        this.clock = this.useFakeTimers();
 
         // in IE8, we can't 'select' a textrange whose textarea is not on the DOM
         if ($.browser.msie) {

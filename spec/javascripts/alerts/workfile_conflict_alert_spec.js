@@ -1,7 +1,7 @@
 describe("chorus.alerts.WorkfileConflict", function() {
     beforeEach(function() {
         this.modalSpy = stubModals();
-        this.clock = sinon.useFakeTimers();
+        this.useFakeTimers();
 
         this.workfile = fixtures.workfile({ content : "version content" });
         this.message = "This work file has been modified by Christine Klunk"
@@ -11,9 +11,6 @@ describe("chorus.alerts.WorkfileConflict", function() {
     });
 
     describe("#render", function() {
-        beforeEach(function() {
-
-        });
         it("should show the server message", function() {
             expect(this.alert.title).toBe(this.message)
         });

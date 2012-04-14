@@ -3,7 +3,7 @@ jasmine.PrettyPrinter.prototype.iterateObject = function(obj, fn) {
   for (var property in obj) {
     if (!obj.hasOwnProperty(property)) continue; // our addition
     if (property == '__Jasmine_been_here_before__') continue;
-    fn(property, obj.__lookupGetter__ ? (obj.__lookupGetter__(property) !== jasmine.undefined && 
+    fn(property, obj.__lookupGetter__ ? (obj.__lookupGetter__(property) !== jasmine.undefined &&
                                          obj.__lookupGetter__(property) !== null) : false);
   }
 };
@@ -55,3 +55,8 @@ jasmine.PrettyPrinter.prototype.format = function(value) {
   }
 };
 
+jasmine.Spec.prototype.useFakeTimers = function() {
+    var clock = sinon.useFakeTimers.apply(sinon, arguments);
+    this.after(function() {clock.restore()});
+    return clock;
+}

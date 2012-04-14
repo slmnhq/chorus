@@ -4,7 +4,7 @@ describe("chorus.views.DatasetEditChorusView", function() {
         this.dataset = newFixtures.datasetChorusView();
         this.view = new chorus.views.DatasetEditChorusView({ model: this.dataset });
         $("#jasmine_content").append(this.view.el);
-        this.clock = sinon.useFakeTimers();
+        this.clock = this.useFakeTimers();
 
         // in IE8, we can't 'select' a textrange whose textarea is not on the DOM
         if ($.browser.msie) {

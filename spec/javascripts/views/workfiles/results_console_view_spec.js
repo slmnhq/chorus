@@ -96,7 +96,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         describe("file:executionStarted", function() {
             beforeEach(function() {
-                this.clock = sinon.useFakeTimers();
+                this.clock = this.useFakeTimers();
                 spyOn(window, "clearInterval");
                 spyOn(this.view, "closeError").andCallThrough();
 

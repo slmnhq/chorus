@@ -76,11 +76,7 @@ describe("chorus global", function() {
             beforeEach(function() {
                 this.chorus.updateCachebuster();
                 this.time = new Date(2000, 11, 25).getTime();
-                this.clock = sinon.useFakeTimers(this.time, "Date");
-            });
-
-            afterEach(function() {
-                this.clock.restore();
+                this.useFakeTimers(this.time, "Date");
             });
 
             it("is set in initialization", function() {
@@ -355,11 +351,7 @@ describe("chorus global", function() {
 
         describe("disableBeforeToday", function() {
             beforeEach(function() {
-                this.clock = sinon.useFakeTimers(new Date(2000, 11, 25).getTime(), "Date");
-            });
-
-            afterEach(function() {
-                this.clock.restore();
+                this.useFakeTimers(new Date(2000, 11, 25).getTime(), "Date");
             });
 
             it("disables the right dates when disableBeforeToday is passed in", function() {

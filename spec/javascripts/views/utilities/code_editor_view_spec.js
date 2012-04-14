@@ -3,7 +3,7 @@ describe("chorus.views.CodeEditorView", function() {
         this.dataset = newFixtures.datasetChorusView();
         this.view = new chorus.views.CodeEditorView();
         $("#jasmine_content").append(this.view.el);
-        this.clock = sinon.useFakeTimers();
+        this.clock = this.useFakeTimers();
 
         // in IE8, we can't 'select' a textrange whose textarea is not on the DOM
         if ($.browser.msie) {

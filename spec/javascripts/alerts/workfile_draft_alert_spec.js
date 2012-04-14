@@ -1,6 +1,6 @@
 describe("chorus.alerts.WorkfileDraft", function() {
     beforeEach(function() {
-        this.clock = sinon.useFakeTimers();
+        this.useFakeTimers();
         this.workfile = fixtures.workfile();
         this.alert = new chorus.alerts.WorkfileDraft({ model: this.workfile });
         this.alert.render();

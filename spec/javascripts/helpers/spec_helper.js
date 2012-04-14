@@ -62,7 +62,6 @@
 
     beforeEach(function() {
         loadTemplatesOnce();
-//        stubHotkeys();
 
         var regexEqualityTester = function(a, b) {
             if(a instanceof RegExp && b instanceof RegExp) {
@@ -362,7 +361,6 @@
         chorus.router.trigger("leaving")
         delete chorus.models.Config._instance;
         this.server.restore();
-        this.clock && this.clock.restore && this.clock.restore();
         $.cookie("userId", null)
         if (this instanceof jasmine.Spec) {
             // reduce the number of keys to iterate
