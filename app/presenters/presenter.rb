@@ -18,4 +18,8 @@ class Presenter
   def present
     self.to_json({ :response => self.to_hash })
   end
+
+  def self.present(model)
+    self.new(model).present
+  end
 end

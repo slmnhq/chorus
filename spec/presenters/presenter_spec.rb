@@ -23,10 +23,6 @@ describe Presenter do
   end
 
   describe "#present" do
-    before(:each) do
-
-    end
-
     it "calls #to_hash" do
       @presenter.should_receive :to_hash
       @presenter.present
@@ -35,6 +31,12 @@ describe Presenter do
     it "calls to_json" do
       @presenter.should_receive :to_json
       @presenter.present
+    end
+  end
+
+  describe ".present" do
+    it "presents the model" do
+      Presenter.present(@user).should == { :response => @user.as_json }.to_json
     end
   end
 end
