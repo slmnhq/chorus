@@ -1,5 +1,5 @@
 chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
-    className: "hdfs_show_file_sidebar",
+    templateName: "hdfs_show_file_sidebar",
     constructorName: "HdfsShowFileSidebar",
 
     events: {

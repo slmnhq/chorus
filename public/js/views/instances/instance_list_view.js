@@ -1,6 +1,6 @@
 chorus.views.InstanceList = chorus.views.Base.extend({
     constructorName: "InstanceListView",
-    className:"instance_list",
+    templateName:"instance_list",
 
     events:{
         "click li":"selectItem"

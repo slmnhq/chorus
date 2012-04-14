@@ -1,6 +1,6 @@
 chorus.views.HdfsEntryList = chorus.views.SelectableList.extend({
     constructorName: "HdfsEntryList",
-    className: "hdfs_entry_list",
+    templateName: "hdfs_entry_list",
     useLoadingSection: true,
     eventName: "hdfs_entry",
 

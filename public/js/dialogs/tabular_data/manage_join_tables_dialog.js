@@ -1,7 +1,7 @@
 chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     constructorName: "ManageJoinTables",
 
-    className: "manage_join_tables",
+    templateName: "manage_join_tables",
     additionalClass: "with_sub_header",
     title: t("dataset.manage_join_tables.title"),
 

@@ -1,5 +1,5 @@
 chorus.pages.Error = chorus.pages.Bare.extend({
-    className: "error",
+    templateName: "error",
     additionalClass: "logged_in_layout",
 
     events: {

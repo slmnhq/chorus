@@ -1,6 +1,6 @@
 chorus.views.SchemaPicker = chorus.views.Base.extend({
     constructorName: "SchemaPickerView",
-    className:"schema_picker",
+    templateName:"schema_picker",
 
     events: {
         "change .instance select": "instanceSelected",

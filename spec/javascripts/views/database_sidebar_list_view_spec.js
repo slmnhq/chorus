@@ -1,8 +1,10 @@
 describe("chorus.views.DatabaseSidebarList", function() {
     context("when there is no schema", function() {
         beforeEach(function() {
-            this.view = new chorus.views.DatabaseSidebarList({schema: undefined });
-            this.view.className = "database_function_sidebar_list";
+            var subclass = chorus.views.DatabaseSidebarList.extend({
+                templateName: "database_function_sidebar_list"
+            });
+            this.view = new subclass({schema: undefined});
         })
 
         describe("#setup", function() {
@@ -35,8 +37,12 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
             spyOn(this.collection.models[0], 'toText').andReturn('object1');
             spyOn(this.collection.models[1], 'toText').andReturn('object2');
-            this.view = new chorus.views.DatabaseSidebarList({collection: this.collection, schema: this.schema });
-            this.view.className = "database_dataset_sidebar_list";
+            var subclass = chorus.views.DatabaseSidebarList.extend({
+                templateName: "database_dataset_sidebar_list"
+            });
+
+            this.view = new subclass({collection: this.collection, schema: this.schema });
+
             spyOn(this.view, "postRender").andCallThrough();
             this.view.render();
         });

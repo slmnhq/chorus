@@ -1,6 +1,6 @@
 chorus.views.WorkspaceShow = chorus.views.Base.extend({
     constructorName: "WorkspaceShowView",
-    className: "workspace_show",
+    templateName: "workspace_show",
     useLoadingSection: true,
 
     subviews: {

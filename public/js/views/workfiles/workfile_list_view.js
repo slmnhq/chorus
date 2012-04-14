@@ -1,5 +1,5 @@
 chorus.views.WorkfileList = chorus.views.SelectableList.extend({
-    className:"workfile_list",
+    templateName:"workfile_list",
     eventName: "workfile",
 
     filter:function (type) {

@@ -1,5 +1,5 @@
 chorus.views.HistogramChartConfiguration = chorus.views.ChartConfiguration.extend({
-    className: "chart_configuration",
+    templateName: "chart_configuration",
     additionalClass: "histogram",
 
     columnGroups: [

@@ -1,5 +1,5 @@
 chorus.views.TabularDataList = chorus.views.SelectableList.extend({
-    className: "tabular_data_list",
+    templateName: "tabular_data_list",
     useLoadingSection: true,
     eventName: "tabularData",
 

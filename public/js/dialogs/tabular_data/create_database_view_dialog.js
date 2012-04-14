@@ -1,7 +1,7 @@
 chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
     constructorName: "CreateDatabaseView",
 
-    className: "create_database_view_dialog",
+    templateName: "create_database_view_dialog",
     title: t("create_database_view.title"),
 
     events: {

@@ -1,6 +1,6 @@
 chorus.views.SearchResults = chorus.views.Base.extend({
     constructorName: "SearchResults",
-    className: "search_results",
+    templateName: "search_results",
 
     subviews: {
         ".this_workspace":     "thisWorkspaceList",

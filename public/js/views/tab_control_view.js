@@ -1,6 +1,6 @@
 chorus.views.TabControl = chorus.views.Base.extend({
     constructorName: "TabControlView",
-    className:'tab_control',
+    templateName:'tab_control',
 
     events: { "click .tabs li": 'clickTab' },
 

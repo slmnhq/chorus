@@ -1,6 +1,6 @@
 chorus.views.SearchAttachment = chorus.views.SearchItemBase.extend({
     constructorName: "SearchAttachment",
-    className: "search_attachment",
+    templateName: "search_attachment",
     eventType: "attachment",
 
     additionalContext: function() {

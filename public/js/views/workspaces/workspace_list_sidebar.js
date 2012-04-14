@@ -1,6 +1,6 @@
 chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
     constructorName: "WorkspaceListSidebar",
-    className: "workspace_list_sidebar",
+    templateName: "workspace_list_sidebar",
 
     subviews: {
         '.tab_control': 'tabs',

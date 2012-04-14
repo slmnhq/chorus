@@ -1,11 +1,11 @@
-chorus.views.StaticTemplate = function (className, context) {
+chorus.views.StaticTemplate = function (templateName, context) {
     var klass = chorus.views.Base.extend({
         constructorName: "StaticTemplate",
-        className:className,
+        templateName:templateName,
         context:context,
 
         postRender:function () {
-            this.$(this.el).addClass((className || "").replace("/", "_"))
+            this.$(this.el).addClass((templateName || "").replace("/", "_"))
         }
     });
 

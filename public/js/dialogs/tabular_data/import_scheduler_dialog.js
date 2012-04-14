@@ -1,7 +1,7 @@
 chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     constructorName: "ImportScheduler",
 
-    className: "import_scheduler",
+    templateName: "import_scheduler",
     useLoadingSection: true,
     persistent: true,
 

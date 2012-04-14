@@ -1,6 +1,6 @@
 chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     constructorName: "HdfsEntrySidebar",
-    className: "hdfs_entry_sidebar",
+    templateName: "hdfs_entry_sidebar",
 
     subviews: {
         '.tab_control': 'tabs'

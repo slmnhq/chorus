@@ -1,5 +1,5 @@
 chorus.views.CodeEditorView = chorus.views.Base.extend({
-    className: "code_editor_view",
+    templateName: "code_editor_view",
 
     setup: function() {
         chorus.PageEvents.subscribe("file:insertText", this.insertText, this);

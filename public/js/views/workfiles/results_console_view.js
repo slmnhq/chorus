@@ -1,5 +1,5 @@
 chorus.views.ResultsConsole = chorus.views.Base.extend({
-    className: "results_console",
+    templateName: "results_console",
     events: {
         "click .cancel": "cancelExecution",
         "click a.maximize": "maximizeTable",

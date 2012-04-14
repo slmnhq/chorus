@@ -1,7 +1,7 @@
 chorus.views.SearchResultList = chorus.views.Base.extend({
     constructorName: "SearchResultList",
     additionalClass: "list",
-    className: "search_result_list",
+    templateName: "search_result_list",
 
     events: {
         "click a.show_all": "showAll"

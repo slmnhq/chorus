@@ -1,6 +1,6 @@
 chorus.views.Dashboard = chorus.views.Base.extend({
     constructorName: "DashboardView",
-    className:"dashboard/main",
+    templateName:"dashboard/main",
     subviews: {
         '.dashboard_main': "dashboardMain",
         '.instance_list': "instanceList",

@@ -1,5 +1,5 @@
 chorus.views.UserNew = chorus.views.Base.extend({
-    className:"user/new",
+    templateName:"user/new",
 
     events:{
         "submit form":'submitNewUser',

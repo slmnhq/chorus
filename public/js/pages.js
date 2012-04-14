@@ -25,8 +25,7 @@ chorus.pages.Bare = chorus.views.Bare.extend({
 
 chorus.pages.Base = chorus.pages.Bare.extend({
     constructorName: "Page",
-
-    className: "logged_in_layout",
+    templateName: "logged_in_layout",
 
     subviews: {
         "#header": "header",

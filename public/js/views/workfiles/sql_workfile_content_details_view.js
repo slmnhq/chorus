@@ -1,5 +1,5 @@
 chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.extend({
-    className: "sql_workfile_content_details",
+    templateName: "sql_workfile_content_details",
 
     setup: function() {
         chorus.PageEvents.subscribe("workfile:executed", this.workfileExecuted, this);

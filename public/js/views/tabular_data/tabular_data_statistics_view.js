@@ -1,5 +1,5 @@
 chorus.views.TabularDataStatistics = chorus.views.Base.extend({
-    className: "tabular_data_statistics",
+    templateName: "tabular_data_statistics",
 
     setup: function(options) {
         this.column = options.column;

@@ -64,7 +64,7 @@
 
     chorus.views.StyleGuideFonts = chorus.views.Base.extend({
         constructorName: "StyleGuideFontsView",
-        className:"style_guide_fonts",
+        templateName:"style_guide_fonts",
 
         context:function () {
             return { sizes:sizeWeightCombos, colors:colors };

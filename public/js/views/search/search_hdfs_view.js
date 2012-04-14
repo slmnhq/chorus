@@ -1,6 +1,6 @@
 chorus.views.SearchHdfs = chorus.views.SearchItemBase.extend({
     constructorName: "SearchHdfsView",
-    className: "search_hdfs",
+    templateName: "search_hdfs",
     eventType: "hdfs_entry",
     
     additionalContext: function() {

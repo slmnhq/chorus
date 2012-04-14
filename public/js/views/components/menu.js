@@ -1,6 +1,6 @@
 chorus.views.Menu = chorus.views.Bare.extend({
     tagName: "ul",
-    className: "components/menu",
+    templateName: "components/menu",
 
     events: {
         "click li a:not([disabled=disabled])": "itemClicked"

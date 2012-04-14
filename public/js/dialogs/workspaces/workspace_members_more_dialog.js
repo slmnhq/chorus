@@ -1,7 +1,6 @@
 chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
     constructorName: "WorkspaceMembersMore",
-
-    className:"workspace_members_more",
+    templateName:"workspace_members_more",
     title:t("workspace.members"),
     persistent:true,
 
@@ -26,7 +25,6 @@ chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
             this.choice = choice;
             this.render();
         }, this)
-
     },
 
     subviews:{

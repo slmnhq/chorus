@@ -1,7 +1,7 @@
 chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     constructorName: "Visualization",
 
-    className: "visualization",
+    templateName: "visualization",
 
     subviews: {
         ".tabledata": "tableData",

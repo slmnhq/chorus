@@ -1,6 +1,6 @@
 chorus.views.LoadingSection = chorus.views.Base.extend({
     constructorName: "LoadingSectionView",
-    className:"loading_section",
+    templateName:"loading_section",
 
     postRender:function () {
         if (this.options.delay) {

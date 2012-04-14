@@ -1,5 +1,5 @@
 chorus.views.ArtifactListSidebar = chorus.views.Sidebar.extend({
-    className:"artifact_list_sidebar",
+    templateName:"artifact_list_sidebar",
 
     setArtifact:function (artifact) {
         this.model = this.artifact = artifact;

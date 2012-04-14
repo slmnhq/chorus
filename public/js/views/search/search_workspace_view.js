@@ -1,6 +1,6 @@
 chorus.views.SearchWorkspace = chorus.views.SearchItemBase.extend({
     constructorName: "SearchWorkspaceView",
-    className: "search_workspace",
+    templateName: "search_workspace",
     eventType: "workspace",
 
     additionalContext: function(){

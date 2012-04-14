@@ -116,9 +116,9 @@ chorus.views.Bare = Backbone.View.include(
         }
 
         $(this.el).html(this.template(evaluatedContext))
-            .addClass((this.className || "").replace("/", "_"))
+            .addClass(this.className || "")
             .addClass(this.additionalClass || "")
-            .attr("data-template", this.className);
+            .attr("data-template", this.templateName);
         this.renderSubviews();
         this.postRender($(this.el));
         this.renderHelps();
@@ -211,7 +211,7 @@ chorus.views.Bare = Backbone.View.include(
         if (this.displayLoadingSection()) {
             return '<div class="loading_section"/>';
         } else {
-            return Handlebars.helpers.renderTemplate(this.className, context).toString();
+            return Handlebars.helpers.renderTemplate(this.templateName, context).toString();
         }
     },
 
@@ -421,7 +421,7 @@ chorus.views.Base = chorus.views.Bare.extend({
 
 chorus.views.MainContentView = chorus.views.Base.extend({
     constructorName: "MainContentView",
-    className: "main_content",
+    templateName: "main_content",
 
     setup: function(options) {
         options = options || {}
@@ -447,7 +447,8 @@ chorus.views.MainContentView = chorus.views.Base.extend({
 });
 
 chorus.views.ListHeaderView = chorus.views.Base.extend({
-    className: "default_content_header",
+    templateName: "default_content_header",
+
     context: function() {
         var ctx = this.options
         return _.extend({}, ctx, this.additionalContext());

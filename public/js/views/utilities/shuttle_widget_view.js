@@ -1,5 +1,5 @@
 chorus.views.ShuttleWidget = chorus.views.Base.extend({
-    className:"shuttle_widget",
+    templateName:"shuttle_widget",
 
     events:{
         "click a.add":"toggleAdd",

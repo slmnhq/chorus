@@ -1,5 +1,5 @@
 chorus.views.Workfile = chorus.views.Base.extend({
-    className:"workfile",
+    templateName:"workfile",
     tagName: "li",
 
     subviews: {

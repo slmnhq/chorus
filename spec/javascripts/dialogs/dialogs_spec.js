@@ -2,7 +2,7 @@ describe("chorus.views.Dialog", function() {
     beforeEach(function() {
         this.dialog = new chorus.dialogs.Base();
         this.dialog.title = "OH HAI";
-        this.dialog.className = "plain_text";
+        this.dialog.templateName = "plain_text";
         this.dialog.additionalContext = function() {
             return {
                 text : "OMG IM IN A DIALOG WHOA"

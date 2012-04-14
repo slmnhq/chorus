@@ -1,6 +1,6 @@
 chorus.views.FrequencyChartConfiguration = chorus.views.ChartConfiguration.extend({
     constructorName: "FrequencyChartConfiguration",
-    className: "chart_configuration",
+    templateName: "chart_configuration",
     additionalClass: "frequency",
 
     columnGroups: [
