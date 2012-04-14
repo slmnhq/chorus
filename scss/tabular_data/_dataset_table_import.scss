@@ -1,7 +1,7 @@
+$cell-width: 150px;
 .table_import_csv.dialog {
     width: 640px;
 
-    $cell-width: 150px;
     .dialog_content {
         padding-left: 2px;
         padding-right: 2px;
@@ -286,6 +286,17 @@
     }
 
     .data_table {
+        .column_names {
+            .th {
+                padding: 0 10px;
+                width:  $cell-width - 20px;
+            }
+
+            .field_name {
+                width: 95%;
+            }
+        }
+
         .tbody {
             top: 71px;
         }
