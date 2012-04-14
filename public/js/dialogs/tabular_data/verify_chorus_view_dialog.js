@@ -9,47 +9,25 @@ chorus.dialogs.VerifyChorusView = chorus.dialogs.SqlPreview.extend({
 
     setup: function() {
         this._super("setup");
-
-        this.bindings.add(this.model, "saved", this.chorusViewCreated);
-        this.bindings.add(this.model, "saveFailed", this.chorusViewFailed);
-        this.bindings.add(this.model, "validationFailed", this.chorusViewFailed);
-
         this.events = _.clone(this.events);
         _.extend(this.events, {
-            "keyup input[name=objectName]": "checkInput",
-            "paste input[name=objectName]": "checkInput",
-            "submit form": "createChorusView"
+            "submit form": "nameChorusView"
         });
     },
 
-    createChorusView: function(e) {
+    nameChorusView: function(e) {
         e.preventDefault();
 
-        this.model.set({
-            query: this.sql(),
-            objectName: this.$("input[name=objectName]").val().trim()
-        })
+        this.model.set({ query: this.sql() })
 
-        this.$("button.submit").startLoading("actions.creating")
-        this.model.save();
+        var assignNameDialog = new chorus.dialogs.NameChorusView({
+            model: this.model
+        });
+        this.launchSubModal(assignNameDialog);
     },
 
     sql: function() {
         return this.editor.getValue();
-    },
-
-    chorusViewCreated: function() {
-        $(document).trigger("close.facebox");
-        chorus.router.navigate(this.model.showUrl());
-    },
-
-    chorusViewFailed: function() {
-        this.$("button.submit").stopLoading()
-    },
-
-    checkInput: function() {
-        var hasText = this.$("input[name=objectName]").val().trim().length > 0;
-        this.$("button.submit").prop("disabled", !hasText);
     },
 
     makeCodeMirrorOptions: function() {
