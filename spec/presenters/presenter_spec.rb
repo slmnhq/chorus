@@ -32,6 +32,10 @@ describe Presenter do
       @presenter.should_receive :to_json
       @presenter.present
     end
+
+    it "wraps the response in the 'response' key" do
+      JSON.parse(@presenter.present).should have_key "response"
+    end
   end
 
   describe ".present" do
