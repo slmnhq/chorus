@@ -31,36 +31,35 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     executionStarted: function() {
-        this.elapsedTime = 0
+        this.executionStartedTime = $.now();
         this.$(".right").addClass("executing")
-        this.spinnerTimer = _.delay(_.bind(this.startSpinner, this), 250)
-        this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
+
+        this.$(".spinner").addClass("hidden").startLoading();
+        _.delay(_.bind(this.showSpinner, this), 250);
+        this.elapsedTimer = setInterval(_.bind(this.updateElapsedTime, this), 1000);
         this.$(".execution").removeClass("hidden");
         this.$(".bottom_gutter").addClass("hidden");
-        this.$(".result_table").addClass("hidden");
-        this.$(".result_table").html("");
+        this.$(".result_table").addClass("hidden").empty();
         this.closeError();
     },
 
-    startSpinner: function() {
-        delete this.spinnerTimer;
-        this.$(".spinner").startLoading()
+    showSpinner: function() {
+        this.$(".spinner").removeClass("hidden");
     },
 
-    incrementElapsedTime: function() {
-        this.elapsedTime++
-        this.$(".elapsed_time").text(t("results_console_view.elapsed", { sec: this.elapsedTime }))
-        this.elapsedTimer = _.delay(_.bind(this.incrementElapsedTime, this), 1000)
+    updateElapsedTime: function() {
+        var seconds = Math.round(($.now() - this.executionStartedTime)/1000);
+        this.$(".elapsed_time").text(t("results_console_view.elapsed", { sec: seconds }));
     },
 
     hideSpinner: function() {
         this.cancelTimers()
-        this.$(".right").removeClass("executing")
-        this.$(".spinner").stopLoading()
+        this.$(".right").removeClass("executing");
+        this.$(".spinner").addClass('hidden').stopLoading();
     },
 
     executionSucceeded: function(task) {
-        this.showResultTable(task)
+        this.showResultTable(task);
         this.hideSpinner();
 
         if (task.get("result") && task.get("result").hasResult == "false") {
@@ -71,15 +70,14 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     showResultTable: function(task) {
         this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, hideExpander: this.options.hideExpander, model: task});
         this.dataTable.render();
-        this.$(".result_table").removeClass("hidden");
-        this.$(".result_table").html(this.dataTable.el);
+        this.$(".result_table").removeClass("hidden").html(this.dataTable.el);
         this.$(".controls").removeClass("hidden");
         this.minimizeTable();
     },
 
     executionFailed: function(task) {
-        this.showErrors()
-        this.hideSpinner()
+        this.showErrors();
+        this.hideSpinner();
     },
 
     showErrors: function() {
@@ -98,14 +96,9 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     cancelTimers: function() {
-        if (this.spinnerTimer) {
-            clearTimeout(this.spinnerTimer);
-            delete this.spinnerTimer
-        }
-
         if (this.elapsedTimer) {
-            clearTimeout(this.elapsedTimer);
-            delete this.elapsedTimer
+            clearInterval(this.elapsedTimer);
+            delete this.elapsedTimer;
         }
     },
 
@@ -120,9 +113,9 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".result_table").removeClass("maximized");
         this.$(".result_table").addClass("minimized");
 
-        this.$(".bottom_gutter").removeClass("hidden")
-        this.$(".arrow").removeClass("down")
-        this.$(".arrow").addClass("up")
+        this.$(".bottom_gutter").removeClass("hidden");
+        this.$(".arrow").removeClass("down");
+        this.$(".arrow").addClass("up");
         this.recalculateScrolling();
     },
 

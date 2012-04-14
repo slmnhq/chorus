@@ -7,8 +7,6 @@ describe("chorus.views.ResultsConsoleView", function() {
             }
         });
         this.view = new chorus.views.ResultsConsole({ model: this.task });
-        this.timerId = 1;
-        spyOn(_, "delay").andReturn(this.timerId++)
     });
 
     describe("#render", function() {
@@ -20,7 +18,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             expect(this.view.$("a.close")).not.toExist();
         });
 
-        it("displays the executing spinner", function() {
+        it("does not display the executing spinner", function() {
             expect(this.view.$(".right")).not.toHaveClass("executing");
         })
 
@@ -98,7 +96,8 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         describe("file:executionStarted", function() {
             beforeEach(function() {
-                spyOn(window, "clearTimeout");
+                this.clock = sinon.useFakeTimers();
+                spyOn(window, "clearInterval");
                 spyOn(this.view, "closeError").andCallThrough();
 
                 chorus.PageEvents.broadcast("file:executionStarted");
@@ -113,15 +112,16 @@ describe("chorus.views.ResultsConsoleView", function() {
             });
 
             it("sets a delay to start a spinner", function() {
-                expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 250);
+                expect(this.view.$(".spinner")).toHaveClass("hidden");
+                this.clock.tick(300);
+                expect(this.view.$(".spinner")).not.toHaveClass("hidden");
             });
 
-            it("saves the spinner timer id", function() {
-                expect(this.view.spinnerTimer).toBeDefined();
-            });
-
-            it("starts tracking execution time", function() {
-                expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 1000);
+            it("updates the time", function() {
+                this.clock.tick(1000);
+                expect(this.view.$(".elapsed_time").text().trim()).toMatchTranslation("results_console_view.elapsed", { sec: 1 });
+                this.clock.tick(10000);
+                expect(this.view.$(".elapsed_time").text().trim()).toMatchTranslation("results_console_view.elapsed", { sec: 11 });
             });
 
             it("shows the execution bar", function() {
@@ -151,7 +151,6 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when the spinner has been started", function() {
                     beforeEach(function() {
-                        delete this.view.spinnerTimer;
                         delete this.view.elapsedTimer;
                         this.view.$(".cancel").click();
                         chorus.PageEvents.broadcast("file:executionFailed");
@@ -211,7 +210,6 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when the spinner has been started", function() {
                     beforeEach(function() {
-                        delete this.view.spinnerTimer;
                         delete this.view.elapsedTimer;
                         this.task = fixtures.taskWithResult();
                         chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
@@ -315,18 +313,18 @@ describe("chorus.views.ResultsConsoleView", function() {
                     expect(this.view.$(".right")).not.toHaveClass("executing");
                 })
 
-                it("stops the spinner", function() {
+                it("hides the spinner", function() {
+                    expect(this.view.$(".spinner")).toHaveClass("hidden");
                     expect(this.view.$(".spinner").isLoading()).toBeFalsy();
                 })
 
                 if (shouldCancelTimers) {
-                    it("cancels the spinner and elapsed time timers", function() {
-                        expect(window.clearTimeout.callCount >= 2).toBeTruthy();
+                    it("stops updating the elapsed time", function() {
+                        expect(window.clearInterval).toHaveBeenCalled();
                     })
                 }
 
                 it("clears timer ids", function() {
-                    expect(this.view.spinnerTimer).toBeUndefined();
                     expect(this.view.elapsedTimer).toBeUndefined();
                 })
             }
@@ -526,39 +524,6 @@ describe("chorus.views.ResultsConsoleView", function() {
         });
     });
 
-    describe("#startSpinner", function() {
-        beforeEach(function() {
-            this.view.render();
-            this.view.spinnerTimer = 22;
-            this.view.startSpinner();
-        })
-
-        it("deletes the timer id", function() {
-            expect(this.view.spinnerTimer).toBeUndefined();
-        })
-
-        it("starts the spinner", function() {
-            expect(this.view.$(".spinner").isLoading()).toBeTruthy();
-        })
-    })
-
-    describe("#incrementElapsedTime", function() {
-        beforeEach(function() {
-            this.view.render();
-            this.view.elapsedTimer = 22;
-            this.view.elapsedTime = 40;
-            this.view.incrementElapsedTime();
-        })
-
-        it("updates execution time", function() {
-            expect(this.view.$(".elapsed_time").text().trim()).toMatchTranslation("results_console_view.elapsed", { sec: 41 })
-        })
-
-        it("reschedules itself", function() {
-            expect(_.delay).toHaveBeenCalledWith(jasmine.any(Function), 1000);
-        })
-    })
-
     describe("#execute", function() {
         beforeEach(function() {
             this.executionModel = new chorus.models.Task();
@@ -568,6 +533,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             spyOn(this.view, 'executionFailed');
             spyOn(this.executionModel, 'save').andCallThrough();
             this.view.execute(this.executionModel);
+            this.view.render();
         });
 
         it("saves the executionModel", function() {
@@ -582,7 +548,6 @@ describe("chorus.views.ResultsConsoleView", function() {
             beforeEach(function() {
                 this.task = fixtures.task();
                 this.task.loaded = true;
-                _.delay.andCallFake(function(fn, timeout) { fn(); });
                 this.view.execute(this.task);
             });
 
