@@ -1,4 +1,5 @@
 .instance_usage {
+    width: 400px;
 
     .total_usage {
         @include font-content-details;
@@ -7,25 +8,21 @@
     li {
         border-bottom: $dotted-list-item-border;
         margin-top: 8px;
-        position: relative;
-        
+        width: 100%;
+
         .image_container {
-            display: inline-block;
             width: 45px;
-            height: 85px;
             vertical-align: top;
+            float: left;
         }
 
         .details {
-            display: inline-block;
-            position: absolute;
-            top: 0;
-            right: 0;
-            left: 40px;
+            overflow: hidden;
         }
 
         .workspace_link {
             font-size: 18px;
+            line-height: 1.2;
             font-weight: $semibold;
         }
 
@@ -42,6 +39,7 @@
 
         .value {
             float: right;
+            line-height: 1.2;
             max-width: 200px;
             text-align: right;
             @include ellipsis;
