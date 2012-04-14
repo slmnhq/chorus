@@ -290,7 +290,15 @@ chorus.views.Bare = Backbone.View.include(
             }
         })
     }
+},
+{
+    extended: function(subclass) {
+        if (subclass.prototype.templateName) {
+            subclass.prototype.className = subclass.prototype.templateName.replace("/", "_");
+        }
+    }
 });
+
 chorus.views.Bare.extend = chorus.classExtend;
 
 chorus.views.Base = chorus.views.Bare.extend({

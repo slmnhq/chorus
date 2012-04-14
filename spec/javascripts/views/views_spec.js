@@ -96,6 +96,13 @@ describe("chorus.views.Base", function() {
         });
     });
 
+    describe(".extended", function() {
+        it("sets the view's className based on its templateName", function() {
+            var Klass = chorus.views.Bare.extend({ templateName: "users/something" });
+            expect(Klass.prototype.className).toBe("users_something");
+        });
+    });
+
     describe("hotkey bindings", function() {
         beforeEach(function() {
             chorus._navigated();

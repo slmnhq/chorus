@@ -315,17 +315,19 @@ window.Chorus = function chorus$Global() {
         "})");
     };
 
-    if (self.isDevMode()) {
-        self.classExtend = function(protoProps, classProps) {
+    self.classExtend = function(protoProps, classProps) {
+        if (self.isDevMode()) {
             var constructorName = protoProps.constructorName || this.prototype.constructorName;
             if (constructorName) {
                 _.extend(protoProps, { constructor: self.namedConstructor(this, "chorus$" + constructorName) });
             }
-            return Backbone.Model.extend.call(this, protoProps, classProps);
         }
-    } else {
-        self.classExtend = Backbone.Model.extend;
-    }
+
+        var subclass = Backbone.Model.extend.call(this, protoProps, classProps);
+        if (this.extended) { this.extended(subclass); }
+
+        return subclass;
+    };
 
     self.log = function() {
         var grossHack = window["con"+"sole"];
