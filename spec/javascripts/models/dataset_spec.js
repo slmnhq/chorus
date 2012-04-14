@@ -197,8 +197,7 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("gives the chorus view a default name", function() {
-            expect(this.chorusView.get('objectName')).toContain(this.dataset.get("objectName"));
-            expect(this.chorusView.get('objectName')).not.toBe(this.dataset.get("objectName"));
+            expect(this.chorusView.get('objectName')).toBe(this.dataset.get("objectName"));
         });
 
         it("has the right data from the dataset", function() {

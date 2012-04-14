@@ -269,7 +269,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.chorusView.get("databaseName")).toBe(this.dataset.get("databaseName"));
                 expect(this.chorusView.get("schemaName")).toBe(this.dataset.get("schemaName"));
                 expect(this.chorusView.get("objectType")).toBe("QUERY");
-                expect(this.chorusView.get("objectName")).toMatch(/chorus_My_table_\d+/)
+                expect(this.chorusView.get("objectName")).toBe("My_table")
             })
         })
     });

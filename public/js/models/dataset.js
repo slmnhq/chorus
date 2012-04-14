@@ -52,7 +52,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
             schemaName: this.get("schemaName"),
             workspace: this.get("workspace"),
             instance: this.get("instance"),
-            objectName: _.uniqueId("chorus_" + this.get("objectName") + "_"),
+            objectName: this.get("objectName")
         });
         chorusView.sourceObject = this;
         return chorusView;
