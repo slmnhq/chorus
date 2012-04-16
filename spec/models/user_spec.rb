@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe User do
   describe ".authenticate" do
-    before() do
+    before do
       @user = User.create :username => 'admin', :password => 'secret', :password_confirmation => 'secret'
     end
 

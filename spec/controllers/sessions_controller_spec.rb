@@ -38,5 +38,4 @@ describe SessionsController do
 
     end
   end
-
 end

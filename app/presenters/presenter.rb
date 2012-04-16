@@ -1,6 +1,20 @@
 class Presenter
+  class ResponseWrapper
+    def initialize(response)
+      @response = response
+    end
+
+    def as_json(options = {})
+      { :response => @response.as_json }
+    end
+  end
+
   def self.present(model)
-    new(model).present
+    ResponseWrapper.new(new(model)).to_json
+  end
+
+  def self.present_collection(collection)
+    ResponseWrapper.new(collection.map { |model| new(model) }).to_json
   end
 
   def initialize(model)
@@ -9,15 +23,7 @@ class Presenter
   
   attr_reader :model
 
-  def present
-    to_json({ :response => to_hash })
-  end
-
-  def to_json(hash)
-    hash.to_json
-  end
-
-  def to_hash
+  def as_json(options = {})
     model.as_json
   end
 end

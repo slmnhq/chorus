@@ -33,4 +33,6 @@ RSpec.configure do |config|
   config.before(:each, :type => :data_migration) do
     Legacy.establish_connection :legacy_test
   end
+
+  config.include AuthHelper, :type => :controller
 end

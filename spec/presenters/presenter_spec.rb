@@ -12,35 +12,15 @@ describe Presenter do
     end
   end
 
-  describe "#to_json" do
-    before(:each) do
-      @presentation = @presenter.to_json({ :foo => "bar", :bro => [ { :fooz => 22, :widgets => false }, { :fooz => 44, :widgets => true }]})
-    end
-
-    it "converts to JSON" do
-      @presentation.should == { :foo => "bar", :bro => [ { :fooz => 22, :widgets => false }, { :fooz => 44, :widgets => true }]}.to_json
-    end
-  end
-
-  describe "#present" do
-    it "calls #to_hash" do
-      @presenter.should_receive :to_hash
-      @presenter.present
-    end
-
-    it "calls to_json" do
-      @presenter.should_receive :to_json
-      @presenter.present
-    end
-
-    it "wraps the response in the 'response' key" do
-      JSON.parse(@presenter.present).should have_key "response"
-    end
-  end
-
   describe ".present" do
     it "presents the model" do
       Presenter.present(@user).should == { :response => @user.as_json }.to_json
+    end
+  end
+
+  describe ".present_collection" do
+    it "presents a list of models" do
+      Presenter.present_collection([@user]).should == { :response => [@user.as_json] }.to_json
     end
   end
 end
