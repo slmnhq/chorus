@@ -60,6 +60,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
     datasetsAdded: function() {
         this.listview.render();
+        this.postRender();
     },
 
     searchTextChanged: function(e) {
