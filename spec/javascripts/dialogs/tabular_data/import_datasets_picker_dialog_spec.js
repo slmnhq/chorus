@@ -1,11 +1,11 @@
-describe("chorus.dialogs.DatasetsPicker", function() {
+describe("chorus.dialogs.ImportDatasetsPicker", function() {
     var dialog, datasets;
     beforeEach(function() {
         stubModals();
-        dialog = new chorus.dialogs.DatasetsPicker({ workspaceId : "33" });
+        dialog = new chorus.dialogs.ImportDatasetsPicker({ workspaceId : "33" });
         datasets = new chorus.collections.DatasetSet([
-            newFixtures.datasetSandboxTable(),
-            newFixtures.datasetSandboxTable()
+            newFixtures.datasetSandboxTable({columns: 42}),
+            newFixtures.datasetSandboxTable({columns: 666})
         ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" });
     });
 
@@ -25,6 +25,7 @@ describe("chorus.dialogs.DatasetsPicker", function() {
         describe("when the fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(datasets, datasets.models, options);
+                spyOn(chorus.dialogs.PreviewColumns.prototype, 'render').andCallThrough();
             });
 
             it("shows the correct title", function() {
@@ -55,6 +56,24 @@ describe("chorus.dialogs.DatasetsPicker", function() {
                 _.each(dialog.collection.models, function(model) {
                     expect(model.get("type")).toBe("SANDBOX_TABLE");
                 });
+            });
+
+            it("shows a Preview Columns link for each dataset", function() {
+                expect(dialog.$(".items li:eq(0) a.preview_columns")).toContainTranslation("dataset.manage_join_tables.preview_columns");
+                expect(dialog.$(".items li:eq(1) a.preview_columns")).toContainTranslation("dataset.manage_join_tables.preview_columns");
+            });
+
+            it("shows the preview columns submodal with the appropriate dataset when you click the link", function() {
+                dialog.$(".items li:eq(0) a.preview_columns").click();
+                expect(chorus.dialogs.PreviewColumns.prototype.render).toHaveBeenCalled();
+                var previewColumnsDialog = chorus.dialogs.PreviewColumns.prototype.render.mostRecentCall.object;
+                expect(previewColumnsDialog.title).toBe(dialog.title);
+                expect(previewColumnsDialog.model.get("id")).toEqual(datasets.at(0).get("id"));
+            });
+
+            it("shows the number of columns in each dataset", function() {
+                expect(dialog.$(".items li:eq(0) .column_count")).toContainTranslation("dataset.column_count", {count: 42});
+                expect(dialog.$(".items li:eq(1) .column_count")).toContainTranslation("dataset.column_count", {count: 666});
             });
         });
     });
