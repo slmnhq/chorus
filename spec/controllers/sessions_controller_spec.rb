@@ -30,6 +30,30 @@ describe SessionsController do
       it "fails" do
         response.code.should == "401"
       end
+
+      it "includes generic error code" do
+        json = JSON.parse(response.body)
+        json.fetch("errors").fetch("fields").fetch("username_or_password").should == "INVALID"
+      end
+    end
+
+    it "is case insensitive for username" do
+      post :create, :username => 'aDMin', :password => 'secret'
+      response.code.should == "201"
+    end
+
+    it "notifies user of a missing field" do
+      post :create, :username => 'aDMin'
+      response.code.should == "401"
+
+      json = JSON.parse(response.body)
+      json.fetch("errors").fetch("fields").fetch("password").should == "REQUIRED"
+
+      post :create, :password => "secret"
+      response.code.should == "401"
+
+      json = JSON.parse(response.body)
+      json.fetch("errors").fetch("fields").fetch("username").should == "REQUIRED"
     end
   end
 

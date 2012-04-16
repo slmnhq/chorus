@@ -6,7 +6,11 @@ class User < ActiveRecord::Base
   establish_connection
 
   def self.authenticate(username, password)
-    find_by_username(username).try(:authenticate, password)
+    named(username).try(:authenticate, password)
+  end
+
+  def self.named(username)
+    where("lower(users.username) = ?", username.downcase).first
   end
 
   # override has_secure_password so that our old SHA1 password hashes work
