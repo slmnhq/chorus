@@ -1,7 +1,9 @@
 class UserPresenter < Presenter
+  delegate :username, to: :model
+
   def to_hash
     {
-        :username => self.model.username
+        :username => username
     }
   end
 end

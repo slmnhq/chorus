@@ -1,6 +1,16 @@
 class Presenter
+  def self.present(model)
+    new(model).present
+  end
+
   def initialize(model)
     @model = model
+  end
+  
+  attr_reader :model
+
+  def present
+    to_json({ :response => to_hash })
   end
 
   def to_json(hash)
@@ -8,18 +18,6 @@ class Presenter
   end
 
   def to_hash
-    @model.as_json
-  end
-
-  def model
-    @model
-  end
-
-  def present
-    self.to_json({ :response => self.to_hash })
-  end
-
-  def self.present(model)
-    self.new(model).present
+    model.as_json
   end
 end
