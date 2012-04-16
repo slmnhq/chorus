@@ -39,6 +39,10 @@ describe("chorus.views.InstanceList", function() {
                 this.view.render();
             });
 
+            it("should display the selectable list styling", function() {
+                expect(this.view.$("ul.list")).toHaveClass("selectable");
+            });
+
             it("renders a description for each instance", function() {
                 expect(this.view.$("li.instance .description").length).toBe(9);
             })
