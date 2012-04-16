@@ -85,6 +85,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 describe("fetching more datasets", function() {
                     beforeEach(function() {
                         spyOn(this.view.listview, "render");
+                        spyOn(this.view, "postRender");
                         this.view.collection.pagination = {page: 1, total:2, records:51};
                         this.server.reset();
                         this.view.listview.trigger('fetch:more');
@@ -104,6 +105,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
                         it("renders the list view", function() {
                             expect(this.view.listview.render).toHaveBeenCalled();
+                            expect(this.view.postRender).toHaveBeenCalled();
                         });
 
                         it("makes items draggable", function() {

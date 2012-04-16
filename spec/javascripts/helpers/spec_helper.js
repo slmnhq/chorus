@@ -4,7 +4,7 @@
         var allFixturesLoaded = false;
 
         // Code that only needs to be run once before all the tests run
-        _.debounce = function(func) { return func; }
+        _.debounce = function(func, timeout) { return func; }
 
         $(window).focus(function(){
             jasmine.getEnv().updateInterval = jasmine.DEFAULT_UPDATE_INTERVAL;

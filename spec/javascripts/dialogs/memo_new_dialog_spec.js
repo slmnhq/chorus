@@ -195,25 +195,23 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         this.dialog.$("a.add_workfile").click();
                     });
 
-                    it("is populated with the previously selected workfiles", function() {
-                        var modal = this.modalSpy.lastModal();
-                        expect(modal.options.defaultSelection.at(0).get('fileName')).toBe('greed.sql');
-                        expect(modal.options.defaultSelection.at(1).get('fileName')).toBe('generosity.cpp');
+                    it("does not pre-select any of the workfiles", function() {
+                        expect(this.modalSpy.lastModal().options.defaultSelection).toBeUndefined();
                     });
 
-                    context("when new files are selected", function() {
+                    context("when additional workfiles are selected", function() {
                         beforeEach(function() {
-                            this.newWorkfile = fixtures.workfile();
-                            this.modalSpy.lastModal().trigger("files:selected", [this.newWorkfile]);
+                            this.newWorkfile1 = fixtures.workfile({id: 4});
+                            this.newWorkfile2 = fixtures.workfile({id: 1});
+                            this.modalSpy.lastModal().trigger("files:selected", [this.newWorkfile1, this.newWorkfile2]);
                         });
 
-                        it("clears any existing workfiles", function() {
-                            expect(this.dialog.$(".file_details").length).toBe(1);
-                        });
-
-                        it("stores the new workfiles in the collection", function() {
-                            expect(this.dialog.model.workfiles.length).toBe(1);
-                            expect(this.dialog.model.workfiles.at(0)).toBe(this.newWorkfile);
+                        it("appends the new workfiles to the existing ones", function() {
+                            expect(this.dialog.model.workfiles.length).toBe(4);
+                            expect(this.dialog.model.workfiles.at(0)).toBe(this.workfile1);
+                            expect(this.dialog.model.workfiles.at(1)).toBe(this.workfile2);
+                            expect(this.dialog.model.workfiles.at(2)).toBe(this.workfile3);
+                            expect(this.dialog.model.workfiles.at(3)).toBe(this.newWorkfile1);
                         });
                     });
                 });
@@ -302,21 +300,27 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         this.dialog.$("a.add_dataset").click();
                     });
 
-                    it("is populated with the previously selected datasets", function() {
-                        var modal = this.modalSpy.lastModal();
-                        expect(modal.options.defaultSelection.models[0].get('objectName')).toBe('table1');
-                        expect(modal.options.defaultSelection.models[1].get('objectName')).toBe('table2');
+                    it("does not pre-select any of the datasets", function() {
+                        expect(this.modalSpy.lastModal().options.defaultSelection).toBeUndefined();
                     });
-                    context("when new datasets are selected", function() {
+
+                    context("when additional datasets are selected", function() {
                         beforeEach(function() {
-                            this.modalSpy.lastModal().trigger("datasets:selected", this.datasets);
+                            this.newDatasets = [
+                                newFixtures.datasetSandboxTable({objectName: 'table1', id: '1'}),
+                                newFixtures.datasetSandboxTable({objectName: 'table4', id: '4'})
+                            ];
+                            this.modalSpy.lastModal().trigger("datasets:selected", this.newDatasets);
                         });
 
-                        it("clears any existing datasets", function() {
-                            expect(this.dialog.$(".dataset_details").length).toBe(2);
+                        it("appends the new datasets to the existing ones", function() {
+                            expect(this.dialog.$(".dataset_details").length).toBe(3);
+                            expect(this.dialog.model.datasets.at(0)).toBe(this.datasets[0]);
+                            expect(this.dialog.model.datasets.at(1)).toBe(this.datasets[1]);
+                            expect(this.dialog.model.datasets.at(2)).toBe(this.newDatasets[1]);
                         });
-                    })
-                })
+                    });
+                });
 
                 describe("when a dataset remove link is clicked", function() {
                     it("removes only that dataset", function() {

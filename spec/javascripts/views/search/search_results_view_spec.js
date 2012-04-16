@@ -63,13 +63,13 @@ describe("chorus.views.SearchResults", function() {
         context("when searching for all types of items", function() {
             it("includes a section for every type of item", function() {
                 var sections = this.view.$(".search_result_list");
-                expect(sections.filter(".this_workspace")).toExist();
-                expect(sections.filter(".user_list")).toExist();
-                expect(sections.filter(".workfile_list")).toExist();
-                expect(sections.filter(".attachment_list")).toExist();
-                expect(sections.filter(".workspace_list")).toExist();
-                expect(sections.filter(".hdfs_list")).toExist();
-                expect(sections.filter(".instance_list")).toExist();
+                expect(sections.filter(".this_workspace.selectable")).toExist();
+                expect(sections.filter(".user_list.selectable")).toExist();
+                expect(sections.filter(".workfile_list.selectable")).toExist();
+                expect(sections.filter(".attachment_list.selectable")).toExist();
+                expect(sections.filter(".workspace_list.selectable")).toExist();
+                expect(sections.filter(".hdfs_list.selectable")).toExist();
+                expect(sections.filter(".instance_list.selectable")).toExist();
             });
         });
 

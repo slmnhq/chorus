@@ -8,6 +8,8 @@
     }
 
     .CodeMirror {
-        background: white;
+        &.editable {
+            background: white;
+        }
     }
 }

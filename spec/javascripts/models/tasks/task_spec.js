@@ -26,27 +26,46 @@ describe("chorus.models.Task", function() {
             this.model.cancel();
         });
 
-        it("creates a cancel request", function() {
-            var cancelRequest = this.server.lastUpdate();
-            expect(cancelRequest.url).toMatchUrl(this.model.url());
-            expect(cancelRequest.params()['taskType']).toBe(this.model.get('taskType'));
-            expect(cancelRequest.params()['checkId']).toBe(this.model.get('checkId'));
-            expect(cancelRequest.params()['action']).toBe('cancel');
-            expect(this.model.has('action')).toBeFalsy();
-        });
-
-        it("ignores subsequent calls to cancel", function() {
-            this.model.cancel();
-            expect(this.server.requests.length).toBe(1);
-        });
+        itCreatesCancelRequestAndIgnoreSubsequent();
 
         describe("when the request completes", function() {
-            it("triggers the 'canceled' event on the task", function() {
+            beforeEach(function() {
                 spyOnEvent(this.model, 'canceled');
                 this.server.lastUpdate().succeed();
+                this.server.reset();
+
+            });
+            it("triggers the 'canceled' event on the task", function() {
                 expect('canceled').toHaveBeenTriggeredOn(this.model);
             });
+            it("reset cancelled flag", function() {
+                expect(this.model.cancelled).toBeFalsy();
+            })
+
+            context("click on cancel again", function() {
+                beforeEach(function() {
+                    this.model.cancel();
+                });
+
+                itCreatesCancelRequestAndIgnoreSubsequent();
+            })
         });
+
+        function itCreatesCancelRequestAndIgnoreSubsequent() {
+            it("creates a cancel request", function() {
+                var cancelRequest = this.server.lastUpdate();
+                expect(cancelRequest.url).toMatchUrl(this.model.url());
+                expect(cancelRequest.params()['taskType']).toBe(this.model.get('taskType'));
+                expect(cancelRequest.params()['checkId']).toBe(this.model.get('checkId'));
+                expect(cancelRequest.params()['action']).toBe('cancel');
+                expect(this.model.has('action')).toBeFalsy();
+            });
+
+            it("ignores subsequent calls to cancel", function() {
+                this.model.cancel();
+                expect(this.server.requests.length).toBe(1);
+            });
+        }
     });
 
     it("won't cancel after the data has loaded", function() {
