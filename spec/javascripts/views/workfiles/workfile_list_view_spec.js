@@ -1,6 +1,6 @@
 describe("chorus.views.WorkfileList", function() {
     beforeEach(function() {
-        spyOn(chorus.PageEvents, "broadcast");
+        spyOn(chorus.PageEvents, "broadcast").andCallThrough();
     });
 
     context("with no workfiles in the collection", function() {
@@ -10,8 +10,8 @@ describe("chorus.views.WorkfileList", function() {
             this.view.render();
         });
 
-        it("does not trigger workfile:selected", function() {
-            expect(chorus.PageEvents.broadcast).not.toHaveBeenCalled();
+        it("triggers workfile:selected", function() {
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", undefined);
         });
     });
 

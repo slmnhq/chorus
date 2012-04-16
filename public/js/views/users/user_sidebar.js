@@ -36,6 +36,7 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
     },
 
     setUser: function(user) {
+        if (!user) return;
         this.resource = this.model = user;
         this.collection = this.model.activities();
         this.collection.fetch();

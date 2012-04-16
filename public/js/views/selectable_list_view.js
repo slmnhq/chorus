@@ -41,7 +41,7 @@ chorus.views.SelectableList = chorus.views.Base.extend({
     },
 
     itemSelected: function(model) {
-        if (this.eventName && model) {
+        if (this.eventName) {
             chorus.PageEvents.broadcast(this.eventName + ":selected", model);
         }
     }
