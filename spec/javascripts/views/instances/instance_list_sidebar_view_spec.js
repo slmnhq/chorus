@@ -35,12 +35,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.instance.activities());
                 this.server.completeFetchFor(this.instance.accounts());
-                this.server.completeFetchFor(this.instance.usage(), fixtures.instanceUsage());
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
-            });
-
-            it("sets the instance on the instance usage dialog launch anchor", function() {
-                expect(this.view.$(".dialog.workspace_usage")).toHaveData("instance", this.instance);
             });
 
             it("displays instance name", function() {
@@ -106,11 +101,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("does display the edit instance link", function() {
                         expect(this.view.$(".actions .edit_instance")).toExist();
                     })
-
-                    it("does not display workspace usage information", function() {
-                        expect(this.view.$(".workspace_usage")).not.toExist();
-                    });
-
                 })
 
                 context("when the instance failed to provision", function() {
@@ -147,17 +137,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                 it("does not display the delete instance link", function() {
                     expect(this.view.$(".actions .delete_instance")).not.toExist();
                 });
-            });
-
-            context("when the fetched accounts triggers a 'reset' event", function() {
-                beforeEach(function() {
-                    this.view.render.reset();
-                    this.instance.accounts().trigger('reset');
-                });
-
-                it("re-renders", function() {
-                    expect(this.view.render).toHaveBeenCalled();
-                })
             });
 
             context("when configuration is clicked", function() {
@@ -353,31 +332,59 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
             });
 
-            describe("workspace usage", function() {
+            it("has the default loading text on the workspace usage link", function() {
+                expect(this.view.$(".actions .workspace_usage")).toContainTranslation("instances.sidebar.usage_loading");
+            });
+
+            context("when the workspace usage fetch completes", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.instance.usage(), fixtures.instanceUsage());
+                });
 
                 context("when there are no workspaces", function() {
                     beforeEach(function() {
                         this.instance.usage().set({workspaces: []});
-                        this.view.render();
+                        this.instance.usage().trigger("loaded");
                     });
 
-                    it("should not be a dialog link", function() {
+                    it("should disable the link", function() {
                         expect(this.view.$('.actions .workspace_usage')).toHaveClass('disabled');
                         expect(this.view.$('.actions .workspace_usage').data('dialog')).toBeUndefined();
                     });
-                })
+
+                    it("should show a count of zero", function() {
+                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: 0});
+                    });
+                });
 
                 context("when there are workspaces", function() {
                     beforeEach(function() {
-                        this.instance.usage().set({workspaces: [fixtures.instanceWorkspaceUsageJson(), fixtures.instanceWorkspaceUsageJson()]});
+                        this.instance.usage().set({workspaces: [
+                            fixtures.instanceWorkspaceUsageJson(),
+                            fixtures.instanceWorkspaceUsageJson()
+                        ]});
+                        this.instance.usage().trigger("loaded");
                     });
 
                     it("should be a dialog link", function() {
-                        expect(this.view.$('.actions .workspace_usage').data('dialog')).not.toBeUndefined();
+                        expect(this.view.$('.actions .workspace_usage')).not.toHaveClass("disabled");
+                        expect(this.view.$('.actions .workspace_usage')).toHaveClass("dialog");
+                        expect(this.view.$(".actions .workspace_usage")).toHaveData("instance", this.instance);
                     })
 
                     it("should show the appropriate number of workspaces", function() {
                         expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: 2});
+                    });
+                });
+
+                context("when the instance is a hadoop instance", function() {
+                    beforeEach(function() {
+                        this.view.instance.set(fixtures.hadoopInstanceJson());
+                        this.instance.usage().trigger("loaded");
+                    });
+
+                    it("does not display workspace usage information", function() {
+                        expect(this.view.$(".workspace_usage")).not.toExist();
                     });
                 })
             });
@@ -385,8 +392,6 @@ describe("chorus.views.InstanceListSidebar", function() {
 
         context("when the user doesn't have permission to fetch the instances workspace usage", function() {
             beforeEach(function() {
-                spyOn(chorus.views.Sidebar.prototype, 'postRender');
-                spyOn(this.view, 'postRender').andCallThrough();
                 this.server.completeFetchFor(this.instance.activities());
                 this.server.completeFetchFor(this.instance.accounts());
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
@@ -398,6 +403,5 @@ describe("chorus.views.InstanceListSidebar", function() {
                 expect(this.view.$('.actions .workspace_usage')).not.toExist();
             });
         });
-
     });
 });
