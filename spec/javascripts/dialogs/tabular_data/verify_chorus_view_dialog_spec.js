@@ -12,8 +12,17 @@ describe("chorus.dialogs.VerifyChorusView", function() {
         this.dialog.launchModal();
     });
 
-    it("has an editable CodeMirror", function() {
-        expect(CodeMirror.fromTextArea.calls[0].args[1].readOnly).toBeUndefined();
+    it("has an non-editable CodeMirror", function() {
+        expect(this.dialog.editor.getOption("readOnly")).toBeTruthy();
+        expect(this.dialog.$(".CodeMirror")).not.toHaveClass("editable");
+        expect(this.dialog.$("button.edit")).not.toHaveClass("disabled");
+    });
+
+    it("can make CodeMirror editable", function() {
+        this.dialog.$("button.edit").click();
+        expect(this.dialog.editor.getOption("readOnly")).toBeFalsy();
+        expect(this.dialog.$(".CodeMirror")).toHaveClass("editable");
+        expect(this.dialog.$("button.edit")).toHaveClass("disabled");
     });
 
     it("displays the model's query in the sql editor", function() {

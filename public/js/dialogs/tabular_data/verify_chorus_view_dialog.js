@@ -7,6 +7,10 @@ chorus.dialogs.VerifyChorusView = chorus.dialogs.SqlPreview.extend({
 
     persistent: true,
 
+    events: {
+        "click button.edit": "makeEditable"
+    },
+
     setup: function() {
         this._super("setup");
         this.events = _.clone(this.events);
@@ -32,7 +36,15 @@ chorus.dialogs.VerifyChorusView = chorus.dialogs.SqlPreview.extend({
 
     makeCodeMirrorOptions: function() {
         var options = this._super("makeCodeMirrorOptions");
-        delete options.readOnly;
         return options;
+    },
+
+    makeEditable: function(e) {
+        e && e.preventDefault();
+
+        this.editor.setOption("readOnly", false);
+        this.$(".CodeMirror").addClass("editable");
+
+        $(e.target).addClass("disabled");
     }
 });

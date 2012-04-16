@@ -41,14 +41,17 @@
         border-bottom: 1px solid #B2C7D6;
         background-color: $content-details-info-bar-background-color;
 
-        button.preview {
-            position: absolute;
-            right: 0;
+        button {
             color: #314858;
             font-weight: $semibold;
             font-size: 13px;
             @include content-details-button($content-details-action-link-border-color);
             border: 1px solid #B2C7D6;
+            margin-left: 5px;
+
+            &.disabled {
+                @include opacity(0.5);
+            }
         }
     }
 }
