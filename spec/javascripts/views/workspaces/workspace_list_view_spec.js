@@ -51,6 +51,10 @@ describe("chorus.views.WorkspaceList", function() {
             this.publicEl = this.view.$("li[data-id=4]");
         });
 
+        it("has class selectable", function() {
+            expect($(this.view.el)).toHaveClass("selectable");
+        })
+
         it("displays all the workspaces", function() {
             expect(this.view.$("li").length).toBe(5);
         });

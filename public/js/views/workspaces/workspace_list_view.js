@@ -1,7 +1,6 @@
 chorus.views.WorkspaceList = chorus.views.SelectableList.extend({
     className:"workspace_list",
     tagName:"ul",
-    additionalClass:"list",
     eventName: "workspace",
 
     collectionModelContext:function (model) {
