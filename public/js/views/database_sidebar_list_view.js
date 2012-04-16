@@ -134,6 +134,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     closeQtip: function() {
         $("li:hover a").trigger("mouseleave");
+        this.$(".context a").trigger("unfocus");
     },
 
     contextClicked: function(e) {

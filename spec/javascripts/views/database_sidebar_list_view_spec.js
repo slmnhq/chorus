@@ -117,8 +117,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
                         it("does not fetch anything", function() {
                             expect(this.server.fetches().length).toBe(0);
-                        })
-                    })
+                        });
+                    });
 
                     context("when the execution schema is not the same as the view's schema", function() {
                         beforeEach(function() {
@@ -128,10 +128,10 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
                         it("fetches the execution schema", function() {
                             expect(this.server.lastFetchFor(this.executionSchema.database().schemas())).toBeDefined();
-                        })
-                    })
-                })
-            })
+                        });
+                    });
+                });
+            });
         });
-    })
-})
+    });
+});
