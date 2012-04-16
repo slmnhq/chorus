@@ -14,13 +14,13 @@ describe Presenter do
 
   describe ".present" do
     it "presents the model" do
-      Presenter.present(@user).should == { :response => @user.as_json }.to_json
+      Presenter.present(@user).to_json.should == { :response => @user.as_json }.to_json
     end
   end
 
   describe ".present_collection" do
     it "presents a list of models" do
-      Presenter.present_collection([@user]).should == { :response => [@user.as_json] }.to_json
+      Presenter.present_collection([@user]).to_json.should == { :response => [@user.as_json] }.to_json
     end
   end
 end

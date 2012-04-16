@@ -10,11 +10,11 @@ class Presenter
   end
 
   def self.present(model)
-    ResponseWrapper.new(new(model)).to_json
+    ResponseWrapper.new(new(model))
   end
 
   def self.present_collection(collection)
-    ResponseWrapper.new(collection.map { |model| new(model) }).to_json
+    ResponseWrapper.new(collection.map { |model| new(model) })
   end
 
   def initialize(model)
