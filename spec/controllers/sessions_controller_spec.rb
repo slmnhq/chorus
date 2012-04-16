@@ -12,7 +12,7 @@ describe SessionsController do
       end
 
       it "succeeds" do
-        response.should be_success
+        response.code.should == "201"
       end
 
       it "includes the user info in the response" do
@@ -20,11 +20,6 @@ describe SessionsController do
         json["response"].should be_present
         json["response"]["username"].should be_present
       end
-
-      it "sets the user id into the session" do
-        session["user_id"].should be_present
-      end
-
     end
 
     describe "with incorrect credentials" do
@@ -35,7 +30,13 @@ describe SessionsController do
       it "fails" do
         response.code.should == "401"
       end
+    end
+  end
 
+  describe "#destroy" do
+    it "returns no content" do
+      delete :destroy
+      response.code.should == "204"
     end
   end
 end
