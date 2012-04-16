@@ -13,14 +13,18 @@ describe Presenter do
   end
 
   describe ".present" do
-    it "presents the model" do
-      Presenter.present(@user).to_json.should == { :response => @user.as_json }.to_json
+    it "wraps the response" do
+      Presenter.present(@user).as_json.should have_key(:response)
     end
   end
 
   describe ".present_collection" do
-    it "presents a list of models" do
-      Presenter.present_collection([@user]).to_json.should == { :response => [@user.as_json] }.to_json
+    it "wraps the response" do
+      Presenter.present_collection([@user]).as_json.should have_key(:response)
+    end
+
+    it "serializes an array" do
+      Presenter.present_collection([@user]).as_json[:response].should be_a(Array)
     end
   end
 end

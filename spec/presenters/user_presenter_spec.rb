@@ -14,5 +14,9 @@ describe UserPresenter do
     it "includes the right keys" do
       @hash.should have_key(:username)
     end
+
+    it "does not include unwanted keys" do
+      @hash.should_not have_key(:password_digest)
+    end
   end
 end

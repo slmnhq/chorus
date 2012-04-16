@@ -20,10 +20,6 @@ class Presenter
   def initialize(model)
     @model = model
   end
-  
-  attr_reader :model
 
-  def as_json(options = {})
-    model.as_json
-  end
+  attr_reader :model
 end
