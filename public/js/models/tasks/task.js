@@ -20,7 +20,8 @@ chorus.models.Task = chorus.models.Base.include(
                 action: 'cancel'
             },
             success: _.bind(function() {
-                this.trigger("canceled")
+                this.trigger("canceled");
+                delete this.cancelled;
             }, this)
         });
     }
