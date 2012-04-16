@@ -5,6 +5,11 @@ namespace :legacy do
     Legacy.connection.execute "CREATE DATABASE chorus_legacy_test"
     system "psql --host=localhost --port=8543 --username=edcadmin chorus_legacy_test < #{File.join(Rails.root, 'db', 'legacy', 'legacy.sql')}"
   end
+
+  desc "Migrate legacy data to the rails database"
+  task :migrate => :environment do
+    DataMigrator.migrate
+  end
 end
 
 namespace :db do
