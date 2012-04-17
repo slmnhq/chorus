@@ -109,79 +109,9 @@ describe UsersController do
         end
       end
 
-      describe "validation" do
-        before do
-          @values[:username] += "X"
-        end
-
-        describe "required fields" do
-          required_fields = [:first_name, :last_name, :username, :email, :password]
-
-          it "should be OK with all the fields set" do
-            post :create, {:user => @values}
-            response.code.should == "201"
-          end
-
-          required_fields.each do |field|
-            it "should require field: #{field}" do
-              values_minus_field = @values.clone
-              values_minus_field.delete(field)
-
-              post :create, {:user => values_minus_field}
-
-              response.code.should == "422"
-            end
-          end
-        end
-
-        describe "duplicate user names" do
-          before do
-            post :create, {:user => @values}
-            post :create, {:user => @values}
-          end
-
-          it "fails" do
-            response.code.should == "422"
-            JSON.parse(response.body)["errors"]["fields"]["username"].should == ["has already been taken"]
-          end
-        end
-
-        describe "duplicate user names (CaSe InSeNsItIvE)" do
-          before do
-            @values[:username].downcase!
-            post :create, {:user => @values}
-            @values[:username].upcase!
-            post :create, {:user => @values}
-          end
-
-          it "fails" do
-            response.code.should == "422"
-            JSON.parse(response.body)["errors"]["fields"]["username"].should == ["has already been taken"]
-          end
-        end
-
-        describe "email address" do
-          it "should require a@b.c..." do
-            @values[:email] = "abc"
-            post :create, {:user => @values}
-            response.code.should == "422"
-            decoded_errors.fields.email.should == ["INVALID"]
-          end
-
-          it "should accept + in the left-hand side of emails" do
-            @values[:email] = "xyz+123@emc.com"
-            post :create, {:user => @values}
-            response.code.should == "201"
-          end
-        end
-
-        describe "password" do
-          it "should require 6 characters" do
-            @values[:password] = "a"
-            post :create, {:user => @values}
-            response.code.should == "422"
-          end
-        end
+      it "should refuse invalid data" do
+        post :create, {:user => {}}
+        response.code.should == "422"
       end
     end
   end

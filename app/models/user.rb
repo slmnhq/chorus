@@ -8,6 +8,12 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :case_sensitive => false
   validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/
   validates_length_of :password, :minimum => 6, :unless => Proc.new { |user| !user.password_digest.nil? }
+  validates_length_of :username, :maximum => 256
+  validates_length_of :first_name, :maximum => 256
+  validates_length_of :last_name, :maximum => 256
+  validates_length_of :email, :maximum => 256
+  validates_length_of :title, :maximum => 256
+  validates_length_of :dept, :maximum => 256
 
   def self.authenticate(username, password)
     named(username).try(:authenticate, password)
@@ -46,6 +52,8 @@ class User < ActiveRecord::Base
     @password = unencrypted_password
     unless unencrypted_password.blank? || unencrypted_password.length < 6
       self.password_digest = Digest::SHA1.hexdigest(unencrypted_password)
+    else
+      self.password_digest = nil
     end
   end
 end
