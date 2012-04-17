@@ -30,4 +30,9 @@ rvm list | grep $ruby_version || install_ruby_for_chorus
 echo "checking for bundler"
 rvm $ruby_version
 gem list | grep bundler || install_bundler_for_chorus
+
+echo "setting up project"
 bundle install
+rake legacy:setup
+rake db:create db:migrate db:test:prepare
+script/test
