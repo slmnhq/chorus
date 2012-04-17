@@ -115,7 +115,9 @@ describe UsersController do
 
     context "admin" do
       before do
-        log_in.admin = true
+        user = log_in
+        user.admin = true
+        user.save
         post :create, @values
       end
 
