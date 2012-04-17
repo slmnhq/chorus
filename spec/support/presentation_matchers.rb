@@ -1,17 +1,17 @@
 RSpec::Matchers.define :have_presented do |model|
-  def hash_for(response)
-    JSON.parse(response.body)["response"] rescue nil
+  def decoded_response(response)
+    response.decoded_body.try(:[], :response)
   end
 
   match do |response|
-    hash = hash_for(response)
+    hash = decoded_response(response)
     hash.should be_present
     presenter_class = "#{model.class}Presenter".constantize
     hash.should == presenter_class.present(model).as_json[:response].stringify_keys
   end
 
   failure_message_for_should do |response|
-    "response should have presented #{model.inspect}, but it was <#{hash_for(response)}>"
+    "response should have presented #{model.inspect}, but it was <#{decoded_response(response)}>"
   end
 
   failure_message_for_should_not do |model|
