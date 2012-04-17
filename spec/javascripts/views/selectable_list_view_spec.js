@@ -1,11 +1,10 @@
 describe("chorus.views.SelectableList", function() {
     beforeEach(function() {
-        spyOn(chorus.PageEvents, "broadcast");
+        spyOn(chorus.PageEvents, "broadcast").andCallThrough();
         this.collection = new chorus.collections.UserSet([newFixtures.user(), newFixtures.user()]);
         this.view = new chorus.views.SelectableList({
             collection: this.collection
         });
-
         // normally would be set by subclass
         this.view.className = "user/list";
         this.view.eventName = "user";
@@ -63,8 +62,25 @@ describe("chorus.views.SelectableList", function() {
             this.view.selectItem(this.view.$("li:not(:hidden)").eq(0));
         });
 
-        it("broadcases an item deselected event", function() {
+        it("broadcasts an item deselected event", function() {
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:deselected");
         });
     });
+
+    describe("when eventName:search is triggered", function() {
+        beforeEach(function() {
+            this.collection = new chorus.collections.DatabaseSet([fixtures.database({name: "1" }), fixtures.database({name: "2"})]);
+            this.collection.loaded = true;
+            this.view = new chorus.views.DatabaseList({collection: this.collection});
+            $("#jasmine_content").append(this.view.el);
+            this.view.render();
+
+            this.view.$("> li:eq(0)").removeClass("selected").addClass("hidden");
+            chorus.PageEvents.broadcast("database:search");
+        });
+
+        it("should select the first visible item in the list", function() {
+            expect(this.view.$("li").eq(1)).toHaveClass("selected");
+        })
+    })
 })

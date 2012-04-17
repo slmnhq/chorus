@@ -18,5 +18,10 @@ describe("chorus.views.SchemaListSidebar", function() {
 
     it("displays the schema type", function() {
         expect(this.view.$(".type")).toContainTranslation("schema_list.sidebar.type");
-    })
+    });
+
+    it("displays nothing when a schema is deselected", function() {
+        chorus.PageEvents.broadcast("schema:deselected");
+        expect(this.view.$(".info")).not.toExist();
+    });
 });

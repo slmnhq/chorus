@@ -7,6 +7,12 @@ chorus.views.SelectableList = chorus.views.Base.extend({
         this.collection.bind("paginate", function() {
             this.selectedIndex = 0;
         }, this);
+
+        if(this.eventName) {
+            chorus.PageEvents.subscribe(this.eventName + ":search", function() {
+                this.selectItem(this.$("li:not(:hidden)").eq(0));
+            }, this);
+        }
     },
 
     delegateEvents: function() {

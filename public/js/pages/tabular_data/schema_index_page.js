@@ -22,7 +22,8 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
             imageUrl: "/images/instances/greenplum_database.png",
             search: {
                 selector: ".name",
-                placeholder: t("schema.search_placeholder")
+                placeholder: t("schema.search_placeholder"),
+                eventName: "schema:search"
             }
         });
 

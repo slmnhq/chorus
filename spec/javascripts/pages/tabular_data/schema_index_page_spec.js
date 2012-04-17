@@ -54,6 +54,7 @@ describe("chorus.pages.SchemaIndexPage", function() {
 
             expect(this.page.$("li.schema:eq(1)")).toHaveClass("hidden");
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Schema", {count: 1});
+            expect(this.page.mainContent.options.search.eventName).toBe("schema:search");
         });
 
         it("should have the correct breadcrumbs", function() {
