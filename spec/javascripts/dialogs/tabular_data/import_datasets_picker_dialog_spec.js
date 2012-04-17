@@ -81,5 +81,20 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
                 expect(dialog.$(".items li:eq(1) .column_count")).toContainTranslation("dataset.column_count", {count: 666});
             });
         });
+
+        context("when a dataset has no column count (or is undefined)", function() {
+            beforeEach(function() {
+                datasets = new chorus.collections.DatasetSet([
+                    newFixtures.datasetSandboxTable({ objectName: "A", columns: null, id: "NOBODY" }),
+                    newFixtures.datasetSandboxTable({ objectName: "B", columns: undefined, id: "NONE" })
+                ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" });
+                this.server.completeFetchFor(datasets, datasets.models, options);
+            });
+
+            it("doesn't show column count", function() {
+                expect(dialog.$("li:eq(0) span.column_count")).not.toExist();
+                expect(dialog.$("li:eq(1) span.column_count")).not.toExist();
+            });
+        });
     });
 });

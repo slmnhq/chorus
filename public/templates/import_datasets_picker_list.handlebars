@@ -14,9 +14,11 @@
                     <div class="main">
                         <span class="name" title="{{name}}">{{name}}</span>
                     </div>
-                    <div class="details">
-                        <span class="column_count">{{t "dataset.column_count" count=columns }}</span>
-                    </div>
+                    {{#if columns}}
+                        <div class="details">
+                            <span class="column_count">{{t "dataset.column_count" count=columns }}</span>
+                        </div>
+                    {{/if}}
                 </div>
             </li>
          {{/each}}
