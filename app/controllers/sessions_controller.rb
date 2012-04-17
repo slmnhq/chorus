@@ -5,12 +5,10 @@ class SessionsController < ApplicationController
   def create
     user = CredentialsValidator.user(params[:username], params[:password])
     session[:user_id] = user.id
-    render :json => UserPresenter.present(user),
-           :status => :created
+    present user, :status => :created
 
   rescue CredentialsValidator::Invalid => e
-    render :json => { :errors => { :fields => e.record.errors } },
-           :status => :unauthorized
+    present_errors e.record.errors, :status => :unauthorized
   end
 
   def destroy

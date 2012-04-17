@@ -7,8 +7,6 @@ class ApplicationController < ActionController::Base
     !!current_user
   end
 
-  private
-
   def current_user
     @_current_user ||= User.find_by_id(session[:user_id])
   end
@@ -37,5 +35,22 @@ class ApplicationController < ActionController::Base
 
   def require_white_listed_order
     head :bad_request unless (Chorus::Application.config.sorting_order_white_list.include?(params[:order]))
+  end
+
+  def present(model, options={})
+    if model.is_a?(ActiveRecord::Relation) || model.is_a?(Enumerable)
+      model_class = model.first.class
+      presentation_method = :present_collection
+    else
+      model_class = model.class
+      presentation_method = :present
+    end
+
+    presenter_class = "#{model_class}Presenter".constantize
+    render options.merge({ :json => presenter_class.send(presentation_method, model) })
+  end
+
+  def present_errors(errors, options={})
+    render options.reverse_merge(:status => :bad_request).merge(:json => { :errors => { :fields => errors } } )
   end
 end
