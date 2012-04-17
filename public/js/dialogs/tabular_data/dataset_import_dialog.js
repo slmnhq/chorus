@@ -8,20 +8,22 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         "change input:radio": "onRadioSelect",
         "submit form": "uploadFile",
         "click button.submit": "uploadFile",
-        "change select": "onSelectChanged"
+        "click a.dataset_picked": "launchDatasetPickerDialog"
     },
 
-    setup: function() {
-        var workspaceId = this.options.launchElement.data("workspace-id");
-        this.sandboxTables = new chorus.collections.DatasetSet([], {workspaceId: workspaceId, type: "SANDBOX_TABLE"});
-        this.sandboxTables.bind("loaded", this.filterTables, this);
-        this.sandboxTables.fetchAll();
+    launchDatasetPickerDialog: function(e) {
+        e.preventDefault();
+        if (!this.saving) {
+            var datasetDialog = new chorus.dialogs.ImportDatasetsPicker({
+                workspaceId: this.options.launchElement.data("workspace-id")
+            });
+            this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
+            this.launchSubModal(datasetDialog);
+        }
     },
 
-    filterTables: function() {
-        this.sandboxTables.models = _.filter(this.sandboxTables.models, _.bind(function(table) {
-            return _.include(["BASE_TABLE", "MASTER_TABLE"], table.get("objectType"));
-        }, this));
+    datasetsChosen: function(datasets) {
+        this.changeSelectedDataset(datasets && datasets[0] && datasets[0].name());
     },
 
     onRadioSelect: function(e) {
@@ -31,51 +33,28 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this.$(".existing_table .options input").prop("disabled", true);
 
         this.importTarget = $(e.currentTarget).val();
-
         if (this.importTarget == "new") {
             this.$(".new_table input:text").prop("disabled", false);
             this.$("button.submit").prop("disabled", false);
+            this.$("a.dataset_picked").addClass("hidden");
+
+            if (this.selectedDataset) {
+                this.$("span.dataset_picked").removeClass("hidden");
+            }
+
         } else if (this.importTarget == "existing") {
-            this.$(".existing_table select").prop("disabled", false);
+            this.$("a.dataset_picked").removeClass("hidden");
+            this.$("span.dataset_picked").addClass("hidden");
+
             this.$(".existing_table .options").removeClass("hidden");
             this.$(".existing_table .options input").prop("disabled", false);
-            if (!this.$("select").val()) {
-                this.$("button.submit").prop("disabled", true);
-            }
-        } else {
-            this.$("button.submit").prop("disabled", false);
-        }
-
-        chorus.styleSelect(this.$("select"));
-    },
-
-    onSelectChanged: function(e) {
-        if ($(e.currentTarget).val()) {
-            this.$("button.submit").prop("disabled", false);
-        } else {
-            this.$("button.submit").prop("disabled", true);
         }
     },
 
-    onSandboxListLoaded: function() {
-        this.$(".existing_table .spinner").stopLoading();
-
-        var select = this.$(".existing_table select");
-        select.append($("<option/>").prop('value', '').prop('selected', 'selected').text(t("selectbox.select_one")));
-
-        this.tableMap = {};
-
-        this.sandboxTables.each(function(model) {
-            select.append($("<option/>").prop('value', model.get("objectName")).data("id", model.id).
-                text(model.get("objectName")).prop("title", model.get("objectName")));
-
-            this.tableMap[model.get("objectName")] = model.get("id");
-        }, this);
-
-        this.$(".existing_table .select").removeClass("hidden");
-
-
-        chorus.styleSelect(this.$("select"));
+    changeSelectedDataset: function(name) {
+        this.selectedDataset = name;
+        this.$(".existing_table a.dataset_picked").text(_.prune(name, 20));
+        this.$(".existing_table span.dataset_picked").text(_.prune(name, 20));
     },
 
     additionalContext: function() {
@@ -127,9 +106,6 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     postRender: function() {
         var self = this;
-
-        self.$(".existing_table .spinner").startLoading();
-        this.sandboxTables.onLoaded(this.onSandboxListLoaded, this);
 
         this.importTarget = "new"
 

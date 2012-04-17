@@ -77,8 +77,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     datasetsChosen: function(datasets){
-        this.changeSelectedDataset(datasets && datasets[0] && datasets[0].get('objectName'));
-    },
+            this.changeSelectedDataset(datasets && datasets[0] && datasets[0].name());
+        },
 
     changeSelectedDataset: function(name) {
         this.$(".existing_table a.dataset_picked").text(_.prune(name, 20));

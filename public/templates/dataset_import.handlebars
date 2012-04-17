@@ -18,14 +18,16 @@
         <div class="row new_table">
             <input type="radio" value="new" id="new_table" name="group" checked="true" tabindex="3"/>
             <label for="new_table">{{t "dataset.import.new_table"}}</label>
-            <input class="right" type="text" maxlength="64"/>
+            <input type="text" maxlength="64"/>
         </div>
 
         <div class="row existing_table">
             <input type="radio" value="existing" name="group" id="existing"/>
             <label for="existing">{{t "dataset.import.existing_table"}}</label>
-            <span class="select hidden"><select class="right" disabled="disabled"></select></span>
-            <span class="spinner"></span>
+            <span class="select">
+                <a href="#" class="dataset_picked hidden">{{t "dataset.import.select_dataset"}}</a>
+                <span class="dataset_picked hidden">{{t "dataset.import.select_dataset"}}</span>
+            </span>
             <div class="options hidden">
                 <input type="checkbox" id="truncate"/><label for="truncate">{{t "dataset.import.truncate_table"}}</label>
             </div>

@@ -99,14 +99,10 @@ describe("chorus.dialogs.DatasetImport", function() {
                 expect(this.dialog.$(".empty_selection")).toHaveClass("hidden");
             });
 
-            it("hides the file select button", function() {
-                expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
-            })
-
             it("shows the 'Change' link", function() {
                 expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
             });
-        })
+        });
 
         describe("import controls", function() {
             it("does not hide them", function() {
@@ -133,10 +129,6 @@ describe("chorus.dialogs.DatasetImport", function() {
                 expect(this.dialog.$(".new_table input:text").val()).toBe('foo_bar_baz');
             });
 
-            it("shows the table name select", function() {
-                expect(this.dialog.$(".existing_table select")).toExist();
-            });
-
             it("sets the title text of the file input field", function() {
                 expect(this.dialog.$("input[type=file]").prop("title")).toMatchTranslation("dataset.import.change_file");
             });
@@ -155,28 +147,15 @@ describe("chorus.dialogs.DatasetImport", function() {
                     expect(this.dialog.$(".new_table input")).toBeEnabled();
                 });
 
-                it("disables the table name selector", function() {
-                    expect(this.dialog.$(".existing_table select")).toBeDisabled();
+                it("doesn't show the span or link for selecting a dataset", function() {
+                    expect(this.dialog.$(".existing_table a.dataset_picked")).toHaveClass("hidden");
+                    expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
                 });
-            });
-
-            it("should enable the upload file button when selecting existing table if table name is already selected", function() {
-                this.server.completeFetchFor(this.dialog.sandboxTables, this.datasets);
-                this.selectedOption = this.dialog.$('option:eq(1)').val();
-                this.dialog.$("select").val(this.selectedOption).change();
-
-                this.dialog.$(".new_table input:radio").removeAttr('checked').change();
-                this.dialog.$(".existing_table input:radio").attr('checked', 'checked').change();
-                this.dialog.$("input:radio").val("existing");
-
-                expect(this.dialog.$('button.submit')).toBeEnabled();
             });
 
             describe("selecting 'Import into existing table'", function() {
                 beforeEach(function() {
-                    this.dialog.$(".new_table input:radio").removeAttr('checked').change();
-                    this.dialog.$(".existing_table input:radio").prop('checked', 'checked').change();
-                    this.dialog.$("input:radio").val("existing");
+                    this.dialog.$(".existing_table input:radio").prop('checked', true).change();
                 });
 
                 it("shows the truncate check box", function() {
@@ -184,137 +163,74 @@ describe("chorus.dialogs.DatasetImport", function() {
                     expect(this.dialog.$(".existing_table #truncate")).toBeEnabled();
                 });
 
-                context("when fetch datasetTable has not completed", function() {
-                    it("displays the loading spinner", function() {
-                        expect(this.dialog.$(".existing_table .spinner").isLoading()).toBeTruthy();
-                    })
+                it("should enable the dataset selection link", function() {
+                    expect(this.dialog.$(".existing_table a.dataset_picked")).not.toHaveClass("hidden");
+                    expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
+                });
 
-                    it("hides the select box", function() {
-                        expect(this.dialog.$(".existing_table .select")).toHaveClass("hidden");
-                    })
-                })
-
-                context("when fetch has been completed", function() {
+                context("when clicking the dataset picker link", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dialog.sandboxTables, this.datasets);
+                        this.dialog.$(".existing_table a.dataset_picked").click();
                     });
 
-                    it("filters out views, external tables, and Hadoop tables", function() {
-                        expect(this.dialog.$(".existing_table .select option").length).toBe(3);
+                    it("should have a link to the dataset picker dialog", function() {
+                        expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
                     });
 
-                    it("does not display loading spinner", function() {
-                        expect(this.dialog.$(".existing_table .spinner").isLoading()).toBeFalsy();
+                    it("should launch the dataset picker dialog", function() {
+                        expect(this.modalSpy.lastModal()).toBeA(chorus.dialogs.ImportDatasetsPicker);
                     });
 
-                    it("shows the select box", function() {
-                        expect(this.dialog.$(".existing_table .select")).not.toHaveClass("hidden");
-                    });
-
-                    it("enables the table name selector", function() {
-                        expect(this.dialog.$(".existing_table select.right")).toBeEnabled();
-                    });
-
-                    it("disables the table name input", function() {
-                        expect(this.dialog.$(".new_table input:text")).toBeDisabled();
-                    });
-
-                    it("disables the upload button", function() {
-                        expect(this.dialog.$('button.submit')).toBeDisabled();
-                    });
-
-                    it("loads a list of sandbox tables into the table name selector", function() {
-                        expect(this.dialog.$(".existing_table select option").length).toBe(this.validDatasets.length + 1);
-
-                        var view = this.dialog;
-                        _.each(this.validDatasets, function(model, index) {
-                            var option = view.$(".existing_table select option:eq(" + ( index + 1 ) + ")");
-                            expect(option).toContainText(model.get("objectName"));
-                            expect(option).toHaveAttr("value", model.get("objectName"));
-                            expect(option.data("id")).toBe(model.id);
-                            expect(option).toHaveAttr("title", model.get("objectName"));
-                        }, this);
-                    });
-
-                    context("selecting an existing table", function() {
-                        beforeEach(function() {
-                            this.selectedOption = this.dialog.$('option:eq(1)').val();
-                            this.selectedId = this.dialog.$("option:eq(1)").data("id");
-                            this.dialog.$("select").val(this.selectedOption).change();
-                        });
-
-                        it("should enable the upload file button", function() {
-                            expect(this.dialog.$('button.submit')).toBeEnabled();
-                        });
-
-                        it("should disable the upload button if the 'select one' option is chosen", function() {
-                            this.dialog.$("select").val('').change();
-                            expect(this.dialog.$("button.submit")).toBeDisabled();
-                        })
-
-                        context("clicking 'Upload File'", function() {
+                    context("when no dataset is selected", function() {
+                        context("when 'import into new table' is checked", function() {
                             beforeEach(function() {
-                                this.dialog.$("form").submit();
-                            })
-
-                            it("should send the name of the existing table as the toTable", function() {
-                                expect(this.dialog.csv.get("toTable")).toBe(this.selectedOption);
+                                this.dialog.$("input[id='new_table']").prop("checked", true).change();
                             });
 
-                            context("when upload succeeds", function() {
-                                beforeEach(function() {
-                                    this.data = {result: {
-                                        resource: [fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes],
-                                        status: "ok"
-                                    }};
-                                    spyOn(chorus.dialogs.ExistingTableImportCSV.prototype, "setup").andCallThrough()
-                                    this.fileUploadOptions.done(null, this.data)
-                                });
-
-                                it("launches the import to existing table dialog", function() {
-                                    expect(chorus.dialogs.ExistingTableImportCSV.prototype.setup).toHaveBeenCalled();
-
-                                    var dialogArgs = chorus.dialogs.ExistingTableImportCSV.prototype.setup.mostRecentCall.args[0]
-                                    expect(dialogArgs.datasetId).toBe(this.selectedId);
-                                    expect(dialogArgs.csv.get("toTable")).toBe('table_a');
-                                    expect(dialogArgs.csv.get("lines").length).toBe(2);
-
-                                    expect(this.modalSpy).toHaveModal(chorus.dialogs.ExistingTableImportCSV);
-                                });
+                            it("doesn't show the span or link for selecting a dataset", function() {
+                                expect(this.dialog.$(".existing_table a.dataset_picked")).toHaveClass("hidden");
+                                expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
                             });
-                        });
-
-                    })
-
-                    describe("and then selecting 'Import into new table", function() {
-                        beforeEach(function() {
-                            this.dialog.$("input:radio").val("new")
-                            this.dialog.$(".new_table input:radio").prop("checked", true).change();
-                        });
-
-                        it("enables the table name input", function() {
-                            expect(this.dialog.$(".new_table input")).toBeEnabled();
-                        });
-
-                        it("disables the table name selector", function() {
-                            expect(this.dialog.$(".existing_table select")).toBeDisabled();
-                        });
-
-                        it("disables the truncate checkbox", function() {
-                            expect(this.dialog.$(".existing_table .options input")).toBeDisabled();
-                        });
-
-                        it("hides the truncate option", function() {
-                            expect(this.dialog.$(".existing_table .options")).toHaveClass("hidden");
                         });
                     });
 
-                })
+                    context("when a dataset is selected", function() {
+                        beforeEach(function() {
+                            this.datasets = [newFixtures.datasetSourceTable({ objectName: "myDataset" })];
+                            chorus.modal.trigger("datasets:selected", this.datasets);
+                        });
+
+                        it("it should show the selected dataset in the link", function() {
+                            expect(this.dialog.$(".existing_table a.dataset_picked")).toContainText("myDataset");
+                        });
+
+                        context("and then 'import into new table' is checked", function() {
+                            beforeEach(function() {
+                                this.dialog.$("input[id='new_table']").prop("checked", true).change();
+                            });
+
+                            it("should hide the select a dataset link", function() {
+                                expect(this.dialog.$(".existing_table a.dataset_picked")).toHaveClass("hidden");
+                            });
+
+                            it("should show the selected table name in the existing table section", function() {
+                                expect(this.dialog.$(".existing_table span.dataset_picked")).not.toHaveClass('hidden');
+                            });
+
+                            it("disables the truncate checkbox", function() {
+                                expect(this.dialog.$(".existing_table .options input")).toBeDisabled();
+                            });
+
+                            it("hides the truncate option", function() {
+                                expect(this.dialog.$(".existing_table .options")).toHaveClass("hidden");
+                            });
+                        });
+                    });
+                });
             });
 
             describe("selecting 'Upload as a work file'", function() {
                 beforeEach(function() {
-                    this.dialog.$("input:radio").val("workfile");
                     this.dialog.$(".new_table input:radio").removeAttr('checked').change();
                     this.dialog.$(".workfile input:radio").attr('checked', 'checked').change();
                 });

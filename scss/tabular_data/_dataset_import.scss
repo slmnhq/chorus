@@ -4,7 +4,7 @@ $image-height : 35px;
 $image-width: 35px;
 
 .dataset_import {
-    width: 450px;
+    width: 500px;
 
     .where {
         @include font-menu;
@@ -12,7 +12,7 @@ $image-width: 35px;
         padding-bottom: 5px;
         font-size: 14px;
         font-weight: $semibold;
-        color: $color-text2;
+        color: $color-text2
     }
 
     form {
@@ -76,40 +76,33 @@ $image-width: 35px;
                 line-height: $image-height;
                 vertical-align: middle;
 
-                .right {
-                    display: inline-block;
-                    float: right;
-                }
-
                 input[type=text] {
                     width: 192px;
-                }
-
-                select {
-                    width: 186px;
-                }
-
-                .ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled {
-                    cursor: default;
-                    font-size: 14px;
-                    font-style: normal;
-                    font-weight: normal;
+                    display: inline-block;
                 }
             }
 
             .existing_table {
-                .spinner.is_loading {
-                    display: inline-block;
-                    height: 5px;
-                    margin-left: 20px;
-                }
-
                 .options {
                     padding-left: 20px;
 
                     label {
                         font-size: 12px;
                     }
+                }
+
+                .dataset_picked {
+                    font-size: 13px;
+                    font-weight: $semibold;
+                    margin-right: 5px;
+                    display: inline-block;
+                    line-height: 14px;
+                }
+
+                a.dataset_picked {
+                    border-bottom: 1px dotted gray;
+                    display: inline-block;
+                    line-height: 14px;
                 }
             }
         }
@@ -119,7 +112,8 @@ $image-width: 35px;
         }
 
         label {
-            text-align: right;
+            min-width: 200px;
+            display: inline-block;
         }
 
         input[disabled="disabled"] {
