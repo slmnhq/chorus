@@ -42,7 +42,8 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
                 }
             },
             search: {
-                placeholder: t("workfile.search_placeholder")
+                placeholder: t("workfile.search_placeholder"),
+                eventName: "workfile:search"
             }
         });
         this.sidebar = new chorus.views.WorkfileListSidebar({workspace: this.workspace});

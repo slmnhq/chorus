@@ -108,6 +108,11 @@ describe("chorus.views.WorkfileListSidebar", function() {
                         expect(this.view.postRender).toHaveBeenCalled();
                     });
                 });
+
+                it("displays nothing when a workfile is deselected", function() {
+                    chorus.PageEvents.broadcast("workfile:deselected");
+                    expect(this.view.$(".info")).not.toExist();
+                });
             });
         });
 

@@ -7,6 +7,7 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
     setup:function () {
         this.tabs = new chorus.views.TabControl(["activity"]);
         chorus.PageEvents.subscribe("workfile:selected", this.setWorkfile, this);
+        chorus.PageEvents.subscribe("workfile:deselected", this.unsetWorkfile, this);
     },
 
     setWorkfile:function (workfile) {
@@ -29,6 +30,11 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
             delete this.tabs.activity;
         }
 
+        this.render();
+    },
+
+    unsetWorkfile: function(){
+        delete this.workfile;
         this.render();
     },
 
