@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   def create
     if current_user.admin?
-      user = User.create! params.except(:controller, :action)
+      user = User.create! params[:user]
       render :json => UserPresenter.present(user), :status => :created
     else
       render :status => :unauthorized, :json => "Only admins can do that"

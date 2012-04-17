@@ -3,10 +3,10 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   has_secure_password
   attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
-  establish_connection
 
   validates_presence_of :username, :first_name, :last_name, :email#TODO:, :password,
   validates_uniqueness_of :username, :case_sensitive => false
+  validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/
 
   def self.authenticate(username, password)
     named(username).try(:authenticate, password)
