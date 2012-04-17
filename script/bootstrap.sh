@@ -21,3 +21,4 @@ echo "checking for bundler"
 source "$HOME/.rvm/scripts/rvm"
 rvm $ruby_version
 gem list | grep bundler || install_bundler_for_chorus
+bundle install
