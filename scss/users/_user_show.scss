@@ -42,6 +42,8 @@ $column-padding-y : $padding-x;
         @include font-normal-beta;
         padding-left: 2px;
         padding-bottom: 5px;
+        font-size: 18px;
+        font-weight: $semibold;
     }
 
     img {
