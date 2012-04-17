@@ -29,6 +29,7 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
             title: this.instance.get("name"),
             imageUrl: this.instance.providerIconUrl(),
             search: {
+                eventName: "database:search",
                 placeholder: t("database.search_placeholder")
             }
         });

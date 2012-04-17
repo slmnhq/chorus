@@ -415,13 +415,25 @@ describe("chorus global", function() {
         context("with an onTextChange function supplied", function() {
             beforeEach(function() {
                 this.onTextChange = jasmine.createSpy("onTextChange");
-                chorus.search({ input: this.input1, onTextChange: this.onTextChange });
+                chorus.search({ input: this.input1, onTextChange: this.onTextChange});
             })
 
             it("should call the onTextChange function when the text changes", function() {
                 expect(this.onTextChange).not.toHaveBeenCalled();
                 this.input1.val("otherText").trigger("keyup");
                 expect(this.onTextChange).toHaveBeenCalled();
+            })
+        });
+
+        context("with the default onTextChange and a supplied eventName", function() {
+            beforeEach(function() {
+                spyOn(chorus.PageEvents, "broadcast");
+                chorus.search({ input: this.input1, list: this.list, eventName: "database:search"});
+            })
+
+            it("should broadcast the event", function() {
+                this.input1.val("otherText").trigger("keyup");
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("database:search")
             })
         });
 
@@ -549,7 +561,9 @@ describe("chorus global", function() {
                 });
             });
         });
-    })
+
+
+    });
 
     describe("#addClearButton", function() {
         beforeEach(function() {

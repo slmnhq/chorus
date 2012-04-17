@@ -21,19 +21,17 @@ chorus.views.SelectableList = chorus.views.Base.extend({
     },
 
     selectItem: function($target) {
-        if ($target.hasClass("selected")) {
-            return;
-        }
-
-        var $lis = this.$("> li");
+        var $lis = this.$(">li");
         $lis.removeClass("selected");
         $target.addClass("selected");
 
         this.selectedIndex = $lis.index($target);
-        if(this.selectedIndex == -1) {
+        if (this.selectedIndex >= 0) {
+            this.itemSelected(this.collection.at(this.selectedIndex));
+        } else {
             this.selectedIndex = 0;
+            this.itemDeselected();
         }
-        this.itemSelected(this.collection.at(this.selectedIndex));
     },
 
     postRender: function() {
@@ -43,6 +41,12 @@ chorus.views.SelectableList = chorus.views.Base.extend({
     itemSelected: function(model) {
         if (this.eventName) {
             chorus.PageEvents.broadcast(this.eventName + ":selected", model);
+        }
+    },
+
+    itemDeselected: function() {
+        if (this.eventName) {
+            chorus.PageEvents.broadcast(this.eventName + ":deselected");
         }
     }
 });

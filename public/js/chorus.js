@@ -232,7 +232,6 @@ window.Chorus = function chorus$Global() {
 
     self.search = function(options) {
         var input = options.input;
-
         var textChangeFunction = options.onTextChange || _.bind(onTextChange, this, options);
 
         input.unbind("textchange.filter").bind("textchange.filter", textChangeFunction);
@@ -247,6 +246,7 @@ window.Chorus = function chorus$Global() {
             selector = options.selector,
             onFilter = options.onFilter,
             afterFilter = options.afterFilter,
+            eventName = options.eventName,
             changedInput = $(e.target),
             clearLink = changedInput.siblings(".chorus_search_clear");
 
@@ -264,6 +264,9 @@ window.Chorus = function chorus$Global() {
         });
 
         if (afterFilter) afterFilter();
+        if (eventName) {
+            chorus.PageEvents.broadcast(eventName);
+        }
     }
 
     self.addClearButton = function(input) {
