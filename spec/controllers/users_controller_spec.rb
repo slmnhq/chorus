@@ -148,4 +148,53 @@ describe UsersController do
       end
     end
   end
+
+  describe "#update" do
+    let(:other_user) { User.create! :username => 'other_user', :password => 'secret', :first_name => "tom", :last_name => "brown", :email => "tom@example.com" }
+    let(:admin) do
+      user = User.new(:username => 'admin', :password => 'secret', :first_name => "larry", :last_name => "bar", :email => "foo@example.com")
+      user.admin = true
+      user.save!
+      user
+    end
+    let(:non_admin) { User.create!(:username => 'other_user', :password => 'secret', :first_name => "henry", :last_name => "james", :email => "h@example.com") }
+
+    context "when logged in as an admin" do
+      before do
+        log_in admin
+      end
+
+      it "responds with the updated user" do
+        put :update, :id => other_user.to_param, :user => {:admin => "true"}
+        response.code.should == "200"
+        decoded_response.admin.should == true
+      end
+
+      it "allows making someone an admin" do
+        put :update, :id => other_user.to_param, :user => {:admin => "true"}
+        other_user.reload.should be_admin
+      end
+
+      it "allows an admin to revoke another user's admin privileges" do
+        other_user.admin = true
+        other_user.save!
+        put :update, :id => other_user.to_param, :user => {:admin => "false"}
+        response.code.should == "200"
+        decoded_response.admin.should == false
+      end
+
+      it "does not allow the last admin to be removed"
+    end
+
+    context "when the current user is not an admin" do
+      before do
+        log_in non_admin
+      end
+
+      it "does not allow non-admins to make someone an admin" do
+        put :update, :id => other_user.to_param, :user => {:admin => "true"}
+        other_user.reload.should_not be_admin
+      end
+    end
+  end
 end

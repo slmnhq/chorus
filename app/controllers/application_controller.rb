@@ -4,10 +4,14 @@ class ApplicationController < ActionController::Base
   after_filter :extend_expiration
 
   def logged_in?
-    session[:user_id].present?
+    !!current_user
   end
 
   private
+
+  def current_user
+    @_current_user ||= User.find_by_id(session[:user_id])
+  end
 
   def check_expiration
     head(:unauthorized) unless session[:expires_at] && session[:expires_at] > Time.now

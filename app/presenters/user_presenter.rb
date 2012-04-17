@@ -1,5 +1,5 @@
 class UserPresenter < Presenter
-  delegate :username, :first_name, :last_name, :email, :title, :dept, :notes, to: :model
+  delegate :username, :first_name, :last_name, :email, :title, :dept, :notes, :admin?, to: :model
 
   def to_hash
     {
@@ -9,7 +9,8 @@ class UserPresenter < Presenter
         :email => email,
         :title => title,
         :dept => dept,
-        :notes => notes
+        :notes => notes,
+        :admin => admin?
     }
   end
 end

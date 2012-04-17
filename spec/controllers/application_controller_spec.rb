@@ -7,6 +7,27 @@ describe ApplicationController do
     end
   end
 
+  describe "#current_user" do
+    before do
+      @user = User.create! :username => 'some_user', :password => 'secret', :last_name => "twaine", :first_name => "mark", :email => "mark@example.com"
+    end
+
+    it "returns the user based on the session's user id" do
+      session[:user_id] = @user.id
+      controller.send(:current_user).should == @user
+    end
+
+    it "returns nil when there is no user_id stored in the session" do
+      session[:user_id] = nil
+      controller.send(:current_user).should be_nil
+    end
+
+    it "returns nil when there is no user with the id stored in the session" do
+      session[:user_id] = -1
+      controller.send(:current_user).should be_nil
+    end
+  end
+
   describe "session expiration" do
     before do
       log_in

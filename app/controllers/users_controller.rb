@@ -11,4 +11,13 @@ class UsersController < ApplicationController
     render :json => { :errors => { :fields => e.record.errors } },
            :status => :unprocessable_entity
   end
+
+  def update
+    user = User.find(params[:id])
+    if current_user.admin?
+      user.admin = params[:user][:admin]
+    end
+    user.save!
+    render :json => UserPresenter.present(user)
+  end
 end

@@ -23,7 +23,7 @@ describe CredentialsValidator do
 
     it "raises an exception if the username is missing" do
       begin
-        CredentialsValidator.user( nil, 'a_password')
+        CredentialsValidator.user(nil, 'a_password')
         fail
       rescue CredentialsValidator::Invalid => e
         e.record.errors.get(:username).should == ["REQUIRED"]
