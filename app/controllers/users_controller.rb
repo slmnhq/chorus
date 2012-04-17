@@ -1,7 +1,13 @@
 class UsersController < ApplicationController
   before_filter :require_admin, :only => :create
+  before_filter :load_user, :only => :show
+
   def index
     render :json => UserPresenter.present_collection(User.order("LOWER(#{params[:order]})").paginate(params.slice(:page, :per_page)))
+  end
+
+  def show
+    render :json => UserPresenter.present(@user)
   end
 
   def create
@@ -23,5 +29,12 @@ class UsersController < ApplicationController
     end
     user.save!
     render :json => UserPresenter.present(user)
+  end
+
+  private
+
+  def load_user
+    @user = User.find_by_id(params[:id])
+    head(:not_found) unless @user
   end
 end

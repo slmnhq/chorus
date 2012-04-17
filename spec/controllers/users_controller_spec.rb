@@ -221,4 +221,34 @@ describe UsersController do
       end
     end
   end
+
+  describe "#show" do
+    before do
+      @user = FactoryGirl.create(:user)
+      @other_user = FactoryGirl.create(:user)
+    end
+
+    context "not logged in" do
+      it "returns unauthorized" do
+        get :show, :id => @other_user.to_param
+        response.code.should == "401"
+      end
+    end
+
+    context "logged in" do
+      before do
+        log_in @user
+      end
+
+      it "succeeds" do
+        get :show, :id => @other_user.to_param
+        response.should be_success
+      end
+
+      it "serializes the user" do
+        get :show, :id => @other_user.to_param
+        response.should have_presented(@other_user)
+      end
+    end
+  end
 end
