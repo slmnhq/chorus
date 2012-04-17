@@ -27,11 +27,21 @@ class CredentialsValidator
       if user
         return user
       else
-        errors.add(:username_or_password, "INVALID")
+        errors.add(:username_or_password, :invalid)
         raise Invalid.new(self)
       end
     else
       raise Invalid.new(self)
+    end
+  end
+
+  private
+
+  def read_attribute_for_validation(attribute)
+    if attribute == :username_or_password
+      nil
+    else
+      send(attribute)
     end
   end
 end
