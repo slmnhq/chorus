@@ -40,6 +40,7 @@ describe("chorus.views.DatasetAndColumnList", function() {
 
         context("when the back link is clicked", function() {
             beforeEach(function() {
+                spyOn(chorus.PageEvents, "broadcast");
                 this.view.columnList.trigger("back");
             });
 
@@ -53,6 +54,10 @@ describe("chorus.views.DatasetAndColumnList", function() {
 
             it("should show the dataset list", function() {
                 expect(this.view.$(".database_dataset_list")).not.toHaveClass("hidden");
+            });
+
+            it("should broadcast a dataset:back", function() {
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:back");
             });
 
             describe("clicking a table again", function() {

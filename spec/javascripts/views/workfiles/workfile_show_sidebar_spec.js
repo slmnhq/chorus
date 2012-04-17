@@ -7,8 +7,20 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
     });
 
-    it("fetches the ActivitySet for the workfile", function() {
-        expect(this.workfile.activities()).toHaveBeenFetched();
+    describe("setup", function() {
+        it("fetches the ActivitySet for the workfile", function() {
+            expect(this.workfile.activities()).toHaveBeenFetched();
+        });
+
+        context("when the dataset:back event is broadcast", function() {
+            beforeEach(function() {
+                chorus.PageEvents.broadcast("dataset:back");
+            });
+
+            it("calls recalculate scrolling", function() {
+                expect(this.view.recalculateScrolling).toHaveBeenCalled();
+            });
+        });
     });
 
     describe("render", function() {

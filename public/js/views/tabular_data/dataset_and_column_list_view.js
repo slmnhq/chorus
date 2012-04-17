@@ -19,6 +19,7 @@ chorus.views.DatasetAndColumnList = chorus.views.Base.extend({
             this.$("input.search").val("");
             this.$(".database_dataset_list").removeClass("hidden");
             this.$(".database_column_list").addClass("hidden");
+            chorus.PageEvents.broadcast("dataset:back");
         }, this);
     }
 });

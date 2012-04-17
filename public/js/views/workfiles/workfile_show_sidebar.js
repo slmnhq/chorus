@@ -24,6 +24,7 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
         this.bindings.add(this.allVersions, "changed", this.render);
 
         chorus.PageEvents.subscribe("datasetSelected", this.jumpToTop, this);
+        chorus.PageEvents.subscribe("dataset:back", this.recalculateScrolling, this);
 
         this.requiredResources.push(this.model);
         this.requiredResources.push(this.model.workspace());
