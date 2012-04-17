@@ -24,4 +24,32 @@ describe User do
       lambda{@user.bogus}.should raise_error
     end
   end
+
+  describe ".admin_count" do
+    it "returns the number of admins that exist" do
+      FactoryGirl.create :admin
+      User.admin_count.should == 1
+
+      FactoryGirl.create :user
+      User.admin_count.should == 1
+
+      FactoryGirl.create :admin
+      User.admin_count.should == 2
+    end
+  end
+
+  describe "#admin=" do
+    let(:admin) { FactoryGirl.create :admin }
+
+    it "allows an admin to remove their own privileges, if there are other admins" do
+      other_admin = FactoryGirl.create(:admin)
+      admin.admin = false
+      admin.should_not be_admin
+    end
+
+    it "does not allow an admin to remove their own priveleges if there are no other admins" do
+      admin.admin = false
+      admin.should be_admin
+    end
+  end
 end

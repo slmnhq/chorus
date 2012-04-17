@@ -21,9 +21,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    if current_user.admin?
-      @user.admin = params[:user][:admin]
-    end
+    @user.admin = params[:user][:admin] if current_user.admin?
     @user.save!
     present @user
   end

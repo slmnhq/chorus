@@ -207,15 +207,18 @@ describe UsersController do
         other_user.reload.should be_admin
       end
 
-      it "allows an admin to revoke another user's admin privileges" do
-        other_user.admin = true
-        other_user.save!
-        put :update, :id => other_user.to_param, :user => {:admin => "false"}
+      it "allows an admin to remove their own privileges, if there are other admins" do
+        other_admin = FactoryGirl.create(:admin)
+        put :update, :id => admin.to_param, :user => {:admin => "false"}
         response.code.should == "200"
         decoded_response.admin.should == false
       end
 
-      it "does not allow the last admin to be removed"
+      it "does not allow an admin to remove their own priveleges if there are no other admins" do
+        put :update, :id => admin.to_param, :user => {:admin => "false"}
+        response.code.should == "200"
+        decoded_response.admin.should == true
+      end
     end
 
     context "when the current user is not an admin" do

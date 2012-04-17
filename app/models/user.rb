@@ -17,6 +17,22 @@ class User < ActiveRecord::Base
     where("lower(users.username) = ?", username.downcase).first
   end
 
+  def self.admin_count
+    admin.size
+  end
+
+  def self.admin
+    where(:admin => true)
+  end
+
+  def admin=(value)
+    if admin? && self.class.admin_count == 1
+      value = true
+    end
+
+    write_attribute(:admin, value)
+  end
+
   # override has_secure_password so that our old SHA1 password hashes work
   def authenticate(unencrypted_password)
     if Digest::SHA1.hexdigest(unencrypted_password) == password_digest
