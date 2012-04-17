@@ -25,10 +25,11 @@ describe UserMigrator, :type => :data_migration do
         Legacy.connection.select_all("SELECT * FROM edc_user").each do |legacy_user|
           user = User.find_by_username(legacy_user["user_name"])
           user.should be_present
-          user.username.should be_present
-          user.first_name.should be_present
-          user.last_name.should be_present
-          user.password_digest.should be_present
+          user.username.should == legacy_user["user_name"]
+          user.first_name.should == legacy_user["first_name"]
+          user.last_name.should == legacy_user["last_name"]
+          legacy_user["password"].should == "{SHA}#{user.password_digest}"
+          user.email.should == legacy_user["email_address"]
         end
       end
 
