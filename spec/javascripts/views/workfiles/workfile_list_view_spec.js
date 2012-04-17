@@ -10,8 +10,8 @@ describe("chorus.views.WorkfileList", function() {
             this.view.render();
         });
 
-        it("triggers workfile:selected", function() {
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", undefined);
+        it("triggers workfile:deselected", function() {
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:deselected");
         });
     });
 

@@ -14,9 +14,14 @@ describe("chorus.views.DatabaseListSidebar", function() {
         var db = fixtures.database();
         chorus.PageEvents.broadcast("database:selected", db);
         expect(this.view.$(".name")).toContainText(db.get("name"));
-    })
+    });
 
     it("displays the database type", function() {
         expect(this.view.$(".type")).toContainTranslation("database_list.sidebar.type");
-    })
+    });
+
+    it("displays nothing when a database is deselected", function() {
+        chorus.PageEvents.broadcast("database:deselected");
+        expect(this.view.$(".info")).not.toExist();
+    });
 });

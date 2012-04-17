@@ -33,8 +33,9 @@ chorus.Modal = chorus.views.Base.extend({
 
         if (!windowHeight) windowHeight = $window.height();
 
-        $facebox.css('top', 30);
-        $popup.css("max-height", windowHeight - 60);
+        $facebox.css('top', 30 + 'px');
+        var popupHeight = windowHeight - 60;
+        $popup.css("max-height", popupHeight + "px");
     },
 
     preRender: function() {

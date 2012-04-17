@@ -1,5 +1,6 @@
 describe("chorus.views.SelectableList", function() {
     beforeEach(function() {
+        spyOn(chorus.PageEvents, "broadcast");
         this.collection = new chorus.collections.UserSet([newFixtures.user(), newFixtures.user()]);
         this.view = new chorus.views.SelectableList({
             collection: this.collection
@@ -7,7 +8,7 @@ describe("chorus.views.SelectableList", function() {
 
         // normally would be set by subclass
         this.view.className = "user/list";
-        this.view.itemSelected = jasmine.createSpy();
+        this.view.eventName = "user";
         this.view.render();
     });
 
@@ -17,7 +18,7 @@ describe("chorus.views.SelectableList", function() {
 
     it("preselects the first item", function() {
         expect(this.view.$("> li").eq(0)).toHaveClass("selected");
-        expect(this.view.itemSelected).toHaveBeenCalledWith(this.collection.at(0));
+        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", this.collection.at(0));
     })
 
     describe("clicking another entry", function() {
@@ -31,7 +32,7 @@ describe("chorus.views.SelectableList", function() {
         })
 
         it("should call itemSelected with the selected model", function() {
-            expect(this.view.itemSelected).toHaveBeenCalledWith(this.collection.at(1));
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", this.collection.at(1));
         });
 
         describe("rerendering", function() {
@@ -54,5 +55,16 @@ describe("chorus.views.SelectableList", function() {
                 expect(this.view.$("> li:eq(0)")).toHaveClass("selected");
             });
         });
-    })
+    });
+
+    describe("selecting an item that does not exist", function() {
+        beforeEach(function() {
+            this.view.$("li").addClass("hidden");
+            this.view.selectItem(this.view.$("li:not(:hidden)").eq(0));
+        });
+
+        it("broadcases an item deselected event", function() {
+            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:deselected");
+        });
+    });
 })
