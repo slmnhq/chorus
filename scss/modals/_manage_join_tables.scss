@@ -2,9 +2,11 @@
     max-height: 600px;
 }
 
-.manage_join_tables, .import_datasets_picker_list {
+.manage_join_tables {
     width: 480px;
+}
 
+.manage_join_tables, .import_datasets_picker_list {
     .search {
         padding: 5px 10px;
         border-bottom: 1px solid $menu-border-color;
