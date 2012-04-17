@@ -2,79 +2,70 @@ require 'spec_helper'
 
 describe UsersController do
   describe "#index" do
-    context "before logging in" do
-      it "says user is unauthorized" do
+    before do
+      log_in FactoryGirl.create(:user, :username => 'some_user', :first_name => "zed")
+      FactoryGirl.create(:user, :username => 'other_user', :first_name => "andy")
+    end
+
+    it "succeeds" do
+      get :index
+      response.code.should == "200"
+    end
+
+    it "shows list of users" do
+      get :index
+      decoded_response.length.should == 2
+    end
+
+    describe "sorting" do
+      it "sorts by first name" do
         get :index
-        response.code.should == "401"
+        decoded_response.first.username.should == "other_user"
+        decoded_response.second.username.should == "some_user"
+      end
+
+      context "with a recognized sort order" do
+        it "respects the sort order" do
+          get :index, :order => "last_name"
+          decoded_response.first.username.should == "some_user"
+          decoded_response.second.username.should == "other_user"
+        end
+      end
+
+      context "with an unrecognized sort order" do
+        it "fails" do
+          get :index, :order => "last_name; DROP TABLE users;"
+          response.code.should == "400"
+        end
       end
     end
 
-    context "after logging in" do
+    describe "pagination" do
       before do
-        log_in FactoryGirl.create(:user, :username => 'some_user', :first_name => "zed")
-        FactoryGirl.create(:user, :username => 'other_user', :first_name => "andy")
+        FactoryGirl.create(:user, :username => 'third_user', :first_name => "zed", :last_name => "bob", :password => 'secret', :email => "jj@emc.com")
       end
 
-      it "succeeds" do
-        get :index
-        response.code.should == "200"
-      end
-
-      it "shows list of users" do
-        get :index
+      it "paginates the collection" do
+        get :index, :page => 1, :per_page => 2
         decoded_response.length.should == 2
       end
 
-      describe "sorting" do
-        it "sorts by first name" do
-          get :index
-          decoded_response.first.username.should == "other_user"
-          decoded_response.second.username.should == "some_user"
-        end
-
-        context "with a recognized sort order" do
-          it "respects the sort order" do
-            get :index, :order => "last_name"
-            decoded_response.first.username.should == "some_user"
-            decoded_response.second.username.should == "other_user"
-          end
-        end
-
-        context "with an unrecognized sort order" do
-          it "fails" do
-            get :index, :order => "last_name; DROP TABLE users;"
-            response.code.should == "400"
-          end
-        end
+      it "defaults to page one" do
+        get :index, :per_page => 2
+        decoded_response.length.should == 2
+        decoded_response.first.username.should == "other_user"
+        decoded_response.second.username.should == "some_user"
       end
 
-      describe "pagination" do
-        before do
-          FactoryGirl.create(:user, :username => 'third_user', :first_name => "zed", :last_name => "bob", :password => 'secret', :email => "jj@emc.com")
-        end
+      it "accepts a page parameter" do
+        get :index, :page => 2, :per_page => 2
+        decoded_response.length.should == 1
+        decoded_response.first.username.should == "third_user"
+      end
 
-        it "paginates the collection" do
-          get :index, :page => 1, :per_page => 2
-          decoded_response.length.should == 2
-        end
-
-        it "defaults to page one" do
-          get :index, :per_page => 2
-          decoded_response.length.should == 2
-          decoded_response.first.username.should == "other_user"
-          decoded_response.second.username.should == "some_user"
-        end
-
-        it "accepts a page parameter" do
-          get :index, :page => 2, :per_page => 2
-          decoded_response.length.should == 1
-          decoded_response.first.username.should == "third_user"
-        end
-
-        it "defaults the per_page to fifty" do
-          get :index
-          request.params[:per_page].should == 50
-        end
+      it "defaults the per_page to fifty" do
+        get :index
+        request.params[:per_page].should == 50
       end
     end
   end
@@ -84,13 +75,6 @@ describe UsersController do
       @values = {:username => "another_user", :password => "secret", :first_name => "joe",
                  :last_name => "user", :email => "joe@chorus.com", :title => "Data Scientist",
                  :dept => "bureau of bureaucracy", :notes => "poor personal hygiene"}
-    end
-
-    context "not logged in" do
-      it "should refuse" do
-        post :create, @values
-        response.code.should == "401"
-      end
     end
 
     context "not admin" do
