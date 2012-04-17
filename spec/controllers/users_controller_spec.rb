@@ -174,6 +174,14 @@ describe UsersController do
             response.code.should == "201"
           end
         end
+
+        describe "password" do
+          it "should require 6 characters" do
+            @values[:password] = "a"
+            post :create, {:user => @values}
+            response.code.should == "422"
+          end
+        end
       end
     end
   end
