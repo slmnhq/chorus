@@ -22,25 +22,21 @@ describe UsersController do
 
       it "shows list of users" do
         get :index
-        response_object = JSON.parse(response.body)["response"]
-        response_object.should be_present
-        response_object.length.should == 2
+        decoded_response.length.should == 2
       end
 
       describe "sorting" do
         it "sorts by first name" do
           get :index
-          response_object = JSON.parse(response.body)["response"]
-          response_object.first["username"].should == "other_user"
-          response_object.second["username"].should == "some_user"
+          decoded_response.first.username.should == "other_user"
+          decoded_response.second.username.should == "some_user"
         end
 
         context "with a recognized sort order" do
           it "respects the sort order" do
             get :index, :order => "last_name"
-            response_object = JSON.parse(response.body)["response"]
-            response_object.first["username"].should == "some_user"
-            response_object.second["username"].should == "other_user"
+            decoded_response.first.username.should == "some_user"
+            decoded_response.second.username.should == "other_user"
           end
         end
 
@@ -59,23 +55,20 @@ describe UsersController do
 
         it "paginates the collection" do
           get :index, :page => 1, :per_page => 2
-          response_object = JSON.parse(response.body)["response"]
-          response_object.length.should == 2
+          decoded_response.length.should == 2
         end
 
         it "defaults to page one" do
           get :index, :per_page => 2
-          response_object = JSON.parse(response.body)["response"]
-          response_object.length.should == 2
-          response_object.first["username"].should == "other_user"
-          response_object.second["username"].should == "some_user"
+          decoded_response.length.should == 2
+          decoded_response.first.username.should == "other_user"
+          decoded_response.second.username.should == "some_user"
         end
 
         it "accepts a page parameter" do
           get :index, :page => 2, :per_page => 2
-          response_object = JSON.parse(response.body)["response"]
-          response_object.length.should == 1
-          response_object.first["username"].should == "third_user"
+          decoded_response.length.should == 1
+          decoded_response.first.username.should == "third_user"
         end
 
         it "defaults the per_page to fifty" do
@@ -126,12 +119,10 @@ describe UsersController do
       end
 
       it "should return the user's fields except password" do
-        response_object = JSON.parse(response.body)["response"]
-
-        @values.each{|key, value|
+        @values.each do |key, value|
           key = key.to_s
-          response_object[key].should == value unless key == "password"
-        }
+          decoded_response[key].should == value unless key == "password"
+        end
       end
 
       describe "validation" do
