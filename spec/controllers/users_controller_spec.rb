@@ -90,9 +90,9 @@ describe UsersController do
 
   describe "#create" do
     before do
-      @values = { :username => "another_user", :password => "secret", :first_name => "joe",
-        :last_name => "user", :email => "joe@chorus.com", :title => "Data Scientist",
-        :dept => "bureau of bureaucracy", :notes => "poor personal hygiene"}
+      @values = {:username => "another_user", :password => "secret", :first_name => "joe",
+                 :last_name => "user", :email => "joe@chorus.com", :title => "Data Scientist",
+                 :dept => "bureau of bureaucracy", :notes => "poor personal hygiene"}
     end
 
     context "not logged in" do
@@ -130,22 +130,46 @@ describe UsersController do
       it "should return the user's fields except password" do
         response_object = JSON.parse(response.body)["response"]
 
-        @values.each{|key, value|
+        @values.each { |key, value|
           key = key.to_s
           response_object[key].should == value unless key == "password"
         }
       end
 
       describe "validation" do
-        required_fields = [:first_name, :last_name, :username, :email, :password]
-        required_fields.each do |field|
-          it "should require field: #{field}" do
-            values_minus_field = @values.clone
-            values_minus_field.delete(field)
+        before do
+          @values[:username] += "X"
+        end
 
-            post :create, values_minus_field
+        describe "required fields" do
+          required_fields = [:first_name, :last_name, :username, :email, :password]
 
+          it "should be OK with all the fields set" do
+            post :create, @values
+            response.code.should == "201"
+          end
+
+          required_fields.each do |field|
+            it "should require field: #{field}" do
+              values_minus_field = @values.clone
+              values_minus_field.delete(field)
+
+              post :create, values_minus_field
+
+              response.code.should == "422"
+            end
+          end
+        end
+
+        describe "duplicate user names" do
+          before do
+            post :create, @values
+            post :create, @values
+          end
+
+          it "fails" do
             response.code.should == "422"
+            JSON.parse(response.body)["errors"]["fields"]["username"].should == ["has already been taken"]
           end
         end
       end

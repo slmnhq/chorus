@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   establish_connection
 
   validates_presence_of :username, :first_name, :last_name, :email#TODO:, :password,
+  validates_uniqueness_of :username
 
   def self.authenticate(username, password)
     named(username).try(:authenticate, password)
