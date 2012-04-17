@@ -133,8 +133,8 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     },
 
     closeQtip: function() {
-        $("li:hover a").trigger("mouseleave");
-        this.$(".context a").trigger("unfocus");
+        $(".workfile_show_sidebar li:hover a").trigger("mouseleave");
+        $(".workfile_show_sidebar .context a").trigger("unfocus");
     },
 
     contextClicked: function(e) {
