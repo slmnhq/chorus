@@ -4,12 +4,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    params_clean = params
-    params_clean.delete(:controller)
-    params_clean.delete(:action)
-
-    user = User.create params_clean
-
+    user = User.create params.except(:controller, :action)
     render :json => UserPresenter.present(user), :status => :created
   end
 end
