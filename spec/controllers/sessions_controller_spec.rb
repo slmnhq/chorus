@@ -2,12 +2,11 @@ require 'spec_helper'
 
 describe SessionsController do
   describe "#create" do
-    before(:each) do
-      @user = User.create :username => 'admin', :password => 'secret', :password_confirmation => 'secret'
-    end
-
     describe "with the correct credentials" do
+      let(:user) { User.new(:username => "admin") }
+
       before do
+        CredentialsValidator.stub(:user).with('admin', 'secret').and_return { user }
         post :create, :username => 'admin', :password => 'secret'
       end
 
@@ -24,6 +23,8 @@ describe SessionsController do
 
     describe "with incorrect credentials" do
       before do
+        invalid_exception = CredentialsValidator::Invalid.new(stub(:errors => {:field => ["error"]}))
+        CredentialsValidator.stub(:user).with('admin', 'public').and_raise(invalid_exception)
         post :create, :username => 'admin', :password => 'public'
       end
 
@@ -31,29 +32,10 @@ describe SessionsController do
         response.code.should == "401"
       end
 
-      it "includes generic error code" do
+      it "includes details of invalid credentials" do
         json = JSON.parse(response.body)
-        json.fetch("errors").fetch("fields").fetch("username_or_password").should == "INVALID"
+        json.fetch("errors").fetch("fields").fetch("field").should == ["error"]
       end
-    end
-
-    it "is case insensitive for username" do
-      post :create, :username => 'aDMin', :password => 'secret'
-      response.code.should == "201"
-    end
-
-    it "notifies user of a missing field" do
-      post :create, :username => 'aDMin'
-      response.code.should == "401"
-
-      json = JSON.parse(response.body)
-      json.fetch("errors").fetch("fields").fetch("password").should == "REQUIRED"
-
-      post :create, :password => "secret"
-      response.code.should == "401"
-
-      json = JSON.parse(response.body)
-      json.fetch("errors").fetch("fields").fetch("username").should == "REQUIRED"
     end
   end
 
