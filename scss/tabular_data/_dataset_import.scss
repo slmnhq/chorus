@@ -10,6 +10,9 @@ $image-width: 35px;
         @include font-menu;
         padding-left: 15px;
         padding-bottom: 5px;
+        font-size: 14px;
+        font-weight: $semibold;
+        color: $color-text2;
     }
 
     form {
