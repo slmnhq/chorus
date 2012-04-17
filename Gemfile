@@ -19,6 +19,7 @@ end
 
 group :test, :development do
   gem 'rspec-rails'
+  gem 'timecop'
 end
 
 # gem 'jquery-rails'

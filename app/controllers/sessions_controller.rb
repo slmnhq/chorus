@@ -1,4 +1,7 @@
 class SessionsController < ApplicationController
+  skip_before_filter :check_expiration
+  skip_after_filter :extend_expiration, :only => :destroy
+
   def create
     user = CredentialsValidator.user(params[:username], params[:password])
     session[:user_id] = user.id

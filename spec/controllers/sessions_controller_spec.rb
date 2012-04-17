@@ -19,6 +19,15 @@ describe SessionsController do
         json["response"].should be_present
         json["response"]["username"].should be_present
       end
+
+      it "sets session expiration" do
+        Chorus::Application.config.session_timeout = 4.hours
+        Timecop.freeze(2012, 4, 17, 10, 30) do
+          post :create, :username => 'admin', :password => 'secret'
+          response.should be_success
+          session[:expires_at].should == 4.hours.from_now
+        end
+      end
     end
 
     describe "with incorrect credentials" do
@@ -43,6 +52,15 @@ describe SessionsController do
     it "returns no content" do
       delete :destroy
       response.code.should == "204"
+    end
+
+    it "clears the session" do
+      user = User.create! :username => 'some_user', :first_name => "Sam", :last_name => "blow", :password => 'secret', :password_confirmation => 'secret'
+      log_in user
+      delete :destroy
+      response.code.should == "204"
+      session[:user_id].should_not be_present
+      session[:expires_at].should_not be_present
     end
   end
 end

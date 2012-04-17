@@ -1,0 +1,1 @@
+Chorus::Application.config.session_timeout = 2.hours
