@@ -79,10 +79,8 @@ describe UsersController do
         end
 
         it "defaults the per_page to fifty" do
-          (1..48).each { |n| FactoryGirl.create(:user) }
           get :index
-          response_object = JSON.parse(response.body)["response"]
-          response_object.length.should == 50
+          request.params[:per_page].should == 50
         end
       end
     end
