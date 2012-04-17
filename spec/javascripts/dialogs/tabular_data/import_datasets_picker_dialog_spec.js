@@ -4,8 +4,8 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
         stubModals();
         dialog = new chorus.dialogs.ImportDatasetsPicker({ workspaceId : "33" });
         datasets = new chorus.collections.DatasetSet([
-            newFixtures.datasetSandboxTable({columns: 42}),
-            newFixtures.datasetSandboxTable({columns: 666})
+            newFixtures.datasetSandboxTable({ objectName: "A", columns: 42, id: "REAL_ID" }),
+            newFixtures.datasetSandboxTable({ objectName: "B", columns: 666, id: "AGENT_SMITH" })
         ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" });
     });
 
@@ -61,6 +61,11 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
             it("shows a Preview Columns link for each dataset", function() {
                 expect(dialog.$(".items li:eq(0) a.preview_columns")).toContainTranslation("dataset.manage_join_tables.preview_columns");
                 expect(dialog.$(".items li:eq(1) a.preview_columns")).toContainTranslation("dataset.manage_join_tables.preview_columns");
+            });
+
+            it("has the correct id, not the CID", function() {
+                expect(dialog.$(".items li:eq(0)").data("id")).toBe("REAL_ID");
+                expect(dialog.$(".items li:eq(1)").data("id")).toBe("AGENT_SMITH");
             });
 
             it("shows the preview columns submodal with the appropriate dataset when you click the link", function() {

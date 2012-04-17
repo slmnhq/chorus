@@ -32,7 +32,7 @@ chorus.dialogs.ImportDatasetsPicker = chorus.dialogs.PickItems.extend({
 
     collectionModelContext: function (model) {
         return {
-            id: model.cid,
+            id: model.get("id"),
             name: model.get("objectName"),
             imageUrl: model.iconUrl({size: 'medium'})
         }
@@ -42,7 +42,7 @@ chorus.dialogs.ImportDatasetsPicker = chorus.dialogs.PickItems.extend({
         e && e.preventDefault();
 
         var clickedId = $(e.target).closest("li").data("id");
-        var databaseObject = this.collection.getByCid(clickedId);
+        var databaseObject = this.collection.get(clickedId);
 
         var previewColumnsDialog = new chorus.dialogs.PreviewColumns({model: databaseObject});
         previewColumnsDialog.title = this.title;

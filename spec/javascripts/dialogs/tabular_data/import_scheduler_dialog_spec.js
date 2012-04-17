@@ -513,7 +513,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             expect(this.dialog.title).toMatchTranslation("import.title");
         });
 
-        it("should the right submit button text", function() {
+        it("should have the right submit button text", function() {
             expect(this.dialog.submitText).toMatchTranslation("import.begin");
         });
 
