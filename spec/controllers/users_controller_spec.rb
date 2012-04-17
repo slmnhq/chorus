@@ -89,4 +89,53 @@ describe UsersController do
       end
     end
   end
+
+  describe "#create" do
+    before do
+      @values = { :username => "another_user", :password => "secret", :first_name => "joe",
+        :last_name => "user", :email => "joe@chorus.com", :title => "Data Scientist",
+        :dept => "bureau of bureaucracy", :notes => "poor personal hygiene"}
+    end
+
+    context "not logged in" do
+      it "should refuse" do
+        post :create, @values
+        response.code.should == "401"
+      end
+    end
+
+    context "not admin" do
+      it "should refuse" do
+        #TODO login as non-admin
+        post :create, @values
+        response.code.should == "401"
+      end
+    end
+
+    context "admin" do
+      let(:user) { User.create! :username => 'some_user', :first_name => "Sam", :last_name => "blow", :password => 'secret', :password_confirmation => 'secret' }
+
+      before do
+        log_in user
+        post :create, @values
+      end
+
+      it "should succeed" do
+        response.code.should == "201"
+      end
+
+      it "should create a user" do
+        User.find_by_username(@values[:username]).should be_present
+      end
+
+      it "should return the user's fields except password" do
+        response_object = JSON.parse(response.body)["response"]
+
+        @values.each{|key, value|
+          key = key.to_s
+          response_object[key].should == value unless key == "password"
+        }
+      end
+    end
+  end
 end

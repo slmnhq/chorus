@@ -8,8 +8,8 @@ class UsersController < ApplicationController
     params_clean.delete(:controller)
     params_clean.delete(:action)
 
-    user = User.new params_clean # TODO: create (save)
+    user = User.create params_clean
 
-    render :json => UserPresenter.present(user), :status => 201
+    render :json => UserPresenter.present(user), :status => :created
   end
 end
