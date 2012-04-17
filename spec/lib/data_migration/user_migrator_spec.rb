@@ -30,6 +30,9 @@ describe UserMigrator, :type => :data_migration do
           user.last_name.should == legacy_user["last_name"]
           legacy_user["password"].should == "{SHA}#{user.password_digest}"
           user.email.should == legacy_user["email_address"]
+          user.title.should == legacy_user["title"]
+          user.dept.should == legacy_user["ou"]
+          user.notes.should == legacy_user["notes"]
         end
       end
 

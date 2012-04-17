@@ -2,7 +2,7 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   has_secure_password
-  attr_accessible :username, :password, :password_confirmation, :first_name, :last_name, :email
+  attr_accessible :username, :password, :password_confirmation, :first_name, :last_name, :email, :title, :dept, :notes
   establish_connection
 
   def self.authenticate(username, password)
