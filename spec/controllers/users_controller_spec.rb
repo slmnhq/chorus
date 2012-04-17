@@ -172,6 +172,20 @@ describe UsersController do
             JSON.parse(response.body)["errors"]["fields"]["username"].should == ["has already been taken"]
           end
         end
+
+        describe "duplicate user names (CaSe InSeNsItIvE)" do
+          before do
+            @values[:username].downcase!
+            post :create, @values
+            @values[:username].upcase!
+            post :create, @values
+          end
+
+          it "fails" do
+            response.code.should == "422"
+            JSON.parse(response.body)["errors"]["fields"]["username"].should == ["has already been taken"]
+          end
+        end
       end
     end
   end
