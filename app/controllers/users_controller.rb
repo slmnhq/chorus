@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :require_admin, :only => :create
-  before_filter :load_user, :only => :show
+  before_filter :load_user, :only => [:show, :update]
 
   def index
     render :json => UserPresenter.present_collection(User.order("LOWER(#{params[:order]})").paginate(params.slice(:page, :per_page)))
@@ -23,12 +23,11 @@ class UsersController < ApplicationController
   end
 
   def update
-    user = User.find(params[:id])
     if current_user.admin?
-      user.admin = params[:user][:admin]
+      @user.admin = params[:user][:admin]
     end
-    user.save!
-    render :json => UserPresenter.present(user)
+    @user.save!
+    render :json => UserPresenter.present(@user)
   end
 
   private
