@@ -14,4 +14,14 @@ class UsersController < ApplicationController
       head :unauthorized
     end
   end
+
+  def create
+    params_clean = params
+    params_clean.delete(:controller)
+    params_clean.delete(:action)
+
+    user = User.new params_clean # TODO: create (save)
+
+    render :json => UserPresenter.present(user), :status => 201
+  end
 end
