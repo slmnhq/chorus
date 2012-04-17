@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_filter :require_admin, :only => :create
   def index
     render :json => UserPresenter.present_collection(User.order("LOWER(#{params[:order]})").paginate(params.slice(:page, :per_page)))
   end

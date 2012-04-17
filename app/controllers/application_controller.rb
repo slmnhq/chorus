@@ -26,6 +26,10 @@ class ApplicationController < ActionController::Base
     check_expiration
   end
 
+  def require_admin
+    head :unauthorized unless logged_in? && current_user.admin?
+  end
+
   def set_collection_defaults
     params.reverse_merge!(Chorus::Application.config.collection_defaults)
     require_white_listed_order

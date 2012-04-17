@@ -20,11 +20,11 @@ ActiveRecord::Schema.define(:version => 20120417184201) do
     t.datetime "updated_at",                         :null => false
     t.string   "first_name"
     t.string   "last_name"
-    t.boolean  "admin",           :default => false
     t.string   "email"
     t.string   "title"
     t.string   "dept"
     t.text     "notes"
+    t.boolean  "admin",           :default => false
   end
 
 end
