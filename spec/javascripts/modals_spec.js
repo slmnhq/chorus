@@ -73,7 +73,11 @@ describe("chorus.Modal", function() {
             });
 
             describe("#resize", function() {
+                // Stubbing out actual window sizing because it is affected by browser 'zoom' setting' and the actual css function
+                // will return invailid results if not 'zoomed' to actual size.
                 beforeEach(function() {
+                    spyOn($.fn, "height").andReturn(600);
+                    spyOn($.fn, "css");
                     this.faceboxProxy = $("<div id='facebox'><div class='popup'></div></div>");
                     this.faceboxOverlayProxy = $("<div id='facebox_overlay'/>");
                     $("#jasmine_content").append(this.faceboxProxy).append(this.faceboxOverlayProxy);
@@ -83,24 +87,31 @@ describe("chorus.Modal", function() {
 
                 it("sets the dialog.top to 30", function() {
                     this.modal.resize();
-                    expect($("#facebox").css("top")).toBe("30px");
+                    var lastCall = $.fn.css.argsForCall;
+                      expect(lastCall).toContain(["top", "30px"])
                 });
 
 
                 it("with no arguments uses window.height", function() {
                     this.modal.resize();
-                    expect($("#facebox .popup").css("max-height")).toBe(($(window).height() - 60) + "px");
+                    var windowHeight = $(window).height() - 60 + "px";
+
+                    var lastCall = $.fn.css.mostRecentCall;
+                    expect(lastCall.args).toEqual(["max-height", windowHeight])
+                    expect(lastCall.object.selector).toBe("#facebox .popup")
                 });
 
                 it("has a max-height smaller than the window's height by twice the dialog's distance from the top of the window", function() {
                     this.modal.resize(0, 100);
-                    expect($("#facebox .popup").css("max-height")).toBe("40px");
+
+                    var lastCall = $.fn.css.argsForCall;
+                    expect(lastCall).toContain(["max-height", "40px"]);
 
                     this.modal.resize(0, 1000);
-                    expect($("#facebox .popup").css("max-height")).toBe("940px");
+                    expect(lastCall).toContain(["max-height", "940px"]);
 
                     this.modal.resize(0, 500);
-                    expect($("#facebox .popup").css("max-height")).toBe("440px");
+                    expect(lastCall).toContain(["max-height", "440px"]);
                 });
             });
 
