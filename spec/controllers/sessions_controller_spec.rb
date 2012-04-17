@@ -15,9 +15,8 @@ describe SessionsController do
       end
 
       it "includes the user info in the response" do
-        json = JSON.parse(response.body)
-        json["response"].should be_present
-        json["response"]["username"].should be_present
+        decoded_response.should be_present
+        decoded_response.username.should be_present
       end
 
       it "sets session expiration" do
@@ -42,8 +41,7 @@ describe SessionsController do
       end
 
       it "includes details of invalid credentials" do
-        json = JSON.parse(response.body)
-        json.fetch("errors").fetch("fields").fetch("field").should == ["error"]
+        decoded_errors.fields.field.should == ["error"]
       end
     end
   end
