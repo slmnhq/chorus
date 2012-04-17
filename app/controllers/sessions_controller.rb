@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  skip_before_filter :check_expiration
+  skip_before_filter :require_login
   skip_after_filter :extend_expiration, :only => :destroy
 
   def create
