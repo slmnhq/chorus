@@ -16,17 +16,4 @@ describe "/users" do
     json["response"].length.should == 1
     json["response"].first["username"].should == "some_user"
   end
-
-  it "creates a new user for a post" do
-    values = { :username => "another_user", :password => "secret", :first_name => "joe",
-      :last_name => "user", :email => "joe@chorus.com", :title => "Data Scientist" }
-    post "/users", values
-
-    response.code.should == "201"
-    json = JSON.parse(response.body)
-    json["response"].should be_present
-    values.each{|key,value|
-      json["response"].fetch(key.to_s).should == value unless key == :password
-    }
-  end
 end

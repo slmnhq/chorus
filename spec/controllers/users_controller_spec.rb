@@ -103,8 +103,11 @@ describe UsersController do
     end
 
     context "not admin" do
+      before do
+        log_in
+      end
+
       it "should refuse" do
-        #TODO login as non-admin
         post :create, @values
         response.code.should == "401"
       end
@@ -112,7 +115,7 @@ describe UsersController do
 
     context "admin" do
       before do
-        log_in
+        log_in.admin = true
         post :create, @values
       end
 

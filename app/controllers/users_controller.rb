@@ -4,9 +4,12 @@ class UsersController < ApplicationController
   end
 
   def create
-    user = User.create! params.except(:controller, :action)
-    render :json => UserPresenter.present(user), :status => :created
-
+    if current_user.admin?
+      user = User.create! params.except(:controller, :action)
+      render :json => UserPresenter.present(user), :status => :created
+    else
+      render :status => :unauthorized, :json => "Only admins can do that"
+    end
   rescue ActiveRecord::RecordInvalid => e
     render :json => { :errors => { :fields => e.record.errors } },
            :status => :unprocessable_entity
