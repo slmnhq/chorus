@@ -10,11 +10,9 @@ describe UsersController do
     end
 
     context "after logging in" do
-      let(:user) { User.create! :username => 'some_user', :first_name => "Sam", :last_name => "blow", :password => 'secret', :password_confirmation => 'secret' }
-
       before do
-        log_in user
-        User.create! :username => 'other_user', :first_name => "joe", :last_name => "Jenkins", :password => 'secret', :password_confirmation => 'secret'
+        log_in
+        User.create! :username => 'other_user', :first_name => "joe", :last_name => "Jenkins", :password => 'secret', :email => "jj@emc.com"
       end
 
       it "succeeds" do
@@ -56,7 +54,7 @@ describe UsersController do
 
       describe "pagination" do
         before do
-          User.create! :username => 'third_user', :first_name => "zed", :last_name => "bob", :password => 'secret', :password_confirmation => 'secret'
+          User.create! :username => 'third_user', :first_name => "zed", :last_name => "bob", :password => 'secret', :email => "jj@emc.com"
         end
 
         it "paginates the collection" do
@@ -81,7 +79,7 @@ describe UsersController do
         end
 
         it "defaults the per_page to fifty" do
-          (1..48).each { |n| User.create! :username => "user#{n}", :first_name => "User #{n}", :last_name => "Last #{n}", :password => 'secret', :password_confirmation => 'secret' }
+          (1..48).each { |n| User.create! :username => "user#{n}", :first_name => "User #{n}", :last_name => "Last #{n}", :password => 'secret', :email => "jj@emc.com" }
           get :index
           response_object = JSON.parse(response.body)["response"]
           response_object.length.should == 50
@@ -113,10 +111,8 @@ describe UsersController do
     end
 
     context "admin" do
-      let(:user) { User.create! :username => 'some_user', :first_name => "Sam", :last_name => "blow", :password => 'secret', :password_confirmation => 'secret' }
-
       before do
-        log_in user
+        log_in
         post :create, @values
       end
 
@@ -135,6 +131,20 @@ describe UsersController do
           key = key.to_s
           response_object[key].should == value unless key == "password"
         }
+      end
+
+      describe "validation" do
+        required_fields = [:first_name, :last_name, :username, :email, :password]
+        required_fields.each do |field|
+          it "should require field: #{field}" do
+            values_minus_field = @values.clone
+            values_minus_field.delete(field)
+
+            post :create, values_minus_field
+
+            response.code.should == "422"
+          end
+        end
       end
     end
   end

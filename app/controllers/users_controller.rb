@@ -4,7 +4,11 @@ class UsersController < ApplicationController
   end
 
   def create
-    user = User.create params.except(:controller, :action)
+    user = User.create! params.except(:controller, :action)
     render :json => UserPresenter.present(user), :status => :created
+
+  rescue ActiveRecord::RecordInvalid => e
+    render :json => { :errors => { :fields => e.record.errors } },
+           :status => :unprocessable_entity
   end
 end

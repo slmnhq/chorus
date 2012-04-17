@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "/users" do
-  let!(:user) { User.create! :username => 'some_user', :password => 'secret', :password_confirmation => 'secret' }
+  let!(:user) { User.create! :username => 'some_user', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com" }
 
   before do
     post "/sessions", :username => "some_user", :password => "secret"

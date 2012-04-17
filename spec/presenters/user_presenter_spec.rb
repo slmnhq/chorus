@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe UserPresenter do
   before(:each) do
-    @user = User.create :username => 'admin', :password => 'secret', :password_confirmation => 'secret'
+    @user = User.create :username => 'admin', :password => 'secret'
     @presenter = UserPresenter.new(@user)
   end
 

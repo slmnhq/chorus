@@ -9,8 +9,7 @@ describe ApplicationController do
 
   describe "session expiration" do
     before do
-      user = User.create! :username => 'some_user', :first_name => "Sam", :last_name => "blow", :password => 'secret', :password_confirmation => 'secret'
-      log_in user
+      log_in
       session[:expires_at] = 1.hour.from_now
     end
 
