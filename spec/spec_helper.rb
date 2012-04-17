@@ -35,4 +35,5 @@ RSpec.configure do |config|
   end
 
   config.include AuthHelper, :type => :controller
+  config.include RocketPants::TestHelper, :type => :controller
 end

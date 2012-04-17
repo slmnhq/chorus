@@ -17,9 +17,10 @@ group :assets do
   # gem 'uglifier', '>= 1.0.3'
 end
 
-group :test, :development do
+group :test do
   gem 'rspec-rails'
   gem 'timecop'
+  gem 'hashie'
 end
 
 # gem 'jquery-rails'
