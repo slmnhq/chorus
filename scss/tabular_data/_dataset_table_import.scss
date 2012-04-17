@@ -308,7 +308,7 @@ $cell-width: 150px;
     .ui-tooltip-content {
         max-height: 420px;
         overflow-y: auto;
-        width: 280px;
+        width: 300px;
     }
 
     .check_wrapper {
@@ -324,12 +324,13 @@ $cell-width: 150px;
             height: 10px;
         }
     }
+
     li {
         a.name {
             @include font-menu;
             vertical-align: baseline;
             @include ellipsis;
-            max-width: 250px;
+            max-width: 180px;
             display: inline-block;
             height: 16px;
             color: $color-text1;
