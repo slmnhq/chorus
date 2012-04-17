@@ -1,0 +1,30 @@
+pairs:
+  ms: Michael Sofaer; msofaer
+  mr: Mark Rushakoff; mrushakoff
+  dc: Dennis Collinson
+  dj: David Jacobs
+  db: Danny Burkes
+  bd: Boxiong Ding
+  ng: Nitin Grewal
+  ch: Charles Hansen; chansen
+  mb: Max Brunsfeld; mbrunsfeld
+  cl: Corina Lawu
+  jp: Joseph Palermo
+  lh: Leo Han
+  ed: Erich Douglass; edouglass
+  co: Colin O'Byrne
+  bp: Bleicke Petersen; bpetersen
+  cf: Chuck Fitzpatrick; cfitzpatrick
+  lt: Lenny Turetsky
+  jt: Jesse Toth
+  nm: Noel Mansour
+  bw: Bin Wang
+  jm: Jacob Maine
+  hw: Heather Williams
+  as: Anne Spalding
+  
+email:
+  prefix: pair
+  domain: pivotallabs.com
+
+

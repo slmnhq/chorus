@@ -26,6 +26,8 @@ describe UserMigrator, :type => :data_migration do
           user = User.find_by_username(legacy_user["user_name"])
           user.should be_present
           user.username.should be_present
+          user.first_name.should be_present
+          user.last_name.should be_present
           user.password_digest.should be_present
         end
       end
