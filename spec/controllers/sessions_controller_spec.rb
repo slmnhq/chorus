@@ -55,7 +55,7 @@ describe SessionsController do
     end
 
     it "clears the session" do
-      log_in
+      log_in FactoryGirl.create :user
       delete :destroy
       response.code.should == "204"
       session[:user_id].should_not be_present

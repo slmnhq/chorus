@@ -9,7 +9,7 @@ describe ApplicationController do
 
   describe "#current_user" do
     before do
-      @user = User.create! :username => 'some_user', :password => 'secret', :last_name => "twaine", :first_name => "mark", :email => "mark@example.com"
+      @user = FactoryGirl.create(:user)
     end
 
     it "returns the user based on the session's user id" do
@@ -30,7 +30,7 @@ describe ApplicationController do
 
   describe "session expiration" do
     before do
-      log_in
+      log_in FactoryGirl.create :user
       session[:expires_at] = 1.hour.from_now
     end
 

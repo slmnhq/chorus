@@ -18,6 +18,7 @@ group :assets do
 end
 
 group :test do
+  gem 'factory_girl'
   gem 'rspec-rails'
   gem 'timecop'
   gem 'hashie'

@@ -11,8 +11,8 @@ describe UsersController do
 
     context "after logging in" do
       before do
-        log_in
-        User.create! :username => 'other_user', :first_name => "joe", :last_name => "Jenkins", :password => 'secret', :email => "jj@emc.com"
+        log_in FactoryGirl.create(:user, :username => 'some_user', :first_name => "zed")
+        FactoryGirl.create(:user, :username => 'other_user', :first_name => "andy")
       end
 
       it "succeeds" do
@@ -54,7 +54,7 @@ describe UsersController do
 
       describe "pagination" do
         before do
-          User.create! :username => 'third_user', :first_name => "zed", :last_name => "bob", :password => 'secret', :email => "jj@emc.com"
+          FactoryGirl.create(:user, :username => 'third_user', :first_name => "zed", :last_name => "bob", :password => 'secret', :email => "jj@emc.com")
         end
 
         it "paginates the collection" do
@@ -79,7 +79,7 @@ describe UsersController do
         end
 
         it "defaults the per_page to fifty" do
-          (1..48).each { |n| User.create! :username => "user#{n}", :first_name => "User #{n}", :last_name => "Last #{n}", :password => 'secret', :email => "jj@emc.com" }
+          (1..48).each { |n| FactoryGirl.create(:user) }
           get :index
           response_object = JSON.parse(response.body)["response"]
           response_object.length.should == 50
@@ -104,7 +104,7 @@ describe UsersController do
 
     context "not admin" do
       before do
-        log_in
+        log_in FactoryGirl.build :user
       end
 
       it "should refuse" do
@@ -115,9 +115,7 @@ describe UsersController do
 
     context "admin" do
       before do
-        user = log_in
-        user.admin = true
-        user.save
+        log_in FactoryGirl.create(:admin, :username => 'some_user')
         post :create, @values
       end
 
@@ -155,14 +153,9 @@ describe UsersController do
   end
 
   describe "#update" do
-    let(:other_user) { User.create! :username => 'other_user', :password => 'secret', :first_name => "tom", :last_name => "brown", :email => "tom@example.com" }
-    let(:admin) do
-      user = User.new(:username => 'admin', :password => 'secret', :first_name => "larry", :last_name => "bar", :email => "foo@example.com")
-      user.admin = true
-      user.save!
-      user
-    end
-    let(:non_admin) { User.create!(:username => 'other_user', :password => 'secret', :first_name => "henry", :last_name => "james", :email => "h@example.com") }
+    let(:other_user) { FactoryGirl.create :user }
+    let(:admin) { FactoryGirl.create :admin }
+    let(:non_admin) { FactoryGirl.create :user }
 
     context "when logged in as an admin" do
       before do

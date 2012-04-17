@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Presenter do
   before do
-    @user = User.create :username => 'admin', :password => 'secret'
+    @user = FactoryGirl.build :user
     @presenter = Presenter.new(@user)
   end
 

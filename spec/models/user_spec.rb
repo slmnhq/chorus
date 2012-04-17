@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
   describe ".authenticate" do
     before do
-      @user = User.create :username => 'aDmin', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
+      @user = FactoryGirl.create :user, :username => 'aDmin'
     end
 
     it "returns true if the password is correct" do
