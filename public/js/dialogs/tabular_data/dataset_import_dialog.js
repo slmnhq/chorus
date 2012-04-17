@@ -22,8 +22,9 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         }
     },
 
-    datasetsChosen: function(datasets) {
-        this.changeSelectedDataset(datasets && datasets[0] && datasets[0].name());
+    datasetsChosen: function(dataset) {
+        this.selectedDataset = dataset[0];
+        this.changeSelectedDataset(dataset && dataset[0] && dataset[0].name());
     },
 
     onRadioSelect: function(e) {
@@ -49,12 +50,23 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             this.$(".existing_table .options").removeClass("hidden");
             this.$(".existing_table .options input").prop("disabled", false);
         }
+
+        this.enableButton();
     },
 
     changeSelectedDataset: function(name) {
-        this.selectedDataset = name;
         this.$(".existing_table a.dataset_picked").text(_.prune(name, 20));
         this.$(".existing_table span.dataset_picked").text(_.prune(name, 20));
+
+        this.enableButton();
+    },
+
+    enableButton: function() {
+        if(this.selectedDataset || this.importTarget !== "existing") {
+            this.$("button.submit").prop("disabled", false);
+        } else {
+            this.$("button.submit").prop("disabled", true);
+        }
     },
 
     additionalContext: function() {
@@ -70,6 +82,14 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         });
     },
 
+    importDestination: function() {
+        if (this.importTarget === "existing") {
+            return (this.selectedDataset && this.selectedDataset.name()) || "";
+        } else if(this.importTarget === "new"){
+            return chorus.models.CSVImport.normalizeForDatabase(this.$('.new_table input:text').val());
+        }
+    },
+
     uploadFile: function(e) {
         e && e.preventDefault();
 
@@ -78,21 +98,21 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceId") + "/workfile";
             this.uploadObj.source = "fs";
             this.request = this.uploadObj.submit();
-        } else {
-            if (this.importTarget === "existing") {
-                this.datasetId = this.tableMap[this.$('select').val()]
-            }
 
-            var toTable = this.$('.new_table input:text').is(':disabled') ? this.$(".existing_table select").val() : chorus.models.CSVImport.normalizeForDatabase(this.$(".new_table input[type='text']").val())
+        } else {
             this.csv.set({
-                toTable: toTable,
+                toTable: this.importDestination(),
                 truncate: this.$(".existing_table input#truncate").is(':checked')
-            }, {silent: true})
+            }, {silent: true});
 
             this.$("button.submit").startLoading("actions.uploading");
-
             this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceId") + "/csv/sample";
-            this.request = this.uploadObj.submit();
+
+            if(this.csv.save()){
+                this.request = this.uploadObj.submit();
+            } else {
+                this.showErrors(this.model);
+            }
         }
     },
 
@@ -166,7 +186,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                     } else {
                         var dialog;
                         if (self.importTarget === "existing") {
-                            dialog = new chorus.dialogs.ExistingTableImportCSV({csv: workingCsv, datasetId: self.datasetId});
+                            dialog = new chorus.dialogs.ExistingTableImportCSV({csv: workingCsv, datasetId: self.selectedDataset.get("id")});
                         } else {
                             dialog = new chorus.dialogs.NewTableImportCSV({csv: workingCsv});
                         }

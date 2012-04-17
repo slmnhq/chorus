@@ -158,6 +158,10 @@ describe("chorus.dialogs.DatasetImport", function() {
                     this.dialog.$(".existing_table input:radio").prop('checked', true).change();
                 });
 
+                it("disables the upload button", function() {
+                    expect(this.dialog.$("button.submit")).toBeDisabled();
+                });
+
                 it("shows the truncate check box", function() {
                     expect(this.dialog.$(".existing_table .options")).not.toHaveClass("hidden");
                     expect(this.dialog.$(".existing_table #truncate")).toBeEnabled();
@@ -191,6 +195,10 @@ describe("chorus.dialogs.DatasetImport", function() {
                                 expect(this.dialog.$(".existing_table a.dataset_picked")).toHaveClass("hidden");
                                 expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
                             });
+
+                            it("enables the upload button", function() {
+                                expect(this.dialog.$("button.submit")).toBeEnabled();
+                            });
                         });
                     });
 
@@ -202,6 +210,10 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                         it("it should show the selected dataset in the link", function() {
                             expect(this.dialog.$(".existing_table a.dataset_picked")).toContainText("myDataset");
+                        });
+
+                        it("enables the upload button", function() {
+                            expect(this.dialog.$("button.submit")).toBeEnabled();
                         });
 
                         context("and then 'import into new table' is checked", function() {
@@ -448,21 +460,36 @@ describe("chorus.dialogs.DatasetImport", function() {
                                 {name: "myfile"}
                             ]
                         };
-                        spyOn(chorus.dialogs.NewTableImportCSV.prototype, "setup").andCallThrough()
                         this.fileUploadOptions.done(null, this.data)
                     });
+
                     it("does not launch the new table configuration dialog", function() {
                         expect(this.modalSpy).not.toHaveModal(chorus.dialogs.NewTableImportCSV);
                     });
+
                     it("fills the error field", function() {
                         expect(this.dialog.$(".errors ul")).toHaveText("You failed");
-                    })
+                    });
+
                     it("does not hide the import controls or change file link", function() {
                         expect(this.dialog.$(".import_controls")).not.toHaveClass("hidden");
                         expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
                         expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
-                    })
-                })
+                    });
+                });
+            });
+
+            context("when importing into an existing table", function() {
+                beforeEach(function() {
+                    this.dialog.$(".existing_table input:radio").prop("checked", true).change();
+                    this.dialog.datasetsChosen([this.validDatasets[1]]);
+                    this.dialog.$("form").submit();
+                });
+
+                it("sets the destination table and truncate options in the csv", function() {
+                    expect(this.dialog.csv.get("toTable")).toBe(this.validDatasets[1].name());
+                    expect(this.dialog.csv.get("truncate")).toBeFalsy();
+                });
             });
         });
     });

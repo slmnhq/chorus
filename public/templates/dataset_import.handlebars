@@ -25,8 +25,8 @@
             <input type="radio" value="existing" name="group" id="existing"/>
             <label for="existing">{{t "dataset.import.existing_table"}}</label>
             <span class="select">
-                <a href="#" class="dataset_picked hidden">{{t "dataset.import.select_dataset"}}</a>
-                <span class="dataset_picked hidden">{{t "dataset.import.select_dataset"}}</span>
+                <a href="#" class="dataset_picked hidden" name="toTable">{{t "dataset.import.select_dataset"}}</a>
+                <span class="dataset_picked hidden" name="toTable">{{t "dataset.import.select_dataset"}}</span>
             </span>
             <div class="options hidden">
                 <input type="checkbox" id="truncate"/><label for="truncate">{{t "dataset.import.truncate_table"}}</label>
