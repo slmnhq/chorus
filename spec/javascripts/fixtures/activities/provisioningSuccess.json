@@ -1,0 +1,9 @@
+{
+    "timestamp": "2012-04-05 15:57:52.432",
+    "id": "10211",
+    "instance": {
+        "id": "10220",
+        "name": "aurora_test1"
+    },
+    "type": "PROVISIONING_SUCCESS"
+}
