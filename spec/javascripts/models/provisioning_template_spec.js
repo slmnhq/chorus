@@ -9,7 +9,7 @@ describe("chorus.models.ProvisioningTemplate", function() {
 
     describe("#toText", function() {
         it("returns the complete text", function() {
-            expect(this.model.toText()).toBe("Small - 1 vcpu, 4 GB RAM");
+            expect(this.model.toText()).toMatchTranslation("provisioning.templates.small", {cpu: "1", mem: "4"});
         });
     });
 });

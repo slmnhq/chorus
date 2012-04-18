@@ -36,6 +36,14 @@ chorus.ValidationRegexes = (function(){
             return chorusIdentifier;
         },
 
+        Password: function(options) {
+            if (options) {
+                var min = options.min || "0";
+                var max = options.max || "";
+                return new RegExp("^.{" + min + "," + max + "}$");
+            }
+        },
+
         SafePgName: function() {
             return safePgName;
         },

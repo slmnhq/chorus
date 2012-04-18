@@ -88,4 +88,33 @@ describe("chorus.ValidationRegexes", function() {
             expect("aBC").not.toMatch(regex);
         });
     });
+
+    describe("Password", function() {
+        context("with a minimum length", function() {
+            it("returns a Password matcher with the supplied min length", function() {
+                var regex = chorus.ValidationRegexes.Password({min: 4});
+                expect("abc").not.toMatch(regex);
+                expect("^123").toMatch(regex);
+                expect("11234").toMatch(regex);
+            });
+        });
+
+        context("with a maximum length", function() {
+            it("returns a Password matcher with the supplied max length", function() {
+                var regex = chorus.ValidationRegexes.Password({max: 4});
+                expect("&bc").toMatch(regex);
+                expect("1123").toMatch(regex);
+                expect("*1234").not.toMatch(regex);
+            });
+        });
+
+        context("with a minimum and maximum length", function() {
+            it("returns a Password matcher with the supplied min and max length", function() {
+                var regex = chorus.ValidationRegexes.Password({min: 4, max: 8});
+                expect("1bc").not.toMatch(regex);
+                expect("%123").toMatch(regex);
+                expect("*123&56789").not.toMatch(regex);
+            });
+        });
+    });
 });

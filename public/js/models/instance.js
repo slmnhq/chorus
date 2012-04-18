@@ -45,7 +45,7 @@
                     this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                     this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
                     this.require("dbUserName", newAttrs);
-                    this.require("dbPassword", newAttrs);
+                    this.requirePattern("dbPassword", chorus.ValidationRegexes.Password({min: 6, max: 256}), newAttrs);
                     break;
                 case "registerHadoop":
                     this.require("host", newAttrs);
@@ -132,6 +132,7 @@
             "name":"instances.dialog.instance_name",
             "host":"instances.dialog.host",
             "port":"instances.dialog.port",
+            "databaseName": "instances.dialog.database_name",
             "maintenanceDb":"instances.dialog.maintenanceDb",
             "description":"instances.dialog.description",
             "size":"instances.dialog.size"

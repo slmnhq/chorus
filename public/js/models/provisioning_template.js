@@ -3,6 +3,7 @@ chorus.models.ProvisioningTemplate = chorus.models.Base.extend({
     nameAttribute: "name",
 
     toText: function() {
-        return _.capitalize(this.name()) + " - " + this.get("cpuNumber") + " vcpu, " + this.get("memorySize") + " GB RAM";
+        var key = "provisioning.templates." + this.get("name");
+        return t(key, {cpu: this.get("cpuNumber"), mem: this.get("memorySize")});
     }
 });
