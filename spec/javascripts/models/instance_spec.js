@@ -338,7 +338,7 @@ describe("chorus.models.Instance", function() {
                     databaseName: "thisDatabase",
                     schemaName: "thisSchema",
                     dbUserName: "foo",
-                    dbPassword: "bar"
+                    dbPassword: "bar123"
                 }
             });
 
