@@ -359,7 +359,10 @@
 
     afterEach(function() {
         chorus.router.trigger("leaving")
+
         delete chorus.models.Config._instance;
+        delete chorus.models.Instance._aurora;
+
         this.server.restore();
         $.cookie("userId", null)
         if (this instanceof jasmine.Spec) {
