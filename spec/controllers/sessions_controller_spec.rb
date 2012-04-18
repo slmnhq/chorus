@@ -50,6 +50,7 @@ describe SessionsController do
     it "returns no content" do
       delete :destroy
       response.code.should == "204"
+      response.body.strip.should be_empty
     end
 
     it "clears the session" do

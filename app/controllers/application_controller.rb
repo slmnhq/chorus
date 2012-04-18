@@ -40,6 +40,10 @@ class ApplicationController < ActionController::Base
     head :unauthorized unless logged_in? && current_user.admin?
   end
 
+  def require_admin_or_referenced_user
+    head :not_found unless logged_in? && (current_user.admin? || current_user == @user)
+  end
+
   def set_collection_defaults
     params.reverse_merge!(Chorus::Application.config.collection_defaults)
     require_white_listed_order

@@ -126,33 +126,42 @@ describe UsersController do
         log_in admin
       end
 
-      it "responds with the updated user" do
-        put :update, :id => other_user.to_param, :user => {:admin => "true"}
-        response.code.should == "200"
-        decoded_response.admin.should == true
+      context "with a valid user id" do
+        it "responds with the updated user" do
+          put :update, :id => other_user.to_param, :user => {:admin => "true"}
+          response.code.should == "200"
+          decoded_response.admin.should == true
+        end
+
+        it "allows making someone an admin" do
+          put :update, :id => other_user.to_param, :user => {:admin => "true"}
+          other_user.reload.should be_admin
+        end
+
+        it "allows an admin to remove their own privileges, if there are other admins" do
+          other_admin = FactoryGirl.create(:admin)
+          put :update, :id => admin.to_param, :user => {:admin => "false"}
+          response.code.should == "200"
+          decoded_response.admin.should == false
+        end
+
+        it "does not allow an admin to remove their own priveleges if there are no other admins" do
+          put :update, :id => admin.to_param, :user => {:admin => "false"}
+          response.code.should == "200"
+          decoded_response.admin.should == true
+        end
+
+        it "updates other attributes" do
+          put :update, :id => other_user.to_param, :user => {:first_name => "updated"}
+          decoded_response.first_name.should == "updated"
+        end
       end
 
-      it "allows making someone an admin" do
-        put :update, :id => other_user.to_param, :user => {:admin => "true"}
-        other_user.reload.should be_admin
-      end
-
-      it "allows an admin to remove their own privileges, if there are other admins" do
-        other_admin = FactoryGirl.create(:admin)
-        put :update, :id => admin.to_param, :user => {:admin => "false"}
-        response.code.should == "200"
-        decoded_response.admin.should == false
-      end
-
-      it "does not allow an admin to remove their own priveleges if there are no other admins" do
-        put :update, :id => admin.to_param, :user => {:admin => "false"}
-        response.code.should == "200"
-        decoded_response.admin.should == true
-      end
-
-      it "updates other attributes" do
-        put :update, :id => other_user.to_param, :user => {:first_name => "updated"}
-        decoded_response.first_name.should == "updated"
+      context "with an invalid user id" do
+        it "returns not found" do
+          put :update, :id => 'bogus', :user => {:first_name => "updated"}
+          response.should be_not_found
+        end
       end
     end
 
@@ -201,14 +210,23 @@ describe UsersController do
         log_in @user
       end
 
-      it "succeeds" do
-        get :show, :id => @other_user.to_param
-        response.should be_success
+      context "with a valid user id" do
+        it "succeeds" do
+          get :show, :id => @other_user.to_param
+          response.should be_success
+        end
+
+        it "presents the user" do
+          get :show, :id => @other_user.to_param
+          response.should have_presented(@other_user)
+        end
       end
 
-      it "serializes the user" do
-        get :show, :id => @other_user.to_param
-        response.should have_presented(@other_user)
+      context "with an invalid user id" do
+        it "returns not found" do
+          get :show, :id => 'bogus'
+          response.should be_not_found
+        end
       end
     end
   end

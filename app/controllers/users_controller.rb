@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
-  before_filter :require_admin, :only => :create
   before_filter :load_user, :only => [:show, :update]
+  before_filter :require_admin, :only => :create
+  before_filter :require_admin_or_referenced_user, :only => :update
 
   def index
     present User.order("LOWER(#{params[:order]})").paginate(params.slice(:page, :per_page))
@@ -15,10 +16,6 @@ class UsersController < ApplicationController
   end
 
   def update
-    unless current_user.admin? || current_user == @user
-      raise ActiveRecord::RecordNotFound
-    end
-
     @user.attributes = params[:user]
     @user.admin = params[:user][:admin] if current_user.admin?
     @user.save!
