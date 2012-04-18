@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120417184201) do
+ActiveRecord::Schema.define(:version => 20120418000741) do
 
   create_table "users", :force => true do |t|
     t.string   "username"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20120417184201) do
     t.string   "dept"
     t.text     "notes"
     t.boolean  "admin",           :default => false
+    t.datetime "deleted_at"
   end
 
 end

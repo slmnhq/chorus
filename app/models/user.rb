@@ -1,6 +1,7 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
+  default_scope :conditions => {:deleted_at => nil}
   attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
   attr_reader :password
 
@@ -55,5 +56,15 @@ class User < ActiveRecord::Base
     else
       self.password_digest = nil
     end
+  end
+
+  def destroy
+    self.deleted_at = Time.now.utc
+    save
+    #freeze # TODO: test
+  end
+
+  def self.find_with_destroyed *args
+    self.with_exclusive_scope { find(*args) }
   end
 end

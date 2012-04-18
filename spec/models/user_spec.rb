@@ -113,4 +113,24 @@ describe User do
       admin.should be_admin
     end
   end
+
+  describe "#destroy" do
+    let(:user) {FactoryGirl.create :user}
+
+    before do
+      user.destroy
+    end
+
+    it "should not delete the database entry" do
+      User.find_with_destroyed(user.id).should_not be_nil
+    end
+
+    it "should update the deleted_at field" do
+      User.find_with_destroyed(user.id).deleted_at.should_not be_nil
+    end
+
+    it "should be hidden from subsequent #find calls" do
+      User.find_by_id(user.id).should be_nil
+    end
+  end
 end
