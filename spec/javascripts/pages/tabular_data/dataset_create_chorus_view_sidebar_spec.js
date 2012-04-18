@@ -1,6 +1,6 @@
 describe("chorus.views.CreateChorusViewSidebar", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.datasetSandboxTable({objectName : "My_table"});
+        this.dataset = newFixtures.dataset.sandboxTable({objectName : "My_table"});
         this.dataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()]);
         var aggregateColumnSet = new chorus.collections.DatabaseColumnSet();
         aggregateColumnSet.reset(this.dataset.columns().models);
@@ -62,7 +62,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         context("when a join is added to the chorus view", function() {
             beforeEach(function() {
-                this.otherDataset = newFixtures.datasetSandboxTable();
+                this.otherDataset = newFixtures.dataset.sandboxTable();
                 this.otherDataset.columns().reset([fixtures.databaseColumn()]);
                 this.dataset.columns().models[0].tabularData.aliasedName="a";
                 this.chorusView.addJoin(this.dataset.columns().models[0], this.otherDataset.columns().models[0], 'inner');
@@ -170,7 +170,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 spyOn(chorus.PageEvents, "broadcast").andCallThrough();
                 this.column1 = this.dataset.columns().models[0];
 
-                this.joinedDataset = newFixtures.datasetSandboxTable();
+                this.joinedDataset = newFixtures.dataset.sandboxTable();
                 this.joinedColumns = this.joinedDataset.columns();
                 this.joinedColumns.reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
                 this.column2 = this.joinedColumns.models[0];

@@ -271,8 +271,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             describe("when datasets are selected", function() {
                 beforeEach(function() {
                     this.datasets = [
-                        newFixtures.datasetSandboxTable({objectName: 'table1', id: '1'}),
-                        newFixtures.datasetSandboxTable({objectName: 'table2', id: '2'})
+                        newFixtures.dataset.sandboxTable({objectName: 'table1', id: '1'}),
+                        newFixtures.dataset.sandboxTable({objectName: 'table2', id: '2'})
                     ];
                     this.modalSpy.lastModal().trigger("datasets:selected", this.datasets);
                 });
@@ -307,8 +307,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     context("when additional datasets are selected", function() {
                         beforeEach(function() {
                             this.newDatasets = [
-                                newFixtures.datasetSandboxTable({objectName: 'table1', id: '1'}),
-                                newFixtures.datasetSandboxTable({objectName: 'table4', id: '4'})
+                                newFixtures.dataset.sandboxTable({objectName: 'table1', id: '1'}),
+                                newFixtures.dataset.sandboxTable({objectName: 'table4', id: '4'})
                             ];
                             this.modalSpy.lastModal().trigger("datasets:selected", this.newDatasets);
                         });

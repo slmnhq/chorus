@@ -1,0 +1,39 @@
+{
+    "schemaName": "analytics",
+    "importFrequency": null,
+    "workspace": {
+        "id": "10000",
+        "name": "danny"
+    },
+    "objectName": "ext_table",
+    "modifiedBy": {
+        "id": "InitialUser",
+        "userName": "edcadmin"
+    },
+    "columns": 1,
+    "commentCount": 0,
+    "type": "SANDBOX_TABLE",
+    "isDeleted": false,
+    "hasCredentials": true,
+    "id": "\"10000\"|\"Analytics\"|\"analytics\"|\"EXTERNAL_TABLE\"|\"ext_table\"",
+    "databaseName": "Analytics",
+    "recentComment": null,
+    "owner": {
+        "id": "InitialUser",
+        "userName": "edcadmin"
+    },
+    "instance": {
+        "id": "10000",
+        "name": "gillette"
+    },
+    "columnNames": [
+        {
+        "name": "id",
+        "typeCategory": "LONG_STRING",
+        "comment": null,
+        "type": "text",
+        "ordinalPosition": "1"
+    }
+    ],
+    "objectType": "EXTERNAL_TABLE"
+}

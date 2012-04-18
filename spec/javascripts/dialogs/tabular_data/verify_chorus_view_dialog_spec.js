@@ -4,7 +4,7 @@ describe("chorus.dialogs.VerifyChorusView", function() {
         stubDefer();
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
         this.launchElement = $("<a></a>");
-        this.chorusView = newFixtures.datasetChorusView({ query: "select name, quantity from shipments;" });
+        this.chorusView = newFixtures.dataset.chorusView({ query: "select name, quantity from shipments;" });
         this.dialog = new chorus.dialogs.VerifyChorusView({
             model: this.chorusView,
             launchElement: this.launchElement

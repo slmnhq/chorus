@@ -1,6 +1,6 @@
 describe("chorus.views.ChartConfiguration", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.datasetSourceTable();
+        this.dataset = newFixtures.dataset.sourceTable();
         this.column1 = fixtures.databaseColumn({typeCategory: "ANIMAL", name: "B Liger"})
         this.column2 = fixtures.databaseColumn({typeCategory: "REAL_NUMBER", name: "a Speed"})
         this.column3 = fixtures.databaseColumn({typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"})
@@ -71,7 +71,7 @@ describe("chorus.views.ChartConfiguration", function() {
             beforeEach(function() {
                 spyOn(this.view, "clearSqlErrors");
                 spyOn(this.view, "showSqlErrors");
-                this.view.model = newFixtures.datasetSourceTable();
+                this.view.model = newFixtures.dataset.sourceTable();
                 this.view.$('button.create').click();
                 this.task = this.view.task;
                 spyOn(this.task, 'cancel').andCallThrough();

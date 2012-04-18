@@ -2,7 +2,7 @@ describe("chorus.dialogs.SqlPreview", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.launchElement = $("<a></a>");
-            var model = newFixtures.datasetChorusView({query: "select awesome from sql"});
+            var model = newFixtures.dataset.chorusView({query: "select awesome from sql"});
             this.dialog = new chorus.dialogs.SqlPreview({
                 launchElement: this.launchElement,
                 model: model

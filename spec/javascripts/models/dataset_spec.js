@@ -1,6 +1,6 @@
 describe("chorus.models.Dataset", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.datasetSourceView({
+        this.dataset = newFixtures.dataset.sourceView({
             workspace: {
                 id: "44"
             },
@@ -87,7 +87,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#createDuplicateChorusView", function() {
         beforeEach(function() {
-            this.model = newFixtures.datasetChorusView();
+            this.model = newFixtures.dataset.chorusView();
             this.copy = this.model.createDuplicateChorusView();
         });
 
@@ -150,7 +150,7 @@ describe("chorus.models.Dataset", function() {
     describe("#iconUrl", function() {
         context("when the user does not have credentials", function() {
             beforeEach(function() {
-                this.dataset = newFixtures.datasetSourceView()
+                this.dataset = newFixtures.dataset.sourceView()
                 this.unlockedIconUrl = this.dataset.iconUrl();
                 this.dataset.set({hasCredentials: false});
             });

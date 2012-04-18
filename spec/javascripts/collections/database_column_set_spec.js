@@ -1,7 +1,7 @@
 describe("chorus.collections.DatabaseColumnSet", function() {
     describe("database table column", function() {
         beforeEach(function() {
-            var table = newFixtures.datasetSandboxTable({
+            var table = newFixtures.dataset.sandboxTable({
                 instance: {
                     id: '2',
                     name: 'instance2'
@@ -19,7 +19,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("when the names need to be url encoded", function() {
             beforeEach(function() {
-                var table = newFixtures.datasetSandboxTable({
+                var table = newFixtures.dataset.sandboxTable({
                     instance: {
                         id: '2',
                         name: '%foo%'
@@ -54,7 +54,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
     describe("database view column", function() {
         beforeEach(function() {
-            var view = newFixtures.datasetSandboxView({
+            var view = newFixtures.dataset.sandboxView({
                 instance: {
                     id: '2',
                     name: 'instance2'
@@ -72,7 +72,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("when the names need to be url encoded", function() {
             beforeEach(function() {
-                var table = newFixtures.datasetSandboxView({
+                var table = newFixtures.dataset.sandboxView({
                     instance: {
                         id: '2',
                         name: '%foo%'
@@ -100,7 +100,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
     describe("database chorus view column", function() {
         beforeEach(function() {
-            var chorusView = newFixtures.datasetChorusView({
+            var chorusView = newFixtures.dataset.chorusView({
                 workspace: {
                     id: '10'
                 },
@@ -117,7 +117,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
     describe("#urlParams", function() {
         context("when type attribute is meta", function() {
             beforeEach(function() {
-                this.columns = newFixtures.datasetSandboxView().columns({type: "meta"});
+                this.columns = newFixtures.dataset.sandboxView().columns({type: "meta"});
             });
 
             it("should include the 'type' parameter in the url", function() {
@@ -127,7 +127,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("when type attribute is unspecified", function() {
             beforeEach(function() {
-                this.columns = newFixtures.datasetSandboxView().columns();
+                this.columns = newFixtures.dataset.sandboxView().columns();
             });
 
             it("should not include the 'type' parameter in the url", function() {
@@ -138,7 +138,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
     describe("#errorMessage", function() {
         it("returns the server errors on the collection", function() {
-            var table = newFixtures.datasetSandboxTable({
+            var table = newFixtures.dataset.sandboxTable({
                 instance: {
                     id: '2',
                     name: 'instance2'
@@ -171,11 +171,11 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         context("with multiple dataset", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.dataset1 = newFixtures.datasetSandboxTable();
+                this.dataset1 = newFixtures.dataset.sandboxTable();
                 this.dataset1.datasetNumber = 1;
                 this.dataset1Columns = this.dataset1.columns();
                 this.dataset1Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2}), fixtures.databaseColumn({ordinalPosition: 3})]);
-                this.dataset2 = newFixtures.datasetSandboxTable();
+                this.dataset2 = newFixtures.dataset.sandboxTable();
                 this.dataset2.datasetNumber = 2;
                 this.dataset2Columns = this.dataset2.columns()
                 this.dataset2Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2})]);

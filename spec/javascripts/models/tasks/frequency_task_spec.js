@@ -3,7 +3,7 @@ describe("chorus.models.FrequencyTask", function() {
         this.model = new chorus.models.FrequencyTask({
             bins: 23,
             yAxis: "height",
-            tabularData: newFixtures.datasetSandboxTable({objectName: "users"})
+            tabularData: newFixtures.dataset.sandboxTable({objectName: "users"})
         });
     });
 

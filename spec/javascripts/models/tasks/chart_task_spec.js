@@ -1,6 +1,6 @@
 describe("chorus.models.ChartTask", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.datasetSandboxTable({schemaName: 'animals', objectName: 'dog_breeds'});
+        this.dataset = newFixtures.dataset.sandboxTable({schemaName: 'animals', objectName: 'dog_breeds'});
         var chartSubclass = chorus.models.ChartTask.extend({});
         chartSubclass.prototype.chartType = "fantastic";
         this.model = new chartSubclass({ tabularData: this.dataset });

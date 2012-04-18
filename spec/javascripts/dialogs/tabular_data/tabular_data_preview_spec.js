@@ -1,6 +1,6 @@
 describe("chorus.dialogs.TabularDataPreview", function () {
     beforeEach(function () {
-        this.dataset = newFixtures.datasetSandboxTable();
+        this.dataset = newFixtures.dataset.sandboxTable();
         spyOn(chorus.views.ResultsConsole.prototype, 'execute').andCallThrough();
         spyOn(chorus.dialogs.TabularDataPreview.prototype, "closeModal");
         this.view = new chorus.dialogs.TabularDataPreview({

@@ -1,6 +1,6 @@
 describe("chorus.views.DatasetFilter", function() {
     beforeEach(function() {
-        this.tabularData = newFixtures.datasetSourceTable();
+        this.tabularData = newFixtures.dataset.sourceTable();
         this.collection = fixtures.databaseColumnSet(null, {tabularData: this.tabularData});
 
         this.model = new chorus.models.TabularDataFilter();

@@ -6,7 +6,7 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
                 this.column2 = fixtures.databaseColumn({typeCategory: "REAL_NUMBER", name: "a Speed"})
                 this.column3 = fixtures.databaseColumn({typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"})
 
-                this.model = newFixtures.datasetChorusView({objectName: "Foo"});
+                this.model = newFixtures.dataset.chorusView({objectName: "Foo"});
                 this.columns = fixtures.databaseColumnSet([this.column1, this.column2, this.column3]);
                 this.view = new chorus.views.BoxplotChartConfiguration({model: this.model, collection: this.columns})
                 spyOn(chorus, 'styleSelect').andCallFake(_.bind(function() {
@@ -115,7 +115,7 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
             beforeEach(function() {
                 this.column2 = fixtures.databaseColumn({typeCategory: "ANIMAL", name: "a Speed"})
 
-                this.model = newFixtures.datasetChorusView({objectName: "Foo"});
+                this.model = newFixtures.dataset.chorusView({objectName: "Foo"});
                 this.columns = fixtures.databaseColumnSet([this.column2]);
                 this.view = new chorus.views.BoxplotChartConfiguration({model: this.model, collection: this.columns})
                 this.view.render();

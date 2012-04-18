@@ -59,12 +59,13 @@ window.fixtureDefinitions = {
     }
 };
 
-fixtureDefinitions.datasetSourceTable   =
-fixtureDefinitions.datasetSourceView    =
-fixtureDefinitions.datasetSandboxTable  =
-fixtureDefinitions.datasetSandboxView   =
-fixtureDefinitions.datasetChorusView    =
-fixtureDefinitions.datasetExternalTable = {
+fixtureDefinitions.dataset = {};
+fixtureDefinitions.dataset.sourceTable   =
+fixtureDefinitions.dataset.sourceView    =
+fixtureDefinitions.dataset.sandboxTable  =
+fixtureDefinitions.dataset.sandboxView   =
+fixtureDefinitions.dataset.chorusView    =
+fixtureDefinitions.dataset.externalTable = {
     model: "Dataset",
     derived: {
         id: function(attrs) {
@@ -78,5 +79,4 @@ fixtureDefinitions.datasetExternalTable = {
         }
     }
 };
-
 

@@ -1,8 +1,8 @@
 describe("chorus.views.TabularDataList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatasetSet([
-            newFixtures.datasetChorusView({ hasCredentials: true }),
-            newFixtures.datasetSandboxTable({ hasCredentials: true })
+            newFixtures.dataset.chorusView({ hasCredentials: true }),
+            newFixtures.dataset.sandboxTable({ hasCredentials: true })
         ]);
         this.collection.loaded = true;
         this.view = new chorus.views.TabularDataList({ collection: this.collection, activeWorkspace: true });

@@ -1,8 +1,8 @@
 describe("chorus.dialogs.DatasetsAttach", function() {
     beforeEach(function() {
         this.datasets = new chorus.collections.DatasetSet([
-            newFixtures.datasetSandboxTable(),
-            newFixtures.datasetSandboxTable()
+            newFixtures.dataset.sandboxTable(),
+            newFixtures.dataset.sandboxTable()
         ], {workspaceId: "33"});
 
         this.dialog = new chorus.dialogs.DatasetsAttach({ workspaceId : "33" });

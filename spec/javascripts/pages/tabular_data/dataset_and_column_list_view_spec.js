@@ -1,7 +1,7 @@
 describe("chorus.views.DatasetAndColumnList", function() {
     beforeEach(function() {
         chorus.page = { workspace: newFixtures.workspace() };
-        this.dataset = newFixtures.datasetChorusView();
+        this.dataset = newFixtures.dataset.chorusView();
         this.view = new chorus.views.DatasetAndColumnList({ model: this.dataset.schema() });
         this.view.render();
         this.view.$(".database_dataset_list input.search").val("searching for a table...");

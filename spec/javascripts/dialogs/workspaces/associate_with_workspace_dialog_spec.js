@@ -30,7 +30,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
         context("when the model is a source table/view with no workspaces", function() {
             beforeEach(function() {
-                this.model = newFixtures.datasetSourceTable();
+                this.model = newFixtures.dataset.sourceTable();
                 this.model.unset("workspaceUsed");
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
@@ -49,7 +49,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
         });
         context("when the model is a sandbox table/view or a chorus view (in a workspace)", function() {
             beforeEach(function() {
-                this.model = newFixtures.datasetSandboxTable({workspace: {id: "645"}});
+                this.model = newFixtures.dataset.sandboxTable({workspace: {id: "645"}});
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     newFixtures.workspace({ name: "im_not_the_current_one'" }),
@@ -69,7 +69,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     describe("clicking Associate Dataset", function() {
         context("for anything except a Chorus View", function() {
             beforeEach(function() {
-                this.model = newFixtures.datasetSandboxTable();
+                this.model = newFixtures.dataset.sandboxTable();
                 this.workspace = newFixtures.workspace({ name: "im_not_the_current_one" });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
@@ -165,7 +165,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             beforeEach(function() {
                 this.currentWorkspace = newFixtures.workspace({ name: "im_also_the_current_one'", id: "987" });
                 this.workspace = newFixtures.workspace({ name: "im_not_the_current_one", id: "123"});
-                this.model = newFixtures.datasetChorusView({ workspace: { id: "987" } });
+                this.model = newFixtures.dataset.chorusView({ workspace: { id: "987" } });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.dialog.render();

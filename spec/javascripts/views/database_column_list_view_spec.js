@@ -15,7 +15,7 @@ describe("chorus.views.DatabaseColumnList", function() {
                 type: "boolean",
                 comment: "column comment"
             });
-            this.dataset = newFixtures.datasetSandboxTable();
+            this.dataset = newFixtures.dataset.sandboxTable();
             this.dataset.setDatasetNumber(1);
             this.dataset.columns().reset([this.column1, this.column2]);
             this.collection = fixtures.databaseColumnSet([this.column1, this.column2]);

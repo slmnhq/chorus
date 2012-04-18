@@ -1,6 +1,6 @@
 describe("chorus.views.DatasetFilterWizard", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.datasetSandboxTable();
+        this.dataset = newFixtures.dataset.sandboxTable();
         this.columnSet = this.dataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
         this.view = new chorus.views.DatasetFilterWizard({columnSet: this.columnSet});
     });

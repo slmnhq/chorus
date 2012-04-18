@@ -4,8 +4,8 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
         stubModals();
         dialog = new chorus.dialogs.ImportDatasetsPicker({ workspaceId : "33" });
         datasets = new chorus.collections.DatasetSet([
-            newFixtures.datasetSandboxTable({ objectName: "A", columns: 42, id: "REAL_ID" }),
-            newFixtures.datasetSandboxTable({ objectName: "B", columns: 666, id: "AGENT_SMITH" })
+            newFixtures.dataset.sandboxTable({ objectName: "A", columns: 42, id: "REAL_ID" }),
+            newFixtures.dataset.sandboxTable({ objectName: "B", columns: 666, id: "AGENT_SMITH" })
         ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" });
     });
 
@@ -85,8 +85,8 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
         context("when a dataset has no column count (or is undefined)", function() {
             beforeEach(function() {
                 datasets = new chorus.collections.DatasetSet([
-                    newFixtures.datasetSandboxTable({ objectName: "A", columns: null, id: "NOBODY" }),
-                    newFixtures.datasetSandboxTable({ objectName: "B", columns: undefined, id: "NONE" })
+                    newFixtures.dataset.sandboxTable({ objectName: "A", columns: null, id: "NOBODY" }),
+                    newFixtures.dataset.sandboxTable({ objectName: "B", columns: undefined, id: "NONE" })
                 ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" });
                 this.server.completeFetchFor(datasets, datasets.models, options);
             });

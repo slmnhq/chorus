@@ -63,8 +63,8 @@ describe("chorus.collections.DatasetSet", function() {
     describe("sorting", function() {
         context("without a sorting override", function() {
             beforeEach(function() {
-                this.collection.add(newFixtures.datasetSandboxTable({objectName: 'zTable'}));
-                this.collection.add(newFixtures.datasetSandboxTable({objectName: 'aTable'}));
+                this.collection.add(newFixtures.dataset.sandboxTable({objectName: 'zTable'}));
+                this.collection.add(newFixtures.dataset.sandboxTable({objectName: 'aTable'}));
             });
 
             it("sorts by objectName", function() {
@@ -76,8 +76,8 @@ describe("chorus.collections.DatasetSet", function() {
         context("with a sorting override", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.DatasetSet([], {workspaceId: 10000, unsorted: true});
-                this.collection.add(newFixtures.datasetSandboxTable({objectName: 'zTable'}));
-                this.collection.add(newFixtures.datasetSandboxTable({objectName: 'aTable'}));
+                this.collection.add(newFixtures.dataset.sandboxTable({objectName: 'zTable'}));
+                this.collection.add(newFixtures.dataset.sandboxTable({objectName: 'aTable'}));
             });
 
             it("does not sort", function() {

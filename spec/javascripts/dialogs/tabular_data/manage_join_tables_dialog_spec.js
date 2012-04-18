@@ -10,7 +10,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             id: "abc"
         });
         this.instanceName = "john";
-        var dataset = newFixtures.datasetSourceTable({
+        var dataset = newFixtures.dataset.sourceTable({
             objectName: "original",
             instance: {
                 name: this.instanceName,

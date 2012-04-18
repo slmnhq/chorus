@@ -138,7 +138,7 @@ describe("chorus.presenters.visualizations", function() {
                     { bin: "30-39", frequency: 1 },
                     { bin: "40-49", frequency: 2000 }
                 ],
-                tabularData: newFixtures.datasetSandboxTable()
+                tabularData: newFixtures.dataset.sandboxTable()
             });
             this.presenter = new chorus.presenters.visualizations.Histogram(this.model);
 

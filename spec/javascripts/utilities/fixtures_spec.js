@@ -57,7 +57,7 @@ describe("newFixtures", function() {
 
     describe("#datasetJson", function() {
         it("generates its id based on the instance, database, schema, type and table name", function() {
-            var datasetJson = newFixtures.datasetSourceTableJson({
+            var datasetJson = newFixtures.dataset.sourceTableJson({
                 instance: { id: "45" },
                 databaseName: "chorus_events",
                 schemaName: "plague",
@@ -70,7 +70,7 @@ describe("newFixtures", function() {
 
         context("when the id is overridden manually", function() {
             it("uses the override", function() {
-                var datasetJson = newFixtures.datasetSourceTableJson({
+                var datasetJson = newFixtures.dataset.sourceTableJson({
                     id: "foo",
                     instance: { id: "45" },
                     databaseName: "chorus_events",
@@ -83,7 +83,7 @@ describe("newFixtures", function() {
 
         context("when some of the id parameters are not overridden", function() {
             it("uses the default parameter to generate the id", function() {
-                var datasetJson = newFixtures.datasetSourceTableJson({
+                var datasetJson = newFixtures.dataset.sourceTableJson({
                     databaseName: "chorus_events",
                     schemaName: "plague",
                     objectName: "outbreaks"

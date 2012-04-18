@@ -108,8 +108,8 @@ describe("chorus.pages.DatasetIndexPage", function() {
             describe("when the fetch returns two items", function() {
                 beforeEach(function() {
                     this.datasets = [
-                        newFixtures.datasetSourceTable(),
-                        newFixtures.datasetSourceView()
+                        newFixtures.dataset.sourceTable(),
+                        newFixtures.dataset.sourceView()
                     ];
                     this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
                 })
@@ -389,7 +389,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.page.render();
 
-            this.dataset = newFixtures.datasetSourceTable();
+            this.dataset = newFixtures.dataset.sourceTable();
             chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
         })
 

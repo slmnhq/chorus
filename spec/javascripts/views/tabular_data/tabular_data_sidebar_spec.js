@@ -30,7 +30,7 @@ describe("chorus.views.TabularDataSidebar", function() {
         context("when a dataset is selected", function() {
             beforeEach(function() {
                 this.server.reset();
-                this.dataset = newFixtures.datasetSourceTable();
+                this.dataset = newFixtures.dataset.sourceTable();
                 chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
             });
 
@@ -75,7 +75,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
 
                 it("does not display the action for a external table", function() {
-                    this.dataset = newFixtures.datasetExternalTable();
+                    this.dataset = newFixtures.dataset.externalTable();
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     expect(this.view.$(".actions a.analyze")).not.toExist();
                 });
@@ -189,7 +189,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                     this.view.options.listMode = true;
                     this.view.options.workspace = newFixtures.workspace({active: false, state: 0, permission: ["update", "admin"]});
                     this.view.render();
-                    this.dataset = newFixtures.datasetSourceTable();
+                    this.dataset = newFixtures.dataset.sourceTable();
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     this.server.completeFetchFor(this.view.importConfiguration, []);
 
@@ -222,7 +222,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the dataset is a sandbox table or view", function() {
                     beforeEach(function() {
-                        this.dataset = newFixtures.datasetSandboxTable();
+                        this.dataset = newFixtures.dataset.sandboxTable();
                         this.view.options.workspace = newFixtures.workspace({ permission: ["update"] })
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
@@ -689,7 +689,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the dataset is a source view", function() {
                     beforeEach(function() {
-                        this.dataset = newFixtures.datasetSourceView();
+                        this.dataset = newFixtures.dataset.sourceView();
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
@@ -700,7 +700,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the dataset is a chorus view", function() {
                     beforeEach(function() {
-                        this.dataset = newFixtures.datasetChorusView({ objectName: "annes_table", query: "select * from foos;" });
+                        this.dataset = newFixtures.dataset.chorusView({ objectName: "annes_table", query: "select * from foos;" });
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 
@@ -733,7 +733,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 context("when the dataset is a source table", function() {
                     _.each(["BASE_TABLE", "EXTERNAL_TABLE", "MASTER_TABLE", "HDFS_EXTERNAL_TABLE"], function(type) {
                         beforeEach(function() {
-                            this.dataset = newFixtures.datasetSourceTable({ objectType : type});
+                            this.dataset = newFixtures.dataset.sourceTable({ objectType : type});
                             chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                         });
 
@@ -874,7 +874,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
         describe("column statistics", function() {
             beforeEach(function() {
-                this.dataset = newFixtures.datasetSourceTable();
+                this.dataset = newFixtures.dataset.sourceTable();
                 this.column = fixtures.databaseColumn({
                     avg: 719719.111,
                     commonValues: [46, 38],
@@ -1036,7 +1036,7 @@ describe("chorus.views.TabularDataSidebar", function() {
         describe("has all the translations for all objectTypes", function() {
             _.each(["QUERY", "VIEW", "TABLE", "BASE_TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
                 it("does not have any missing translations for" + type, function() {
-                    this.dataset = newFixtures.datasetSourceTable({objectType: type});
+                    this.dataset = newFixtures.dataset.sourceTable({objectType: type});
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     expect(this.view.tabs.activity.options.type).not.toContain("missing");
                 })

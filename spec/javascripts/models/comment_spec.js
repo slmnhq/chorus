@@ -87,9 +87,9 @@ describe("chorus.models.Comment", function() {
     describe("saving the dataset attachments", function() {
         it("assigns the 'datasetIds' field as a comma-separated list of dataset ids", function() {
             this.model.datasets = new chorus.collections.DatasetSet([
-                newFixtures.datasetSandboxTable({ objectName: "table_a", id: 'a'}),
-                newFixtures.datasetSandboxTable({ objectName: "table_b", id: 'b'}),
-                newFixtures.datasetSandboxTable({ objectName: "table_c", id: 'c'})
+                newFixtures.dataset.sandboxTable({ objectName: "table_a", id: 'a'}),
+                newFixtures.dataset.sandboxTable({ objectName: "table_b", id: 'b'}),
+                newFixtures.dataset.sandboxTable({ objectName: "table_c", id: 'c'})
             ]);
 
             this.model.save();

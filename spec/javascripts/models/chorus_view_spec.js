@@ -1,6 +1,6 @@
 describe("chorus.models.ChorusView", function() {
     beforeEach(function() {
-        this.sourceDataset = newFixtures.datasetSandboxTable();
+        this.sourceDataset = newFixtures.dataset.sandboxTable();
         this.sourceDataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn(), fixtures.databaseColumn()])
         this.model = this.sourceDataset.deriveChorusView();
         this.model.aggregateColumnSet = new chorus.collections.DatabaseColumnSet(this.sourceDataset.columns().models);
@@ -333,7 +333,7 @@ describe("chorus.models.ChorusView", function() {
 
     function addJoin(self, sourceColumn) {
         sourceColumn || (sourceColumn = self.sourceDataset.columns().models[0]);
-        var joinedDataset = newFixtures.datasetSandboxTable();
+        var joinedDataset = newFixtures.dataset.sandboxTable();
         joinedDataset.columns().reset([fixtures.databaseColumn(), fixtures.databaseColumn()]);
         var joinedColumn = joinedDataset.columns().models[0];
         self.model.addJoin(sourceColumn, joinedColumn, 'inner');

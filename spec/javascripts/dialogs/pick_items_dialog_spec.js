@@ -300,9 +300,9 @@ describe("chorus.dialogs.PickItems", function() {
         var dataset1, dataset2, dataset3;
 
         beforeEach(function() {
-            dataset1 = newFixtures.datasetSandboxTable();
-            dataset2 = newFixtures.datasetSandboxTable();
-            dataset3 = newFixtures.datasetSandboxTable();
+            dataset1 = newFixtures.dataset.sandboxTable();
+            dataset2 = newFixtures.dataset.sandboxTable();
+            dataset3 = newFixtures.dataset.sandboxTable();
 
             this.datasets = new chorus.collections.DatasetSet([
                 dataset1,
