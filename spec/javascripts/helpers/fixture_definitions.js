@@ -38,11 +38,12 @@ window.fixtureDefinitions = {
         model: "CSVImport"
     },
 
-    activities: {
+    activity: {
         provisioningSuccess: {
             model: "Activity",
             unique: [ "id" ]
         },
+
         provisioningFail: {
             model: "Activity",
             unique: [ "id" ]

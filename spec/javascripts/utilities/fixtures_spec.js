@@ -3,11 +3,11 @@ describe("newFixtures", function() {
         var activity;
 
         beforeEach(function() {
-            activity = newFixtures.activities.provisioningSuccess();
+            activity = newFixtures.activity.provisioningSuccess();
         });
 
         it("gets the right data", function() {
-            var fixtureScript = $("#fixtures [data-fixture-path='activities/provisioningSuccess']");
+            var fixtureScript = $("#fixtures [data-fixture-path='activity/provisioningSuccess']");
             var fixtureJson = JSON.parse(fixtureScript.html());
             expect(activity.get("timestamp")).toBe(fixtureJson.timestamp);
         });
