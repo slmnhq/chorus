@@ -366,17 +366,11 @@
         this.server.restore();
         $.cookie("userId", null)
         if (this instanceof jasmine.Spec) {
-            // reduce the number of keys to iterate
-            var oldProto = this.prototype;
-            delete this.prototype;
-
             _.each(this, function(_value, key) {
                 if (this.hasOwnProperty(key) && !(key in specWhitelist)) {
                     delete this[key];
                 }
             }, this);
-
-            this.prototype = oldProto;
         }
         chorus._navigated();
     });
