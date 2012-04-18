@@ -5,19 +5,29 @@
     window.newFixtures.addUniqueDefaults = addUniqueDefaults;
 
     _.each(window.fixtureDefinitions, function(definition, name) {
-        if (definition.model || definition.collection) {
-            generateFixture(definition, name);
-        } else {
-            newFixtures[name] = {};
-            _.each(definition, function(innerDefinition, innerName) {
+        if (definition.children) {
+            window.newFixtures[name] = {};
+            initializeChildDefinitions(definition);
+            _.each(definition.children, function(innerDefinition, innerName) {
                 generateFixture(innerDefinition, innerName, name);
             });
+        } else {
+            generateFixture(definition, name);
         }
     });
 
+    function initializeChildDefinitions(definition) {
+        _.each(definition.children, function(childDef) {
+            _.each(definition, function(value, property) {
+                if (property === "children") { return };
+                childDef[property] || (childDef[property] = definition[property]);
+            });
+        });
+    }
+
     function generateFixture(definition, name, parentName) {
         var module = parentName ? newFixtures[parentName] : newFixtures;
-        var klass = getClass(definition);
+        var klass = getClass(definition, parentName || name);
         var jsonMethodName = name + "Json";
 
         module[jsonMethodName] = function(overrides, uncheckedOverrides) {
@@ -44,11 +54,15 @@
         });
     }
 
-    function getClass(fixtureDefinition) {
-        if (fixtureDefinition.model) {
-            return chorus.models[fixtureDefinition.model];
+    function getClass(definition, name) {
+        if (definition.model) {
+            return chorus.models[definition.model];
+        } else if (definition.collection) {
+            return chorus.collections[definition.collection];
         } else {
-            return chorus.collections[fixtureDefinition.collection];
+            var isCollection = name.match(/Set/);
+            var className = _.titleize(name);
+            return isCollection ? chorus.collections[className] : chorus.models[className];
         }
     }
 

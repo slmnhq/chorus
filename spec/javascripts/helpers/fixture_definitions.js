@@ -1,36 +1,29 @@
 window.fixtureDefinitions = {
     user: {
-        model: "User",
         unique: [ "id" ]
     },
 
     workspace: {
-        model: "Workspace",
         unique: [ "id", "sandboxInfo.sandboxId" ]
     },
 
     workspaceSet: {
-        collection: "WorkspaceSet",
         unique: [ "id", "sandboxInfo.sandboxId" ]
     },
 
     userSet: {
-        collection: "UserSet",
         unique: [ "id" ]
     },
 
     schema: {
-        model: "Schema",
         unique: [ "id", "instance.id" ]
     },
 
     schemaSet: {
-        collection: "SchemaSet",
         unique: ["id"]
     },
 
     sandbox: {
-        model: "Sandbox",
         unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ]
     },
 
@@ -38,44 +31,53 @@ window.fixtureDefinitions = {
         model: "CSVImport"
     },
 
-    activity: {
-        provisioningSuccess: {
-            model: "Activity",
-            unique: [ "id" ]
-        },
+    provisioningTemplate: {},
 
-        provisioningFail: {
-            model: "Activity",
-            unique: [ "id" ]
+    provisioningTemplateSet: {},
+
+    activity: {
+        unique: [ "id" ],
+
+        children: {
+            provisioningSuccess: {},
+            provisioningFail:    {}
         }
     },
 
-    provisioningTemplate: {
-        model: "ProvisioningTemplate"
+    dataset: {
+        derived: {
+            id: function(attrs) {
+                return '"' + [
+                    attrs.instance.id,
+                    attrs.databaseName,
+                    attrs.schemaName,
+                    attrs.objectType,
+                    attrs.objectName,
+                ].join('"|"') + '"';
+            }
+        },
+
+        children: {
+            sourceTable:   {},
+            sourceView:    {},
+            sandboxTable:  {},
+            sandboxView:   {},
+            chorusView:    {},
+            externalTable: {}
+        }
     },
 
-    provisioningTemplateSet: {
-        collection: "ProvisioningTemplateSet"
-    }
-};
+    test: {
+        model: "User",
+        unique: [ "id" ],
+        derived: { email: function(attrs) { return attrs.firstName + "@example.com"; } },
 
-fixtureDefinitions.dataset = {};
-fixtureDefinitions.dataset.sourceTable   =
-fixtureDefinitions.dataset.sourceView    =
-fixtureDefinitions.dataset.sandboxTable  =
-fixtureDefinitions.dataset.sandboxView   =
-fixtureDefinitions.dataset.chorusView    =
-fixtureDefinitions.dataset.externalTable = {
-    model: "Dataset",
-    derived: {
-        id: function(attrs) {
-            return '"' + [
-                attrs.instance.id,
-                attrs.databaseName,
-                attrs.schemaName,
-                attrs.objectType,
-                attrs.objectName,
-            ].join('"|"') + '"';
+        children: {
+            withOverrides: {
+                model: "Workspace"
+            },
+
+            noOverrides: {}
         }
     }
 };

@@ -1,19 +1,33 @@
 describe("newFixtures", function() {
     describe("nested fixture definitions", function() {
-        var activity;
+        var definition, model;
 
         beforeEach(function() {
-            activity = newFixtures.activity.provisioningSuccess();
+            definition = fixtureDefinitions.test;
         });
 
         it("gets the right data", function() {
-            var fixtureScript = $("#fixtures [data-fixture-path='activity/provisioningSuccess']");
+            model = newFixtures.test.withOverrides();
+            var fixtureScript = $("#fixtures [data-fixture-path='test/withOverrides']");
             var fixtureJson = JSON.parse(fixtureScript.html());
-            expect(activity.get("timestamp")).toBe(fixtureJson.timestamp);
+            expect(model.get("firstName")).toBeDefined();
+            expect(model.get("firstName")).toBe(fixtureJson.firstName);
         });
 
-        it("returns an activity model", function() {
-            expect(activity).toBeA(chorus.models.Activity);
+        context("when the nested definition overrides the parent definition", function() {
+            it("uses the values in the nested definition", function() {
+                model = newFixtures.test.withOverrides();
+                expect(definition.children.withOverrides.model).toBe("Workspace");
+                expect(model).toBeA(chorus.models.Workspace);
+            });
+        });
+
+        context("when the nested definition does not override the parent definition", function() {
+            it("uses the values in the parent definition", function() {
+                model = newFixtures.test.noOverrides();
+                expect(definition.model).toBe("User");
+                expect(model).toBeA(chorus.models.User);
+            });
         });
     });
 
