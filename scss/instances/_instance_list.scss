@@ -33,4 +33,8 @@
     .description {
         @include secondary-text-normal;
     }
+
+    span.name{
+        color: $color-text3;
+    }
 }

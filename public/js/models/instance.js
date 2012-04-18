@@ -124,6 +124,10 @@
             }
         },
 
+        isProvisioning: function() {
+            return this.get("state") == "provisioning";
+        },
+
         attrToLabel:{
             "dbUserName":"instances.dialog.database_account",
             "dbPassword":"instances.dialog.database_password",

@@ -1,8 +1,11 @@
 {{#if name}}
 <div class="info">
     <div class="instance_name" title="{{name}}">{{name}}</div>
-    <div class="instance_type" title="{{instanceProvider}}">{{instanceProvider}}</div>
+    <div class="instance_type" title="{{instanceProvider}}">{{instanceProvider}}
+        {{#if isProvisioning}}<span>{{t "instances.sidebar.provisioning"}}</span>{{/if}}
+    </div>
 </div>
+{{#unless isProvisioning}}
 <div class="account_info">
     {{#if dbUserName}}
         <img src="/images/instances/shared_icon.png"/>
@@ -30,6 +33,7 @@
         {{/if}}
     {{/if}}
 </div>
+{{/unless}}
 <div class="actions">
     <ul>
         {{#ifAny dbUserName userCanEditInstance }}
@@ -52,7 +56,5 @@
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="instance" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
     </ul>
 </div>
-
 <div class="tab_control"></div>
-
 {{/if}}

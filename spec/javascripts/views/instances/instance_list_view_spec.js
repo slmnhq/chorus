@@ -138,6 +138,24 @@ describe("chorus.views.InstanceList", function() {
                 });
             });
 
+            describe("when an instance has not finished provisioning", function() {
+                beforeEach(function() {
+                    this.collection.reset([
+                        fixtures.instance({
+                            instanceProvider: "Greenplum Database",
+                            name: "Greenplum",
+                            state: "provisioning"
+                        })
+                    ]);
+                    this.view.render();
+                });
+
+                it("the name should not be a link", function() {
+                    expect(this.view.$(".greenplum_instance li:eq(0) a.name")).not.toExist();
+                    expect(this.view.$(".greenplum_instance li:eq(0) span.name")).toContainText("Greenplum");
+                });
+            });
+
             describe("instance:added event", function() {
                 beforeEach(function() {
                     this.newInstance = fixtures.instance({id: "1234567"});

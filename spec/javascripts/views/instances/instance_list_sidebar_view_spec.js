@@ -43,7 +43,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             });
 
             it("displays instance type", function() {
-                expect(this.view.$(".instance_type").text()).toBe("Greenplum Database");
+                expect(this.view.$(".instance_type")).toContainText("Greenplum Database");
             });
 
             it("calls super in postRender (so that scrolling works)", function() {
@@ -101,7 +101,26 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("does display the edit instance link", function() {
                         expect(this.view.$(".actions .edit_instance")).toExist();
                     })
-                })
+                });
+
+                context("when the instance is provisioning", function() {
+                    beforeEach(function() {
+                        setLoggedInUser({ userName : "benjamin", admin: true});
+                        this.instance.set({
+                            state: "provisioning",
+                            provisionType: "create"
+                        });
+                        this.view.render();
+                    });
+
+                    it("doesn't display the account info section", function() {
+                        expect(this.view.$(".account_info")).not.toExist();
+                    });
+
+                    it("display provisioning info text", function() {
+                        expect(this.view.$(".instance_type span")).toContainTranslation("instances.sidebar.provisioning")
+                    });
+                });
 
                 context("when the instance failed to provision", function() {
                     beforeEach(function() {
