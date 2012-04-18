@@ -15,6 +15,7 @@ end
 namespace :db do
   namespace :test do
     namespace :prepare do
+      desc "Drop and recreate legacy test database, then import legacy data"
       task :legacy => "legacy:setup"
     end
   end
