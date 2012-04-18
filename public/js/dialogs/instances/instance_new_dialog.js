@@ -22,6 +22,10 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
         this.requiredResources.add(chorus.models.Config.instance());
         this.requiredResources.add(this.aurora);
+
+        if (this.aurora.isInstalled()) {
+            this.requiredResources.push(chorus.models.Instance.auroraTemplates());
+        }
     },
 
     makeModel:function () {

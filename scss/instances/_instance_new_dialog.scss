@@ -65,9 +65,16 @@
         }
 
         img.help {
-                display: inline-block;
-                margin-top: -3px;
-                vertical-align: middle;
+            display: inline-block;
+            margin-top: -3px;
+            vertical-align: middle;
+        }
+
+        .instructions {
+            @include dialog-label;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            display: inline-block;
         }
 
         .disabled {
@@ -76,6 +83,10 @@
 
         .max_size {
             @include secondary-text-normal;
+        }
+
+        select, .ui-selectmenu {
+            width: 150px;
         }
     }
 }

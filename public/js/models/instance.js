@@ -30,7 +30,6 @@
             this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(), newAttrs, "instance.validation.name_pattern");
             switch (newAttrs.provisionType) {
                 case "register" :
-                    // validating existing Greenplum instance
                     this.require("host", newAttrs);
                     this.require("port", newAttrs);
                     this.require("maintenanceDb", newAttrs);
@@ -41,12 +40,12 @@
                     }
                     break;
                 case "create" :
-                    // validating create a new Greenplum instance
                     this.requireIntegerRange("size", 0, chorus.models.Config.instance().get("provisionMaxSizeInGB"), newAttrs);
-
                     this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                     this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                     this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
+                    this.require("dbUserName", newAttrs);
+                    this.require("dbPassword", newAttrs);
                     break;
                 case "registerHadoop":
                     this.require("host", newAttrs);
@@ -166,7 +165,14 @@
                 this._aurora = new chorus.models.Provisioning({provisionerPluginName:"A4CProvisioner", type:"install"});
             }
             return this._aurora;
+        },
+
+        auroraTemplates: function() {
+            if (!this._templates) {
+                this._templates = new chorus.collections.ProvisioningTemplateSet([], {provisionerPluginName: "A4CProvisioner"});
+                this._templates.fetch();
+            }
+            return this._templates;
         }
     });
-
 })();

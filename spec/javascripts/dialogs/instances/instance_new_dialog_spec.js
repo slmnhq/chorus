@@ -13,6 +13,17 @@ describe("chorus.dialogs.InstanceNew", function() {
         expect(chorus.models.Instance.aurora()).toHaveBeenFetched();
     });
 
+    context("when aurora is installed", function() {
+        beforeEach(function() {
+            spyOn(chorus.models.Instance.aurora(), "isInstalled").andReturn(true);
+            this.dialog = new chorus.dialogs.InstancesNew();
+        });
+
+        it("fetches provisioningTemplates", function() {
+            expect(this.server.lastFetchFor(chorus.models.Instance.auroraTemplates())).toBeDefined();
+        });
+    });
+
     describe("when the fetches complete", function() {
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.Instance.aurora());
@@ -228,6 +239,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                     this.dialog.$(".create_new_greenplum input[name=size]").val("1");
                     this.dialog.$(".create_new_greenplum input[name=databaseName]").val("dbTest");
                     this.dialog.$(".create_new_greenplum input[name=schemaName]").val("schemaTest");
+                    this.dialog.$(".create_new_greenplum input[name=dbUserName]").val("edcadmin");
+                    this.dialog.$(".create_new_greenplum input[name=dbPassword]").val("supersecret");
                 });
 
                 context("saving", function() {
@@ -249,6 +262,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(attrs.description).toBe("Instance Description");
                         expect(attrs.databaseName).toBe("dbTest");
                         expect(attrs.schemaName).toBe("schemaTest");
+                        expect(attrs.dbUserName).toBe("edcadmin");
+                        expect(attrs.dbPassword).toBe("supersecret");
 
                         expect(chorus.toast).toHaveBeenCalledWith("instances.new_dialog.provisioning")
                     });

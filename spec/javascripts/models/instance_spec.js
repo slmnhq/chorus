@@ -76,6 +76,20 @@ describe("chorus.models.Instance", function() {
         });
     });
 
+    describe(".auroraTemplates", function() {
+        beforeEach(function() {
+            this.templates = chorus.models.Instance.auroraTemplates();
+        });
+
+        it("returns a template set object", function() {
+            expect(this.templates).toBeA(chorus.collections.ProvisioningTemplateSet);
+        });
+
+        it("memoizes", function() {
+            expect(this.templates).toBe(chorus.models.Instance.auroraTemplates());
+        });
+    });
+
     describe("#owner", function() {
         it("returns a user", function() {
             var owner = this.instance.owner();
@@ -321,10 +335,12 @@ describe("chorus.models.Instance", function() {
                     name: "foo",
                     size: "100000",
                     provisionType: "create",
-                    databaseName:  "thisDatabase",
-                    schemaName:  "thisSchema"
+                    databaseName: "thisDatabase",
+                    schemaName: "thisSchema",
+                    dbUserName: "foo",
+                    dbPassword: "bar"
                 }
-            })
+            });
 
             it("requires size", function() {
                 this.attrs.size = "";
@@ -350,6 +366,18 @@ describe("chorus.models.Instance", function() {
                 expect(this.instance.errors.name).toBeTruthy();
             });
 
+            it("requires a user name", function() {
+                this.attrs.dbUserName = "";
+                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                expect(this.instance.errors.dbUserName).toBeTruthy();
+            });
+
+            it("requires a password", function() {
+                this.attrs.dbPassword = "";
+                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                expect(this.instance.errors.dbPassword).toBeTruthy();
+            });
+
             it("requires size to be less than the config's max provision size", function() {
                 this.attrs.size = "200";
 
@@ -361,7 +389,6 @@ describe("chorus.models.Instance", function() {
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.size).toBeTruthy();
             });
-
         });
 
         context("when registering an existing hadoop instance", function() {
