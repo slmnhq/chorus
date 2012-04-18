@@ -1,9 +1,7 @@
 chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     constructorName: "InstancesNew",
-
     className:"instance_new",
     title:t("instances.new_dialog.title"),
-
     persistent:true,
 
     events:{
@@ -18,14 +16,30 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.model, "validationFailed", this.saveFailed);
 
         this.aurora = chorus.models.Instance.aurora();
+        this.bindings.add(this.aurora, "loaded", this.fetchTemplates, this);
         this.aurora.fetch();
 
         this.requiredResources.add(chorus.models.Config.instance());
         this.requiredResources.add(this.aurora);
+    },
 
+    fetchTemplates: function() {
         if (this.aurora.isInstalled()) {
-            this.requiredResources.push(chorus.models.Instance.auroraTemplates());
+            this.templates = chorus.models.Instance.auroraTemplates();
+            this.bindings.add(this.templates, "loaded", this.templatesLoaded, this);
+            this.templates.fetch();
         }
+    },
+
+    templatesLoaded: function() {
+        var $select = $("<select name='template' class='instance_size'></select>");
+        _.each(this.templates.models, function(template) {
+            var $option = $("<option></option>").val(template.name()).text(template.toText());
+            $select.append($option);
+        });
+
+        this.$(".instance_size_container").append($select);
+        chorus.styleSelect(this.$("select.instance_size"));
     },
 
     makeModel:function () {
@@ -60,7 +74,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     fieldValues: function() {
         var updates = {};
         var inputSource = this.$("input[name=instance_type]:checked").closest("fieldset");
-        _.each(inputSource.find("input[type=text], input[type=hidden], input[type=password], textarea"), function (i) {
+        _.each(inputSource.find("input[type=text], input[type=hidden], input[type=password], textarea, select"), function (i) {
             var input = $(i);
             updates[input.attr("name")] = input.val().trim();
         });

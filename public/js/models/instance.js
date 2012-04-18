@@ -170,7 +170,6 @@
         auroraTemplates: function() {
             if (!this._templates) {
                 this._templates = new chorus.collections.ProvisioningTemplateSet([], {provisionerPluginName: "A4CProvisioner"});
-                this._templates.fetch();
             }
             return this._templates;
         }

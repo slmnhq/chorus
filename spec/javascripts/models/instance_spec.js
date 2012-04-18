@@ -430,23 +430,19 @@ describe("chorus.models.Instance", function() {
 
     describe("#isHadoop", function() {
         context("when the instance is a hadoop instance", function() {
-            {
-                beforeEach(function() {
-                    this.instance = fixtures.hadoopInstance();
-                });
+            beforeEach(function() {
+                this.instance = fixtures.hadoopInstance();
+            });
 
-                it("returns true", function() {
-                    expect(this.instance.isHadoop()).toBeTruthy();
-                })
-            }
+            it("returns true", function() {
+                expect(this.instance.isHadoop()).toBeTruthy();
+            })
         })
 
         context("when the instance is not a hadoop instance", function() {
-            {
-                it("returns false", function() {
-                    expect(this.instance.isHadoop()).toBeFalsy();
-                })
-            }
+            it("returns false", function() {
+                expect(this.instance.isHadoop()).toBeFalsy();
+            })
         })
     })
 });

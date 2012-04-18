@@ -48,12 +48,9 @@
             width: $account-width;
         }
 
-        label[name=size] {
-            width: $fieldset-width;
-        }
-
-        input[name=size] {
+        label[name=size], input[name=size] {
             width: $size_width;
+            margin-top: 1px;
         }
 
         label[name=dbPassword], input[name=dbPassword],
@@ -73,7 +70,6 @@
         .instructions {
             @include dialog-label;
             margin-top: 20px;
-            margin-bottom: 10px;
             display: inline-block;
         }
 
@@ -82,11 +78,16 @@
         }
 
         .max_size {
-            @include secondary-text-normal;
+            @include dialog-label;
+        }
+
+        .instance_size_container {
+            display: inline-block;
+            margin-left: 10px;
         }
 
         select, .ui-selectmenu {
-            width: 150px;
+            width: 225px;
         }
     }
 }
