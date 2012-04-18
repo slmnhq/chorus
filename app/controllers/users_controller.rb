@@ -15,6 +15,11 @@ class UsersController < ApplicationController
   end
 
   def update
+    unless current_user.admin? || current_user == @user
+      raise ActiveRecord::RecordNotFound
+    end
+
+    @user.attributes = params[:user]
     @user.admin = params[:user][:admin] if current_user.admin?
     @user.save!
     present @user

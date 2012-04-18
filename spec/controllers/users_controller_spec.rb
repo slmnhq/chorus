@@ -149,6 +149,11 @@ describe UsersController do
         response.code.should == "200"
         decoded_response.admin.should == true
       end
+
+      it "updates other attributes" do
+        put :update, :id => other_user.to_param, :user => {:first_name => "updated"}
+        decoded_response.first_name.should == "updated"
+      end
     end
 
     context "when the current user is not an admin" do
@@ -156,9 +161,24 @@ describe UsersController do
         log_in non_admin
       end
 
-      it "does not allow non-admins to make someone an admin" do
-        put :update, :id => other_user.to_param, :user => {:admin => "true"}
-        other_user.reload.should_not be_admin
+      it "allows the user to edit their own profile" do
+        expect {
+          put :update, :id => non_admin.to_param, :user => {:first_name => "updated"}
+        }.to_not change { non_admin.reload.last_name }
+
+        decoded_response.first_name.should == "updated"
+      end
+
+      it "does not allow non-admins to make themselves an admin" do
+        put :update, :id => non_admin.to_param, :user => {:admin => "true"}
+        non_admin.reload.should_not be_admin
+      end
+
+      it "does not allow non-admins to update other users" do
+        expect {
+          put :update, :id => other_user.to_param, :user => {:first_name => "updated"}
+        }.to_not change { other_user.reload.first_name }
+        response.code.should == "404"
       end
     end
   end
