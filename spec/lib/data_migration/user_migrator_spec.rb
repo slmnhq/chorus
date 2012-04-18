@@ -18,12 +18,12 @@ describe UserMigrator, :type => :data_migration do
         UserMigrator.migrate
       end
       it "creates new users for legacy users" do
-        User.count.should == 8
+        User.find_with_destroyed(:all).length.should == 8
       end
 
       it "copies the correct data fields from the legacy user" do
         Legacy.connection.select_all("SELECT * FROM edc_user").each do |legacy_user|
-          user = User.find_by_username(legacy_user["user_name"])
+          user = User.find_with_destroyed(:first, :conditions =>{:username => legacy_user["user_name"]})
           user.should be_present
           user.username.should == legacy_user["user_name"]
           user.first_name.should == legacy_user["first_name"]
@@ -33,6 +33,11 @@ describe UserMigrator, :type => :data_migration do
           user.title.should == legacy_user["title"]
           user.dept.should == legacy_user["ou"]
           user.notes.should == legacy_user["notes"]
+          if legacy_user["is_deleted"] == "f"
+            user.deleted_at.should be_nil
+          else
+            user.deleted_at.should == legacy_user["last_updated_tx_stamp"]
+          end
         end
       end
 

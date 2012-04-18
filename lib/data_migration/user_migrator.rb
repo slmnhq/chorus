@@ -13,6 +13,7 @@ class UserMigrator
                              :title      => user["title"],
                              :dept       => user["ou"],
                              :notes      => user["notes"]
+      new_user.deleted_at = user["last_updated_tx_stamp"] if user["is_deleted"] == "t"
       new_user.password_digest = user["password"][5..-1]
       new_user.save!
     end
