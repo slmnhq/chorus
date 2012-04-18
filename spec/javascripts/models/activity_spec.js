@@ -472,6 +472,25 @@ describe("chorus.models.Activity", function() {
         });
     });
 
+    describe("#parentComment", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.COMMENT_ON_NOTE_ON_DATABASE_TABLE();
+            this.parentComment = this.model.parentComment();
+        });
+
+        it("should return a comment activity", function() {
+            expect(this.parentComment).toBeA(chorus.models.Activity);
+        });
+
+        it("should retain the data", function() {
+           expect(this.parentComment.databaseObject().name()).toBe(this.model.get("parentComment").databaseObject.name);
+        });
+
+        it("memoizes", function() {
+            expect(this.parentComment).toBe(this.model.parentComment());
+        })
+    });
+
     describe("#attachments", function() {
         beforeEach(function() {
             this.model.set({

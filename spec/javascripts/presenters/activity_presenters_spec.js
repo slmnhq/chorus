@@ -45,7 +45,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
             });
 
 
@@ -76,7 +76,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"'));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"'));
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -134,7 +134,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
             });
 
 
@@ -165,7 +165,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"'));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"'));
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -196,7 +196,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right importSourceUrl", function() {
-            expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10006/datasets/'+encodeURIComponent('"10002"|"Analytics"|"analytics"|"QUERY"|"a_chorus_view"'));
+            expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10006/datasets/' + encodeURIComponent('"10002"|"Analytics"|"analytics"|"QUERY"|"a_chorus_view"'));
         });
 
         it("should have an importSourceLink in the header", function() {
@@ -255,7 +255,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -291,7 +291,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/'+encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"'));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10002"|"bizarro_world"|"public"|"QUERY"|"song_view"'));
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -442,7 +442,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            expect(this.presenter.objectUrl).toMatchUrl('#/workspaces/4/datasets/'+encodeURIComponent('"10014"|"silverware"|"forks"|"shiny"'));
+            expect(this.presenter.objectUrl).toMatchUrl('#/workspaces/4/datasets/' + encodeURIComponent('"10014"|"silverware"|"forks"|"shiny"'));
         });
 
         it("should have the right objectType", function() {
@@ -557,6 +557,80 @@ describe("chorus.presenters.Activity", function() {
         })
 
         itShouldHaveFileAttachments();
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
+    context(".COMMENT_ON_NOTE_ON_DATABASE_TABLE", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.COMMENT_ON_NOTE_ON_DATABASE_TABLE();
+            this.databaseObject = this.model.parentComment().databaseObject();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.databaseObject.get("objectName"));
+        });
+
+        it("should have the right objectUrl", function() {
+            expect(this.presenter.objectUrl).toBe(this.databaseObject.showUrl());
+        });
+
+        it("should have the right objectType", function() {
+            expect(this.presenter.header.objectType).toMatchTranslation("database_object." + this.databaseObject.get("objectType"))
+        });
+
+        it("should have all the pieces", function() {
+            expect(this.presenter.headerHtml.toString()).not.toContain("[missing")
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
+    context(".COMMENT_ON_NOTE_ON_WORKSPACE", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.COMMENT_ON_NOTE_ON_WORKSPACE();
+            this.workspace = this.model.parentComment().workspace();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the right objectUrl", function() {
+            expect(this.presenter.objectUrl).toBe(this.workspace.showUrl());
+        });
+
+        it("should have the right objectType", function() {
+            expect(this.presenter.header.objectType).toMatchTranslation("workspaces.title_lower")
+        });
+
+        it("should have all the pieces", function() {
+            expect(this.presenter.headerHtml.toString()).not.toContain("[missing");
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
+    context(".COMMENT_ON_NOTE_ON_CHORUS_VIEW", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.COMMENT_ON_NOTE_ON_CHORUS_VIEW();
+            this.dataset = this.model.parentComment().dataset();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
+        });
+
+        it("should have the right objectUrl", function() {
+            expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+        });
+
+        it("should have all the pieces", function() {
+            expect(this.presenter.headerHtml.toString()).not.toContain("missing");
+        });
+
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
@@ -1312,6 +1386,24 @@ describe("chorus.presenters.Activity", function() {
 
             itGetsTheTranslationKeyCorrectly('without_workspace');
         });
+
+        describe("#headerTranslationKey with comment on note on dataset", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.COMMENT_ON_NOTE_ON_CHORUS_VIEW();
+            });
+
+            itGetsTheTranslationKeyCorrectly('default');
+        });
+
+        describe("#headerTranslationKey with comment on note on a workspace", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.COMMENT_ON_NOTE_ON_WORKSPACE();
+            });
+
+            itGetsTheTranslationKeyCorrectly('without_workspace');
+        });
+
+
 
         function itGetsTheTranslationKeyCorrectly(expectedKeySuffix) {
             context("when displayStyle is not set", function() {

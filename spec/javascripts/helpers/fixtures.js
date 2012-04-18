@@ -449,6 +449,93 @@ beforeEach(function() {
                 return new chorus.models.Activity(attrs);
             },
 
+
+            "COMMENT_ON_NOTE_ON_CHORUS_VIEW": function(overrides) {
+                var instanceId = fixtures.nextId().toString();
+                var attrs = _.extend({
+                    author: fixtures.authorJson(),
+                    type: "NOTE_COMMENT",
+                    text: "How about that note on that table.",
+                    timestamp: "2011-12-01 00:00:00",
+                    id: fixtures.nextId().toString(),
+                    parentComment: {
+                        author: fixtures.authorJson(),
+                        type: "NOTE",
+                        text: "How about that view.",
+                        timestamp: "2011-12-01 00:00:00",
+                        id: fixtures.nextId().toString(),
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author: fixtures.authorJson(),
+                                timestamp: "2011-12-15 12:34:56"
+                            }
+                        ],
+                        chorusView: {
+                            id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
+                            name: '__a_chorus_view_name',
+                            objectName: "__a_chorus_view_name",
+                            objectType: "QUERY",
+                            type: "CHORUS_VIEW"
+                        },
+                        artifacts: [],
+                        workspace: fixtures.nestedWorkspaceJson()
+                    }
+                }, overrides);
+                return new chorus.models.Activity(attrs);
+            },
+
+            "COMMENT_ON_NOTE_ON_DATABASE_TABLE": function(overrides) {
+                var instanceId = fixtures.nextId().toString();
+                var attrs = _.extend({
+                    author: fixtures.authorJson(),
+                    type: "NOTE_COMMENT",
+                    text: "How about that note on that table.",
+                    timestamp: "2011-12-01 00:00:00",
+                    id: fixtures.nextId().toString(),
+                    parentComment: {
+                        author: fixtures.authorJson(),
+                        type: "NOTE",
+                        text: "How about that view.",
+                        timestamp: "2011-12-01 00:00:00",
+                        id: fixtures.nextId().toString(),
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author: fixtures.authorJson(),
+                                timestamp: "2011-12-15 12:34:56"
+                            }
+                        ],
+                        databaseObject: {
+                            id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
+                            name: '__a_table_name',
+                            objectType: "BASE_TABLE",
+                            type: "databaseObject",
+                            databaseName: "dca_demo",
+                            schemaName: "public",
+                            instance: fixtures.instanceJson()
+                        },
+                        artifacts: [
+                            {
+                                entityId: "10101",
+                                entityType: "file",
+                                id: "10101",
+                                name: "something.sql",
+                                type: "SQL"
+                            },
+                            {
+                                entityId: "10102",
+                                entityType: "file",
+                                id: "10102",
+                                name: "something.txt",
+                                type: "TXT"
+                            }
+                        ]
+                    }
+                }, overrides);
+                return new chorus.models.Activity(attrs);
+            },
+
             "NOTE_ON_DATASET_VIEW": function(overrides) {
                 var instanceId = fixtures.nextId().toString();
                 var attrs = _.extend({
@@ -524,6 +611,50 @@ beforeEach(function() {
                     ]
                 });
             },
+
+            "COMMENT_ON_NOTE_ON_WORKSPACE": function() {
+                    var attrs = _.extend({
+                        author: fixtures.authorJson(),
+                        type: "NOTE_COMMENT",
+                        text: "How about that note on that table.",
+                        timestamp: "2011-12-01 00:00:00",
+                        id: fixtures.nextId().toString(),
+
+                    parentComment: {
+                        author: fixtures.authorJson(),
+                        type: "NOTE",
+                        text: "How about that.",
+                        timestamp: "2011-12-01 00:00:00",
+                        id: "10101",
+                        comments: [
+                            {
+                                text: "sub-comment 1",
+                                author: fixtures.authorJson(),
+                                timestamp: "2011-12-15 12:34:56"
+                            }
+                        ],
+                        workspace: newFixtures.workspaceJson(),
+                        artifacts: [
+                            {
+                                entityId: "10101",
+                                entityType: "file",
+                                id: "10101",
+                                name: "something.sql",
+                                type: "SQL"
+                            },
+                            {
+                                entityId: "10102",
+                                entityType: "file",
+                                id: "10102",
+                                name: "something.txt",
+                                type: "TXT"
+                            }
+                        ]
+                    }
+                });
+                return new chorus.models.Activity(attrs);
+            },
+
 
             "NOTE_ON_WORKFILE_JSON": function() {
                 return {
@@ -1844,7 +1975,8 @@ beforeEach(function() {
                 attributes.schemaName,
                 attributes.objectType,
                 attributes.objectName
-            ], function(piece) {return '"' + piece + '"'}).join("|");
+            ],
+                function(piece) {return '"' + piece + '"'}).join("|");
             return attributes;
         },
 
@@ -2435,43 +2567,43 @@ beforeEach(function() {
 
         attachmentOnInstanceSearchResult: function(overrides) {
             var attributes = _.extend({
-                    "entityType": "attachment",
-                    "type": "attachment",
-                    "id": "10014",
-                    "isDeleted": false,
-                    "lastUpdatedStamp": "2012-03-20 16:43:21",
-                    "fileId": "10014",
-                    "fileType": "IMAGE",
-                    "isBinary": true,
-                    "name": "chuck.jpg",
-                    "highlightedAttributes": {
-                        "name": ["<em>chuck<\/em>.jpg"]
-                    },
+                "entityType": "attachment",
+                "type": "attachment",
+                "id": "10014",
+                "isDeleted": false,
+                "lastUpdatedStamp": "2012-03-20 16:43:21",
+                "fileId": "10014",
+                "fileType": "IMAGE",
+                "isBinary": true,
+                "name": "chuck.jpg",
+                "highlightedAttributes": {
+                    "name": ["<em>chuck<\/em>.jpg"]
+                },
+                "owner": {
+                    "id": "InitialUser",
+                    "lastName": "Admin",
+                    "firstName": "EDC"
+                },
+                "workspace": {},
+                "instance": {
+                    "port": 5432,
+                    "id": "10000",
+                    "host": "gillette.sf.pivotallabs.com",
+                    "provisionType": "register",
+                    "name": "gillette",
                     "owner": {
                         "id": "InitialUser",
                         "lastName": "Admin",
                         "firstName": "EDC"
                     },
-                    "workspace": {},
-                    "instance": {
-                        "port": 5432,
-                        "id": "10000",
-                        "host": "gillette.sf.pivotallabs.com",
-                        "provisionType": "register",
-                        "name": "gillette",
-                        "owner": {
-                            "id": "InitialUser",
-                            "lastName": "Admin",
-                            "firstName": "EDC"
-                        },
-                        "state": "online",
-                        "instanceProvider": "Greenplum Database",
-                        "isDeleted": false,
-                        "entityType": "instance",
-                        "maintenanceDb": "postgres"
-                    },
-                    "comments": []
-                });
+                    "state": "online",
+                    "instanceProvider": "Greenplum Database",
+                    "isDeleted": false,
+                    "entityType": "instance",
+                    "maintenanceDb": "postgres"
+                },
+                "comments": []
+            });
             return new chorus.models.Artifact(attributes);
         },
 
@@ -2958,62 +3090,64 @@ beforeEach(function() {
                     numFound: 1
                 },
                 attachment: {
-                    docs: [{
-                        entityType: "hdfs",
-                        id: "10000",
-                        isDeleted: false,
-                        lastUpdatedStamp: "2012-03-16 11:17:09",
-                        fileId: "10000",
-                        fileType: "CSV",
-                        isBinary: true,
-                        name: "titanic.csv",
-                        highlightedAttributes: {
-                            name: ["<em>titanic<\/em>.csv"]
-                        },
-                        owner: {
-                            id: "InitialUser",
-                            lastName: "Admin",
-                            firstName: "EDC"
-                        },
-                        workspace: {
+                    docs: [
+                        {
+                            entityType: "hdfs",
                             id: "10000",
-                            name: "ws"
-                        },
-                        hdfs: {
-                            id: "10020|/webui/help/publish/Data/Index.js",
-                            name: "Index.js",
-                            path: "/webui/help/publish/Data",
-                            instance: {
-                                id: "10020",
-                                name: "hadoooooooooop"
+                            isDeleted: false,
+                            lastUpdatedStamp: "2012-03-16 11:17:09",
+                            fileId: "10000",
+                            fileType: "CSV",
+                            isBinary: true,
+                            name: "titanic.csv",
+                            highlightedAttributes: {
+                                name: ["<em>titanic<\/em>.csv"]
                             },
-                            entityType: "hdfs"
+                            owner: {
+                                id: "InitialUser",
+                                lastName: "Admin",
+                                firstName: "EDC"
+                            },
+                            workspace: {
+                                id: "10000",
+                                name: "ws"
+                            },
+                            hdfs: {
+                                id: "10020|/webui/help/publish/Data/Index.js",
+                                name: "Index.js",
+                                path: "/webui/help/publish/Data",
+                                instance: {
+                                    id: "10020",
+                                    name: "hadoooooooooop"
+                                },
+                                entityType: "hdfs"
+                            },
+                            comments: []
                         },
-                        comments: []
-                    },
-                    {
-                        entityType: "workspace",
-                        id: "10001",
-                        isDeleted: false,
-                        lastUpdatedStamp: "2012-03-16 11:18:32",
-                        fileId: "10001",
-                        fileType: "IMAGE",
-                        isBinary: true,
-                        name: "Titanic2.jpg",
-                        highlightedAttributes: {
-                            name: ["<em>Titanic<\/em>2.jpg"]
-                        },
-                        owner: {
-                            id: "InitialUser",
-                            lastName: "Admin",
-                            firstName: "EDC"
-                        },
-                        workspace: {
-                            id: "10000",
-                            name: "ws"
-                        },
-                        comments: []
-                    }],
+                        {
+                            entityType: "workspace",
+                            id: "10001",
+                            isDeleted: false,
+                            lastUpdatedStamp: "2012-03-16 11:18:32",
+                            fileId: "10001",
+                            fileType: "IMAGE",
+                            isBinary: true,
+                            name: "Titanic2.jpg",
+                            highlightedAttributes: {
+                                name: ["<em>Titanic<\/em>2.jpg"]
+                            },
+                            owner: {
+                                id: "InitialUser",
+                                lastName: "Admin",
+                                firstName: "EDC"
+                            },
+                            workspace: {
+                                id: "10000",
+                                name: "ws"
+                            },
+                            comments: []
+                        }
+                    ],
                     numFound: 2
                 }
             }, overrides)
@@ -3048,15 +3182,15 @@ beforeEach(function() {
                 entityType: "attachment",
                 fileId: "10020",
                 fileType: "IMAGE",
-                highlightedAttributes: {name:['<em>tracker</em>_dot.jpeg']},
+                highlightedAttributes: {name: ['<em>tracker</em>_dot.jpeg']},
                 id: "10020",
                 isBinary: true,
                 isDeleted: false,
                 lastUpdatedStamp: "2012-03-19 16:17:04",
                 name: "tracker_dot.jpeg",
-                owner: {id: 'InitialUser', lastName:'Admin', firstName:'EDC'},
+                owner: {id: 'InitialUser', lastName: 'Admin', firstName: 'EDC'},
                 type: "attachment",
-                workspace: {id:10000, name:'danny'}
+                workspace: {id: 10000, name: 'danny'}
             }, overrides);
         },
 

@@ -5,7 +5,7 @@ chorus.models.Activity = chorus.models.Base.extend({
         if (!this._author && this.has("author")) {
             this._author = new chorus.models.User(this.get("author"))
         }
-        
+
         return this._author;
     },
 
@@ -32,6 +32,10 @@ chorus.models.Activity = chorus.models.Base.extend({
             this._workspace || (this._workspace = new chorus.models.Workspace(this.get("workspace")));
         }
 
+        if (this.parentComment()) {
+            this._workspace || (this._workspace = this.parentComment().workspace());
+        }
+
         return this._workspace;
     },
 
@@ -47,7 +51,7 @@ chorus.models.Activity = chorus.models.Base.extend({
             });
         }
     },
-    
+
     chorusViewDataset: function() {
         var chorusView = this.get("chorusView");
         if (chorusView && this.get("workspace")) {
@@ -96,6 +100,11 @@ chorus.models.Activity = chorus.models.Base.extend({
             }
         }
 
+
+        if (this.parentComment()) {
+            this._workfile || (this._workfile = this.parentComment().workfile());
+        }
+
         return this._workfile;
     },
 
@@ -104,6 +113,14 @@ chorus.models.Activity = chorus.models.Base.extend({
         if (hdfsJson) {
             return new chorus.models.HdfsEntry(hdfsJson);
         }
+    },
+
+    parentComment: function() {
+        if (this.get("parentComment")) {
+            this._parentComment || (this._parentComment = new chorus.models.Activity(this.get("parentComment")));
+        }
+
+        return this._parentComment;
     },
 
     promoteToInsight: function(options) {
@@ -207,7 +224,8 @@ chorus.models.Activity = chorus.models.Base.extend({
     },
 
     noteworthy: function() {
-        return this.instance() ||
+            return (this.parentComment() && this.parentComment().noteworthy()) ||
+            this.instance() ||
             this.workfile() ||
             this.dataset() ||
             this.databaseObject() ||

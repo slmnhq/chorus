@@ -31,6 +31,7 @@
 
             var activityTypeToEntityType = {
                 "NOTE": "comment",
+                "NOTE_COMMENT": "comment",
                 "INSIGHT_CREATED": "comment",
                 "RECEIVE_NOTE": "comment"
             }
@@ -150,6 +151,7 @@
         NOTE: showNote,
         INSIGHT_CREATED: showNote,
         RECEIVE_NOTE: showNote,
+        NOTE_COMMENT: showNote,
 
         IMPORT_SUCCESS: function(model) {
             var ctx = importIsObject(model);
