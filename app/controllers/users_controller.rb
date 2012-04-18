@@ -14,7 +14,7 @@ class UsersController < ApplicationController
     if current_user.admin?
       present User.create!(params[:user]), :status => :created
     else
-      render :status => :unauthorized, :json => "Only admins can do that"
+      head :unauthorized
     end
   rescue ActiveRecord::RecordInvalid => e
     present_errors e.record.errors, :status => :unprocessable_entity
