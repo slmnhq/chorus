@@ -12,5 +12,11 @@ FactoryGirl.define do
     last_name  "User"
     admin      true
   end
+
+  factory :instance do
+    sequence(:name) {|n| "instance#{n}"}
+    sequence(:host) {|n| "host#{n}.emc.com"}
+    sequence(:port) {|n| 5000+n}
+  end
 end
 
