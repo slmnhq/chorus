@@ -5,11 +5,23 @@
     window.newFixtures.addUniqueDefaults = addUniqueDefaults;
 
     _.each(window.fixtureDefinitions, function(definition, name) {
+        if (definition.model || definition.collection) {
+            generateFixture(definition, name);
+        } else {
+            newFixtures[name] = {};
+            _.each(definition, function(innerDefinition, innerName) {
+                generateFixture(innerDefinition, innerName, name);
+            });
+        }
+    });
+
+    function generateFixture(definition, name, parentName) {
+        var module = parentName ? newFixtures[parentName] : newFixtures;
         var klass = getClass(definition);
         var jsonMethodName = name + "Json";
 
-        window.newFixtures[jsonMethodName] = function(overrides, uncheckedOverrides) {
-            var rawData = getFixture(name);
+        module[jsonMethodName] = function(overrides, uncheckedOverrides) {
+            var rawData = getFixture(name, parentName);
             overrides || (overrides = defaultOverridesFor(rawData));
             addUniqueDefaults(overrides, definition.unique);
             var attrs = safeExtend(rawData, overrides, name);
@@ -18,11 +30,11 @@
             return attrs;
         };
 
-        window.newFixtures[name] = function() {
-            var attrs = newFixtures[jsonMethodName].apply(this, arguments);
+        module[name] = function() {
+            var attrs = module[jsonMethodName].apply(this, arguments);
             return new klass(attrs);
         };
-    });
+    }
 
     function addDerivedAttributes(attrs, overrides, derivationMethods) {
         _.each(derivationMethods, function(method, attrName) {
@@ -48,10 +60,11 @@
         }
     }
 
-    function getFixture(name) {
+    function getFixture(name, parentName) {
         if (!window.fixtureData[name]) {
-            var $element = $("#fixtures [data-fixture-path='" + name + "']");
-            if (!$element.length) throw "No fixture for " + name;
+            var path = _.compact([parentName, name]).join("/");
+            var $element = $("#fixtures [data-fixture-path='" + path + "']");
+            if (!$element.length) throw "No fixture for " + path;
             window.fixtureData[name] = JSON.parse($element.html());
         }
         return window.fixtureData[name];

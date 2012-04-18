@@ -36,6 +36,17 @@ window.fixtureDefinitions = {
 
     csvImport: {
         model: "CSVImport"
+    },
+
+    activities: {
+        provisioningSuccess: {
+            model: "Activity",
+            unique: [ "id" ]
+        },
+        provisioningFail: {
+            model: "Activity",
+            unique: [ "id" ]
+        }
     }
 };
 

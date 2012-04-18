@@ -1,4 +1,22 @@
 describe("newFixtures", function() {
+    describe("nested fixture definitions", function() {
+        var activity;
+
+        beforeEach(function() {
+            activity = newFixtures.activities.provisioningSuccess();
+        });
+
+        it("gets the right data", function() {
+            var fixtureScript = $("#fixtures [data-fixture-path='activities/provisioningSuccess']");
+            var fixtureJson = JSON.parse(fixtureScript.html());
+            expect(activity.get("timestamp")).toBe(fixtureJson.timestamp);
+        });
+
+        it("returns an activity model", function() {
+            expect(activity).toBeA(chorus.models.Activity);
+        });
+    });
+
     describe("#userJson", function() {
         var userJson;
 
