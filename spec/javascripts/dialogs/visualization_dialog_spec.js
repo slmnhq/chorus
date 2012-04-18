@@ -40,7 +40,8 @@ describe("chorus.dialogs.Visualization", function() {
             describe("when the task data is valid", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "isValidData").andReturn(true);
-                    this.dialog.onExecutionComplete();
+                    this.dialog.launchModal();
+                    this.dialog.drawChart();
                 });
 
                 it("should draw the chart", function() {
@@ -66,7 +67,8 @@ describe("chorus.dialogs.Visualization", function() {
                         var filter1 = new chorus.models.TabularDataFilter({column: this.columns.at(0), comparator: "equal", input: {value: "original_filter_value_a"}});
                         var filters = new chorus.collections.TabularDataFilterSet([filter1]);
                         this.dialog.filters = filters;
-                        this.dialog.onExecutionComplete();
+                        this.dialog.launchModal();
+                        this.dialog.drawChart();
                     });
 
                     it("shows the singular form of 'filter', not 'filters'", function() {
@@ -84,7 +86,8 @@ describe("chorus.dialogs.Visualization", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "isValidData").andReturn(false);
                     this.dialog.render();
-                    this.dialog.onExecutionComplete();
+                    this.dialog.launchModal();
+                    this.dialog.drawChart();
                 })
 
                 it("does not enable the save chart button", function() {
@@ -220,6 +223,30 @@ describe("chorus.dialogs.Visualization", function() {
 
                     itRespondsToFilterUpdates();
 
+                    context("clicking 'Refresh Data'", function() {
+                        beforeEach(function() {
+                            this.dialog.$("button.refresh").click();
+                        });
+
+                        it("saves the updated task", function() {
+                            expect(this.server.lastCreateFor(this.dialog.task)).toBeDefined();
+                        });
+
+                        context("and the task save fails", function() {
+                            beforeEach(function() {
+                                this.server.lastCreateFor(this.dialog.task).fail([{message: "I FAILED!"}]);
+                            });
+
+                            it("displays the error message in the dialog", function() {
+                                expect(this.dialog.$(".errors")).toContainText("I FAILED!");
+                            });
+
+                            it("stops the spinner on the refresh button", function() {
+                                expect(this.dialog.$("button.refresh").isLoading()).toBeFalsy();
+                            });
+                        });
+                    });
+
                     context("and then reverting to the original values", function() {
                         beforeEach(function() {
                             this.dialog.filterWizard.$(".filter input:eq(0)").val(originalFilterVal).trigger("keyup");
@@ -254,7 +281,8 @@ describe("chorus.dialogs.Visualization", function() {
         context("when the rows are empty", function() {
             beforeEach(function() {
                 spyOn(this.dialog, "isValidData").andReturn(false)
-                this.dialog.onExecutionComplete()
+                this.dialog.launchModal();
+                this.dialog.drawChart();
             });
 
             it("disables the 'Save' button", function() {
@@ -268,7 +296,8 @@ describe("chorus.dialogs.Visualization", function() {
 
         context("when the rows are valid", function() {
             beforeEach(function() {
-                this.dialog.onExecutionComplete();
+                this.dialog.launchModal();
+                this.dialog.drawChart();
             });
 
             it("should have a title", function() {

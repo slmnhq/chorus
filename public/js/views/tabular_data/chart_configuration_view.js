@@ -103,21 +103,27 @@
         launchVisualizationDialog: function(e) {
             e && e.preventDefault && e.preventDefault();
             this.clearSqlErrors();
-            this.startVisualization()
+            this.startVisualization();
 
-            var dialog = new chorus.dialogs.Visualization({model: this.model, chartOptions: this.chartOptions(), filters: this.filters, columnSet: this.collection });
-            this.dialog = dialog
             var func = 'make' + _.capitalize(this.chartOptions().type) + 'Task';
-            this.task = dialog.task = this.model[func](this.chartOptions());
-            dialog.task.set({filters: this.filters && this.filters.whereClause()});
+            this.task = this.model[func](this.chartOptions());
+            this.task.set({filters: this.filters && this.filters.whereClause()});
 
-            dialog.task.bindOnce("saved", dialog.onExecutionComplete, dialog);
-            dialog.task.bindOnce("saveFailed", this.onSqlError, this)
+            this.dialog = new chorus.dialogs.Visualization({
+                task: this.task,
+                model: this.model,
+                chartOptions: this.chartOptions(),
+                filters: this.filters,
+                columnSet: this.collection
+            });
 
-            dialog.task.bindOnce("saved", this.cleanupVisualization, this);
-            dialog.task.bindOnce("saveFailed", this.cleanupVisualization, this)
+            this.task.bindOnce("saved", this.createVisualization, this);
+            this.task.bindOnce("saveFailed", this.showSqlErrors, this);
 
-            dialog.task.save();
+            this.task.bindOnce("saved", this.cleanupVisualization, this);
+            this.task.bindOnce("saveFailed", this.cleanupVisualization, this)
+
+            this.task.save();
         },
 
         cancelVisualization: function(e) {
@@ -127,6 +133,12 @@
                 this.task.cancel();
                 this.cleanupVisualization();
             }
+        },
+
+        createVisualization: function() {
+            this.dialog.launchModal();
+            this.dialog.drawChart();
+            this.task.unbind("saveFailed");
         },
 
         startVisualization: function() {
@@ -140,7 +152,7 @@
             delete this.task;
         },
 
-        onSqlError: function() {
+        showSqlErrors: function() {
             this.options.errorContainer.showError(this.task, chorus.alerts.VisualizationError)
         },
 

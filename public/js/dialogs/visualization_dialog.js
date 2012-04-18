@@ -1,6 +1,5 @@
 chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     constructorName: "Visualization",
-
     className: "visualization",
 
     subviews: {
@@ -21,6 +20,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
+        this.task = this.options.task;
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
         this.filters = this.options.filters.clone();
@@ -61,11 +61,6 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         });
     },
 
-    onExecutionComplete: function() {
-        this.launchModal();
-        this.drawChart();
-    },
-
     drawChart: function() {
         if (this.isValidData()) {
             this.$(".modal_controls a.hide").addClass("hidden");
@@ -85,10 +80,17 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     refreshChart: function() {
         this.$(".overlay").addClass("disabled");
         this.task.set({filters: this.filters && this.filters.whereClause()});
+        this.task.bindOnce("saveFailed", this.saveFailed, this);
         this.task.save();
+
         this.showButtons(["stop", "refresh"]);
         this.$("button.refresh").startLoading("visualization.refreshing");
         this.bindings.add(this.task, "saved", this.chartRefreshed, this);
+    },
+
+    saveFailed: function() {
+        this.showErrors(this.task);
+        this.$("button.refresh").stopLoading();
     },
 
     chartRefreshed: function() {
@@ -167,7 +169,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             chartType: t("dataset.visualization.names." + this.type),
             workspaceId: this.task.get("workspaceId"),
             hasChart: !!this.chart,
-            entityName: this.model.get("objectName")
+            entityName: this.model.get("objectName"),
+            serverErrors: this.task.serverErrors
         }
     },
 

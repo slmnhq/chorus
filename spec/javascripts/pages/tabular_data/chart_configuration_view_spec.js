@@ -70,7 +70,7 @@ describe("chorus.views.ChartConfiguration", function() {
         describe("Creating a Visualization", function() {
             beforeEach(function() {
                 spyOn(this.view, "clearSqlErrors");
-                spyOn(this.view, "onSqlError");
+                spyOn(this.view, "showSqlErrors");
                 this.view.model = newFixtures.datasetSourceTable();
                 this.view.$('button.create').click();
                 this.task = this.view.task;
@@ -91,6 +91,10 @@ describe("chorus.views.ChartConfiguration", function() {
 
             it("should show the cancel button", function() {
                 expect(this.view.$("button.cancel")).not.toHaveClass('hidden');
+            });
+
+            it("should save the chart task", function() {
+                expect(this.server.lastCreateFor(this.view.task)).toBeDefined();
             });
 
             describe("cancel:visualization", function() {
@@ -129,7 +133,7 @@ describe("chorus.views.ChartConfiguration", function() {
                     });
 
                     it("does not render errors", function() {
-                        expect(this.view.onSqlError).not.toHaveBeenCalled();
+                        expect(this.view.showSqlErrors).not.toHaveBeenCalled();
                     });
 
                     it("unsets the task from the view", function() {
@@ -162,6 +166,16 @@ describe("chorus.views.ChartConfiguration", function() {
                 it("unsets the task from the view", function() {
                     expect(this.view.task).toBeUndefined();
                 });
+
+                context("and the visualization dialog is refreshed", function() {
+                    beforeEach(function() {
+                        this.modalSpy.lastModal().task.trigger("saveFailed");
+                    });
+
+                    it("does not show errors in the chart config", function() {
+                        expect(this.view.showSqlErrors).not.toHaveBeenCalled();
+                    });
+                });
             });
 
             describe("when the save fails", function() {
@@ -169,8 +183,8 @@ describe("chorus.views.ChartConfiguration", function() {
                     this.server.lastCreateFor(this.view.task).fail("Boom!");
                 });
 
-                it("displays the error DIV", function() {
-                    expect(this.view.onSqlError).toHaveBeenCalled();
+                it("displays the error message", function() {
+                    expect(this.view.showSqlErrors).toHaveBeenCalled();
                 });
 
                 it("should remove the spinner from the create button", function() {
@@ -220,15 +234,15 @@ describe("chorus.views.ChartConfiguration", function() {
             this.view.task = {};
         });
 
-        describe("onSqlError", function() {
-            it("passes the task and the alert class to showErrors on the errorContainer", function() {
-                this.view.onSqlError();
+        describe("showSqlErrors", function() {
+            it("passes the task and the alert class to showSqlErrors on the errorContainer", function() {
+                this.view.showSqlErrors();
                 expect(this.view.options.errorContainer.showError).toHaveBeenCalledWith(this.view.task, chorus.alerts.VisualizationError);
             });
         });
 
         describe("clearSqlErrors", function() {
-            it("passes the task and the alert class to showErrors on the errorContainer", function() {
+            it("passes the task and the alert class to showSqlErrors on the errorContainer", function() {
                 this.view.clearSqlErrors();
                 expect(this.view.options.errorContainer.closeError).toHaveBeenCalled();
             });
