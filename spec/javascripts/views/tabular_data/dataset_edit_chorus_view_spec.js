@@ -75,7 +75,7 @@ describe("chorus.views.DatasetEditChorusView", function() {
             spyOn(chorus.router, "navigate");
             this.view.editor.setValue("select * from table_abc");
             spyOn(this.view.model, "save");
-            this.view.trigger("dataset:saveEdit");
+            chorus.PageEvents.broadcast("dataset:saveEdit");
             this.clock.tick(1000);
 
         });
@@ -83,8 +83,8 @@ describe("chorus.views.DatasetEditChorusView", function() {
             beforeEach(function() {
                 this.view.model.trigger("saved");
             });
-            it("saves the model", function() {
-                expect(this.view.model.save).toHaveBeenCalled();
+            it("saves the model with silent:true (otherwise the page will re-render)", function() {
+                expect(this.view.model.save).toHaveBeenCalledWith(undefined, {silent: true});
             });
 
             it("sets the query in the model", function() {
@@ -108,5 +108,16 @@ describe("chorus.views.DatasetEditChorusView", function() {
                 expect(this.view.$(".errors ul li").text()).toBe("SQL error!");
             })
         })
+    });
+
+    describe("cancel", function() {
+        beforeEach(function() {
+            this.view.model.serverErrors = ["bad sql"];
+            chorus.PageEvents.broadcast("dataset:cancelEdit");
+        });
+
+        it("clears the errors", function() {
+           expect(this.view.model.serverErrors).toBeUndefined();
+        });
     });
 });

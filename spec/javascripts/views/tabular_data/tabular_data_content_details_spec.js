@@ -565,7 +565,6 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         context("and cancel is clicked", function() {
                             beforeEach(function() {
                                 spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
-                                spyOnEvent(this.view, "dataset:cancelEdit");
                                 this.view.$('.edit_chorus_view .cancel').click();
                             });
                             it("shows the definition bar and hides the create_chart bar", function() {
@@ -579,8 +578,8 @@ describe("chorus.views.TabularDataContentDetails", function() {
                             it("triggers 'cancel:sidebar'", function() {
                                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
                             });
-                            it("triggers dataset:cancelEdit", function() {
-                                expect("dataset:cancelEdit").toHaveBeenTriggeredOn(this.view);
+                            it("broadcasts dataset:cancelEdit", function() {
+                                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:cancelEdit");
                             });
                             it("resets the query to the initial query", function() {
                                 expect(this.view.tabularData.get("query")).toBe("select * from abc")
@@ -588,11 +587,11 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         })
                         context("and 'Save and Return' is clicked", function() {
                             beforeEach(function() {
-                                spyOnEvent(this.view, "dataset:saveEdit");
+                                spyOn(chorus.PageEvents, "broadcast");
                                 this.view.$(".save").click();
                             });
-                            it("triggers dataset:saveEdit", function() {
-                                expect("dataset:saveEdit").toHaveBeenTriggeredOn(this.view)
+                            it("broadcasts dataset:saveEdit", function() {
+                                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:saveEdit");
                             });
                         })
                     });

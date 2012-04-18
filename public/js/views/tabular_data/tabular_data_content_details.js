@@ -171,12 +171,12 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
         this.$(".column_count").removeClass("hidden");
         this.$(".definition").removeClass("hidden");
         chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
-        this.trigger("dataset:cancelEdit");
+        chorus.PageEvents.broadcast('dataset:cancelEdit');
         this.tabularData.set({query: this.tabularData.initialQuery});
     },
 
     saveChorusView: function() {
-        this.trigger("dataset:saveEdit");
+        chorus.PageEvents.broadcast("dataset:saveEdit");
     },
 
     closeError: function(e) {

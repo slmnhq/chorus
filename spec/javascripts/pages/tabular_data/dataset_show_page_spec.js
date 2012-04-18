@@ -116,7 +116,8 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                         describe("when user cancel edit dataset and dataset:cancelEdit is triggered", function() {
                             beforeEach(function() {
-                                this.page.mainContent.contentDetails.trigger("dataset:cancelEdit");
+                                this.page.drawColumns.reset();
+                                chorus.PageEvents.broadcast("dataset:cancelEdit");
                             });
 
                             it("re-draws the page", function() {

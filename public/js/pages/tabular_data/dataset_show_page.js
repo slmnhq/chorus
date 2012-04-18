@@ -54,8 +54,7 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
             contentDetails: new chorus.views.TabularDataContentDetails({ tabularData: this.tabularData, collection: this.columnSet, inEditChorusView: true })
         });
 
-        this.mainContent.contentDetails.bind("dataset:cancelEdit", this.drawColumns, this);
-        this.mainContent.contentDetails.forwardEvent("dataset:saveEdit", this.mainContent.content, this);
+        chorus.PageEvents.subscribe("dataset:cancelEdit", this.drawColumns, this);
 
         this.renderSubview('mainContent');
     },

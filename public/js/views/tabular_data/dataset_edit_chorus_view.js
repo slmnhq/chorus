@@ -3,7 +3,8 @@ chorus.views.DatasetEditChorusView = chorus.views.CodeEditorView.extend({
 
     setup: function() {
         this._super("setup");
-        this.bind("dataset:saveEdit", this.saveModel, this);
+        chorus.PageEvents.subscribe("dataset:saveEdit", this.saveModel, this);
+        chorus.PageEvents.subscribe("dataset:cancelEdit", this.cancelEdit, this);
         this.model.initialQuery = this.model.get("query");
         this.bindings.add(this.model, "saved", this.navigateToChorusViewShowPage);
     },
@@ -30,8 +31,12 @@ chorus.views.DatasetEditChorusView = chorus.views.CodeEditorView.extend({
     saveModel: function() {
         var query = this.editor.getValue();
 
-        this.model.set({query: query});
-        this.model.save();
+        this.model.set({query: query}, {silent: true});
+        this.model.save(undefined, {silent: true});
+    },
+
+    cancelEdit: function() {
+        delete this.model.serverErrors;
     },
 
     navigateToChorusViewShowPage: function() {
