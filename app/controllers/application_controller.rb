@@ -2,6 +2,18 @@ class ApplicationController < ActionController::Base
   before_filter :require_login
   before_filter :set_collection_defaults, :only => :index
   after_filter :extend_expiration
+  rescue_from 'ActiveRecord::RecordNotFound', :with => :render_not_found
+  rescue_from 'ActiveRecord::RecordInvalid', :with => :render_not_valid
+
+  private
+
+  def render_not_valid(e)
+    present_validation_errors e.record.errors, :status => :unprocessable_entity
+  end
+
+  def render_not_found(e)
+    present_errors({:record => :NOT_FOUND}, :status => :not_found)
+  end
 
   def logged_in?
     !!current_user
@@ -51,6 +63,10 @@ class ApplicationController < ActionController::Base
   end
 
   def present_errors(errors, options={})
-    render options.reverse_merge(:status => :bad_request).merge(:json => { :errors => { :fields => errors } } )
+    render options.reverse_merge(:status => :bad_request).merge(:json => { :errors => errors } )
+  end
+
+  def present_validation_errors(errors, options={})
+    present_errors({ :fields => errors }, options)
   end
 end

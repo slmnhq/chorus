@@ -6,9 +6,8 @@ class SessionsController < ApplicationController
     user = CredentialsValidator.user(params[:username], params[:password])
     session[:user_id] = user.id
     present user, :status => :created
-
   rescue CredentialsValidator::Invalid => e
-    present_errors e.record.errors, :status => :unauthorized
+    present_validation_errors e.record.errors, :status => :unauthorized
   end
 
   def destroy

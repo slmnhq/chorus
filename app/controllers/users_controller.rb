@@ -11,13 +11,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    if current_user.admin?
-      present User.create!(params[:user]), :status => :created
-    else
-      head :unauthorized
-    end
-  rescue ActiveRecord::RecordInvalid => e
-    present_errors e.record.errors, :status => :unprocessable_entity
+    present User.create!(params[:user]), :status => :created
   end
 
   def update

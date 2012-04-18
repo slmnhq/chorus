@@ -2,8 +2,35 @@ require 'spec_helper'
 
 describe ApplicationController do
   class ApplicationController
+    def any_action
+    end
+
     def action_requiring_session
       head :ok
+    end
+  end
+
+  describe "rescuing from errors" do
+    before do
+      log_in FactoryGirl.create :user
+    end
+
+    it "renders 'not found' JSON when record not found" do
+      controller.stub(:any_action).and_raise(ActiveRecord::RecordNotFound)
+      get :any_action
+
+      response.code.should == "404"
+      decoded_errors.record.should == "NOT_FOUND"
+    end
+
+    it "renders 'invalid' JSON when record is invalid" do
+      invalid_record = User.new
+      invalid_record.valid?
+      controller.stub(:any_action).and_raise(ActiveRecord::RecordInvalid.new(invalid_record))
+      get :any_action
+
+      response.code.should == "422"
+      decoded_errors.fields.username.should == ["REQUIRED"]
     end
   end
 
