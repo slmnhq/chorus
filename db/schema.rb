@@ -11,7 +11,29 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120418000741) do
+ActiveRecord::Schema.define(:version => 20120418211041) do
+
+  create_table "instances", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "owner"
+    t.string   "host"
+    t.integer  "port"
+    t.date     "expire"
+    t.string   "state"
+    t.string   "provision_type"
+    t.string   "provision_id"
+    t.integer  "size"
+    t.string   "instance_provider"
+    t.datetime "last_check"
+    t.string   "provision_name"
+    t.boolean  "is_deleted"
+    t.string   "instance_version"
+    t.string   "maintenance_db"
+    t.string   "connection_string"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "username"
@@ -20,11 +42,11 @@ ActiveRecord::Schema.define(:version => 20120418000741) do
     t.datetime "updated_at",                         :null => false
     t.string   "first_name"
     t.string   "last_name"
-    t.boolean  "admin",           :default => false
     t.string   "email"
     t.string   "title"
     t.string   "dept"
     t.text     "notes"
+    t.boolean  "admin",           :default => false
     t.datetime "deleted_at"
   end
 

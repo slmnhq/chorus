@@ -6,5 +6,10 @@ describe DataMigrator, :type => :data_migration do
       UserMigrator.should_receive(:migrate)
       DataMigrator.migrate
     end
+
+    it "calls the instance migrator" do
+      InstanceMigrator.should_receive(:migrate)
+      DataMigrator.migrate
+    end
   end
 end
