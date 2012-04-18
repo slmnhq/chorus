@@ -328,7 +328,6 @@ describe("chorus.dialogs.DatasetImport", function() {
         });
 
         describe("clicking 'Upload File'", function() {
-
             context("when all fields are valid", function() {
                 beforeEach(function() {
                     this.dialog.$("form").submit();
