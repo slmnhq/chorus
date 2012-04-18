@@ -9,8 +9,13 @@ describe("chorus.dialogs.SandboxNew", function() {
         this.dialog.render();
     });
 
+    it("fetches the aurora provisioning status", function() {
+        expect(chorus.models.Instance.aurora()).toHaveBeenFetched();
+    });
+
     context("when the SchemaPicker triggers an error", function() {
         beforeEach(function() {
+            this.server.completeFetchFor(chorus.models.Instance.aurora());
             var modelWithError = fixtures.schemaSet();
             modelWithError.serverErrors = fixtures.serverErrors({
                 message: 'oh nos!'
@@ -32,9 +37,8 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     context("when aurora is not configured", function() {
         beforeEach(function() {
-            chorus.models.Instance.aurora().set({ installationStatus: "nope"});
-            this.dialog.render();
-        })
+            this.server.completeFetchFor(chorus.models.Instance.aurora(), { installationStatus: "no" });
+        });
 
         it("does not display the radio buttons", function() {
             expect(this.dialog.$("input:radio[name='sandbox_type']")).not.toExist();
@@ -155,14 +159,9 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     context("when aurora is configured", function() {
         beforeEach(function() {
-            chorus.models.Instance.aurora().set({ installationStatus: "install_succeed"});
-            chorus.models.Config.instance().set({provisionMaxSizeInGB: 2000});
-            chorus.models.Instance.aurora().loaded = true;
-            chorus.models.Config.instance().loaded = true;
-
-            this.dialog = new chorus.dialogs.SandboxNew({launchElement: this.launchElement, pageModel: this.workspace});
-            this.dialog.render();
-        })
+            this.server.completeFetchFor(chorus.models.Instance.aurora(), { installationStatus: "install_succeed" });
+            this.server.completeFetchFor(chorus.models.Config.instance(), { provisionMaxSizeInGB: 2000 });
+        });
 
         it("enables the 'as a standalone' radio button (not checked)", function() {
             expect(this.dialog.$("input[value='as_standalone']")).toBeEnabled();

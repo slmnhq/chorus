@@ -2,16 +2,21 @@ describe("chorus.dialogs.InstanceNew", function() {
     beforeEach(function() {
         this.launchElement = $("<button/>");
         this.dialog = new chorus.dialogs.InstancesNew({launchElement: this.launchElement});
+        $('#jasmine_content').append(this.dialog.el);
     });
 
     it("calls Config.instance to pre-fetch the config data", function() {
         expect(this.dialog.requiredResources.models).toContain(chorus.models.Config.instance());
     });
 
-    describe("#render", function() {
+    it("fetches the aurora install status", function() {
+        expect(chorus.models.Instance.aurora()).toHaveBeenFetched();
+    });
+
+    describe("when the fetches complete", function() {
         beforeEach(function() {
-            $('#jasmine_content').append(this.dialog.el);
-            this.dialog.render();
+            this.server.completeFetchFor(chorus.models.Instance.aurora());
+            this.server.completeFetchFor(chorus.models.Config.instance());
         });
 
         it("has radio buttons for 'register an existing instance' and 'register hadoop file system'", function() {

@@ -17,7 +17,11 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
         this.bindings.add(this.model, "validationFailed", this.saveFailed);
 
-        this.requiredResources.push(chorus.models.Config.instance());
+        this.aurora = chorus.models.Instance.aurora();
+        this.aurora.fetch();
+
+        this.requiredResources.add(chorus.models.Config.instance());
+        this.requiredResources.add(this.aurora);
     },
 
     makeModel:function () {

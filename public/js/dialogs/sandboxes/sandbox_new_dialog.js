@@ -23,11 +23,11 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.instanceMode, "error", this.showErrors);
         this.bindings.add(this.instanceMode, "clearErrors", this.clearErrors);
 
-        if (chorus.models.Config.instance().loaded) {
-            this.resourcesLoaded();
-        } else {
-            this.requiredResources.push(chorus.models.Config.instance());
-        }
+        this.aurora = chorus.models.Instance.aurora();
+        this.aurora.fetch();
+
+        this.requiredResources.add(this.aurora);
+        this.requiredResources.add(chorus.models.Config.instance());
 
         this.standaloneMode = new chorus.views.SandboxNewStandaloneMode({addingSandbox: true});
         this.activeForm = this.instanceMode;
@@ -47,7 +47,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function() {
-        return { configured: chorus.models.Instance.aurora().isInstalled() };
+        return { configured: this.aurora.isInstalled() };
     },
 
     save: function(e) {
