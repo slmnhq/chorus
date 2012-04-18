@@ -47,6 +47,14 @@ window.fixtureDefinitions = {
             model: "Activity",
             unique: [ "id" ]
         }
+    },
+
+    provisioningTemplate: {
+        model: "ProvisioningTemplate"
+    },
+
+    provisioningTemplateSet: {
+        collection: "ProvisioningTemplateSet"
     }
 };
 

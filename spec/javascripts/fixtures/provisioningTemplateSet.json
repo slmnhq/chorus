@@ -1,0 +1,17 @@
+[
+    {
+       "name":"small",
+       "cpuNumber":"1",
+       "memorySize":"4"
+    },
+    {
+       "name":"median",
+       "cpuNumber":"2",
+       "memorySize":"8"
+    },
+    {
+       "name":"large",
+       "cpuNumber":"4",
+       "memorySize":"16"
+    }
+]
