@@ -45,7 +45,7 @@ set -e
 
 echo "***** checking for ruby"
 rbenv versions | grep $ruby_version || install_ruby_for_chorus
-rbenv shell $ruby_version
+export RBENV_VERSION=$ruby_version
 ruby -v
 ruby -v | grep $ruby_version
 
