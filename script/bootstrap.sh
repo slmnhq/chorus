@@ -14,51 +14,46 @@ install_ruby_build() {
   fi
 }
 
-brew update
-brew install rbenv
-install_ruby_build
-
-set -e
-
 install_ruby_for_chorus() {
-  echo "installing ruby"
+  echo "***** installing ruby"
   export CC=/usr/bin/gcc
-  rbenv install $ruby_version
-  rbenv rehash
+  rbenv install $ruby_version || true
+  rbenv rehash || true
 }
 
 install_bundler_for_chorus() {
-  echo "installing bundler"
+  echo "***** installing bundler"
   gem install bundler
-  rbenv rehash
+  rbenv rehash || true
 }
 
 add_rbenv_to_bash() {
     rbenv_config="$HOME/.bash_profile_includes/rbenv.sh"
     if [ ! -e "$rbenv_config" ]
     then
-        cat > $rbenv_config <<EOF
-#/bin/bash
-
-eval "\$(rbenv init -)"
-    EOF
-
-      echo "Added rbenv init to bash profile includes"
+      cp script/rbenv.sh $rbenv_config
+      echo "***** Added rbenv init to bash profile includes"
     fi
 }
 
-echo "checking for ruby"
+echo "***** updating Homebrew and installing rbenv"
+brew update
+brew install rbenv
+install_ruby_build
+
+set -e
+
+echo "***** checking for ruby"
 rbenv versions | grep $ruby_version || install_ruby_for_chorus
 rbenv local $ruby_version
 
-echo "checking for bundler"
+echo "***** checking for bundler"
 gem list | grep bundler || install_bundler_for_chorus
 
-echo "add rbenv to bash"
+echo "***** add rbenv to bash"
 add_rbenv_to_bash
 
-echo "setting up project"
+echo "***** setting up project"
 bundle install
-rake legacy:setup
-rake db:create db:migrate db:test:prepare
+rake db:create db:migrate db:test:prepare legacy:setup db:test:prepare:legacy
 script/test
