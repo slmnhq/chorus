@@ -76,20 +76,6 @@ chorus.views.Bare = Backbone.View.include(
         alert.launchModal();
     },
 
-    delegateEvents : function() {
-        var newEvents = [this.events];
-        var currentObject = this;
-        while(currentObject) {
-            currentObject = this._findSuper("events", currentObject);
-            if(currentObject && currentObject['events']) {
-                newEvents.push(currentObject['events']);
-            }
-        }
-        newEvents.push({});
-        var combinedNewEvents = _.extend.apply(this, newEvents.reverse());
-        this._super('delegateEvents', [combinedNewEvents]);
-    },
-
     verifyResourcesLoaded: function(preventRender) {
         if (this.requiredResources.length == 0) {
             return;
@@ -296,6 +282,8 @@ chorus.views.Bare = Backbone.View.include(
         if (proto.templateName) {
             proto.className = proto.templateName.replace(/\//g, "_");
         }
+
+        _.defaults(proto.events, this.prototype.events);
     }
 });
 

@@ -1154,9 +1154,6 @@ describe("chorus.views.Base", function() {
                     events: {
                         "click .world" : 'noEventsChildFunction'
                     },
-                    template: function() {
-                        return '<div class="hello world"></div>';
-                    },
                     noEventsChildFunction: jasmine.createSpy('noEventsChildFunction')
                 });
                 var grandparentViewClass = chorus.views.Bare.extend({
