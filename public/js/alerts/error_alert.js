@@ -5,7 +5,10 @@ chorus.alerts.Error = chorus.alerts.Base.extend({
 
     makeModel:function () {
         this._super("makeModel", arguments);
-        this.body = this.model.errorMessage();
+        this.options = this.options || {};
+        this.options.launchElement = this.options.launchElement || $("<a/>");
+        this.body = this.options.launchElement.data("body") || this.model.errorMessage();
+        this.title = this.options.launchElement.data("title") || this.title;
     },
 
     postRender:function () {
