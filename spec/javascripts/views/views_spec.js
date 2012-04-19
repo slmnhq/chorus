@@ -682,6 +682,16 @@ describe("chorus.views.Base", function() {
                 })
             })
 
+            context("when a contentDetailsOptions hash is provided", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "Workfile", contentDetailsOptions: {foo: "bar"} });
+                });
+
+                it("gets mixed in to the options for the list content details", function() {
+                    expect(this.view.contentDetails.options.foo).toBe("bar");
+                });
+            });
+
             context("when a contentOptions hash is provided", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "Workfile", contentOptions: {foo: "bar"} });

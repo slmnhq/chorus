@@ -64,7 +64,8 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
                 placeholder: t("schema.search"),
                 onTextChange: onTextChangeFunction
             },
-            contentOptions: { checkable: true }
+            contentOptions: { checkable: true },
+            contentDetailsOptions: { multiSelect: true }
         });
 
         this.render();

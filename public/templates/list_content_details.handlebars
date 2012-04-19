@@ -50,9 +50,21 @@
     </div>
 {{/if}}
 
+{{#if multiSelect}}
+    <div class="multiselect">
+        <span class="select">{{t "actions.select"}}</span>
+        <a href="#" class="select_all">{{t "actions.select_all"}}</a>
+        |
+        <a href="#" class="select_none">{{t "actions.select_none"}}</a>
+    </div>
+{{/if}}
+
 {{#if search}}
-    {{#if search.placeholder}}
+    {{#unless multiSelect}}
         <span class="explore">{{t "actions.explore" }}</span>
+    {{/unless}}
+
+    {{#if search.placeholder}}
         <input type="text" class="search" placeholder="{{search.placeholder}}"/>
     {{/if}}
 {{/if}}

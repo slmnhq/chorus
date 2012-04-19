@@ -5,7 +5,9 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
     events:{
         "click a.next": "fetchNextPage",
         "click a.previous": "fetchPreviousPage",
-        "click a.close_provisioning": "closeProvisioningBar"
+        "click a.close_provisioning": "closeProvisioningBar",
+        "click a.select_all": "selectAll",
+        "click a.select_none": "selectNone"
     },
 
     fetchNextPage:function () {
@@ -22,6 +24,16 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
 
     scrollToTopOfPage:function () {
         window.scroll(0, 0);
+    },
+
+    selectAll: function(e) {
+        e.preventDefault();
+        chorus.PageEvents.broadcast("selectAll");
+    },
+
+    selectNone: function(e) {
+        e.preventDefault();
+        chorus.PageEvents.broadcast("selectNone");
     },
 
     postRender:function (el) {
@@ -101,7 +113,8 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
             hideCounts:this.options.hideCounts,
             buttons:this.options.buttons,
             search: this.options.search,
-            workspaceId: this.collection && this.collection.attributes && this.collection.attributes.workspaceId
+            workspaceId: this.collection && this.collection.attributes && this.collection.attributes.workspaceId,
+            multiSelect: this.options.multiSelect
         }
 
         if (this.collection.loaded && this.collection.pagination) {

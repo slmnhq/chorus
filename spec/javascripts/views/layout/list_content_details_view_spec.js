@@ -45,6 +45,50 @@ describe("chorus.views.ListContentDetails", function() {
             });
         });
 
+        context("when the multiSelect is falsy", function() {
+            beforeEach(function() {
+                this.view.options.multiSelect = false;
+                this.view.render();
+            });
+
+            it("does not show the multi-select section", function() {
+                expect(this.view.$(".multiselect")).not.toExist();
+            });
+        });
+
+        context("when the multiSelect option is true", function() {
+            beforeEach(function() {
+                this.view.options.search = true;
+                this.view.options.multiSelect = true;
+                this.view.render();
+                spyOn(chorus.PageEvents, "broadcast");
+            });
+
+            it("does not show the 'explore' text", function() {
+                expect(this.view.$("span.explore")).not.toExist();
+            });
+
+            it("should have a 'select all' and 'deselect all'", function() {
+                expect(this.view.$(".multiselect span")).toContainTranslation("actions.select");
+                expect(this.view.$(".multiselect a.select_all")).toContainTranslation("actions.select_all");
+                expect(this.view.$(".multiselect a.select_none")).toContainTranslation("actions.select_none");
+            });
+
+            describe("when the 'select all' link is clicked", function() {
+                it("broadcasts the 'selectAll' page event", function() {
+                    this.view.$(".multiselect a.select_all").click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectAll");
+                });
+            });
+
+            describe("when the 'select none' link is clicked", function() {
+                it("broadcasts the 'selectNone' page event", function() {
+                    this.view.$(".multiselect a.select_none").click();
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
+                });
+            });
+        });
+
         context("when the collection is loaded", function() {
             context("and the hideCounts option is falsy", function() {
                 beforeEach(function() {

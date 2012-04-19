@@ -11,6 +11,20 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
     setup: function() {
         this._super("setup", arguments);
         this.selectedDatasets = new chorus.collections.TabularDataSet();
+        chorus.PageEvents.subscribe("selectAll", this.selectAll, this);
+        chorus.PageEvents.subscribe("selectNone", this.selectNone, this);
+    },
+
+    selectAll: function() {
+        this.selectedDatasets.reset(this.collection.models);
+        this.$("> li input[type=checkbox]").prop("checked", true);
+        chorus.PageEvents.broadcast("tabularData:checked", this.selectedDatasets);
+    },
+
+    selectNone: function() {
+        this.selectedDatasets.reset([]);
+        this.$("> li input[type=checkbox]").prop("checked", false);
+        chorus.PageEvents.broadcast("tabularData:checked", this.selectedDatasets);
     },
 
     postRender: function() {

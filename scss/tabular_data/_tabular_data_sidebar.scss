@@ -4,12 +4,14 @@
         @include border-radius(8px);
         margin-bottom: 10px;
         margin-right: 10px;
-        padding: 8px;
+        padding: 10px;
         background-color: $shaded-background-color;
 
         .count {
             font-size: 18px;
             font-weight: $semibold;
+            display: inline-block;
+            margin-bottom: 8px;
         }
 
         li a {

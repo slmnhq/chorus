@@ -12,6 +12,7 @@ describe("chorus.views.TabularDataList", function() {
 
     context("when the checkable flag is enabled", function() {
         beforeEach(function() {
+            spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
             this.view.options.checkable = true;
             this.view.render();
             this.checkboxes = this.view.$("> li input[type=checkbox]");
@@ -23,7 +24,6 @@ describe("chorus.views.TabularDataList", function() {
 
         describe("when a dataset is checked", function() {
             beforeEach(function() {
-                spyOn(chorus.PageEvents, 'broadcast');
                 this.checkboxes.eq(1).click().change();
             });
 
@@ -51,6 +51,36 @@ describe("chorus.views.TabularDataList", function() {
 
                     it("broadcasts the 'tabularData:checked' event with an empty collection", function() {
                         expectDatasetChecked([ this.collection.at(1) ]);
+                    });
+                });
+            });
+        });
+
+        describe("select all and select none", function() {
+            context("when the selectAll page event is recieved", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("selectAll");
+                });
+
+                it("checks all of the datasets", function() {
+                    expect(this.view.$("input[type=checkbox]:checked").length).toBe(3);
+                });
+
+                it("broadcasts the 'tabularData:checked' page event with a collection of all datasets", function() {
+                    expectDatasetChecked(this.collection.models);
+                });
+
+                context("when the selectNone page event is received", function() {
+                    beforeEach(function() {
+                        chorus.PageEvents.broadcast("selectNone");
+                    });
+
+                    it("un-checks all of the datasets", function() {
+                        expect(this.view.$("input[type=checkbox]:checked").length).toBe(0);
+                    });
+
+                    it("broadcasts the 'tabularData:checked' page event with an empty collection", function() {
+                        expectDatasetChecked([]);
                     });
                 });
             });

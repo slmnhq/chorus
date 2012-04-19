@@ -60,6 +60,10 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             ]);
         });
 
+        it("passes the multiSelect option to the list content details", function() {
+            expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
+        });
+
         it("renders a checkbox next to each dataset", function() {
             expect(this.page.$("li input[type=checkbox]").length).toBe(this.page.collection.length);
         });

@@ -474,12 +474,14 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
         if (options.contentDetails) {
             this.contentDetails = options.contentDetails;
         } else {
-            this.contentDetails = new chorus.views.ListContentDetails({
-                collection: collection,
-                modelClass: modelClass,
-                buttons: options.buttons,
-                search: options.search && _.extend({list: $(this.content.el)}, options.search)
-            });
+            this.contentDetails = new chorus.views.ListContentDetails(
+                _.extend({
+                    collection: collection,
+                    modelClass: modelClass,
+                    buttons: options.buttons,
+                    search: options.search && _.extend({list: $(this.content.el)}, options.search)
+                }, options.contentDetailsOptions));
+
             this.contentFooter = new chorus.views.ListContentDetails({
                 collection: collection,
                 modelClass: modelClass,
