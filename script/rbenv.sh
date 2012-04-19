@@ -1,2 +1,3 @@
 #/bin/bash
-eval "\$(rbenv init -)"
+eval "$(rbenv init -)"
+
