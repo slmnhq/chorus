@@ -118,6 +118,10 @@
                 header.chorusViewLink = chorus.helpers.linkTo(this.presenter.chorusViewUrl, this.presenter.chorusViewName).toString();
             }
 
+            if (this.presenter.instanceAddress){
+                header.instanceAddress = this.presenter.instanceAddress
+            }
+
             return header;
         },
 
@@ -232,6 +236,21 @@
                 body: model.get("commitMessage")
             }
         },
+
+        PROVISIONING_SUCCESS: function(model){
+            var instance = model.instance();
+            return {
+                objectName: instance.get("name"),
+                objectUrl: instance.showUrl(),
+                instanceAddress: instance.get("host") + ":" + instance.get("port")
+            }
+        },
+
+        PROVISIONING_FAIL: function(model){
+
+        },
+
+
 
         INSTANCE_CREATED: function(model) {
             var instance = model.instance();

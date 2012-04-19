@@ -740,6 +740,37 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".PROVISIONING_SUCCESS", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.PROVISIONING_SUCCESS();
+            this.instance = this.model.instance();
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.instance.get('name'));
+        });
+
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.Instance({id: this.instance.id}).showUrl();
+            expect(this.presenter.objectUrl).toBe(url);
+        });
+
+        it("should have the 'isNote' property set to false", function() {
+            expect(this.presenter.isNote).toBeFalsy();
+        });
+
+        it("should have the correct html", function () {
+            expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity_stream.header.html.PROVISIONING_SUCCESS.without_workspace",
+                { objectLink: chorus.helpers.linkTo(this.instance.showUrl(), this.instance.name(), {'class': 'object_link'}).toString(),
+                  instanceAddress: this.instance.get("host") + ":" + this.instance.get("port")
+                }
+            );
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context(".WORKSPACE_CREATED", function() {
         beforeEach(function() {
             this.model = fixtures.activities.WORKSPACE_CREATED();
@@ -1402,8 +1433,6 @@ describe("chorus.presenters.Activity", function() {
 
             itGetsTheTranslationKeyCorrectly('without_workspace');
         });
-
-
 
         function itGetsTheTranslationKeyCorrectly(expectedKeySuffix) {
             context("when displayStyle is not set", function() {

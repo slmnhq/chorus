@@ -1282,6 +1282,52 @@ beforeEach(function() {
                 });
             },
 
+            "PROVISIONING_SUCCESS": function() {
+                return new chorus.models.Activity({
+                    "timestamp": "2012-04-05 15:57:47",
+                      "id": 10301,
+                      "author": {
+                          "id": "InitialUser",
+                          "lastName": "Admin",
+                          "isDeleted": false,
+                          "firstName": "EDC"
+                      },
+                      "instance": {
+                          "id": "10220",
+                          "name": "aurora_test1",
+                          "host": "http://localhost",
+                          "port": "5432"
+                      },
+                      "isDeleted": false,
+                      "type": "PROVISIONING_SUCCESS",
+                      "comments": [ ]
+                });
+            },
+
+            "PROVISIONING_FAIL": function() {
+                return new chorus.models.Activity({
+                    "errorMessage": {
+                          "responseMessage": "fail",
+                          "errorMessage": "Can not connect to Aurora server."
+                      },
+                      "timestamp": "2012-04-05 16:19:54",
+                      "id": 10311,
+                      "author": {
+                          "id": "InitialUser",
+                          "lastName": "Admin",
+                          "isDeleted": false,
+                          "firstName": "EDC"
+                      },
+                      "instance": {
+                          "id": "10230",
+                          "name": "aurora_wrong"
+                      },
+                      "isDeleted": false,
+                      "type": "PROVISIONING_FAIL",
+                      "comments": [ ]
+                });
+            },
+
             "WORKSPACE_ARCHIVED": function() {
                 return new chorus.models.Activity({
                     author: fixtures.authorJson(),
