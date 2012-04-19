@@ -41,19 +41,19 @@ brew update
 brew install rbenv
 install_ruby_build
 
+echo "***** checking for rbenv in bash"
+add_rbenv_to_bash
+
 set -e
 
 echo "***** checking for ruby"
 rbenv versions | grep $ruby_version || install_ruby_for_chorus
-export RBENV_VERSION=$ruby_version
+rbenv shell $ruby_version
 ruby -v
 ruby -v | grep $ruby_version
 
 echo "***** checking for bundler"
 gem list | grep bundler || install_bundler_for_chorus
-
-echo "***** checking for rbenv in bash"
-add_rbenv_to_bash
 
 echo "***** setting up project"
 bundle install
