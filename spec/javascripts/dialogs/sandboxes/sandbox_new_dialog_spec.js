@@ -223,6 +223,10 @@ describe("chorus.dialogs.SandboxNew", function() {
                         this.server.completeSaveFor(this.dialog.model);
                     });
 
+                    it("does not show added-a-sandbox toast (bc it may take a while)", function() {
+                        expect(chorus.toast).not.toHaveBeenCalledWith("sandbox.create.toast");
+                    });
+
                     it("dismisses the dialog", function() {
                         expect(this.dialog.closeModal).toHaveBeenCalled();
                     });
