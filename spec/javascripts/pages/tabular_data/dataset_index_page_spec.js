@@ -33,6 +33,37 @@ describe("chorus.pages.DatasetIndexPage", function() {
             this.page.render();
             expect(this.page.$(".loading_section")).toExist();
         });
+
+        context("when the workspace fetch completes", function() {
+            beforeEach(function() {
+                this.server.completeFetchFor(this.workspace, newFixtures.workspace());
+                spyOn(this.page.mainContent.contentDetails, "postRender").andCallThrough();
+            });
+
+            context("when the instance is provisioning", function() {
+                beforeEach(function() {
+                    this.instance = fixtures.instance({ state: "provisioning" });
+                    this.server.completeFetchFor(this.page.instance, this.instance);
+                });
+
+                it("sets the provisioningState to 'provisioning' on the content details view", function() {
+                    expect(this.page.mainContent.contentDetails.provisioningState).toBe("provisioning");
+                    expect(this.page.mainContent.contentDetails.postRender).toHaveBeenCalled();
+                });
+            });
+
+            context("when the instance failed provisioning", function() {
+                beforeEach(function() {
+                    this.instance = fixtures.instance({ state: "fault" });
+                    this.server.completeFetchFor(this.page.instance, this.instance);
+                });
+
+                it("sets the provisioningState to 'fault' on the content details view", function() {
+                    expect(this.page.mainContent.contentDetails.provisioningState).toBe("fault");
+                    expect(this.page.mainContent.contentDetails.postRender).toHaveBeenCalled();
+                });
+            });
+        });
     });
 
     describe("when a fetch fails", function() {

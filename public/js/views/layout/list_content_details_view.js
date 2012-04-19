@@ -4,7 +4,8 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
 
     events:{
         "click a.next": "fetchNextPage",
-        "click a.previous": "fetchPreviousPage"
+        "click a.previous": "fetchPreviousPage",
+        "click a.close_provisioning": "closeProvisioningBar"
     },
 
     fetchNextPage:function () {
@@ -34,6 +35,19 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         if (this.options.search) {
             this.setupSearch();
         }
+
+        if (this.provisioningState == "provisioning") {
+            this.$(".provisioning_bar").removeClass("hidden");
+        } else if (this.provisioningState == "fault") {
+            this.$(".provisioning_fault_bar").removeClass("hidden");
+        }
+    },
+
+    closeProvisioningBar: function(e) {
+        e && e.preventDefault();
+
+        this.$(".provisioning_bar").addClass("hidden");
+        this.$(".provisioning_fault_bar").addClass("hidden");
     },
 
     setupSearch: function() {

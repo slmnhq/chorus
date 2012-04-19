@@ -61,3 +61,40 @@ $link-padding: 15px;
         display: inline-block;
     }
 }
+
+#page[data-page=DatasetIndex] {
+    .content_details {
+        padding: 0;
+        height: auto;
+
+        .provisioning_bar, .provisioning_fault_bar {
+            padding: 0 10px;
+            line-height: 31px;
+            width: 100%;
+            display: block;
+            @include results-console-message;
+            @include borderbox;
+
+            .actions {
+                float: right;
+
+                a {
+                    @include font-content-details;
+                }
+            }
+        }
+
+        .provisioning_bar {
+            background-image: url("/images/binary_workfile_action_bar_tile.png");
+        }
+
+        .provisioning_fault_bar {
+            color: $error-color;
+            background-color: $error-background-color;
+        }
+
+        button.dialog {
+            margin-left: 10px;
+        }
+    }
+}

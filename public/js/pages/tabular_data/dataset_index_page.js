@@ -105,6 +105,7 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
             this.account = this.workspace.sandbox().instance().accountForCurrentUser();
 
             this.checkAccountOnLoaded();
+            this.instanceOnLoaded();
 
             this.instance.fetch();
             this.account.fetch();
@@ -122,7 +123,14 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
     },
 
     checkAccountOnLoaded: function() {
-       this.account.onLoaded(function() {this.instance.onLoaded(this.checkAccount, this)}, this);
+        this.account.onLoaded(function() {this.instance.onLoaded(this.checkAccount, this)}, this);
+    },
+
+    instanceOnLoaded: function() {
+        this.instance.onLoaded(function() {
+            this.mainContent.contentDetails.provisioningState = this.instance.get("state");
+            this.mainContent.contentDetails.render();
+        }, this);
     },
 
     checkAccount: function() {

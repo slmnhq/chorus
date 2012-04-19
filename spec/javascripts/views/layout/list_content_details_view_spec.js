@@ -309,4 +309,52 @@ describe("chorus.views.ListContentDetails", function() {
             expect(this.view.$(".count")).toContainTranslation("loading");
         });
     });
+
+    describe("when the instance is provisioning", function() {
+        beforeEach(function() {
+            this.view.provisioningState = "provisioning";
+            this.view.render();
+        });
+
+        it("shows a grey bar below the title", function() {
+            expect(this.view.$(".provisioning_bar")).not.toHaveClass("hidden");
+            expect(this.view.$(".provisioning_fault_bar")).toHaveClass("hidden");
+            expect(this.view.$(".provisioning_bar")).toContainTranslation("dataset.content_details.provisioning");
+            expect(this.view.$(".provisioning_bar .actions a.close_provisioning")).toContainTranslation("actions.close");
+        });
+
+        describe("user clicks 'close'", function() {
+            beforeEach(function() {
+                this.view.$(".provisioning_bar .actions a.close_provisioning").click();
+            });
+
+            it("removes the bar", function() {
+                expect(this.view.$(".provisioning_bar")).toHaveClass("hidden");
+            });
+        });
+    });
+
+    describe("when the instance provisioning failed", function() {
+        beforeEach(function() {
+            this.view.provisioningState = "fault";
+            this.view.render();
+        });
+
+        it("shows a red bar below the title", function() {
+            expect(this.view.$(".provisioning_fault_bar")).not.toHaveClass("hidden");
+            expect(this.view.$(".provisioning_bar")).toHaveClass("hidden");
+            expect(this.view.$(".provisioning_fault_bar")).toContainTranslation("dataset.content_details.provisioning_fault");
+            expect(this.view.$(".provisioning_fault_bar .actions a.close_provisioning")).toContainTranslation("actions.close");
+        });
+
+        describe("user clicks 'close'", function() {
+            beforeEach(function() {
+                this.view.$(".provisioning_fault_bar .actions a.close_provisioning").click();
+            });
+
+            it("removes the bar", function() {
+                expect(this.view.$(".provisioning_fault_bar")).toHaveClass("hidden");
+            });
+        });
+    });
 });
