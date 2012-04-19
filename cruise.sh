@@ -3,7 +3,7 @@
 set -e
 set -x
 
-rbenv init -
+eval "$(rbenv init -)"
 rbenv shell `cat .rbenv-version`
 ruby -v | grep 1.9.3
 bundle install
