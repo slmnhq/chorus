@@ -295,6 +295,14 @@
             }
         },
 
+        INSTANCE_DELETED: function(model) {
+            var instance = model.instance();
+            return {
+                objectName: instance.get("name"),
+                objectUrl: null
+            }
+        },
+
         USER_ADDED: function(model) {
             var user = new chorus.models.User(model.get("user"));
             return {

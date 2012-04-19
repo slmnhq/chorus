@@ -740,6 +740,29 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".INSTANCE_DELETED", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.INSTANCE_DELETED();
+            this.instance = this.model.instance();
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.instance.get('name'));
+        });
+
+        it("does not have an objectUrl", function() {
+            var url = new chorus.models.Instance({id: this.instance.id}).showUrl();
+            expect(this.presenter.objectUrl).toBeNull();
+        });
+
+        it("should have the 'isNote' property set to false", function() {
+            expect(this.presenter.isNote).toBeFalsy();
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context(".PROVISIONING_SUCCESS", function() {
         beforeEach(function() {
             this.model = fixtures.activities.PROVISIONING_SUCCESS();

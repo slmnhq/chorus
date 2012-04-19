@@ -613,12 +613,12 @@ beforeEach(function() {
             },
 
             "COMMENT_ON_NOTE_ON_WORKSPACE": function() {
-                    var attrs = _.extend({
-                        author: fixtures.authorJson(),
-                        type: "NOTE_COMMENT",
-                        text: "How about that note on that table.",
-                        timestamp: "2011-12-01 00:00:00",
-                        id: fixtures.nextId().toString(),
+                var attrs = _.extend({
+                    author: fixtures.authorJson(),
+                    type: "NOTE_COMMENT",
+                    text: "How about that note on that table.",
+                    timestamp: "2011-12-01 00:00:00",
+                    id: fixtures.nextId().toString(),
 
                     parentComment: {
                         author: fixtures.authorJson(),
@@ -1282,12 +1282,28 @@ beforeEach(function() {
                 });
             },
 
-            "START_PROVISIONING" : function(overrides) {
+            "INSTANCE_DELETED": function(overrides) {
                 var attrs = _.extend({
-                "id": "10180",
-                "instance": {port:"5432", id:"10032", host:"10.32.88.200", name:"aurora_instance", isDeleted:false},
-                "timestamp": "2012-04-19 12:21:00.162",
-                "type": "START_PROVISIONING"
+                    "author": {id: "InitialUser", lastName: "Admin", isDeleted: false, firstName: "EDC"},
+                    "comments": [],
+                    "id": "10380",
+                    "instance": {id: "10033", name: "aurora_to_be_deleted_del_1334876442675", isDeleted: true},
+                    "isDeleted": false,
+                    "timestamp": "2012-04-19 16:00:42",
+                    "type": "INSTANCE_DELETED"
+
+
+                });
+
+                return new chorus.models.Activity(attrs);
+            },
+
+            "START_PROVISIONING": function(overrides) {
+                var attrs = _.extend({
+                    "id": "10180",
+                    "instance": {port: "5432", id: "10032", host: "10.32.88.200", name: "aurora_instance", isDeleted: false},
+                    "timestamp": "2012-04-19 12:21:00.162",
+                    "type": "START_PROVISIONING"
                 }, overrides);
 
                 return new chorus.models.Activity(attrs);
@@ -1296,46 +1312,46 @@ beforeEach(function() {
             "PROVISIONING_SUCCESS": function() {
                 return new chorus.models.Activity({
                     "timestamp": "2012-04-05 15:57:47",
-                      "id": 10301,
-                      "author": {
-                          "id": "InitialUser",
-                          "lastName": "Admin",
-                          "isDeleted": false,
-                          "firstName": "EDC"
-                      },
-                      "instance": {
-                          "id": "10220",
-                          "name": "aurora_test1",
-                          "host": "http://localhost",
-                          "port": "5432"
-                      },
-                      "isDeleted": false,
-                      "type": "PROVISIONING_SUCCESS",
-                      "comments": [ ]
+                    "id": 10301,
+                    "author": {
+                        "id": "InitialUser",
+                        "lastName": "Admin",
+                        "isDeleted": false,
+                        "firstName": "EDC"
+                    },
+                    "instance": {
+                        "id": "10220",
+                        "name": "aurora_test1",
+                        "host": "http://localhost",
+                        "port": "5432"
+                    },
+                    "isDeleted": false,
+                    "type": "PROVISIONING_SUCCESS",
+                    "comments": [ ]
                 });
             },
 
             "PROVISIONING_FAIL": function() {
                 return new chorus.models.Activity({
                     "errorMessage": {
-                          "responseMessage": "fail",
-                          "errorMessage": "Can not connect to Aurora server."
-                      },
-                      "timestamp": "2012-04-05 16:19:54",
-                      "id": 10311,
-                      "author": {
-                          "id": "InitialUser",
-                          "lastName": "Admin",
-                          "isDeleted": false,
-                          "firstName": "EDC"
-                      },
-                      "instance": {
-                          "id": "10230",
-                          "name": "aurora_wrong"
-                      },
-                      "isDeleted": false,
-                      "type": "PROVISIONING_FAIL",
-                      "comments": [ ]
+                        "responseMessage": "fail",
+                        "errorMessage": "Can not connect to Aurora server."
+                    },
+                    "timestamp": "2012-04-05 16:19:54",
+                    "id": 10311,
+                    "author": {
+                        "id": "InitialUser",
+                        "lastName": "Admin",
+                        "isDeleted": false,
+                        "firstName": "EDC"
+                    },
+                    "instance": {
+                        "id": "10230",
+                        "name": "aurora_wrong"
+                    },
+                    "isDeleted": false,
+                    "type": "PROVISIONING_FAIL",
+                    "comments": [ ]
                 });
             },
 
@@ -1953,7 +1969,7 @@ beforeEach(function() {
             var attributes = _.extend({
                 instanceId: "10020",
                 userName: "u1",
-                sharedAccount : {}
+                sharedAccount: {}
             }, overrides);
             return new chorus.models.InstanceAccount(attributes);
         },
