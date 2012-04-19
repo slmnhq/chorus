@@ -12,12 +12,7 @@ class User < ActiveRecord::Base
   validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/
   validates_presence_of :password, :unless => :password_digest?
   validates_length_of :password, :minimum => 6, :if => :password
-  validates_length_of :username, :maximum => 256
-  validates_length_of :first_name, :maximum => 256
-  validates_length_of :last_name, :maximum => 256
-  validates_length_of :email, :maximum => 256
-  validates_length_of :title, :maximum => 256
-  validates_length_of :dept, :maximum => 256
+  validates_length_of :username, :first_name, :last_name, :email, :title, :dept, :maximum => 256
 
   def self.authenticate(username, password)
     named(username).try(:authenticate, password)
