@@ -4,7 +4,7 @@ class InstanceMigrator
       Legacy.connection.add_column :edc_instance, :chorus_rails_instance_id, :integer
     end
 
-    instances = Legacy.connection.select_all("SELECT * from edc_instance")
+    instances = Legacy.connection.select_all("SELECT * from edc_instance WHERE instance_provider = 'Greenplum Database'")
     instances.each do |instance|
       new_instance = Instance.new
 

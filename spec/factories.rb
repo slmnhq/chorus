@@ -17,6 +17,7 @@ FactoryGirl.define do
     sequence(:name) {|n| "instance#{n}"}
     sequence(:host) {|n| "host#{n}.emc.com"}
     sequence(:port) {|n| 5000+n}
+    maintenance_db "postgres"
   end
 end
 
