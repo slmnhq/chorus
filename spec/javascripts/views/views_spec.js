@@ -98,8 +98,8 @@ describe("chorus.views.Base", function() {
 
     describe(".extended", function() {
         it("sets the view's className based on its templateName", function() {
-            var Klass = chorus.views.Bare.extend({ templateName: "users/something" });
-            expect(Klass.prototype.className).toBe("users_something");
+            var Klass = chorus.views.Bare.extend({ templateName: "users/something/else" });
+            expect(Klass.prototype.className).toBe("users_something_else");
         });
     });
 
@@ -227,31 +227,27 @@ describe("chorus.views.Base", function() {
 
             describe("#render", function() {
                 beforeEach(function() {
-                    this.view.className = "plain_text"
+                    var SubClass = chorus.views.Base.extend({
+                        templateName: "one/two/three",
+                        template: function() { return "<div class='foo'/>"; }
+                    });
+                    this.view = new SubClass();
                     spyOnEvent(this.view, "content:changed");
                     this.view.render();
-                })
+                });
 
                 it("triggers a 'content:changed' event on itself", function() {
                     expect("content:changed").toHaveBeenTriggeredOn(this.view);
-                })
+                });
 
-                it("adds the className as a class name", function() {
-                    expect($(this.view.el)).toHaveClass("plain_text")
-                })
-
-                it("adds the className as a data-template", function() {
-                    expect($(this.view.el)).toHaveAttr("data-template", "plain_text")
-                })
+                it("adds the template name as a data-template", function() {
+                    expect($(this.view.el)).toHaveAttr("data-template", "one/two/three");
+                });
 
                 describe("with subviews", function() {
                     beforeEach(function() {
-                        this.view.template = function() {
-                            return "<div class='foo'/>";
-                        };
-
                         this.subview = new chorus.views.Base();
-                        this.subview.className = "plain_text";
+                        this.subview.templateName = "plain_text";
                         this.view.foo = this.subview;
 
                         this.view.subviews = {".foo": "foo"};
@@ -323,7 +319,7 @@ describe("chorus.views.Base", function() {
                         describe("after a new subview has been assigned", function() {
                             beforeEach(function() {
                                 this.otherSubview =new chorus.views.Base();
-                                this.otherSubview.className = "plain_text";
+                                this.otherSubview.templateName = "plain_text";
                                 this.otherSubview.additionalClass = "other_subview";
 
                                 this.view.foo = this.otherSubview;
@@ -847,7 +843,7 @@ describe("chorus.views.Base", function() {
     describe("loading section", function() {
         beforeEach(function() {
             this.view = new chorus.views.Bare();
-            this.view.className = "plain_text";
+            this.view.templateName = "plain_text";
             this.view.context = function() {
                 return { text: "Foo" };
             }
@@ -1001,7 +997,7 @@ describe("chorus.views.Base", function() {
         describe("placeholder", function() {
             beforeEach(function() {
                 this.view = new chorus.views.Base();
-                this.view.className = "plain_text";
+                this.view.templateName = "plain_text";
                 spyOn(chorus, 'placeholder');
                 this.view.render();
             })
@@ -1023,7 +1019,7 @@ describe("chorus.views.Base", function() {
                 };
                 this.view.subviews = { ".subfoo": "subfoo" }
                 this.view.subfoo = new chorus.views.Bare();
-                this.view.subfoo.className = "plain_text"
+                this.view.subfoo.templateName = "plain_text"
                 this.view.render();
                 stubDefer();
 

@@ -36,7 +36,7 @@ describe("chorus.Modal", function() {
         describe("when chorus.modal already exists", function() {
             beforeEach(function() {
                 this.parentModal = new chorus.Modal();
-                this.parentModal.className = this.modal.className = "plain_text";
+                this.parentModal.templateName = this.modal.templateName = "plain_text";
                 this.parentModal.launchModal();
                 spyOn(this.parentModal, "launchSubModal").andCallThrough();
 
@@ -59,7 +59,7 @@ describe("chorus.Modal", function() {
 
                 //Modal is abstract, so we need to give it a template to render
                 //this is the responsibility of subclasses
-                this.modal.className = "plain_text"
+                this.modal.templateName = "plain_text"
 
                 this.modal.launchModal();
             });
@@ -172,7 +172,7 @@ describe("chorus.Modal", function() {
         }
 
         beforeEach(function() {
-            this.modal.className = "plain_text"
+            this.modal.templateName = "plain_text"
             this.modal.launchModal();
 
             this.faceboxProxy = $("<div id='facebox'/>");
@@ -180,7 +180,7 @@ describe("chorus.Modal", function() {
             $("#jasmine_content").append(this.faceboxProxy).append(this.faceboxOverlayProxy);
 
             this.subModal = new chorus.Modal({ pageModel: this.model });
-            this.subModal.className = this.modal.className
+            this.subModal.templateName = this.modal.templateName
             spyOn(this.subModal, "launchNewModal").andCallThrough();
             $.facebox.settings.inited = true;
             this.modal.launchSubModal(this.subModal)
@@ -219,7 +219,7 @@ describe("chorus.Modal", function() {
                 $("#jasmine_content").append(this.faceboxProxy2).append(this.faceboxOverlayProxy2);
 
                 this.subSubModal = new chorus.Modal({ pageModel: this.model });
-                this.subSubModal.className = this.modal.className;
+                this.subSubModal.templateName = this.modal.templateName;
                 spyOn(this.subSubModal, "launchNewModal").andCallThrough();
                 $.facebox.settings.inited = true;
                 this.subModal.launchSubModal(this.subSubModal)

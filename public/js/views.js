@@ -293,8 +293,9 @@ chorus.views.Bare = Backbone.View.include(
 },
 {
     extended: function(subclass) {
-        if (subclass.prototype.templateName) {
-            subclass.prototype.className = subclass.prototype.templateName.replace("/", "_");
+        var proto = subclass.prototype;
+        if (proto.templateName) {
+            proto.className = proto.templateName.replace(/\//g, "_");
         }
     }
 });
