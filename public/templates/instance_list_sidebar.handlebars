@@ -52,7 +52,9 @@
             {{/if}}
         {{/ifAny}}
          {{#if userCanEditInstance}}
-             <li><a class="dialog edit_instance" href="#" data-dialog="InstanceEdit">{{t "instances.sidebar.edit_instance"}}</a></li>
+             {{#if editable}}
+                <li><a class="dialog edit_instance" href="#" data-dialog="InstanceEdit">{{t "instances.sidebar.edit_instance"}}</a></li>
+            {{/if}}
             {{#if deleteable}}
                 <li><a class="alert delete_instance" href="#" data-alert="InstanceDelete">{{t "instances.sidebar.delete_instance"}}</a></li>
             {{/if}}

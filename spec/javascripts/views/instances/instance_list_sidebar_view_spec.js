@@ -120,6 +120,10 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("display provisioning info text", function() {
                         expect(this.view.$(".instance_type span")).toContainTranslation("instances.sidebar.provisioning")
                     });
+
+                    it("doesn't display the edit instance link", function() {
+                        expect(this.view.$(".actions .edit_instance")).not.toExist();
+                    });
                 });
 
                 context("when the instance failed to provision", function() {
@@ -147,6 +151,10 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                     it("displays the delete instance link", function() {
                         expect(this.view.$(".actions .delete_instance")).toExist();
+                    });
+
+                    it("doesn't display the edit instance link", function() {
+                        expect(this.view.$(".actions .edit_instance")).not.toExist();
                     });
                 });
             });
