@@ -134,9 +134,9 @@
             var isSameAsWorkspace = (this.workspace !== this.noteObject);
 
             if (this.workspace && (isSandboxMessage || isSameAsWorkspace)) {
-                return 'without_workspace';
-            } else {
                 return 'default';
+            } else {
+                return 'without_workspace';
             }
         },
 
@@ -145,13 +145,15 @@
             var type    = getType(this.model, prefix);
             var mainKey = [prefix, type].join(".");
             if (this.options.isNotification) mainKey += ".notification";
-            var possibleStyles = _.flatten([this.options.displayStyle, this.defaultStyle(type)]);
+            var possibleStyles = _.compact(_.flatten([this.options.displayStyle, this.defaultStyle(type)]));
 
             var key, n = possibleStyles.length;
             for (var i = 0; i < n; i++) {
                 key = [mainKey, possibleStyles[i]].join(".");
                 if (I18n.lookup(key)) return key;
             }
+
+            return mainKey;
         },
 
         NOTE: showNote,
