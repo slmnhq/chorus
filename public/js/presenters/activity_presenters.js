@@ -125,27 +125,29 @@
             return t(this.headerTranslationKey(), this.presenter.header)
         },
 
+        defaultStyle: function(type) {
+            var isSandboxMessage  = (type === "WORKSPACE_ADD_SANDBOX");
+            var isSameAsWorkspace = (this.workspace !== this.noteObject);
+
+            if (this.workspace && (isSandboxMessage || isSameAsWorkspace)) {
+                return 'default';
+            } else {
+                return 'without_workspace';
+            }
+        },
+
         headerTranslationKey: function() {
-            var prefix = 'activity_stream.header.html.';
-            var type = this.model.get("type");
-            if (_.include(["RECEIVE_NOTE", "INSIGHT_CREATED"], type)) type = "NOTE";
-            if (!I18n.lookup(prefix + type)) type = 'DEFAULT';
-            prefix = prefix + type + '.';
+            var prefix  = 'activity_stream.header.html';
+            var type    = getType(this.model, prefix);
+            var mainKey = [prefix, type].join(".");
+            if (this.options.isNotification) mainKey += ".notification";
+            var possibleStyles = _.flatten([this.options.displayStyle, this.defaultStyle(type)]);
 
-            if (this.options.isNotification) prefix += "notification.";
-
-            var isSandboxMessage = type === "WORKSPACE_ADD_SANDBOX";
-            var isSameAsWorkspace = this.workspace != this.noteObject;
-
-            var styles = _.flatten([
-                this.options.displayStyle,
-                this.workspace && (isSandboxMessage || isSameAsWorkspace) ? 'default' : 'without_workspace'
-            ]);
-            var style = _.find(styles, function(potentialStyle) {
-                return I18n.lookup(prefix + potentialStyle);
-            });
-
-            return prefix + style;
+            var key, n = possibleStyles.length;
+            for (var i = 0; i < n; i++) {
+                key = [mainKey, possibleStyles[i]].join(".");
+                if (I18n.lookup(key)) return key;
+            }
         },
 
         NOTE: showNote,
@@ -301,6 +303,16 @@
             };
         }
     });
+
+    function getType(model, prefix) {
+        var type = model.get("type");
+        if (_.include(["RECEIVE_NOTE", "INSIGHT_CREATED"], type)) type = "NOTE";
+        if (I18n.lookup([prefix, type].join("."))) {
+            return type;
+        } else {
+            return "DEFAULT";
+        }
+    }
 
     function showNote(model) {
         var attrs = {
