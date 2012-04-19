@@ -89,6 +89,12 @@ $link-padding: 15px;
         }
 
         .provisioning_fault_bar {
+            .actions {
+                a {
+                    color: $error-color;
+                }
+            }
+
             color: $error-color;
             background-color: $error-background-color;
         }

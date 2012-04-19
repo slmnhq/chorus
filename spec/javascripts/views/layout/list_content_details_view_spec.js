@@ -310,51 +310,69 @@ describe("chorus.views.ListContentDetails", function() {
         });
     });
 
-    describe("when the instance is provisioning", function() {
+    context("when it's a dataset list content details view", function() {
         beforeEach(function() {
-            this.view.provisioningState = "provisioning";
-            this.view.render();
+            this.modalSpy = stubModals();
+            this.collection = new chorus.collections.DatasetSet();
+            this.collection.attributes.workspaceId = 44;
+            this.collection.loaded = true;
+            this.view = new chorus.views.ListContentDetails({ collection: this.collection, modelClass: "Dataset" });
+            $("#jasmine_content").append(this.view.el);
         });
 
-        it("shows a grey bar below the title", function() {
-            expect(this.view.$(".provisioning_bar")).not.toHaveClass("hidden");
-            expect(this.view.$(".provisioning_fault_bar")).toHaveClass("hidden");
-            expect(this.view.$(".provisioning_bar")).toContainTranslation("dataset.content_details.provisioning");
-            expect(this.view.$(".provisioning_bar .actions a.close_provisioning")).toContainTranslation("actions.close");
-        });
-
-        describe("user clicks 'close'", function() {
+        describe("when the instance is provisioning", function() {
             beforeEach(function() {
-                this.view.$(".provisioning_bar .actions a.close_provisioning").click();
+                this.view.provisioningState = "provisioning";
+                this.view.render();
             });
 
-            it("removes the bar", function() {
-                expect(this.view.$(".provisioning_bar")).toHaveClass("hidden");
-            });
-        });
-    });
-
-    describe("when the instance provisioning failed", function() {
-        beforeEach(function() {
-            this.view.provisioningState = "fault";
-            this.view.render();
-        });
-
-        it("shows a red bar below the title", function() {
-            expect(this.view.$(".provisioning_fault_bar")).not.toHaveClass("hidden");
-            expect(this.view.$(".provisioning_bar")).toHaveClass("hidden");
-            expect(this.view.$(".provisioning_fault_bar")).toContainTranslation("dataset.content_details.provisioning_fault");
-            expect(this.view.$(".provisioning_fault_bar .actions a.close_provisioning")).toContainTranslation("actions.close");
-        });
-
-        describe("user clicks 'close'", function() {
-            beforeEach(function() {
-                this.view.$(".provisioning_fault_bar .actions a.close_provisioning").click();
-            });
-
-            it("removes the bar", function() {
+            it("shows a grey bar below the title", function() {
+                expect(this.view.$(".provisioning_bar")).not.toHaveClass("hidden");
                 expect(this.view.$(".provisioning_fault_bar")).toHaveClass("hidden");
+                expect(this.view.$(".provisioning_bar")).toContainTranslation("dataset.content_details.provisioning");
+                expect(this.view.$(".provisioning_bar .actions a.close_provisioning")).toContainTranslation("actions.close");
+            });
+
+            describe("user clicks 'close'", function() {
+                beforeEach(function() {
+                    this.view.$(".provisioning_bar .actions a.close_provisioning").click();
+                });
+
+                it("removes the bar", function() {
+                    expect(this.view.$(".provisioning_bar")).toHaveClass("hidden");
+                });
             });
         });
-    });
+
+        describe("when the instance provisioning failed", function() {
+            beforeEach(function() {
+                this.view.provisioningState = "fault";
+                this.view.render();
+            });
+
+            it("shows a red bar below the title", function() {
+                expect(this.view.$(".provisioning_fault_bar")).not.toHaveClass("hidden");
+                expect(this.view.$(".provisioning_bar")).toHaveClass("hidden");
+                expect(this.view.$(".provisioning_fault_bar")).toContainTranslation("dataset.content_details.provisioning_fault");
+                expect(this.view.$(".provisioning_fault_bar .actions a.close_provisioning")).toContainTranslation("actions.close");
+            });
+
+            it("shows the retry link", function() {
+                expect(this.view.$(".provisioning_fault_bar .actions a.retry_provisioning")).toContainTranslation("actions.retry");
+                expect(this.view.$(".provisioning_fault_bar .actions a.retry_provisioning")).toHaveClass("dialog");
+                expect(this.view.$(".provisioning_fault_bar .actions a.retry_provisioning").data("dialog")).toBe("SandboxNew");
+                expect(this.view.$(".provisioning_fault_bar .actions a.retry_provisioning").data("workspace-id")).toBe(44);
+            });
+
+            describe("user clicks 'close'", function() {
+                beforeEach(function() {
+                    this.view.$(".provisioning_fault_bar .actions a.close_provisioning").click();
+                });
+
+                it("removes the bar", function() {
+                    expect(this.view.$(".provisioning_fault_bar")).toHaveClass("hidden");
+                });
+            });
+        });
+    })
 });

@@ -100,7 +100,8 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         var hash = {
             hideCounts:this.options.hideCounts,
             buttons:this.options.buttons,
-            search: this.options.search
+            search: this.options.search,
+            workspaceId: this.collection && this.collection.attributes && this.collection.attributes.workspaceId
         }
 
         if (this.collection.loaded && this.collection.pagination) {
