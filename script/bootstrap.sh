@@ -38,9 +38,9 @@ add_rbenv_to_bash() {
     if [ ! -e "$rbenv_config" ]
     then
         cat > $rbenv_config <<EOF
-    #/bin/bash
+#/bin/bash
 
-    eval "\$(rbenv init -)"
+eval "\$(rbenv init -)"
     EOF
 
       echo "Added rbenv init to bash profile includes"
