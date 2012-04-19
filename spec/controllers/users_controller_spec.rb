@@ -3,7 +3,7 @@ require 'spec_helper'
 describe UsersController do
   describe "#index" do
     before do
-      log_in FactoryGirl.create(:user, :username => 'some_user', :first_name => "zed")
+      log_in FactoryGirl.create(:user, :username => 'some_user', :first_name => "marty")
       FactoryGirl.create(:user, :username => 'other_user', :first_name => "andy")
     end
 
