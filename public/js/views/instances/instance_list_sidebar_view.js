@@ -24,7 +24,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             userCanEditPermissions: this.canEditPermissions(),
             userCanEditInstance: this.canEditInstance(),
             instanceAccountsCount: this.instance.accounts().length,
-            deleteable: this.instance.get("state") == "fault" && this.instance.get("provisionType") == "create",
+            deleteable: this.instance.isFault() && this.instance.get("provisionType") == "create",
             isProvisioning: this.instance.isProvisioning(),
             isFault: this.instance.isFault(),
             isOnline: this.instance.isOnline()
