@@ -107,6 +107,12 @@ $link-padding: 15px;
             .actions {
                 a {
                     color: $error-color;
+                    padding: 0 5px;
+                }
+
+                a.close_provisioning {
+                    border-left: 1px solid $error-color;
+                    padding-left: 6px;
                 }
             }
 
