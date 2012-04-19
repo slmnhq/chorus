@@ -798,7 +798,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the correct details link", function() {
-            var detailsLink = detailsLink = chorus.helpers.linkTo('#', "View Some Errors", {
+            var detailsLink = detailsLink = chorus.helpers.linkTo('#', t("activity_stream.view_error_details"), {
                 "class": 'alert',
                 "data-alert": "Error",
                 "data-title": t("provisioning.failed.alert.title"),

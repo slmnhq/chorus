@@ -260,7 +260,7 @@
         PROVISIONING_FAIL: function(model){
             var instance = model.instance();
             var ctx = {};
-            ctx.detailsLink = chorus.helpers.linkTo('#', "View Some Errors", {
+            ctx.detailsLink = chorus.helpers.linkTo('#', t("activity_stream.view_error_details"), {
                 "class": 'alert',
                 "data-alert": "Error",
                 "data-title": t("provisioning.failed.alert.title"),
