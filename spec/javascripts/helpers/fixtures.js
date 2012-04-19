@@ -1282,6 +1282,17 @@ beforeEach(function() {
                 });
             },
 
+            "START_PROVISIONING" : function(overrides) {
+                var attrs = _.extend({
+                "id": "10180",
+                "instance": {port:"5432", id:"10032", host:"10.32.88.200", name:"aurora_instance", isDeleted:false},
+                "timestamp": "2012-04-19 12:21:00.162",
+                "type": "START_PROVISIONING"
+                }, overrides);
+
+                return new chorus.models.Activity(attrs);
+            },
+
             "PROVISIONING_SUCCESS": function() {
                 return new chorus.models.Activity({
                     "timestamp": "2012-04-05 15:57:47",

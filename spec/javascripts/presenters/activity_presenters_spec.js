@@ -776,6 +776,40 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context(".START_PROVISIONING", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.START_PROVISIONING();
+            this.instance = this.model.instance();
+            this.instance.set({instanceProvider: "Greenplum Database"});
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.instance.get('name'));
+        });
+
+        it("should have the right objectUrl", function() {
+            var url = new chorus.models.Instance({id: this.instance.id}).showUrl();
+            expect(this.presenter.objectUrl).toBe(url);
+        });
+
+        it("should have the 'isNote' property set to false", function() {
+            expect(this.presenter.isNote).toBeFalsy();
+        });
+
+        it("should have the correct html", function() {
+            expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity_stream.header.html.START_PROVISIONING.without_workspace",
+                { objectLink: chorus.helpers.linkTo(this.instance.showUrl(), this.instance.name(), {'class': 'object_link'}).toString()}
+            );
+        });
+
+        it("should have the instance icon", function() {
+            expect(this.presenter.iconSrc).toBe(this.instance.providerIconUrl());
+            expect(this.presenter.iconClass).toBe("");
+            expect(this.presenter.iconHref).toBe(this.instance.showUrl());
+        });
+    });
+
     context(".PROVISIONING_FAIL", function() {
         beforeEach(function() {
             this.model = fixtures.activities.PROVISIONING_FAIL();

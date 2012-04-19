@@ -244,6 +244,18 @@
             }
         },
 
+        START_PROVISIONING: function(model){
+            var instance = model.instance();
+            instance.set({instanceProvider: "Greenplum Database"});
+            return {
+                objectName: instance.get("name"),
+                objectUrl: instance.showUrl(),
+                iconClass: '',
+                iconSrc: instance.providerIconUrl(),
+                iconHref: instance.showUrl()
+            }
+        },
+
         PROVISIONING_SUCCESS: function(model){
             var instance = model.instance();
             instance.set({instanceProvider: "Greenplum Database"});
