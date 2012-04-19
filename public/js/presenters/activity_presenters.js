@@ -122,6 +122,10 @@
                 header.instanceAddress = this.presenter.instanceAddress
             }
 
+            if (this.presenter.objectName){
+                header.objectName = this.presenter.objectName
+            }
+
             return header;
         },
 
@@ -249,10 +253,11 @@
         },
 
         PROVISIONING_FAIL: function(model){
-
+            var instance = model.instance();
+            return {
+                objectName: instance.get("name")
+            }
         },
-
-
 
         INSTANCE_CREATED: function(model) {
             var instance = model.instance();

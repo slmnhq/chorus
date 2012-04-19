@@ -771,6 +771,30 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".PROVISIONING_FAIL", function() {
+        beforeEach(function() {
+            this.model = fixtures.activities.PROVISIONING_FAIL();
+            this.instance = this.model.instance();
+            this.presenter = new chorus.presenters.Activity(this.model)
+        });
+
+        it("should have the right objectName", function() {
+            expect(this.presenter.objectName).toBe(this.instance.get('name'));
+        });
+
+        it("should have the 'isNote' property set to false", function() {
+            expect(this.presenter.isNote).toBeFalsy();
+        });
+
+        it("should have the correct html", function () {
+            expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity_stream.header.html.PROVISIONING_FAIL.without_workspace",
+                { objectName: this.instance.name() }
+            );
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context(".WORKSPACE_CREATED", function() {
         beforeEach(function() {
             this.model = fixtures.activities.WORKSPACE_CREATED();
