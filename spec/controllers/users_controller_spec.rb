@@ -7,6 +7,8 @@ describe UsersController do
       FactoryGirl.create(:user, :username => 'other_user', :first_name => "andy")
     end
 
+    it_behaves_like "an action that requires authentication", :get, :index
+
     it "succeeds" do
       get :index
       response.code.should == "200"
@@ -77,6 +79,8 @@ describe UsersController do
                  :dept => "bureau of bureaucracy", :notes => "poor personal hygiene"}
     end
 
+    it_behaves_like "an action that requires authentication", :post, :create
+
     context "not admin" do
       before do
         log_in FactoryGirl.build :user
@@ -120,6 +124,8 @@ describe UsersController do
     let(:other_user) { FactoryGirl.create :user }
     let(:admin) { FactoryGirl.create :admin }
     let(:non_admin) { FactoryGirl.create :user }
+
+    it_behaves_like "an action that requires authentication", :put, :update
 
     context "when logged in as an admin" do
       before do
@@ -196,37 +202,27 @@ describe UsersController do
     before do
       @user = FactoryGirl.create(:user)
       @other_user = FactoryGirl.create(:user)
+      log_in @user
     end
 
-    context "not logged in" do
-      it "returns unauthorized" do
+    it_behaves_like "an action that requires authentication", :get, :show
+
+    context "with a valid user id" do
+      it "succeeds" do
         get :show, :id => @other_user.to_param
-        response.code.should == "401"
+        response.should be_success
+      end
+
+      it "presents the user" do
+        get :show, :id => @other_user.to_param
+        response.should have_presented(@other_user)
       end
     end
 
-    context "logged in" do
-      before do
-        log_in @user
-      end
-
-      context "with a valid user id" do
-        it "succeeds" do
-          get :show, :id => @other_user.to_param
-          response.should be_success
-        end
-
-        it "presents the user" do
-          get :show, :id => @other_user.to_param
-          response.should have_presented(@other_user)
-        end
-      end
-
-      context "with an invalid user id" do
-        it "returns not found" do
-          get :show, :id => 'bogus'
-          response.should be_not_found
-        end
+    context "with an invalid user id" do
+      it "returns not found" do
+        get :show, :id => 'bogus'
+        response.should be_not_found
       end
     end
   end

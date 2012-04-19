@@ -5,4 +5,8 @@ module AuthHelper
 
     return user
   end
+
+  def log_out
+    session.clear
+  end
 end
