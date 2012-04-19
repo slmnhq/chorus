@@ -20,12 +20,6 @@ describe User do
     end
   end
 
-  it "should ignore fields that aren't in the model" do
-    @user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
-    @user.should be_valid
-    lambda { @user.bogus }.should raise_error
-  end
-
   describe "validations" do
     before do
       @user = FactoryGirl.create :user #, :username => 'aDmin'
@@ -80,6 +74,10 @@ describe User do
     end
   end
 
+  describe "associations" do
+    it { should have_many(:instances) }
+  end
+
   describe ".admin_count" do
     it "returns the number of admins that exist" do
       FactoryGirl.create :admin
@@ -108,8 +106,16 @@ describe User do
     end
   end
 
+  describe ".create" do
+    it "should ignore fields that aren't in the model" do
+      @user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
+      @user.should be_valid
+      lambda { @user.bogus }.should raise_error
+    end
+  end
+
   describe "#destroy" do
-    let(:user) {FactoryGirl.create :user}
+    let(:user) { FactoryGirl.create :user }
 
     before do
       user.destroy

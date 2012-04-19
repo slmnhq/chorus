@@ -11,29 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120418211041) do
+ActiveRecord::Schema.define(:version => 20120419194129) do
 
   create_table "instances", :force => true do |t|
     t.string   "name"
     t.text     "description"
-    t.string   "owner"
     t.string   "host"
     t.integer  "port"
-    t.date     "expire"
-    t.string   "state"
-    t.string   "provision_type"
-    t.string   "provision_id"
-    t.integer  "size"
-    t.string   "instance_provider"
-    t.datetime "last_check"
-    t.string   "provision_name"
-    t.boolean  "is_deleted"
-    t.string   "instance_version"
     t.string   "maintenance_db"
-    t.string   "connection_string"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "owner_id",       :null => false
   end
+
+  add_index "instances", ["owner_id"], :name => "index_instances_on_owner_id"
 
   create_table "users", :force => true do |t|
     t.string   "username"

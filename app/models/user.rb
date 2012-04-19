@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
   attr_reader :password
 
+  has_many :instances, :foreign_key => :owner_id
+
   validates_presence_of :username, :first_name, :last_name, :email
   validates_uniqueness_of :username, :case_sensitive => false
   validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/

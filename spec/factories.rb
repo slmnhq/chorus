@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :user do
+  factory :user, :aliases => [:owner] do
     sequence(:username) {|n| "user#{n}" }
     password "secret"
     first_name "John"
@@ -18,6 +18,7 @@ FactoryGirl.define do
     sequence(:host) {|n| "host#{n}.emc.com"}
     sequence(:port) {|n| 5000+n}
     maintenance_db "postgres"
+    owner
   end
 end
 

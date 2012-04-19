@@ -44,17 +44,11 @@ describe InstancesController do
         instance.name.should == "changed"
         instance.port.should == 12345
       end
-
-      it "should not allow changing Id" do
-        put :update, :id => @instance1.id, :instance => {:id => 122222}
-        instance = Instance.find(@instance1.id)
-        instance.id.should_not == 122222
-      end
     end
 
     context "logged in as instance-owner" do
       before do
-        @instance1.owner = @user.username
+        @instance1.owner = @user
         @instance1.save!
       end
 
@@ -64,12 +58,6 @@ describe InstancesController do
         instance.host.should == "server.emc.com"
         instance.name.should == "changed"
         instance.port.should == 12345
-      end
-
-      it "should not allow changing Id" do
-        put :update, :id => @instance1.id, :instance => {:id => 122222}
-        instance = Instance.find(@instance1.id)
-        instance.id.should_not == 122222
       end
     end
   end

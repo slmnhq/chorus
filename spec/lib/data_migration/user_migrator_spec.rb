@@ -23,7 +23,7 @@ describe UserMigrator, :type => :data_migration do
 
       it "copies the correct data fields from the legacy user" do
         Legacy.connection.select_all("SELECT * FROM edc_user").each do |legacy_user|
-          user = User.find_with_destroyed(:first, :conditions =>{:username => legacy_user["user_name"]})
+          user = User.find_with_destroyed(legacy_user["chorus_rails_user_id"])
           user.should be_present
           user.username.should == legacy_user["user_name"]
           user.first_name.should == legacy_user["first_name"]
