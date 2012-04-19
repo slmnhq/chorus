@@ -134,9 +134,9 @@
             var isSameAsWorkspace = (this.workspace !== this.noteObject);
 
             if (this.workspace && (isSandboxMessage || isSameAsWorkspace)) {
-                return 'default';
-            } else {
                 return 'without_workspace';
+            } else {
+                return 'default';
             }
         },
 
