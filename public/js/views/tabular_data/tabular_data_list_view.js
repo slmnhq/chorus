@@ -4,7 +4,8 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
     eventName: "tabularData",
 
     events: {
-        "click li input[type=checkbox]": "checkboxClicked"
+        "click  li input[type=checkbox]": "checkboxClicked",
+        "change li input[type=checkbox]": "checkboxChanged"
     },
 
     setup: function() {
@@ -21,12 +22,10 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
         this._super("postRender", arguments);
     },
 
-    checkboxClicked: function(e) {
-        e.stopImmediatePropagation();
-
-        var checkbox = this.$("input[type=checkbox]");
-        var isChecked = checkbox.is(":checked");
-        var index = checkbox.index(e.currentTarget);
+    checkboxChanged: function(e) {
+        var clickedBox = $(e.currentTarget);
+        var index = this.$("> li input[type=checkbox]").index(clickedBox);
+        var isChecked = clickedBox.prop("checked");
 
         if (isChecked) {
             this.selectedDatasets.add(this.collection.at(index));
@@ -35,5 +34,9 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
         }
 
         chorus.PageEvents.broadcast("tabularData:checked", this.selectedDatasets);
+    },
+
+    checkboxClicked: function(e) {
+        e.stopPropagation();
     }
 });

@@ -2,7 +2,8 @@ describe("chorus.views.TabularDataList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatasetSet([
             newFixtures.dataset.chorusView({ hasCredentials: true }),
-            newFixtures.dataset.sandboxTable({ hasCredentials: true })
+            newFixtures.dataset.sandboxTable({ hasCredentials: true }),
+            newFixtures.dataset.sourceTable({ hasCredentials: true })
         ]);
         this.collection.loaded = true;
         this.view = new chorus.views.TabularDataList({ collection: this.collection, activeWorkspace: true });
@@ -23,7 +24,7 @@ describe("chorus.views.TabularDataList", function() {
         describe("when a dataset is checked", function() {
             beforeEach(function() {
                 spyOn(chorus.PageEvents, 'broadcast');
-                this.checkboxes.eq(1).prop("checked", true).click();
+                this.checkboxes.eq(1).click().change();
             });
 
             it("does not 'select' the dataset", function() {
@@ -34,13 +35,23 @@ describe("chorus.views.TabularDataList", function() {
                 expectDatasetChecked([ this.collection.at(1) ]);
             });
 
-            describe("when the same item is clicked again", function() {
+            describe("checking another dataset", function() {
                 beforeEach(function() {
-                    this.checkboxes.eq(1).prop("checked", false).click();
+                    this.checkboxes.eq(0).click().change();
                 });
 
-                it("broadcasts the 'tabularData:checked' event with an empty collection", function() {
-                    expectDatasetChecked([]);
+                it("broadcasts the 'tabularData:checked' event with the collection of currently-checked datasets", function() {
+                    expectDatasetChecked([ this.collection.at(1), this.collection.at(0) ]);
+                });
+
+                describe("when one of the items is clicked again", function() {
+                    beforeEach(function() {
+                        this.checkboxes.eq(0).click().change();
+                    });
+
+                    it("broadcasts the 'tabularData:checked' event with an empty collection", function() {
+                        expectDatasetChecked([ this.collection.at(1) ]);
+                    });
                 });
             });
         });
@@ -79,8 +90,8 @@ describe("chorus.views.TabularDataList", function() {
     });
 
     it("passes the 'activeWorkspace' option to the dataset views, so that they render the links", function() {
-        expect(this.view.$("li a.image").length).toBe(2);
-        expect(this.view.$("li a.name").length).toBe(2);
+        expect(this.view.$("li a.image").length).toBe(this.collection.length);
+        expect(this.view.$("li a.name").length).toBe(this.collection.length);
 
         this.view = new chorus.views.TabularDataList({ collection: this.collection, activeWorkspace: false });
         this.view.render();
