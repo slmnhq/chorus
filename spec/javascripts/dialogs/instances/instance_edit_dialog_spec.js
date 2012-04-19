@@ -217,6 +217,13 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.model.save.argsForCall[0][0].provisionType).toBe("register");
         });
 
+        it("saves silently (to prevent re-rendering in aurora instances)", function() {
+            this.dialog.model.set({ provisionType: "create"});
+            this.dialog.render();
+            spyOn(this.dialog.model, "save");
+            this.dialog.$("button.submit").submit();
+            expect(this.dialog.model.save.calls[0].args[1]).toEqual({silent: true});
+        });
 
         it("changes the text on the upload button to 'saving'", function() {
             spyOn(this.dialog.model, "save");
@@ -230,8 +237,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.$("button.cancel")).toBeDisabled();
         });
 
-        // skipping these tests because we haven't gotten updated story for editing provisioned instance
-        xcontext("with a provisioned instance", function() {
+        context("with a provisioned instance", function() {
             beforeEach(function() {
                 this.dialog.model.set({ provisionType: "create"});
                 this.dialog.render();

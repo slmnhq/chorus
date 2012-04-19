@@ -340,6 +340,7 @@ describe("chorus.models.Instance", function() {
                     dbUserName: "foo",
                     dbPassword: "bar123"
                 }
+                spyOn(this.instance, "isNew").andReturn("true");
             });
 
             it("requires size", function() {
@@ -390,6 +391,51 @@ describe("chorus.models.Instance", function() {
                 expect(this.instance.errors.size).toBeTruthy();
             });
         });
+
+        context("when editing a provisioned instance", function() {
+            beforeEach(function() {
+                this.attrs = {
+                    name: "foo",
+                    size: "1",
+                    provisionType: "create",
+                    databaseName: "thisDatabase",
+                    schemaName: "thisSchema",
+                    dbUserName: "foo",
+                    dbPassword: "bar123"
+                }
+                spyOn(this.instance, "isNew").andReturn("false");
+            });
+
+            it("requires size", function() {
+                this.attrs.size = "";
+                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                expect(this.instance.errors.size).toBeTruthy();
+            })
+
+            it ("requires name", function(){
+                this.attrs.name = "";
+                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                expect(this.instance.errors.name).toBeTruthy();
+            });
+
+            it ("requires nothing else", function(){
+                this.attrs = {name : "foo", size: "1"}
+                expect(this.instance.performValidation(this.attrs)).toBeTruthy();
+            });
+
+            it("requires size to be less than the config's max provision size", function() {
+                this.attrs.size = "200";
+
+                chorus.models.Config.instance().set({provisionMaxSizeInGB: 500});
+                expect(this.instance.performValidation(this.attrs)).toBeTruthy();
+                expect(this.instance.errors.size).toBeFalsy();
+
+                chorus.models.Config.instance().set({provisionMaxSizeInGB: 100});
+                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
+                expect(this.instance.errors.size).toBeTruthy();
+            });
+        });
+
 
         context("when registering an existing hadoop instance", function() {
             beforeEach(function() {

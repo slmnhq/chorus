@@ -40,12 +40,14 @@
                     }
                     break;
                 case "create" :
-                    this.requireIntegerRange("size", 1, chorus.models.Config.instance().get("provisionMaxSizeInGB"), newAttrs);
-                    this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
-                    this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                     this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
-                    this.require("dbUserName", newAttrs);
-                    this.requirePattern("dbPassword", chorus.ValidationRegexes.Password({min: 6, max: 256}), newAttrs);
+                    this.requireIntegerRange("size", 1, chorus.models.Config.instance().get("provisionMaxSizeInGB"), newAttrs);
+                    if( this.isNew()) {
+                        this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
+                        this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
+                        this.require("dbUserName", newAttrs);
+                        this.requirePattern("dbPassword", chorus.ValidationRegexes.Password({min: 6, max: 256}), newAttrs);
+                    }
                     break;
                 case "registerHadoop":
                     this.require("host", newAttrs);
