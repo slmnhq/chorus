@@ -1,6 +1,6 @@
 chorus.views.ImageUpload = chorus.views.Base.extend({
     constructorName: "ImageUploadView",
-    className:"image_upload",
+    templateName:"image_upload",
 
     additionalContext:function () {
         return {

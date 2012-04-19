@@ -1,5 +1,5 @@
 chorus.views.SchemaList = chorus.views.SelectableList.extend({
-    className: "schema_list",
+    templateName: "schema_list",
     eventName: "schema",
 
     collectionModelContext: function(model) {

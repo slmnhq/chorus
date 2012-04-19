@@ -1,5 +1,5 @@
 chorus.views.DatasetAndColumnList = chorus.views.Base.extend({
-    className: "dataset_and_column_list",
+    templateName: "dataset_and_column_list",
 
     subviews: {
         ".database_dataset_list": "datasetList",

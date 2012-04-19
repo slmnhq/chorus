@@ -1,6 +1,6 @@
 chorus.dialogs.Account = chorus.dialogs.Base.extend({
     constructorName: "AccountDialog",
-    className:"instance_account",
+    templateName:"instance_account",
     translationKeys: {
         cancel: '',
         body: ''

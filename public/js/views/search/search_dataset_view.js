@@ -1,6 +1,6 @@
 chorus.views.SearchDataset = chorus.views.SearchItemBase.extend({
     constructorName: "SearchDatasetView",
-    className: "search_dataset",
+    templateName: "search_dataset",
     eventType: 'tabularData',
 
     additionalContext: function() {

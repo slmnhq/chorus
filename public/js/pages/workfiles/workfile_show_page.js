@@ -56,7 +56,8 @@
     });
 
     chorus.views.WorkfileHeader = chorus.views.Base.extend({
-        className:"workfile_header",
+        templateName: "workfile_header",
+
         additionalContext:function () {
             return {
                 iconUrl: this.model.isImage() ? this.model.thumbnailUrl() : this.model.iconUrl()

@@ -1,7 +1,7 @@
 chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
     constructorName: "PickItems",
 
-    className: 'pick_items',
+    templateName: 'pick_items',
     useLoadingSection: true,
     additionalClass: "with_sub_header",
 

@@ -1,5 +1,5 @@
 chorus.views.WorkfileContent = chorus.views.Base.extend({
-        className:"workfile_content"
+        templateName:"workfile_content"
     },
     {
         buildFor:function (model) {

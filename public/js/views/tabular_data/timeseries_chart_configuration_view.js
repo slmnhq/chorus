@@ -1,5 +1,5 @@
 chorus.views.TimeseriesChartConfiguration = chorus.views.ChartConfiguration.extend({
-    className: "chart_configuration",
+    templateName: "chart_configuration",
     additionalClass: "timeseries",
 
     postRender: function() {

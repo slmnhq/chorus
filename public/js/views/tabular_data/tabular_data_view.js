@@ -1,5 +1,5 @@
 chorus.views.TabularData = chorus.views.Base.extend({
-    className: "tabular_data",
+    templateName: "tabular_data",
     tagName: "li",
 
     subviews: {

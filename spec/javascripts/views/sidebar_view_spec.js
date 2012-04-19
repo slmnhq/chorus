@@ -4,12 +4,12 @@ describe("chorus.views.Sidebar", function() {
         chorus.page = new chorus.pages.Base();
         this.page = chorus.page;
         this.page.sidebar = new chorus.views.Sidebar();
-        this.page.sidebar.className = "user/sidebar";
+        this.page.sidebar.templateName = "user/sidebar";
         this.page.sidebar.subviews = {
             '.foo' : 'fooView'
         };
         this.page.sidebar.fooView = new chorus.views.Base();
-        this.page.sidebar.fooView.className = "plain_text";
+        this.page.sidebar.fooView.templateName = "plain_text";
     });
 
     describe("scrollbar handling", function() {

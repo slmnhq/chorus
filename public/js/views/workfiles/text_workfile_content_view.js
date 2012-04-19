@@ -1,5 +1,5 @@
 chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
-    className: "text_workfile_content",
+    templateName: "text_workfile_content",
     saveInterval: 30000,
 
     setup: function() {

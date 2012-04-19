@@ -1,6 +1,6 @@
 chorus.views.SearchResultCommentList = chorus.views.Base.extend({
     constructorName: "SearchResultCommentList",
-    className: "search_result_comment_list",
+    templateName: "search_result_comment_list",
 
     events: {
         "click a.show_more_comments": "showMoreComments",

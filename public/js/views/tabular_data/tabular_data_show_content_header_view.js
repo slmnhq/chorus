@@ -1,5 +1,5 @@
 chorus.views.TabularDataShowContentHeader = chorus.views.ListHeaderView.extend({
-    className: "tabular_data_show_content_header",
+    templateName: "tabular_data_show_content_header",
 
     additionalContext: function() {
         return {

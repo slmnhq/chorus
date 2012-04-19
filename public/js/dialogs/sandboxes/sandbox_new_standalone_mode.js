@@ -1,7 +1,7 @@
 chorus.views.SandboxNewStandaloneMode = chorus.views.Base.extend({
     constructorName: "SandboxNewStandaloneMode",
 
-    className:"sandbox_new_standalone_mode",
+    templateName:"sandbox_new_standalone_mode",
 
     setup: function() {
         this.requiredResources.push(chorus.models.Config.instance());

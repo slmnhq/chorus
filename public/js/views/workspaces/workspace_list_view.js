@@ -1,5 +1,5 @@
 chorus.views.WorkspaceList = chorus.views.SelectableList.extend({
-    className:"workspace_list",
+    templateName:"workspace_list",
     tagName:"ul",
     eventName: "workspace",
 

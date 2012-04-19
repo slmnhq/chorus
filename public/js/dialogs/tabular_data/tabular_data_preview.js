@@ -1,7 +1,7 @@
 chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
     constructorName: "TabularDataPreview",
 
-    className: 'tabular_data_preview',
+    templateName: 'tabular_data_preview',
     title: function() {return t("dataset.data_preview_title", {name: this.model.get("objectName")}); },
 
     events: {

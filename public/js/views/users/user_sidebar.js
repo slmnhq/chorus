@@ -1,5 +1,5 @@
 chorus.views.UserSidebar = chorus.views.Sidebar.extend({
-    className:"user/sidebar",
+    templateName:"user/sidebar",
     entityType:"user",
 
     subviews:{

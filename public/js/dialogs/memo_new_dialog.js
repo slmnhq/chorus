@@ -3,7 +3,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
 ).extend({
     constructorName: "MemoNew",
 
-    className: "notes_new",
+    templateName: "notes_new",
     persistent: true,
     events: {
         "submit form": "save",

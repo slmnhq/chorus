@@ -1,6 +1,6 @@
 chorus.views.Activity = chorus.views.Base.extend({
     constructorName: "ActivityView",
-    className:"activity",
+    templateName:"activity",
     tagName:"li",
 
     events: {

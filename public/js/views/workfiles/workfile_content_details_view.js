@@ -1,5 +1,5 @@
 chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
-    className:"workfile_content_details",
+    templateName:"workfile_content_details",
     additionalClass: "workfile_content_details",
 
     setup:function () {

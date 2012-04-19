@@ -1,7 +1,7 @@
 chorus.dialogs.NameChorusView = chorus.dialogs.Base.extend({
     constructorName: "AssignChorusViewName",
 
-    className: "name_chorus_view",
+    templateName: "name_chorus_view",
     title: t("dataset.name_chorus_view.title"),
 
     events: {

@@ -1,6 +1,6 @@
 chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
     constructorName: "WorkspaceMemberList",
-    className: "workspace_member_list",
+    templateName: "workspace_member_list",
     numMembers: 24,
 
     setup: function() {

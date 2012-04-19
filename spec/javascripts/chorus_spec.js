@@ -5,53 +5,36 @@ describe("chorus global", function() {
     })
 
     context("classExtend", function() {
-        beforeEach(function() {
-            this.oldDevMode = !!window.CHORUS_DEV_MODE;
-        });
-
-        afterEach(function() {
-            window.CHORUS_DEV_MODE = this.oldDevMode;
-        });
-
-        // Once the global chorus object has been initialized, there's no simple way to test the effects of classExtend
-        // (other than on the current global object).
-        if (chorus.isDevMode()) {
+        context("when in chorus dev mode", function() {
             it("applies the customized class name", function() {
-                var SomeClass = chorus.models.Base.extend({
-                    constructorName: "Foo"
-                });
-
+                chorus.isDevMode.andReturn(true);
+                var SomeClass = chorus.models.Base.extend({ constructorName: "Foo" });
                 expect(SomeClass.name).toBe("chorus$Foo");
             });
-        } else {
+        });
+
+        context("when in production", function() {
             it("does not receive a custom name", function() {
-                var SomeClass = chorus.models.Base.extend({
-                    constructorName: "Foo"
-                });
-
+                chorus.isDevMode.andReturn(false);
+                var SomeClass = chorus.models.Base.extend({ constructorName: "Foo" });
                 expect(SomeClass.name).toBe("");
-            });
-        }
-
-        describe("when in Dev mode", function() {
-            beforeEach(function() {
-                window.CHORUS_DEV_MODE = true;
-                this.chorus = new Chorus();
-            });
-
-            it("uses a custom classExtend", function() {
-                expect(this.chorus.classExtend).not.toBe(Backbone.Model.extend);
             });
         });
 
-        describe("when not in dev mode", function() {
+        describe("when the class being extended has an 'extended' hook", function() {
+            var MyClass, SubClass, extendedSpy;
+
             beforeEach(function() {
-                window.CHORUS_DEV_MODE = false;
-                this.chorus = new Chorus();
+                chorus.isDevMode.andReturn(true);
+                extendedSpy = jasmine.createSpy("extended");
+                MyClass = chorus.models.Base.extend({}, {
+                    extended: extendedSpy
+                });
             });
 
-            it("uses Backbone's extend", function() {
-                expect(this.chorus.classExtend).toBe(Backbone.Model.extend);
+            it("calls the extended hook with the new subclass", function() {
+                SubClass = MyClass.extend({ foo: "bar", constructorName: "SubClass" });
+                expect(extendedSpy).toHaveBeenCalledWith(SubClass);
             });
         });
     });

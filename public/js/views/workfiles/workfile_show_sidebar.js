@@ -1,6 +1,6 @@
 chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
     constructorName: "WorkfileShowSidebarView",
-    className:"workfile_show_sidebar",
+    templateName:"workfile_show_sidebar",
     useLoadingSection:true,
 
     events:{

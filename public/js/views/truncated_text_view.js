@@ -1,6 +1,6 @@
 chorus.views.TruncatedText = chorus.views.Base.extend({
     constructorName: "TruncatedText",
-    className: "truncated_text",
+    templateName: "truncated_text",
 
     events: {
         "click .links a": "toggleMore",

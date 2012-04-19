@@ -1,6 +1,6 @@
 chorus.views.DashboardInstanceList = chorus.views.Base.extend({
     constructorName: "DashboardInstanceListView",
-    className:"dashboard/instance_list",
+    templateName:"dashboard/instance_list",
     tagName:"ul",
     additionalClass:"list",
     useLoadingSection:true,

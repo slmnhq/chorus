@@ -1,7 +1,7 @@
 chorus.dialogs.Comment = chorus.dialogs.Base.include(
     chorus.Mixins.ClEditor
 ).extend({
-    className:"comment",
+    templateName:"comment",
     title:t("comments.new_dialog.title"),
     persistent:true,
 

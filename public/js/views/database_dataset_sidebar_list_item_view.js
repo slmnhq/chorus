@@ -1,6 +1,6 @@
 chorus.views.DatabaseDatasetSidebarListItem = chorus.views.Base.extend({
     constructorName: "DatabaseDatasetSidebarListItemView",
-    className: "database_dataset_sidebar_list_item",
+    templateName: "database_dataset_sidebar_list_item",
     useLoadingSection: true,
 
     events: {

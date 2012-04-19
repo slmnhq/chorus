@@ -1,5 +1,5 @@
 chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
-    className: "tabular_data_content_details",
+    templateName: "tabular_data_content_details",
     persistent: true,
 
     subviews: {

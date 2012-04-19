@@ -1,5 +1,5 @@
 chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
-    className:"workfile_list_sidebar",
+    templateName:"workfile_list_sidebar",
     subviews:{
         '.tab_control': 'tabs'
     },

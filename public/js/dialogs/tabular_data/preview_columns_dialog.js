@@ -1,7 +1,7 @@
 chorus.dialogs.PreviewColumns = chorus.dialogs.Base.extend({
     constructorName: "PreviewColumns",
 
-    className: "preview_columns",
+    templateName: "preview_columns",
     additionalClass: "with_sub_header",
     title: t("dataset.manage_join_tables.title"),
     useLoadingSection:true,

@@ -1,6 +1,6 @@
 chorus.views.Login = chorus.views.Base.extend({
     constructorName: "LoginView",
-    className:"login",
+    templateName:"login",
     events:{
         "submit form":"submitLoginForm"
     },

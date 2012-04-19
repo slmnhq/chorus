@@ -1,6 +1,6 @@
 chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     constructorName: "TypeAheadSearchView",
-    className: "type_ahead_search",
+    templateName: "type_ahead_search",
 
     resultLimit: 5,
 

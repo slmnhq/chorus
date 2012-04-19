@@ -1,5 +1,5 @@
 chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
-    className: "sql_workfile_content",
+    templateName: "sql_workfile_content",
 
     subviews: {
         '.text_content': 'textContent',

@@ -1,6 +1,6 @@
 chorus.views.Header = chorus.views.Base.extend({
     constructorName: "HeaderView",
-    className: "header",
+    templateName: "header",
     events: {
         "click .username a": "togglePopupUsername",
         "click .account a": "togglePopupAccount",

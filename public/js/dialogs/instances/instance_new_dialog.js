@@ -1,6 +1,6 @@
 chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     constructorName: "InstancesNew",
-    className:"instance_new",
+    templateName:"instance_new",
     title:t("instances.new_dialog.title"),
     persistent:true,
 

@@ -1,6 +1,6 @@
 (function() {
     chorus.views.UserNewLdap = chorus.views.Base.extend({
-        className: "user/new_ldap",
+        templateName: "user/new_ldap",
         additionalClass: "user_new",
 
         persistent: true,

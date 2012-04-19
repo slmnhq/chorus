@@ -1,6 +1,6 @@
 chorus.views.SearchUser = chorus.views.SearchItemBase.extend({
     constructorName: "SearchUserView",
-    className: "search_user",
+    templateName: "search_user",
     eventType: "user",
 
     additionalContext: function() {

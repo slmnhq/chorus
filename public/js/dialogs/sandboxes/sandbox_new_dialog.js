@@ -1,7 +1,7 @@
 chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     constructorName: "SandboxNew",
 
-    className: "sandbox_new",
+    templateName: "sandbox_new",
     title: t("sandbox.new_dialog.title"),
 
     persistent: true,

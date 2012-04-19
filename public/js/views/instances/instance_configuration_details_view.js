@@ -1,5 +1,5 @@
 chorus.views.InstanceConfigurationDetails = chorus.views.Base.extend({
-    className: "instance_configuration_details",
+    templateName: "instance_configuration_details",
 
     additionalContext: function() {
         return {

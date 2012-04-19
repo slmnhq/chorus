@@ -1,6 +1,6 @@
 chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
     constructorName: "DashboardWorkspaceListView",
-    className: "dashboard/workspace_list",
+    templateName: "dashboard/workspace_list",
     tagName: "ul",
     additionalClass: "list",
     useLoadingSection: true,

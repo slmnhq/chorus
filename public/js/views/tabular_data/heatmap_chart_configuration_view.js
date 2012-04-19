@@ -1,5 +1,5 @@
 chorus.views.HeatmapChartConfiguration = chorus.views.ChartConfiguration.extend({
-    className:"chart_configuration",
+    templateName:"chart_configuration",
     additionalClass: "heatmap",
 
     postRender:function () {

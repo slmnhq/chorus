@@ -1,5 +1,5 @@
 chorus.views.DatasetEditChorusView = chorus.views.CodeEditorView.extend({
-    className: "dataset_edit_chorus_view",
+    templateName: "dataset_edit_chorus_view",
 
     setup: function() {
         this._super("setup");

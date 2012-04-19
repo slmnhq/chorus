@@ -1,6 +1,6 @@
 chorus.views.CommentList = chorus.views.Base.extend({
     constructorName: "CommentListView",
-    className:"comment_list",
+    templateName:"comment_list",
 
     additionalContext:function () {
         return {

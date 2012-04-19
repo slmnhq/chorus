@@ -1,6 +1,6 @@
 chorus.views.DatasetEditChorusViewSidebar = chorus.views.Sidebar.extend({
     constructorName: "DatasetEditChorusViewSidebarView",
-    className: "dataset_edit_chorus_view_sidebar",
+    templateName: "dataset_edit_chorus_view_sidebar",
     useLoadingSection: true,
 
     subviews: {

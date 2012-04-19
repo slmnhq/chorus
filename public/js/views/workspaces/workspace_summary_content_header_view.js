@@ -1,6 +1,6 @@
 chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
     constructorName: "WorkspaceSummaryContentHeaderView",
-    className: "workspace_summary_content_header",
+    templateName: "workspace_summary_content_header",
     useLoadingSection: true,
 
     subviews: {

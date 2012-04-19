@@ -6,8 +6,8 @@ describe("chorus.views.SelectableList", function() {
             collection: this.collection
         });
         // normally would be set by subclass
-        this.view.className = "user/list";
         this.view.eventName = "user";
+        this.view.templateName = "user/list";
         this.view.render();
     });
 

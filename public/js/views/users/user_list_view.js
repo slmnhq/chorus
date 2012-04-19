@@ -1,5 +1,5 @@
 chorus.views.UserList = chorus.views.SelectableList.extend({
-    className:"user/list",
+    templateName:"user/list",
     eventName: "user",
 
     collectionModelContext:function (model) {

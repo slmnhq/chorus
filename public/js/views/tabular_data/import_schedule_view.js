@@ -1,5 +1,5 @@
 chorus.views.ImportSchedule = chorus.views.Base.extend({
-    className: "import_schedule",
+    templateName: "import_schedule",
 
     postRender: function() {
         chorus.datePicker({

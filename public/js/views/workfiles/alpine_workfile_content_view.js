@@ -1,5 +1,5 @@
 chorus.views.AlpineWorkfileContent = chorus.views.WorkfileContent.extend({
-    className:"alpine_workfile_content",
+    templateName:"alpine_workfile_content",
     useLoadingSection: true,
 
     setup: function() {
