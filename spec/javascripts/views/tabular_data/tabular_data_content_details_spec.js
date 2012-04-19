@@ -368,7 +368,9 @@ describe("chorus.views.TabularDataContentDetails", function() {
                     expect(this.view.$(".chorus_view_info")).not.toHaveClass("hidden");
                     expect(this.view.$(".info_bar")).toHaveClass("hidden");
                     expect(this.view.$(".column_count")).toHaveClass("hidden");
-                    expect(this.view.$(".chorus_view_info").text()).toContainTranslation("workspaces.select");
+                    expect(this.view.$(".chorus_view_info")).toContainTranslation("actions.select");
+                    expect(this.view.$(".chorus_view_info a.select_all")).toContainTranslation("actions.select_all");
+                    expect(this.view.$(".chorus_view_info a.select_none")).toContainTranslation("actions.select_none");
                 });
 
                 it("triggers the 'textchange' event on the newly visible search input", function() {
