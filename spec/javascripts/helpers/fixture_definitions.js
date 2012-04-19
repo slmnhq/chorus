@@ -1,38 +1,18 @@
 window.fixtureDefinitions = {
-    user: {
-        unique: [ "id" ]
-    },
+    user:    { unique: [ "id" ] },
+    userSet: { unique: [ "id" ] },
 
-    workspace: {
-        unique: [ "id", "sandboxInfo.sandboxId" ]
-    },
+    schema:    { unique: [ "id", "instance.id" ] },
+    schemaSet: { unique: [ "id" ] },
 
-    workspaceSet: {
-        unique: [ "id", "sandboxInfo.sandboxId" ]
-    },
+    workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] },
+    workspaceSet: { unique: [ "id", "sandboxInfo.sandboxId" ] },
 
-    userSet: {
-        unique: [ "id" ]
-    },
+    sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
 
-    schema: {
-        unique: [ "id", "instance.id" ]
-    },
-
-    schemaSet: {
-        unique: ["id"]
-    },
-
-    sandbox: {
-        unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ]
-    },
-
-    csvImport: {
-        model: "CSVImport"
-    },
+    csvImport: { model: "CSVImport" },
 
     provisioningTemplate: {},
-
     provisioningTemplateSet: {},
 
     activity: {
@@ -46,14 +26,8 @@ window.fixtureDefinitions = {
 
     dataset: {
         derived: {
-            id: function(attrs) {
-                return '"' + [
-                    attrs.instance.id,
-                    attrs.databaseName,
-                    attrs.schemaName,
-                    attrs.objectType,
-                    attrs.objectName,
-                ].join('"|"') + '"';
+            id: function(a) {
+                return '"' + [ a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName, ].join('"|"') + '"';
             }
         },
 
@@ -68,16 +42,12 @@ window.fixtureDefinitions = {
     },
 
     test: {
-        model: "User",
-        unique: [ "id" ],
-        derived: { email: function(attrs) { return attrs.firstName + "@example.com"; } },
+        model:   "User",
+        unique:  [ "id" ],
 
         children: {
-            withOverrides: {
-                model: "Workspace"
-            },
-
-            noOverrides: {}
+            noOverrides: {},
+            withOverrides: { model: "Workspace" }
         }
     }
 };
