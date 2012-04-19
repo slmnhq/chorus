@@ -226,7 +226,7 @@ describe("chorus.presenters.Activity", function() {
                 expect(this.presenter.header.importType).toMatchTranslation("dataset.import.types.file");
             });
 
-            itShouldHaveImportFailedIcon();
+            itShouldHaveFailedIcon();
             itShouldHaveDestinationTableLink();
             itShouldHaveDetailsLink(t("activity_stream.view_error_details"), {
                 href: '#',
@@ -262,7 +262,7 @@ describe("chorus.presenters.Activity", function() {
                 expect(this.presenter.header.importSourceLink).toBeDefined();
             });
 
-            itShouldHaveImportFailedIcon();
+            itShouldHaveFailedIcon();
             itShouldHaveDestinationTableLink();
             itShouldHaveDetailsLink(t("activity_stream.view_error_details"), {
                 href: '#',
@@ -298,7 +298,7 @@ describe("chorus.presenters.Activity", function() {
                 expect(this.presenter.header.importSourceLink).toBeDefined();
             });
 
-            itShouldHaveImportFailedIcon();
+            itShouldHaveFailedIcon();
             itShouldHaveDestinationTableLink();
             itShouldHaveDetailsLink(t("activity_stream.view_error_details"), {
                 href: '#',
@@ -744,6 +744,7 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             this.model = fixtures.activities.PROVISIONING_SUCCESS();
             this.instance = this.model.instance();
+            this.instance.set({instanceProvider: "Greenplum Database"});
             this.presenter = new chorus.presenters.Activity(this.model)
         });
 
@@ -760,15 +761,19 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.isNote).toBeFalsy();
         });
 
-        it("should have the correct html", function () {
+        it("should have the correct html", function() {
             expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity_stream.header.html.PROVISIONING_SUCCESS.without_workspace",
                 { objectLink: chorus.helpers.linkTo(this.instance.showUrl(), this.instance.name(), {'class': 'object_link'}).toString(),
-                  instanceAddress: this.instance.get("host") + ":" + this.instance.get("port")
+                    instanceAddress: this.instance.get("host") + ":" + this.instance.get("port")
                 }
             );
         });
 
-        itShouldHaveTheAuthorsIconAndUrl();
+        it("should have the instance icon", function() {
+            expect(this.presenter.iconSrc).toBe(this.instance.providerIconUrl());
+            expect(this.presenter.iconClass).toBe("");
+            expect(this.presenter.iconHref).toBe(this.instance.showUrl());
+        });
     });
 
     context(".PROVISIONING_FAIL", function() {
@@ -786,13 +791,23 @@ describe("chorus.presenters.Activity", function() {
             expect(this.presenter.isNote).toBeFalsy();
         });
 
-        it("should have the correct html", function () {
+        it("should have the correct header html", function() {
             expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity_stream.header.html.PROVISIONING_FAIL.without_workspace",
-                { objectName: this.instance.name() }
+                { objectName: this.instance.name()}
             );
         });
 
-        itShouldHaveTheAuthorsIconAndUrl();
+        it("should have the correct details link", function() {
+            var detailsLink = detailsLink = chorus.helpers.linkTo('#', "View Some Errors", {
+                "class": 'alert',
+                "data-alert": "Error",
+                "data-title": t("provisioning.failed.alert.title"),
+                "data-body": "Can not connect to Aurora server."
+            });
+            expect(this.presenter.detailsLink).toEqual(detailsLink);
+        });
+
+        itShouldHaveFailedIcon();
     });
 
     context(".WORKSPACE_CREATED", function() {
@@ -1591,10 +1606,11 @@ describe("chorus.presenters.Activity", function() {
         });
     }
 
-    function itShouldHaveImportFailedIcon() {
+    function itShouldHaveFailedIcon() {
         it("should have the right icon", function() {
             expect(this.presenter.iconSrc).toBe("/images/med_red_alert.png");
             expect(this.presenter.iconClass).toBe("");
+            expect(this.presenter.iconHref).toBe("javascript:void()");
         });
     }
 

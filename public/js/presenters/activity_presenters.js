@@ -176,6 +176,7 @@
             var ctx = importIsObject(model);
             ctx.iconClass = '';
             ctx.iconSrc = "/images/med_red_alert.png";
+            ctx.iconHref = "javascript:void()";
 
             ctx.detailsLink = chorus.helpers.linkTo('#', t("activity_stream.view_error_details"), {
                 "class": 'alert',
@@ -245,18 +246,33 @@
 
         PROVISIONING_SUCCESS: function(model){
             var instance = model.instance();
+            instance.set({instanceProvider: "Greenplum Database"});
             return {
                 objectName: instance.get("name"),
                 objectUrl: instance.showUrl(),
-                instanceAddress: instance.get("host") + ":" + instance.get("port")
+                instanceAddress: instance.get("host") + ":" + instance.get("port"),
+                iconClass: '',
+                iconSrc: instance.providerIconUrl(),
+                iconHref: instance.showUrl()
             }
         },
 
         PROVISIONING_FAIL: function(model){
             var instance = model.instance();
-            return {
-                objectName: instance.get("name")
-            }
+            var ctx = {};
+            ctx.detailsLink = chorus.helpers.linkTo('#', "View Some Errors", {
+                "class": 'alert',
+                "data-alert": "Error",
+                "data-title": t("provisioning.failed.alert.title"),
+                "data-body": model.get("errorMessage").errorMessage
+            });
+
+            ctx.iconClass = '';
+            ctx.iconSrc = "/images/med_red_alert.png";
+            ctx.iconHref = "javascript:void()"
+            ctx.objectName =  instance.get("name");
+
+            return ctx;
         },
 
         INSTANCE_CREATED: function(model) {
