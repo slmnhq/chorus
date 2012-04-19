@@ -8,32 +8,47 @@ $link-padding: 15px;
 
     div {
         display: inline;
+    }
 
-        &.pagination {
-            float: right;
+    .pagination {
+        float: right;
 
-            .links {
-                padding-left: $link-padding;
+        .links {
+            padding-left: $link-padding;
 
-                .next, .previous {
-                    font-size: 12px;
-                    padding: 4px $link-padding;
-                }
+            .next, .previous {
+                font-size: 12px;
+                padding: 4px $link-padding;
+            }
 
-                .next {
-                    border-left: 1px solid $weak-header-border-color;
-                    padding-right: $link-padding - $padding-x;
-                }
+            .next {
+                border-left: 1px solid $weak-header-border-color;
+                padding-right: $link-padding - $padding-x;
+            }
 
-                a {
-                    cursor: pointer;
+            a {
+                cursor: pointer;
 
-                    span {
-                        color: $link-color;
-                        border-bottom: 1px dotted $link-color;
-                    }
+                span {
+                    color: $link-color;
+                    border-bottom: 1px dotted $link-color;
                 }
             }
+        }
+    }
+
+    .multiselect {
+        a {
+            @include link-with-dotted-underline;
+        }
+
+        .select {
+            padding-right: 3px;
+        }
+
+        .separator {
+            padding: 0 3px;
+            color: $link-color;
         }
     }
 

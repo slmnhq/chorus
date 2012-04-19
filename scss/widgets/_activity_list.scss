@@ -29,9 +29,7 @@ $system-action-color: #7C7D7D;
         }
 
         a {
-            font-size: 12px;
-            font-weight: $semibold;
-            border-bottom: 1px dotted $link-color;
+            @include link-with-dotted-underline;
 
             &.active {
                 color: black;
