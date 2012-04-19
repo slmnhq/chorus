@@ -1,4 +1,23 @@
 .tabular_data_sidebar {
+    .multiple_selection {
+        @include box-shadow(0 0 4px #999 inset);
+        @include border-radius(8px);
+        margin-bottom: 10px;
+        margin-right: 10px;
+        padding: 8px;
+        background-color: $shaded-background-color;
+
+        .count {
+            font-size: 18px;
+            font-weight: $semibold;
+        }
+
+        li a {
+            font-size: 12px;
+            font-weight: $semibold;
+        }
+    }
+
     .info {
         margin-bottom: 5px;
 

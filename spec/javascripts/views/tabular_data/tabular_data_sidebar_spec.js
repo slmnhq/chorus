@@ -34,6 +34,10 @@ describe("chorus.views.TabularDataSidebar", function() {
                 chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
             });
 
+            it("does not display the multiple selection section", function() {
+                expect(this.view.$(".multiple_selection")).toHaveClass("hidden");
+            });
+
             it("displays the selected dataset name", function() {
                 expect(this.view.$(".name").text().trim()).toBe(this.dataset.get("objectName"));
             });
@@ -868,6 +872,40 @@ describe("chorus.views.TabularDataSidebar", function() {
                             expect(this.view.resource).toHaveBeenFetched();
                         });
                     });
+                });
+            });
+        });
+
+        describe("when a single dataset is checked", function() {
+            beforeEach(function() {
+                this.checkedDatasets = new chorus.collections.TabularDataSet([
+                    newFixtures.dataset.sourceTable()
+                ]);
+
+                this.multiSelectSection = this.view.$(".multiple_selection");
+                chorus.PageEvents.broadcast("tabularData:checked", this.checkedDatasets);
+            });
+
+            it("does not display the multiple selection section", function() {
+                expect(this.multiSelectSection).toHaveClass("hidden");
+            });
+
+            context("when two datasets are checked", function() {
+                beforeEach(function() {
+                    this.checkedDatasets.add(newFixtures.dataset.sandboxTable());
+                    chorus.PageEvents.broadcast("tabularData:checked", this.checkedDatasets);
+                });
+
+                it("does display the multiple selection section", function() {
+                    expect(this.multiSelectSection).not.toHaveClass("hidden");
+                });
+
+                it("displays the number of selected datasets", function() {
+                    expect(this.multiSelectSection.find(".count").text()).toMatchTranslation("dataset.sidebar.multiple_selection.count", {count: 2});
+                });
+
+                it("displays the 'associate with workspace' link", function() {
+                    expect(this.multiSelectSection.find("a.associate")).toContainTranslation("actions.associate_with_another_workspace");
                 });
             });
         });

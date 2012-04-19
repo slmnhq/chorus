@@ -16,6 +16,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
 
     setup: function() {
         chorus.PageEvents.subscribe("tabularData:selected", this.setTabularData, this);
+        chorus.PageEvents.subscribe("tabularData:checked", this.tabularDataChecked, this);
         chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
         chorus.PageEvents.subscribe("importSchedule:changed", this.updateImportSchedule, this);
         chorus.PageEvents.subscribe("workspace:associated", this.refetchModel, this);
@@ -78,6 +79,13 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         }
 
         this.render();
+    },
+
+    tabularDataChecked: function(checkedDatasets) {
+        var multiSelectEl = this.$(".multiple_selection");
+        var length = checkedDatasets.length;
+        multiSelectEl.toggleClass("hidden", length <= 1);
+        multiSelectEl.find(".count").text(t("dataset.sidebar.multiple_selection.count", { count: length }))
     },
 
     resetStatistics: function(){
