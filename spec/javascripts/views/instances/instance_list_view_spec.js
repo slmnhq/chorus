@@ -138,7 +138,7 @@ describe("chorus.views.InstanceList", function() {
                 });
             });
 
-            describe("when an instance has not finished provisioning", function() {
+            describe("when an instance is provisioning", function() {
                 beforeEach(function() {
                     this.collection.reset([
                         fixtures.instance({
@@ -150,7 +150,33 @@ describe("chorus.views.InstanceList", function() {
                     this.view.render();
                 });
 
-                it("the name should not be a link", function() {
+                it("should display the grey state icon", function() {
+                    expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/unknown.png");
+                });
+
+                it("should not display the name should as a link", function() {
+                    expect(this.view.$(".greenplum_instance li:eq(0) a.name")).not.toExist();
+                    expect(this.view.$(".greenplum_instance li:eq(0) span.name")).toContainText("Greenplum");
+                });
+            });
+
+            describe("when an instance has a provisioning fault", function() {
+                beforeEach(function() {
+                    this.collection.reset([
+                        fixtures.instance({
+                            instanceProvider: "Greenplum Database",
+                            name: "Greenplum",
+                            state: "fault"
+                        })
+                    ]);
+                    this.view.render();
+                });
+
+                it("should display the red state icon", function() {
+                    expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/red.png");
+                });
+
+                it("should not display the name as a link", function() {
                     expect(this.view.$(".greenplum_instance li:eq(0) a.name")).not.toExist();
                     expect(this.view.$(".greenplum_instance li:eq(0) span.name")).toContainText("Greenplum");
                 });

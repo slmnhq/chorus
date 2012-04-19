@@ -4,8 +4,14 @@
     <div class="instance_type" title="{{instanceProvider}}">{{instanceProvider}}
         {{#if isProvisioning}}<span>{{t "instances.sidebar.provisioning"}}</span>{{/if}}
     </div>
+    {{#if isFault}}
+        <div class="instance_fault">
+            <img src="/images/message_error_small.png"/>
+            <span>{{t "instances.sidebar.fault"}}</span>
+        </div>
+    {{/if}}
 </div>
-{{#unless isProvisioning}}
+{{#if isOnline}}
 <div class="account_info">
     {{#if dbUserName}}
         <img src="/images/instances/shared_icon.png"/>
@@ -33,7 +39,7 @@
         {{/if}}
     {{/if}}
 </div>
-{{/unless}}
+{{/if}}
 <div class="actions">
     <ul>
         {{#ifAny dbUserName userCanEditInstance }}

@@ -48,7 +48,8 @@ chorus.views.InstanceList = chorus.views.Base.extend({
             isGreenplum: model.isGreenplum(),
             isHadoop: model.isHadoop(),
             isOther: !(model.isHadoop() || model.isGreenplum()),
-            isProvisioning: model.isProvisioning()
+            isProvisioning: model.isProvisioning(),
+            isFault: model.isFault()
         }
     },
 

@@ -4,11 +4,11 @@
     <img class="provider" src="{{providerUrl}}"/>
 </div>
 <div class="instance_details">
-    {{#if isProvisioning}}
+    {{#ifAny isProvisioning isFault}}
         <span class="name">{{name}}</span>
     {{else}}
         <a class="name" href="{{showUrl}}">{{name}}</a>
-    {{/if}}
+    {{/ifAny}}
     <div class="description">{{description}}</div>
 </div>
 <span class="spacer_right"></span>

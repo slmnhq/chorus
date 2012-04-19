@@ -128,6 +128,14 @@
             return this.get("state") == "provisioning";
         },
 
+        isFault: function() {
+            return this.get("state") == "fault";
+        },
+
+        isOnline: function() {
+            return this.get("state") == "online";
+        },
+
         attrToLabel:{
             "dbUserName":"instances.dialog.database_account",
             "dbPassword":"instances.dialog.database_password",
