@@ -16,7 +16,7 @@ chorus.dialogs.ImportDatasetsPicker = chorus.dialogs.PickItems.extend({
 
     setup: function() {
         this._super("setup");
-        this.pickItemsList.className = "import_datasets_picker_list";
+        this.pickItemsList.templateName = "import_datasets_picker_list";
     },
 
     makeModel: function() {
