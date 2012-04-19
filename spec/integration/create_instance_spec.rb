@@ -8,8 +8,8 @@ describe " add an instance " do
 
   it "creates an instance" do
     within("#facebox") do
-      choose("register_existing_greenplum")
       wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
+      choose("register_existing_greenplum")
 
       within(".register_existing_greenplum") do
         fill_in 'name', :with => "GPDB_inst_sel_test#{Time.now.to_i}"
@@ -28,8 +28,8 @@ describe " add an instance " do
 
   it "creates an Hadoop Instance" do
     within("#facebox") do
-      choose("register_existing_hadoop")
       wait_until { page.has_selector?(".register_existing_hadoop input[name=name]")}
+      choose("register_existing_hadoop")
 
       within(".register_existing_hadoop") do
         fill_in 'name', :with => "Hadoop_inst_sel_test#{Time.now.to_i}"
