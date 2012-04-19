@@ -18,13 +18,13 @@ install_ruby_for_chorus() {
   echo "***** installing ruby"
   export CC=/usr/bin/gcc
   rbenv install $ruby_version || true
-  rbenv rehash || true
+  rbenv rehash
 }
 
 install_bundler_for_chorus() {
   echo "***** installing bundler"
   gem install bundler
-  rbenv rehash || true
+  rbenv rehash
 }
 
 add_rbenv_to_bash() {
@@ -38,7 +38,7 @@ add_rbenv_to_bash() {
 
 echo "***** updating Homebrew and installing rbenv"
 brew update
-brew install rbenv
+brew install rbenv --HEAD
 install_ruby_build
 
 echo "***** checking for rbenv in bash"
