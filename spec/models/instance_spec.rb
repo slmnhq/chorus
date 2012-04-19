@@ -5,13 +5,9 @@ describe Instance do
   end
 
   describe "validations" do
-    required_fields = [:name, :port, :maintenance_db, :host]
-
-    required_fields.each do |field|
-      it "should require field: #{field}" do
-        @instance[field] = nil
-        @instance.should be_invalid
-      end
-    end
+    it { should validate_presence_of :name }
+    it { should validate_presence_of :host }
+    it { should validate_presence_of :port }
+    it { should validate_presence_of :maintenance_db }
   end
 end

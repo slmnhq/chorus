@@ -8,7 +8,8 @@ class User < ActiveRecord::Base
   validates_presence_of :username, :first_name, :last_name, :email
   validates_uniqueness_of :username, :case_sensitive => false
   validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/
-  validates_length_of :password, :minimum => 6, :unless => Proc.new { |user| !user.password_digest.nil? }
+  validates_presence_of :password, :unless => :password_digest?
+  validates_length_of :password, :minimum => 6, :if => :password
   validates_length_of :username, :maximum => 256
   validates_length_of :first_name, :maximum => 256
   validates_length_of :last_name, :maximum => 256

@@ -18,71 +18,65 @@ describe User do
       User.authenticate(@user.username.downcase, 'secret').should be_true
       User.authenticate(@user.username.upcase, 'secret').should be_true
     end
+  end
 
-    it "should ignore fields that aren't in the model" do
-      @user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
-      @user.should be_valid
-      lambda { @user.bogus }.should raise_error
+  it "should ignore fields that aren't in the model" do
+    @user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
+    @user.should be_valid
+    lambda { @user.bogus }.should raise_error
+  end
+
+  describe "validations" do
+    before do
+      @user = FactoryGirl.create :user #, :username => 'aDmin'
     end
 
-    describe "validations" do
-      describe "required fields" do
-        required_fields = [:first_name, :last_name, :username, :email]
+    it { should validate_presence_of :first_name }
+    it { should validate_presence_of :last_name }
+    it { should validate_presence_of :username }
+    it { should validate_presence_of :email }
 
-        required_fields.each do |field|
-          it "should require field: #{field}" do
-            @user[field] = nil
-            @user.should be_invalid
-          end
+    describe "password" do
+      context "when the password is not being modified" do
+        it "is required if user does not have a saved password" do
+          user = FactoryGirl.build(:user, :password_digest => nil, :password => nil)
+          user.should validate_presence_of(:password)
+        end
+
+        it "is not required if user has a saved password" do
+          user = FactoryGirl.build(:user, :password_digest => "1234", :password => nil)
+          user.should be_valid
         end
       end
 
-      describe "password" do
-        it "should be required" do
-          lambda { FactoryGirl.create :user, :password => nil }.should raise_error
-        end
+      context "when the password is being modified" do
+        it { ensure_length_of(:password).is_at_least(6) }
+      end
+    end
 
-        it "should be at least 6 characters for a new user" do
-          lambda { FactoryGirl.create :user, :password => "12345" }.should raise_error
-        end
-
-        it "should be at least 6 characters for an existing user" do
-          @user.password = "12345"
-          @user.should be_invalid
-        end
+    describe "email" do
+      it "should require a@b.c..." do
+        @user.email = "abc"
+        @user.should be_invalid
       end
 
-      describe "email" do
-        it "should require a@b.c..." do
-          @user[:email] = "abc"
-          @user.should be_invalid
-        end
-
-        it "should accept + in the left-hand side of emails" do
-          @user[:email] = "xyz+123@emc.com"
-          @user.should be_valid
-        end
+      it "should accept + in the left-hand side of emails" do
+        @user.email = "xyz+123@emc.com"
+        @user.should be_valid
       end
+    end
 
-      it "should disallow duplicate user names" do
-        lambda{FactoryGirl.create :user, :username => @user.username}.should raise_error
-        lambda{FactoryGirl.create :user, :username => @user.username.upcase}.should raise_error
-        lambda{FactoryGirl.create :user, :username => @user.username.downcase}.should raise_error
-      end
+    it "should disallow duplicate user names" do
+      subject.should validate_uniqueness_of(:username).case_insensitive
+    end
 
-      describe "field length" do
-        value = "x@x.x"
-        257.times do
-          value += "X"
-        end
-
-        [:username, :first_name, :last_name, :email, :title, :dept].each { |field|
-          it "max 256 for: #{field}" do
-            @user[field] = value
-            @user.valid?.should be_false
-          end
-        }
-      end
+    describe "field length" do
+      it { should ensure_length_of(:username).is_at_most(256) }
+      it { should ensure_length_of(:first_name).is_at_most(256) }
+      it { should ensure_length_of(:last_name).is_at_most(256) }
+      it { should ensure_length_of(:email).is_at_most(256) }
+      it { should ensure_length_of(:title).is_at_most(256) }
+      it { should ensure_length_of(:dept).is_at_most(256) }
     end
   end
 
@@ -108,7 +102,7 @@ describe User do
       admin.should_not be_admin
     end
 
-    it "does not allow an admin to remove their own priveleges if there are no other admins" do
+    it "does not allow an admin to remove their own privileges if there are no other admins" do
       admin.admin = false
       admin.should be_admin
     end
