@@ -31,9 +31,8 @@ add_rbenv_to_bash() {
     rbenv_config="$HOME/.bash_profile_includes/rbenv.sh"
     if [ ! -e "$rbenv_config" ]
     then
+      echo "***** Adding rbenv init to bash profile includes"
       cp script/rbenv.sh $rbenv_config
-      echo "***** Added rbenv init to bash profile includes"
-      source script/rbenv.sh
     fi
 }
 
@@ -46,12 +45,14 @@ set -e
 
 echo "***** checking for ruby"
 rbenv versions | grep $ruby_version || install_ruby_for_chorus
-rbenv local $ruby_version
+rbenv shell $ruby_version
+ruby -v
+ruby -v | grep $ruby_version
 
 echo "***** checking for bundler"
 gem list | grep bundler || install_bundler_for_chorus
 
-echo "***** add rbenv to bash"
+echo "***** checking for rbenv in bash"
 add_rbenv_to_bash
 
 echo "***** setting up project"
