@@ -4,6 +4,11 @@ class InstancesController < ApplicationController
     present instances
   end
 
+  def create
+    instance = Instance.create!(params[:instance])
+    present instance, :status => :created
+  end
+
   def update
     instance = Instance.find_by_id(params[:id])
     if current_user.admin || current_user.username == instance.owner

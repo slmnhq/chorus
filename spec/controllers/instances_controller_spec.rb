@@ -73,4 +73,33 @@ describe InstancesController do
       end
     end
   end
+
+  describe "#create" do
+    let(:valid_attributes) do
+      {
+          :name => "new",
+          :port => 12345,
+          :host => "server.emc.com",
+          :maintenance_db => "postgres",
+          :db_username => "test_db",
+          :db_password => "pw12345"
+      }
+    end
+
+    it "reports that the instance was created" do
+      post :create, :instance => valid_attributes
+      response.code.should == "201"
+    end
+
+    it "saves the instance to the database" do
+      expect {
+        post :create, :instance => valid_attributes
+      }.to change { Instance.count }.by(1)
+    end
+
+    it "renders the newly created instance" do
+      post :create, :instance => valid_attributes
+      decoded_response.name.should == "new"
+    end
+  end
 end
