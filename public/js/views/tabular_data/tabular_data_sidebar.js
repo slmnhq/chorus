@@ -15,6 +15,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     },
 
     setup: function() {
+        this.checkedDatasetsLength = 0;
         chorus.PageEvents.subscribe("tabularData:selected", this.setTabularData, this);
         chorus.PageEvents.subscribe("tabularData:checked", this.tabularDataChecked, this);
         chorus.PageEvents.subscribe("column:selected", this.setColumn, this);
@@ -82,10 +83,14 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     },
 
     tabularDataChecked: function(checkedDatasets) {
+        this.checkedDatasetsLength = checkedDatasets.length;
+        this.showOrHideMultipleSelectionSection();
+    },
+
+    showOrHideMultipleSelectionSection: function() {
         var multiSelectEl = this.$(".multiple_selection");
-        var length = checkedDatasets.length;
-        multiSelectEl.toggleClass("hidden", length <= 1);
-        multiSelectEl.find(".count").text(t("dataset.sidebar.multiple_selection.count", { count: length }))
+        multiSelectEl.toggleClass("hidden", this.checkedDatasetsLength <= 1);
+        multiSelectEl.find(".count").text(t("dataset.sidebar.multiple_selection.count", { count: this.checkedDatasetsLength }))
     },
 
     resetStatistics: function(){
@@ -100,6 +105,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         var $importLinks = this.$("a.create_schedule, a.edit_schedule, a.import_now");
         $importLinks.data("dataset", this.resource);
         $importLinks.data("workspace", this.options.workspace);
+        this.showOrHideMultipleSelectionSection();
         this._super("postRender");
     },
 

@@ -907,6 +907,20 @@ describe("chorus.views.TabularDataSidebar", function() {
                 it("displays the 'associate with workspace' link", function() {
                     expect(this.multiSelectSection.find("a.associate")).toContainTranslation("actions.associate_with_another_workspace");
                 });
+
+                context("when a dataset is selected", function() {
+                    beforeEach(function() {
+                        chorus.PageEvents.broadcast("tabularData:selected", newFixtures.dataset.sourceTable());
+                    });
+
+                    it("should still show the multiple selection section", function() {
+                        expect(this.view.$(".multiple_selection")).not.toHaveClass("hidden");
+                    });
+
+                    it("should retain the selection count when the view is re-rendered", function() {
+                        expect(this.view.$(".multiple_selection .count").text()).toMatchTranslation("dataset.sidebar.multiple_selection.count", {count: 2});
+                    });
+                });
             });
         });
 
