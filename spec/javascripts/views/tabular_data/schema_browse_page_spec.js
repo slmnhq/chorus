@@ -60,6 +60,10 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             ]);
         });
 
+        it("renders a checkbox next to each dataset", function() {
+            expect(this.page.$("li input[type=checkbox]").length).toBe(this.page.collection.length);
+        });
+
         it("displays the search input", function() {
             expect(this.page.$("input.search").attr("placeholder")).toMatchTranslation("schema.search");
         });

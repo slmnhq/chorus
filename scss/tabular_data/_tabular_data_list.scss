@@ -4,6 +4,11 @@
         float: left;
     }
 
+    input[type=checkbox] {
+        float: left;
+        margin-top: 16px;
+    }
+
     .right {
         @include recent-comment;
         overflow: hidden;

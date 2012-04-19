@@ -1,5 +1,9 @@
 <span class="spacer_left"></span>
 
+{{#if checkable}}
+    <input type="checkbox"/>
+{{/if}}
+
 {{#ifAll hasCredentials viewable}}
     <a class="image" href="{{showUrl}}">
         <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>

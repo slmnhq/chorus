@@ -63,7 +63,8 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
             search: {
                 placeholder: t("schema.search"),
                 onTextChange: onTextChangeFunction
-            }
+            },
+            contentOptions: { checkable: true }
         });
 
         this.render();

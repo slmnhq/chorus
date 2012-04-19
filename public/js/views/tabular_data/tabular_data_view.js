@@ -40,7 +40,8 @@ chorus.views.TabularData = chorus.views.Base.extend({
             iconImgUrl: this.model.iconUrl(),
             humanizedImportFrequency: chorus.helpers.importFrequencyForModel(this.model),
             workspaces: this.model.workspacesAssociated(),
-            viewable: viewable
+            viewable: viewable,
+            checkable: this.options.checkable
         };
 
         if (recentComment) {

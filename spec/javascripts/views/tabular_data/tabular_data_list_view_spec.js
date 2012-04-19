@@ -9,6 +9,23 @@ describe("chorus.views.TabularDataList", function() {
         this.view.render();
     });
 
+    context("when the checkable flag is enabled", function() {
+        beforeEach(function() {
+            this.view.options.checkable = true;
+            this.view.render();
+        });
+
+        it("renders a checkbox next to each dataset", function() {
+            expect(this.view.$("> li input[type=checkbox]").length).toBe(this.collection.length);
+        });
+    });
+
+    context("when the checkable flag is falsy", function() {
+        it("does not render checkboxes", function() {
+            expect(this.view.$("input[type=checkbox]")).not.toExist();
+        });
+    });
+
     it("renders a dataset view for each dataset", function() {
         expect(this.view.$("> li").length).toBe(this.collection.length);
     });

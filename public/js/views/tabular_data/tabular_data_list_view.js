@@ -6,7 +6,7 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
     postRender: function() {
         var $list = $(this.el);
         this.collection.each(function(model) {
-            var view = new chorus.views.TabularData({ model: model, activeWorkspace: this.options.activeWorkspace });
+            var view = new chorus.views.TabularData({ model: model, activeWorkspace: this.options.activeWorkspace, checkable: this.options.checkable });
             $list.append(view.render().el);
         }, this);
         this._super("postRender", arguments);
