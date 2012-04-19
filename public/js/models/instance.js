@@ -40,7 +40,7 @@
                     }
                     break;
                 case "create" :
-                    this.requireIntegerRange("size", 0, chorus.models.Config.instance().get("provisionMaxSizeInGB"), newAttrs);
+                    this.requireIntegerRange("size", 1, chorus.models.Config.instance().get("provisionMaxSizeInGB"), newAttrs);
                     this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                     this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                     this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
