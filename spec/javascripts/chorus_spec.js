@@ -57,7 +57,6 @@ describe("chorus global", function() {
 
         describe("cache buster generation", function() {
             beforeEach(function() {
-                this.chorus.updateCachebuster();
                 this.time = new Date(2000, 11, 25).getTime();
                 this.useFakeTimers(this.time, "Date");
             });

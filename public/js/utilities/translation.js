@@ -20,11 +20,15 @@ chorus.translation = {
         });
 
         return result;
+    },
+
+    getMessageFileUrl: function() {
+        return '/messages/Messages_en.properties?iebuster=' + $.now();
     }
 };
 
 $.ajax({
-    url:'/messages/Messages_en.properties',
+    url:chorus.translation.getMessageFileUrl(),
     async:false,
     dataType:'text'
 }).done(function (data, status) {

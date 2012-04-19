@@ -1,5 +1,5 @@
 describe("translation", function() {
-    describe("parseProperties", function() {
+    describe("#parseProperties", function() {
         beforeEach(function() {
             this.translationString =
                 "quux=Non-nested\n" +
@@ -61,6 +61,20 @@ describe("translation", function() {
 
                 expect(window.alert).toHaveBeenCalled();
             });
+        });
+    });
+
+    describe("#getMessageFileUrl", function() {
+        it("has the correct basename", function() {
+            expect(chorus.translation.getMessageFileUrl()).toContain("/messages/Messages_");
+        });
+
+        it("contains the current locale", function() {
+            expect(chorus.translation.getMessageFileUrl()).toContain("_en.");
+        });
+
+        it ("contains a cache-busting Url", function(){
+            expect (chorus.translation.getMessageFileUrl()).toMatch(/\?iebuster\=[0-9]+/);
         });
     });
 });
