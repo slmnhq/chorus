@@ -5,22 +5,22 @@ describe "creating a note on a workspace" do
   before(:each) do
     login('edcadmin', 'secret')
     create_valid_workspace
-    wait_until { page.find('a[data-dialog="NotesNew"]').text == "Add a note"}
+    wait_until { page.has_selector?('a[data-dialog="NotesNew"]') }
     click_link "Add a note"
-    wait_until { page.find("#facebox .dialog h1").text == "Add a Note" }
+    wait_until { page.has_selector?("#facebox .dialog h1") }
   end
 
   describe "launching the submodal dialog" do
     before do
       click_link "Show options"
-      wait_until { page.find("#facebox .dialog span.label").text == "Attach" }
+      wait_until { page.has_selector?("#facebox .dialog span.label") }
       click_link "Work File"
-      wait_until { page.find("#facebox .dialog h1").text == "Attach Work Files" }
+      wait_until { page.has_selector?("#facebox .dialog h1") }
     end
 
     it "dismisses each modal with each press of escape" do
       page.find("body").native.send_keys :escape
-      wait_until { page.find("#facebox .dialog h1").text == "Add a Note" }
+      wait_until { page.has_selector?("#facebox .dialog h1") }
       page.find("body").native.send_keys :escape
       evaluate_script('$("#facebox").length').should be_zero
     end
