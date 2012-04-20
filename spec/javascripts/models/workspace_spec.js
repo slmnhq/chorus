@@ -95,10 +95,12 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
-    describe("#datasetsUrl", function() {
-        it("links to the dataset index route", function() {
-            this.model.set({id: 5});
-            expect(this.model.datasetsUrl()).toBe("#/workspaces/5/datasets");
+    describe("#datasets", function() {
+        it("returns a memoized dataset set with the right workspace id", function() {
+            var datasets = this.model.datasets();
+            expect(datasets).toBeA(chorus.collections.DatasetSet);
+            expect(datasets.attributes.workspaceId).toBe(this.model.id);
+            expect(datasets).toBe(this.model.datasets());
         });
     });
 

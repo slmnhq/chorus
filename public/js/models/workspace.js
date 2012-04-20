@@ -67,6 +67,11 @@ chorus.models.Workspace = chorus.models.Base.extend({
         });
     },
 
+    datasets: function() {
+        this._datasets || (this._datasets = new chorus.collections.DatasetSet([], { workspaceId: this.id }));
+        return this._datasets;
+    },
+
     comments:function () {
         this._comments || (this._comments = new chorus.collections.CommentSet(this.get("latestCommentList")));
         return this._comments;
@@ -121,10 +126,6 @@ chorus.models.Workspace = chorus.models.Base.extend({
 
     picklistImageUrl:function () {
         return this.defaultIconUrl("small");
-    },
-
-    datasetsUrl: function() {
-        return this.showUrl() + "/datasets";
     },
 
     workfilesUrl: function () {

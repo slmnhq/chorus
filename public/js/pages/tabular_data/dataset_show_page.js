@@ -8,7 +8,7 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
             {label: this.workspace.displayShortName(), url: this.workspace.showUrl()},
-            {label: t("breadcrumbs.workspaces_data"), url: this.workspace.datasetsUrl()},
+            {label: t("breadcrumbs.workspaces_data"), url: this.workspace.datasets().showUrl()},
             {label: this.tabularData.get('objectName')}
         ];
     },

@@ -21,7 +21,7 @@ chorus.alerts.DatasetDelete = chorus.alerts.ModelDelete.extend({
         this._super("makeModel", arguments);
         this.model = this.model || this.pageModel;
         this.datasetName = this.model.name();
-        this.redirectUrl = this.model.workspace().datasetsUrl();
+        this.redirectUrl = this.model.workspace().datasets().showUrl();
     }
 });
 

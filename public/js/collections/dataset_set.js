@@ -7,6 +7,8 @@ chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
         }
     },
 
+    showUrlTemplate: "workspaces/{{workspaceId}}/datasets",
+
     urlTemplate:function() {
         if (this.attributes.workspaceId) {
             return "workspace/{{workspaceId}}/dataset";
