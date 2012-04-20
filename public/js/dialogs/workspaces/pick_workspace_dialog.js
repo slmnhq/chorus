@@ -9,10 +9,6 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
     selectedEvent: 'files:selected',
     modelClass: "Workspace",
 
-    events: {
-        "click button.submit": "doCallback"
-    },
-
     setup: function() {
         this._super("setup");
     },

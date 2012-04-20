@@ -10,7 +10,7 @@ chorus.dialogs.VisualizationWorkspacePicker = chorus.dialogs.PickWorkspace.exten
         this._super("setup", arguments)
     },
 
-    callback : function() {
+    submit : function() {
         this.trigger("workspace:selected", this.selectedItem());
         this.closeModal();
     }

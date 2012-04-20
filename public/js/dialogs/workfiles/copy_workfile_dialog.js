@@ -18,7 +18,7 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
         this.render();
     },
 
-    callback: function() {
+    submit: function() {
         var self = this;
 
         var params = {

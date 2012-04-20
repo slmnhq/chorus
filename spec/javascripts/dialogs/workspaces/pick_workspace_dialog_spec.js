@@ -3,6 +3,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
         setLoggedInUser({id: 4003});
         chorus.session.trigger("saved")
         this.launchElement = $("<a></a>");
+        spyOn(chorus.dialogs.PickItems.prototype, "submit").andCallThrough();
         this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement});
     });
 
@@ -71,24 +72,22 @@ describe("chorus.dialogs.PickWorkspace", function() {
 
             describe("clicking the choose workspace button", function() {
                 beforeEach(function() {
-                    this.dialog.callback = jasmine.createSpy("callback");
                     this.dialog.$("li:eq(0)").click();
                     this.dialog.$("button.submit").click();
                 });
 
-                it("calls the callback", function() {
-                    expect(this.dialog.callback).toHaveBeenCalled();
+                it("calls the submit callback", function() {
+                    expect(this.dialog.submit).toHaveBeenCalled();
                 })
             });
 
             describe("double-clicking a workspace", function() {
                 beforeEach(function() {
-                    this.dialog.callback = jasmine.createSpy("callback");
                     this.dialog.$("li:eq(0)").dblclick();
                 });
 
-                it("calls the callback", function() {
-                    expect(this.dialog.callback).toHaveBeenCalled();
+                it("calls the submit callback", function() {
+                    expect(this.dialog.submit).toHaveBeenCalled();
                 });
             });
         });

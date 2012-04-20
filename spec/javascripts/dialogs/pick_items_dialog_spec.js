@@ -2,8 +2,8 @@ describe("chorus.dialogs.PickItems", function() {
     beforeEach(function() {
         stubDefer();
         spyOn(chorus.dialogs.PickItems.prototype, "selectItem").andCallThrough();
-        spyOn(chorus.dialogs.PickItems.prototype, "doCallback").andCallThrough();
         spyOn(chorus.dialogs.PickItems.prototype, "submit").andCallThrough();
+        spyOn(chorus.dialogs.PickItems.prototype, "selectionFinished").andCallThrough();
 
         this.user1 = newFixtures.user({ firstName: "A", lastName: "User" });
         this.user2 = newFixtures.user({ firstName: "B", lastName: "User" });
@@ -231,26 +231,19 @@ describe("chorus.dialogs.PickItems", function() {
 
             describe("double-clicking", function() {
                 beforeEach(function() {
-                    spyOnEvent(this.dialog, "item:doubleclick");
                     this.dialog.$("li:eq(1)").dblclick();
-                });
-
-                it("triggers an item:doubleclick event", function() {
-                    expect("item:doubleclick").toHaveBeenTriggeredOn(this.dialog, [
-                        [this.user2]
-                    ]);
                 });
 
                 it("calls selectItem", function() {
                     expect(this.dialog.selectItem).toHaveBeenCalled();
                 });
 
-                it("calls doCallback", function() {
-                    expect(this.dialog.doCallback).toHaveBeenCalled();
-                });
-
                 it("calls submit", function() {
                     expect(this.dialog.submit).toHaveBeenCalled();
+                });
+
+                it("calls #selectionFinished", function() {
+                    expect(this.dialog.selectionFinished).toHaveBeenCalled();
                 });
             })
         });
@@ -399,7 +392,7 @@ describe("chorus.dialogs.PickItems", function() {
         });
     });
 
-    describe("submit", function() {
+    describe("#selectionFinished", function() {
         beforeEach(function() {
             this.users.loaded = true;
             this.dialog.render();
@@ -408,14 +401,14 @@ describe("chorus.dialogs.PickItems", function() {
 
         it("dismisses the dialog", function() {
             spyOn(this.dialog, "closeModal");
-            this.dialog.$("button.submit").click();
+            this.dialog.selectionFinished();
             expect(this.dialog.closeModal).toHaveBeenCalled();
         });
 
         it("triggers the selection event with the selected items", function() {
             this.dialog.selectedEvent = "some:event";
             spyOnEvent(this.dialog, this.dialog.selectedEvent);
-            this.dialog.$("button.submit").click();
+            this.dialog.selectionFinished();
             expect(this.dialog.selectedEvent).toHaveBeenTriggeredOn(this.dialog, [
                 [this.user1]
             ]);

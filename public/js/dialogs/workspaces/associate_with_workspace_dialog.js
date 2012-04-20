@@ -21,7 +21,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         this.render();
     },
 
-    callback: function() {
+    submit: function() {
         var self = this;
         var url, params;
 

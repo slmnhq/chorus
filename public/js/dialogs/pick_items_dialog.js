@@ -6,7 +6,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
     additionalClass: "with_sub_header",
 
     events: {
-        "click .submit": "submit",
+        "click button.submit": "submitClicked",
         "click li": 'selectItem',
         "dblclick li": "doubleClick"
     },
@@ -31,10 +31,9 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
         this.pickItemsList.collectionModelContext = this.collectionModelContext; // forwarding inheritance on to pickItemsList
 
         this.bindings.add(this.collection, 'searched', this.enableOrDisableSubmitButton);
-        this.bindings.add(this, "item:doubleclick", this.doCallback, this);
     },
 
-    submit: function() {
+    selectionFinished: function() {
         var listOrItem = this.selectedItem();
         var selectedItems = _.isArray(listOrItem) ? listOrItem : [listOrItem];
 
@@ -116,7 +115,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
 
     doubleClick: function(e) {
         this.selectItem(e);
-        this.trigger("item:doubleclick", _.flatten([this.selectedItem()]));
+        this.submit();
     },
 
     renderServerSideSearch: function() {
@@ -150,11 +149,12 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
         });
     },
 
-    doCallback: function() {
-        this.callback && this.callback();
+    submitClicked: function(e) {
+        e.preventDefault();
+        this.submit();
     },
 
-    callback: function() {
-        this.submit();
+    submit: function() {
+        this.selectionFinished();
     }
 });
