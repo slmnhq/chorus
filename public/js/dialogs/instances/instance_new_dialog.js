@@ -64,11 +64,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         e && e.preventDefault();
         this.$("button.submit").startLoading("instances.new_dialog.saving");
         var values = this.fieldValues();
-
-        if (this.model.save(values) !== false && values.provisionType == "create") {
-            this.provisioning = true;
-            chorus.toast("instances.new_dialog.provisioning")
-        }
+        this.model.save(values);
     },
 
     fieldValues: function() {
@@ -89,11 +85,15 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     saveSuccess:function () {
         chorus.PageEvents.broadcast("instance:added", this.model.get("id"));
-        this.closeModal();
 
-        if (this.provisioning) {
+        if (this.model.get("provisionType") == "create") {
+            this.provisioning = true;
+            chorus.toast("instances.new_dialog.provisioning");
             chorus.router.navigate("/instances", { selectId: this.model.get("id") });
+
         }
+
+        this.closeModal();
     },
 
     saveFailed:function () {

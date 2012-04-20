@@ -289,7 +289,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                     expect(attrs.dbPassword).toBe("supersecret");
                     expect(attrs.template).toBe("large");
 
-                    expect(chorus.toast).toHaveBeenCalledWith("instances.new_dialog.provisioning")
+                    expect(chorus.toast).not.toHaveBeenCalledWith("instances.new_dialog.provisioning")
                 });
 
                 describe("when the save completes successfully", function() {
@@ -297,6 +297,10 @@ describe("chorus.dialogs.InstanceNew", function() {
                         spyOn(chorus.router, "navigate");
                         this.server.lastCreateFor(this.dialog.model).succeed({id: 123});
                     });
+
+                    it("display the toast message", function() {
+                        expect(chorus.toast).toHaveBeenCalledWith("instances.new_dialog.provisioning")
+                    })
 
                     it("navigates to the instance list", function() {
                         expect(chorus.router.navigate).toHaveBeenCalledWith("/instances", {selectId: 123});
