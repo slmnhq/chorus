@@ -1,5 +1,5 @@
 .dialog.sandbox_new {
-    $dialog-width: 425px;
+    $dialog-width: 515px;
     width: $dialog-width;
 
     .description {
@@ -43,8 +43,13 @@
             width: $account-width;
         }
 
+        .instance_size_container {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
         label[name=size] {
-            width: $fieldset-width;
+            width: $size_width;
         }
 
         input[name=size] {
@@ -65,12 +70,22 @@
             vertical-align: middle;
         }
 
+        .instructions {
+            @include dialog-label;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
         .disabled {
             color : $color-text4;
         }
 
         .max_size {
-            @include secondary-text-normal;
+            @include dialog-label;
+        }
+
+        select, .ui-selectmenu {
+            width: 225px;
         }
     }
 }

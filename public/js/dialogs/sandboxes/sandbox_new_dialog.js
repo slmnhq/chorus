@@ -24,6 +24,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.instanceMode, "clearErrors", this.clearErrors);
 
         this.aurora = chorus.models.Instance.aurora();
+        this.bindings.add(this.aurora, "loaded", this.fetchTemplates, this);
         this.aurora.fetch();
 
         this.requiredResources.add(this.aurora);
@@ -31,6 +32,25 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
         this.standaloneMode = new chorus.views.SandboxNewStandaloneMode({addingSandbox: true});
         this.activeForm = this.instanceMode;
+    },
+
+    fetchTemplates: function() {
+        if (this.aurora.isInstalled()) {
+            this.templates = chorus.models.Instance.auroraTemplates();
+            this.bindings.add(this.templates, "loaded", this.templatesLoaded, this);
+            this.templates.fetch();
+        }
+    },
+
+    templatesLoaded: function() {
+        var $select = $("<select name='template' class='instance_size'></select>");
+        _.each(this.templates.models, function(template) {
+            var $option = $("<option></option>").val(template.name()).text(template.toText());
+            $select.append($option);
+        });
+
+        this.$(".instance_size_container").append($select);
+        chorus.styleSelect(this.$("select.instance_size"));
     },
 
     makeModel: function() {

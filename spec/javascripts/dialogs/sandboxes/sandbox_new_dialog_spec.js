@@ -168,6 +168,24 @@ describe("chorus.dialogs.SandboxNew", function() {
             expect(this.dialog.$("input[value='within_instance']").prop("checked")).toBeTruthy();
         });
 
+        it("fetches the aurora templates", function() {
+            expect(chorus.models.Instance.auroraTemplates()).toHaveBeenFetched();
+        });
+
+        context("when the aurora template fetch completes", function() {
+            beforeEach(function() {
+                this.server.completeFetchFor(chorus.models.Instance.auroraTemplates(), [
+                    newFixtures.provisioningTemplate({name: "Small"}),
+                    newFixtures.provisioningTemplate({name: "Medium"}),
+                    newFixtures.provisioningTemplate({name: "Large"})
+                ]);
+            });
+
+            it("populates the template select box", function() {
+                expect(this.dialog.$("select option").length).toBe(3);
+            });
+        });
+
         describe("clicking the 'as a standalone' radio button", function() {
             beforeEach(function() {
                 this.dialog.$("input[value='as_standalone']").click();
