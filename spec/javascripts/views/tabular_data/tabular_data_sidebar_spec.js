@@ -908,6 +908,18 @@ describe("chorus.views.TabularDataSidebar", function() {
                     expect(this.multiSelectSection.find("a.associate")).toContainTranslation("actions.associate_with_another_workspace");
                 });
 
+                describe("clicking the 'associate with workspace' link", function() {
+                    beforeEach(function() {
+                        this.multiSelectSection.find("a.associate").click();
+                    });
+
+                    it("launches the dialog for associating multiple datasets with a workspace", function() {
+                        var dialog = this.modalSpy.lastModal();
+                        expect(dialog).toBeA(chorus.dialogs.AssociateMultipleWithWorkspace);
+                        expect(dialog.databaseObjects).toBe(this.checkedDatasets);
+                    });
+                });
+
                 context("when a dataset is selected", function() {
                     beforeEach(function() {
                         chorus.PageEvents.broadcast("tabularData:selected", newFixtures.dataset.sourceTable());

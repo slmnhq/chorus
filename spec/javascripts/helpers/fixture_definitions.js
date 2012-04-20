@@ -41,6 +41,14 @@ window.fixtureDefinitions = {
         }
     },
 
+    databaseObject: {
+        derived: {
+            id: function(a) {
+                return '"' + [ a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName, ].join('"|"') + '"';
+            }
+        },
+    },
+
     test: {
         model:   "User",
         unique:  [ "id" ],

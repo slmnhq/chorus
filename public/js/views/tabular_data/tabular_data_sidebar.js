@@ -4,7 +4,8 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click .no_credentials a.add_credentials": "launchAddCredentialsDialog",
-        "click .associate": "launchAssociateWithWorkspaceDialog",
+        "click .actions .associate": "launchAssociateWithWorkspaceDialog",
+        "click .multiple_selection .associate": "launchAssociateMultipleWithWorkspaceDialog",
         "click .tabular_data_preview": "launchTabularDataPreviewDialog",
         "click .actions a.analyze" : "launchAnalyzeAlert",
         "click a.duplicate": "launchDuplicateChorusView"
@@ -83,14 +84,15 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     },
 
     tabularDataChecked: function(checkedDatasets) {
-        this.checkedDatasetsLength = checkedDatasets.length;
+        this.checkedDatasets = checkedDatasets;
         this.showOrHideMultipleSelectionSection();
     },
 
     showOrHideMultipleSelectionSection: function() {
         var multiSelectEl = this.$(".multiple_selection");
-        multiSelectEl.toggleClass("hidden", this.checkedDatasetsLength <= 1);
-        multiSelectEl.find(".count").text(t("dataset.sidebar.multiple_selection.count", { count: this.checkedDatasetsLength }))
+        var numChecked = this.checkedDatasets ? this.checkedDatasets.length : 0;
+        multiSelectEl.toggleClass("hidden", numChecked <= 1);
+        multiSelectEl.find(".count").text(t("dataset.sidebar.multiple_selection.count", { count: numChecked }))
     },
 
     resetStatistics: function(){
@@ -118,6 +120,12 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
         e.preventDefault();
 
         new chorus.dialogs.AssociateWithWorkspace({model: this.resource, activeOnly: true}).launchModal();
+    },
+
+    launchAssociateMultipleWithWorkspaceDialog: function(e) {
+        e.preventDefault();
+
+        new chorus.dialogs.AssociateMultipleWithWorkspace({databaseObjects: this.checkedDatasets, activeOnly: true}).launchModal();
     },
 
     launchTabularDataPreviewDialog: function(e) {
