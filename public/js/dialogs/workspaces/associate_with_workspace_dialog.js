@@ -35,11 +35,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
             url = "/edc/workspace/" + this.selectedItem().get("id") + "/dataset";
             params = {
                 type: "SOURCE_TABLE",
-                instanceId: this.model.get("instance").id,
-                databaseName: this.model.get("databaseName"),
-                schemaName: this.model.get("schemaName"),
-                objectName: this.model.get("objectName"),
-                objectType: this.model.get("objectType")
+                datasetIds: this.model.id
             };
         }
         this.$("button.submit").startLoading("actions.associating");
@@ -49,7 +45,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
                 if (data.status == "ok") {
                     self.model.activities().fetch();
                     self.closeModal();
-                    chorus.toast("dataset.associate.toast", {datasetTitle: params.objectName, workspaceNameTarget: self.selectedItem().get("name")});
+                    chorus.toast("dataset.associate.toast", {datasetTitle: self.model.get("objectName"), workspaceNameTarget: self.selectedItem().get("name")});
                     chorus.PageEvents.broadcast("workspace:associated");
                 } else {
                     self.serverErrors = data.message;

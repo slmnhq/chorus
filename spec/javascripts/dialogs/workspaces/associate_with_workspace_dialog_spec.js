@@ -89,16 +89,11 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 this.dialog.$("button.submit").click();
             });
 
-            it("calls the API", function() {
+            it("calls the API for associating new source tables with a workspace", function() {
                 expect(_.last(this.server.requests).url).toMatchUrl("/edc/workspace/" + this.workspace.get("id") + "/dataset");
                 expect(_.last(this.server.requests).params()).toEqual({
                     type: "SOURCE_TABLE",
-                    instanceId: this.model.get("instance").id.toString(),
-
-                    databaseName: this.model.get("databaseName"),
-                    schemaName: this.model.get("schemaName"),
-                    objectName: this.model.get("objectName"),
-                    objectType: this.model.get("objectType")
+                    datasetIds: this.model.id
                 });
                 expect(_.last(this.server.requests).method).toBe("POST");
             });
