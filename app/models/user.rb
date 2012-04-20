@@ -57,6 +57,7 @@ class User < ActiveRecord::Base
   end
 
   def destroy
+    raise ActiveRecord::RecordInvalid.new(self) unless instances.empty?
     self.deleted_at = Time.now.utc
     save
     #freeze # TODO: test

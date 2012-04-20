@@ -226,4 +226,61 @@ describe UsersController do
       end
     end
   end
+
+  describe "#destroy" do
+    let(:user) { FactoryGirl.create :user }
+
+    context "admin" do
+      before do
+        log_in FactoryGirl.create(:admin)
+      end
+
+      context "user with no instances" do
+        before do
+          delete :destroy, :id => user.id
+        end
+
+        it "should succeed" do
+          response.code.should == "200"
+        end
+
+        it "should delete the user" do
+          deleted_user = User.find_with_destroyed(user.id)
+          deleted_user.deleted_at.should_not be_nil
+        end
+      end
+
+      context "user owns an instance" do
+        before do
+          user.instances << FactoryGirl.create(:instance, :owner => user)
+          delete :destroy, :id => user.id
+        end
+
+        it "should fail" do
+          response.code.should == "422"
+        end
+
+        it "should not delete the user" do
+          live_user = User.find_with_destroyed(user.id)
+          live_user.deleted_at.should be_nil
+        end
+      end
+    end
+
+    context "non-admin" do
+      before(:each) do
+        log_in FactoryGirl.create(:user)
+        delete :destroy, :id => user.id
+      end
+
+      it "should not succeed" do
+        response.code.should == "401"
+      end
+
+      it "should not delete the user" do
+        live_user = User.find_with_destroyed(user.id)
+        live_user.deleted_at.should be_nil
+      end
+    end
+  end
 end

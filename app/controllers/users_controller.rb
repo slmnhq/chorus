@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :load_user, :only => [:show, :update]
-  before_filter :require_admin, :only => :create
+  before_filter :load_user, :only => [:show, :update, :destroy]
+  before_filter :require_admin, :only => [:create, :destroy]
   before_filter :require_admin_or_referenced_user, :only => :update
 
   def index
@@ -20,6 +20,11 @@ class UsersController < ApplicationController
     @user.admin = params[:user][:admin] if current_user.admin?
     @user.save!
     present @user
+  end
+
+  def destroy
+    @user.destroy
+    head :ok
   end
 
   private

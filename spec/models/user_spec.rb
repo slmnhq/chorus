@@ -132,5 +132,10 @@ describe User do
     it "should be hidden from subsequent #find calls" do
       User.find_by_id(user.id).should be_nil
     end
+
+    it "should not allow deleting a user who owns an instance" do
+      user.instances << FactoryGirl.create(:instance, :owner => user)
+      lambda { user.destroy }.should raise_error ActiveRecord::RecordInvalid
+    end
   end
 end
