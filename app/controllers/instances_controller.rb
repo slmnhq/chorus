@@ -1,7 +1,8 @@
 class InstancesController < ApplicationController
+  before_filter :load_instance, :only => :update
+
   def index
-    instances = Instance.all
-    present instances
+    present Instance.scoped
   end
 
   def create
@@ -10,13 +11,16 @@ class InstancesController < ApplicationController
   end
 
   def update
-    instance = Instance.find_by_id(params[:id])
-    if current_user.admin? || current_user == instance.owner
-      instance.attributes = params[:instance]
-      instance.save!
-      present instance
-    else
-      render :status => :unauthorized, :json => nil
-    end
+    head(:unauthorized) and return unless current_user.admin? || current_user == @instance.owner
+    @instance.attributes = params[:instance]
+    @instance.save!
+    present @instance
+  end
+
+  private
+
+  def load_instance
+    @instance = Instance.find_by_id(params[:id])
+    head(:not_found) unless @instance
   end
 end
