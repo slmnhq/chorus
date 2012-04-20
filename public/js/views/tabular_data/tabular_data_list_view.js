@@ -10,13 +10,18 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
 
     setup: function() {
         this._super("setup", arguments);
-        this.selectedDatasets = new chorus.collections.TabularDataSet();
+        this.selectedDatasets = new chorus.collections.DatabaseObjectSet();
+        this.selectedDatasets.attributes = this.collection.attributes;
         chorus.PageEvents.subscribe("selectAll", this.selectAll, this);
         chorus.PageEvents.subscribe("selectNone", this.selectNone, this);
     },
 
     selectAll: function() {
-        this.selectedDatasets.reset(this.collection.models);
+        this.bindings.add(this.selectedDatasets, "reset", this.selectAllFetched);
+        this.selectedDatasets.fetchAll();
+    },
+
+    selectAllFetched: function() {
         this.$("> li input[type=checkbox]").prop("checked", true);
         chorus.PageEvents.broadcast("tabularData:checked", this.selectedDatasets);
     },
@@ -34,6 +39,17 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
             $list.append(view.render().el);
         }, this);
         this._super("postRender", arguments);
+
+        this.checkSelectedDatasets();
+    },
+
+    checkSelectedDatasets: function() {
+        var checkboxes = this.$("input[type=checkbox]");
+        this.collection.each(function(model, i) {
+            if (this.selectedDatasets.get(model.id)) {
+                checkboxes.eq(i).prop("checked", true);
+            }
+        }, this);
     },
 
     checkboxChanged: function(e) {

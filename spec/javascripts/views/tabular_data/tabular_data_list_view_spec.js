@@ -1,11 +1,12 @@
 describe("chorus.views.TabularDataList", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.DatasetSet([
+        this.collection = new chorus.collections.DatabaseObjectSet([
             newFixtures.dataset.chorusView({ hasCredentials: true }),
             newFixtures.dataset.sandboxTable({ hasCredentials: true }),
             newFixtures.dataset.sourceTable({ hasCredentials: true })
-        ]);
+        ], { instanceId: "1", databaseName: "two", schemaName: "three" });
         this.collection.loaded = true;
+
         this.view = new chorus.views.TabularDataList({ collection: this.collection, activeWorkspace: true });
         this.view.render();
     });
@@ -54,20 +55,49 @@ describe("chorus.views.TabularDataList", function() {
                     });
                 });
             });
+
+            describe("when returning to the same page after switching pages", function() {
+                beforeEach(function() {
+                    this.view.collection.fetch();
+                    this.server.completeFetchFor(this.view.collection, this.view.collection.models);
+                });
+
+                it("keeps the same items checked", function() {
+                    expect(this.view.$("input[type=checkbox]").filter(":checked").length).toBe(1);
+                    expect(this.view.$("input[type=checkbox]").eq(1)).toBe(":checked");
+                });
+            });
         });
 
         describe("select all and select none", function() {
             context("when the selectAll page event is recieved", function() {
                 beforeEach(function() {
+                    spyOn(this.collection, 'fetchAll').andCallThrough();
                     chorus.PageEvents.broadcast("selectAll");
                 });
 
-                it("checks all of the datasets", function() {
-                    expect(this.view.$("input[type=checkbox]:checked").length).toBe(3);
+                it("fetches all of the datasets", function() {
+                    var fetch = this.server.lastFetchFor(this.collection);
+                    expect(fetch.url).toContainQueryParams({ rows: 1000 });
                 });
 
-                it("broadcasts the 'tabularData:checked' page event with a collection of all datasets", function() {
-                    expectDatasetChecked(this.collection.models);
+                describe("when the fetch completes", function() {
+                    beforeEach(function() {
+                        this.allDatasets = this.collection.models.concat([
+                            newFixtures.dataset.sandboxTable(),
+                            newFixtures.dataset.sandboxTable(),
+                            newFixtures.dataset.sandboxTable()
+                        ]);
+                        this.server.completeFetchAllFor(this.collection, this.allDatasets);
+                    });
+
+                    it("checks all of the datasets", function() {
+                        expect(this.view.$("input[type=checkbox]:checked").length).toBe(3);
+                    });
+
+                    it("broadcasts the 'tabularData:checked' page event with a collection of all datasets", function() {
+                        expectDatasetChecked(this.allDatasets);
+                    });
                 });
 
                 context("when the selectNone page event is received", function() {
@@ -92,9 +122,8 @@ describe("chorus.views.TabularDataList", function() {
             expect(eventName).toBe("tabularData:checked");
 
             var collection = chorus.PageEvents.broadcast.mostRecentCall.args[1];
-            expect(collection).toBeA(chorus.collections.TabularDataSet);
-
-            expect(collection.models).toEqual(expectedModels);
+            expect(collection).toBeA(chorus.collections.DatabaseObjectSet);
+            expect(collection.pluck("id")).toEqual(_.pluck(expectedModels, "id"));
         }
     });
 
