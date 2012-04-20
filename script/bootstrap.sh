@@ -33,6 +33,7 @@ add_rbenv_to_bash() {
     then
       echo "***** Adding rbenv init to bash profile includes"
       cp script/rbenv.sh $rbenv_config
+      source script/rbenv.sh
     fi
 }
 
