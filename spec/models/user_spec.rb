@@ -14,6 +14,11 @@ describe User do
       User.authenticate(@user.username, 'bogus').should be_false
     end
 
+    it "returns false if the user is deleted" do
+      @user.destroy
+      User.authenticate(@user.username, 'secret').should be_false
+    end
+
     it "is case insensitive" do
       User.authenticate(@user.username.downcase, 'secret').should be_true
       User.authenticate(@user.username.upcase, 'secret').should be_true
