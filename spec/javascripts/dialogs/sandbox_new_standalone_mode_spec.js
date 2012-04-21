@@ -59,6 +59,8 @@ describe("chorus.dialogs.SandboxNewStandaloneMode", function() {
                 this.view.$("input[name=databaseName]").val("my_database");
                 this.view.$("input[name=schemaName]").val("my_schema");
                 this.view.$("input[name=size]").val("5");
+                this.view.$("input[name=dbUserName]").val("edcadmin");
+                this.view.$("input[name=dbPassword]").val("sosecret");
             });
 
             it("returns the entered instance name, database name, schema name and size", function() {
@@ -66,7 +68,9 @@ describe("chorus.dialogs.SandboxNewStandaloneMode", function() {
                     instanceName: 'my_instance',
                     databaseName: 'my_database',
                     schemaName: 'my_schema',
-                    size: '5'
+                    size: '5',
+                    dbUserName: 'edcadmin',
+                    dbPassword: 'sosecret'
                 });
             });
         });

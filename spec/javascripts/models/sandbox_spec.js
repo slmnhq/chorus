@@ -76,11 +76,6 @@ describe("chorus.models.Sandbox", function() {
             this.model.save({ instance: '22', databaseName: "foobar", schemaName: "meow" });
             expect(this.model.get("type")).toBe("011");
         });
-
-        it("specifies a '0' for the schema field if the default name is given", function() {
-            this.model.save({ instance: '22', databaseName: 'secret_data', schemaName: 'public' });
-            expect(this.model.get("type")).toBe("010");
-        });
     });
 
     describe("validations", function() {
@@ -136,6 +131,16 @@ describe("chorus.models.Sandbox", function() {
                 expectInvalid({ size: "-1" }, this.model, [ "size" ]);
                 expectInvalid({ size: "0" }, this.model, [ "size" ]);
                 expectInvalid({ size: "1.7" }, this.model, [ "size" ]);
+            });
+
+            context("if it's an aurora instance", function() {
+                beforeEach(function() {
+                    this.model.set({ type: "111" });
+                });
+
+                it("requires a db username and db password", function() {
+                    expectInvalid({ }, this.model, [ "dbUserName", "dbPassword" ]);
+                });
             });
 
             describe("when the maximum size has been configured", function() {

@@ -4,7 +4,9 @@ chorus.models.Sandbox = chorus.models.Base.extend({
         "instanceName": "instances.dialog.instance_name",
         "databaseName": "instances.dialog.database_name",
         "schemaName": "instances.dialog.schema_name",
-        "size": "instances.dialog.size"
+        "size": "instances.dialog.size",
+        "dbUserName": "instances.dialog.database_name",
+        "dbPassword": "instances.dialog.database_password"
     },
 
     urlTemplate: function(options) {
@@ -20,9 +22,7 @@ chorus.models.Sandbox = chorus.models.Base.extend({
         var type = _.map(['instance', 'database', 'schema'], function(name) {
             return attrs[name] ? "0" : "1";
         });
-        if (attrs.schemaName && attrs.schemaName === chorus.models.Schema.DEFAULT_NAME) {
-            type[2] = "0";
-        }
+
         attrs.type = type.join("");
     },
 
@@ -47,6 +47,10 @@ chorus.models.Sandbox = chorus.models.Base.extend({
         if (this.isCreatingNew('schema', attrs)) {
             this.require("schemaName", attrs);
             this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifierLower(63), attrs);
+        }
+        if ((this.get("type") === "111") || (attrs.type === "111")) {
+            this.require("dbUserName", attrs);
+            this.requirePattern("dbPassword", chorus.ValidationRegexes.Password({min: 6, max: 256}), attrs);
         }
     },
 
