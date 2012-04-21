@@ -1,6 +1,11 @@
 describe("chorus.models.DatabaseObject", function() {
     beforeEach(function() {
-        this.databaseObject = fixtures.databaseObject();
+        this.databaseObject = newFixtures.databaseObject({
+            instance: { id: 12 },
+            databaseName: "beers",
+            schemaName: "ipa",
+            objectType: "BASE_TABLE"
+        });
     });
 
     describe("url", function() {
@@ -75,12 +80,9 @@ describe("chorus.models.DatabaseObject", function() {
         });
 
         context("when it contains html", function() {
-            beforeEach(function() {
-                this.databaseObject = fixtures.databaseTable({objectName: '<em>mmmm</em> good'});
-            })
-
             it("removes the html", function() {
-                expect(this.databaseObject.showUrl()).toMatchUrl("#/instances/12/databases/database_name/schemas/schema_name/BASE_TABLE/mmmm%20good");
+                this.databaseObject.set({ objectName: "<em>mmmm</em> good" });
+                expect(this.databaseObject.showUrl()).toMatchUrl("#/instances/12/databases/beers/schemas/ipa/BASE_TABLE/mmmm%20good");
             })
         })
     })

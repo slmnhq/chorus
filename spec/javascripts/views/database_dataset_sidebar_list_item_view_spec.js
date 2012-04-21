@@ -2,10 +2,10 @@ describe("chorus.views.DatabaseDatasetSidebarListItem", function() {
     beforeEach(function() {
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
         this.collection = new chorus.collections.DatabaseObjectSet([
-            fixtures.databaseObject({ objectName: "1234",  type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
-            fixtures.databaseObject({ objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
-            fixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
-            fixtures.databaseObject({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" })
+            newFixtures.databaseObject({ schemaName: "schema_name", objectName: "1234",  type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
+            newFixtures.databaseObject({ schemaName: "schema_name", objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
+            newFixtures.databaseObject({ schemaName: "schema_name", objectName: "Data2", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" }),
+            newFixtures.databaseObject({ schemaName: "schema_name", objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" })
         ]);
         this.view = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
         this.view.render();

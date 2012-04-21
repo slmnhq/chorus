@@ -38,10 +38,10 @@ describe("chorus.views.TabularData", function() {
 
     describe("found in workspaces tooltip (when rendered from the schema browse page)", function() {
         beforeEach(function() {
-            this.databaseObject = fixtures.databaseObject({
+            this.databaseObject = newFixtures.databaseObject({
                 objectName: "john_the_table",
                 workspaceUsed: {
-                    count: 5,
+                    workspaceCount: 3,
                     workspaceList: [
                         { id: '1', name: "Hoge" },
                         { id: '2', name: "Fuga" },

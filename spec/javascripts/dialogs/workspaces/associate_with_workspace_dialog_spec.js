@@ -6,7 +6,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     describe("after workspaces are fetched", function() {
         context("when the model is a source table/view with multiple workspaces", function() {
             beforeEach(function() {
-                this.model = fixtures.databaseObject({workspaceUsed: {
+                this.model = newFixtures.databaseObject({workspaceUsed: {
                     workspaceCount: 2,
                     workspaceList: [
                         {id: "123", name: "im_also_the_current_one"},

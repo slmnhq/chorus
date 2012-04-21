@@ -55,8 +55,8 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.instance);
             this.server.completeFetchFor(this.page.collection, [
-                fixtures.databaseTable(),
-                fixtures.databaseView()
+                fixtures.databaseTable({ objectName: "bar" }),
+                fixtures.databaseView({ objectName: "foo" })
             ]);
         });
 
@@ -77,14 +77,13 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         });
 
         it("pre-selects the first item", function() {
-            expect(this.page.$(".list li").eq(0)).toHaveClass("selected");
+            expect(this.page.$(".list > li").eq(0)).toHaveClass("selected");
         });
 
         it("changes the selection after clicking another item", function() {
-            this.page.$(".list li").eq(1).click();
-
-            expect(this.page.$(".list li").eq(0)).not.toHaveClass("selected");
-            expect(this.page.$(".list li").eq(1)).toHaveClass("selected");
+            this.page.$(".list > li").eq(1).click();
+            expect(this.page.$(".list > li").eq(0)).not.toHaveClass("selected");
+            expect(this.page.$(".list > li").eq(1)).toHaveClass("selected");
         });
 
         it("has the right breadcrumbs", function() {

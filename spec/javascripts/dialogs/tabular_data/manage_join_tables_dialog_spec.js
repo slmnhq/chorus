@@ -2,7 +2,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
     beforeEach(function() {
         this.qtip = stubQtip();
         stubModals();
-        this.originalDatabaseObject = fixtures.databaseObject({
+        this.originalDatabaseObject = newFixtures.databaseObject({
             objectName: "original",
             columns: 23,
             type: "SOURCE_TABLE",
@@ -50,7 +50,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             this.schemaTed = fixtures.schema({name: "Ted", databaseName: this.schema.get("databaseName"), instanceName: this.instanceName });
             this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
 
-            this.databaseObject1 = fixtures.databaseObject({
+            this.databaseObject1 = newFixtures.databaseObject({
                 objectName: "cats",
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
@@ -58,7 +58,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             });
             this.databaseObject1.unset("columns");
 
-            this.databaseObject2 = fixtures.databaseObject({
+            this.databaseObject2 = newFixtures.databaseObject({
                 objectName: "dogs",
                 columns: 22,
                 type: "SOURCE_TABLE",
@@ -66,7 +66,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"dogs"'
             });
 
-            this.databaseObject3 = fixtures.databaseObject({
+            this.databaseObject3 = newFixtures.databaseObject({
                 objectName: "lions",
                 columns: 24,
                 type: "SOURCE_TABLE",
@@ -221,9 +221,9 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                         describe("when the datasets are fetched", function() {
                             beforeEach(function() {
                                 this.server.completeFetchFor(this.schemaBob.databaseObjects(), [
-                                    fixtures.databaseObject({ objectName: "fred" }),
-                                    fixtures.databaseObject({ objectName: "lou" }),
-                                    fixtures.databaseObject({ objectName: "bryan" })
+                                    newFixtures.databaseObject({ objectName: "fred" }),
+                                    newFixtures.databaseObject({ objectName: "lou" }),
+                                    newFixtures.databaseObject({ objectName: "bryan" })
                                 ]);
                             });
 

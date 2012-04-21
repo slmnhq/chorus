@@ -1750,42 +1750,8 @@ beforeEach(function() {
             return new chorus.models.Schema(attributes);
         },
 
-        databaseObjectJson: function(overrides) {
-            var id = this.nextId().toString();
-            return _.extend(this.tabularDataJson(), {
-                objectType: "BASE_TABLE",
-                rows: 500,
-                columns: 3,
-                onDiskSize: "64 kB",
-                lastAnalyzedTime: "2012-01-18 13:43:31.70468",
-                masterTable: null,
-                partitions: 0,
-                hasData: true,
-                desc: null,
-                type: "SOURCE_TABLE",
-                databaseName: "database_name",
-                schemaName: "schema_name",
-                workspaceUsed: {
-                    workspaceCount: 0,
-                    workspaceList: [ ]
-                },
-                columnNames: [
-                    "col1",
-                    "col2",
-                    "col3"
-                ]
-            }, overrides);
-        },
-
-        databaseObject: function(overrides) {
-            var id = this.nextId().toString();
-            var attributes = _.extend(this.tabularDataJson(), this.databaseObjectJson(), overrides);
-            return new chorus.models.DatabaseObject(attributes);
-        },
-
         databaseTable: function(overrides) {
-            var id = this.nextId().toString();
-            var attributes = _.extend(this.databaseObjectJson(), {
+            var attributes = _.extend(newFixtures.databaseObjectJson(), {
                 objectType: "BASE_TABLE",
                 type: "SOURCE_TABLE"
             }, overrides);
@@ -1793,8 +1759,7 @@ beforeEach(function() {
         },
 
         databaseView: function(overrides) {
-            var id = this.nextId().toString();
-            var attributes = _.extend(this.databaseObjectJson(), {
+            var attributes = _.extend(newFixtures.databaseObjectJson(), {
                 objectType: "VIEW",
                 type: "SOURCE_TABLE",
                 definition: "SELECT chorus_test_table.customer_id FROM ddemo.chorus_test_table;"

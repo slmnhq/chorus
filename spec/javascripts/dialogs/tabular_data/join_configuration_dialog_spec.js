@@ -11,7 +11,7 @@ describe("chorus.dialogs.JoinConfiguration", function() {
         this.chorusView = this.sourceTable.deriveChorusView();
         this.chorusView.aggregateColumnSet = new chorus.collections.DatabaseColumnSet();
 
-        this.destinationTable = fixtures.databaseObject({
+        this.destinationTable = newFixtures.databaseObject({
             objectType: "SANDBOX_TABLE",
             objectName: "lions_den"
         });
