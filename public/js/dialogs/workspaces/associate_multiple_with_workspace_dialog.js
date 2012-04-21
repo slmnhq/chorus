@@ -1,8 +1,8 @@
 chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.extend({
     constructorName: "AssociateWithWorkspace",
 
-    title: t("dataset.associate.title"),
-    buttonTitle: t("dataset.associate.button"),
+    title: t("dataset.associate.title.other"),
+    buttonTitle: t("dataset.associate.button.other"),
 
     setup: function(options) {
         this.databaseObjects = options.databaseObjects;
@@ -21,6 +21,12 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
         };
 
         var self = this;
-        $.post(url, params, function(data) { self.closeModal(); });
+        $.post(url, params, function(data) {
+            self.closeModal();
+            chorus.toast("dataset.associate.toast.other", {
+                workspaceNameTarget: self.selectedItem().get("name"),
+                count: self.databaseObjects.length
+            });
+        });
     }
 });

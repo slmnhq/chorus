@@ -36,7 +36,14 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
         describe("when the request succeeds", function() {
             beforeEach(function() {
                 spyOn(this.dialog, "closeModal");
+                spyOn(chorus, "toast");
                 this.server.lastCreate().succeed();
+            });
+
+            it("displays a toast message", function() {
+                expect(chorus.toast).toHaveBeenCalledWith(
+                    "dataset.associate.toast.other", { count: 3, workspaceNameTarget: "cadabra" }
+                );
             });
 
             it("closes the dialog", function() {

@@ -1,7 +1,7 @@
 chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
     constructorName: "PickWorkspace",
 
-    title: t("dataset.associate.title"),
+    title: t("dataset.associate.title.one"),
     constructorName: "PickWorkspaceDialog",
     submitButtonTranslationKey: "dataset.associate.button",
     emptyListTranslationKey: "dataset.associate.empty.placeholder",

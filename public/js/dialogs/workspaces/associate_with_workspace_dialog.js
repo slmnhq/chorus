@@ -1,8 +1,8 @@
 chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
     constructorName: "AssociateWithWorkspace",
 
-    title: t("dataset.associate.title"),
-    buttonTitle: t("dataset.associate.button"),
+    title: t("dataset.associate.title.one"),
+    buttonTitle: t("dataset.associate.button.one"),
 
     setup: function () {
         this.requiredResources.add(this.collection);
@@ -45,7 +45,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
                 if (data.status == "ok") {
                     self.model.activities().fetch();
                     self.closeModal();
-                    chorus.toast("dataset.associate.toast", {datasetTitle: self.model.get("objectName"), workspaceNameTarget: self.selectedItem().get("name")});
+                    chorus.toast("dataset.associate.toast.one", {datasetTitle: self.model.get("objectName"), workspaceNameTarget: self.selectedItem().get("name")});
                     chorus.PageEvents.broadcast("workspace:associated");
                 } else {
                     self.serverErrors = data.message;
