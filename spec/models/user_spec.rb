@@ -14,6 +14,11 @@ describe User do
       User.authenticate(@user.username, 'bogus').should be_false
     end
 
+    it "returns false if the user is deleted" do
+      @user.destroy
+      User.authenticate(@user.username, 'secret').should be_false
+    end
+
     it "is case insensitive" do
       User.authenticate(@user.username.downcase, 'secret').should be_true
       User.authenticate(@user.username.upcase, 'secret').should be_true
@@ -29,6 +34,34 @@ describe User do
     it { should validate_presence_of :last_name }
     it { should validate_presence_of :username }
     it { should validate_presence_of :email }
+
+    describe "username" do
+      context "when no other user with that username exists" do
+        it "validates" do
+          FactoryGirl.build(:user, :username => "foo").should be_valid
+        end
+      end
+
+      context "when another non-deleted user with that username exists" do
+        before(:each) do
+          FactoryGirl.create(:user, :username => "foo")
+        end
+
+        it "fails validation" do
+          FactoryGirl.build(:user, :username => "foo").should_not be_valid
+        end
+      end
+
+      context "when a deleted user with that username exists" do
+        before(:each) do
+          FactoryGirl.create(:user, :username => "foo", :deleted_at => Time.now)
+        end
+
+        it "validates" do
+          FactoryGirl.build(:user, :username => "foo").should be_valid
+        end
+      end
+    end
 
     describe "password" do
       context "when the password is not being modified" do
@@ -60,8 +93,16 @@ describe User do
       end
     end
 
-    it "should disallow duplicate user names" do
-      subject.should validate_uniqueness_of(:username).case_insensitive
+    describe "duplicate user names" do
+      it "should be disallowed" do
+        subject.should validate_uniqueness_of(:username).case_insensitive
+      end
+
+      it "should be allowed when user name belongs to a deleted user" do
+        @user.destroy
+        user2 = FactoryGirl.create(:user, :username => @user.username)
+        user2.should be_valid
+      end
     end
 
     describe "field length" do
@@ -131,6 +172,11 @@ describe User do
 
     it "should be hidden from subsequent #find calls" do
       User.find_by_id(user.id).should be_nil
+    end
+
+    it "should not allow deleting a user who owns an instance" do
+      user.instances << FactoryGirl.create(:instance, :owner => user)
+      lambda { user.destroy }.should raise_error ActiveRecord::RecordInvalid
     end
   end
 end

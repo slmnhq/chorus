@@ -29,6 +29,19 @@ describe SessionsController do
       end
     end
 
+    context "correct credentials for a deleted user" do
+      let(:user) { FactoryGirl.create(:user, :username => "admin") }
+
+      before do
+        user.destroy
+        post :create, :username => 'admin', :password => 'secret'
+      end
+
+      it "fails" do
+        response.code.should == "401"
+      end
+    end
+
     describe "with incorrect credentials" do
       before do
         invalid_exception = CredentialsValidator::Invalid.new(stub(:errors => {:field => ["error"]}))
