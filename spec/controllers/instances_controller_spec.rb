@@ -72,26 +72,16 @@ describe InstancesController do
     it_behaves_like "an action that requires authentication", :put, :update
 
     context "with valid attributes" do
-      let(:valid_attributes) do
-        {
-            :name => "new",
-            :port => 12345,
-            :host => "server.emc.com",
-            :maintenance_db => "postgres",
-            :db_username => "test_db",
-            :db_password => "pw12345"
-        }
+      let(:valid_attributes) { Hash.new }
+
+      before do
+        instance = FactoryGirl.build(:instance, :name => "new")
+        Gpdb::Instance.stub(:create).with(valid_attributes, @user).and_return { instance }
       end
 
       it "reports that the instance was created" do
         post :create, :instance => valid_attributes
         response.code.should == "201"
-      end
-
-      it "saves the instance to the database" do
-        expect {
-          post :create, :instance => valid_attributes
-        }.to change { Instance.count }.by(1)
       end
 
       it "renders the newly created instance" do
@@ -101,10 +91,11 @@ describe InstancesController do
     end
 
     context "with invalid attributes" do
-      let(:invalid_attributes) do
-        {
-            :name => "new"
-        }
+      let(:invalid_attributes) { Hash.new }
+
+      before do
+        instance = FactoryGirl.build(:instance, :name => nil)
+        Gpdb::Instance.stub(:create).with(invalid_attributes, @user).and_raise(ActiveRecord::RecordInvalid.new(instance))
       end
 
       it "responds with validation errors" do

@@ -6,7 +6,7 @@ class InstancesController < ApplicationController
   end
 
   def create
-    instance = current_user.instances.create!(params[:instance])
+    instance = Gpdb::Instance.create(params[:instance], current_user)
     present instance, :status => :created
   end
 
