@@ -12,7 +12,7 @@ module Gpdb
 
       connection = Connection.new(cached_instance.attributes)
 
-      unless connection.valid?
+      unless connection.connected?
         # TODO: this feels intrusive... maybe there's a way to create our own object,
         # with it's own validations and exception raising mechanism.
         cached_instance.errors.add(:connection, :invalid)

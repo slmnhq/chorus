@@ -19,7 +19,7 @@ describe Gpdb::Instance do
     end
 
     before do
-      connection = stub(:valid? => true)
+      connection = stub(:connected? => true)
       Gpdb::Connection.stub(:new) { connection }
     end
 
@@ -41,7 +41,7 @@ describe Gpdb::Instance do
 
     context "with attributes that are not valid for the connection" do
       before do
-        connection = stub(:valid? => false)
+        connection = stub(:connected? => false)
         Gpdb::Connection.stub(:new) { connection }
       end
 

@@ -37,7 +37,7 @@ module Gpdb
       self.class.connection_handler.establish_connection @name, spec
     end
 
-    def valid?
+    def connected?
       connection.schema_cache.tables
       true
     rescue PG::Error => e
