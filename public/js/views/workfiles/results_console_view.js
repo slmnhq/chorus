@@ -8,7 +8,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         "click .close_errors": "closeError",
         "click .sql_errors .view_details": "viewErrorDetails",
         "click .execution .view_details": "viewExecutionDetails",
-        "click a.close": "clickClose"
+        "click a.close": "clickClose",
+        "click a.download_csv": "saveToDesktop"
     },
 
     setup: function() {
@@ -20,6 +21,33 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     beforeNavigateAway: function() {
         this.model && this.model.cancel();
         this._super("beforeNavigateAway", arguments);
+    },
+
+    createDownloadForm: function() {
+        var form = $("<form action='/generateCSV.jsp' method='post'></form>");
+        var columns = _.map(this.resource.get("columns"), function(column){
+           return {name: URI.encode(column.name)};
+        });
+
+        var rows = _.map(this.resource.get("rows"), function(row){
+            var ret = {}
+            _.each(_.keys(row), function(key){
+                ret[key] = URI.encode(row[key]);
+            });
+            return ret;
+        });
+
+        form.append($("<input name='columnData' type='hidden'/>").val((JSON.stringify(columns))));
+        form.append($("<input name='rowsData' type='hidden'>/").val((JSON.stringify(rows))));
+        return form;
+    },
+
+    saveToDesktop: function(e) {
+        e && e.preventDefault();
+        var form = this.createDownloadForm()
+        form.hide();
+        $("body").append(form)
+        form.submit();
     },
 
     execute: function(task) {

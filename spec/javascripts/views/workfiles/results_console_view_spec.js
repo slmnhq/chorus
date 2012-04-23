@@ -22,6 +22,9 @@ describe("chorus.views.ResultsConsoleView", function() {
             expect(this.view.$(".right")).not.toHaveClass("executing");
         })
 
+        it("displays save to csv file download link", function() {
+            expect(this.view.$("a.download_csv")).toExist();
+        })
         it("hides the minimize and maximize links", function() {
             expect(this.view.$("a.minimize")).toHaveClass('hidden')
             expect(this.view.$("a.maximize")).toHaveClass('hidden')
@@ -453,6 +456,52 @@ describe("chorus.views.ResultsConsoleView", function() {
                             return 10;
                         }
                         expect(this.view.getDesiredDataTableHeight()).toBe(originalSize - 10);
+                    });
+                });
+
+                describe("clicking the download link", function() {
+                    beforeEach(function() {
+                        this.submitSpy = jasmine.createSpy("submit");
+                        this.hideSpy = jasmine.createSpy("hide");
+
+                        this.fakeForm = {
+                            submit: this.submitSpy,
+                            hide: this.hideSpy
+                        }
+
+                        spyOn(this.view, "createDownloadForm").andReturn(this.fakeForm)
+                        this.view.$("a.download_csv").click();
+                    });
+
+                    it("constructs a form for download", function() {
+                        expect(this.view.createDownloadForm).toHaveBeenCalled();
+                    });
+
+                    it("hides the form", function() {
+                        expect(this.hideSpy).toHaveBeenCalled();
+                    });
+
+                    it("submits the form", function() {
+                        expect(this.submitSpy).toHaveBeenCalled();
+                    });
+                });
+
+                describe("constructing the download form", function() {
+                    beforeEach(function() {
+                        this.view.resource.set({
+                            columns: [{name: "col1"}],
+                            rows: [{col1: "row1"}]
+                        });
+                        this.form = this.view.createDownloadForm();
+                    });
+
+                    it("has the correct action", function() {
+                        expect(this.form).toHaveAttr("action", "/generateCSV.jsp");
+                    });
+
+                    it("has the correct form elements", function() {
+                        expect($("input[name=columnData]", this.form)).toHaveValue(JSON.stringify([{name: "col1"}]));
+                        expect($("input[name=rowsData]", this.form)).toHaveValue(JSON.stringify([{col1: "row1"}]));
                     });
                 });
 
