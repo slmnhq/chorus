@@ -1,4 +1,15 @@
 .tabular_data_list, .database_column_list {
+
+    .browse_more {
+        padding: 20px 10px;
+        @include font-normal-beta;
+        height: auto;
+
+        a {
+            font-size: 13px;
+        }
+    }
+
     .image {
         display: block;
         float: left;

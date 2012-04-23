@@ -137,6 +137,14 @@ describe("chorus.views.TabularDataList", function() {
         expect(this.view.$("> li").length).toBe(this.collection.length);
     });
 
+    it("renders the no datasets message if there are no datasets", function() {
+        this.view.collection = new chorus.collections.DatabaseObjectSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
+        this.view.collection.loaded = true;
+        this.view.render();
+        expect($(this.view.el)).toContainTranslation("dataset.browse_more", {linkText: "browse your instances"});
+        expect(this.view.$(".browse_more a")).toHaveHref("#/instances");
+    });
+
     it("should broadcast tabularData:selected when itemSelected is called", function() {
         var model = this.collection.at(1);
         spyOn(chorus.PageEvents, "broadcast");
