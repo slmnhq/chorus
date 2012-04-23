@@ -93,8 +93,16 @@ describe User do
       end
     end
 
-    it "should disallow duplicate user names" do
-      subject.should validate_uniqueness_of(:username).case_insensitive
+    describe "duplicate user names" do
+      it "should be disallowed" do
+        subject.should validate_uniqueness_of(:username).case_insensitive
+      end
+
+      it "should be allowed when user name belongs to a deleted user" do
+        @user.destroy
+        user2 = FactoryGirl.create(:user, :username => @user.username)
+        user2.should be_valid
+      end
     end
 
     describe "field length" do

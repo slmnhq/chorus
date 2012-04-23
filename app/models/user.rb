@@ -7,7 +7,6 @@ class User < ActiveRecord::Base
 
   has_many :instances, :foreign_key => :owner_id
 
-  #validates_uniqueness_of
   validates_presence_of :username, :first_name, :last_name, :email
   validate :uniqueness_of_non_deleted_username
   validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/
