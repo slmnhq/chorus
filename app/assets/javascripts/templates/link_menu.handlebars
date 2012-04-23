@@ -1,0 +1,21 @@
+<span class="title">{{title}}</span>
+<a class="popup" href="#">
+    <span class="chosen">{{chosenText}}</span>
+    <img src="/images/blue-menu-triangle.png"/>
+</a>
+
+<div class="menu hidden popup_filter">
+    <div class="pointer"/>
+    <ul data-event="{{event}}">
+        {{#each options}}
+            <li data-type="{{data}}">
+                <div class="check {{#unless isChecked}}hidden{{/unless}}"></div>
+                {{#if disabled}}
+                    <span class="unavailable">{{text}}</span>
+                {{else}}
+                    <a href="#">{{text}}</a>
+                {{/if}}
+            </li>
+        {{/each}}
+    </ul>
+</div>

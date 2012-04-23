@@ -1,0 +1,274 @@
+@import "../_common.scss";
+
+body .ui-draggable-dragging {
+    .name {
+        max-width: 60%;
+    }
+
+    .type {
+        float: right;
+        margin-top: 8px;
+        color: $color-text3;
+    }
+}
+
+#sidebar {
+    &:focus {
+        outline: none;
+    }
+
+    width: $sidebar-width;
+    padding-left: $sidebar-padding-x;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    #help {
+      top: 1px;
+      left: $sidebar-width - $help-pill-width - $guts-padding + $sidebar-padding-x;
+    }
+
+    .spacer {
+        height: $breadcrumbs-height + $padding-y;
+    }
+
+    .info {
+        margin-bottom: 5px;
+
+        .name {
+            @include heading-sidebar;
+            margin-bottom: 5px;
+        }
+        .type {
+            @include secondary-text-small;
+        }
+    }
+
+    .image {
+        padding-bottom: 16px;
+        text-align: center;
+    }
+
+    .actions {
+        h1 {
+            @include ellipsis;
+            @include heading-sidebar;
+            margin-bottom: 10px;
+        }
+
+        a, span, .disabled {
+            font-size: 12px;
+            font-weight: $semibold;
+        }
+
+        .disabled {
+            color: $color-text4;
+        }
+
+        li {
+            padding-bottom: 3px;
+            margin-left: 10px;
+        }
+    }
+
+
+    img {
+        max-width: $sidebar-width - 20px;
+    }
+
+    .members{
+
+        li {
+            display: inline-block;
+            vertical-align: middle;
+            height: $icon-image-height + 6px;
+            padding-bottom: 3px;
+        }
+
+        img{
+            width: $icon-image-width;
+            height: $icon-image-height;
+        }
+
+        .dialog {
+            font-size: 12px;
+            font-weight: $semibold;
+            margin-left: 10px;
+        }
+    }
+
+    .notice {
+        a {
+            font-size: 12px;
+        }
+        font-size: 12px;
+        color: $color-text2;
+        padding: $dialog-padding;
+        background-color: $activity-stream-comment-background-color;
+        margin: auto;
+
+        .bottom {
+            display: inline-block;
+            margin: 8px 0;
+        }
+    }
+
+    .sidebar_content {
+        .tabbed_area {
+            .context {
+                @include font-content-details;
+                font-size: 14px;
+
+                span {
+                    vertical-align: bottom;
+                }
+
+                a {
+                    @include ellipsis;
+                    @include menu-triangle;
+                    max-width: 140px;
+                    border-bottom: 1px dotted $link-color;
+                    color: $link-color;
+                }
+            }
+
+            .back {
+                font-size: 12px;
+                font-weight: $semibold;
+            }
+
+            .none_found {
+                @include font-normal-beta;
+            }
+
+            .context, .back, .none_found {
+                margin: 4px 0px 17px 20px;
+            }
+
+            .database_function_sidebar_list, .database_dataset_sidebar_list, .database_column_sidebar_list {
+                ul {
+                    margin-top: 10px;
+                }
+
+                li {
+                    height: 29px;
+                    padding-top: 0px;
+                    padding-bottom: 0px;
+                    color: $color-text2;
+                    cursor: pointer;
+
+                    img {
+                        margin-top: 2px;
+                        display: inline-block;
+                        vertical-align: middle;
+                    }
+
+                    .name, .type {
+                        margin-top: 2px;
+                        font-size: 14px;
+                        display: inline-block;
+                        @include ellipsis;
+                        max-width: 75%;
+                        vertical-align: middle;
+                        line-height: 19px;
+                    }
+
+                    .name {
+                        font-weight: $semibold;
+                    }
+
+                    &:first-child {
+                        border-top: $dotted-list-item-border;
+                        margin-top: -1px;
+                    }
+                    &:last-child {
+                        border-bottom: $dotted-list-item-border;
+                    }
+
+                    &.hover {
+                        margin-top: -1px;
+                        background-color: $selected-row-hover-background-color;
+                        border-top: 1px solid $list-border-color;
+                        border-bottom: 1px solid $list-border-color;
+                    }
+                }
+
+                a.more {
+                    display: block;
+                    font-size: 13px;
+                    font-weight: $semibold;
+                    text-align: center;
+                    margin-top: 10px;
+                    padding-bottom: 10px;
+                }
+
+                .empty_selection {
+                    .top {
+                        @include secondary-text-small-semibold;
+                    }
+                }
+            }
+
+            .database_column_sidebar_list {
+                .context {
+                    line-height: 1.2;
+                    .table, .schema {
+                        display: inline-block;
+                        max-width: 80px;
+                        @include ellipsis;
+                    }
+                }
+
+                li {
+                    .name {
+                        max-width: 60%;
+                    }
+                    .type {
+                        float: right;
+                        margin-top: 8px;
+                        color: $color-text3;
+                    }
+                }
+            }
+
+            .database_function_sidebar_list, .database_dataset_sidebar_list {
+                .schema_menu {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.drag_helper {
+    width: 225px;
+    height: 29px;
+    z-index: 9999;
+    margin-top: 2px;
+    font-size: 14px;
+
+    display: inline-block;
+    vertical-align: middle;
+
+    line-height: 19px;
+    font-weight: $semibold;
+    background-color: $selected-row-hover-background-color;
+    @include opacity(0.6);
+
+    padding-top: 0px;
+    padding-bottom: 0px;
+    color: $color-text2;
+
+    .name {
+        width: 175px;
+        display: inline-block;
+        @include ellipsis;
+    }
+
+    img {
+        margin-top: 2px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+}

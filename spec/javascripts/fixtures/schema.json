@@ -1,0 +1,364 @@
+[
+    {
+        "storage": "h",
+        "protocol": null,
+        "type": "SOURCE_TABLE",
+        "objectName": "2010_report_on_white_house",
+        "rows": 99,
+        "columns": 5,
+        "onDiskSize": "160 kB",
+        "lastAnalyzedTime": "2012-03-15 13:37:16.490786",
+        "masterTable": null,
+        "partitions": 0,
+        "hasData": true,
+        "desc": null,
+        "objectType": "BASE_TABLE",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"2010_report_on_white_house\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 3,
+            "workspaceList": [{
+                "id": "10077",
+                "name": "GinNJuice1333134961"
+            },
+            {
+                "id": "10074",
+                "name": "GinNJuice1333134915"
+            },
+            {
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    },
+    {
+        "storage": "v",
+        "protocol": null,
+        "type": "SOURCE_TABLE",
+        "mastertable": false,
+        "objectName": "__view_usprez",
+        "tables": ["_uspresident"],
+        "desc": null,
+        "columns": 9,
+        "objectType": "VIEW",
+        "definition": "SELECT _uspresident.presidency, _uspresident.president, _uspresident.wikipedia_entry, _uspresident.took_office, _uspresident.left_office, _uspresident.party, _uspresident.portrait, _uspresident.thumbnail, _uspresident.home_state FROM ddemo._uspresident;",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"VIEW\"|\"__view_usprez\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 1,
+            "workspaceList": [{
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    },
+    {
+        "storage": "h",
+        "protocol": null,
+        "type": "SOURCE_TABLE",
+        "objectName": "_copy123copy",
+        "rows": 8,
+        "columns": 2,
+        "onDiskSize": "64 kB",
+        "lastAnalyzedTime": "2012-03-17 14:58:37.145064",
+        "masterTable": null,
+        "partitions": 0,
+        "hasData": true,
+        "desc": null,
+        "objectType": "BASE_TABLE",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"_copy123copy\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 1,
+            "workspaceList": [{
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    },
+    {
+        "storage": "h",
+        "protocol": null,
+        "type": "SOURCE_TABLE",
+        "objectName": "_uspresident",
+        "rows": 44,
+        "columns": 9,
+        "onDiskSize": "160 kB",
+        "lastAnalyzedTime": "2012-02-17 16:31:34.136156",
+        "masterTable": null,
+        "partitions": 0,
+        "hasData": true,
+        "desc": null,
+        "objectType": "BASE_TABLE",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"_uspresident\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 1,
+            "workspaceList": [{
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    },
+    {
+        "storage": "h",
+        "protocol": null,
+        "type": "SOURCE_TABLE",
+        "objectName": "_uspresident_wikipedia_urls_thmbs_hs",
+        "rows": 44,
+        "columns": 9,
+        "onDiskSize": "160 kB",
+        "lastAnalyzedTime": "2012-02-17 16:30:04.104807",
+        "masterTable": null,
+        "partitions": 0,
+        "hasData": true,
+        "desc": null,
+        "objectType": "BASE_TABLE",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"_uspresident_wikipedia_urls_thmbs_hs\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 3,
+            "workspaceList": [{
+                "id": "10010",
+                "name": "ws2"
+            },
+            {
+                "id": "10020",
+                "name": "ws3"
+            },
+            {
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    },
+    {
+        "storage": "h",
+        "protocol": null,
+        "type": "SOURCE_TABLE",
+        "objectName": "_uspresident_wikipedia_urls_thmbs_hs444",
+        "rows": 44,
+        "columns": 9,
+        "onDiskSize": "160 kB",
+        "lastAnalyzedTime": "2012-03-01 14:42:58.740238",
+        "masterTable": null,
+        "partitions": 0,
+        "hasData": true,
+        "desc": null,
+        "objectType": "BASE_TABLE",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"_uspresident_wikipedia_urls_thmbs_hs444\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 1,
+            "workspaceList": [{
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    },
+    {
+        "storage": "h",
+        "protocol": null,
+        "type": "SOURCE_TABLE",
+        "objectName": "a2",
+        "rows": 0,
+        "columns": 5,
+        "onDiskSize": "96 kB",
+        "lastAnalyzedTime": "2012-02-27 11:19:30.890656",
+        "masterTable": null,
+        "partitions": 0,
+        "hasData": false,
+        "desc": null,
+        "objectType": "BASE_TABLE",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"a2\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 3,
+            "workspaceList": [{
+                "id": "10010",
+                "name": "ws2"
+            },
+            {
+                "id": "10020",
+                "name": "ws3"
+            },
+            {
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    },
+    {
+        "storage": "h",
+        "protocol": null,
+        "type": "SOURCE_TABLE",
+        "objectName": "a2x",
+        "rows": 0,
+        "columns": 1,
+        "onDiskSize": "96 kB",
+        "lastAnalyzedTime": null,
+        "masterTable": null,
+        "partitions": 0,
+        "hasData": false,
+        "desc": null,
+        "objectType": "BASE_TABLE",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"a2x\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 1,
+            "workspaceList": [{
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    },
+    {
+        "storage": "x",
+        "protocol": "{gphdfs://gillette.sf.pivotallabs.com:8020/data/import.csv}",
+        "type": "SOURCE_TABLE",
+        "objectName": "a_1",
+        "rows": 1000000,
+        "columns": 2,
+        "onDiskSize": "0 bytes",
+        "lastAnalyzedTime": null,
+        "masterTable": null,
+        "partitions": 0,
+        "hasData": true,
+        "desc": null,
+        "objectType": "HDFS_EXTERNAL_TABLE",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"HDFS_EXTERNAL_TABLE\"|\"a_1\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 1,
+            "workspaceList": [{
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    },
+    {
+        "storage": "h",
+        "protocol": null,
+        "type": "SOURCE_TABLE",
+        "objectName": "a___import",
+        "rows": 0,
+        "columns": 1,
+        "onDiskSize": "96 kB",
+        "lastAnalyzedTime": null,
+        "masterTable": null,
+        "partitions": 0,
+        "hasData": false,
+        "desc": null,
+        "objectType": "BASE_TABLE",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"a___import\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 1,
+            "workspaceList": [{
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    },
+    {
+        "storage": "h",
+        "protocol": null,
+        "type": "SOURCE_TABLE",
+        "objectName": "a_import",
+        "rows": 500,
+        "columns": 2,
+        "onDiskSize": "160 kB",
+        "lastAnalyzedTime": "2012-03-01 09:39:11.126854",
+        "masterTable": null,
+        "partitions": 0,
+        "hasData": true,
+        "desc": null,
+        "objectType": "BASE_TABLE",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"a_import\"",
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "databaseName": "dca_demo",
+        "schemaName": "ddemo",
+        "workspaceUsed": {
+            "workspaceCount": 1,
+            "workspaceList": [{
+                "id": "10022",
+                "name": "another stupidly long workspace name"
+            }]
+        },
+        "recentComment": null,
+        "commentCount": 0
+    }
+]

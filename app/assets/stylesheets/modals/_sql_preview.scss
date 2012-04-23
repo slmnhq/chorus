@@ -1,0 +1,57 @@
+@import "../_common.scss";
+
+.sql_preview {
+    width: 885px;
+    min-height: 120px;
+
+    .dialog_content {
+        padding: 0;
+
+        .modal_controls {
+            padding: 5px;
+        }
+    }
+
+    .sql {
+        padding-top: 5px;
+        max-height: 140px;
+        overflow-y: auto;
+    }
+
+    .results_console {
+        a.minimize, a.maximize, .separator {
+            display: none;
+        }
+    }
+
+    .CodeMirror-scroll {
+        height: auto;
+        overflow: visible;
+    }
+
+    .CodeMirror-gutter {
+        background-color: $body-background-color;
+    }
+
+    .preview_bar {
+        margin: 0;
+        border-collapse:collapse;
+        height: 30px;
+        padding: 2px 5px 0px 5px;
+        border-bottom: 1px solid #B2C7D6;
+        background-color: $content-details-info-bar-background-color;
+
+        button {
+            color: #314858;
+            font-weight: $semibold;
+            font-size: 13px;
+            @include content-details-button($content-details-action-link-border-color);
+            border: 1px solid #B2C7D6;
+            margin-left: 5px;
+
+            &.disabled {
+                @include opacity(0.5);
+            }
+        }
+    }
+}

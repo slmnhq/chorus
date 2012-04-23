@@ -1,0 +1,48 @@
+.dialog.attach_dialog {
+    width: 320px;
+
+    .dialog_content {
+        padding: 0;
+
+        .none {
+            margin: 5px;
+        }
+        .collection_list {
+
+            max-height: 360px;
+            overflow: auto;
+            ul {
+                li {
+                    cursor: pointer;
+                    height: 39px;
+                    line-height: 39px;
+                    vertical-align: middle;
+
+                    a {
+                        width: 100%;
+                    }
+
+                    img {
+                        width: auto;
+                        height: auto;
+                        padding-right: 2px;
+                    }
+
+                    &.selected {
+                        background-color: $picklist-selected-background-color;
+
+                        .name {
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
+
+        .modal_controls {
+            padding: 10px 15px;
+            margin-top: 0;
+            border-top: 1px solid $subheader-border-color-dark;
+        }
+    }
+}

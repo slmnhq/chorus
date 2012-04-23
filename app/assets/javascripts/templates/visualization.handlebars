@@ -1,0 +1,43 @@
+<div class="headerbar">
+    <div class="text type">{{t "visualization.type"}}</div>
+
+    <div class="chart_icon frequency"/>
+    <div class="chart_icon histogram"/>
+    <div class="chart_icon heatmap"/>
+    <div class="chart_icon timeseries"/>
+    <div class="chart_icon boxplot"/>
+
+    <div class="text label">{{chartType}}</div>
+
+    <div class="right">
+        <a href="#" class="show_options">{{t "visualization.show_options" count=filterCount}}</a>
+        <a href="#" class="hide_options hidden">{{t "visualization.hide_options" count=filterCount}}</a>
+    </div>
+</div>
+
+<div class="filter_options hidden">
+</div>
+
+<div class="chart_container">
+    <div class="overlay hidden"><span>{{t "visualization.overlay"}}</span></div>
+
+    <div class="chart_area">
+    </div>
+</div>
+
+<div class="tabledata hidden">
+</div>
+
+<div class="modal_controls">
+    <div class="vertical">
+        <a href="#" class="show hidden">{{t "visualization.show_table"}}</a>
+        <a href="#" class="hide hidden">{{t "visualization.hide_table"}}</a>
+        <div class="right">
+            <button class="close_dialog">{{t "actions.close"}}</button>
+            <button class="save" disabled="disabled">{{t "actions.save_as"}}</button>
+            <button class="stop hidden">{{t "actions.cancel"}}</button>
+            <button class="revert hidden">{{t "visualization.revert"}}</button>
+            <button class="refresh hidden">{{t "visualization.refresh"}}</button>
+    </div>
+    </div>
+</div>

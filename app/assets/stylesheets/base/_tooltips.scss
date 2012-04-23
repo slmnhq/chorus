@@ -1,0 +1,73 @@
+@import "common.scss";
+
+@mixin tooltip($text, $bg, $border) {
+    .ui-tooltip-content {
+	    color: $text;
+        background-color: $bg;
+	    border-color: $border;
+    }
+    .ui-tooltip-titlebar {
+        background-color: $bg;
+        .ui-state-hover {
+            border-color: $border;
+        }
+    }
+    .ui-state-default {
+        .ui-tooltip-icon {
+            background-position: -102px 0;
+        }
+    }
+    .ui-tooltip-icon {
+        border-color: $border;
+    }
+}
+
+.tooltip-normal {
+    // qTip's author explicitly recommends !important for overriding z-index
+    // https://github.com/Craga89/qTip2/issues/274
+    /*z-index: $body-tooltip-z-index !important;*/
+}
+
+.tooltip-modal {
+    // qTip's author explicitly recommends !important for overriding z-index
+    // https://github.com/Craga89/qTip2/issues/274
+    z-index: $modal-tooltip-z-index !important;
+}
+
+.tooltip-white {
+    @include tooltip($color-text1, #FFFFFF, #CCC)
+}
+
+.tooltip-error {
+    @include tooltip($error-text-color, #B61B1D, #B61B1D);
+
+    .ui-tooltip-content {
+        font-size: 16px;
+        line-height: 16px;
+        max-width: 350px;
+    }
+}
+.tooltip-help {
+    @include tooltip($error-text-color, #282828, #282828);
+
+    .ui-tooltip-content {
+        font-size: 13px;
+        max-width: 350px;
+    }
+}
+
+
+.tooltip-insert {
+    @include tooltip(red, $selected-row-hover-background-color, $list-border-color);
+    .ui-tooltip-content {
+        $height: 19px;
+        height: $height;
+        line-height: $height;
+        font-weight: $semibold;
+        border-right: none;
+    }
+    a {
+        font-size: 12px;
+        cursor: pointer;
+    }
+}

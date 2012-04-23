@@ -1,0 +1,32 @@
+{{#each models}}
+    <li data-id="{{id}}">
+        <span class="spacer_left"/>
+        {{#if insightCount}}
+            <div class="badge">
+                <div class="left"/><div class="center">{{insightCount}}</div><div class="right"/>
+            </div>
+        {{/if}}
+        <a class="image" href="{{showUrl}}">
+            <img src="{{imageUrl}}"/>
+        </a>
+        <div class="text">
+            <div class="main">
+                <a class="name" href="{{showUrl}}">
+                    <span title="{{name}}">{{name}}</span>
+                </a>
+            </div>
+
+            {{#if latestComment}}
+                <div class="comment">
+                    <div class="count">
+                        {{commentInsightCountString}}
+                    </div>
+                    <div class="recent">
+                        {{t "dashboard.workspaces.most_recent"}} <span class="date">{{relativeTimestamp latestComment.timestamp}}</span> by <span class="author">{{latestComment.author}}</span>
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+        <span class="spacer_right"/>
+    </li>
+{{/each}}

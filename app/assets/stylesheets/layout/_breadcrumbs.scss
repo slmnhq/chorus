@@ -1,0 +1,35 @@
+@import "../_common";
+
+.breadcrumbs {
+    @include background-image(linear-gradient($body-glow-color, $body-background-color));
+    @include ellipsis;
+    height: $breadcrumbs-height;
+
+    ol {
+        padding: $padding-y ($padding-x + $guts-padding + 1px);
+    }
+
+    li {
+        display: inline-block;
+        @include font-normal-beta;
+    }
+
+    a {
+        color : $color-text1;
+        border-bottom : 1px dotted $color-text1;
+        margin-right : $padding-x;
+    }
+
+    .slug {
+        @include font-normal-delta;
+    }
+
+    .spacer {
+        margin-right : $padding-x;
+        background-image : url("/images/breadcrumb-separator.png");
+        background-repeat: no-repeat;
+        width: 3px;
+        height: 7px;
+        display: inline-block;
+    }
+}

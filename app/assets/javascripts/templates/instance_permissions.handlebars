@@ -1,0 +1,63 @@
+<div class="sub_header">
+    {{#if sharedAccount}}
+        <span class="details_text">{{t "instances.shared_account"}}</span>
+        <a href="#" class="remove_shared_account">{{t "instances.permissions_dialog.switch_to_individual"}}</a>
+    {{else}}
+        <span class="individual_accounts_count">{{t "instances.sidebar.x_individual_accounts" count=accountCount}}</span>
+        <a href="#" class="add_shared_account">{{t "instances.permissions_dialog.switch_to_shared"}}</a>
+        <button class='add_account'>{{t "instances.permissions_dialog.add_account"}}</button>
+    {{/if}}
+</div>
+<div class="collection_list">
+    <ul>
+        {{#each models}}
+            <li data-id={{id}}>
+                <div class="links">
+                    {{#if isOwner}}
+                        <span class="owner action">{{t "instances.permissions.owner"}}</span>
+                    {{/if}}
+                    <a href="#" class="edit action">{{t "instances.permissions.edit"}}</a>
+                    {{#if isOwner}}
+                        {{#if ../../sharedAccount}}
+                            <a href="#" class="change_owner action">{{t "instances.permissions.change_owner"}}</a>
+                        {{/if}}
+                        <a href="#" class="save_owner hidden action">{{t "instances.permissions.save_owner"}}</a>
+                        <a href="#" class="cancel_change_owner hidden action">{{t "actions.cancel"}}</a>
+                    {{else}}
+                        {{#unless ../../sharedAccount}}
+                            <a href="#" class="make_owner action">{{t "instances.permissions.make_owner"}}</a>
+                            <a href="#" class="remove_credentials action">{{t "instances.permissions.remove_credentials"}}</a>
+                        {{/unless}}
+                    {{/if}}
+                </div>
+                <div class="image">
+                    <img class="profile" src="{{imageUrl}}"/>
+                </div>
+                <div class="select_container hidden">
+                    <select class="name"></select>
+                </div>
+                <div class="name" title="{{ownerFullName}}">{{fullName}}</div>
+                <div class="credentials">
+                    <form action="#">
+                        <div class="field_wrapper">
+                            <label>{{t "instances.permissions.username"}}</label>
+                            <input type="text" name="dbUserName" maxlength="256" value="{{dbUserName}}"/>
+                        </div>
+                        <div class="field_wrapper">
+                            <label>{{t "instances.permissions.password"}}</label>
+                            <input type="password" maxlength="256" name="dbPassword"/>
+                        </div>
+                        <div class="actions">
+                            <a href="#" class="save">{{t "actions.save_changes"}}</a><a href="#" class="cancel">{{t "actions.cancel"}}</a>
+                            <input type="submit"></input>
+                        </div>
+                    </form>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+<div class="modal_controls">
+    <button type="button" class="cancel" tabindex=3>{{t "actions.close_window"}}</button>
+</div>
+

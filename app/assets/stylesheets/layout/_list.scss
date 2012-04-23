@@ -1,0 +1,148 @@
+@import "../_common.scss";
+
+.list {
+    position: relative;
+
+    li {
+        padding: $padding-y 0;
+        border-bottom: $dotted-list-item-border;
+        margin: 0 $padding-x;
+        position: relative;
+        @include after-clearfix;
+
+        &:last-child {
+            border-bottom: none;
+
+            .spacer-left {
+                bottom: 0;
+            }
+        }
+
+        .spacer_left, .spacer_right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: $padding-x;
+        }
+
+        .spacer_left {
+            left: -$padding-x;
+        }
+
+        .spacer_right {
+            right: -$padding-x;
+        }
+
+        .image {
+            display: block;
+            float: left;
+        }
+
+        div.text {
+            vertical-align: top;
+            line-height: 21px;
+            overflow:hidden;
+            _overflow:visible;
+            zoom:1;
+            padding-left: $padding-x;
+
+            .summary {
+                padding-bottom: 15px;
+            }
+        }
+
+        div.main_text {
+            display: inline-block;
+        }
+
+        .description {
+            @include secondary-text-small;
+            padding-top: 4px;
+        }
+
+        div.details {
+            font-size: 13px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        div.summary {
+            color: $color-text4;
+            @include summary-text;
+
+            .styled_text {
+                height: auto;
+                max-height: $summary-line-height * 2;
+            }
+            .links a {
+                font-size: 13px;
+            }
+
+            &.expanded {
+                .styled_text {
+                    max-height: none;
+                }
+            }
+        }
+
+        .name span {
+            max-width: none;
+        }
+
+        * {
+            vertical-align: top
+        }
+
+        .name {
+            font-size: 18px;
+            line-height: 23px;
+
+            span {
+                display: inline-block;
+                @include ellipsis;
+                max-width: 68%;
+            }
+        }
+
+        .tag {
+            float: right;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            font-style: italic;
+        }
+    }
+
+    &.selectable {
+        li {
+            &:hover {
+                background: $list-hover-color;
+
+                .spacer_left {
+                    background: $list-hover-color;
+                    bottom: -1px;
+                }
+            }
+
+            &.selected {
+                $border-width: 2px;
+
+                background: white;
+                padding-bottom: $padding-y - ($border-width - 1px); // default border is 1px
+                border-bottom: $border-width solid $border-color;
+
+                .spacer_left {
+                    background: white;
+                    bottom: -$border-width;
+                    border-bottom: $border-width solid $border-color;
+                }
+
+                .spacer_right {
+                    border-left: 2px solid $border-color;
+                }
+            }
+        }
+    }
+}
+

@@ -1,0 +1,43 @@
+<span class="spacer_left"></span>
+
+{{#if checkable}}
+    <input type="checkbox"/>
+{{/if}}
+
+{{#ifAll hasCredentials viewable}}
+    <a class="image" href="{{showUrl}}">
+        <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
+    </a>
+{{else}}
+    <span class="image">
+        <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
+    </span>
+{{/ifAll}}
+
+<div class="right">
+
+    {{importFrequencyTag humanizedImportFrequency}}
+
+    {{#ifAll hasCredentials viewable}}
+        <a href="{{showUrl}}" class="name">{{objectName}}</a>
+    {{else}}
+        <span class="name">{{objectName}}</span>
+    {{/ifAll}}
+
+    <div class="location">
+        {{tabularDataLocation resource}}
+    </div>
+
+    {{usedInWorkspaces workspaces dataset}}
+
+    {{#if lastComment}}
+        <div class="comment">
+            <div class="body"></div>
+            {{userProfileLink lastComment.creator}}
+            <span class="comment_info">
+                {{t "comments.commented_on"}} <span class="on">{{lastComment.on}}</span>
+            </span>
+        </div>
+    {{/if}}
+</div>
+<span class="spacer_right"></span>

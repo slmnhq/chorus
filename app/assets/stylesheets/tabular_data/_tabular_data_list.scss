@@ -1,0 +1,66 @@
+.tabular_data_list, .database_column_list {
+
+    .browse_more {
+        padding: 20px 10px;
+        @include font-normal-beta;
+        height: auto;
+
+        a {
+            font-size: 13px;
+        }
+    }
+
+    .image {
+        display: block;
+        float: left;
+    }
+
+    input[type=checkbox] {
+        float: left;
+        margin-top: 16px;
+    }
+
+    .right {
+        @include recent-comment;
+        overflow: hidden;
+        padding-left: $padding-x;
+
+        .name {
+            font-weight: $semibold;
+        }
+        .name_disabled {
+            color: $color-text2;
+        }
+        .location, .found_in {
+            padding-top: 4px;
+            @include results-console-message;
+            line-height: 16px;
+            vertical-align: top;
+            a {
+                font-size: 12px;
+                font-weight: $semibold;
+                line-height: 16px;
+                vertical-align: top;
+            }
+        }
+
+        .found_in {
+          padding-left: 20px;
+        }
+
+        .comment {
+            padding-top: 4px;
+            line-height: 19px;
+        }
+
+    }
+
+    .no_credentials {
+        .name {
+            color: $color-text3;
+        }
+        .location {
+            color: $color-text2;
+        }
+    }
+}

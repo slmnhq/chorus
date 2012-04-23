@@ -1,0 +1,172 @@
+.notes_new, .edit_note, .dialog.comment {
+
+    width: 380px;
+
+    textarea {
+        min-width : 350px;
+        min-height: 75px;
+        resize: none;
+    }
+
+    a {
+        font-size: 12px;
+        font-weight: $semibold;
+        line-height: 16px;
+    }
+
+    .toolbar {
+        color: $link-color;
+        text-align: right;
+        font-size: 12px;
+        margin-bottom: 8px;
+
+        a {
+            font-size: 12px;
+            padding: 0px 2px;
+        }
+    }
+
+    .options_area {
+        .file-wrapper {
+            margin-bottom: 2px;
+        }
+
+        .label {
+            color: $color-text2;
+            font-weight: $semibold;
+            width: 72px;
+            display: inline-block;
+        }
+
+        .separator {
+            color: $link-color;
+            margin: 0 2px;
+        }
+
+        .attachment_links {
+            &.disabled {
+                input {
+                    display: none;
+                }
+
+                a {
+                    color: $color-text4;
+                }
+            }
+        }
+    }
+
+    .file_details, .dataset_details {
+        line-height: 32px;
+        img {
+            vertical-align: middle;
+            height: 35px;
+            width:35px;
+        }
+        .remove {
+            float: right;
+            line-height: 32px;
+        }
+        .progress_bar {
+            display: inline-block;
+            background-color: $progress-bar-background-color;
+            width: 100px;
+            height: 15px;
+            float: right;
+            margin-top: 7px;
+            position: relative;
+            span {
+                background-image: url(/images/loading_animation.gif);
+                position: absolute;
+                display: inline-block;
+                left: 0;
+                top: 0;
+                bottom: 0;
+            }
+        }
+        .upload_finished {
+            float : right;
+            color: $color-text4
+        }
+    }
+
+    .name {
+        display: inline-block;
+        width: 170px;
+        @include ellipsis;
+        color: $color-text2;
+        font-weight: $semibold;
+    }
+
+    .options_text, .options_area {
+        font-size: 12px;
+        margin: 8px 8px;
+    }
+
+    .options_text {
+        color: $color-text3;
+
+        .show_options {
+            font-weight: $semibold;
+            border-bottom: 1px dotted;
+        }
+    }
+
+    .row {
+        margin-bottom: 10px;
+
+        a.workfile {
+            vertical-align: bottom;
+        }
+    }
+
+    .link_menu {
+        padding-left: 8px;
+    }
+
+    .notification_recipient {
+        margin-left: 5px;
+        margin-right: 8px;
+        margin-top: 8px;
+
+        .title {
+            @include font-content-details;
+        }
+
+        .add_user {
+            font-size: 12px;
+            font-weight: $semibold;
+        }
+
+        .user_lists {
+            margin-left: 80px;
+
+            .dropdown {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+        }
+
+        .picked_users {
+            .name {
+                @include ellipsis;
+                @include font-content-details;
+                max-width: 200px;
+                display: inline-block;
+            }
+
+            .remove {
+                float: right;
+            }
+
+            .name, .remove {
+                line-height: 20px;
+                vertical-align: middle;
+            }
+        }
+
+        select {
+            width: 200px;
+        }
+    }
+}

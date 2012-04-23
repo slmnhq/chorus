@@ -1,0 +1,41 @@
+<div class='instance_provider greenplum_instance'>
+    <div class="details">{{t "instances.list.type.greenplum"}}</div>
+    <ul class="list selectable">
+        {{#each models}}
+            {{#if isGreenplum}}
+                <li class="instance" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
+            {{/if}}
+        {{/each}}
+    </ul>
+    {{#unless hasGreenplum}}
+        <div class="no_instances">{{t "instances.none"}}</div>
+    {{/unless}}
+</div>
+
+<div class="instance_provider hadoop_instance">
+    <div class="details">{{t "instances.list.type.hdfs"}}</div>
+    <ul class="list selectable">
+        {{#each models}}
+            {{#if isHadoop}}
+                <li class="instance" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
+            {{/if}}
+        {{/each}}
+    </ul>
+    {{#unless hasHadoop}}
+        <div class="no_instances">{{t "instances.none"}}</div>
+    {{/unless}}
+</div>
+
+<div class="instance_provider other_instance">
+    <div class="details">{{t "instances.list.type.other"}}</div>
+    <ul class="list selectable">
+        {{#each models}}
+            {{#if isOther}}
+                <li class="instance" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
+            {{/if}}
+        {{/each}}
+    </ul>
+    {{#unless hasOther}}
+        <div class="no_instances">{{t "instances.none"}}</div>
+    {{/unless}}
+</div>

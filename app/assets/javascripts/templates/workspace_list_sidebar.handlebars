@@ -1,0 +1,16 @@
+{{#if hasImage}}
+    <img class="workspace_image" src="{{imageSrc}}"/>
+{{/if}}
+
+<div class="info">
+    <div title="{{prettyName}}" class="name">{{prettyName}}</div>
+</div>
+
+<ul class="actions">
+    <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+    <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="InsightsNew">{{t "actions.add_insight"}}</a></li>
+</ul>
+
+<div class="workspace_member_list"></div>
+
+<div class="tab_control"></div>

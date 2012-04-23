@@ -1,0 +1,11 @@
+@import "../_common.scss";
+
+@mixin profile_image {
+    background: white;
+    padding: 2px;
+    border: 1px solid $guts-border-color;
+}
+
+img.profile {
+    @include profile_image;
+}

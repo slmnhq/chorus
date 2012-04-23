@@ -1,0 +1,35 @@
+<input type="hidden" name="provisionType" value="create" />
+
+{{#if addingSandbox}}
+    <label class="required" name="instanceName">{{t "instances.dialog.instance_name"}}</label>
+    <input type="text" name="instanceName" maxlength="44"/>
+{{else}}
+    <label class="required" name="name">{{t "instances.dialog.instance_name"}}</label>
+    <input type="text" name="name" maxlength="44"/>
+
+    <label>{{t "instances.dialog.description"}}</label>
+    <textarea rows="3" name="description"/>
+{{/if}}
+
+
+<label class="required" name="size">{{t "instances.dialog.size"}} </label>
+<span class="max_size">({{t "instances.new_dialog.max_size" max=provisionMaxSizeInGB}})</span>
+<br/>
+
+<input type="text" name="size"/>
+<div class="instance_size_container"/>
+<br/>
+
+<label name="databaseName" class="required">{{t "instances.dialog.database_name"}}</label>
+<label name="schemaName" class="required">{{t "instances.dialog.schema_name"}}</label>
+
+<input type="text" name="databaseName" maxlength="63"/>
+<input type="text" name="schemaName" value="public" maxlength="63"/>
+
+<span class="instructions">{{t "instances.dialog.provisioning_instructions"}}</span>
+
+<label name="dbUserName" class="required">{{t "instances.dialog.database_account"}}</label>
+<label name="dbPassword" class="required">{{t "instances.dialog.database_password"}}</label>
+
+<input type="text" name="dbUserName" maxlength="256"/>
+<input type="password" name="dbPassword" maxlength="256"/>

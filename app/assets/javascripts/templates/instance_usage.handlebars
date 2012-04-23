@@ -1,0 +1,31 @@
+<div class='sub_header'>
+    <div class="total_usage">{{t "instances.usage.total" size=sandboxesSize}}</div>
+</div>
+
+<div class="sub_content">
+    <ul>
+        {{#each workspaces}}
+        <li>
+            <div class="image_container">
+                <img src="/images/workspaces/workspace_small.png"/>
+            </div>
+            <div class="details">
+                <a class="workspace_link" href="{{workspacePath workspaceId}}">{{workspaceName}}</a>
+                {{workspaceUsage percentageUsed size}}
+                <div class="pair location">
+                    <div class="value">{{databaseName}}/{{schemaName}}</div>
+                    <div class="key">{{t "instances.usage.location"}}</div>
+                </div>
+                <div class="pair owner">
+                    <div class="value">{{ownerFullName}}</div>
+                    <div class="key">{{t "instances.usage.owner"}}</div>
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+    
+<div class="modal_controls">
+    <button type="button" class="cancel">{{t "actions.close_window"}}</button>
+</div>

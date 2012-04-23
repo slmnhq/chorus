@@ -1,0 +1,58 @@
+$activity-gutter: 8px;
+
+.comments {
+    margin-top: $activity-gutter;
+    margin-bottom: $activity-gutter;
+
+    > li {
+        .object {
+            display: none;
+        }
+
+        .author{
+            font-size: 14px;
+            font-weight: $semibold;
+        }
+    }
+
+    li.more {
+        display: none;
+    }
+
+    .morelinks {
+        padding: $activity-gutter;
+        padding-top: 0;
+        a {
+            font-size: 12px;
+
+            &.less {
+                display: none;
+            }
+        }
+    }
+
+    &.more {
+        li.more {
+            display: block;
+        }
+
+        .morelinks {
+            a.less {
+                display: inline;
+            }
+        }
+
+        a.more {
+            display: none;
+        }
+    }
+    
+    .icon {
+        position: relative;
+
+        .insight_ribbon {
+            white-space: nowrap;
+            top: -18px;
+        }
+    }
+}

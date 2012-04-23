@@ -1,0 +1,25 @@
+<div class="sub_header">
+    <span class="title">{{t "dataset.manage_join_tables.create_join_title" objectName=destinationObjectName}}</span>
+</div>
+
+<div class="join_tables_content">
+    <label>{{t "dataset.manage_join_tables.source_join_column"}}</label>
+
+    <div class="source_columns"></div>
+
+    <label>{{t "dataset.manage_join_tables.destination_join_column"}}</label>
+
+    <div class="destination_columns"></div>
+
+    <label>{{t "dataset.manage_join_tables.join_type"}}</label>
+    <select class="join_type">
+        {{#each joinMap}}
+            <option value="{{value}}">{{t text}}</option>
+        {{/each}}
+    </select>
+</div>
+
+<div class="modal_controls">
+    <button class="cancel">{{t "actions.cancel"}}</button>
+    <button class="submit">{{t "actions.save_changes"}}</button>
+</div>

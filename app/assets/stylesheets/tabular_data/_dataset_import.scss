@@ -1,0 +1,133 @@
+@import "_common.scss";
+
+$image-height : 35px;
+$image-width: 35px;
+
+.dataset_import {
+    width: 500px;
+
+    .where {
+        @include font-menu;
+        padding-left: 15px;
+        padding-bottom: 5px;
+        font-size: 14px;
+        font-weight: $semibold;
+        color: $color-text2
+    }
+
+    form {
+        .file_details {
+            line-height: $image-height;
+            vertical-align: middle;
+
+            span, label, input[type=file] {
+                display: inline-block;
+            }
+
+            img {
+                float: left;
+                vertical-align: middle;
+            }
+
+            .file {
+                vertical-align: middle;
+
+                .empty_selection {
+                    @include font-normal-alpha;
+                    padding-left: 12px;
+                }
+
+                .file-wrapper {
+                    padding-bottom: 1px;
+                    vertical-align: top;
+                    a {
+                       font-size: 12px;
+                       font-weight: $semibold;
+                       margin-left: 10px;
+                    }
+                }
+
+                .file_name {
+                    @include ellipsis;
+                    display: inline-block;
+                    max-width: 315px;
+                    color: $color-text3;
+                    font-size: 14px;
+                }
+
+                input[type=file] {
+                    color: $link-color;
+                    &:hover {
+                        cursor : pointer;
+                    }
+                }
+
+                .choose {
+                    @include font-content-details;
+                    @include content-details-button($border-color);
+                }
+            }
+        }
+
+        .import_controls {
+            margin-left: $image-width;
+
+            .row {
+                line-height: $image-height;
+                vertical-align: middle;
+
+                input[type=text] {
+                    width: 192px;
+                    display: inline-block;
+                }
+            }
+
+            .existing_table {
+                .options {
+                    padding-left: 20px;
+
+                    label {
+                        font-size: 12px;
+                    }
+                }
+
+                .dataset_picked {
+                    font-size: 13px;
+                    font-weight: $semibold;
+                    margin-right: 5px;
+                    display: inline-block;
+                    line-height: 14px;
+                }
+
+                a.dataset_picked {
+                    border-bottom: 1px dotted gray;
+                    display: inline-block;
+                    line-height: 14px;
+                }
+            }
+        }
+
+        .errors {
+            width: 100%;
+        }
+
+        label {
+            min-width: 200px;
+            display: inline-block;
+        }
+
+        input[disabled="disabled"] {
+            @include opacity(.6);
+        }
+
+        &.chosen {
+            img {
+                visibility: visible;
+            }
+
+            .comment {
+                visibility: visible;
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+@import "../common";
+
+.instance_account {
+    width: 475px;
+
+    label {
+        display: inline-block;
+        margin-bottom: 12px;
+    }
+
+    input {
+        width: 350px;
+        margin-bottom: 12px;
+        margin-left: 12px;
+    }
+}

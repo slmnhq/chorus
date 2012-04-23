@@ -1,0 +1,83 @@
+@import "_common.scss";
+
+$login-width : 450px;
+div.login {
+    margin-top: 190px;
+
+    .card {
+        @include borderbox;
+        background-color: $card-background;
+        border: 2px solid $card-border-color;
+        margin: auto;
+        width: $login-width;
+        overflow: auto;
+
+        h1 {
+            font-weight: bold;
+            font-size: 23px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        form {
+            text-align: center;
+            padding: 11px 15px 9px 20px;
+            .content {
+                margin: auto;
+                text-align: left;
+                width: 300px;
+                padding-top: 5px;
+
+                input {
+                    margin-bottom: 12px;
+                }
+            }
+
+            .modal_controls {
+                @include after-clearfix;
+            }
+        }
+    }
+
+    footer {
+        width : $login-width;
+        color: #999999;
+        font-size : 10px;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+
+        .logos {
+            @include after-clearfix;
+            width: $login-width;
+            margin: 25px 0;
+
+            .greenplum {
+                float: left;
+            }
+
+            .emc {
+                float: right;
+            }
+        }
+
+        .legal {
+            text-align: left;
+            
+            p {
+                padding-bottom: 12px;
+                span {
+                    display: inline-block;
+
+                    &.version {
+                        padding-right: 4px;
+                    }
+
+                    &.copyright {
+                        padding-left: 4px;
+                    }
+                }
+            }
+        }
+    }
+}

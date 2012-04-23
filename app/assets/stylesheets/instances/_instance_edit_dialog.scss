@@ -1,0 +1,48 @@
+@import "_common.scss";
+
+.instance_edit {
+    $dialog-width : 475px;
+    $host-width : 320px;
+    $account_width : 212px;
+    $input-spacing : 16px;
+
+    width: $dialog-width;
+
+    input[type=text][disabled=disabled] {
+        border: 0;
+        background: none;
+    }
+
+    label {
+        margin-top: 15px;
+        margin-bottom: $padding-y;
+        display: inline-block;
+    }
+
+    label[name=host], input[name=host] {
+        width: $host-width;
+        display: inline-block;
+    }
+
+    input[name=maintenanceDb] {
+        width: $host-width;
+    }
+
+    label[name=userName], input[name=userName],
+    label[name=userGroups], input[name=userGroups]
+    {
+        display: inline-block;
+        width: $account_width;
+    }
+
+    label[name=userGroups], input[name=userGroups] {
+        margin-left: $input-spacing;
+    }
+
+    label[name=port], input[name=port] {
+        width: $dialog-width - $host-width - 40px;
+        margin-left: 4px;
+        display: inline-block;
+    }
+}
+

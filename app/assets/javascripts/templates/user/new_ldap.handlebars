@@ -1,0 +1,71 @@
+{{> errorDiv }}
+{{#ifAdmin}}
+<form action="/edc/users" method="post">
+    <div class="edit_photo">
+        <img src="/images/default-user-icon.png" class="profile"/>
+    </div>
+    <div class="fields">
+
+        <div class="row">
+            <span class="left">
+                <a class="check_username" href="#">{{t "users.ldap.check_username"}}</a>
+                <label class="required">{{t "users.username"}}</label>
+                <input type="text" name="userName" maxlength="256" value="{{userName}}"/>
+            </span>
+
+            <span class="right admin">
+                <label class="placeholder"></label>
+                <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
+                <label for="admin-checkbox">{{t "users.make_admin"}}</label>
+            </span>
+        </div>
+
+        <div class="row">
+            <span class="left">
+                <label class="required">{{t "users.first_name"}}</label>
+                <input type="text" name="firstName" maxlength="256" value="{{firstName}}"/>
+            </span>
+
+            <span class="right">
+                <label class="required">{{t "users.last_name"}}</label>
+                <input type="text" name="lastName" maxlength="256" value="{{lastName}}"/>
+            </span>
+        </div>
+
+        <div class="row">
+            <span class="left">
+                <label class="required">{{t "users.email"}}</label>
+                <input type="text" name="emailAddress" maxlength="256" value="{{emailAddress}}"/>
+            </span>
+        </div>
+
+        <div class="row">
+            <span class="left">
+                <label>Title</label>
+                <input type="text" name="title" maxlength="256" value="{{title}}"/>
+            </span>
+
+            <span class="right">
+                <label>{{t "users.department"}}</label>
+                <input type="text" name="ou" maxlength="256" value="{{ou}}"/>
+            </span>
+        </div>
+
+        <div class="row">
+               <span class="notes">
+                   <label>Notes</label>
+                   <textarea rows="4" cols="1" name="notes" maxlength="4096">{{notes}}</textarea>
+               </span>
+        </div>
+
+        <div class="row controls">
+            <span class="left">
+                <button type="submit" class="submit">{{t "users.button.add"}}</button>
+                <button type="button" class="cancel">{{t "actions.cancel"}}</button>
+            </span>
+        </div>
+    </div>
+</form>
+{{else}}
+<p class="aint_admin">{{t "users.not_admin"}}</p>
+{{/ifAdmin}}

@@ -1,0 +1,46 @@
+<form action="" enctype="multipart/form-data" method="post">
+    <div class="where">{{t "dataset.import.where" canonicalName=canonicalName}}</div>
+
+    <div class="file_details">
+        <img class="hidden" src="/images/workfiles/medium/plain.png"/>
+        <div class="file">
+            <span class="file_name"/>
+            <span class="file-wrapper">
+                <button class="choose">{{t "dataset.import.select_file"}}</button>
+                <input type="file"/>
+                <a href="#" class='hidden'>{{t "actions.change"}}</a>
+            </span>
+            <span class="empty_selection">{{t "dataset.import.no_file_selected"}}</span>
+        </div>
+    </div>
+
+    <div class="import_controls hidden">
+        <div class="row new_table">
+            <input type="radio" value="new" id="new_table" name="group" checked="true" tabindex="3"/>
+            <label for="new_table">{{t "dataset.import.new_table"}}</label>
+            <input type="text" maxlength="64"/>
+        </div>
+
+        <div class="row existing_table">
+            <input type="radio" value="existing" name="group" id="existing"/>
+            <label for="existing">{{t "dataset.import.existing_table"}}</label>
+            <span class="select">
+                <a href="#" class="dataset_picked hidden" name="toTable">{{t "dataset.import.select_dataset"}}</a>
+                <span class="dataset_picked hidden" name="toTable">{{t "dataset.import.select_dataset"}}</span>
+            </span>
+            <div class="options hidden">
+                <input type="checkbox" id="truncate"/><label for="truncate">{{t "dataset.import.truncate_table"}}</label>
+            </div>
+        </div>
+
+        <div class="row workfile">
+            <input type="radio" value="workfile" name="group" id="workfile"/>
+            <label for="workfile">{{t "dataset.import.workfile"}}</label>
+        </div>
+    </div>
+
+    <div class="modal_controls">
+        <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+        <button type="submit" class="submit" tabindex="99" disabled="disabled">{{t "dataset.import.upload_file"}}</button>
+    </div>
+</form>

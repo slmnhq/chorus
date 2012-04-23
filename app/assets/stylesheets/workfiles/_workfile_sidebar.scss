@@ -1,0 +1,135 @@
+@import "../_common.scss";
+
+.workfile_list_sidebar, .workfile_show_sidebar {
+    .info {
+        .fileName {
+            @include ellipsis;
+            @include heading-sidebar;
+        }
+
+        .updated {
+            color: $color-text4;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .fileName {
+            margin-bottom: 10px;
+        }
+    }
+}
+
+
+.workfile_list_sidebar {
+    .info {
+        margin-bottom: 20px;
+    }
+
+    html.ie8 & {
+        button {
+            font-size : 15px;
+        }
+
+    }
+}
+
+.workfile_show_sidebar {
+    .info {
+        margin: 5px 0 20px 0;
+    }
+
+    .display_title {
+        @include font-content-details;
+    }
+
+    .version_list {
+        font-size: 12px;
+        margin-left: 3px;
+        span {
+            color : $link-color;
+            border-bottom: 1px dotted $link-color;
+            color: $link-color;
+        }
+
+        img {
+           margin: 2px;
+        }
+    }
+}
+
+.workfile_version_list {
+    li {
+        a {
+            padding-top: 10px;
+            display: inline-block;
+        }
+
+        &:first-child a {
+            /* qtip has some top padding already */
+            padding-top: 6px;
+        }
+
+        &:last-child .spacer {
+            border-bottom: none;
+        }
+
+        &:hover {
+            .version_title {
+                text-decoration: underline;
+            }
+        }
+
+        img {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .version_info {
+            display: inline-block;
+            width: 80%;
+        }
+
+        .version_title {
+            @include font-menu;
+        }
+
+        .version_details {
+            margin-top: 2px;
+            @include secondary-text-small;
+            padding-bottom: 10px;
+        }
+
+        .spacer {
+            border-bottom: $dotted-list-item-border;
+        }
+    }
+}
+
+ul.schema_menu {
+    overflow: auto;
+    max-height: 300px;
+
+    li {
+        margin: 2px 4px 0px 8px;
+
+        .check {
+            background-repeat: no-repeat;
+            background-image: url("/images/check.png");
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 2px;
+            margin-left: -14px;
+            position: relative;
+            top: 1px;
+
+            &.hidden {
+                visibility: hidden;
+            }
+        }
+
+        a {
+            cursor: pointer;
+        }
+    }
+}

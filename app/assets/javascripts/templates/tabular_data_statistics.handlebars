@@ -1,0 +1,124 @@
+<div class="statistics_detail">
+    <h2 class="dataset_title">
+        <div class='title'>{{t "dataset.statistics.dataset"}}:</div>
+        <div class="table_name">{{objectName}}</div>
+    </h2>
+
+    {{#if statistics}}
+        <div class="statistics">
+            {{#if typeString}}
+            <div class="pair">
+                <div class="key">{{t "dataset.statistics.type"}}</div>
+                <div class="value table_type" title="{{typeString}}">{{typeString}}</div>
+            </div>
+            {{/if}}
+            {{#if statistics.partitions}}
+            <div class="pair partitions">
+                <div class="key">{{t "dataset.statistics.partitions"}}</div>
+                <div class="value" title="{{statistics.partitions}}">{{statistics.partitions}}</div>
+            </div>
+            {{/if}}
+            {{#if statistics.columns}}
+            <div class="pair columns">
+                <div class="key">{{t "dataset.statistics.columns"}}</div>
+                <div class="value" title="{{statistics.columns}}">{{statistics.columns}}</div>
+            </div>
+            {{/if}}
+            {{#if statistics.lastAnalyzedTime}}
+            <div class="pair last_analyzed_time">
+                <div class="key">{{t "dataset.statistics.last_analyzed_time"}}</div>
+                <div class="value" title="{{relativeTimestamp statistics.lastAnalyzedTime}}">{{relativeTimestamp statistics.lastAnalyzedTime}}</div>
+            </div>
+            {{#if statistics.rows}}
+            <div class="pair rows">
+                <div class="key">{{t "dataset.statistics.rows"}}</div>
+                <div class="value" title="{{statistics.rows}}">{{statistics.rows}}</div>
+            </div>
+            {{/if}}
+            {{/if}}
+            {{#if statistics.onDiskSize}}
+            <div class="pair size">
+                <div class="key">{{t "dataset.statistics.size"}}</div>
+                <div class="value" title="{{statistics.onDiskSize}}">{{statistics.onDiskSize}}</div>
+            </div>
+            {{/if}}
+        </div>
+        {{#if statistics.desc}}
+        <div class='description'>
+            <h4>{{t "dataset.statistics.Description"}}</h4>
+            <p>
+            {{statistics.desc}}
+            </p>
+        </div>
+        {{/if}}
+    {{/if}}
+
+    {{#if column}}
+        <h2 class="column_title">
+            <div class='title'>{{t "dataset.column_name"}}:</div>
+            <div class="column_name">{{column.name}}</div>
+        </h2>
+        <div class="column_statistics">
+            <div class="pair type_category">
+                <div class="key">{{t "dataset.column_statistics.type_category"}}</div>
+                <div class="value" title="{{column.typeClass}}">{{column.typeClass}}</div>
+            </div>
+            <div class="pair type">
+                <div class="key">{{t "dataset.column_statistics.type"}}</div>
+                <div class="value" title="{{column.type}}">{{column.type}}</div>
+            </div>
+            {{#if statistics.lastAnalyzedTime}}
+            {{#if column.min}}
+            <div class="pair min">
+                <div class="key">{{t "dataset.column_statistics.min"}}</div>
+                <div class="value" title="{{column.min}}">{{round column.min}}</div>
+            </div>
+            {{/if}}
+            {{#if column.median}}
+            <div class="pair median">
+                <div class="key">{{t "dataset.column_statistics.median"}}</div>
+                <div class="value" title="{{column.median}}">{{round column.median}}</div>
+            </div>
+            {{/if}}
+            {{#if column.avg}}
+            <div class="pair avg">
+                <div class="key">{{t "dataset.column_statistics.avg"}}</div>
+                <div class="value" title="{{column.avg}}">{{round column.avg}}</div>
+            </div>
+            {{/if}}
+            {{#if column.max}}
+            <div class="pair max">
+                <div class="key">{{t "dataset.column_statistics.max"}}</div>
+                <div class="value" title="{{column.max}}">{{round column.max}}</div>
+            </div>
+            {{/if}}
+            {{#if column.stdDeviation}}
+            <div class="pair stddev">
+                <div class="key">{{t "dataset.column_statistics.stddev"}}</div>
+                <div class="value" title="{{column.stdDeviation}}">{{round column.stdDeviation}}</div>
+            </div>
+            {{/if}}
+            {{#if column.distinctValue}}
+            <div class="pair distinct">
+                <div class="key">{{t "dataset.column_statistics.distinct"}}</div>
+                <div class="value" title="{{column.distinctValue}}">{{round column.distinctValue}}</div>
+            </div>
+            {{/if}}
+            {{#if column.commonValues.length}}
+            <div class="multiline common">
+                <div class="key">{{t "dataset.column_statistics.common"}}</div>
+                {{#each column.commonValues}}
+                <div class="value" title="{{this}}">{{round this}}</div>
+                {{/each}}
+            </div>
+            {{/if}}
+            {{#if column.nullFraction}}
+            <div class="pair pctnull">
+                <div class="key">{{t "dataset.column_statistics.pctnull"}}</div>
+                <div class="value" title="{{column.nullFraction}}">{{percentage column.nullFraction}}</div>
+            </div>
+            {{/if}}
+            {{/if}}
+        </div>
+    {{/if}}
+</div>

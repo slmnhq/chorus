@@ -1,0 +1,39 @@
+<div class="row">
+    <select name="scheduleFrequency" class="frequency">
+    <option value="DAILY">{{t "import.frequency.daily"}}</option>
+        <option value="WEEKLY" selected="selected">{{t "import.frequency.weekly"}}</option>
+        <option value="MONTHLY">{{t "import.frequency.monthly"}}</option>
+    </select>
+
+    <select class="hours">
+        {{#each hours}}
+        <option value="{{this}}">{{this}}</option>
+    {{/each}}
+    </select>
+
+    <select class="minutes">
+        {{#each minutes}}
+        <option value="{{this}}">{{this}}</option>
+    {{/each}}
+    </select>
+
+    <select class="ampm">
+    <option value="AM">{{t "import.ampm.am"}}</option>
+        <option value="PM">{{t "import.ampm.pm"}}</option>
+    </select>
+</div>
+
+<div class="row date start">
+    <span class="label">{{t "import.start.label"}}</span>
+    <input type="text" name="month" placeholder='{{t "datepicker.placeholder.month"}}' value="{{start.month}}"/>
+
+    <input type="text" name="day" placeholder='{{t "datepicker.placeholder.day"}}' value="{{start.day}}"/>
+    <input type="text" name="year" placeholder='{{t "datepicker.placeholder.year"}}' value="{{start.year}}"/>
+</div>
+
+<div class="row date end">
+    <span class="label">{{t "import.end.label"}}</span>
+    <input type="text" name="month" placeholder='{{t "datepicker.placeholder.month"}}' value="{{end.month}}"/>
+    <input type="text" name="day" placeholder='{{t "datepicker.placeholder.day"}}' value="{{end.day}}"/>
+    <input type="text" name="year" placeholder='{{t "datepicker.placeholder.year"}}' value="{{end.year}}"/>
+</div>

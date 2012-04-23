@@ -1,0 +1,77 @@
+@import "../_common.scss";
+
+.truncated_text {
+    .styled_text {
+        height: $summary-line-height * 2;
+        &.extra_line {
+            height: $summary-line-height * 3;
+        }
+        overflow: hidden;
+
+        .original {
+            @include summary-text;
+
+            a {
+                font-size: 10pt;
+            }
+
+            b {
+                font-weight: bold;
+            }
+
+            i {
+                font-style: italic;
+             }
+
+            ul {
+                list-style-type: disc;
+            }
+
+            ol {
+                list-style-type: decimal;
+            }
+
+            ul, ol {
+                li {
+                    padding: 0;
+                    margin-left: 40px;
+                    border: none;
+                    line-height: $summary-line-height;
+                }
+            }
+        }
+    }
+
+    &.expanded .styled_text {
+        height: auto;
+    }
+
+    .links {
+        display: none;
+    }
+
+    &.expandable .links {
+        display: block;
+    }
+
+    .links {
+        .more {
+        }
+
+        .less {
+            display: none;
+        }
+    }
+
+    &.expanded {
+        .links {
+            .more {
+                display: none;
+            }
+
+            .less {
+                display: inline;
+            }
+        }
+    }
+}

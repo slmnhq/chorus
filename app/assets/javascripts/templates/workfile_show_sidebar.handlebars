@@ -1,0 +1,23 @@
+<div class="info">
+    <div title="{{fileName}}" class="fileName">{{fileName}}</div>
+    <span class="display_title">{{t "actions.display"}}</span>
+    <a class="version_list" href="#">
+        <span class="chosen">{{t "workfile.version_title" versionNum=versionInfo.versionNum}}</span>
+        <img src="/images/blue-menu-triangle.png"/>
+    </a>
+    <div class="updated">{{t "workfiles.updated_by"}} <a class="updated_by" href="{{modifierUrl}}">{{updatedBy}}</a> on <span class="updated_on">{{displayTimestamp lastUpdatedStamp}}</span></div>
+</div>
+<div class="actions">
+    <ul>
+        <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{id}}" data-workspace-id="{{workspaceId}}" data-active-only="true">{{t "actions.copy_to_another_workspace"}}</a></li>
+        {{#if isActiveWorkspace}}
+            <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{id}}" data-workspace-id="{{workspaceId}}" data-workfile-name="{{fileName}}">{{t "actions.delete"}}</a></li>
+        {{/if}}
+        <li><a class="download" href="{{downloadUrl}}">{{t "actions.download"}}</a></li>
+        {{#if isActiveWorkspace}}
+            <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workfile" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+        {{/if}}
+    </ul>
+</div>
+
+<div class="tab_control"></div>

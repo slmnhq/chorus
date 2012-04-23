@@ -1,0 +1,40 @@
+<button class="run_file">{{t "workfile.content_details.run_file"}}<span class="down_arrow"></span></button>
+<div class="execution_schema">{{schemaName}}</div>
+
+{{renderTemplate "workfile_content_details" .}}
+
+<div class="hidden">
+<div class="run_workfile">
+    <ul class="run_menu">
+        <li>
+            {{#if schemaName}}
+                <span class="menu_shortcut">{{hotKeyName "r"}}</span>
+                <a href="#" class="run_default">
+                {{#if executionSchemaIsSandbox}}
+                    {{t "workfile.content_details.run_workspace_sandbox"}}
+                {{else}}
+                    {{t "workfile.content_details.run_in_last_schema" schemaName=schemaName}}
+                {{/if}}
+                </a>
+            {{else}}
+                <span class="run_default">{{t "workfile.content_details.run_workspace_sandbox"}}</span>
+            {{/if}}
+        </li>
+
+        <li>
+            <span class="menu_shortcut">{{hotKeyName "e"}}</span>
+            <a href="#" class="run_selection">
+            {{#if executionSchemaIsSandbox}}
+                {{t "workfile.content_details.run_selection_sandbox"}}
+            {{else}}
+                {{#if schemaName}}
+                    {{t "workfile.content_details.run_selection_schema" schemaName=schemaName}}
+                {{else}}
+                    {{t "workfile.content_details.run_selection_sandbox"}}
+                {{/if}}
+            {{/if}}
+        </a></li>
+        <li><a href="#" class="run_other_schema">{{t "workfile.content_details.run_in_another_schema"}}</a></li>
+    </ul>
+</div>
+</div>

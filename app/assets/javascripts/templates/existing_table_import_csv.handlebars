@@ -1,0 +1,71 @@
+<div class="directions">
+    {{{directions}}}
+</div>
+<div class="progress_wrapper">
+    <div class="progress"></div>
+    <a class="automap">{{t "dataset.import.table.automap"}}</a>
+</div>
+<div class="options">
+    <div class="header_options">
+        <input id="hasHeader" type="checkbox" {{#if hasHeader}}checked{{/if}}></input>
+        <label for="hasHeader">{{t "dataset.import.include_header"}}</label>
+    </div>
+
+    <span class="delimiter">{{t "dataset.import.delimiter.title"}}</span>
+
+    <input type="radio" class="delimiter" id="delimiter_tab" name="delimiter" value="&#09;"/>
+    <label class="delimiter" for="delimiter_tab">{{t "dataset.import.delimiter.tab"}}</label>
+
+    <input type="radio" class="delimiter" id="delimiter_comma" name="delimiter" value=","/>
+    <label class="delimiter" for="delimiter_comma">{{t "dataset.import.delimiter.comma"}}</label>
+
+    <input type="radio" class="delimiter" id="delimiter_semicolon" name="delimiter" value=";"/>
+    <label class="delimiter" for="delimiter_semicolon">{{t "dataset.import.delimiter.semicolon"}}</label>
+
+    <input type="radio" class="delimiter" id="delimiter_space" name="delimiter" value=" "/>
+    <label class="delimiter" for="delimiter_space">{{t "dataset.import.delimiter.space"}}</label>
+
+    <input type="radio" class="delimiter" id="delimiter_other" name="delimiter" value="other"/>
+    <label class="delimiter" for="delimiter_other">{{t "dataset.import.delimiter.other"}}</label>
+
+    <input type="text" class="delimiter" name="custom_delimiter" value="{{delimiter}}" maxlength="1" />
+</div>
+
+<div class="result_table">
+    <div class="data_table">
+        <div class="thead list">
+            <div class="column_names">
+                {{#each columns}}<div class="th"><div class="field_name" title="{{name}}">{{name}}</div></div>{{/each}}
+            </div>
+            <div class="column_mapping">
+                {{#each columns}}<div class="th map"><span>{{t "dataset.import.table.existing.map_to"}}</span>
+                        <a href="#"><span class="column_name">{{destination}}</span><span class="arrow"/></a></div>{{/each}}
+            </div>
+        </div>
+
+        <div class="tbody">
+            {{#each columns}}<div class="column">
+                {{#each values}}
+                <div class="td" title="{{this}}">{{renderTableData this}}</div>
+                {{/each}}
+            </div>{{/each}}
+        </div>
+    </div>
+</div>
+
+<div class="menu_content hidden">
+    <ul>
+        {{#each destinationColumns}}
+            <li name={{name}}>
+                <div class="check_wrapper"><span class="check hidden"></span></div>
+                <a class="name" href="#" title="{{name}}">{{name}}</a><span class="count"/>
+                <span class="type">{{type}}</span>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+<div class="modal_controls">
+    <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+    <button type="submit" class="submit" tabindex="99">{{t "dataset.import.table.submit"}}</button>
+</div>

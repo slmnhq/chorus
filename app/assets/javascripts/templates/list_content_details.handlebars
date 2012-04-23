@@ -1,0 +1,78 @@
+<div class="provisioning_bar hidden">
+    <div class="actions">
+        <a href="#" class="close_provisioning">{{t "actions.close"}}</a>
+    </div>
+    {{t "dataset.content_details.provisioning"}}
+</div>
+<div class="provisioning_fault_bar hidden">
+    <div class="actions">
+        <a href="#" class="dialog retry_provisioning" data-dialog="SandboxNew" data-workspace-id="{{workspaceId}}">{{t "actions.retry"}}</a>
+        <a href="#" class="close_provisioning">{{t "actions.close"}}</a>
+    </div>
+    {{t "dataset.content_details.provisioning_fault"}}
+</div>
+
+{{#each buttons}}
+    {{#if view}}
+        <button type="button" class="dialog" data-dialog="{{view}}"
+        {{#each dataAttributes}}
+            data-{{name}}="{{value}}"
+        {{/each}}
+        {{#if disabled}}
+            disabled="disabled"
+        {{/if}}
+        >{{text}}</button>
+        {{#if helpText}}
+            <img class="help" src="/images/more-info.png" data-text="{{helpText}}"/>
+        {{/if}}
+    {{else}}
+        {{#if url}}
+            <a class="button" href="{{url}}">{{text}}</a>
+        {{/if}}
+    {{/if}}
+{{/each}}
+
+{{#if loaded}}
+    <div class="pagination">
+        {{#unless hideCounts}}
+            <div class="page">
+                {{t "pagination.page"}} <span class="current"></span> {{t "pagination.of"}} <span class="total"></span>
+            </div>
+        {{/unless}}
+
+        <div class="links">
+            <a class="previous"><span>{{t "pagination.previous"}}</span></a>
+            <span class="previous">{{t "pagination.previous"}}</span>
+
+            <a class="next"><span>{{t "pagination.next"}}</span></a>
+            <span class="next">{{t "pagination.next"}}</span>
+        </div>
+    </div>
+{{/if}}
+
+{{#if multiSelect}}
+    <div class="multiselect">
+        <span class="select">{{t "actions.select"}}</span>
+        <a href="#" class="select_all">{{t "actions.select_all"}}</a>
+        <span class="separator">|</span>
+        <a href="#" class="select_none">{{t "actions.select_none"}}</a>
+    </div>
+{{/if}}
+
+{{#if search}}
+    {{#unless multiSelect}}
+        <span class="explore">{{t "actions.explore" }}</span>
+    {{/unless}}
+
+    {{#if search.placeholder}}
+        <input type="text" class="search" placeholder="{{search.placeholder}}"/>
+    {{/if}}
+{{/if}}
+
+{{#if loaded}}
+    {{#unless hideCounts}}
+        <div class="count"></div>
+    {{/unless}}
+{{else}}
+    <div class="loading">{{t "loading"}}</div>
+{{/if}}

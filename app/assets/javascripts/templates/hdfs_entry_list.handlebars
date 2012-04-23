@@ -1,0 +1,22 @@
+{{#each models}}
+    <li>
+        <span class="spacer_left"/>
+        <img src="{{iconUrl}}"/>
+        <div class="description">
+            {{#if isDir}}
+                <a class="name" href="{{showUrl}}">{{name}}</a>
+                <span class="dir">{{dirInfo}}</span>
+            {{else}}
+                {{#if displayableFiletype}}
+                    <span class="name"><a href="{{showUrl}}">{{name}}</a></span>
+                    <span class="size">{{humanSize}}</span>
+                {{else}}
+                    <span class="name">{{name}}</span>
+                    <span class="size">{{humanSize}}</span>
+
+                {{/if}}
+            {{/if}}
+        </div>
+        <span class="spacer_right"/>
+    </li>
+{{/each}}

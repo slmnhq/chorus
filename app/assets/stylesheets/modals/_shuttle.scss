@@ -1,0 +1,172 @@
+@import "_common.scss";
+
+$list-item-height: 39px;
+$list-border-width: 1px;
+$shuttle-width: 720px;
+
+.shuttle_widget {
+    background-color: $body-background-color;
+    width: $shuttle-width;
+    border-bottom: 1px solid $list-border-color;
+    border-top: 1px solid $list-border-color;
+
+    .shuttle_header {
+        border-bottom: 1px solid $list-border-color;
+        position: relative;
+        height: 33px;
+
+        .search_container {
+            left: 0;
+            border-right: 1px solid $list-border-color;
+
+            .chorus_search_container {
+                width: 70%;
+            }
+        }
+
+        .summary {
+            left: 50%;
+        }
+
+         .search_container, .summary {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            vertical-align: middle;
+            line-height: 25px;
+
+            > div {
+                padding: 4px 8px;
+            }
+
+            a {
+               float: right;
+            }
+        }
+
+        .object_name {
+            color: $color-text3;
+        }
+
+        .selected_count {
+            padding-left: 5px;
+        }
+
+        a {
+            font-weight: $semibold;
+        }
+    }
+
+    .shuttle_body {
+        position: relative;
+        height: (($list-item-height + $list-border-width) * 8);
+    }
+
+    a {
+        font-size: 12px;
+    }
+
+    .was_added {
+        color: $color-text3;
+        float: right;
+        font-size: 12px;
+    }
+
+    li a {
+        float: right;
+    }
+
+    img.profile {
+        max-height: 100%;
+        max-width: 100%;
+        vertical-align: middle;
+    }
+
+    div.image {
+        position: relative;
+        display: inline-block;
+        padding: 2px;
+        width: $list-item-height - 6px;
+        height: $list-item-height - 6px;
+    }
+
+    ul {
+        position: absolute;
+        width: 50%;
+        top: 0;
+        bottom: 0;
+        vertical-align: top;
+        overflow-y: auto;
+
+        li {
+            height: $list-item-height;
+            border-bottom: $list-border-width dotted $list-border-color;
+            padding: 0 8px;
+            line-height: $list-item-height - 3px;
+
+            .name {
+                @include font-normal-alpha;
+                vertical-align: middle;
+                @include ellipsis;
+                padding-left: 10px;
+                display: inline-block;
+                max-width: 60%;
+            }
+        }
+
+        &.available {
+            left: 0;
+            border-right: 1px solid $list-border-color;
+
+            li {
+                img.checkmark {
+                    position: absolute;
+                    bottom: 0px;
+                    right: 0px;
+                    display: none;
+                }
+
+                &.added {
+                    img.checkmark {
+                        display: inherit;
+                    }
+                    a {
+                        display : none;
+                    }
+
+                    .was_added {
+                        display : inline;
+                    }
+                }
+
+                a {
+                    display : inline;
+                }
+
+                .was_added {
+                    display : none;
+                }
+            }
+        }
+
+        &.selected {
+            left: 50%;
+
+            li {
+                display: none;
+                &.added {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+.dialog.workspace_edit_members .dialog_content{
+    padding: 0;
+    .modal_controls {
+        padding: 0 20px 20px;
+    }
+
+}
+

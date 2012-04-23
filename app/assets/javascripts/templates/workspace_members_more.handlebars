@@ -1,0 +1,17 @@
+<div class="sub_header">
+    <span class="member_count">{{t "workspace.members_count" count=members.length}}</span>
+    <div class="sort_menu"/>
+</div>
+<div class="collection_list">
+    <ul>
+    {{#each members}}
+    <li title="{{displayName}}">
+        <img class="profile" src="{{imageUrl}}"/>
+        <span class="name">{{displayName}}</span>
+    </li>
+    {{/each}}
+    </ul>
+</div>
+<div class="modal_controls">
+<button class="cancel">{{t "actions.close_window"}}</button>
+</div>

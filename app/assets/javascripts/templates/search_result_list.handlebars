@@ -1,0 +1,19 @@
+{{#if shown}}
+    {{#unless filteredSearch}}
+        <div class="search_result_header">
+            <div class="list_content_details">
+                <div class="pagination">
+                    {{#if moreResults}}
+                        <span class="count">{{t "search.count" shown=shown total=total}}</span>
+                        <a class="show_all" data-type="{{entityType}}" href="#">{{t "search.show_all"}}</a>
+                    {{else}}
+                        <span class="count">{{t "search.count_short" count=shown}}</span>
+                    {{/if}}
+                </div>
+                <span class="title">{{title}}</span>
+            </div>
+        </div>
+    {{/unless}}
+
+    <ul class="{{entityType}}_list"></ul>
+{{/if}}

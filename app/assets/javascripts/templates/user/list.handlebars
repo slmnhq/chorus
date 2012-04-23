@@ -1,0 +1,24 @@
+{{#each models}}
+    <li data-userId="{{id}}">
+        <span class="spacer_left"/>
+        <a class="image" href="{{showUrl}}">
+            <img src="{{imageUrl}}" class="profile"/>
+        </a>
+        <div class="text">
+            <div class="main">
+                <a class="name" href="{{showUrl}}">
+                    <span title="{{fullName}}">{{fullName}}</span>
+                </a>
+                {{#if admin}}
+                    <span class="administrator tag">
+                        <span class="arrow_left"/><span class="tag_name">{{t "users.administrator"}}</span>
+                    </span>
+                {{/if}}
+            </div>
+            <div class="details">
+                <span class="title" title="{{title}}">{{title}}</span>
+            </div>
+        </div>
+        <span class="spacer_right"/>
+    </li>
+{{/each}}

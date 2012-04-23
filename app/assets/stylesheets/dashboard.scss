@@ -1,0 +1,125 @@
+@import "_common";
+
+div[data-page="Dashboard"] {
+    $workspace-list-width: 350px;
+
+    #left {
+        margin-right: 0;
+    }
+
+    #main_content {
+        @include after-clearfix();
+    }
+
+    #help {
+      top: 50px;
+      right: $guts-padding;
+    }
+
+    #user_count {
+      top: 50px;
+      right: $help-pill-width + (2 * $guts-padding);
+    }
+
+    .content {
+        padding-right: 15px;
+    }
+
+    .main_activity_list .heading {
+        display: none;
+    }
+
+    .dashboard_sidebar {
+        float: right;
+        width: $workspace-list-width;
+    }
+
+    .main_content.workspace_list {
+        font-weight: $semibold;
+
+        .content_header {
+            background: transparent;
+        }
+
+        .dashboard_workspace_list {
+            li {
+                padding-bottom : 4px;
+
+                .comment {
+                    line-height : 16px;
+                    padding-top : 3px;
+                    .count {
+                        font-size: 13px;
+                        font-weight: normal;
+                        color: $link-color;
+                    }
+
+                    .date {
+                        font-size: 12px;
+                        font-weight: normal;
+                        color: $color-text2;
+                    }
+
+                    .recent {
+                        font-size: 12px;
+                        font-weight: normal;
+                        color: $color-text2;
+
+                        .author {
+                            font-weight: $semibold;
+                        }
+                    }
+                }
+            }
+
+            > li:last-child {
+                border-bottom:  $dotted-list-item-border;
+            }
+        }
+    }
+
+    .main_content.instance_list {
+        font-weight: $semibold;
+
+        .dashboard_instance_list {
+
+            .main {
+                padding-bottom: 5px;
+            }
+
+            > li:last-child {
+                border-bottom:  $dotted-list-item-border;
+            }
+        }
+    }
+
+    .content_details {
+        line-height : 27px;
+        color: $link-color;
+        border-top : none;
+        border-bottom-style: dotted;
+        padding-top: 4px;
+
+        a {
+            padding: 0 10px;
+            font-size: 12px;
+            font-weight: $semibold;
+        }
+    }
+
+    .main_content.dashboard_main {
+        margin-right:  $workspace-list-width;
+    }
+}
+
+.tooltip {
+    width: 250px;
+    li.comment {
+        .insight_ribbon {
+            top: -18px;
+        }
+        .object {
+            display: inline;
+        }
+    }
+}

@@ -1,0 +1,68 @@
+{{#if name}}
+<div class="info">
+    <div class="instance_name" title="{{name}}">{{name}}</div>
+    <div class="instance_type" title="{{instanceProvider}}">{{instanceProvider}}
+        {{#if isProvisioning}}<span>{{t "instances.sidebar.provisioning"}}</span>{{/if}}
+    </div>
+    {{#if isFault}}
+        <div class="instance_fault">
+            <img src="/images/message_error_small.png"/>
+            <span>{{t "instances.sidebar.fault"}}</span>
+        </div>
+    {{/if}}
+</div>
+{{#if isOnline}}
+<div class="account_info">
+    {{#if dbUserName}}
+        <img src="/images/instances/shared_icon.png"/>
+        {{t "instances.sidebar.is_shared_account"}}
+        {{#if userCanEditPermissions}}
+            <a href="#" class="dialog" data-dialog="InstancePermissions">{{t "instances.sidebar.edit"}}</a>
+        {{/if}}
+    {{else}}
+        {{#if userCanEditPermissions}}
+            <div class="edit_individual_accounts">
+                <img src="/images/instances/individual.png"/>
+                <span class="individual_accounts_count">{{t "instances.sidebar.there_are_x_individual_accounts" count=instanceAccountsCount}}</span>
+                 <a href="#" class="dialog" data-dialog="InstancePermissions">{{t "instances.sidebar.edit"}}</a>
+            </div>
+        {{else}}
+            <div class="individual_account">
+                {{#if userHasAccount}}
+                    <img src="/images/instances/access.png"/>
+                    {{t "instances.sidebar.access"}}
+                {{else}}
+                    <img src="/images/instances/no_access.png"/>
+                    {{t "instances.sidebar.no_access"}}
+                {{/if}}
+            </div>
+        {{/if}}
+    {{/if}}
+</div>
+{{/if}}
+<div class="actions">
+    <ul>
+        {{#ifAny dbUserName userCanEditInstance }}
+        {{else}}
+            {{#if userHasAccount}}
+                <li><a class="dialog edit_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.edit.title"}}'>{{t "instances.sidebar.edit_credentials"}}</a></li>
+                <li><a class="alert remove_credentials" href="#" data-alert="InstanceAccountDelete">{{t "instances.sidebar.remove_credentials"}}</a></li>
+            {{else}}
+                <li><a class="dialog add_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.add.title"}}'>{{t "instances.sidebar.add_credentials"}}</a></li>
+            {{/if}}
+        {{/ifAny}}
+         {{#if userCanEditInstance}}
+             {{#if editable}}
+                <li><a class="dialog edit_instance" href="#" data-dialog="InstanceEdit">{{t "instances.sidebar.edit_instance"}}</a></li>
+            {{/if}}
+            {{#if deleteable}}
+                <li><a class="alert delete_instance" href="#" data-alert="InstanceDelete">{{t "instances.sidebar.delete_instance"}}</a></li>
+            {{/if}}
+        {{/if}}
+        <li class="workspace_usage_container"><span class="disabled workspace_usage">{{t "instances.sidebar.usage_loading"}}</span></li>
+
+        <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="instance" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+    </ul>
+</div>
+<div class="tab_control"></div>
+{{/if}}

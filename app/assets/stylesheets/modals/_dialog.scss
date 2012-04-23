@@ -1,0 +1,86 @@
+@import "../_common.scss";
+
+.dialog {
+    .dialog_header {
+        height: 54px;
+        border-bottom: 1px solid $border-color;
+
+        h1 {
+            @include heading-normal;
+            line-height: 54px;
+            vertical-align: middle;
+            margin: 0 $dialog-padding;
+            padding-right: 25px;
+        }
+    }
+
+    .dialog_content {
+        background-color: $body-background-color;
+        padding: 10px $dialog-padding;
+
+        .menus {
+            height: 30px;
+        }
+
+    }
+
+    fieldset {
+        border: 1px solid $border-color;
+        padding: 0 $dialog-padding $dialog-padding;
+
+        legend label {
+            font-size: 14px;
+            font-weight: normal;
+            color: $color-text1;
+        }
+
+        form label {
+            margin-top: 8px;
+        }
+
+        form label, input {
+            display: inline-block;
+        }
+    }
+
+    .sub_header {
+        padding : 0;
+        line-height: 34px;
+        vertical-align: middle;
+        @include font-content-details;
+
+        .sort_menu {
+            float: right;
+        }
+    }
+
+    label {
+        @include dialog-label;
+    }
+
+    &.with_sub_header {
+        .dialog_content {
+            padding: 0;
+        }
+
+        .sub_header {
+            padding: 0 15px;
+            border-bottom: 1px solid $menu-border-color;
+        }
+
+        .sub_content {
+            padding: 10px $dialog-padding;
+        }
+
+        .loading_section {
+            padding: 20px;
+        }
+
+        .modal_controls {
+            padding: $dialog-padding;
+            border-top: 1px solid $menu-border-color;
+            margin: 0;
+        }
+    }
+}
+

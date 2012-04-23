@@ -1,0 +1,30 @@
+.tabular_data_preview.dialog {
+    width: 800px;
+
+    &.dialog {
+        .dialog_content {
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 0;
+        }
+    }
+
+    .modal_controls {
+        margin-right: $dialog-padding;
+    }
+
+    .results_console {
+        border-bottom: 1px solid $list-border-color;
+
+        .execution {
+            h1.title {
+                display: none;
+            }
+        }
+
+        .bottom_gutter {
+            display: none;
+        }
+
+    }
+}

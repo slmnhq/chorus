@@ -1,0 +1,78 @@
+<div class="definition">
+    <span class="sql">{{sqlDefinition definition}}</span>
+    <button class="visualize">{{t "dataset.content_details.visualize"}}</button>
+    {{#if showDerive}}
+        <button class="derive">{{t "dataset.content_details.derive"}}</button>
+    {{/if}}
+    {{#if showEdit}}
+        <button class="edit">{{t "dataset.content_details.edit"}}</button>
+    {{/if}}
+</div>
+<div class="create_chart hidden">
+    <a href="#" class="cancel">{{t "actions.cancel"}}</a>
+    <span class="create">{{t "dataset.content_details.create"}}</span><span class="triangle_right"></span>
+    <span data-chart_type="frequency" class="chart_icon frequency"><span class="triangle"></span></span>
+    <span class="separator"></span>
+    <span data-chart_type="histogram" class="chart_icon histogram"><span class="triangle"></span></span>
+    <span class="separator"></span>
+    <span data-chart_type="heatmap" class="chart_icon heatmap"><span class="triangle"></span></span>
+    <span class="separator"></span>
+    <span data-chart_type="timeseries" class="chart_icon timeseries"><span class="triangle"></span></span>
+    <span class="separator"></span>
+    <span data-chart_type="boxplot" class="chart_icon boxplot"><span class="triangle"></span></span>
+    <span class="separator"></span>
+    <span class="frequency title hidden">{{t "dataset.visualization.names.frequency"}}</span>
+    <span class="histogram title hidden">{{t "dataset.visualization.names.histogram"}}</span>
+    <span class="heatmap title hidden">{{t "dataset.visualization.names.heatmap"}}</span>
+    <span class="timeseries title hidden">{{t "dataset.visualization.names.timeseries"}}</span>
+    <span class="boxplot title hidden">{{t "dataset.visualization.names.boxplot"}}</span>
+</div>
+<div class="create_chorus_view hidden">
+     <a href="#" class="cancel">{{t "actions.cancel"}}</a>
+      <span class="create">{{t "dataset.content_details.create"}}</span><span class="triangle_right"></span>
+     <span class="chorusview"><span class="triangle"></span></span>
+     <span class="title">{{t "dataset.chorusview.title"}}</span>
+</div>
+<div class="edit_chorus_view hidden">
+     <a href="#" class="cancel">{{t "actions.cancel"}}</a>
+      <span class="create">{{t "dataset.content_details.edit_as_workfile"}}</span><span class="triangle_right"></span>
+     <button class="preview">{{t "dataset.run_sql"}}</button>
+     <button class="save">{{t "dataset.content_details.edit_chorus_view.save"}}</button>
+</div>
+<div class="info_bar hidden">
+{{t "dataset.visualization.info_bar"}}
+</div>
+<div class="column_count">
+    <span class="explore">{{t "actions.explore"}}</span>
+    <input class="search" placeholder="{{t "dataset.search"}}"/>
+    <span class="count">{{t "dataset.column_count" count=models.length}}</span>
+    <div class="right">
+        <button class="preview">{{t "dataset.data_preview"}}</button>
+    </div>
+</div>
+<div class="chorus_view_info hidden">
+    <span class="select">{{t "actions.select"}}</span>
+    <a href="#" class="select_all">{{t "actions.select_all"}}</a>
+    |
+    <a href="#" class="select_none">{{t "actions.select_none"}}</a>
+    <input class="search" placeholder="{{t "dataset.search"}}"/>
+    <span class="count">{{t "dataset.column_count" count=models.length}}</span>
+</div>
+
+<div class="edit_chorus_view_info hidden">
+    <span class="left">{{t "dataset.content_details.edit_chorus_view.info"}}</span>
+</div>
+
+<div class="dataset_errors hidden">
+    <ul>
+        <li>{{t "results_console_view.there_was_an_error"}}</li>
+    </ul>
+    <div class="actions">
+        <a href="#" class="action view_error_details">{{t "actions.view_details"}}</a> | <a href="#" class="action close_errors">{{t "actions.close"}}</a>
+    </div>
+</div>
+
+<div class="chart_config hidden"/>
+
+<div class="data_preview hidden"/>
+<div class="filters hidden"/>

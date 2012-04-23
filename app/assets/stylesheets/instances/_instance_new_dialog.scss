@@ -1,0 +1,93 @@
+@import "common.scss";
+
+.dialog.instance_new {
+    $dialog-width : 515px;
+
+    width: $dialog-width;
+
+    legend div {
+        display: inline-block;
+        margin: 0 8px;
+    }
+
+    fieldset.collapsed {
+        >div {
+            display: none;
+        }
+
+        border: none;
+        padding: 0 $dialog-padding;
+        margin-left: 1px;
+        margin-bottom: 0;
+    }
+
+    fieldset {
+        $fieldset-width : $dialog-width - 4 * $dialog-padding - 2px;
+        $hostname_width : 320px;
+        $account_width : 210px;
+        $input-spacing : 12px;
+        $size_width : 75px;
+
+        margin-bottom: $dialog-padding;
+
+        label[name=host], input[name=host],
+        label[name=maintenanceDb], input[name=maintenanceDb] {
+            width: $hostname-width;
+        }
+
+        label[name=port], input[name=port] {
+            width: $fieldset-width - $hostname_width - $dialog-padding - 4px;
+            margin-left: $input-spacing;
+        }
+
+        label[name=dbUserName], input[name=dbUserName],
+        label[name=databaseName], input[name=databaseName],
+        label[name=userName], input[name=userName],
+        label[name=userGroups], input[name=userGroups]
+        {
+            width: $account-width;
+        }
+
+        label[name=size], input[name=size] {
+            width: $size_width;
+            margin-top: 1px;
+        }
+
+        label[name=dbPassword], input[name=dbPassword],
+        label[name=schemaName], input[name=schemaName],
+        label[name=userGroups], input[name=userGroups]
+        {
+            width: $fieldset-width - $account_width - $dialog-padding - 4px;
+            margin-left: $input-spacing;
+        }
+
+        img.help {
+            display: inline-block;
+            margin-top: -3px;
+            vertical-align: middle;
+        }
+
+        .instructions {
+            @include dialog-label;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .disabled {
+            color : $color-text4;
+        }
+
+        .max_size {
+            @include dialog-label;
+        }
+
+        .instance_size_container {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        select, .ui-selectmenu {
+            width: 225px;
+        }
+    }
+}

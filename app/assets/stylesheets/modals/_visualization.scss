@@ -1,0 +1,149 @@
+@mixin chart_icon($name){
+    .#{$name}.chart_icon {
+        background-image: url("/images/visualizations/dialog/#{$name}_off.png");
+        &.selected {
+            background-image: url("/images/visualizations/dialog/#{$name}_on.png");
+        }
+    }
+}
+
+.visualization {
+    .dialog_content {
+        padding: 0;
+    }
+
+    .right {
+        float: right;
+        padding: 10px 10px 0;
+        font-size: 13px;
+        font-weight: $semibold;
+    }
+
+    .headerbar {
+        background: $body-background-color;
+        border-bottom: 1px solid $list-border-color;
+        font-size: 0;
+
+        .text {
+            padding: 10px 10px 0;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .type {
+            font-size: 14px;
+            font-weight: $semibold;
+            color: $color-text3;
+        }
+
+        .label {
+            @include results-console;
+        }
+
+        .filter {
+            font-size: 12px;
+            font-weight: $semibold;
+            padding: 0 10px 0 0;
+            line-height: 35px;
+            vertical-align: middle;
+        }
+
+        .chart_icon {
+            height: 35px;
+            width: 45px;
+            display: inline-block;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+            border-left: 1px dotted $list-border-color;
+
+            &.selected {
+                background-color: $chart-fill-color;
+            }
+        }
+
+        @include chart_icon(boxplot);
+        @include chart_icon(chorusview);
+        @include chart_icon(frequency);
+        @include chart_icon(heatmap);
+        @include chart_icon(histogram);
+        @include chart_icon(timeseries);
+    }
+
+    .filter_content {
+        line-height: 32px;
+    }
+
+    .modal_controls {
+        width: 100%;
+        height: 55px;
+        background: $body-background-color;
+        border-top: 1px solid $list-border-color;
+
+        .vertical {
+            a {
+                font-size: 12px;
+                font-weight: $semibold;
+                padding-left: 10px;
+                display: inline-block;
+                padding: 20px 0 0 10px;
+            }
+
+            .right {
+                margin-right: 10px;
+
+                button {
+                    margin-top: 12px;
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+
+    .chart_container{
+       width: 940px;
+       height: 340px;
+       padding: 0;
+       margin: 0;
+       position: relative;
+    }
+
+    .overlay {
+        background-color: #000;
+        @include opacity(.71);
+        color: #FFF;
+        font-size: 14px;
+        font-weight: $semibold;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        text-align: center;
+        padding-top: 131px;
+        cursor: pointer;
+        &.disabled {
+            cursor: default;
+        }
+    }
+
+    .chart_area {
+        width: 940px;
+        height: 340px;
+        background: white;
+
+        line-height: 340px;
+        vertical-align: middle;
+        text-align: center;
+
+        .empty_data {
+            font-weight: $semibold;
+        }
+    }
+
+    .results_console {
+        .bottom_gutter {
+            height: 0;
+            background: transparent;
+        }
+    }
+}

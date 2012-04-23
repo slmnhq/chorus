@@ -1,0 +1,112 @@
+@import "../_common.scss";
+
+.data_table {
+    $header-line-height: 32px;
+    $line-height: 40px;
+    $cell-width: 100px;
+    $short-name-width: 90px;
+    overflow: hidden;
+
+    position: relative;
+
+    background: $data-table-background-color;
+
+    .thead {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: #eaeef2;
+        white-space: nowrap;
+        z-index: $data-table-head-z-index;
+    }
+
+    .tbody {
+        position: absolute;
+        top: $header-line-height + 1px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        white-space: nowrap;
+        z-index: $data-table-body-z-index;
+
+        overflow: auto;
+        line-height: normal;
+    }
+
+    .column {
+        display: inline-block;
+        overflow: hidden;
+    }
+
+    .column[data-type="WHOLE_NUMBER"],
+    .column[data-type="REAL_NUMBER"] {
+        text-align: right;
+    }
+
+    .td, .th {
+        width: $cell-width;
+        @include ellipsis;
+        border-right: 1px solid $subheader-border-color-dark;
+    }
+
+    .th {
+        position: relative;
+        vertical-align: middle;
+        line-height: $header-line-height;
+        height: $header-line-height;
+        padding: 0 10px;
+        display: inline-block;
+        border-bottom: 1px solid $subheader-border-color-dark;
+        @include font-content-details;
+
+        .name {
+            display: inline-block;
+            width: $cell-width;
+            @include ellipsis;
+        }
+    }
+
+
+    .th:hover:first-child .name {
+        width: $cell-width;
+    }
+
+    .th a.move_to_first {
+        position: absolute;
+        top: 10px;
+        right: 6px;
+        display: none;
+        width: 10px;
+        height: 10px;
+        background-image: url("/images/shuttle_left.png");
+        background-repeat: no-repeat;
+    }
+
+    .th:hover {
+        a.move_to_first {
+            display: block;
+        }
+
+        .name {
+            width: $short-name-width;
+        }
+    }
+
+    .th:first-child:hover {
+        a.move_to_first {
+            display: none;
+        }
+
+        .name {
+            width: $cell-width;
+        }
+    }
+
+    .td {
+        line-height: $line-height;
+        padding: 0 10px;
+        border-bottom : $dotted-list-item-border;
+        @include font-normal-alpha;
+    }
+
+}

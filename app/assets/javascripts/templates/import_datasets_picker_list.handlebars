@@ -1,0 +1,29 @@
+{{#if pagination}}
+    <div class="pagination content_details"></div>
+{{/if}}
+{{#if models.length}}
+    <div class="items">
+        <ul class="list">
+         {{#each models}}
+            <li data-id="{{id}}">
+                <div class="actions">
+                    <a class="preview_columns" href="#">{{t "dataset.manage_join_tables.preview_columns"}}</a>
+                </div>
+                <img class="image" src="{{imageUrl}}"/>
+                <div class="text">
+                    <div class="main">
+                        <span class="name" title="{{name}}">{{name}}</span>
+                    </div>
+                    {{#if columns}}
+                        <div class="details">
+                            <span class="column_count">{{t "dataset.column_count" count=columns }}</span>
+                        </div>
+                    {{/if}}
+                </div>
+            </li>
+         {{/each}}
+        </ul>
+    </div>
+{{else}}
+    <div class="none">{{t emptyListTranslationKey}}</div>
+{{/if}}

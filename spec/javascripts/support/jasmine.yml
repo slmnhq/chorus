@@ -1,0 +1,132 @@
+# src_files
+#
+# Return an array of filepaths relative to src_dir to include before jasmine specs.
+# Default: []
+#
+# EXAMPLE:
+#
+# src_files:
+#   - lib/source1.js
+#   - lib/source2.js
+#   - dist/**/*.js
+#
+src_files:
+  - js/vendor/jquery-1.7.1.js
+  - js/vendor/underscore-1.2.1.js
+  - js/vendor/backbone-0.5.3.js
+  - js/vendor/jquery.ui.core.js
+  - js/vendor/jquery.ui.widget.js
+  - js/vendor/jquery.ui.mouse.js
+  - js/vendor/jquery.ui.*.js
+  - js/vendor/codemirror-2.16.js
+  - js/vendor/es5-shim.js
+  - js/vendor/d3.js
+  - js/vendor/**/*.js
+  - js/environment.js
+  - js/bootstrap.js
+  - js/chorus.js
+  - js/utilities/**/*.js
+  - js/mixins/*.js
+  - js/router.js
+  - js/models.js
+  - js/views.js
+  - js/pages.js
+  - js/modals.js
+  - js/dialogs.js
+  - js/alerts.js
+  - js/presenters.js
+  - js/views/sidebar_view.js
+  - js/views/selectable_list_view.js
+  - js/views/tabular_data/chart_configuration_view.js
+  - js/views/database_sidebar_list_view.js
+  - js/views/utilities/code_editor_view.js
+  - js/views/workfiles/workfile_content_details_view.js
+  - js/views/workfiles/workfile_content_view.js
+  - js/views/workfiles/text_workfile_content_view.js
+  - js/views/search/search_result_list_base.js
+  - js/views/search/search_item_base.js
+  - js/views/**/*.js
+  - js/dialogs/pick_items_dialog.js
+  - js/dialogs/workspaces/pick_workspace_dialog.js
+  - js/dialogs/memo_new_dialog.js
+  - js/dialogs/tabular_data/new_table_import_csv.js
+  - js/models/tabular_data.js
+  - js/models/dataset.js
+  - js/models/tasks/task.js
+  - js/models/tasks/chart_task.js
+  - js/models/csv_import.js
+  - js/models/**/*.js
+  - js/collections/instance_set.js
+  - js/collections/hdfs_entry_set.js
+  - js/collections/tabular_data_set.js
+  - js/collections/user_set.js
+  - js/collections/workfile_set.js
+  - js/collections/workspace_set.js
+  - js/pages/tabular_data/tabular_data_show_page.js
+  - js/pages/search_index_page.js
+  - js/pages/workspaces/workspace_show_page.js
+  - js/**/*.js
+  - help/**/*.js
+
+non_spec_src_files:
+  - js_non_spec/**/*.js
+
+# stylesheets
+#
+# Return an array of stylesheet filepaths relative to src_dir to include before jasmine specs.
+# Default: []
+#
+# EXAMPLE:
+#
+stylesheets:
+  - css/**/*.css
+
+# helpers
+#
+# Return an array of filepaths relative to spec_dir to include before jasmine specs.
+# Default: ["helpers/**/*.js"]
+#
+# EXAMPLE:
+#
+# helpers:
+#   - helpers/**/*.js
+#
+helpers:
+  - helpers/fixture_data.js
+  - helpers/fixture_definitions.js
+  - helpers/fixture_generator.js
+  - helpers/**/*.js
+
+# spec_files
+#
+#  Return an array of filepaths relative to spec_dir to include.
+# Default: ["**/*[sS]pec.js"]
+#
+# EXAMPLE:
+#
+# spec_files:
+#   - **/*[sS]pec.js
+#
+spec_files:
+
+# src_dir
+#
+# Source directory path. Your src_files must be returned relative to this path. Will use root if left blank.
+# Default: project root
+#
+# EXAMPLE:
+#
+# src_dir: public
+#
+src_dir: public
+
+# spec_dir
+#
+# Spec directory path. Your spec_files must be returned relative to this path.
+# Default: spec/javascripts
+#
+# EXAMPLE:
+#
+# spec_dir: spec/javascripts
+#
+spec_dir:

@@ -1,0 +1,87 @@
+@import "../_common.scss";
+
+.alert {
+    .guts {
+        width: 450px;
+        max-width: 450px;
+        background-color: $body-background-color;
+        padding: 18px 15px 10px 18px;
+
+        .content {
+
+            .left {
+                float: left;
+                max-width: 360px;
+                word-wrap: break-word;
+                @include after-clearfix;
+
+                h1 {
+                    color: black;
+                    font-size: 14px;
+                    font-weight: $semibold;
+                    margin-bottom: 10px;
+                }
+
+                p {
+                    @include font-normal-alpha;
+                }
+            }
+
+            .right {
+                float: right;
+                width: 90px;
+
+                img {
+                    float: right;
+
+                    &.info {
+                        display: none;
+                    }
+                    &.error {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .body {
+            margin-top: 10px;
+            
+            p {
+                padding: 10px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                max-height: 100px;
+                border: 1px solid $border-color;
+                font-size: 12px;
+                font-weight: normal;
+                color: black;
+            }
+        }
+    }
+
+    &.info {
+        img.message {
+            display: none;
+        }
+        img.error {
+            display: none;
+        }
+        img.info {
+            display: inline !important;
+        }
+    }
+
+    &.error {
+        img.message {
+            display: none;
+        }
+        img.info {
+            display:none;
+        }
+        img.error {
+            display: inline !important;
+        }
+    }
+}
+

@@ -1,0 +1,36 @@
+{{#each models}}
+    <li data-id="{{id}}" {{#unless active}}class="archived"{{/unless}}>
+        <span class="spacer_left"/>
+        <a class="image" href="{{showUrl}}">
+            <img src="{{imageUrl}}"/>
+        </a>
+        <div class="text">
+            <div class="main">
+                <a class="name" href="{{showUrl}}">
+                    <span title="{{name}}">{{name}}</span>
+                </a>
+            </div>
+            <div class="summary">
+            </div>
+            <div class="details">
+                <span class="owner">
+                    {{#if active}}
+                        {{t "workspaces.owned_by"}}
+                        <a href="{{ownerUrl}}">{{ownerFullName}}</a>
+                    {{else}}
+                        {{t "workspaces.archived_by"}}
+                        <a href="{{archiverUrl}}">{{archiverFullName}}</a>
+                        <span class="timestamp">{{relativeTimestamp archivedTimestamp}}</span>
+                    {{/if}}
+                </span>
+                {{#unless isPublic}}
+                    <span class="private">
+                        <img src="/images/workspace-lock.png"/>
+                        {{t "workspaces.private"}}
+                    </span>
+                {{/unless}}
+            </div>
+        </div>
+        <span class="spacer_right"/>
+    </li>
+{{/each}}

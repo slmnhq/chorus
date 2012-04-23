@@ -1,0 +1,163 @@
+.results_console {
+    .execution {
+        height: 32px;
+        line-height: 32px;
+        vertical-align: middle;
+        padding: 0 $padding-x;
+        background: $shaded-background-color;
+        border-bottom: 1px solid $guts-border-color;
+
+        h1 {
+            @include results-console;
+            display: inline-block;
+            padding-right: $padding-x;
+        }
+
+        a {
+            font-size: 12px;
+            font-weight: $semibold;
+        }
+
+        .controls {
+            float: right;
+            margin-left: 10px;
+
+            .separator {
+                margin: 0 5px;
+            }
+            &.collapsed {
+                .separator {
+                    display: none;
+                }
+            }
+        }
+
+        .right {
+            float: right;
+
+            .message {
+                @include results-console-message;
+            }
+
+            .execution_info {
+                display: none;
+
+                .elapsed_time {
+                    @include results-console-message;
+                }
+
+                .spinner {
+                  display: inline-block;
+                  width: 25px;
+
+                  div[aria-role=progressbar] {
+                      left: 13px;
+                      top: -3px;
+                  }
+                }
+
+                .task_loading {
+                    @include results-console-message;
+                    display: inline-block;
+                }
+
+                .cancel {
+                    font-weight: normal;
+                }
+            }
+
+            &.executing {
+                .message {
+                    display: none;
+                }
+
+                .execution_info {
+                    display: inline;
+                }
+            }
+        }
+    }
+
+    .separator {
+        color: $color-text3;
+        padding-left: $padding-x;
+        padding-right: $padding-x;
+    }
+
+    .result_table {
+        clear: both;
+    }
+
+    .actions {
+        color: white;
+        float: right;
+
+        a {
+            float: none;
+        }
+    }
+
+    .bottom_gutter {
+        background: white;
+        height: 20px;
+        text-align: center;
+        vertical-align: top;
+        border-top: 1px solid $list-border-color;
+        line-height: 16px;
+    }
+
+    .expander_button {
+        cursor: pointer;
+        background: $data-table-background-color;
+        width: 30px;
+        height: 15px;
+
+        display: inline-block;
+
+        border: 1px solid $list-border-color;
+        border-top: none;
+        margin-top: -4px;
+
+        text-align: center;
+        vertical-align: middle;
+
+        .arrow {
+            display: inline-block;
+            margin-bottom: 2px;
+        }
+
+        .up {
+            width:0px;
+            height:0px;
+            border-left:5px solid transparent;  /* left arrow slant */
+            border-right:5px solid transparent; /* right arrow slant */
+            border-bottom:5px solid $color-text4; /* bottom, add background color here */
+            font-size:0px;
+            line-height:0px;
+        }
+
+        .down {
+            width:0px;
+            height:0px;
+            border-left:5px solid transparent;
+            border-right:5px solid transparent;
+            border-top:5px solid $color-text4;
+            font-size:0px;
+            line-height:0px;
+        }
+    }
+
+    .minimized .data_table {
+        height: 200px;
+        width: 100%;
+    }
+
+    .collapsed .data_table {
+        display: none;
+    }
+
+    .maximized .data_table {
+        height: 500px;
+        width: 100%;
+    }
+}

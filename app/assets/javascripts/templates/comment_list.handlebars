@@ -1,0 +1,38 @@
+{{#if models.length}}
+    <ul class="comments">
+        {{#eachWithMoreLink models initialLimit "activity_stream.comments.more" "activity_stream.comments.less"}}
+        <li data-comment-id="{{id}}" class="{{moreClass}} activity_item comment media">
+            <div class="icon">
+                {{#if isInsight}}
+                <div class="insight_ribbon">
+                    <div class="left"/><div class="center">{{t "activity_stream.insight"}}</div><div class="right"/>
+                </div>
+                {{/if}}
+                <a href="{{iconHref}}">
+                    <img class="profile" title="{{displayName}}" src="{{iconSrc}}"/>
+                </a>
+            </div>
+            <div class="comment_content bd">
+                <div class="comment_header">
+                    {{headerHtml}}
+                </div>
+                <div class="body"></div>
+                <div class="actions">
+                    <span class="timestamp">{{relativeTimestamp timestamp}}</span>
+                    {{#ifAdminOr isOwner}}
+                        <a class="delete_link alert"
+                           data-alert="DeleteNoteConfirmAlert"
+                           data-comment-id="{{id}}"
+                           data-entity-type="{{../../entityType}}"
+                           data-entity-id="{{../../entityId}}"
+                           href="#">
+                            {{t "actions.delete"}}
+                            <img src="images/trashcan.png"/>
+                        </a>
+                    {{/ifAdminOr}}
+                </div>
+            </div>
+        </li>
+        {{/eachWithMoreLink}}
+    </ul>
+{{/if}}

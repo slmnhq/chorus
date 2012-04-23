@@ -1,0 +1,186 @@
+@import "_common.scss";
+
+$list-item-height: 39px;
+$list-border-width: 1px;
+$link-padding: 6px;
+
+.instance_permissions {
+    width: 500px;
+
+    input[type=submit] {
+        height: 1px;
+        visibility: hidden;
+    }
+
+    button.add_account {
+        @include content-details-button($border-color);
+        @include font-content-details;
+        margin-left: 10px;
+    }
+
+    .sub_header {
+        .individual_accounts_count {
+            background : url("/images/instances/individual.png") no-repeat left 8px;
+            display: inline-block;
+            padding-left: 23px;
+        }
+
+        .details_text {
+            background : url("/images/instances/shared_icon.png") no-repeat left 6px;
+            display: inline-block;
+            padding-left: 23px;
+        }
+
+        a {
+            font-size: 12px;
+            float: right;
+        }
+    }
+
+    .collection_list {
+        height: 9*$list-item-height;
+
+        ul {
+            li {
+                height: auto;
+                min-height: $list-item-height;
+                padding-right: 15px;
+
+                select, .ui-selectmenu {
+                    width: 215px;
+                }
+                select.name {
+                    display: none;
+                }
+
+                .select_container {
+                    margin-left: 10px;
+
+                    span.ui-selectmenu-button {
+                        vertical-align: middle;
+                    }
+                }
+
+                div {
+                    display: inline-block;
+                }
+
+                .image {
+                    position: relative;
+                    display: inline-block;
+
+                    img {
+                        padding: 2px;
+                    }
+                }
+
+                .name {
+                    @include ellipsis;
+                }
+
+                div.name {
+                    width: 200px;
+                }
+
+                .links {
+                    float: right;
+                    font-size: 12px;
+
+                    .owner {
+                        color: $color-text4;
+                    }
+
+                    a {
+                        font-size: 12px;
+                    }
+
+                    .action {
+                        border-left: 1px solid $link-color;
+                        padding-left: $link-padding;
+                        margin-left: $link-padding;
+                    }
+
+                    .action:first-child {
+                        border-left: none;
+                    }
+                }
+
+                .credentials {
+                    display: none;
+                    margin-left: 52px;
+                    line-height: 12px;
+
+                    a {
+                        font-size: 12px;
+                    }
+
+                    .field_wrapper {
+                        width: 48%;
+                        padding-right: 4px;
+
+                        label {
+                            padding-bottom: 4px;
+                            display: block;
+                        }
+                    }
+
+                    .actions {
+                        padding: 8px 0;
+                        display: block;
+                        color: $link-color;
+
+                        a {
+                            padding: 0 ($link-padding + 2);
+
+                            &:first-child {
+                                padding-left: 0;
+                            }
+
+                            div[aria-role=progressbar] {
+                                left: -98px;
+                                top: 5px;
+                                display: inline;
+                            }
+
+                            &.cancel {
+                                border-left: 1px solid $link-color;
+                            }
+                        }
+                    }
+                }
+
+                &.editing {
+                    margin-top: 5px;
+
+                    .image img {
+                        vertical-align: top;
+                    }
+
+                    .select_container {
+                        line-height: 35px;
+                        vertical-align: top;
+                    }
+
+                    .links {
+                        display: none;
+                    }
+
+                    .credentials {
+                        display: block;
+                    }
+                }
+
+                &.new {
+                    select.name {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+
+    .modal_controls {
+        margin: 0;
+        padding: 14px;
+    }
+}

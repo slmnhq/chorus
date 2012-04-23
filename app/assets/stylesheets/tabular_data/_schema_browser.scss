@@ -1,0 +1,16 @@
+@import "_common.scss";
+
+.schema_browser {
+    .required::after {
+        content: none;
+    }
+
+    .title {
+        @include dialog-label;
+        margin-left: 15px;
+    }
+
+    .schema_picker {
+        padding: 0 15px;
+    }
+}

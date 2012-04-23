@@ -1,0 +1,319 @@
+@import "../_common.scss";
+
+$text-padding-y: 4px;
+$big-gutter: (2 * $activity-gutter);
+$media-gutter: 10px;
+
+$system-action-color: #7C7D7D;
+
+.media, .media > .bd {
+    overflow: hidden;
+}
+
+.media > .icon {
+    float: left;
+    margin-right: $activity-gutter;
+}
+
+.media > .icon img {
+    display: block;
+}
+
+.activity_list_header {
+    .menus {
+        float: right;
+        margin-right: 10px;
+
+        .title {
+            @include font-content-details;
+        }
+
+        a {
+            @include link-with-dotted-underline;
+
+            &.active {
+                color: black;
+                border-bottom: none;
+            }
+        }
+
+        .separator {
+            padding: 0 5px;
+            position: relative;
+            top: 2px;
+            color: $link-color;
+        }
+
+        .badge {
+            display: inline-block;
+        }
+    }
+
+    .title {
+        img {
+            float: left;
+        }
+        h1 {
+            padding-left: 5px;
+        }
+    }
+}
+
+.activity_list {
+
+    .more_activities {
+        font-size: 12px;
+        padding: $activity-gutter $big-gutter;
+    }
+
+    .no_activity {
+        @include secondary-text-normal;
+        padding: 0 $activity-gutter;
+    }
+}
+
+.activity {
+    &.unread {
+        background: #ffface;
+    }
+
+    .activity_item {
+        padding: $activity-gutter;
+        position: relative;
+        overflow: visible;
+
+        img {
+            width: $icon-image-width;
+            height: $icon-image-height;
+        }
+
+        a[href=''], a:not([href]) {
+            color: $color-text3;
+            cursor: auto;
+        }
+
+        .insight_ribbon {
+            padding: 0;
+            position: absolute;
+            left: -15px;
+            top: -9px;
+            z-index: 10;
+            line-height: 11px;
+            height: 22px;
+
+            .left {
+                background: url(/images/ribbons/label_insight1.png) no-repeat;
+                width: 6px;
+                height: 22px;
+                display: inline-block;
+            }
+
+            .center {
+                @include database-column-type;
+                background: url(/images/ribbons/label_insight2.png) repeat-x;
+                height: 14px;
+                display: inline-block;
+                padding: 2px 8px 2px 8px;
+                vertical-align: top;
+                text-transform: uppercase;
+            }
+
+            .right {
+                background: url(/images/ribbons/label_insight3.png) no-repeat;
+                width: 8px;
+                height: 22px;
+                display: inline-block;
+            }
+        }
+    }
+}
+
+.comment_list {
+    .comments {
+        background: $shaded-background-color;
+    }
+}
+
+.activity_content, .comment_content {
+    ul.attachments {
+        img {
+            vertical-align: middle;
+        }
+
+        li {
+            @include ellipsis;
+        }
+    }
+
+    .name {
+        font-size: 12px;
+        font-weight: $semibold;
+    }
+
+    .body {
+        @include font-normal-beta;
+        padding-bottom: $text-padding-y;
+        word-wrap: break-word;
+    }
+
+    .activity_header, .comment_header {
+        word-wrap: break-word;
+        @include secondary-text-normal;
+        line-height: 18px;
+        padding-bottom: $text-padding-y;
+        .author {
+            font-weight: $semibold;
+        }
+    }
+
+    .actions {
+        .timestamp {
+            @include secondary-text-small;
+            line-height: 20px;
+        }
+
+        .details {
+            padding-bottom: 4px;
+
+            a {
+                @include secondary-text-small-semibold;
+                color: $link-color;
+            }
+        }
+
+        a.delete_link, a.edit_link {
+            @include secondary-text-small;
+            display: none;
+            border-left: solid 1px;
+            padding-left: 5px;
+            margin-left: 5px;
+
+            img {
+                height: 12px;
+                width: 12px;
+                margin-bottom: 4px;
+                vertical-align: middle;
+            }
+        }
+    }
+
+    .links {
+        padding: 4px 0;
+        font-size: 12px;
+        padding-bottom: $text-padding-y;
+
+        a {
+            font-size: 12px;
+        }
+
+        .separator {
+            position: relative;
+            top: -1px;
+            color: $link-color;
+            margin: 0 2px;
+        }
+    }
+
+    .promoted_by {
+        @include secondary-text-small;
+    }
+}
+
+.popup_notifications li,
+li .activity_content,
+.comment_content {
+    &:hover {
+        a.edit_link, a.delete_link {
+            display: inline;
+        }
+    }
+}
+
+#sidebar .activity_heading {
+    padding: 12px 0;
+
+    @include heading-sidebar;
+    color: $color-text2;
+    font-size: 16px;
+}
+
+.activity_list.workspace_detail, .activity_list.dashboard, .recent_comments_list {
+    .comments {
+        margin-left: ($icon-image-width + (2 * $activity-gutter));
+    }
+
+    ul.activities {
+        > li {
+            border-bottom: 1px dotted $list-border-color;
+            padding: 0 $activity-gutter;
+
+            &.insight {
+                background: white;
+                border-right: 1px dotted $list-border-color;
+                border-bottom: 1px dotted $list-border-color;
+                .activity_item {
+                    padding-top: 12px;
+                }
+            }
+        }
+    }
+}
+
+.recent_comments_list {
+    .ui-tooltip-content {
+        padding: 9px 0 0 7px;
+
+        ul.activities {
+            > li {
+                &.insight {
+                    border-right: none;
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+}
+
+.activity_list.dashboard {
+    padding-top: $activity-gutter;
+
+    .heading {
+        display: none;
+    }
+}
+
+#sidebar .activity_list {
+    li.insight {
+        background: white;
+        .insight_ribbon {
+            left: -5px;
+        }
+    }
+    li[data-activity-type=WORKSPACE_CREATED],
+    li[data-activity-type=WORKSPACE_DELETED],
+    li[data-activity-type=WORKFILE_CREATED],
+    li[data-activity-type=WORKSPACE_MAKE_PRIVATE],
+    li[data-activity-type=WORKSPACE_MAKE_PUBLIC],
+    li[data-activity-type=WORKSPACE_ARCHIVED],
+    li[data-activity-type=WORKSPACE_UNARCHIVED],
+    li[data-activity-type=INSTANCE_CREATED],
+    li[data-activity-type=USER_ADDED],
+    li[data-activity-type=USER_DELETED] {
+        .order {
+            display: inline;
+        }
+    }
+
+}
+
+#sidebar {
+    &.instance_list_sidebar, &.workfile_show_sidebar {
+        .activity_list .heading {
+            display: none
+        }
+    }
+}
+

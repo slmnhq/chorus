@@ -1,0 +1,45 @@
+<div class="left">
+    <div class="logo">
+        <a href="#/"><img src="/images/headertitle.png"/></a>
+    </div>
+</div>
+<div class="right">
+    <div class="gear">
+        <a href="#" title=""><img src="/images/gear_menu.png"/></a>
+    </div>
+    <div class="menu hidden popup_gear">
+        <div class="pointer"/>
+        <ul>
+            <li><a href="#/users">{{t "header.users_list"}}</a></li>
+            <li><a href="#/workspaces">{{t "header.workspaces"}}</a></li>
+            <li><a href="#/instances">{{t "header.instances"}}</a></li>
+            <li><a href="#/notifications">{{t "header.notifications"}}</a></li>
+        </ul>
+    </div>
+    <div class="messages">
+        <a href="#" class="notifications {{#unless notifications.length}}empty{{/unless}}" title="notifications">{{notifications.pagination.records}}</a>
+    </div>
+    <div class="menu hidden popup_notifications">
+        <div class="pointer"/>
+        <div class="notification_area">
+            <ul/>
+            <a class="notifications_all" href="#/notifications">{{t "notification.see_all"}}</a>
+        </div>
+    </div>
+    <div class="username">
+        <a href="#" title="{{fullName}}"><span>{{displayName}}</span><img src="/images/menu-indicator.png"/></a>
+    </div>
+    <div class="menu hidden popup_username">
+        <div class="pointer"/>
+        <ul>
+            <li><a href="{{userUrl}}">{{t "header.your_profile"}}</a></li>
+            <li><a href="#/logout">{{t "header.sign_out"}}</a></li>
+        </ul>
+    </div>
+</div>
+<div class="search">
+    <form action="#">
+        <input type="text" placeholder="{{t "header.search.placeholder"}}"/>
+    </form>
+</div>
+<div class="type_ahead_result hidden"></div>

@@ -1,0 +1,98 @@
+.instance_usage {
+    width: 400px;
+
+    .total_usage {
+        @include font-content-details;
+    }
+
+    li {
+        border-bottom: $dotted-list-item-border;
+        margin-top: 8px;
+        width: 100%;
+
+        .image_container {
+            width: 45px;
+            vertical-align: top;
+            float: left;
+        }
+
+        .details {
+            overflow: hidden;
+        }
+
+        .workspace_link {
+            font-size: 18px;
+            line-height: 1.2;
+            font-weight: $semibold;
+        }
+
+        .pair {
+            font-size: 13px;
+            padding-top: 4px;
+            display: block;
+        }
+
+        .key {
+            display: inline-block;
+            color: $color-text2;
+        }
+
+        .value {
+            float: right;
+            line-height: 1.2;
+            max-width: 200px;
+            text-align: right;
+            @include ellipsis;
+        }
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
+
+    .usage_bar {
+        height: 15px;
+        line-height: 15px;
+        width: 100%;
+        background: $progress-bar-background-color;
+        font-size: 12px;
+
+        .size_text {
+            color: $color-text2;
+            display: block;
+            float: left;
+            margin-left: 5px;
+            margin-top: 1px;
+        }
+    }
+
+    .used {
+        height: 100%;
+        float: left;
+        display: inline-block;
+        background: $link-color;
+        border-right: 1px solid white;
+
+        .percentage_text {
+            float: right;
+            height: 100%;
+            display: inline-block;
+            margin-right: 5px;
+            margin-top: 1px;
+            color: white;
+        }
+
+        .size_text {
+            color: white;
+        }
+    }
+
+    .full {
+        background-color: $progress-bar-full-background-color;
+    }
+
+    .sub_content {
+        overflow: auto;
+        max-height: 380px;
+    }
+}

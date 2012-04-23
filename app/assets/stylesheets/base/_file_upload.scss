@@ -1,0 +1,40 @@
+@import "../_common.scss";
+
+.file-wrapper {
+    cursor: pointer;
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+
+    input {
+        -moz-transform: translate(-430px, 0pt) scale(4);
+        width: 200px;
+        height: 200px;
+        border-width: 0 0 200px 200px;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        margin: 0;
+        pading: 0;
+        cursor: pointer;
+        @include opacity(0);
+     }
+}
+
+.image_upload {
+    .file-wrapper {
+        padding-left: 3px;
+
+        .action {
+            font-size: 12px;
+            font-weight: $semibold;
+            cursor: pointer;
+
+            &.disabled {
+                color: $color-text4;
+                cursor: normal;
+            }
+        }
+    }
+}

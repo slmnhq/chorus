@@ -1,0 +1,373 @@
+// Do not put any css rules into this file.  This file is only for declaration of variables and mixins
+//
+@import "compass/utilities";
+@import "compass/css3";
+@import "compass/css3/opacity";
+@import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
+@import "compass/css3/images";
+
+
+// Dimensions
+$sidebar-width : 266px;
+$sidebar-padding-x : 16px;
+$page-min-width : 750px;
+$padding-x : 10px;
+$padding-y : 8px;
+$margin-x : 10px;
+$guts-padding: 7px;
+$user-detail-image-width: 150px;
+$header-height : 49px;
+$icon-image-width : 32px;
+$icon-image-height : 32px;
+$activity-gutter: 8px;
+$dialog-padding : 15px;
+$button-height : 26px;
+$breadcrumbs-height: 32px;
+$help-pill-width: 34px;
+
+// Colors
+//
+$body-background-color: #EAEFF6;
+$body-glow-color : #C8DCED;
+$shaded-background-color: #E1E5E9;
+$data-table-background-color: #EAEEF2;
+
+$color-text1 : black;
+$color-text2 : #5f5f5f;
+$color-text3 : #7D7D7D;
+$color-text4 : #959595;
+$color-text5 : #464646;
+$error-text-color: white;
+
+$link-color : #2c95dd;
+$content-header-link-color: $color-text4;
+$content-details-action-link-color: #4E7225;
+
+$element-background: white;
+$button-background-color : white;
+
+$list-hover-color: #dde3e9;
+$border-color : #D0D0D0;
+$weak-header-border-color : #bebfc9;
+$subheader-border-color : #D1D4D7;
+$subheader-border-color-dark : #A4A6A8;
+$guts-border-color : #CCD2D7;
+$pagination-border-color: #A4A6A8;
+$menu-border-color: #B0B0B0;
+$header-border-color: #8A97A2;
+$list-border-color: #B9BBBD;
+$content-details-action-link-border-color: #98B675;
+$dotted-list-item-border: 1px dotted $subheader-border-color;
+$tab-gradient-color : #D5E0EB;
+$results-console-border-color: #88A8D3;
+$type-ahead-result-border-color: #A5A6A8;
+
+$progress-bar-background-color : #D8DEE6;
+$progress-bar-full-background-color : #AE0020;
+
+$administrator-background-color: #5f5f5f;
+
+$search-highlight-color: #FFFF00;
+
+// TODO Change these colors or the references to them
+$card-background: $element-background;
+$card-border-color: $border-color;
+
+$error-background-color: #B61B1D;
+$error-color: white;
+$alert-background-color: #B5121B;
+$content-details-action-background-color: #B3D988;
+$content-details-create-background-color: #49A942;
+$content-details-create-bar-link-color: #608437;
+$content-details-chart-icon-hover-background-color: #C3ECA0;
+$content-details-chart-icon-selected-background-color: #42AA3D;
+$content-details-info-bar-background-color: #C4DCEB;
+
+$picklist-selected-background-color: #3795DD;
+
+$activity-stream-comment-background-color: #DFE5EB;
+$selected-row-hover-background-color: #DCE2E8;
+$chart-fill-color: #4A83C3;
+
+$dataset-number-background-color: #788DA5;
+
+// z-indices
+$guts-z-index: 0;
+$link-menu-z-index: $guts-z-index + 1;
+$editor-top-z-index: 10;
+
+$data-table-body-z-index: 20;
+$data-table-head-z-index: $data-table-body-z-index + 1;
+
+// qTip2 assigns z-index values starting from 15000, but we want them to flow under the header.
+// It seems that when you navigate between pages, qTip's z-index resets to 15000, so this would work wrong if a single page
+// rendered 1000 qTip tooltips.  That will probably never be the case.
+$header-z-index: 16000;
+$menu-z-index: $header-z-index + 1;
+
+$dialog-overlay-z-index: $menu-z-index + 1;
+$dialog-z-index: $dialog-overlay-z-index + 1;
+
+$modal-tooltip-z-index: $dialog-z-index + 1;
+
+$toast-closing-z-index: $modal-tooltip-z-index + 1;
+$toast-z-index: $toast-closing-z-index + 1;
+$hidden-z-index: -100;
+$select-menu-z-index: 1000000;
+
+//ie colors
+$ie-header-color: #c7c7c7;
+
+// Font weights
+$semibold: 600;
+
+// Font size
+$medium-font: 14px;
+
+$summary-font-size: 14px;
+$summary-line-height: 19px;
+
+// Mixins
+
+// Un-comment these lines to find text that isn't styled with a mixin
+// * { text-shadow: red 0 0 2px !important; }
+@mixin debugging-mixin {
+    // text-shadow: none !important;
+}
+
+@mixin heading-normal {
+    @include debugging-mixin;
+    font-size: 24px;
+    font-weight: $semibold;
+    color: black;
+}
+
+@mixin heading-sidebar {
+    @include debugging-mixin;
+    @include ellipsis;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: $semibold;
+    color: $color-text1;
+}
+
+@mixin dialog-label {
+    @include debugging-mixin;
+    font-size: 13px;
+    font-weight: normal;
+    color: $color-text2;
+}
+
+@mixin font-normal-alpha {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: normal;
+    color: $color-text2;
+}
+
+@mixin font-normal-beta {
+    @include debugging-mixin;
+    font-size: 13px;
+    font-weight: normal;
+    color: black;
+}
+
+@mixin font-normal-gamma {
+    @include debugging-mixin;
+    font-size: 12px;
+    font-weight: $semibold;
+    color: black;
+}
+
+@mixin font-normal-delta {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: normal;
+    color: black;
+}
+
+@mixin font-content-details {
+    @include debugging-mixin;
+    font-size: 12px;
+    font-weight: $semibold;
+    color: $color-text2;
+}
+
+@mixin font-menu {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 14px;
+    vertical-align: middle;
+    color: $color-text1;
+}
+
+@mixin results-console {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: $semibold;
+    color: $color-text1;
+}
+
+@mixin results-console-message {
+    @include debugging-mixin;
+    font-size: 12px;
+    font-weight: normal;
+    color: $color-text2;
+}
+
+@mixin list-section-heading {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: $semibold;
+    color: $color-text2;
+}
+
+@mixin database-column-type {
+    @include debugging-mixin;
+    font-size: 11px;
+    font-weight: $semibold;
+    color: white;
+}
+
+@mixin secondary-text-normal {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: normal;
+    color: $color-text3;
+}
+
+@mixin secondary-text-semibold {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: $semibold;
+    color: $color-text3;
+}
+
+@mixin secondary-text-small {
+    @include debugging-mixin;
+    font-size: 12px;
+    font-weight: normal;
+    color: $color-text3;
+}
+
+@mixin secondary-text-small-semibold {
+    @include debugging-mixin;
+    font-size: 12px;
+    font-weight: $semibold;
+    color: $color-text3;
+}
+
+@mixin summary-text {
+    @include debugging-mixin;
+    font-size: $summary-font-size;
+    line-height: $summary-line-height;
+}
+
+@mixin create-bar-text {
+    font-size: 14px;
+    font-weight: $semibold;
+    color: white;
+}
+
+@mixin link-with-dotted-underline {
+    font-size: 12px;
+    font-weight: $semibold;
+    border-bottom: 1px dotted $link-color;
+}
+
+@mixin after-clearfix($which: both) {
+    &:after {
+            content: ".";
+            display: block;
+            height: 0;
+            font-size: 0;
+            clear: $which;
+            visibility: hidden;
+        }
+}
+
+@mixin borderbox {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+};
+
+@mixin ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@mixin not-ellipsis {
+    white-space: inherit;
+    overflow: inherit;
+    text-overflow: inherit;
+}
+
+@mixin content-details-button($border-color) {
+    border: 1px solid $border-color;
+    @include border-radius(30px);
+    background: none;
+    margin-bottom: 2px;
+
+    &[disabled=disabled] {
+        @include opacity(0.5);
+    }
+    @include debugging-mixin;
+}
+
+@mixin tab-gradient {
+    @include background-image(linear-gradient($body-background-color, $tab-gradient-color));
+}
+
+@mixin recent-comment {
+    .comment {
+        .body {
+            @include font-normal-alpha;
+        }
+
+        .user {
+            font-size: 13px;
+            font-weight: $semibold;
+        }
+
+        .comment_info {
+            font-size: 13px;
+            color: $color-text4;
+        }
+    }
+}
+
+@mixin menu-triangle {
+    padding-right: 10px;
+    background-image: url("/images/blue-menu-triangle.png");
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+@mixin triangle($pointing_direction, $color, $width, $height) {
+    width: 0;
+   	height: 0;
+	@if $pointing_direction == up {
+		border-bottom: $height solid $color;
+		border-left: $width/2 solid transparent;
+		border-right: $width/2 solid transparent;
+	} @else if $pointing_direction == down {
+		border-top: $height solid $color;
+		border-left: $width/2 solid transparent;
+		border-right: $width/2 solid transparent;
+	} @else if $pointing_direction == right {
+		border-left: $width solid $color;
+		border-top: $height/2 solid transparent;
+		border-bottom: $height/2 solid transparent;
+	} @else if $pointing_direction == left {
+		border-right: $width solid $color;
+		border-top: $height/2 solid transparent;
+		border-bottom: $height/2 solid transparent;
+	}
+}
+
+// Do not put any css rules into this file.  This file is only for declaration of variables and mixins
+//

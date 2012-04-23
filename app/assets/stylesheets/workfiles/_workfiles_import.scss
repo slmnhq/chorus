@@ -1,0 +1,78 @@
+@import "_common.scss";
+
+$image-height : 35px;
+$image-width: 35px;
+
+.workfiles_import {
+    width: 440px;
+
+    form {
+        .details {
+            padding-top: 5px;
+
+            span, label, input[type=file] {
+                display: inline-block;
+            }
+
+            img {
+                float: left;
+                vertical-align: middle;
+                visibility: hidden;
+            }
+
+            .file {
+                padding-left: $image-width + 4px;
+                .choose {
+                    @include font-content-details;
+                    @include content-details-button($border-color);
+                }
+            }
+        }
+
+        div.comment {
+            padding: 3px 0 5px 0;
+            margin-left: $image-width;
+            visibility: hidden;
+        }
+
+        .errors {
+            width: 100%;
+        }
+
+        label {
+            text-align: right;
+        }
+
+        label, input[type=file] {
+            color: $link-color;
+            &:hover {
+                cursor : pointer;
+            }
+        }
+
+        .defaultText {
+            @include font-normal-alpha;
+            padding-left: 12px;
+        }
+
+        .fileName {
+            @include ellipsis;
+            color: $color-text3;
+            font-size: 14px;
+            vertical-align: middle;
+            line-height: 26px;
+            min-height: 26px;
+        }
+
+
+        &.chosen {
+            img {
+                visibility: visible;
+            }
+
+            .comment {
+                visibility: visible;
+            }
+        }
+    }
+}

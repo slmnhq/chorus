@@ -1,0 +1,142 @@
+@import "../_common.scss";
+
+.components_menu {
+    li {
+        padding: 5px 0;
+
+        a, span {
+            @include font-menu;
+        }
+
+        a {
+            &:hover {
+                text-decoration: underline;
+            }
+
+            &.disabled {
+                text-decoration: none;
+                cursor: default;
+                @include secondary-text-normal;
+            }
+        }
+
+        &.selected {
+            .check {
+                visibility: visible;
+            }
+        }
+    }
+
+    .check {
+        background-repeat: no-repeat;
+        background-image: url("/images/check.png");
+        display: inline-block;
+        visibility: hidden;
+        width: 10px;
+        height: 10px;
+        // margin-left: -14px;
+        position: relative;
+        top: 1px;
+    }
+}
+
+.menu {
+    display: inline;
+    position: absolute;
+    background: white;
+    padding: 9px 20px;
+    border: 1px solid $menu-border-color;
+    text-align: left;
+    z-index: $menu-z-index;
+
+    .pointer {
+        width: 21px;
+        height: 13px;
+        background-image : url("/images/menu-triangle.png");
+        background-repeat: no-repeat;
+        position: absolute;
+        top: -13px;
+        left: 49px;
+    }
+
+    a {
+        @include font-menu;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &.hidden {
+        display: none;
+    }
+}
+
+.link_menu {
+    position: relative;
+    z-index : $link-menu-z-index;
+    display:inline-block;
+    padding-left: 12px;
+    .title {
+        font-size: 12px;
+        font-weight: $semibold;
+        color: $color-text2;
+
+    }
+
+    a {
+        font-size: 12px;
+        margin-left: 3px;
+        span {
+            border-bottom: 1px dotted $link-color;
+            color: $link-color;
+        }
+
+        img {
+           margin: 2px;
+        }
+    }
+
+    .popup_filter {
+        min-width:130px;
+        right: -2px;
+        top: 28px;
+        padding: 9px 7px 9px 2px;
+        z-index : $link-menu-z-index;
+        line-height: 16px;
+
+        .pointer {
+            left: 100px;
+        }
+
+        li {
+            margin: 2px 4px 0px 18px;
+
+            .check {
+                background-repeat: no-repeat;
+                background-image: url("/images/check.png");
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                margin-left: -14px;
+                position: relative;
+                top: 1px;
+
+                &.hidden {
+                    visibility: hidden;
+                }
+            }
+
+            a {
+                font-weight : 400;
+                color: black !important;
+            }
+
+            .unavailable {
+                @include secondary-text-small;
+                font-style: italic;
+                margin-left: 3px;
+            }
+        }
+    }
+}

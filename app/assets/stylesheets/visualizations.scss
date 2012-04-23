@@ -1,0 +1,89 @@
+@import "_common.scss";
+
+svg.chart {
+    background: white;
+    height: 340px;
+    width: 925px;
+
+    line {
+        stroke-width: 0.4;
+        stroke: #444;
+    }
+
+    path {
+        fill: none;
+    }
+
+    .ytick, .xtick {
+        stroke-dasharray: 1;
+        stroke-width: 0.25;
+        stroke: #aaa;
+    }
+
+    .axis_edge line {
+        stroke-width: 0.40;
+        stroke: #444;
+    }
+
+    text {
+        font-size: 12px;
+        font-weight: $semibold;
+        fill: $color-text2;
+    }
+
+    .xaxis, .yaxis, .axis {
+        line {
+            stroke-width: 0.40;
+            stroke: #444;
+        }
+
+        .grid, .grid line {
+            stroke-dasharray: 1;
+            stroke-width: 0.25;
+            stroke: #444;
+        }
+    }
+
+    &.time_series path {
+        stroke-width: 0.6;
+        stroke: black;
+    }
+
+    &.boxplot {
+        .quartile {
+            fill: $chart-fill-color;
+        }
+
+        .midline, .whisker, .median {
+            stroke: black;
+            stroke-width: 1.0;
+        }
+    }
+
+    &.frequency {
+        rect {
+            fill: $chart-fill-color;
+        }
+    }
+
+    &.timeseries {
+        path.series {
+            stroke-width: 5.0;
+            stroke: $chart-fill-color;
+        }
+
+    }
+
+    &.histogram {
+        rect.bar {
+            fill: $chart-fill-color;
+        }
+    }
+
+    &.heatmap {
+        rect.bin {
+            stroke-width: 1;
+            stroke: white;
+        }
+    }
+}

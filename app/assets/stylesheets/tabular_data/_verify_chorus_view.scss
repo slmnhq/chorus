@@ -1,0 +1,15 @@
+@import "../_common.scss";
+
+.dialog.verify_chorus_view {
+    .preview_bar {
+        button {
+            right: 3px;
+        }
+    }
+
+    .CodeMirror {
+        &.editable {
+            background: white;
+        }
+    }
+}

@@ -1,0 +1,245 @@
+@import "../_common";
+
+@mixin chart_icon($name) {
+    .#{$name}.chart_icon, .chorusview {
+        background-image: url("/images/visualizations/create_icons/#{$name}_off.png");
+        &.selected {
+            background-image: url("/images/visualizations/create_icons/#{$name}_on.png");
+        }
+    }
+}
+
+.content_details .tabular_data_content_details {
+    .column_count,.edit_chorus_view_info {
+        padding: 0 $padding-x;
+        border-top: 1px solid #B2C7D6;
+        background-color: $content-details-info-bar-background-color;
+
+
+        .right {
+            float: right;
+            a {
+                font-size: 12px;
+                font-weight: $semibold;
+                color: #344b5b;
+            }
+        }
+
+        .preview {
+            color: #314858;
+            border: 1px solid #B2C7D6;
+        }
+    }
+
+    .count, .explore {
+        @include font-normal-alpha;
+    }
+
+    input.search {
+        display: inline-block;
+    }
+
+    .chorus_search_container {
+        width: 40%;
+        margin: 0 8px;
+    }
+
+    button {
+        margin: 1px 5px 0 5px;
+        color: $content-details-action-link-color;
+        font-weight: $semibold;
+        font-size: 13px;
+        @include content-details-button($content-details-action-link-border-color);
+        float: right;
+
+        &.preview {
+            float: none;
+            margin: 0 0 4px 5px;
+        }
+    }
+
+    .definition, .create_chart, .create_chorus_view, .edit_chorus_view {
+        height: 32px;
+        line-height: 33px;
+        border-bottom: 1px solid #8D9DA8;
+        background-color: $content-details-action-background-color;
+    }
+
+    .definition {
+
+        .sql {
+            @include font-normal-alpha;
+            margin-left: 10px;
+            white-space: nowrap;
+            vertical-align: middle;
+            display: inline-block;
+            width: 50%;
+
+            .sql_prompt {
+                display: inline-block;
+                margin-right: 5px;
+                vertical-align: middle;
+            }
+
+            .sql_content {
+                @include ellipsis;
+                display: inline-block;
+                font-weight: $semibold;
+                color: $color-text1;
+                vertical-align: middle;
+                width: 93%;
+            }
+        }
+
+        .down_arrow {
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #aaa;
+            margin: 0 0 2px 8px;
+            display: inline-block;
+        }
+    }
+
+    .create_chart, .create_chorus_view, .edit_chorus_view {
+        .create {
+            @include create-bar-text;
+            background-color: $content-details-create-background-color;
+            display: inline-block;
+            min-width: 65px;
+            vertical-align: top;
+            text-align: center;
+        }
+
+        .separator {
+            border-right: 1px dotted $content-details-create-bar-link-color;
+            display: inline-block;
+            height: 20px;
+            margin-bottom: 1px;
+        }
+
+        .triangle_right {
+            @include triangle(right, $content-details-create-background-color, 10px, 32px);
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .cancel {
+            float: right;
+            color: $content-details-create-bar-link-color;
+            font-size: 12px;
+            font-weight: $semibold;
+            margin-right: 15px;
+        }
+
+        .title {
+            font-size: 14px;
+            font-weight: $semibold;
+            color: $content-details-create-bar-link-color;
+            vertical-align: top;
+            margin-left: 5px;
+        }
+
+        .chart_icon, .chorusview {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            margin-top: 2px;
+            display: inline-block;
+            cursor: pointer;
+            background-position: center;
+            background-repeat: no-repeat;
+            &:hover {
+                background-color: $content-details-chart-icon-hover-background-color;
+            }
+            &.selected {
+                background-color: $content-details-chart-icon-selected-background-color;
+                .triangle {
+                    display: inline-block;
+                    position: absolute;
+                    left: 17px;
+                    bottom: -12px;
+                }
+            }
+            .triangle {
+                display: none;
+                @include triangle(down, $content-details-chart-icon-selected-background-color, 16px, 12px);
+            }
+        }
+
+        @include chart_icon(frequency);
+        @include chart_icon(histogram);
+        @include chart_icon(heatmap);
+        @include chart_icon(timeseries);
+        @include chart_icon(boxplot);
+        @include chart_icon(chorusview);
+    }
+
+    .edit_chorus_view {
+        .create {
+            width: 120px;
+        }
+        .cancel {
+            margin-left: 15px;
+        }
+    }
+    .info_bar, .chorus_view_info , .edit_chorus_view_info {
+        background-color: $content-details-info-bar-background-color;
+        padding: 0 $padding-x;
+        font-size: 14px;
+        color: $color-text1;
+        font-weight: normal;
+
+        a.select_all, a.select_none {
+            @include font-content-details;
+
+            margin-left: 10px;
+        }
+
+        a.select_all {
+            margin-right: 10px;
+        }
+
+        .select {
+            @include font-normal-alpha;
+        }
+    }
+
+    .info_bar {
+        border-bottom:1px solid $menu-border-color;
+    }
+
+    .edit_chorus_view_info {
+        color: $color-text2;
+    }
+
+    .actions {
+        color: white;
+        float: right;
+
+        a {
+            float: none;
+        }
+    }
+}
+
+.transform_menu {
+    li {
+        padding: 5px;
+
+        a {
+            @include font-menu;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .menu_shortcut {
+            @include font-menu;
+            color: $color-text4;
+            float: right;
+            padding-left: (6 * $padding-x);
+        }
+    }
+}

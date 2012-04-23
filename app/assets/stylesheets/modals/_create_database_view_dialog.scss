@@ -1,0 +1,16 @@
+.create_database_view_dialog {
+    width: 450px;
+
+    .target_location {
+        width: 450px;
+        @include results-console-message;
+        @include ellipsis;
+        padding-bottom: 10px;
+    }
+
+    .target_location_valuefefdsa {
+        font-size: 13px;
+        font-weight: $semibold;
+        font-color: $color-text2;
+    }
+}

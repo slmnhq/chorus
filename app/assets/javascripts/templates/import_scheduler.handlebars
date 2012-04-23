@@ -1,0 +1,77 @@
+<div class="destination">{{t "import.destination" canonicalName=canonicalName}}</div>
+
+<div class="new_table">
+    <fieldset>
+        <legend class="row">
+            <input type="radio" name="imports" id="import_scheduler_new_table" checked="checked"/>
+            <label class="main" for="import_scheduler_new_table">{{t "import.new_table"}}</label>
+            <input type="text" class="name" name="toTable" maxlength="64"/>
+        </legend>
+
+        <div class="inputs">
+            <input type="hidden" name="truncate" value="false"/>
+            <input type="hidden" name="isNewTable" value="true"/>
+            {{#if allowNewTruncate}}
+                <div class="row">
+                    <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate_new"/>
+                    <label for="import_scheduler_truncate_new">{{t "import.truncate"}}</label>
+                </div>
+            {{/if}}
+            <div class="row limit">
+                <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_new"/>
+                <label for="import_scheduler_limit_rows_new">{{t "import.limit_rows"}}</label>
+                <input class="row_limit" type="text" name="sampleCount" disabled="disabled" value="500"/>
+            </div>
+            {{#if showSchedule}}
+                <div class="row schedule_import{{#if hideScheduleCheckbox}} hidden{{/if}}">
+                    <input type="checkbox" name="schedule" id="import_scheduler_schedule_new"/>
+                    <label for="import_scheduler_schedule_new">{{t "import.schedule_import"}}</label>
+                </div>
+
+                <div class="schedule_widget">
+                    <div class="schedule"/>
+                </div>
+            {{/if}}
+        </div>
+    </fieldset>
+</div>
+
+<div class="existing_table">
+    <fieldset class="disabled existing_table">
+        <legend class="row">
+            <input type="radio" name="imports" id="import_scheduler_existing_table"/>
+            <label class="main" for="import_scheduler_existing_table">{{t "import.existing_table"}}</label>
+            <span class="dataset_picked" name="toTable">{{t "dataset.import.select_dataset"}}</span>
+            <a href="#" class="dataset_picked hidden" name="toTable">{{t "dataset.import.select_dataset"}}</a>
+        </legend>
+
+        <div class="inputs">
+            <input type="hidden" name="isNewTable" value="false"/>
+            <div class="row">
+                <input type="checkbox" class="truncate" name="truncate" id="import_scheduler_truncate_existing"/>
+                <label for="import_scheduler_truncate_existing">{{t "import.truncate"}}</label>
+            </div>
+            <div class="row limit">
+                <input type="checkbox" name="limit_num_rows" id="import_scheduler_limit_rows_existing"/>
+                <label for="import_scheduler_limit_rows_existing">{{t "import.limit_rows"}}</label>
+                <input class="row_limit" type="text" name="sampleCount" disabled="disabled" value="500"/>
+            </div>
+
+            {{#if showSchedule}}
+                <div class="row schedule_import{{#if hideScheduleCheckbox}} hidden{{/if}}">
+                    <input type="checkbox" name="schedule" id="import_scheduler_schedule_existing"/>
+                    <label for="import_scheduler_schedule_existing">{{t "import.schedule_import"}}</label>
+                </div>
+
+                <div class="schedule_widget">
+                    <div class="schedule"/>
+                </div>
+            {{/if}}
+        </div>
+    </fieldset>
+</div>
+
+<div class="modal_controls">
+    <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+    <button type="submit" class="submit" tabindex="99">{{submitText}}</button>
+</div>

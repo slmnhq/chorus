@@ -1,0 +1,70 @@
+<form>
+    <label class="required">{{t "workspace.settings.name"}}</label>
+    <input type="text" name="name" maxlength="256" value="{{name}}" tabindex="1"/>
+    <input type="checkbox" id="public_checkbox" name="isPublic"
+        {{#if isPublic}}
+            checked="checked"
+        {{/if}}
+    />
+    <label for="public_checkbox">{{t "workspace.settings.publicly_available"}}</label>
+
+    <div>
+        <div class="toolbar"></div>
+        <label>{{t "workspace.settings.summary"}}</label>
+    </div>
+    <textarea name="summary" rows="2" tabindex="2">{{summary}}</textarea>
+
+    <label>Workspace Image</label>
+
+    <div class="image_container">
+        <div class='edit_photo'><div class="image_upload"/></div>
+        <div class="instructions">
+            {{t "workspace.settings.image.instructions"}}
+        </div>
+    </div>
+
+    <label>{{t "workspace.settings.sandbox.location"}}</label>
+
+    <div class="sandboxLocation">{{sandboxLocation}}</div>
+    {{#if isOwnerOrAdmin}}
+        <label>{{ t "workspace.settings.change_owner"}}</label>
+        <select name="owner" class="owner">
+            {{#each members}}
+                <option value={{id}}>{{displayNameFromPerson attributes}}</option>
+            {{/each}}
+        </select>
+    {{else}}
+        <label>{{ t "workspace.settings.workspace_owner"}}</label>
+        <div class="owner"><a href="{{ownerUrl}}">{{ownerName}}</a></div>
+    {{/if}}
+
+    <div class="workspace_status">
+        <label>{{t "workspace.settings.status"}}</label>
+        <div class="radio">
+            <input type="radio" id="workspace_active" name="status"
+                {{#if active}}
+                    checked="checked"
+                {{/if}}
+            />
+            <label for="workspace_active"><span>{{t "workspace.settings.active"}}</span></label>
+        </div>
+        <div class="radio">
+            <input type="radio" id="workspace_archived" name="status"
+                {{#unless active}}
+                    checked="checked"
+                {{/unless}}
+            />
+            <label for="workspace_archived"><span>{{t "workspace.settings.archived"}}</span></label>
+        </div>
+    </div>
+    <div class="archived_text">
+        {{t "workspace.settings.archived_description"}}
+    </div>
+
+    <div class="modal_controls">
+        <button type="button" class="cancel" tabindex="100">{{#if canSave}}{{t "actions.cancel"}}{{else}}{{t "actions.close_window"}}{{/if}}</button>
+        {{#if canSave}}
+        <button type="submit" class="submit" tabindex="99">{{t "actions.save_changes"}}</button>
+        {{/if}}
+    </div>
+</form>

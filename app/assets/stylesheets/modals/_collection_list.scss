@@ -1,0 +1,30 @@
+.collection_list {
+    $list-item-height: 39px;
+    $list-border-width: 1px;
+
+    max-height: (($list-item-height + $list-border-width) * 8) + $list-item-height;
+    overflow: auto;
+
+    ul {
+        li {
+            height: $list-item-height;
+            border-bottom: $list-border-width dotted $list-border-color;
+            padding: 0 8px;
+            line-height: $list-item-height;
+            vertical-align: middle;
+            @include ellipsis;
+
+            img {
+                max-width: $icon-image-width;
+                max-height: $icon-image-height;
+                vertical-align: middle;
+                padding-right: 4px;
+            }
+
+            .name {
+                vertical-align: middle;
+                @include font-normal-alpha;
+            }
+        }
+    }
+}

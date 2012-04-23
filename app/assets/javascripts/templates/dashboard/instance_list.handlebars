@@ -1,0 +1,16 @@
+{{#each models}}
+    <li data-id="{{id}}">
+        <span class="spacer_left"/>
+        <a class="image">
+            <img src="{{imageUrl}}"/>
+        </a>
+        <div class="main">
+            <div class="text">
+                <a href="{{showUrl}}" class="name">
+                    <span title="{{name}}">{{name}}</span>
+                </a>
+            </div>
+        </div>
+        <span class="spacer_right"/>
+    </li>
+{{/each}}

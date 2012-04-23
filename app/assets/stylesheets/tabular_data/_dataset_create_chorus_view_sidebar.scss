@@ -1,0 +1,116 @@
+@import "_common.scss";
+
+.dataset_create_chorus_view_sidebar {
+    .joins {
+        margin-bottom: 20px;
+    }
+
+    .join {
+        margin-bottom: 5px;
+        .aliased_name {
+            overflow: hidden;
+        }
+        .column {
+            @include ellipsis;
+            width: 57px;
+            display: inline-block;
+            font-size: 14px;
+            line-height: 19px;
+            font-weight: normal;
+            color: black;
+        }
+
+        .delete {
+            visibility: hidden;
+            cursor: pointer;
+        }
+        &:hover .delete {
+            visibility: visible;
+        }
+    }
+
+    .selected_columns {
+        color: $color-text2;
+        font-size: 12px;
+        padding: 8px;
+
+        .title {
+            color: $color-text1;
+            font-size: 16px;
+            font-weight: $semibold;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .dataset {
+            margin-bottom: 5px;
+            @include secondary-text-semibold;
+
+            .aliased_name {
+                overflow: hidden;
+            }
+
+            .label {
+                line-height: 19px;
+                display: inline-block;
+                margin-right: 2px;
+                overflow: hidden;
+            }
+            .name {
+                @include ellipsis;
+                max-width: 115px;
+                font-size: 14px;
+                line-height: 19px;
+                color: $color-text1;
+                font-weight: $semibold;
+                display: inline-block;
+            }
+        }
+    }
+
+    button {
+        bottom: -15px;
+
+        &.disabled {
+            color: #D6DBE0;
+            border-color: #D6DBE0;
+        }
+    }
+    fieldset {
+        padding: 0 0 15px 0;
+    }
+
+    a.remove {
+        float: right;
+        display: none;
+        @include secondary-text-small;
+    }
+
+    .columns, .no_columns_selected {
+        margin-bottom: 15px;
+    }
+
+    .columns {
+        .name {
+            display: inline-block;
+            font-size: 14px;
+            line-height: 19px;
+            font-weight: normal;
+            color: black;
+            padding-left: 15px;
+            max-width: 124px;
+            @include ellipsis;
+        }
+    }
+
+    .sidebar_row {
+        width: 100%;
+        @include after-clearfix;
+
+        &:hover {
+            .remove {
+                display: inline-block;
+            }
+        }
+    }
+}

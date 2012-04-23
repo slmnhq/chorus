@@ -1,0 +1,195 @@
+/* Selectmenu
+----------------------------------*/
+.ui-selectmenu {
+  display: block;
+  display: inline-block;
+  position: relative;
+  height: 2.2em;
+  vertical-align: middle;
+  text-decoration: none;
+  overflow: hidden;
+  zoom: 1;
+  padding: 0 2px;
+
+  color: $color-text2;
+  background-color: #fff;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(0.5, white));
+  background-image: -webkit-linear-gradient(center bottom, #eeeeee 0%, white 50%);
+  background-image: -moz-linear-gradient(center bottom, #eeeeee 0%, white 50%);
+  background-image: -o-linear-gradient(top, #eeeeee 0%,#ffffff 50%);
+  background-image: -ms-linear-gradient(top, #eeeeee 0%,#ffffff 50%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#ffffff',GradientType=0 );
+  background-image: linear-gradient(top, #eeeeee 0%,#ffffff 50%);
+
+  border: 1px solid #AAA;
+
+  &.ui-corner-all {
+    @include border-radius(4px);
+  }
+
+  &.ui-corner-top {
+    @include border-top-radius(4px);
+    background-color: #eee;
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, white), color-stop(0.5, #eeeeee));
+    background-image: -webkit-linear-gradient(center bottom, white 0%, #eeeeee 50%);
+    background-image: -moz-linear-gradient(center bottom, white 0%, #eeeeee 50%);
+    background-image: -o-linear-gradient(bottom, white 0%, #eeeeee 50%);
+    background-image: -ms-linear-gradient(top, #ffffff 0%,#eeeeee 50%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 );
+    background-image: linear-gradient(top, #ffffff 0%,#eeeeee 50%);
+
+    .ui-selectmenu-icon {
+      background-position: -18px 1px;
+    }
+  }
+}
+
+.ui-selectmenu-icon {
+  top: 2px;
+  background: url(/images/select-sprite.png) no-repeat 0 1px;
+  width: 18px;
+  height: 26px;
+  position: absolute;
+  right: 4px;
+}
+
+.ui-selectmenu-menu {
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  display: none;
+  z-index: $select-menu-z-index !important;
+}
+
+/* z-index: 1005 to make selectmenu work with dialog */
+.ui-selectmenu-menu  ul {
+  padding: 2px;
+  margin: 0;
+  list-style: none;
+  position: relative;
+  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: white;
+  max-height: 250px;
+  border: 1px solid #AAA;
+}
+
+.ui-selectmenu-open {
+  display: block;
+}
+
+.ui-selectmenu-menu li {
+  padding: 0;
+  margin: 0;
+  display: block;
+  border-top: 1px dotted transparent;
+  border-bottom: 1px dotted transparent;
+  border-right-width: 0 !important;
+  border-left-width: 0 !important;
+  font-weight: normal !important;
+
+  &.ui-selectmenu-item-focus a {
+      color: white;
+      background: #1C93DF;
+  }
+}
+
+.ui-selectmenu-menu li a, .ui-selectmenu-status {
+  @include ellipsis;
+  line-height: 1.4em;
+  display: block;
+  outline: none;
+  text-decoration: none;
+}
+
+.ui-selectmenu-status {
+  color: $color-text2;
+}
+
+.ui-selectmenu-menu li a {
+  color: black;
+}
+
+.ui-selectmenu-menu li a {
+  padding: 2px 5px;
+}
+
+.ui-selectmenu-status {
+  padding: .405em 2.1em .405em 1em;
+}
+
+.ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled {
+  cursor: default;
+  @include secondary-text-small;
+  font-style: italic;
+}
+
+a.ui-selectmenu-disabled {
+    @include opacity(.6);
+}
+
+.ui-selectmenu-menu li.ui-selectmenu-hasIcon a,
+.ui-selectmenu-hasIcon .ui-selectmenu-status {
+  padding-left: 20px;
+  position: relative;
+  margin-left: 5px;
+}
+
+.ui-selectmenu-menu li .ui-icon, .ui-selectmenu-status .ui-icon {
+  position: absolute;
+  top: 1em;
+  margin-top: -8px;
+  left: 0;
+}
+
+.ui-selectmenu-status {
+  line-height: 1.4em;
+}
+
+.ui-selectmenu-menu li span, .ui-selectmenu-status span {
+  display: block;
+  margin-bottom: .2em;
+}
+
+.ui-selectmenu-menu li .ui-selectmenu-item-header {
+  font-weight: bold;
+}
+
+.ui-selectmenu-menu li .ui-selectmenu-item-footer {
+  opacity: .8;
+}
+
+/* for optgroups */
+.ui-selectmenu-menu .ui-selectmenu-group {
+  font-size: 1em;
+}
+
+.ui-selectmenu-menu .ui-selectmenu-group .ui-selectmenu-group-label {
+  line-height: 1.4em;
+  display: block;
+  padding: .6em .5em 0;
+  font-weight: bold;
+}
+
+.ui-selectmenu-menu .ui-selectmenu-group ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* IE6 workaround (dotted transparent borders) */
+* html .ui-selectmenu-menu li {
+  border-color: pink;
+  filter: chroma(color = pink);
+  width: 100%;
+}
+
+* html .ui-selectmenu-menu li a {
+  position: relative
+}
+
+/* IE7 workaround (opacity disabled) */
+*+html .ui-state-disabled, *+html .ui-state-disabled a {
+  color: silver;
+}

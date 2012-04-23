@@ -1,0 +1,14 @@
+<div class="info">
+    <div title="{{fileName}}" class="file_name">{{fileName}}</div>
+    <div class="last_updated">{{lastUpdated}}</div>
+</div>
+<div class="actions">
+    <ul>
+        {{#unless isBinary}}
+            <li><a class="external_table" href="#">{{t "hdfs.create_external_table"}}</a></li>
+        {{/unless}}
+        <li><a class="dialog" href="#" data-entity-id="{{entityId}}" data-entity-type="hdfs" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+    </ul>
+</div>
+
+<div class="tab_control"></div>

@@ -1,0 +1,42 @@
+@import "../_common.scss";
+
+.modal_controls {
+    margin-top: 25px;
+
+    button {
+        float: right;
+        margin-left: 14px;
+    }
+
+    label {
+        line-height: $button-height;
+
+        &.required:after {
+          margin-right: 4px;
+        }
+    }
+
+    @include after-clearfix;
+}
+
+.controls, .modal_controls {
+    button {
+        display: inline-block;
+        div[aria-role=progressbar] {
+            top: -4px;
+            left: 17px;
+            display: inline-block;
+            > group {
+                /* Position fixes for IE8 VML fallback */
+                position: absolute;
+                bottom: 7px;
+                left: 0px;
+            }
+        }
+
+        &.is_loading {
+            padding-right: 35px;
+        }
+    }
+}
+

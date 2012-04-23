@@ -1,0 +1,18 @@
+@import "../_common.scss";
+
+#sidebar{
+    .user_sidebar {
+        .info {
+            .full_name {
+                @include ellipsis;
+                @include heading-sidebar;
+                margin-bottom: 0;
+                line-height: 18px;
+            }
+
+            .title {
+                @include secondary-text-small;
+            }
+        }
+    }
+}

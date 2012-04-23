@@ -1,0 +1,75 @@
+<div class="media activity_item">
+    {{#if isInsight}}
+    <div class="insight_ribbon">
+        <span class="left" /><span class="center">{{t "insight.title"}}</span><span class="right" />
+    </div>
+    {{/if}}
+
+    <div class="icon">
+        <a href="{{iconHref}}"><img src="{{iconSrc}}" class="{{iconClass}}" /></a>
+    </div>
+    <div class="activity_content bd">
+        <div class="activity_header">
+            {{headerHtml}}
+        </div>
+        {{#if isUserGenerated}}
+            <div class="truncated_text"></div>
+        {{else}}
+            {{#if body}}
+                <div class="body">{{body}}</div>
+            {{/if}}
+        {{/if}}
+        <ul class='attachments'>
+        {{#each attachments}}
+            <li>
+                <a href="{{url}}">
+                    <img src="{{iconSrc}}" />
+                    <span class="name" title="{{name}}">{{name}}</span>
+                </a>
+            </li>
+        {{/each}}
+        </ul>
+        <div class="actions">
+            {{#if detailsLink}}
+                <div class="details">{{detailsLink}}</div>
+            {{/if}}
+            <span class="timestamp">{{relativeTimestamp timestamp}}</span>
+            {{#if isNotification}}
+                <a class="delete_link alert" data-alert="NotificationDeleteAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
+            {{else}}
+                {{#unless isReadOnly}}
+                    {{#if isUserGenerated}}
+                        {{#if isOwner}}
+                            <a class="edit_link dialog" data-dialog="EditNote" href="#">{{t "actions.edit"}}</a>
+                        {{/if}}
+                        {{#ifAdminOr isOwner}}
+                            <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
+                        {{/ifAdminOr}}
+                    {{/if}}
+                {{/unless}}
+            {{/if}}
+        </div>
+        {{#unless isReadOnly}}
+            <div class="links">
+                <a class="comment dialog" data-dialog="Comment" data-entity-type="{{entityType}}" data-entity-id="{{id}}" data-entity-title="{{entityTitle}}" href="#">{{t "activity_stream.comment"}}</a>
+                {{#if isNote}}
+                    <span class="separator">|</span> <a class="promote" href="#">{{t "activity_stream.promote"}}</a>
+                {{/if}}
+                {{#if isInsight}}
+                    {{#ifAdminOr isOwner}}
+                        {{#if isPublished}}
+                            <span class="separator">|</span> <a href="#" class="unpublish">{{t "insight.unpublish.link"}}</a>
+                        {{else}}
+                            <span class="separator">|</span> <a href="#" class="publish">{{t "insight.publish.link"}}</a>
+                        {{/if}}
+                    {{/ifAdminOr}}
+                    <span class="separator">|</span> <span class="promoted_by">{{safeT "insight.promoted_by" promoterLink=promoterLink relativeTimestamp=promotionTimestamp}}</span>
+                {{/if}}
+            </div>
+        {{/unless}}
+    </div>
+</div>
+
+{{#unless isReadOnly}}
+    <ul class="comment_list"></ul>
+{{/unless}}

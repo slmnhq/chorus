@@ -1,0 +1,6 @@
+<select>
+    {{#each models}}
+        <option value="{{quotedName}}" data-cid="{{model.cid}}" data-aliased-name="{{model.tabularData.aliasedName}}" title="{{name}}"
+                {{#if selected}}selected="selected"{{/if}} {{#if disable}}disabled="disabled"{{/if}}>{{name}}</option>
+    {{/each}}
+</select>

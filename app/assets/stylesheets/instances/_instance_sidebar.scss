@@ -1,0 +1,72 @@
+@import "_common.scss";
+
+.instance_list_sidebar {
+    .info {
+        margin-bottom: 10px;
+    }
+
+    .account_info {
+        font-size: 12px;
+        font-weight: normal;
+        color: $color-text1;
+
+        vertical-align: middle;
+        margin-bottom: 10px;
+
+        img {
+            vertical-align: middle;
+            padding-right: 4px;
+        }
+
+        a {
+            margin-left: 8px;
+            padding-left: 8px;
+            border-left: 1px solid $border-color;
+            border-color: $link-color;
+        }
+    }
+
+    .instance_name {
+        @include ellipsis;
+        @include heading-sidebar;
+    }
+
+    .instance_type {
+        @include secondary-text-small;
+    }
+
+    .instance_fault {
+        padding: 5px 0;
+        @include secondary-text-small;
+
+        span {
+            display: inline-block;
+            vertical-align: top;
+        }
+    }
+
+    .instance_configuration_details {
+        dl {
+            padding-right: 8px;
+            font-size: 14px;
+            line-height: 19px;
+        }
+
+        dt {
+            @include font-normal-alpha;
+            float: left;
+            clear: left;
+        }
+
+        dd {
+            float: right;
+            width: 142px;
+            text-align: right;
+            @include ellipsis;
+        }
+    }
+
+    .tabbed_area .selected {
+        display: block;
+    }
+}

@@ -1,0 +1,14 @@
+.hdfs_show_file_sidebar {
+    .info {
+        margin-bottom: 10px;
+
+        .file_name {
+            @include heading-sidebar;
+            @include ellipsis;
+        }
+
+        .last_updated {
+            @include results-console-message;
+        }
+    }
+}

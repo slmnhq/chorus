@@ -1,0 +1,39 @@
+@import "_common.scss";
+
+.error_box {
+    font-size: 12px;
+    font-weight: $semibold;
+    line-height: 16px;
+    color: black;
+
+    background-color: white;
+    position: relative;
+    top: 140px;
+
+    border: 2px solid $guts-border-color;
+
+    height: 175px;
+    width: 425px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .title {
+        padding: 10px;
+        background-color: $error-background-color;
+        color: $error-color;
+    }
+
+    .content{
+        .text {
+            padding: 10px;
+        }
+
+        button {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            font-size: 12px;
+            font-weight: $semibold;
+        }
+    }
+}

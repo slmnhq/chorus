@@ -1,0 +1,69 @@
+<fieldset>
+    <legend>
+        {{t "dataset.chorusview.sidebar.title"}}
+    </legend>
+    <ul class="actions">
+        <li><a href="#" class="preview">{{t "dataset.preview_sql"}}</a></li>
+        <li><a href="#" class="dialog add_join" data-dialog="ManageJoinTables">{{t "dataset.chorusview.sidebar.add_join"}}</a></li>
+    </ul>
+
+    <div class="selected_columns">
+        {{#if joins.length}}
+            <div class="joins">
+                <span class="title">{{t "dataset.chorusview.sidebar.joins"}}</span>
+                {{#each joins}}
+                    <div class="join" data-cid={{destinationColumn.tabularData.cid}}>
+                        <span class="aliased_name"><span class="letter">{{sourceColumn.tabularData.aliasedName}}</span></span><span class="column" title="{{sourceColumn.attributes.name}}">{{sourceColumn.attributes.name}}</span> =
+                        <span class="aliased_name"><span class="letter">{{destinationColumn.tabularData.aliasedName}}</span></span><span class="column" title="{{destinationColumn.attributes.name}}">{{destinationColumn.attributes.name}}</span>
+                        <img class="delete" src="images/trashcan.png" />
+                    </div>
+                {{/each}}
+            </div>
+        {{/if}}
+        <span class="title">{{t "dataset.chorusview.sidebar.selected_columns"}}</span>
+        <div class="dataset">
+            <span class="aliased_name"><span class="letter">{{resource.aliasedName}}</span></span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
+            <span class="name" title="{{objectName}}">{{objectName}}</span>
+        </div>
+
+        {{#if columns.length}}
+            <ul class="columns">
+                {{#each columns}}
+                    <li data-cid='{{cid}}'>
+                        <div class="sidebar_row">
+                            <a href="#" class="remove">{{t "dataset.chorusview.sidebar.remove"}}</a>
+                            <div class="name" title="{{attributes.name}}">{{attributes.name}}</div>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <div class="no_columns_selected">{{t "dataset.chorusview.sidebar.no_columns_selected"}}</div>
+        {{/if}}
+
+        {{#each joins}}
+            <div class="dataset">
+                <span class="aliased_name"><span class="letter">{{destinationColumn.tabularData.aliasedName}}</span></span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
+                <span class="name" title="{{destinationColumn.tabularData.attributes.objectName}}">{{destinationColumn.tabularData.attributes.objectName}}</span>
+            </div>
+            {{#if columns.length}}
+                <ul class="columns">
+                    {{#each columns}}
+                        <li data-cid='{{cid}}'>
+                            <div class="sidebar_row">
+                                <a href="#" class="remove">{{t "dataset.chorusview.sidebar.remove"}}</a>
+                                <div class="name" title="{{attributes.name}}">{{attributes.name}}</div>
+                            </div>
+                        </li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <div class="no_columns_selected">{{t "dataset.chorusview.sidebar.no_columns_selected"}}</div>
+            {{/if}}
+        {{/each}}
+    </div>
+
+    <div class="button_wrapper">
+        <button class="create">{{t "dataset.chorusview.sidebar.verify_chorus_view"}}</button>
+    </div>
+</fieldset>

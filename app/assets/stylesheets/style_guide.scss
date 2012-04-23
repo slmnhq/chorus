@@ -1,0 +1,136 @@
+@import "_common.scss";
+
+#page[data-page=StyleGuide]  {
+    .dark_text_color { color : $color-text2 }
+    .secondary_text_color { color : $color-text3 }
+    .weak_text_color { color : $color-text4 }
+
+    ul.views {
+        padding: 20px;
+
+        li.view {
+            padding: 20px 0;
+
+            > h1 {
+                padding: 10px;
+            }
+        }
+    }
+
+    .heading_normal {
+        @include heading-normal;
+    }
+
+    .heading_sidebar {
+        @include heading-sidebar;
+    }
+
+    .dialog_label {
+        @include dialog-label;
+    }
+
+    .font_normal_alpha {
+        @include font-normal-alpha;
+    }
+
+    .font_normal_beta {
+        @include font-normal-beta;
+    }
+
+    .font_normal_gamma {
+        @include font-normal-gamma;
+    }
+
+    .font_content_details {
+        @include font-content-details;
+    }
+
+    .list_section_heading {
+        @include list-section-heading;
+    }
+
+    .secondary_text_normal {
+        @include secondary-text-normal;
+    }
+
+    .secondary_text_small {
+        @include secondary-text-small;
+    }
+
+    .selected_row_hover_background_color {
+        background-color: $selected-row-hover-background-color;
+    }
+
+    .error_background_color {
+        background-color:   $error-background-color;
+    }
+
+    .alert_background_color {
+    background-color: $alert-background-color;
+    }
+    .workfiles-action-details-background-color {
+    background-color: $content-details-action-background-color;
+    }
+
+    .picklist_selected_background_color {
+    background-color: $picklist-selected-background-color;
+    }
+
+    .activity_stream_comment_background_color {
+    background-color: $activity-stream-comment-background-color;
+    }
+
+
+    .data_table {
+        border: 1px solid black;
+        width: 350px;
+        height: 300px;
+    }
+
+    table {
+        td, th, tr { @include debugging-mixin; }
+        width: 90%;
+        margin-left: 20px;
+        text-shadow: none !important;
+        border-spacing: 0px;
+        border-collapse: separate;
+
+        th {
+            border: 2px solid $color-text2;
+            border-top: none;
+            border-left: none;
+        }
+
+        th, td { padding: 10px; }
+
+        tr {
+            &.size12 { font-size: 12px; }
+            &.size13 { font-size: 13px; }
+            &.size14 { font-size: 14px; }
+            &.size18 { font-size: 18px; }
+            &.size19 { font-size: 19px; }
+            &.size24 { font-size: 24px; }
+
+            &.normal   { td, th { font-weight: normal; }}
+            &.semibold { td, th { font-weight: $semibold !important; }}
+        }
+
+        td, th {
+            &.text1 { color: $color-text1; }
+            &.text2 { color: $color-text2; }
+            &.text3 { color: $color-text3; }
+            &.text4 { color: $color-text4; }
+            &.text5 { color: $color-text5; }
+            &.link { color: $link-color; }
+        }
+
+        td {
+            background: transparentize(black, .9);
+        }
+
+        td.combination {
+            background: none;
+        }
+    }
+
+}

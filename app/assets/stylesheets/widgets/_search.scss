@@ -1,0 +1,29 @@
+@import "_common.scss";
+
+input.chorus_search {
+    @include border-radius(12px);
+    font-size: 14px;
+    padding: 2px 22px 0px 29px;
+    background: url("/images/search-icon.png") no-repeat 9px 3px;
+    outline: none;
+    background-color: white;
+    border-color: $subheader-border-color;
+    margin: 0;
+    line-height: 18px;
+    vertical-align: top;
+}
+
+div.chorus_search_container {
+    position: relative;
+    line-height: 25px;
+    padding: 0;
+    margin: 0;
+}
+
+a.chorus_search_clear {
+    position: absolute;
+    top: 50%;
+    margin-top: -9px;
+    right: 4px;
+    line-height: 12px;
+}

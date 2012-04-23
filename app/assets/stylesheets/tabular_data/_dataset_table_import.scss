@@ -1,0 +1,355 @@
+$cell-width: 150px;
+.table_import_csv.dialog {
+    width: 640px;
+
+    .dialog_content {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .directions {
+        @include font-normal-alpha;
+        display: inline-block;
+        margin-left: 15px;
+        margin-bottom: 5px;
+        input {
+            display: inline-block;
+            width: 401px;
+        }
+
+        input.hdfs {
+            width: 215px;
+        }
+
+        select {
+            width: 160px;
+        }
+
+        .name_label {
+            padding: 0 5px;
+        }
+
+        .select_label {
+            padding-right: 5px;
+        }
+    }
+
+    .options {
+        height: 25px;
+        margin-bottom: 10px;
+        padding: 0 15px;
+
+        .header_options {
+            float: right;
+            margin-top: 6px;
+            display: inline-block;
+        }
+
+        span.delimiter {
+            @include font-normal-alpha;
+            color: black;
+        }
+
+        label.delimiter {
+            font-size: 12px;
+            font-weight: normal;
+            color: $color-text2;
+            padding-right: 5px;
+        }
+
+        input[name=custom_delimiter] {
+            display: inline-block;
+            width: 2em;
+        }
+    }
+
+    .data_table {
+
+        .th, .td {
+            width: $cell-width - 20px;
+            height: 40px;
+        }
+        border-top: 1px solid $list-border-color;
+        border-bottom: 1px solid $list-border-color;
+
+        min-height: 225px;
+
+        .tbody {
+            top: 47px;
+        }
+
+        .column_names {
+            .th {
+                height: 29px;
+                width: $cell-width;
+                padding: 0;
+            }
+
+            .field_name {
+                display: inline-block;
+                width: 100%;
+                @include ellipsis;
+
+                input {
+                    width: 100%;
+                    margin: 0;
+                }
+            }
+        }
+
+        .column_mapping {
+            .map {
+                @include font-content-details;
+                > span, a {
+                    display: inline-block;
+                    vertical-align: middle;
+                    padding-top: 4px;
+                }
+
+                a {
+                    @include ellipsis;
+                    font-size: 12px;
+                    font-weight: $semibold;
+                    max-width: $cell-width - 68px;
+                    height: 32px;
+                    &.selection_conflict {
+                        color: #cc0000;
+
+                        .arrow {
+                            @include triangle(down, #cc0000, 6px, 6px);
+                        }
+                    }
+
+                    .column_name {
+                        margin-right: 5px;
+                    }
+
+                    .arrow {
+                        display: inline-block;
+                        @include triangle(down, $link-color, 6px, 6px);
+                    }
+                }
+            }
+        }
+
+        .data_types {
+            line-height: 12px;
+
+            .th {
+                height: 16px;
+                line-height: 16px;
+                padding: 0;
+                width: $cell-width;
+                overflow: visible;
+
+                .link_menu {
+                    padding: 0;
+                    .chosen {
+                        color: white;
+                        border: none;
+                        width: $cell-width - 4px;
+                        display: inline-block;
+                        height: 16px;
+                    }
+                    .popup {
+                        padding-left: 8px;
+                        img {
+                            display: none;
+                        }
+                    }
+                    .popup_filter {
+                        right: 14px;
+                        width: 100px;
+                        min-width: 100px;
+                        max-width: 100px;
+
+                        li {
+                            padding: 0;
+                        }
+
+                        .pointer {
+                            left: 47px;
+                        }
+                    }
+                }
+            }
+
+            .type {
+                width: $cell-width;
+                height: 16px;
+            }
+
+            .type_name {
+                display: inline-block;
+                color: white;
+
+                .arrow {
+                    position: absolute;
+                    right: 10px;
+                    top: 5px;
+                    @include triangle(down, white, 8px, 8px);
+                }
+            }
+
+            .left, .right {
+                width: 2px;
+                height: 16px;
+                display: inline-block;
+                vertical-align: top;
+            }
+
+            .center {
+                width: $cell-width - 4px;
+                height: 16px;
+                display: inline-block;
+                vertical-align: top;
+                padding-left: 0;
+            }
+
+            .integer, .float {
+                .left {
+                    background: url(/images/datatypes/label_sm_datatype_dkblue1.png) no-repeat;
+                }
+
+                .center {
+                    background: url(/images/datatypes/label_sm_datatype_dkblue2.png) repeat;
+                }
+
+                .right {
+                    background: url(/images/datatypes/label_sm_datatype_dkblue3.png) no-repeat;
+                }
+            }
+
+            .text {
+                .left {
+                    background: url(/images/datatypes/label_sm_datatype_purple1.png) no-repeat;
+                }
+
+                .center {
+                    background: url(/images/datatypes/label_sm_datatype_purple2.png) repeat;
+                }
+
+                .right {
+                    background: url(/images/datatypes/label_sm_datatype_purple3.png) no-repeat;
+                }
+            }
+
+            .date, .time, .date_time, .timestamp {
+                .left {
+                    background: url(/images/datatypes/label_sm_datatype_ltblue1.png) no-repeat;
+                }
+
+                .center {
+                    background: url(/images/datatypes/label_sm_datatype_ltblue2.png) repeat;
+                }
+
+                .right {
+                    background: url(/images/datatypes/label_sm_datatype_ltblue3.png) no-repeat;
+                }
+            }
+        }
+    }
+
+    .modal_controls {
+        padding-right: 10px;
+        padding-bottom: 5px;
+    }
+}
+
+.existing_table_import_csv.table_import_csv {
+    .directions {
+        @include ellipsis;
+        max-width: 610px;
+        vertical-align: middle;
+        padding-bottom: 2px;
+
+        .destination {
+            font-weight: $semibold;
+        }
+    }
+    .progress_wrapper {
+        margin-left: 15px;
+
+        .progress {
+            display: inline-block;
+            @include results-console;
+            vertical-align: middle;
+            margin-bottom: 5px;
+            padding-bottom: 2px;
+        }
+
+        .automap {
+            font-size: 12px;
+            font-weight: $semibold;
+            padding-left: 10px;
+        }
+    }
+
+    .data_table {
+        .column_names {
+            .th {
+                padding: 0 10px;
+                width:  $cell-width - 20px;
+            }
+
+            .field_name {
+                width: 95%;
+            }
+        }
+
+        .tbody {
+            top: 71px;
+        }
+    }
+}
+
+.table_import_csv.qtip {
+
+    .ui-tooltip-content {
+        max-height: 420px;
+        overflow-y: auto;
+        width: 300px;
+    }
+
+    .check_wrapper {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin: 0 3px;
+
+        .check {
+            background-image: url("/images/check.png");
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+        }
+    }
+
+    li {
+        a.name {
+            @include font-menu;
+            vertical-align: baseline;
+            @include ellipsis;
+            max-width: 180px;
+            display: inline-block;
+            height: 16px;
+            color: $color-text1;
+
+            &:hover {
+                text-decoration: underline;
+            }
+
+            &.selected {
+                color: $color-text2;
+            }
+
+            &.selection_conflict {
+                color: #cc0000;
+            }
+        }
+        .type {
+            @include secondary-text-small;
+            float: right;
+        }
+    }
+}

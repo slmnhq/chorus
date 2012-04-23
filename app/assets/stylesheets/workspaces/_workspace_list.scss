@@ -1,0 +1,51 @@
+@import "_common.scss";
+
+.workspace_list {
+    li.archived .name span  {
+        text-decoration: line-through;
+    }
+
+    .owner {
+        color: $color-text4;
+
+        a {
+            font-weight: $semibold;
+        }
+    }
+
+    .private {
+        @include dialog-label;
+        border-left: 2px solid $border-color;
+        margin-left: 5px;
+        padding: 3px $padding-x 1px;
+    }
+
+    li {
+        .full {
+            display: none;
+        }
+        .truncated {
+            display : block;
+        }
+        &.more {
+            .full {
+                display : block;
+            }
+            .truncated {
+                display : none;
+            }
+        }
+
+        .badge {
+            position:absolute;
+            top: 5px;
+        }
+
+        .spacer {
+            display: inline-block;
+            width: 10px;
+            min-height: 45px;
+        }
+    }
+}
+

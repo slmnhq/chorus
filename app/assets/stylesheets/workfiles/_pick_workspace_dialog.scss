@@ -1,0 +1,19 @@
+@import "../_common.scss";
+
+.pick_workspace {
+
+    .picklist {
+        min-width: 315px;
+        max-width: 600px;
+    }
+
+    &.dialog .dialog_content {
+        padding: 0;
+    }
+    
+    .modal_controls {
+        margin: 0;
+        padding: 14px;
+        border-top: 1px solid $pagination-border-color;
+    }
+}

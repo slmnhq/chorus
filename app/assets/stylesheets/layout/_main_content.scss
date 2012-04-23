@@ -1,0 +1,68 @@
+@import "../_common.scss";
+
+#main_content {
+    border: 1px solid $guts-border-color;
+    @include border-radius(3px);
+}
+
+.content_header {
+    background: white;
+    min-height: 36px;
+    padding: 12px $padding-x 5px;
+    border-bottom: 1px solid $subheader-border-color;
+    @include border-top-radius(3px);
+
+    h1 {
+        @include ellipsis;
+        padding-top: 16px;
+        padding-bottom: 7px;
+        @include heading-normal;
+    }
+
+    .icon {
+        float: left;
+        padding-right: 5px;
+    }
+
+    .menus {
+        float: right;
+        text-align : right;
+        margin-top:25px;
+        height: 25px;
+        @include after-clearfix;
+    }
+
+    .found_in {
+        margin-bottom: 7px;
+
+        a {
+            display: inline;
+        }
+    }
+}
+
+.content_details, .content_footer {
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    @include font-content-details;
+    border-bottom: 1px solid $pagination-border-color;
+    padding: 0 $padding-x;
+
+    &.hidden {
+        padding: 0;
+        height: 0;
+        border: none;
+    }
+
+    button {
+        @include font-content-details;
+        @include content-details-button($border-color);
+    }
+}
+
+.content_footer {
+    height: auto;
+    border-bottom: none;
+    border-top: 1px solid $pagination-border-color;
+}

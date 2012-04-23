@@ -1,0 +1,25 @@
+<fieldset>
+    <legend>
+        {{#if configured}}
+        <div>
+            <input type="radio" name="sandbox_type" value="within_instance" id="within_instance" checked="checked"/>
+            <label for="within_instance">{{t "sandbox.create.within_instance"}}</label>
+        </div>
+        <div>
+            <input type="radio" name="sandbox_type" value="as_standalone" id="as_standalone"/>
+            <label for="as_standalone">{{t "sandbox.create.as_standalone"}}
+            <img class="help" src="/images/more-info.png" data-text='{{t "sandbox.create.standalone_dialog.help_text"}}'/>
+            </label>
+        </div>
+        {{/if}}
+    </legend>
+    <form>
+        <div class="instance_mode"></div>
+        <div class="standalone_mode hidden"></div>
+    </form>
+</fieldset>
+<div class="modal_controls">
+    <label class="required"/><label>{{t "validation.required_field"}}</label>
+    <button type="button" class="cancel" tabindex=2>{{t "actions.cancel"}}</button>
+    <button type="submit" class="submit" tabindex=1>{{t "sandbox.create_sandbox"}}</button>
+</div>

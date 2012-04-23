@@ -1,0 +1,32 @@
+@import "../_common.scss";
+@import "compass/css3/border-radius";
+
+.pick_items {
+    width: 500px;
+
+    .sub_header .chorus_search_container {
+        margin: 5px 0;
+    }
+
+    .list_content_details {
+        width: auto;
+    }
+
+    .items {
+        ul {
+            li {
+                &:hover {
+                    cursor: pointer;
+                }
+
+                &.selected {
+                    background-color: $picklist-selected-background-color;
+
+                    .name {
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}

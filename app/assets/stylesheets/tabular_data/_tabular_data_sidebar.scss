@@ -1,0 +1,158 @@
+.tabular_data_sidebar {
+    .multiple_selection {
+        @include box-shadow(0 0 4px #999 inset);
+        @include border-radius(8px);
+        margin-bottom: 10px;
+        margin-right: 10px;
+        padding: 10px;
+        background-color: $shaded-background-color;
+
+        .count {
+            font-size: 18px;
+            font-weight: $semibold;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        li a {
+            font-size: 12px;
+            font-weight: $semibold;
+        }
+    }
+
+    .info {
+        margin-bottom: 5px;
+
+        .name {
+            @include heading-sidebar;
+            margin-bottom: 5px;
+        }
+        .type {
+            @include secondary-text-small;
+        }
+    }
+
+    .last_import, .next_import {
+        @include results-console-message;
+        line-height: 16px;
+        margin-bottom: 10px;
+        .icon {
+            float: left;
+            margin-top: 3px;
+            margin-right: 5px;
+        }
+        .right {
+            a {
+                font-size: 12px;
+                font-weight: $semibold;
+            }
+            padding-left: 22px;
+            &.last_import_text {
+                padding-top: 10px;
+            }
+        }
+    }
+
+    &.visualizing {
+        .actions, .last_import, .next_import {
+            display: none;
+        }
+    }
+
+    .activity_list {
+        .heading {
+            display: none;
+        }
+    }
+
+    .statistics_detail {
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 18px;
+        color: $color-text2;
+
+        .title {
+            display: inline-block;
+            font-size: 16px;
+            font-weight: $semibold;
+            overflow: hidden; /*this is neccesary for alignment in firefox due to the overflow:hidden firefox bug*/
+        }
+
+        .column_title {
+            margin-top: 15px;
+        }
+
+        .table_name, .column_name {
+            display: inline-block;
+            @include ellipsis;
+            max-width: 185px;
+            color: black;
+            font-size: 16px;
+            line-height:22px;
+            font-weight: $semibold;
+        }
+
+        .statistics, .column_statistics {
+            margin-top: 15px;
+            margin-left: 15px;
+        }
+
+        .key {
+            display: inline-block;
+            color: $color-text2;
+            width: 49%;
+        }
+
+        .value {
+            width: 47%;
+            color: black;
+            max-width: 120px;
+            text-align: right;
+            vertical-align: top;
+            display: inline-block;
+            @include ellipsis;
+        }
+
+        .value.table_type {
+            @include not-ellipsis;
+        }
+
+        .pair {
+            display: block;
+            border-bottom: $dotted-list-item-border;
+            margin-right: 10px;
+        }
+
+        .multiline {
+            margin-right: 10px;
+
+            .key {
+                border-bottom: $dotted-list-item-border;
+            }
+
+            .value {
+                display: block;
+                padding-left: 50%;
+                border-bottom: $dotted-list-item-border;
+
+                &:nth-child(2) {
+                    width: 47%;
+                    max-width: 120px;
+                    display: inline-block;
+                    padding-left: 0;
+                }
+            }
+        }
+
+        .description {
+            margin-top: 15px;
+            margin-left: 15px;
+            margin-right: 10px;
+
+            p {
+                margin-top: 8px;
+                font-size: 12px;
+            }
+        }
+    }
+}

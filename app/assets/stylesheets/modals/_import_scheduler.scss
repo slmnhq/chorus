@@ -1,0 +1,110 @@
+.date-picker {
+    z-index: 20001;
+}
+
+.import_scheduler {
+    width: 500px;
+
+    fieldset.disabled {
+        border: none;
+        padding-bottom: 0;
+
+        .inputs {
+            display: none;
+        }
+    }
+
+    legend {
+        margin-bottom: 5px;
+    }
+
+    .destination {
+        padding-bottom: 10px;
+        @include results-console-message;
+    }
+
+    input[type=checkbox] {
+        margin-left: 20px;
+    }
+
+    .row {
+        line-height: 34px;
+        vertical-align: middle;
+    }
+
+    label {
+        display: inline-block;
+        min-width: 200px;
+        line-height: 20px;
+    }
+
+    label.main {
+        @include font-menu;
+    }
+
+    .new_table {
+        .name {
+            width: 206px;
+        }
+    }
+
+    .existing_table {
+        .names {
+            width: 200px;
+            display: inline-block;
+        }
+
+        label.main {
+            vertical-align: top;
+            margin-top: 10px;
+        }
+
+        .dataset_picked {
+            font-size: 13px;
+            font-weight: $semibold;
+            margin-right: 5px;
+            display: inline-block;
+            line-height: 14px;
+        }
+
+        a.dataset_picked {
+            border-bottom: 1px dotted gray;
+            display: inline-block;
+            line-height: 14px;
+        }
+    }
+
+    .limit {
+        .row_limit {
+            float: right;
+            width: 120px;
+            margin-right: 6px;
+            @include after-clearfix;
+        }
+    }
+
+    .date {
+        .label {
+            width: 150px;
+            @include font-menu;
+            display: inline-block;
+        }
+
+        input {
+            width: 50px;
+            display: inline-block;
+        }
+    }
+
+    .frequency {
+        width: 100px;
+    }
+
+    .hours, .ampm, .minutes {
+        width: 65px;
+    }
+
+    .schedule_widget {
+        margin-left: 40px;
+    }
+}

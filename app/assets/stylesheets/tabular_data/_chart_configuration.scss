@@ -1,0 +1,109 @@
+.chart_configuration {
+    padding: 15px;
+    position: relative;
+
+    .chart_columns {
+        display: inline-block;
+    }
+    .field {
+        display: inline-block;
+        padding-right: 20px;
+        vertical-align: top;
+    }
+
+    .labels {
+        line-height: 12px;
+        display: inline-block;
+        width: 225px;
+        .label{
+            display: inline-block;
+        }
+
+        .column_hint {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: $semibold;
+            color: $color-text4;
+            float: right;
+        }
+    }
+
+    select, .ui-selectmenu {
+        display: block;
+        width: 225px;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    .button_wrapper {
+        display: block;
+    }
+    button.create, button.cancel {
+    /* need to override the content-details style*/
+        @include border-radius(0px);
+        border: 1px solid $border-color;
+        background: white;
+        color: $link-color;
+        display: inline-block;
+        float: none;
+        &.is_loading {
+            color: $color-text4;
+        }
+        font-size: 16px;
+        font-weight: normal;
+    }
+
+    .no_columns {
+        display: block;
+        width: 215px;
+        padding-bottom: 10px;
+    }
+
+    .limiter {
+        font-size: 12px;
+        color: $color-text2;
+        font-weight: $semibold;
+        margin-bottom: 10px;
+        line-height: 12px;
+
+        a {
+            font-size: 12px;
+        }
+        .pointing_l {
+            display: inline-block;
+            border-bottom: 1px solid $color-text3;
+            border-left: 1px solid $color-text3;
+            width: 5px;
+            height: 7px;
+            margin-right: 3px;
+            margin-left: 2px;
+            vertical-align: top;
+        }
+        .selected_value {
+            padding-right: 5px;
+        }
+        .triangle {
+            display: inline-block;
+            margin-bottom: 2px;
+            @include triangle(down, $link-color, 7px, 4px);
+        }
+    }
+
+    .limiter_menu_container {
+        .limiter_menu {
+            display: none;
+        }
+    }
+}
+
+ul.limiter_menu {
+    li {
+        cursor: pointer;
+        font-size: 14px;
+        line-height: 16px;
+        &:hover {
+            text-decoration: underline;
+
+        }
+    }
+}

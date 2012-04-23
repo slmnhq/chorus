@@ -1,0 +1,84 @@
+.dataset_filter_wizard {
+
+    .filter_content {
+        padding: 0 10px;
+    }
+    
+    .gradient_top {
+        height: 10px;
+        @include background-image(linear-gradient($content-details-info-bar-background-color, $body-background-color));
+        border-top: 1px solid $list-border-color;
+    }
+
+    .gradient_bottom {
+        @include background-image(linear-gradient($body-background-color, $content-details-info-bar-background-color));
+        height: 10px;
+    }
+
+    .filter_title {
+        @include secondary-text-small;
+    }
+
+    .add_filter {
+        float: right;
+        font-size: 12px;
+    }
+
+    .brackets {
+        height: 100%;
+        width: 8px;
+        display: inline-block;
+        vertical-align: top;
+
+        .brackets_top {
+            height:50%;
+            border-left: 1px solid $list-border-color;
+            border-bottom: 1px solid $list-border-color;
+        }
+
+        .brackets_bottom {
+            height:50%;
+            border-left: 1px solid $list-border-color;
+        }
+    }
+
+    li.last {
+        .brackets_bottom {
+            border-left: 0;
+        }
+    }
+}
+
+.dataset_filter {
+    height: 40px;
+    border-bottom: 0;
+
+    .remove {
+        display: inline-block;
+        margin-top: 4px;
+        vertical-align: top;
+    }
+
+    select, .ui-selectmenu {
+        width: 215px;
+        margin-right: 10px;
+    }
+
+    .ui-selectmenu-menu ul {
+      padding: 2px 8px 2px 2px;
+    }
+
+    input[type=text] {
+        width: 25%;
+        max-width: 250px;
+        display: inline-block;
+        margin-right: 10px;
+        vertical-align: top;
+        margin-top: 4px;
+    }
+
+    .filter.date input {
+        width: 80px;
+    }
+
+}

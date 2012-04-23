@@ -1,0 +1,20 @@
+<div class="sandbox_schema">
+    <legend>
+        <input type="radio" name="schema_type" id="sandbox_schema" disabled='disabled'/>
+        <label for="sandbox_schema" class="disabled">{{t "workfile.run_in_schema.sandbox_schema"}}</label>
+    </legend>
+    <div class="name"/>
+</div>
+<fieldset class="another_schema">
+    <legend>
+        <input type="radio" name="schema_type" id="another_schema" checked="true"/>
+        <label for="another_schema">{{t "workfile.run_in_schema.another_schema"}}</label>
+    </legend>
+    <div class="loading">{{t "loading"}}</div>
+    <div class="schema_picker"/>
+</fieldset>
+
+<div class="modal_controls">
+    <button type="button" class="cancel" tabindex=4>{{t "actions.cancel"}}</button>
+    <button type="submit" class="submit" disabled="true" tabindex=3>{{t "workfile.run_in_schema.run_file"}}</button>
+</div>

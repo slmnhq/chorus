@@ -1,0 +1,41 @@
+.run_file_in_schema {
+	width: 452px;
+
+	.sandbox_schema {
+		padding-left: 15px;
+
+		label {
+			@include font-menu;
+		}
+
+		.name {
+			@include font-normal-beta;
+			padding: 5px 0 5px 22px;
+		}
+	}
+
+	.another_schema {
+		padding-top: $padding-y;
+
+		&.collapsed {
+	        >div {
+	            display: none;
+	        }
+
+	        border: none;
+	    }
+
+	}
+
+	.modal_controls {
+		margin-top : 15px;
+	}
+
+	.schema_picker {
+		padding: 0 20px;
+	}
+
+    label.disabled {
+        color: $color-text4;
+    }
+}

@@ -1,0 +1,38 @@
+<h2>{{t "workspace.quickstart.headline"}}</h2>
+<div class="body">{{t "workspace.quickstart.body"}}</div>
+
+<a class="dismiss" href="{{workspaceUrl}}">{{t "workspace.quickstart.dismiss"}}</a>
+
+<div class="boxes">
+    <div class="add_team_members info_box">
+        <img src="images/workspaces/user_quick_start.png"/>
+        <div class="details">
+            <a class="dialog" data-dialog="WorkspaceEditMembers" href="#">{{t "workspace.quickstart.add_team_members.link"}}</a>
+            <span class="text">{{t "workspace.quickstart.add_team_members.text"}}</span>
+        </div>
+    </div>
+
+    <div class="edit_workspace_settings info_box">
+        <img src="images/workspaces/config_quick_start.png"/>
+        <div class="details">
+            <a class="dialog" data-dialog="WorkspaceSettings" href="#">{{t "workspace.quickstart.edit_workspace_settings.link"}}</a>
+            <span class="text">{{t "workspace.quickstart.edit_workspace_settings.text"}}</span>
+        </div>
+    </div>
+
+    <div class="add_sandbox info_box">
+        <img src="images/workspaces/sandbox_quick_start.png"/>
+        <div class="details">
+            <a class="dialog" data-dialog="SandboxNew" data-workspace-id="{{id}}" data-no-reload="true" href="#">{{t "workspace.quickstart.add_sandbox.link"}}</a>
+            <span class="text">{{t "workspace.quickstart.add_sandbox.text"}}</span>
+        </div>
+    </div>
+
+    <div class="add_workfiles info_box">
+        <img src="images/workspaces/work_files_quick_start.png"/>
+        <div class="details">
+            <a class="dialog" data-dialog="WorkfilesImport" data-workspace-id="{{id}}" href="#">{{t "workspace.quickstart.add_workfiles.link"}}</a>
+            <span class="text">{{t "workspace.quickstart.add_workfiles.text"}}</span>
+        </div>
+    </div>
+</div>

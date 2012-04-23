@@ -1,0 +1,81 @@
+<fieldset class="collapsed register_existing_greenplum">
+    <legend>
+        <input type="radio" name="instance_type" id="register_existing_greenplum"/>
+        <label for="register_existing_greenplum">{{t "instances.new_dialog.register_existing_greenplum"}}</label>
+        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_greenplum_help_text"}}'/>
+    </legend>
+    <div><form>
+        <input type="hidden" name="provisionType" value="register" />
+        <label class="required">{{t "instances.dialog.instance_name"}}</label>
+        <input type="text" name="name" maxlength="44"/>
+
+        <label>{{t "instances.dialog.description"}}</label>
+        <textarea rows="3" name="description"/>
+
+        <label class="required" name="host">{{t "instances.dialog.host"}}</label>
+        <label class="required" name="port">{{t "instances.dialog.port"}}</label>
+        <input type="text" name="host"/>
+        <input type="text" name="port"/>
+
+        <label class="required" name="maintenanceDb">{{t "instances.dialog.maintenanceDb"}}</label>
+        <input type="text" name="maintenanceDb" value="postgres"/>
+
+        <label class="required" name="dbUserName">{{t "instances.dialog.database_account"}}</label>
+        <label class="required" name="dbPassword">{{t "instances.dialog.database_password"}}</label>
+        <input type="text" name="dbUserName" maxlength="256"/>
+        <input type="password" name="dbPassword" maxlength="256"/>
+
+        <input type="checkbox" name="shared" id="register_greenplum_shared"/>
+        <label for="register_greenplum_shared">{{t "instances.dialog.is_community_account"}}
+            <img class="help" src="/images/more-info.png" data-text='{{t "instances.new_dialog.is_community_account.help_text"}}'/>
+        </label>
+    </form></div>
+</fieldset>
+
+{{#if auroraInstalled}}
+<fieldset class="collapsed create_new_greenplum" >
+    <legend>
+        <input type="radio" name="instance_type" id="create_new_greenplum"/>
+        <label for="create_new_greenplum">{{t "instances.new_dialog.create_new_greenplum"}}</label>
+        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.create_new_greenplum_help_text"}}'/>
+    </legend>
+    <div><form>
+        {{renderTemplate "instance/_provision" this}}
+    </form></div>
+</fieldset>
+{{/if}}
+
+<fieldset class="collapsed register_existing_hadoop">
+    <legend>
+        <input type="radio" name="instance_type" id="register_existing_hadoop"/>
+        <label for="register_existing_hadoop">{{t "instances.new_dialog.register_existing_hadoop"}}</label>
+        <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_hadoop_help_text"}}'/>
+    </legend>
+    <div><form>
+        <input type="hidden" name="provisionType" value="registerHadoop" />
+        <input class="hidden" type="checkbox" name="shared" checked="checked"/>
+
+        <label class="required">{{t "instances.dialog.instance_name"}}</label>
+        <input type="text" name="name"/>
+
+        <label>{{t "instances.dialog.description"}}</label>
+        <textarea rows="3" name="description"/>
+
+        <label class="required" name="host">{{t "instances.dialog.host"}} </label>
+        <label class="required" name="port">{{t "instances.dialog.port"}}</label>
+        <input type="text" name="host"/>
+        <input type="text" name="port"/>
+
+        <label class="required" name="userName">{{t "instances.dialog.hadoop_account"}}</label>
+        <label class="required" name="userGroups">{{t "instances.dialog.hadoop_group_list"}}</label>
+        <input type="text" name="userName" maxlength="255"/>
+        <input type="text" name="userGroups" maxlength="255"/>
+    </form></div>
+</fieldset>
+
+
+<div class="modal_controls">
+    <label class="required"/><label>{{t "validation.required_field"}}</label>
+    <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+    <button type="submit" class="submit" tabindex="99" disabled="disabled">{{t "instances.new_dialog.save"}}</button>
+</div>

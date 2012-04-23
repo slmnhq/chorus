@@ -1,0 +1,18 @@
+<input class="search" placeholder='{{t "schema.metadata.list.hint.columns"}}'/>
+<div class="context">{{safeT "schema.columns.search_in" schemaSpan=schemaSpan tableSpan=tableOrViewSpan}}</div>
+<a class="back" href="#">{{t "schema.column.list.back"}}</a>
+{{#if models.length}}
+    <ul class="list">
+        {{#each models}}
+            <li data-name="{{name}}" data-fullname="{{fullName}}" data-cid="{{cid}}" title="{{name}}">
+                <span class="spacer_left"/>
+                <img src="images/small_column.png">
+                <span class="name">{{name}}</span>
+                <span class="type">{{type}}</span>
+                <span class="spacer_right"/>
+            </li>
+        {{/each}}
+    </ul>
+{{else}}
+    <div class="none_found">{{t "schema.column.list.empty"}}</div>
+{{/if}}

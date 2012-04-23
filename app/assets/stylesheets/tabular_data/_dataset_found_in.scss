@@ -1,0 +1,28 @@
+.found_in {
+    font-size: 12px;
+    line-height: 16px;
+
+    color: $color-text2;
+    a {
+        display: inline-block;
+        font-size: inherit;
+        font-weight: $semibold;
+        @include ellipsis;
+        max-width: 80%;
+    }
+
+    .open_other_menu {
+        @include menu-triangle;
+        border-bottom: 1px dotted $link-color;
+    }
+
+    .other_menu {
+        display: none;
+    }
+}
+
+.found_in_other_workspaces_menu {
+    li {
+        line-height: 18px;
+    }
+}

@@ -1,0 +1,29 @@
+@import "../_common.scss";
+
+.workspace_members_more {
+    width: 315px;
+
+    .sub_header {
+        padding: 0 15px;
+        @include borderbox;
+    }
+
+    .collection_list {
+        border-top: 1px solid $subheader-border-color-dark;
+        border-bottom: 1px solid $subheader-border-color-dark;
+
+    }
+
+    button {
+        float: right;
+        margin: 0 10px 15px;
+    }
+}
+
+.dialog.workspace_members_more {
+
+    .dialog_content {
+        padding: 0;
+    }
+
+}

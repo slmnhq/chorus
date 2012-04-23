@@ -1,0 +1,67 @@
+.hdfs_entry_sidebar {
+    .info {
+        .name {
+            @include ellipsis;
+            @include heading-sidebar;
+            margin-bottom: 10px;
+        }
+
+        .last_updated {
+            color: $color-text4;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    }
+}
+
+.hdfs_entry_list {
+    li {
+        img {
+            display: inline-block;
+        }
+
+        .description {
+            display: inline-block;
+            font-size: 18px;
+            font-weight: $semibold;
+            color: $color-text2;
+
+            .dir {
+                padding-top: 3px;
+                display: block;
+                font-weight: $semibold;
+                @include font-content-details;
+
+                a {
+                    font-size: 18px;
+                    font-weight: $semibold;
+                }
+            }
+
+            .size {
+                padding-top: 3px;
+                display: block;
+                @include font-content-details;
+            }
+        }
+    }
+}
+
+ul.hdfs_link_menu {
+    min-width:130px;
+    padding: 9px 7px 9px 2px;
+    line-height: 16px;
+
+    li {
+        margin: 2px 4px 0px;
+
+        a {
+            font-weight: 400;
+            color: black !important;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}

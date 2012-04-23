@@ -1,0 +1,34 @@
+<span class="spacer_left"/>
+{{#if activeWorkspace}}
+    <a class="image" href="{{url}}">
+        <img src="{{iconSrc}}"/>
+    </a>
+{{else}}
+    <span class="image">
+        <img src="{{iconSrc}}"/>
+    </span>
+{{/if}}
+
+<div class="text">
+
+    <div class="main">
+        <a title="{{fileName}}" class="name" href="{{url}}">{{fileName}}</a>
+    </div>
+
+    <div class="details"/>
+
+    {{#if lastComment}}
+        <div class="comment">
+            <div class="body"></div>
+            {{userProfileLink lastComment.creator}}
+            <span class="comment_info">
+                {{t "workfiles.commented_on"}} <span class="on">{{lastComment.on}}</span>
+                {{#if otherCommentCount }}
+                    - {{t "workfiles.other_comments" count=otherCommentCount}}
+                {{/if}}
+            </span>
+        </div>
+    {{/if}}
+
+</div>
+<span class="spacer_right"/>
