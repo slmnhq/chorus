@@ -3,6 +3,9 @@
 .truncated_text {
     .styled_text {
         height: $summary-line-height * 2;
+        &.extra_line {
+            height: $summary-line-height * 3;
+        }
         overflow: hidden;
 
         .original {

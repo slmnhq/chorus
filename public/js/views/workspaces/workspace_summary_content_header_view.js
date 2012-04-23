@@ -15,7 +15,7 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
     },
 
     resourcesLoaded : function() {
-        this.truncatedSummary = new chorus.views.TruncatedText({model:this.model, attribute:"summary", attributeIsHtmlSafe: true});
+        this.truncatedSummary = new chorus.views.TruncatedText({model:this.model, attribute:"summary", attributeIsHtmlSafe: true, extraLine: true});
         this.activityListHeader = new chorus.views.ActivityListHeader({
               model: this.model,
               allTitle: this.model.get("name"),

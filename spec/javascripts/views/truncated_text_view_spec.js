@@ -95,6 +95,27 @@ describe("chorus.views.TruncatedText", function() {
                 });
             });
 
+            context("when given an extraLine option", function() {
+                beforeEach(function() {
+                    this.text = "This is <br>a test <br> more"
+                    this.model.set({ summary: this.text})
+                    this.view.options.extraLine = true;
+                    this.view.render();
+                });
+
+                it("renders the text", function() {
+                    expect(this.view.$(".original").html()).toBe(this.text);
+                });
+
+                it("marks the view as not expandable", function() {
+                    expect($(this.view.el)).not.toHaveClass('expandable');
+                });
+
+                it("adds class extra_line to the .styled_text", function() {
+                    expect(this.view.$(".styled_text")).toHaveClass("extra_line");
+                })
+            })
+
             it("renders 'read more' and 'read less' links", function() {
                 expect(this.view.$(".links a.more").text().trim()).toMatchTranslation("truncated_text.more");
                 expect(this.view.$(".links a.less").text().trim()).toMatchTranslation("truncated_text.less");

@@ -32,6 +32,8 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
 
             expect(this.view.truncatedSummary.options.model).toBe(this.workspace);
             expect(this.view.truncatedSummary.options.attribute).toBe("summary");
+            expect(this.view.truncatedSummary.options.extraLine).toBeTruthy();
+
         })
 
         it("hides the summary if the workspace does not have one", function() {

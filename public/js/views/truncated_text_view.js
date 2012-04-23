@@ -22,9 +22,17 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
     },
 
     show: function() {
+        var numLines = 2;
+
         _.defer(_.bind(function() {
+
+            if (this.options.extraLine) {
+                numLines++;
+                this.$(".styled_text").addClass("extra_line");
+            }
+
             var text = this.$(".original");
-            var heightLimit = parseInt(text.css("line-height")) * 2;
+            var heightLimit = parseInt(text.css("line-height")) * numLines;
             if (text.height() > heightLimit) {
                 $(this.el).addClass('expandable');
             } else {
