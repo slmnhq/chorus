@@ -10,7 +10,7 @@ describe " add an instance " do
     within("#facebox") do
       wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
       choose("register_existing_greenplum")
-      wait_until { !find(".register_existing_greenplum.collapsed")}
+      wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
       within(".register_existing_greenplum") do
         wait_until { find("input[name=name]").visible? }
         wait_until { find("textarea[name=description]").visible? }
@@ -37,7 +37,7 @@ describe " add an instance " do
     within("#facebox") do
       wait_until { page.has_selector?(".register_existing_hadoop input[name=name]")}
       choose("register_existing_hadoop")
-      wait_until { !find(".register_existing_hadoop.collapsed")}
+      wait_until { !page.has_selector?(".register_existing_hadoop.collapsed")}
       within(".register_existing_hadoop") do
         wait_until { find("input[name=name]").visible? }
         wait_until { find("textarea[name=description]").visible? }
