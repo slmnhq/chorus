@@ -35,6 +35,34 @@ describe User do
     it { should validate_presence_of :username }
     it { should validate_presence_of :email }
 
+    describe "username" do
+      context "when no other user with that username exists" do
+        it "validates" do
+          FactoryGirl.build(:user, :username => "foo").should be_valid
+        end
+      end
+
+      context "when another non-deleted user with that username exists" do
+        before(:each) do
+          FactoryGirl.create(:user, :username => "foo")
+        end
+
+        it "fails validation" do
+          FactoryGirl.build(:user, :username => "foo").should_not be_valid
+        end
+      end
+
+      context "when a deleted user with that username exists" do
+        before(:each) do
+          FactoryGirl.create(:user, :username => "foo", :deleted_at => Time.now)
+        end
+
+        it "validates" do
+          FactoryGirl.build(:user, :username => "foo").should be_valid
+        end
+      end
+    end
+
     describe "password" do
       context "when the password is not being modified" do
         it "is required if user does not have a saved password" do

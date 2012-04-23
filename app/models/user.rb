@@ -7,12 +7,23 @@ class User < ActiveRecord::Base
 
   has_many :instances, :foreign_key => :owner_id
 
+  #validates_uniqueness_of
   validates_presence_of :username, :first_name, :last_name, :email
-  validates_uniqueness_of :username, :case_sensitive => false
+  validate :uniqueness_of_non_deleted_username
   validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/
   validates_presence_of :password, :unless => :password_digest?
   validates_length_of :password, :minimum => 6, :if => :password
   validates_length_of :username, :first_name, :last_name, :email, :title, :dept, :maximum => 256
+
+  def uniqueness_of_non_deleted_username
+    if self.username
+      other_user = User.where("lower(users.username) = ?", self.username.downcase)
+      other_user = other_user.where("id != ?", self.id) if self.id
+      if other_user.present?
+        errors.add(:username, :taken)
+      end
+    end
+  end
 
   def self.authenticate(username, password)
     named(username).try(:authenticate, password)
