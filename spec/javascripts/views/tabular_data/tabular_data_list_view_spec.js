@@ -137,12 +137,29 @@ describe("chorus.views.TabularDataList", function() {
         expect(this.view.$("> li").length).toBe(this.collection.length);
     });
 
-    it("renders the no datasets message if there are no datasets", function() {
-        this.view.collection = new chorus.collections.DatabaseObjectSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
-        this.view.collection.loaded = true;
-        this.view.render();
-        expect($(this.view.el)).toContainTranslation("dataset.browse_more", {linkText: "browse your instances"});
-        expect(this.view.$(".browse_more a")).toHaveHref("#/instances");
+    describe("the no datasets message", function() {
+        beforeEach(function() {
+            this.view.collection = new chorus.collections.DatabaseObjectSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
+            this.view.render();
+        });
+
+        it("should not display the browse more message", function() {
+            expect(this.view.$(".browse_more")).not.toExist();
+        });
+
+        context("after the collection is loaded", function() {
+            beforeEach(function() {
+                this.view.collection.loaded = true;
+                this.view.render();
+            });
+
+            it("renders the no datasets message if there are no datasets", function() {
+                expect($(this.view.el)).toContainTranslation("dataset.browse_more", {linkText: "browse your instances"});
+                expect(this.view.$(".browse_more a")).toHaveHref("#/instances");
+            });
+        });
+
+
     });
 
     it("should broadcast tabularData:selected when itemSelected is called", function() {

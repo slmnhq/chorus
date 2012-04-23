@@ -34,7 +34,7 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
 
     postRender: function() {
         var $list = $(this.el);
-        if(this.collection.length === 0) {
+        if(this.collection.length === 0 && this.collection.loaded) {
             var linkText = Handlebars.helpers.linkTo("#/instances", "browse your instances");
             var noDatasetEl = $("<div class='browse_more'></div>");
             noDatasetEl.append(t("dataset.browse_more", {linkText: linkText}));
