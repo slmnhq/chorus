@@ -1,0 +1,2 @@
+describe InstanceCredential do
+end

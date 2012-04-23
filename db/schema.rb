@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120419194129) do
+ActiveRecord::Schema.define(:version => 20120423191005) do
+
+  create_table "instance_credentials", :force => true do |t|
+    t.string  "username"
+    t.binary  "password"
+    t.integer "instance_id"
+    t.integer "owner_id"
+    t.boolean "shared"
+  end
 
   create_table "instances", :force => true do |t|
     t.string   "name"
