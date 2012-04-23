@@ -6,7 +6,7 @@ describe " add an instance " do
     page.find("a.add.dialog").click
   end
 
-  it "creates an instance" do
+  xit "creates an instance" do
     within("#facebox") do
       wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
       choose("register_existing_greenplum")
@@ -33,7 +33,7 @@ describe " add an instance " do
     end
   end
 
-  it "creates an Hadoop Instance" do
+  xit "creates an Hadoop Instance" do
     within("#facebox") do
       wait_until { page.has_selector?(".register_existing_hadoop input[name=name]")}
       choose("register_existing_hadoop")
