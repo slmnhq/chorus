@@ -7,7 +7,7 @@ class InstanceCredentialMigrator
     legacy_instance_credentials.each do |credential|
       new_credential = InstanceCredential.new
       new_credential.username = credential["db_user_name"]
-      new_credential.password = credential["db_password"]
+      new_credential.password = decrypt_password(credential["db_password"], credential["secret_key"])
       new_credential.shared = (credential["shared"] == "yes")
       new_credential.owner_id = credential["chorus_rails_user_id"]
       new_credential.instance_id = credential["chorus_rails_instance_id"]
@@ -26,5 +26,13 @@ class InstanceCredentialMigrator
       JOIN edc_user ON edc_user.user_name = edc_account_map.user_name
       WHERE instance_provider = 'Greenplum Database'
     EOSQL
+  end
+
+  def self.decrypt_password(password, key)
+    cipher = OpenSSL::Cipher::Cipher.new("AES-128-CBC")
+    cipher.decrypt
+    cipher.key = key
+    d = cipher.update password
+    d << cipher.final
   end
 end

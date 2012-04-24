@@ -21,7 +21,7 @@ describe InstanceCredentialMigrator, :type => :data_migration do
         InstanceCredentialMigrator.legacy_instance_credentials.each do |legacy|
           credential = InstanceCredential.find(legacy["chorus_rails_instance_credentials_id"])
           credential.username.should == legacy["db_user_name"]
-          credential.password.should == legacy["db_password"]
+          credential.password.should == "secret"
           credential.shared.should == (legacy["shared"] != "no")
           credential.owner_id.should == legacy["chorus_rails_user_id"].to_i
           credential.instance_id.should == legacy["chorus_rails_instance_id"].to_i
