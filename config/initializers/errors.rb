@@ -1,0 +1,1 @@
+SecurityTransgression = Class.new(RuntimeError)

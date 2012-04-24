@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   after_filter :extend_expiration
   rescue_from 'ActiveRecord::RecordNotFound', :with => :render_not_found
   rescue_from 'ActiveRecord::RecordInvalid', :with => :render_not_valid
+  rescue_from 'SecurityTransgression', :with => :render_forbidden
 
   private
 
@@ -13,6 +14,10 @@ class ApplicationController < ActionController::Base
 
   def render_not_found(e)
     present_errors({:record => :NOT_FOUND}, :status => :not_found)
+  end
+
+  def render_forbidden(e = nil)
+    head(:forbidden)
   end
 
   def logged_in?
@@ -37,7 +42,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_admin
-    head :unauthorized unless logged_in? && current_user.admin?
+    render_forbidden unless logged_in? && current_user.admin?
   end
 
   def require_admin_or_referenced_user

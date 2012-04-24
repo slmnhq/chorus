@@ -274,7 +274,7 @@ describe UsersController do
       end
 
       it "should not succeed" do
-        response.code.should == "401"
+        response.code.should == "403"
       end
 
       it "should not delete the user" do
@@ -315,7 +315,7 @@ describe UsersController do
 
       it "returns unauthorized" do
         get :ldap, :username => "foo"
-        response.code.should == "401"
+        response.code.should == "403"
       end
     end
   end
