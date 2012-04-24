@@ -14,7 +14,7 @@ describe("chorus.dialogs.VisualizationWorkspacePicker", function() {
 
     it("has the correct title and button", function() {
         expect(this.dialog.title).toMatchTranslation("visualization.workspace_picker.title");
-        expect(this.dialog.buttonTitle).toMatchTranslation("visualization.workspace_picker.button");
+        expect(this.dialog.submitButtonTranslationKey).toBe("visualization.workspace_picker.button");
     });
 
     it("only displays the active workspaces", function() {
