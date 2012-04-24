@@ -1,7 +1,11 @@
 require 'active_model'
 require_relative '../../app/services/credentials_validator'
+require 'spec_helper'
 
 class User
+end
+
+class LdapClient
 end
 
 describe CredentialsValidator do
@@ -46,6 +50,16 @@ describe CredentialsValidator do
         fail
       rescue CredentialsValidator::Invalid => e
         e.record.errors.get(:username_or_password).should == ["INVALID"]
+      end
+    end
+
+    context "when the LDAP switch is configured" do
+      it "uses the LdapClient authentication" do
+        Chorus::Application.config.ldap_authentication = true
+
+        user = stub
+        LdapClient.stub(:authenticate).with('a_username', 'a_password').and_return { user }
+        CredentialsValidator.user('a_username', 'a_password').should be(user)
       end
     end
   end
