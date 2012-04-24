@@ -81,7 +81,8 @@ describe Gpdb::Instance do
       cached_instance = Instance.find_by_name(valid_attributes[:name])
       cached_instance_credentials = InstanceCredential.find_by_owner_id_and_instance_id(owner.id, cached_instance.id)
 
-      cached_instance_credentials.should be_shared
+      cached_instance_credentials.username.should == valid_attributes[:username]
+      cached_instance_credentials.password.should == valid_attributes[:password]
     end
   end
 end

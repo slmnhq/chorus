@@ -49,8 +49,7 @@ module Gpdb
       )
       cached_credentials = @cached_instance.credentials.build(
           :username => username,
-          :password => password,
-          :shared => true
+          :password => password
       )
       cached_credentials.owner = owner
       cached_credentials.save!
