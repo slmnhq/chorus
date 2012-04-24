@@ -54,6 +54,7 @@ describe LdapClient do
       end
 
       Net::LDAP.any_instance.should_receive(:auth).with("username=foo,cn=users_cn,dc=foo", "secret").and_return(true)
+      Net::LDAP.any_instance.should_receive(:bind)
 
       LdapClient.search("foo")
       LdapClient.authenticate("foo", "secret")
