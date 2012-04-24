@@ -37,7 +37,6 @@ class UsersController < ApplicationController
   private
 
   def load_user
-    @user = User.find_by_id(params[:id])
-    head(:not_found) unless @user
+    @user = User.find(params[:id])
   end
 end

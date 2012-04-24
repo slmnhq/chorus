@@ -26,8 +26,7 @@ describe InstanceMigrator, :type => :data_migration do
 
       it "copies the correct data fields from the legacy instance" do
         Legacy.connection.select_all("SELECT * FROM edc_instance WHERE instance_provider = 'Greenplum Database'").each do |legacy_instance|
-          instance = Instance.find_by_id(legacy_instance["chorus_rails_instance_id"])
-          instance.should be_present
+          instance = Instance.find(legacy_instance["chorus_rails_instance_id"])
           #p instance
           instance.name.should == legacy_instance["name"]
           instance.description.should == legacy_instance["description"]

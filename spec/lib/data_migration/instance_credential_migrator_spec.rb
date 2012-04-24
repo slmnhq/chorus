@@ -19,8 +19,7 @@ describe InstanceCredentialMigrator, :type => :data_migration do
 
       it "copies the necessary fields" do
         InstanceCredentialMigrator.legacy_instance_credentials.each do |legacy|
-          credential = InstanceCredential.find_by_id(legacy["chorus_rails_instance_credentials_id"])
-          credential.should be_present
+          credential = InstanceCredential.find(legacy["chorus_rails_instance_credentials_id"])
           credential.username.should == legacy["db_user_name"]
           credential.password.should == legacy["db_password"]
           credential.shared.should == (legacy["shared"] != "no")
