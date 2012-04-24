@@ -1,6 +1,10 @@
 chorus.models.ChartTask = chorus.models.Task.extend({
     taskType: "getChartData",
 
+    name: function() {
+        return t("dataset.visualization.data.filename");
+    },
+
     initialize: function(attrs) {
         this.tabularData = attrs.tabularData;
         this.set({

@@ -6,6 +6,10 @@ describe("chorus.models.ChartTask", function() {
         this.model = new chartSubclass({ tabularData: this.dataset });
     });
 
+    it("has the right name", function() {
+        expect(this.model.name()).toMatchTranslation("dataset.visualization.data.filename");
+    });
+
     it("has the right taskType", function() {
         expect(this.model.get("taskType")).toBe("getChartData");
     });
