@@ -4,6 +4,13 @@ chorus.models.Config = chorus.models.Base.extend({
 
     isExternalAuth: function() {
         return this.get("externalAuth")
+    },
+
+    timezoneOffset: function() {
+        if (this.has("timezoneOffset")) {
+            var hours = parseInt(this.get("timezoneOffset"));
+            return hours * 100;
+        }
     }
 }, {
     instance:function () {

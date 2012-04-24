@@ -2,7 +2,7 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
     constructorName: "CopyWorkfile",
 
     title: t("workfile.copy_dialog.title"),
-    buttonTitle: t("workfile.copy_dialog.copy_file"),
+    submitButtonTranslationKey: "workfile.copy_dialog.copy_file",
 
     setup: function() {
         this.workfile = new chorus.models.Workfile({ id: this.options.launchElement.data("workfile-id"), workspaceId: this.options.launchElement.data("workspace-id") });

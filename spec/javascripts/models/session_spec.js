@@ -125,9 +125,9 @@ describe("chorus.models.Session", function() {
     describe("#fetch", function() {
         beforeEach(function() {
             this.model = new models.Session({ id : "1234", foo : "bar" });
-            this.needsLoginSpy = jasmine.createSpy();
             $.cookie("authid", "1234");
-            this.model.bind("needsLogin", this.needsLoginSpy);
+
+            spyOnEvent(this.model, "needsLogin");
             this.model.fetch();
         });
 
@@ -141,33 +141,26 @@ describe("chorus.models.Session", function() {
 
         context("when the session is valid", function() {
             beforeEach(function() {
-                this.server.respondWith(
-                    'GET',
-                    '/edc/auth/checkLogin/?authid=1234',
-                    this.prepareResponse({ status :"ok"}));
-
-                this.server.respond();
-            })
+                this.server.lastFetch().succeed();
+            });
 
             it("does not trigger needsLogin", function() {
-                expect(this.needsLoginSpy).not.toHaveBeenCalled();
+                expect("needsLogin").not.toHaveBeenTriggeredOn(this.model);
             })
-        })
+
+            it("fetches the chorus configuration", function() {
+                expect(new chorus.models.Config()).toHaveBeenFetched();
+            });
+        });
 
         context("when the session is not valid", function() {
             beforeEach(function() {
                 expect(this.model.user()).toBeTruthy();
-                
-                this.server.respondWith(
-                    'GET',
-                    '/edc/auth/checkLogin/?authid=1234',
-                    this.prepareResponse({ status :"fail", message : "no way", resource : []}));
-
-                this.server.respond();
-            })
+                this.server.lastFetch().fail();
+            });
 
             it("triggers needsLogin", function() {
-                expect(this.needsLoginSpy).toHaveBeenCalled();
+                expect("needsLogin").toHaveBeenTriggeredOn(this.model);
             })
 
             it("clears the session attributes", function() {

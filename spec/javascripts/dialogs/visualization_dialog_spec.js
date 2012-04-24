@@ -23,8 +23,7 @@ describe("chorus.dialogs.Visualization", function() {
         this.filters = new chorus.collections.TabularDataFilterSet([filter1, filter2, incompleteFilter1, incompleteFilter2]);
 
         spyOn(this.filters, "clone").andCallThrough();
-        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
-        this.dialog.task = fixtures.boxplotTaskWithResult();
+        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, task: fixtures.boxplotTaskWithResult(), chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
 
         spyOn(this.dialog, 'refreshChart').andCallThrough();
         spyOn(this.dialog, "launchSubModal").andCallThrough();
@@ -579,6 +578,10 @@ describe("chorus.dialogs.Visualization", function() {
         describe("clicking on the 'Show Data Table' link", function() {
             beforeEach(function() {
                 this.dialog.$(".modal_controls a.show").click();
+            });
+
+            it("passes task into ResultsConsole", function() {
+                expect(this.dialog.tableData.model).toBe(this.dialog.task)
             });
 
             it("should show the data table", function() {

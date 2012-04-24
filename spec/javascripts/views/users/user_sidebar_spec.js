@@ -31,6 +31,10 @@ describe("chorus.views.UserSidebar", function() {
             it("should have a 'delete user' action", function() {
                 expect(this.view.$(".actions a.delete_user[data-alert=UserDelete]")).toExist();
             });
+
+            it("displays the 'change password' link", function() {
+                expect(this.view.$("a.change_password[data-dialog=ChangePassword]")).toExist();
+            });
         });
 
         context("when logged in as an non-admin", function() {

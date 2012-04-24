@@ -33,4 +33,18 @@ describe("chorus.models.Config", function() {
             expect(this.model.isExternalAuth()).toBeTruthy();
         })
     })
+
+    describe("#timezoneOffset", function() {
+        it("returns the server's timezone offset as an integer multiple of one hundred", function() {
+            var config = newFixtures.config({ timezoneOffset: "-8" });
+            expect(config.timezoneOffset()).toBe(-800);
+        });
+
+        context("when the information is not-yet fetched", function() {
+            it("returns a falsy value", function() {
+                var config = new chorus.models.Config();
+                expect(config.timezoneOffset()).toBeFalsy();
+            });
+        });
+    });
 });

@@ -15,6 +15,8 @@ window.fixtureDefinitions = {
     provisioningTemplate: {},
     provisioningTemplateSet: {},
 
+    config: {},
+
     activity: {
         unique: [ "id" ],
 
@@ -37,6 +39,7 @@ window.fixtureDefinitions = {
             sandboxTable:  {},
             sandboxView:   {},
             chorusView:    {},
+            chorusViewSearchResult: {},
             externalTable: {}
         }
     },

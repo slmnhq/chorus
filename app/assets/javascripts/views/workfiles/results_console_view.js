@@ -25,8 +25,9 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     createDownloadForm: function() {
         var form = $("<form action='/generateCSV.jsp' method='post'></form>");
-        form.append($("<input name='columnData' type='hidden'/>").val((JSON.stringify(this.resource.get("columns")))));
-        form.append($("<input name='rowsData' type='hidden'>/").val((JSON.stringify(this.resource.get("rows")))));
+        form.append($("<input name='columnData' type='hidden'/>").val(JSON.stringify(this.resource.getColumns())));
+        form.append($("<input name='rowsData' type='hidden'>/").val(JSON.stringify(this.resource.getRows())));
+        form.append($("<input name='datasetName' type='hidden'>/").val(this.resource.name()));
         return form;
     },
 

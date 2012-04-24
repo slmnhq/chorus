@@ -57,6 +57,15 @@ chorus.models.User = chorus.models.Base.extend({
         return url.toString();
     },
 
+    currentUserCanEdit: function() {
+        var currentUser = chorus.session.user();
+        return currentUser.isAdmin() || this.get("userName") === currentUser.get("userName");
+    },
+
+    isAdmin: function() {
+        return !!this.get("admin");
+    },
+
     picklistImageUrl:function () {
         return this.imageUrl();
     },

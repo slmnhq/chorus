@@ -152,7 +152,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     itRemovesExecutionUI(true);
                 })
 
-                context("when the spinner has been started", function() {
+                context("when the23688221 spinner has been started", function() {
                     beforeEach(function() {
                         delete this.view.elapsedTimer;
                         this.view.$(".cancel").click();
@@ -487,25 +487,48 @@ describe("chorus.views.ResultsConsoleView", function() {
                 });
 
                 describe("constructing the download form", function() {
-                    beforeEach(function() {
-                        this.view.resource.set({
-                            columns: [{name: "col1"}],
-                            rows: [{col1: "row1"}]
+                    context("with a sql execution task (executing a workfile)", function() {
+                        beforeEach(function() {
+                            this.view.resource = new chorus.models.SqlExecutionTask({
+                                result: {
+                                    columns: [{name: "col1"}],
+                                    rows:    [{col1: "row1"}]
+                                }
+                            });
+                            spyOn(this.view.resource, "name").andReturn("john the resource");
+                            this.form = this.view.createDownloadForm();
                         });
-                        this.form = this.view.createDownloadForm();
+
+                        itCreatesTheFormCorrectly();
+                        itCanExpandAndCollapseTheResults("minimized", "maximized");
                     });
 
-                    it("has the correct action", function() {
-                        expect(this.form).toHaveAttr("action", "/generateCSV.jsp");
-                    });
+                    context("with a data preview task (previewing a dataset)", function() {
+                        beforeEach(function() {
+                            this.view.resource = new chorus.models.DataPreviewTask({
+                                columns: [{name: "col1"}],
+                                rows:    [{col1: "row1"}]
+                            });
+                            spyOn(this.view.resource, "name").andReturn("john the resource");
+                            this.form = this.view.createDownloadForm();
+                        });
 
-                    it("has the correct form elements", function() {
-                        expect($("input[name=columnData]", this.form)).toHaveValue(JSON.stringify([{name: "col1"}]));
-                        expect($("input[name=rowsData]", this.form)).toHaveValue(JSON.stringify([{col1: "row1"}]));
+                        itCreatesTheFormCorrectly();
+                        itCanExpandAndCollapseTheResults("minimized", "maximized");
                     });
                 });
+            }
 
-                itCanExpandAndCollapseTheResults("minimized", "maximized");
+            function itCreatesTheFormCorrectly() {
+                it("has the correct action", function() {
+                    expect(this.form).toHaveAttr("action", "/generateCSV.jsp");
+                });
+
+                it("has the correct form elements", function() {
+                    expect($("input[name=columnData]", this.form)).toHaveValue(JSON.stringify([{name: "col1"}]));
+                    expect($("input[name=rowsData]", this.form)).toHaveValue(JSON.stringify([{col1: "row1"}]));
+                    expect($("input[name=datasetName]", this.form)).toHaveValue("john the resource");
+                });
             }
 
             function itCanExpandAndCollapseTheResults(tableShouldHaveClass, tableShouldNotHaveClass) {

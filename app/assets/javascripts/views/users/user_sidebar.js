@@ -19,15 +19,13 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
     additionalContext:function () {
         var ctx = {};
         if (this.model) {
-            var name = this.model.get("userName");
-            var userIsLoggedIn = name == chorus.session.user().get("userName");
-            var userIsAdmin = chorus.session.user().get("admin");
+            var currentUserCanEdit = this.model.currentUserCanEdit();
 
             _.extend(ctx, {
                 displayName: this.model.displayName(),
-                permission: userIsLoggedIn || userIsAdmin,
+                permission: currentUserCanEdit,
                 listMode: this.options.listMode,
-                changePasswordAvailable: userIsLoggedIn && !this.config.isExternalAuth(),
+                changePasswordAvailable: currentUserCanEdit && !this.config.isExternalAuth(),
                 isInEditMode: this.options.editMode
             });
         }

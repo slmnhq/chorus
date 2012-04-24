@@ -36,8 +36,8 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         return "dataset.types." + this.metaType();
     },
 
-    isChorusView: function() {
-        return this.get("type") === "CHORUS_VIEW";
+    query: function() {
+        return this.get("query") || this.get("content");
     },
 
     isSandbox: function() {

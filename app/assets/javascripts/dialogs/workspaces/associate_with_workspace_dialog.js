@@ -2,7 +2,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
     constructorName: "AssociateWithWorkspace",
 
     title: t("dataset.associate.title.one"),
-    buttonTitle: t("dataset.associate.button.one"),
+    submitButtonTranslationKey: "dataset.associate.button.one",
 
     setup: function () {
         this.requiredResources.add(this.collection);

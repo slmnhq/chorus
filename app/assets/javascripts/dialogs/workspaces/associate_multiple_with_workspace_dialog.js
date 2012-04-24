@@ -2,7 +2,7 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
     constructorName: "AssociateWithWorkspace",
 
     title: t("dataset.associate.title.other"),
-    buttonTitle: t("dataset.associate.button.other"),
+    submitButtonTranslationKey: "dataset.associate.button.other",
 
     setup: function(options) {
         this.databaseObjects = options.databaseObjects;
@@ -12,6 +12,7 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
 
     submit: function() {
         this._super("submit", arguments);
+        this.$("button.submit").startLoading("actions.associating");
 
         var workspace = this.selectedItem();
         var url = workspace.datasets().url();

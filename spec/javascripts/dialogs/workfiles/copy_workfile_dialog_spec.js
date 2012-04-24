@@ -36,6 +36,10 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             expect(this.dialog.$('li:eq(1) .name')).toContainText("me_neither");
         });
 
+        it("has the right button text", function() {
+            expect(this.dialog.$("button.submit")).toContainTranslation("workfile.copy_dialog.copy_file");
+        });
+
         describe("clicking Copy File", function() {
             beforeEach(function() {
                 spyOn(chorus, "toast");

@@ -1,0 +1,31 @@
+{
+    "entityType": "chorusView",
+    "id": "\"10000\"|\"Analytics\"|\"public\"|\"QUERY\"|\"a1000\"",
+    "isDeleted": false,
+    "lastUpdatedStamp": "2012-04-13 17:49:24",
+    "datasetType": "CHORUS_VIEW",
+    "databaseName": "Analytics",
+    "schemaName": "public",
+    "objectType": "QUERY",
+    "content": "SELECT *\nFROM public.\"1000_songs_test_1\" AS a\n",
+    "objectName": "a1000",
+    "highlightedAttributes": {
+        "objectName": [
+            "<em>a</em><em>1000</em>"
+        ]
+    },
+    "owner": {
+        "id": "InitialUser",
+        "lastName": "Admin",
+        "firstName": "EDC"
+    },
+    "workspace": {
+        "id": "10001",
+        "name": "a"
+    },
+    "instance": {
+        "id": "10000",
+        "name": "gillette"
+    },
+    "comments": []
+}

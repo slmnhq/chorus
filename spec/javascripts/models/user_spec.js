@@ -11,6 +11,27 @@ describe("chorus.models.User", function() {
         expect(this.model.urlTemplate).toBe("user/{{id}}");
     });
 
+    describe("#currentUserCanEdit", function() {
+        beforeEach(function() {
+            this.model.set({ userName: "chris" });
+        });
+
+        it("returns true if the current user is an admin", function() {
+            setLoggedInUser({ admin: true, userName: "fog" });
+            expect(this.model.currentUserCanEdit()).toBeTruthy();
+        });
+
+        it("returns true if the current user is the same user", function() {
+            setLoggedInUser({ admin: false, userName: "chris" });
+            expect(this.model.currentUserCanEdit()).toBeTruthy();
+        });
+
+        it("returns false otherwise", function() {
+            setLoggedInUser({ admin: false, userName: "joe" });
+            expect(this.model.currentUserCanEdit()).toBeFalsy();
+        });
+    });
+
     describe("#workspaces", function() {
         beforeEach(function() {
             this.user = newFixtures.user({userName: "dr_charlzz", id: "457"});
