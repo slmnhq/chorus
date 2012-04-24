@@ -23,6 +23,10 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
             this.dialog.$("button.submit").click();
         });
 
+        it("has the right button text", function() {
+            expect(this.dialog.$("button.submit")).toContainTranslation("dataset.associate.button.other");
+        });
+
         it("sends a request to the 'associate dataset' API", function() {
             expect(this.server.lastCreate().url).toContain("/edc/workspace/12/dataset");
             expect(this.server.lastCreate().params().type).toBe("SOURCE_TABLE");

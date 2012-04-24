@@ -2,7 +2,7 @@ chorus.dialogs.VisualizationWorkspacePicker = chorus.dialogs.PickWorkspace.exten
     constructorName: "VisualizationWorkspacePicker",
 
     title: t("visualization.workspace_picker.title"),
-    buttonTitle: t("visualization.workspace_picker.button"),
+    submitButtonTranslationKey: "visualization.workspace_picker.button",
 
     setup: function() {
         this.options = this.options || {}
