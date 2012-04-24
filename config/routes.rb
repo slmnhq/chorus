@@ -1,6 +1,5 @@
 Chorus::Application.routes.draw do
-
-  resource :sessions, :only => [ :create, :destroy ]
-  resources :users, :only => [ :index, :show, :create, :destroy ]
-
+  resource :sessions, :only => [:create, :destroy]
+  resources :users, :only => [:index, :show, :create, :destroy]
+  resources :instances, :only => [:index, :create, :update]
 end

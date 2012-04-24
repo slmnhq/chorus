@@ -9,6 +9,20 @@ module Gpdb
     attr_reader :name, :host, :port, :database
     attr_reader :username, :password
     attr_reader :owner
+    attr_reader :cached_instance
+
+    def self.create!(instance_config, owner)
+      instance = new(instance_config, owner)
+      unless instance.valid?
+        raise ActiveRecord::RecordInvalid.new(instance)
+      end
+      instance.cache!
+      instance
+    end
+
+    def self.create_cache!(instance_config, owner)
+      create!(instance_config, owner).cached_instance
+    end
 
     def initialize(attributes, owner)
       @name = attributes[:name]
@@ -20,33 +34,25 @@ module Gpdb
       @owner = owner
     end
 
-    def self.create!(instance_config, owner)
-      instance = new(instance_config, owner)
-      unless instance.valid?
-        raise ActiveRecord::RecordInvalid.new(instance)
-      end
-      instance.cache!
-      instance
-    end
-
     def connection_must_be_established
       errors.add(:connection, :invalid) unless connection.connected?
     end
 
     def cache!
-      cached_instance = owner.instances.create!(
+      @cached_instance = owner.instances.create!(
           :name => name,
           :host => host,
           :port => port,
           :maintenance_db => database
       )
-      cached_credentials = cached_instance.credentials.build(
+      cached_credentials = @cached_instance.credentials.build(
           :username => username,
           :password => password
       )
       cached_credentials.shared = true
       cached_credentials.owner = owner
       cached_credentials.save!
+      @cached_instance
     end
 
     private
