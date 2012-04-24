@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :load_user, :only => [:show, :update, :destroy]
-  before_filter :require_admin, :only => [:create, :destroy]
+  before_filter :require_admin, :only => [:create, :destroy, :ldap]
   before_filter :require_admin_or_referenced_user, :only => :update
 
   def index
@@ -25,6 +25,13 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     head :ok
+  end
+
+  def ldap
+    users = LdapClient.search(params[:username]).map do |userJson|
+      User.new userJson
+    end
+    present users
   end
 
   private

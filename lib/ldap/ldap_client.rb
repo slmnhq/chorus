@@ -8,6 +8,7 @@ class LdapClient
 
     results.map do |result|
       {
+          :username => result["uid"].first,
           :first_name => result["givenname"].first,
           :last_name => result["sn"].first,
           :title => result["title"].first,

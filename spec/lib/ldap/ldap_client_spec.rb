@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe LdapClient do
+  before do
+    YAML.stub(:load_file).and_return("test" => { "host" => "localhost", "dc" => "foo", "auth_cn" => "users_cn", "auth_attribute" => "username" })
+  end
+
   describe ".search" do
     before(:each) do
       @entries = [
@@ -15,7 +19,7 @@ describe LdapClient do
       results = LdapClient.search(:username => "testguy")
       results.should be_a(Array)
       results.first.should be_a(Hash)
-      results.first.should == { :first_name => "Test", :last_name => "Guy", :title => "Big Kahuna", :dept => "Greenery", :email => "testguy@example.com" }
+      results.first.should == { :first_name => "Test", :last_name => "Guy", :title => "Big Kahuna", :dept => "Greenery", :email => "testguy@example.com", :username => "testguy" }
     end
   end
 
@@ -43,7 +47,6 @@ describe LdapClient do
 
   describe "configuration" do
     it "reads configuration from a YAML file" do
-      YAML.stub(:load_file).and_return({ "host" => "localhost", "dc" => "foo", "auth_cn" => "users_cn", "auth_attribute" => "username" })
       Net::LDAP.any_instance.should_receive(:search) do |options|
         options[:base].should == "dc=foo"
         options[:filter].to_s.should == "(cn=foo*)"

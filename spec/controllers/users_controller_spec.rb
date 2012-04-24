@@ -283,4 +283,40 @@ describe UsersController do
       end
     end
   end
+
+  describe "#ldap" do
+    before do
+      @user_attributes = {:username => "testguy", :first_name=>"Test", :last_name=>"Guy", :title=>"Big Kahuna", :dept=>"Greenery", :email=>"testguy@example.com"}
+      LdapClient.stub(:search).and_return([@user_attributes])
+    end
+
+    it_behaves_like "an action that requires authentication", :get, :ldap
+
+    context "as an admin" do
+      before(:each) do
+        log_in FactoryGirl.create(:admin)
+      end
+
+      it "returns the set of matching users" do
+        get :ldap, :username => "foo"
+        response.should be_success
+        hash = response.decoded_body[:response].first
+        @user_attributes.keys.each do |key|
+          hash[key].should == @user_attributes[key]
+        end
+      end
+
+    end
+
+    context "as a non-admin" do
+      before(:each) do
+        log_in FactoryGirl.create(:user)
+      end
+
+      it "returns unauthorized" do
+        get :ldap, :username => "foo"
+        response.code.should == "401"
+      end
+    end
+  end
 end
