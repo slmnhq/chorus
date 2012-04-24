@@ -23,4 +23,14 @@ describe Instance do
     instance.id.should_not == 12222
     instance.owner_id.should_not == 12222
   end
+
+  describe "#owner_credentials" do
+    it "returns the instance owner's credentials" do
+      owner = FactoryGirl.create(:user)
+      instance = FactoryGirl.create(:instance, :owner => owner)
+      owner_credentials = FactoryGirl.create(:instance_credential, :instance => instance, :owner => owner)
+
+      instance.owner_credentials.should == owner_credentials
+    end
+  end
 end

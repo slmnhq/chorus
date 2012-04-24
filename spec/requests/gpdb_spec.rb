@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "creating a new gpdb instance" do
+describe "gpdb instances" do
   let(:valid_attributes) do
     {
         :name => "good_gillette",
@@ -19,10 +19,18 @@ describe "creating a new gpdb instance" do
       post "/sessions", :username => "some_user", :password => "secret"
     end
 
-    it "works" do
+    it "can be created" do
       post "/instances", :instance => valid_attributes
 
       response.code.should == "201"
+    end
+
+    it "can be updated" do
+      post "/instances", :instance => valid_attributes
+      instance_id = decoded_response.id
+      put "/instances/#{instance_id}", :instance => valid_attributes.merge(:name => "new name")
+
+      decoded_response.name.should == "new name"
     end
   end
 end

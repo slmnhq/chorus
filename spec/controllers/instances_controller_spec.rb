@@ -29,42 +29,29 @@ describe InstancesController do
   end
 
   describe "#update" do
-    it_behaves_like "an action that requires authentication", :put, :update
+    let(:changed_attributes) { {"name" => "changed"} }
 
-    it "should not allow non-admin/owner do it" do
-      put :update, :id => @instance1.id, :instance => {:name => "changed"}
-      response.code.should == "401"
+    before do
+      instance = FactoryGirl.build(:instance)
+      Gpdb::ConnectionBuilder.stub(:update!).with('1', changed_attributes, @user) { instance }
     end
 
-    context "logged-in as admin" do
-      before do
-        @user.admin = true
-        @user.save!
-        log_in @user
-      end
-
-      it "should work" do
-        put :update, :id => @instance1.id, :instance => {:name => "changed", :port => 12345, :host => "server.emc.com"}
-        instance = Instance.find(@instance1.id)
-        instance.host.should == "server.emc.com"
-        instance.name.should == "changed"
-        instance.port.should == 12345
-      end
+    it "should reply with successful update" do
+      put :update, :id => '1', :instance => changed_attributes
+      response.code.should == "200"
     end
 
-    context "logged in as instance-owner" do
-      before do
-        @instance1.owner = @user
-        @instance1.save!
-      end
+    it "should handle invalid updates" do
+      instance = FactoryGirl.build(:instance, :name => nil)
+      Gpdb::ConnectionBuilder.stub(:update!).with('1', changed_attributes, @user).and_raise(ActiveRecord::RecordInvalid.new(instance))
+      put :update, :id => '1', :instance => changed_attributes
+      response.code.should == "422"
+    end
 
-      it "should work" do
-        put :update, :id => @instance1.id, :instance => {:name => "changed", :port => 12345, :host => "server.emc.com"}
-        instance = Instance.find(@instance1.id)
-        instance.host.should == "server.emc.com"
-        instance.name.should == "changed"
-        instance.port.should == 12345
-      end
+    it "should handle security transgressions" do
+      Gpdb::ConnectionBuilder.stub(:update!).with('1', changed_attributes, @user).and_raise(SecurityTransgression.new)
+      put :update, :id => '1', :instance => changed_attributes
+      response.code.should == "403"
     end
   end
 
@@ -76,7 +63,7 @@ describe InstancesController do
 
       before do
         instance = FactoryGirl.build(:instance, :name => "new")
-        Gpdb::ConnectionBuilder.stub(:create_cache!).with(valid_attributes, @user).and_return { instance }
+        Gpdb::ConnectionBuilder.stub(:create!).with(valid_attributes, @user).and_return { instance }
       end
 
       it "reports that the instance was created" do
@@ -95,7 +82,7 @@ describe InstancesController do
 
       before do
         instance = FactoryGirl.build(:instance, :name => nil)
-        Gpdb::ConnectionBuilder.stub(:create_cache!).with(invalid_attributes, @user).and_raise(ActiveRecord::RecordInvalid.new(instance))
+        Gpdb::ConnectionBuilder.stub(:create!).with(invalid_attributes, @user).and_raise(ActiveRecord::RecordInvalid.new(instance))
       end
 
       it "responds with validation errors" do

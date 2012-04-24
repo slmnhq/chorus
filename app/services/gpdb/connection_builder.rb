@@ -9,19 +9,27 @@ module Gpdb
     attr_reader :name, :host, :port, :database
     attr_reader :username, :password
     attr_reader :owner
-    attr_reader :cached_instance
 
-    def self.create!(instance_config, owner)
-      instance = new(instance_config, owner)
-      unless instance.valid?
-        raise ActiveRecord::RecordInvalid.new(instance)
-      end
-      instance.cache!
-      instance
+    def self.create!(connection_config, owner)
+      builder = new(connection_config, owner)
+      builder.save!(owner)
+      builder.instance
     end
 
-    def self.create_cache!(instance_config, owner)
-      create!(instance_config, owner).cached_instance
+    def self.update!(instance_id, connection_config, updater)
+      instance = Instance.find(instance_id)
+      raise SecurityTransgression unless updater.admin? || updater == instance.owner
+
+      builder = for_update(connection_config, instance)
+      builder.save!(updater)
+      builder.instance
+    end
+
+    def self.for_update(connection_config, instance)
+      builder = new(connection_config, instance.owner)
+      builder.instance = instance
+      builder.credentials = instance.owner_credentials
+      builder
     end
 
     def initialize(attributes, owner)
@@ -34,26 +42,58 @@ module Gpdb
       @owner = owner
     end
 
+    def save!(user)
+      valid!
+      save_instance!
+      save_credentials!(user)
+    end
+
+    def valid!
+      unless valid?
+        raise ActiveRecord::RecordInvalid.new(self)
+      end
+    end
+
     def connection_must_be_established
       connection.verify_connection!
     rescue ConnectionError => e
       errors.add(:connection, e.message)
     end
 
-    def cache!
-      @cached_instance = owner.instances.create!(
+    def instance
+      @instance ||= owner.instances.build
+    end
+
+    attr_writer :instance
+
+    def save_instance!
+      instance.attributes = {
           :name => name,
           :host => host,
           :port => port,
           :maintenance_db => database
+      }
+      instance.save!
+    end
+
+    def credentials
+      @credentials ||= (
+      credentials = instance.credentials.build
+      credentials.owner = owner
+      credentials
       )
-      cached_credentials = @cached_instance.credentials.build(
+    end
+
+    attr_writer :credentials
+
+    def save_credentials!(user)
+      return unless user == credentials.owner
+
+      credentials.attributes = {
           :username => username,
           :password => password
-      )
-      cached_credentials.owner = owner
-      cached_credentials.save!
-      @cached_instance
+      }
+      credentials.save!
     end
 
     private
