@@ -4,4 +4,5 @@ class Instance < ActiveRecord::Base
   validates_presence_of :name, :host, :port, :maintenance_db
 
   belongs_to :owner, :class_name => 'User'
+  has_many :credentials, :class_name => 'InstanceCredential'
 end

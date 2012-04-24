@@ -1,23 +1,65 @@
 module Gpdb
   class Instance
-    def self.create(instance_config, owner)
-      cached_instance = owner.instances.build(instance_config)
-      check_connection(cached_instance)
+    include ActiveModel::Validations
 
-      cached_instance.save!
+    validates_presence_of :name, :host, :port, :database
+    validates_presence_of :username, :password
+    validate :connection_must_be_established
+
+    attr_reader :name, :host, :port, :database
+    attr_reader :username, :password
+    attr_reader :owner
+
+    def initialize(attributes, owner)
+      @name = attributes[:name]
+      @host = attributes[:host]
+      @port = attributes[:port]
+      @database = attributes[:database]
+      @username = attributes[:username]
+      @password = attributes[:password]
+      @owner = owner
     end
 
-    def self.check_connection(cached_instance)
-      return unless cached_instance.valid?
-
-      connection = Connection.new(cached_instance.attributes)
-
-      unless connection.connected?
-        # TODO: this feels intrusive... maybe there's a way to create our own object,
-        # with it's own validations and exception raising mechanism.
-        cached_instance.errors.add(:connection, :invalid)
-        raise ActiveRecord::RecordInvalid.new(cached_instance)
+    def self.create!(instance_config, owner)
+      instance = new(instance_config, owner)
+      unless instance.valid?
+        raise ActiveRecord::RecordInvalid.new(instance)
       end
+      instance.cache!
+      instance
+    end
+
+    def connection_must_be_established
+      errors.add(:connection, :invalid) unless connection.connected?
+    end
+
+    def cache!
+      cached_instance = owner.instances.create!(
+          :name => name,
+          :host => host,
+          :port => port,
+          :maintenance_db => database
+      )
+      cached_credentials = cached_instance.credentials.build(
+          :username => username,
+          :password => password
+      )
+      cached_credentials.shared = true
+      cached_credentials.owner = owner
+      cached_credentials.save!
+    end
+
+    private
+
+    def connection
+      @connection ||= Gpdb::Connection.new(
+          :name => name,
+          :host => host,
+          :port => port,
+          :database => database,
+          :username => username,
+          :password => password
+      )
     end
   end
 end

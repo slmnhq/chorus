@@ -13,6 +13,7 @@ describe Instance do
 
   describe "associations" do
     it { should belong_to :owner }
+    it { should have_many :credentials }
   end
 
   it "should not allow changing inaccessible attributes" do

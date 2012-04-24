@@ -76,7 +76,7 @@ describe InstancesController do
 
       before do
         instance = FactoryGirl.build(:instance, :name => "new")
-        Gpdb::Instance.stub(:create).with(valid_attributes, @user).and_return { instance }
+        Gpdb::Instance.stub(:create!).with(valid_attributes, @user).and_return { instance }
       end
 
       it "reports that the instance was created" do
@@ -95,7 +95,7 @@ describe InstancesController do
 
       before do
         instance = FactoryGirl.build(:instance, :name => nil)
-        Gpdb::Instance.stub(:create).with(invalid_attributes, @user).and_raise(ActiveRecord::RecordInvalid.new(instance))
+        Gpdb::Instance.stub(:create!).with(invalid_attributes, @user).and_raise(ActiveRecord::RecordInvalid.new(instance))
       end
 
       it "responds with validation errors" do
