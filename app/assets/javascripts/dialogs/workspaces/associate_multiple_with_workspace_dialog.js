@@ -12,6 +12,7 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
 
     submit: function() {
         this._super("submit", arguments);
+        this.$("button.submit").startLoading("actions.associating");
 
         var workspace = this.selectedItem();
         var url = workspace.datasets().url();

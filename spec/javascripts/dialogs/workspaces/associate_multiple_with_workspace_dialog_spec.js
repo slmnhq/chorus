@@ -12,6 +12,10 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
         this.dialog.render();
     });
 
+    it("has the right button text", function() {
+        expect(this.dialog.submitButtonTranslationKey).toBe("dataset.associate.button.other");
+    });
+
     describe("when the workspaces are fetched and one is chosen", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(chorus.session.user().workspaces(), [
@@ -23,10 +27,6 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
             this.dialog.$("button.submit").click();
         });
 
-        it("has the right button text", function() {
-            expect(this.dialog.$("button.submit")).toContainTranslation("dataset.associate.button.other");
-        });
-
         it("sends a request to the 'associate dataset' API", function() {
             expect(this.server.lastCreate().url).toContain("/edc/workspace/12/dataset");
             expect(this.server.lastCreate().params().type).toBe("SOURCE_TABLE");
@@ -35,6 +35,10 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
         it("sends all of the datasets' ids, separated by commas", function() {
             var expectedDatasetIds = this.databaseObjects.pluck("id").join(",");
             expect(this.server.lastCreate().params().datasetIds).toBe(expectedDatasetIds);
+        });
+
+        it("display loading message on the button", function() {
+            expect(this.dialog.$("button.submit")).toHaveSpinner();
         });
 
         describe("when the request succeeds", function() {
