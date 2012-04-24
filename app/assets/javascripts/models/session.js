@@ -33,7 +33,7 @@ chorus.models.Session = chorus.models.Base.extend({
                 self.trigger("needsLogin");
             }
             if (success) success(model, response);
-
+            chorus.models.Config.instance();
         };
 
         return this._super('fetch', [options]);

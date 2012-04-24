@@ -15,6 +15,8 @@ window.fixtureDefinitions = {
     provisioningTemplate: {},
     provisioningTemplateSet: {},
 
+    config: {},
+
     activity: {
         unique: [ "id" ],
 
