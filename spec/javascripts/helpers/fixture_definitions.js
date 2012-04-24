@@ -39,6 +39,7 @@ window.fixtureDefinitions = {
             sandboxTable:  {},
             sandboxView:   {},
             chorusView:    {},
+            chorusViewSearchResult: {},
             externalTable: {}
         }
     },

@@ -492,6 +492,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                             columns: [{name: "col1"}],
                             rows: [{col1: "row1"}]
                         });
+                        spyOn(this.view.resource, "name").andReturn("john the resource");
                         this.form = this.view.createDownloadForm();
                     });
 
@@ -502,6 +503,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     it("has the correct form elements", function() {
                         expect($("input[name=columnData]", this.form)).toHaveValue(JSON.stringify([{name: "col1"}]));
                         expect($("input[name=rowsData]", this.form)).toHaveValue(JSON.stringify([{col1: "row1"}]));
+                        expect($("input[name=datasetName]", this.form)).toHaveValue("john the resource");
                     });
                 });
 

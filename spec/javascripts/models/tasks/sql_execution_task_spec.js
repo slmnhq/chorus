@@ -9,6 +9,10 @@ describe("chorus.models.SqlExecutionTask", function() {
         });
     });
 
+    it("has a reasonable name", function() {
+        expect(this.model.name()).toMatchTranslation("dataset.sql.filename");
+    });
+
     it("has the right task type", function(){
        expect(this.model.get("taskType")).toBe("workfileSQLExecution");
     })

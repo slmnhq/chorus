@@ -137,35 +137,28 @@ chorus.models.TabularData = chorus.models.Base.include(
         },
 
         preview: function() {
-            var preview = new chorus.models.Task({
+            var commonAttributes = {
                 instanceId: this.get("instance").id,
                 databaseName: this.get("databaseName"),
-                schemaName: this.get("schemaName")
-            });
+                schemaName: this.get("schemaName"),
+                objectName: this.get("objectName")
+            };
 
-            var additionalAttrs;
-            if (this.has("query")) { // dataset API for Chorus View calls it "query"
-                additionalAttrs = {
+            if (this.isChorusView()) {
+                return new chorus.models.ChorusViewPreviewTask(_.extend(commonAttributes, {
                     taskType: "getDatasetPreview",
-                    query: this.get("query"),
+                    query: this.query(),
                     workspaceId: this.get("workspace").id
-                };
-            } else if (this.has("content")) { // search API for Chorus View calls it "content"
-                additionalAttrs = {
-                    taskType: "getDatasetPreview",
-                    query: this.get("content"),
-                    workspaceId: this.get("workspace").id
-                };
+                }));
             } else {
-                additionalAttrs = {
-                    taskType: "previewTableOrView",
-                    objectName: this.get("objectName"),
+                return new chorus.models.DataPreviewTask(_.extend(commonAttributes, {
                     objectType: this.get("objectType")
-                };
+                }));
             }
-            preview.set(additionalAttrs, {silent: true});
+        },
 
-            return preview;
+        isChorusView: function() {
+            return this.get("type") === "CHORUS_VIEW";
         },
 
         refetchAfterInvalidated: function() {

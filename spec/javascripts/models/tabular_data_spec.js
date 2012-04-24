@@ -289,7 +289,7 @@ describe("chorus.models.TabularData", function() {
             checkPreview();
 
             it("should return a database preview", function() {
-                expect(this.preview.get("taskType")).toBe("previewTableOrView");
+                expect(this.preview).toBeA(chorus.models.DataPreviewTask);
                 expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
                 expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
                 expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
@@ -307,6 +307,7 @@ describe("chorus.models.TabularData", function() {
             checkPreview();
 
             it("should return a database preview", function() {
+                expect(this.preview).toBeA(chorus.models.DataPreviewTask);
                 expect(this.preview.get("taskType")).toBe("previewTableOrView");
                 expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
                 expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
@@ -318,14 +319,18 @@ describe("chorus.models.TabularData", function() {
 
         context("with a chorus view", function() {
             beforeEach(function() {
-                this.tabularData.set({id: '"2"|"dca_demo"|"some_schema"|"BASE_TABLE"|"Dataset1"', query: "select * from hello_world", objectType: "QUERY", objectName: "my_chorusview", workspace: {id: "234", name: "abc"}});
+                this.tabularData = newFixtures.dataset.chorusView({
+                    query: "select * from hello_world",
+                    objectName: "my_chorusview",
+                    workspace: {id: "234", name: "abc"}
+                });
                 this.preview = this.tabularData.preview();
             });
 
             checkPreview();
 
             it("should return a dataset preview", function() {
-                expect(this.preview.get("taskType")).toBe("getDatasetPreview");
+                expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
                 expect(this.preview.get("workspaceId")).toBe("234");
                 expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
                 expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
@@ -336,33 +341,19 @@ describe("chorus.models.TabularData", function() {
 
         context("with a chorus view (from search API)", function() {
             beforeEach(function() {
-                this.tabularData.set({id: '"2"|"dca_demo"|"some_schema"|"BASE_TABLE"|"Dataset1"', query: undefined, content: "select * from hello_world", objectType: "QUERY", objectName: "my_chorusview", workspace: {id: "234", name: "abc"}});
+                this.tabularData = newFixtures.dataset.chorusViewSearchResult({
+                    content: "select * from hello_world",
+                    objectName: "my_chorusview",
+                    workspace: {id: "234", name: "abc"}
+                });
                 this.preview = this.tabularData.preview();
             });
 
             checkPreview();
 
             it("should return a dataset preview", function() {
-                expect(this.preview.get("taskType")).toBe("getDatasetPreview");
+                expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
                 expect(this.preview.get("workspaceId")).toBe("234");
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
-                expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
-                expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
-                expect(this.preview.get("query")).toBe("select * from hello_world");
-            });
-        });
-
-        context("with a chorus view query ( when editing a chorus view )", function() {
-            beforeEach(function() {
-                this.tabularData.set({workspace: {id: "111", name: "abc"}, query: "select * from hello_world"});
-                this.preview = this.tabularData.preview();
-            });
-
-            checkPreview();
-
-            it("should return a dataset query preview", function() {
-                expect(this.preview.get("taskType")).toBe("getDatasetPreview");
-                expect(this.preview.get("workspaceId")).toBe("111");
                 expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
                 expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
                 expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
