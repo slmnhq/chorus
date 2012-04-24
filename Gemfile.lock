@@ -48,6 +48,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.18)
     multi_json (1.2.0)
+    net-ldap (0.3.1)
     pg (0.13.2)
     polyglot (0.3.3)
     rack (1.4.1)
@@ -112,6 +113,7 @@ DEPENDENCIES
   factory_girl
   hashie
   json
+  net-ldap
   pg
   rails (= 3.2.3)
   rspec-rails

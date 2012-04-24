@@ -1,0 +1,17 @@
+development:
+  host: bartol.sf.pivotallabs.com
+  dc: bartol
+  auth_cn: users
+  auth_attribute: uid
+
+test:
+  host: bartol.sf.pivotallabs.com
+  dc: bartol
+  auth_cn: users
+  auth_attribute: uid
+
+production:
+  host: bartol.sf.pivotallabs.com
+  dc: bartol
+  auth_cn: users
+  auth_attribute: uid
