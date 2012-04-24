@@ -5,5 +5,7 @@ Chorus::Application.routes.draw do
       get :ldap
     end
   end
+
   resources :instances, :only => [:index, :create, :update]
+  match "/" => "root#index"
 end

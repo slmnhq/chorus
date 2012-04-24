@@ -23,7 +23,7 @@ chorus.translation = {
     },
 
     getMessageFileUrl: function() {
-        return '/messages/Messages_en.properties?iebuster=' + $.now();
+        return '../../messages/Messages_en.properties?iebuster=' + $.now();
     }
 };
 
