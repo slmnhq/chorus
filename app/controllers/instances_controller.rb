@@ -4,7 +4,7 @@ class InstancesController < ApplicationController
   end
 
   def create
-    cached_instance = Gpdb::Instance.create_cache!(params[:instance], current_user)
+    cached_instance = Gpdb::ConnectionBuilder.create_cache!(params[:instance], current_user)
     present cached_instance, :status => :created
   end
 

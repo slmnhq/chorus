@@ -1,5 +1,5 @@
 module Gpdb
-  class Instance
+  class ConnectionBuilder
     include ActiveModel::Validations
 
     validates_presence_of :name, :host, :port, :database
