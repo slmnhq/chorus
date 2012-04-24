@@ -57,8 +57,8 @@ class TemplateMiddleware
 
   def call(env)
     response_lines = []
-    Dir.glob("public/templates/**/*.handlebars") do |file|
-      template_name = file[("public/templates".length + 1)...(-(".handlebars".length))]
+    Dir.glob("app/assets/javascripts/templates/**/*.handlebars") do |file|
+      template_name = file[("app/assets/javascripts/templates".length + 1)...(-(".handlebars".length))]
       this_response = [%{<script type="x-handlebars-template" data-template-path="#{template_name}">}]
       this_response << IO.read(file)
       this_response << %{</script>}
@@ -86,6 +86,16 @@ class FixtureMiddleware
   end
 end
 
+class MessageMiddleware
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    [200, {"Content-Type" => "text/html"}, [IO.read("public/messages/Messages_en.properties")]]
+  end
+end
+
 module Jasmine
   def self.app(config)
     puts("Constructing custom Jasmine app from jasmine_config.rb")
@@ -100,6 +110,14 @@ module Jasmine
       map('/__JASMINE_ROOT__') { run Rack::File.new(Jasmine::Core.path) }
       map(config.spec_path)    { run Rack::File.new(config.spec_dir) }
       map(config.root_path)    { run Rack::File.new(config.project_root) }
+
+      map('/assets') do
+        run Rails.application.assets
+      end
+
+      map("/messages/Messages_en.properties") do
+        run MessageMiddleware.new(self)
+      end
 
       map("/edc") do
         run DummyMiddleware.new(self)
@@ -119,9 +137,9 @@ module Jasmine
 
       map('/') do
         run Rack::Cascade.new([
-          Rack::URLMap.new('/' => Rack::File.new(config.src_dir)),
-          Jasmine::RunAdapter.new(config)
-        ])
+                                  Rack::URLMap.new('/' => Rack::File.new(config.src_dir)),
+                                  Jasmine::RunAdapter.new(config)
+                              ])
       end
     end
   end
