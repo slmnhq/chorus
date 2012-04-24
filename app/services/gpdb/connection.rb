@@ -1,4 +1,5 @@
 module Gpdb
+  ConnectionError = Class.new(RuntimeError)
   # Heavily inspired by ActiveRecord::Base::ConnectionSpecification
   class Connection
     # Heavily inspired by ActiveRecord::ConnectionAdapters::ConnectionHandler,
@@ -37,11 +38,11 @@ module Gpdb
       self.class.connection_handler.establish_connection @name, spec
     end
 
-    def connected?
+    def verify_connection!
       connection.schema_cache.tables
       true
     rescue PG::Error => e
-      false
+      raise ConnectionError.new(e.message)
     end
 
     def connection

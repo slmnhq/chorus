@@ -35,7 +35,9 @@ module Gpdb
     end
 
     def connection_must_be_established
-      errors.add(:connection, :invalid) unless connection.connected?
+      connection.verify_connection!
+    rescue ConnectionError => e
+      errors.add(:connection, e.message)
     end
 
     def cache!
@@ -47,9 +49,9 @@ module Gpdb
       )
       cached_credentials = @cached_instance.credentials.build(
           :username => username,
-          :password => password
+          :password => password,
+          :shared => true
       )
-      cached_credentials.shared = true
       cached_credentials.owner = owner
       cached_credentials.save!
       @cached_instance

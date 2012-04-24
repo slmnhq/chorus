@@ -15,7 +15,11 @@ describe Gpdb::Connection do
       }
     end
 
-    it { should be_connected }
+    describe "#verify_connection!" do
+      it "returns true" do
+        subject.verify_connection!.should be_true
+      end
+    end
 
     it "should share a real Postgres connection between connection instances with the same name" do
       c1 = Gpdb::Connection.new(connection_spec)
@@ -36,6 +40,15 @@ describe Gpdb::Connection do
       }
     end
 
-    it { should_not be_connected }
+    describe "#verify_connection!" do
+      it "raises an error" do
+        begin
+          subject.verify_connection!
+          flunk
+        rescue Gpdb::ConnectionError => e
+          e.message.should =~ /host name/
+        end
+      end
+    end
   end
 end

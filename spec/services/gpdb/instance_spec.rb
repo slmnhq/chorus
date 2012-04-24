@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Gpdb::Instance do
   describe ".create" do
     before do
-      connection = stub(:connected? => true)
+      connection = stub(:verify_connection! => true)
       Gpdb::Connection.stub(:new) { connection }
     end
 
@@ -42,13 +42,14 @@ describe Gpdb::Instance do
     end
 
     it "requires that a real connection to GPDB can be established" do
-      connection = stub(:connected? => false)
+      connection = double
+      connection.stub(:verify_connection!).and_raise(Gpdb::ConnectionError.new("connection error"))
       Gpdb::Connection.should_receive(:new).with(valid_attributes) { connection }
 
       begin
         Gpdb::Instance.create_cache!(valid_attributes, owner)
       rescue ActiveRecord::RecordInvalid => e
-        e.record.errors.get(:connection).should == ["INVALID"]
+        e.record.errors.get(:connection).should == ["connection error"]
       end
     end
 

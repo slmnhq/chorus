@@ -25,12 +25,22 @@ describe ApplicationController do
 
     it "renders 'invalid' JSON when record is invalid" do
       invalid_record = User.new
-      invalid_record.valid?
+      invalid_record.errors.add(:username, :blank)
       controller.stub(:any_action).and_raise(ActiveRecord::RecordInvalid.new(invalid_record))
       get :any_action
 
       response.code.should == "422"
       decoded_errors.fields.username.should == ["REQUIRED"]
+    end
+
+    it "renders string-based validation messages, when provided" do
+      invalid_record = User.new
+      invalid_record.errors.add(:username, "some error")
+      controller.stub(:any_action).and_raise(ActiveRecord::RecordInvalid.new(invalid_record))
+      get :any_action
+
+      response.code.should == "422"
+      decoded_errors.fields.username.should == ["some error"]
     end
   end
 
