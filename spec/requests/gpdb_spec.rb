@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "gpdb instances" do
+describe "gpdb instances", :network => true do
   let(:valid_attributes) do
     {
         :name => "good_gillette",

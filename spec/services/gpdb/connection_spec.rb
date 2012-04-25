@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Gpdb::Connection do
+describe Gpdb::Connection, :network => true do
   subject { Gpdb::Connection.new(connection_spec) }
 
   context "with valid attributes" do

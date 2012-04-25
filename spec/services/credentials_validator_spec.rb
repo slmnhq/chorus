@@ -1,12 +1,4 @@
-require 'active_model'
-require_relative '../../app/services/credentials_validator'
 require 'spec_helper'
-
-class User
-end
-
-class LdapClient
-end
 
 describe CredentialsValidator do
   describe ".user" do
