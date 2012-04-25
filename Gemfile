@@ -11,6 +11,7 @@ gem 'net-ldap'
 group :assets do
   gem 'sass-rails'
   gem 'compass-rails'
+  gem 'handlebars_assets'
 
   # gem 'coffee-rails', '~> 3.2.1'
   # # See https://github.com/sstephenson/execjs#readme for more supported runtimes

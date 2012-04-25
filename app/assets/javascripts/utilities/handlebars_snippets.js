@@ -151,12 +151,15 @@
         },
 
         renderTemplate: function(templateName, context) {
-            if (!chorus.templates[templateName]) {
-                var $element = $("#templates [data-template-path='" + templateName + "']")
-                if (!$element.length) throw "No template for " + templateName;
-                chorus.templates[templateName] = Handlebars.compile($element.html());
-            }
-            return new Handlebars.SafeString(chorus.templates[templateName](context));
+//            if (window.JST["templates/" + templateName]) {
+//                var element = window.JST["templates/" + templateName](context);
+//                if (!element) throw "No template in window.JST for " + templateName;
+//                chorus.templates[templateName] = Handlebars.compile($element.html());
+//
+//            }
+//            console.log("before ", new Handlebars.SafeString(chorus.templates[templateName](context)));
+            var result = new Handlebars.SafeString(window.JST["templates/" + templateName](context));
+            return new Handlebars.SafeString(result);
         },
 
         renderTemplateIf: function(conditional, templateName, context) {

@@ -101,6 +101,11 @@ chorus.views.Bare = Backbone.View.include(
             evaluatedContext = _.isFunction(this.context) ? this.context() : this.context;
         }
 
+        var html = this.template(evaluatedContext)
+        console.log(html)
+        $(this.el).html(html)
+        console.log(this.el)
+
         $(this.el).html(this.template(evaluatedContext))
             .addClass(this.className || "")
             .addClass(this.additionalClass || "")
