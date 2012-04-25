@@ -1,6 +1,57 @@
-# Install ruby
+#Greenplum Chorusrails
 
-## If you are currently using RVM, remove it.
+This file contains instructions to get started on Mac OSX.  If you are running Linux, it shouldn't be too different.
+
+##Bootstrap
+
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/master/Library/Contributions/install_homebrew.rb)"
+
+You need git
+
+  brew install git
+
+Get someone who has rights to the repository to add your github account to the repo.
+Check that you can get to Github correctly:
+
+  ssh git@github.com
+The response should have your username in it.  If it doesn't go to http://help.github.com/ssh-issues/
+
+Check out the repo in `~/workspace/chorusrails`, like so:
+
+  git clone git@github.com:GreenplumChorus/chorusrails.git ~/workspace/chorusrails
+
+###Postgres
+
+Install postgres if you don't have it
+
+  brew install postgres
+
+You may have to increase some memory limits:
+
+  sudo sysctl -w kern.sysv.shmall=65536
+  sudo sysctl -w kern.sysv.shmmax=16777216
+
+You can put these settings in your `/etc/sysctl.conf` file, and they will become effective whenever you boot:
+
+  kern.sysv.shmall=65536
+  kern.sysv.shmmax=16777216
+
+If you don't have a `/etc/sysctl.conf` file, just create one.
+
+OSX Lion may not retain these settings between reboots, so you may see the message
+could not create shared memory segment: Invalid argument` indicating that the `sysctl` commands need to be run again.
+
+Then create the database folder
+
+    initdb -D ~/workspace/chorusrails/var/db
+
+### XCode
+
+You need XCode for a compiler
+
+### Install ruby
+
+#### If you are currently using RVM, remove it.
 
 Mostly, you need to run
 
@@ -16,7 +67,7 @@ Note that this will break RVM in other systems, notably the chorus-java project.
 
 Start a new terminal.
 
-## Run script/bootstrap
+#### Run script/bootstrap
 
 From the root directory of this project, run:
 
@@ -31,3 +82,16 @@ This script
 * Creates databases
 * Runs tests
 
+## Development
+
+  cd ~/workspace/chorusrails && rails s
+
+Application will be on http://localhost:3000
+
+### Testing:
+
+    script/test
+
+### CI
+
+http://greenplum-ci:3333/builds/chorusrails
