@@ -1,3 +1,3 @@
-#/bin/bash
+#!/bin/bash
 eval "$(rbenv init -)"
 

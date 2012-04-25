@@ -26,9 +26,9 @@ ActiveRecord::Schema.define(:version => 20120424221335) do
     t.string   "host"
     t.integer  "port"
     t.string   "maintenance_db"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.integer  "owner_id",       :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.integer  "owner_id",                          :null => false
     t.boolean  "shared",         :default => false
   end
 
