@@ -932,7 +932,7 @@ describe("chorus.views.Base", function() {
                     });
 
                     it("renders the 'normal' template", function() {
-                        expect($(this.view.el).text()).toBe("Foo");
+                        expect($(this.view.el)).toContainText("Foo");
                         expect(this.view.$('.loading_section').length).toBe(0)
                     });
                 })

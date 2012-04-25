@@ -423,7 +423,7 @@ describe("handlebars", function() {
 
             it("renders the template if the condition is truthy", function() {
                 var output = Handlebars.compile(this.template)({ condition: true, text: "hello" });
-                expect(output).toBe("hello");
+                expect(output).toContainText("hello");
             });
 
             it("does not render the template if the condition is falsy", function() {
@@ -563,25 +563,25 @@ describe("handlebars", function() {
             it("renders the string false for the boolean false", function() {
                 var context = {x: false};
                 var string = Handlebars.compile(this.template)(context);
-                expect(string).toBe("false");
+                expect(string).toContainText("false");
             });
 
             it("renders the string 0 for the number 0", function() {
                 var context = {x: 0};
                 var string = Handlebars.compile(this.template)(context);
-                expect(string).toBe("0");
+                expect(string.toString()).toContainText("0");
             });
 
             it("renders &nbsp; for null", function() {
                 var context = {x: null};
                 var string = Handlebars.compile(this.template)(context);
-                expect(string).toBe("&nbsp;");
+                expect(string).toContainText("&nbsp;");
             });
 
             it("renders NaN for NaN", function() {
                 var context = {x: NaN};
                 var string = Handlebars.compile(this.template)(context);
-                expect(string).toBe("NaN");
+                expect(string.toString()).toContainText("NaN");
             });
         });
 
@@ -605,13 +605,13 @@ describe("handlebars", function() {
             it("should not round the value", function() {
                 var context = {value: .0012344}
                 var string = Handlebars.compile(this.template)(context);
-                expect(string).toBe("0.0012344");
+                expect(string.toString()).toContainText("0.0012344");
             });
 
             it("should round the value to two decimal places", function() {
                 var context = {value: 10.494727};
                 var string = Handlebars.compile(this.template)(context);
-                expect(string).toBe("10.49");
+                expect(string.toString()).toContainText("10.49");
             });
         });
 

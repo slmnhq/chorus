@@ -32,12 +32,9 @@
         },
 
         ifAll: function() {
-            // Handlebars actually passes in two functions: the first is block with block.inverse,
-            // and the second function is just the block.inverse function itself.
             var args = _.toArray(arguments);
-            var elseBlock = args.pop();
             var block = args.pop();
-            if (args.length == 0) {
+            if (block.length == 0) {
                 throw "ifAll expects arguments";
             }
             if (_.all(args, function(arg) {
@@ -45,15 +42,14 @@
             })) {
                 return block(this);
             } else {
-                return elseBlock(this);
+                return block.inverse(this);
             }
         },
 
         ifAny: function() {
             var args = _.toArray(arguments);
-            var elseBlock = args.pop();
             var block = args.pop();
-            if (args.length == 0) {
+            if (block.length == 0) {
                 throw "ifAny expects arguments";
             }
             if (_.any(args, function(arg) {
@@ -61,7 +57,7 @@
             })) {
                 return block(this);
             } else {
-                return elseBlock(this);
+                return block.inverse(this);
             }
         },
 
@@ -102,17 +98,17 @@
             }
         },
 
-        eachWithMoreLink: function(context, max, more_key, less_key, fn, inverse) {
+        eachWithMoreLink: function(context, max, more_key, less_key, block) {
             var ret = "";
 
             if (context && context.length > 0) {
                 for (var i = 0, j = context.length; i < j; i++) {
                     context[i].moreClass = (i >= max) ? "more" : "";
-                    ret = ret + fn(context[i]);
+                    ret = ret + block(context[i]);
                 }
                 ret += Handlebars.helpers.moreLink(context, max, more_key, less_key);
             } else {
-                ret = inverse(this);
+                ret = block.inverse(this);
             }
             return ret;
         },
@@ -151,15 +147,7 @@
         },
 
         renderTemplate: function(templateName, context) {
-//            if (window.JST["templates/" + templateName]) {
-//                var element = window.JST["templates/" + templateName](context);
-//                if (!element) throw "No template in window.JST for " + templateName;
-//                chorus.templates[templateName] = Handlebars.compile($element.html());
-//
-//            }
-//            console.log("before ", new Handlebars.SafeString(chorus.templates[templateName](context)));
-            var result = new Handlebars.SafeString(window.JST["templates/" + templateName](context));
-            return new Handlebars.SafeString(result);
+            return new Handlebars.SafeString(window.JST["templates/" + templateName](context));
         },
 
         renderTemplateIf: function(conditional, templateName, context) {
@@ -404,5 +392,4 @@
     _.each(chorus.helpers, function(helper, name) {
         Handlebars.registerHelper(name, helper);
     });
-
 })();

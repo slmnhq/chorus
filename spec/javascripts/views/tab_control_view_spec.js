@@ -44,9 +44,9 @@ describe("chorus.views.TabControl", function() {
 
     it("renders each view inside of its 'tabbed area'", function() {
         expect(this.view.$(".tabbed_area div").length).toBe(3);
-        expect(this.view.$(".tabbed_area div").eq(0)).toHaveText("tabText1");
-        expect(this.view.$(".tabbed_area div").eq(1)).toHaveText("tabText2");
-        expect(this.view.$(".tabbed_area div").eq(2)).toHaveText("tabText3");
+        expect(this.view.$(".tabbed_area div").eq(0)).toContainText("tabText1");
+        expect(this.view.$(".tabbed_area div").eq(1)).toContainText("tabText2");
+        expect(this.view.$(".tabbed_area div").eq(2)).toContainText("tabText3");
     });
 
     it("calls #delegateEvents on each view (bc otherwise the events of a subview don't propogate to its subviews)", function() {

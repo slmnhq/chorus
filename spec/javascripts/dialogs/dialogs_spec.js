@@ -17,11 +17,11 @@ describe("chorus.views.Dialog", function() {
         })
 
         it("displays the title in the .dialog_header", function() {
-            expect(this.dialog.$(".dialog_header h1").text()).toBe("OH HAI")
+            expect(this.dialog.$(".dialog_header h1")).toContainText("OH HAI");
         })
 
         it("renders the view in the .dialog_content", function() {
-            expect(this.dialog.$(".dialog_content").text()).toBe("OMG IM IN A DIALOG WHOA")
+            expect(this.dialog.$(".dialog_content")).toContainText("OMG IM IN A DIALOG WHOA");
         })
 
         it("sets up input placeholders for older browsers", function() {

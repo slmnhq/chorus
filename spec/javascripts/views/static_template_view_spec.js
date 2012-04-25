@@ -9,7 +9,7 @@ describe("chorus.views.StaticTemplate", function(){
             it("renders the template with that context", function() {
                 var staticView = new chorus.views.StaticTemplate("plain_text", { text: "hi there" });
                 staticView.render();
-                expect($(staticView.el)).toHaveText("hi there")
+                expect($(staticView.el)).toContainText("hi there")
             })
         })
 
@@ -20,7 +20,7 @@ describe("chorus.views.StaticTemplate", function(){
                 });
 
                 staticView.render();
-                expect($(staticView.el)).toHaveText("No way")
+                expect($(staticView.el)).toContainText("No way")
             })
         })
     });
