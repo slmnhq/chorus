@@ -4,12 +4,13 @@ set cursorline
 " switch to spec or implementation file
 
 function! OpenSpecOrImpl()
-    let file_path = system("~/workspace/chorus/ofbiz/hot-deploy/client/ops/scripts/find_spec_or_impl.rb " . expand("%"))
-    if (filereadable(file_path))
-        exec ":e " . file_path
-    else
-        echo "No related file found."
+    let file_path = system("~/workspace/chorusrails/script/find_spec_or_impl.rb " . expand("%"))
+
+    if (!filereadable(file_path))
+        echo "No related file found. Opening new file."
     endif
+
+    exec ":e " . file_path
 endfunction
 
 macmenu &File.Open\ Tab\.\.\. key=<nop>

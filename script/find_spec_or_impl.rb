@@ -1,16 +1,19 @@
 #!/usr/bin/env ruby
 
-require 'pathname'
-
-# file_path = Pathname.new(ARGV[0])
 filename = ARGV[0]
 in_spec = filename =~ /_spec/
-going_to_spec = !in_spec
+in_js = filename =~ /js$/
 
-related_file = if going_to_spec
-  filename.gsub(/^app/, 'spec').gsub(/.rb$/, '_spec.rb')
+if in_js
+  impl_prefix, spec_prefix, extension = "app/assets/javascripts/", "spec/javascripts/", ".js"
 else
-  filename.gsub(/^spec/, 'app').gsub(/_spec.rb$/, '.rb')
+  impl_prefix, spec_prefix, extension = "app/", "spec/", ".rb"
+end
+
+related_file = if in_spec
+  filename.gsub(/^#{spec_prefix}/, impl_prefix).gsub(/_spec#{extension}$/, "#{extension}")
+else
+  filename.gsub(/^#{impl_prefix}/, spec_prefix).gsub(/#{extension}$/, "_spec#{extension}")
 end
 
 print related_file
