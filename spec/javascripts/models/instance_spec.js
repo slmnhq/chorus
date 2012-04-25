@@ -20,7 +20,7 @@ describe("chorus.models.Instance", function() {
     });
 
     it("has a valid url", function() {
-        expect(this.instance.url()).toBe("/edc/instance/" + this.instance.get('id'));
+        expect(this.instance.url()).toBe("/instance/" + this.instance.get('id'));
     });
 
     describe("#stateIconUrl", function() {

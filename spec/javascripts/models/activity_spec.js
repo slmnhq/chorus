@@ -108,7 +108,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("posts to the comment insight url", function() {
-            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/" + this.model.get("id") + "/promote");
+            expect(this.server.lastCreate().url).toBe("/commentinsight/" + this.model.get("id") + "/promote");
         });
 
         it("calls the success function", function() {
@@ -120,14 +120,14 @@ describe("chorus.models.Activity", function() {
     describe("#publish", function() {
         it("posts to the comment insight url with the publish action", function() {
             this.model.publish();
-            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/" + this.model.get("id") + "/publish");
+            expect(this.server.lastCreate().url).toBe("/commentinsight/" + this.model.get("id") + "/publish");
         });
     });
 
     describe("#unpublish", function() {
         it("posts to the comment insight url with the unpublish action", function() {
             this.model.unpublish();
-            expect(this.server.lastCreate().url).toBe("/edc/commentinsight/" + this.model.get("id") + "/unpublish");
+            expect(this.server.lastCreate().url).toBe("/commentinsight/" + this.model.get("id") + "/unpublish");
         });
     });
 

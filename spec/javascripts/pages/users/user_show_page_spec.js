@@ -9,7 +9,7 @@ describe("chorus.pages.UserShow", function(){
         });
 
         it("fetches the model automatically", function(){
-            expect(this.server.requests[0].url).toBe("/edc/user/44");
+            expect(this.server.requests[0].url).toBe("/user/44");
         });
 
         it("has a helpId", function() {

@@ -7,7 +7,7 @@ describe("chorus.models.Sandbox", function() {
         context("when creating", function() {
             it("has the right url", function() {
                 var uri = new URI(this.model.url({ method: "create" }));
-                expect(uri.path()).toBe("/edc/workspace/" + this.model.get('workspaceId') + "/sandbox");
+                expect(uri.path()).toBe("/workspace/" + this.model.get('workspaceId') + "/sandbox");
             });
         });
     });

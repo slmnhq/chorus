@@ -14,7 +14,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
     describe("#setup", function() {
         it("fetches the source workfile", function() {
-            expect(this.server.lastFetch().url).toBe("/edc/workspace/4/workfile/10")
+            expect(this.server.lastFetch().url).toBe("/workspace/4/workfile/10")
         })
     });
 
@@ -54,7 +54,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             });
 
             it("calls the API", function() {
-                expect(_.last(this.server.requests).url).toBe("/edc/workspace/" + this.workspace.get("id") + "/workfile");
+                expect(_.last(this.server.requests).url).toBe("/workspace/" + this.workspace.get("id") + "/workfile");
                 expect(_.last(this.server.requests).method).toBe("POST");
             })
 

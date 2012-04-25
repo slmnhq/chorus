@@ -6,7 +6,7 @@ describe("chorus.models.Task", function() {
     });
 
     it("has the right url", function() {
-        var expectedUrl = "/edc/task/sync/";
+        var expectedUrl = "/task/sync/";
         expect(this.model.url()).toMatchUrl(expectedUrl);
     });
 

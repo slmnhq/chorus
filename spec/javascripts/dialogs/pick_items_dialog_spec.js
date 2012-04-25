@@ -366,7 +366,7 @@ describe("chorus.dialogs.PickItems", function() {
 
                 it("fetches filtered database objects", function() {
                     expect(this.server.lastFetch().url).toMatchUrl(
-                        "/edc/workspace/1/dataset?namePattern=a+query",
+                        "/workspace/1/dataset?namePattern=a+query",
                         { paramsToIgnore: ["page", "rows"] }
                     );
                 });

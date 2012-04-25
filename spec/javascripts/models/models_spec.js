@@ -14,7 +14,7 @@ describe("chorus.models.Abstract", function() {
                 });
 
                 it("uses the function's return value", function() {
-                    expect(this.model.url()).toMatchUrl("/edc/my_other_items/foo");
+                    expect(this.model.url()).toMatchUrl("/my_other_items/foo");
                 });
 
                 it("passes any options to the urlTemplate function", function() {
@@ -25,19 +25,19 @@ describe("chorus.models.Abstract", function() {
             });
 
             it("compiles the urlTemplate and renders it with model attributes", function() {
-                expect(this.model.url()).toMatchUrl("/edc/my_items/foo");
+                expect(this.model.url()).toMatchUrl("/my_items/foo");
             });
 
             it("compiles the urlTemplate with the model's entityId and entityType", function() {
                 this.model.entityId = "45";
                 this.model.urlTemplate = "data/{{entityId}}"
-                expect(this.model.url()).toBe("/edc/data/45");
+                expect(this.model.url()).toBe("/data/45");
             });
 
             it("does not unescape %2b to +, or otherwise bypass escaping", function() {
                 this.model.entityId = "+";
                 this.model.urlTemplate = "data/{{encode entityId}}"
-                expect(this.model.url()).toBe("/edc/data/%2B");
+                expect(this.model.url()).toBe("/data/%2B");
             });
 
             context("when the model has a urlTemplateAttributes function", function() {
@@ -52,7 +52,7 @@ describe("chorus.models.Abstract", function() {
                 });
 
                 it("should use the urlTemplateAttributes to construct the url", function() {
-                    expect(this.model.url()).toBe("/edc/data/foo/bar/baz");
+                    expect(this.model.url()).toBe("/data/foo/bar/baz");
                 });
             });
 
@@ -77,7 +77,7 @@ describe("chorus.models.Abstract", function() {
                     });
 
                     it("url-encodes the params and appends them to the url", function() {
-                        expect(this.model.url()).toMatchUrl("/edc/my_items/foo?dance=the+thizzle");
+                        expect(this.model.url()).toMatchUrl("/my_items/foo?dance=the+thizzle");
                     });
 
                     context("when the base url template includes a query string", function() {
@@ -86,7 +86,7 @@ describe("chorus.models.Abstract", function() {
                         });
 
                         it("merges the query strings properly", function() {
-                            expect(this.model.url()).toMatchUrl("/edc/my_items/foo?dance=the+thizzle&size=medium");
+                            expect(this.model.url()).toMatchUrl("/my_items/foo?dance=the+thizzle&size=medium");
                         });
                     });
                 });
@@ -200,7 +200,7 @@ describe("chorus.models.Abstract", function() {
 
                         this.server.respondWith(
                             'PUT',
-                            '/edc/my_items/foo',
+                            '/my_items/foo',
                             this.prepareResponse(this.response));
 
                         this.server.respond();
@@ -220,7 +220,7 @@ describe("chorus.models.Abstract", function() {
                         ] };
                         this.server.respondWith(
                             'PUT',
-                            '/edc/my_items/foo',
+                            '/my_items/foo',
                             this.prepareResponse(this.response));
                         this.server.respond();
 
@@ -243,7 +243,7 @@ describe("chorus.models.Abstract", function() {
 
                         this.server.respondWith(
                             'PUT',
-                            '/edc/my_items/foo',
+                            '/my_items/foo',
                             this.prepareResponse(this.response));
 
                         this.server.respond();
@@ -263,7 +263,7 @@ describe("chorus.models.Abstract", function() {
                         ] };
                         this.server.respondWith(
                             'PUT',
-                            '/edc/my_items/foo',
+                            '/my_items/foo',
                             this.prepareResponse(this.response));
                         this.server.respond();
 
@@ -282,7 +282,7 @@ describe("chorus.models.Abstract", function() {
                             this.server = sinon.fakeServer.create();
                             this.server.respondWith(
                                 'PUT',
-                                '/edc/my_items/foo',
+                                '/my_items/foo',
                                 this.prepareResponse(this.response));
 
                             this.model.save();
@@ -489,7 +489,7 @@ describe("chorus.models.Abstract", function() {
 
                     this.server.respondWith(
                         'DELETE',
-                        '/edc/my_items/foo',
+                        '/my_items/foo',
                         this.prepareResponse(this.response));
 
                     this.server.respond();
@@ -513,7 +513,7 @@ describe("chorus.models.Abstract", function() {
 
                     this.server.respondWith(
                         'DELETE',
-                        '/edc/my_items/foo',
+                        '/my_items/foo',
                         this.prepareResponse(this.response));
 
                     this.server.respond();
@@ -999,7 +999,7 @@ describe("chorus.models.Abstract", function() {
                 });
 
                 it("fetches the corresponding page of the collection", function() {
-                    expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50");
+                    expect(this.collection.url()).toBe("/bar/bar?page=1&rows=50");
                 });
             });
 
@@ -1011,7 +1011,7 @@ describe("chorus.models.Abstract", function() {
                 });
 
                 it("uses the function's return value", function() {
-                    expect(this.collection.url()).toContain("/edc/my_other_items/bar");
+                    expect(this.collection.url()).toContain("/my_other_items/bar");
                 });
 
                 it("passes any options to the urlTemplate function", function() {
@@ -1023,31 +1023,31 @@ describe("chorus.models.Abstract", function() {
 
             context("when the collection has NO pagination or page property", function() {
                 it("fetches the first page of the collection", function() {
-                    expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50");
+                    expect(this.collection.url()).toBe("/bar/bar?page=1&rows=50");
                 });
             });
 
             it("does not unescape %2b to +, or otherwise bypass escaping", function() {
                 this.collection.attributes.foo = "+";
-                expect(this.collection.url()).toBe("/edc/bar/%2B?page=1&rows=50");
+                expect(this.collection.url()).toBe("/bar/%2B?page=1&rows=50");
             });
 
             it("takes an optional page size", function() {
-                expect(this.collection.url({ rows: 1000 })).toBe("/edc/bar/bar?page=1&rows=1000");
+                expect(this.collection.url({ rows: 1000 })).toBe("/bar/bar?page=1&rows=1000");
             });
 
             it("takes an optional page number", function() {
-                expect(this.collection.url({ page: 4 })).toBe("/edc/bar/bar?page=4&rows=50");
+                expect(this.collection.url({ page: 4 })).toBe("/bar/bar?page=4&rows=50");
             });
 
             it("mixes in sortIndex and sortOrder from the collection", function() {
                 this.collection.sortAsc("foo");
-                expect(this.collection.url()).toBe("/edc/bar/bar?page=1&rows=50&sidx=foo&sord=asc");
+                expect(this.collection.url()).toBe("/bar/bar?page=1&rows=50&sidx=foo&sord=asc");
             })
 
             it("plays nicely with existing parameters in the url template", function() {
                 this.collection.urlTemplate = "bar/{{foo}}?why=not";
-                expect(this.collection.url()).toBe("/edc/bar/bar?why=not&page=1&rows=50");
+                expect(this.collection.url()).toBe("/bar/bar?why=not&page=1&rows=50");
             })
         });
 
@@ -1122,7 +1122,7 @@ describe("chorus.models.Abstract", function() {
             context("when the collection does not contain pagination information", function() {
                 it("fetches the first page of items", function() {
                     this.collection.fetch();
-                    expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=50")
+                    expect(this.server.requests[0].url).toBe("/bar/bar?page=1&rows=50")
                 })
             })
 
@@ -1137,7 +1137,7 @@ describe("chorus.models.Abstract", function() {
 
                 it("fetches the page specified in the pagination information", function() {
                     this.collection.fetch();
-                    expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=50")
+                    expect(this.server.requests[0].url).toBe("/bar/bar?page=1&rows=50")
                 })
             })
 
@@ -1177,7 +1177,7 @@ describe("chorus.models.Abstract", function() {
             })
 
             it("requests page one from the server", function() {
-                expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=1&rows=1000");
+                expect(this.server.requests[0].url).toBe("/bar/bar?page=1&rows=1000");
             })
 
             describe("and the server responds successfully", function() {
@@ -1195,7 +1195,7 @@ describe("chorus.models.Abstract", function() {
 
                     this.server.respondWith(
                         'GET',
-                        '/edc/bar/bar?page=1&rows=1000',
+                        '/bar/bar?page=1&rows=1000',
                         this.prepareResponse(this.pageOneResponse));
 
                     this.pageTwoResponse = { status: "ok", resource: [
@@ -1212,7 +1212,7 @@ describe("chorus.models.Abstract", function() {
 
                     this.server.respondWith(
                         'GET',
-                        '/edc/bar/bar?page=2&rows=1000',
+                        '/bar/bar?page=2&rows=1000',
                         this.prepareResponse(this.pageTwoResponse));
 
                     var self = this;
@@ -1233,7 +1233,7 @@ describe("chorus.models.Abstract", function() {
                 })
 
                 it("requests subsequent pages", function() {
-                    expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=2&rows=1000");
+                    expect(this.server.requests[1].url).toBe("/bar/bar?page=2&rows=1000");
                 })
 
                 it("triggers the reset event once", function() {
@@ -1268,7 +1268,7 @@ describe("chorus.models.Abstract", function() {
 
                     this.server.respondWith(
                         'GET',
-                        '/edc/bar/bar?page=1&rows=1000',
+                        '/bar/bar?page=1&rows=1000',
                         this.prepareResponse(this.pageOneResponse));
 
                     this.pageTwoResponse = {
@@ -1283,7 +1283,7 @@ describe("chorus.models.Abstract", function() {
 
                     this.server.respondWith(
                         'GET',
-                        '/edc/bar/bar?page=2&rows=1000',
+                        '/bar/bar?page=2&rows=1000',
                         this.prepareResponse(this.pageTwoResponse));
 
                     var self = this;
@@ -1296,7 +1296,7 @@ describe("chorus.models.Abstract", function() {
                 })
 
                 it("requests subsequent pages", function() {
-                    expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=2&rows=1000");
+                    expect(this.server.requests[1].url).toBe("/bar/bar?page=2&rows=1000");
                 })
 
                 it("triggers the reset event when the error occurs", function() {
@@ -1308,7 +1308,7 @@ describe("chorus.models.Abstract", function() {
         describe("#fetchPage", function() {
             it("requests page one from the server", function() {
                 this.collection.fetchPage(2);
-                expect(this.server.requests[0].url).toBe("/edc/bar/bar?page=2&rows=50");
+                expect(this.server.requests[0].url).toBe("/bar/bar?page=2&rows=50");
             })
 
             it("passes options through to fetch", function() {
@@ -1321,13 +1321,13 @@ describe("chorus.models.Abstract", function() {
             it("does not affect subsequent calls to fetch", function() {
                 this.collection.fetchPage(2);
                 this.collection.fetch();
-                expect(this.server.requests[1].url).toBe("/edc/bar/bar?page=1&rows=50");
+                expect(this.server.requests[1].url).toBe("/bar/bar?page=1&rows=50");
             })
 
             context("when the 'rows' option is passed", function() {
                 it("fetches the given number of rows", function() {
                     this.collection.fetchPage(2, { rows: 13 });
-                    expect(this.server.lastFetch().url).toBe("/edc/bar/bar?page=2&rows=13");
+                    expect(this.server.lastFetch().url).toBe("/bar/bar?page=2&rows=13");
                 });
 
                 it("does not pass the 'rows' option through to Backbone.Collection#fetch", function() {
@@ -1340,7 +1340,7 @@ describe("chorus.models.Abstract", function() {
                 it("stores the number of rows, and fetches number next time", function() {
                     this.collection.fetchPage(2, { rows: 13 });
                     this.collection.fetchPage(3);
-                    expect(this.server.lastFetch().url).toBe("/edc/bar/bar?page=3&rows=13");
+                    expect(this.server.lastFetch().url).toBe("/bar/bar?page=3&rows=13");
 
                     this.collection.fetch();
                     expect(this.server.lastFetch().url).toContainQueryParams({ rows: 13 });

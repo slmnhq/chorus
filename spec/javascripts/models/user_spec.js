@@ -69,7 +69,7 @@ describe("chorus.models.User", function() {
             });
 
             it("hits the right url for that user", function() {
-                var expectedUrl = "/edc/workspace/?user=457&page=1&rows=50";
+                var expectedUrl = "/workspace/?user=457&page=1&rows=50";
                 expect(this.server.requests[0].url).toBe(expectedUrl);
             });
         });
@@ -95,7 +95,7 @@ describe("chorus.models.User", function() {
             });
 
             it("hits the right url for that user", function() {
-                var expectedUrl = "/edc/workspace/?user=457&page=1&rows=50&active=true";
+                var expectedUrl = "/workspace/?user=457&page=1&rows=50&active=true";
                 expect(this.server.requests[0].url).toMatchUrl(expectedUrl);
             });
         });
@@ -108,7 +108,7 @@ describe("chorus.models.User", function() {
                 password: "w1zZz4rd",
                 passwordConfirmation: "w1zZz4rd"
             });
-            expect(_.last(this.server.requests).url).toBe("/edc/user/42/password");
+            expect(_.last(this.server.requests).url).toBe("/user/42/password");
         });
     });
 
@@ -235,12 +235,12 @@ describe("chorus.models.User", function() {
 
         it("uses the right URL", function() {
             var user = newFixtures.user({userName: 'foo', id: "bar"});
-            expect(user.imageUrl()).toBe("/edc/userimage/bar?size=original&iebuster=12345");
+            expect(user.imageUrl()).toBe("/userimage/bar?size=original&iebuster=12345");
         });
 
         it("accepts the size argument", function() {
             var user = newFixtures.user({userName: 'foo', id: "bar"});
-            expect(user.imageUrl({size: "icon"})).toBe("/edc/userimage/bar?size=icon&iebuster=12345");
+            expect(user.imageUrl({size: "icon"})).toBe("/userimage/bar?size=icon&iebuster=12345");
         });
     });
 

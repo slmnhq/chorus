@@ -33,18 +33,18 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
         context("the workspace has an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(true);
-                this.spyImg = spyOn(this.view.model, 'imageUrl').andReturn("/edc/userimage/party.gif")
+                this.spyImg = spyOn(this.view.model, 'imageUrl').andReturn("/userimage/party.gif")
                 this.view.render();
             });
 
             it("renders the workspace image", function() {
-                expect(this.view.$("img.workspace_image").attr("src")).toContain('/edc/userimage/party.gif');
+                expect(this.view.$("img.workspace_image").attr("src")).toContain('/userimage/party.gif');
             });
 
             it("renders the sidebar when image is changed", function() {
-                this.spyImg.andReturn("/edc/userimage/partyAgain.gif")
+                this.spyImg.andReturn("/userimage/partyAgain.gif")
                 this.view.model.trigger("image:change");
-                expect(this.view.$("img.workspace_image").attr("src")).toContain('/edc/userimage/partyAgain.gif');
+                expect(this.view.$("img.workspace_image").attr("src")).toContain('/userimage/partyAgain.gif');
             });
 
             context("and the image is loaded", function() {

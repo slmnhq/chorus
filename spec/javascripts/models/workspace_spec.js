@@ -86,12 +86,12 @@ describe("chorus.models.Workspace", function() {
     describe("#customIconUrl", function() {
         it("links to the original url by default", function() {
             this.model.set({id: 5});
-            expect(this.model.customIconUrl()).toBe("/edc/workspace/5/image?size=original");
+            expect(this.model.customIconUrl()).toBe("/workspace/5/image?size=original");
         });
 
         it("links to the requested size", function() {
             this.model.set({id: 5});
-            expect(this.model.customIconUrl({size: 'profile'})).toBe("/edc/workspace/5/image?size=profile");
+            expect(this.model.customIconUrl({size: 'profile'})).toBe("/workspace/5/image?size=profile");
         });
     });
 
@@ -165,7 +165,7 @@ describe("chorus.models.Workspace", function() {
         });
 
         it("has the right url", function() {
-            expect(this.model.members().url()).toContain("/edc/workspace/5/member");
+            expect(this.model.members().url()).toContain("/workspace/5/member");
         });
 
         it("memoizes", function() {
@@ -284,11 +284,11 @@ describe("chorus.models.Workspace", function() {
         })
 
         it("uses the right URL", function() {
-            expect(this.model.imageUrl()).toBe("/edc/workspace/10013/image?size=original");
+            expect(this.model.imageUrl()).toBe("/workspace/10013/image?size=original");
         });
 
         it("accepts the size argument", function() {
-            expect(this.model.imageUrl({size: "icon"})).toBe("/edc/workspace/10013/image?size=icon");
+            expect(this.model.imageUrl({size: "icon"})).toBe("/workspace/10013/image?size=icon");
         });
     });
 

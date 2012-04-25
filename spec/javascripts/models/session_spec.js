@@ -17,7 +17,7 @@ describe("chorus.models.Session", function() {
         });
 
         it("has the right url", function() {
-            expect(this.server.requests[0].url).toBe("/edc/auth/login/");
+            expect(this.server.requests[0].url).toBe("/auth/login/");
         });
 
         it("has the right method", function() {
@@ -63,15 +63,15 @@ describe("chorus.models.Session", function() {
             })
 
             it("calls the logout API", function() {
-                expect(this.server.requests[0].url).toBe("/edc/auth/logout/?authid=1234");
+                expect(this.server.requests[0].url).toBe("/auth/logout/?authid=1234");
             });
 
             describe("and the server responds", function() {
                 beforeEach(function() {
                     this.server.respondWith(
                         'GET',
-                        '/edc/auth/logout/?authid=1234',
-                        this.prepareResponse({"message":[],"status":"ok","requestId":2694,"resource":[],"method":"GET","resourcelink":"/edc/auth/logout/","pagination":null,"version":"0.1"}));
+                        '/auth/logout/?authid=1234',
+                        this.prepareResponse({"message":[],"status":"ok","requestId":2694,"resource":[],"method":"GET","resourcelink":"/auth/logout/","pagination":null,"version":"0.1"}));
 
                     this.server.respond();
                 })
@@ -136,7 +136,7 @@ describe("chorus.models.Session", function() {
         });
 
         it("has the correct url", function() {
-            expect(this.server.requests[0].url).toBe("/edc/auth/checkLogin/?authid=1234");
+            expect(this.server.requests[0].url).toBe("/auth/checkLogin/?authid=1234");
         });
 
         context("when the session is valid", function() {

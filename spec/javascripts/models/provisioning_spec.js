@@ -4,7 +4,7 @@ describe("chorus.models.Provisioning", function() {
     });
 
     it("has the appropriate #downloadUrl", function() {
-        expect(this.model.url()).toBe("/edc/provisioning/A4CProvisioner?type=install");
+        expect(this.model.url()).toBe("/provisioning/A4CProvisioner?type=install");
     })
 
     describe("#isInstalled", function() {

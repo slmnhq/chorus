@@ -2,7 +2,7 @@ describe("chorus.models.Config", function() {
 
     it("has a valid url", function() {
         var config = chorus.models.Config.instance();
-        expect(config.url()).toBe("/edc/config/");
+        expect(config.url()).toBe("/config/");
     });
 
     describe(".instance", function() {

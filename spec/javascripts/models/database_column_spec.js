@@ -43,7 +43,7 @@ describe("chorus.models.DatabaseColumn", function() {
                     });
                     var attr = this.model.attributes;
                     var url = this.model.url();
-                    expect(url).toContain("/edc/data/5/database/%25foo%25/schema/b%2Fa%2Fr/"+attr.parentType+"/a%20space/column?");
+                    expect(url).toContain("/data/5/database/%25foo%25/schema/b%2Fa%2Fr/"+attr.parentType+"/a%20space/column?");
                     expect(url).toContain("filter=" + attr.name);
                     expect(url).toContain("type=meta");
                 });

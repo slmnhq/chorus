@@ -12,6 +12,6 @@ describe("chorus.models.HdfsFile", function() {
     })
 
     it("has the right url", function() {
-        expect(this.file.url()).toBe("/edc/data/1234/hdfs/%2Fmy%2Fcomplicated%2Fhome%2Ffolder%2Fmy%20file.txt/sample");
+        expect(this.file.url()).toBe("/data/1234/hdfs/%2Fmy%2Fcomplicated%2Fhome%2Ffolder%2Fmy%20file.txt/sample");
     });
 })

@@ -6,7 +6,7 @@ describe("chorus.collections.MemberSet", function() {
 
     describe("#url", function() {
         it("has the workspace id in the url", function() {
-            expect(this.memberSet.url()).toContain("/edc/workspace/17/member")
+            expect(this.memberSet.url()).toContain("/workspace/17/member")
         })
     })
 

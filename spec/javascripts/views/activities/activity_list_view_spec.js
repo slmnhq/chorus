@@ -100,11 +100,11 @@ describe("chorus.views.ActivityList", function() {
 
             it("displays information for each comment", function() {
                 expect(this.view.$("li[data-comment-id]:eq(0) .icon a")).toHaveAttr("href", "#/users/1234")
-                expect(this.view.$("li[data-comment-id]:eq(0) .icon a img")).toHaveAttr("src", "/edc/userimage/1234?size=icon&iebuster=555")
+                expect(this.view.$("li[data-comment-id]:eq(0) .icon a img")).toHaveAttr("src", "/userimage/1234?size=icon&iebuster=555")
                 expect(this.view.$("li[data-comment-id]:eq(0) .comment_header a")).toHaveText("Bob Smith");
                 expect(this.view.$("li[data-comment-id]:eq(0) .comment_content .actions .timestamp")).toExist();
                 expect(this.view.$("li[data-comment-id]:eq(1) .icon a")).toHaveAttr("href", "#/users/10101")
-                expect(this.view.$("li[data-comment-id]:eq(1) .icon a img")).toHaveAttr("src", "/edc/userimage/10101?size=icon&iebuster=555")
+                expect(this.view.$("li[data-comment-id]:eq(1) .icon a img")).toHaveAttr("src", "/userimage/10101?size=icon&iebuster=555")
                 expect(this.view.$("li[data-comment-id]:eq(1) .comment_header a")).toHaveText("John Commenter");
                 expect(this.view.$("li[data-comment-id]:eq(1) .comment_content .timestamp")).toExist();
             });
@@ -185,11 +185,11 @@ describe("chorus.views.ActivityList", function() {
             it("displays info for each attached file", function() {
                 expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li').length).toBe(2);
 
-                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(0) a')).toHaveAttr('href', '/edc/file/10101')
+                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(0) a')).toHaveAttr('href', '/file/10101')
                 expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(0) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("SQL", "medium"))
                 expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(0) .name').text().trim()).toBe("something.sql")
 
-                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(1) a')).toHaveAttr('href', '/edc/file/10102')
+                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(1) a')).toHaveAttr('href', '/file/10102')
                 expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(1) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("TXT", "medium"))
                 expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(1) .name').text().trim()).toBe("something.txt")
             })

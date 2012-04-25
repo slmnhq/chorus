@@ -16,7 +16,7 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
                     metaType: "table"
                 })
 
-                expect(this.databaseObjectStatistics.url()).toContain("/edc/data/1/database/%25foo%25/schema/b%2Fa/table/a%25pct")
+                expect(this.databaseObjectStatistics.url()).toContain("/data/1/database/%25foo%25/schema/b%2Fa/table/a%25pct")
             })
 
             it("calls the right API when the metaType is a view", function() {
@@ -30,7 +30,7 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
                     metaType: "view"
                 })
 
-                expect(this.databaseObjectStatistics.url()).toContain("/edc/data/1/database/%25foo%25/schema/b%2Fa/view/a%25pct")
+                expect(this.databaseObjectStatistics.url()).toContain("/data/1/database/%25foo%25/schema/b%2Fa/view/a%25pct")
             })
         })
 
@@ -50,7 +50,7 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
 
                 this.databaseObjectStatistics.datasetId = "composite|id"
 
-                expect(this.databaseObjectStatistics.url()).toContain("/edc/workspace/10010/dataset/composite%7Cid")
+                expect(this.databaseObjectStatistics.url()).toContain("/workspace/10010/dataset/composite%7Cid")
             })
         })
     })

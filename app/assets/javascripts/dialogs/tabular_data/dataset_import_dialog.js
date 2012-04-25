@@ -95,7 +95,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
         if (this.importTarget === "workfile") {
             this.$("button.submit").startLoading("actions.uploading");
-            this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceId") + "/workfile";
+            this.uploadObj.url = "/workspace/" + this.options.launchElement.data("workspaceId") + "/workfile";
             this.uploadObj.source = "fs";
             this.request = this.uploadObj.submit();
 
@@ -106,7 +106,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             }, {silent: true});
 
             this.$("button.submit").startLoading("actions.uploading");
-            this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceId") + "/csv/sample";
+            this.uploadObj.url = "/workspace/" + this.options.launchElement.data("workspaceId") + "/csv/sample";
 
             if (this.csv.performValidation()) {
                 this.request = this.uploadObj.submit();

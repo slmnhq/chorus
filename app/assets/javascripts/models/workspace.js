@@ -8,7 +8,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
 
     customIconUrl:function (options) {
         options = (options || {});
-        return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
+        return "/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
     },
 
     defaultIconUrl:function (size) {
@@ -121,7 +121,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
 
     imageUrl:function (options) {
         options = (options || {});
-        return "/edc/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
+        return "/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
     },
 
     picklistImageUrl:function () {

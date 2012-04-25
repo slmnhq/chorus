@@ -21,7 +21,7 @@ chorus.models.Session = chorus.models.Base.extend({
 
     fetch: function(options) {
         options = _.extend(options || {}, {
-            url: "/edc/auth/checkLogin/?authid=" + $.cookie("authid")
+            url: "/auth/checkLogin/?authid=" + $.cookie("authid")
         });
 
         var success = options.success;
@@ -68,7 +68,7 @@ chorus.models.Session = chorus.models.Base.extend({
 
     requestLogout: function(logoutSucceeded) {
         var self = this;
-        $.get("/edc/auth/logout/?authid=" + $.cookie("authid"), function() {
+        $.get("/auth/logout/?authid=" + $.cookie("authid"), function() {
             self.clear();
             logoutSucceeded();
         });

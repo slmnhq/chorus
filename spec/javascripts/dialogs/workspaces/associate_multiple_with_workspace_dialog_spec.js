@@ -28,7 +28,7 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
         });
 
         it("sends a request to the 'associate dataset' API", function() {
-            expect(this.server.lastCreate().url).toContain("/edc/workspace/12/dataset");
+            expect(this.server.lastCreate().url).toContain("/workspace/12/dataset");
             expect(this.server.lastCreate().params().type).toBe("SOURCE_TABLE");
         });
 

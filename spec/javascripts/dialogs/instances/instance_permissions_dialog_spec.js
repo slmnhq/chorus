@@ -167,7 +167,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("saves the instance account", function() {
-                        expect(this.server.lastUpdate().url).toBe("/edc/instance/accountmap/999?")
+                        expect(this.server.lastUpdate().url).toBe("/instance/accountmap/999?")
                         expect(this.server.lastUpdate().requestBody).toBe("id=999&shared=no")
                     });
 
@@ -414,7 +414,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 it("should call delete on the accountmap", function() {
-                    expect(this.server.lastDestroy().url).toBe("/edc/instance/accountmap/" + this.accountBeingRemoved.id + "?");
+                    expect(this.server.lastDestroy().url).toBe("/instance/accountmap/" + this.accountBeingRemoved.id + "?");
                 });
 
                 context("when the delete succeeds", function() {
@@ -698,7 +698,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 it("only sends the shared parameter", function() {
-                    expect(_.last(this.server.requests).url).toBe("/edc/instance/accountmap/888?")
+                    expect(_.last(this.server.requests).url).toBe("/instance/accountmap/888?")
                     expect(_.last(this.server.requests).requestBody).toBe("id=888&shared=yes");
                 })
 

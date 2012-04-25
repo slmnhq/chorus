@@ -11,7 +11,7 @@ describe("chorus.collections.SchemaFunctionSet", function() {
         });
 
         it("encodes the url", function() {
-            expect(this.functionSet.url()).toContain("/edc/instance/10000/database/%25foo%25/schema/b%2Fa%2Fr/function");
+            expect(this.functionSet.url()).toContain("/instance/10000/database/%25foo%25/schema/b%2Fa%2Fr/function");
         });
     });
 

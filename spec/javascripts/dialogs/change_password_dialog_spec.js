@@ -30,7 +30,7 @@ describe("chorus.dialogs.ChangePassword", function() {
         });
 
         it("makes the correct API request", function() {
-            expect(this.server.lastUpdate().url).toBe("/edc/user/me/password");
+            expect(this.server.lastUpdate().url).toBe("/user/me/password");
             expect(this.server.lastUpdate().params().password).toBe("newpass");
         });
 

@@ -13,13 +13,13 @@ describe("chorus.collections.ActivitySet", function() {
             });
 
             it("returns the url for fetching all insights", function() {
-                expect(this.collection.url()).toHaveUrlPath("/edc/commentinsight/");
+                expect(this.collection.url()).toHaveUrlPath("/commentinsight/");
             });
         });
 
         context("when the collection does *not* have the 'insights' attribute", function() {
             it("returns the url for fetching all the activities for the entity", function() {
-                expect(this.collection.url()).toHaveUrlPath("/edc/activitystream/workspace/45");
+                expect(this.collection.url()).toHaveUrlPath("/activitystream/workspace/45");
             });
         });
 

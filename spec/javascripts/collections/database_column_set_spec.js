@@ -14,7 +14,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         });
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toContain("/edc/data/2/database/db1/schema/schema1/table/table1/column");
+            expect(this.columns.url()).toContain("/data/2/database/db1/schema/schema1/table/table1/column");
         })
 
         context("when the names need to be url encoded", function() {
@@ -32,7 +32,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
             });
 
             it("should url encode the appropriate entities", function() {
-                expect(this.columns.url()).toContain("/edc/data/2/database/b%2Fa%2Fr/schema/%20baz%20/table/!!!/column");
+                expect(this.columns.url()).toContain("/data/2/database/b%2Fa%2Fr/schema/%20baz%20/table/!!!/column");
             });
         });
 
@@ -67,7 +67,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         });
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toContain("/edc/data/2/database/db1/schema/schema1/view/view1/column");
+            expect(this.columns.url()).toContain("/data/2/database/db1/schema/schema1/view/view1/column");
         })
 
         context("when the names need to be url encoded", function() {
@@ -85,7 +85,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
             });
 
             it("should url encode the appropriate entities", function() {
-                expect(this.columns.url()).toContain("/edc/data/2/database/b%2Fa%2Fr/schema/%20baz%20/view/!!!/column");
+                expect(this.columns.url()).toContain("/data/2/database/b%2Fa%2Fr/schema/%20baz%20/view/!!!/column");
             });
         });
 
@@ -110,7 +110,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         })
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toMatchUrl('/edc/workspace/10/dataset/"10000"|"dca_demo"|"ddemo"|"QUERY"|"chorus_view"/column', {paramsToIgnore: ['page', 'rows']});
+            expect(this.columns.url()).toMatchUrl('/workspace/10/dataset/"10000"|"dca_demo"|"ddemo"|"QUERY"|"chorus_view"/column', {paramsToIgnore: ['page', 'rows']});
         })
     })
 

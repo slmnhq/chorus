@@ -402,7 +402,7 @@ describe("chorus.views.Activity", function() {
                 });
 
                 it("posts to the comment insight api", function() {
-                    expect(this.server.lastCreate().url).toBe("/edc/commentinsight/" + this.view.model.get("id") + "/promote");
+                    expect(this.server.lastCreate().url).toBe("/commentinsight/" + this.view.model.get("id") + "/promote");
                 });
 
                 describe("when the post completes", function() {

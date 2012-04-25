@@ -10,6 +10,6 @@ describe("chorus.models.TabularDataAnalyze", function() {
     })
 
     it("should have the correct url template", function() {
-        expect(this.analyze.url()).toContain("/edc/data/1/database/foo/schema/bar/table/baz/analyze");
+        expect(this.analyze.url()).toContain("/data/1/database/foo/schema/bar/table/baz/analyze");
     });
 });

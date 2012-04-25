@@ -6,11 +6,11 @@ describe("chorus.models.Artifact", function() {
     describe("#downloadUrl", function() {
         it("prefers fileId over id", function() { // because search results are not consistent with "regular" attachments
             this.model.set({fileId: "123"})
-            expect(this.model.downloadUrl()).toBe("/edc/file/123");
+            expect(this.model.downloadUrl()).toBe("/file/123");
         });
 
         it("uses id when fileId is not present", function() {
-            expect(this.model.downloadUrl()).toBe("/edc/file/97");
+            expect(this.model.downloadUrl()).toBe("/file/97");
         });
     });
 
@@ -31,11 +31,11 @@ describe("chorus.models.Artifact", function() {
     describe("#thumbnailUrl", function() {
         it("prefers fileId over id", function() { // because search results are not consistent with "regular" attachments
             this.model.set({fileId: "123"})
-            expect(this.model.thumbnailUrl()).toBe("/edc/file/123/thumbnail");
+            expect(this.model.thumbnailUrl()).toBe("/file/123/thumbnail");
         });
 
         it("uses id when fileId is not present", function() {
-            expect(this.model.thumbnailUrl()).toBe("/edc/file/97/thumbnail");
+            expect(this.model.thumbnailUrl()).toBe("/file/97/thumbnail");
         });
     });
 

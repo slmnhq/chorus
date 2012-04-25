@@ -25,13 +25,13 @@ describe("chorus.models.Dataset", function() {
 
     context("when the object has an id", function() {
         it("has the right url", function() {
-            var url = encodeURI('/edc/workspace/44/dataset/"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"');
+            var url = encodeURI('/workspace/44/dataset/"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"');
             expect(this.dataset.url()).toMatchUrl(url);
         });
 
         it("has the right url with an ugly ID", function() {
             this.dataset.set({id: "foo#bar"});
-            expect(this.dataset.url()).toBe("/edc/workspace/44/dataset/foo%23bar");
+            expect(this.dataset.url()).toBe("/workspace/44/dataset/foo%23bar");
         });
     });
 
@@ -41,7 +41,7 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("has the right url", function() {
-            expect(this.dataset.url()).toMatchUrl("/edc/workspace/44/dataset");
+            expect(this.dataset.url()).toMatchUrl("/workspace/44/dataset");
         });
     })
 

@@ -19,7 +19,7 @@ describe("chorus.models.DatabaseObject", function() {
             });
 
             it("uses the table exploration api", function() {
-                expect(this.databaseObject.url()).toContain("/edc/data/" + this.databaseObject.get("instance").id + "/database/%25foo%25/schema/b%2Fa%2Fr/table/a%20space")
+                expect(this.databaseObject.url()).toContain("/data/" + this.databaseObject.get("instance").id + "/database/%25foo%25/schema/b%2Fa%2Fr/table/a%20space")
             });
         });
 
@@ -33,7 +33,7 @@ describe("chorus.models.DatabaseObject", function() {
             });
 
             it("uses the table exploration api", function() {
-                expect(this.databaseObject.url()).toContain("/edc/data/" + this.databaseObject.get("instance").id + "/database/%25foo%25/schema/b%2Fa%2Fr/view/a%20space")
+                expect(this.databaseObject.url()).toContain("/data/" + this.databaseObject.get("instance").id + "/database/%25foo%25/schema/b%2Fa%2Fr/view/a%20space")
             });
         });
     });

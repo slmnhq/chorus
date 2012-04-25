@@ -285,7 +285,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                         "msgkey" : "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH"
                     }
                     var model = this.view.model
-                    var url = "/edc/workspace/" + model.get("workspaceId") + "/workfile/" +
+                    var url = "/workspace/" + model.get("workspaceId") + "/workfile/" +
                         model.get("id") + "/version/" + model.get("versionInfo").versionNum;
                     _.find(this.server.updates(), function(request){
                         return request.url === url ;

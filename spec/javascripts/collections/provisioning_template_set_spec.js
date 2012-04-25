@@ -9,7 +9,7 @@ describe("chorus.collections.ProvisioningTemplateSet", function() {
 
     it("should have the correct url", function() {
         var url = this.collection.url();
-        expect(url).toMatchUrl("/edc/provisioning/A4CProvisioner", {paramsToIgnore: ["page", "rows", "type"]});
+        expect(url).toMatchUrl("/provisioning/A4CProvisioner", {paramsToIgnore: ["page", "rows", "type"]});
         expect(url).toContainQueryParams({type: "template"});
     });
 });

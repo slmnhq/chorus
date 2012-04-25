@@ -12,7 +12,7 @@ describe("chorus.views.ImageWorkfileContent", function() {
         it("creates an image tag referencing the workfile", function() {
             var img = this.view.$("img")
             expect(img).toExist();
-            expect(img).toHaveAttr("src", "/edc/workspace/" + this.model.get("workspaceId") + "/workfile/" + this.model.get("id") + "/file/" + this.model.get("versionInfo").versionFileId)
+            expect(img).toHaveAttr("src", "/workspace/" + this.model.get("workspaceId") + "/workfile/" + this.model.get("id") + "/file/" + this.model.get("versionInfo").versionFileId)
         })
     })
 });

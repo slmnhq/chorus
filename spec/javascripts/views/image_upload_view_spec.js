@@ -177,7 +177,7 @@ describe("chorus.views.ImageUpload", function() {
 
                 context("when the user submits a good image after a bad image", function() {
                     beforeEach(function() {
-                        this.originalUrl = '/edc/userimage/foo.png';
+                        this.originalUrl = '/userimage/foo.png';
                         this.view.$("img").attr("src", this.originalUrl);
                         this.fileList = [
                             {fileName: 'foo.png'}

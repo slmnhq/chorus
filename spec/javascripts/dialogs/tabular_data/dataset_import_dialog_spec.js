@@ -339,7 +339,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                 });
 
                 it("uploads the specified file", function() {
-                    expect(this.dialog.uploadObj.url).toEqual("/edc/workspace/242/csv/sample")
+                    expect(this.dialog.uploadObj.url).toEqual("/workspace/242/csv/sample")
                     expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
                 });
 

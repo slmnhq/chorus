@@ -834,7 +834,7 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("returns an analyze model with the right url", function() {
-            expect(this.tabularData.analyze().url()).toBe("/edc/data/2/database/db/schema/myScheme/table/MrTable/analyze")
+            expect(this.tabularData.analyze().url()).toBe("/data/2/database/db/schema/myScheme/table/MrTable/analyze")
         });
     });
 });

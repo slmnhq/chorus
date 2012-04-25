@@ -45,7 +45,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
     describe("#setup", function() {
         it("fetches the model", function() {
-            expect(this.server.requests[0].url).toBe("/edc/workspace/" + this.model.get('workspaceId'));
+            expect(this.server.requests[0].url).toBe("/workspace/" + this.model.get('workspaceId'));
         });
 
         it("sets the workspace id, for prioritizing search", function() {

@@ -32,7 +32,7 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
             params.description = description;
         }
 
-        $.post("/edc/workspace/" + this.selectedItem().get("id") + "/workfile", params,
+        $.post("/workspace/" + this.selectedItem().get("id") + "/workfile", params,
             function(data) {
                 if (data.status == "ok") {
                     self.closeModal();

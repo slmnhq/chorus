@@ -50,7 +50,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
         })
 
         it("fetches the draft", function() {
-            expect(this.server.lastFetch().url).toBe("/edc/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/draft");
+            expect(this.server.lastFetch().url).toBe("/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/draft");
             expect(this.server.lastFetch().method).toBe("GET");
         });
 
@@ -60,7 +60,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
             })
 
             it("deletes the draft", function() {
-                expect(this.server.lastDestroy().url).toBe("/edc/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/draft");
+                expect(this.server.lastDestroy().url).toBe("/workspace/" + this.workfile.get('workspaceId') + "/workfile/" + this.workfile.get('id') + "/draft");
             })
 
             context("when the delete succeeds", function() {

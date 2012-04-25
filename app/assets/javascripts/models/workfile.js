@@ -34,7 +34,7 @@
         },
 
         thumbnailUrl: function() {
-            return "/edc/workspace/" + this.get('workspaceId') + "/workfile/" + this.get('id') + "/version/" + this.get('versionInfo').versionNum + "/thumbnail";
+            return "/workspace/" + this.get('workspaceId') + "/workfile/" + this.get('id') + "/version/" + this.get('versionInfo').versionNum + "/thumbnail";
         },
 
         initialize: function() {
@@ -187,7 +187,7 @@
                 path += this.get("draftInfo").draftFileId;
                 url.path(path)
             } else if (this.get("versionInfo")) {
-                url = URI("/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.id + "/file/" + this.get("versionInfo").versionFileId);
+                url = URI("/workspace/" + this.get("workspaceId") + "/workfile/" + this.id + "/file/" + this.get("versionInfo").versionFileId);
             } else {
                 url.path(path)
             }
@@ -218,7 +218,7 @@
                 var overrides = {};
 
                 if (this.get("versionInfo") && this.get("versionInfo").versionNum) {
-                    overrides.url = "/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version/" + this.get("versionInfo").versionNum;
+                    overrides.url = "/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version/" + this.get("versionInfo").versionNum;
                     attrs['lastUpdatedStamp'] = this.get("versionInfo").lastUpdatedStamp;
                 }
 
@@ -231,7 +231,7 @@
 
             var overrides = {
                 method: 'create',
-                url: "/edc/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version"
+                url: "/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version"
             };
 
             return this._super("save", [attrs, _.extend(options, overrides)])

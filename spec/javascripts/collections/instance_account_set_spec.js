@@ -42,7 +42,7 @@ describe("chorus.collections.InstanceAccountSet", function() {
         it("has the instanceId param", function() {
             var uri = new URI(this.accountSet.url());
 
-            expect(uri.path()).toMatchUrl("/edc/instance/accountmap");
+            expect(uri.path()).toMatchUrl("/instance/accountmap");
             expect(uri.search(true).instanceId).toBe("1");
         });
     });

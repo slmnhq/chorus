@@ -813,12 +813,12 @@ describe("chorus.views.Base", function() {
 
             context("when an imageUrl is provided", function() {
                 beforeEach(function() {
-                    this.view.options.imageUrl = "edc/image/foo/bar.png";
+                    this.view.options.imageUrl = "image/foo/bar.png";
                     this.view.render();
                 })
 
                 it("renders the image", function() {
-                    expect(this.view.$(".icon")).toHaveAttr("src", "edc/image/foo/bar.png")
+                    expect(this.view.$(".icon")).toHaveAttr("src", "image/foo/bar.png")
                 })
 
                 context("and an imageTitle is provided", function() {

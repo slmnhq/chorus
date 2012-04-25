@@ -39,7 +39,7 @@ describe("chorus.models.CSVImport", function() {
 
     it("has the right url", function() {
         this.model = fixtures.csvImport({workspaceId: "23"})
-        expect(this.model.url()).toBe("/edc/workspace/23/csv/import");
+        expect(this.model.url()).toBe("/workspace/23/csv/import");
 
     })
     context("with comma delimiters", function() {

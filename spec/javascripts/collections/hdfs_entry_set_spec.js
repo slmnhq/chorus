@@ -7,7 +7,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
         });
 
         it("has the right URL", function() {
-            expect(this.hdfsEntrySet.url()).toContain("/edc/data/" + this.hdfsEntrySet.attributes.instance.id + "/hdfs/%2Fdata%2Fsomewhere");
+            expect(this.hdfsEntrySet.url()).toContain("/data/" + this.hdfsEntrySet.attributes.instance.id + "/hdfs/%2Fdata%2Fsomewhere");
         });
 
         describe("add", function() {

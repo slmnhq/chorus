@@ -86,7 +86,7 @@ describe("chorus.router", function() {
                 spyOn(chorus.pages.LoginPage.prototype, "initialize").andCallThrough();
                 this.server.respondWith(
                     'GET',
-                    '/edc/auth/checkLogin/?authid=1234',
+                    '/auth/checkLogin/?authid=1234',
                     this.prepareResponse({ status: "fail" }));
             })
 

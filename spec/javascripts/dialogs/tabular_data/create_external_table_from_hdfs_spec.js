@@ -103,7 +103,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     var request = this.server.lastCreate();
                     var statement = "testisgreat (column_1 text, column_2 text, column_3 text, column_4 text, column_5 text)";
 
-                    expect(request.url).toMatchUrl("/edc/workspace/" + workspaceId + "/externaltable");
+                    expect(request.url).toMatchUrl("/workspace/" + workspaceId + "/externaltable");
                     expect(request.params().statement).toBe(statement);
                     expect(request.params().hasHeader).toBe('false');
                 });
@@ -139,7 +139,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     var request = this.server.lastCreate();
                     var statement = "bar_txt (col1 text, col2 text, col3 text, col_4 text, col_5 text)";
 
-                    expect(request.url).toMatchUrl("/edc/workspace/" + workspaceId + "/externaltable");
+                    expect(request.url).toMatchUrl("/workspace/" + workspaceId + "/externaltable");
                     expect(request.params().path).toBe("/foo/bar.txt");
                     expect(request.params().instanceId).toBe("234");
                     expect(request.params().statement).toBe(statement);

@@ -12,7 +12,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
         })
 
         it("destroys a model with the right entityId, entityType, and id", function() {
-            expect(this.server.lastDestroy().url).toMatchUrl("/edc/comment/workspace/10000/" + this.activity.id);
+            expect(this.server.lastDestroy().url).toMatchUrl("/comment/workspace/10000/" + this.activity.id);
         });
 
         describe("when the delete succeeds", function() {
@@ -90,7 +90,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
         });
 
         it("destroys a model with the right entityId, entityType, and id", function() {
-            expect(this.server.lastDestroy().url).toMatchUrl("/edc/comment/workspace/10000/12345");
+            expect(this.server.lastDestroy().url).toMatchUrl("/comment/workspace/10000/12345");
         });
 
         it("sets the alert title correctly", function() {

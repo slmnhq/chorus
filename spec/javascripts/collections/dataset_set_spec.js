@@ -9,7 +9,7 @@ describe("chorus.collections.DatasetSet", function() {
 
     describe("#url", function() {
         it("is correct", function() {
-            expect(this.collection.url({rows: 10, page: 1})).toMatchUrl("/edc/workspace/10000/dataset?rows=10&page=1");
+            expect(this.collection.url({rows: 10, page: 1})).toMatchUrl("/workspace/10000/dataset?rows=10&page=1");
         });
 
         context("with filter type", function() {
@@ -55,7 +55,7 @@ describe("chorus.collections.DatasetSet", function() {
             });
 
             it("should encode the url", function() {
-                expect(this.collection.url()).toContain("/edc/data/10000/database/%25foo%25/schema/%20bar%20");
+                expect(this.collection.url()).toContain("/data/10000/database/%25foo%25/schema/%20bar%20");
             });
         });
     });

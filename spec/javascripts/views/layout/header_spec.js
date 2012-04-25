@@ -623,7 +623,7 @@ describe("chorus.views.Header", function() {
                 });
 
                 it("should log the current user out", function() {
-                    expect(this.server.lastRequest().url).toMatchUrl('/edc/auth/logout/', {paramsToIgnore: "authid"});
+                    expect(this.server.lastRequest().url).toMatchUrl('/auth/logout/', {paramsToIgnore: "authid"});
                 });
 
                 context("when the logout and login finish", function() {

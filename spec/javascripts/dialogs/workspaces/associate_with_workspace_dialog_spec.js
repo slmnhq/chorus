@@ -90,7 +90,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             });
 
             it("calls the API for associating new source tables with a workspace", function() {
-                expect(_.last(this.server.requests).url).toMatchUrl("/edc/workspace/" + this.workspace.get("id") + "/dataset");
+                expect(_.last(this.server.requests).url).toMatchUrl("/workspace/" + this.workspace.get("id") + "/dataset");
                 expect(_.last(this.server.requests).params()).toEqual({
                     type: "SOURCE_TABLE",
                     datasetIds: this.model.id
@@ -181,7 +181,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             });
 
             it("calls the API", function() {
-                expect(_.last(this.server.requests).url).toMatchUrl("/edc/workspace/987/dataset/" + this.model.get("id"));
+                expect(_.last(this.server.requests).url).toMatchUrl("/workspace/987/dataset/" + this.model.get("id"));
                 expect(_.last(this.server.requests).params()).toEqual({
                     targetWorkspaceId: this.workspace.get("id"),
                     objectName: this.model.get("objectName")

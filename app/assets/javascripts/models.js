@@ -15,7 +15,7 @@ chorus.models = {
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
             var context = _.extend({}, this.attributes, { entityId: this.entityId, entityType: this.entityType });
             if (_.isFunction(this.urlTemplateAttributes)) {_.extend(context, this.urlTemplateAttributes());}
-            var uri = new URI("/edc/" + Handlebars.compile(template, {noEscape: true})(context));
+            var uri = new URI("/" + Handlebars.compile(template, {noEscape: true})(context));
             if (this.urlParams) {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
                 uri.addSearch(params);
@@ -248,7 +248,7 @@ chorus.collections = {
             }, options);
 
             var template = _.isFunction(this.urlTemplate) ? this.urlTemplate(options) : this.urlTemplate;
-            var uri = new URI("/edc/" + Handlebars.compile(template, {noEscape: true})(this.attributes));
+            var uri = new URI("/" + Handlebars.compile(template, {noEscape: true})(this.attributes));
 
             if (this.urlParams) {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;

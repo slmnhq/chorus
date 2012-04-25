@@ -3431,7 +3431,7 @@ beforeEach(function() {
 
                         {
                             "entityType": "hdfs",
-                            "id": "10020|/webui/js/chorus/app/views/EdcViews.js",
+                            "id": "10020|/webui/js/chorus/app/viewsViews.js",
                             "name": "EdcViews.js",
                             "path": "/webui/js/chorus/app/views",
                             isBinary: false,

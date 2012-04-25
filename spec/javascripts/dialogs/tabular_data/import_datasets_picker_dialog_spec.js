@@ -18,7 +18,7 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
 
         it("fetches the results sorted by objectName", function() {
             var url = this.server.lastFetch().url
-            expect(url).toHaveUrlPath("/edc/workspace/33/dataset");
+            expect(url).toHaveUrlPath("/workspace/33/dataset");
             expect(url).toContainQueryParams(options);
         });
 

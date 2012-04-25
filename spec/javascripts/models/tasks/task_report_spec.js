@@ -5,6 +5,6 @@ describe("chorus.models.TaskReport", function() {
 
     it("has the right url", function() {
         this.model.set({"id": "45"});
-        expect(this.model.url()).toMatchUrl("/edc/task/45");
+        expect(this.model.url()).toMatchUrl("/task/45");
     });
 });

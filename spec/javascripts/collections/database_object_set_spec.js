@@ -17,7 +17,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
         it("is correct", function() {
             var url = this.collection.url({ rows: 10, page: 1});
             expect(url).toContainQueryParams({ rows: 10, page: 1, type: "meta" });
-            expect(url).toHaveUrlPath("/edc/data/10000/database/some_database/schema/some_schema");
+            expect(url).toHaveUrlPath("/data/10000/database/some_database/schema/some_schema");
         });
 
         context("when the url needs to be encoded", function() {
@@ -28,7 +28,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
             });
 
             it("should encode the url", function() {
-                expect(this.collection.url()).toContain("/edc/data/10000/database/some%25database/schema/some%20schema");
+                expect(this.collection.url()).toContain("/data/10000/database/some%25database/schema/some%20schema");
             });
         });
 
@@ -39,7 +39,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
 
             it("should include the filter in the url", function() {
                 var url = this.collection.url({rows: 10, page: 1});
-                expect(url).toHaveUrlPath("/edc/data/10000/database/some_database/schema/some_schema");
+                expect(url).toHaveUrlPath("/data/10000/database/some_database/schema/some_schema");
                 expect(url).toContainQueryParams({ rows: 10, page: 1, filter: "foo" });
             });
         });
@@ -69,7 +69,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
         it("triggers an API query for the given term", function() {
             this.collection.search("search term");
             expect(this.server.lastFetch().url).toMatchUrl(
-                "/edc/data/10000/database/some_database/schema/some_schema?filter=search+term",
+                "/data/10000/database/some_database/schema/some_schema?filter=search+term",
                 {paramsToIgnore: ["type", "page", "rows"]}
             );
         });

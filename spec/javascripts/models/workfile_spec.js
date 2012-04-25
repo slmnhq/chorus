@@ -15,7 +15,7 @@ describe("chorus.models.Workfile", function() {
     describe("#thumbnailUrl", function() {
         it("is correct", function() {
             this.model.get("versionInfo").versionNum = 6
-            expect(this.model.thumbnailUrl()).toBe("/edc/workspace/10000/workfile/10020/version/6/thumbnail");
+            expect(this.model.thumbnailUrl()).toBe("/workspace/10000/workfile/10020/version/6/thumbnail");
         });
     });
 
@@ -228,7 +228,7 @@ describe("chorus.models.Workfile", function() {
         });
 
         it("has the right backend URL", function() {
-            expect(this.model.url()).toBe("/edc/workspace/10/workfile/5");
+            expect(this.model.url()).toBe("/workspace/10/workfile/5");
         });
 
         describe("#showUrl", function() {
@@ -262,11 +262,11 @@ describe("chorus.models.Workfile", function() {
             });
 
             it("has the right download URL", function() {
-                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/12345?download=true&iebuster=12345");
+                expect(this.model.downloadUrl()).toBe("/workspace/10/workfile/5/file/12345?download=true&iebuster=12345");
             });
 
             it("has the right download URL, even if iebuster is appended as a parameter", function() {
-                expect(this.model.downloadUrl()).toContain("/edc/workspace/10/workfile/5/file/12345")
+                expect(this.model.downloadUrl()).toContain("/workspace/10/workfile/5/file/12345")
                 expect(this.model.downloadUrl()).toContain("?")
                 expect(this.model.downloadUrl()).toContain("download=true");
                 expect(this.model.downloadUrl()).toContain("iebuster=12345");
@@ -280,7 +280,7 @@ describe("chorus.models.Workfile", function() {
             });
 
             it("has the right download URL", function() {
-                expect(this.model.downloadUrl()).toBe("/edc/workspace/10/workfile/5/file/99999?download=true&iebuster=12345");
+                expect(this.model.downloadUrl()).toBe("/workspace/10/workfile/5/file/99999?download=true&iebuster=12345");
             });
         })
     });
@@ -499,7 +499,7 @@ describe("chorus.models.Workfile", function() {
             })
 
             it("fetches the correct url", function() {
-                expect(this.server.lastFetch().url).toBe("/edc/workspace/10000/workfile/10020")
+                expect(this.server.lastFetch().url).toBe("/workspace/10000/workfile/10020")
             })
         })
 
@@ -511,7 +511,7 @@ describe("chorus.models.Workfile", function() {
             })
 
             it("fetches the correct url", function() {
-                expect(this.server.lastFetch().url).toBe("/edc/workspace/10000/workfile/10020/version/88")
+                expect(this.server.lastFetch().url).toBe("/workspace/10000/workfile/10020/version/88")
             })
         })
     })
@@ -546,7 +546,7 @@ describe("chorus.models.Workfile", function() {
                 })
 
                 it("saves to the correct url", function() {
-                    expect(this.server.lastUpdate().url).toBe("/edc/workspace/10000/workfile/10020/version/99")
+                    expect(this.server.lastUpdate().url).toBe("/workspace/10000/workfile/10020/version/99")
                 });
                 it("saves with the versionInfo lastUpdatedStamp", function() {
                     expect(this.server.lastUpdate().requestBody).toContain("THEVERSIONSTAMP");
@@ -560,7 +560,7 @@ describe("chorus.models.Workfile", function() {
                 })
 
                 it("saves to the correct url", function() {
-                    expect(this.server.lastCreate().url).toBe("/edc/workspace/10000/workfile/10020/version")
+                    expect(this.server.lastCreate().url).toBe("/workspace/10000/workfile/10020/version")
                 })
             })
         })

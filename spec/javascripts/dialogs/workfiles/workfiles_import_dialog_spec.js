@@ -20,7 +20,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
 
         it("has the right action url", function() {
-            expect(this.dialog.$("form").attr("action")).toBe("/edc/workspace/4/workfile");
+            expect(this.dialog.$("form").attr("action")).toBe("/workspace/4/workfile");
         });
 
         it("disables the upload button", function() {

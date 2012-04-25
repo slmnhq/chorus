@@ -6,7 +6,7 @@ describe("chorus.collections.CommentSet", function() {
 
     describe("#url", function() {
         it("has the workspace id in the url", function() {
-            expect(this.commentSet.url()).toContain("/edc/comment/workspace/17");
+            expect(this.commentSet.url()).toContain("/comment/workspace/17");
         });
     });
 });

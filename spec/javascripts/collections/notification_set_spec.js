@@ -15,7 +15,7 @@ describe("chorus.collections.NotificationSet", function() {
     describe("#url", function() {
         context("when constructed with no type option", function() {
             it("is correct", function() {
-                expect(this.collection.url()).toHaveUrlPath("/edc/notification")
+                expect(this.collection.url()).toHaveUrlPath("/notification")
             });
         });
 
@@ -25,7 +25,7 @@ describe("chorus.collections.NotificationSet", function() {
             });
 
             it("is correct", function() {
-                expect(this.collection.url()).toMatchUrl("/edc/notification?type=unread", { paramsToIgnore: ["page", "rows" ]})
+                expect(this.collection.url()).toMatchUrl("/notification?type=unread", { paramsToIgnore: ["page", "rows" ]})
             });
         });
     });
@@ -104,7 +104,7 @@ describe("chorus.collections.NotificationSet", function() {
         });
 
         it("calls the correct API", function() {
-            expect(this.server.lastUpdate().url).toBe("/edc/notification/101,102,103,104/read")
+            expect(this.server.lastUpdate().url).toBe("/notification/101,102,103,104/read")
         });
 
         describe("when the call succeeds", function() {

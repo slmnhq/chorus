@@ -30,7 +30,7 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
 
         it("saves the model with the fields from the form with the correct post url", function() {
             expect(Backbone.Model.prototype.save).toHaveBeenCalled()
-            expect(this.server.lastCreate().url).toBe("/edc/workspace/44/workfile/55/version");
+            expect(this.server.lastCreate().url).toBe("/workspace/44/workfile/55/version");
         });
 
         describe("when the save completes", function() {

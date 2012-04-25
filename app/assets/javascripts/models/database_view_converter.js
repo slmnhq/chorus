@@ -11,7 +11,7 @@ chorus.models.DatabaseViewConverter = chorus.models.Base.extend({
     },
 
     url: function() {
-        return "/edc/workspace/" + this.from.get("workspace").id
+        return "/workspace/" + this.from.get("workspace").id
             + "/dataset/" + encodeURIComponent(this.from.get("id"))
             + "/convert";
     }

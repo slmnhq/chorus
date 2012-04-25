@@ -9,7 +9,7 @@ describe("chorus.models.CommentInsight", function() {
         });
 
         it("has the right url", function() {
-            expect(this.model.url()).toBe("/edc/commentinsight/41/promote");
+            expect(this.model.url()).toBe("/commentinsight/41/promote");
         });
     });
 
@@ -22,7 +22,7 @@ describe("chorus.models.CommentInsight", function() {
             expect(this.insightCount).toBeA(chorus.models.Base);
 
             this.insightCount.fetch();
-            expect(this.server.lastFetch().url).toHaveUrlPath("/edc/commentinsight/count");
+            expect(this.server.lastFetch().url).toHaveUrlPath("/commentinsight/count");
         });
 
         it("includes urlParams, if provided", function() {

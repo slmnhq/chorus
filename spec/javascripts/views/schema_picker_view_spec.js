@@ -78,7 +78,7 @@ describe("chorus.views.SchemaPicker", function() {
                 });
 
                 it("fetches the list of instances", function() {
-                    expect(this.server.requests[0].url).toMatch("/edc/instance/");
+                    expect(this.server.requests[0].url).toMatch("/instance/");
                 });
 
                 itDisplaysLoadingPlaceholderFor('instance');
@@ -158,7 +158,7 @@ describe("chorus.views.SchemaPicker", function() {
                             });
 
                             it("fetches the list of databases", function() {
-                                expect(this.server.requests[1].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database");
+                                expect(this.server.requests[1].url).toMatch("/instance/" + this.selectedInstance.get('id') + "/database");
                             });
 
                             itSortsTheSelectOptionsAlphabetically('database')
@@ -267,7 +267,7 @@ describe("chorus.views.SchemaPicker", function() {
                                     itTriggersTheChangeEvent(false);
 
                                     it("fetches the list of schemas", function() {
-                                        expect(this.server.requests[2].url).toMatch("/edc/instance/" + this.selectedInstance.get('id') + "/database/" + this.selectedDatabase.get("name") + "/schema");
+                                        expect(this.server.requests[2].url).toMatch("/instance/" + this.selectedInstance.get('id') + "/database/" + this.selectedDatabase.get("name") + "/schema");
                                     });
 
                                     itShowsUnavailableTextWhenResponseIsEmptyFor('schema');

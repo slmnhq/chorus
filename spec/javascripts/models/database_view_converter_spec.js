@@ -6,7 +6,7 @@ describe("chorus.models.DatabaseViewConverter", function() {
     });
 
     it("has the right url", function() {
-        expect(this.model.url()).toBe("/edc/workspace/123/dataset/A%7CB%7CC/convert");
+        expect(this.model.url()).toBe("/workspace/123/dataset/A%7CB%7CC/convert");
     });
 
     describe("#databaseView", function() {
