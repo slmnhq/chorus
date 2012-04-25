@@ -15,6 +15,10 @@
 /tmp
 .idea/
 .DS_Store
+.jhw-cache
+
+
+
 
 # Ignore ctags file
 tags
