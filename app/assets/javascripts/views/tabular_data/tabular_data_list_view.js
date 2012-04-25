@@ -63,11 +63,14 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
         var clickedBox = $(e.currentTarget);
         var index = this.$("> li input[type=checkbox]").index(clickedBox);
         var isChecked = clickedBox.prop("checked");
+        var model = this.collection.at(index);
 
         if (isChecked) {
-            this.selectedDatasets.add(this.collection.at(index));
+            if (!this.selectedDatasets.contains(model)) {
+                this.selectedDatasets.add(model);
+            }
         } else {
-            this.selectedDatasets.remove(this.collection.at(index));
+            this.selectedDatasets.remove(model);
         }
 
         chorus.PageEvents.broadcast("tabularData:checked", this.selectedDatasets);

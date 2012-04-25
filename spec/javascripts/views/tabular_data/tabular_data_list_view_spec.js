@@ -1,9 +1,9 @@
 describe("chorus.views.TabularDataList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatabaseObjectSet([
-            newFixtures.dataset.chorusView({ hasCredentials: true }),
-            newFixtures.dataset.sandboxTable({ hasCredentials: true }),
-            newFixtures.dataset.sourceTable({ hasCredentials: true })
+            newFixtures.dataset.chorusView({ hasCredentials: true, objectName: "foo" }),
+            newFixtures.dataset.sandboxTable({ hasCredentials: true, objectName: "bar" }),
+            newFixtures.dataset.sourceTable({ hasCredentials: true, objectName: "baz" })
         ], { instanceId: "1", databaseName: "two", schemaName: "three" });
         this.collection.loaded = true;
 
