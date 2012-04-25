@@ -1,4 +1,4 @@
-@import "../_common.scss";
+@import "_common.scss";
 
 .pick_workspace {
 
@@ -10,7 +10,7 @@
     &.dialog .dialog_content {
         padding: 0;
     }
-    
+
     .modal_controls {
         margin: 0;
         padding: 14px;

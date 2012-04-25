@@ -1,4 +1,4 @@
-@import "../_common.scss";
+@import "_common.scss";
 
 .alert {
     .guts {
@@ -46,7 +46,7 @@
 
         .body {
             margin-top: 10px;
-            
+
             p {
                 padding: 10px;
                 overflow-y: auto;

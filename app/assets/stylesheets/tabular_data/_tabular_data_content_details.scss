@@ -1,4 +1,4 @@
-@import "../_common";
+@import "_common.scss";
 
 @mixin chart_icon($name) {
     .#{$name}.chart_icon, .chorusview {

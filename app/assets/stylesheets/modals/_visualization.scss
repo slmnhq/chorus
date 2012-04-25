@@ -1,3 +1,5 @@
+@import "_common.scss";
+
 @mixin chart_icon($name){
     .#{$name}.chart_icon {
         background-image: url("/images/visualizations/dialog/#{$name}_off.png");

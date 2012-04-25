@@ -1,9 +1,11 @@
+@import "_common.scss";
+
 .dataset_filter_wizard {
 
     .filter_content {
         padding: 0 10px;
     }
-    
+
     .gradient_top {
         height: 10px;
         @include background-image(linear-gradient($content-details-info-bar-background-color, $body-background-color));

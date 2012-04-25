@@ -1,4 +1,4 @@
-@import "../_common";
+@import "_common";
 
 .breadcrumbs {
     @include background-image(linear-gradient($body-glow-color, $body-background-color));
