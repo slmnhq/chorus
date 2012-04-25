@@ -12,23 +12,39 @@ describe InstanceCredentialsController do
         log_in admin
       end
 
-      context "shared credentials" do
-        it "get saved correctly" do
-          post :create, :credential => {:instance_id => instance.id, :username => "lenny", :password => "secret", :shared => true}
-          response.code.should == "201"
-          rehydrated_credential = InstanceCredential.find(decoded_response.id)
-          rehydrated_credential.should be_present
-          rehydrated_credential.username.should == "lenny"
-          rehydrated_credential.password.should == "secret"
-          rehydrated_credential.owner.should == admin
-          rehydrated_credential.instance.should == instance
-          rehydrated_credential.shared.should be_true
+      context "for a shared credentials instance" do
+        before do
+          instance.update_attribute :shared, true
+        end
+
+        context "that does not already have credentials stored" do
+          it "get saved correctly" do
+            post :create, :instance_id => instance.id, :credential => { :username => "lenny", :password => "secret"}
+            response.code.should == "201"
+            rehydrated_credential = InstanceCredential.find(decoded_response.id)
+            rehydrated_credential.should be_present
+            rehydrated_credential.username.should == "lenny"
+            rehydrated_credential.password.should == "secret"
+            rehydrated_credential.owner.should == admin
+            rehydrated_credential.instance.should == instance
+          end
+        end
+
+        context "that already has credentials stored" do
+          before do
+            FactoryGirl.create(:instance_credential, :instance => instance)
+          end
+
+          it "fails" do
+            post :create, :instance_id => instance.id, :credential => {:username => "lenny", :password => "secret"}
+            response.code.should == "422"
+          end
         end
       end
 
-      context "individual credentials" do
+      context "for an individual credentials instance" do
         it "get saved correctly" do
-          post :create, :credential => {:instance_id => instance.id, :username => "lenny", :password => "secret"}
+          post :create, :instance_id => instance.id, :credential => {:username => "lenny", :password => "secret"}
           response.code.should == "201"
           rehydrated_credential = InstanceCredential.find(decoded_response.id)
           rehydrated_credential.should be_present
@@ -36,7 +52,6 @@ describe InstanceCredentialsController do
           rehydrated_credential.password.should == "secret"
           rehydrated_credential.owner.should == admin
           rehydrated_credential.instance.should == instance
-          rehydrated_credential.shared.should be_false
         end
       end
     end
@@ -46,23 +61,41 @@ describe InstanceCredentialsController do
         log_in instance_owner
       end
 
-      context "shared credentials" do
-        it "get saved correctly" do
-          post :create, :credential => {:instance_id => instance.id, :username => "lenny", :password => "secret", :shared => true}
-          response.code.should == "201"
-          rehydrated_credential = InstanceCredential.find(decoded_response.id)
-          rehydrated_credential.should be_present
-          rehydrated_credential.username.should == "lenny"
-          rehydrated_credential.password.should == "secret"
-          rehydrated_credential.owner.should == instance_owner
-          rehydrated_credential.instance.should == instance
-          rehydrated_credential.shared.should be_true
+      context "for a shared credentials instance" do
+        before do
+          instance.update_attribute :shared, true
+        end
+
+        context "that does not already have credentials stored" do
+          it "get saved correctly" do
+            post :create, :instance_id => instance.id, :credential => {:username => "lenny", :password => "secret"}
+            response.code.should == "201"
+            rehydrated_credential = InstanceCredential.find(decoded_response.id)
+            rehydrated_credential.should be_present
+            rehydrated_credential.username.should == "lenny"
+            rehydrated_credential.password.should == "secret"
+            rehydrated_credential.owner.should == instance_owner
+            rehydrated_credential.instance.should == instance
+          end
+        end
+
+        context "that already has credentials stored" do
+          before do
+            credential = instance.credentials.build :username => "foo", :password => "bar"
+            credential.owner = instance_owner
+            credential.save!
+          end
+
+          it "fails" do
+            post :create, :instance_id => instance.id, :credential => {:username => "lenny", :password => "secret"}
+            response.code.should == "422"
+          end
         end
       end
 
-      context "individual credentials" do
+      context "for an individual credentials instance" do
         it "get saved correctly" do
-          post :create, :credential => {:instance_id => instance.id, :username => "lenny", :password => "secret"}
+          post :create, :instance_id => instance.id, :credential => {:username => "lenny", :password => "secret"}
           response.code.should == "201"
           rehydrated_credential = InstanceCredential.find(decoded_response.id)
           rehydrated_credential.should be_present
@@ -70,7 +103,6 @@ describe InstanceCredentialsController do
           rehydrated_credential.password.should == "secret"
           rehydrated_credential.owner.should == instance_owner
           rehydrated_credential.instance.should == instance
-          rehydrated_credential.shared.should be_false
         end
       end
     end
@@ -80,22 +112,47 @@ describe InstanceCredentialsController do
         log_in joe
       end
 
-      it "creates only individual credentials" do
-        post :create, :credential => {:instance_id => instance.id, :username => "lenny", :password => "secret", :shared => true}
-        response.code.should == "201"
-        credentials = InstanceCredential.find(decoded_response.id)
-        credentials.should be_present
-        credentials.username.should == "lenny"
-        credentials.password.should == "secret"
-        credentials.owner.should == joe
-        credentials.instance.should == instance
-        credentials.shared.should be_false
+      context "for a shared credentials instance" do
+        before do
+          instance.update_attribute :shared, true
+        end
+
+        context "that does not already have credentials stored" do
+          it "fails" do
+            post :create, :instance_id => instance.id, :credential => {:username => "lenny", :password => "secret"}
+            response.code.should == "403"
+          end
+        end
+
+        context "that already has credentials stored" do
+          before do
+            InstanceCredential.create :instance_id => instance.id, :username => "foo", :password => "bar"
+          end
+
+          it "fails" do
+            post :create, :instance_id => instance.id, :credential => {:username => "lenny", :password => "secret"}
+            response.code.should == "403"
+          end
+        end
+      end
+
+      context "for an individual credentials instance" do
+        it "get saved correctly" do
+          post :create, :instance_id => instance.id, :credential => {:username => "lenny", :password => "secret"}
+          response.code.should == "201"
+          rehydrated_credential = InstanceCredential.find(decoded_response.id)
+          rehydrated_credential.should be_present
+          rehydrated_credential.username.should == "lenny"
+          rehydrated_credential.password.should == "secret"
+          rehydrated_credential.owner.should == joe
+          rehydrated_credential.instance.should == instance
+        end
       end
     end
   end
 
   describe "#update" do
-    let(:credential) {FactoryGirl.create :instance_credential, :instance => instance, :owner => instance_owner, :shared => false}
+    let(:credential) { FactoryGirl.create :instance_credential, :instance => instance, :owner => instance_owner }
 
     context "admin" do
       before do
@@ -103,14 +160,13 @@ describe InstanceCredentialsController do
       end
 
       it "succeeds" do
-        put :update, :id => credential.id, :credential => {:username => "changed", :password => "changed", :shared => true}
+        put :update, :instance_id => instance.id, :id => credential.id, :credential => {:username => "changed", :password => "changed"}
         response.code.should == "200"
-        credential = InstanceCredential.find(decoded_response.id)
-        credential.should be_present
-        credential.username.should == "changed"
-        credential.password.should == "changed"
-        credential.shared.should be_true
-        credential.owner.should == instance_owner
+        rehydrated_credential = InstanceCredential.find(decoded_response.id)
+        rehydrated_credential.should be_present
+        rehydrated_credential.username.should == "changed"
+        rehydrated_credential.password.should == "changed"
+        rehydrated_credential.owner.should == instance_owner
       end
     end
 
@@ -119,15 +175,20 @@ describe InstanceCredentialsController do
         log_in instance_owner
       end
 
-      it "succeeds" do
-        put :update, :id => credential.id, :credential => {:username => "changed", :password => "changed", :shared => true}
+      it "succeeds for user's credential" do
+        put :update, :instance_id => instance.id, :id => credential.id, :credential => {:username => "changed", :password => "changed"}
         response.code.should == "200"
         rehydrated_credential = InstanceCredential.find(decoded_response.id)
         rehydrated_credential.should be_present
         rehydrated_credential.username.should == "changed"
         rehydrated_credential.password.should == "changed"
-        rehydrated_credential.shared.should be_true
         rehydrated_credential.owner.should == instance_owner
+      end
+
+      it "fails for other's credential" do
+        credential.update_attribute :owner, joe
+        put :update, :instance_id => instance.id, :id => credential.id, :credential => {:username => "changed", :password => "changed"}
+        response.code.should == "403"
       end
     end
 
@@ -138,7 +199,7 @@ describe InstanceCredentialsController do
 
       context "someone else's credential'" do
         it "fails" do
-          put :update, :id => credential.id, :credential => {:username => "changed", :password => "changed", :shared => true}
+          put :update, :instance_id => instance.id, :id => credential.id, :credential => {:username => "changed", :password => "changed"}
           response.should be_forbidden
         end
       end
@@ -149,14 +210,13 @@ describe InstanceCredentialsController do
           credential.save!
         end
 
-        it "succeeds but does not let him set shared=true" do
-          put :update, :id => credential.id, :credential => {:username => "changed", :password => "changed", :shared => true}
+        it "succeeds" do
+          put :update, :instance_id => instance.id, :id => credential.id, :credential => {:username => "changed", :password => "changed"}
           response.code.should == "200"
           rehydrated_credential = InstanceCredential.find(decoded_response.id)
           rehydrated_credential.should be_present
           rehydrated_credential.username.should == "changed"
           rehydrated_credential.password.should == "changed"
-          rehydrated_credential.shared.should be_false
           rehydrated_credential.owner.should == joe
         end
       end

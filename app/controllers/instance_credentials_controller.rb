@@ -1,26 +1,29 @@
 class InstanceCredentialsController < ApplicationController
+  before_filter :load_instance
+  before_filter :load_credential, :only => [:update]
+
   def create
-    instance = Instance.find(params[:credential][:instance_id])
-    credential = InstanceCredential.new(params[:credential])
+    raise ActiveRecord::RecordInvalid.new(@instance) if @instance.shared? && @instance.credentials.count > 0
+    raise SecurityTransgression if @instance.shared? unless current_user.admin? or @instance.owner == current_user
+    credential = @instance.credentials.build params[:credential]
     credential.owner = current_user
-    credential.instance = instance
-    credential.shared = params[:credential][:shared] if current_user.admin? or current_user.id == instance.owner_id
     credential.save!
     present credential, :status => :created
   end
 
   def update
-    credential = InstanceCredential.find(params[:id])
-    raise SecurityTransgression unless (current_user.admin? || current_user.id == credential.owner_id)
+    raise SecurityTransgression unless (current_user.admin? || current_user.id == @credential.owner_id)
+    @credential.update_attributes params[:credential]
+    present @credential, :status => :ok
+  end
 
-    credential.attributes = params[:credential]
+  private
 
-    if params[:credential].has_key?(:shared) && (current_user.admin? || credential.instance.owner == current_user)
-      credential.shared = params[:credential][:shared]
-    end
+  def load_instance
+    @instance = Instance.find(params[:instance_id])
+  end
 
-    credential.save!
-
-    present credential, :status => :ok
+  def load_credential
+    @credential = InstanceCredential.find(params[:id])
   end
 end

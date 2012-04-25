@@ -18,14 +18,25 @@ describe InstanceCredentialMigrator, :type => :data_migration do
       end
 
       it "copies the necessary fields" do
-        InstanceCredentialMigrator.legacy_instance_credentials.each do |legacy|
-          credential = InstanceCredential.find(legacy["chorus_rails_instance_credentials_id"])
+        InstanceCredential.all.each do |credential|
+          legacy = Legacy.connection.select_one("SELECT edc_account_map.*, edc_instance.chorus_rails_instance_id, edc_user.chorus_rails_user_id
+                FROM edc_account_map
+                JOIN edc_instance ON edc_account_map.instance_id = edc_instance.id
+                JOIN edc_user ON edc_user.user_name = edc_account_map.user_name
+                WHERE chorus_rails_instance_credentials_id = #{credential.id}")
           credential.username.should == legacy["db_user_name"]
           credential.password.should == "secret"
-          credential.shared.should == (legacy["shared"] != "no")
           credential.owner_id.should == legacy["chorus_rails_user_id"].to_i
           credential.instance_id.should == legacy["chorus_rails_instance_id"].to_i
         end
+      end
+
+      it "marks instances as shared when shared credentials exist" do
+        Instance.find(Legacy.connection.select_one("SELECT chorus_rails_instance_id AS id FROM edc_instance WHERE id = '10020'")["id"]).should be_shared
+      end
+      
+      it "ignores the zombie credentials" do
+        InstanceCredential.where(:username => "zombie").should_not be_present
       end
     end
   end

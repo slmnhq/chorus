@@ -4,27 +4,43 @@ class InstanceCredentialMigrator
       Legacy.connection.add_column :edc_account_map, :chorus_rails_instance_credentials_id, :integer
     end
 
-    legacy_instance_credentials.each do |credential|
-      new_credential = InstanceCredential.new
-      new_credential.username = credential["db_user_name"]
-      new_credential.password = decrypt_password(credential["db_password"], credential["secret_key"])
-      new_credential.shared = (credential["shared"] == "yes")
-      new_credential.owner_id = credential["chorus_rails_user_id"]
-      new_credential.instance_id = credential["chorus_rails_instance_id"]
-      new_credential.save!
+    legacy_instance_ids = Legacy.connection.select_values("SELECT DISTINCT(instance_id) from edc_account_map")
 
-      sql = "Update edc_account_map SET chorus_rails_instance_credentials_id = #{new_credential.id} WHERE id = '#{credential["id"]}'"
-      Legacy.connection.update(sql)
+    legacy_instance_ids.each do |legacy_instance_id|
+      legacy_credentials = legacy_instance_credentials legacy_instance_id
+
+      shared_legacy_credentials = legacy_credentials.reject do |legacy_credential|
+        legacy_credential["shared"] != "yes"
+      end.compact
+
+      if shared_legacy_credentials.present?
+        instance = Instance.find(shared_legacy_credentials.first["chorus_rails_instance_id"])
+        instance.update_attribute(:shared, true)
+        legacy_credentials = shared_legacy_credentials
+      end
+
+      legacy_credentials.each do |legacy_credential|
+        new_credential = InstanceCredential.new
+        new_credential.username = legacy_credential["db_user_name"]
+        new_credential.password = decrypt_password(legacy_credential["db_password"], legacy_credential["secret_key"])
+        new_credential.owner_id = legacy_credential["chorus_rails_user_id"]
+        new_credential.instance_id = legacy_credential["chorus_rails_instance_id"]
+        new_credential.save!
+
+        sql = "Update edc_account_map SET chorus_rails_instance_credentials_id = #{new_credential.id} WHERE id = '#{legacy_credential["id"]}'"
+        Legacy.connection.update(sql)
+      end
     end
   end
 
-  def self.legacy_instance_credentials
+  def self.legacy_instance_credentials(instance_id)
     Legacy.connection.select_all <<-EOSQL
       SELECT edc_account_map.*, edc_instance.chorus_rails_instance_id, edc_user.chorus_rails_user_id
       FROM edc_account_map
       JOIN edc_instance ON edc_account_map.instance_id = edc_instance.id
       JOIN edc_user ON edc_user.user_name = edc_account_map.user_name
       WHERE instance_provider = 'Greenplum Database'
+      AND instance_id = '#{instance_id}'
     EOSQL
   end
 
