@@ -1,7 +1,11 @@
 module Jasmine
   class Config
 
-    # Add your overrides or custom config code here
+    def src_files
+      Rails.application.assets["application"].dependencies.map do |asset|
+        "assets/" + asset.logical_path
+      end
+    end
 
   end
 end
