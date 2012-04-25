@@ -4,37 +4,39 @@ This file contains instructions to get started on Mac OSX.  If you are running L
 
 ##Bootstrap
 
+Install homebrew
+
   /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/master/Library/Contributions/install_homebrew.rb)"
 
 You need git
 
-  brew install git
+    brew install git
 
 Get someone who has rights to the repository to add your github account to the repo.
 Check that you can get to Github correctly:
 
-  ssh git@github.com
+    ssh git@github.com
 The response should have your username in it.  If it doesn't go to http://help.github.com/ssh-issues/
 
 Check out the repo in `~/workspace/chorusrails`, like so:
 
-  git clone git@github.com:GreenplumChorus/chorusrails.git ~/workspace/chorusrails
+    git clone git@github.com:GreenplumChorus/chorusrails.git ~/workspace/chorusrails
 
 ###Postgres
 
 Install postgres if you don't have it
 
-  brew install postgres
+    brew install postgres
 
 You may have to increase some memory limits:
 
-  sudo sysctl -w kern.sysv.shmall=65536
-  sudo sysctl -w kern.sysv.shmmax=16777216
+    sudo sysctl -w kern.sysv.shmall=65536
+    sudo sysctl -w kern.sysv.shmmax=16777216
 
 You can put these settings in your `/etc/sysctl.conf` file, and they will become effective whenever you boot:
 
-  kern.sysv.shmall=65536
-  kern.sysv.shmmax=16777216
+    kern.sysv.shmall=65536
+    kern.sysv.shmmax=16777216
 
 If you don't have a `/etc/sysctl.conf` file, just create one.
 
@@ -55,11 +57,11 @@ You need XCode for a compiler
 
 Mostly, you need to run
 
-  rvm implode
+    rvm implode
 
 You should also remove any references to RVM in your bash setup.  As a start, run...
 
-  grep -i rvm ~/.bash* | grep -v .bash_history
+    grep -i rvm ~/.bash* | grep -v .bash_history
 
 Which will list files that reference RVM.  Edit those files to remove rvm completely.
 
@@ -71,7 +73,7 @@ Start a new terminal.
 
 From the root directory of this project, run:
 
-  script/bootstrap.sh
+    script/bootstrap.sh
 
 This script
 
@@ -84,7 +86,7 @@ This script
 
 ## Development
 
-  cd ~/workspace/chorusrails && rails s
+    cd ~/workspace/chorusrails && rails s
 
 Application will be on http://localhost:3000
 
