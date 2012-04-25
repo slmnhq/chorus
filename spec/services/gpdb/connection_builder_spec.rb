@@ -144,5 +144,23 @@ describe Gpdb::ConnectionBuilder do
         e.record.errors.get(:connection).should == ["connection error"]
       end
     end
+
+    describe("switching from individual to shared") do
+      let!(:other_credentials) { FactoryGirl.create(:instance_credential, :instance => cached_instance) }
+      let!(:instance_owner_credentials) { cached_instance.owner_credentials }
+
+      before do
+        @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes.merge(:shared => true), owner)
+      end
+
+      it "sets the shared attribute" do
+        @updated_instance.should be_shared
+      end
+
+      it "deletes credentials other than those belonging to the instance owner" do
+        InstanceCredential.where(:id => instance_owner_credentials.id).should be_present
+        InstanceCredential.where(:id => other_credentials.id).should_not be_present
+      end
+    end
   end
 end

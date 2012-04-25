@@ -6,7 +6,7 @@ module Gpdb
     validates_presence_of :username, :password
     validate :connection_must_be_established
 
-    attr_reader :name, :host, :port, :database
+    attr_reader :name, :host, :port, :database, :shared
     attr_reader :username, :password
     attr_reader :owner
 
@@ -40,11 +40,13 @@ module Gpdb
       @username = attributes[:username]
       @password = attributes[:password]
       @owner = owner
+      @shared = !!attributes[:shared]
     end
 
     def save!(user)
       valid!
       save_instance!
+      InstanceCredential.destroy_all("instance_id = #{instance.id} AND id != #{credentials.id}") if instance.shared
       save_credentials!(user)
     end
 
@@ -71,7 +73,8 @@ module Gpdb
           :name => name,
           :host => host,
           :port => port,
-          :maintenance_db => database
+          :maintenance_db => database,
+          :shared => shared
       }
       instance.save!
     end
