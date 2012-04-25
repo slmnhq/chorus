@@ -26,7 +26,8 @@ module Gpdb
     end
 
     def self.for_update(connection_config, instance)
-      builder = new(connection_config, instance.owner)
+      new_owner = connection_config.delete(:owner) || instance.owner
+      builder = new(connection_config, new_owner)
       builder.instance = instance
       builder.credentials = instance.owner_credentials
       builder
@@ -45,9 +46,12 @@ module Gpdb
 
     def save!(user)
       valid!
-      save_instance!
-      InstanceCredential.destroy_all("instance_id = #{instance.id} AND id != #{credentials.id}") if instance.shared
-      save_credentials!(user)
+      Instance.transaction do
+        save_instance!
+        InstanceCredential.destroy_all("instance_id = #{instance.id} AND id != #{credentials.id}") if instance.shared
+        save_credentials!(user)
+        raise(ActiveRecord::RecordInvalid.new(self)) if !instance.shared && instance.owner_credentials.nil?
+      end
     end
 
     def valid!
@@ -76,6 +80,7 @@ module Gpdb
           :maintenance_db => database,
           :shared => shared
       }
+      instance.owner_id = owner.id
       instance.save!
     end
 
@@ -94,8 +99,9 @@ module Gpdb
 
       credentials.attributes = {
           :username => username,
-          :password => password
+          :password => password,
       }
+      credentials.owner_id = owner.id if shared
       credentials.save!
     end
 

@@ -162,5 +162,71 @@ describe Gpdb::ConnectionBuilder do
         InstanceCredential.where(:id => other_credentials.id).should_not be_present
       end
     end
+
+    describe("switching from shared to individual") do
+      before do
+        Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => true), owner)
+        @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => false), owner)
+      end
+
+      it "clears the shared attribute" do
+        @updated_instance.should be_present
+        @updated_instance.should_not be_shared
+      end
+    end
+
+    describe "giving ownership to another user" do
+      let(:new_owner) { FactoryGirl.create :user }
+
+      context "when the new owner doesn't have credentials for the instance" do
+        context "and the instance has shared credentials" do
+          before do
+            Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => true), owner)
+            @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => true, :owner => new_owner), owner)
+          end
+
+          it "should succeed and give the credentials to the new owner" do
+            @updated_instance.should be_present
+            @updated_instance.owner.should == new_owner
+            @updated_instance.credentials.count.should == 1
+            @updated_instance.owner_credentials.owner.should == new_owner
+            @updated_instance.owner_credentials.username.should == valid_attributes[:username]
+            @updated_instance.owner_credentials.password.should == valid_attributes[:password]
+          end
+        end
+
+        context "and the instance has individual credentials" do
+          it "should raise ActiveRecord::RecordInvalid" do
+            lambda {
+              Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:owner => new_owner), owner)
+            }.should raise_error(ActiveRecord::RecordInvalid)
+          end
+
+          it "does not update the instance" do
+            lambda {
+              Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:owner => new_owner, :name => "foobar"), owner)
+            }.should raise_error
+
+            cached_instance.reload.name.should_not == "foobar"
+          end
+        end
+      end
+
+      context "when the new owner has credentials for the instance" do
+        let!(:new_owner_credentials) { FactoryGirl.create :instance_credential, :owner => new_owner, :instance => cached_instance }
+
+        context "and the instance has individual credentials" do
+          before do
+            @old_credential_count = cached_instance.credentials.count
+            @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:owner => new_owner, :name => "foobar"), owner)
+          end
+          it "succeeds" do
+            @updated_instance.should be_present
+            @updated_instance.owner.should == new_owner
+            @updated_instance.credentials.count.should == @old_credential_count
+          end
+        end
+      end
+    end
   end
 end
