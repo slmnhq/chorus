@@ -63,7 +63,7 @@ You should also remove any references to RVM in your bash setup.  As a start, ru
 
 Which will list files that reference RVM.  Edit those files to remove rvm completely.
 
-Note that this will break RVM in other systems, notably the chorus-java project.  See the README in the chorus-java project for instructions on re-installing its Ruby with rbenv.
+Note that this will break RVM in other systems, notably the chorus-java project.  See the README in the chorus-java project for the new way to install Ruby.
 
 Start a new terminal.
 
