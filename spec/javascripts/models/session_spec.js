@@ -12,7 +12,7 @@ describe("chorus.models.Session", function() {
 
     describe("#save", function() {
         beforeEach(function() {
-            this.model = new models.Session({ userName : "johnjohn", password : "partytime"});
+            this.model = new models.Session({ userName: "johnjohn", password: "partytime"});
             this.model.save();
         });
 
@@ -35,7 +35,7 @@ describe("chorus.models.Session", function() {
 
         context("when the model has errors", function() {
             beforeEach(function() {
-                this.model.set({ errors : true });
+                this.model.set({ errors: true });
                 this.model.logout();
             })
 
@@ -113,7 +113,7 @@ describe("chorus.models.Session", function() {
 
     describe("#fetch", function() {
         beforeEach(function() {
-            this.model = new models.Session({ id : "1234", foo : "bar" });
+            this.model = new models.Session({ id: "1234", foo: "bar" });
             $.cookie("authid", "1234");
 
             spyOnEvent(this.model, "needsLogin");
@@ -210,7 +210,7 @@ describe("chorus.models.Session", function() {
         });
 
         it("should return a truthy value for a valid session", function() {
-            this.model.set({ userName : "barn", password : "door" });
+            this.model.set({ userName: "barn", password: "door" });
             expect(this.model.performValidation()).toBeTruthy();
         });
 

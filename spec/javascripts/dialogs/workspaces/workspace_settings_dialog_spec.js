@@ -48,9 +48,11 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             stubDefer();
             disableSpy = jasmine.createSpy("disable")
             spyOn(this.dialog, "makeEditor").andCallThrough();
-            spyOn($.fn, "cleditor").andReturn([{
-                disable: disableSpy
-            }])
+            spyOn($.fn, "cleditor").andReturn([
+                {
+                    disable: disableSpy
+                }
+            ])
             setLoggedInUser({ id: 11 });
             this.dialog.render();
         });
@@ -476,8 +478,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     context("the server responds with success", function() {
                         beforeEach(function() {
                             spyOnEvent(this.dialog.pageModel, "invalidated");
-                            this.server.respondWith([200, {'Content-Type': 'text/plain'}, '{"resource":[{"id":"9"}], "status": "ok"}']);
-                            this.server.respond();
+                            this.server.completeUpdateFor(this.dialog.pageModel);
                         });
 
                         it("closes the dialog", function() {
@@ -491,8 +492,9 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("the server responds with failure", function() {
                         beforeEach(function() {
-                            this.server.respondWith([200, {"Content-Type": "text/plain"}, '{"status": "fail", "message" : [{"message": "fake error message"}]}']);
-                            this.server.respond();
+                            this.server.lastUpdateFor(this.dialog.pageModel).fail([
+                                {"message": "fake error message"}
+                            ]);
                         });
 
                         it("stops the spinner", function() {
