@@ -97,19 +97,17 @@
                     window.scroll(0, 0);
                 };
 
-                navFunction();
-
-//                if (className === 'Login' || className === 'StyleGuide') {
-//                    navFunction();
-//                } else {
-//                    self.app.session.fetch({
-//                        success:function (session, resp) {
-//                            if (resp.status == "ok") {
-//                                navFunction();
-//                            }
-//                        }
-//                    });
-//                }
+                if (className === 'Login' || className === 'StyleGuide') {
+                    navFunction();
+                } else {
+                    self.app.session.fetch({
+                        success:function (session, resp) {
+                            if (resp.status == "ok") {
+                                navFunction();
+                            }
+                        }
+                    });
+                }
             };
         }
     });
