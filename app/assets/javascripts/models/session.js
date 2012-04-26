@@ -75,7 +75,7 @@ chorus.models.Session = chorus.models.Base.extend({
     },
 
     rememberPathBeforeLoggedOut: function() {
-        if (Backbone.history.fragment != "/logout") {
+        if (Backbone.history.fragment != "/logout" && Backbone.history.fragment != "/login") {
             this._pathBeforeLoggedOut = Backbone.history.fragment;
         } else {
             delete this._pathBeforeLoggedOut;

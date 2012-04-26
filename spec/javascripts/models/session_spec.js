@@ -289,6 +289,17 @@ describe("chorus.models.Session", function() {
                 });
             });
 
+            context("when navigating to login", function() {
+                beforeEach(function() {
+                    Backbone.history.fragment = "/login";
+                    this.session.rememberPathBeforeLoggedOut()
+                });
+
+                it("ignores the path", function() {
+                    expect(this.session.resumePath()).toBeFalsy();
+                });
+            });
+
             context("when navigating elsewhere", function() {
                 beforeEach(function() {
                     Backbone.history.fragment = "/elsewhere";
