@@ -110,7 +110,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
 
             context("when the resource does not respond to #instanceRequiringCredentials", function() {
                 beforeEach(function() {
-                    this.server.lastFetchFor(this.otherModel).fail([{
+                    this.server.lastFetchFor(this.otherModel).failNotFound([{
                         message: "Not found"
                     }]);
                 });

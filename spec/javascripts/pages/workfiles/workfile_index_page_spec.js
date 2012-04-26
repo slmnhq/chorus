@@ -67,7 +67,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
         it("goes to 404 when the workspace fetch fails", function() {
             spyOn(Backbone.history, "loadUrl");
-            this.server.lastFetchFor(this.page.workspace).fail();
+            this.server.lastFetchFor(this.page.workspace).failNotFound();
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
         });
     });

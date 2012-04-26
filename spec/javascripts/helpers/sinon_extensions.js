@@ -145,6 +145,7 @@ _.extend(sinon.fakeServer, {
     }
 });
 
+
 _.extend(sinon.FakeXMLHttpRequest.prototype, {
     succeed: function(models, pagination) {
         if (!_.isArray(models)) models = [models];
@@ -167,7 +168,10 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         );
     },
 
-    fail: function(message, resource) {
+    failNotFound: function(message, resource) {
+        this.fail(message, resource);
+    },
+    fail: function fail(message, resource) {
         resource || (resource = [])
         return this.respond(
             200,
