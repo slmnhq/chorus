@@ -1,6 +1,6 @@
 chorus.models.Session = chorus.models.Base.extend({
     constructorName: "Session",
-    urlTemplate: "sessions",
+    urlTemplate: "auth/login/",
 
     initialize: function() {
         this.sandboxPermissionsCreated = {}
@@ -68,11 +68,9 @@ chorus.models.Session = chorus.models.Base.extend({
 
     requestLogout: function(logoutSucceeded) {
         var self = this;
-        this.destroy({
-            success: function() {
-                self.clear();
-                logoutSucceeded();
-            }
+        $.get("/auth/logout/?authid=" + $.cookie("authid"), function() {
+            self.clear();
+            logoutSucceeded();
         });
     },
 
@@ -93,12 +91,12 @@ chorus.models.Session = chorus.models.Base.extend({
     },
 
     declareValidations: function(newAttrs) {
-        this.require("username", newAttrs);
+        this.require("userName", newAttrs);
         this.require("password", newAttrs);
     },
 
     attrToLabel: {
-        "username": "login.username",
+        "userName": "login.username",
         "password": "login.password"
     }
 });

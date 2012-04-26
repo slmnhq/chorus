@@ -12,18 +12,23 @@ describe("chorus.models.Session", function() {
 
     describe("#save", function() {
         beforeEach(function() {
-            this.model = new models.Session({ username : "johnjohn", password : "partytime"});
+            this.model = new models.Session({ userName : "johnjohn", password : "partytime"});
             this.model.save();
         });
 
         it("has the right url", function() {
-            expect(this.server.requests[0].url).toBe("/sessions");
+            expect(this.server.requests[0].url).toBe("/auth/login/");
         });
+
+        it("has the right method", function() {
+            expect(this.server.requests[0].method).toBe("POST");
+        });
+
     });
 
     describe("#logout", function() {
         beforeEach(function() {
-            this.model = new models.Session({ id: "1" });
+            this.model = new models.Session();
             this.needsLoginSpy = jasmine.createSpy();
             this.model.bind("needsLogin", this.needsLoginSpy);
             spyOn(chorus.router, "navigate")
@@ -58,13 +63,18 @@ describe("chorus.models.Session", function() {
             })
 
             it("calls the logout API", function() {
-                expect(this.server.lastDestroy().url).toBe("/sessions");
+                expect(this.server.requests[0].url).toBe("/auth/logout/?authid=1234");
             });
 
             describe("and the server responds", function() {
                 beforeEach(function() {
-                    this.server.lastDestroy().succeed();
-                });
+                    this.server.respondWith(
+                        'GET',
+                        '/auth/logout/?authid=1234',
+                        this.prepareResponse({"message":[],"status":"ok","requestId":2694,"resource":[],"method":"GET","resourcelink":"/auth/logout/","pagination":null,"version":"0.1"}));
+
+                    this.server.respond();
+                })
 
                 it("triggers needsLogin", function() {
                     expect(this.needsLoginSpy).toHaveBeenCalled();
@@ -217,13 +227,13 @@ describe("chorus.models.Session", function() {
         });
 
         it("should return a truthy value for a valid session", function() {
-            this.model.set({ username : "barn", password : "door" });
+            this.model.set({ userName : "barn", password : "door" });
             expect(this.model.performValidation()).toBeTruthy();
         });
 
-        it("requires username", function() {
+        it("requires userName", function() {
             this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("username", undefined);
+            expect(this.model.require).toHaveBeenCalledWith("userName", undefined);
         });
 
         it("requires password", function() {
@@ -254,6 +264,7 @@ describe("chorus.models.Session", function() {
         it("returns false when the user has not been fetched", function() {
             expect(this.session.user()).toBeFalsy();
         });
+
     });
 
     describe("resuming", function() {
