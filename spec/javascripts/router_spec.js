@@ -84,16 +84,12 @@ describe("chorus.router", function() {
         context("with an invalid session", function() {
             beforeEach(function() {
                 spyOn(chorus.pages.LoginPage.prototype, "initialize").andCallThrough();
-                this.server.respondWith(
-                    'GET',
-                    '/auth/checkLogin/?authid=1234',
-                    this.prepareResponse({ status: "fail" }));
             })
 
             context("when navigating to the login page", function() {
                 beforeEach(function() {
                     this.chorus.router.navigate("/login");
-                    this.server.respond();
+                    this.server.lastFetch().fail();
                 })
 
                 it("does the navigation", function() {
@@ -104,7 +100,7 @@ describe("chorus.router", function() {
             context("when navigating to any page other than login", function() {
                 beforeEach(function() {
                     this.chorus.router.navigate("/users/new");
-                    this.server.respond();
+                    this.server.lastFetch().fail();
                 })
 
                 it("navigates to the login page", function() {

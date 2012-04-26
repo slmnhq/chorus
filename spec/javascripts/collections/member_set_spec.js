@@ -35,17 +35,7 @@ describe("chorus.collections.MemberSet", function() {
 
         context("when the request succeeds", function() {
             beforeEach(function() {
-                this.response = { status: "ok", resource : [
-                    { foo : "hi" }
-                ] };
-
-                this.server.respondWith(
-                    'PUT',
-                    this.memberSet.url(),
-                    this.prepareResponse(this.response));
-
-
-                this.server.respond();
+                this.server.completeUpdateFor(this.memberSet);
             });
 
             it("triggers the 'saved' event on the member set", function() {
@@ -55,17 +45,7 @@ describe("chorus.collections.MemberSet", function() {
 
         context("when the request fails", function() {
             beforeEach(function() {
-                this.response = { status: "fail", resource : [
-                    { foo : "hi" }
-                ] };
-
-                this.server.respondWith(
-                    'PUT',
-                    this.memberSet.url(),
-                    this.prepareResponse(this.response));
-
-
-                this.server.respond();
+                this.server.lastUpdateFor(this.memberSet).fail();
             });
 
             it("triggers the 'saveFailed' event on the member set", function() {
