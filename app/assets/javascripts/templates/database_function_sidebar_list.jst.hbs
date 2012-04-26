@@ -4,7 +4,7 @@
     {{/if}}
     <input class="search" placeholder='{{t "schema.functions.list.hint"}}'/>
     <div class="context">{{safeT "schema.functions.search_in" schemaLink=schemaLink}}</div>
-    {{#if models}}{{#if models.length}}
+    {{#if hasCollection}}{{#if models.length}}
         <ul class="list">
             {{#each models}}
                 <li data-cid="{{cid}}" data-fullname="{{fullName}}" data-name="{{name}}">

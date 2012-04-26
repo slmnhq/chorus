@@ -21,6 +21,12 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
         }
     },
 
+    additionalContext: function() {
+        return _.extend(this._super("additionalContext", arguments), {
+            hasCollection: !!this.collection
+        });
+    },
+
     fetchResourceAfterSchemaSelected: function() {
         this.resource = this.collection = this.schema.functions();
         this.bindings.add(this.resource, "change reset add remove", this.render);
