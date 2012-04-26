@@ -181,7 +181,7 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
     },
 
     failForbidden: function(message, resource) {
-        this.fail(arguments);
+        this.fail(message, resource);
     },
 
     params: function() {
