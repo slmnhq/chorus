@@ -1,11 +1,4 @@
 beforeEach(function() {
-    this.prepareResponse = function(responseJSON) {
-        return [200, {
-            'Content-Type': 'application/json'
-        },
-            JSON.stringify(responseJSON)];
-    };
-
     window.fixtures = {};
 
     $.extend(window.fixtures, {
