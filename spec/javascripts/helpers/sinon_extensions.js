@@ -184,6 +184,18 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         this.fail(message, resource);
     },
 
+    failUnauthorized: function(message, resource) {
+        return this.respond(
+            200,
+            { 'Content-Type': 'application/json' },
+            JSON.stringify({
+                status: "fail",
+                resource: resource || [],
+                message: message || "something went wrong!"
+            })
+        );
+    },
+
     params: function() {
         var uri;
         if (this.requestBody) {

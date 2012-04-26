@@ -8,6 +8,7 @@ describe("chorus.router", function() {
             this.savedAuthCookie = $.cookie("authid")
             $.cookie("authid", "1234");
             spyOn(chorus.PageEvents, "reset");
+
         });
 
         afterEach(function() {
@@ -20,39 +21,23 @@ describe("chorus.router", function() {
             expect(this.chorus.updateCachebuster).toHaveBeenCalled();
         });
 
-        context("with a valid session", function() {
+        context("when navigating to a page that requires login", function() {
             beforeEach(function() {
-                var session = this.chorus.session;
-                spyOn(this.chorus.session, "fetch").andCallFake(function(options) {
-                    options.success(session, { status: "ok" });
-                })
-                spyOn(this.chorus.session, "loggedIn").andReturn(true);
-            })
+                spyOn(this.chorus.router, "navigate").andCallThrough();
+                spyOn(chorus.pages.UserNewPage.prototype, "initialize").andCallThrough();
+                spyOnEvent(this.chorus.router, "leaving");
 
-            context("when navigating to the login page", function() {
+                this.chorus.router.navigate("/users/new", { foo: "bar" });
+            });
+
+            it("fetches the session", function() {
+                expect(this.server.lastFetch().url).toBe("/auth/checkLogin/?authid=1234");
+            });
+
+            describe("when the session is valid", function() {
                 beforeEach(function() {
-                    spyOn(chorus.pages.DashboardPage.prototype, "initialize").andCallThrough();
-                    this.chorus.router.navigate("/login");
-                })
-
-                it("navigates to the dashboard", function() {
-                    expect(chorus.pages.DashboardPage.prototype.initialize).toHaveBeenCalled();
+                    this.server.lastFetch().succeed();
                 });
-
-                it("calls reset on the PageEvents object", function() {
-                    expect(chorus.PageEvents.reset).toHaveBeenCalled();
-                });
-            })
-
-            context("when navigating to any page other than login", function() {
-                beforeEach(function() {
-                    spyOn(chorus.pages.UserNewPage.prototype, "initialize").andCallThrough();
-                    this.chorus.router.navigate("/users/new");
-                })
-
-                it("fetches the session", function() {
-                    expect(this.chorus.session.fetch.callCount).toBe(1);
-                })
 
                 it("navigates to the requested page", function() {
                     expect(chorus.pages.UserNewPage.prototype.initialize).toHaveBeenCalled();
@@ -68,47 +53,55 @@ describe("chorus.router", function() {
                 })
 
                 it("triggers the 'leaving' event on itself", function() {
-                    spyOnEvent(this.chorus.router, "leaving");
-                    this.chorus.router.navigate("/users/new");
                     expect("leaving").toHaveBeenTriggeredOn(this.chorus.router);
                 });
 
                 it("sets chorus.page.pageOptions to chorus.pageOptions", function() {
-                    this.chorus.router.navigate("/users/new", { foo: "bar" });
                     expect(this.chorus.page.pageOptions).toEqual({ foo: "bar" })
                     expect(this.chorus.pageOptions).toBeUndefined();
                 })
-            })
-        });
+            });
 
-        context("with an invalid session", function() {
-            beforeEach(function() {
-                spyOn(chorus.pages.LoginPage.prototype, "initialize").andCallThrough();
-            })
-
-            context("when navigating to the login page", function() {
+            describe("when the session is invalid", function() {
                 beforeEach(function() {
-                    this.chorus.router.navigate("/login");
-                    this.server.lastFetch().fail();
-                })
-
-                it("does the navigation", function() {
-                    expect(chorus.pages.LoginPage.prototype.initialize).toHaveBeenCalled();
+                    this.server.lastFetch().failUnauthorized();
                 });
-            })
-
-            context("when navigating to any page other than login", function() {
-                beforeEach(function() {
-                    this.chorus.router.navigate("/users/new");
-                    this.server.lastFetch().fail();
-                })
 
                 it("navigates to the login page", function() {
+                    expect(this.chorus.router.navigate).toHaveBeenCalledWith("/login");
+                });
+            });
+        });
+
+        describe("when navigating to the login the page", function() {
+            beforeEach(function() {
+                spyOn(this.chorus.router, "navigate").andCallThrough();
+                spyOn(chorus.pages.LoginPage.prototype, "initialize").andCallThrough();
+            });
+
+            context("when the user is already logged in", function() {
+                beforeEach(function() {
+                    spyOn(this.chorus.session, "loggedIn").andReturn(true);
+                    this.chorus.router.navigate("/login");
+                });
+
+                it("redirects them to their dashboard", function() {
+                    expect(this.chorus.router.navigate).toHaveBeenCalledWith("/");
+                });
+            });
+
+            context("when the user is not logged in", function() {
+                beforeEach(function() {
+                    spyOn(this.chorus.session, "loggedIn").andReturn(false);
+                    this.chorus.router.navigate("/login");
+                });
+
+                it("goes to the login page", function() {
                     expect(chorus.pages.LoginPage.prototype.initialize).toHaveBeenCalled();
-                })
-            })
-        })
-    })
+                });
+            });
+        });
+    });
 
     describe("#navigate", function() {
         beforeEach(function() {

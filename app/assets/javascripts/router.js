@@ -70,13 +70,17 @@
             this.navigate(Backbone.history.fragment);
         },
 
-        generateRouteCallback:function (className) {
+        pageRequiresLogin: function(pageName) {
+            return !_.include(["Login", "StyleGuide"], pageName);
+        },
+
+        generateRouteCallback: function(className) {
             var self = this;
             return function () {
                 var args = _.map(_.toArray(arguments), function(arg) {
                     return decodeURIComponent(arg);
                 });
-                var navFunction = function () {
+                var navFunction = function() {
                     chorus.PageEvents.reset();
                     if (className == "Login" && self.app.session.loggedIn()) {
                         self.navigate("/");
@@ -97,9 +101,7 @@
                     window.scroll(0, 0);
                 };
 
-                if (className === 'Login' || className === 'StyleGuide') {
-                    navFunction();
-                } else {
+                if (this.pageRequiresLogin(className)) {
                     self.app.session.fetch({
                         success:function (session, resp) {
                             if (resp.status == "ok") {
@@ -107,6 +109,8 @@
                             }
                         }
                     });
+                } else {
+                    navFunction();
                 }
             };
         }
