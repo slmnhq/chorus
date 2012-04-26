@@ -190,103 +190,40 @@ describe("chorus.models.Abstract", function() {
 
                 it("triggers the validated event", function() {
                     expect(this.validatedSpy).toHaveBeenCalled();
-                })
+                });
 
                 describe("when the request succeeds", function() {
                     beforeEach(function() {
-                        this.response = { status: "ok", resource: [
-                            { foo: "hi" }
-                        ] };
-
-                        this.server.respondWith(
-                            'PUT',
-                            '/my_items/foo',
-                            this.prepareResponse(this.response));
-
-                        this.server.respond();
+                        this.server.lastUpdate().succeed({foo: "hi"});
                     });
 
                     it("triggers a saved event", function() {
                         expect(this.savedSpy).toHaveBeenCalled();
-                    })
+                    });
                 });
 
                 describe("when the request fails", function() {
                     beforeEach(function() {
-
-                        this.response = { status: "fail", message: [
+                        this.message = [
                             { message: "hi" },
                             { message: "bye" }
-                        ] };
-                        this.server.respondWith(
-                            'PUT',
-                            '/my_items/foo',
-                            this.prepareResponse(this.response));
-                        this.server.respond();
+                        ];
 
+                        this.server.lastUpdate().fail(this.message);
                     });
 
                     it("returns the error information", function() {
-                        expect(this.model.serverErrors).toEqual(this.response.message);
-                    })
+                        expect(this.model.serverErrors).toEqual(this.message);
+                    });
 
                     it("triggers a saveFailed event", function() {
                         expect(this.saveFailedSpy).toHaveBeenCalled();
-                    })
-                });
-
-                describe("and then another request succeeds", function() {
-                    beforeEach(function() {
-                        this.response = { status: "ok", resource: [
-                            { foo: "hi" }
-                        ] };
-
-                        this.server.respondWith(
-                            'PUT',
-                            '/my_items/foo',
-                            this.prepareResponse(this.response));
-
-                        this.server.respond();
                     });
-
-                    it("triggers a saved event", function() {
-                        expect(this.savedSpy).toHaveBeenCalled();
-                    })
-                })
-
-                describe("when the request fails on the server", function() {
-                    beforeEach(function() {
-
-                        this.response = { status: "fail", message: [
-                            { message: "hi" },
-                            { message: "bye" }
-                        ] };
-                        this.server.respondWith(
-                            'PUT',
-                            '/my_items/foo',
-                            this.prepareResponse(this.response));
-                        this.server.respond();
-
-                    });
-
-                    it("returns the error information", function() {
-                        expect(this.model.serverErrors).toEqual(this.response.message);
-                    })
 
                     describe("and then another request succeeds", function() {
                         beforeEach(function() {
-                            this.response = { status: "ok", resource: [
-                                { foo: "hi" }
-                            ] };
-
-                            this.server = sinon.fakeServer.create();
-                            this.server.respondWith(
-                                'PUT',
-                                '/my_items/foo',
-                                this.prepareResponse(this.response));
-
                             this.model.save();
-                            this.server.respond();
+                            this.server.lastUpdate().succeed({foo: "hi"});
                         });
                         it("should trigger the saved event", function() {
                             expect(this.savedSpy).toHaveBeenCalled();
@@ -294,10 +231,10 @@ describe("chorus.models.Abstract", function() {
 
                         it("clears the error information", function() {
                             expect(this.model.serverErrors).toBeUndefined();
-                        })
-                    })
-                })
-            })
+                        });
+                    });
+                });
+            });
 
             describe("when the model is invalid", function() {
                 beforeEach(function() {
@@ -450,8 +387,7 @@ describe("chorus.models.Abstract", function() {
 
                 it("triggers the 'fetchFailed' event on the model", function() {
                     this.model.fetch();
-                    this.server.respondWith([200, {'Content-Type': 'application/json'}, '{"resource":[], "status": "fail", "message" : "this is an error message" }']);
-                    this.server.respond();
+                    this.server.lastFetch().fail();
                     expect(this.fetchFailedSpy).toHaveBeenCalled();
                     expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.model);
                 });
@@ -465,8 +401,7 @@ describe("chorus.models.Abstract", function() {
 
                 it("triggers the 'loaded' event on the model", function() {
                     this.model.fetch();
-                    this.server.respondWith([200, {'Content-Type': 'application/json'}, '{"resource":[], "status": "ok" }']);
-                    this.server.respond();
+                    this.server.lastFetch().succeed();
                     expect(this.loadedSpy).toHaveBeenCalled();
                 })
             })
@@ -483,16 +418,7 @@ describe("chorus.models.Abstract", function() {
 
             describe("when the request succeeds", function() {
                 beforeEach(function() {
-                    this.response = { status: "ok", resource: [
-                        { foo: "hi" }
-                    ] };
-
-                    this.server.respondWith(
-                        'DELETE',
-                        '/my_items/foo',
-                        this.prepareResponse(this.response));
-
-                    this.server.respond();
+                    this.server.lastDestroy().succeed();
                 });
 
                 it("triggers a destroy event", function() {
@@ -506,17 +432,7 @@ describe("chorus.models.Abstract", function() {
 
             describe("when the request fails", function() {
                 beforeEach(function() {
-                    this.response = { status: "fail", message: [
-                        { message: "hi" },
-                        { message: "bye" }
-                    ] };
-
-                    this.server.respondWith(
-                        'DELETE',
-                        '/my_items/foo',
-                        this.prepareResponse(this.response));
-
-                    this.server.respond();
+                    this.server.lastDestroy().fail();
                 });
 
                 it("triggers a destroyFailed event", function() {
@@ -576,7 +492,9 @@ describe("chorus.models.Abstract", function() {
                 it("returns undefined", function() {
                     expect(this.model.parse({
                         status: "fail",
-                        message: [{ message: "No." }],
+                        message: [
+                            { message: "No." }
+                        ],
                         resource: [ this.thing ]
                     })).toBeUndefined();
                 });
@@ -921,10 +839,10 @@ describe("chorus.models.Abstract", function() {
                 beforeEach(function() {
                     delete this.model.nameAttribute;
                     delete this.model.nameFunction;
-                    this.model.set({name : "Mark"});
+                    this.model.set({name: "Mark"});
                 });
                 it("returns the name attribute", function() {
-                   expect(this.model.name()).toBe("Mark");
+                    expect(this.model.name()).toBe("Mark");
                 });
             });
         });
@@ -1079,7 +997,9 @@ describe("chorus.models.Abstract", function() {
             context("when there are errors", function() {
                 it("returns an empty array", function() {
                     expect(this.collection.parse({
-                        message: [{ message: "No." }],
+                        message: [
+                            { message: "No." }
+                        ],
                         resource: this.things,
                         status: "fail"
                     })).toEqual([]);
@@ -1146,8 +1066,7 @@ describe("chorus.models.Abstract", function() {
                     this.loadedSpy = jasmine.createSpy("loaded");
                     this.collection.bind("loaded", this.loadedSpy);
                     this.collection.fetch();
-                    this.server.respondWith([200, {'Content-Type': 'application/json'}, '{"resource":[], "status": "ok" }']);
-                    this.server.respond();
+                    this.server.lastFetch().succeed();
                 })
 
                 it("triggers the 'loaded' event on the collection", function() {
@@ -1174,79 +1093,66 @@ describe("chorus.models.Abstract", function() {
         describe("#fetchAll", function() {
             beforeEach(function() {
                 this.collection.fetchAll();
-            })
+            });
 
             it("requests page one from the server", function() {
                 expect(this.server.requests[0].url).toBe("/bar/bar?page=1&rows=1000");
-            })
+            });
 
             describe("and the server responds successfully", function() {
                 beforeEach(function() {
-                    this.pageOneResponse = { status: "ok", resource: [
-                        { foo: "hi" },
-                        { foo: "there" }
-                    ],
-                        "pagination": {
-                            "total": "2",
-                            "page": "1",
-                            "records": "3"
-                        }
-                    };
-
-                    this.server.respondWith(
-                        'GET',
-                        '/bar/bar?page=1&rows=1000',
-                        this.prepareResponse(this.pageOneResponse));
-
-                    this.pageTwoResponse = { status: "ok", resource: [
-                        { foo: "hi" },
-                        { foo: "there" }
-                    ],
-                        "pagination": {
-                            "total": "2",
-
-                            "page": "2",
-                            "records": "3"
-                        }
-                    };
-
-                    this.server.respondWith(
-                        'GET',
-                        '/bar/bar?page=2&rows=1000',
-                        this.prepareResponse(this.pageTwoResponse));
-
                     var self = this;
 
                     this.resetListener = jasmine.createSpy("reset");
                     this.resetListener.andCallFake(function(collection) {
                         self.collectionLengthOnReset = collection.length;
-                    })
+                    });
                     this.collection.bind("reset", this.resetListener)
 
                     this.loadedListener = jasmine.createSpy("loaded");
                     this.loadedListener.andCallFake(function() {
                         self.collectionLengthOnLoaded = this.length;
-                    })
+                    });
                     this.collection.bind("loaded", this.loadedListener)
 
-                    this.server.respond();
-                })
+                    this.server.fetches()[0].succeed([
+                        { foo: "hi" },
+                        { foo: "there" }
+                    ],
+                        {
+                            "total": "2",
+                            "page": "1",
+                            "records": "3"
+                        }
+                    );
+
+                    this.server.fetches()[1].succeed([
+                        { foo: "hi" },
+                        { foo: "there" }
+                    ],
+                        {
+                            "total": "2",
+                            "page": "2",
+                            "records": "3"
+                        }
+                    );
+                });
 
                 it("requests subsequent pages", function() {
                     expect(this.server.requests[1].url).toBe("/bar/bar?page=2&rows=1000");
-                })
+                });
 
                 it("triggers the reset event once", function() {
                     expect(this.resetListener.callCount).toBe(1)
-                })
+                });
 
                 it("triggers the reset event after all models are in the collection", function() {
                     expect(this.collectionLengthOnReset).toBe(4)
-                })
+                });
 
                 it("triggers the loaded event once", function() {
                     expect(this.loadedListener.callCount).toBe(1)
-                })
+                });
 
                 it("triggers the loaded event after all models are in the collection", function() {
                     expect(this.collectionLengthOnLoaded).toBe(4)
@@ -1255,44 +1161,25 @@ describe("chorus.models.Abstract", function() {
 
             describe("and the server responds with an error", function() {
                 beforeEach(function() {
-                    this.pageOneResponse = { status: "ok", resource: [
-                        { foo: "hi" },
-                        { foo: "there" }
-                    ],
-                        "pagination": {
-                            "total": "2",
-                            "page": "1",
-                            "records": "3"
-                        }
-                    };
-
-                    this.server.respondWith(
-                        'GET',
-                        '/bar/bar?page=1&rows=1000',
-                        this.prepareResponse(this.pageOneResponse));
-
-                    this.pageTwoResponse = {
-                        status: "fail",
-                        resource: [],
-                        message: [
-                            {
-                                "message": "Something went sideways"
-                            }
-                        ]
-                    };
-
-                    this.server.respondWith(
-                        'GET',
-                        '/bar/bar?page=2&rows=1000',
-                        this.prepareResponse(this.pageTwoResponse));
-
                     var self = this;
 
                     this.resetListener = function(collection) {
                         self.collectionLengthOnReset = collection.length;
                     }
                     this.collection.bind("reset", this.resetListener)
-                    this.server.respond();
+
+                    this.server.fetches()[0].succeed([
+                        { foo: "hi" },
+                        { foo: "there" }
+                    ],
+                        {
+                            "total": "2",
+                            "page": "1",
+                            "records": "3"
+                        }
+                    )
+
+                    this.server.fetches()[1].fail()
                 })
 
                 it("requests subsequent pages", function() {
