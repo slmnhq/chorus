@@ -16,21 +16,15 @@ describe("chorus.models.Session", function() {
             this.model.save();
         });
 
-        it("has the right url", function() {
-            expect(this.server.requests[0].url).toBe("/auth/login/");
+        it("posts to the right url", function() {
+            expect(this.server.lastCreate().url).toBe("/auth/login/");
         });
-
-        it("has the right method", function() {
-            expect(this.server.requests[0].method).toBe("POST");
-        });
-
     });
 
     describe("#logout", function() {
         beforeEach(function() {
             this.model = new models.Session();
-            this.needsLoginSpy = jasmine.createSpy();
-            this.model.bind("needsLogin", this.needsLoginSpy);
+            spyOnEvent(this.model, "needsLogin");
             spyOn(chorus.router, "navigate")
             $.cookie("authid", "1234");
         });
@@ -50,7 +44,7 @@ describe("chorus.models.Session", function() {
             });
 
             it("triggers needsLogin", function() {
-                expect(this.needsLoginSpy).toHaveBeenCalled();
+                expect("needsLogin").toHaveBeenTriggeredOn(this.model);
             })
         })
 
@@ -68,23 +62,18 @@ describe("chorus.models.Session", function() {
 
             describe("and the server responds", function() {
                 beforeEach(function() {
-                    this.server.respondWith(
-                        'GET',
-                        '/auth/logout/?authid=1234',
-                        this.prepareResponse({"message":[],"status":"ok","requestId":2694,"resource":[],"method":"GET","resourcelink":"/auth/logout/","pagination":null,"version":"0.1"}));
-
-                    this.server.respond();
-                })
+                    this.server.lastFetch().succeed();
+                });
 
                 it("triggers needsLogin", function() {
-                    expect(this.needsLoginSpy).toHaveBeenCalled();
-                })
+                    expect("needsLogin").toHaveBeenTriggeredOn(this.model);
+                });
 
                 it("clears all attributes in the model", function() {
                     expect(_.size(this.model.attributes)).toBe(0);
                     expect(this.model._user).toBeUndefined();
                     expect(this.model.sandboxPermissionsCreated).toEqual({});
-                })
+                });
             })
         })
     });
@@ -171,7 +160,7 @@ describe("chorus.models.Session", function() {
                 expect(this.model.serverErrors).toBeUndefined();
             })
 
-            it("clears the memorized user", function() {
+            it("clears the memoized user", function() {
                 expect(this.model.user()).toBeFalsy();
             });
         })
@@ -203,22 +192,16 @@ describe("chorus.models.Session", function() {
             })
         })
 
-        context("when the destinationRoute is Login", function() {
+        context("when the destination route is the dashboard page", function() {
             beforeEach(function() {
                 this.model.check("Dashboard");
             })
 
             it("fetches itself", function() {
                 expect(this.model.fetch).toHaveBeenCalled();
-            })
-        })
-
-        context("when the destinationRoute is not Login", function() {
-            it("fetches self", function() {
-
-            })
-        })
-    })
+            });
+        });
+    });
 
     describe("validation", function() {
         beforeEach(function() {

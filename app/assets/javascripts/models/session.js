@@ -56,13 +56,13 @@ chorus.models.Session = chorus.models.Base.extend({
     logout: function() {
         var self = this;
 
-        if (!this.get("errors")) {
+        if (this.get("errors")) {
+            this.rememberPathBeforeLoggedOut();
+            this.trigger("needsLogin")
+        } else {
             this.requestLogout(function() {
                 self.trigger("needsLogin")
             });
-        } else {
-            this.rememberPathBeforeLoggedOut();
-            this.trigger("needsLogin")
         }
     },
 
