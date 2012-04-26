@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-set -x
 
 eval "$(rbenv init -)"
 rbenv shell `cat .rbenv-version`
