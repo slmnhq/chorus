@@ -6,8 +6,8 @@ describe InstanceCredentialsController do
   let(:joe) {FactoryGirl.create :user}
   let(:instance) {FactoryGirl.create :instance, :owner => instance_owner}
 
-  describe "create" do
-    context "admin" do
+  describe "#create" do
+    context "when admin" do
       before do
         log_in admin
       end
@@ -56,7 +56,7 @@ describe InstanceCredentialsController do
       end
     end
 
-    context "instance owner" do
+    context "when instance owner" do
       before do
         log_in instance_owner
       end
@@ -107,7 +107,7 @@ describe InstanceCredentialsController do
       end
     end
 
-    context "regular joe" do
+    context "when regular joe" do
       before do
         log_in joe
       end
@@ -154,7 +154,7 @@ describe InstanceCredentialsController do
   describe "#update" do
     let(:credential) { FactoryGirl.create :instance_credential, :instance => instance, :owner => instance_owner }
 
-    context "admin" do
+    context "when admin" do
       before do
         log_in admin
       end
@@ -170,7 +170,7 @@ describe InstanceCredentialsController do
       end
     end
 
-    context "instance owner" do
+    context "when instance owner" do
       before do
         log_in instance_owner
       end
@@ -192,7 +192,7 @@ describe InstanceCredentialsController do
       end
     end
 
-    context "regular joe" do
+    context "when regular joe" do
       before do
         log_in joe
       end
