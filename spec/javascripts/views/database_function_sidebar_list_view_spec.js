@@ -158,7 +158,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                         fixtures.schema({ name: "orphaned_tables", id: "6" })
                     ]);
 
-                    this.server.lastFetchFor(this.view.collection).fail([
+                    this.server.lastFetchFor(this.view.collection).failForbidden([
                         {message: "Account map needed yo"}
                     ]);
                 });

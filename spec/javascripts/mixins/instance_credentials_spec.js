@@ -78,7 +78,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                 beforeEach(function() {
                     this.instance = fixtures.instance();
                     spyOn(this.model, 'instanceRequiringCredentials').andReturn(this.instance);
-                    this.server.lastFetchFor(this.model).fail();
+                    this.server.lastFetchFor(this.model).failForbidden();
                 })
 
                 it("does not go to the 404 page", function() {

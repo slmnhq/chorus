@@ -180,6 +180,10 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         );
     },
 
+    failForbidden: function(message, resource) {
+        this.fail(arguments);
+    },
+
     params: function() {
         var uri;
         if (this.requestBody) {

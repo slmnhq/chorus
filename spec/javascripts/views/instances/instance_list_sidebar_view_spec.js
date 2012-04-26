@@ -431,7 +431,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 this.server.completeFetchFor(this.instance.activities());
                 this.server.completeFetchFor(this.instance.accounts());
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
-                this.server.lastFetchFor(this.instance.usage()).fail("Account map needed");
+                this.server.lastFetchFor(this.instance.usage()).failForbidden("Account map needed");
             });
 
             it("renders without the workspace usage section", function() {

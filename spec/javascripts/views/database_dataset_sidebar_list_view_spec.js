@@ -263,7 +263,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
         context("if the tables and views fetch fails", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.schema.database().schemas());
-                this.server.lastFetchFor(this.schema.databaseObjects()).fail([
+                this.server.lastFetchFor(this.schema.databaseObjects()).failForbidden([
                     {message: "Account map needed"}
                 ]);
                 this.view.render();

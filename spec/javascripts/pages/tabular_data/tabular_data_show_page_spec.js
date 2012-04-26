@@ -67,9 +67,10 @@ describe("chorus.pages.TabularDataShowPage", function() {
                         expect(this.page.mainContent.persistent).toBeTruthy();
                     })
                 })
+
                 context("with errors", function() {
                     beforeEach(function() {
-                        this.server.lastFetchAllFor(this.columnSet).fail([{message: "No permission"}]);
+                        this.server.lastFetchAllFor(this.columnSet).failForbidden([{message: "No permission"}]);
                     });
 
                     it("puts the errors on the new column set", function() {
