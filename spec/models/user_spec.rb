@@ -78,6 +78,15 @@ describe User do
 
       context "when the password is being modified" do
         it { ensure_length_of(:password).is_at_least(6) }
+
+        it "the password is updated" do
+          @user = FactoryGirl.create :user, :username => 'jimmy'
+          @user.save!
+
+          @user.password = "654321"
+          @user.save!
+          User.named('jimmy').password_digest.should == Digest::SHA1.hexdigest("654321")
+        end
       end
     end
 

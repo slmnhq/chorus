@@ -117,6 +117,18 @@ describe UsersController do
         post :create, {:user => {}}
         response.code.should == "422"
       end
+
+      it "should sanitize for xss" do
+        post :create, { :user => {
+            username: "Tom",
+            first_name: "Thomas",
+            last_name: "<script type='text/javascript'>alert('mwahahahahahaha');</script>",
+            email: "tom@example.com",
+            password: "qwerty"
+        }}
+        response.code.should == "201"
+        User.named('Tom').last_name.should_not match "<"
+      end
     end
   end
 
@@ -194,6 +206,21 @@ describe UsersController do
           put :update, :id => other_user.to_param, :user => {:first_name => "updated"}
         }.to_not change { other_user.reload.first_name }
         response.code.should == "404"
+      end
+
+      it "lets users change their own password" do
+        put :update, :id => non_admin.to_param, :user => { :password => '987654' }
+        response.code.should == "200"
+        User.find(non_admin.to_param).password_digest.should == Digest::SHA1.hexdigest("987654")
+      end
+
+      it "should sanitize for xss" do
+        put :update, :id => non_admin.to_param, :user => {
+            :last_name => "<script type='text/javascript'>alert('mwahahahahahaha');</script>"
+        }
+
+        response.code.should == "200"
+        User.named(non_admin.username).last_name.should_not match "<"
       end
     end
   end
