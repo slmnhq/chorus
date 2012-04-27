@@ -187,8 +187,15 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         this.fail(message, resource);
     },
 
-    failForbidden: function(message, resource) {
-        this.fail(message, resource);
+    failForbidden: function(errors, response) {
+        return this.respond(
+            403,
+            { 'Content-Type': 'application/json' },
+            JSON.stringify({
+                response: response,
+                errors: errors || {}
+            })
+        );
     },
 
     failUnprocessableEntity: function(message, resource) {

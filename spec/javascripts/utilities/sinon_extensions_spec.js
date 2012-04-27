@@ -173,19 +173,23 @@ describe("sinon extensions", function() {
     describe("#failForbidden", function() {
         beforeEach(function() {
             this.fakeResponse = new sinon.FakeXMLHttpRequest();
-            this.fakeResponse.failForbidden({message: "whatever"})
+            this.fakeResponse.failForbidden({record: "not accessible"}, { instanceId: 1 })
         });
 
-        it("returns a status code of 200", function() {
-            expect(this.fakeResponse.status).toBe(200);
+        it("returns a status code of 403", function() {
+            expect(this.fakeResponse.status).toBe(403);
         });
 
         it("returns an error message in the 'message' field", function() {
-            expect(this.fakeResponse.responseText).toContain("whatever");
+            expect(JSON.parse(this.fakeResponse.responseText).errors).toEqual({
+                record: "not accessible"
+            });
         });
 
-        it("returns a 'fail' in the 'status' field", function() {
-            expect(this.fakeResponse.responseText).toContain("fail");
+        it("includes the response if one is given", function() {
+            expect(JSON.parse(this.fakeResponse.responseText).response).toEqual({
+                instanceId: 1
+            });
         });
     })
 
