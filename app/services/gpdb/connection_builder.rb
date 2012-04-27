@@ -41,7 +41,7 @@ module Gpdb
       @username = attributes[:username]
       @password = attributes[:password]
       @owner = owner
-      @shared = !!attributes[:shared]
+      @shared = ActiveRecord::ConnectionAdapters::Column.value_to_boolean(attributes[:shared])
     end
 
     def save!(user)

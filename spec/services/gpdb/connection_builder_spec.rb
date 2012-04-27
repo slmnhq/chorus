@@ -150,7 +150,7 @@ describe Gpdb::ConnectionBuilder do
       let!(:instance_owner_credentials) { cached_instance.owner_credentials }
 
       before do
-        @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes.merge(:shared => true), owner)
+        @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes.merge(:shared => "true"), owner)
       end
 
       it "sets the shared attribute" do
@@ -165,8 +165,8 @@ describe Gpdb::ConnectionBuilder do
 
     describe("switching from shared to individual") do
       before do
-        Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => true), owner)
-        @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => false), owner)
+        Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => "true"), owner)
+        @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => "false"), owner)
       end
 
       it "clears the shared attribute" do
