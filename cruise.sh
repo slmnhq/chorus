@@ -8,4 +8,7 @@ ruby -v | grep 1.9.3
 gem list bundler | grep bundler || gem install bundler
 bundle install
 rake legacy:setup db:migrate db:test:prepare db:test:prepare:legacy
-script/test
+
+script/test  > $CC_BUILD_ARTIFACTS/rspec_tests.log 2>&1
+
+rake phantom > $CC_BUILD_ARTIFACTS/jasmine_tests.log 2>&1
