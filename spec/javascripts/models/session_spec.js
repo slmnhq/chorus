@@ -145,7 +145,7 @@ describe("chorus.models.Session", function() {
         context("when the session is not valid", function() {
             beforeEach(function() {
                 expect(this.model.user()).toBeTruthy();
-                this.server.lastFetch().fail();
+                this.server.lastFetch().failUnauthorized();
             });
 
             it("triggers needsLogin", function() {

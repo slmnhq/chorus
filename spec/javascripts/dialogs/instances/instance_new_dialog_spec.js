@@ -309,7 +309,7 @@ describe("chorus.dialogs.InstanceNew", function() {
 
                 describe("when the save fails", function() {
                     beforeEach(function() {
-                        this.server.lastCreateFor(this.dialog.model).fail([{message: "foobar"}]);
+                        this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity([{message: "foobar"}]);
                     });
 
                     it("displays the errors", function() {

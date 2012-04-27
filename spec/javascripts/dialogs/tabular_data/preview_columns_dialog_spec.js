@@ -84,7 +84,7 @@ describe("chorus.dialogs.PreviewColumns", function() {
             this.dialog.previousModal = {
                 showErrors: jasmine.createSpy("showErrors")
             }
-            this.server.lastFetch().fail();
+            this.server.lastFetch().failUnprocessableEntity();
         });
 
         it("copies the serverErrors to the dialog model", function() {

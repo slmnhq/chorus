@@ -56,7 +56,7 @@ describe("chorus.alerts.Analyze", function() {
         context("when the post fails", function() {
             beforeEach(function() {
                 spyOn(this.alert, "closeModal");
-                this.server.lastFetchFor(this.model.analyze()).fail();
+                this.server.lastFetchFor(this.model.analyze()).failUnprocessableEntity();
             });
 
             it("should display the errors", function() {

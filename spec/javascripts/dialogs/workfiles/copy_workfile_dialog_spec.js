@@ -105,7 +105,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             describe("when the API fails", function() {
                 beforeEach(function() {
                     this.dialog.closeModal.reset();
-                    this.server.lastCreate().fail([{
+                    this.server.lastCreate().failUnprocessableEntity([{
                         "message": "Workspace already has a workfile with this name. Specify a different name."
                     }]);
                 })

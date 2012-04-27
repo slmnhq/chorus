@@ -233,7 +233,7 @@ describe("chorus.dialogs.Visualization", function() {
 
                         context("and the task save fails", function() {
                             beforeEach(function() {
-                                this.server.lastCreateFor(this.dialog.task).fail([{message: "I FAILED!"}]);
+                                this.server.lastCreateFor(this.dialog.task).failUnprocessableEntity([{message: "I FAILED!"}]);
                             });
 
                             it("displays the error message in the dialog", function() {

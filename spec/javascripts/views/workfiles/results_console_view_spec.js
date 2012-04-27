@@ -642,7 +642,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         context("when execution fails", function() {
             beforeEach(function() {
-                this.server.lastCreateFor(this.executionModel).fail([
+                this.server.lastCreateFor(this.executionModel).failUnprocessableEntity([
                     {message: "broke!"}
                 ]);
             });

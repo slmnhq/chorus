@@ -45,7 +45,7 @@ describe("chorus.collections.MemberSet", function() {
 
         context("when the request fails", function() {
             beforeEach(function() {
-                this.server.lastUpdateFor(this.memberSet).fail();
+                this.server.lastUpdateFor(this.memberSet).failUnprocessableEntity();
             });
 
             it("triggers the 'saveFailed' event on the member set", function() {

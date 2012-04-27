@@ -588,7 +588,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             context("when the import fails", function() {
                 beforeEach(function() {
-                    this.server.lastCreateFor(this.dialog.csv).fail([
+                    this.server.lastCreateFor(this.dialog.csv).failUnprocessableEntity([
                         {message: "oops"}
                     ]);
                 });

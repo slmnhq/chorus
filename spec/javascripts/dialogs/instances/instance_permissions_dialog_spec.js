@@ -195,7 +195,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     context("when the save fails", function() {
                         beforeEach(function() {
                             spyOn(chorus, 'toast');
-                            this.server.lastUpdate().fail("nope")
+                            this.server.lastUpdate().failUnprocessableEntity("nope")
                         });
 
                         it("displays a save failed toast message", function() {
@@ -438,7 +438,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the delete fails", function() {
                     beforeEach(function() {
-                        this.server.lastDestroy().fail([{message: "don't delete me"}]);
+                        this.server.lastDestroy().failUnprocessableEntity([{message: "don't delete me"}]);
                     });
                     it("displays the error", function() {
                        expect(this.dialog.$(".errors")).toContainText("don't delete me");

@@ -111,7 +111,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                 });
 
                 it("save fails", function() {
-                    this.server.lastCreateFor(this.view.model).fail([
+                    this.server.lastCreateFor(this.view.model).failUnprocessableEntity([
                         {message: "foo"}
                     ]);
                     expect(this.view.$(".errors")).toContainText("foo");

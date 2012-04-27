@@ -289,7 +289,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                         model.get("id") + "/version/" + model.get("versionInfo").versionNum;
                     _.find(this.server.updates(), function(request){
                         return request.url === url ;
-                    }).fail([message]);
+                    }).failUnprocessableEntity([message]);
                 });
 
                 it("should show the version conflict alert", function() {

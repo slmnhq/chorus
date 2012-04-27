@@ -61,7 +61,7 @@ describe("chorus.Mixins.Fetching", function() {
         context("after the fetch fails", function() {
             beforeEach(function() {
                 this.resource.fetch();
-                this.server.lastFetchFor(this.resource).fail();
+                this.server.lastFetchFor(this.resource).failUnprocessableEntity();
                 this.resource.fetch.reset();
             });
 

@@ -119,7 +119,7 @@ describe("chorus.collections.NotificationSet", function() {
 
         describe("when the call fails", function() {
             beforeEach(function() {
-                this.server.lastUpdate().fail();
+                this.server.lastUpdate().failUnprocessableEntity();
             });
 
             it("does not call the success function", function() {

@@ -492,7 +492,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("the server responds with failure", function() {
                         beforeEach(function() {
-                            this.server.lastUpdateFor(this.dialog.pageModel).fail([
+                            this.server.lastUpdateFor(this.dialog.pageModel).failUnprocessableEntity([
                                 {"message": "fake error message"}
                             ]);
                         });

@@ -129,4 +129,23 @@ describe("sinon extensions", function() {
             expect(this.fakeResponse.responseText).toContain("fail");
         });
     })
+
+    describe("#failUnprocessableEntity", function() {
+        beforeEach(function() {
+            this.fakeResponse = new sinon.FakeXMLHttpRequest();
+            this.fakeResponse.failUnprocessableEntity({message: "whatever"})
+        });
+
+        it("returns a status code of 200", function() {
+            expect(this.fakeResponse.status).toBe(200);
+        });
+
+        it("returns an error message in the 'message' field", function() {
+            expect(this.fakeResponse.responseText).toContain("whatever");
+        });
+
+        it("returns a 'fail' in the 'status' field", function() {
+            expect(this.fakeResponse.responseText).toContain("fail");
+        });
+    })
 });

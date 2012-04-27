@@ -168,9 +168,6 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         );
     },
 
-    failNotFound: function(message, resource) {
-        this.fail(message, resource);
-    },
     fail: function fail(message, resource) {
         resource || (resource = [])
         return this.respond(
@@ -184,7 +181,15 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         );
     },
 
+    failNotFound: function(message, resource) {
+        this.fail(message, resource);
+    },
+
     failForbidden: function(message, resource) {
+        this.fail(message, resource);
+    },
+
+    failUnprocessableEntity: function(message, resource) {
         this.fail(message, resource);
     },
 

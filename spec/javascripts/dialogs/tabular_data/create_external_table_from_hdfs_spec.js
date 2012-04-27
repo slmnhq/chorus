@@ -174,7 +174,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
 
                     this.dialog.$("button.submit").click();
-                    this.server.lastCreate().fail([
+                    this.server.lastCreate().failUnprocessableEntity([
                         { message: "I like cheese" }
                     ]);
                 });

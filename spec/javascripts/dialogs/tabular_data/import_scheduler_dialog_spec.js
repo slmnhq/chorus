@@ -707,7 +707,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                         context("and the save is not successful", function() {
                             beforeEach(function() {
-                                this.server.lastCreate().fail();
+                                this.server.lastCreate().failUnprocessableEntity();
                             });
 
                             it("should not display the loading spinner", function() {

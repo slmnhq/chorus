@@ -133,7 +133,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             describe("when the API fails", function() {
                 beforeEach(function() {
                     this.dialog.closeModal.reset();
-                    this.server.lastRequest().fail([{
+                    this.server.lastRequest().failUnprocessableEntity([{
                         "message": "Workspace already has a workfile with this name. Specify a different name."
                     }]);
                 });

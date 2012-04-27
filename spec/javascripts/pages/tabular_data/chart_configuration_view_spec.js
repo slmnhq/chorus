@@ -129,7 +129,7 @@ describe("chorus.views.ChartConfiguration", function() {
 
                 describe("when the cancel is successful", function() {
                     beforeEach(function() {
-                        this.server.lastCreateFor(this.task).fail("The task is cancelled");
+                        this.server.lastCreateFor(this.task).failUnprocessableEntity("The task is cancelled");
                     });
 
                     it("does not render errors", function() {
@@ -180,7 +180,7 @@ describe("chorus.views.ChartConfiguration", function() {
 
             describe("when the save fails", function() {
                 beforeEach(function() {
-                    this.server.lastCreateFor(this.view.task).fail("Boom!");
+                    this.server.lastCreateFor(this.view.task).failUnprocessableEntity("Boom!");
                 });
 
                 it("displays the error message", function() {

@@ -209,7 +209,7 @@ describe("chorus.models.Abstract", function() {
                             { message: "bye" }
                         ];
 
-                        this.server.lastUpdate().fail(this.message);
+                        this.server.lastUpdate().failUnprocessableEntity(this.message);
                     });
 
                     it("returns the error information", function() {
@@ -387,7 +387,7 @@ describe("chorus.models.Abstract", function() {
 
                 it("triggers the 'fetchFailed' event on the model", function() {
                     this.model.fetch();
-                    this.server.lastFetch().fail();
+                    this.server.lastFetch().failUnprocessableEntity();
                     expect(this.fetchFailedSpy).toHaveBeenCalled();
                     expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.model);
                 });
@@ -432,7 +432,7 @@ describe("chorus.models.Abstract", function() {
 
             describe("when the request fails", function() {
                 beforeEach(function() {
-                    this.server.lastDestroy().fail();
+                    this.server.lastDestroy().failUnprocessableEntity();
                 });
 
                 it("triggers a destroyFailed event", function() {
@@ -1079,7 +1079,7 @@ describe("chorus.models.Abstract", function() {
                     this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
                     this.collection.bind("fetchFailed", this.fetchFailedSpy);
                     this.collection.fetch();
-                    this.server.lastFetchFor(this.collection).fail();
+                    this.server.lastFetchFor(this.collection).failUnprocessableEntity();
                 });
 
                 it("triggers the 'fetchFailed' event on the model", function() {
@@ -1179,7 +1179,7 @@ describe("chorus.models.Abstract", function() {
                         }
                     )
 
-                    this.server.fetches()[1].fail()
+                    this.server.fetches()[1].failUnprocessableEntity()
                 })
 
                 it("requests subsequent pages", function() {
@@ -1336,7 +1336,7 @@ describe("chorus.models.Abstract", function() {
             context("after the fetch fails", function() {
                 beforeEach(function() {
                     this.resource.fetch();
-                    this.server.lastFetchFor(this.resource).fail();
+                    this.server.lastFetchFor(this.resource).failUnprocessableEntity();
                     this.resource.fetch.reset();
                 });
 

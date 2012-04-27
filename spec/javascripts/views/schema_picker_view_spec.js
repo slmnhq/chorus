@@ -433,7 +433,7 @@ describe("chorus.views.SchemaPicker", function() {
                                     context("when the schema list fetch fails", function() {
                                         beforeEach(function() {
                                             spyOnEvent(this.view, 'error');
-                                            this.server.lastFetchAllFor(this.view.schemas).fail('whoops!');
+                                            this.server.lastFetchAllFor(this.view.schemas).failUnprocessableEntity('whoops!');
                                         });
 
                                         it("hides the loading section", function() {
@@ -450,7 +450,7 @@ describe("chorus.views.SchemaPicker", function() {
                             context("when the database list fetch fails", function() {
                                 beforeEach(function() {
                                     spyOnEvent(this.view, 'error');
-                                    this.server.lastFetchAllFor(this.view.databases).fail('whoops!');
+                                    this.server.lastFetchAllFor(this.view.databases).failUnprocessableEntity('whoops!');
                                 });
 
                                 it("hides the loading section", function() {
@@ -468,7 +468,7 @@ describe("chorus.views.SchemaPicker", function() {
                 context("when the instance list fetch fails", function() {
                     beforeEach(function() {
                         spyOnEvent(this.view, 'error');
-                        this.server.lastFetchAllFor(this.view.instances).fail('whoops!');
+                        this.server.lastFetchAllFor(this.view.instances).failUnprocessableEntity('whoops!');
                     });
 
                     it("triggers error with the message", function() {

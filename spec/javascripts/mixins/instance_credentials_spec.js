@@ -102,7 +102,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
             context("fetch failed for some other reason", function() {
                 beforeEach(function() {
                     spyOn(this.model, 'instanceRequiringCredentials').andReturn(undefined);
-                    this.server.lastFetchFor(this.model).fail();
+                    this.server.lastFetchFor(this.model).failNotFound();
                 })
 
                 itGoesToThe404Page();

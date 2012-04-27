@@ -151,7 +151,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     describe("when the task completion fails", function() {
                         beforeEach(function() {
-                            this.server.lastCreate().fail("it broke", [
+                            this.server.lastCreate().failUnprocessableEntity("it broke", [
                                 { executionInfo: this.executionInfo }
                             ]);
                         })
@@ -172,7 +172,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     describe("when the task is cancelled", function() {
                         beforeEach(function() {
                             chorus.PageEvents.broadcast.reset();
-                            this.server.lastCreate().fail(fixtures.serverErrors({message: 'The task is cancelled'}), []);
+                            this.server.lastCreate().failUnprocessableEntity(fixtures.serverErrors({message: 'The task is cancelled'}), []);
                         })
 
                         it("broadcasts file:executionFailed", function() {
