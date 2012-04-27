@@ -148,7 +148,8 @@ _.extend(sinon.fakeServer, {
 
 _.extend(sinon.FakeXMLHttpRequest.prototype, {
     succeed: function(models, pagination) {
-        if (!_.isArray(models)) models = [models];
+        var isArray = _.isArray(models);
+        if (!isArray) models = [models];
         var resource = _.map(models, function(model) {
             if (model instanceof Backbone.Model) {
                 return model.attributes;
@@ -157,12 +158,13 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
             }
         });
 
+        if (!isArray) { resource = resource[0]; }
+
         return this.respond(
             200,
             { 'Content-Type': 'application/json' },
             JSON.stringify({
-                status: "ok",
-                resource: resource,
+                response: resource,
                 pagination: pagination
             })
         );

@@ -1,4 +1,63 @@
 describe("sinon extensions", function() {
+    describe("XHR#succeed", function() {
+        beforeEach(function() {
+            var resource = new chorus.models.User();
+            resource.fetch();
+            this.xhr = this.server.lastFetch();
+        });
+
+        context("when given a model", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.Base({ foo: "bar" })
+                this.xhr.succeed(this.model);
+            });
+
+            it("returns a 200 status", function() {
+                this.xhr.succeed(newFixtures.user());
+                expect(this.xhr.status).toBe(200);
+            });
+
+            it("returns the right content-type", function() {
+                this.xhr.succeed(newFixtures.user());
+                expect(this.xhr.responseHeaders["Content-Type"]).toBe("application/json");
+            });
+
+            it("makes 'response' key a hash of the model's attributes", function() {
+                expect(JSON.parse(this.xhr.responseText).response).toEqual({
+                    foo: "bar"
+                });
+            });
+        });
+
+        context("when given an array of models", function() {
+            beforeEach(function() {
+                this.xhr.succeed([
+                    new chorus.models.Base({ foo: "bar" }),
+                    new chorus.models.Base({ baz: "quux" })
+                ], {
+                    page: 1,
+                    total: 5,
+                    records: 100
+                });
+            });
+
+            it("makes the 'response' key an array containing each model's attributes", function() {
+                expect(JSON.parse(this.xhr.responseText).response).toEqual([
+                    { foo: "bar" },
+                    { baz: "quux" }
+                ]);
+            });
+
+            it("includes the 'pagination' key, if passed", function() {
+                expect(JSON.parse(this.xhr.responseText).pagination).toEqual({
+                    page: 1,
+                    total: 5,
+                    records: 100
+                });
+            });
+        });
+    });
+
     describe("#lastFetchFor", function() {
         context("when #fetchAll was called on a collection (setting a non-default 'rows' parameter)", function() {
             beforeEach(function() {
