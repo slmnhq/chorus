@@ -75,7 +75,10 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 describe("when the columnSet fetch completes", function() {
                     beforeEach(function() {
-                        this.server.lastFetchAllFor(this.columnSet).succeed(this.columnSet);
+                        this.server.lastFetchAllFor(this.columnSet).succeed([
+                            fixtures.databaseColumn(),
+                            fixtures.databaseColumn()
+                        ]);
                     })
 
                     it("creates a new columnSet with the same data as the dataset's columnSet", function() {

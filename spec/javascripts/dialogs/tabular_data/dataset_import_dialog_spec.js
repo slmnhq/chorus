@@ -261,10 +261,11 @@ describe("chorus.dialogs.DatasetImport", function() {
                             spyOn(chorus.router, "navigate");
                             spyOn(chorus, "toast");
                             this.workfile = fixtures.workfile({id: "23", fileName: "myFile"});
-                            this.data = {result: {
-                                resource: [this.workfile.attributes],
-                                status: "ok"
-                            }};
+                            this.data = {
+                                result: {
+                                    response: this.workfile.attributes,
+                                }
+                            };
                         });
 
                         context("and the workfile is showable", function() {
@@ -302,7 +303,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             this.workfile = fixtures.workfile({id: "23", fileName: "myFile"});
                             this.data = {
                                 result: {
-                                    resource: [],
+                                    response: [],
                                     status: "fail",
                                     message: [
                                         {message: "Bad File"}
@@ -351,10 +352,12 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                     context("when the csv contains column data", function() {
                         beforeEach(function() {
-                            this.data = {result: {
-                                resource: [fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes],
-                                status: "ok"
-                            }};
+                            this.data = {
+                                result: {
+                                    response: fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes,
+                                    status: "ok"
+                                }
+                            };
                             this.fileUploadOptions.done(null, this.data)
                         });
 
@@ -390,10 +393,12 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                     context("when the csv contains no column data", function() {
                         beforeEach(function() {
-                            this.data = {result: {
-                                resource: [fixtures.csvImport({lines: []}).attributes],
-                                status: "ok"
-                            }};
+                            this.data = {
+                                result: {
+                                    response: fixtures.csvImport({lines: []}).attributes,
+                                    status: "ok"
+                                }
+                            };
                             this.fileUploadOptions.done(null, this.data)
                         });
 
@@ -418,10 +423,12 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                     context("when the csv contains unparseable data", function() {
                         beforeEach(function() {
-                            this.data = {result: {
-                                resource: [fixtures.csvImport({lines: ['"foo,"bar"']}).attributes],
-                                status: "ok"
-                            }};
+                            this.data = {
+                                result: {
+                                    response: fixtures.csvImport({lines: ['"foo,"bar"']}).attributes,
+                                    status: "ok"
+                                }
+                            };
                             this.fileUploadOptions.done(null, this.data)
                         });
 

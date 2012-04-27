@@ -17,8 +17,10 @@ chorus.collections.DatabaseSet = chorus.collections.Base.include(
     },
 
     parse:function (data) {
-        if (data.resource.length && data.resource[0].databaseList) {
-            data.resource = data.resource[0].databaseList;
+        // TODO - remove the check for 'data.response' once we've converted
+        // the #fail method to use the new format
+        if (data.response && data.response.length && data.response[0].databaseList) {
+            data.response = data.response[0].databaseList;
         }
 
         return this._super('parse', [data]);

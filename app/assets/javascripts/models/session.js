@@ -28,7 +28,7 @@ chorus.models.Session = chorus.models.Base.extend({
         var self = this;
 
         options.success = function(model, response, xhr) {
-            if (response.status !== "ok") {
+            if (!self.dataStatusOk(response)) {
                 self.clear();
                 self.trigger("needsLogin");
             }

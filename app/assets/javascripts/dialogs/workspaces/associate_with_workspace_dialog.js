@@ -42,7 +42,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
 
         $.post(url, params,
             function(data) {
-                if (data.status == "ok") {
+                if (self.model.dataStatusOk(data)) {
                     self.model.activities().fetch();
                     self.closeModal();
                     chorus.toast("dataset.associate.toast.one", {datasetTitle: self.model.get("objectName"), workspaceNameTarget: self.selectedItem().get("name")});

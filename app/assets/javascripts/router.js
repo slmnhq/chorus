@@ -103,8 +103,8 @@
 
                 if (this.pageRequiresLogin(className)) {
                     self.app.session.fetch({
-                        success:function (session, resp) {
-                            if (resp.status == "ok") {
+                        success: function(session, resp) {
+                            if (session.dataStatusOk(resp)) {
                                 navFunction();
                             }
                         }

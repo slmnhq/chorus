@@ -36,13 +36,11 @@ chorus.Mixins.SQLResults = {
     },
 
     dataStatusOk: function(data) {
-        if (data.status != "ok") return false;
-
-        if (data.resource && data.resource[0] && data.resource[0].state == "failed") {
+        if (data.response && data.response.state == "failed") {
             return false
+        } else {
+            return this._super("dataStatusOk", arguments);
         }
-
-        return true
     },
 
     dataErrors: function(data) {
@@ -50,8 +48,8 @@ chorus.Mixins.SQLResults = {
             return data.message
         }
 
-        if (data.resource && data.resource[0] && data.resource[0].result) {
-            return [data.resource[0].result]
+        if (data.response && data.response.result) {
+            return [data.response.result];
         }
     },
 

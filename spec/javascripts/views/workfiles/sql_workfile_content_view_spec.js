@@ -114,16 +114,14 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     describe("when the task completes successfully", function() {
                         beforeEach(function() {
-                            this.server.lastCreate().succeed([
-                                {
-                                    id: "10100",
-                                    state: "success",
-                                    result: {
-                                        message: "hi there"
-                                    },
-                                    executionInfo: this.executionInfo
-                                }
-                            ]);
+                            this.server.lastCreate().succeed({
+                                id: "10100",
+                                state: "success",
+                                result: {
+                                    message: "hi there"
+                                },
+                                executionInfo: this.executionInfo
+                            });
                         })
 
                         it("broadcasts file:executionSucceeded", function() {

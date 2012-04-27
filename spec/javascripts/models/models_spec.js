@@ -484,7 +484,7 @@ describe("chorus.models.Abstract", function() {
 
             context("when there are no errors", function() {
                 it("returns the enclosed resource", function() {
-                    expect(this.model.parse({ status: "ok", foo: "bar", resource: [ this.thing ]})).toBe(this.thing);
+                    expect(this.model.parse({ status: "ok", foo: "bar", response: this.thing })).toBe(this.thing);
                 });
             });
 
@@ -495,7 +495,7 @@ describe("chorus.models.Abstract", function() {
                         message: [
                             { message: "No." }
                         ],
-                        resource: [ this.thing ]
+                        response: [ this.thing ]
                     })).toBeUndefined();
                 });
             });
@@ -767,13 +767,6 @@ describe("chorus.models.Abstract", function() {
             })
         });
 
-        describe("behavior shared with collection", function() {
-            beforeEach(function() {
-                this.resource = newFixtures.user();
-            });
-            fetchIfNotLoadedSpecs();
-        })
-
         describe("hasOwnPage", function() {
             it("returns false", function() {
                 var model = new chorus.models.Base()
@@ -990,7 +983,7 @@ describe("chorus.models.Abstract", function() {
                     records: "52"
                 }
 
-                this.collection.parse({ resource: this.things, pagination: pagination });
+                this.collection.parse({ response: this.things, pagination: pagination });
                 expect(this.collection.pagination).toBe(pagination);
             });
 
@@ -1000,7 +993,7 @@ describe("chorus.models.Abstract", function() {
                         message: [
                             { message: "No." }
                         ],
-                        resource: this.things,
+                        response: this.things,
                         status: "fail"
                     })).toEqual([]);
                 });
@@ -1008,7 +1001,7 @@ describe("chorus.models.Abstract", function() {
 
             context("when there are no errors", function() {
                 it("returns the enclosed resource", function() {
-                    expect(this.collection.parse({ resource: this.things, status: 'ok'})).toEqual(this.things);
+                    expect(this.collection.parse({ response: this.things, status: 'ok'})).toEqual(this.things);
                 });
             });
         });
@@ -1235,13 +1228,6 @@ describe("chorus.models.Abstract", function() {
             });
         })
 
-        describe("behavior shared with models", function() {
-            beforeEach(function() {
-                this.resource = fixtures.workfileSet();
-            });
-            fetchIfNotLoadedSpecs();
-        })
-
         describe("LastFetchWins", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.LastFetchWins([], { foo: "bar" });
@@ -1277,97 +1263,5 @@ describe("chorus.models.Abstract", function() {
             });
         });
     });
-
-    function fetchIfNotLoadedSpecs() {
-        describe("fetchIfNotLoaded", function() {
-            beforeEach(function() {
-                spyOn(this.resource, 'fetch').andCallThrough();
-            });
-
-            context("when not loaded or fetching", function() {
-                it("starts a fetch", function() {
-                    this.resource.fetchIfNotLoaded();
-                    expect(this.resource.fetch).toHaveBeenCalled();
-                })
-            })
-
-            context("when loaded", function() {
-                beforeEach(function() {
-                    this.resource.loaded = true;
-                })
-
-                it("it won't start fetching again", function() {
-                    this.resource.fetchIfNotLoaded();
-                    expect(this.resource.fetch).not.toHaveBeenCalled();
-                })
-            })
-
-            context("when fetching", function() {
-                beforeEach(function() {
-                    this.resource.fetch();
-                })
-
-                it("it won't start a second fetch", function() {
-                    this.resource.fetch.reset();
-                    this.resource.fetchIfNotLoaded();
-                    expect(this.resource.fetch).not.toHaveBeenCalled();
-                });
-            });
-
-            context("after fetch completes", function() {
-                beforeEach(function() {
-                    this.resource.fetch();
-                    this.server.completeFetchFor(this.resource);
-                })
-
-                context("if the model is declared unloaded", function() {
-                    beforeEach(function() {
-                        this.resource.loaded = false;
-                        this.resource.fetch.reset();
-                    })
-
-                    it('will fetch again', function() {
-                        this.resource.fetchIfNotLoaded();
-                        expect(this.resource.fetch).toHaveBeenCalled();
-                    })
-                })
-            });
-
-            context("after the fetch fails", function() {
-                beforeEach(function() {
-                    this.resource.fetch();
-                    this.server.lastFetchFor(this.resource).failUnprocessableEntity();
-                    this.resource.fetch.reset();
-                });
-
-                it('will fetch again', function() {
-                    this.resource.fetchIfNotLoaded();
-                    expect(this.resource.fetch).toHaveBeenCalled();
-                })
-            });
-
-            context("after the fetch errors", function() {
-                beforeEach(function() {
-                    this.resource.fetch();
-                    this.server.lastFetchFor(this.resource).error();
-                    this.resource.fetch.reset();
-                });
-
-                it('will fetch again', function() {
-                    this.resource.fetchIfNotLoaded();
-                    expect(this.resource.fetch).toHaveBeenCalled();
-                })
-            });
-
-            context("fetching with options", function() {
-                beforeEach(function() {
-                    this.resource.fetchIfNotLoaded({rows: 10});
-                });
-                it("should pass options to fetch", function() {
-                    expect(this.resource.fetch.mostRecentCall.args[0].rows).toBe(10);
-                })
-            });
-        })
-    }
 });
 

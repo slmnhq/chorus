@@ -20,23 +20,24 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
 
     submit: function() {
         var self = this;
+        var workfile = this.workfile;
 
         var params = {
             source: "chorus",
-            fileName: this.workfile.get("fileName"),
-            workfileId: this.workfile.get("id")
+            fileName: workfile.get("fileName"),
+            workfileId: workfile.get("id")
         }
 
-        var description = this.workfile.get("description");
+        var description = workfile.get("description");
         if (description) {
             params.description = description;
         }
 
         $.post("/workspace/" + this.selectedItem().get("id") + "/workfile", params,
             function(data) {
-                if (data.status == "ok") {
+                if (workfile.dataStatusOk(data)) {
                     self.closeModal();
-                    var copiedWorkfile = new chorus.models.Workfile(data.resource[0])
+                    var copiedWorkfile = new chorus.models.Workfile(workfile.parse(data));
                     chorus.toast("workfile.copy_dialog.toast", {workfileTitle: copiedWorkfile.get("fileName"), workspaceNameTarget: self.selectedItem().get("name")});
                 } else {
                     self.serverErrors = data.message;

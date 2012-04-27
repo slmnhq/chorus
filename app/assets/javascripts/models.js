@@ -39,10 +39,10 @@ chorus.models = {
             return this._activities;
         },
 
-        parse: function(data) {
-            var errors = this.parseErrors(data);
+        parse: function(data, xhr) {
+            var errors = this.parseErrors(data, xhr);
             if (!errors) {
-                return data.resource[0];
+                return data.response;
             }
         },
 
@@ -93,7 +93,7 @@ chorus.models = {
             options.success = function(resp) {
                 if (!model.set(model.parse(resp), options)) return false;
 
-                var event = (resp.status === "ok") ? "destroy" : "destroyFailed";
+                var event = model.dataStatusOk(resp) ? "destroy" : "destroyFailed";
                 model.trigger(event, model, model.collection, options);
 
                 if (success) success(model, resp);
@@ -324,12 +324,13 @@ chorus.collections = {
 
         fetchAll: (function() {
             var fetchPage = function(page) {
+                var self = this;
                 this.fetch({
                     url: this.url({ page: page, rows: 1000 }),
                     silent: true,
                     add: page != 1,
                     success: function(collection, resp) {
-                        if (resp.status == "ok") {
+                        if (self.dataStatusOk(resp)) {
                             var total = resp.pagination ? parseInt(resp.pagination.total) : 1;
                             var page = resp.pagination ? parseInt(resp.pagination.page) : 1;
                             if (page >= total) {
@@ -358,7 +359,7 @@ chorus.collections = {
             if (errors) {
                 return [];
             } else {
-                return data.resource;
+                return data.response;
             }
         },
 

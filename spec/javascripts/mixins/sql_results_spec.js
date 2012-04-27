@@ -10,31 +10,25 @@ describe("chorus.Mixins.SQLResults", function() {
         }
         ],
         status: "fail",
-        resource: [ ]
+        response: []
     };
 
     var taskFailure = {
         "message": [],
-        "status": "ok",
-        "resource": [
-            {
+        "response": {
             "state": "failed",
             "result": {
                 "message": "An error happened in the task",
                 "executeResult": "failed"
             }
         }
-        ]
     };
 
     var taskSuccess = {
         message: [],
-        resource: [
-            {
+        response: {
             executeResult: "success"
         }
-        ],
-        status: "ok"
     };
 
     describe("#errorMessage", function() {
@@ -246,7 +240,7 @@ describe("chorus.Mixins.SQLResults", function() {
             });
 
             it("returns the errors object", function() {
-                expect(this.hostModel.dataErrors(this.data)).toEqual([this.data.resource[0].result]);
+                expect(this.hostModel.dataErrors(this.data)).toEqual([this.data.response.result]);
             })
         });
     });

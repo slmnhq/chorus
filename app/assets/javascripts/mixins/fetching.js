@@ -18,7 +18,7 @@ chorus.Mixins.Fetching = {
     },
 
     dataStatusOk: function(data) {
-        return data.status == 'ok';
+        return !_.include(["needlogin", "fail"], data.status);
     },
 
     dataErrors: function(data) {

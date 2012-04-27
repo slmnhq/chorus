@@ -25,15 +25,16 @@ chorus.collections.NotificationSet = chorus.collections.Base.extend({
     },
 
     markAllRead: function(options) {
+        var self = this;
         if (this.length > 0) {
             $.ajax({
                 type: "PUT",
                 url: "/notification/" + this.pluck("id").join(",") + "/read"
             }).success(function(response) {
-                    if (response && response.status == "ok" && options.success) {
-                        options.success(response);
-                    }
-                });
+                if (self.dataStatusOk(response) && options.success) {
+                    options.success(response);
+                }
+            });
         } else {
             if (options.success) options.success();
         }
