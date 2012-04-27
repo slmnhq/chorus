@@ -54,24 +54,6 @@ class DummyMiddleware
   end
 end
 
-class TemplateMiddleware
-  def initialize(app)
-    @app = app
-  end
-
-  def call(env)
-    response_lines = []
-    Dir.glob("app/assets/javascripts/templates/**/*.handlebars") do |file|
-      template_name = file[("app/assets/javascripts/templates".length + 1)...(-(".handlebars".length))]
-      this_response = [%{<script type="x-handlebars-template" data-template-path="#{template_name}">}]
-      this_response << IO.read(file)
-      this_response << %{</script>}
-      response_lines << this_response.join()
-    end
-    [200, {"Content-Type" => "text/html"}, response_lines]
-  end
-end
-
 class FixtureMiddleware
   def initialize(app)
     @app = app
@@ -135,15 +117,11 @@ module Jasmine
         run FixtureMiddleware.new(self)
       end
 
-      map("/__templates") do
-        run TemplateMiddleware.new(self)
-      end
-
       map('/') do
         run Rack::Cascade.new([
-                                  Rack::URLMap.new('/' => Rack::File.new(config.src_dir)),
-                                  Jasmine::RunAdapter.new(config)
-                              ])
+            Rack::URLMap.new('/' => Rack::File.new(config.src_dir)),
+            Jasmine::RunAdapter.new(config)
+        ])
       end
     end
   end

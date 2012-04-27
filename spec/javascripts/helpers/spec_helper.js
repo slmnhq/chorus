@@ -1,6 +1,5 @@
 (function() {
     var loadTemplatesOnce = _.once(function() {
-        var allTemplatesLoaded = false;
         var allFixturesLoaded = false;
 
         // Code that only needs to be run once before all the tests run
@@ -15,10 +14,9 @@
             jasmine.getEnv().updateInterval = 12000;
         });
 
-        runs(loadAllTemplates);
         runs(loadAllFixtures);
         waitsFor(function() {
-            return allTemplatesLoaded && allFixturesLoaded;
+            return allFixturesLoaded;
         }, "all templates and fixtures to be loaded", 5000);
 
         function loadAllFixtures() {
@@ -36,25 +34,6 @@
                 error: function(data) {
                     alert("Sorry but I couldn't load the fixtures! Things will go REALLY poorly from here...");
                     allFixturesLoaded = true;
-                }
-            });
-        }
-
-        function loadAllTemplates() {
-            var templateContainer = $("<div id='templates'/>");
-            $("body").append(templateContainer);
-            return $.ajax({
-                async: true,
-                cache: false,
-                dataType: 'html',
-                url: '/__templates',
-                success: function(data) {
-                    templateContainer.append(data);
-                    allTemplatesLoaded = true;
-                },
-                error: function(data) {
-                    alert("Sorry but I couldn't load the templates! Things will go REALLY poorly from here...");
-                    allTemplatesLoaded = true;
                 }
             });
         }
