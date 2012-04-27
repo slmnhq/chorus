@@ -379,31 +379,64 @@ describe("chorus.models.Abstract", function() {
         });
 
         describe("#fetch", function() {
-            context("when there is a server error", function() {
-                beforeEach(function() {
-                    this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
-                    this.model.bind("fetchFailed", this.fetchFailedSpy);
-                });
+            beforeEach(function() {
+                this.errorSpy = jasmine.createSpy("error");
+                this.successSpy = jasmine.createSpy("success");
+                this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
+                this.loadedSpy = jasmine.createSpy("loaded");
 
+                this.model.bind("fetchFailed", this.fetchFailedSpy);
+                this.model.bind("loaded", this.loadedSpy);
+
+                this.model.fetch({
+                    success: this.successSpy,
+                    error: this.errorSpy,
+                });
+            });
+
+            context("when there is a server error", function() {
                 it("triggers the 'fetchFailed' event on the model", function() {
-                    this.model.fetch();
                     this.server.lastFetch().failUnprocessableEntity();
                     expect(this.fetchFailedSpy).toHaveBeenCalled();
                     expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.model);
                 });
             });
 
+            context("when the response is '403 forbidden'", function() {
+                beforeEach(function() {
+                    this.server.lastFetch().failForbidden({custom: "error"});
+                });
+
+                it("triggers the 'fetchFailed' event on the model", function() {
+                    expect(this.fetchFailedSpy).toHaveBeenCalled();
+                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.model);
+                });
+
+                it("does not trigger 'loaded", function() {
+                    expect(this.loadedSpy).not.toHaveBeenCalled();
+                });
+
+                it("fills serverErrors from the errors key", function() {
+                    expect(this.model.serverErrors).toEqual({custom: "error"});
+                });
+
+                it("calls the 'error' callback if one is provided", function() {
+                    expect(this.errorSpy).toHaveBeenCalled();
+                });
+            });
+
             context("when the fetch succeeds", function() {
                 beforeEach(function() {
-                    this.loadedSpy = jasmine.createSpy("loaded");
-                    this.model.bind("loaded", this.loadedSpy);
-                })
+                    this.server.lastFetch().succeed();
+                });
 
                 it("triggers the 'loaded' event on the model", function() {
-                    this.model.fetch();
-                    this.server.lastFetch().succeed();
                     expect(this.loadedSpy).toHaveBeenCalled();
-                })
+                });
+
+                it("calls the 'success' callback if one is provided", function() {
+                    expect(this.successSpy).toHaveBeenCalled();
+                });
             })
         });
 
@@ -484,7 +517,13 @@ describe("chorus.models.Abstract", function() {
 
             context("when there are no errors", function() {
                 it("returns the enclosed resource", function() {
-                    expect(this.model.parse({ status: "ok", foo: "bar", response: this.thing })).toBe(this.thing);
+                    expect(this.model.parse({
+                        status: "ok",
+                        foo: "bar",
+                        response: this.thing
+                    }, {
+                        status: 200
+                    })).toBe(this.thing);
                 });
             });
 
@@ -496,6 +535,8 @@ describe("chorus.models.Abstract", function() {
                             { message: "No." }
                         ],
                         response: [ this.thing ]
+                    }, {
+                        status: 200
                     })).toBeUndefined();
                 });
             });
@@ -1032,33 +1073,28 @@ describe("chorus.models.Abstract", function() {
         });
 
         describe("#fetch", function() {
+            beforeEach(function() {
+                this.loadedSpy = jasmine.createSpy("loaded");
+                this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
+                this.collection.bind("loaded", this.loadedSpy);
+                this.collection.bind("fetchFailed", this.fetchFailedSpy);
+
+                this.errorSpy = jasmine.createSpy("error");
+                this.successSpy = jasmine.createSpy("success");
+                this.collection.fetch({
+                    success: this.successSpy,
+                    error: this.errorSpy,
+                });
+            });
+
             context("when the collection does not contain pagination information", function() {
                 it("fetches the first page of items", function() {
-                    this.collection.fetch();
-                    expect(this.server.requests[0].url).toBe("/bar/bar?page=1&rows=50")
-                })
-            })
-
-            context("when the collection has pagination information", function() {
-                beforeEach(function() {
-                    this.collection.pagination = {
-                        page: "2",
-                        total: "3",
-                        records: "22"
-                    }
-                })
-
-                it("fetches the page specified in the pagination information", function() {
-                    this.collection.fetch();
                     expect(this.server.requests[0].url).toBe("/bar/bar?page=1&rows=50")
                 })
             })
 
             context("when the fetch succeeds", function() {
                 beforeEach(function() {
-                    this.loadedSpy = jasmine.createSpy("loaded");
-                    this.collection.bind("loaded", this.loadedSpy);
-                    this.collection.fetch();
                     this.server.lastFetch().succeed();
                 })
 
@@ -1069,15 +1105,35 @@ describe("chorus.models.Abstract", function() {
 
             context("when there is a server error", function() {
                 beforeEach(function() {
-                    this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
-                    this.collection.bind("fetchFailed", this.fetchFailedSpy);
-                    this.collection.fetch();
                     this.server.lastFetchFor(this.collection).failUnprocessableEntity();
                 });
 
                 it("triggers the 'fetchFailed' event on the model", function() {
                     expect(this.fetchFailedSpy).toHaveBeenCalled();
                     expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.collection);
+                });
+            });
+
+            context("when the response is '403 forbidden'", function() {
+                beforeEach(function() {
+                    this.server.lastFetch().failForbidden({custom: "error"});
+                });
+
+                it("triggers the 'fetchFailed' event on the model", function() {
+                    expect(this.fetchFailedSpy).toHaveBeenCalled();
+                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.collection);
+                });
+
+                it("does not trigger 'loaded", function() {
+                    expect(this.loadedSpy).not.toHaveBeenCalled();
+                });
+
+                it("fills serverErrors from the errors key", function() {
+                    expect(this.collection.serverErrors).toEqual({custom: "error"});
+                });
+
+                it("calls the 'error' callback if one is provided", function() {
+                    expect(this.errorSpy).toHaveBeenCalled();
                 });
             });
         });

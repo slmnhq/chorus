@@ -29,7 +29,7 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
 
     fetchResourceAfterSchemaSelected: function() {
         this.resource = this.collection = this.schema.functions();
-        this.bindings.add(this.resource, "change reset add remove", this.render);
+        this.bindings.add(this.resource, "change reset add remove fetchFailed", this.render);
         this.collection.fetchIfNotLoaded();
     },
 

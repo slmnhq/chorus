@@ -51,10 +51,10 @@ chorus.models = {
             var effectiveAttrs = attrs || {};
             this.beforeSave(effectiveAttrs, options);
             var success = options.success;
-            options.success = function(model, resp, xhr) {
+            options.success = function(model, data, xhr) {
                 var savedEvent = model.serverErrors ? "saveFailed" : "saved";
-                model.trigger(savedEvent, model, resp, xhr);
-                if (success) success(model, resp, xhr);
+                model.trigger(savedEvent, model, data, xhr);
+                if (success) success(model, data, xhr);
             };
             if (this.performValidation(effectiveAttrs)) {
                 this.trigger("validated");
@@ -69,16 +69,24 @@ chorus.models = {
         fetch: function(options) {
             this.fetching = true;
             options || (options = {});
-            var success = options.success;
-            options.success = function(model, resp, xhr) {
+            var success = options.success, error = options.error;
+            options.success = function(model, data, xhr) {
                 if (model.serverErrors) {
-                    model.trigger('fetchFailed', model, resp, xhr);
+                    model.trigger('fetchFailed', model, data, xhr);
                 }
                 if (model.loaded) {
                     model.trigger('loaded');
                 }
-                if (success) success(model, resp, xhr);
+                if (success) success(model, data, xhr);
             };
+
+            options.error = function(model, xhr) {
+                model.trigger("fetchFailed", model, xhr)
+                var data = xhr.responseText && JSON.parse(xhr.responseText);
+                model.parseErrors(data, xhr);
+                if (error) error(model, xhr);
+            };
+
             return this._super('fetch', [options])
                 .always(_.bind(function() {
                 this.fetching = false;
@@ -90,13 +98,13 @@ chorus.models = {
             if (this.isNew()) return this.trigger('destroy', this, this.collection, options);
             var model = this;
             var success = options.success;
-            options.success = function(resp) {
-                if (!model.set(model.parse(resp), options)) return false;
+            options.success = function(data, status, xhr) {
+                if (!model.set(model.parse(data, xhr), options)) return false;
 
-                var event = model.dataStatusOk(resp) ? "destroy" : "destroyFailed";
+                var event = model.dataStatusOk(data, xhr) ? "destroy" : "destroyFailed";
                 model.trigger(event, model, model.collection, options);
 
-                if (success) success(model, resp);
+                if (success) success(model, data);
             };
 
             return (this.sync || Backbone.sync).call(this, 'delete', this, options);
@@ -283,7 +291,7 @@ chorus.collections = {
         },
 
         makeSuccessFunction: function(options, success) {
-            return function(collection, resp) {
+            return function(collection, data, xhr) {
                 if (collection.serverErrors) {
                     collection.trigger('fetchFailed', collection);
                 }
@@ -291,7 +299,7 @@ chorus.collections = {
                     collection.trigger('loaded');
                 }
                 if (success) {
-                    success(collection, resp);
+                    success(collection, data, xhr);
                 }
             };
         },
@@ -303,8 +311,16 @@ chorus.collections = {
         fetch: function(options) {
             this.fetching = true;
             options || (options = {});
-            var success = options.success;
+            var success = options.success, error = options.error;
             options.success = this.makeSuccessFunction(options, success);
+
+            options.error = function(collection, xhr) {
+                collection.trigger("fetchFailed", collection, xhr)
+                var data = xhr.responseText && JSON.parse(xhr.responseText);
+                collection.parseErrors(data, xhr);
+                if (error) error(collection, xhr);
+            };
+
             return this._super('fetch', [options])
                 .always(_.bind(function() {
                 this.fetching = false;
@@ -329,10 +345,10 @@ chorus.collections = {
                     url: this.url({ page: page, rows: 1000 }),
                     silent: true,
                     add: page != 1,
-                    success: function(collection, resp) {
-                        if (self.dataStatusOk(resp)) {
-                            var total = resp.pagination ? parseInt(resp.pagination.total) : 1;
-                            var page = resp.pagination ? parseInt(resp.pagination.page) : 1;
+                    success: function(collection, data, xhr) {
+                        if (self.dataStatusOk(data, xhr)) {
+                            var total = data.pagination ? parseInt(data.pagination.total) : 1;
+                            var page = data.pagination ? parseInt(data.pagination.page) : 1;
                             if (page >= total) {
                                 collection.trigger("reset", collection);
                                 collection.trigger("loaded");
@@ -353,9 +369,9 @@ chorus.collections = {
         })(),
 
 
-        parse: function(data) {
+        parse: function(data, xhr) {
             this.pagination = data.pagination;
-            var errors = this.parseErrors(data);
+            var errors = this.parseErrors(data, xhr);
             if (errors) {
                 return [];
             } else {
@@ -384,10 +400,10 @@ chorus.collections.LastFetchWins = chorus.collections.Base.extend({
 
     makeSuccessFunction: function(options, success) {
         var fetchId = ++this.lastFetchId;
-        return _.bind(function(collection, resp) {
+        return _.bind(function(collection, data) {
             if (fetchId != this.lastFetchId) return;
             var parentFunction = this._super("makeSuccessFunction", [options || {}, success]);
-            return parentFunction(collection, resp);
+            return parentFunction(collection, data);
         }, this);
     }
 });

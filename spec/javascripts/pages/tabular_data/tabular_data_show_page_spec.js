@@ -70,11 +70,11 @@ describe("chorus.pages.TabularDataShowPage", function() {
 
                 context("with errors", function() {
                     beforeEach(function() {
-                        this.server.lastFetchAllFor(this.columnSet).failForbidden([{message: "No permission"}]);
+                        this.server.lastFetchAllFor(this.columnSet).failForbidden({message: "No permission"});
                     });
 
                     it("puts the errors on the new column set", function() {
-                        expect(this.page.columnSet.serverErrors[0].message).toBe("No permission");
+                        expect(this.page.columnSet.serverErrors).toEqual({message: "No permission"});
                     })
                 })
             })

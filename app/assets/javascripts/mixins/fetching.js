@@ -17,23 +17,24 @@ chorus.Mixins.Fetching = {
         }
     },
 
-    dataStatusOk: function(data) {
-        return !_.include(["needlogin", "fail"], data.status);
+    dataStatusOk: function(data, xhr) {
+        var badStatus = xhr && xhr.status >= 300
+        return !badStatus && !_.include(["needlogin", "fail"], data.status);
     },
 
     dataErrors: function(data) {
-        return data.message;
+        return data.errors || data.message;
     },
 
-    parseErrors: function(data) {
+    parseErrors: function(data, xhr) {
         if (data.status == "needlogin") {
             chorus.session.trigger("needsLogin");
         }
-        if (this.dataStatusOk(data)) {
+        if (this.dataStatusOk(data, xhr)) {
             this.loaded = true;
             delete this.serverErrors;
         } else {
-            this.errorData = data.resource && data.resource[0];
+            this.errorData = data.response;
             this.serverErrors = this.dataErrors(data);
             return true;
         }
