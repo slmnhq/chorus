@@ -31,7 +31,7 @@ describe("chorus.router", function() {
             });
 
             it("fetches the session", function() {
-                expect(this.server.lastFetch().url).toBe("/auth/checkLogin/?authid=1234");
+                expect(chorus.session).toHaveBeenFetched();
             });
 
             describe("when the session is valid", function() {
@@ -41,7 +41,7 @@ describe("chorus.router", function() {
 
                 it("navigates to the requested page", function() {
                     expect(chorus.pages.UserNewPage.prototype.initialize).toHaveBeenCalled();
-                })
+                });
 
                 it("calls reset on the PageEvents object", function() {
                     expect(chorus.PageEvents.reset).toHaveBeenCalled();
@@ -50,7 +50,7 @@ describe("chorus.router", function() {
                 it("sets the scroll position to (0,0)", function() {
                     this.chorus.router.navigate("/users/new");
                     expect(window.scroll).toHaveBeenCalledWith(0, 0);
-                })
+                });
 
                 it("triggers the 'leaving' event on itself", function() {
                     expect("leaving").toHaveBeenTriggeredOn(this.chorus.router);
@@ -59,16 +59,6 @@ describe("chorus.router", function() {
                 it("sets chorus.page.pageOptions to chorus.pageOptions", function() {
                     expect(this.chorus.page.pageOptions).toEqual({ foo: "bar" })
                     expect(this.chorus.pageOptions).toBeUndefined();
-                })
-            });
-
-            describe("when the session is invalid", function() {
-                beforeEach(function() {
-                    this.server.lastFetch().failUnauthorized();
-                });
-
-                it("navigates to the login page", function() {
-                    expect(this.chorus.router.navigate).toHaveBeenCalledWith("/login");
                 });
             });
         });
@@ -136,28 +126,28 @@ describe("chorus.router", function() {
         describe("when triggerRoute is true", function() {
             beforeEach(function() {
                 Backbone.history.fragment = "/foo";
-            })
+            });
 
             describe("and the target fragment is not the current fragment", function() {
                 it("delegates to the Backbone.router implementation", function() {
                     this.chorus.router.navigate("/bar");
                     expect(Backbone.history.navigate).toHaveBeenCalledWith("/bar", true);
-                })
-            })
+                });
+            });
 
             describe("and the target fragment is the current fragment", function() {
                 it("calls loadUrl on the fragment", function() {
                     this.chorus.router.navigate("/foo");
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
                     expect(Backbone.history.navigate).not.toHaveBeenCalled();
-                })
+                });
 
                 it("calls loadUrl on the fragment, even if the target fragment is prefixed by #", function() {
                     this.chorus.router.navigate("#/foo");
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo");
                     expect(Backbone.history.navigate).not.toHaveBeenCalled();
-                })
-            })
+                });
+            });
 
             describe("when the fragment is URI encoded", function() {
                 beforeEach(function() {
@@ -169,7 +159,7 @@ describe("chorus.router", function() {
                         this.chorus.router.navigate("/foo/%271%27%7C2");
                         expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/foo/%271%27%7C2");
                         expect(Backbone.history.navigate).not.toHaveBeenCalled();
-                    })
+                    });
 
                     it("calls loadUrl on the fragment, even if the target fragment is prefixed by #", function() {
                         this.chorus.router.navigate("#/foo/%271%27%7C2");
@@ -187,8 +177,8 @@ describe("chorus.router", function() {
             spyOn(chorus.router, 'navigate');
             chorus.router.reload();
             expect(chorus.router.navigate).toHaveBeenCalledWith(Backbone.history.fragment);
-        })
-    })
+        });
+    });
 
     describe("url decoding", function() {
         beforeEach(function() {
@@ -199,7 +189,7 @@ describe("chorus.router", function() {
             var session = this.chorus.session;
             spyOn(this.chorus.session, "fetch").andCallFake(function(options) {
                 options.success(session, { status: "ok" });
-            })
+            });
 
             spyOn(chorus.pages.SearchIndexPage.prototype, "setup").andCallThrough()
         });

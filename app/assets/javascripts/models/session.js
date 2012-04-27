@@ -1,6 +1,6 @@
 chorus.models.Session = chorus.models.Base.extend({
     constructorName: "Session",
-    urlTemplate: "auth/login/",
+    urlTemplate: "sessions",
 
     initialize: function() {
         this.sandboxPermissionsCreated = {}
@@ -20,29 +20,20 @@ chorus.models.Session = chorus.models.Base.extend({
     },
 
     fetch: function(options) {
-        options = _.extend(options || {}, {
-            url: "/auth/checkLogin/?authid=" + $.cookie("authid")
-        });
+        options || (options = {});
+        var success = options.success, error = options.error;
 
-        var success = options.success;
-        var self = this;
-
-        options.success = function(model, response, xhr) {
-            if (!self.dataStatusOk(response)) {
-                self.clear();
-                self.trigger("needsLogin");
-            }
-            if (success) success(model, response);
+        options.success = function(model, data, xhr) {
             chorus.models.Config.instance();
+            if (success) success(model, data);
+        };
+
+        options.error = function(model, xhr) {
+            model.clear();
+            if (error) error(model, xhr);
         };
 
         return this._super('fetch', [options]);
-    },
-
-    check: function(destinationRoute) {
-        if (destinationRoute != "Logout" && destinationRoute != "Login") {
-            this.fetch();
-        }
     },
 
     clear: function() {

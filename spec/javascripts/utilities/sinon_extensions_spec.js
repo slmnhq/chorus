@@ -73,23 +73,23 @@ describe("sinon extensions", function() {
 
     describe("#completeFetchFor", function() {
         beforeEach(function() {
-            this.model = new chorus.models.User({ id: '1' })
-            this.collection = new chorus.collections.UserSet()
+            this.model = new chorus.models.User({ id: '1' });
+            this.collection = new chorus.collections.UserSet();
 
-            this.model.fetch()
+            this.model.fetch();
             this.collection.fetch()
-        })
+        });
 
-        context("it is called with a specified result", function(){
+        context("it is called with a specified result", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.model, { name: "John Smith", secretIdentity: "Neo" })
-            })
+                this.server.completeFetchFor(this.model, { name: "John Smith", secretIdentity: "Neo" });
+            });
 
             it("succeeds with the specified result", function() {
-                expect(this.model.get('name')).toBe("John Smith")
-                expect(this.model.loaded).toBeTruthy()
-            })
-        })
+                expect(this.model.get('name')).toBe("John Smith");
+                expect(this.model.loaded).toBeTruthy();
+            });
+        });
 
         context("when no result is passed", function() {
             context("it is called with a backbone model", function() {
@@ -99,28 +99,28 @@ describe("sinon extensions", function() {
                 });
 
                 it("uses the current attributes of the model", function() {
-                    expect(this.model.get('name')).toBe("Keanu Reeves")
-                    expect(this.model.loaded).toBeTruthy()
-                })
-            })
+                    expect(this.model.get('name')).toBe("Keanu Reeves");
+                    expect(this.model.loaded).toBeTruthy();
+                });
+            });
 
             context("it is called with a collection", function() {
                 beforeEach(function() {
-                    var otherCollection = new chorus.collections.UserSet([], { group: "Agents" })
+                    var otherCollection = new chorus.collections.UserSet([], { group: "Agents" });
                     this.server.completeFetchFor(otherCollection);
                 });
 
                 it("uses an empty model set", function() {
                     expect(this.collection.models.length).toBe(0)
-                    expect(this.collection.get('group')).toBeUndefined()
-                    expect(this.collection.loaded).toBeTruthy()
-                })
-            })
+                    expect(this.collection.get('group')).toBeUndefined();
+                    expect(this.collection.loaded).toBeTruthy();
+                });
+            });
         });
     });
 
     describe("#makeFakeResponse(modelOrCollection, response)", function() {
-        context("when called with a specified response", function(){
+        context("when called with a specified response", function() {
             it("returns the specified response", function() {
                 var fakeResponse = this.server.makeFakeResponse(this.model, {
                     name: "John Smith",
@@ -130,8 +130,8 @@ describe("sinon extensions", function() {
                     name: "John Smith",
                     secretIdentity: "Neo"
                 });
-            })
-        })
+            });
+        });
 
         context("when no response is passed", function() {
             context("and it is called with a backbone model", function() {
@@ -191,7 +191,30 @@ describe("sinon extensions", function() {
                 instanceId: 1
             });
         });
-    })
+    });
+
+    describe("#failUnauthorized", function() {
+        beforeEach(function() {
+            this.fakeResponse = new sinon.FakeXMLHttpRequest();
+            this.fakeResponse.failUnauthorized({record: "not accessible"}, { instanceId: 1 })
+        });
+
+        it("returns a status code of 401", function() {
+            expect(this.fakeResponse.status).toBe(401);
+        });
+
+        it("returns an error message in the 'message' field", function() {
+            expect(JSON.parse(this.fakeResponse.responseText).errors).toEqual({
+                record: "not accessible"
+            });
+        });
+
+        it("includes the response if one is given", function() {
+            expect(JSON.parse(this.fakeResponse.responseText).response).toEqual({
+                instanceId: 1
+            });
+        });
+    });
 
     describe("#failNotFound", function() {
         beforeEach(function() {

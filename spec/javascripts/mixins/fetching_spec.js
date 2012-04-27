@@ -100,78 +100,103 @@ describe("chorus.Mixins.Fetching", function() {
                 {hi: "there"},
                 {go: "away"}
             ];
-
-            this.xhrOk = { status: 200 };
         });
 
-        context("when the staus is 'needlogin'", function() {
-            it("triggers needsLogin on chorus.session", function() {
-                spyOn(chorus.session, "trigger");
-                this.resource.parseErrors({status: "needlogin"}, this.xhrOk);
-                expect(chorus.session.trigger).toHaveBeenCalledWith("needsLogin");
+        context("when an XHR object is not passed", function() {
+            beforeEach(function() {
+                this.xhr = undefined;
+                this.data = { response: this.things, status: 'ok' };
             });
+
+            itHandlesSuccess();
         });
 
-        context("when the status is 'ok'", function() {
-            it("sets loaded", function() {
-                this.resource.parseErrors({ foo: "bar", resource: this.things, status: 'ok'}, this.xhrOk);
-                expect(this.resource.loaded).toBeTruthy();
+        context("when the status is '200 ok'", function() {
+            beforeEach(function() {
+                this.xhr = { status: 200 };
+                this.data = { response: this.things };
             });
 
-            it("returns a falsy value (the model has no errors)", function() {
-                expect(this.resource.parseErrors({ foo: "bar", resource: this.things, status: 'ok'}, this.xhrOk)).toBeFalsy();
-            });
+            itHandlesSuccess();
         });
 
-        context("when the status is NOT 'ok'", function() {
-            it("does not set loaded", function() {
-                this.resource.parseErrors({ foo: "bar", resource: this.things, status: 'fail'}, this.xhrOk);
-                expect(this.resource.loaded).not.toBeTruthy();
+        context("when the status is 'fail'", function() {
+            beforeEach(function() {
+                this.data = {
+                    status: "fail",
+                    response: { instanceId: 1 },
+                    errors: { record: "no" }
+                };
+
+                this.xhr = { status: 200 };
             });
 
-            it("returns the server's errors", function() {
-                expect(this.resource.parseErrors({
-                    status: 'fail',
-                    message: [{ message: "some problem" }],
-                    resource: this.things
-                }, this.xhrOk)).toBeTruthy();
-            });
-
-            it("stores the returned resource as the resource's errorData", function() {
-                this.resource.parseErrors({
-                    status: 'fail',
-                    message: [{ message: "some problem" }],
-                    response: { instanceId: "101", instanceName: "Joe Instance" }
-                }, this.xhrOk);
-                expect(this.resource.errorData).toEqual({ instanceId: "101", instanceName: "Joe Instance" });
-            });
+            itHandlesFailure();
         });
 
         context("when the response is '403 forbidden'", function() {
             beforeEach(function() {
-                this.attributes = this.resource.parseErrors({
+                this.data = {
+                    response: { instanceId: 1 },
+                    errors: { record: "no" }
+                };
+
+                this.xhr = { status: 403 };
+            });
+
+            itHandlesFailure();
+        });
+
+        context("when the response is '401 unauthorized'", function() {
+            beforeEach(function() {
+                spyOnEvent(chorus.session, "needsLogin");
+
+                this.data = {
                     response: { foo: "bar" },
                     errors: { record: "bad" }
-                }, {
-                    status: 403
-                });
+                };
+
+                this.xhr = { status: 401 };
             });
 
-            it("returns truthy", function() {
-                expect(this.attributes).toBeTruthy();
-            });
+            itHandlesFailure();
 
-            it("sets the model's 'errorData' based on the response", function() {
-                expect(this.resource.errorData).toEqual({
-                    foo: "bar"
-                });
-            });
-
-            it("sets the model's 'serverErrors' based on the 'errors' key", function() {
-                expect(this.resource.serverErrors).toEqual({
-                    record: "bad"
-                });
+            it("triggers the 'needsLogin' event on the session", function() {
+                this.resource.parseErrors(this.data, this.xhr);
+                expect("needsLogin").toHaveBeenTriggeredOn(chorus.session);
             });
         });
+
+        function itHandlesSuccess() {
+            it("sets loaded", function() {
+                this.resource.parseErrors(this.data, this.xhr);
+                expect(this.resource.loaded).toBeTruthy();
+            });
+
+            it("returns a falsy value (the model has no errors)", function() {
+                expect(this.resource.parseErrors(this.data, this.xhr)).toBeFalsy();
+            });
+        }
+
+        function itHandlesFailure() {
+            it("does not set loaded", function() {
+                this.resource.parseErrors(this.data, this.xhr);
+                expect(this.resource.loaded).toBeFalsy();
+            });
+
+            it("returns true", function() {
+                expect(this.resource.parseErrors(this.data, this.xhr)).toBeTruthy();
+            });
+
+            it("stores the errors as the resource's 'serverErrors'", function() {
+                this.resource.parseErrors(this.data, this.xhr);
+                expect(this.resource.serverErrors).toBe(this.data.errors);
+            });
+
+            it("stores the returned response as the resource's errorData", function() {
+                this.resource.parseErrors(this.data, this.xhr);
+                expect(this.resource.errorData).toEqual(this.data.response);
+            });
+        }
     });
 });

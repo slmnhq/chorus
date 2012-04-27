@@ -19,7 +19,7 @@ chorus.Mixins.Fetching = {
 
     dataStatusOk: function(data, xhr) {
         var badStatus = xhr && xhr.status >= 300
-        return !badStatus && !_.include(["needlogin", "fail"], data.status);
+        return !badStatus && (data.status !== "fail");
     },
 
     dataErrors: function(data) {
@@ -27,7 +27,7 @@ chorus.Mixins.Fetching = {
     },
 
     parseErrors: function(data, xhr) {
-        if (data.status == "needlogin") {
+        if (xhr && xhr.status === 401) {
             chorus.session.trigger("needsLogin");
         }
         if (this.dataStatusOk(data, xhr)) {

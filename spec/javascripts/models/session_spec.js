@@ -17,7 +17,7 @@ describe("chorus.models.Session", function() {
         });
 
         it("posts to the right url", function() {
-            expect(this.server.lastCreate().url).toBe("/auth/login/");
+            expect(this.server.lastCreate().url).toBe("/sessions");
         });
     });
 
@@ -37,7 +37,7 @@ describe("chorus.models.Session", function() {
             beforeEach(function() {
                 this.model.set({ errors: true });
                 this.model.logout();
-            })
+            });
 
             it("does not call the logout API", function() {
                 expect(this.server.requests.length).toBe(0);
@@ -45,8 +45,8 @@ describe("chorus.models.Session", function() {
 
             it("triggers needsLogin", function() {
                 expect("needsLogin").toHaveBeenTriggeredOn(this.model);
-            })
-        })
+            });
+        });
 
         context("when the model does not have errors", function() {
             beforeEach(function() {
@@ -54,7 +54,7 @@ describe("chorus.models.Session", function() {
                 this.model._user = newFixtures.user();
                 this.model.sandboxPermissionsCreated['4'] = true;
                 this.model.logout();
-            })
+            });
 
             it("calls the logout API", function() {
                 expect(this.server.requests[0].url).toBe("/auth/logout/?authid=1234");
@@ -116,8 +116,10 @@ describe("chorus.models.Session", function() {
             this.model = new models.Session({ id: "1234", foo: "bar" });
             $.cookie("authid", "1234");
 
-            spyOnEvent(this.model, "needsLogin");
-            this.model.fetch();
+            this.errorSpy = jasmine.createSpy("error");
+            this.model.fetch({
+                error: this.errorSpy
+            });
         });
 
         afterEach(function() {
@@ -125,17 +127,13 @@ describe("chorus.models.Session", function() {
         });
 
         it("has the correct url", function() {
-            expect(this.server.requests[0].url).toBe("/auth/checkLogin/?authid=1234");
+            expect(this.server.lastFetch().url).toBe("/sessions");
         });
 
         context("when the session is valid", function() {
             beforeEach(function() {
                 this.server.lastFetch().succeed();
             });
-
-            it("does not trigger needsLogin", function() {
-                expect("needsLogin").not.toHaveBeenTriggeredOn(this.model);
-            })
 
             it("fetches the chorus configuration", function() {
                 expect(new chorus.models.Config()).toHaveBeenFetched();
@@ -148,57 +146,20 @@ describe("chorus.models.Session", function() {
                 this.server.lastFetch().failUnauthorized();
             });
 
-            it("triggers needsLogin", function() {
-                expect("needsLogin").toHaveBeenTriggeredOn(this.model);
-            })
-
             it("clears the session attributes", function() {
                 expect(_.keys(this.model.attributes).length).toBe(0);
             });
 
             it("clears the session error messages", function() {
                 expect(this.model.serverErrors).toBeUndefined();
-            })
+            });
 
             it("clears the memoized user", function() {
                 expect(this.model.user()).toBeFalsy();
             });
-        })
-    })
 
-    describe("#check", function() {
-        beforeEach(function() {
-            this.model = new models.Session();
-            spyOn(this.model, "fetch")
-        });
-
-        context("when the destination route is the login page", function() {
-            beforeEach(function() {
-                this.model.check("Login");
-            })
-
-            it("does not fetch itself", function() {
-                expect(this.model.fetch).not.toHaveBeenCalled();
-            })
-        })
-
-        context("when the destination route is the Logout page", function() {
-            beforeEach(function() {
-                this.model.check("Logout");
-            })
-
-            it("does not fetch itself", function() {
-                expect(this.model.fetch).not.toHaveBeenCalled();
-            })
-        })
-
-        context("when the destination route is the dashboard page", function() {
-            beforeEach(function() {
-                this.model.check("Dashboard");
-            })
-
-            it("fetches itself", function() {
-                expect(this.model.fetch).toHaveBeenCalled();
+            it("calls the 'error' callback, if one was provided", function() {
+                expect(this.errorSpy).toHaveBeenCalled();
             });
         });
     });
@@ -233,7 +194,7 @@ describe("chorus.models.Session", function() {
         context("when a user has been fetched", function() {
             beforeEach(function() {
                 this.session._user = newFixtures.user();
-            })
+            });
 
             it("returns a User", function() {
                 expect(this.session.user() instanceof(chorus.models.User)).toBeTruthy();
@@ -310,5 +271,5 @@ describe("chorus.models.Session", function() {
                 expect(this.session.shouldResume()).toBeTruthy();
             });
         });
-    })
+    });
 });

@@ -202,14 +202,13 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         this.fail(message, resource);
     },
 
-    failUnauthorized: function(message, resource) {
+    failUnauthorized: function(errors, response) {
         return this.respond(
-            200,
+            401,
             { 'Content-Type': 'application/json' },
             JSON.stringify({
-                status: "fail",
-                resource: resource || [],
-                message: message || "something went wrong!"
+                response: response || [],
+                errors: errors || {}
             })
         );
     },
