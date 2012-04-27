@@ -17,6 +17,16 @@ window.fixtureDefinitions = {
 
     config: {},
 
+    instance: {
+        unique: [ "id" ],
+
+        children: {
+            hadoop:         {},
+            greenplum:      {},
+            sharedAccount:  {}
+        }
+    },
+
     activity: {
         unique: [ "id" ],
 
@@ -29,7 +39,7 @@ window.fixtureDefinitions = {
     dataset: {
         derived: {
             id: function(a) {
-                return '"' + [ a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName, ].join('"|"') + '"';
+                return '"' + [ a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName ].join('"|"') + '"';
             }
         },
 
@@ -47,9 +57,9 @@ window.fixtureDefinitions = {
     databaseObject: {
         derived: {
             id: function(a) {
-                return '"' + [ a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName, ].join('"|"') + '"';
+                return '"' + [ a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName ].join('"|"') + '"';
             }
-        },
+        }
     },
 
     test: {
