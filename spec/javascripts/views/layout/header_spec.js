@@ -3,7 +3,6 @@ describe("chorus.views.Header", function() {
         chorus.session = new chorus.models.Session({
             "firstName": "Daniel",
             "lastName": "Burke",
-            "fullName": "Daniel Francis Burke",
             userName: "dburke",
             id: "55"
         });
@@ -11,16 +10,16 @@ describe("chorus.views.Header", function() {
         chorus._navigated();
         this.view = new chorus.views.Header();
         this.view.session.loaded = true;
-    })
+    });
 
     describe("initialization", function() {
         it("has required resources", function() {
             expect(this.view.requiredResources.length).toBe(3);
-        })
+        });
 
         it("does not have a model", function() {
             expect(this.view.model).toBeUndefined();
-        })
+        });
 
         it("fetches unread notifications", function() {
             expect(this.view.unreadNotifications.attributes.type).toBe("unread");
@@ -125,7 +124,7 @@ describe("chorus.views.Header", function() {
                     page: 1,
                     total: 1,
                     records: 2
-                })
+                });
             this.server.completeFetchFor(this.view.notifications,
                 [
                     fixtures.notification(),
@@ -134,7 +133,7 @@ describe("chorus.views.Header", function() {
                     fixtures.notification(),
                     fixtures.notification()
                 ]);
-        })
+        });
 
         it("should have a search field", function() {
             expect(this.view.$(".search input[type=text]")).toExist();
@@ -146,11 +145,11 @@ describe("chorus.views.Header", function() {
 
         it("clears requiredResources", function() {
             expect(this.view.requiredResources.length).toBe(0);
-        })
+        });
 
         it("inserts the number of unread notifications into the markup", function() {
             expect(this.view.$("a.notifications").text().trim()).toBe("2")
-        })
+        });
 
         it("should have a hidden type ahead search view", function() {
             expect(this.view.$(this.view.typeAheadView.el)).toExist();
@@ -180,7 +179,7 @@ describe("chorus.views.Header", function() {
             it("hides the search results if the input is empty", function() {
                 this.view.$(".search input:text").val("").trigger("textchange");
                 expect($(this.view.typeAheadView.el)).toHaveClass("hidden");
-            })
+            });
 
             it("hides the search view when a link is clicked (if navigating to same route as displayed in browser url bar)", function() {
                 var $a = $("<a/>");
@@ -254,69 +253,22 @@ describe("chorus.views.Header", function() {
         })
 
         describe("username", function() {
-            describe("where the user has no fullName", function() {
-                beforeEach(function() {
-                    chorus.user.unset("fullName");
-                })
-
-                describe("and the synthesized full name is less than 21 characters", function() {
-                    beforeEach(function() {
-                        chorus.user.set({ firstName: "0123456789", lastName: "012345" });
-                        this.view.render();
-                    });
-
-                    it("displays the synthesized full name", function() {
-                        expect(this.view.$(".username a").text().trim()).toBe("0123456789 012345");
-                    });
-                })
-
-                describe("and the synthesized full name is more than 20 characters", function() {
-                    beforeEach(function() {
-                        chorus.user.set({ firstName: "012345678901234", lastName: "0123456789" });
-                        this.view.render();
-                    })
-
-                    it("displays the abbreviated synthesized full name", function() {
-                        expect(this.view.$(".username a").text().trim()).toBe("012345678901234 0.");
-                    });
-                })
-
+            beforeEach(function() {
+                spyOn(chorus.session.user(), "displayName").andReturn("Armadillo");
+                spyOn(chorus.session.user(), "displayShortName").andReturn("Sam");
+                this.view.render();
             });
 
-            describe("where the user has a fullName", function() {
-                describe("less than or equal to 20 characters", function() {
-                    it("displays the user's full name", function() {
-                        expect(this.view.$(".username a").text().trim()).toBe("Daniel Francis Burke");
-                    })
-                })
+            it("has the short display name in the username link", function() {
+                expect(this.view.$(".username a")).toContainText("Sam");
+            });
 
-                describe("greater than 20 characters", function() {
-                    beforeEach(function() {
-                        chorus.user.set({
-                            "lastName": "Burkes",
-                            "fullName": "Daniel Francis Burkes"
-                        });
-                        this.view.render();
-                    });
-
-                    it("displays the user's abbreviated full name", function() {
-                        expect(this.view.$(".username a").text().trim()).toBe("Daniel B.");
-                    })
-                })
-            })
+            it("has the full name in the title of the username link", function() {
+                expect(this.view.$(".username a").attr("title")).toBe("Armadillo");
+            });
 
             it("has a hidden popup menu", function() {
                 expect(this.view.$(".menu.popup_username")).toHaveClass("hidden");
-            })
-
-            it("has a title attribute equal to the non-abbreviated full name", function() {
-                chorus.user.set({
-                    "lastName": "Burkes",
-                    "fullName": "Daniel Francis Burkes, III"
-                });
-                this.view.render();
-
-                expect(this.view.$(".username a").attr('title')).toBe("Daniel Francis Burkes, III");
             })
 
             describe("when clicked", function() {
@@ -576,7 +528,7 @@ describe("chorus.views.Header", function() {
         beforeEach(function() {
             this.users = new chorus.collections.UserSet([
                 newFixtures.user({firstName: "user", lastName: "one", id: "1", admin: false}),
-                newFixtures.user({firstName: "user", lastName: "two", id:"2", admin: false})
+                newFixtures.user({firstName: "user", lastName: "two", id: "2", admin: false})
             ]);
             chorus.isDevMode.andReturn(true);
 
@@ -591,14 +543,14 @@ describe("chorus.views.Header", function() {
         it("should fetch the users", function() {
             expect(this.server.lastFetch().url).toBe(this.view.users.url({ page: 1, rows: 1000}));
         })
-        
+
         context("after fetches completes", function() {
             beforeEach(function() {
                 stubDefer();
                 this.server.completeFetchAllFor(this.view.users, this.users.models);
             });
 
-            afterEach(function () {
+            afterEach(function() {
                 $("select.switch_user").remove();
             });
 
@@ -608,7 +560,7 @@ describe("chorus.views.Header", function() {
 
             it("should have an option to switch to each user", function() {
                 this.users.each(function(user, i) {
-                    var option = $(".switch_user option").eq(i+1)
+                    var option = $(".switch_user option").eq(i + 1)
                     expect(option).toContainText(user.displayName())
                     expect(option.val()).toBe(user.get("userName"))
                 }, this);

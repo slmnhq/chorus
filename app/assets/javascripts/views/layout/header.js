@@ -64,7 +64,7 @@ chorus.views.Header = chorus.views.Base.extend({
         }
     },
 
-    addFastUserToggle: function () {
+    addFastUserToggle: function() {
         function addDropdown() {
             $('select.switch_user').remove();
             var $select = $("<select class='switch_user'></select>");
@@ -76,7 +76,7 @@ chorus.views.Header = chorus.views.Base.extend({
 
             $select.css({position: 'fixed', bottom: 0, right: 0})
             $("body").append($select);
-            $select.unbind("change").bind("change", function () {
+            $select.unbind("change").bind("change", function() {
                 switchUser($(this).val());
             });
         }
@@ -129,13 +129,11 @@ chorus.views.Header = chorus.views.Base.extend({
     additionalContext: function(ctx) {
         this.requiredResources.reset()
         var user = this.session.user();
-        var firstName = this.session.get("firstName");
-        var lastName = this.session.get("lastName");
-        var fullName = this.session.get("fullName") || ([firstName, lastName].join(' '));
 
         return _.extend(ctx, this.session.attributes, {
             notifications: this.unreadNotifications,
-            displayName: (fullName.length > 20 ? (firstName + ' ' + lastName[0] + '.') : fullName),
+            fullName: user && user.displayName(),
+            displayName: user && user.displayShortName(),
             userUrl: user && user.showUrl()
         });
     },
