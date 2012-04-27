@@ -183,8 +183,15 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         );
     },
 
-    failNotFound: function(message, resource) {
-        this.fail(message, resource);
+    failNotFound: function(errors, response) {
+        return this.respond(
+            404,
+            { 'Content-Type': 'application/json' },
+            JSON.stringify({
+                response: response,
+                errors: errors || {}
+            })
+        );
     },
 
     failForbidden: function(errors, response) {

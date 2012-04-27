@@ -105,7 +105,7 @@ describe("chorus.dialogs.JoinConfiguration", function() {
                 this.dialog.previousModal = {
                     showErrors: jasmine.createSpy("showErrors")
                 }
-                this.server.lastFetch().failNotFound();
+                this.server.lastFetch().failNotFound({ record: "not found" });
             });
 
             it("copies the serverErrors to the dialog model", function() {

@@ -81,10 +81,10 @@ chorus.models = {
             };
 
             options.error = function(model, xhr) {
-                model.trigger("fetchFailed", model, xhr)
                 var data = xhr.responseText && JSON.parse(xhr.responseText);
                 model.parseErrors(data, xhr);
                 if (error) error(model, xhr);
+                model.trigger("fetchFailed", model, xhr)
             };
 
             return this._super('fetch', [options])
@@ -315,10 +315,10 @@ chorus.collections = {
             options.success = this.makeSuccessFunction(options, success);
 
             options.error = function(collection, xhr) {
-                collection.trigger("fetchFailed", collection, xhr)
                 var data = xhr.responseText && JSON.parse(xhr.responseText);
                 collection.parseErrors(data, xhr);
                 if (error) error(collection, xhr);
+                collection.trigger("fetchFailed", collection, xhr)
             };
 
             return this._super('fetch', [options])

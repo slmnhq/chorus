@@ -403,25 +403,31 @@ describe("chorus.models.Abstract", function() {
             });
 
             context("when the response is '403 forbidden'", function() {
-                beforeEach(function() {
-                    this.server.lastFetch().failForbidden({custom: "error"});
-                });
-
-                it("triggers the 'fetchFailed' event on the model", function() {
-                    expect(this.fetchFailedSpy).toHaveBeenCalled();
-                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.model);
-                });
-
                 it("does not trigger 'loaded", function() {
+                    this.server.lastFetch().failForbidden({custom: "error"});
                     expect(this.loadedSpy).not.toHaveBeenCalled();
                 });
 
                 it("fills serverErrors from the errors key", function() {
+                    this.server.lastFetch().failForbidden({custom: "error"});
                     expect(this.model.serverErrors).toEqual({custom: "error"});
                 });
 
                 it("calls the 'error' callback if one is provided", function() {
+                    this.server.lastFetch().failForbidden({custom: "error"});
                     expect(this.errorSpy).toHaveBeenCalled();
+                });
+
+                it("triggers the 'fetchFailed' event on the model after populating the data", function() {
+                    var model = this.model;
+                    this.fetchFailedSpy.andCallFake(function() {
+                        expect(model.serverErrors).toEqual({custom: "error"});
+                    });
+
+                    this.server.lastFetch().failForbidden({custom: "error"});
+
+                    expect(this.fetchFailedSpy).toHaveBeenCalled();
+                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.model);
                 });
             });
 

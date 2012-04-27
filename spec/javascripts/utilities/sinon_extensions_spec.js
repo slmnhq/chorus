@@ -1,4 +1,10 @@
 describe("sinon extensions", function() {
+    beforeEach(function() {
+        this.errors = { record: "not accessible" };
+        this.response = { instanceId: 1 };
+        this.fakeRequest = new sinon.FakeXMLHttpRequest();
+    });
+
     describe("XHR#succeed", function() {
         beforeEach(function() {
             var resource = new chorus.models.User();
@@ -122,11 +128,11 @@ describe("sinon extensions", function() {
     describe("#makeFakeResponse(modelOrCollection, response)", function() {
         context("when called with a specified response", function() {
             it("returns the specified response", function() {
-                var fakeResponse = this.server.makeFakeResponse(this.model, {
+                var fakeRequest = this.server.makeFakeResponse(this.model, {
                     name: "John Smith",
                     secretIdentity: "Neo"
                 });
-                expect(fakeResponse).toEqual({
+                expect(fakeRequest).toEqual({
                     name: "John Smith",
                     secretIdentity: "Neo"
                 });
@@ -137,8 +143,8 @@ describe("sinon extensions", function() {
             context("and it is called with a backbone model", function() {
                 it("uses the current attributes of the model", function() {
                     var user = new chorus.models.User({ id: '1', name: "Keanu Reeves" });
-                    var fakeResponse = this.server.makeFakeResponse(user);
-                    expect(fakeResponse).toEqual({ id: '1', name: "Keanu Reeves" });
+                    var fakeRequest = this.server.makeFakeResponse(user);
+                    expect(fakeRequest).toEqual({ id: '1', name: "Keanu Reeves" });
                 });
             });
 
@@ -153,104 +159,77 @@ describe("sinon extensions", function() {
 
     describe("#fail", function() {
         beforeEach(function() {
-            this.fakeResponse = new sinon.FakeXMLHttpRequest();
-            this.fakeResponse.fail()
+            this.fakeRequest.fail()
         });
 
-        it("returns a status code of 200", function() {
-            expect(this.fakeResponse.status).toBe(200);
-        });
+        itReturnsStatus(200);
 
         it("returns an error message in the 'message' field", function() {
-            expect(this.fakeResponse.responseText).toContain("something went wrong!");
+            expect(this.fakeRequest.responseText).toContain("something went wrong!");
         });
 
         it("returns a 'fail' in the 'status' field", function() {
-            expect(this.fakeResponse.responseText).toContain("fail");
+            expect(this.fakeRequest.responseText).toContain("fail");
         });
     });
 
     describe("#failForbidden", function() {
         beforeEach(function() {
-            this.fakeResponse = new sinon.FakeXMLHttpRequest();
-            this.fakeResponse.failForbidden({record: "not accessible"}, { instanceId: 1 })
+            this.fakeRequest.failForbidden(this.errors, this.response)
         });
 
-        it("returns a status code of 403", function() {
-            expect(this.fakeResponse.status).toBe(403);
-        });
-
-        it("returns an error message in the 'message' field", function() {
-            expect(JSON.parse(this.fakeResponse.responseText).errors).toEqual({
-                record: "not accessible"
-            });
-        });
-
-        it("includes the response if one is given", function() {
-            expect(JSON.parse(this.fakeResponse.responseText).response).toEqual({
-                instanceId: 1
-            });
-        });
+        itReturnsStatus(403);
+        itIncludesErrorAndResponse();
     });
 
     describe("#failUnauthorized", function() {
         beforeEach(function() {
-            this.fakeResponse = new sinon.FakeXMLHttpRequest();
-            this.fakeResponse.failUnauthorized({record: "not accessible"}, { instanceId: 1 })
+            this.fakeRequest.failUnauthorized(this.errors, this.response);
         });
 
-        it("returns a status code of 401", function() {
-            expect(this.fakeResponse.status).toBe(401);
-        });
-
-        it("returns an error message in the 'message' field", function() {
-            expect(JSON.parse(this.fakeResponse.responseText).errors).toEqual({
-                record: "not accessible"
-            });
-        });
-
-        it("includes the response if one is given", function() {
-            expect(JSON.parse(this.fakeResponse.responseText).response).toEqual({
-                instanceId: 1
-            });
-        });
+        itReturnsStatus(401);
+        itIncludesErrorAndResponse();
     });
 
     describe("#failNotFound", function() {
         beforeEach(function() {
-            this.fakeResponse = new sinon.FakeXMLHttpRequest();
-            this.fakeResponse.failNotFound({message: "whatever"})
+            this.fakeRequest = new sinon.FakeXMLHttpRequest();
+            this.fakeRequest.failNotFound(this.errors, this.response);
         });
 
-        it("returns a status code of 200", function() {
-            expect(this.fakeResponse.status).toBe(200);
-        });
-
-        it("returns an error message in the 'message' field", function() {
-            expect(this.fakeResponse.responseText).toContain("whatever");
-        });
-
-        it("returns a 'fail' in the 'status' field", function() {
-            expect(this.fakeResponse.responseText).toContain("fail");
-        });
+        itReturnsStatus(404);
+        itIncludesErrorAndResponse();
     });
 
     describe("#failUnprocessableEntity", function() {
         beforeEach(function() {
-            this.fakeResponse = new sinon.FakeXMLHttpRequest();
-            this.fakeResponse.failUnprocessableEntity({message: "whatever"})
+            this.fakeRequest.failUnprocessableEntity({message: "whatever"})
         });
 
-        it("returns a status code of 200", function() {
-            expect(this.fakeResponse.status).toBe(200);
-        });
+        itReturnsStatus(200);
 
         it("returns an error message in the 'message' field", function() {
-            expect(this.fakeResponse.responseText).toContain("whatever");
+            expect(this.fakeRequest.responseText).toContain("whatever");
         });
 
         it("returns a 'fail' in the 'status' field", function() {
-            expect(this.fakeResponse.responseText).toContain("fail");
+            expect(this.fakeRequest.responseText).toContain("fail");
         });
     });
+
+    function itReturnsStatus(code) {
+        it("returns a status code of " + code, function() {
+            expect(this.fakeRequest.status).toBe(code);
+        });
+    }
+
+    function itIncludesErrorAndResponse() {
+        it("returns an error message in the 'message' field", function() {
+            expect(JSON.parse(this.fakeRequest.responseText).errors).toEqual(this.errors);
+        });
+
+        it("includes the response if one is given", function() {
+            expect(JSON.parse(this.fakeRequest.responseText).response).toEqual(this.response);
+        });
+    }
 });
