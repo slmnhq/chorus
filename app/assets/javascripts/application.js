@@ -23,6 +23,7 @@
 //= require vendor/d3
 //= require_tree ./vendor
 //= require bootstrap
+//= require environment
 //= require chorus
 //= require_tree ./utilities
 //= require_tree ./mixins
