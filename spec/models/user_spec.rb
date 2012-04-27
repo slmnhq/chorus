@@ -61,6 +61,10 @@ describe User do
           FactoryGirl.build(:user, :username => "foo").should be_valid
         end
       end
+
+      it "fails with invalid username" do
+        FactoryGirl.build(:user, :username => "My Name Is Michael Cane").should_not be_valid
+      end
     end
 
     describe "password" do
@@ -121,6 +125,8 @@ describe User do
       it { should ensure_length_of(:email).is_at_most(256) }
       it { should ensure_length_of(:title).is_at_most(256) }
       it { should ensure_length_of(:dept).is_at_most(256) }
+      it { should ensure_length_of(:password).is_at_most(256) }
+      it { should ensure_length_of(:notes).is_at_most(4096) }
     end
   end
 
