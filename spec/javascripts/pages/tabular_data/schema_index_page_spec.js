@@ -1,6 +1,6 @@
 describe("chorus.pages.SchemaIndexPage", function() {
     beforeEach(function() {
-        this.instance = fixtures.instance({id: "1234"});
+        this.instance = newFixtures.instance.greenplum({id: "1234"});
         this.page = new chorus.pages.SchemaIndexPage("1234", "Foo/");
         this.page.render();
     });

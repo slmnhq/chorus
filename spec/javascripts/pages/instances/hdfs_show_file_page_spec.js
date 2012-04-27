@@ -1,6 +1,6 @@
 describe("chorus.pages.HdfsShowFilePage", function() {
     beforeEach(function() {
-        this.instance = fixtures.instance({id: "1234", name: "MyInstance"});
+        this.instance = newFixtures.instance.greenplum({id: "1234", name: "MyInstance"});
         this.file = fixtures.hdfsFile({ path: "my file.txt" });
         this.page = new chorus.pages.HdfsShowFilePage("1234", "my/path/my file.txt");
     });

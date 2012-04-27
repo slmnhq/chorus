@@ -6,7 +6,7 @@ describe("chorus.views.SchemaPicker", function() {
 
         context("when instance is provided", function() {
             beforeEach(function() {
-                this.instance = fixtures.instance();
+                this.instance = newFixtures.instance.greenplum();
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance });
                 this.view.render();
             });
@@ -26,7 +26,7 @@ describe("chorus.views.SchemaPicker", function() {
 
         context("when an instance and a database are provided", function() {
             beforeEach(function() {
-                this.instance = fixtures.instance();
+                this.instance = newFixtures.instance.greenplum();
                 this.database = fixtures.database({instanceId: this.instance.get("id")});
                 this.database.unset('id');
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance, database: this.database });
@@ -88,7 +88,11 @@ describe("chorus.views.SchemaPicker", function() {
                 itSortsTheSelectOptionsAlphabetically('instance');
 
                 it("does not add Hadoop instances to the instance list", function() {
-                    this.server.completeFetchAllFor(this.view.instances, [fixtures.instance(), fixtures.instance({instanceProvider: "Hadoop"}), fixtures.instance()]);
+                    this.server.completeFetchAllFor(this.view.instances, [
+                        newFixtures.instance.greenplum(),
+                        newFixtures.instance.hadoop(),
+                        newFixtures.instance.greenplum()
+                    ]);
                     var options = this.view.$(".instance select option");
                     expect(options.length).toBe(3);
                     expect(options.eq(0).val()).toBeFalsy();
@@ -100,9 +104,9 @@ describe("chorus.views.SchemaPicker", function() {
                     context("when the instance list fetch completes", function() {
                         beforeEach(function() {
                             this.server.completeFetchAllFor(this.view.instances, [
-                                fixtures.instance({ hasCredentials: true, id: 1 }),
-                                fixtures.instance({ hasCredentials: true, id: 2 }),
-                                fixtures.instance({ hasCredentials: false, id: 3 })
+                                newFixtures.instance.greenplum({ hasCredentials: true, id: 1 }),
+                                newFixtures.instance.greenplum({ hasCredentials: true, id: 2 }),
+                                newFixtures.instance.greenplum({ hasCredentials: false, id: 3 })
                             ]);
                         });
 
@@ -498,7 +502,7 @@ describe("chorus.views.SchemaPicker", function() {
         describe("#fieldValues", function() {
             context("with an instance provided", function() {
                 beforeEach(function() {
-                    this.instance = fixtures.instance();
+                    this.instance = newFixtures.instance.greenplum();
                     this.view = new chorus.views.SchemaPicker({ instance: this.instance });
                     this.view.render();
                     this.server.completeFetchFor(this.view.databases, [ fixtures.database({ id: '5' }) ]);
@@ -521,7 +525,7 @@ describe("chorus.views.SchemaPicker", function() {
                     this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                     $('#jasmine_content').append(this.view.el);
                     this.view.render();
-                    this.server.completeFetchAllFor(this.view.instances, [ fixtures.instance({ id: '4' }) ]);
+                    this.server.completeFetchAllFor(this.view.instances, [ newFixtures.instance.greenplum({ id: '4' }) ]);
                     this.view.$(".instance select").val("4").change();
                 });
 
@@ -716,7 +720,11 @@ describe("chorus.views.SchemaPicker", function() {
             it("sorts the select options alphabetically for " + type, function() {
 
                 if (type == "instance") {
-                    this.server.completeFetchAllFor(this.view[type + "s"], [fixtures[type]({name: "Zoo"}), fixtures[type]({name: "Aardvark"}), fixtures[type]({name: "bear"})]);
+                    this.server.completeFetchAllFor(this.view[type + "s"], [
+                        newFixtures.instance.greenplum({name: "Zoo"}),
+                        newFixtures.instance.greenplum({name: "Aardvark"}),
+                        newFixtures.instance.greenplum({name: "bear"})
+                    ]);
                 } else {
                     this.server.completeFetchFor(this.view[type + "s"], [fixtures[type]({name: "Zoo"}), fixtures[type]({name: "Aardvark"}), fixtures[type]({name: "bear"})]);
                 }

@@ -2,7 +2,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
         this.schema = fixtures.schema({ instanceId: "123", databaseName: "Foo%", name: "Bar/" });
-        this.instance = fixtures.instance({ id: "123" });
+        this.instance = newFixtures.instance.greenplum({ id: "123" });
         this.database = fixtures.database({ name: "Foo%", instanceId: "123" });
         this.page = new chorus.pages.SchemaBrowsePage("123", "Foo%", "Bar/");
     });

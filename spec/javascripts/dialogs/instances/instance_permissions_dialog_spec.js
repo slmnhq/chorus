@@ -7,7 +7,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
     describe("#setup", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
-            this.instance = fixtures.instanceWithSharedAccount();
+            this.instance = newFixtures.instance.sharedAccount();
             var launchElement = $("<a/>").data("instance", this.instance);
             this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
         })
@@ -24,7 +24,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
     context("when the instance is a shared account", function() {
         beforeEach(function() {
-            this.instance = fixtures.instanceWithSharedAccount();
+            this.instance = newFixtures.instance.sharedAccount();
             var account = fixtures.instanceAccount(this.instance);
             this.instance.set({ ownerId: account.user().get("id") });
             this.instance.accounts().reset(account);
@@ -211,7 +211,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll').andCallThrough();
             this.owner = newFixtures.user({firstName: 'EDC', lastName: 'Admin'});
-            this.instance = fixtures.instance({ownerId: this.owner.get('id'), owner: this.owner.get('userName'), ownerFullName: this.owner.displayName()});
+            this.instance = newFixtures.instance.greenplum({
+                ownerId: this.owner.get('id'),
+                owner: this.owner.get('userName'),
+                ownerFullName: this.owner.displayName()
+            });
             this.accounts = this.instance.accounts();
             this.accounts.add([
                 fixtures.instanceAccount({ id: '1', user: { firstName: "bob", lastName: "zzap", id: '111' } }),

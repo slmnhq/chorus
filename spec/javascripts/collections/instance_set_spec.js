@@ -1,28 +1,28 @@
 describe("chorus.collections.InstanceSet", function() {
+    beforeEach(function() {
+        this.collection = new chorus.collections.InstanceSet([
+            newFixtures.instance.greenplum({ name: "Gun_instance" }),
+            newFixtures.instance.greenplum({ name: "cat_instance" }),
+            newFixtures.instance.greenplum({ name: "Fat_instance" }),
+            newFixtures.instance.greenplum({ name: "egg_instance" }),
+            newFixtures.instance.greenplum({ name: "Dog_instance" })
+        ]);
+    });
+
     it("does not include the hasCredentials parameter by default", function() {
-        expect(new chorus.collections.InstanceSet().urlParams().hasCredentials).toBeFalsy();
+        expect(this.collection.urlParams().hasCredentials).toBeFalsy();
     });
 
     it("includes hasCredentials=true when given it", function() {
-        expect(new chorus.collections.InstanceSet([], {hasCredentials:true}).urlParams().hasCredentials).toBe(true);
-    })
+        this.collection.attributes = {hasCredentials: true};
+        expect(this.collection.urlParams().hasCredentials).toBeTruthy();
+    });
 
     it("sorts the instances by name, case insensitively", function() {
-        var collection = new chorus.collections.InstanceSet();
-        collection.reset([
-            fixtures.instance({ name: "Gun_instance" }),
-            fixtures.instance({ name: "cat_instance" }),
-            fixtures.instance({ name: "Fat_instance" }),
-            fixtures.instance({ name: "egg_instance" }),
-            fixtures.instance({ name: "Dog_instance" })
-        ]);
-
-        expect(collection.pluck("name")).toEqual([
-            "cat_instance",
-            "Dog_instance",
-            "egg_instance",
-            "Fat_instance",
-            "Gun_instance"
-        ]);
+        expect(this.collection.at(0).get("name")).toBe("cat_instance");
+        expect(this.collection.at(1).get("name")).toBe("Dog_instance");
+        expect(this.collection.at(2).get("name")).toBe("egg_instance");
+        expect(this.collection.at(3).get("name")).toBe("Fat_instance");
+        expect(this.collection.at(4).get("name")).toBe("Gun_instance");
     });
 });

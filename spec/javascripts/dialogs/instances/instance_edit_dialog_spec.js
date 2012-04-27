@@ -1,7 +1,7 @@
 describe("chorus.dialogs.InstanceEdit", function() {
     beforeEach(function() {
         this.launchElement = $("<button/>");
-        this.instance = fixtures.instance({
+        this.instance = newFixtures.instance.greenplum({
             name: "pasta",
             host: "greenplum",
             port: "8555",

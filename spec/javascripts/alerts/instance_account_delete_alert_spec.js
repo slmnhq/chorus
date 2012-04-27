@@ -1,7 +1,7 @@
 describe("chorus.alerts.InstanceAccountDelete", function() {
     beforeEach(function() {
         this.launchElement = $("<a></a>");
-        this.instance = fixtures.instance({ id: '456' });
+        this.instance = newFixtures.instance.greenplum({ id: '456' });
         setLoggedInUser({ id: "1011" });
         this.alert = new chorus.alerts.InstanceAccountDelete({ pageModel: this.instance });
     });

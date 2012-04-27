@@ -1,6 +1,6 @@
 describe("chorus.models.Instance", function() {
     beforeEach(function() {
-        this.instance = fixtures.instance({id: 1});
+        this.instance = newFixtures.instance.greenplum({id: 1});
     });
 
     describe("showUrl", function() {
@@ -10,7 +10,7 @@ describe("chorus.models.Instance", function() {
 
         context("for a hadoop instance", function() {
             beforeEach(function() {
-                this.instance = fixtures.hadoopInstance();
+                this.instance = newFixtures.instance.hadoop();
             });
 
             it("links to the root of the hadoop instance", function() {
@@ -111,7 +111,7 @@ describe("chorus.models.Instance", function() {
         })
         it("returns false if object is of different type", function() {
             var owner = this.instance.owner();
-            var brokenParameter = fixtures.instance({id: owner.get('id')});
+            var brokenParameter = newFixtures.instance.greenplum({id: owner.get('id')});
             expect(this.instance.isOwner(brokenParameter)).toBeFalsy();
         })
     });
@@ -219,7 +219,7 @@ describe("chorus.models.Instance", function() {
     describe("#sharedAccount", function() {
         context("when the instance has a shared account", function() {
             beforeEach(function() {
-                this.instance = fixtures.instanceWithSharedAccount();
+                this.instance = newFixtures.instance.sharedAccount();
             });
 
             it("returns a instanceAccount based on the dbUserName of the instance", function() {
@@ -267,14 +267,36 @@ describe("chorus.models.Instance", function() {
     })
 
     describe("#isGreenplum", function() {
+        var instance;
+        beforeEach(function() {
+            instance = newFixtures.instance.greenplum();
+        });
+
         it("returns true for greenplum instances", function() {
-            expect(fixtures.instance().isGreenplum()).toBeTruthy();
-        })
+            expect(instance.isGreenplum()).toBeTruthy();
+        });
 
         it("returns false otherwise", function() {
-            expect(fixtures.instance({instanceProvider: 'somethingElse'}).isGreenplum()).toBeFalsy();
-        })
-    })
+            instance.set({instanceProvider: "somethingElse"});
+            expect(instance.isGreenplum()).toBeFalsy();
+        });
+    });
+
+    describe("#isHadoop", function() {
+        var instance;
+        beforeEach(function() {
+            instance = newFixtures.instance.hadoop();
+        });
+
+        it("returns true for hadoop instances", function() {
+            expect(instance.isHadoop()).toBeTruthy();
+        });
+
+        it("returns false otherwise", function() {
+            instance.set({instanceProvider: "somethingElse"});
+            expect(instance.isHadoop()).toBeFalsy();
+        });
+    });
 
     describe("validations", function() {
         context("with a registered instance", function() {
@@ -468,27 +490,9 @@ describe("chorus.models.Instance", function() {
         });
 
         it("returns false for hadoop instances", function() {
-            this.instance = fixtures.hadoopInstance();
+            this.instance = newFixtures.instance.hadoop();
             this.instance.usage().set({workspaces: []});
             expect(this.instance.hasWorkspaceUsageInfo()).toBeFalsy();
         });
     });
-
-    describe("#isHadoop", function() {
-        context("when the instance is a hadoop instance", function() {
-            beforeEach(function() {
-                this.instance = fixtures.hadoopInstance();
-            });
-
-            it("returns true", function() {
-                expect(this.instance.isHadoop()).toBeTruthy();
-            })
-        })
-
-        context("when the instance is not a hadoop instance", function() {
-            it("returns false", function() {
-                expect(this.instance.isHadoop()).toBeFalsy();
-            })
-        })
-    })
 });

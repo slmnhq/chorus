@@ -1877,52 +1877,6 @@ beforeEach(function() {
             }, overrides);
         },
 
-        instance: function(overrides) {
-            var attributes = _.extend(this.instanceJson(), {
-                description: "description for jasmine",
-                expire: null,
-                freeSpace: null,
-                hasCredentials: true,
-                host: "localhost",
-                instanceProvider: "Greenplum Database",
-                instanceVersion: null,
-                isDeleted: false,
-                lastCheck: null,
-                id: this.nextId().toString(),
-                owner: "edcadmin",
-                ownerId: this.nextId().toString(),
-                ownerFullName: "EDC Admin",
-                port: "8020",
-                provisionName: null,
-                provisionType: null,
-                sharedAccount: {},
-                size: null,
-                state: "online",
-                totalObject: null
-            }, overrides);
-            return new chorus.models.Instance(attributes);
-        },
-
-        instanceWithSharedAccount: function(overrides) {
-            var instance = this.instance(_.extend({
-                sharedAccount: {
-                    dbUserName: "gpadmin"
-                }
-            }, overrides));
-            return instance;
-        },
-
-        hadoopInstanceJson: function(overrides) {
-            return _.extend({
-                instanceProvider: "Hadoop",
-                provisionType: "registerHadoop"
-            }, overrides)
-        },
-
-        hadoopInstance: function(overrides) {
-            return this.instance(this.hadoopInstanceJson(overrides));
-        },
-
         emptyInstanceAccount: function(overrides) {
             var attributes = _.extend({
                 instanceId: "10020",

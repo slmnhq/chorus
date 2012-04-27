@@ -1,10 +1,10 @@
 describe("chorus.views.DashboardInstanceList", function() {
     beforeEach(function(){
-        this.instance1 = fixtures.instance({ name: "broccoli" });
-        this.instance2 = fixtures.instance({ name: "Camels", instanceProvider: "Hadoop" });
-        this.instance3 = fixtures.instance({ name: "doppler", instanceProvider: "Hadoop" });
-        this.instance4 = fixtures.instance({ name: "Ego" });
-        this.instance5 = fixtures.instance({ name: "fatoush" });
+        this.instance1 = newFixtures.instance.greenplum({ name: "broccoli" });
+        this.instance2 = newFixtures.instance.greenplum({ name: "Camels", instanceProvider: "Hadoop" });
+        this.instance3 = newFixtures.instance.greenplum({ name: "doppler", instanceProvider: "Hadoop" });
+        this.instance4 = newFixtures.instance.greenplum({ name: "Ego" });
+        this.instance5 = newFixtures.instance.greenplum({ name: "fatoush" });
         this.collection = new chorus.collections.InstanceSet([
             this.instance5,
             this.instance2,

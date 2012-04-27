@@ -21,15 +21,15 @@ describe("chorus.views.InstanceList", function() {
     context("with instances", function() {
         beforeEach(function() {
             this.collection = new chorus.collections.InstanceSet();
-            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "GP9", id:"g9"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "gP1", id: "g1"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Greenplum Database", name : "GP10", id: "g10"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "Hadoop9", id: "h9"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "hadoop1", id: "h1"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Hadoop", name : "Hadoop10", id: "h10"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Whatever9", name : "Whatever9", id: "w9"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Whatever1", name : "whatever1", id: "w1"}));
-            this.collection.add(fixtures.instance({instanceProvider : "Whatever10", name : "Whatever10", id: "w10"}));
+            this.collection.add(newFixtures.instance.greenplum({name : "GP9", id:"g9"}));
+            this.collection.add(newFixtures.instance.greenplum({name : "gP1", id: "g1"}));
+            this.collection.add(newFixtures.instance.greenplum({name : "GP10", id: "g10"}));
+            this.collection.add(newFixtures.instance.hadoop({name : "Hadoop9", id: "h9"}));
+            this.collection.add(newFixtures.instance.hadoop({name : "hadoop1", id: "h1"}));
+            this.collection.add(newFixtures.instance.hadoop({name : "Hadoop10", id: "h10"}));
+            this.collection.add(newFixtures.instance.greenplum({instanceProvider : "Whatever9", name : "Whatever9", id: "w9"}));
+            this.collection.add(newFixtures.instance.greenplum({instanceProvider : "Whatever1", name : "whatever1", id: "w1"}));
+            this.collection.add(newFixtures.instance.greenplum({instanceProvider : "Whatever10", name : "Whatever10", id: "w10"}));
 
             this.view = new chorus.views.InstanceList({collection: this.collection});
         });
@@ -141,11 +141,7 @@ describe("chorus.views.InstanceList", function() {
             describe("when an instance is provisioning", function() {
                 beforeEach(function() {
                     this.collection.reset([
-                        fixtures.instance({
-                            instanceProvider: "Greenplum Database",
-                            name: "Greenplum",
-                            state: "provisioning"
-                        })
+                        newFixtures.instance.greenplum({ name: "Greenplum", state: "provisioning" })
                     ]);
                     this.view.render();
                 });
@@ -163,11 +159,7 @@ describe("chorus.views.InstanceList", function() {
             describe("when an instance has a provisioning fault", function() {
                 beforeEach(function() {
                     this.collection.reset([
-                        fixtures.instance({
-                            instanceProvider: "Greenplum Database",
-                            name: "Greenplum",
-                            state: "fault"
-                        })
+                        newFixtures.instance.greenplum({ name: "Greenplum", state: "fault" })
                     ]);
                     this.view.render();
                 });
@@ -184,7 +176,7 @@ describe("chorus.views.InstanceList", function() {
 
             describe("instance:added event", function() {
                 beforeEach(function() {
-                    this.newInstance = fixtures.instance({id: "1234567"});
+                    this.newInstance = newFixtures.instance.greenplum({id: "1234567"});
                     spyOn(this.view.collection, "fetchAll");
                     chorus.PageEvents.broadcast("instance:added", "1234567");
                 });

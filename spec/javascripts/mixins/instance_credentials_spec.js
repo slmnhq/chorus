@@ -76,7 +76,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
         describe("when a fetch fails for one of the page's required resources", function() {
             context("when credentials are missing", function() {
                 beforeEach(function() {
-                    this.instance = fixtures.instance();
+                    this.instance = newFixtures.instance.greenplum();
                     spyOn(this.model, 'instanceRequiringCredentials').andReturn(this.instance);
                     this.server.lastFetchFor(this.model).failForbidden();
                 })

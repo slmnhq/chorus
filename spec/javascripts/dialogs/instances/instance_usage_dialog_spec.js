@@ -1,6 +1,11 @@
 describe("chorus.dialogs.InstanceUsage", function() {
     beforeEach(function() {
-        this.instance = fixtures.instance({name : "pasta", host : "greenplum", port : "8555", description : "it is a food name" });
+        this.instance = newFixtures.instance.greenplum({
+            name: "pasta",
+            host: "greenplum",
+            port: "8555",
+            description: "it is a food name"
+        });
         this.launchElement = $("<a/>");
         this.launchElement.data("instance", this.instance);
         this.dialog = new chorus.dialogs.InstanceUsage({launchElement : this.launchElement });

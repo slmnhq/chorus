@@ -14,7 +14,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context("when an instance is selected", function() {
         beforeEach(function() {
-            this.instance = fixtures.instance({instanceProvider: "Greenplum Database", name : "Harry's House of Glamour"})
+            this.instance = newFixtures.instance.greenplum({name : "Harry's House of Glamour"});
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
 
@@ -89,8 +89,10 @@ describe("chorus.views.InstanceListSidebar", function() {
                 context("when the instance is a hadoop instance", function() {
                     beforeEach(function() {
                         setLoggedInUser({ userName : "benjamin", admin: false});
-                        this.instance.set({ownerId : chorus.session.user().get('id')});
-                        this.view.instance.set(fixtures.hadoopInstanceJson());
+                        this.instance.set({
+                            ownerId : chorus.session.user().get('id'),
+                            instanceProvider: "Hadoop"
+                        });
                         this.view.render();
                     });
 
@@ -189,7 +191,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 describe("for existing greenplum instance", function() {
                     context("and the instance has a shared account", function() {
                         beforeEach(function() {
-                            var instance = fixtures.instanceWithSharedAccount();
+                            var instance = newFixtures.instance.sharedAccount();
                             instance.loaded = true;
                             this.view.setInstance(instance);
                             this.server.completeFetchFor(instance.usage(), { workspaces: [] });
@@ -415,7 +417,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the instance is a hadoop instance", function() {
                     beforeEach(function() {
-                        this.view.instance.set(fixtures.hadoopInstanceJson());
+                        this.view.instance.set({instanceProvider: "Hadoop"});
                         this.instance.usage().trigger("loaded");
                     });
 
