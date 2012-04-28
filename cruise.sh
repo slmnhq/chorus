@@ -18,5 +18,5 @@ bundle exec rake jasmine > $CC_BUILD_ARTIFACTS/jasmine.log 2>&1 &
 JASMINE_PID=$!; sleep 5
 
 # Run Jasmine tests
-rake phantom > $CC_BUILD_ARTIFACTS/jasmine_tests.log 2>&1
+rake jasmine:ci > $CC_BUILD_ARTIFACTS/jasmine_tests.log 2>&1
 kill -9 $JASMINE_PID || true
