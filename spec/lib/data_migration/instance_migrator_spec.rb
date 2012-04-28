@@ -8,16 +8,16 @@ describe InstanceMigrator, :type => :data_migration do
       end
 
       it "adds the new foreign key column" do
-        UserMigrator.migrate
-        InstanceMigrator.migrate
+        UserMigrator.new.migrate
+        InstanceMigrator.new.migrate
         Legacy.connection.column_exists?(:edc_instance, :chorus_rails_instance_id).should be_true
       end
     end
 
     describe "copying the data" do
       before do
-        UserMigrator.migrate
-        InstanceMigrator.migrate
+        UserMigrator.new.migrate
+        InstanceMigrator.new.migrate
       end
 
       it "creates new instances for legacy GPDB instances" do

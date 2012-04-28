@@ -1,5 +1,5 @@
 class InstanceCredentialMigrator
-  def self.migrate
+  def migrate
     unless Legacy.connection.column_exists?(:edc_account_map, :chorus_rails_instance_credentials_id)
       Legacy.connection.add_column :edc_account_map, :chorus_rails_instance_credentials_id, :integer
     end
@@ -33,7 +33,7 @@ class InstanceCredentialMigrator
     end
   end
 
-  def self.legacy_instance_credentials(instance_id)
+  def legacy_instance_credentials(instance_id)
     Legacy.connection.select_all <<-EOSQL
       SELECT edc_account_map.*, edc_instance.chorus_rails_instance_id, edc_user.chorus_rails_user_id
       FROM edc_account_map
@@ -44,7 +44,7 @@ class InstanceCredentialMigrator
     EOSQL
   end
 
-  def self.decrypt_password(password, key)
+  def decrypt_password(password, key)
     cipher = OpenSSL::Cipher::Cipher.new("AES-128-CBC")
     cipher.decrypt
     cipher.key = key

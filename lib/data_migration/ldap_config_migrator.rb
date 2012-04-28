@@ -1,17 +1,22 @@
 class LdapConfigMigrator
-  class << self;
-    attr_accessor :properties_path, :yaml_path;
+
+  attr_accessor :properties_path, :yaml_path
+
+  def initialize
+    @yaml_path = LdapClient.config_file_path
   end
 
-  def self.migrate
-    properties_file_hash = PropertiesFile.read(self.properties_path)
+  def migrate
+    # TODO - Figure out where this file is
+    return if not @properties_path
+    properties_file_hash = PropertiesFile.read(@properties_path)
     yaml = transform(properties_file_hash).to_yaml
-    f = File.open(self.yaml_path, 'w')
+    f = File.open(@yaml_path, 'w')
     f.write(yaml)
     f.close
   end
 
-  def self.transform(hash)
+  def transform(hash)
     {
         "host" => hash["chorus.ldap.host"],
         "enable" => hash["chorus.ldap.enable"] == "true",

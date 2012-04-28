@@ -1,5 +1,5 @@
 class InstanceMigrator
-  def self.migrate
+  def migrate
     unless Legacy.connection.column_exists?(:edc_instance, :chorus_rails_instance_id)
       Legacy.connection.add_column :edc_instance, :chorus_rails_instance_id, :integer
     end
@@ -32,7 +32,7 @@ class InstanceMigrator
     end
   end
 
-  def self.legacy_instances
+  def legacy_instances
     Legacy.connection.select_all(<<SQL)
       SELECT edc_instance.*, edc_user.chorus_rails_user_id
       FROM edc_instance

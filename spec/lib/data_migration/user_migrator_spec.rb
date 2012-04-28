@@ -8,14 +8,14 @@ describe UserMigrator, :type => :data_migration do
       end
 
       it "adds the new foreign key column" do
-        UserMigrator.migrate
+        UserMigrator.new.migrate
         Legacy.connection.column_exists?(:edc_user, :chorus_rails_user_id).should be_true
       end
     end
 
     describe "copying the data" do
       before do
-        UserMigrator.migrate
+        UserMigrator.new.migrate
       end
       it "creates new users for legacy users" do
         User.find_with_destroyed(:all).length.should == 8

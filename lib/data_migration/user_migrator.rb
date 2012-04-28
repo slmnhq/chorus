@@ -1,5 +1,5 @@
 class UserMigrator
-  def self.migrate
+  def migrate
     unless Legacy.connection.column_exists?(:edc_user, :chorus_rails_user_id)
       Legacy.connection.add_column :edc_user, :chorus_rails_user_id, :integer
     end

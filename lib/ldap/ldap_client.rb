@@ -24,6 +24,10 @@ class LdapClient
     ldap.bind
   end
 
+  def self.config_file_path
+    File.join(Rails.root, 'config', 'ldap.yml')
+  end
+
   private
 
   def self.client
@@ -31,6 +35,6 @@ class LdapClient
   end
 
   def self.config
-    @@config ||= YAML.load_file(File.join(Rails.root, 'config', 'ldap.yml'))[Rails.env]
+    @@config ||= YAML.load_file(config_file_path())[Rails.env]
   end
 end

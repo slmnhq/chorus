@@ -4,9 +4,9 @@ describe InstanceCredentialMigrator, :type => :data_migration do
   describe ".migrate" do
     describe "copying the data" do
       before do
-        UserMigrator.migrate
-        InstanceMigrator.migrate
-        InstanceCredentialMigrator.migrate
+        UserMigrator.new.migrate
+        InstanceMigrator.new.migrate
+        InstanceCredentialMigrator.new.migrate
       end
 
       it "creates new InstanceCredentials from old AccountMap" do

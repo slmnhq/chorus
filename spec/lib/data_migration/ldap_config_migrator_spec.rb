@@ -3,7 +3,8 @@ require 'spec_helper'
 describe LdapConfigMigrator, :type => :data_migration do
   before do
     @temp_yaml = Tempfile.open('ldap.yaml');
-    LdapConfigMigrator.yaml_path = @temp_yaml.path
+    @migrator = LdapConfigMigrator.new
+    @migrator.yaml_path = @temp_yaml.path
 
     @temp_props = Tempfile.open('chorus.properties')
     @temp_props.puts <<EOF
@@ -34,12 +35,12 @@ chorus.ldap.attribute.title = title
 foo.bar = sna
 EOF
     @temp_props.flush
-    LdapConfigMigrator.properties_path = @temp_props.path
-    LdapConfigMigrator.migrate
+    @migrator.properties_path = @temp_props.path
+    @migrator.migrate
   end
 
   it "should read and convert the ldap fields from chorus.properties" do
-    yf = File.open LdapConfigMigrator.yaml_path
+    yf = File.open @migrator.yaml_path
     ldap_config = YAML::load(yf)
 
     ldap_config["foo.bar"].should_not be_present
