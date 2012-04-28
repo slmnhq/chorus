@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120424221335) do
+ActiveRecord::Schema.define(:version => 20120427234448) do
 
   create_table "instance_credentials", :force => true do |t|
     t.string  "username"
@@ -37,16 +37,20 @@ ActiveRecord::Schema.define(:version => 20120424221335) do
   create_table "users", :force => true do |t|
     t.string   "username"
     t.string   "password_digest"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
     t.string   "title"
     t.string   "dept"
     t.text     "notes"
-    t.boolean  "admin",           :default => false
+    t.boolean  "admin",              :default => false
     t.datetime "deleted_at"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
 
 end

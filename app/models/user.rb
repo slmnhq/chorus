@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
 
   has_many :instances, :foreign_key => :owner_id
 
+  has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+
   validates_presence_of :username, :first_name, :last_name, :email
   validate :uniqueness_of_non_deleted_username
   validates_format_of :email, :with => /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/

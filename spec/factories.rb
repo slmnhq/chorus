@@ -5,6 +5,7 @@ FactoryGirl.define do
     first_name "John"
     last_name "Doe"
     sequence(:email) { |n| "person#{n}@example.com" }
+    image_file_name "jim.png"
   end
 
   factory :admin, :parent => :user do

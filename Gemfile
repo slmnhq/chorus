@@ -7,6 +7,7 @@ gem 'pg'
 gem 'json'
 gem 'will_paginate'
 gem 'net-ldap'
+gem 'paperclip'
 
 group :assets do
   gem 'sass-rails'
