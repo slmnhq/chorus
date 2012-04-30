@@ -12,11 +12,6 @@ rake legacy:setup db:migrate db:test:prepare db:test:prepare:legacy
 # Run rspec tests
 script/test  > $CC_BUILD_ARTIFACTS/rspec_tests.log 2>&1
 
-# Start Jasmine
-rake RAILS_ENV=development devmode:enable assets:precompile
-bundle exec rake jasmine > $CC_BUILD_ARTIFACTS/jasmine.log 2>&1 &
-JASMINE_PID=$!; sleep 5
-
 # Run Jasmine tests
+RAILS_ENV=development rake devmode:enable assets:precompile
 rake jasmine:ci > $CC_BUILD_ARTIFACTS/jasmine_tests.log 2>&1
-kill -9 $JASMINE_PID || true
