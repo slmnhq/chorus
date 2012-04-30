@@ -59,6 +59,32 @@ describe SessionsController do
     end
   end
 
+  describe "#show" do
+    context "When logged in" do
+      let(:user) { FactoryGirl.create :user }
+
+      before do
+        log_in user
+        get :show
+      end
+      it "should return the current user" do
+        response.code.should == "200"
+      end
+      it "should have the user attributes" do
+        decoded_response.username.should == user.username
+      end
+    end
+
+    context "when not logged in" do
+      before do
+        get :show
+      end
+      it "returns 401" do
+        response.code.should == "401"
+      end
+    end
+  end
+
   describe "#destroy" do
     it "returns no content" do
       delete :destroy
