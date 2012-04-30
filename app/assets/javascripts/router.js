@@ -102,13 +102,7 @@
                 };
 
                 if (this.pageRequiresLogin(className)) {
-                    self.app.session.fetch({
-                        success: function(session, data) {
-                            if (session.dataStatusOk(data)) {
-                                navFunction();
-                            }
-                        }
-                    });
+                    self.app.session.fetch({ success: navFunction });
                 } else {
                     navFunction();
                 }
