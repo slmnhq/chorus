@@ -17,6 +17,12 @@ describe("chorus.pages.DatabaseIndexPage", function() {
         expect(this.page.collection).toHaveBeenFetched();
     });
 
+    it("has the right #failurePageOptions (for populating the content of a 404 page)", function() {
+        var options = this.page.failurePageOptions();
+        expect(options.title).toMatchTranslation("invalid_route.database_index.title");
+        expect(options.text).toMatchTranslation("invalid_route.database_index.content");
+    });
+
     describe("before the fetches complete", function() {
         it("has some breadcrumbs", function() {
             expect(this.page.$(".breadcrumbs")).toContainTranslation("breadcrumbs.home")
