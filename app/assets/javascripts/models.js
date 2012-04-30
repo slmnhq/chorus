@@ -39,12 +39,6 @@ chorus.models = {
             return this._activities;
         },
 
-        parse: function(data, xhr) {
-            this.loaded = true;
-            delete this.serverErrors;
-            return data.response;
-        },
-
         save: function(attrs, options) {
             options || (options = {});
             var effectiveAttrs = attrs || {};
@@ -62,7 +56,6 @@ chorus.models = {
                 if (error) error(model, xhr);
             };
 
-
             if (this.performValidation(effectiveAttrs)) {
                 this.trigger("validated");
                 var attrsToSave = _.isEmpty(effectiveAttrs) ? undefined : effectiveAttrs;
@@ -71,28 +64,6 @@ chorus.models = {
                 this.trigger("validationFailed");
                 return false;
             }
-        },
-
-        fetch: function(options) {
-            this.fetching = true;
-            options || (options = {});
-            var success = options.success, error = options.error;
-            options.success = function(model, data, xhr) {
-                model.trigger('loaded');
-                if (success) success(model, data, xhr);
-            };
-
-            options.error = function(model, xhr) {
-                var data = xhr.responseText && JSON.parse(xhr.responseText);
-                model.parseErrors(data, xhr);
-                model.trigger("fetchFailed", model, xhr)
-                if (error) error(model, xhr);
-            };
-
-            return this._super('fetch', [options])
-                .always(_.bind(function() {
-                this.fetching = false;
-            }, this));
         },
 
         destroy: function(options) {
@@ -294,38 +265,8 @@ chorus.collections = {
             return uri.toString();
         },
 
-        makeSuccessFunction: function(options, success) {
-            return function(collection, data, xhr) {
-                if (!options.silent) {
-                    collection.trigger('loaded');
-                }
-                if (success) {
-                    success(collection, data, xhr);
-                }
-            };
-        },
-
         isDeleted: function() {
             return false;
-        },
-
-        fetch: function(options) {
-            this.fetching = true;
-            options || (options = {});
-            var success = options.success, error = options.error;
-            options.success = this.makeSuccessFunction(options, success);
-
-            options.error = function(collection, xhr) {
-                var data = xhr.responseText && JSON.parse(xhr.responseText);
-                collection.parseErrors(data, xhr);
-                if (error) error(collection, xhr);
-                collection.trigger("fetchFailed", collection, xhr)
-            };
-
-            return this._super('fetch', [options])
-                .always(_.bind(function() {
-                this.fetching = false;
-            }, this));
         },
 
         fetchPage: function(page, options) {
@@ -367,14 +308,6 @@ chorus.collections = {
                 fetchPage.call(this, 1);
             }
         })(),
-
-
-        parse: function(data, xhr) {
-            this.loaded = true;
-            delete this.serverErrors;
-            this.pagination = data.pagination;
-            return data.response;
-        },
 
         sortDesc: function(idx) {
             this._sort(idx, "desc")

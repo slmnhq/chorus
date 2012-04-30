@@ -102,20 +102,6 @@ describe("chorus.Mixins.Fetching", function() {
             ];
         });
 
-        context("when the status is 'fail'", function() {
-            beforeEach(function() {
-                this.data = {
-                    status: "fail",
-                    response: { instanceId: 1 },
-                    errors: { record: "no" }
-                };
-
-                this.xhr = { status: 200 };
-            });
-
-            itHandlesFailure();
-        });
-
         context("when the response is '403 forbidden'", function() {
             beforeEach(function() {
                 this.data = {
@@ -165,5 +151,73 @@ describe("chorus.Mixins.Fetching", function() {
                 expect(this.resource.errorData).toEqual(this.data.response);
             });
         }
+    });
+
+    describe("#fetch", function() {
+        beforeEach(function() {
+            this.errorSpy = jasmine.createSpy("error");
+            this.successSpy = jasmine.createSpy("success");
+            this.fetchFailedSpy = jasmine.createSpy("fetchFailed");
+            this.loadedSpy = jasmine.createSpy("loaded");
+
+            this.resource.bind("fetchFailed", this.fetchFailedSpy);
+            this.resource.bind("loaded", this.loadedSpy);
+
+            this.resource.fetch({
+                success: this.successSpy,
+                error: this.errorSpy,
+            });
+        });
+
+        context("when there is a server error", function() {
+            it("triggers the 'fetchFailed' event on the resource", function() {
+                this.server.lastFetch().failUnprocessableEntity();
+                expect(this.fetchFailedSpy).toHaveBeenCalled();
+                expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.resource);
+            });
+        });
+
+        context("when the response is '403 forbidden'", function() {
+            it("does not trigger 'loaded", function() {
+                this.server.lastFetch().failForbidden({custom: "error"});
+                expect(this.loadedSpy).not.toHaveBeenCalled();
+            });
+
+            it("fills serverErrors from the errors key", function() {
+                this.server.lastFetch().failForbidden({custom: "error"});
+                expect(this.resource.serverErrors).toEqual({custom: "error"});
+            });
+
+            it("calls the 'error' callback if one is provided", function() {
+                this.server.lastFetch().failForbidden({custom: "error"});
+                expect(this.errorSpy).toHaveBeenCalled();
+            });
+
+            it("triggers the 'fetchFailed' event on the resource after populating the data", function() {
+                var resource = this.resource;
+                this.fetchFailedSpy.andCallFake(function() {
+                    expect(resource.serverErrors).toEqual({custom: "error"});
+                });
+
+                this.server.lastFetch().failForbidden({custom: "error"});
+
+                expect(this.fetchFailedSpy).toHaveBeenCalled();
+                expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.resource);
+            });
+        });
+
+        context("when the fetch succeeds", function() {
+            beforeEach(function() {
+                this.server.lastFetch().succeed();
+            });
+
+            it("triggers the 'loaded' event on the resource", function() {
+                expect(this.loadedSpy).toHaveBeenCalled();
+            });
+
+            it("calls the 'success' callback if one is provided", function() {
+                expect(this.successSpy).toHaveBeenCalled();
+            });
+        })
     });
 });
