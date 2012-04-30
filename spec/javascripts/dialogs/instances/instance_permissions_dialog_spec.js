@@ -213,7 +213,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
             this.owner = newFixtures.user({firstName: 'EDC', lastName: 'Admin'});
             this.instance = newFixtures.instance.greenplum({
                 ownerId: this.owner.get('id'),
-                owner: this.owner.get('userName'),
+                owner: this.owner.get('username'),
                 ownerFullName: this.owner.displayName()
             });
             this.accounts = this.instance.accounts();

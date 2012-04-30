@@ -13,28 +13,28 @@ describe("chorus.models.User", function() {
 
     describe("#currentUserCanEdit", function() {
         beforeEach(function() {
-            this.model.set({ userName: "chris" });
+            this.model.set({ username: "chris" });
         });
 
         it("returns true if the current user is an admin", function() {
-            setLoggedInUser({ admin: true, userName: "fog" });
+            setLoggedInUser({ admin: true, username: "fog" });
             expect(this.model.currentUserCanEdit()).toBeTruthy();
         });
 
         it("returns true if the current user is the same user", function() {
-            setLoggedInUser({ admin: false, userName: "chris" });
+            setLoggedInUser({ admin: false, username: "chris" });
             expect(this.model.currentUserCanEdit()).toBeTruthy();
         });
 
         it("returns false otherwise", function() {
-            setLoggedInUser({ admin: false, userName: "joe" });
+            setLoggedInUser({ admin: false, username: "joe" });
             expect(this.model.currentUserCanEdit()).toBeFalsy();
         });
     });
 
     describe("#workspaces", function() {
         beforeEach(function() {
-            this.user = newFixtures.user({userName: "dr_charlzz", id: "457"});
+            this.user = newFixtures.user({username: "dr_charlzz", id: "457"});
             this.workspaces = this.user.workspaces();
         });
 
@@ -77,7 +77,7 @@ describe("chorus.models.User", function() {
 
     describe("#activeWorkspaces", function() {
         beforeEach(function() {
-            this.user = newFixtures.user({userName: "dr_charlzz", id: "457"});
+            this.user = newFixtures.user({username: "dr_charlzz", id: "457"});
             this.workspaces = this.user.activeWorkspaces();
         });
 
@@ -134,7 +134,7 @@ describe("chorus.models.User", function() {
             expect(this.model.performValidation()).toBeTruthy();
         });
 
-        _.each(["firstName", "lastName", "userName", "password"], function(attr) {
+        _.each(["firstName", "lastName", "username", "password"], function(attr) {
             it("requires " + attr, function() {
                 this.model.performValidation();
                 expect(this.model.require).toHaveBeenCalledWith(attr, undefined);
@@ -151,7 +151,7 @@ describe("chorus.models.User", function() {
                 this.model = new chorus.models.User({
                     firstName: "bob",
                     lastName: "jenkins",
-                    userName: "bobjenk",
+                    username: "bobjenk",
                     emailAddress: "bobj@raisetheroof.us"
                 });
             });
@@ -176,7 +176,7 @@ describe("chorus.models.User", function() {
                 this.model = newFixtures.user({
                     firstName: "bob",
                     lastName: "jenkins",
-                    userName: "bobjenk",
+                    username: "bobjenk",
                     emailAddress: "bobj@raisetheroof.us"
                 });
                 this.model.ldap = true;
@@ -190,7 +190,7 @@ describe("chorus.models.User", function() {
                 this.model.set({
                     firstName: null,
                     lastName: "",
-                    userName: "",
+                    username: "",
                     emailAddress: "bob@bob.com"
                 });
                 expect(this.model.performValidation()).toBeFalsy();
@@ -204,7 +204,7 @@ describe("chorus.models.User", function() {
                     id: "5",
                     firstName: "bob",
                     lastName: "jenkins",
-                    userName: "bobjenk",
+                    username: "bobjenk",
                     emailAddress: "bobj@raisetheroof.us"
                 });
                 this.model.save({
@@ -234,19 +234,19 @@ describe("chorus.models.User", function() {
         });
 
         it("uses the right URL", function() {
-            var user = newFixtures.user({userName: 'foo', id: "bar"});
+            var user = newFixtures.user({username: 'foo', id: "bar"});
             expect(user.imageUrl()).toBe("/userimage/bar?size=original&iebuster=12345");
         });
 
         it("accepts the size argument", function() {
-            var user = newFixtures.user({userName: 'foo', id: "bar"});
+            var user = newFixtures.user({username: 'foo', id: "bar"});
             expect(user.imageUrl({size: "icon"})).toBe("/userimage/bar?size=icon&iebuster=12345");
         });
     });
 
     describe("#picklistImageUrl", function() {
         it("uses the right URL", function() {
-            var user = newFixtures.user({userName: 'foo', id: "bar"});
+            var user = newFixtures.user({username: 'foo', id: "bar"});
             expect(user.picklistImageUrl()).toBe(user.imageUrl({ size: "original" }));
         });
     })

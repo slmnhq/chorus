@@ -37,7 +37,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
         } else {
             ownerAttrs = {
                 id: this.get("ownerId"),
-                userName: this.get("owner"),
+                username: this.get("owner"),
                 firstName: this.get("ownerFirstName"),
                 lastName: this.get("ownerLastName")
             };
@@ -104,7 +104,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     archiver:function () {
         return new chorus.models.User({
             fullName:(this.get("archiverFirstName") + ' ' + this.get("archiverLastName")),
-            userName:this.get("archiver")
+            username:this.get("archiver")
         });
     },
 

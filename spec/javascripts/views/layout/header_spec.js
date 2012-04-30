@@ -3,7 +3,7 @@ describe("chorus.views.Header", function() {
         chorus.session = new chorus.models.Session({
             "firstName": "Daniel",
             "lastName": "Burke",
-            userName: "dburke",
+            username: "dburke",
             id: "55"
         });
         chorus.user = chorus.session;
@@ -562,7 +562,7 @@ describe("chorus.views.Header", function() {
                 this.users.each(function(user, i) {
                     var option = $(".switch_user option").eq(i + 1)
                     expect(option).toContainText(user.displayName())
-                    expect(option.val()).toBe(user.get("userName"))
+                    expect(option.val()).toBe(user.get("username"))
                 }, this);
             });
 
@@ -590,7 +590,7 @@ describe("chorus.views.Header", function() {
                         });
 
                         it("updates the chorus.session.user model", function() {
-                            expect(chorus.session.user().get("userName")).toBe(this.selectedUserName);
+                            expect(chorus.session.user().get("username")).toBe(this.selectedUserName);
                         });
 
                         it("reloads the current page", function() {

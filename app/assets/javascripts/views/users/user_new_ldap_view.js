@@ -32,8 +32,8 @@
         },
 
         checkUsername: function(callback) {
-            var username = this.$("input[name=userName]").val();
-            this.collection = new chorus.collections.LdapUserSet([], { userName: username });
+            var username = this.$("input[name=username]").val();
+            this.collection = new chorus.collections.LdapUserSet([], { username: username });
 
             this.collection.fetch();
 
@@ -56,7 +56,7 @@
         },
 
         noLdapUserFound: function() {
-            var alert = new chorus.alerts.NoLdapUser({ username: this.collection.attributes.userName });
+            var alert = new chorus.alerts.NoLdapUser({ username: this.collection.attributes.username });
             alert.launchModal();
         },
 

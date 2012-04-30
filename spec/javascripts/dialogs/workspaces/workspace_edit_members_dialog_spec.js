@@ -46,9 +46,9 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
 
         describe("when the submit button is clicked", function() {
             beforeEach(function() {
-                this.user1 = new chorus.models.User({ id: '1', userName: "niels" });
-                this.user2 = new chorus.models.User({ id: '2', userName: "ludwig" });
-                this.user3 = new chorus.models.User({ id: '3', userName: "isaac" });
+                this.user1 = new chorus.models.User({ id: '1', username: "niels" });
+                this.user2 = new chorus.models.User({ id: '2', username: "ludwig" });
+                this.user3 = new chorus.models.User({ id: '3', username: "isaac" });
 
                 this.dialog.collection.add([ this.user1, this.user2, this.user3 ]);
 
@@ -84,7 +84,7 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
 
             context("when some of the selected users are already members", function() {
                 beforeEach(function() {
-                    this.otherUser2 = new chorus.models.User({ id: '2', userName: "ludwig" });
+                    this.otherUser2 = new chorus.models.User({ id: '2', username: "ludwig" });
                     this.dialog.members.add(this.otherUser2);
                 });
 

@@ -13,7 +13,7 @@ chorus.views.Login = chorus.views.Base.extend({
 
     postRender : function() {
         this.$(".legal .version").load("/VERSION");
-        _.defer(_.bind(function() {this.$("input[name='userName']").focus()}, this));
+        _.defer(_.bind(function() {this.$("input[name='username']").focus()}, this));
     },
 
     onLogin : function () {
@@ -34,7 +34,7 @@ chorus.views.Login = chorus.views.Base.extend({
         this.model.clear({ silent:true });
         delete this.model.id;
         this.model.set({
-            userName:this.$("input[name='userName']").val(),
+            username:this.$("input[name='username']").val(),
             password:this.$("input[name='password']").val()
         });
         this.model.save();

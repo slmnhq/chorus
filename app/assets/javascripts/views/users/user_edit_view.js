@@ -19,7 +19,7 @@
 
         additionalContext:function () {
             return {
-                permission:((this.model.get("userName") == chorus.session.user().get("userName")) || chorus.session.user().get("admin"))
+                permission:((this.model.get("username") == chorus.session.user().get("username")) || chorus.session.user().get("admin"))
             }
         },
 

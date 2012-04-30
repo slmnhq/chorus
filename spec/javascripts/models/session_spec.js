@@ -12,7 +12,7 @@ describe("chorus.models.Session", function() {
 
     describe("#save", function() {
         beforeEach(function() {
-            this.model = new models.Session({ userName: "johnjohn", password: "partytime"});
+            this.model = new models.Session({ username: "johnjohn", password: "partytime"});
             this.model.save();
         });
 
@@ -171,13 +171,13 @@ describe("chorus.models.Session", function() {
         });
 
         it("should return a truthy value for a valid session", function() {
-            this.model.set({ userName: "barn", password: "door" });
+            this.model.set({ username: "barn", password: "door" });
             expect(this.model.performValidation()).toBeTruthy();
         });
 
-        it("requires userName", function() {
+        it("requires username", function() {
             this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("userName", undefined);
+            expect(this.model.require).toHaveBeenCalledWith("username", undefined);
         });
 
         it("requires password", function() {

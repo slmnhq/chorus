@@ -1,7 +1,7 @@
 def fill_user_form(username)
   fill_in 'firstName', :with => "Joe"
   fill_in 'lastName', :with => "Blow"
-  fill_in 'userName', :with => username
+  fill_in 'username', :with => username
   fill_in 'emailAddress', :with => "#{username}@blow.com"
   fill_in 'password', :with => "password"
   fill_in 'passwordConfirmation', :with => "password"

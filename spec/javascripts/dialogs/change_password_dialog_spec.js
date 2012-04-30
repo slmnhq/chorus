@@ -1,6 +1,6 @@
 describe("chorus.dialogs.ChangePassword", function() {
     beforeEach(function() {
-        this.user = new chorus.models.User({ userName: "john", firstName: "John", lastName: "Doe", emailAddress: "jdoe@emc.com", id: "me" });
+        this.user = new chorus.models.User({ username: "john", firstName: "John", lastName: "Doe", emailAddress: "jdoe@emc.com", id: "me" });
         this.view = new chorus.dialogs.ChangePassword({ pageModel : this.user });
         this.view.render();
     });

@@ -40,13 +40,13 @@ describe("newFixtures", function() {
 
         it("includes the user fixture data", function() {
             expect(window.fixtureData.user).toBeDefined();
-            expect(window.fixtureData.user.userName).toBeDefined();
-            expect(userJson.userName).toBe(window.fixtureData.user.userName);
+            expect(window.fixtureData.user.username).toBeDefined();
+            expect(userJson.username).toBe(window.fixtureData.user.username);
         });
 
         it("allows for overrides", function() {
-            userJson = newFixtures.userJson({userName: "Foo Bar"});
-            expect(userJson.userName).toBe("Foo Bar");
+            userJson = newFixtures.userJson({username: "Foo Bar"});
+            expect(userJson.username).toBe("Foo Bar");
         });
 
         it("does not allow overrides for non-existant attributes", function() {
@@ -145,13 +145,13 @@ describe("newFixtures", function() {
         it("sets attributes of the models based on the fixture data", function() {
             var data = window.fixtureData.userSet[0];
             expect(data).toBeDefined();
-            expect(data.userName).toBeDefined();
-            expect(userSet.at(0).get("userName")).toBe(data.userName);
+            expect(data.username).toBeDefined();
+            expect(userSet.at(0).get("username")).toBe(data.username);
         });
 
         it("allows for overrides", function() {
-            userSet = newFixtures.userSet([ { userName: "Foo Bar" } ]);
-            expect(userSet.at(0).get("userName")).toBe("Foo Bar");
+            userSet = newFixtures.userSet([ { username: "Foo Bar" } ]);
+            expect(userSet.at(0).get("username")).toBe("Foo Bar");
         });
 
         it("does not allow overrides for non-existant attributes", function() {

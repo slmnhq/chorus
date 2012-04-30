@@ -27,7 +27,7 @@ chorus.models.User = chorus.models.Base.extend({
     declareValidations:function (newAttrs) {
         this.require('firstName', newAttrs);
         this.require('lastName', newAttrs);
-        this.require('userName', newAttrs);
+        this.require('username', newAttrs);
         this.requireValidEmailAddress('emailAddress', newAttrs);
 
         if(!this.ldap){
@@ -59,7 +59,7 @@ chorus.models.User = chorus.models.Base.extend({
 
     currentUserCanEdit: function() {
         var currentUser = chorus.session.user();
-        return currentUser.isAdmin() || this.get("userName") === currentUser.get("userName");
+        return currentUser.isAdmin() || this.get("username") === currentUser.get("username");
     },
 
     isAdmin: function() {
@@ -94,7 +94,7 @@ chorus.models.User = chorus.models.Base.extend({
         "emailAddress":"users.email",
         "firstName":"users.first_name",
         "lastName":"users.last_name",
-        "userName":"users.username",
+        "username":"users.username",
         "password":"users.password",
         "title":"users.title",
         "department":"users.department",

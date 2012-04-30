@@ -19,7 +19,7 @@
             "name":"ergonomics",
             "owner":{
                 "id":"InitialUser",
-                "userName":"edcadmin"
+                "username":"edcadmin"
             },
             "isDeleted":false
         },
@@ -69,7 +69,7 @@
             "name":"ergonomics",
             "owner":{
                 "id":"InitialUser",
-                "userName":"edcadmin"
+                "username":"edcadmin"
             },
             "isDeleted":false
         },

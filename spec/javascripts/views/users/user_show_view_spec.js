@@ -6,7 +6,7 @@ describe("chorus.views.UserShow", function() {
                 title: "My Title",
                 ou: "My Department",
                 admin: true,
-                userName: "gabe1",
+                username: "gabe1",
                 notes: "My Notes"
             });
             var workspaces = new chorus.collections.WorkspaceSet();
@@ -32,7 +32,7 @@ describe("chorus.views.UserShow", function() {
 
             it("renders a profile image for the user", function() {
                 var image = this.view.$(".edit_photo img");
-                var userName = this.model.get("userName");
+                var username = this.model.get("username");
                 expect(image.attr('src').indexOf(this.model.imageUrl())).toBe(0);
             });
 

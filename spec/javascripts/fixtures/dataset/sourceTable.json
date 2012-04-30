@@ -9,7 +9,7 @@
     "objectName": "2010_report_toasdfasdf_congress_on_white_house_staff",
     "modifiedBy": {
         "id": "InitialUser",
-        "userName": "edcadmin"
+        "username": "edcadmin"
     },
     "commentCount": 4,
     "type": "SOURCE_TABLE",
@@ -72,7 +72,7 @@
     },
     "owner": {
         "id": "InitialUser",
-        "userName": "edcadmin"
+        "username": "edcadmin"
     },
     "instance": {
         "id": "10021",

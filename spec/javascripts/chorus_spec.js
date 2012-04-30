@@ -635,7 +635,7 @@ describe("chorus global", function() {
         beforeEach(function() {
             this.chorus.initialize();
             Backbone.history.fragment = "/foo";
-            setLoggedInUser({id: "1", userName: "iAmNumberOne"}, this.chorus);
+            setLoggedInUser({id: "1", username: "iAmNumberOne"}, this.chorus);
         })
 
         it("tells the session to save the path of the page the user was trying to get to", function() {

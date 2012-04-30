@@ -17,7 +17,7 @@ describe("chorus.views.userNew", function() {
                 beforeEach(function() {
                     this.view.$("input[name=firstName]").val("Frankie");
                     this.view.$("input[name=lastName]").val("Knuckles");
-                    this.view.$("input[name=userName]").val("frankie2002");
+                    this.view.$("input[name=username]").val("frankie2002");
                     this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com");
                     this.view.$("input[name=password]").val("whoaomg");
                     this.view.$("input[name=passwordConfirmation]").val("whoaomg");
@@ -30,7 +30,7 @@ describe("chorus.views.userNew", function() {
                     this.view.$("form").submit();
                     expect(this.user.attributes["firstName"]).toBe("Frankie");
                     expect(this.user.attributes["lastName"]).toBe("Knuckles");
-                    expect(this.user.attributes["userName"]).toBe("frankie2002");
+                    expect(this.user.attributes["username"]).toBe("frankie2002");
                     expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
                     expect(this.user.attributes["password"]).toBe("whoaomg");
                     expect(this.user.attributes["passwordConfirmation"]).toBe("whoaomg");
@@ -40,9 +40,9 @@ describe("chorus.views.userNew", function() {
                 });
 
                 it("trims text inputs", function() {
-                    this.view.$("input[name=userName]").val("   foo   ")
+                    this.view.$("input[name=username]").val("   foo   ")
                     this.view.$("form").submit();
-                    expect(this.user.get("userName")).toBe("foo");
+                    expect(this.user.get("username")).toBe("foo");
                 });
 
                 it("does not trim text areas", function() {
@@ -99,7 +99,7 @@ describe("chorus.views.userNew", function() {
                         it("retains the data already entered", function() {
                             expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
                             expect(this.view.$("input[name=lastName]").val()).toBe("Knuckles");
-                            expect(this.view.$("input[name=userName]").val()).toBe("frankie2002");
+                            expect(this.view.$("input[name=username]").val()).toBe("frankie2002");
                             expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
                             expect(this.view.$("input[name=password]").val()).toBe("whoaomg");
                             expect(this.view.$("input[name=passwordConfirmation]").val()).toBe("whoaomg");

@@ -22,9 +22,9 @@
             }
         },
 
-        ifCurrentUserNameIs: function(userName, block) {
+        ifCurrentUserNameIs: function(username, block) {
             var user = chorus && chorus.session && chorus.session.user();
-            if (user && user.get("userName") == userName) {
+            if (user && user.get("username") == username) {
                 return block(this);
             } else if (block.inverse) {
                 return block.inverse(this);
@@ -62,7 +62,7 @@
         },
 
         currentUserName: function(block) {
-            return chorus.session.get("userName");
+            return chorus.session.get("username");
         },
 
         displayNameFromPerson: function(person) {

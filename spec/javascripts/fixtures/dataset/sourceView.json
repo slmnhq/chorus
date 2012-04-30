@@ -9,7 +9,7 @@
     "objectName": "ab",
     "modifiedBy": {
         "id": "InitialUser",
-        "userName": "edcadmin"
+        "username": "edcadmin"
     },
     "commentCount": 3,
     "type": "SOURCE_TABLE",
@@ -65,7 +65,7 @@
     },
     "owner": {
         "id": "InitialUser",
-        "userName": "edcadmin"
+        "username": "edcadmin"
     },
     "instance": {
         "id": "10000",

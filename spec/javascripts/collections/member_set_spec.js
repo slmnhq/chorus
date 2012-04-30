@@ -14,9 +14,9 @@ describe("chorus.collections.MemberSet", function() {
         beforeEach(function() {
             spyOnEvent(this.memberSet, 'saved');
             spyOnEvent(this.memberSet, 'saveFailed');
-            this.user1 = new chorus.models.User({ userName: "niels", id: "1" });
-            this.user2 = new chorus.models.User({ userName: "ludwig", id: "2" });
-            this.user3 = new chorus.models.User({ userName: "isaac", id: "4" });
+            this.user1 = new chorus.models.User({ username: "niels", id: "1" });
+            this.user2 = new chorus.models.User({ username: "ludwig", id: "2" });
+            this.user3 = new chorus.models.User({ username: "isaac", id: "4" });
             this.memberSet.add([this.user1, this.user2, this.user3]);
             this.memberSet.save();
         });

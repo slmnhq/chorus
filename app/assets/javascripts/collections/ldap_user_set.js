@@ -3,7 +3,7 @@ chorus.collections.LdapUserSet = chorus.collections.Base.extend({
 
     urlParams: function() {
         var params = {};
-        if (this.attributes.userName) { params.userName = this.attributes.userName; }
+        if (this.attributes.username) { params.username = this.attributes.username; }
         return params;
     }
 });

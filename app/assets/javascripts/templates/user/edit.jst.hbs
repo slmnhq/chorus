@@ -1,6 +1,6 @@
 {{> errorDiv}}
 {{#if permission}}
-<form action="/users/{{userName}}" method="put">
+<form action="/users/{{username}}" method="put">
     <div class="edit_photo"></div>
     <div class="fields">
 
@@ -19,7 +19,7 @@
         <div class="row">
                <span class="left">
                    <label class="required">{{t "users.username"}}</label>
-                   <span name="userName">{{userName}}</span>
+                   <span name="username">{{username}}</span>
                </span>
 
             {{#ifAdmin}}

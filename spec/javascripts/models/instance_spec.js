@@ -94,7 +94,7 @@ describe("chorus.models.Instance", function() {
         it("returns a user", function() {
             var owner = this.instance.owner();
             expect(owner.get("id")).toBe(this.instance.get("ownerId"));
-            expect(owner.get("userName")).toBe("edcadmin");
+            expect(owner.get("username")).toBe("edcadmin");
             expect(owner.get("fullName")).toBe("EDC Admin");
         })
     });

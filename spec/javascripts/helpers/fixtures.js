@@ -1673,7 +1673,7 @@ beforeEach(function() {
                 hasDraft: false,
                 isDeleted: false,
                 modifiedBy: modifiedByUser,
-                owner: ownerUser.userName,
+                owner: ownerUser.username,
                 ownerId: ownerUser.id,
                 workspaceId: this.nextId().toString(),
                 imageId: null,
@@ -1946,8 +1946,8 @@ beforeEach(function() {
                 importInfo: {},
                 hasCredentials: true,
                 importFrequency: null,
-                owner: {id: "InitialUser", userName: "edcadmin"},
-                modifiedBy: {id: "InitialUser", userName: "edcadmin"},
+                owner: {id: "InitialUser", username: "edcadmin"},
+                modifiedBy: {id: "InitialUser", username: "edcadmin"},
                 workspace: {id: fixtures.nextId(), name: "some_workspace"},
                 workspaceUsed: {
                     workspaceCount: 1,
@@ -2636,7 +2636,7 @@ beforeEach(function() {
                                 "id": "422",
                                 "firstName": "John",
                                 "lastName": "Smith",
-                                "userName": "johnny192"
+                                "username": "johnny192"
                             },
                             "owner": {
                                 "id": "InitialUser",
@@ -2663,7 +2663,7 @@ beforeEach(function() {
                                 "id": "422",
                                 "firstName": "John",
                                 "lastName": "Smith",
-                                "userName": "johnny192"
+                                "username": "johnny192"
                             },
                             "owner": {
                                 "id": "InitialUser",

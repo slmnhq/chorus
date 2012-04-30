@@ -82,12 +82,12 @@ chorus.models.Session = chorus.models.Base.extend({
     },
 
     declareValidations: function(newAttrs) {
-        this.require("userName", newAttrs);
+        this.require("username", newAttrs);
         this.require("password", newAttrs);
     },
 
     attrToLabel: {
-        "userName": "login.username",
+        "username": "login.username",
         "password": "login.password"
     }
 });

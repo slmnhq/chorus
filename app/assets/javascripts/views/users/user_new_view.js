@@ -37,7 +37,7 @@ chorus.views.UserNew = chorus.views.Base.extend({
 
         this.model.set(updates)
 
-        this.model.id = undefined; // since User#idAttribute is userName, we need this for isNew to return true
+        this.model.id = undefined; // since User#idAttribute is username, we need this for isNew to return true
         this.model.save();
     },
 

@@ -82,12 +82,12 @@ describe("handlebars", function() {
 
         describe("ifCurrentUserNameIs", function() {
             beforeEach(function() {
-                setLoggedInUser({ userName: "benjamin" });
+                setLoggedInUser({ username: "benjamin" });
                 this.spy = jasmine.createSpy("ifCurrentUserNameIs");
                 this.spy.inverse = jasmine.createSpy("ifCurrentUserNameIs inverse");
             });
 
-            describe("when the given userName matches the current user's name'", function() {
+            describe("when the given username matches the current user's name'", function() {
                 it("executes the block", function() {
                     Handlebars.helpers.ifCurrentUserNameIs("benjamin", this.spy);
                     expect(this.spy).toHaveBeenCalled();
@@ -95,7 +95,7 @@ describe("handlebars", function() {
                 })
             });
 
-            describe("when the given userName does NOT match the current user's name", function() {
+            describe("when the given username does NOT match the current user's name", function() {
                 it("execute the inverse block", function() {
                     Handlebars.helpers.ifCurrentUserNameIs("noe valley", this.spy)
                     expect(this.spy.inverse).toHaveBeenCalled();
@@ -282,10 +282,10 @@ describe("handlebars", function() {
         describe("currentUserName", function() {
             beforeEach(function() {
                 this.template = "{{currentUserName}}";
-                chorus.session.set({userName: "bob"});
+                chorus.session.set({username: "bob"});
             });
             it("should return the user", function() {
-                expect(Handlebars.compile(this.template)({})).toBe(chorus.session.get("userName"));
+                expect(Handlebars.compile(this.template)({})).toBe(chorus.session.get("username"));
             });
         });
 

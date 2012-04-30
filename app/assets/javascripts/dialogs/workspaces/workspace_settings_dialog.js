@@ -95,7 +95,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
 
         if (this.$("select.owner").length > 0) {
             attrs.ownerId = this.$("select.owner").val();
-            attrs.ownerName = this.model.members().get(attrs.ownerId).get("userName");
+            attrs.ownerName = this.model.members().get(attrs.ownerId).get("username");
         }
 
         this.$("button.submit").startLoading("actions.saving");

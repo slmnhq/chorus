@@ -70,13 +70,13 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             context("when user is an admin or owner of the instance", function() {
                 it("displays edit instance link when user is admin", function() {
-                    setLoggedInUser({ userName : "benjamin", admin: true});
+                    setLoggedInUser({ username : "benjamin", admin: true});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
                 it("displays edit instance link when user is owner", function() {
-                    setLoggedInUser({ userName : "benjamin", admin: false});
+                    setLoggedInUser({ username : "benjamin", admin: false});
                     this.instance.set({ownerId : chorus.session.user().get('id')});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
@@ -88,7 +88,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the instance is a hadoop instance", function() {
                     beforeEach(function() {
-                        setLoggedInUser({ userName : "benjamin", admin: false});
+                        setLoggedInUser({ username : "benjamin", admin: false});
                         this.instance.set({
                             ownerId : chorus.session.user().get('id'),
                             instanceProvider: "Hadoop"
@@ -107,7 +107,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the instance is provisioning", function() {
                     beforeEach(function() {
-                        setLoggedInUser({ userName : "benjamin", admin: true});
+                        setLoggedInUser({ username : "benjamin", admin: true});
                         this.instance.set({
                             state: "provisioning",
                             provisionType: "create"
@@ -130,7 +130,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the instance failed to provision", function() {
                     beforeEach(function() {
-                        setLoggedInUser({ userName : "benjamin", admin: true});
+                        setLoggedInUser({ username : "benjamin", admin: true});
                         this.instance.set({
                             state: "fault",
                             provisionType: "create"
@@ -163,7 +163,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             context("when user is not an admin or owner of the instance", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ userName : "benjamin", admin: false});
+                    setLoggedInUser({ username : "benjamin", admin: false});
                     this.instance.set({owner : "harry"});
                     this.view.render();
                 });
@@ -247,20 +247,20 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
 
                 it("displays edit instance link when user is admin", function() {
-                    setLoggedInUser({ userName : "benjamin", admin: true});
+                    setLoggedInUser({ username : "benjamin", admin: true});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
                 it("displays edit instance link when user is owner", function() {
-                    setLoggedInUser({ userName : "benjamin", admin: false});
+                    setLoggedInUser({ username : "benjamin", admin: false});
                     this.instance.set({ownerId : chorus.session.user().get('id')});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
                 it("does NOT display the edit instance link when user is not an admin or owner", function() {
-                    setLoggedInUser({ userName : "benjamin", admin: false});
+                    setLoggedInUser({ username : "benjamin", admin: false});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).not.toExist();
                 });
@@ -343,7 +343,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         var account = fixtures.instanceAccount();
                         spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
                         this.instance.accounts().add([fixtures.instanceAccount(), fixtures.instanceAccount()]);
-                        setLoggedInUser({ userName : "benjamin", admin: true});
+                        setLoggedInUser({ username : "benjamin", admin: true});
                         this.view.render();
                     });
 

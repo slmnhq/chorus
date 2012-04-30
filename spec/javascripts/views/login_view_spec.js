@@ -16,7 +16,7 @@ describe("chorus.views.Login", function() {
 
     it("focuses the username field by default", function() {
         expect($.fn.focus).toHaveBeenCalled();
-        expect($.fn.focus.mostRecentCall.object).toBe("input[name='userName']");
+        expect($.fn.focus.mostRecentCall.object).toBe("input[name='username']");
     });
 
     describe("when the version string is returned", function() {
@@ -34,13 +34,13 @@ describe("chorus.views.Login", function() {
             this.view.model.set({ foo: "bar" })
             this.view.model.id = "foo"
             this.saveSpy = spyOn(this.view.model, "save");
-            this.view.$("input[name=userName]").val("johnjohn");
+            this.view.$("input[name=username]").val("johnjohn");
             this.view.$("input[name=password]").val("partytime");
             this.view.$("form.login").submit();
         });
 
         it("sets attributes on the model", function() {
-            expect(this.view.model.get("userName")).toBe("johnjohn");
+            expect(this.view.model.get("username")).toBe("johnjohn");
             expect(this.view.model.get("password")).toBe("partytime");
         });
 
@@ -93,7 +93,7 @@ describe("chorus.views.Login", function() {
 
             context("from the same user that timed out", function() {
                 beforeEach(function() {
-                    setLoggedInUser({id: "2", userName: "iAmNumberTwo"});
+                    setLoggedInUser({id: "2", username: "iAmNumberTwo"});
 
                     this.view.model.trigger('saved', this.view.model);
                 });
@@ -105,7 +105,7 @@ describe("chorus.views.Login", function() {
 
             context("from a different user that timed out", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ id: "3", userName: "iAmNumberThree" });
+                    setLoggedInUser({ id: "3", username: "iAmNumberThree" });
 
                     this.view.model.trigger('saved', this.view.model);
                 });

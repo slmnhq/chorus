@@ -73,7 +73,7 @@
         owner:function () {
             return new chorus.models.User({
                 id:this.get("ownerId"),
-                userName:this.get("owner"),
+                username:this.get("owner"),
                 fullName:this.get("ownerFullName")
             })
         },

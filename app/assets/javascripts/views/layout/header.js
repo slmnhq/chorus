@@ -71,7 +71,7 @@ chorus.views.Header = chorus.views.Base.extend({
 
             $select.append("<option>Switch to user..</option>")
             this.users.each(function(user) {
-                $select.append("<option value=" + user.get("userName") + ">" + user.displayName() + "</option>")
+                $select.append("<option value=" + user.get("username") + ">" + user.displayName() + "</option>")
             });
 
             $select.css({position: 'fixed', bottom: 0, right: 0})
@@ -84,12 +84,12 @@ chorus.views.Header = chorus.views.Base.extend({
         var self = this;
         var session = chorus.session;
 
-        function switchUser(userName) {
+        function switchUser(username) {
             session.requestLogout(function() {
                 // log back in as new user
                 self.bindings.add(session, "saved", _.bind(chorus.router.reload, chorus.router))
                 self.bindings.add(session, "saveFailed", function() { session.trigger("needsLogin"); });
-                session.save({userName: userName, password: "secret"});
+                session.save({username: username, password: "secret"});
             });
         }
 

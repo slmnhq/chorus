@@ -8,7 +8,7 @@
     "objectName": "ext_table",
     "modifiedBy": {
         "id": "InitialUser",
-        "userName": "edcadmin"
+        "username": "edcadmin"
     },
     "columns": 1,
     "commentCount": 0,
@@ -20,7 +20,7 @@
     "recentComment": null,
     "owner": {
         "id": "InitialUser",
-        "userName": "edcadmin"
+        "username": "edcadmin"
     },
     "instance": {
         "id": "10000",

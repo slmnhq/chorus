@@ -1,7 +1,7 @@
 [
    {
       "id":"10010",
-      "userName":"u1",
+      "username":"u1",
       "firstName":"u1",
       "lastName":"u1",
       "admin":false,
@@ -13,7 +13,7 @@
    },
    {
       "id":"10001",
-      "userName":"nonadmin",
+      "username":"nonadmin",
       "firstName":"Non",
       "lastName":"admin",
       "admin":false,
@@ -25,7 +25,7 @@
    },
    {
       "id":"10000",
-      "userName":"partyman1333403592",
+      "username":"partyman1333403592",
       "firstName":"Joe",
       "lastName":"Blow",
       "admin":false,
@@ -37,7 +37,7 @@
    },
    {
       "id":"InitialUser",
-      "userName":"edcadmin",
+      "username":"edcadmin",
       "firstName":"EDC",
       "lastName":"Admin",
       "admin":true,

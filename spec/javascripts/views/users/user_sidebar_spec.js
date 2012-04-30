@@ -1,6 +1,6 @@
 describe("chorus.views.UserSidebar", function() {
     beforeEach(function() {
-        this.user = new chorus.models.User({userName: "bill", id: "42"})
+        this.user = new chorus.models.User({username: "bill", id: "42"})
         this.config = new chorus.models.Config({ externalAuth: false })
 
         spyOn(chorus.views.UserSidebar.prototype, "setUser").andCallThrough();
@@ -49,7 +49,7 @@ describe("chorus.views.UserSidebar", function() {
 
             context("and the user being shown is the current user", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ userName: 'bill', id : "42" });
+                    setLoggedInUser({ username: 'bill', id : "42" });
                     this.view.render();
                 });
 

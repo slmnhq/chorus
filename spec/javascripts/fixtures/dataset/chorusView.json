@@ -9,7 +9,7 @@
    "objectName":"based_on_sandbox_table",
    "modifiedBy":{
       "id":"InitialUser",
-      "userName":"edcadmin"
+      "username":"edcadmin"
    },
    "query":"SELECT a.spotify_url, a.year\nFROM analytics.a1000 AS a\n",
    "columns":2,
@@ -24,7 +24,7 @@
    "recentComment":null,
    "owner":{
       "id":"InitialUser",
-      "userName":"edcadmin"
+      "username":"edcadmin"
    },
    "instance":{
       "id":"10000",

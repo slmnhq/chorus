@@ -35,9 +35,9 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
         //necessary for collection views down at the bottom
         this.loadingCollection = new chorus.collections.UserSet();
         this.userCollection = new chorus.collections.UserSet([
-            new chorus.models.User({ userName: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser"}),
-            new chorus.models.User({ userName: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser"}),
-            new chorus.models.User({ userName: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser"})
+            new chorus.models.User({ username: "edcadmin", firstName: "Johnny", lastName: "Danger", admin: false, id: "InitialUser"}),
+            new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser"}),
+            new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser"})
         ]);
 
         this.userCollection.loaded = true;

@@ -179,9 +179,9 @@ describe("chorus.dialogs.InstanceEdit", function() {
     describe("saving", function() {
         beforeEach(function() {
             this.dialog.model.set({ provisionType: "register"});
-            this.user1 = new chorus.models.User({ id: '1', userName: "niels", firstName: "ni", lastName: "slew"});
-            this.user2 = new chorus.models.User({ id: '2', userName: "ludwig", firstName: "lu", lastName: "wig" });
-            this.user3 = new chorus.models.User({ id: '3', userName: "isaac", firstName: "is", lastName: "ac" });
+            this.user1 = new chorus.models.User({ id: '1', username: "niels", firstName: "ni", lastName: "slew"});
+            this.user2 = new chorus.models.User({ id: '2', username: "ludwig", firstName: "lu", lastName: "wig" });
+            this.user3 = new chorus.models.User({ id: '3', username: "isaac", firstName: "is", lastName: "ac" });
             this.dialog.users.add([ this.user1, this.user2, this.user3 ]);
             this.dialog.render();
 

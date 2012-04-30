@@ -119,7 +119,7 @@ describe("chorus.models.Workspace", function() {
 
             it("has the attributes", function() {
                 expect(this.model.owner().get("id")).toBe("47");
-                expect(this.model.owner().get("userName")).toBe("jhenry");
+                expect(this.model.owner().get("username")).toBe("jhenry");
                 expect(this.model.owner().get("firstName")).toBe("John");
                 expect(this.model.owner().get("lastName")).toBe("Henry");
             });
@@ -226,7 +226,7 @@ describe("chorus.models.Workspace", function() {
         it("returns a new User with the right username and fullName", function() {
             var archiver = this.model.archiver();
             expect(archiver.get("fullName")).toBe("John Henry");
-            expect(archiver.get("userName")).toBe("jhenry");
+            expect(archiver.get("username")).toBe("jhenry");
         });
 
     });

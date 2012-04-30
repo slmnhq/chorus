@@ -378,7 +378,7 @@ describe("chorus.presenters.Activity", function() {
                 workspace: _.extend(fixtures.nestedWorkspaceJson(), {
                     owner: {
                         id: 'workspace-owner-id',
-                        userName: 'Workspace Owner'
+                        username: 'Workspace Owner'
                     }
                 })
             });

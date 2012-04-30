@@ -8,7 +8,7 @@
     "objectName": "2010_report_on_white_house",
     "modifiedBy": {
         "id": "InitialUser",
-        "userName": "edcadmin"
+        "username": "edcadmin"
     },
     "columns": 5,
     "commentCount": 0,
@@ -20,7 +20,7 @@
     "recentComment": null,
     "owner": {
         "id": "InitialUser",
-        "userName": "edcadmin"
+        "username": "edcadmin"
     },
     "instance": {
         "id": "10000",
