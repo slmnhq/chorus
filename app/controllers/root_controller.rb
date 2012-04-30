@@ -4,4 +4,8 @@ class RootController < ApplicationController
 
   def index
   end
+
+  def not_found
+    render :text => '{"route": "not found"}'
+  end
 end

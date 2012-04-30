@@ -8,4 +8,6 @@ Chorus::Application.routes.draw do
 
   resources :instances, :only => [:index, :create, :update]
   match "/" => "root#index"
+
+  match '*not_found' => 'root#not_found'
 end
