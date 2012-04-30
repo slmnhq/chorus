@@ -34,6 +34,13 @@ describe("chorus.router", function() {
                 expect(chorus.session).toHaveBeenFetched();
             });
 
+            it("does not fetch the session if navigating after the session is already fetched", function() {
+                this.server.lastFetch().succeed();
+                this.server.reset();
+                this.chorus.router.navigate("/users");
+                expect(chorus.session).not.toHaveBeenFetched();
+            });
+
             describe("when the session is valid", function() {
                 beforeEach(function() {
                     this.server.lastFetch().succeed();
@@ -59,6 +66,17 @@ describe("chorus.router", function() {
                 it("sets chorus.page.pageOptions to chorus.pageOptions", function() {
                     expect(this.chorus.page.pageOptions).toEqual({ foo: "bar" })
                     expect(this.chorus.pageOptions).toBeUndefined();
+                });
+            });
+
+            describe("when the session is invalid", function() {
+                beforeEach(function() {
+                    this.chorus.router.navigate.reset();
+                    this.server.lastFetch().failUnauthorized();
+                });
+
+                it("navigates to login", function() {
+                   expect(this.chorus.router.navigate).toHaveBeenCalledWith('/login');
                 });
             });
         });

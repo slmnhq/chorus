@@ -101,8 +101,12 @@
                     window.scroll(0, 0);
                 };
 
-                if (this.pageRequiresLogin(className)) {
-                    self.app.session.fetch({ success: navFunction });
+                if (this.pageRequiresLogin(className) && !self.app.session.loaded) {
+                    self.app.session.fetch(
+                        {
+                            success: navFunction,
+                            error: function() { self.navigate("/login"); }
+                        });
                 } else {
                     navFunction();
                 }
