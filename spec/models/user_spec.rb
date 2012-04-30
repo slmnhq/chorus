@@ -196,5 +196,5 @@ describe User do
   end
 
   # Spec doesn't seem to be working, guy on Stack Overflow has same problem with RoR 3.2.3. Pending fix?
-  xit { should have_attached_file(:image) }
+  it { should have_attached_file(:image) }
 end
