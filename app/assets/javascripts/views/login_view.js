@@ -12,7 +12,7 @@ chorus.views.Login = chorus.views.Base.extend({
     },
 
     postRender : function() {
-        this.$(".legal .version").load("/VERSION");
+        this.$(".legal .version").load("/VERSION" + "?buster=" + chorus.cachebuster());
         _.defer(_.bind(function() {this.$("input[name='userName']").focus()}, this));
     },
 
