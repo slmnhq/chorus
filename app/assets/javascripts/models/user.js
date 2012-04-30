@@ -1,9 +1,9 @@
 chorus.models.User = chorus.models.Base.extend({
     constructorName: "User",
 
-    urlTemplate:"user/{{id}}",
-    showUrlTemplate:"users/{{id}}",
-    entityType:"user",
+    urlTemplate: "users/{{id}}",
+    showUrlTemplate: "users/{{id}}",
+    entityType: "user",
     nameFunction: 'displayName',
 
     workspaces:function () {
@@ -68,12 +68,6 @@ chorus.models.User = chorus.models.Base.extend({
 
     picklistImageUrl:function () {
         return this.imageUrl();
-    },
-
-    savePassword:function (attrs) {
-        var passwordUrl = URI(this.url());
-        passwordUrl.path(passwordUrl.path() + "/password");
-        this.save(attrs, { url:passwordUrl.toString() });
     },
 
     displayName:function () {

@@ -1,6 +1,12 @@
 describe("chorus.dialogs.ChangePassword", function() {
     beforeEach(function() {
-        this.user = new chorus.models.User({ username: "john", firstName: "John", lastName: "Doe", emailAddress: "jdoe@emc.com", id: "me" });
+        this.user = new chorus.models.User({
+            username: "john",
+            firstName: "John",
+            lastName: "Doe",
+            emailAddress: "jdoe@emc.com",
+            id: 12
+        });
         this.view = new chorus.dialogs.ChangePassword({ pageModel : this.user });
         this.view.render();
     });
@@ -30,7 +36,7 @@ describe("chorus.dialogs.ChangePassword", function() {
         });
 
         it("makes the correct API request", function() {
-            expect(this.server.lastUpdate().url).toBe("/user/me/password");
+            expect(this.server.lastUpdate().url).toBe("/users/12");
             expect(this.server.lastUpdate().params().password).toBe("newpass");
         });
 

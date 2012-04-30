@@ -8,7 +8,7 @@ describe("chorus.models.User", function() {
     });
 
     it("has the correct urlTemplate", function() {
-        expect(this.model.urlTemplate).toBe("user/{{id}}");
+        expect(this.model.urlTemplate).toBe("users/{{id}}");
     });
 
     describe("#currentUserCanEdit", function() {
@@ -98,17 +98,6 @@ describe("chorus.models.User", function() {
                 var expectedUrl = "/workspace/?user=457&page=1&rows=50&active=true";
                 expect(this.server.requests[0].url).toMatchUrl(expectedUrl);
             });
-        });
-    });
-
-    describe("#savePassword", function() {
-        it("PUTs to the right URL", function() {
-            this.model = newFixtures.user({id: 42})
-            this.model.savePassword({
-                password: "w1zZz4rd",
-                passwordConfirmation: "w1zZz4rd"
-            });
-            expect(_.last(this.server.requests).url).toBe("/user/42/password");
         });
     });
 
