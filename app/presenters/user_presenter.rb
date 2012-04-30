@@ -1,8 +1,9 @@
 class UserPresenter < Presenter
-  delegate :username, :first_name, :last_name, :email, :title, :dept, :notes, :admin?, :image_file_name, to: :model
+  delegate :id, :username, :first_name, :last_name, :email, :title, :dept, :notes, :admin?, :image_file_name, to: :model
 
   def to_hash
     {
+        :id => id,
         :username => username,
         :first_name => first_name,
         :last_name => last_name,

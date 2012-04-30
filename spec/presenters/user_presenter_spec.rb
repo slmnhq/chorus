@@ -14,6 +14,7 @@ describe UserPresenter do
     it "includes the right keys" do
       @hash.should have_key(:username)
       @hash.should have_key(:image_file_name)
+      @hash.should have_key(:id)
     end
 
     it "does not include unwanted keys" do
