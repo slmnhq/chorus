@@ -88,6 +88,14 @@ This script
 
     cd ~/workspace/chorusrails && rails s
 
+    Run postgres:
+    (Currently the database lives in the old Chorus project)
+    ps aux | grep -- '-p8543' | grep -v grep | awk '{print $2}' | xargs kill -9
+    postgres -D ~/workspace/chorus/var/db -h localhost -p8543 --bytea_output=escape
+
+    rake db:migrate
+    rake db:test:prepare
+
 Application will be on http://localhost:3000
 
 ### Testing:
