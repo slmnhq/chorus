@@ -209,7 +209,9 @@ describe("chorus.models.Abstract", function() {
                             { message: "bye" }
                         ];
 
-                        this.server.lastUpdate().failUnprocessableEntity(this.message);
+                        this.server.lastUpdate().failUnprocessableEntity(this.message, {
+                            foo: "bar"
+                        });
                     });
 
                     it("returns the error information", function() {
@@ -218,6 +220,11 @@ describe("chorus.models.Abstract", function() {
 
                     it("triggers a saveFailed event", function() {
                         expect(this.saveFailedSpy).toHaveBeenCalled();
+                        var args = this.saveFailedSpy.mostRecentCall.args;
+                        expect(args[0]).toBe(this.model);
+                        expect(args[1].response).toEqual({
+                            foo: "bar"
+                        });
                     });
 
                     describe("and then another request succeeds", function() {
@@ -471,7 +478,7 @@ describe("chorus.models.Abstract", function() {
 
             describe("when the request fails", function() {
                 beforeEach(function() {
-                    this.server.lastDestroy().failUnprocessableEntity();
+                    this.server.lastDestroy().failUnprocessableEntity({ record: "not_found"});
                 });
 
                 it("triggers a destroyFailed event", function() {
@@ -481,6 +488,10 @@ describe("chorus.models.Abstract", function() {
                 it("does not trigger a destroy event", function() {
                     expect(this.destroySpy).not.toHaveBeenCalled();
                 })
+
+                it("returns the error information", function() {
+                    expect(this.model.serverErrors).toEqual({ record: "not_found" });
+                });
             });
         })
 

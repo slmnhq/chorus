@@ -44,8 +44,8 @@ chorus.Mixins.SQLResults = {
     },
 
     dataErrors: function(data) {
-        if (data.message && data.message.length) {
-            return data.message
+        if (data.errors && data.errors.length) {
+            return data.errors
         }
 
         if (data.response && data.response.result) {

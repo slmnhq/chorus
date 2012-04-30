@@ -40,17 +40,24 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         }
         this.$("button.submit").startLoading("actions.associating");
 
-        $.post(url, params,
-            function(data) {
-                if (self.model.dataStatusOk(data)) {
-                    self.model.activities().fetch();
-                    self.closeModal();
-                    chorus.toast("dataset.associate.toast.one", {datasetTitle: self.model.get("objectName"), workspaceNameTarget: self.selectedItem().get("name")});
-                    chorus.PageEvents.broadcast("workspace:associated");
-                } else {
-                    self.serverErrors = data.message;
-                    self.render();
-                };
-            }, "json");
+        $.ajax({
+            url: url,
+            type: "POST",
+            dataType: "json",
+
+            data: params,
+            success : function(data) {
+                self.model.activities().fetch();
+                self.closeModal();
+                chorus.toast("dataset.associate.toast.one", {datasetTitle: self.model.get("objectName"), workspaceNameTarget: self.selectedItem().get("name")});
+                chorus.PageEvents.broadcast("workspace:associated");
+            },
+
+            error : function(xhr) {
+                var data = JSON.parse(xhr.responseText);
+                self.serverErrors = data.errors;
+                self.render();
+            }
+        });
     }
 });

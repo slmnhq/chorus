@@ -29,14 +29,11 @@ chorus.collections.NotificationSet = chorus.collections.Base.extend({
         if (this.length > 0) {
             $.ajax({
                 type: "PUT",
-                url: "/notification/" + this.pluck("id").join(",") + "/read"
-            }).success(function(response) {
-                if (self.dataStatusOk(response) && options.success) {
-                    options.success(response);
-                }
+                url: "/notification/" + this.pluck("id").join(",") + "/read",
+                success: options.success
             });
         } else {
-            if (options.success) options.success();
+            options.success && options.success();
         }
     }
 })

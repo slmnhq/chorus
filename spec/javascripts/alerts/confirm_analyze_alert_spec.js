@@ -53,10 +53,13 @@ describe("chorus.alerts.Analyze", function() {
             });
         });
 
-        context("when the post fails", function() {
+        context("when the fetch fails", function() {
             beforeEach(function() {
                 spyOn(this.alert, "closeModal");
-                this.server.lastFetchFor(this.model.analyze()).failUnprocessableEntity();
+                this.server.lastFetchFor(this.model.analyze()).failUnprocessableEntity([
+                    { message: "first problem" },
+                    { message: "second problem" }
+                ]);
             });
 
             it("should display the errors", function() {

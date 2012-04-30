@@ -149,9 +149,9 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     describe("when the task completion fails", function() {
                         beforeEach(function() {
-                            this.server.lastCreate().failUnprocessableEntity("it broke", [
-                                { executionInfo: this.executionInfo }
-                            ]);
+                            this.server.lastCreate().failUnprocessableEntity({ record: "it broke" }, {
+                                executionInfo: this.executionInfo
+                            });
                         })
 
                         it("broadcasts file:executionFailed", function() {
@@ -170,7 +170,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     describe("when the task is cancelled", function() {
                         beforeEach(function() {
                             chorus.PageEvents.broadcast.reset();
-                            this.server.lastCreate().failUnprocessableEntity(fixtures.serverErrors({message: 'The task is cancelled'}), []);
+                            this.server.lastCreate().failUnprocessableEntity(fixtures.serverErrors({message: 'The task is cancelled'}), {});
                         })
 
                         it("broadcasts file:executionFailed", function() {

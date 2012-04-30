@@ -50,12 +50,20 @@ chorus.models = {
             options || (options = {});
             var effectiveAttrs = attrs || {};
             this.beforeSave(effectiveAttrs, options);
-            var success = options.success;
+            var success = options.success, error = options.error;
             options.success = function(model, data, xhr) {
-                var savedEvent = model.serverErrors ? "saveFailed" : "saved";
-                model.trigger(savedEvent, model, data, xhr);
+                model.trigger("saved", model, data, xhr);
                 if (success) success(model, data, xhr);
             };
+
+            options.error = function(model, xhr) {
+                var data = xhr.responseText && JSON.parse(xhr.responseText);
+                model.parseErrors(data, xhr);
+                model.trigger("saveFailed", model, data, xhr)
+                if (error) error(model, xhr);
+            };
+
+
             if (this.performValidation(effectiveAttrs)) {
                 this.trigger("validated");
                 var attrsToSave = _.isEmpty(effectiveAttrs) ? undefined : effectiveAttrs;
@@ -71,20 +79,15 @@ chorus.models = {
             options || (options = {});
             var success = options.success, error = options.error;
             options.success = function(model, data, xhr) {
-                if (model.serverErrors) {
-                    model.trigger('fetchFailed', model, data, xhr);
-                }
-                if (model.loaded) {
-                    model.trigger('loaded');
-                }
+                model.trigger('loaded');
                 if (success) success(model, data, xhr);
             };
 
             options.error = function(model, xhr) {
                 var data = xhr.responseText && JSON.parse(xhr.responseText);
                 model.parseErrors(data, xhr);
-                if (error) error(model, xhr);
                 model.trigger("fetchFailed", model, xhr)
+                if (error) error(model, xhr);
             };
 
             return this._super('fetch', [options])
@@ -97,16 +100,18 @@ chorus.models = {
             options || (options = {});
             if (this.isNew()) return this.trigger('destroy', this, this.collection, options);
             var model = this;
-            var success = options.success;
+            var success = options.success, error = options.error;
             options.success = function(data, status, xhr) {
                 if (!model.set(model.parse(data, xhr), options)) return false;
-
-                var event = model.dataStatusOk(data, xhr) ? "destroy" : "destroyFailed";
-                model.trigger(event, model, model.collection, options);
-
+                model.trigger("destroy", model, model.collection, options);
                 if (success) success(model, data);
             };
-
+            options.error = function(xhr) {
+                var data = xhr.responseText && JSON.parse(xhr.responseText);
+                model.parseErrors(data, xhr);
+                model.trigger("destroyFailed", model, model.collection, options);
+                if (error) error(model);
+            };
             return (this.sync || Backbone.sync).call(this, 'delete', this, options);
         },
 
@@ -292,10 +297,7 @@ chorus.collections = {
 
         makeSuccessFunction: function(options, success) {
             return function(collection, data, xhr) {
-                if (collection.serverErrors) {
-                    collection.trigger('fetchFailed', collection);
-                }
-                if (collection.loaded && !options.silent) {
+                if (!options.silent) {
                     collection.trigger('loaded');
                 }
                 if (success) {
@@ -346,19 +348,18 @@ chorus.collections = {
                     silent: true,
                     add: page != 1,
                     success: function(collection, data, xhr) {
-                        if (self.dataStatusOk(data, xhr)) {
-                            var total = data.pagination ? parseInt(data.pagination.total) : 1;
-                            var page = data.pagination ? parseInt(data.pagination.page) : 1;
-                            if (page >= total) {
-                                collection.trigger("reset", collection);
-                                collection.trigger("loaded");
-                            } else {
-                                fetchPage.call(collection, page + 1);
-                            }
-                        } else {
+                        var total = data.pagination ? parseInt(data.pagination.total) : 1;
+                        var page  = data.pagination ? parseInt(data.pagination.page) : 1;
+                        if (page >= total) {
                             collection.trigger("reset", collection);
                             collection.trigger("loaded");
+                        } else {
+                            fetchPage.call(collection, page + 1);
                         }
+                    },
+                    error: function(collection) {
+                        collection.trigger("reset", collection);
+                        collection.trigger("loaded");
                     }
                 });
             };

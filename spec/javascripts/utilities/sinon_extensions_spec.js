@@ -203,18 +203,11 @@ describe("sinon extensions", function() {
 
     describe("#failUnprocessableEntity", function() {
         beforeEach(function() {
-            this.fakeRequest.failUnprocessableEntity({message: "whatever"})
+            this.fakeRequest.failUnprocessableEntity(this.errors, this.response);
         });
 
-        itReturnsStatus(200);
-
-        it("returns an error message in the 'message' field", function() {
-            expect(this.fakeRequest.responseText).toContain("whatever");
-        });
-
-        it("returns a 'fail' in the 'status' field", function() {
-            expect(this.fakeRequest.responseText).toContain("fail");
-        });
+        itReturnsStatus(422);
+        itIncludesErrorAndResponse();
     });
 
     function itReturnsStatus(code) {

@@ -1,45 +1,46 @@
 describe("chorus.Mixins.SQLResults", function() {
     var serverFailure = {
-        message: [
+        errors: [
             {
-            message: "Error!",
-            msgcode: null,
-            description: null,
-            severity: "error",
-            msgkey: null
-        }
+                message: "Error!",
+                msgcode: null,
+                description: null,
+                severity: "error",
+                msgkey: null
+            }
         ],
-        status: "fail",
         response: []
     };
 
     var taskFailure = {
-        "message": [],
-        "response": {
-            "state": "failed",
-            "result": {
-                "message": "An error happened in the task",
-                "executeResult": "failed"
+        errors: [],
+        response: {
+            state: "failed",
+            result: {
+                message: "An error happened in the task",
+                executeResult: "failed"
             }
         }
     };
 
     var taskSuccess = {
-        message: [],
+        errors: [],
         response: {
             executeResult: "success"
         }
     };
 
-    describe("#errorMessage", function() {
-        beforeEach(function() {
-            this.hostModel = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
-            }));
-        });
 
+    var HostModel;
+
+    beforeEach(function() {
+        HostModel = chorus.models.Base.include(chorus.Mixins.SQLResults);
+    });
+
+    describe("#errorMessage", function() {
         context("when the model has serverErrors", function() {
             beforeEach(function() {
-                this.host = new this.hostModel({});
+                this.host = new HostModel({});
                 this.host.serverErrors = [
                     {message: "Foo"}
                 ]
@@ -52,7 +53,7 @@ describe("chorus.Mixins.SQLResults", function() {
 
         context("when the model does not have serverErrors", function() {
             beforeEach(function() {
-                this.host = new this.hostModel();
+                this.host = new HostModel();
             });
 
             it("returns false", function() {
@@ -64,7 +65,7 @@ describe("chorus.Mixins.SQLResults", function() {
     describe("#columnOrientedData", function() {
         context("when the host provides custom functions", function() {
             beforeEach(function() {
-                this.hostModel = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
+                HostModel = chorus.models.Base.include(chorus.Mixins.SQLResults).extend({
                     getRows: function() {
                         return this.get("r");
                     },
@@ -89,29 +90,29 @@ describe("chorus.Mixins.SQLResults", function() {
                                 return name;
                         }
                     }
-                }));
+                });
 
-                this.host = new this.hostModel({
+                this.host = new HostModel({
                     c: [
                         {
-                        name: "foo",
-                        typeCategory: "whatever"
-                    },
-                    {
-                        name: "bar",
-                        typeCategory: "what"
-                    }
+                            name: "foo",
+                            typeCategory: "whatever"
+                        },
+                        {
+                            name: "bar",
+                            typeCategory: "what"
+                        }
                     ],
 
                     r: [
                         {
-                        "foo": 1,
-                        "bar": 3
-                    },
-                    {
-                        "foo": 2,
-                        "bar": 4
-                    }
+                            "foo": 1,
+                            "bar": 3
+                        },
+                        {
+                            "foo": 2,
+                            "bar": 4
+                        }
                     ]
                 });
             });
@@ -136,30 +137,29 @@ describe("chorus.Mixins.SQLResults", function() {
 
         context("when the host does not provide custom functions", function() {
             beforeEach(function() {
-                this.hostModel = chorus.models.Base.extend(_.extend({}, chorus.Mixins.SQLResults, {
-                }));
+                HostModel = chorus.models.Base.include(chorus.Mixins.SQLResults);
 
-                this.host = new this.hostModel({
+                this.host = new HostModel({
                     columns: [
                         {
-                        name: "foo",
-                        typeCategory: "whatever"
-                    },
-                    {
-                        name: "bar",
-                        typeCategory: "what"
-                    }
+                            name: "foo",
+                            typeCategory: "whatever"
+                        },
+                        {
+                            name: "bar",
+                            typeCategory: "what"
+                        }
                     ],
 
                     rows: [
                         {
-                        "foo": 1,
-                        "bar": 3
-                    },
-                    {
-                        "foo": 2,
-                        "bar": 4
-                    }
+                            "foo": 1,
+                            "bar": 3
+                        },
+                        {
+                            "foo": 2,
+                            "bar": 4
+                        }
                     ]
                 });
             });
@@ -185,38 +185,20 @@ describe("chorus.Mixins.SQLResults", function() {
 
     describe("dataStatusOk", function() {
         beforeEach(function() {
-            this.hostModel = new (chorus.models.Base.extend(chorus.Mixins.SQLResults));
+            this.hostModel = new HostModel();
         });
 
-        context("when there is a server failure", function() {
-            beforeEach(function() {
-                this.data = serverFailure;
-            });
+        it("returns false when there is a server failure", function() {
+            expect(this.hostModel.dataStatusOk(serverFailure, { status: 422 })).toBeFalsy();
+        })
 
-            it("returns false", function() {
-                expect(this.hostModel.dataStatusOk(this.data)).toBeFalsy();
-            })
-        });
+        it("returns false when there is a task failure", function() {
+            expect(this.hostModel.dataStatusOk(taskFailure)).toBeFalsy();
+        })
 
-        context("when there is a task failure", function() {
-            beforeEach(function() {
-                this.data = taskFailure;
-            });
-
-            it("returns false", function() {
-                expect(this.hostModel.dataStatusOk(this.data)).toBeFalsy();
-            })
-        });
-
-        context("when the task succeeds", function() {
-            beforeEach(function() {
-                this.data = taskSuccess;
-            });
-
-            it("returns true", function() {
-                expect(this.hostModel.dataStatusOk(this.data)).toBeTruthy();
-            })
-        });
+        it("returns true when the task succeeds", function() {
+            expect(this.hostModel.dataStatusOk(taskSuccess)).toBeTruthy();
+        })
     });
 
     describe("dataErrors", function() {
@@ -224,25 +206,13 @@ describe("chorus.Mixins.SQLResults", function() {
             this.hostModel = new (chorus.models.Base.extend(chorus.Mixins.SQLResults));
         });
 
-        context("when there is a server failure", function() {
-            beforeEach(function() {
-                this.data = serverFailure;
-            });
+        it("returns the errors object when there is a server failure", function() {
+            expect(this.hostModel.dataErrors(serverFailure)).toEqual(serverFailure.errors)
+        })
 
-            it("returns the errors object", function() {
-                expect(this.hostModel.dataErrors(this.data)).toEqual(this.data.message)
-            })
-        });
-
-        context("when there is a task failure", function() {
-            beforeEach(function() {
-                this.data = taskFailure;
-            });
-
-            it("returns the errors object", function() {
-                expect(this.hostModel.dataErrors(this.data)).toEqual([this.data.response.result]);
-            })
-        });
+        it("returns the errors object when there is a task failure", function() {
+            expect(this.hostModel.dataErrors(taskFailure)).toEqual([taskFailure.response.result]);
+        })
     });
 });
 

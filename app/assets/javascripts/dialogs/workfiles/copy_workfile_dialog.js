@@ -33,16 +33,23 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
             params.description = description;
         }
 
-        $.post("/workspace/" + this.selectedItem().get("id") + "/workfile", params,
-            function(data) {
-                if (workfile.dataStatusOk(data)) {
-                    self.closeModal();
-                    var copiedWorkfile = new chorus.models.Workfile(workfile.parse(data));
-                    chorus.toast("workfile.copy_dialog.toast", {workfileTitle: copiedWorkfile.get("fileName"), workspaceNameTarget: self.selectedItem().get("name")});
-                } else {
-                    self.serverErrors = data.message;
-                    self.render();
-                }
-            }, "json");
+        $.ajax({
+            url: "/workspace/" + this.selectedItem().get("id") + "/workfile",
+            type: "POST",
+            dataType: "json",
+
+            data: params,
+            success: function(data) {
+                self.closeModal();
+                var copiedWorkfile = new chorus.models.Workfile(workfile.parse(data));
+                chorus.toast("workfile.copy_dialog.toast", {workfileTitle: copiedWorkfile.get("fileName"), workspaceNameTarget: self.selectedItem().get("name")});
+            },
+
+            error: function(xhr) {
+                var data = JSON.parse(xhr.responseText);
+                self.serverErrors = data.errors;
+                self.render();
+            }
+        });
     }
 });

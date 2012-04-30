@@ -205,8 +205,15 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         );
     },
 
-    failUnprocessableEntity: function(message, resource) {
-        this.fail(message, resource);
+    failUnprocessableEntity: function(errors, response) {
+        return this.respond(
+            422,
+            { 'Content-Type': 'application/json' },
+            JSON.stringify({
+                response: response,
+                errors: errors || {}
+            })
+        );
     },
 
     failUnauthorized: function(errors, response) {

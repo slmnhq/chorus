@@ -3,22 +3,23 @@ chorus.collections.MemberSet = chorus.collections.Base.extend({
     model:chorus.models.User,
     urlTemplate:"workspace/{{workspaceId}}/member",
 
-    save:function () {
+    save: function() {
         var self = this;
 
         Backbone.sync('update', this, {
             data: this.toUrlParams(),
             success: function(resp, status, xhr) {
-                var savedEvent = self.dataStatusOk(resp) ? "saved" : "saveFailed"
-                self.trigger(savedEvent);
+                self.trigger("saved");
+            },
+            error: function() {
+                self.trigger("saveFailed");
             }
         });
     },
 
     toUrlParams:function () {
-        return this.reduce(function (memo, model) {
-            var param = "members=" + model.get("id");
-            return (memo.length === 0) ? param : (memo + "&" + param)
-        }, "");
+        return this.map(function(model) {
+            return "members=" + model.id;
+        }).join("&");
     }
 });
