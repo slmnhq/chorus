@@ -102,24 +102,6 @@ describe("chorus.Mixins.Fetching", function() {
             ];
         });
 
-        context("when an XHR object is not passed", function() {
-            beforeEach(function() {
-                this.xhr = undefined;
-                this.data = { response: this.things, status: 'ok' };
-            });
-
-            itHandlesSuccess();
-        });
-
-        context("when the status is '200 ok'", function() {
-            beforeEach(function() {
-                this.xhr = { status: 200 };
-                this.data = { response: this.things };
-            });
-
-            itHandlesSuccess();
-        });
-
         context("when the status is 'fail'", function() {
             beforeEach(function() {
                 this.data = {
@@ -167,25 +149,10 @@ describe("chorus.Mixins.Fetching", function() {
             });
         });
 
-        function itHandlesSuccess() {
-            it("sets loaded", function() {
-                this.resource.parseErrors(this.data, this.xhr);
-                expect(this.resource.loaded).toBeTruthy();
-            });
-
-            it("returns a falsy value (the model has no errors)", function() {
-                expect(this.resource.parseErrors(this.data, this.xhr)).toBeFalsy();
-            });
-        }
-
         function itHandlesFailure() {
             it("does not set loaded", function() {
                 this.resource.parseErrors(this.data, this.xhr);
                 expect(this.resource.loaded).toBeFalsy();
-            });
-
-            it("returns true", function() {
-                expect(this.resource.parseErrors(this.data, this.xhr)).toBeTruthy();
             });
 
             it("stores the errors as the resource's 'serverErrors'", function() {

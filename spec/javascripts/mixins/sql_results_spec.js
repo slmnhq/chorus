@@ -183,24 +183,6 @@ describe("chorus.Mixins.SQLResults", function() {
         })
     })
 
-    describe("dataStatusOk", function() {
-        beforeEach(function() {
-            this.hostModel = new HostModel();
-        });
-
-        it("returns false when there is a server failure", function() {
-            expect(this.hostModel.dataStatusOk(serverFailure, { status: 422 })).toBeFalsy();
-        })
-
-        it("returns false when there is a task failure", function() {
-            expect(this.hostModel.dataStatusOk(taskFailure)).toBeFalsy();
-        })
-
-        it("returns true when the task succeeds", function() {
-            expect(this.hostModel.dataStatusOk(taskSuccess)).toBeTruthy();
-        })
-    });
-
     describe("dataErrors", function() {
         beforeEach(function() {
             this.hostModel = new (chorus.models.Base.extend(chorus.Mixins.SQLResults));

@@ -166,6 +166,8 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             if (self.importTarget === "workfile") {
                 var workfile = new chorus.models.Workfile();
                 workfile.set(workfile.parse(data.result), {silent: true});
+                workfile.parseErrors(data.result, { status: 200 });
+
                 if (workfile.serverErrors) {
                     self.showErrors(workfile);
                 } else {
@@ -175,6 +177,8 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             } else {
                 var workingCsv = self.csv.clone();
                 workingCsv.set(workingCsv.parse(data.result), {silent: true});
+                workingCsv.parseErrors(data.result, { status: 200 });
+
                 if (workingCsv.serverErrors) {
                     self.csv.serverErrors = workingCsv.serverErrors;
                     self.csv.trigger("saveFailed");

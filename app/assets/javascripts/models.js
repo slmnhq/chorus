@@ -40,10 +40,9 @@ chorus.models = {
         },
 
         parse: function(data, xhr) {
-            var errors = this.parseErrors(data, xhr);
-            if (!errors) {
-                return data.response;
-            }
+            this.loaded = true;
+            delete this.serverErrors;
+            return data.response;
         },
 
         save: function(attrs, options) {
@@ -371,13 +370,10 @@ chorus.collections = {
 
 
         parse: function(data, xhr) {
+            this.loaded = true;
+            delete this.serverErrors;
             this.pagination = data.pagination;
-            var errors = this.parseErrors(data, xhr);
-            if (errors) {
-                return [];
-            } else {
-                return data.response;
-            }
+            return data.response;
         },
 
         sortDesc: function(idx) {

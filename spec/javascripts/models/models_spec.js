@@ -232,6 +232,7 @@ describe("chorus.models.Abstract", function() {
                             this.model.save();
                             this.server.lastUpdate().succeed({foo: "hi"});
                         });
+
                         it("should trigger the saved event", function() {
                             expect(this.savedSpy).toHaveBeenCalled();
                         });
@@ -532,30 +533,14 @@ describe("chorus.models.Abstract", function() {
                 this.thing = { hi: "there" };
             })
 
-            context("when there are no errors", function() {
-                it("returns the enclosed resource", function() {
-                    expect(this.model.parse({
-                        status: "ok",
-                        foo: "bar",
-                        response: this.thing
-                    }, {
-                        status: 200
-                    })).toBe(this.thing);
-                });
-            });
-
-            context("when there are errors", function() {
-                it("returns undefined", function() {
-                    expect(this.model.parse({
-                        status: "fail",
-                        message: [
-                            { message: "No." }
-                        ],
-                        response: [ this.thing ]
-                    }, {
-                        status: 200
-                    })).toBeUndefined();
-                });
+            it("returns the enclosed resource", function() {
+                expect(this.model.parse({
+                    status: "ok",
+                    foo: "bar",
+                    response: this.thing
+                }, {
+                    status: 200
+                })).toBe(this.thing);
             });
         });
 
@@ -1045,22 +1030,8 @@ describe("chorus.models.Abstract", function() {
                 expect(this.collection.pagination).toBe(pagination);
             });
 
-            context("when there are errors", function() {
-                it("returns an empty array", function() {
-                    expect(this.collection.parse({
-                        message: [
-                            { message: "No." }
-                        ],
-                        response: this.things,
-                        status: "fail"
-                    })).toEqual([]);
-                });
-            });
-
-            context("when there are no errors", function() {
-                it("returns the enclosed resource", function() {
-                    expect(this.collection.parse({ response: this.things, status: 'ok'})).toEqual(this.things);
-                });
+            it("returns the enclosed resource", function() {
+                expect(this.collection.parse({ response: this.things, status: 'ok'})).toEqual(this.things);
             });
         });
 

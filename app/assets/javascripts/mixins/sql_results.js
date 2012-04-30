@@ -35,14 +35,6 @@ chorus.Mixins.SQLResults = {
         });
     },
 
-    dataStatusOk: function(data) {
-        if (data.response && data.response.state == "failed") {
-            return false
-        } else {
-            return this._super("dataStatusOk", arguments);
-        }
-    },
-
     dataErrors: function(data) {
         if (data.errors && data.errors.length) {
             return data.errors

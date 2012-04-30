@@ -304,10 +304,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             this.data = {
                                 result: {
                                     response: [],
-                                    status: "fail",
-                                    message: [
-                                        {message: "Bad File"}
-                                    ]
+                                    errors: [{ message: "Bad File" }]
                                 }
                             };
                             this.fileUploadOptions.done(null, this.data)
@@ -457,10 +454,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         this.data = {
                             result: {
                                 resource: [],
-                                message: [
-                                    {message: "You failed"}
-                                ],
-                                status: "fail"
+                                errors: [{ message: "You failed" }],
                             },
                             files: [
                                 {name: "myfile"}
