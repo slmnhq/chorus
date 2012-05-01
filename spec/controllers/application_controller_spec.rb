@@ -5,6 +5,10 @@ describe ApplicationController do
     def any_action
     end
 
+    def action_that_presents
+      present object_to_present
+    end
+
     def action_requiring_session
       head :ok
     end
@@ -62,6 +66,72 @@ describe ApplicationController do
     it "returns nil when there is no user with the id stored in the session" do
       session[:user_id] = -1
       controller.send(:current_user).should be_nil
+    end
+  end
+
+  describe "#present" do
+    before do
+      controller.stub(:object_to_present).and_return { object_to_present }
+      log_in FactoryGirl.create :user
+    end
+
+    context "with an active record relation" do
+      before do
+        FactoryGirl.create(:admin)
+        FactoryGirl.create(:admin)
+      end
+
+      let(:object_to_present) { User.where(:admin => true) }
+
+      it "sets the response to an array with a hash for each model in the relation" do
+        get :action_that_presents
+        decoded_response.length.should == 2
+        decoded_response[0].id.should == object_to_present[0].id
+        decoded_response[0].id.should == object_to_present[0].id
+      end
+    end
+
+    context "with an array of models" do
+      let(:object_to_present) do
+        [
+          FactoryGirl.build(:user, :username => 'name1'),
+          FactoryGirl.build(:user, :username => 'name2')
+        ]
+      end
+
+      it "sets the response to an array with a hash for each model" do
+        get :action_that_presents
+        decoded_response.length.should == 2
+        decoded_response[0].username.should == object_to_present[0].username
+        decoded_response[0].username.should == object_to_present[0].username
+      end
+    end
+
+    context "with an empty relation" do
+      let(:object_to_present) { User.where(:username => "not_real") }
+
+      it "sets the response to an empty array" do
+        get :action_that_presents
+        decoded_response.should == []
+      end
+    end
+
+    context "with an empty array" do
+      let(:object_to_present) { [] }
+
+      it "sets the response to an empty array" do
+        get :action_that_presents
+        decoded_response.should == []
+      end
+    end
+
+    context "with a single model" do
+      let(:object_to_present) { FactoryGirl.build(:user) }
+
+      it "sets the response to an array with a hash for each model" do
+        get :action_that_presents
+        decoded_response.username.should == object_to_present.username
+      end
     end
   end
 
