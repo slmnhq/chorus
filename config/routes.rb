@@ -1,5 +1,6 @@
 Chorus::Application.routes.draw do
   resource :sessions, :only => [ :create, :destroy, :show ]
+  resource :config, :only => [ :show ]
   resources :users, :only => [ :index, :show, :create, :update, :destroy ] do
     collection do
       get :ldap

@@ -37,4 +37,8 @@ class LdapClient
   def self.config
     @@config ||= YAML.load_file(config_file_path())[Rails.env]
   end
+
+  def self.enabled?
+    self.config['host'].present?
+  end
 end

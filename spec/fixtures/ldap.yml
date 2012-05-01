@@ -1,0 +1,5 @@
+test:
+  host: localhost
+  dc: foo
+  auth_cn: users_cn
+  auth_attribute: username
