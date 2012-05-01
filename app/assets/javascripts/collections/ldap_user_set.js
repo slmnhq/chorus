@@ -1,5 +1,5 @@
 chorus.collections.LdapUserSet = chorus.collections.Base.extend({
-    urlTemplate: "user/ldap/",
+    urlTemplate: "users/ldap/",
 
     urlParams: function() {
         var params = {};

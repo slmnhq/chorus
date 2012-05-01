@@ -4,7 +4,7 @@ describe("chorus.collections.LdapUserSet", function() {
     });
 
     it("has the right url", function() {
-        expect(this.collection.url()).toMatchUrl("/user/ldap/?username=bernard", {
+        expect(this.collection.url()).toMatchUrl("/users/ldap/?username=bernard", {
             paramsToIgnore: ["rows", "page"]
         });
     });
