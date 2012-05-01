@@ -3,8 +3,8 @@ class InstancePresenter < Presenter
 
   def to_hash
     {
-        :name => name,
-        :host => host,
+        :name => h(name),
+        :host => h(host),
         :port => port,
         :id => id
     }

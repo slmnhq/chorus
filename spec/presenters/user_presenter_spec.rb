@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe UserPresenter do
+describe UserPresenter, :type => :view do
   before(:each) do
     @user = FactoryGirl.build :user
-    @presenter = UserPresenter.new(@user)
+    @presenter = UserPresenter.new(@user, view)
   end
 
   describe "#to_hash" do
@@ -19,6 +19,20 @@ describe UserPresenter do
 
     it "does not include unwanted keys" do
       @hash.should_not have_key(:password_digest)
+    end
+
+    it "sanitizes values" do
+      bad_value = "<script>alert('got your cookie')</script>"
+      fields_to_sanitize = [:username, :first_name, :last_name, :email, :title, :dept, :notes]
+
+      dangerous_params = fields_to_sanitize.inject({}) { |params, field| params.merge(field => bad_value)  }
+
+      user = FactoryGirl.build :user, dangerous_params
+      json = UserPresenter.new(user, view).to_hash
+
+      fields_to_sanitize.each do |sanitized_field|
+        json[sanitized_field].should_not match "<"
+      end
     end
   end
 end

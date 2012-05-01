@@ -4,13 +4,13 @@ class UserPresenter < Presenter
   def to_hash
     {
         :id => id,
-        :username => username,
-        :first_name => first_name,
-        :last_name => last_name,
-        :email => email,
-        :title => title,
-        :dept => dept,
-        :notes => notes,
+        :username => h(username),
+        :first_name => h(first_name),
+        :last_name => h(last_name),
+        :email => h(email),
+        :title => h(title),
+        :dept => h(dept),
+        :notes => h(notes),
         :admin => admin?,
         :image_file_name => image_file_name
     }

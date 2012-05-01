@@ -12,12 +12,10 @@ class UsersController < ApplicationController
   end
 
   def create
-    sanitize! params[:user]
     present User.create!(params[:user]), :status => :created
   end
 
   def update
-    sanitize! params[:user]
     @user.attributes = params[:user]
     @user.admin = params[:user][:admin] if current_user.admin?
     @user.save!
@@ -40,11 +38,5 @@ class UsersController < ApplicationController
 
   def load_user
     @user = User.find(params[:id])
-  end
-
-  def sanitize! params
-    params.each do |k,v|
-      params[k] = CGI.escape_html v
-    end
   end
 end

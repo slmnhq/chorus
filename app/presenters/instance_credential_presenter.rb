@@ -3,7 +3,7 @@ class InstanceCredentialPresenter < Presenter
   def to_hash
     {
       :id => id,
-      :username => username,
+      :username => h(username),
       :owner_id => owner_id,
       :instance_id => instance_id,
     }

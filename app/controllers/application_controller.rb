@@ -68,7 +68,7 @@ class ApplicationController < ActionController::Base
     end
 
     presenter_class = "#{model_class}Presenter".constantize
-    render options.merge({ :json => presenter_class.send(presentation_method, model) })
+    render options.merge({ :json => presenter_class.send(presentation_method, model, self.view_context) })
   end
 
   def present_errors(errors, options={})

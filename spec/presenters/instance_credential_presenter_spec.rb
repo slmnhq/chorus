@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InstanceCredentialPresenter do
+describe InstanceCredentialPresenter, :type => :view do
   before do
     @user = FactoryGirl.create :user
 
@@ -11,7 +11,7 @@ describe InstanceCredentialPresenter do
     @credential.owner = @user
     @credential.instance = @instance
 
-    @presenter = InstanceCredentialPresenter.new(@credential)
+    @presenter = InstanceCredentialPresenter.new(@credential, view)
   end
 
   describe "#to_hash" do
@@ -24,6 +24,15 @@ describe InstanceCredentialPresenter do
       @hash[:owner_id].should == @user.id
       @hash[:instance_id].should == @instance.id
       @hash[:username].should == @credential[:username]
+    end
+
+    it "sanitizes values" do
+      bad_value = "<script>alert('got your cookie')</script>"
+
+      credential = FactoryGirl.build :instance_credential, :username => bad_value
+      json = InstanceCredentialPresenter.new(credential, view).to_hash
+
+      json[:username].should_not match "<"
     end
   end
 end
