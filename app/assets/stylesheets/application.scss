@@ -8,6 +8,22 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
- *= require _common
- *= require_directory .
  */
+
+@import "base.scss";
+@import "dashboard.scss";
+@import "error.scss";
+@import "hdfs.scss";
+@import "instances.scss";
+@import "jasmine.scss";
+@import "layout.scss";
+@import "login.scss";
+@import "modals.scss";
+@import "search_results.scss";
+@import "style_guide.scss";
+@import "tabular_data.scss";
+@import "users.scss";
+@import "visualizations.scss";
+@import "widgets.scss";
+@import "workfiles.scss";
+@import "workspaces.scss";
