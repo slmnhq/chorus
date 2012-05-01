@@ -36,7 +36,7 @@ describe("chorus.views.userEdit", function() {
                     expect(this.view.$("input[name=first_name]").val()).toBe(this.user.get("first_name"));
                     expect(this.view.$("input[name=last_name]").val()).toBe(this.user.get("last_name"));
                     expect(this.view.$("span[name=username]").text()).toBe(this.user.get("username"));
-                    expect(this.view.$("input[name=emailAddress]").val()).toBe(this.user.get("emailAddress"));
+                    expect(this.view.$("input[name=email]").val()).toBe(this.user.get("email"));
                     expect(this.view.$("input[name=title]").val()).toBe('');
                     expect(this.view.$("textarea[name=notes]").text()).toBe('');
                     expect(this.view.$("input[name=ou]").val()).toBe('');
@@ -50,7 +50,7 @@ describe("chorus.views.userEdit", function() {
                 context("submitting the form", function() {
                     beforeEach(function() {
                         this.view.$("input[name=first_name]").val("Frankie");
-                        this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com");
+                        this.view.$("input[name=email]").val("frankie_knuckles@nyclol.com");
                         this.view.$("input[name=ou]").val("awesomeness dept");
                         this.view.$("textarea[name=notes]").text("Here are some notes\n more than one line")
                         this.view.$("form").submit();
@@ -65,7 +65,7 @@ describe("chorus.views.userEdit", function() {
                             expect(this.user.attributes["first_name"]).toBe("Frankie");
                             expect(this.user.attributes["last_name"]).toBe(this.user.get("last_name"));
                             expect(this.user.attributes["username"]).toBe(this.user.get("username"));
-                            expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
+                            expect(this.user.attributes["email"]).toBe("frankie_knuckles@nyclol.com");
                             expect(this.user.attributes["ou"]).toBe("awesomeness dept");
                             expect(this.user.attributes["admin"]).toBe(this.user.get("admin"));
                             expect(this.user.attributes["notes"]).toBe("Here are some notes\n more than one line");
@@ -116,7 +116,7 @@ describe("chorus.views.userEdit", function() {
                     context("saving the user with invalid data", function() {
                         beforeEach(function() {
                             spyOn(Backbone.Model.prototype, 'save');
-                            this.view.$("input[name=emailAddress]").val("bademail");
+                            this.view.$("input[name=email]").val("bademail");
                             this.view.$("form").submit();
                         });
                         it("does not save the user", function() {
@@ -128,7 +128,7 @@ describe("chorus.views.userEdit", function() {
                         });
 
                         it("does not change the local model", function() {
-                            expect(this.view.model.get("emailAddress")).not.toBe("bademail");
+                            expect(this.view.model.get("email")).not.toBe("bademail");
                         })
                     });
 

@@ -5,7 +5,7 @@ chorus.views.SearchUser = chorus.views.SearchItemBase.extend({
 
     additionalContext: function() {
         var modelWithSearchResults = chorus.helpers.withSearchResults(this.model);
-        var supportingMessage = _.compact(_.map(["ou", "content", "emailAddress", "name"],
+        var supportingMessage = _.compact(_.map(["ou", "content", "email", "name"],
             function(fieldName) {
                 var value = this.model.highlightedAttribute(fieldName);
                 if (value) {

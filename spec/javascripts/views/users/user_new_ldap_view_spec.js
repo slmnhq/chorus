@@ -23,7 +23,7 @@ describe("chorus.views.UserNewLdap", function() {
                     this.view.$("input[name=first_name]").val("Frankie");
                     this.view.$("input[name=last_name]").val("Knuckles");
                     this.view.$("input[name=username]").val("frankie2002");
-                    this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com");
+                    this.view.$("input[name=email]").val("frankie_knuckles@nyclol.com");
                     this.view.$("input[name=ou]").val("awesomeness dept");
                     this.view.$("input[name=title]").val("fashion policeman");
                     this.view.$("input[name=admin]").prop("checked", true);
@@ -35,7 +35,7 @@ describe("chorus.views.UserNewLdap", function() {
                         first_name: "Frankie",
                         last_name: "Knuckles",
                         username: "frankie2002",
-                        emailAddress: "frankie_knuckles@nyclol.com",
+                        email: "frankie_knuckles@nyclol.com",
                         ou: "awesomeness dept",
                         title: "fashion policeman",
                         admin: true,
@@ -99,7 +99,7 @@ describe("chorus.views.UserNewLdap", function() {
                                 username: "john_henry",
                                 first_name: "John",
                                 last_name: "Henry",
-                                emailAddress: "jh@hammer.edu",
+                                email: "jh@hammer.edu",
                                 title: "Hammerer",
                                 ou: "whoop-ass"
                             })
@@ -109,7 +109,7 @@ describe("chorus.views.UserNewLdap", function() {
                     it("fills in the fields from the LDAP user", function() {
                         expect(this.view.$("input[name='first_name']").val()).toBe("John");
                         expect(this.view.$("input[name='last_name']").val()).toBe("Henry");
-                        expect(this.view.$("input[name='emailAddress']").val()).toBe("jh@hammer.edu");
+                        expect(this.view.$("input[name='email']").val()).toBe("jh@hammer.edu");
                         expect(this.view.$("input[name='title']").val()).toBe("Hammerer");
                         expect(this.view.$("input[name='ou']").val()).toBe("whoop-ass");
                     });
@@ -131,7 +131,7 @@ describe("chorus.views.UserNewLdap", function() {
                     this.view.$("input[name=first_name]").val("Frankie");
                     this.view.$("input[name=last_name]").val("Knuckles");
                     this.view.$("input[name=username]").val("frankie2002");
-                    this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com");
+                    this.view.$("input[name=email]").val("frankie_knuckles@nyclol.com");
                     this.view.$("input[name=ou]").val("awesomeness dept");
                     this.view.$("input[name=admin]").prop("checked", true);
 
@@ -160,7 +160,7 @@ describe("chorus.views.UserNewLdap", function() {
                             expect(this.user.attributes["first_name"]).toBe("Frankie");
                             expect(this.user.attributes["last_name"]).toBe("Knuckles");
                             expect(this.user.attributes["username"]).toBe("frankie2002");
-                            expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
+                            expect(this.user.attributes["email"]).toBe("frankie_knuckles@nyclol.com");
                             expect(this.user.attributes["ou"]).toBe("awesomeness dept");
                             expect(this.user.attributes["admin"]).toBe(true);
                         });
@@ -194,7 +194,7 @@ describe("chorus.views.UserNewLdap", function() {
                                 expect(this.view.$("input[name=first_name]").val()).toBe("Frankie");
                                 expect(this.view.$("input[name=last_name]").val()).toBe("Knuckles");
                                 expect(this.view.$("input[name=username]").val()).toBe("frankie2002");
-                                expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
+                                expect(this.view.$("input[name=email]").val()).toBe("frankie_knuckles@nyclol.com");
                                 expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");
                                 expect(this.view.$("input[name=admin]")).toBeChecked();
                             });

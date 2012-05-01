@@ -28,7 +28,7 @@ chorus.models.User = chorus.models.Base.extend({
         this.require('first_name', newAttrs);
         this.require('last_name', newAttrs);
         this.require('username', newAttrs);
-        this.requireValidEmailAddress('emailAddress', newAttrs);
+        this.requireValidEmailAddress('email', newAttrs);
 
         if(!this.ldap){
             this.requireConfirmationForChange('password', newAttrs);
@@ -85,7 +85,7 @@ chorus.models.User = chorus.models.Base.extend({
     },
 
     attrToLabel:{
-        "emailAddress":"users.email",
+        "email":"users.email",
         "first_name":"users.first_name",
         "last_name":"users.last_name",
         "username":"users.username",
