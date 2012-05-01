@@ -1,6 +1,6 @@
 {
     "provisionMaxSizeInGB": 2000,
-    "externalAuth": false,
+    "external_auth_enabled": false,
     "logLevel": "INFO",
     "provisionMaxSize": "2000 GB",
     "sandboxRecommendSizeInBytes": 5368709120,
