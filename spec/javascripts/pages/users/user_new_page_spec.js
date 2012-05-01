@@ -1,6 +1,8 @@
 describe("chorus.pages.UserNewPage", function() {
     beforeEach(function() {
-        this.config = new chorus.models.Config(); // avoid fetch
+        this.config = chorus.models.Config.instance();
+        spyOn(this.config, "fetch");
+
         this.page = new chorus.pages.UserNewPage()
     });
 
@@ -9,10 +11,6 @@ describe("chorus.pages.UserNewPage", function() {
     });
 
     describe("#setup", function() {
-        it("fetches the chorus configuration information", function() {
-            expect(this.config).toHaveBeenFetched();
-        });
-
         describe("when the configuration fetch completes", function() {
             context("when external auth is enabled", function() {
                 beforeEach(function() {
@@ -36,6 +34,15 @@ describe("chorus.pages.UserNewPage", function() {
                 });
             });
         });
+    });
+
+    it("always re-fetch the configuration info", function(){
+        expect(this.config.fetch.callCount).toBe(1);  // Already has been fetched storyId#28824949
+
+        this.page = new chorus.pages.UserNewPage();
+
+        expect(chorus.models.Config.instance().fetch).toHaveBeenCalled();
+        expect(this.config.fetch.callCount).toBe(2);
     });
 
     describe("#render", function(){
@@ -65,4 +72,4 @@ describe("chorus.pages.UserNewPage", function() {
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
         });
     });
-})
+});
