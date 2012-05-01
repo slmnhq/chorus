@@ -22,6 +22,9 @@ end
 
 group :test do
   gem 'factory_girl'
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'capybara-screenshot'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'timecop'

@@ -42,6 +42,15 @@ GEM
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
     builder (3.0.0)
+    capybara (1.1.2)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      selenium-webdriver (~> 2.0)
+      xpath (~> 0.1.4)
+    capybara-screenshot (0.1.10)
+      capybara (>= 1.0)
     childprocess (0.3.2)
       ffi (~> 1.0.6)
     chunky_png (1.2.5)
@@ -52,6 +61,7 @@ GEM
       sass (~> 3.1)
     compass-rails (1.0.1)
       compass (~> 0.12.0)
+    database_cleaner (0.7.2)
     diff-lcs (1.1.3)
     erubis (2.7.0)
     execjs (1.3.0)
@@ -79,6 +89,7 @@ GEM
     mime-types (1.18)
     multi_json (1.3.2)
     net-ldap (0.3.1)
+    nokogiri (1.5.2)
     paperclip (3.0.2)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
@@ -151,13 +162,18 @@ GEM
       polyglot (>= 0.3.1)
     tzinfo (0.3.33)
     will_paginate (3.0.3)
+    xpath (0.1.4)
+      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bcrypt-ruby
+  capybara
+  capybara-screenshot
   compass-rails
+  database_cleaner
   factory_girl
   handlebars_assets
   hashie
