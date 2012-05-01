@@ -1891,7 +1891,7 @@ beforeEach(function() {
             if (overridesOrInstance instanceof chorus.models.Instance) {
                 overrides = {
                     instanceId: overridesOrInstance.get("id"),
-                    dbUserName: overridesOrInstance.get("sharedAccount").dbUserName
+                    db_username: overridesOrInstance.get("sharedAccount").db_username
                 };
             } else {
                 overrides = overridesOrInstance || {};
@@ -1902,7 +1902,7 @@ beforeEach(function() {
                 expiration: null,
                 instanceId: this.nextId().toString(),
                 user: _.extend(newFixtures.userJson(), overrides.user),
-                dbUserName: "gpadmin"
+                db_username: "gpadmin"
             }, overrides);
             return new chorus.models.InstanceAccount(attributes);
         },
@@ -2585,7 +2585,7 @@ beforeEach(function() {
                     "instanceProvider": "Greenplum Database",
                     "isDeleted": false,
                     "entityType": "instance",
-                    "maintenanceDb": "postgres"
+                    "database": "postgres"
                 },
                 "comments": []
             });
@@ -3371,7 +3371,7 @@ beforeEach(function() {
                                 "instanceProvider": "Greenplum Database",
                                 "isDeleted": false,
                                 "entityType": "instance",
-                                "maintenanceDb": "postgres"
+                                "database": "postgres"
                             },
                             "comments": []
                         },

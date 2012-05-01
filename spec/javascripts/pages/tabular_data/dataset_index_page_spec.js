@@ -287,7 +287,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
                         this.server.completeFetchFor(this.account, fixtures.emptyInstanceAccount());
-                        this.server.completeFetchFor(this.page.instance, newFixtures.instance.sharedAccount({sharedAccount: {dbUserName: "Bob"}}));
+                        this.server.completeFetchFor(this.page.instance, newFixtures.instance.sharedAccount({sharedAccount: {db_username: "Bob"}}));
                     });
 
                     it("does not pop up a WorkspaceInstanceAccount dialog", function() {

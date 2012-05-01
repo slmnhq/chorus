@@ -26,14 +26,14 @@ describe("chorus.dialogs.InstanceAccount", function() {
             this.account = this.dialog.model;
             spyOn(this.account, 'save').andCallThrough();
 
-            this.dialog.$("input[name=dbUserName]").val("office");
-            this.dialog.$("input[name=dbPassword]").val("howard875huge");
+            this.dialog.$("input[name=db_username]").val("office");
+            this.dialog.$("input[name=db_password]").val("howard875huge");
             this.dialog.$("form").submit();
         });
 
         it("sets the database username and password fields on the model", function() {
-            expect(this.account.get("dbUserName")).toBe("office");
-            expect(this.account.get("dbPassword")).toBe("howard875huge");
+            expect(this.account.get("db_username")).toBe("office");
+            expect(this.account.get("db_password")).toBe("howard875huge");
         });
 
         it("saves the model with the fields from the form", function() {
@@ -60,8 +60,8 @@ describe("chorus.dialogs.InstanceAccount", function() {
 
         describe("after saving", function() {
             beforeEach(function() {
-                this.dialog.$("input[name=dbUserName]").val("office");
-                this.dialog.$("input[name=dbPassword]").val("howard875huge");
+                this.dialog.$("input[name=db_username]").val("office");
+                this.dialog.$("input[name=db_password]").val("howard875huge");
                 this.dialog.$("form").submit();
             });
 

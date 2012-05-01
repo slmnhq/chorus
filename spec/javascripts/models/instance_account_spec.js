@@ -73,31 +73,31 @@ describe("chorus.models.InstanceAccount", function() {
             spyOn(this.model, "require").andCallThrough();
         });
 
-        it("requires dbUserName", function() {
-            this.model.unset("dbUserName");
+        it("requires db_username", function() {
+            this.model.unset("db_username");
             this.model.performValidation();
-            expect(this.model.require).toHaveBeenCalledWith("dbUserName", undefined);
+            expect(this.model.require).toHaveBeenCalledWith("db_username", undefined);
         });
 
         context("when the account already exists and the password is NOT being changed", function() {
-            it("does not require a dbPassword", function() {
-                this.model.unset("dbPassword");
+            it("does not require a db_password", function() {
+                this.model.unset("db_password");
                 this.model.performValidation();
                 expect(this.model.isValid()).toBeTruthy();
             });
         });
 
         context("when the account is being created", function() {
-            it("requires a dbPassword", function() {
-                this.model = new chorus.models.InstanceAccount({ dbUserName: "ilikecoffee" });
+            it("requires a db_password", function() {
+                this.model = new chorus.models.InstanceAccount({ db_username: "ilikecoffee" });
                 this.model.performValidation();
                 expect(this.model.isValid()).toBeFalsy();
             });
         });
 
         context("when the account already exists and the password is being changed", function() {
-            it("requires a dbPassword", function() {
-                this.model.performValidation({ dbPassword: "" });
+            it("requires a db_password", function() {
+                this.model.performValidation({ db_password: "" });
                 expect(this.model.isValid()).toBeFalsy();
             });
         });
@@ -109,10 +109,10 @@ describe("chorus.models.InstanceAccount", function() {
 
             describe("and it is changed to an individual account", function() {
                 beforeEach(function() {
-                    this.model.unset("dbUserName");
+                    this.model.unset("db_username");
                 })
 
-                it("does not require dbUserName", function() {
+                it("does not require db_username", function() {
                     this.model.performValidation({ shared : "no" })
                     expect(this.model.isValid()).toBeTruthy();
                 })

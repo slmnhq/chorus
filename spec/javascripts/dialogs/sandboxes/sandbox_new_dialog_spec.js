@@ -220,8 +220,8 @@ describe("chorus.dialogs.SandboxNew", function() {
                     $el.find("input[name=schemaName]").val("batman");
                     $el.find("input[name=databaseName]").val("aquaman");
                     $el.find("input[name=size]").val("1000");
-                    $el.find("input[name=dbUserName]").val("edcadmin");
-                    $el.find("input[name=dbPassword]").val("foobar");
+                    $el.find("input[name=db_username]").val("edcadmin");
+                    $el.find("input[name=db_password]").val("foobar");
 
                     this.dialog.$("button.submit").click();
                 });

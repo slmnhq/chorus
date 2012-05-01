@@ -31,7 +31,7 @@
         margin-bottom: $dialog-padding;
 
         label[name=host], input[name=host],
-        label[name=maintenanceDb], input[name=maintenanceDb] {
+        label[name=database], input[name=database] {
             width: $hostname-width;
         }
 
@@ -40,7 +40,7 @@
             margin-left: $input-spacing;
         }
 
-        label[name=dbUserName], input[name=dbUserName],
+        label[name=db_username], input[name=db_username],
         label[name=databaseName], input[name=databaseName],
         label[name=userName], input[name=userName],
         label[name=userGroups], input[name=userGroups]
@@ -53,7 +53,7 @@
             margin-top: 1px;
         }
 
-        label[name=dbPassword], input[name=dbPassword],
+        label[name=db_password], input[name=db_password],
         label[name=schemaName], input[name=schemaName],
         label[name=userGroups], input[name=userGroups]
         {

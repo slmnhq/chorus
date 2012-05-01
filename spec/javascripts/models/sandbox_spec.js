@@ -139,7 +139,7 @@ describe("chorus.models.Sandbox", function() {
                 });
 
                 it("requires a db username and db password", function() {
-                    expectInvalid({ }, this.model, [ "dbUserName", "dbPassword" ]);
+                    expectInvalid({ }, this.model, [ "db_username", "db_password" ]);
                 });
             });
 

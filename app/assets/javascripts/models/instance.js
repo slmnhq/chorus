@@ -13,7 +13,7 @@
 
     chorus.models.Instance = chorus.models.Base.extend({
         constructorName: "Instance",
-        urlTemplate:"instance/{{id}}",
+        urlTemplate:"instances/{{id}}",
         nameAttribute: 'name',
 
         showUrlTemplate: function() {
@@ -32,11 +32,11 @@
                 case "register" :
                     this.require("host", newAttrs);
                     this.require("port", newAttrs);
-                    this.require("maintenanceDb", newAttrs);
+                    this.require("database", newAttrs);
                     this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
                     if (this.isNew()) {
-                        this.require("dbUserName", newAttrs);
-                        this.require("dbPassword", newAttrs);
+                        this.require("db_username", newAttrs);
+                        this.require("db_password", newAttrs);
                     }
                     break;
                 case "create" :
@@ -45,8 +45,8 @@
                     if( this.isNew()) {
                         this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                         this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
-                        this.require("dbUserName", newAttrs);
-                        this.requirePattern("dbPassword", chorus.ValidationRegexes.Password({min: 6, max: 256}), newAttrs);
+                        this.require("db_username", newAttrs);
+                        this.requirePattern("db_password", chorus.ValidationRegexes.Password({min: 6, max: 256}), newAttrs);
                     }
                     break;
                 case "registerHadoop":
@@ -115,11 +115,11 @@
         },
 
         sharedAccount:function () {
-            var dbUserName = this.get("sharedAccount") && this.get("sharedAccount").dbUserName;
-            if (dbUserName) {
+            var db_username = this.get("sharedAccount") && this.get("sharedAccount").db_username;
+            if (db_username) {
                 var sharedAccount = this.accounts().first();
                 if (!sharedAccount) {
-                    sharedAccount = new chorus.models.InstanceAccount({ dbUserName:dbUserName, instanceId:this.get("id") });
+                    sharedAccount = new chorus.models.InstanceAccount({ db_username:db_username, instanceId:this.get("id") });
                     this.accounts().add(sharedAccount);
                 }
                 return sharedAccount;
@@ -139,15 +139,15 @@
         },
 
         attrToLabel:{
-            "dbUserName":"instances.dialog.database_account",
-            "dbPassword":"instances.dialog.database_password",
+            "db_username":"instances.dialog.database_account",
+            "db_password":"instances.dialog.database_password",
             "userName":"instances.dialog.hadoop_account",
             "userGroups":"instances.dialog.hadoop_group_list",
             "name":"instances.dialog.instance_name",
             "host":"instances.dialog.host",
             "port":"instances.dialog.port",
             "databaseName": "instances.dialog.database_name",
-            "maintenanceDb":"instances.dialog.maintenanceDb",
+            "database":"instances.dialog.database",
             "description":"instances.dialog.description",
             "size":"instances.dialog.size"
         },

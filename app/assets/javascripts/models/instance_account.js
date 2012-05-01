@@ -30,17 +30,17 @@ chorus.models.InstanceAccount = chorus.models.Base.extend(
             var shared = newAttrs && newAttrs.hasOwnProperty("shared") ? newAttrs["shared"] : this.get("shared");
 
             if (shared === this.previous("shared")) {
-                this.require('dbUserName', newAttrs);
+                this.require('db_username', newAttrs);
             }
 
-            if (this.isNew() || (newAttrs && newAttrs.hasOwnProperty('dbPassword'))) {
-                this.require('dbPassword', newAttrs);
+            if (this.isNew() || (newAttrs && newAttrs.hasOwnProperty('db_password'))) {
+                this.require('db_password', newAttrs);
             }
         },
 
         attrToLabel:{
-            "dbUserName":"instances.permissions.username",
-            "dbPassword":"instances.permissions.password"
+            "db_username":"instances.permissions.username",
+            "db_password":"instances.permissions.password"
         }
     },
     {

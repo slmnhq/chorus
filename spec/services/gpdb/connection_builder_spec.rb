@@ -2,7 +2,17 @@ require 'spec_helper'
 
 describe Gpdb::ConnectionBuilder do
   let(:owner) { FactoryGirl.create(:user) }
-  let(:valid_attributes) do
+  let(:valid_input_attributes) do
+    {
+        :name => "new",
+        :port => 12345,
+        :host => "server.emc.com",
+        :database => "postgres",
+        :db_username => "bob",
+        :db_password => "secret"
+    }
+  end
+  let(:valid_output_attributes) do
     {
         :name => "new",
         :port => 12345,
@@ -11,6 +21,7 @@ describe Gpdb::ConnectionBuilder do
         :username => "bob",
         :password => "secret"
     }
+
   end
 
   before do
@@ -21,22 +32,22 @@ describe Gpdb::ConnectionBuilder do
   describe ".create!" do
     it "requires name" do
       expect {
-        Gpdb::ConnectionBuilder.create!(valid_attributes.merge(:name => nil), owner)
+        Gpdb::ConnectionBuilder.create!(valid_input_attributes.merge(:name => nil), owner)
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "requires db connection params" do
       [:host, :port, :database].each do |attribute|
         expect {
-          Gpdb::ConnectionBuilder.create!(valid_attributes.merge(attribute => nil), owner)
+          Gpdb::ConnectionBuilder.create!(valid_input_attributes.merge(attribute => nil), owner)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 
     it "requires db username and password" do
-      [:username, :password].each do |attribute|
+      [:db_username, :db_password].each do |attribute|
         expect {
-          Gpdb::ConnectionBuilder.create!(valid_attributes.merge(attribute => nil), owner)
+          Gpdb::ConnectionBuilder.create!(valid_input_attributes.merge(attribute => nil), owner)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -44,10 +55,10 @@ describe Gpdb::ConnectionBuilder do
     it "requires that a real connection to GPDB can be established" do
       connection = double
       connection.stub(:verify_connection!).and_raise(Gpdb::ConnectionError.new("connection error"))
-      Gpdb::Connection.should_receive(:new).with(valid_attributes) { connection }
+      Gpdb::Connection.should_receive(:new).with(valid_output_attributes) { connection }
 
       begin
-        Gpdb::ConnectionBuilder.create!(valid_attributes, owner)
+        Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
       rescue ActiveRecord::RecordInvalid => e
         e.record.errors.get(:connection).should == ["connection error"]
       end
@@ -55,41 +66,42 @@ describe Gpdb::ConnectionBuilder do
 
     it "caches the db name, owner and connection params" do
       expect {
-        Gpdb::ConnectionBuilder.create!(valid_attributes, owner)
+        Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
       }.to change { Instance.count }.by(1)
-      cached_instance = Instance.find_by_name_and_owner_id(valid_attributes[:name], owner.id)
-      cached_instance.host.should == valid_attributes[:host]
-      cached_instance.port.should == valid_attributes[:port]
-      cached_instance.maintenance_db.should == valid_attributes[:database]
+      cached_instance = Instance.find_by_name_and_owner_id(valid_input_attributes[:name], owner.id)
+      cached_instance.host.should == valid_input_attributes[:host]
+      cached_instance.port.should == valid_input_attributes[:port]
+      cached_instance.maintenance_db.should == valid_input_attributes[:database]
     end
 
     it "caches the db username and password" do
       expect {
-        Gpdb::ConnectionBuilder.create!(valid_attributes, owner)
+        Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
       }.to change { InstanceCredential.count }.by(1)
 
-      cached_instance = Instance.find_by_name_and_owner_id(valid_attributes[:name], owner.id)
+      cached_instance = Instance.find_by_name_and_owner_id(valid_input_attributes[:name], owner.id)
       cached_instance_credentials = InstanceCredential.find_by_owner_id_and_instance_id(owner.id, cached_instance.id)
 
-      cached_instance_credentials.username.should == valid_attributes[:username]
-      cached_instance_credentials.password.should == valid_attributes[:password]
+      cached_instance_credentials.username.should == valid_input_attributes[:db_username]
+      cached_instance_credentials.password.should == valid_input_attributes[:db_password]
     end
 
     it "shares the cached credentials" do
-      Gpdb::ConnectionBuilder.create!(valid_attributes, owner)
+      Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
 
-      cached_instance = Instance.find_by_name(valid_attributes[:name])
+      cached_instance = Instance.find_by_name(valid_input_attributes[:name])
       cached_instance_credentials = InstanceCredential.find_by_owner_id_and_instance_id(owner.id, cached_instance.id)
 
-      cached_instance_credentials.username.should == valid_attributes[:username]
-      cached_instance_credentials.password.should == valid_attributes[:password]
+      cached_instance_credentials.username.should == valid_input_attributes[:db_username]
+      cached_instance_credentials.password.should == valid_input_attributes[:db_password]
     end
   end
 
   describe ".update!" do
     let(:admin) { FactoryGirl.create(:user, :admin => true) }
-    let(:cached_instance) { Gpdb::ConnectionBuilder.create!(valid_attributes, owner) }
-    let(:updated_attributes) { valid_attributes.merge(:name => "new name") }
+    let(:cached_instance) { Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner) }
+    let(:updated_attributes) { valid_input_attributes.merge(:name => "new name") }
+    let(:updated_output_attributes) { valid_output_attributes.merge(:name => "new name") }
 
     it "allows admin to update" do
       updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, admin)
@@ -114,14 +126,14 @@ describe Gpdb::ConnectionBuilder do
     end
 
     it "saves the owner's changes to their credentials" do
-      updated_attributes[:password] = "newpass"
+      updated_attributes[:db_password] = "newpass"
       updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
       owners_credentials = InstanceCredential.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
       owners_credentials.password.should == "newpass"
     end
 
     it "ignores the admin's changes to the credentials" do
-      updated_attributes[:password] = "newpass"
+      updated_attributes[:db_password] = "newpass"
       updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, admin)
       owners_credentials = InstanceCredential.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
       owners_credentials.password.should == "secret"
@@ -136,7 +148,7 @@ describe Gpdb::ConnectionBuilder do
     it "requires that a real connection to GPDB can be established" do
       connection = double
       connection.stub(:verify_connection!).and_raise(Gpdb::ConnectionError.new("connection error"))
-      Gpdb::Connection.should_receive(:new).with(updated_attributes) { connection }
+      Gpdb::Connection.should_receive(:new).with(updated_output_attributes) { connection }
 
       begin
         Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
@@ -165,8 +177,8 @@ describe Gpdb::ConnectionBuilder do
 
     describe("switching from shared to individual") do
       before do
-        Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => "true"), owner)
-        @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => "false"), owner)
+        Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => "true"), owner)
+        @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => "false"), owner)
       end
 
       it "clears the shared attribute" do
@@ -181,8 +193,8 @@ describe Gpdb::ConnectionBuilder do
       context "when the new owner doesn't have credentials for the instance" do
         context "and the instance has shared credentials" do
           before do
-            Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => true), owner)
-            @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:shared => true, :owner => new_owner), owner)
+            Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => true), owner)
+            @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => true, :owner => new_owner), owner)
           end
 
           it "should succeed and give the credentials to the new owner" do
@@ -190,21 +202,21 @@ describe Gpdb::ConnectionBuilder do
             @updated_instance.owner.should == new_owner
             @updated_instance.credentials.count.should == 1
             @updated_instance.owner_credentials.owner.should == new_owner
-            @updated_instance.owner_credentials.username.should == valid_attributes[:username]
-            @updated_instance.owner_credentials.password.should == valid_attributes[:password]
+            @updated_instance.owner_credentials.username.should == valid_input_attributes[:db_username]
+            @updated_instance.owner_credentials.password.should == valid_input_attributes[:db_password]
           end
         end
 
         context "and the instance has individual credentials" do
           it "should raise ActiveRecord::RecordInvalid" do
             lambda {
-              Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:owner => new_owner), owner)
+              Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => new_owner), owner)
             }.should raise_error(ActiveRecord::RecordInvalid)
           end
 
           it "does not update the instance" do
             lambda {
-              Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:owner => new_owner, :name => "foobar"), owner)
+              Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => new_owner, :name => "foobar"), owner)
             }.should raise_error
 
             cached_instance.reload.name.should_not == "foobar"
@@ -218,7 +230,7 @@ describe Gpdb::ConnectionBuilder do
         context "and the instance has individual credentials" do
           before do
             @old_credential_count = cached_instance.credentials.count
-            @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_attributes.merge(:owner => new_owner, :name => "foobar"), owner)
+            @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => new_owner, :name => "foobar"), owner)
           end
           it "succeeds" do
             @updated_instance.should be_present

@@ -20,8 +20,8 @@ chorus.views.SandboxNewStandaloneMode = chorus.views.Base.extend({
             databaseName: this.$("input[name='databaseName']").val(),
             schemaName: this.$("input[name='schemaName']").val(),
             size: this.$("input[name='size']").val(),
-            dbUserName: this.$("input[name='dbUserName']").val(),
-            dbPassword: this.$("input[name='dbPassword']").val()
+            db_username: this.$("input[name='db_username']").val(),
+            db_password: this.$("input[name='db_password']").val()
         }
     }
 });

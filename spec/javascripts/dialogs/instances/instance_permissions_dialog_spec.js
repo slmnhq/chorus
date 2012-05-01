@@ -139,8 +139,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
             });
 
-            it("populates the dbUserName text field from the account map", function() {
-                expect(this.dialog.$("input[name=dbUserName]").val()).toBe(this.instance.sharedAccount().get('dbUserName'));
+            it("populates the db_username text field from the account map", function() {
+                expect(this.dialog.$("input[name=db_username]").val()).toBe(this.instance.sharedAccount().get('db_username'));
             })
 
             it("displays a 'switch to individual account' link", function() {
@@ -151,7 +151,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "launchSubModal").andCallThrough();
                     spyOn(this.instance, "sharedAccount").andCallFake(function() {
-                        return fixtures.instanceAccount({ shared : "yes", dbUserName : "foo", id : "999" });
+                        return fixtures.instanceAccount({ shared : "yes", db_username : "foo", id : "999" });
                     })
                     this.dialog.$("a.remove_shared_account").click();
                 });
@@ -176,7 +176,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             spyOn(chorus, 'toast');
                             spyOn(this.dialog, "postRender").andCallThrough();
                             expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
-                            this.server.lastUpdate().succeed([fixtures.instanceAccount({ shared : "no", dbUserName : "foo", id : "999" })])
+                            this.server.lastUpdate().succeed([fixtures.instanceAccount({ shared : "no", db_username : "foo", id : "999" })])
                         });
 
                         it("displays a toast message", function() {
@@ -280,8 +280,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 this.liBeingEdited = this.dialog.$("li[data-id=2]");
                 this.otherLi = this.dialog.$("li[data-id=1]");
                 this.liBeingEdited.find("a.edit").click();
-                this.liBeingEdited.find("input[name=dbUserName]").val("jughead");
-                this.liBeingEdited.find("input[name=dbPassword]").val("gogogo");
+                this.liBeingEdited.find("input[name=db_username]").val("jughead");
+                this.liBeingEdited.find("input[name=db_password]").val("gogogo");
             });
 
             it("adds the 'editing' class to the parent li", function() {
@@ -297,8 +297,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 })
 
                 it("populates the account map from the form", function() {
-                    expect(this.accountBeingEdited.get("dbUserName")).toBe("jughead");
-                    expect(this.accountBeingEdited.get("dbPassword")).toBe("gogogo");
+                    expect(this.accountBeingEdited.get("db_username")).toBe("jughead");
+                    expect(this.accountBeingEdited.get("db_password")).toBe("gogogo");
                 })
 
                 it("saves the acccount map", function() {
@@ -367,8 +367,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 })
 
                 it("does not populate the account from the form", function() {
-                    expect(this.accountBeingEdited.get("dbUserName")).not.toBe("jughead");
-                    expect(this.accountBeingEdited.get("dbPassword")).not.toBe("gogogo");
+                    expect(this.accountBeingEdited.get("db_username")).not.toBe("jughead");
+                    expect(this.accountBeingEdited.get("db_password")).not.toBe("gogogo");
                 })
 
                 it("does not save the account", function() {
@@ -553,8 +553,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         });
 
                         it("shows errors", function() {
-                            expect(this.dialog.$('input[name=dbUserName]:visible')).toHaveClass('has_error');
-                            expect(this.dialog.$('input[name=dbPassword]:visible')).toHaveClass('has_error');
+                            expect(this.dialog.$('input[name=db_username]:visible')).toHaveClass('has_error');
+                            expect(this.dialog.$('input[name=db_password]:visible')).toHaveClass('has_error');
                         });
                     });
 
@@ -562,10 +562,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         beforeEach(function() {
                             spyOn(this.dialog, "render").andCallThrough();
                             spyOn(this.dialog.account, "save").andCallThrough();
-                            this.dialog.$('input[name=dbUserName]').val('badUser!');
-                            this.dialog.$('input[name=dbPassword]').val('badPassword!');
-                            this.dialog.$('li[data-id=new] input[name=dbUserName]').val('user!');
-                            this.dialog.$('li[data-id=new] input[name=dbPassword]').val('password!');
+                            this.dialog.$('input[name=db_username]').val('badUser!');
+                            this.dialog.$('input[name=db_password]').val('badPassword!');
+                            this.dialog.$('li[data-id=new] input[name=db_username]').val('user!');
+                            this.dialog.$('li[data-id=new] input[name=db_password]').val('password!');
                             this.dialog.$('li select').val('111');
                         });
                         context("clicking save", function() {
@@ -576,8 +576,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             it("saves the correct fields", function() {
                                 expect(this.dialog.account.save).toHaveBeenCalledWith({
                                     userId : '444',
-                                    dbUserName : 'user!',
-                                    dbPassword : 'password!'
+                                    db_username : 'user!',
+                                    db_password : 'password!'
                                 });
                             });
 
@@ -681,7 +681,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         context("clicking the switch to shared account link", function() {
             beforeEach(function() {
                 spyOn(this.dialog, "launchSubModal").andCallThrough();
-                this.ownerAccount = fixtures.instanceAccount({shared: 'no', dbUserName : "foo", id : "888"});
+                this.ownerAccount = fixtures.instanceAccount({shared: 'no', db_username : "foo", id : "888"});
                 spyOn(this.ownerAccount, "save").andCallThrough();
                 spyOn(this.dialog.instance, 'accountForOwner').andReturn(this.ownerAccount);
                 this.dialog.$("a.add_shared_account").click();

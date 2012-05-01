@@ -232,7 +232,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             context("when the instance has a shared account", function() {
                 beforeEach(function() {
                     this.instance.set({
-                        sharedAccount: { dbUserName: "polenta" }
+                        sharedAccount: { db_username: "polenta" }
                     });
                     this.instance._accountForCurrentUser = fixtures.instanceAccount();
                     this.view.render();

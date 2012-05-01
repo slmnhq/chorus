@@ -38,8 +38,8 @@ module Gpdb
       @host = attributes[:host]
       @port = attributes[:port]
       @database = attributes[:database]
-      @username = attributes[:username]
-      @password = attributes[:password]
+      @username = attributes[:db_username]
+      @password = attributes[:db_password]
       @owner = owner
       @shared = ActiveRecord::ConnectionAdapters::Column.value_to_boolean(attributes[:shared])
     end

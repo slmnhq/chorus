@@ -20,5 +20,5 @@
     "size": null,
     "state": "online",
     "totalObject": null,
-    "maintenanceDb": "foo"
+    "database": "foo"
 }

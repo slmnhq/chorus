@@ -213,8 +213,8 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         });
         this.account.save({
             userId:li.find("select").val(),
-            dbUserName:li.find("input[name=dbUserName]").val(),
-            dbPassword:li.find("input[name=dbPassword]").val()
+            db_username:li.find("input[name=db_username]").val(),
+            db_password:li.find("input[name=db_password]").val()
         });
     },
 

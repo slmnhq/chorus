@@ -78,7 +78,7 @@ describe("chorus.views.SchemaPicker", function() {
                 });
 
                 it("fetches the list of instances", function() {
-                    expect(this.server.requests[0].url).toMatch("/instance/");
+                    expect(this.server.requests[0].url).toMatch("/instances/");
                 });
 
                 itDisplaysLoadingPlaceholderFor('instance');

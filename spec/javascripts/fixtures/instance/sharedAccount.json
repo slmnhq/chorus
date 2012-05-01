@@ -17,10 +17,10 @@
     "provisionName": null,
     "provisionType": null,
     "sharedAccount": {
-        "dbUserName": "gpadmin"
+        "db_username": "gpadmin"
     },
     "size": null,
     "state": "online",
     "totalObject": null,
-    "maintenanceDb": "foo"
+    "database": "foo"
 }
