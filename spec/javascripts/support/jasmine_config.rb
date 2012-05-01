@@ -26,34 +26,6 @@ module Jasmine
   end
 end
 
-class DummyMiddleware
-  def initialize(app)
-    @app = app
-  end
-
-  def call(env)
-    request = Rack::Request.new(env)
-
-    path = env['PATH_INFO']
-    if path =~ /\.(png|gif|jpg)/ || path =~ /\/.*image/
-      headers = {
-          "Content-Type" => "image/jpeg"
-      }
-      [200, headers, []]
-    elsif path =~ /\/file\/[^\/]+$/
-      headers = {
-          "Content-Type" => "text/plain"
-      }
-      [200, headers, []]
-    else
-      headers = {
-          "Content-Type" => "application/json"
-      }
-      [200, headers, ["{}"]]
-    end
-  end
-end
-
 class FixtureMiddleware
   def initialize(app)
     @app = app
@@ -82,13 +54,43 @@ class MessageMiddleware
   end
 end
 
+class DummyMiddleware
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    path = env['PATH_INFO']
+
+    fake_headers =
+      case path
+      when /\.js$/
+        nil
+      when /\/.*(image|thumbnail)/, /\.(png|gif|jpg)/
+        { "Content-Type" => "image/jpeg" }
+      when /fonts/
+        { "Content-Type" => "application/octet-stream" }
+      when /\/file\/[^\/]+$/
+        { "Content-Type" => "text/plain" }
+      when /\/edc\//
+        { "Content-Type" => "application/json" }
+      end
+
+    if fake_headers
+      [200, fake_headers, []]
+    else
+      @app.call(env)
+    end
+  end
+end
+
 module Jasmine
   def self.app(config)
     puts("Constructing custom Jasmine app from jasmine_config.rb")
     Rack::Builder.app do
       use Rack::Head
       use Rack::ETag, "max-age=0, private, must-revalidate"
-
+      use DummyMiddleware
 
       map('/run.html')         { run Jasmine::Redirect.new('/') }
       map('/__suite__')        { run Jasmine::FocusedSuite.new(config) }
@@ -103,14 +105,6 @@ module Jasmine
 
       map("/messages/Messages_en.properties") do
         run MessageMiddleware.new(self)
-      end
-
-      map("/edc") do
-        run DummyMiddleware.new(self)
-      end
-
-      map("/images") do
-        run DummyMiddleware.new(self)
       end
 
       map("/__fixtures") do
