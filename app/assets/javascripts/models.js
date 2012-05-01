@@ -243,17 +243,15 @@ chorus.collections = {
                 rows: options.rows
             });
 
-            if (options.sidx && options.sord) {
+            if (options.order) {
                 uri.addSearch({
-                    sidx: options.sidx,
-                    sord: options.sord
+                    order: options.order
                 });
             }
 
-            if (this.sortIndex && this.sortOrder) {
+            if (this.order) {
                 uri.addSearch({
-                    sidx: this.sortIndex,
-                    sord: this.sortOrder
+                    order: this.order
                 });
             }
 
@@ -310,16 +308,18 @@ chorus.collections = {
         })(),
 
         sortDesc: function(idx) {
+            // Not used. We only do ascending sort for now.
             this._sort(idx, "desc")
         },
 
         sortAsc: function(idx) {
+            // We only support ascending sort at the moment.
             this._sort(idx, "asc")
         },
 
         _sort: function(idx, order) {
-            this.sortIndex = idx
-            this.sortOrder = order
+            // order argument not used at this time. We only support ascending sort for now.
+            this.order = idx
         }
     })
 };

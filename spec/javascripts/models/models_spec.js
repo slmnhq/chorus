@@ -926,10 +926,10 @@ describe("chorus.models.Abstract", function() {
                 expect(this.collection.url({ page: 4 })).toBe("/bar/bar?page=4&rows=50");
             });
 
-            it("mixes in sortIndex and sortOrder from the collection", function() {
+            it("mixes in order from collection ascending", function() {
                 this.collection.sortAsc("foo");
-                expect(this.collection.url()).toBe("/bar/bar?page=1&rows=50&sidx=foo&sord=asc");
-            })
+                expect(this.collection.url()).toBe("/bar/bar?page=1&rows=50&order=foo")
+            });
 
             it("plays nicely with existing parameters in the url template", function() {
                 this.collection.urlTemplate = "bar/{{foo}}?why=not";

@@ -34,9 +34,8 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             expect(_.last(this.server.requests).url).toBe(this.workspace.members().url());
         });
 
-        it("sorts the members by last name", function() {
-            expect(_.last(this.server.requests).url).toContain("sidx=last_name");
-            expect(_.last(this.server.requests).url).toContain("sord=asc");
+        it("sorts the members by last name ascending", function() {
+            expect(_.last(this.server.requests).url).toContain("order=last_name");
         });
     });
 

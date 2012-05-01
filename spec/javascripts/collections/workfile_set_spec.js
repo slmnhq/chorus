@@ -23,7 +23,7 @@ describe("chorus.collections.WorkfileSet", function() {
                 this.collection.sortAsc("name")
             })
             it("it has correct Url", function() {
-                expect(this.collection.url()).toBe("/workspace/1234/workfile?fileType=sql&page=1&rows=50&sidx=name&sord=asc");
+                expect(this.collection.url()).toBe("/workspace/1234/workfile?fileType=sql&page=1&rows=50&order=name");
             })
         })
     });

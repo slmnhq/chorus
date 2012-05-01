@@ -12,7 +12,7 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
     describe("#render", function() {
         var options;
         beforeEach(function() {
-            options = { sidx: "objectName", sord: "asc", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" };
+            options = { order: "objectName", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" };
             dialog.launchModal();
         });
 

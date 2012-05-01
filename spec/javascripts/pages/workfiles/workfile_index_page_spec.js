@@ -52,9 +52,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             expect(this.page.workspaceId).toBe(this.workspace.get("id"));
         });
 
-        it("defaults to alphabetical sorting", function() {
-            expect(this.page.collection.sortIndex).toBe("fileName");
-            expect(this.page.collection.sortOrder).toBe("asc");
+        it("defaults to alphabetical sorting ascending", function() {
+            expect(this.page.collection.order).toBe("fileName");
         });
 
         it("defaults to all files", function() {
@@ -157,7 +156,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
         describe("sorting", function() {
             beforeEach(function() {
-                this.page.collection.sortOrder = this.page.collection.sortIndex = undefined;
+                this.page.collection.order = undefined;
                 spyOn(this.page.collection, "fetchAll");
             })
 
@@ -166,17 +165,15 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 expect(this.page.$("ul[data-event=sort] li[data-type=date]")).toExist();
             })
 
-            it("can sort the list alphabetically", function() {
+            it("can sort the list alphabetically ascending", function() {
                 this.page.$("li[data-type=alpha] a").click();
-                expect(this.page.collection.sortIndex).toBe("fileName")
-                expect(this.page.collection.sortOrder).toBe("asc")
+                expect(this.page.collection.order).toBe("fileName")
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
             })
 
-            it("can sort the list bu date", function() {
+            it("can sort the list bu date ascending", function() {
                 this.page.$("li[data-type=date] a").click();
-                expect(this.page.collection.sortIndex).toBe("lastUpdatedStamp")
-                expect(this.page.collection.sortOrder).toBe("asc")
+                expect(this.page.collection.order).toBe("lastUpdatedStamp")
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
             })
         })

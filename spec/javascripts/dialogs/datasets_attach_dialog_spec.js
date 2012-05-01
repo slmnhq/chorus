@@ -18,15 +18,15 @@ describe("chorus.dialogs.DatasetsAttach", function() {
     });
 
 
-    it("fetches the results sorted by objectName", function() {
+    it("fetches the results sorted by objectName ascending", function() {
         var url = this.server.lastFetch().url
         expect(url).toHaveUrlPath("/workspace/33/dataset");
-        expect(url).toContainQueryParams({ sidx: "objectName", sord: "asc" });
+        expect(url).toContainQueryParams({ order: "objectName"});
     });
 
     describe("when the fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.datasets, this.datasets.models, { sidx: "objectName", sord: "asc" });
+            this.server.completeFetchFor(this.datasets, this.datasets.models, { order: "objectName" });
         });
 
         it("only fetches one page initially", function() {

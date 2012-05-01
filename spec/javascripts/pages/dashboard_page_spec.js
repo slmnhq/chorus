@@ -69,9 +69,8 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.workspaceSet.attributes.showLatestComments).toBeTruthy();
         })
 
-        it("should sort the workspaceSet by name Descending", function() {
-            expect(this.page.workspaceSet.sortIndex).toBe("name");
-            expect(this.page.workspaceSet.sortOrder).toBe("asc");
+        it("should sort the workspaceSet by name ascending", function() {
+            expect(this.page.workspaceSet.order).toBe("name");
         })
 
         it("fetches only the chorus instances where the user has permissions", function() {
