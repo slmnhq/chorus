@@ -1,11 +1,14 @@
+# uncomment the 'host' key to enable ldap
+# in the development/test environments
+
 development:
-  host: bartol.sf.pivotallabs.com
+  # host: bartol.sf.pivotallabs.com
   dc: bartol
   auth_cn: users
   auth_attribute: uid
 
 test:
-  host: bartol.sf.pivotallabs.com
+  # host: bartol.sf.pivotallabs.com
   dc: bartol
   auth_cn: users
   auth_attribute: uid
