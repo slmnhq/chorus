@@ -61,9 +61,7 @@ module Gpdb
     end
 
     def connection_must_be_established
-      connection.verify_connection!
-    rescue ConnectionError => e
-      errors.add(:connection, e.message)
+      @connection ||= connection
     end
 
     def instance
@@ -108,14 +106,16 @@ module Gpdb
     private
 
     def connection
-      @connection ||= Gpdb::Connection.new(
-          :name => name,
+      @connection ||= ActiveRecord::Base.postgresql_connection(
           :host => host,
           :port => port,
           :database => database,
           :username => username,
           :password => password
       )
+    rescue PG::Error => e
+            errors.add(:connection, e.message)
+            @connection = nil
     end
   end
 end

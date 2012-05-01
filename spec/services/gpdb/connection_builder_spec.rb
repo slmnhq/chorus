@@ -25,8 +25,7 @@ describe Gpdb::ConnectionBuilder do
   end
 
   before do
-    connection = stub(:verify_connection! => true)
-    Gpdb::Connection.stub(:new) { connection }
+    ActiveRecord::Base.stub(:postgresql_connection).and_return(valid_output_attributes)
   end
 
   describe ".create!" do
@@ -53,9 +52,8 @@ describe Gpdb::ConnectionBuilder do
     end
 
     it "requires that a real connection to GPDB can be established" do
-      connection = double
-      connection.stub(:verify_connection!).and_raise(Gpdb::ConnectionError.new("connection error"))
-      Gpdb::Connection.should_receive(:new).with(valid_output_attributes) { connection }
+      ActiveRecord::Base.stub(:postgresql_connection).and_raise(PG::Error.new("connection error"))
+      lambda { Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner) }.should raise_error
 
       begin
         Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
@@ -146,10 +144,8 @@ describe Gpdb::ConnectionBuilder do
     end
 
     it "requires that a real connection to GPDB can be established" do
-      connection = double
-      connection.stub(:verify_connection!).and_raise(Gpdb::ConnectionError.new("connection error"))
-      Gpdb::Connection.should_receive(:new).with(updated_output_attributes) { connection }
-
+      ActiveRecord::Base.stub(:postgresql_connection).and_raise(PG::Error.new("connection error"))
+      lambda { Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner) }.should raise_error
       begin
         Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
       rescue ActiveRecord::RecordInvalid => e
