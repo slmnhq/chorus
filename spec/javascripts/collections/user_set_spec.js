@@ -4,6 +4,6 @@ describe("chorus.collections.UserSet", function() {
     });
 
     it("has the correct urlTemplate", function() {
-        expect(this.collection.urlTemplate).toBe("user/");
+        expect(this.collection.urlTemplate).toBe("users/");
     })
 });

@@ -2,8 +2,8 @@
    {
       "id":"10010",
       "username":"u1",
-      "firstName":"u1",
-      "lastName":"u1",
+      "first_name":"u1",
+      "last_name":"u1",
       "admin":false,
       "notes":null,
       "lastLogin":"2012-04-03 11:56:26",
@@ -14,8 +14,8 @@
    {
       "id":"10001",
       "username":"nonadmin",
-      "firstName":"Non",
-      "lastName":"admin",
+      "first_name":"Non",
+      "last_name":"admin",
       "admin":false,
       "notes":null,
       "lastLogin":"2012-04-02 16:59:12",
@@ -26,8 +26,8 @@
    {
       "id":"10000",
       "username":"partyman1333403592",
-      "firstName":"Joe",
-      "lastName":"Blow",
+      "first_name":"Joe",
+      "last_name":"Blow",
       "admin":false,
       "notes":null,
       "lastLogin":null,
@@ -38,8 +38,8 @@
    {
       "id":"InitialUser",
       "username":"edcadmin",
-      "firstName":"EDC",
-      "lastName":"Admin",
+      "first_name":"EDC",
+      "last_name":"Admin",
       "admin":true,
       "notes":null,
       "lastLogin":"2012-04-05 14:04:34",

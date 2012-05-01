@@ -7,7 +7,7 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
 
     setup:function () {
         this.collection = new chorus.collections.UserSet();
-        this.collection.sortAsc("lastName");
+        this.collection.sortAsc("last_name");
         this.collection.fetch();
 
         var buttons = [];
@@ -26,11 +26,11 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
                 sort:{
                     title:t("users.header.menu.sort.title"),
                     options:[
-                        {data:"firstName", text:t("users.header.menu.sort.first_name")},
-                        {data:"lastName", text:t("users.header.menu.sort.last_name")}
+                        {data:"first_name", text:t("users.header.menu.sort.first_name")},
+                        {data:"last_name", text:t("users.header.menu.sort.last_name")}
                     ],
                     event:"sort",
-                    chosen: "lastName"
+                    chosen: "last_name"
                 }
 
             },

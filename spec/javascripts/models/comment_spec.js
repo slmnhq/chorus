@@ -4,8 +4,8 @@ describe("chorus.models.Comment", function() {
             id: '41',
             author: {
                 id: "45",
-                firstName: "LeBron",
-                lastName: "James"
+                first_name: "LeBron",
+                last_name: "James"
             }
         });
     });
@@ -61,8 +61,8 @@ describe("chorus.models.Comment", function() {
         });
 
         it("returns a user with the right name", function() {
-            expect(this.author.get("firstName")).toBe("LeBron");
-            expect(this.author.get("lastName")).toBe("James");
+            expect(this.author.get("first_name")).toBe("LeBron");
+            expect(this.author.get("last_name")).toBe("James");
         });
 
         it("memoizes", function() {

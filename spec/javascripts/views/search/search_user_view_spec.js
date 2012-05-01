@@ -5,7 +5,7 @@ describe("chorus.views.SearchUser", function() {
         this.model.set({highlightedAttributes: {
             title: '<em>test</em>er',
             emailAddress: '<em>test</em>@example.com',
-            firstName: "<em>John</em>",
+            first_name: "<em>John</em>",
             ou: "<em>John</em>",
             content: "<em>Here is some content</em>",
             name: "<em>foo</em>"
@@ -54,10 +54,10 @@ describe("chorus.views.SearchUser", function() {
                     "comments": [],
                     "emailAddress": "test@emc.com",
                     "entityType": "user",
-                    "firstName": "John",
+                    "first_name": "John",
                     "id": "10023",
                     "isDeleted": "false",
-                    "lastName": "Doe",
+                    "last_name": "Doe",
                     "lastUpdatedStamp": "2012-03-01 11:07:13",
                     "name": "test",
                     "title": "affd",
@@ -68,7 +68,7 @@ describe("chorus.views.SearchUser", function() {
                         "name": "<em>test</em>",
                         "ou": "<em>Test</em>",
                         "title": "<em>affd</em>",
-                        "firstName": "<em>affd</em>",
+                        "first_name": "<em>affd</em>",
                         "emailAddress": "<em>test</em>@emc.com",
                         "content": "<em>Hello</em>"
                     }
@@ -119,10 +119,10 @@ describe("chorus.views.SearchUser", function() {
                     "comments": [],
                     "emailAddress": "test@emc.com",
                     "entityType": "user",
-                    "firstName": "John",
+                    "first_name": "John",
                     "id": "10023",
                     "isDeleted": "false",
-                    "lastName": "Doe",
+                    "last_name": "Doe",
                     "lastUpdatedStamp": "2012-03-01 11:07:13",
                     "name": "test",
                     "content": "",

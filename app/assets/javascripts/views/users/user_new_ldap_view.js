@@ -48,8 +48,8 @@
 
         ldapUsersFetched: function() {
             var model = this.collection.first();
-            this.$("input[name='firstName']").val(model.get("firstName"));
-            this.$("input[name='lastName']").val(model.get("lastName"));
+            this.$("input[name='first_name']").val(model.get("first_name"));
+            this.$("input[name='last_name']").val(model.get("last_name"));
             this.$("input[name='emailAddress']").val(model.get("emailAddress"));
             this.$("input[name='title']").val(model.get("title"));
             this.$("input[name='ou']").val(model.get("ou"));

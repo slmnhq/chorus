@@ -7,9 +7,9 @@ describe("chorus.views.UserList", function() {
         describe("when the collection has loaded", function() {
             beforeEach(function() {
                 this.collection = newFixtures.userSet([
-                    {id: 10000, firstName: "a", lastName: "a", admin: false},
-                    {id: 10001, firstName: "a", lastName: "b", admin: true},
-                    {id: 10002, firstName: "a", lastName: "b", admin: false}
+                    {id: 10000, first_name: "a", last_name: "a", admin: false},
+                    {id: 10001, first_name: "a", last_name: "b", admin: true},
+                    {id: 10002, first_name: "a", last_name: "b", admin: false}
                 ]);
                 this.collection.loaded = true;
                 this.view = new chorus.views.UserList({collection: this.collection});
@@ -39,7 +39,7 @@ describe("chorus.views.UserList", function() {
 
                 _.each(this.view.$("a.name span"), function(el, index) {
                     var model = self.collection.at(index);
-                    expect($(el).attr("title")).toBe([model.get("firstName"), model.get("lastName")].join(' '));
+                    expect($(el).attr("title")).toBe([model.get("first_name"), model.get("last_name")].join(' '));
                 })
             })
 

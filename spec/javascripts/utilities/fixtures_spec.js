@@ -10,8 +10,8 @@ describe("newFixtures", function() {
             model = newFixtures.test.withOverrides();
             var fixtureScript = $("#fixtures [data-fixture-path='test/withOverrides']");
             var fixtureJson = JSON.parse(fixtureScript.html());
-            expect(model.get("firstName")).toBeDefined();
-            expect(model.get("firstName")).toBe(fixtureJson.firstName);
+            expect(model.get("first_name")).toBeDefined();
+            expect(model.get("first_name")).toBe(fixtureJson.first_name);
         });
 
         context("when the nested definition overrides the parent definition", function() {

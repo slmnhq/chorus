@@ -27,8 +27,8 @@ describe("chorus.models.InstanceAccount", function() {
     describe("#user", function() {
         beforeEach(function() {
             this.model.set({"user": {
-                firstName: "Ricardo",
-                lastName: "Henderson",
+                first_name: "Ricardo",
+                last_name: "Henderson",
                 id: "45",
                 userId: "45"
             }})
@@ -39,8 +39,8 @@ describe("chorus.models.InstanceAccount", function() {
         });
 
         it("sets the name and id fields based on the account's information", function() {
-            expect(this.model.user().get("firstName")).toBe("Ricardo");
-            expect(this.model.user().get("lastName")).toBe("Henderson");
+            expect(this.model.user().get("first_name")).toBe("Ricardo");
+            expect(this.model.user().get("last_name")).toBe("Henderson");
             expect(this.model.user().get("id")).toBe("45");
             expect(this.model.user().get("userId")).toBe("45");
         });

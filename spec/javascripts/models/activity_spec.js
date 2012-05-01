@@ -463,7 +463,7 @@ describe("chorus.models.Activity", function() {
             var commentsJson = this.model.get("comments");
             expect(this.comments.models[0].get("text")).toBe(commentsJson[0].text);
             expect(this.comments.models[0].get("timestamp")).toBe(commentsJson[0].timestamp);
-            expect(this.comments.models[0].author().get("firstName")).toBe(commentsJson[0].author.firstName);
+            expect(this.comments.models[0].author().get("first_name")).toBe(commentsJson[0].author.first_name);
         });
 
         it("sets the entityType and entityId as attributes of the CommentSet", function() {

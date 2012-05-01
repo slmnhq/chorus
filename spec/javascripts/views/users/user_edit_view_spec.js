@@ -33,8 +33,8 @@ describe("chorus.views.userEdit", function() {
                 });
 
                 it("initializes the form from the model", function() {
-                    expect(this.view.$("input[name=firstName]").val()).toBe(this.user.get("firstName"));
-                    expect(this.view.$("input[name=lastName]").val()).toBe(this.user.get("lastName"));
+                    expect(this.view.$("input[name=first_name]").val()).toBe(this.user.get("first_name"));
+                    expect(this.view.$("input[name=last_name]").val()).toBe(this.user.get("last_name"));
                     expect(this.view.$("span[name=username]").text()).toBe(this.user.get("username"));
                     expect(this.view.$("input[name=emailAddress]").val()).toBe(this.user.get("emailAddress"));
                     expect(this.view.$("input[name=title]").val()).toBe('');
@@ -49,7 +49,7 @@ describe("chorus.views.userEdit", function() {
 
                 context("submitting the form", function() {
                     beforeEach(function() {
-                        this.view.$("input[name=firstName]").val("Frankie");
+                        this.view.$("input[name=first_name]").val("Frankie");
                         this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com");
                         this.view.$("input[name=ou]").val("awesomeness dept");
                         this.view.$("textarea[name=notes]").text("Here are some notes\n more than one line")
@@ -62,8 +62,8 @@ describe("chorus.views.userEdit", function() {
                         });
 
                         it("modify the user with the form attributes", function() {
-                            expect(this.user.attributes["firstName"]).toBe("Frankie");
-                            expect(this.user.attributes["lastName"]).toBe(this.user.get("lastName"));
+                            expect(this.user.attributes["first_name"]).toBe("Frankie");
+                            expect(this.user.attributes["last_name"]).toBe(this.user.get("last_name"));
                             expect(this.user.attributes["username"]).toBe(this.user.get("username"));
                             expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
                             expect(this.user.attributes["ou"]).toBe("awesomeness dept");
@@ -109,7 +109,7 @@ describe("chorus.views.userEdit", function() {
                         });
 
                         it("retains the data already entered", function() {
-                            expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
+                            expect(this.view.$("input[name=first_name]").val()).toBe("Frankie");
                         });
                     });
 
@@ -124,7 +124,7 @@ describe("chorus.views.userEdit", function() {
                         });
 
                         it("retains the data already entered", function() {
-                            expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
+                            expect(this.view.$("input[name=first_name]").val()).toBe("Frankie");
                         });
 
                         it("does not change the local model", function() {
@@ -134,12 +134,12 @@ describe("chorus.views.userEdit", function() {
 
                     context("the form has extra whitespace around an input", function() {
                         beforeEach(function() {
-                            this.view.$("input[name=firstName]").val("     spaces     ");
+                            this.view.$("input[name=first_name]").val("     spaces     ");
                             this.view.$("form").submit();
                         });
 
                         it("trims the whitespace before submission", function() {
-                            expect(this.user.attributes["firstName"]).toBe("spaces");
+                            expect(this.user.attributes["first_name"]).toBe("spaces");
                         });
                     });
 
@@ -200,8 +200,8 @@ describe("chorus.views.userEdit", function() {
                 })
                 it("gives you permission to edit the user", function() {
                     expect(this.view.$(".aint_admin")).not.toExist();
-                    expect(this.view.$("input[name=firstName]").val()).toBe(this.user.get("firstName"));
-                    expect(this.view.$("input[name=lastName]").val()).toBe(this.user.get("lastName"));
+                    expect(this.view.$("input[name=first_name]").val()).toBe(this.user.get("first_name"));
+                    expect(this.view.$("input[name=last_name]").val()).toBe(this.user.get("last_name"));
                     expect(this.view.$("span[name=username]").text()).toBe(this.user.get("username"));
                 })
             })

@@ -20,8 +20,8 @@ describe("chorus.views.UserNewLdap", function() {
 
             describe("#fieldValues", function() {
                 beforeEach(function() {
-                    this.view.$("input[name=firstName]").val("Frankie");
-                    this.view.$("input[name=lastName]").val("Knuckles");
+                    this.view.$("input[name=first_name]").val("Frankie");
+                    this.view.$("input[name=last_name]").val("Knuckles");
                     this.view.$("input[name=username]").val("frankie2002");
                     this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com");
                     this.view.$("input[name=ou]").val("awesomeness dept");
@@ -32,8 +32,8 @@ describe("chorus.views.UserNewLdap", function() {
 
                 it("includes the values of every input in the form", function() {
                     expect(this.view.fieldValues()).toEqual({
-                        firstName: "Frankie",
-                        lastName: "Knuckles",
+                        first_name: "Frankie",
+                        last_name: "Knuckles",
                         username: "frankie2002",
                         emailAddress: "frankie_knuckles@nyclol.com",
                         ou: "awesomeness dept",
@@ -58,8 +58,8 @@ describe("chorus.views.UserNewLdap", function() {
 
                 context("when there is whitespace surrounding an input value", function() {
                     it("trims the whitespace before submission", function() {
-                        this.view.$("input[name=firstName]").val("     spaces     ");
-                        expect(this.view.fieldValues().firstName).toBe("spaces");
+                        this.view.$("input[name=first_name]").val("     spaces     ");
+                        expect(this.view.fieldValues().first_name).toBe("spaces");
                     });
                 });
 
@@ -97,8 +97,8 @@ describe("chorus.views.UserNewLdap", function() {
                         this.server.completeFetchFor(this.ldapUsers, [
                             newFixtures.user({
                                 username: "john_henry",
-                                firstName: "John",
-                                lastName: "Henry",
+                                first_name: "John",
+                                last_name: "Henry",
                                 emailAddress: "jh@hammer.edu",
                                 title: "Hammerer",
                                 ou: "whoop-ass"
@@ -107,8 +107,8 @@ describe("chorus.views.UserNewLdap", function() {
                     });
 
                     it("fills in the fields from the LDAP user", function() {
-                        expect(this.view.$("input[name='firstName']").val()).toBe("John");
-                        expect(this.view.$("input[name='lastName']").val()).toBe("Henry");
+                        expect(this.view.$("input[name='first_name']").val()).toBe("John");
+                        expect(this.view.$("input[name='last_name']").val()).toBe("Henry");
                         expect(this.view.$("input[name='emailAddress']").val()).toBe("jh@hammer.edu");
                         expect(this.view.$("input[name='title']").val()).toBe("Hammerer");
                         expect(this.view.$("input[name='ou']").val()).toBe("whoop-ass");
@@ -128,8 +128,8 @@ describe("chorus.views.UserNewLdap", function() {
 
             context("submitting the form", function() {
                 beforeEach(function() {
-                    this.view.$("input[name=firstName]").val("Frankie");
-                    this.view.$("input[name=lastName]").val("Knuckles");
+                    this.view.$("input[name=first_name]").val("Frankie");
+                    this.view.$("input[name=last_name]").val("Knuckles");
                     this.view.$("input[name=username]").val("frankie2002");
                     this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com");
                     this.view.$("input[name=ou]").val("awesomeness dept");
@@ -157,8 +157,8 @@ describe("chorus.views.UserNewLdap", function() {
                         it("creates a user with the form's attributes", function() {
                             expect(this.view.fieldValues).toHaveBeenCalled();
 
-                            expect(this.user.attributes["firstName"]).toBe("Frankie");
-                            expect(this.user.attributes["lastName"]).toBe("Knuckles");
+                            expect(this.user.attributes["first_name"]).toBe("Frankie");
+                            expect(this.user.attributes["last_name"]).toBe("Knuckles");
                             expect(this.user.attributes["username"]).toBe("frankie2002");
                             expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
                             expect(this.user.attributes["ou"]).toBe("awesomeness dept");
@@ -191,8 +191,8 @@ describe("chorus.views.UserNewLdap", function() {
                             })
 
                             it("retains the data already entered", function() {
-                                expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
-                                expect(this.view.$("input[name=lastName]").val()).toBe("Knuckles");
+                                expect(this.view.$("input[name=first_name]").val()).toBe("Frankie");
+                                expect(this.view.$("input[name=last_name]").val()).toBe("Knuckles");
                                 expect(this.view.$("input[name=username]").val()).toBe("frankie2002");
                                 expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
                                 expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");

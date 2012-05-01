@@ -15,7 +15,7 @@ chorus.collections.InstanceAccountSet = chorus.collections.Base.extend({
     },
 
     comparator:function (account) {
-        var name = account.user() && (account.user().get("lastName") + account.user().get("firstName"));
+        var name = account.user() && (account.user().get("last_name") + account.user().get("first_name"));
         name = name ? name.toLowerCase() : '\uFFFF'  //'FFFF' should be the last possible unicode character
         return name;
     }

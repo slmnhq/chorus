@@ -48,7 +48,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
         this.bindings.add(this.pageModel, "saved", this.saved);
         this.bindings.add(this.pageModel, "validationFailed", this.saveFailed);
         this.bindings.add(this.pageModel, "saveFailed", this.saveFailed);
-        this.model.members().sortAsc("lastName");
+        this.model.members().sortAsc("last_name");
         this.model.members().fetch();
 
         $(document).one('reveal.facebox', _.bind(this.setupSelects, this));

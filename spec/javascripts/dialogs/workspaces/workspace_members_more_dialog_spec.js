@@ -8,7 +8,7 @@ describe("chorus.dialogs.WorkspaceMembersMore", function() {
             members.add(newFixtures.user());
         });
         var self = this
-        self.choice = "lastName"
+        self.choice = "last_name"
         sortedMembers = _.sortBy(members.models, function(member) {
             return member.get(self.choice);
         });
@@ -51,9 +51,9 @@ describe("chorus.dialogs.WorkspaceMembersMore", function() {
             })
 
             it("sorts", function() {
-                members.models[20].set({firstName : "AAAAA"});
+                members.models[20].set({first_name : "AAAAA"});
                 expect(dialog.$('.name').eq(0).text()).not.toContain("AAAAA")
-                dialog.$(".menu li[data-type=firstName] a").click()
+                dialog.$(".menu li[data-type=first_name] a").click()
                 expect(dialog.$('.name').eq(0).text()).toContain("AAAAA")
             })
         })

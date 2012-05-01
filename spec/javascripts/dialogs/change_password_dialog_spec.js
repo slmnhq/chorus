@@ -2,8 +2,8 @@ describe("chorus.dialogs.ChangePassword", function() {
     beforeEach(function() {
         this.user = new chorus.models.User({
             username: "john",
-            firstName: "John",
-            lastName: "Doe",
+            first_name: "John",
+            last_name: "Doe",
             emailAddress: "jdoe@emc.com",
             id: 12
         });

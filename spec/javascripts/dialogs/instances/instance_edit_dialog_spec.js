@@ -152,8 +152,8 @@ describe("chorus.dialogs.InstanceEdit", function() {
             it("fills in the users on a successful accounts fetch", function() {
                 spyOn(this.dialog.users, "add").andCallThrough();
 
-                var user1 = { id: '1', firstName: 'barnie', lastName: 'rubble' }
-                var user2 = { id: '2', firstName: 'fred', lastName: 'flinstone' }
+                var user1 = { id: '1', first_name: 'barnie', last_name: 'rubble' }
+                var user2 = { id: '2', first_name: 'fred', last_name: 'flinstone' }
 
                 var instanceAccounts = [
                     fixtures.instanceAccount({user: user1}),
@@ -165,13 +165,13 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
                 expect(this.dialog.users.models[0]).toBeA(chorus.models.User);
                 expect(this.dialog.users.models[0].get("id")).toBe("2");
-                expect(this.dialog.users.models[0].get("firstName")).toBe("fred");
-                expect(this.dialog.users.models[0].get("lastName")).toBe("flinstone");
+                expect(this.dialog.users.models[0].get("first_name")).toBe("fred");
+                expect(this.dialog.users.models[0].get("last_name")).toBe("flinstone");
 
                 expect(this.dialog.users.models[1]).toBeA(chorus.models.User);
                 expect(this.dialog.users.models[1].get("id")).toBe("1");
-                expect(this.dialog.users.models[1].get("firstName")).toBe("barnie");
-                expect(this.dialog.users.models[1].get("lastName")).toBe("rubble");
+                expect(this.dialog.users.models[1].get("first_name")).toBe("barnie");
+                expect(this.dialog.users.models[1].get("last_name")).toBe("rubble");
             });
         });
     });
@@ -179,9 +179,9 @@ describe("chorus.dialogs.InstanceEdit", function() {
     describe("saving", function() {
         beforeEach(function() {
             this.dialog.model.set({ provisionType: "register"});
-            this.user1 = new chorus.models.User({ id: '1', username: "niels", firstName: "ni", lastName: "slew"});
-            this.user2 = new chorus.models.User({ id: '2', username: "ludwig", firstName: "lu", lastName: "wig" });
-            this.user3 = new chorus.models.User({ id: '3', username: "isaac", firstName: "is", lastName: "ac" });
+            this.user1 = new chorus.models.User({ id: '1', username: "niels", first_name: "ni", last_name: "slew"});
+            this.user2 = new chorus.models.User({ id: '2', username: "ludwig", first_name: "lu", last_name: "wig" });
+            this.user3 = new chorus.models.User({ id: '3', username: "isaac", first_name: "is", last_name: "ac" });
             this.dialog.users.add([ this.user1, this.user2, this.user3 ]);
             this.dialog.render();
 

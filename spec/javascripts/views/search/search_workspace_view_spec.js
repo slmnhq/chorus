@@ -10,9 +10,9 @@ describe("chorus.views.SearchWorkspace", function() {
                 name: "ws",
                 content: "ws <i>other text</i>",
                 owner: {
-                    firstName: "EDC",
+                    first_name: "EDC",
                     id: "InitialUser",
-                    lastName: "Admin"
+                    last_name: "Admin"
                 },
                 comments: [
                     {
@@ -24,7 +24,7 @@ describe("chorus.views.SearchWorkspace", function() {
                         "workspaceId": "10000",
                         "isInsight": false,
                         "highlightedAttributes": {"content": ["good <em>version<\/em>"]},
-                        "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}
+                        "owner": {"id": "InitialUser", "last_name": "Admin", "first_name": "EDC"}
                     }
                 ],
                 highlightedAttributes: {
@@ -71,9 +71,9 @@ describe("chorus.views.SearchWorkspace", function() {
                     name: "ws",
                     content: "<i>that is not highlighted</i>",
                     owner: {
-                        firstName: "EDC",
+                        first_name: "EDC",
                         id: "InitialUser",
-                        lastName: "Admin"
+                        last_name: "Admin"
                     },
                     comments: [
                         {
@@ -85,7 +85,7 @@ describe("chorus.views.SearchWorkspace", function() {
                             "workspaceId": "10000",
                             "isInsight": false,
                             "highlightedAttributes": {"content": ["good <em>version<\/em>"]},
-                            "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}
+                            "owner": {"id": "InitialUser", "last_name": "Admin", "first_name": "EDC"}
                         }
                     ],
                     highlightedAttributes: {

@@ -1,8 +1,8 @@
 describe("chorus.pages.Base", function() {
     beforeEach(function() {
         chorus.user = new chorus.models.User({
-            "firstName": "Daniel",
-            "lastName": "Burkes",
+            "first_name": "Daniel",
+            "last_name": "Burkes",
             "fullName": "Daniel Francis Burkes"
         });
 

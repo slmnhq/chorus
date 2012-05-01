@@ -75,11 +75,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 describe("when the user fetch completes", function() {
                     beforeEach(function() {
                         this.dialog.users.reset([
-                            newFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
+                            newFixtures.user({ first_name: "jim", last_name: "aardvark", id: '222' }),
                             this.instance.owner(),
-                            newFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
-                            newFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
-                            newFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
+                            newFixtures.user({ first_name: "harold", last_name: "four", id: '444' }),
+                            newFixtures.user({ first_name: "suzie", last_name: "three", id: '333' }),
+                            newFixtures.user({ first_name: "bob", last_name: "zzap", id: '111' })
                         ]);
                     });
 
@@ -210,7 +210,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
     context("when the instance has individual accounts", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll').andCallThrough();
-            this.owner = newFixtures.user({firstName: 'EDC', lastName: 'Admin'});
+            this.owner = newFixtures.user({first_name: 'EDC', last_name: 'Admin'});
             this.instance = newFixtures.instance.greenplum({
                 ownerId: this.owner.get('id'),
                 owner: this.owner.get('username'),
@@ -218,8 +218,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
             this.accounts = this.instance.accounts();
             this.accounts.add([
-                fixtures.instanceAccount({ id: '1', user: { firstName: "bob", lastName: "zzap", id: '111' } }),
-                fixtures.instanceAccount({ id: '2', user: { firstName: "jim", lastName: "aardvark", id: '222' } }),
+                fixtures.instanceAccount({ id: '1', user: { first_name: "bob", last_name: "zzap", id: '111' } }),
+                fixtures.instanceAccount({ id: '2', user: { first_name: "jim", last_name: "aardvark", id: '222' } }),
                 fixtures.instanceAccount({ id: '3', user: this.owner})
             ]);
             var launchElement = $("<a/>").data("instance", this.instance);
@@ -454,11 +454,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
         describe("when the chorus users are fetched", function() {
             beforeEach(function() {
                 this.dialog.users.reset([
-                    newFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
+                    newFixtures.user({ first_name: "jim", last_name: "aardvark", id: '222' }),
                     this.instance.owner(),
-                    newFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
-                    newFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
-                    newFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
+                    newFixtures.user({ first_name: "harold", last_name: "four", id: '444' }),
+                    newFixtures.user({ first_name: "suzie", last_name: "three", id: '333' }),
+                    newFixtures.user({ first_name: "bob", last_name: "zzap", id: '111' })
                 ]);
             });
 
@@ -666,8 +666,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
             describe("when the fetch for all chorus users completes", function() {
                 beforeEach(function() {
                     this.dialog.users.reset([
-                        newFixtures.user({ firstName: "anna", lastName: "cannon" }),
-                        newFixtures.user({ firstName: "ben", lastName: "maulden" })
+                        newFixtures.user({ first_name: "anna", last_name: "cannon" }),
+                        newFixtures.user({ first_name: "ben", last_name: "maulden" })
                     ]);
                 });
 

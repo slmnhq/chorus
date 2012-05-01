@@ -59,7 +59,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should display the correct name and type for user", function() {
             var user = this.result.get("typeAhead").docs[4];
             var result = this.view.$("li.result:eq(3)");
-            expect(result.find(".name").html()).toBe(user.highlightedAttributes.firstName[0] + ' ' + user.highlightedAttributes.lastName[0]);
+            expect(result.find(".name").html()).toBe(user.highlightedAttributes.first_name[0] + ' ' + user.highlightedAttributes.last_name[0]);
             expect(result.find(".name").attr("href")).toBe((new chorus.models.User(user)).showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.user");
         });

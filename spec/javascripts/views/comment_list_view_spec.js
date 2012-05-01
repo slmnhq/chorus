@@ -5,8 +5,8 @@ describe("chorus.views.CommentList", function() {
             text : "Yes we can",
             isInsight: true,
             author : {
-                firstName : "Barack",
-                lastName : "Obama",
+                first_name : "Barack",
+                last_name : "Obama",
                 id : "45"
             }
         });

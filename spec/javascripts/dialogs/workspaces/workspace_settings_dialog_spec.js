@@ -13,9 +13,9 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
         this.workspace.unset("sandboxInfo");
 
         this.workspace.members().add([
-            new chorus.models.User({ id: 11, firstName: "Mikey", lastName: "B" }),
-            new chorus.models.User({ id: 12, firstName: "Deborah", lastName: "D" }),
-            new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
+            new chorus.models.User({ id: 11, first_name: "Mikey", last_name: "B" }),
+            new chorus.models.User({ id: 12, first_name: "Deborah", last_name: "D" }),
+            new chorus.models.User({ id: 13, first_name: "Richard", last_name: "G" })
         ]);
 
         this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
@@ -35,7 +35,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
         });
 
         it("sorts the members by last name", function() {
-            expect(_.last(this.server.requests).url).toContain("sidx=lastName");
+            expect(_.last(this.server.requests).url).toContain("sidx=last_name");
             expect(_.last(this.server.requests).url).toContain("sord=asc");
         });
     });

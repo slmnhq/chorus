@@ -11,16 +11,16 @@ chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
                 sort:{
                     title:t("users.header.menu.sort.title"),
                     options:[
-                        {data:"firstName", text:t("users.header.menu.sort.first_name")},
-                        {data:"lastName", text:t("users.header.menu.sort.last_name")}
+                        {data:"first_name", text:t("users.header.menu.sort.first_name")},
+                        {data:"last_name", text:t("users.header.menu.sort.last_name")}
                     ],
                     event:"sort",
-                    chosen: "lastName"
+                    chosen: "last_name"
                 }
             }
         });
 
-        this.choice = "lastName";
+        this.choice = "last_name";
         this.sortMenu.bind("choice:sort", function (choice) {
             this.choice = choice;
             this.render();

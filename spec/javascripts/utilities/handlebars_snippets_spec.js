@@ -224,7 +224,7 @@ describe("handlebars", function() {
 
         describe("displayNameFromPerson", function() {
             it("renders the fullname", function() {
-                expect(Handlebars.helpers.displayNameFromPerson({firstName: "EDC", lastName: "Admin"})).toBe("EDC Admin");
+                expect(Handlebars.helpers.displayNameFromPerson({first_name: "EDC", last_name: "Admin"})).toBe("EDC Admin");
             })
         })
 

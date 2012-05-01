@@ -969,25 +969,25 @@ describe("chorus.models.Abstract", function() {
 
         describe("#findWhere", function() {
             beforeEach(function() {
-                this.m1 = newFixtures.user({ firstName: "john", lastName: "coltrane", id: "5", admin: false });
-                this.m2 = newFixtures.user({ firstName: "ravi", lastName: "coltrane", id: "6", admin: true });
-                this.m3 = newFixtures.user({ firstName: "john", lastName: "medeski", id: "7", admin: true  });
+                this.m1 = newFixtures.user({ first_name: "john", last_name: "coltrane", id: "5", admin: false });
+                this.m2 = newFixtures.user({ first_name: "ravi", last_name: "coltrane", id: "6", admin: true });
+                this.m3 = newFixtures.user({ first_name: "john", last_name: "medeski", id: "7", admin: true  });
                 this.collection.reset([ this.m1, this.m2, this.m3 ]);
             });
 
             context("when a model with the given attributes exists in the collection", function() {
                 it("returns that model", function() {
-                    expect(this.collection.findWhere({ firstName: "john", lastName: "coltrane" })).toBe(this.m1);
-                    expect(this.collection.findWhere({ firstName: "john", admin: false })).toBe(this.m1);
-                    expect(this.collection.findWhere({ lastName: "coltrane", admin: true })).toBe(this.m2);
-                    expect(this.collection.findWhere({ firstName: "john", admin: true })).toBe(this.m3);
-                    expect(this.collection.findWhere({ lastName: "medeski" })).toBe(this.m3);
+                    expect(this.collection.findWhere({ first_name: "john", last_name: "coltrane" })).toBe(this.m1);
+                    expect(this.collection.findWhere({ first_name: "john", admin: false })).toBe(this.m1);
+                    expect(this.collection.findWhere({ last_name: "coltrane", admin: true })).toBe(this.m2);
+                    expect(this.collection.findWhere({ first_name: "john", admin: true })).toBe(this.m3);
+                    expect(this.collection.findWhere({ last_name: "medeski" })).toBe(this.m3);
                 });
             });
 
             context("when no model with the given attributes exists in the collection", function() {
                 it("returns undefined", function() {
-                    expect(this.collection.findWhere({ firstName: "ravi", lastName: "medeski" })).toBeUndefined();
+                    expect(this.collection.findWhere({ first_name: "ravi", last_name: "medeski" })).toBeUndefined();
                 });
             });
         });

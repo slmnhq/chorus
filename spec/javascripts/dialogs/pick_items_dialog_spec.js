@@ -5,9 +5,9 @@ describe("chorus.dialogs.PickItems", function() {
         spyOn(chorus.dialogs.PickItems.prototype, "submit").andCallThrough();
         spyOn(chorus.dialogs.PickItems.prototype, "selectionFinished").andCallThrough();
 
-        this.user1 = newFixtures.user({ firstName: "A", lastName: "User" });
-        this.user2 = newFixtures.user({ firstName: "B", lastName: "User" });
-        this.user3 = newFixtures.user({ firstName: "C", lastName: "User" });
+        this.user1 = newFixtures.user({ first_name: "A", last_name: "User" });
+        this.user2 = newFixtures.user({ first_name: "B", last_name: "User" });
+        this.user3 = newFixtures.user({ first_name: "C", last_name: "User" });
 
         this.users = new chorus.collections.UserSet([this.user1, this.user2, this.user3]);
         var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "User" });

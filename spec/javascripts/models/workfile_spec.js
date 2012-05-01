@@ -6,8 +6,8 @@ describe("chorus.models.Workfile", function() {
     describe("#modifier", function() {
         it("returns a partially constructed user, based on the workfile's modifier attribute", function() {
             var modifier = this.model.modifier();
-            expect(modifier.get("firstName")).toBe(this.model.get("modifiedBy").firstName);
-            expect(modifier.get("lastName")).toBe(this.model.get("modifiedBy").lastName);
+            expect(modifier.get("first_name")).toBe(this.model.get("modifiedBy").first_name);
+            expect(modifier.get("last_name")).toBe(this.model.get("modifiedBy").last_name);
             expect(modifier.get("id")).toBe(this.model.get("modifiedBy").id);
         });
     });
@@ -186,8 +186,8 @@ describe("chorus.models.Workfile", function() {
         it("has the right creator", function() {
             var creator = this.comment.author()
             expect(creator.get("id")).toBe(this.lastCommentJson.author.id);
-            expect(creator.get("firstName")).toBe(this.lastCommentJson.author.firstName);
-            expect(creator.get("lastName")).toBe(this.lastCommentJson.author.lastName);
+            expect(creator.get("first_name")).toBe(this.lastCommentJson.author.first_name);
+            expect(creator.get("last_name")).toBe(this.lastCommentJson.author.last_name);
         });
 
         context("when the workfile doesn't have any comments", function() {

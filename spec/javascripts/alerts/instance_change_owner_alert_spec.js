@@ -1,6 +1,6 @@
 describe("chorus.alerts.InstanceChangeOwner", function() {
     beforeEach(function() {
-        this.user = newFixtures.user({ firstName: "Boxiong", lastName: "Ding" });
+        this.user = newFixtures.user({ first_name: "Boxiong", last_name: "Ding" });
         this.alert = new chorus.alerts.InstanceChangeOwner({ model: this.user });
         this.alert.render();
     })

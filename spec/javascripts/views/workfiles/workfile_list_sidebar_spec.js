@@ -39,7 +39,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
                 });
 
                 it("displays the name of the person who updated the workfile", function() {
-                    var updaterName = this.workfile.get("modifiedBy").firstName + " " + this.workfile.get("modifiedBy").lastName;
+                    var updaterName = this.workfile.get("modifiedBy").first_name + " " + this.workfile.get("modifiedBy").last_name;
                     expect(this.view.$(".updated_by").text().trim()).toBe(updaterName);
                 });
 

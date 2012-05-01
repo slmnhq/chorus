@@ -16,8 +16,8 @@
     },
     "owner": {
         "id": "InitialUser",
-        "lastName": "Admin",
-        "firstName": "EDC"
+        "last_name": "Admin",
+        "first_name": "EDC"
     },
     "workspace": {
         "id": "10001",

@@ -1,8 +1,8 @@
 {
    "id":"10001",
    "username":"nonadmin",
-   "firstName":"Non",
-   "lastName":"admin",
+   "first_name":"Non",
+   "last_name":"admin",
    "emailAddress":"non@admin.co",
    "title":null,
    "ou":null,

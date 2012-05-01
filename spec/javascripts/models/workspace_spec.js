@@ -120,8 +120,8 @@ describe("chorus.models.Workspace", function() {
             it("has the attributes", function() {
                 expect(this.model.owner().get("id")).toBe("47");
                 expect(this.model.owner().get("username")).toBe("jhenry");
-                expect(this.model.owner().get("firstName")).toBe("John");
-                expect(this.model.owner().get("lastName")).toBe("Henry");
+                expect(this.model.owner().get("first_name")).toBe("John");
+                expect(this.model.owner().get("last_name")).toBe("Henry");
             });
 
             it("doesn't automatically fetch the User", function() {

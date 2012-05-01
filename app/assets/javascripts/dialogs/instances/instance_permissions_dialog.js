@@ -26,7 +26,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
         this.users = new chorus.collections.UserSet();
         this.bindings.add(this.users, "reset", this.populateSelect);
-        this.users.sortAsc("firstName");
+        this.users.sortAsc("first_name");
         this.users.fetchAll();
         this.collection = this.instance.accounts();
 

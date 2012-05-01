@@ -53,9 +53,9 @@
         "isInsight": false,
         "author": {
             "id": "InitialUser",
-            "lastName": "Admin",
+            "last_name": "Admin",
             "isDeleted": false,
-            "firstName": "EDC"
+            "first_name": "EDC"
         },
         "promotionTime": null,
         "promotionActioner": null,

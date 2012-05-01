@@ -10,7 +10,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
 
     makeModel: function() {
         this.collection = new chorus.collections.UserSet();
-        this.collection.sortAsc("firstName");
+        this.collection.sortAsc("first_name");
         this.collection.fetchAll();
 
         this.selectedUsers = new chorus.collections.UserSet();
@@ -54,7 +54,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         this.$("select").append($("<option value=''>Select a user</option>"));
 
         this.collection && this.collection.models.sort(function(a, b) {
-            return naturalSort(a.get("firstName").toLowerCase(), b.get("firstName").toLowerCase());
+            return naturalSort(a.get("first_name").toLowerCase(), b.get("first_name").toLowerCase());
         });
 
         _.each(this.collection.models, function(user) {
