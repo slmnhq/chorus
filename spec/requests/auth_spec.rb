@@ -5,7 +5,7 @@ describe "resources which require authentication" do
 
   context "after the user has logged in" do
     before do
-      post "/sessions", :username => "some_user", :password => "secret"
+      post "/sessions", :session => { :username => "some_user", :password => "secret" }
     end
 
     it "shows the resource" do
