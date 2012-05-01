@@ -16,7 +16,7 @@ describe "gpdb instances", :network => true do
 
   context "after the user has logged in" do
     before do
-      post "/sessions", :username => "some_user", :password => "secret"
+      post "/sessions", :session => { :username => "some_user", :password => "secret" }
     end
 
     it "can be created" do

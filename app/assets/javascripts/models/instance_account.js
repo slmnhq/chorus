@@ -4,9 +4,9 @@ chorus.models.InstanceAccount = chorus.models.Base.extend(
         urlTemplate:function (options) {
             var method = options && options.method;
             if (method === "update" || method === "delete") {
-                return "instance/accountmap/{{id}}";
+                return "instance/{{instanceId}}/accountmap/{{id}}";
             } else {
-                return "instance/accountmap";
+                return "instance/{{instanceId}}/accountmap";
             }
         },
 
