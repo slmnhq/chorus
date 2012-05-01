@@ -1,11 +1,9 @@
-@import "_common.scss";
-
 .database_column_list {
     &.list {
         li {
             div.text {
                 padding-left: 0;
-
+                
                 .summary {
                     padding-bottom: 0;
                 }

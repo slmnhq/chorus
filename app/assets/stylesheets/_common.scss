@@ -1,6 +1,12 @@
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins
 //
-@import "compass";
+@import "compass/utilities";
+@import "compass/css3";
+@import "compass/css3/opacity";
+@import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
+@import "compass/css3/images";
+
 
 // Dimensions
 $sidebar-width : 266px;
