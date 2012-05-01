@@ -7,6 +7,14 @@
 #   Mayor.create(:name => 'Emanuel', :city => cities.first)
 unless User.where(:username => "edcadmin").present?
   puts "Creating edcadmin user..."
-  User.create :username => "edcadmin", :first_name => "EDC", :last_name => "Admin",
-              :email => "edcadmin@example.com", :password => "secret", :password_confirmation => "secret"
+  user = User.new(
+    :username => "edcadmin",
+    :first_name => "EDC",
+    :last_name => "Admin",
+    :email => "edcadmin@example.com",
+    :password => "secret",
+    :password_confirmation => "secret"
+  )
+  user.admin = true
+  user.save
 end
