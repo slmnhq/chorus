@@ -194,6 +194,20 @@ chorus.models = {
             return new Handlebars.SafeString(highlightedModel.name());
         },
 
+        toJSON: function() {
+            var result = {};
+
+            if (this.parameterWrapper) {
+                result[this.parameterWrapper] = this._super("toJSON");
+            } else if (this.constructorName && this.constructorName != "Model") {
+                result[this.constructorName.toLowerCase()] = this._super("toJSON");
+            } else {
+                result = this._super("toJSON")
+
+            }
+            return result;
+        },
+
         _textForAttr: function(attr) {
             return (this.attrToLabel && this.attrToLabel[attr]) ? t(this.attrToLabel[attr]) : attr;
         }

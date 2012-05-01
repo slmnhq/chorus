@@ -37,7 +37,7 @@ describe("chorus.dialogs.ChangePassword", function() {
 
         it("makes the correct API request", function() {
             expect(this.server.lastUpdate().url).toBe("/users/12");
-            expect(this.server.lastUpdate().params().password).toBe("newpass");
+            expect(this.server.lastUpdate().params()["user[password]"]).toBe("newpass");
         });
 
         describe("when the save request completes", function() {

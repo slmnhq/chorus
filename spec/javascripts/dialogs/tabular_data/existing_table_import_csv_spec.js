@@ -554,13 +554,13 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             it("imports the file", function() {
                 expect(this.server.lastCreate().url).toBe(this.dialog.csv.url());
                 var params = this.server.lastCreate().params();
-                expect(params.fileName).toBe(this.dialog.csv.get("fileName"));
-                expect(params.toTable).toBe("existingTable");
-                expect(params.delimiter).toBe(",");
-                expect(params.type).toBe("existingTable");
-                expect(params.hasHeader).toBe('true');
-                expect(params.truncate).toBe('true');
-                expect(JSON.parse(params.columnsMap)).toEqual(this.expectedColumnsMap);
+                expect(params["csvimport[fileName]"]).toBe(this.dialog.csv.get("fileName"));
+                expect(params["csvimport[toTable]"]).toBe("existingTable");
+                expect(params["csvimport[delimiter]"]).toBe(",");
+                expect(params["csvimport[type]"]).toBe("existingTable");
+                expect(params["csvimport[hasHeader]"]).toBe('true');
+                expect(params["csvimport[truncate]"]).toBe('true');
+                expect(JSON.parse(params["csvimport[columnsMap]"])).toEqual(this.expectedColumnsMap);
 
             });
 

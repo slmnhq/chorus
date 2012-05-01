@@ -7,7 +7,7 @@ describe SessionsController do
 
       before do
         CredentialsValidator.stub(:user).with('admin', 'secret').and_return { user }
-        post :create, :username => 'admin', :password => 'secret'
+        post :create, :session => {:username => 'admin', :password => 'secret'}
       end
 
       it "succeeds" do
@@ -22,7 +22,7 @@ describe SessionsController do
       it "sets session expiration" do
         Chorus::Application.config.session_timeout = 4.hours
         Timecop.freeze(2012, 4, 17, 10, 30) do
-          post :create, :username => 'admin', :password => 'secret'
+          post :create, :session => {:username => 'admin', :password => 'secret'}
           response.should be_success
           session[:expires_at].should == 4.hours.from_now
         end
@@ -34,7 +34,7 @@ describe SessionsController do
 
       before do
         user.destroy
-        post :create, :username => 'admin', :password => 'secret'
+        post :create, :session => {:username => 'admin', :password => 'secret'}
       end
 
       it "fails" do
@@ -46,7 +46,7 @@ describe SessionsController do
       before do
         invalid_exception = CredentialsValidator::Invalid.new(stub(:errors => {:field => ["error"]}))
         CredentialsValidator.stub(:user).with('admin', 'public').and_raise(invalid_exception)
-        post :create, :username => 'admin', :password => 'public'
+        post :create, :session => {:username => 'admin', :password => 'public'}
       end
 
       it "fails" do

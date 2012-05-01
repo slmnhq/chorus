@@ -89,7 +89,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 });
 
                 it("should include the recipients in the save request", function() {
-                    expect(this.server.lastCreate().params().recipients).toBe("1,2");
+                    expect(this.server.lastCreate().params()["comment[recipients]"]).toBe("1,2");
                 });
             });
 

@@ -345,16 +345,16 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         it("imports the file", function() {
             expect(this.server.lastCreate().url).toBe(this.dialog.csv.url());
             var params = this.server.lastCreate().params();
-            expect(params.fileName).toBe(this.dialog.csv.get("fileName"));
-            expect(params.toTable).toBe("foo_quux_bar");
-            expect(params.delimiter).toBe(",");
+            expect(params["csvimport[fileName]"]).toBe(this.dialog.csv.get("fileName"));
+            expect(params["csvimport[toTable]"]).toBe("foo_quux_bar");
+            expect(params["csvimport[delimiter]"]).toBe(",");
 
             var expectedColumns = [];
             _.each(this.dialog.csv.columnOrientedData(), function(item, i) {
                 expectedColumns.push({columnName: item.name, columnType: item.type, columnOrder: i + 1});
             });
 
-            expect(JSON.parse(params.columnsDef)).toEqual(expectedColumns);
+            expect(JSON.parse(params["csvimport[columnsDef]"])).toEqual(expectedColumns);
         });
 
         context("when the post to import responds with success", function() {

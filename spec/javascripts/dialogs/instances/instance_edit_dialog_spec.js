@@ -249,11 +249,11 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
 
             it("updates the model", function() {
-                expect(this.server.lastUpdate().params().name).toBe("test2");
-                expect(this.server.lastUpdate().params().port).toBe("8556");
-                expect(this.server.lastUpdate().params().host).toBe("testhost2");
-                expect(this.server.lastUpdate().params().size).toBe("123");
-                expect(this.server.lastUpdate().params().database).toBeUndefined();
+                expect(this.server.lastUpdate().params()["instance[name]"]).toBe("test2");
+                expect(this.server.lastUpdate().params()["instance[port]"]).toBe("8556");
+                expect(this.server.lastUpdate().params()["instance[host]"]).toBe("testhost2");
+                expect(this.server.lastUpdate().params()["instance[size]"]).toBe("123");
+                expect(this.server.lastUpdate().params()["instance[database]"]).toBeUndefined();
             });
         });
 

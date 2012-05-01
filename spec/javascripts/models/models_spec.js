@@ -866,6 +866,46 @@ describe("chorus.models.Abstract", function() {
                 });
             });
         });
+
+        describe("#toJSON", function() {
+            beforeEach(function() {
+                this.model.set({
+                    "name": "Lenny"
+                });
+            });
+
+            context("when parameterWrapper is not defined", function() {
+                context("and constructorName is defined", function() {
+                    beforeEach(function() {
+                        this.model.constructorName = "FlimFlam";
+                    });
+
+                    it("scopes the attributes under the lowercased constructorName", function() {
+                        var params = this.model.toJSON();
+                        expect(params.flimflam).toBeDefined();
+                        expect(params.flimflam.name).toBe("Lenny");
+                    });
+                });
+
+                context("and constructorName is not defined", function() {
+                    it("uses the base toJSON method", function() {
+                        expect(this.model.toJSON()).toEqual(this.model.attributes);
+                    });
+                });
+            });
+
+            context("when parameterWrapper is defined", function() {
+                beforeEach(function() {
+                    this.model.parameterWrapper = "foo";
+                });
+
+                it("scopes the attributes under the parameterWrapper key", function() {
+                    var params = this.model.toJSON();
+                    expect(params.foo).toBeDefined();
+                    expect(params.foo.name).toBe("Lenny");
+                });
+            });
+        });
     });
 
     describe("Collection", function() {

@@ -167,8 +167,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("saves the instance account", function() {
-                        expect(this.server.lastUpdate().url).toBe("/instance/accountmap/999?")
-                        expect(this.server.lastUpdate().requestBody).toBe("id=999&shared=no")
+                        expect(this.server.lastUpdate().url).toBe("/instance/accountmap/999?");
+                        expect(this.server.lastUpdate().params()["instanceaccount[id]"]).toBe("999");
+                        expect(this.server.lastUpdate().params()["instanceaccount[shared]"]).toBe("no");
                     });
 
                     context("when the save succeeds", function() {
@@ -702,8 +703,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 it("only sends the shared parameter", function() {
-                    expect(_.last(this.server.requests).url).toBe("/instance/accountmap/888?")
-                    expect(_.last(this.server.requests).requestBody).toBe("id=888&shared=yes");
+                    expect(this.server.lastRequest().url).toBe("/instance/accountmap/888?")
+                    expect(this.server.lastRequest().params()["instanceaccount[id]"]).toBe("888");
+                    expect(this.server.lastRequest().params()["instanceaccount[shared]"]).toBe("yes");
                 })
 
                 context("when the save succeeds", function() {
