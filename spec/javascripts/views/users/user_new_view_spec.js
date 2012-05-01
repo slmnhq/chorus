@@ -18,7 +18,7 @@ describe("chorus.views.userNew", function() {
                     this.view.$("input[name=first_name]").val("Frankie");
                     this.view.$("input[name=last_name]").val("Knuckles");
                     this.view.$("input[name=username]").val("frankie2002");
-                    this.view.$("input[name=emailAddress]").val("frankie_knuckles@nyclol.com");
+                    this.view.$("input[name=email]").val("frankie_knuckles@nyclol.com");
                     this.view.$("input[name=password]").val("whoaomg");
                     this.view.$("input[name=passwordConfirmation]").val("whoaomg");
                     this.view.$("input[name=ou]").val("awesomeness dept");
@@ -31,7 +31,7 @@ describe("chorus.views.userNew", function() {
                     expect(this.user.attributes["first_name"]).toBe("Frankie");
                     expect(this.user.attributes["last_name"]).toBe("Knuckles");
                     expect(this.user.attributes["username"]).toBe("frankie2002");
-                    expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
+                    expect(this.user.attributes["email"]).toBe("frankie_knuckles@nyclol.com");
                     expect(this.user.attributes["password"]).toBe("whoaomg");
                     expect(this.user.attributes["passwordConfirmation"]).toBe("whoaomg");
                     expect(this.user.attributes["ou"]).toBe("awesomeness dept");
@@ -100,7 +100,7 @@ describe("chorus.views.userNew", function() {
                             expect(this.view.$("input[name=first_name]").val()).toBe("Frankie");
                             expect(this.view.$("input[name=last_name]").val()).toBe("Knuckles");
                             expect(this.view.$("input[name=username]").val()).toBe("frankie2002");
-                            expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
+                            expect(this.view.$("input[name=email]").val()).toBe("frankie_knuckles@nyclol.com");
                             expect(this.view.$("input[name=password]").val()).toBe("whoaomg");
                             expect(this.view.$("input[name=passwordConfirmation]").val()).toBe("whoaomg");
                             expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");
@@ -113,7 +113,7 @@ describe("chorus.views.userNew", function() {
                 context("saving the user with invalid data", function() {
                     beforeEach(function() {
                         spyOn(Backbone.Model.prototype, 'save');
-                        this.view.$("input[name=emailAddress]").val("bademail");
+                        this.view.$("input[name=email]").val("bademail");
                         this.view.$("form").submit();
                     });
                     it("does not save the user", function() {

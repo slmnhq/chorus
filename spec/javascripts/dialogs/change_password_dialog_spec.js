@@ -4,7 +4,7 @@ describe("chorus.dialogs.ChangePassword", function() {
             username: "john",
             first_name: "John",
             last_name: "Doe",
-            emailAddress: "jdoe@emc.com",
+            email: "jdoe@emc.com",
             id: 12
         });
         this.view = new chorus.dialogs.ChangePassword({ pageModel : this.user });

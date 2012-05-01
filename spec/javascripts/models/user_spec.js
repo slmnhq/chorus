@@ -130,9 +130,9 @@ describe("chorus.models.User", function() {
             });
         });
 
-        it("requires emailAddress", function() {
+        it("requires email", function() {
             this.model.performValidation();
-            expect(this.model.requirePattern).toHaveBeenCalledWith("emailAddress", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, undefined);
+            expect(this.model.requirePattern).toHaveBeenCalledWith("email", /[\w\.-]+(\+[\w-]*)?@([\w-]+\.)+[\w-]+/, undefined);
         });
 
         context("when the user is new", function() {
@@ -141,7 +141,7 @@ describe("chorus.models.User", function() {
                     first_name: "bob",
                     last_name: "jenkins",
                     username: "bobjenk",
-                    emailAddress: "bobj@raisetheroof.us"
+                    email: "bobj@raisetheroof.us"
                 });
             });
 
@@ -166,7 +166,7 @@ describe("chorus.models.User", function() {
                     first_name: "bob",
                     last_name: "jenkins",
                     username: "bobjenk",
-                    emailAddress: "bobj@raisetheroof.us"
+                    email: "bobj@raisetheroof.us"
                 });
                 this.model.ldap = true;
             });
@@ -180,7 +180,7 @@ describe("chorus.models.User", function() {
                     first_name: null,
                     last_name: "",
                     username: "",
-                    emailAddress: "bob@bob.com"
+                    email: "bob@bob.com"
                 });
                 expect(this.model.performValidation()).toBeFalsy();
             })
@@ -194,7 +194,7 @@ describe("chorus.models.User", function() {
                     first_name: "bob",
                     last_name: "jenkins",
                     username: "bobjenk",
-                    emailAddress: "bobj@raisetheroof.us"
+                    email: "bobj@raisetheroof.us"
                 });
                 this.model.save({
                     password: "original_password",
@@ -205,7 +205,7 @@ describe("chorus.models.User", function() {
 
             context("when the password has not changed", function() {
                 it("returns true", function() {
-                    expect(this.model.performValidation({ emailAddress: "bobjanky@coolpalace.us" })).toBeTruthy();
+                    expect(this.model.performValidation({ email: "bobjanky@coolpalace.us" })).toBeTruthy();
                 });
             });
 

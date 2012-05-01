@@ -2996,7 +2996,7 @@ beforeEach(function() {
                         {
                             "admin": "false",
                             "comments": [],
-                            "emailAddress": null,
+                            "email": null,
                             "entityType": "user",
                             "first_name": "John",
                             "id": "10023",
@@ -3016,7 +3016,7 @@ beforeEach(function() {
                         {
                             admin: "false",
                             comments: [],
-                            emailAddress: "test1@emc.com",
+                            email: "test1@emc.com",
                             entityType: "user",
                             first_name: "Test",
                             id: "10020",
@@ -3036,7 +3036,7 @@ beforeEach(function() {
                         {
                             admin: "false",
                             comments: [],
-                            emailAddress: "test2@emc.com",
+                            email: "test2@emc.com",
                             entityType: "user",
                             first_name: "Jack",
                             id: "10021",
@@ -3445,7 +3445,7 @@ beforeEach(function() {
                             "isDeleted": false,
                             "admin": false,
                             "last_name": "user1",
-                            "emailAddress": "user1@user.com",
+                            "email": "user1@user.com",
                             "highlightedAttributes": {
                                 "last_name": ["<em>user<\/em>1"],
                                 "name": ["<em>user<\/em>1"],

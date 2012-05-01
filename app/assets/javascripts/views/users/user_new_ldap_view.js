@@ -50,7 +50,7 @@
             var model = this.collection.first();
             this.$("input[name='first_name']").val(model.get("first_name"));
             this.$("input[name='last_name']").val(model.get("last_name"));
-            this.$("input[name='emailAddress']").val(model.get("emailAddress"));
+            this.$("input[name='email']").val(model.get("email"));
             this.$("input[name='title']").val(model.get("title"));
             this.$("input[name='ou']").val(model.get("ou"));
         },

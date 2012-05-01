@@ -2,7 +2,7 @@ describe("chorus.views.UserShow", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.model = new chorus.models.User({
-                emailAddress: "a@b.com",
+                email: "a@b.com",
                 title: "My Title",
                 ou: "My Department",
                 admin: true,
@@ -45,7 +45,7 @@ describe("chorus.views.UserShow", function() {
             });
 
             it("renders the email text", function() {
-                expect(this.view.$(".emailAddress").text()).toBe(this.model.get("emailAddress"));
+                expect(this.view.$(".email").text()).toBe(this.model.get("email"));
             });
 
             it("renders administrator", function() {

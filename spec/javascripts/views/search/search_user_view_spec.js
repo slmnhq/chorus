@@ -4,7 +4,7 @@ describe("chorus.views.SearchUser", function() {
         this.model = this.result.users().models[0];
         this.model.set({highlightedAttributes: {
             title: '<em>test</em>er',
-            emailAddress: '<em>test</em>@example.com',
+            email: '<em>test</em>@example.com',
             first_name: "<em>John</em>",
             ou: "<em>John</em>",
             content: "<em>Here is some content</em>",
@@ -52,7 +52,7 @@ describe("chorus.views.SearchUser", function() {
                 this.model.set({
                     "admin": "false",
                     "comments": [],
-                    "emailAddress": "test@emc.com",
+                    "email": "test@emc.com",
                     "entityType": "user",
                     "first_name": "John",
                     "id": "10023",
@@ -69,7 +69,7 @@ describe("chorus.views.SearchUser", function() {
                         "ou": "<em>Test</em>",
                         "title": "<em>affd</em>",
                         "first_name": "<em>affd</em>",
-                        "emailAddress": "<em>test</em>@emc.com",
+                        "email": "<em>test</em>@emc.com",
                         "content": "<em>Hello</em>"
                     }
                 });
@@ -117,7 +117,7 @@ describe("chorus.views.SearchUser", function() {
                 this.model.set({
                     "admin": "false",
                     "comments": [],
-                    "emailAddress": "test@emc.com",
+                    "email": "test@emc.com",
                     "entityType": "user",
                     "first_name": "John",
                     "id": "10023",
