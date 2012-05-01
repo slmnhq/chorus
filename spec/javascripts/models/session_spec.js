@@ -57,12 +57,12 @@ describe("chorus.models.Session", function() {
             });
 
             it("calls the logout API", function() {
-                expect(this.server.requests[0].url).toBe("/auth/logout/?authid=1234");
+                expect(this.server.lastDestroyFor(this.model)).toBeDefined();
             });
 
             describe("and the server responds", function() {
                 beforeEach(function() {
-                    this.server.lastFetch().succeed();
+                    this.server.lastDestroy().succeed();
                 });
 
                 it("triggers needsLogin", function() {

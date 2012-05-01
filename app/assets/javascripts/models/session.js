@@ -59,9 +59,14 @@ chorus.models.Session = chorus.models.Base.extend({
 
     requestLogout: function(logoutSucceeded) {
         var self = this;
-        $.get("/auth/logout/?authid=" + $.cookie("authid"), function() {
-            self.clear();
-            logoutSucceeded();
+
+        $.ajax({
+            type: "DELETE",
+            url: self.url(),
+            success: function() {
+                self.clear();
+                logoutSucceeded();
+            }
         });
     },
 
@@ -73,7 +78,7 @@ chorus.models.Session = chorus.models.Base.extend({
         }
     },
 
-    shouldResume: function () {
+    shouldResume: function() {
         return this._pathBeforeLoggedOut;
     },
 
