@@ -17,4 +17,4 @@ RAILS_ENV=development rake devmode:enable assets:precompile
 rake jasmine:ci > $CC_BUILD_ARTIFACTS/jasmine_tests.log 2>&1
 
 # Run integration tests
-script/test spec/integration/new_user_spec.rb > $CC_BUILD_ARTIFACTS/integration_tests.log 2>&1
+script/test spec/integration/working_specs.rb > $CC_BUILD_ARTIFACTS/integration_tests.log 2>&1

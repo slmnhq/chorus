@@ -7,12 +7,15 @@ def fill_user_form(username)
   fill_in 'passwordConfirmation', :with => "password"
 end
 
-def click_add_user_button
+def click_submit_button
   page.find("button[type=submit]").click
 end
 
 def create_valid_user(username)
   fill_user_form(username)
-  click_add_user_button
+  click_submit_button
 end
 
+def current_user_id
+  evaluate_script "chorus.session.user().id"
+end

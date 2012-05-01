@@ -9,7 +9,7 @@ describe "creating a user" do
     visit("/#/users/new")
 
     field_errors.should be_empty
-    click_add_user_button
+    click_submit_button
     field_errors.should_not be_empty
 
     # user is a duplicate
