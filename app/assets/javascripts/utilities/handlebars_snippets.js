@@ -1,6 +1,6 @@
 (function() {
 
-    Handlebars.registerPartial("errorDiv", '<div class="errors">{{#if serverErrors }}{{#if serverErrors.length}}<ul>{{#each serverErrors}}<li>{{message}}</li>{{/each}}</ul><a class="close_errors action" href="#">{{t "actions.close"}}</a>{{/if}}{{/if}}</div>');
+    Handlebars.registerPartial("errorDiv", '<div class="errors">{{#if serverErrors }}{{renderErrors serverErrors}}{{/if}}</div>');
 
     var templates = {}; //for memoizing handlebars helpers templates
     chorus.helpers = {
@@ -386,6 +386,20 @@
                 return t("search.supporting_message_types.column");
             }
             return t("search.supporting_message_types.note");
+        },
+
+        renderErrors: function(serverErrors) {
+            var output = ["<ul>"]
+
+            if (serverErrors.fields) {
+                _.each(serverErrors.fields, function(value, key) {
+                    var key = "field_error." + key + "." + value;
+                    output.push("<li>" + t(key) + "</li>")
+                })
+            }
+
+            output.push("</ul>");
+            return new Handlebars.SafeString(output.join("\n"))
         }
     };
 

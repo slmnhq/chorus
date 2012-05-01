@@ -957,30 +957,23 @@ describe("handlebars", function() {
                 });
             });
 
-            context("when context.serverErrors is an empty array", function() {
+            context("when context.serverErrors has fields", function() {
                 beforeEach(function() {
-                    this.context = { serverErrors: [] };
-                });
-
-                it("renders an empty div", function() {
-                    var el = Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context, Handlebars.helpers, Handlebars.partials);
-                    expect(el).toBe('<div class="errors"></div>');
-                });
-            });
-
-            context("when context.serverErrors is an array of hashes with 'message' keys", function() {
-                beforeEach(function() {
-                    this.context = { serverErrors: [
-                        { message: "one" },
-                        { message: "two" }
-                    ] };
+                    this.context = {
+                        serverErrors: {
+                            fields : {
+                                username_or_password: [ "INVALID" ],
+                                password: [ "REQUIRED" ]
+                            }
+                        }
+                    };
                 });
 
                 it("renders the messages", function() {
-                    var el = Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context, Handlebars.helpers, Handlebars.partials);
-                    expect($(el).find("li").length).toBe(2);
-                    expect(el).toContain("one");
-                    expect(el).toContain("two");
+                    var el = $(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context, Handlebars.helpers, Handlebars.partials));
+                    expect(el.find("li").length).toBe(2);
+                    expect(el.find("li:eq(0)")).toContainTranslation("field_error.username_or_password.INVALID")
+                    expect(el.find("li:eq(1)")).toContainTranslation("field_error.password.REQUIRED")
                 });
             });
         });
