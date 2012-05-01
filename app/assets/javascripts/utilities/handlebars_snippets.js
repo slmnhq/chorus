@@ -151,7 +151,7 @@
         },
 
         renderTemplateIf: function(conditional, templateName, context) {
-            if(conditional) {
+            if (conditional) {
                 return Handlebars.helpers.renderTemplate(templateName, context);
             } else {
                 return "";
@@ -276,7 +276,7 @@
         },
 
         attachmentFoundIn: function(model) {
-            if(model.workspace()) {
+            if (model.workspace()) {
                 var workspaceLink = model.workspace().showLink();
                 var datasetLink = model.tabularData().showLink();
                 return t("attachment.found_in.tabular_data_in_workspace", { workspaceLink: workspaceLink, tabularDataLink: datasetLink })
@@ -312,7 +312,7 @@
 
         displaySearchMatch: function(attributeName) {
             var attr = chorus.helpers.withSearchResults(this).get(attributeName, false);
-            if(attr) {
+            if (attr) {
                 return new Handlebars.SafeString(attr);
             }
             return attr;
@@ -320,7 +320,7 @@
 
         displaySearchMatchFromSafeField: function(attributeName) {
             var attr = chorus.helpers.withSearchResults(this).get(attributeName, true);
-            if(attr) {
+            if (attr) {
                 return new Handlebars.SafeString(attr);
             }
             return attr;
@@ -335,7 +335,7 @@
                     if (getReal.call(modelOrAttributes, 'highlightedAttributes') && getReal.call(modelOrAttributes, 'highlightedAttributes')[attributeName]) {
                         var attribute = getReal.call(modelOrAttributes, 'highlightedAttributes')[attributeName];
                         return new Handlebars.SafeString(_.isArray(attribute) ? attribute[0] : attribute);
-                    } else if (safe){
+                    } else if (safe) {
                         return new Handlebars.SafeString(modelOrAttributes[attributeName]);
                     } else {
                         return new Handlebars.SafeString(Handlebars.Utils.escapeExpression(getReal.call(modelOrAttributes, attributeName)));
@@ -355,7 +355,7 @@
         },
 
         importFrequencyTag: function(frequency) {
-            if(!frequency) {
+            if (!frequency) {
                 return '';
             }
             var result = '<span class="tag import_frequency">' +
@@ -373,16 +373,16 @@
         },
 
         searchResultCommentTitle: function(comment) {
-            if(comment.isInsight) {
+            if (comment.isInsight) {
                 return t("search.supporting_message_types.insight");
             }
-            if(comment.isComment) {
+            if (comment.isComment) {
                 return t("search.supporting_message_types.comment");
             }
-            if(comment.isCommitMessage) {
+            if (comment.isCommitMessage) {
                 return "";
             }
-            if(comment.isColumn) {
+            if (comment.isColumn) {
                 return t("search.supporting_message_types.column");
             }
             return t("search.supporting_message_types.note");
@@ -391,7 +391,11 @@
         renderErrors: function(serverErrors) {
             var output = ["<ul>"]
 
-            if (serverErrors.fields) {
+            if (_.isArray(serverErrors)) {
+                _.each(serverErrors, function(error) {
+                    output.push("<li>" + error.message + "</li>")
+                })
+            } else if (serverErrors.fields) {
                 _.each(serverErrors.fields, function(value, key) {
                     var key = "field_error." + key + "." + value;
                     output.push("<li>" + t(key) + "</li>")
