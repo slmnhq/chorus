@@ -98,6 +98,10 @@ This script
 
 Application will be on http://localhost:3000
 
+    If you cannot log in as edcadmin, you first need to initialize the it in the database with
+
+    rake db:seed
+
 ### Testing:
 
     script/test
