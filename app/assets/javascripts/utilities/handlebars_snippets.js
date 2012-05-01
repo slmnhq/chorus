@@ -1,6 +1,6 @@
 (function() {
 
-    Handlebars.registerPartial("errorDiv", '<div class="errors">{{#if serverErrors }}{{renderErrors serverErrors}}{{/if}}</div>');
+    Handlebars.registerPartial("errorDiv", '<div class="errors">{{#if serverErrors }}{{renderErrors serverErrors}}<a class="close_errors action" href="#">{{t "actions.close"}}</a>{{/if}}</div>');
 
     var templates = {}; //for memoizing handlebars helpers templates
     chorus.helpers = {
@@ -399,7 +399,7 @@
             }
 
             output.push("</ul>");
-            return new Handlebars.SafeString(output.join("\n"))
+            return new Handlebars.SafeString(output.join(""))
         }
     };
 
