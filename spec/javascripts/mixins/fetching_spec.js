@@ -218,6 +218,17 @@ describe("chorus.Mixins.Fetching", function() {
             it("calls the 'success' callback if one is provided", function() {
                 expect(this.successSpy).toHaveBeenCalled();
             });
-        })
+        });
+
+        context("when there is an error with a single space in the response text", function() {
+            beforeEach(function() {
+                this.fetchFailedSpy.reset();
+                this.server.lastFetch().respond(401, {'Content-Type': 'application/json'}, " ");
+            });
+
+            it("does not crash", function() {
+                expect(this.fetchFailedSpy).toHaveBeenCalled();
+            });
+        });
     });
 });

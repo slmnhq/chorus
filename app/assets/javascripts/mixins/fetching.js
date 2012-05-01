@@ -34,7 +34,7 @@ chorus.Mixins.Fetching = {
         var success = options.success, error = options.error;
         options.success = this.makeSuccessFunction(options, success);
         options.error = function(collection, xhr) {
-            var data = xhr.responseText && JSON.parse(xhr.responseText);
+            var data = xhr.responseText && !!xhr.responseText.trim() && JSON.parse(xhr.responseText);
             collection.parseErrors(data, xhr);
             if (error) error(collection, xhr);
             collection.trigger("fetchFailed", collection, xhr)
