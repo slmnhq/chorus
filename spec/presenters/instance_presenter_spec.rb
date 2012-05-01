@@ -2,7 +2,10 @@ require 'spec_helper'
 
 describe InstancePresenter, :type => :view do
   before(:each) do
+    @user = FactoryGirl.create :user
+
     @instance = FactoryGirl.build :instance
+    @instance.owner = @user
     @presenter = InstancePresenter.new(@instance, view)
   end
 
@@ -16,7 +19,15 @@ describe InstancePresenter, :type => :view do
       @hash.should have_key(:port)
       @hash.should have_key(:host)
       @hash.should have_key(:id)
+      @hash.should have_key(:owner)
     end
+
+    it "should use ownerPresenter Hash method for owner" do
+      @owner = @hash[:owner]
+      puts @owner.to_json
+      @owner.to_hash.should == (UserPresenter.new(@user, view).to_hash)
+    end
+
 
     it "sanitizes values" do
       bad_value = "<script>alert('got your cookie')</script>"
