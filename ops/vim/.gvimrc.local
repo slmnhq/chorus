@@ -16,3 +16,4 @@ endfunction
 macmenu &File.Open\ Tab\.\.\. key=<nop>
 map <D-T> :call OpenSpecOrImpl()<CR>
 
+map <D-+> <Esc>zR
