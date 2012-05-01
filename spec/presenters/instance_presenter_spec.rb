@@ -24,7 +24,6 @@ describe InstancePresenter, :type => :view do
 
     it "should use ownerPresenter Hash method for owner" do
       @owner = @hash[:owner]
-      puts @owner.to_json
       @owner.to_hash.should == (UserPresenter.new(@user, view).to_hash)
     end
 
