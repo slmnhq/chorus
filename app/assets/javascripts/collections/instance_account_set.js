@@ -1,6 +1,6 @@
 chorus.collections.InstanceAccountSet = chorus.collections.Base.extend({
     model:chorus.models.InstanceAccount,
-    urlTemplate:"instance/{{instanceId}}/accountmap",
+    urlTemplate:"instance/accountmap",
 
     users:function () {
         return this.map(function (model) {
