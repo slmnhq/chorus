@@ -12,6 +12,7 @@ def click_submit_button
 end
 
 def create_valid_user(username)
+  visit("/#/users/new")
   fill_user_form(username)
   click_submit_button
 end
