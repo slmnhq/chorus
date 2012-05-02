@@ -58,14 +58,14 @@ class ApplicationController < ActionController::Base
     head :bad_request unless (Chorus::Application.config.sorting_order_white_list.include?(params[:order]))
   end
 
-  def present(model, options={})
-    json = { :response => Presenter.present(model, view_context) }
+  def present(model_or_collection, options={})
+    json = { :response => Presenter.present(model_or_collection, view_context) }
 
-    if model.respond_to? :current_page
+    if model_or_collection.respond_to? :current_page
       json[:pagination] = {
-          :page => model.current_page,
-          :per_page => model.per_page,
-          :total => model.total_entries
+          :page => model_or_collection.current_page,
+          :per_page => model_or_collection.per_page,
+          :total => model_or_collection.total_entries
       }
     end
 
