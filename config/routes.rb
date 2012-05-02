@@ -5,6 +5,9 @@ Chorus::Application.routes.draw do
     collection do
       get :ldap
     end
+    member do
+      resource :image, :only => [ :create, :update, :destroy ]
+    end
   end
 
   resources :instances, :only => [:index, :create, :update] do
