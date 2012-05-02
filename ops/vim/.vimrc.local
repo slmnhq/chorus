@@ -1,6 +1,7 @@
+set smarttab
+
 set softtabstop=4
 set tabstop=4
-set smarttab
 set shiftwidth=4
 
 " don't blink cursor
@@ -19,4 +20,7 @@ set foldmethod=indent
 
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>""
 map <C-n> :tabnew 
+
+autocmd FileType javascript set softtabstop=4 | set tabstop=4 | set shiftwidth=4
+autocmd FileType ruby       set softtabstop=2 | set tabstop=2 | set shiftwidth=2
 
