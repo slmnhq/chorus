@@ -6,7 +6,7 @@ set shiftwidth=4
 " don't blink cursor
 set gcr=n:blinkon0
 
-map <D-S-F8> :!/Users/pivotal/workspace/chorus/launch_jasmine.sh %<CR>
+noremap <D-S-F8> <Esc>:call system("/Users/pivotal/workspace/chorus/launch_jasmine.sh " . expand("%"))<CR><C-l>
 map <D-S-F9> :!/Users/pivotal/workspace/chorus/launch_phantom_jasmine.sh %<CR>
 map <D-k> :Gstatus<CR>
 
