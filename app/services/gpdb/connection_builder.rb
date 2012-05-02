@@ -6,7 +6,7 @@ module Gpdb
     validates_presence_of :username, :password
     validate :connection_must_be_established
 
-    attr_reader :name, :host, :port, :maintenance_db, :shared, :provision_type
+    attr_reader :name, :host, :port, :maintenance_db, :shared, :provision_type, :description
     attr_reader :username, :password
     attr_reader :owner
 
@@ -19,6 +19,9 @@ module Gpdb
     def self.update!(instance_id, connection_config, updater)
       instance = Instance.find(instance_id)
       raise SecurityTransgression unless updater.admin? || updater == instance.owner
+      instance_account = InstanceAccount.find_by_owner_id_and_instance_id(instance.owner_id, instance_id)
+      connection_config[:db_username] = instance_account[:username] unless connection_config[:db_username]
+      connection_config[:db_password] = instance_account[:password] unless connection_config[:db_password]
 
       builder = for_update(connection_config, instance)
       builder.save!(updater)
@@ -42,6 +45,7 @@ module Gpdb
       @password = attributes[:db_password]
       @owner = owner
       @provision_type = attributes[:provision_type]
+      @description = attributes[:description]
       @shared = ActiveRecord::ConnectionAdapters::Column.value_to_boolean(attributes[:shared])
     end
 
@@ -78,9 +82,10 @@ module Gpdb
           :port => port,
           :maintenance_db => maintenance_db,
           :shared => shared,
-          :provision_type => provision_type
+          :provision_type => provision_type,
+          :description => description
       }
-      instance.owner_id = owner.id
+      instance.owner_id = owner[:id]
       instance.save!
     end
 

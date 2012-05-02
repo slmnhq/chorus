@@ -10,7 +10,8 @@ describe Gpdb::ConnectionBuilder do
         :maintenance_db => "postgres",
         :db_username => "bob",
         :db_password => "secret",
-        :provision_type => "register"
+        :provision_type => "register",
+        :description => "old description"
     }
   end
   let(:valid_output_attributes) do
@@ -21,7 +22,8 @@ describe Gpdb::ConnectionBuilder do
         :maintenance_db => "postgres",
         :username => "bob",
         :password => "secret",
-        :provision_type => "register"
+        :provision_type => "register",
+        :description => "old description"
     }
 
   end
@@ -130,6 +132,22 @@ describe Gpdb::ConnectionBuilder do
     it "saves the changes to the instance" do
       updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
       updated_instance.reload.name.should == "new name"
+    end
+
+    it "saves the change of description to the instance" do
+      updated_attributes[:description] = "new description"
+      updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
+      updated_instance.reload.description.should == "new description"
+    end
+
+    it "uses the existing credentials if none are provided" do
+      updated_attributes[:db_password] = nil
+      updated_attributes[:db_username] = nil
+
+      updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
+      owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
+      owners_account.username.should == "bob"
+      owners_account.password.should == "secret"
     end
 
     it "saves the owner's changes to their account" do
