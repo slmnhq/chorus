@@ -224,12 +224,12 @@ describe("chorus.models.User", function() {
 
         it("uses the right URL", function() {
             var user = newFixtures.user({username: 'foo', id: "bar"});
-            expect(user.imageUrl()).toBe("/userimage/bar?size=original&iebuster=12345");
+            expect(user.imageUrl()).toBe("/users/bar/image?size=original&iebuster=12345");
         });
 
         it("accepts the size argument", function() {
             var user = newFixtures.user({username: 'foo', id: "bar"});
-            expect(user.imageUrl({size: "icon"})).toBe("/userimage/bar?size=icon&iebuster=12345");
+            expect(user.imageUrl({size: "icon"})).toBe("/users/bar/image?size=icon&iebuster=12345");
         });
     });
 

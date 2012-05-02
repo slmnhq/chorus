@@ -1647,7 +1647,7 @@ describe("chorus.presenters.Activity", function() {
 
     function itShouldHaveUserIcon() {
         it("should have the user icon", function() {
-            expect(this.presenter.iconSrc).toContain("/userimage/");
+            expect(this.presenter.iconSrc).toBe(this.model.author().imageUrl());
             expect(this.presenter.iconClass).toBe("profile");
         });
     }

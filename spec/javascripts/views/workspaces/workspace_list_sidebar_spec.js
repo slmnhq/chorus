@@ -13,12 +13,12 @@ describe("chorus.views.WorkspaceListSidebar", function() {
     context("the workspace has an image", function() {
         beforeEach(function() {
             spyOn(this.view.model, 'hasImage').andReturn(true);
-            this.spyImg = spyOn(this.view.model, 'imageUrl').andReturn("/userimage/party.gif")
+            spyOn(this.view.model, 'imageUrl').andReturn("/user/456/image")
             this.view.render();
         });
 
         it("renders the workspace image", function() {
-            expect(this.view.$("img.workspace_image").attr("src")).toContain('/userimage/party.gif');
+            expect(this.view.$("img.workspace_image").attr("src")).toContain("/user/456/image");
         });
     });
 

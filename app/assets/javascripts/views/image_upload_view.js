@@ -25,7 +25,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
         var multipart = !window.jasmine;
         this.$("input[type=file]").fileupload({
             url:this.model.imageUrl(),
-            type:'POST',
+            type: 'PUT',
             add:fileSelected,
             done:uploadFinished,
             multipart:multipart,
