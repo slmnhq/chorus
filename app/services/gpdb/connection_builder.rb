@@ -6,7 +6,7 @@ module Gpdb
     validates_presence_of :username, :password
     validate :connection_must_be_established
 
-    attr_reader :name, :host, :port, :maintenance_db, :shared, :provision_type, :description
+    attr_reader :name, :host, :port, :maintenance_db, :shared, :provision_type, :description, :instance_provider
     attr_reader :username, :password
     attr_reader :owner
 
@@ -46,6 +46,7 @@ module Gpdb
       @owner = owner
       @provision_type = attributes[:provision_type]
       @description = attributes[:description]
+      @instance_provider = instance.get_instance_provider
       @shared = ActiveRecord::ConnectionAdapters::Column.value_to_boolean(attributes[:shared])
     end
 
@@ -83,7 +84,8 @@ module Gpdb
           :maintenance_db => maintenance_db,
           :shared => shared,
           :provision_type => provision_type,
-          :description => description
+          :description => description,
+          :instance_provider => instance_provider
       }
       instance.owner_id = owner[:id]
       instance.save!

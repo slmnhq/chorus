@@ -66,7 +66,7 @@
         },
 
         providerIconUrl: function() {
-            var filename = providerIconMap[this.get("instanceProvider")] || "other_instance.png";
+            var filename = providerIconMap[this.get("instance_provider")] || "other_instance.png";
             return imagePrefix + filename;
         },
 
@@ -163,11 +163,11 @@
         },
 
         isGreenplum: function() {
-            return this.get('instanceProvider') == 'Greenplum Database'
+            return this.get('instance_provider') == 'Greenplum Database'
         },
 
         isHadoop: function() {
-            return this.get("instanceProvider") == "Hadoop";
+            return this.get("instance_provider") == "Hadoop";
         },
 
         hasWorkspaceUsageInfo: function() {

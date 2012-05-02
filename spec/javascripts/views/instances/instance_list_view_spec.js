@@ -27,9 +27,9 @@ describe("chorus.views.InstanceList", function() {
             this.collection.add(newFixtures.instance.hadoop({name : "Hadoop9", id: "h9"}));
             this.collection.add(newFixtures.instance.hadoop({name : "hadoop1", id: "h1"}));
             this.collection.add(newFixtures.instance.hadoop({name : "Hadoop10", id: "h10"}));
-            this.collection.add(newFixtures.instance.greenplum({instanceProvider : "Whatever9", name : "Whatever9", id: "w9"}));
-            this.collection.add(newFixtures.instance.greenplum({instanceProvider : "Whatever1", name : "whatever1", id: "w1"}));
-            this.collection.add(newFixtures.instance.greenplum({instanceProvider : "Whatever10", name : "Whatever10", id: "w10"}));
+            this.collection.add(newFixtures.instance.greenplum({instance_provider : "Whatever9", name : "Whatever9", id: "w9"}));
+            this.collection.add(newFixtures.instance.greenplum({instance_provider : "Whatever1", name : "whatever1", id: "w1"}));
+            this.collection.add(newFixtures.instance.greenplum({instance_provider : "Whatever10", name : "Whatever10", id: "w10"}));
 
             this.view = new chorus.views.InstanceList({collection: this.collection});
         });

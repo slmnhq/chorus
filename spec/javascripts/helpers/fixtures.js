@@ -2582,7 +2582,7 @@ beforeEach(function() {
                         "first_name": "EDC"
                     },
                     "state": "online",
-                    "instanceProvider": "Greenplum Database",
+                    "instance_provider": "Greenplum Database",
                     "isDeleted": false,
                     "entityType": "instance",
                     "database": "postgres"
@@ -2954,7 +2954,7 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdatedStamp": "2012-03-07 12:59:45",
                             "host": "gillette",
-                            "instanceProvider": "Hadoop",
+                            "instance_provider": "Hadoop",
                             "name": "my_hadoop",
                             "state": "online",
                             "highlightedAttributes": {
@@ -2974,7 +2974,7 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdatedStamp": "2012-03-07 12:59:45",
                             "host": "gillette",
-                            "instanceProvider": "Greenplum Database",
+                            "instance_provider": "Greenplum Database",
                             "name": "my_instance",
                             "state": "fault",
                             "highlightedAttributes": {
@@ -3368,7 +3368,7 @@ beforeEach(function() {
                                     "first_name": "EDC"
                                 },
                                 "state": "online",
-                                "instanceProvider": "Greenplum Database",
+                                "instance_provider": "Greenplum Database",
                                 "isDeleted": false,
                                 "entityType": "instance",
                                 "database": "postgres"
@@ -3421,7 +3421,7 @@ beforeEach(function() {
                             "state": "online",
                             "provision_type": "register",
                             "entityType": "instance",
-                            "instanceProvider": "Greenplum Database",
+                            "instance_provider": "Greenplum Database",
                             "id": "10000",
                             "isDeleted": false,
                             "name": "gillette",

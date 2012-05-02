@@ -7,7 +7,7 @@
     "hasCredentials": true,
     "host": "localhost",
     "instance_id": "5",
-    "instanceProvider": "Greenplum Database",
+    "instance_provider": "Greenplum Database",
     "instanceVersion": null,
     "isDeleted": false,
     "lastCheck": null,

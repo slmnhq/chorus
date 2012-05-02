@@ -6,7 +6,7 @@
     "freeSpace": null,
     "hasCredentials": true,
     "host": "localhost",
-    "instanceProvider": "Hadoop",
+    "instance_provider": "Hadoop",
     "instanceVersion": null,
     "isDeleted": false,
     "lastCheck": null,

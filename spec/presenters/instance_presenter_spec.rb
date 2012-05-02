@@ -23,6 +23,7 @@ describe InstancePresenter, :type => :view do
       @hash.should have_key(:provision_type)
       @hash.should have_key(:maintenance_db)
       @hash.should have_key(:description)
+      @hash.should have_key(:instance_provider)
     end
 
     it "should use ownerPresenter Hash method for owner" do

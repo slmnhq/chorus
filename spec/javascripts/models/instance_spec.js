@@ -42,17 +42,17 @@ describe("chorus.models.Instance", function() {
 
     describe("#providerIconUrl", function() {
         it("returns the right url for greenplum instances", function() {
-            this.instance.set({ instanceProvider: "Greenplum Database" });
+            this.instance.set({ instance_provider: "Greenplum Database" });
             expect(this.instance.providerIconUrl()).toBe("/images/instances/greenplum_instance.png");
         });
 
         it("returns the right url for hadoop instances", function() {
-            this.instance.set({ instanceProvider: "Hadoop" });
+            this.instance.set({ instance_provider: "Hadoop" });
             expect(this.instance.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");
         });
 
         it("returns the right url for other instances", function() {
-            this.instance.set({ instanceProvider: "Something Else" });
+            this.instance.set({ instance_provider: "Something Else" });
             expect(this.instance.providerIconUrl()).toBe("/images/instances/other_instance.png");
         });
     });
@@ -277,7 +277,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("returns false otherwise", function() {
-            instance.set({instanceProvider: "somethingElse"});
+            instance.set({instance_provider: "somethingElse"});
             expect(instance.isGreenplum()).toBeFalsy();
         });
     });
@@ -293,7 +293,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("returns false otherwise", function() {
-            instance.set({instanceProvider: "somethingElse"});
+            instance.set({instance_provider: "somethingElse"});
             expect(instance.isHadoop()).toBeFalsy();
         });
     });

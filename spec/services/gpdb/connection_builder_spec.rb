@@ -104,6 +104,11 @@ describe Gpdb::ConnectionBuilder do
           instance[key].should == value unless (key == :username || key == :password)
       }
     end
+
+    it "sets the instance_provider on the instance" do
+      instance = Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
+      instance[:instance_provider].should == "Greenplum Database"
+    end
   end
 
   describe ".update!" do
