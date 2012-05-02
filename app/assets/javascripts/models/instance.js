@@ -71,11 +71,9 @@
         },
 
         owner:function () {
-            return new chorus.models.User({
-                id:this.get("ownerId"),
-                username:this.get("owner"),
-                fullName:this.get("ownerFullName")
-            })
+            return new chorus.models.User(
+                this.get("owner")
+            )
         },
 
         isOwner:function (user) {
@@ -108,7 +106,7 @@
         },
 
         accountForOwner:function () {
-            var ownerId = this.get("ownerId");
+            var ownerId = this.get("owner").id;
             return _.find(this.accounts().models, function (account) {
                 return account.get("user").id == ownerId
             });

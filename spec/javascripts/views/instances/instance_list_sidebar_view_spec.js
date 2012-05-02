@@ -77,7 +77,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 it("displays edit instance link when user is owner", function() {
                     setLoggedInUser({ username : "benjamin", admin: false});
-                    this.instance.set({ownerId : chorus.session.user().get('id')});
+                    this.instance.set({owner:{id : chorus.session.user().get('id')} });
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
@@ -90,7 +90,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     beforeEach(function() {
                         setLoggedInUser({ username : "benjamin", admin: false});
                         this.instance.set({
-                            ownerId : chorus.session.user().get('id'),
+                            owner : {id:chorus.session.user().get('id')},
                             instanceProvider: "Hadoop"
                         });
                         this.view.render();
@@ -164,7 +164,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             context("when user is not an admin or owner of the instance", function() {
                 beforeEach(function() {
                     setLoggedInUser({ username : "benjamin", admin: false});
-                    this.instance.set({owner : "harry"});
+                    this.instance.set({owner: {id:  "harry"}});
                     this.view.render();
                 });
 
@@ -254,7 +254,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 it("displays edit instance link when user is owner", function() {
                     setLoggedInUser({ username : "benjamin", admin: false});
-                    this.instance.set({ownerId : chorus.session.user().get('id')});
+                    this.instance.set({owner: {id : chorus.session.user().get('id')}});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });

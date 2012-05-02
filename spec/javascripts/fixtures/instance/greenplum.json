@@ -10,9 +10,14 @@
     "instanceVersion": null,
     "isDeleted": false,
     "lastCheck": null,
-    "owner": "edcadmin",
-    "ownerId": "1",
-    "ownerFullName": "EDC Admin",
+    "owner": {
+        "id": 1,
+        "admin": true,
+        "username": "edcadmin",
+        "first_name": "EDC",
+        "last_name": "Admin",
+        "email": "edcadmin@greenplum.com"
+    },
     "port": "8020",
     "provisionName": null,
     "provisionType": null,

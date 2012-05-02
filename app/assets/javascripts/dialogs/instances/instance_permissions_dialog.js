@@ -127,7 +127,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     saveOwner:function (user) {
-        this.instance.save({ ownerId:user.get("id") });
+        this.instance.save({ owner:{ id: user.get("id")} });
         this.bindings.add(this.instance, "saveFailed", this.showErrors);
         this.bindings.add(this.instance, "saved", function () {
             chorus.toast("instances.confirm_change_owner.toast");
