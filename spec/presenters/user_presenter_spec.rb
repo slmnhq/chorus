@@ -13,10 +13,13 @@ describe UserPresenter, :type => :view do
 
     it "includes the right keys" do
       @hash.should have_key(:username)
-      @hash.should have_key(:image_file_name)
       @hash.should have_key(:id)
       @hash.should have_key(:first_name)
       @hash.should have_key(:last_name)
+    end
+
+    it "includes the image url" do
+      @hash[:image_url].should == @user.image.url
     end
 
     it "does not include unwanted keys" do
