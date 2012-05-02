@@ -14,7 +14,7 @@ script/test > $CC_BUILD_ARTIFACTS/rspec_tests.log 2>&1
 
 # Run Jasmine tests
 RAILS_ENV=development rake devmode:enable assets:precompile
-rake jasmine:ci > $CC_BUILD_ARTIFACTS/jasmine_tests.log 2>&1
+rake phantom > $CC_BUILD_ARTIFACTS/jasmine_tests.log 2>&1
 
 # Run integration tests
 script/test spec/integration/working_specs.rb > $CC_BUILD_ARTIFACTS/integration_tests.log 2>&1

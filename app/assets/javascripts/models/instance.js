@@ -120,7 +120,6 @@
                     sharedAccount = new chorus.models.InstanceAccount({ db_username:db_username, instance_id:this.get("id") });
                     this.accounts().add(sharedAccount);
                 }
-                console.log("returning ", sharedAccount.attributes)
                 return sharedAccount;
             }
         },
