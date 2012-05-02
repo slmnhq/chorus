@@ -255,6 +255,10 @@ describe UsersController do
           response.code.should == "200"
         end
 
+        it "should respond with valid json" do
+          lambda { JSON.parse(response.body) }.should_not raise_error
+        end
+
         it "should delete the user" do
           deleted_user = User.find_with_destroyed(user.id)
           deleted_user.deleted_at.should_not be_nil

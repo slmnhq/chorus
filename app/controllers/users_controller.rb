@@ -24,7 +24,7 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    head :ok
+    render :json => {}
   end
 
   def ldap
