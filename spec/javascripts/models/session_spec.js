@@ -236,11 +236,22 @@ describe("chorus.models.Session", function() {
             context("when navigating elsewhere", function() {
                 beforeEach(function() {
                     Backbone.history.fragment = "/elsewhere";
-                    this.session.rememberPathBeforeLoggedOut()
+                    this.session.rememberPathBeforeLoggedOut();
                 });
 
                 it("remembers the path", function() {
                     expect(this.session.resumePath()).toEqual("/elsewhere");
+                });
+
+                context("and then trying to log in with bad credentials", function() {
+                    beforeEach(function() {
+                        Backbone.history.fragment = "/login";
+                        this.session.rememberPathBeforeLoggedOut();
+                    });
+
+                    it("remembers the non-login path", function() {
+                        expect(this.session.resumePath()).toEqual("/elsewhere");
+                    });
                 });
             });
         });
