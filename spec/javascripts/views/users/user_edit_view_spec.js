@@ -39,7 +39,7 @@ describe("chorus.views.userEdit", function() {
                     expect(this.view.$("input[name=email]").val()).toBe(this.user.get("email"));
                     expect(this.view.$("input[name=title]").val()).toBe('');
                     expect(this.view.$("textarea[name=notes]").text()).toBe('');
-                    expect(this.view.$("input[name=ou]").val()).toBe('');
+                    expect(this.view.$("input[name=dept]").val()).toBe('');
                     expect(this.view.$("input[name=admin]").prop("checked")).toBe(this.user.get("admin"));
                 })
 
@@ -51,7 +51,7 @@ describe("chorus.views.userEdit", function() {
                     beforeEach(function() {
                         this.view.$("input[name=first_name]").val("Frankie");
                         this.view.$("input[name=email]").val("frankie_knuckles@nyclol.com");
-                        this.view.$("input[name=ou]").val("awesomeness dept");
+                        this.view.$("input[name=dept]").val("awesomeness dept");
                         this.view.$("textarea[name=notes]").text("Here are some notes\n more than one line")
                         this.view.$("form").submit();
                     });
@@ -66,7 +66,7 @@ describe("chorus.views.userEdit", function() {
                             expect(this.user.attributes["last_name"]).toBe(this.user.get("last_name"));
                             expect(this.user.attributes["username"]).toBe(this.user.get("username"));
                             expect(this.user.attributes["email"]).toBe("frankie_knuckles@nyclol.com");
-                            expect(this.user.attributes["ou"]).toBe("awesomeness dept");
+                            expect(this.user.attributes["dept"]).toBe("awesomeness dept");
                             expect(this.user.attributes["admin"]).toBe(this.user.get("admin"));
                             expect(this.user.attributes["notes"]).toBe("Here are some notes\n more than one line");
                         });
