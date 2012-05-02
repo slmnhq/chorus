@@ -34,10 +34,10 @@ describe InstanceMigrator, :type => :data_migration do
           instance.port.should == legacy_instance["port"].to_i
           #instance.expire.should == legacy_instance["expire"]
           #instance.state.should == legacy_instance["state"]
-          #instance.provision_type.should == legacy_instance["provision_type"]
+          instance.provision_type.should == legacy_instance["provision_type"]
           #instance.provision_id.should == legacy_instance["provision_id"]
           #instance.size.should == legacy_instance["size"]
-          #instance.instance_provider.should == legacy_instance["instance_provider"]
+          instance.instance_provider.should == legacy_instance["instance_provider"]
           #instance.last_check.should == legacy_instance["last_check"]
           #instance.provision_name.should == legacy_instance["provision_name"]
           #instance.is_deleted.should == (legacy_instance["is_deleted"] != "f")
