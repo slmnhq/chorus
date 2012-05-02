@@ -1,11 +1,13 @@
 class InstanceAccountPresenter < Presenter
-  delegate :id, :username, :owner_id, :instance_id, to: :model
+  delegate :id, :username, :owner_id, :instance_id, :owner, to: :model
+
   def to_hash
     {
       :id => id,
       :username => h(username),
       :owner_id => owner_id,
       :instance_id => instance_id,
+      :owner => present(owner)
     }
   end
 end

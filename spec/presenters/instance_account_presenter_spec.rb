@@ -26,6 +26,11 @@ describe InstanceAccountPresenter, :type => :view do
       @hash[:username].should == @account[:username]
     end
 
+    it "should use ownerPresenter Hash method for owner" do
+      @owner = @hash[:owner]
+      @owner.to_hash.should == (UserPresenter.new(@user, view).to_hash)
+    end
+
     it "sanitizes values" do
       bad_value = "<script>alert('got your cookie')</script>"
 

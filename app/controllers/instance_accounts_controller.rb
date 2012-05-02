@@ -12,7 +12,6 @@ class InstanceAccountsController < ApplicationController
     raise ActiveRecord::RecordInvalid.new(@instance) if @instance.shared? && @instance.accounts.count > 0
     raise SecurityTransgression if @instance.shared? unless current_user.admin? or @instance.owner == current_user
     account = @instance.accounts.build params[:account]
-    account.owner = current_user
     account.save!
     present account, :status => :created
   end
@@ -30,6 +29,6 @@ class InstanceAccountsController < ApplicationController
   end
 
   def load_account
-    @account = InstanceAccount.find(params[:id])
+    @account = InstanceAccount.find(params[:account][:id])
   end
 end

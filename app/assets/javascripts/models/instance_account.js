@@ -25,7 +25,7 @@ chorus.models.InstanceAccount = chorus.models.Base.extend(
         },
 
         user:function () {
-            return this.get("user") && new chorus.models.User(this.get('user'));
+            return this.get("owner") && new chorus.models.User(this.get('owner'));
         },
 
         declareValidations:function (newAttrs) {

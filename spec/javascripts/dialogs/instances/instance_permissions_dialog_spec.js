@@ -578,7 +578,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                             it("saves the correct fields", function() {
                                 expect(this.dialog.account.save).toHaveBeenCalledWith({
-                                    userId : '444',
+                                    owner_id : '444',
                                     db_username : 'user!',
                                     db_password : 'password!'
                                 });
@@ -588,8 +588,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                                 expect(this.dialog.account.get('instance_id')).toBe(this.dialog.instance.get('id'));
                             });
 
-                            it("has the selected userId", function() {
-                                expect(this.dialog.account.get('userId')).toBe('444');
+                            it("has the selected owner_id", function() {
+                                expect(this.dialog.account.get('owner_id')).toBe('444');
                             });
 
                             context("after the save returns successfully", function() {
