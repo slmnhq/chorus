@@ -13,6 +13,14 @@ rake legacy:setup db:migrate db:test:prepare db:test:prepare:legacy
 script/test > $CC_BUILD_ARTIFACTS/rspec_tests.log 2>&1
 
 # Run Jasmine tests
+
+# start jasmine
+ps aux | grep jasmine | grep -v grep | awk '{print $2}' | xargs kill -9
+bundle exec rake jasmine > $CC_BUILD_ARTIFACTS/jasmine.log 2>&1 &
+jasmine_pid=$!
+echo $jasmine_pid
+sleep 5
+
 RAILS_ENV=development rake devmode:enable assets:precompile
 rake phantom > $CC_BUILD_ARTIFACTS/jasmine_tests.log 2>&1
 
