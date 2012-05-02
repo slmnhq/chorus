@@ -75,35 +75,12 @@ describe ApplicationController do
       log_in FactoryGirl.create :user
     end
 
-    context "with an active record relation" do
-      before do
-        FactoryGirl.create(:admin)
-        FactoryGirl.create(:admin)
-      end
+    context "with a single model" do
+      let(:object_to_present) { FactoryGirl.build(:user) }
 
-      let(:object_to_present) { User.where(:admin => true) }
-
-      it "sets the response to an array with a hash for each model in the relation" do
+      it "sets the response to a hash of the model" do
         get :action_that_presents
-        decoded_response.length.should == 2
-        decoded_response[0].id.should == object_to_present[0].id
-        decoded_response[0].id.should == object_to_present[0].id
-      end
-    end
-
-    context "with an array of models" do
-      let(:object_to_present) do
-        [
-            FactoryGirl.build(:user, :username => 'name1'),
-            FactoryGirl.build(:user, :username => 'name2')
-        ]
-      end
-
-      it "sets the response to an array with a hash for each model" do
-        get :action_that_presents
-        decoded_response.length.should == 2
-        decoded_response[0].username.should == object_to_present[0].username
-        decoded_response[0].username.should == object_to_present[0].username
+        decoded_response.username.should == object_to_present.username
       end
     end
 
@@ -128,33 +105,6 @@ describe ApplicationController do
         decoded_pagination.page.should == 1
         decoded_pagination.per_page.should == 1
         decoded_pagination.total.should == 2
-      end
-    end
-
-    context "with an empty relation" do
-      let(:object_to_present) { User.where(:username => "not_real") }
-
-      it "sets the response to an empty array" do
-        get :action_that_presents
-        decoded_response.should == []
-      end
-    end
-
-    context "with an empty array" do
-      let(:object_to_present) { [] }
-
-      it "sets the response to an empty array" do
-        get :action_that_presents
-        decoded_response.should == []
-      end
-    end
-
-    context "with a single model" do
-      let(:object_to_present) { FactoryGirl.build(:user) }
-
-      it "sets the response to an array with a hash for each model" do
-        get :action_that_presents
-        decoded_response.username.should == object_to_present.username
       end
     end
   end
