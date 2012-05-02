@@ -1,5 +1,5 @@
 class InstancePresenter < Presenter
-  delegate :name, :host, :port, :id, :owner, to: :model
+  delegate :name, :host, :port, :id, :owner, :provision_type, :maintenance_db, to: :model
 
   def to_hash
     {
@@ -7,7 +7,9 @@ class InstancePresenter < Presenter
         :host => h(host),
         :port => port,
         :id => id,
-        :owner => present(owner)
+        :owner => present(owner),
+        :provision_type => provision_type,
+        :maintenance_db => maintenance_db
     }
   end
 end

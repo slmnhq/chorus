@@ -20,10 +20,10 @@
     },
     "port": "8020",
     "provisionName": null,
-    "provisionType": null,
+    "provision_type": "registerHadoop",
     "sharedAccount": {},
     "size": null,
     "state": "online",
     "totalObject": null,
-    "database": "foo"
+    "maintenance_db": "foo"
 }

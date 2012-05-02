@@ -7,9 +7,10 @@ describe Gpdb::ConnectionBuilder do
         :name => "new",
         :port => 12345,
         :host => "server.emc.com",
-        :database => "postgres",
+        :maintenance_db => "postgres",
         :db_username => "bob",
-        :db_password => "secret"
+        :db_password => "secret",
+        :provision_type => "register"
     }
   end
   let(:valid_output_attributes) do
@@ -17,9 +18,10 @@ describe Gpdb::ConnectionBuilder do
         :name => "new",
         :port => 12345,
         :host => "server.emc.com",
-        :database => "postgres",
+        :maintenance_db => "postgres",
         :username => "bob",
-        :password => "secret"
+        :password => "secret",
+        :provision_type => "register"
     }
 
   end
@@ -36,7 +38,7 @@ describe Gpdb::ConnectionBuilder do
     end
 
     it "requires db connection params" do
-      [:host, :port, :database].each do |attribute|
+      [:host, :port, :maintenance_db].each do |attribute|
         expect {
           Gpdb::ConnectionBuilder.create!(valid_input_attributes.merge(attribute => nil), owner)
         }.to raise_error(ActiveRecord::RecordInvalid)
@@ -69,7 +71,7 @@ describe Gpdb::ConnectionBuilder do
       cached_instance = Instance.find_by_name_and_owner_id(valid_input_attributes[:name], owner.id)
       cached_instance.host.should == valid_input_attributes[:host]
       cached_instance.port.should == valid_input_attributes[:port]
-      cached_instance.maintenance_db.should == valid_input_attributes[:database]
+      cached_instance.maintenance_db.should == valid_input_attributes[:maintenance_db]
     end
 
     it "caches the db username and password" do
@@ -92,6 +94,13 @@ describe Gpdb::ConnectionBuilder do
 
       cached_instance_credentials.username.should == valid_input_attributes[:db_username]
       cached_instance_credentials.password.should == valid_input_attributes[:db_password]
+    end
+
+    it "saves the instance attributes" do
+      instance = Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
+      valid_output_attributes.each {| key, value |
+          instance[key].should == value unless (key == :username || key == :password)
+      }
     end
   end
 

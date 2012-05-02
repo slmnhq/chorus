@@ -6,7 +6,7 @@ describe "gpdb instances", :network => true do
         :name => "good_gillette",
         :port => 5432,
         :host => "gillette.sf.pivotallabs.com",
-        :database => "postgres",
+        :maintenance_db => "postgres",
         :db_username => "gpadmin",
         :db_password => "secret"
     }

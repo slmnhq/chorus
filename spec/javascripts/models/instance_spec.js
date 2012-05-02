@@ -307,8 +307,8 @@ describe("chorus.models.Instance", function() {
                     db_username: "dude",
                     db_password: "whatever",
                     port: "1234",
-                    database: "postgres",
-                    provisionType: "register"
+                    maintenance_db: "postgres",
+                    provision_type: "register"
                 }
             });
 
@@ -321,7 +321,7 @@ describe("chorus.models.Instance", function() {
                     expect(this.instance.performValidation(this.attrs)).toBeTruthy();
                 })
 
-                _.each(["name", "host", "db_username", "db_password", "port", "database"], function(attr) {
+                _.each(["name", "host", "db_username", "db_password", "port", "maintenance_db"], function(attr) {
                     it("requires " + attr, function() {
                         this.attrs[attr] = "";
                         expect(this.instance.performValidation(this.attrs)).toBeFalsy();
@@ -356,7 +356,7 @@ describe("chorus.models.Instance", function() {
                 this.attrs = {
                     name: "foo",
                     size: "100000",
-                    provisionType: "create",
+                    provision_type: "create",
                     databaseName: "thisDatabase",
                     schemaName: "thisSchema",
                     db_username: "foo",
@@ -419,7 +419,7 @@ describe("chorus.models.Instance", function() {
                 this.attrs = {
                     name: "foo",
                     size: "1",
-                    provisionType: "create",
+                    provision_type: "create",
                     databaseName: "thisDatabase",
                     schemaName: "thisSchema",
                     db_username: "foo",
@@ -464,7 +464,7 @@ describe("chorus.models.Instance", function() {
                 this.attrs = {
                     name: "foo",
                     size: "100000",
-                    provisionType: "registerHadoop"
+                    provision_type: "registerHadoop"
                 }
             });
 

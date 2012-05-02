@@ -2574,7 +2574,7 @@ beforeEach(function() {
                     "port": 5432,
                     "id": "10000",
                     "host": "gillette.sf.pivotallabs.com",
-                    "provisionType": "register",
+                    "provision_type": "register",
                     "name": "gillette",
                     "owner": {
                         "id": "InitialUser",
@@ -3360,7 +3360,7 @@ beforeEach(function() {
                                 "port": 5432,
                                 "id": "10000",
                                 "host": "gillette.sf.pivotallabs.com",
-                                "provisionType": "register",
+                                "provision_type": "register",
                                 "name": "gillette",
                                 "owner": {
                                     "id": "InitialUser",
@@ -3419,7 +3419,7 @@ beforeEach(function() {
                             "host": "gillette.sf.pivotallabs.com",
                             "lastUpdatedStamp": "2012-03-16 16:39:14",
                             "state": "online",
-                            "provisionType": "register",
+                            "provision_type": "register",
                             "entityType": "instance",
                             "instanceProvider": "Greenplum Database",
                             "id": "10000",

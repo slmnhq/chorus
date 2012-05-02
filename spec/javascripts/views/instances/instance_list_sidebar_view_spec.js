@@ -110,7 +110,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         setLoggedInUser({ username : "benjamin", admin: true});
                         this.instance.set({
                             state: "provisioning",
-                            provisionType: "create"
+                            provision_type: "create"
                         });
                         this.view.render();
                     });
@@ -133,7 +133,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         setLoggedInUser({ username : "benjamin", admin: true});
                         this.instance.set({
                             state: "fault",
-                            provisionType: "create"
+                            provision_type: "create"
                         });
                         this.view.render();
                     });

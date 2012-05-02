@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120427234448) do
+ActiveRecord::Schema.define(:version => 20120502005019) do
 
   create_table "instance_credentials", :force => true do |t|
     t.string  "username"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 20120427234448) do
     t.datetime "updated_at",                        :null => false
     t.integer  "owner_id",                          :null => false
     t.boolean  "shared",         :default => false
+    t.string   "provision_type"
   end
 
   add_index "instances", ["owner_id"], :name => "index_instances_on_owner_id"

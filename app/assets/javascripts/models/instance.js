@@ -28,11 +28,11 @@
         declareValidations:function (newAttrs) {
             this.require("name", newAttrs);
             this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(), newAttrs, "instance.validation.name_pattern");
-            switch (newAttrs.provisionType) {
+            switch (newAttrs.provision_type) {
                 case "register" :
                     this.require("host", newAttrs);
                     this.require("port", newAttrs);
-                    this.require("database", newAttrs);
+                    this.require("maintenance_db", newAttrs);
                     this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
                     if (this.isNew()) {
                         this.require("db_username", newAttrs);
@@ -146,7 +146,7 @@
             "host":"instances.dialog.host",
             "port":"instances.dialog.port",
             "databaseName": "instances.dialog.database_name",
-            "database":"instances.dialog.database",
+            "maintenance_db":"instances.dialog.maintenance_db",
             "description":"instances.dialog.description",
             "size":"instances.dialog.size"
         },

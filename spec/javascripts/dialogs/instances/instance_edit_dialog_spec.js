@@ -6,7 +6,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             host: "greenplum",
             port: "8555",
             description: "it is a food name",
-            database: "postgres"
+            maintenance_db: "postgres"
         });
         this.launchElement.data("instance", this.instance);
         this.dialog = new chorus.dialogs.InstanceEdit({launchElement: this.launchElement});
@@ -20,7 +20,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
     describe("#render", function() {
         describe("when editing a registered instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provisionType: "register"})
+                this.dialog.model.set({ provision_type: "register"})
                 this.dialog.render();
             });
 
@@ -45,15 +45,15 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
 
             it("has a 'database' field that is pre-populated", function() {
-                expect(this.dialog.$("input[name='database']").val()).toBe("postgres");
-                expect(this.dialog.$("label[name='database']").text()).toMatchTranslation("instances.dialog.database_name");
-                expect(this.dialog.$("input[name='database']").prop("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name='maintenance_db']").val()).toBe("postgres");
+                expect(this.dialog.$("label[name='maintenance_db']").text()).toMatchTranslation("instances.dialog.database_name");
+                expect(this.dialog.$("input[name='maintenance_db']").prop("disabled")).toBeFalsy();
             });
         });
 
         describe("when editing a provisioned instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provisionType: "create", size: "10"})
+                this.dialog.model.set({ provision_type: "create", size: "10"})
                 this.dialog.render();
             });
 
@@ -85,7 +85,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         describe("when editing a hadoop instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provisionType: "registerHadoop", userName: "user", userGroups: "hadoop"})
+                this.dialog.model.set({ provision_type: "registerHadoop", userName: "user", userGroups: "hadoop"})
                 this.dialog.render();
             });
 
@@ -178,7 +178,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
     describe("saving", function() {
         beforeEach(function() {
-            this.dialog.model.set({ provisionType: "register"});
+            this.dialog.model.set({ provision_type: "register"});
             this.user1 = new chorus.models.User({ id: '1', username: "niels", first_name: "ni", last_name: "slew"});
             this.user2 = new chorus.models.User({ id: '2', username: "ludwig", first_name: "lu", last_name: "wig" });
             this.user3 = new chorus.models.User({ id: '3', username: "isaac", first_name: "is", last_name: "ac" });
@@ -191,7 +191,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             this.dialog.$("input[name=name]").val("test1");
             this.dialog.$("input[name=port]").val("8555");
             this.dialog.$("input[name=host]").val("testhost");
-            this.dialog.$("input[name=database]").val("not_postgres");
+            this.dialog.$("input[name=maintenance_db]").val("not_postgres");
         });
 
         it("puts the button in 'loading' mode", function() {
@@ -206,19 +206,19 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
 
-        it("should call save with the right parameters ( to make sure that we pass in the provisionType for validation )", function() {
+        it("should call save with the right parameters ( to make sure that we pass in the provision_type for validation )", function() {
             spyOn(this.dialog.model, "save").andCallThrough();
             this.dialog.$("button[type=submit]").submit();
 
             expect(this.dialog.model.save.argsForCall[0][0].name).toBe("test1");
             expect(this.dialog.model.save.argsForCall[0][0].port).toBe("8555");
             expect(this.dialog.model.save.argsForCall[0][0].host).toBe("testhost");
-            expect(this.dialog.model.save.argsForCall[0][0].database).toBe("not_postgres");
-            expect(this.dialog.model.save.argsForCall[0][0].provisionType).toBe("register");
+            expect(this.dialog.model.save.argsForCall[0][0].maintenance_db).toBe("not_postgres");
+            expect(this.dialog.model.save.argsForCall[0][0].provision_type).toBe("register");
         });
 
         it("saves silently (to prevent re-rendering in aurora instances)", function() {
-            this.dialog.model.set({ provisionType: "create"});
+            this.dialog.model.set({ provision_type: "create"});
             this.dialog.render();
             spyOn(this.dialog.model, "save");
             this.dialog.$("button.submit").submit();
@@ -239,7 +239,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         context("with a provisioned instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provisionType: "create"});
+                this.dialog.model.set({ provision_type: "create"});
                 this.dialog.render();
                 this.dialog.$("input[name=name]").val("test2");
                 this.dialog.$("input[name=port]").val("8556");
@@ -253,13 +253,13 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 expect(this.server.lastUpdate().params()["instance[port]"]).toBe("8556");
                 expect(this.server.lastUpdate().params()["instance[host]"]).toBe("testhost2");
                 expect(this.server.lastUpdate().params()["instance[size]"]).toBe("123");
-                expect(this.server.lastUpdate().params()["instance[database]"]).toBeUndefined();
+                expect(this.server.lastUpdate().params()["instance[maintenance_db]"]).toBeUndefined();
             });
         });
 
         context("with a hadoop instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provisionType: "registerHadoop"});
+                this.dialog.model.set({ provision_type: "registerHadoop"});
                 this.dialog.render();
                 this.dialog.$("input[name=name]").val("test3");
                 this.dialog.$("input[name=port]").val("8557");
@@ -275,12 +275,13 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 expect(this.dialog.model.get("host")).toBe("testhost3");
                 expect(this.dialog.model.get("userName")).toBe("userName");
                 expect(this.dialog.model.get("userGroups")).toBe("userGroups");
-                expect(this.dialog.model.has("database")).toBeFalsy();
+                expect(this.dialog.model.has("maintenance_db")).toBeFalsy();
             });
         });
 
         context("when save completes", function() {
             beforeEach(function() {
+                this.dialog.$("button.submit").submit()
                 spyOnEvent(this.instance, "change")
                 this.dialog.model.trigger("saved");
             });

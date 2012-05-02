@@ -21,10 +21,10 @@
     },
     "port": "8020",
     "provisionName": null,
-    "provisionType": null,
+    "provision_type": "register",
     "sharedAccount": {},
     "size": null,
     "state": "online",
     "totalObject": null,
-    "database": "foo"
+    "maintenance_db": "foo"
 }

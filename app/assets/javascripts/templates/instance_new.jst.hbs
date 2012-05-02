@@ -5,7 +5,7 @@
         <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_greenplum_help_text"}}'/>
     </legend>
     <div><form>
-        <input type="hidden" name="provisionType" value="register" />
+        <input type="hidden" name="provision_type" value="register" />
         <label class="required">{{t "instances.dialog.instance_name"}}</label>
         <input type="text" name="name" maxlength="44"/>
 
@@ -17,8 +17,8 @@
         <input type="text" name="host"/>
         <input type="text" name="port"/>
 
-        <label class="required" name="database">{{t "instances.dialog.database"}}</label>
-        <input type="text" name="database" value="postgres"/>
+        <label class="required" name="maintenance_db">{{t "instances.dialog.maintenance_db"}}</label>
+        <input type="text" name="maintenance_db" value="postgres"/>
 
         <label class="required" name="db_username">{{t "instances.dialog.database_account"}}</label>
         <label class="required" name="db_password">{{t "instances.dialog.database_password"}}</label>
@@ -52,7 +52,7 @@
         <img src="/images/more-info.png" class="help" data-text='{{t "instances.new_dialog.register_existing_hadoop_help_text"}}'/>
     </legend>
     <div><form>
-        <input type="hidden" name="provisionType" value="registerHadoop" />
+        <input type="hidden" name="provision_type" value="registerHadoop" />
         <input class="hidden" type="checkbox" name="shared" checked="checked"/>
 
         <label class="required">{{t "instances.dialog.instance_name"}}</label>

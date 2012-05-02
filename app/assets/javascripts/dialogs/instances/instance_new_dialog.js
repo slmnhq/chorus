@@ -86,7 +86,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     saveSuccess:function () {
         chorus.PageEvents.broadcast("instance:added", this.model.get("id"));
 
-        if (this.model.get("provisionType") == "create") {
+        if (this.model.get("provision_type") == "create") {
             this.provisioning = true;
             chorus.toast("instances.new_dialog.provisioning");
             chorus.router.navigate("/instances", { selectId: this.model.get("id") });

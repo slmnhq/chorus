@@ -115,7 +115,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                 });
 
                 it("uses 'postgres' as the default database name", function() {
-                    expect(this.dialog.$(".register_existing_greenplum input[name=database]").val()).toBe("postgres");
+                    expect(this.dialog.$(".register_existing_greenplum input[name=maintenance_db]").val()).toBe("postgres");
                 });
 
                 describe("filling out the form", function() {
@@ -126,7 +126,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                         this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
                         this.dialog.$(".register_existing_greenplum input[name=db_username]").val("user");
                         this.dialog.$(".register_existing_greenplum input[name=db_password]").val("my_password");
-                        this.dialog.$(".register_existing_greenplum input[name=database]").val("foo");
+                        this.dialog.$(".register_existing_greenplum input[name=maintenance_db]").val("foo");
 
                         this.dialog.$(".register_existing_greenplum input[name=name]").trigger("change");
                     });
@@ -139,7 +139,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(values.port).toBe("1234");
                         expect(values.db_username).toBe("user");
                         expect(values.db_password).toBe("my_password");
-                        expect(values.database).toBe("foo");
+                        expect(values.maintenance_db).toBe("foo");
                     });
                 });
             });
@@ -181,9 +181,9 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(values.userGroups).toBe("hadoop");
                     });
 
-                    it("#fieldValues should have the right values for 'provisionType' and 'shared'", function() {
+                    it("#fieldValues should have the right values for 'provision_type' and 'shared'", function() {
                         var values = this.dialog.fieldValues();
-                        expect(values.provisionType).toBe("registerHadoop");
+                        expect(values.provision_type).toBe("registerHadoop");
                         expect(values.shared).toBe("yes");
                     });
                 });
@@ -217,7 +217,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                     this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
                     this.dialog.$(".register_existing_greenplum input[name=db_username]").val("user");
                     this.dialog.$(".register_existing_greenplum input[name=db_password]").val("my_password");
-                    this.dialog.$(".register_existing_greenplum input[name=database]").val("foo");
+                    this.dialog.$(".register_existing_greenplum input[name=maintenance_db]").val("foo");
                     this.dialog.$(".register_existing_greenplum input[name=name]").trigger("change");
 
                     spyOn(this.dialog.model, "save").andCallThrough();
@@ -231,9 +231,9 @@ describe("chorus.dialogs.InstanceNew", function() {
 
                     expect(attrs.db_password).toBe("my_password");
                     expect(attrs.name).toBe("Instance_Name");
-                    expect(attrs.provisionType).toBe("register");
+                    expect(attrs.provision_type).toBe("register");
                     expect(attrs.description).toBe("Instance Description");
-                    expect(attrs.database).toBe("foo");
+                    expect(attrs.maintenance_db).toBe("foo");
                 });
 
                 context("when the form is not valid", function() {
@@ -281,7 +281,7 @@ describe("chorus.dialogs.InstanceNew", function() {
 
                     expect(attrs.size).toBe("1");
                     expect(attrs.name).toBe("new_greenplum_instance");
-                    expect(attrs.provisionType).toBe("create");
+                    expect(attrs.provision_type).toBe("create");
                     expect(attrs.description).toBe("Instance Description");
                     expect(attrs.databaseName).toBe("dbTest");
                     expect(attrs.schemaName).toBe("schemaTest");
@@ -334,7 +334,7 @@ describe("chorus.dialogs.InstanceNew", function() {
 
                         expect(attrs.size).toBe("1");
                         expect(attrs.name).toBe("new_greenplum_instance");
-                        expect(attrs.provisionType).toBe("create");
+                        expect(attrs.provision_type).toBe("create");
                         expect(attrs.description).toBe("Instance Description");
                         expect(attrs.host).toBeUndefined();
                     });

@@ -2,11 +2,11 @@ module Gpdb
   class ConnectionBuilder
     include ActiveModel::Validations
 
-    validates_presence_of :name, :host, :port, :database
+    validates_presence_of :name, :host, :port, :maintenance_db
     validates_presence_of :username, :password
     validate :connection_must_be_established
 
-    attr_reader :name, :host, :port, :database, :shared
+    attr_reader :name, :host, :port, :maintenance_db, :shared, :provision_type
     attr_reader :username, :password
     attr_reader :owner
 
@@ -37,10 +37,11 @@ module Gpdb
       @name = attributes[:name]
       @host = attributes[:host]
       @port = attributes[:port]
-      @database = attributes[:database]
+      @maintenance_db = attributes[:maintenance_db]
       @username = attributes[:db_username]
       @password = attributes[:db_password]
       @owner = owner
+      @provision_type = attributes[:provision_type]
       @shared = ActiveRecord::ConnectionAdapters::Column.value_to_boolean(attributes[:shared])
     end
 
@@ -75,8 +76,9 @@ module Gpdb
           :name => name,
           :host => host,
           :port => port,
-          :maintenance_db => database,
-          :shared => shared
+          :maintenance_db => maintenance_db,
+          :shared => shared,
+          :provision_type => provision_type
       }
       instance.owner_id = owner.id
       instance.save!
@@ -109,7 +111,7 @@ module Gpdb
       @connection ||= ActiveRecord::Base.postgresql_connection(
           :host => host,
           :port => port,
-          :database => database,
+          :database => maintenance_db,
           :username => username,
           :password => password
       )
