@@ -195,6 +195,5 @@ describe User do
     end
   end
 
-  # Spec doesn't seem to be working, guy on Stack Overflow has same problem with RoR 3.2.3. Pending fix?
   it { should have_attached_file(:image) }
 end
