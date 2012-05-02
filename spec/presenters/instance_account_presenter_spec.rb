@@ -1,17 +1,17 @@
 require 'spec_helper'
 
-describe InstanceCredentialPresenter, :type => :view do
+describe InstanceAccountPresenter, :type => :view do
   before do
     @user = FactoryGirl.create :user
 
     @instance = FactoryGirl.create :instance
     @instance.owner = @user
 
-    @credential = FactoryGirl.create :instance_credential
-    @credential.owner = @user
-    @credential.instance = @instance
+    @account = FactoryGirl.create :instance_account
+    @account.owner = @user
+    @account.instance = @instance
 
-    @presenter = InstanceCredentialPresenter.new(@credential, view)
+    @presenter = InstanceAccountPresenter.new(@account, view)
   end
 
   describe "#to_hash" do
@@ -20,17 +20,17 @@ describe InstanceCredentialPresenter, :type => :view do
     end
 
     it "includes the right keys and values" do
-      @hash[:id].should == @credential.id
+      @hash[:id].should == @account.id
       @hash[:owner_id].should == @user.id
       @hash[:instance_id].should == @instance.id
-      @hash[:username].should == @credential[:username]
+      @hash[:username].should == @account[:username]
     end
 
     it "sanitizes values" do
       bad_value = "<script>alert('got your cookie')</script>"
 
-      credential = FactoryGirl.build :instance_credential, :username => bad_value
-      json = InstanceCredentialPresenter.new(credential, view).to_hash
+      account = FactoryGirl.build :instance_account, :username => bad_value
+      json = InstanceAccountPresenter.new(account, view).to_hash
 
       json[:username].should_not match "<"
     end

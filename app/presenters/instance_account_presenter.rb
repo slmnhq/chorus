@@ -1,4 +1,4 @@
-class InstanceCredentialPresenter < Presenter
+class InstanceAccountPresenter < Presenter
   delegate :id, :username, :owner_id, :instance_id, to: :model
   def to_hash
     {

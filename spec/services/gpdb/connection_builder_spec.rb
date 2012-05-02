@@ -77,23 +77,23 @@ describe Gpdb::ConnectionBuilder do
     it "caches the db username and password" do
       expect {
         Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
-      }.to change { InstanceCredential.count }.by(1)
+      }.to change { InstanceAccount.count }.by(1)
 
       cached_instance = Instance.find_by_name_and_owner_id(valid_input_attributes[:name], owner.id)
-      cached_instance_credentials = InstanceCredential.find_by_owner_id_and_instance_id(owner.id, cached_instance.id)
+      cached_instance_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, cached_instance.id)
 
-      cached_instance_credentials.username.should == valid_input_attributes[:db_username]
-      cached_instance_credentials.password.should == valid_input_attributes[:db_password]
+      cached_instance_account.username.should == valid_input_attributes[:db_username]
+      cached_instance_account.password.should == valid_input_attributes[:db_password]
     end
 
-    it "shares the cached credentials" do
+    it "shares the cached account" do
       Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
 
       cached_instance = Instance.find_by_name(valid_input_attributes[:name])
-      cached_instance_credentials = InstanceCredential.find_by_owner_id_and_instance_id(owner.id, cached_instance.id)
+      cached_instance_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, cached_instance.id)
 
-      cached_instance_credentials.username.should == valid_input_attributes[:db_username]
-      cached_instance_credentials.password.should == valid_input_attributes[:db_password]
+      cached_instance_account.username.should == valid_input_attributes[:db_username]
+      cached_instance_account.password.should == valid_input_attributes[:db_password]
     end
 
     it "saves the instance attributes" do
@@ -132,18 +132,18 @@ describe Gpdb::ConnectionBuilder do
       updated_instance.reload.name.should == "new name"
     end
 
-    it "saves the owner's changes to their credentials" do
+    it "saves the owner's changes to their account" do
       updated_attributes[:db_password] = "newpass"
       updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
-      owners_credentials = InstanceCredential.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
-      owners_credentials.password.should == "newpass"
+      owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
+      owners_account.password.should == "newpass"
     end
 
-    it "ignores the admin's changes to the credentials" do
+    it "ignores the admin's changes to the account" do
       updated_attributes[:db_password] = "newpass"
       updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, admin)
-      owners_credentials = InstanceCredential.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
-      owners_credentials.password.should == "secret"
+      owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
+      owners_account.password.should == "secret"
     end
 
     it "complains if it can't find an existing cached instance" do
@@ -163,8 +163,8 @@ describe Gpdb::ConnectionBuilder do
     end
 
     describe("switching from individual to shared") do
-      let!(:other_credentials) { FactoryGirl.create(:instance_credential, :instance => cached_instance) }
-      let!(:instance_owner_credentials) { cached_instance.owner_credentials }
+      let!(:other_account) { FactoryGirl.create(:instance_account, :instance => cached_instance) }
+      let!(:instance_owner_account) { cached_instance.owner_account }
 
       before do
         @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes.merge(:shared => "true"), owner)
@@ -174,9 +174,9 @@ describe Gpdb::ConnectionBuilder do
         @updated_instance.should be_shared
       end
 
-      it "deletes credentials other than those belonging to the instance owner" do
-        InstanceCredential.where(:id => instance_owner_credentials.id).should be_present
-        InstanceCredential.where(:id => other_credentials.id).should_not be_present
+      it "deletes accounts other than those belonging to the instance owner" do
+        InstanceAccount.where(:id => instance_owner_account.id).should be_present
+        InstanceAccount.where(:id => other_account.id).should_not be_present
       end
     end
 
@@ -195,24 +195,24 @@ describe Gpdb::ConnectionBuilder do
     describe "giving ownership to another user" do
       let(:new_owner) { FactoryGirl.create :user }
 
-      context "when the new owner doesn't have credentials for the instance" do
-        context "and the instance has shared credentials" do
+      context "when the new owner doesn't have account for the instance" do
+        context "and the instance has shared accounts" do
           before do
             Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => true), owner)
             @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => true, :owner => new_owner), owner)
           end
 
-          it "should succeed and give the credentials to the new owner" do
+          it "should succeed and give the account to the new owner" do
             @updated_instance.should be_present
             @updated_instance.owner.should == new_owner
-            @updated_instance.credentials.count.should == 1
-            @updated_instance.owner_credentials.owner.should == new_owner
-            @updated_instance.owner_credentials.username.should == valid_input_attributes[:db_username]
-            @updated_instance.owner_credentials.password.should == valid_input_attributes[:db_password]
+            @updated_instance.accounts.count.should == 1
+            @updated_instance.owner_account.owner.should == new_owner
+            @updated_instance.owner_account.username.should == valid_input_attributes[:db_username]
+            @updated_instance.owner_account.password.should == valid_input_attributes[:db_password]
           end
         end
 
-        context "and the instance has individual credentials" do
+        context "and the instance has individual accounts" do
           it "should raise ActiveRecord::RecordInvalid" do
             lambda {
               Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => new_owner), owner)
@@ -229,18 +229,18 @@ describe Gpdb::ConnectionBuilder do
         end
       end
 
-      context "when the new owner has credentials for the instance" do
-        let!(:new_owner_credentials) { FactoryGirl.create :instance_credential, :owner => new_owner, :instance => cached_instance }
+      context "when the new owner has account for the instance" do
+        let!(:new_owner_account) { FactoryGirl.create :instance_account, :owner => new_owner, :instance => cached_instance }
 
-        context "and the instance has individual credentials" do
+        context "and the instance has individual accounts" do
           before do
-            @old_credential_count = cached_instance.credentials.count
+            @old_account_count = cached_instance.accounts.count
             @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => new_owner, :name => "foobar"), owner)
           end
           it "succeeds" do
             @updated_instance.should be_present
             @updated_instance.owner.should == new_owner
-            @updated_instance.credentials.count.should == @old_credential_count
+            @updated_instance.accounts.count.should == @old_account_count
           end
         end
       end

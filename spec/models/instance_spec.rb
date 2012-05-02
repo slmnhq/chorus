@@ -13,7 +13,7 @@ describe Instance do
 
   describe "associations" do
     it { should belong_to :owner }
-    it { should have_many :credentials }
+    it { should have_many :accounts }
   end
 
   it "should not allow changing inaccessible attributes" do
@@ -24,13 +24,13 @@ describe Instance do
     instance.owner_id.should_not == 12222
   end
 
-  describe "#owner_credentials" do
-    it "returns the instance owner's credentials" do
+  describe "#owner_account" do
+    it "returns the instance owner's account" do
       owner = FactoryGirl.create(:user)
       instance = FactoryGirl.create(:instance, :owner => owner)
-      owner_credentials = FactoryGirl.create(:instance_credential, :instance => instance, :owner => owner)
+      owner_account = FactoryGirl.create(:instance_account, :instance => instance, :owner => owner)
 
-      instance.owner_credentials.should == owner_credentials
+      instance.owner_account.should == owner_account
     end
   end
 end

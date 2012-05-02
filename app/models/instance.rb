@@ -4,9 +4,9 @@ class Instance < ActiveRecord::Base
   validates_presence_of :name, :host, :port, :maintenance_db
 
   belongs_to :owner, :class_name => 'User'
-  has_many :credentials, :class_name => 'InstanceCredential'
+  has_many :accounts, :class_name => 'InstanceAccount'
 
-  def owner_credentials
-    credentials.where(:owner_id => owner_id).first
+  def owner_account
+    accounts.where(:owner_id => owner_id).first
   end
 end

@@ -11,7 +11,7 @@ Chorus::Application.routes.draw do
   end
 
   resources :instances, :only => [:index, :create, :update] do
-    resources :accounts, :controller => :instance_credentials
+    resources :accounts, :controller => :instance_accounts
   end
   match "/" => "root#index"
 

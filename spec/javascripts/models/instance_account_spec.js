@@ -4,7 +4,7 @@ describe("chorus.models.InstanceAccount", function() {
     });
 
     it("wraps parameters in 'credentials'", function() {
-        expect(this.model.parameterWrapper).toBe("credentials")
+        expect(this.model.parameterWrapper).toBe("account")
     });
 
     describe("#url", function() {

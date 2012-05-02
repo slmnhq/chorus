@@ -1,7 +1,7 @@
 chorus.models.InstanceAccount = chorus.models.Base.extend(
     {
         constructorName: "InstanceAccount",
-        parameterWrapper: "credentials",
+        parameterWrapper: "account",
 
         urlTemplate:function (options) {
             var method = options && options.method;
