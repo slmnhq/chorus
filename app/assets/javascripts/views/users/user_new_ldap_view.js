@@ -52,7 +52,7 @@
             this.$("input[name='last_name']").val(model.get("last_name"));
             this.$("input[name='email']").val(model.get("email"));
             this.$("input[name='title']").val(model.get("title"));
-            this.$("input[name='ou']").val(model.get("ou"));
+            this.$("input[name='dept']").val(model.get("dept"));
         },
 
         noLdapUserFound: function() {

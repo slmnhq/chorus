@@ -218,18 +218,34 @@ describe("chorus.models.User", function() {
     });
 
     describe("#imageUrl", function() {
+        var user;
+
         beforeEach(function() {
             spyOn(chorus, "cachebuster").andReturn(12345)
+            user = newFixtures.user({
+                username: 'foo',
+                id: "bar",
+                image_url: "/system/users/images/000/000/005/original/retro.jpg"
+            });
         });
 
-        it("uses the right URL", function() {
-            var user = newFixtures.user({username: 'foo', id: "bar"});
-            expect(user.imageUrl()).toBe("/users/bar/image?size=original&iebuster=12345");
+        context("when the 'image_url' attribute is blank", function() {
+            it("returns undefined", function() {
+                user.unset("image_url");
+                expect(user.imageUrl()).toBeUndefined();
+            });
         });
 
-        it("accepts the size argument", function() {
-            var user = newFixtures.user({username: 'foo', id: "bar"});
-            expect(user.imageUrl({size: "icon"})).toBe("/users/bar/image?size=icon&iebuster=12345");
+        it("uses the URL for the original-sized image by default", function() {
+            expect(user.imageUrl()).toHaveUrlPath("/system/users/images/000/000/005/original/retro.jpg");
+        });
+
+        it("appends a cache-busting query param", function() {
+            expect(user.imageUrl()).toContainQueryParams({ iebuster: 12345 });
+        });
+
+        xit("uses the thumbnail url if the 'size' option is set to 'thumb'", function() {
+            expect(user.imageUrl({ size: "thumb" })).toHaveUrlPath("/system/users/images/000/000/005/thumb/retro.jpg");
         });
     });
 

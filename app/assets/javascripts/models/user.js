@@ -52,9 +52,9 @@ chorus.models.User = chorus.models.Base.extend({
 
     imageUrl:function (options) {
         options = (options || {});
-        var url = new URI("/users/" + this.id + "/image?size=" + (options.size || "original"));
-        url.addSearch({iebuster: chorus.cachebuster()});
-        return url.toString();
+        return this.get("image_url") && new URI(this.get("image_url"))
+            .addSearch({ iebuster: chorus.cachebuster() })
+            .toString();
     },
 
     currentUserCanEdit: function() {

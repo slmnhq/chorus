@@ -87,6 +87,12 @@ describe("chorus.views.ActivityList", function() {
                         text: 'I love you all'
                     })
                 ]);
+
+                // right now, activities and comments don't include their
+                // author's image urls
+                comments.at(0).author().set({ image_url: "foo" });
+                comments.at(1).author().set({ image_url: "bar" });
+
                 var otherComments = this.collection.at(1).comments();
                 otherComments.reset([]);
                 this.view.render();
@@ -99,14 +105,19 @@ describe("chorus.views.ActivityList", function() {
             })
 
             it("displays information for each comment", function() {
-                expect(this.view.$("li[data-comment-id]:eq(0) .icon a")).toHaveAttr("href", "#/users/1234")
-                expect(this.view.$("li[data-comment-id]:eq(0) .icon a img")).toHaveAttr("src", "/users/1234/image?size=icon&iebuster=555")
-                expect(this.view.$("li[data-comment-id]:eq(0) .comment_header a")).toHaveText("Bob Smith");
-                expect(this.view.$("li[data-comment-id]:eq(0) .comment_content .actions .timestamp")).toExist();
-                expect(this.view.$("li[data-comment-id]:eq(1) .icon a")).toHaveAttr("href", "#/users/10101")
-                expect(this.view.$("li[data-comment-id]:eq(1) .icon a img")).toHaveAttr("src", "/users/10101/image?size=icon&iebuster=555")
-                expect(this.view.$("li[data-comment-id]:eq(1) .comment_header a")).toHaveText("John Commenter");
-                expect(this.view.$("li[data-comment-id]:eq(1) .comment_content .timestamp")).toExist();
+                var commentLis = this.view.$("li[data-activity-id]:eq(0) .comments li");
+                var comments = this.collection.at(0).comments();
+                expect(commentLis.length).toBe(comments.length);
+
+                expect(commentLis.eq(0).find(".icon a")).toHaveAttr("href", comments.at(0).author().showUrl());
+                expect(commentLis.eq(0).find(".icon a img")).toHaveAttr("src", comments.at(0).author().imageUrl());
+                expect(commentLis.eq(0).find(".comment_header a")).toHaveText(comments.at(0).author().displayName());
+                expect(commentLis.eq(0).find(".comment_content .actions .timestamp")).toExist();
+
+                expect(commentLis.eq(1).find(".icon a")).toHaveAttr("href", comments.at(1).author().showUrl());
+                expect(commentLis.eq(1).find(".icon a img")).toHaveAttr("src", comments.at(1).author().imageUrl());
+                expect(commentLis.eq(1).find(".comment_header a")).toHaveText(comments.at(1).author().displayName());
+                expect(commentLis.eq(1).find(".comment_content .timestamp")).toExist();
             });
 
             context("when there are less than three comments", function() {

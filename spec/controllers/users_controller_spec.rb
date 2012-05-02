@@ -231,6 +231,11 @@ describe UsersController do
         response.should be_not_found
       end
     end
+
+    it "generates a jasmine fixture" do
+      get :show, :id => @other_user.to_param
+      save_fixture "user.json"
+    end
   end
 
   describe "#destroy" do
