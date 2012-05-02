@@ -7,7 +7,7 @@ class InstancePresenter < Presenter
         :host => h(host),
         :port => port,
         :id => id,
-        :owner => UserPresenter.new(owner, @view_context)
+        :owner => present(owner)
     }
   end
 end

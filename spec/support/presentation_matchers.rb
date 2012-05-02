@@ -6,9 +6,8 @@ RSpec::Matchers.define :have_presented do |model|
   match do |response|
     hash = decoded_response(response)
     hash.should be_present
-    presenter_class = "#{model.class}Presenter".constantize
     view_context = matcher_execution_context.controller.view_context
-    hash.should == presenter_class.present(model, view_context).as_json[:response].stringify_keys
+    hash.should == Presenter.present(model, view_context).as_json.stringify_keys
   end
 
   failure_message_for_should do |response|

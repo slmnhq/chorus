@@ -1,28 +1,29 @@
 class Presenter
-  class ResponseWrapper
-    def initialize(response, pagination=nil)
-      @response = response
-      @pagination = pagination
+  def self.present(model_or_collection, view_context)
+    if model_or_collection.is_a?(ActiveRecord::Relation) || model_or_collection.is_a?(Enumerable)
+      exemplary_model = model_or_collection.to_a.first
+      return [] unless exemplary_model.present?
+      model_class = exemplary_model.class
+      presentation_method = :present_collection
+    else
+      model_class = model_or_collection.class
+      presentation_method = :present_model
     end
 
-    def as_json(options = {})
-      result = { :response => @response.as_json }
-      result[:pagination] = @pagination if @pagination
-      result
-    end
+    presenter_class = "#{model_class}Presenter".constantize
+    presenter_class.send(presentation_method, model_or_collection, view_context)
   end
 
-  def self.present(model, view_context)
-    ResponseWrapper.new(new(model, view_context))
+  def self.present_model(model, view_context)
+    new(model, view_context)
   end
 
   def self.present_collection(collection, view_context)
-    ResponseWrapper.new(collection.map { |model| new(model, view_context) },
-                        (collection.respond_to?(:current_page) ? {
-                          :page => collection.current_page,
-                          :per_page => collection.per_page,
-                          :total => collection.total_entries
-                        } : nil))
+    collection.map { |model| new(model, view_context) }
+  end
+
+  def present(model)
+    self.class.present(model, @view_context)
   end
 
   def initialize(model, view_context)

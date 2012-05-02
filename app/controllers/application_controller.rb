@@ -59,16 +59,17 @@ class ApplicationController < ActionController::Base
   end
 
   def present(model, options={})
-    if model.is_a?(ActiveRecord::Relation) || model.is_a?(Enumerable)
-      model_class = model.first.class
-      presentation_method = :present_collection
-    else
-      model_class = model.class
-      presentation_method = :present
+    json = { :response => Presenter.present(model, view_context) }
+
+    if model.respond_to? :current_page
+      json[:pagination] = {
+          :page => model.current_page,
+          :per_page => model.per_page,
+          :total => model.total_entries
+      }
     end
 
-    presenter_class = "#{model_class}Presenter".constantize
-    render options.merge({ :json => presenter_class.send(presentation_method, model, self.view_context) })
+    render options.merge({ :json => json })
   end
 
   def present_errors(errors, options={})
