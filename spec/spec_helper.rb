@@ -4,6 +4,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require "paperclip/matchers"
+require "json"
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -41,5 +42,7 @@ RSpec.configure do |config|
   config.include RocketPants::TestHelper, :type => :request
   config.include JsonHelper, :type => :controller
   config.include JsonHelper, :type => :request
+  config.include FixtureGenerator, :type => :controller
   config.include Paperclip::Shoulda::Matchers
 end
+
