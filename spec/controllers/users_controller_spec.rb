@@ -197,7 +197,7 @@ describe UsersController do
       end
 
       it "lets users change their own password" do
-        put :update, :id => non_admin.to_param, :user => { :password => '987654' }
+        put :update, :id => non_admin.to_param, :user => {:password => '987654'}
         response.code.should == "200"
         User.find(non_admin.to_param).password_digest.should == Digest::SHA1.hexdigest("987654")
       end
@@ -292,7 +292,7 @@ describe UsersController do
 
   describe "#ldap" do
     before do
-      @user_attributes = {:username => "testguy", :first_name=>"Test", :last_name=>"Guy", :title=>"Big Kahuna", :dept=>"Greenery", :email=>"testguy@example.com"}
+      @user_attributes = {:username => "testguy", :first_name => "Test", :last_name => "Guy", :title => "Big Kahuna", :dept => "Greenery", :email => "testguy@example.com"}
       LdapClient.stub(:search).and_return([@user_attributes])
     end
 

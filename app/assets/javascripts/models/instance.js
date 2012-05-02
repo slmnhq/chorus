@@ -81,17 +81,17 @@
         },
 
         databases:function () {
-            this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instanceId:this.get("id")}));
+            this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instance_id:this.get("id")}));
             return this._databases;
         },
 
         accounts:function () {
-            this._accounts || (this._accounts = new chorus.collections.InstanceAccountSet([], {instanceId:this.get("id")}));
+            this._accounts || (this._accounts = new chorus.collections.InstanceAccountSet([], {instance_id:this.get("id")}));
             return this._accounts;
         },
 
         accountForUser:function (user) {
-            return new chorus.models.InstanceAccount({ instanceId:this.get("id"), userId: user.get("id") });
+            return new chorus.models.InstanceAccount({ instance_id:this.get("id"), userId: user.get("id") });
         },
 
         accountForCurrentUser:function () {
@@ -117,9 +117,10 @@
             if (db_username) {
                 var sharedAccount = this.accounts().first();
                 if (!sharedAccount) {
-                    sharedAccount = new chorus.models.InstanceAccount({ db_username:db_username, instanceId:this.get("id") });
+                    sharedAccount = new chorus.models.InstanceAccount({ db_username:db_username, instance_id:this.get("id") });
                     this.accounts().add(sharedAccount);
                 }
+                console.log("returning ", sharedAccount.attributes)
                 return sharedAccount;
             }
         },
@@ -156,7 +157,7 @@
 
         usage:function () {
             if (!this.instanceUsage) {
-                this.instanceUsage = new chorus.models.InstanceUsage({ instanceId:this.get('id')})
+                this.instanceUsage = new chorus.models.InstanceUsage({ instance_id:this.get('id')})
             }
             return this.instanceUsage
         },

@@ -139,7 +139,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     newAccount:function (e) {
         var button = this.$("button.add_account");
         if (button.is(":disabled")) return;
-        this.account = new chorus.models.InstanceAccount({instanceId:this.instance.get("id")});
+        this.account = new chorus.models.InstanceAccount({instance_id:this.instance.get("id")});
         this.collection.add(this.account);
         this.$("button.add_account").prop("disabled", true);
         var newLi = this.$("li[data-id=new]");
@@ -261,8 +261,9 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         localGroup.add(sharedAccount, "saveFailed", displayFailureToast);
 
         var id = sharedAccount.get("id")
+        var instance_id = sharedAccount.get("instance_id")
         sharedAccount.clear({silent:true});
-        sharedAccount.save({id:id, shared:"no"});
+        sharedAccount.save({id:id, shared:"no", instance_id:instance_id});
 
         function displaySuccessToast() {
             chorus.toast("instances.shared_account_removed");
@@ -292,8 +293,9 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         localGroup.add(account, "saveFailed", displayFailureToast);
 
         var id = account.get("id")
+        var instance_id = account.get("instance_id")
         account.clear({silent:true});
-        account.save({id:id, shared:"yes"});
+        account.save({id:id, shared:"yes", instance_id:instance_id});
 
         function displaySuccessToast() {
             chorus.toast("instances.shared_account_added");
@@ -326,7 +328,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     removeIndividualAccount : function(accountId) {
         var selectedUser = this.collection.get(accountId).user();
 
-        var account = new chorus.models.InstanceAccount({id: accountId});
+        var account = new chorus.models.InstanceAccount({id: accountId, instance_id: this.model.id });
 
         this.bindings.add(account, "destroyFailed", function() {
             this.showErrors(account);

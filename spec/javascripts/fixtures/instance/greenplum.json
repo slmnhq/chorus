@@ -6,6 +6,7 @@
     "freeSpace": null,
     "hasCredentials": true,
     "host": "localhost",
+    "instance_id": "5",
     "instanceProvider": "Greenplum Database",
     "instanceVersion": null,
     "isDeleted": false,

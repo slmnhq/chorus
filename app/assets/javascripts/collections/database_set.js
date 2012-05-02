@@ -2,17 +2,17 @@ chorus.collections.DatabaseSet = chorus.collections.Base.include(
     chorus.Mixins.InstanceCredentials.model
 ).extend({
     model:chorus.models.Database,
-    urlTemplate: "instance/{{instanceId}}/database",
-    showUrlTemplate: "instances/{{instanceId}}/databases",
+    urlTemplate: "instance/{{instance_id}}/database",
+    showUrlTemplate: "instances/{{instance_id}}/databases",
 
     setup:function () {
         this.bind("reset", this.applyInstanceIdToDatabases, this);
     },
 
     applyInstanceIdToDatabases:function () {
-        var id = this.attributes.instanceId;
+        var id = this.attributes.instance_id;
         this.each(function (db) {
-            db.attributes.instanceId = id;
+            db.attributes.instance_id = id;
         });
     },
 

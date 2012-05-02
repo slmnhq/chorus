@@ -1,12 +1,14 @@
 chorus.models.InstanceAccount = chorus.models.Base.extend(
     {
         constructorName: "InstanceAccount",
+        parameterWrapper: "credentials",
+
         urlTemplate:function (options) {
             var method = options && options.method;
             if (method === "update" || method === "delete") {
-                return "instance/accountmap/{{id}}";
+                return "instances/{{instance_id}}/accounts/{{id}}";
             } else {
-                return "instance/accountmap";
+                return "instances/{{instance_id}}/accounts";
             }
         },
 
@@ -14,7 +16,7 @@ chorus.models.InstanceAccount = chorus.models.Base.extend(
             if (options && options.method === "read") {
                 var params = { instanceId:this.get("instanceId") };
                 if (this.get("userId")) {
-                    params["userId"] = this.get("userId")
+                    params["user_id"] = this.get("userId")
                 }
                 return params;
             } else {
@@ -45,7 +47,7 @@ chorus.models.InstanceAccount = chorus.models.Base.extend(
     },
     {
         findByInstanceId:function (instanceId) {
-            var account = new chorus.models.InstanceAccount({ instanceId:instanceId });
+            var account = new chorus.models.InstanceAccount({ instance_id:instanceId });
             account.fetch();
             return account;
         }

@@ -127,7 +127,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("sets the instance id", function() {
-            expect(this.account.get("instanceId")).toBe(this.instance.get("id"));
+            expect(this.account.get("instance_id")).toBe(this.instance.get("id"));
         });
 
         it("sets the user id based on the given user", function() {
@@ -190,7 +190,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("sets the instance id", function() {
-            expect(this.instanceAccounts.attributes.instanceId).toBe(this.instance.get('id'));
+            expect(this.instanceAccounts.attributes.instance_id).toBe(this.instance.get('id'));
         });
 
         it("memoizes", function() {
@@ -208,7 +208,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("sets the instance id", function() {
-            expect(this.databases.attributes.instanceId).toBe(this.instance.get('id'));
+            expect(this.databases.attributes.instance_id).toBe(this.instance.get('id'));
         });
 
         it("memoizes", function() {
@@ -226,7 +226,7 @@ describe("chorus.models.Instance", function() {
                 var sharedAccount = this.instance.sharedAccount();
                 expect(sharedAccount).toBeA(chorus.models.InstanceAccount);
                 expect(sharedAccount.get('db_username')).toBe(this.instance.get('sharedAccount').db_username);
-                expect(sharedAccount.get('instanceId')).toBe(this.instance.get('id'));
+                expect(sharedAccount.get('instance_id')).toBe(this.instance.get('id'));
             });
 
             it("is a model in the same instance's #accounts collection'", function() {
@@ -258,7 +258,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("sets the instance id", function() {
-            expect(this.instanceUsage.attributes.instanceId).toBe(this.instance.get('id'));
+            expect(this.instanceUsage.attributes.instance_id).toBe(this.instance.get('id'));
         });
 
         it("memoizes", function() {

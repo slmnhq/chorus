@@ -7,7 +7,9 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :instances, :only => [:index, :create, :update]
+  resources :instances, :only => [:index, :create, :update] do
+    resources :accounts, :controller => :instance_credentials
+  end
   match "/" => "root#index"
 
   match '*not_found' => 'root#not_found'

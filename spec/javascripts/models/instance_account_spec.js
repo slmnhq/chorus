@@ -1,25 +1,29 @@
 describe("chorus.models.InstanceAccount", function() {
     beforeEach(function() {
-        this.model = fixtures.instanceAccount({ id: '72', instanceId: '1045', userId: "1011" });
+        this.model = fixtures.instanceAccount({ id: '72', instance_id: '1045', userId: "1011" });
+    });
+
+    it("wraps parameters in 'credentials'", function() {
+        expect(this.model.parameterWrapper).toBe("credentials")
     });
 
     describe("#url", function() {
         context("when updating or deleting", function() {
             it("has the right url for accessing an account by its id", function() {
-                expect(this.model.url({ method: 'update' })).toMatchUrl("/instance/accountmap/72");
-                expect(this.model.url({ method: 'delete' })).toMatchUrl("/instance/accountmap/72");
+                expect(this.model.url({ method: 'update' })).toMatchUrl("/instances/1045/accounts/72");
+                expect(this.model.url({ method: 'delete' })).toMatchUrl("/instances/1045/accounts/72");
             });
         });
 
         context("when creating", function() {
             it("has the base url for accounts (no id)", function() {
-                expect(this.model.url({ method: 'create' })).toMatchUrl("/instance/accountmap");
+                expect(this.model.url({ method: 'create' })).toMatchUrl("/instances/1045/accounts");
             });
         });
 
         context("when fetching", function() {
             it("has the right url for fetching an account by user id and instance id", function() {
-                expect(this.model.url({ method: 'read' })).toMatchUrl("/instance/accountmap?instanceId=1045&userId=1011");
+                expect(this.model.url({ method: 'read' })).toMatchUrl("/instances/1045/accounts?user_id=1011");
             });
         });
     });
@@ -59,7 +63,7 @@ describe("chorus.models.InstanceAccount", function() {
     describe("#fetchByInstanceId", function() {
         it("hits the correct url", function() {
             chorus.models.InstanceAccount.findByInstanceId("4");
-            expect(this.server.requests[0].url).toMatchUrl("/instance/accountmap?instanceId=4")
+            expect(this.server.requests[0].url).toMatchUrl("/instances/4/accounts")
         })
 
         it("returns an InstanceAccount", function() {

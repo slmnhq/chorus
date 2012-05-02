@@ -1879,7 +1879,7 @@ beforeEach(function() {
 
         emptyInstanceAccount: function(overrides) {
             var attributes = _.extend({
-                instanceId: "10020",
+                instance_id: "10020",
                 userName: "u1",
                 sharedAccount: {}
             }, overrides);
@@ -1890,7 +1890,7 @@ beforeEach(function() {
             var overrides;
             if (overridesOrInstance instanceof chorus.models.Instance) {
                 overrides = {
-                    instanceId: overridesOrInstance.get("id"),
+                    instance_id: overridesOrInstance.get("id"),
                     db_username: overridesOrInstance.get("sharedAccount").db_username
                 };
             } else {
@@ -1900,7 +1900,7 @@ beforeEach(function() {
                 id: this.nextId().toString(),
                 shared: "yes",
                 expiration: null,
-                instanceId: this.nextId().toString(),
+                instance_id: this.nextId().toString(),
                 user: _.extend(newFixtures.userJson(), overrides.user),
                 db_username: "gpadmin"
             }, overrides);

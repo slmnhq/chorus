@@ -1,6 +1,6 @@
 describe("chorus.models.Database", function() {
     beforeEach(function() {
-        this.model = fixtures.database({ instanceId: '1', instanceName: "insta_whip", id: '2', name: "love_poems" });
+        this.model = fixtures.database({ instance_id: '1', instanceName: "insta_whip", id: '2', name: "love_poems" });
     });
 
     describe("#urlTemplate", function() {
@@ -21,7 +21,7 @@ describe("chorus.models.Database", function() {
 
         it("returns a schema set with the right instance and database name and id", function() {
             expect(this.schemas).toBeA(chorus.collections.SchemaSet);
-            expect(this.schemas.attributes.instanceId).toBe("1");
+            expect(this.schemas.attributes.instance_id).toBe("1");
             expect(this.schemas.attributes.databaseId).toBe("2");
 
             expect(this.schemas.attributes.instanceName).toBe("insta_whip");
