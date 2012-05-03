@@ -14,7 +14,7 @@ class UserPresenter < Presenter
       :admin => admin?,
       :image => {
         :original => image.url(:original),
-        :icon => image.url(:thumb)
+        :icon => image.url(:icon)
       }
     }
   end
