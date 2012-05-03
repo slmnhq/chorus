@@ -168,7 +168,7 @@ describe("chorus.models.Instance", function() {
             this.owner = this.instance.owner();
             this.account1 = fixtures.instanceAccount();
             this.account2 = fixtures.instanceAccount({
-                user: this.owner.attributes
+                owner: this.owner.attributes
             })
             this.accounts = fixtures.instanceAccountSet([this.account1, this.account2]);
             spyOn(this.instance, "accounts").andReturn(this.accounts);
