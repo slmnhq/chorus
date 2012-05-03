@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   private
 
   def render_not_valid(e)
-    present_validation_errors e.record.errors, :status => :unprocessable_entity
+    present_validation_errors ErrorPresenter.new(e.record.errors), :status => :unprocessable_entity
   end
 
   def render_not_found(e)

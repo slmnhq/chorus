@@ -62,7 +62,7 @@ describe Gpdb::ConnectionBuilder do
       begin
         Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
       rescue ActiveRecord::RecordInvalid => e
-        e.record.errors.get(:connection).should == ["connection error"]
+        e.record.errors.get(:connection).should == [[:generic, {:message => "connection error"}]]
       end
     end
 
@@ -186,7 +186,7 @@ describe Gpdb::ConnectionBuilder do
       begin
         Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
       rescue ActiveRecord::RecordInvalid => e
-        e.record.errors.get(:connection).should == ["connection error"]
+        e.record.errors.get(:connection).should == [[:generic, {:message => "connection error"}]]
       end
     end
 

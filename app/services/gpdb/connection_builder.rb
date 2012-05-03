@@ -123,8 +123,8 @@ module Gpdb
           :password => password
       )
     rescue PG::Error => e
-            errors.add(:connection, e.message)
-            @connection = nil
+      errors.add(:connection, :generic, {:message => e.message})
+      @connection = nil
     end
   end
 end
