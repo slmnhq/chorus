@@ -18,8 +18,12 @@ describe UserPresenter, :type => :view do
       @hash.should have_key(:last_name)
     end
 
-    it "includes the image url" do
-      @hash[:image_url].should == @user.image.url
+    it "includes the original image url" do
+      @hash[:image][:original].should == @user.image.url(:original)
+    end
+
+    it "includes the thumb url" do
+      @hash[:image][:thumb].should == @user.image.url(:thumb)
     end
 
     it "does not include unwanted keys" do

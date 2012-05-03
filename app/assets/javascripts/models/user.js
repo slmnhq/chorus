@@ -50,11 +50,18 @@ chorus.models.User = chorus.models.Base.extend({
         return true;
     },
 
-    imageUrl:function (options) {
-        options = (options || {});
-        return this.get("image_url") && new URI(this.get("image_url"))
+    fetchImageUrl: function (options) {
+        var size = (options && options.size) || "original";
+        url = this.get("image") && this.get("image")[size];
+        return url && new URI(url)
             .addSearch({ iebuster: chorus.cachebuster() })
             .toString();
+    },
+
+    createImageUrl: function() {
+        var url = new URI(this.url());
+        url.path(url.path() + "/image");
+        return url.toString();
     },
 
     currentUserCanEdit: function() {
@@ -67,7 +74,7 @@ chorus.models.User = chorus.models.Base.extend({
     },
 
     picklistImageUrl:function () {
-        return this.imageUrl();
+        return this.fetchImageUrl();
     },
 
     displayName:function () {

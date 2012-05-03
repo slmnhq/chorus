@@ -26,8 +26,8 @@ describe("chorus.dialogs.WorkspaceMembersMore", function() {
         it("includes an image for each member", function() {
             var images = dialog.$(".collection_list img");
             expect(images.length).toBe(sortedMembers.length);
-            expect(images.eq(0).attr("src")).toBe(sortedMembers[0].imageUrl({ size: 'icon' }));
-            expect(images.eq(1).attr("src")).toBe(sortedMembers[1].imageUrl({ size: 'icon' }));
+            expect(images.eq(0).attr("src")).toBe(sortedMembers[0].fetchImageUrl({ size: 'icon' }));
+            expect(images.eq(1).attr("src")).toBe(sortedMembers[1].fetchImageUrl({ size: 'icon' }));
         });
 
         it("includes a name for each member", function() {

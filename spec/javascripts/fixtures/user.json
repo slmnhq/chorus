@@ -1,12 +1,15 @@
 {
-  "id": 542,
-  "username": "user120",
+  "id": 1076,
+  "username": "user2",
   "first_name": "John",
   "last_name": "Doe",
-  "email": "person146@example.com",
+  "email": "person2@example.com",
   "title": "",
   "dept": "",
   "notes": "",
   "admin": false,
-  "image_url": "/images/original/missing.png"
+  "image": {
+    "original": "/images/original/missing.png",
+    "icon": "/images/thumb/missing.png"
+  }
 }

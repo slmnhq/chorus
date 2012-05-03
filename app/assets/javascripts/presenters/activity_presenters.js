@@ -53,7 +53,7 @@
             };
 
             if (this.author) {
-                obj.iconSrc = this.author.imageUrl();
+                obj.iconSrc = this.author.fetchImageUrl();
                 obj.iconHref = this.author.showUrl();
                 obj.isOwner = this.author.id == chorus.session.user().id || (this.workspace && this.workspace.currentUserIsOwner());
             }
@@ -308,7 +308,7 @@
             return {
                 objectName: user.get("name"),
                 objectUrl: user.showUrl(),
-                iconSrc: user.imageUrl(),
+                iconSrc: user.fetchImageUrl(),
                 iconHref: user.showUrl()
             }
         },

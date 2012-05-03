@@ -42,8 +42,8 @@ describe("chorus.views.ShuttleWidget", function() {
         })
 
         it("renders the model image in an li", function() {
-           expect(this.view.$("ul.available li:eq(0) .profile").attr("src")).toBe(this.collection.get("10000").imageUrl());
-           expect(this.view.$("ul.selected li.added:eq(0) .profile").attr("src")).toBe(this.collection.get("10001").imageUrl());
+           expect(this.view.$("ul.available li:eq(0) .profile").attr("src")).toBe(this.collection.get("10000").fetchImageUrl());
+           expect(this.view.$("ul.selected li.added:eq(0) .profile").attr("src")).toBe(this.collection.get("10001").fetchImageUrl());
         });
 
         it("renders the model displayName in an li", function() {

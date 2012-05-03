@@ -17,7 +17,7 @@ chorus.views.CommentList = chorus.views.Base.extend({
             var author = comment.author();
             return  {
                 isOwner: (author.id == chorus.session.user().id) || this.options.currentUserOwnsWorkspace,
-                iconSrc: author.imageUrl({ size:"icon" }),
+                iconSrc: author.fetchImageUrl({ size:"icon" }),
                 iconHref: author.showUrl(),
                 displayName: author.displayName(),
                 timestamp: comment.get("timestamp"),

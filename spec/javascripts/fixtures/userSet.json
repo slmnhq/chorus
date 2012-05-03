@@ -9,7 +9,10 @@
       "lastLogin":"2012-04-03 11:56:26",
       "isDeleted":false,
       "title":null,
-      "image_url":"/images/original/missing.png",
+      "image": {
+          "original": "/images/original/missing.png",
+          "icon": "/images/thumb/missing.png"
+      },
       "createdStamp":"2012-04-03 11:55:58.775"
    },
    {
@@ -22,7 +25,10 @@
       "lastLogin":"2012-04-02 16:59:12",
       "isDeleted":false,
       "title":null,
-      "image_url":"/images/original/missing.png",
+      "image": {
+          "original": "/images/original/missing.png",
+          "icon": "/images/thumb/missing.png"
+      },
       "createdStamp":"2012-04-02 16:47:15.046"
    },
    {
@@ -35,7 +41,10 @@
       "lastLogin":null,
       "isDeleted":false,
       "title":null,
-      "image_url":"/images/original/missing.png",
+      "image": {
+          "original": "/images/original/missing.png",
+          "icon": "/images/thumb/missing.png"
+      },
       "createdStamp":"2012-04-02 14:53:12.652"
    },
    {
@@ -48,7 +57,10 @@
       "lastLogin":"2012-04-05 14:04:34",
       "isDeleted":false,
       "title":null,
-      "image_url":"/images/original/missing.png",
+      "image": {
+          "original": "/images/original/missing.png",
+          "icon": "/images/thumb/missing.png"
+      },
       "createdStamp":"2012-03-29 16:00:32.173"
    }
 ]

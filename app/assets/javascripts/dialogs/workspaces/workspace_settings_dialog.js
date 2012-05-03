@@ -19,7 +19,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
             : t("workspace.settings.sandbox.none");
 
         return {
-            imageUrl:this.pageModel.imageUrl(),
+            imageUrl:this.pageModel.fetchImageUrl(),
             hasImage:this.pageModel.hasImage(),
             members:this.pageModel.members().models,
             canSave : this.pageModel.currentUserIsMember() || this.userIsOwnerOrAdmin(),

@@ -45,7 +45,7 @@ describe("chorus.views.CommentList", function() {
         });
 
         it("displays the profile image of each comment's author", function() {
-            expect(this.listItems.eq(0).find("img").attr('src')).toBe(this.comment1.author().imageUrl({ size: "original" }));
+            expect(this.listItems.eq(0).find("img").attr('src')).toBe(this.comment1.author().fetchImageUrl({ size: "original" }));
         });
 
         it("displays the insight ribbon when appropriate", function() {

@@ -217,7 +217,7 @@ describe("chorus.models.User", function() {
         });
     });
 
-    describe("#imageUrl", function() {
+    describe("#fetchImageUrl", function() {
         var user;
 
         beforeEach(function() {
@@ -225,34 +225,46 @@ describe("chorus.models.User", function() {
             user = newFixtures.user({
                 username: 'foo',
                 id: "bar",
-                image_url: "/system/users/images/000/000/005/original/retro.jpg"
+                image: {
+                    icon: "/system/users/images/000/000/005/icon/retro.jpg",
+                    original: "/system/users/images/000/000/005/original/retro.jpg"
+                }
             });
         });
 
-        context("when the 'image_url' attribute is blank", function() {
-            it("returns undefined", function() {
-                user.unset("image_url");
-                expect(user.imageUrl()).toBeUndefined();
-            });
-        });
-
-        it("uses the URL for the original-sized image by default", function() {
-            expect(user.imageUrl()).toHaveUrlPath("/system/users/images/000/000/005/original/retro.jpg");
+        it("returns undefined when the user does not have an image", function() {
+            user.unset("image");
+            expect(user.fetchImageUrl()).toBeUndefined();
         });
 
         it("appends a cache-busting query param", function() {
-            expect(user.imageUrl()).toContainQueryParams({ iebuster: 12345 });
+            expect(user.fetchImageUrl()).toContainQueryParams({ iebuster: 12345 });
         });
 
-        xit("uses the thumbnail url if the 'size' option is set to 'thumb'", function() {
-            expect(user.imageUrl({ size: "thumb" })).toHaveUrlPath("/system/users/images/000/000/005/thumb/retro.jpg");
+        it("uses the URL for the original-sized image by default", function() {
+            expect(user.fetchImageUrl()).toHaveUrlPath("/system/users/images/000/000/005/original/retro.jpg");
+        });
+
+        it("uses the icon url if the 'size' option is set to 'icon'", function() {
+            expect(user.fetchImageUrl({ size: "icon" })).toHaveUrlPath("/system/users/images/000/000/005/icon/retro.jpg");
+        });
+    });
+
+    describe("#createImageUrl", function() {
+        it("gives the right url back", function() {
+            var user = newFixtures.user({
+                username: 'elephant',
+                id: "55",
+            });
+            expect(user.createImageUrl()).toHaveUrlPath("/users/55/image")
+            expect(user.createImageUrl()).toBeA("string");
         });
     });
 
     describe("#picklistImageUrl", function() {
         it("uses the right URL", function() {
             var user = newFixtures.user({username: 'foo', id: "bar"});
-            expect(user.picklistImageUrl()).toBe(user.imageUrl({ size: "original" }));
+            expect(user.picklistImageUrl()).toBe(user.fetchImageUrl({ size: "original" }));
         });
     })
 
