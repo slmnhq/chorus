@@ -10,6 +10,10 @@ class Instance < ActiveRecord::Base
     accounts.where(:owner_id => owner_id).first
   end
 
+  def state
+    "online"#TODO
+  end
+
   def get_instance_provider
     return "Greenplum Database"
   end

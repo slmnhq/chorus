@@ -17,11 +17,10 @@ describe Instance do
   end
 
   it "should not allow changing inaccessible attributes" do
-    instance = FactoryGirl.create(:instance)
     changed_id = 122222
-    instance.attributes = {:id => changed_id, :owner_id => changed_id}
-    instance.id.should_not == 12222
-    instance.owner_id.should_not == 12222
+    @instance.attributes = {:id => changed_id, :owner_id => changed_id}
+    @instance.id.should_not == changed_id
+    @instance.owner_id.should_not == changed_id
   end
 
   describe "#owner_account" do
@@ -32,6 +31,10 @@ describe Instance do
 
       instance.owner_account.should == owner_account
     end
+  end
+
+  it "#state temporarily returns 'online' in all situations" do
+    @instance.state.should == "online"
   end
 
   describe "#for_user" do
