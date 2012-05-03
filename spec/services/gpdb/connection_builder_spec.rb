@@ -227,7 +227,7 @@ describe Gpdb::ConnectionBuilder do
         context "and the instance has shared accounts" do
           before do
             Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => true), owner)
-            @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => true, :owner => new_owner), owner)
+            @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => true, :owner => {:id => new_owner.to_param}), owner)
           end
 
           it "should succeed and give the account to the new owner" do
@@ -243,13 +243,13 @@ describe Gpdb::ConnectionBuilder do
         context "and the instance has individual accounts" do
           it "should raise ActiveRecord::RecordInvalid" do
             lambda {
-              Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => new_owner), owner)
+              Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => {:id => new_owner.to_param}), owner)
             }.should raise_error(ActiveRecord::RecordInvalid)
           end
 
           it "does not update the instance" do
             lambda {
-              Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => new_owner, :name => "foobar"), owner)
+              Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => {:id => new_owner.to_param}, :name => "foobar"), owner)
             }.should raise_error
 
             cached_instance.reload.name.should_not == "foobar"
@@ -263,7 +263,7 @@ describe Gpdb::ConnectionBuilder do
         context "and the instance has individual accounts" do
           before do
             @old_account_count = cached_instance.accounts.count
-            @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => new_owner, :name => "foobar"), owner)
+            @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:owner => {:id => new_owner.to_param}, :name => "foobar"), owner)
           end
           it "succeeds" do
             @updated_instance.should be_present

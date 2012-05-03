@@ -29,7 +29,7 @@ module Gpdb
     end
 
     def self.for_update(connection_config, instance)
-      new_owner = connection_config.delete(:owner) || instance.owner
+      new_owner = connection_config[:owner] && connection_config[:owner][:id] ? User.find(connection_config[:owner][:id]) : instance.owner
       builder = new(connection_config, new_owner)
       builder.instance = instance
       builder.account = instance.owner_account
