@@ -1,1 +1,1 @@
-ENV["DATABASE_URL"] = "postgres://edcadmin:secret@localhost:8543/queue_classic_chorus"
+ENV["QC_DATABASE_URL"] = "postgres://edcadmin:secret@localhost:8543/queue_classic_chorus"

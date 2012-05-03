@@ -1,8 +1,8 @@
-include Clockwork
+ENV["QC_DATABASE_URL"] = "postgres://edcadmin:secret@localhost:8543/queue_classic_chorus"
 require 'queue_classic'
-require 'clockwork'
 
-ENV["DATABASE_URL"] = "postgres://edcadmin:secret@localhost:8543/queue_classic_chorus"
+require 'clockwork'
+include Clockwork
 
 handler do |job|
   puts "Running #{job}"
