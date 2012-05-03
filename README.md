@@ -70,10 +70,12 @@ Note that this will break RVM in other systems, notably the chorus-java project.
 Start a new terminal.
 
 
-### Run postgres:
+### Run postgres
+
 (Currently the database lives in the old Chorus project)
-ps aux | grep -- '-p8543' | grep -v grep | awk '{print $2}' | xargs kill -9
-postgres -D ~/workspace/chorus/var/db -h localhost -p8543 --bytea_output=escape
+    ps aux | grep -- '-p8543' | grep -v grep | awk '{print $2}' | xargs kill -9 
+    postgres -D ~/workspace/chorus/var/db -h localhost -p8543 --bytea_output=escape
+
 
 
 #### Run script/bootstrap
