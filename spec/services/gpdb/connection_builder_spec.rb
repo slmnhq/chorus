@@ -98,6 +98,11 @@ describe Gpdb::ConnectionBuilder do
       cached_instance_account.password.should == valid_input_attributes[:db_password]
     end
 
+    it "can save a new instance that is shared" do
+      instance = Gpdb::ConnectionBuilder.create!(valid_input_attributes.merge({:shared => true}), owner)
+      instance.shared.should == true
+    end
+
     it "saves the instance attributes" do
       instance = Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
       valid_output_attributes.each {| key, value |
