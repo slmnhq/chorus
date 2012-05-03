@@ -1,5 +1,5 @@
 class Presenter
-  CLASS_TO_PRESENTER_MAP = {
+  PRESENTER_NAME_MAP = {
     ::Paperclip::Attachment => "Image"
   }
 
@@ -14,8 +14,8 @@ class Presenter
       presentation_method = :present_model
     end
 
-    if CLASS_TO_PRESENTER_MAP.has_key?(model_class)
-      class_name = CLASS_TO_PRESENTER_MAP[model_class]
+    if PRESENTER_NAME_MAP.has_key?(model_class)
+      class_name = PRESENTER_NAME_MAP[model_class]
     else
       class_name = model_class.name
     end
