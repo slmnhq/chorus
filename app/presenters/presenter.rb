@@ -33,7 +33,7 @@ class Presenter
   end
 
   def present(model)
-    self.class.present(model, @view_context)
+    self.class.present(model, @view_context).to_hash
   end
 
   def initialize(model, view_context)
