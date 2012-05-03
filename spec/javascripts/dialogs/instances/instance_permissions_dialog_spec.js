@@ -151,7 +151,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "launchSubModal").andCallThrough();
                     spyOn(this.instance, "sharedAccount").andCallFake(function() {
-                        return fixtures.instanceAccount({ shared : "yes", db_username : "foo", id : "999", instance_id: "5" });
+                        return fixtures.instanceAccount({ shared : "true", db_username : "foo", id : "999", instance_id: "5" });
                     });
                     this.dialog.$("a.remove_shared_account").click();
                 });
@@ -169,7 +169,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     it("saves the instance account", function() {
                         expect(this.server.lastUpdate().url).toBe("/instances/5/accounts/999?");
                         expect(this.server.lastUpdate().params()["account[id]"]).toBe("999");
-                        expect(this.server.lastUpdate().params()["account[shared]"]).toBe("no");
+                        expect(this.server.lastUpdate().params()["account[shared]"]).toBe("false");
                     });
 
                     context("when the save succeeds", function() {
@@ -177,7 +177,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             spyOn(chorus, 'toast');
                             spyOn(this.dialog, "postRender").andCallThrough();
                             expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
-                            this.server.lastUpdate().succeed([fixtures.instanceAccount({ shared : "no", db_username : "foo", id : "999" })])
+                            this.server.lastUpdate().succeed([fixtures.instanceAccount({ shared : "false", db_username : "foo", id : "999" })])
                         });
 
                         it("displays a toast message", function() {
@@ -684,7 +684,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         context("clicking the switch to shared account link", function() {
             beforeEach(function() {
                 spyOn(this.dialog, "launchSubModal").andCallThrough();
-                this.ownerAccount = fixtures.instanceAccount({shared: 'no', db_username : "foo", id : "888", instance_id: 5});
+                this.ownerAccount = fixtures.instanceAccount({shared: 'false', db_username : "foo", id : "888", instance_id: 5});
                 spyOn(this.ownerAccount, "save").andCallThrough();
                 spyOn(this.dialog.instance, 'accountForOwner').andReturn(this.ownerAccount);
                 this.dialog.$("a.add_shared_account").click();
@@ -700,14 +700,14 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
                 });
 
-                it("calls save on the account with shared:yes", function() {
-                    expect(this.ownerAccount.save.calls[0].args[0].shared).toBe("yes");
+                it("calls save on the account with shared:true", function() {
+                    expect(this.ownerAccount.save.calls[0].args[0].shared).toBe("true");
                 });
 
                 it("only sends the shared parameter", function() {
                     expect(this.server.lastRequest().url).toBe("/instances/5/accounts/888?")
                     expect(this.server.lastRequest().params()["account[id]"]).toBe("888");
-                    expect(this.server.lastRequest().params()["account[shared]"]).toBe("yes");
+                    expect(this.server.lastRequest().params()["account[shared]"]).toBe("true");
                 })
 
                 context("when the save succeeds", function() {

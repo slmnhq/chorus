@@ -108,7 +108,7 @@ describe("chorus.models.InstanceAccount", function() {
 
         context("when the instance account is a shared account", function() {
             beforeEach(function() {
-                this.model = fixtures.instanceAccount({ shared : "yes" })
+                this.model = fixtures.instanceAccount({ shared : "true" })
             });
 
             describe("and it is changed to an individual account", function() {
@@ -117,7 +117,7 @@ describe("chorus.models.InstanceAccount", function() {
                 })
 
                 it("does not require db_username", function() {
-                    this.model.performValidation({ shared : "no" })
+                    this.model.performValidation({ shared : "false" })
                     expect(this.model.isValid()).toBeTruthy();
                 })
             })

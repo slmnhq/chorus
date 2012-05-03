@@ -1900,7 +1900,7 @@ beforeEach(function() {
             }
             var attributes = _.extend({
                 id: this.nextId().toString(),
-                shared: "yes",
+                shared: "true",
                 expiration: null,
                 instance_id: this.nextId().toString(),
                 owner: _.extend(newFixtures.userJson(), overrides.owner),

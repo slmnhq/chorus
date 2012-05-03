@@ -20,6 +20,8 @@ describe InstancePresenter, :type => :view do
       @hash.should have_key(:host)
       @hash.should have_key(:id)
       @hash.should have_key(:owner)
+      @hash.should have_key(:shared)
+      @hash.should have_key(:state)
       @hash.should have_key(:provision_type)
       @hash.should have_key(:maintenance_db)
       @hash.should have_key(:description)
