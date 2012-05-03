@@ -1,11 +1,11 @@
 require 'queue_classic'
 
 class AddQueueClassic < ActiveRecord::Migration
-  def up
+  def self.up
     QC::Setup.create
   end
 
-  def down
+  def self.down
     QC::Setup.drop
   end
 end
