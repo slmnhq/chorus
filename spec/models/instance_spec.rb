@@ -33,4 +33,39 @@ describe Instance do
       instance.owner_account.should == owner_account
     end
   end
+
+  describe "#for_user" do
+    before(:each) do
+      @user = FactoryGirl.create :user
+      @instance_allowed1 = FactoryGirl.create :instance, :owner => @user
+      @instance_allowed2 = FactoryGirl.create :instance, :owner => @user
+      @instance_forbidden = FactoryGirl.create :instance
+      @instance_shared = FactoryGirl.create :instance, :shared => true
+    end
+
+    context("user as non-admin") do
+      it "returns all the instances the user has access to" do
+        Instance.for_user(@user).should include @instance_allowed1
+        Instance.for_user(@user).should include @instance_allowed2
+        Instance.for_user(@user).should include @instance_shared
+      end
+
+      it "does not return instances the user has no access to" do
+        Instance.for_user(@user).should_not include(@instance_forbidden)
+      end
+    end
+
+    context("user as admin") do
+      before(:each) do
+        @user.admin = true
+      end
+
+      it "returns all the instances the user has access to" do
+        Instance.for_user(@user).should include @instance_allowed1
+        Instance.for_user(@user).should include @instance_allowed2
+        Instance.for_user(@user).should include @instance_forbidden
+        Instance.for_user(@user).should include @instance_shared
+      end
+    end
+  end
 end

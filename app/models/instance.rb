@@ -13,4 +13,12 @@ class Instance < ActiveRecord::Base
   def get_instance_provider
     return "Greenplum Database"
   end
+
+  def self.for_user(user)
+    if user.admin?
+      Instance.scoped
+    else
+      Instance.scoped.where("owner_id = ? OR shared = true", user.id)
+    end
+  end
 end

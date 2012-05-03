@@ -1,6 +1,6 @@
 class InstancesController < ApplicationController
   def index
-    present Instance.scoped
+    present Instance.for_user(current_user)
   end
 
   def create
