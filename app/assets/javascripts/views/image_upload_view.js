@@ -78,18 +78,20 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
             chorus.updateCachebuster();
         }
 
-        function uploadFinished(e, json) {
+        function uploadFinished(e, data) {
             reEnableUpload()
+            var json = JSON.parse(data.result).response;
             delete self.resource.serverErrors;
             self.resource.trigger("validated");
+            self.model.set({"image": json}, {silent: true})
             self.model.trigger("image:change");
             self.$("img").attr('src', self.model.fetchImageUrl());
             self.$("img").removeClass("hidden");
         }
 
-        function uploadFailed(e, json) {
+        function uploadFailed(e, data) {
             reEnableUpload();
-            self.resource.serverErrors = json.errors;
+            self.resource.serverErrors = JSON.parse(data.result).errors;
             self.resource.trigger("saveFailed");
         }
     }
