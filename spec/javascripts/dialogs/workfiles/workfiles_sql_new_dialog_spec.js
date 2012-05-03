@@ -92,12 +92,12 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
 
             context("when save fails", function() {
                 beforeEach(function() {
-                    this.dialog.model.serverErrors = fixtures.serverErrors();
+                    this.dialog.model.serverErrors = { fields: { a: { REQUIRED: {} } } };
                     this.dialog.model.trigger("saveFailed")
                 })
 
                 it("displays the errors and does not leave the button in the loading state", function() {
-                    expect(this.dialog.$(".errors")).not.toBeEmpty();
+                    expect(this.dialog.$(".errors").text()).toContain("A is required");
                     expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
                 });
             })

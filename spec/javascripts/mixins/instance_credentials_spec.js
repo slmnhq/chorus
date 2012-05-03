@@ -9,44 +9,14 @@ describe("chorus.Mixins.InstanceCredentials", function() {
             context("when a fetch failed because of missing instance credentials", function() {
                 it("returns an instance model with the right id", function() {
                     this.collection.errorData = {
-                        instanceId: "101",
-                        instanceName: "Ron Instance"
+                        id: "101",
+                        name: "Ron Instance"
                     };
-
-                    this.collection.serverErrors = [{
-                        description: null,
-                        message: "Account map is needed.",
-                        msgcode: "E_4_0109",
-                        msgkey: "ACCOUNTMAP.NO_ACTIVE_ACCOUNT",
-                        severity: "error"
-                    }];
-
-                    var instance = this.collection.instanceRequiringCredentials();
-                    expect(instance).toBeA(chorus.models.Instance);
-                    expect(instance.get("id")).toBe("101");
-
-                    this.collection.serverErrors = [{
-                        description: null,
-                        message: "com.emc.edc.common.AccountMapException: Account map is needed.",
-                        msgcode: null,
-                        msgkey: null,
-                        severity: "error"
-                    }];
 
                     var instance = this.collection.instanceRequiringCredentials();
                     expect(instance).toBeA(chorus.models.Instance);
                     expect(instance.get("id")).toBe("101");
                 });
-            });
-
-            it("returns false when a fetch failed for some other reason", function() {
-                this.collection.serverErrors = [{ message: "sql error - no table named 'dudes'" }];
-                expect(this.collection.instanceRequiringCredentials()).toBeFalsy();
-            });
-
-            it("returns false when the model has no server errors", function() {
-                delete this.collection.serverErrors;
-                expect(this.collection.instanceRequiringCredentials()).toBeFalsy();
             });
         });
     });
@@ -63,8 +33,8 @@ describe("chorus.Mixins.InstanceCredentials", function() {
             this.model.urlTemplate = "foo";
             this.otherModel.urlTemplate = "bar";
 
-            this.page.requiredResources.push(this.model);
-            this.page.requiredResources.push(this.otherModel);
+            this.page.dependOn(this.model);
+            this.page.dependOn(this.otherModel);
 
             this.modalSpy = stubModals();
             spyOn(Backbone.history, 'loadUrl');
@@ -81,7 +51,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                     this.server.lastFetchFor(this.model).failForbidden();
                 })
 
-                it("does not go to the 404 page", function() {
+                it("does not go to the 403 page", function() {
                     expect(Backbone.history.loadUrl).not.toHaveBeenCalled()
                 });
 

@@ -631,7 +631,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
         describe("column errors", function() {
             beforeEach(function() {
                 spyOn(this.view, "showError");
-                this.collection.serverErrors = [{message: "No permission"}];
+                this.collection.serverErrors = {fields: {a: {REQUIRED: {}}}};
                 this.view.render();
             });
 

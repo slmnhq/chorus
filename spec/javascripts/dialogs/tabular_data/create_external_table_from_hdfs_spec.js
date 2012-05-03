@@ -33,7 +33,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
         });
 
         it("populates the dialog's errors div", function() {
-            expect(this.dialog.$(".errors")).toContainTranslation("hdfs.create_external.no_workspaces");
+            expect(this.dialog.$(".errors")).toContainTranslation("field_error.workspaces.EMPTY");
         })
     })
 
@@ -174,9 +174,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
 
                     this.dialog.$("button.submit").click();
-                    this.server.lastCreate().failUnprocessableEntity([
-                        { message: "I like cheese" }
-                    ]);
+                    this.server.lastCreate().failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
                 });
 
                 it("has no validation errors", function() {

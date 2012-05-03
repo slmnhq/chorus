@@ -4,9 +4,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         this.model = fixtures.workfile({ workspaceId: 4 });
         var workfileSet = new chorus.collections.WorkfileSet([this.model], { workspaceId: 4 });
         this.dialog = new chorus.dialogs.WorkfilesImport({ launchElement : this.launchElement, pageModel: this.model, pageCollection: workfileSet });
-        this.successfulResponseTxt = {"result": '{"resource":[{"id":"9", "fileName" : "new_file.txt", "mimeType" : "text/plain", "workspaceId" : "4"}], "status": "ok"}'};
-        this.successfulResponseOther = {"result": '{"resource":[{"id":"9", "fileName" : "new_file.sh", "mimeType" : "application/octet-stream", "workspaceId" : "4"}], "status": "ok"}'};
-        this.errorResponse = {"result": '{"status": "fail", "message" :[{"message":"Workspace already has a workfile with this name. Specify a different name."}]}'};
+        this.successfulResponseTxt = {"response":{"id":"9", "fileName" : "new_file.txt", "mimeType" : "text/plain", "workspaceId" : "4"}};
     });
 
     it("does not re-render when the model changes", function() {
@@ -153,7 +151,8 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                     this.saveFailedSpy = jasmine.createSpy();
                     this.eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
                     this.dialog.resource.bind("saveFailed", this.saveFailedSpy);
-                    this.fileUploadOptions.done(this.eventSpy, this.errorResponse);
+                    this.errorResponse = {errors : { fields: { a: { REQUIRED: {} } } }};
+                    this.fileUploadOptions.fail(this.eventSpy, this.errorResponse);
                 });
 
                 it("triggers saveFailed on the model", function() {
@@ -169,7 +168,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 });
 
                 it("displays the correct error", function() {
-                    expect(this.dialog.$(".errors ul").text()).toBe("Workspace already has a workfile with this name. Specify a different name.")
+                    expect(this.dialog.$(".errors ul").text()).toBe("A is required")
                 });
 
                 it("sets the button text back to 'Upload File'", function() {

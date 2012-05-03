@@ -4,8 +4,9 @@ describe("chorus.alerts.WorkfileConflict", function() {
         this.useFakeTimers();
 
         this.workfile = fixtures.workfile({ content : "version content" });
-        this.message = "This work file has been modified by Christine Klunk"
-        this.workfile.serverErrors = [{message: this.message}];
+        this.message = "This work file has been modified by Christine Klunk";
+        // TODO: REWRITE: Maybe server should provide {INVALID: {editor: "Christine Klunk"}} instead
+        this.workfile.serverErrors = {fields: {version: {GENERIC: {message: this.message}}}};
         this.alert = new chorus.alerts.WorkfileConflict({ model : this.workfile });
         this.alert.render();
     });

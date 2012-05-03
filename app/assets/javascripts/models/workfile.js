@@ -248,6 +248,10 @@
 
         hasOwnPage: function() {
             return true;
+        },
+
+        hasConflict: function() {
+            return this.serverErrors && this.serverErrors.fields && this.serverErrors.fields.version && this.serverErrors.fields.version.INVALID;
         }
     });
 })();

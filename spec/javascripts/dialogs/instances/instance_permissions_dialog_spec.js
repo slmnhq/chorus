@@ -151,7 +151,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "launchSubModal").andCallThrough();
                     spyOn(this.instance, "sharedAccount").andCallFake(function() {
-                        return fixtures.instanceAccount({ shared : "yes", db_username : "foo", id : "999", instance_id: "5" });
+                        return fixtures.instanceAccount({ shared : "true", db_username : "foo", id : "999", instance_id: "5" });
                     });
                     this.dialog.$("a.remove_shared_account").click();
                 });
@@ -167,9 +167,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("saves the instance account", function() {
-                        expect(this.server.lastUpdate().url).toBe("/instances/5/accounts/999?");
+                        expect(this.server.lastUpdate().url).toBe("/instances/5/accounts/999");
                         expect(this.server.lastUpdate().params()["account[id]"]).toBe("999");
-                        expect(this.server.lastUpdate().params()["account[shared]"]).toBe("no");
+                        expect(this.server.lastUpdate().params()["account[shared]"]).toBe("false");
                     });
 
                     context("when the save succeeds", function() {
@@ -177,7 +177,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             spyOn(chorus, 'toast');
                             spyOn(this.dialog, "postRender").andCallThrough();
                             expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
-                            this.server.lastUpdate().succeed([fixtures.instanceAccount({ shared : "no", db_username : "foo", id : "999" })])
+                            this.server.lastUpdate().succeed([fixtures.instanceAccount({ shared : "false", db_username : "foo", id : "999" })])
                         });
 
                         it("displays a toast message", function() {
@@ -335,7 +335,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 describe("when the save fails", function() {
                     beforeEach(function() {
-                        this.accountBeingEdited.serverErrors = [{ message: "You can't do that, dude" }];
+                        this.accountBeingEdited.serverErrors = { fields: { a: { REQUIRED: {} } } };
                         this.accountBeingEdited.trigger('saveFailed');
                     })
 
@@ -344,7 +344,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     })
 
                     it("displays error messages", function() {
-                        expect(this.dialog.$(".errors li:first-child").text().trim()).toBe("You can't do that, dude");
+                        expect(this.dialog.$(".errors li:first-child").text().trim()).toBe("A is required");
                     })
 
                     it("stops the spinner", function() {
@@ -421,7 +421,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 it("should call delete on the accounts", function() {
-                    expect(this.server.lastDestroy().url).toBe("/instances/" + this.instance.get("id") + "/accounts/" + this.accountBeingRemoved.id + "?");
+                    expect(this.server.lastDestroy().url).toBe("/instances/" + this.instance.get("id") + "/accounts/" + this.accountBeingRemoved.id);
                 });
 
                 context("when the delete succeeds", function() {
@@ -445,10 +445,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the delete fails", function() {
                     beforeEach(function() {
-                        this.server.lastDestroy().failUnprocessableEntity([{message: "don't delete me"}]);
+                        this.server.lastDestroy().failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
                     });
                     it("displays the error", function() {
-                       expect(this.dialog.$(".errors")).toContainText("don't delete me");
+                       expect(this.dialog.$(".errors")).toContainText("A is required");
                     });
                 });
             });
@@ -604,12 +604,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                             describe("when the save fails", function() {
                                 beforeEach(function() {
-                                    this.dialog.account.serverErrors = [{ message: "couldn't create account..'" }];
+                                    this.dialog.account.serverErrors = { fields: { a: { REQUIRED: {} } } };
                                     this.dialog.account.trigger("saveFailed");
-                                });
-
-                                it("shows the server errors", function() {
-                                    expect(this.dialog.$(".errors")).toContainText("couldn't create account");
                                 });
 
                                 it("only shows one copy of the server error", function() {
@@ -684,7 +680,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         context("clicking the switch to shared account link", function() {
             beforeEach(function() {
                 spyOn(this.dialog, "launchSubModal").andCallThrough();
-                this.ownerAccount = fixtures.instanceAccount({shared: 'no', db_username : "foo", id : "888", instance_id: 5});
+                this.ownerAccount = fixtures.instanceAccount({shared: 'false', db_username : "foo", id : "888", instance_id: 5});
                 spyOn(this.ownerAccount, "save").andCallThrough();
                 spyOn(this.dialog.instance, 'accountForOwner').andReturn(this.ownerAccount);
                 this.dialog.$("a.add_shared_account").click();
@@ -700,15 +696,15 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
                 });
 
-                it("calls save on the account with shared:yes", function() {
-                    expect(this.ownerAccount.save.calls[0].args[0].shared).toBe("yes");
+                it("calls save on the account with shared:true", function() {
+                    expect(this.ownerAccount.save.calls[0].args[0].shared).toBe("true");
                 });
 
                 it("only sends the shared parameter", function() {
-                    expect(this.server.lastRequest().url).toBe("/instances/5/accounts/888?")
+                    expect(this.server.lastRequest().url).toBe("/instances/5/accounts/888")
                     expect(this.server.lastRequest().params()["account[id]"]).toBe("888");
-                    expect(this.server.lastRequest().params()["account[shared]"]).toBe("yes");
-                })
+                    expect(this.server.lastRequest().params()["account[shared]"]).toBe("true");
+                });
 
                 context("when the save succeeds", function() {
                     beforeEach(function() {
@@ -827,12 +823,12 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             describe("when the save fails", function() {
                 beforeEach(function() {
-                    this.instance.serverErrors = [{ message: "shut up" }];
+                    this.instance.serverErrors = { fields: { a: { REQUIRED: {} } } };
                     this.instance.trigger("saveFailed");
                 });
 
                 it("displays the server errors in the errors div", function() {
-                    expect(this.dialog.$(".errors")).toContainText("shut up");
+                    expect(this.dialog.$(".errors li").length).toBe(1);
                 });
             });
         });

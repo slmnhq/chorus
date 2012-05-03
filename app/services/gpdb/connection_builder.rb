@@ -29,7 +29,7 @@ module Gpdb
     end
 
     def self.for_update(connection_config, instance)
-      new_owner = connection_config.delete(:owner) || instance.owner
+      new_owner = connection_config[:owner] && connection_config[:owner][:id] ? User.find(connection_config[:owner][:id]) : instance.owner
       builder = new(connection_config, new_owner)
       builder.instance = instance
       builder.account = instance.owner_account
@@ -54,8 +54,8 @@ module Gpdb
       valid!
       Instance.transaction do
         save_instance!
-        InstanceAccount.destroy_all("instance_id = #{instance.id} AND id != #{account.id}") if instance.shared
         save_account!(user)
+        InstanceAccount.destroy_all("instance_id = #{instance.id} AND id != #{account.id}") if instance.shared
         raise(ActiveRecord::RecordInvalid.new(self)) if !instance.shared && instance.owner_account.nil?
       end
     end
@@ -123,8 +123,8 @@ module Gpdb
           :password => password
       )
     rescue PG::Error => e
-            errors.add(:connection, e.message)
-            @connection = nil
+      errors.add(:connection, :generic, {:message => e.message})
+      @connection = nil
     end
   end
 end

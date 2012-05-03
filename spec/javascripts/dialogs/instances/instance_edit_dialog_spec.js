@@ -301,14 +301,12 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         context("when the upload gives a server error", function() {
             beforeEach(function() {
-                this.dialog.model.set({serverErrors: [
-                    { message: "foo" }
-                ]});
+                this.dialog.model.set({serverErrors: { fields: { a: { REQUIRED: {} } } }});
                 this.dialog.model.trigger("saveFailed");
             });
 
             it("display the correct error", function() {
-                expect(this.dialog.$(".errors").text()).toContain("foo");
+                expect(this.dialog.$(".errors").text()).toContain("A is required");
             });
 
             itRecoversFromError();

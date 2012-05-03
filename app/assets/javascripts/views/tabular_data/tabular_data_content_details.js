@@ -71,7 +71,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
             });
         }
 
-        if(this.collection.serverErrors && this.collection.serverErrors.length){
+        if(this.collection.serverErrors && _.keys(this.collection.serverErrors).length){
             this.showError(this.collection, chorus.alerts.Error);
         }
     },

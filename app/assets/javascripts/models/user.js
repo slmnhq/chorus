@@ -50,6 +50,7 @@ chorus.models.User = chorus.models.Base.extend({
         return true;
     },
 
+
     fetchImageUrl: function (options) {
         var size = (options && options.size) || "original";
         url = this.get("image") && this.get("image")[size];

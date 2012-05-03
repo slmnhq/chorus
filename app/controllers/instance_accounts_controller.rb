@@ -22,13 +22,22 @@ class InstanceAccountsController < ApplicationController
     present @account, :status => :ok
   end
 
+  def show
+    account = (params[:id] ? load_account : load_account_for_current_user)
+    present account
+  end
+
   private
+
+  def load_account_for_current_user
+    InstanceAccount.where(:instance_id => @instance.id, :owner_id => current_user.id).first
+  end
 
   def load_instance
     @instance = Instance.find(params[:instance_id])
   end
 
   def load_account
-    @account = InstanceAccount.find(params[:account][:id])
+    @account = InstanceAccount.find(params[:id])
   end
 end

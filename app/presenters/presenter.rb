@@ -1,4 +1,8 @@
 class Presenter
+  PRESENTER_NAME_MAP = {
+    ::Paperclip::Attachment => "Image"
+  }
+
   def self.present(model_or_collection, view_context)
     if model_or_collection.is_a?(ActiveRecord::Relation) || model_or_collection.is_a?(Enumerable)
       exemplary_model = model_or_collection.to_a.first
@@ -10,7 +14,13 @@ class Presenter
       presentation_method = :present_model
     end
 
-    presenter_class = "#{model_class}Presenter".constantize
+    if PRESENTER_NAME_MAP.has_key?(model_class)
+      class_name = PRESENTER_NAME_MAP[model_class]
+    else
+      class_name = model_class.name
+    end
+
+    presenter_class = "#{class_name}Presenter".constantize
     presenter_class.send(presentation_method, model_or_collection, view_context)
   end
 
@@ -23,7 +33,7 @@ class Presenter
   end
 
   def present(model)
-    self.class.present(model, @view_context)
+    self.class.present(model, @view_context).to_hash
   end
 
   def initialize(model, view_context)

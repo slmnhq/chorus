@@ -56,18 +56,20 @@ describe("chorus.alerts.Analyze", function() {
         context("when the fetch fails", function() {
             beforeEach(function() {
                 spyOn(this.alert, "closeModal");
-                this.server.lastFetchFor(this.model.analyze()).failUnprocessableEntity([
-                    { message: "first problem" },
-                    { message: "second problem" }
-                ]);
+                this.server.lastFetchFor(this.model.analyze()).failUnprocessableEntity({
+                    fields: {
+                        first: { PROBLEM: {}},
+                        second: { PROBLEM: {}}
+                    }
+                });
             });
 
             it("should display the errors", function() {
-               expect(this.alert.$(".errors li")).toExist();
+                expect(this.alert.$(".errors li")).toExist();
             });
 
             it("re-enables the submit button", function() {
-               expect(this.alert.$("button.submit").isLoading()).toBeFalsy();
+                expect(this.alert.$("button.submit").isLoading()).toBeFalsy();
             });
         });
     });

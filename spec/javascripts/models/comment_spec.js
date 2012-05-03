@@ -29,11 +29,11 @@ describe("chorus.models.Comment", function() {
 
     describe("validation", function() {
         it("should return a falsyy value if there is no body", function() {
-            this.model.set({ body : "" });
+            this.model.set({ body: "" });
             expect(this.model.performValidation()).toBeFalsy();
         });
         it("should return a truthy value if there is a body", function() {
-            this.model.set({ body : "foo" });
+            this.model.set({ body: "foo" });
             expect(this.model.performValidation()).toBeTruthy();
         });
     });
@@ -130,6 +130,15 @@ describe("chorus.models.Comment", function() {
         })
 
         describe("saveFiles", function() {
+            var errorResponse = {
+                errors: {
+                    fields: {
+                        file_upload: {TOO_LONG: {count: 10485760}}
+                    }
+                },
+                response: []
+            };
+
             beforeEach(function() {
                 this.model.addFileUpload(this.fileUpload2);
                 this.fileUploadSuccessSpy = jasmine.createSpy('fileUploadSuccess');
@@ -178,18 +187,8 @@ describe("chorus.models.Comment", function() {
 
             describe("when some of the saves have api failure", function() {
                 beforeEach(function() {
-                    this.submitObject1.promise.done.mostRecentCall.args[0]();
-                    this.submitObject2.promise.done.mostRecentCall.args[0](
-                        {
-                            message: [
-                                {
-                                    message: "The field fileToUpload[] exceeds its maximum permitted  size of 10485760 bytes."
-                                }
-                            ],
-                            resource: [],
-                            status: "fail"
-                        }
-                    );
+                    this.submitObject1.promise.fail.mostRecentCall.args[0]({}, errorResponse);
+                    this.submitObject2.promise.fail.mostRecentCall.args[0]({}, errorResponse);
                 });
                 it("triggers fileUploadFailed", function() {
                     expect(this.fileUploadSuccessSpy).not.toHaveBeenCalled();
@@ -202,18 +201,22 @@ describe("chorus.models.Comment", function() {
                 })
 
                 it("puts the error on the file object", function() {
-                    expect(this.fileUpload2.serverErrors).toEqual([{message:'The field fileToUpload[] exceeds its maximum permitted  size of 10485760 bytes.'}]);
+                    expect(_.first(this.fileUpload2.serverErrorMessages())).toEqual(
+                        'The file exceeds its maximum permitted size of 10485760 bytes.'
+                    );
                 });
 
                 it("copies the errors to the model", function() {
-                    expect(this.model.serverErrors).toEqual([{message:'The field fileToUpload[] exceeds its maximum permitted  size of 10485760 bytes.'}]);
+                    expect(_.first(this.model.serverErrorMessages())).toEqual(
+                        'The file exceeds its maximum permitted size of 10485760 bytes.'
+                    );
                 });
             });
 
             describe("when some of the saves have failed", function() {
                 beforeEach(function() {
                     this.submitObject1.promise.done.mostRecentCall.args[0]();
-                    this.submitObject2.promise.fail.mostRecentCall.args[0]();
+                    this.submitObject2.promise.fail.mostRecentCall.args[0]({}, errorResponse);
                 })
 
                 it("triggers fileUploadFailed", function() {
@@ -231,7 +234,7 @@ describe("chorus.models.Comment", function() {
                 })
 
                 it("sets serverErrors on the model", function() {
-                    expect(this.model.serverErrors[0].message).toMatchTranslation('notes.new_dialog.upload_cancelled');
+                    expect(this.model.serverErrorMessages()[0]).toMatchTranslation('notes.new_dialog.upload_cancelled');
                 })
             })
 
@@ -242,7 +245,7 @@ describe("chorus.models.Comment", function() {
                 })
 
                 it("only has the cancel message once", function() {
-                    expect(this.model.serverErrors.length).toBe(1);
+                    expect(_.keys(this.model.serverErrors).length).toBe(1);
                 })
             })
         });

@@ -17,6 +17,8 @@ window.fixtureDefinitions = {
 
     config: {},
 
+    image: {},
+
     instance: {
         unique: [ "id" ],
 

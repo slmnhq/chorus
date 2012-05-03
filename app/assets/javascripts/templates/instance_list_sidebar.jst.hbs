@@ -13,7 +13,7 @@
 </div>
 {{#if isOnline}}
 <div class="account_info">
-    {{#if db_username}}
+    {{#if shared}}
         <img src="/images/instances/shared_icon.png"/>
         {{t "instances.sidebar.is_shared_account"}}
         {{#if userCanEditPermissions}}
@@ -42,7 +42,7 @@
 {{/if}}
 <div class="actions">
     <ul>
-        {{#ifAny db_username userCanEditInstance }}
+        {{#ifAny shared userCanEditInstance }}
         {{else}}
             {{#if userHasAccount}}
                 <li><a class="dialog edit_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.edit.title"}}'>{{t "instances.sidebar.edit_credentials"}}</a></li>

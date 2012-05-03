@@ -17,14 +17,12 @@ describe("chorus.dialogs.SandboxNew", function() {
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.Instance.aurora());
             var modelWithError = fixtures.schemaSet();
-            modelWithError.serverErrors = fixtures.serverErrors({
-                message: 'oh nos!'
-            });
+            modelWithError.serverErrors = { fields: { a: { REQUIRED: {} } } };
             this.dialog.instanceMode.trigger("error", modelWithError);
         });
 
         it("shows the error", function() {
-            expect(this.dialog.$('.errors')).toContainText('oh nos!');
+            expect(this.dialog.$('.errors')).toContainText('A is required');
         });
 
         context("and then the schemaPicker triggers clearErrors", function(){

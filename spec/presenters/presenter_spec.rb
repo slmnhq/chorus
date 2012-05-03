@@ -29,6 +29,13 @@ describe Presenter, :type => :view do
       end
     end
 
+    context "with a paperclip attachment" do
+      it "creates an ImagePresenter" do
+        mock(ImagePresenter).new(@user.image, view)
+        Presenter.present(@user.image, view)
+      end
+    end
+
     context "with an active record relation" do
       before do
         FactoryGirl.create(:admin)

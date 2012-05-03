@@ -98,21 +98,19 @@ describe("chorus.views.DatasetEditChorusView", function() {
 
         context("when save fails", function() {
             beforeEach(function() {
-                this.view.model.set({serverErrors: [
-                    { message: "SQL error!" }
-                ]})
+                this.view.model.set({serverErrors: { fields: { a: { REQUIRED: {} } } }})
                 this.view.model.trigger("saveFailed");
                 this.view.render();
             });
             it("displays the error message", function() {
-                expect(this.view.$(".errors ul li").text()).toBe("SQL error!");
+                expect(this.view.$(".errors ul li").text()).toBe("A is required");
             })
         })
     });
 
     describe("cancel", function() {
         beforeEach(function() {
-            this.view.model.serverErrors = ["bad sql"];
+            this.view.model.serverErrors = {fields: {a: {REQUIRED: {}}}};
             chorus.PageEvents.broadcast("dataset:cancelEdit");
         });
 

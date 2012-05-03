@@ -69,6 +69,16 @@ Note that this will break RVM in other systems, notably the chorus-java project.
 
 Start a new terminal.
 
+
+### Run postgres
+
+(Currently the database lives in the old Chorus project)
+    
+    ps aux | grep -- '-p8543' | grep -v grep | awk '{print $2}' | xargs kill -9 
+    postgres -D ~/workspace/chorus/var/db -h localhost -p8543 --bytea_output=escape
+
+
+
 #### Run script/bootstrap
 
 From the root directory of this project, run:
@@ -88,7 +98,7 @@ This script
 
     cd ~/workspace/chorusrails && rails s
 
-    Run postgres:
+    If your postgres is not running do the following:
     (Currently the database lives in the old Chorus project)
     ps aux | grep -- '-p8543' | grep -v grep | awk '{print $2}' | xargs kill -9
     postgres -D ~/workspace/chorus/var/db -h localhost -p8543 --bytea_output=escape

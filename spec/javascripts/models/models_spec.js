@@ -204,18 +204,15 @@ describe("chorus.models.Abstract", function() {
 
                 describe("when the request fails", function() {
                     beforeEach(function() {
-                        this.message = [
-                            { message: "hi" },
-                            { message: "bye" }
-                        ];
+                        this.errors = { fields: { a: { REQUIRED: {} } } };
 
-                        this.server.lastUpdate().failUnprocessableEntity(this.message, {
+                        this.server.lastUpdate().failUnprocessableEntity(this.errors, {
                             foo: "bar"
                         });
                     });
 
                     it("returns the error information", function() {
-                        expect(this.model.serverErrors).toEqual(this.message);
+                        expect(this.model.serverErrors).toEqual(this.errors);
                     });
 
                     it("triggers a saveFailed event", function() {

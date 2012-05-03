@@ -16,10 +16,7 @@ describe("errors", function() {
     context("when there are errors", function() {
         beforeEach(function() {
             var context = {
-                serverErrors : [
-                    { message : "hi" },
-                    { message : "there" }
-                ]
+                serverErrors : { fields: { a: { PROBLEM: {} }, b: { PROBLEM: {} } } }
             };
 
             $("#jasmine_content").html(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", context, Handlebars.helpers, Handlebars.partials))

@@ -59,14 +59,12 @@ describe("chorus.views.Login", function() {
 
     describe("when the login fails", function() {
         beforeEach(function() {
-            this.view.model.serverErrors = [
-                { message: "Hi there" }
-            ]
+            this.view.model.serverErrors = { fields: { a: { REQUIRED: {} } } }
             this.view.render();
         });
 
         it("displays the error message", function() {
-            expect(this.view.$(".errors").text()).toContain("Hi there")
+            expect(this.view.$(".errors").text()).toContain("A is required")
         })
     });
 

@@ -133,9 +133,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             describe("when the API fails", function() {
                 beforeEach(function() {
                     this.dialog.closeModal.reset();
-                    this.server.lastRequest().failUnprocessableEntity([{
-                        "message": "Workspace already has a workfile with this name. Specify a different name."
-                    }]);
+                    this.server.lastRequest().failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
                 });
 
                 it("does not close the dialog", function() {
@@ -151,7 +149,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 });
 
                 it("displays the server error message", function() {
-                    expect(this.dialog.$(".errors ul").text().trim()).toBe("Workspace already has a workfile with this name. Specify a different name.")
+                    expect(this.dialog.$(".errors ul").text().trim()).toBe("A is required")
                 });
             });
         });

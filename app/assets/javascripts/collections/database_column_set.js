@@ -26,10 +26,6 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
         return model;
     },
 
-    errorMessage: function() {
-        return _.pluck(this.serverErrors, "message").join("\n");
-    },
-
     comparator: function(column) {
         if (column.tabularData && column.tabularData.datasetNumber) {
             return (column.tabularData.datasetNumber * 10000) + column.get('ordinalPosition');

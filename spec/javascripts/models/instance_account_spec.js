@@ -1,6 +1,6 @@
 describe("chorus.models.InstanceAccount", function() {
     beforeEach(function() {
-        this.model = fixtures.instanceAccount({ id: '72', instance_id: '1045', userId: "1011" });
+        this.model = fixtures.instanceAccount({ id: '72', instance_id: '1045' });
     });
 
     it("wraps parameters in 'credentials'", function() {
@@ -22,8 +22,9 @@ describe("chorus.models.InstanceAccount", function() {
         });
 
         context("when fetching", function() {
-            it("has the right url for fetching an account by user id and instance id", function() {
-                expect(this.model.url({ method: 'read' })).toMatchUrl("/instances/1045/accounts?user_id=1011");
+            it("has the right url for fetching current user's account for this instance", function() {
+                this.model.set({userId: chorus.session.user().id});
+                expect(this.model.url({ method: 'read' })).toMatchUrl("/instances/1045/my_account");
             });
         });
     });
@@ -108,7 +109,7 @@ describe("chorus.models.InstanceAccount", function() {
 
         context("when the instance account is a shared account", function() {
             beforeEach(function() {
-                this.model = fixtures.instanceAccount({ shared : "yes" })
+                this.model = fixtures.instanceAccount({ shared : "true" })
             });
 
             describe("and it is changed to an individual account", function() {
@@ -117,7 +118,7 @@ describe("chorus.models.InstanceAccount", function() {
                 })
 
                 it("does not require db_username", function() {
-                    this.model.performValidation({ shared : "no" })
+                    this.model.performValidation({ shared : "false" })
                     expect(this.model.isValid()).toBeTruthy();
                 })
             })

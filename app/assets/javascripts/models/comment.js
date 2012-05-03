@@ -45,12 +45,6 @@ chorus.models.Comment = chorus.models.Activity.extend({
     },
 
     uploadSuccess:function (file, response) {
-        if (response && response.status == "fail") {
-            this.fileUploadErrors++;
-            this.serverErrors || (this.serverErrors = []);
-            this.serverErrors = this.serverErrors.concat(response.message);
-            file.serverErrors = response.message;
-        }
         this.filesToBeSaved--;
         this.uploadComplete();
     },
@@ -60,9 +54,10 @@ chorus.models.Comment = chorus.models.Activity.extend({
         this.fileUploadErrors++;
         if (response == "abort") {
             this.message = this.message || t('notes.new_dialog.upload_cancelled')
-            this.serverErrors = [
-                {message:this.message}
-            ];
+            this.serverErrors = {fields: {file_upload: {GENERIC: {message: this.message}}}};
+        } else {
+            this.serverErrors = response.errors;
+            file.serverErrors = response.errors;
         }
         this.uploadComplete();
     },

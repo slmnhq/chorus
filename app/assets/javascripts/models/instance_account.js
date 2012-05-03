@@ -7,20 +7,10 @@ chorus.models.InstanceAccount = chorus.models.Base.extend(
             var method = options && options.method;
             if (method === "update" || method === "delete") {
                 return "instances/{{instance_id}}/accounts/{{id}}";
+            } else if (method === "read" && this.get("userId") == chorus.session.user().id) {
+                return "instances/{{instance_id}}/my_account"
             } else {
                 return "instances/{{instance_id}}/accounts";
-            }
-        },
-
-        urlParams:function (options) {
-            if (options && options.method === "read") {
-                var params = { instanceId:this.get("instanceId") };
-                if (this.get("userId")) {
-                    params["user_id"] = this.get("userId")
-                }
-                return params;
-            } else {
-                return {};
             }
         },
 

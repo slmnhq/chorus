@@ -263,7 +263,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         var id = sharedAccount.get("id")
         var instance_id = sharedAccount.get("instance_id")
         sharedAccount.clear({silent:true});
-        sharedAccount.save({id:id, shared:"no", instance_id:instance_id});
+        sharedAccount.save({id:id, shared:"false", instance_id:instance_id});
 
         function displaySuccessToast() {
             chorus.toast("instances.shared_account_removed");
@@ -295,7 +295,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         var id = account.get("id")
         var instance_id = account.get("instance_id")
         account.clear({silent:true});
-        account.save({id:id, shared:"yes", instance_id:instance_id});
+        account.save({id:id, shared:"true", instance_id:instance_id});
 
         function displaySuccessToast() {
             chorus.toast("instances.shared_account_added");

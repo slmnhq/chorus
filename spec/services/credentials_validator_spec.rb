@@ -22,7 +22,7 @@ describe CredentialsValidator do
         CredentialsValidator.user(nil, 'a_password')
         fail
       rescue CredentialsValidator::Invalid => e
-        e.record.errors.get(:username).should == ["REQUIRED"]
+        e.record.errors.get(:username).should == [[:blank, {}]]
       end
     end
 
@@ -31,7 +31,7 @@ describe CredentialsValidator do
         CredentialsValidator.user('a_username', nil)
         fail
       rescue CredentialsValidator::Invalid => e
-        e.record.errors.get(:password).should == ["REQUIRED"]
+        e.record.errors.get(:password).should == [[:blank, {}]]
       end
     end
 
@@ -41,7 +41,7 @@ describe CredentialsValidator do
         CredentialsValidator.user('a_username', 'a_password')
         fail
       rescue CredentialsValidator::Invalid => e
-        e.record.errors.get(:username_or_password).should == ["INVALID"]
+        e.record.errors.get(:username_or_password).should == [[:invalid, {}]]
       end
     end
 

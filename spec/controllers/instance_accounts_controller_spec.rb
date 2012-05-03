@@ -53,15 +53,6 @@ describe InstanceAccountsController do
         request.params[:per_page].should == 50
       end
     end
-
-    describe "with a user_id" do
-      it "returns account for only that user" do
-        get :index, :instance_id => instance.to_param, :user_id => joe.to_param
-        response.should be_success
-        decoded_response.length.should == 1
-        decoded_response.first.username.should == "joe"
-      end
-    end
   end
 
   describe "#create" do
@@ -219,7 +210,7 @@ describe InstanceAccountsController do
       end
 
       it "succeeds" do
-        put :update, :instance_id => instance.id, :account => {:username => "changed", :password => "changed", :id => account.id }
+        put :update, :instance_id => instance.id, :id => account.id, :account => {:username => "changed", :password => "changed" }
         response.code.should == "200"
         rehydrated_account = InstanceAccount.find(decoded_response.id)
         rehydrated_account.should be_present
@@ -235,7 +226,7 @@ describe InstanceAccountsController do
       end
 
       it "succeeds for user's account" do
-        put :update, :instance_id => instance.id, :account => {:username => "changed", :password => "changed", :id => account.id }
+        put :update, :instance_id => instance.id, :id => account.id, :account => {:username => "changed", :password => "changed" }
         response.code.should == "200"
         rehydrated_account = InstanceAccount.find(decoded_response.id)
         rehydrated_account.should be_present
@@ -246,7 +237,7 @@ describe InstanceAccountsController do
 
       it "fails for other's account" do
         account.update_attribute :owner, joe
-        put :update, :instance_id => instance.id, :account => {:username => "changed", :password => "changed", :id => account.id }
+        put :update, :instance_id => instance.id, :id => account.id, :account => {:username => "changed", :password => "changed" }
         response.code.should == "403"
       end
     end
@@ -258,7 +249,7 @@ describe InstanceAccountsController do
 
       context "someone else's account'" do
         it "fails" do
-          put :update, :instance_id => instance.id, :account => {:username => "changed", :password => "changed", :id => account.id }
+          put :update, :instance_id => instance.id, :id => account.id, :account => {:username => "changed", :password => "changed" }
           response.should be_forbidden
         end
       end
@@ -270,7 +261,7 @@ describe InstanceAccountsController do
         end
 
         it "succeeds" do
-          put :update, :instance_id => instance.id, :account => {:username => "changed", :password => "changed", :id => account.id }
+          put :update, :instance_id => instance.id, :id => account.id, :account => {:username => "changed", :password => "changed" }
           response.code.should == "200"
           rehydrated_account = InstanceAccount.find(decoded_response.id)
           rehydrated_account.should be_present
@@ -279,6 +270,27 @@ describe InstanceAccountsController do
           rehydrated_account.owner.should == joe
         end
       end
+    end
+  end
+
+  describe "#show" do
+    let(:account1) { FactoryGirl.create :instance_account, :instance => instance, :username => "instance_owner", :owner => instance_owner }
+
+    it "when given an :id parameter returns the specified InstanceAccount" do
+      log_in instance_owner
+      get :show, :id => account1.id, :instance_id => instance.id
+      response.code.should == "200"
+      decoded_response.id.should == account1.id
+      decoded_response.username.should == account1.username
+    end
+
+    it "when given no :id parameter returns the current_user's InstanceAccount for the specified Instance" do
+      joes_account = FactoryGirl.create :instance_account, :instance => instance, :owner => joe
+      log_in joe
+      get :show, :instance_id => instance.id
+      response.code.should == "200"
+      decoded_response.id.should == joes_account.id
+      decoded_response.username.should == joes_account.username
     end
   end
 end

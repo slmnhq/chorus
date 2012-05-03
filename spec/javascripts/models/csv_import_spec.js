@@ -174,12 +174,12 @@ describe("chorus.models.CSVImport", function() {
         it("returns an empty array and sets serverErrors", function() {
             var columns = this.model.columnOrientedData();
             expect(columns).toEqual([]);
-            expect(this.model.serverErrors.length).toBe(1);
+            expect(_.keys(this.model.serverErrors).length).toBe(1);
         });
 
         it("clears server errors when it parses correctly", function() {
             this.model.columnOrientedData();
-            expect(this.model.serverErrors.length).toBe(1);
+            expect(_.keys(this.model.serverErrors).length).toBe(1);
             this.model.set({'delimiter': ','});
             var columns = this.model.columnOrientedData();
             expect(columns.length).toBe(3);

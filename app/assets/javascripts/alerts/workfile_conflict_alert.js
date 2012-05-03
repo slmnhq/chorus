@@ -7,8 +7,8 @@ chorus.alerts.WorkfileConflict = chorus.alerts.Base.extend({
     additionalClass:"error",
 
     setup:function () {
-        this.title = this.model.serverErrors[0].message;
-        this.model.serverErrors = [];
+        this.title = this.model.serverErrorMessage();
+        this.model.serverErrors = {};
     },
 
     postRender:function () {
