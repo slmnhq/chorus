@@ -20,7 +20,7 @@ describe ApplicationController do
     end
 
     it "renders 'not found' JSON when record not found" do
-      controller.stub(:any_action).and_raise(ActiveRecord::RecordNotFound)
+      stub(controller).any_action { raise ActiveRecord::RecordNotFound }
       get :any_action
 
       response.code.should == "404"
@@ -30,7 +30,7 @@ describe ApplicationController do
     it "renders 'invalid' JSON when record is invalid" do
       invalid_record = User.new
       invalid_record.errors.add(:username, :blank)
-      controller.stub(:any_action).and_raise(ActiveRecord::RecordInvalid.new(invalid_record))
+      stub(controller).any_action { raise ActiveRecord::RecordInvalid.new(invalid_record) }
       get :any_action
 
       response.code.should == "422"
@@ -40,7 +40,7 @@ describe ApplicationController do
     it "renders string-based validation messages, when provided" do
       invalid_record = User.new
       invalid_record.errors.add(:username, "some error")
-      controller.stub(:any_action).and_raise(ActiveRecord::RecordInvalid.new(invalid_record))
+      stub(controller).any_action { raise ActiveRecord::RecordInvalid.new(invalid_record) }
       get :any_action
 
       response.code.should == "422"
@@ -71,7 +71,7 @@ describe ApplicationController do
 
   describe "#present" do
     before do
-      controller.stub(:object_to_present).and_return { object_to_present }
+      stub(controller).object_to_present { object_to_present }
       log_in FactoryGirl.create :user
     end
 

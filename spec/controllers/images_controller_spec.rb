@@ -4,7 +4,9 @@ describe ImagesController do
   describe "#update" do
     before do
       @user = FactoryGirl.create(:user, :username => 'some_user', :first_name => "marty")
-      User.any_instance.stub(:save_attached_files).and_return(true)
+      any_instance_of(User) do |user|
+        stub(user).save_attached_files { true }
+      end
       log_in @user
     end
 

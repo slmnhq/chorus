@@ -13,7 +13,7 @@ describe CredentialsValidator do
 
     it "returns the user" do
       user = stub
-      User.stub(:authenticate).with('a_username', 'a_password').and_return { user }
+      stub(User).authenticate('a_username', 'a_password') { user }
       CredentialsValidator.user('a_username', 'a_password').should be(user)
     end
 
@@ -37,7 +37,7 @@ describe CredentialsValidator do
 
     it "raises an exception if the user cannot be authenticated" do
       begin
-        User.stub(:authenticate).with('a_username', 'a_password').and_return { nil }
+        stub(User).authenticate('a_username', 'a_password') { nil }
         CredentialsValidator.user('a_username', 'a_password')
         fail
       rescue CredentialsValidator::Invalid => e
@@ -50,7 +50,7 @@ describe CredentialsValidator do
         Chorus::Application.config.ldap_authentication = true
 
         user = stub
-        LdapClient.stub(:authenticate).with('a_username', 'a_password').and_return { user }
+        stub(LdapClient).authenticate('a_username', 'a_password') { user }
         CredentialsValidator.user('a_username', 'a_password').should be(user)
       end
     end

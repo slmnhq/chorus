@@ -6,7 +6,7 @@ describe SessionsController do
       let(:user) { User.new(:username => "admin") }
 
       before do
-        CredentialsValidator.stub(:user).with('admin', 'secret').and_return { user }
+        stub(CredentialsValidator).user('admin', 'secret') { user }
         post :create, :session => {:username => 'admin', :password => 'secret'}
       end
 
@@ -44,8 +44,10 @@ describe SessionsController do
 
     describe "with incorrect credentials" do
       before do
-        invalid_exception = CredentialsValidator::Invalid.new(stub(:errors => {:field => ["error"]}))
-        CredentialsValidator.stub(:user).with('admin', 'public').and_raise(invalid_exception)
+        thing = Object.new
+        stub(thing).errors { {:field => ["error"]} }
+        invalid_exception = CredentialsValidator::Invalid.new(thing)
+        stub(CredentialsValidator).user('admin', 'public') { raise(invalid_exception) }
         post :create, :session => {:username => 'admin', :password => 'public'}
       end
 

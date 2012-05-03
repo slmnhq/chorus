@@ -27,7 +27,7 @@ describe DataMigrator, :type => :data_migration do
       @data_migrator.migrators = []
       10.times do
         stub_migrator = PseudoMigrator.new
-        stub_migrator.should_receive(:migrate)
+        mock(stub_migrator).migrate
         @data_migrator.migrators << stub_migrator
       end
 

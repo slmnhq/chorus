@@ -8,7 +8,7 @@ describe ConfigsController do
 
   describe "#show" do
     before(:each) do
-      LdapClient.should_receive(:enabled?).and_return { true }
+      mock(LdapClient).enabled? { true }
     end
 
     it "includes the ldap status" do

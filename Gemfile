@@ -21,6 +21,7 @@ group :assets do
 end
 
 group :test do
+  gem 'rr'
   gem 'factory_girl'
   gem 'capybara'
   gem 'database_cleaner'

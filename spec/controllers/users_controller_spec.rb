@@ -302,7 +302,7 @@ describe UsersController do
   describe "#ldap" do
     before do
       @user_attributes = {:username => "testguy", :first_name => "Test", :last_name => "Guy", :title => "Big Kahuna", :dept => "Greenery", :email => "testguy@example.com"}
-      LdapClient.stub(:search).and_return([@user_attributes])
+      stub(LdapClient).search.with_any_args { [@user_attributes] }
     end
 
     it_behaves_like "an action that requires authentication", :get, :ldap
