@@ -16,5 +16,12 @@ describe ImagesController do
       @user.reload
       @user.image.url.should_not == "/images/original/missing.png"
     end
+
+    it "responds with the urls of the new image" do
+      put :update, :id => @user.id, :files => [Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/small.png", Rails.root), "image/jpeg")]
+      @user.reload
+      decoded_response.original.should == @user.image.url(:original)
+      decoded_response.icon.should == @user.image.url(:icon)
+    end
   end
 end
