@@ -54,7 +54,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         if (user) {
             _.extend(context, {
                 fullName:user.displayName(),
-                imageUrl:user.imageUrl(),
+                imageUrl:user.fetchImageUrl(),
                 isOwner:this.instance.isOwner(account.user())
             });
         }
@@ -195,7 +195,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     updateUserSelect:function () {
         var selectedUser = this.users.get($('li[data-id=new] select').val());
         if (selectedUser) {
-            this.$('li[data-id=new] img.profile').attr('src', selectedUser.imageUrl());
+            this.$('li[data-id=new] img.profile').attr('src', selectedUser.fetchImageUrl());
         }
     },
 

@@ -90,8 +90,8 @@ describe("chorus.views.ActivityList", function() {
 
                 // right now, activities and comments don't include their
                 // author's image urls
-                comments.at(0).author().set({ image_url: "foo" });
-                comments.at(1).author().set({ image_url: "bar" });
+                comments.at(0).author().set({ image: { icon: "foo" } });
+                comments.at(1).author().set({ image: { icon: "bar" } });
 
                 var otherComments = this.collection.at(1).comments();
                 otherComments.reset([]);
@@ -110,12 +110,12 @@ describe("chorus.views.ActivityList", function() {
                 expect(commentLis.length).toBe(comments.length);
 
                 expect(commentLis.eq(0).find(".icon a")).toHaveAttr("href", comments.at(0).author().showUrl());
-                expect(commentLis.eq(0).find(".icon a img")).toHaveAttr("src", comments.at(0).author().imageUrl());
+                expect(commentLis.eq(0).find(".icon a img")).toHaveAttr("src", comments.at(0).author().fetchImageUrl());
                 expect(commentLis.eq(0).find(".comment_header a")).toHaveText(comments.at(0).author().displayName());
                 expect(commentLis.eq(0).find(".comment_content .actions .timestamp")).toExist();
 
                 expect(commentLis.eq(1).find(".icon a")).toHaveAttr("href", comments.at(1).author().showUrl());
-                expect(commentLis.eq(1).find(".icon a img")).toHaveAttr("src", comments.at(1).author().imageUrl());
+                expect(commentLis.eq(1).find(".icon a img")).toHaveAttr("src", comments.at(1).author().fetchImageUrl());
                 expect(commentLis.eq(1).find(".comment_header a")).toHaveText(comments.at(1).author().displayName());
                 expect(commentLis.eq(1).find(".comment_content .timestamp")).toExist();
             });

@@ -54,7 +54,7 @@ describe("chorus.views.UserList", function() {
 
             it("displays an image for each user", function() {
                 expect(this.view.$("li img").length).toBe(3);
-                expect(this.view.$("li img").attr("src")).toBe(this.collection.models[0].imageUrl({size: "icon"}));
+                expect(this.view.$("li img").attr("src")).toBe(this.collection.models[0].fetchImageUrl({size: "icon"}));
             });
 
             it("displays a name for each user", function() {

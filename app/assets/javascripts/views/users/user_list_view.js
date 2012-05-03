@@ -4,7 +4,7 @@ chorus.views.UserList = chorus.views.SelectableList.extend({
 
     collectionModelContext: function(model) {
         return {
-            imageUrl: model.imageUrl({size: "icon"}),
+            imageUrl: model.fetchImageUrl({size: "icon"}),
             showUrl: model.showUrl(),
             fullName: model.displayName(),
             title: model.get("title")

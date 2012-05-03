@@ -119,7 +119,12 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return (name.length < length) ? name : name.slice(0, length) + "...";
     },
 
-    imageUrl:function (options) {
+    fetchImageUrl:function (options) {
+        options = (options || {});
+        return "/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
+    },
+
+    createImageUrl:function (options) {
         options = (options || {});
         return "/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
     },

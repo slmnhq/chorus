@@ -11,14 +11,14 @@ describe("chorus.views.SearchUser", function() {
                 content: "<em>Here is some content</em>",
                 name: "<em>foo</em>"
             },
-            image_url: "/foo"
+            image: { icon: "bar" }
         })
         this.view = new chorus.views.SearchUser({ model: this.model });
         this.view.render();
     });
 
     it("includes the user icon", function() {
-        expect(this.view.$("img.icon").attr("src")).toBe(this.model.imageUrl({size: "icon"}));
+        expect(this.view.$("img.icon").attr("src")).toBe(this.model.fetchImageUrl({size: "icon"}));
     });
 
     it("has a link to the profile", function() {

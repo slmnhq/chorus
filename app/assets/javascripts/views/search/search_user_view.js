@@ -16,7 +16,7 @@ chorus.views.SearchUser = chorus.views.SearchItemBase.extend({
             }, this), this);
 
         return {
-            iconSrc: this.model.imageUrl({size: "icon"}),
+            iconSrc: this.model.fetchImageUrl({size: "icon"}),
             link: this.model.showUrl(),
             displayName: new Handlebars.SafeString(modelWithSearchResults.displayName()),
             title: modelWithSearchResults.get("title"),

@@ -220,8 +220,8 @@ describe UsersController do
       end
 
       it "presents the user" do
+        mock.proxy(controller).present(@other_user)
         get :show, :id => @other_user.to_param
-        response.should have_presented(@other_user)
       end
     end
 

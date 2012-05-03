@@ -688,7 +688,7 @@ describe("chorus.views.Activity", function() {
 
     function itShouldRenderAuthorDetails() {
         it("renders the author's icon", function() {
-            expect(this.view.$('img').attr('src')).toBe(this.view.model.author().imageUrl());
+            expect(this.view.$('img').attr('src')).toBe(this.view.model.author().fetchImageUrl());
         });
 
         it("contains the author's name", function() {

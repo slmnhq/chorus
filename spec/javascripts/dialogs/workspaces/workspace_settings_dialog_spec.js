@@ -362,7 +362,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     it("displays the workspace image", function() {
                         var image = this.dialog.$("img");
-                        expect(image.attr("src")).toContain(this.workspace.imageUrl());
+                        expect(image.attr("src")).toContain(this.workspace.fetchImageUrl());
                     });
 
                     it("displays the 'change image' link", function() {

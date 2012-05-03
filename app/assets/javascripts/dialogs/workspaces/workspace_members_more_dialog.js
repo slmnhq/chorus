@@ -40,7 +40,7 @@ chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
             members:_.map(sortedMembers, function (member) {
                 return {
                     displayName:member.displayName(),
-                    imageUrl:member.imageUrl({size:'icon'}),
+                    imageUrl:member.fetchImageUrl({size:'icon'}),
                     showUrl:member.showUrl()
                 };
             })

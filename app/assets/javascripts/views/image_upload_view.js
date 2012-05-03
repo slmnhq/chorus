@@ -4,7 +4,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
 
     additionalContext:function () {
         return {
-            imageUrl:this.model.imageUrl(),
+            imageUrl:this.model.fetchImageUrl(),
             hasImage:this.model.hasImage(),
             addImageKey:this.addImageKey,
             changeImageKey:this.changeImageKey,
@@ -24,7 +24,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
 
         var multipart = !window.jasmine;
         this.$("input[type=file]").fileupload({
-            url:this.model.imageUrl(),
+            url:this.model.createImageUrl(),
             type: 'PUT',
             add:fileSelected,
             done:uploadFinished,
@@ -81,7 +81,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
                 self.resource.serverErrors = [];
                 self.resource.trigger("validated");
                 self.model.trigger("image:change");
-                self.$("img").attr('src', self.model.imageUrl());
+                self.$("img").attr('src', self.model.fetchImageUrl());
                 self.$("img").removeClass("hidden");
             } else {
                 self.resource.serverErrors = json.message;

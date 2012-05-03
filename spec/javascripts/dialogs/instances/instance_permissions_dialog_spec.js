@@ -46,7 +46,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 var li = this.dialog.$("li");
                 var sharedAccountUser = this.instance.sharedAccount().user();
                 expect(li).toExist();
-                expect(li.find("img.profile")).toHaveAttr("src", sharedAccountUser.imageUrl());
+                expect(li.find("img.profile")).toHaveAttr("src", sharedAccountUser.fetchImageUrl());
                 expect(li.find(".name").text()).toBe(sharedAccountUser.displayName());
             })
 
@@ -516,7 +516,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 it("displays the image for the selected user", function() {
                     var selectedUser = this.dialog.users.get(this.dialog.$('li[data-id=new] select').val());
-                    expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.imageUrl());
+                    expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.fetchImageUrl());
                 });
 
                 describe("selecting a new user", function() {
@@ -527,7 +527,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                     it("updates the image for that user", function() {
                         var selectedUser = this.dialog.users.get(this.dialog.$('li[data-id=new] select').val());
-                        expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.imageUrl());
+                        expect(this.dialog.$('li[data-id=new] img.profile').attr('src')).toBe(selectedUser.fetchImageUrl());
                     });
                 })
 

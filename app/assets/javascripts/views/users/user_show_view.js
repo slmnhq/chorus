@@ -10,7 +10,7 @@ chorus.views.UserShow = chorus.views.Base.extend({
         return {
             workspaces:this.model.workspaces(),
             department:this.model.get("dept"),
-            imageUrl:this.model.imageUrl()
+            imageUrl:this.model.fetchImageUrl()
         }
     }
 });

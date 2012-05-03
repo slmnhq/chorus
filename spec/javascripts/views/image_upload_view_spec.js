@@ -1,6 +1,10 @@
 describe("chorus.views.ImageUpload", function() {
     beforeEach(function() {
-        this.user = new chorus.models.User({ username: "franklin", id : 13, image_url: "/foo" });
+        this.user = newFixtures.user({
+            username: "franklin",
+            id : 13,
+            image: { original: "/foo", icon: "/icon" }
+        });
         this.view = new chorus.views.ImageUpload({model : this.user});
         this.view.model.loaded = true;
         this.successfulResponse = {"result": '{"status": "ok"}'};
@@ -58,8 +62,8 @@ describe("chorus.views.ImageUpload", function() {
                 expect(this.view.$("a.action").text()).toMatchTranslation(this.view.changeImageKey);
             });
 
-            it("displays an image with the model's imageUrl", function() {
-                expect(this.view.$("img").attr("src")).toContain(this.user.imageUrl());
+            it("displays an image with the model's fetchImageUrl", function() {
+                expect(this.view.$("img").attr("src")).toContain(this.user.fetchImageUrl());
             });
 
             it("the image is not hidden", function() {
@@ -93,6 +97,10 @@ describe("chorus.views.ImageUpload", function() {
             it("disables the upload button", function() {
                 expect(this.view.$("input[type=file]")).toBeDisabled();
                 expect(this.view.$("a.action")).toHaveClass("disabled");
+            });
+
+            it("uploads to the model's createImageUrl", function() {
+                expect(this.fileUploadOptions.url).toBe(this.user.createImageUrl());
             });
 
             context("when the upload has finished successfully", function() {

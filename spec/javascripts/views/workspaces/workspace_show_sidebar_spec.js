@@ -33,7 +33,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
         context("the workspace has an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(true);
-                this.spyImg = spyOn(this.view.model, 'imageUrl').andReturn("imageUrl1")
+                this.spyImg = spyOn(this.view.model, 'fetchImageUrl').andReturn("imageUrl1")
                 this.view.render();
             });
 
@@ -64,7 +64,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
         context("the workspace does not have an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(false);
-                spyOn(this.view.model, 'imageUrl').andReturn("/party.gif")
+                spyOn(this.view.model, 'fetchImageUrl').andReturn("/party.gif")
                 this.view.render();
             });
 
