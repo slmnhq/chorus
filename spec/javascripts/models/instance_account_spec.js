@@ -30,7 +30,7 @@ describe("chorus.models.InstanceAccount", function() {
 
     describe("#user", function() {
         beforeEach(function() {
-            this.model.set({"user": {
+            this.model.set({"owner": {
                 first_name: "Ricardo",
                 last_name: "Henderson",
                 id: "45",
@@ -49,9 +49,9 @@ describe("chorus.models.InstanceAccount", function() {
             expect(this.model.user().get("userId")).toBe("45");
         });
 
-        context("when the account doesn't have a user", function() {
+        context("when the account doesn't have an owner", function() {
             beforeEach(function() {
-                this.model.unset("user");
+                this.model.unset("owner");
             });
 
             it("returns undefined", function() {

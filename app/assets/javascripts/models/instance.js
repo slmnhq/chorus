@@ -108,7 +108,7 @@
         accountForOwner:function () {
             var ownerId = this.get("owner").id;
             return _.find(this.accounts().models, function (account) {
-                return account.get("user").id == ownerId
+                return account.get("owner").id == ownerId
             });
         },
 

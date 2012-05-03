@@ -156,8 +156,8 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 var user2 = { id: '2', first_name: 'fred', last_name: 'flinstone' }
 
                 var instanceAccounts = [
-                    fixtures.instanceAccount({user: user1}),
-                    fixtures.instanceAccount({user: user2})
+                    fixtures.instanceAccount({owner: user1}),
+                    fixtures.instanceAccount({owner: user2})
                 ];
                 this.dialog.accounts.reset(instanceAccounts);
                 this.dialog.accounts.trigger("reset");

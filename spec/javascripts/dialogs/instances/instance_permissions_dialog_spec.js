@@ -221,9 +221,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
             this.accounts = this.instance.accounts();
             this.accounts.add([
-                fixtures.instanceAccount({ id: '1', user: { first_name: "bob", last_name: "zzap", id: '111' } }),
-                fixtures.instanceAccount({ id: '2', user: { first_name: "jim", last_name: "aardvark", id: '222' } }),
-                fixtures.instanceAccount({ id: '3', user: this.owner})
+                fixtures.instanceAccount({ id: '1', owner: { first_name: "bob", last_name: "zzap", id: '111' } }),
+                fixtures.instanceAccount({ id: '2', owner: { first_name: "jim", last_name: "aardvark", id: '222' } }),
+                fixtures.instanceAccount({ id: '3', owner: this.owner})
             ]);
             var launchElement = $("<a/>").data("instance", this.instance);
             this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });

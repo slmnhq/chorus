@@ -1901,7 +1901,7 @@ beforeEach(function() {
                 shared: "yes",
                 expiration: null,
                 instance_id: this.nextId().toString(),
-                user: _.extend(newFixtures.userJson(), overrides.user),
+                owner: _.extend(newFixtures.userJson(), overrides.owner),
                 db_username: "gpadmin"
             }, overrides);
             return new chorus.models.InstanceAccount(attributes);
