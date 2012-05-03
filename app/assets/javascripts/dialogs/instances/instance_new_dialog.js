@@ -75,7 +75,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
             updates[input.attr("name")] = input.val().trim();
         });
 
-        updates.shared = inputSource.find("input[name=shared]").prop("checked") ? "yes" : "no";
+        updates.shared = inputSource.find("input[name=shared]").prop("checked") ? "true" : "false";
         return updates;
     },
 

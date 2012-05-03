@@ -184,7 +184,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                     it("#fieldValues should have the right values for 'provision_type' and 'shared'", function() {
                         var values = this.dialog.fieldValues();
                         expect(values.provision_type).toBe("registerHadoop");
-                        expect(values.shared).toBe("yes");
+                        expect(values.shared).toBe("true");
                     });
                 });
             });
