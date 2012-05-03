@@ -73,6 +73,7 @@ Start a new terminal.
 ### Run postgres
 
 (Currently the database lives in the old Chorus project)
+    
     ps aux | grep -- '-p8543' | grep -v grep | awk '{print $2}' | xargs kill -9 
     postgres -D ~/workspace/chorus/var/db -h localhost -p8543 --bytea_output=escape
 
