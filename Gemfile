@@ -8,6 +8,8 @@ gem 'json'
 gem 'will_paginate'
 gem 'net-ldap'
 gem 'paperclip'
+gem 'queue_classic', "2.0.0rc14"
+gem 'clockwork'
 
 group :assets do
   gem 'sass-rails'

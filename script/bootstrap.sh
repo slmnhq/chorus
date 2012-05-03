@@ -5,6 +5,7 @@ SCRIPT_DIR=`dirname $0`
 
 $SCRIPT_DIR/bootstrap-rbenv.sh
 $SCRIPT_DIR/bootstrap-ruby.sh $ruby_version
+$SCRIPT_DIR/bootstrap-queue.sh
 
 set -e
 
