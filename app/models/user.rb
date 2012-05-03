@@ -71,10 +71,12 @@ class User < ActiveRecord::Base
   end
 
   def destroy
-    raise ActiveRecord::RecordInvalid.new(self) unless instances.empty?
+    if !instances.empty?
+      errors.add(:delete , "not_allowed")
+      raise ActiveRecord::RecordInvalid.new(self)
+    end
     self.deleted_at = Time.now.utc
     save
-    #freeze # TODO: test
   end
 
   def self.find_with_destroyed *args
