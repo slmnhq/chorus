@@ -1233,7 +1233,8 @@ beforeEach(function() {
                     ],
                     user: {
                         id: "12345",
-                        name: "Bill Smith"
+                        name: "Bill Smith",
+                        image_url: "/foo"
                     }
                 });
             },
@@ -1528,6 +1529,7 @@ beforeEach(function() {
 
         authorJson: function() {
             return {
+                image_url: "/foo",
                 id: "1234",
                 last_name: "Smith",
                 first_name: "Bob"

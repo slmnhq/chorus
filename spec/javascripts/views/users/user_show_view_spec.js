@@ -1,10 +1,10 @@
 describe("chorus.views.UserShow", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.model = new chorus.models.User({
+            this.model = newFixtures.user({
                 email: "a@b.com",
                 title: "My Title",
-                ou: "My Department",
+                dept: "My Department",
                 admin: true,
                 username: "gabe1",
                 notes: "My Notes"
@@ -41,7 +41,7 @@ describe("chorus.views.UserShow", function() {
             });
 
             it("renders the department text", function() {
-                expect(this.view.$(".department").text()).toBe(this.model.get("ou"));
+                expect(this.view.$(".department").text()).toBe(this.model.get("dept"));
             });
 
             it("renders the email text", function() {

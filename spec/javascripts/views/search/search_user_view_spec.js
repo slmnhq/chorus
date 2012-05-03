@@ -2,14 +2,17 @@ describe("chorus.views.SearchUser", function() {
     beforeEach(function() {
         this.result = fixtures.searchResult();
         this.model = this.result.users().models[0];
-        this.model.set({highlightedAttributes: {
-            title: '<em>test</em>er',
-            email: '<em>test</em>@example.com',
-            first_name: "<em>John</em>",
-            ou: "<em>John</em>",
-            content: "<em>Here is some content</em>",
-            name: "<em>foo</em>"
-        } })
+        this.model.set({
+            highlightedAttributes: {
+                title: '<em>test</em>er',
+                email: '<em>test</em>@example.com',
+                first_name: "<em>John</em>",
+                ou: "<em>John</em>",
+                content: "<em>Here is some content</em>",
+                name: "<em>foo</em>"
+            },
+            image_url: "/foo"
+        })
         this.view = new chorus.views.SearchUser({ model: this.model });
         this.view.render();
     });

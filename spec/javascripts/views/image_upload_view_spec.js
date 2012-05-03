@@ -1,6 +1,6 @@
 describe("chorus.views.ImageUpload", function() {
     beforeEach(function() {
-        this.user = new chorus.models.User({ username: "franklin", id : 13 });
+        this.user = new chorus.models.User({ username: "franklin", id : 13, image_url: "/foo" });
         this.view = new chorus.views.ImageUpload({model : this.user});
         this.view.model.loaded = true;
         this.successfulResponse = {"result": '{"status": "ok"}'};
