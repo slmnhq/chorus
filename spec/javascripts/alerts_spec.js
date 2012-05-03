@@ -60,12 +60,10 @@ describe("chorus.alerts", function() {
             })
         })
         it("displays server errors", function() {
-            this.alert.resource.set({serverErrors : [
-                { message: "Hi there" }
-            ]});
+            this.alert.resource.set({serverErrors : { fields: { connection: { INVALID: { message: "Couldn't find host/port to connect to" } } } }});
             this.alert.render();
 
-            expect(this.alert.$(".errors").text()).toContain("Hi there")
+            expect(this.alert.$(".errors").text()).toContain("Couldn't find host/port to connect to")
         })
     })
 
@@ -184,9 +182,7 @@ describe("chorus.alerts.ModelDelete", function() {
         describe("when the model deletion fails", function() {
             beforeEach(function() {
                 spyOnEvent($(document), "close.facebox");
-                this.alert.resource.set({serverErrors : [
-                    { message: "Hi there" }
-                ]});
+                this.alert.resource.set({serverErrors: { fields: { a: { INVALID : { message: "Hi there"}}} }});
                 this.alert.model.trigger("destroyFailed", this.alert.model);
             })
 

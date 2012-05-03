@@ -389,21 +389,15 @@
         },
 
         renderErrors: function(serverErrors) {
-            var output = ["<ul>"]
+            var output = ["<ul>"];
+            var errorMessages = chorus.Mixins.ServerErrors.serverErrorMessages.call({serverErrors: serverErrors});
 
-            if (_.isArray(serverErrors)) {
-                _.each(serverErrors, function(error) {
-                    output.push("<li>" + error.message + "</li>")
-                })
-            } else if (serverErrors.fields) {
-                _.each(serverErrors.fields, function(value, key) {
-                    var key = "field_error." + key + "." + value;
-                    output.push("<li>" + t(key) + "</li>")
-                })
-            }
+            _.each(errorMessages, function(message) {
+                output.push("<li>" + message + "</li>");
+            });
 
             output.push("</ul>");
-            return new Handlebars.SafeString(output.join(""))
+            return new Handlebars.SafeString(output.join(""));
         }
     };
 

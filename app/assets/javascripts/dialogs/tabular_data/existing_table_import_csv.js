@@ -268,20 +268,8 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         var sourceColumnsNum = this.csv.columnOrientedData().length;
         var destinationColumnsNum = this.dataset.get("columnNames") ? this.dataset.get("columnNames").length : 0;
         if (destinationColumnsNum < sourceColumnsNum) {
-            this.resource.serverErrors = [
-                { message: t("dataset.import.table.too_many_source_columns")}
-            ];
+            this.resource.serverErrors = { fields: { source_columns: { LESS_THAN_OR_EQUAL_TO: {} } } };
             this.resource.trigger("validationFailed");
-        } else {
-            var errors = _.reject(this.resource.serverErrors, function(item) {
-                return item.message === t("dataset.import.table.too_many_source_columns");
-            });
-
-            if (errors.length == 0) {
-                delete this.resource.serverErrors;
-            } else {
-                this.resource.serverErrors = errors;
-            }
         }
     },
 

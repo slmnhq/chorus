@@ -1,19 +1,10 @@
 describe("chorus.Mixins.SQLResults", function() {
     var serverFailure = {
-        errors: [
-            {
-                message: "Error!",
-                msgcode: null,
-                description: null,
-                severity: "error",
-                msgkey: null
-            }
-        ],
+        errors: { fields: { a: { REQUIRED: {} } } },
         response: []
     };
 
     var taskFailure = {
-        errors: [],
         response: {
             state: "failed",
             result: {
@@ -23,43 +14,10 @@ describe("chorus.Mixins.SQLResults", function() {
         }
     };
 
-    var taskSuccess = {
-        errors: [],
-        response: {
-            executeResult: "success"
-        }
-    };
-
-
     var HostModel;
 
     beforeEach(function() {
         HostModel = chorus.models.Base.include(chorus.Mixins.SQLResults);
-    });
-
-    describe("#errorMessage", function() {
-        context("when the model has serverErrors", function() {
-            beforeEach(function() {
-                this.host = new HostModel({});
-                this.host.serverErrors = [
-                    {message: "Foo"}
-                ]
-            });
-
-            it("returns the error message", function() {
-                expect(this.host.errorMessage()).toBe("Foo");
-            });
-        });
-
-        context("when the model does not have serverErrors", function() {
-            beforeEach(function() {
-                this.host = new HostModel();
-            });
-
-            it("returns false", function() {
-                expect(this.host.errorMessage()).toBeFalsy();
-            });
-        });
     });
 
     describe("#columnOrientedData", function() {

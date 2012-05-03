@@ -102,19 +102,6 @@ describe("chorus.Mixins.Fetching", function() {
             ];
         });
 
-        context("when the response is '403 forbidden'", function() {
-            beforeEach(function() {
-                this.data = {
-                    response: { instanceId: 1 },
-                    errors: { record: "no" }
-                };
-
-                this.xhr = { status: 403 };
-            });
-
-            itHandlesFailure();
-        });
-
         context("when the response is '401 unauthorized'", function() {
             beforeEach(function() {
                 spyOnEvent(chorus.session, "needsLogin");
@@ -132,6 +119,45 @@ describe("chorus.Mixins.Fetching", function() {
             it("triggers the 'needsLogin' event on the session", function() {
                 this.resource.parseErrors(this.data, this.xhr);
                 expect("needsLogin").toHaveBeenTriggeredOn(chorus.session);
+            });
+        });
+
+
+        context("when the response is '403 forbidden'", function() {
+            beforeEach(function() {
+                spyOn(this.resource, "trigger");
+                this.data = {
+                    response: { instanceId: 1 },
+                    errors: { record: "no" }
+                };
+
+                this.xhr = { status: 403 };
+            });
+
+            itHandlesFailure();
+
+            it("triggers fetchForbidden on the resource", function() {
+                this.resource.parseErrors(this.data, this.xhr);
+                expect(this.resource.trigger).toHaveBeenCalledWith("fetchForbidden");
+            });
+        });
+
+        context("when the response is '404 not found'", function() {
+            beforeEach(function() {
+                spyOn(this.resource, "trigger");
+                this.data = {
+                    response: { instanceId: 1 },
+                    errors: { record: "no" }
+                };
+
+                this.xhr = { status: 404 };
+            });
+
+            itHandlesFailure();
+
+            it("triggers fetchNotFound on the resource", function() {
+                this.resource.parseErrors(this.data, this.xhr);
+                expect(this.resource.trigger).toHaveBeenCalledWith("fetchNotFound");
             });
         });
 

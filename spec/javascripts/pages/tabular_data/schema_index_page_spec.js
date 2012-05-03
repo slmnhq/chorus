@@ -6,7 +6,7 @@ describe("chorus.pages.SchemaIndexPage", function() {
     });
 
     it("includes the InstanceCredentials mixin", function() {
-        expect(this.page.requiredResourcesFetchFailed).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchFailed);
+        expect(this.page.requiredResourcesFetchForbidden).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchForbidden);
     });
 
     it("has a helpId", function() {

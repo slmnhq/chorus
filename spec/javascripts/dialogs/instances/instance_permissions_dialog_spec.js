@@ -335,7 +335,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 describe("when the save fails", function() {
                     beforeEach(function() {
-                        this.accountBeingEdited.serverErrors = [{ message: "You can't do that, dude" }];
+                        this.accountBeingEdited.serverErrors = { fields: { a: { REQUIRED: {} } } };
                         this.accountBeingEdited.trigger('saveFailed');
                     })
 
@@ -344,7 +344,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     })
 
                     it("displays error messages", function() {
-                        expect(this.dialog.$(".errors li:first-child").text().trim()).toBe("You can't do that, dude");
+                        expect(this.dialog.$(".errors li:first-child").text().trim()).toBe("A is required");
                     })
 
                     it("stops the spinner", function() {
@@ -445,10 +445,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the delete fails", function() {
                     beforeEach(function() {
-                        this.server.lastDestroy().failUnprocessableEntity([{message: "don't delete me"}]);
+                        this.server.lastDestroy().failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
                     });
                     it("displays the error", function() {
-                       expect(this.dialog.$(".errors")).toContainText("don't delete me");
+                       expect(this.dialog.$(".errors")).toContainText("A is required");
                     });
                 });
             });
@@ -604,12 +604,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                             describe("when the save fails", function() {
                                 beforeEach(function() {
-                                    this.dialog.account.serverErrors = [{ message: "couldn't create account..'" }];
+                                    this.dialog.account.serverErrors = { fields: { a: { REQUIRED: {} } } };
                                     this.dialog.account.trigger("saveFailed");
-                                });
-
-                                it("shows the server errors", function() {
-                                    expect(this.dialog.$(".errors")).toContainText("couldn't create account");
                                 });
 
                                 it("only shows one copy of the server error", function() {
@@ -827,12 +823,12 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             describe("when the save fails", function() {
                 beforeEach(function() {
-                    this.instance.serverErrors = [{ message: "shut up" }];
+                    this.instance.serverErrors = { fields: { a: { REQUIRED: {} } } };
                     this.instance.trigger("saveFailed");
                 });
 
                 it("displays the server errors in the errors div", function() {
-                    expect(this.dialog.$(".errors")).toContainText("shut up");
+                    expect(this.dialog.$(".errors li").length).toBe(1);
                 });
             });
         });

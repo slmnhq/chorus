@@ -10,7 +10,7 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
     },
 
     versionConflict: function() {
-        if (this.model.serverErrors[0].msgkey == "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH") {
+        if (this.model.hasConflict()) {
             this.alert = new chorus.alerts.WorkfileConflict({ launchElement: this, model: this.model });
             this.alert.launchModal();
         }

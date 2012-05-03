@@ -35,17 +35,14 @@ chorus.Mixins.SQLResults = {
         });
     },
 
+    // TODO: REWRITE do we need this still?
     dataErrors: function(data) {
-        if (data.errors && data.errors.length) {
+        if (data.errors) {
             return data.errors
         }
 
         if (data.response && data.response.result) {
             return [data.response.result];
         }
-    },
-
-    errorMessage:function () {
-        return this.serverErrors && this.serverErrors[0] && this.serverErrors[0].message;
     }
 };

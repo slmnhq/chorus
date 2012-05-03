@@ -22,17 +22,31 @@ describe("chorus.pages.Base", function() {
     })
 
     describe("#dependOn", function() {
-        context("when no function is provided", function() {
+        context("when resource is not found", function() {
             beforeEach(function() {
                 this.page = new chorus.pages.Bare();
                 this.model = new chorus.models.Base();
-                spyOn(this.page, "requiredResourcesFetchFailed");
+                spyOn(this.page, "requiredResourcesFetchNotFound");
                 this.page.dependOn(this.model);
             });
 
-            it("binds fetchFailed to requiredResourcesFetchFailed", function() {
-                this.model.trigger("fetchFailed");
-                expect(this.page.requiredResourcesFetchFailed).toHaveBeenCalled();
+            it("calls requiredResourcesFetchNotFound", function() {
+                this.model.trigger("fetchNotFound");
+                expect(this.page.requiredResourcesFetchNotFound).toHaveBeenCalled();
+            });
+        });
+
+        context("when resource is forbidden", function() {
+            beforeEach(function() {
+                this.page = new chorus.pages.Bare();
+                this.model = new chorus.models.Base();
+                spyOn(this.page, "requiredResourcesFetchForbidden");
+                this.page.dependOn(this.model);
+            });
+
+            it("calls requiredResourcesFetchForbidden", function() {
+                this.model.trigger("fetchForbidden");
+                expect(this.page.requiredResourcesFetchForbidden).toHaveBeenCalled();
             });
         });
 
@@ -40,7 +54,6 @@ describe("chorus.pages.Base", function() {
             beforeEach(function() {
                 this.page = new chorus.pages.Bare();
                 this.model = new chorus.models.Base();
-                spyOn(this.page, "requiredResourcesFetchFailed");
             });
 
             context("and the dependence is already loaded", function() {
@@ -104,22 +117,35 @@ describe("chorus.pages.Base", function() {
             });
         });
 
-        context("when the page has required resources", function() {
+        context("when the page depends on resources", function() {
             beforeEach(function() {
                 this.resource = newFixtures.user();
-                this.view.requiredResources.push(this.resource);
+                this.view.dependOn(this.resource);
             });
 
-            context("when the fetch fails", function() {
+            context("when the fetch returns not found", function() {
                 beforeEach(function() {
                     spyOn(Backbone.history, "loadUrl");
                     spyOn(this.view, "failurePageOptions").andReturn({foo: "bar"});
-                    this.resource.trigger("fetchFailed");
+                    this.resource.trigger("fetchNotFound");
                 });
 
                 it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
                     expect(chorus.pageOptions).toEqual({ foo: "bar" });
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
+                })
+            });
+
+            context("when the fetch returns forbidden", function() {
+                beforeEach(function() {
+                    spyOn(Backbone.history, "loadUrl");
+                    spyOn(this.view, "failurePageOptions").andReturn({foo: "bar"});
+                    this.resource.trigger("fetchForbidden");
+                });
+
+                it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
+                    expect(chorus.pageOptions).toEqual({ foo: "bar" });
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/unauthorized");
                 })
             });
         });
@@ -244,7 +270,7 @@ describe("chorus.pages.Base", function() {
     describe("help", function() {
         beforeEach(function() {
             spyOn(chorus, "help");
-            this.page = new chorus.pages.Base();
+            chorus.page = this.page = new chorus.pages.Base();
             chorus.bindModalLaunchingClicks(this.page);
             this.page.render();
             this.page.$("#help a").click();

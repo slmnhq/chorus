@@ -3,7 +3,8 @@ chorus.models = {
         chorus.Mixins.Urls,
         chorus.Mixins.Events,
         chorus.Mixins.dbHelpers,
-        chorus.Mixins.Fetching
+        chorus.Mixins.Fetching,
+        chorus.Mixins.ServerErrors
     ).extend({
         constructorName: "Model",
 
@@ -219,7 +220,8 @@ chorus.collections = {
     Base: Backbone.Collection.include(
         chorus.Mixins.Urls,
         chorus.Mixins.Events,
-        chorus.Mixins.Fetching
+        chorus.Mixins.Fetching,
+        chorus.Mixins.ServerErrors
     ).extend({
         constructorName: "Collection",
 

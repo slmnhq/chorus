@@ -2,7 +2,8 @@ describe("chorus.presenters.Base", function() {
     beforeEach(function() {
         this.model = new Backbone.Model({bestFriend: "Larry Wall"});
         this.model.loaded = true;
-        this.model.serverErrors = ["too few ponies– requires at least three"];
+        this.serverErrors = {fields: {ponies: {GREATER_THAN_OR_EQUAL_TO: {count: 3}}}}
+        this.model.serverErrors = this.serverErrors;
         this.presenter = new chorus.presenters.Base(this.model)
     });
 
@@ -11,7 +12,7 @@ describe("chorus.presenters.Base", function() {
     });
 
     it("presents the model's server errors", function() {
-       expect(this.presenter.serverErrors).toEqual(["too few ponies– requires at least three"]);
+       expect(this.presenter.serverErrors).toEqual(this.serverErrors);
     });
 
     it("presents the model's attributes", function() {
@@ -45,7 +46,7 @@ describe("chorus.presenters.Base", function() {
         })
 
         it("respects the models not overwritten attributes", function(){
-            expect(this.presenter.serverErrors).toEqual(["too few ponies– requires at least three"]);
+            expect(this.presenter.serverErrors).toEqual(this.serverErrors);
         })
 
         it("passes the original model to the subclass", function() {

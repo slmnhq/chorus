@@ -3,13 +3,19 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         if (chorus.user) this.bindings.add(chorus.user, "change", this.render);
     },
 
-    requiredResourcesFetchFailed: function() {
+    requiredResourcesFetchNotFound: function() {
         chorus.pageOptions = this.failurePageOptions();
         Backbone.history.loadUrl("/invalidRoute");
     },
 
+    requiredResourcesFetchForbidden: function() {
+        chorus.pageOptions = this.failurePageOptions();
+        Backbone.history.loadUrl("/unauthorized");
+    },
+
     dependOn: function(model, functionToCallWhenLoaded) {
-        this.bindings.add(model, "fetchFailed", this.requiredResourcesFetchFailed);
+        this.bindings.add(model, "fetchNotFound", this.requiredResourcesFetchNotFound);
+        this.bindings.add(model, "fetchForbidden", _.bind(this.requiredResourcesFetchForbidden, this, model));
         this.bindings.add(model, "change", this.render);
         if (functionToCallWhenLoaded) {
             if (model.loaded) {

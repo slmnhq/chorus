@@ -304,7 +304,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             this.data = {
                                 result: {
                                     response: [],
-                                    errors: [{ message: "Bad File" }]
+                                    errors: { fields: { a: { REQUIRED: {} } } }
                                 }
                             };
                             this.fileUploadOptions.done(null, this.data)
@@ -316,7 +316,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         });
 
                         it("displays the errors", function() {
-                            expect(this.dialog.$('.errors')).toContainText('Bad File');
+                            expect(this.dialog.$('.errors')).toContainText('A is required');
                         })
 
                     });
@@ -454,7 +454,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         this.data = {
                             result: {
                                 resource: [],
-                                errors: [{ message: "You failed" }],
+                                errors: { fields: { a: { REQUIRED: {} } } }
                             },
                             files: [
                                 {name: "myfile"}
@@ -468,7 +468,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                     });
 
                     it("fills the error field", function() {
-                        expect(this.dialog.$(".errors ul")).toHaveText("You failed");
+                        expect(this.dialog.$(".errors li")).toHaveText("A is required");
                     });
 
                     it("does not hide the import controls or change file link", function() {

@@ -111,10 +111,8 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                 });
 
                 it("save fails", function() {
-                    this.server.lastCreateFor(this.view.model).failUnprocessableEntity([
-                        {message: "foo"}
-                    ]);
-                    expect(this.view.$(".errors")).toContainText("foo");
+                    this.server.lastCreateFor(this.view.model).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                    expect(this.view.$(".errors")).toContainText("A is required");
                     expect(this.view.$("button.submit").isLoading()).toBeFalsy();
                 });
             });

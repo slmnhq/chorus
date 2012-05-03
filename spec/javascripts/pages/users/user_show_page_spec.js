@@ -19,7 +19,7 @@ describe("chorus.pages.UserShow", function(){
         context("when the model fails to load properly", function() {
             beforeEach(function() {
                 spyOn(Backbone.history, "loadUrl")
-                this.view.model.trigger('fetchFailed')
+                this.view.model.trigger('fetchNotFound')
             })
 
             it("navigates to the 404 page", function() {

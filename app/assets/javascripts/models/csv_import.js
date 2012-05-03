@@ -16,9 +16,7 @@ chorus.models.CSVImport = chorus.models.Base.extend({
             delete this.serverErrors;
         } catch (e) {
             if (e instanceof CSV.ParseError) {
-                this.serverErrors = [
-                    { message: t("dataset.import.invalid_csv") }
-                ];
+                this.serverErrors = {fields: {delimiter: {INVALID : {}}}};
                 return [];
             } else {
                 throw (e);

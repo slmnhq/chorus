@@ -1,33 +1,33 @@
 chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     constructorName: "WorkfilesImport",
 
-    templateName:"workfiles_import",
-    title:t("workfiles.import_dialog.title"),
+    templateName: "workfiles_import",
+    title: t("workfiles.import_dialog.title"),
 
-    persistent:true,
+    persistent: true,
 
-    events:{
+    events: {
         "change input[name=description]": "descriptionChanged",
         "paste input[name=description]": "descriptionChanged",
         "keyup input[name=description]": "descriptionChanged",
-        "click button.submit":"upload",
-        "submit form":"upload"
+        "click button.submit": "upload",
+        "submit form": "upload"
     },
 
-    makeModel:function () {
-        this.model = this.model || new chorus.models.Workfile({workspaceId:this.options.launchElement.data("workspace-id")})
+    makeModel: function() {
+        this.model = this.model || new chorus.models.Workfile({workspaceId: this.options.launchElement.data("workspace-id")})
     },
 
-    setup:function () {
+    setup: function() {
         var self = this;
-        $(document).one('close.facebox', function () {
+        $(document).one('close.facebox', function() {
             if (self.request) {
                 self.request.abort();
             }
         });
     },
 
-    upload:function (e) {
+    upload: function(e) {
         if (e) {
             e.preventDefault();
         }
@@ -37,7 +37,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         }
     },
 
-    closeModal:function (e) {
+    closeModal: function(e) {
         if (e) {
             e.preventDefault();
         }
@@ -47,7 +47,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         this._super("closeModal");
     },
 
-    chooseFile:function (e) {
+    chooseFile: function(e) {
         e.preventDefault();
         this.$("input").click();
     },
@@ -56,17 +56,18 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         this.$("button.submit").prop("disabled", false);
     },
 
-    postRender:function () {
+    postRender: function() {
         var self = this;
 
         // dataType: 'text' is necessary for FF3.6
         // see https://github.com/blueimp/jQuery-File-Upload/issues/422
         // see https://github.com/blueimp/jQuery-File-Upload/blob/master/jquery.iframe-transport.js
         this.$("input[type=file]").fileupload({
-            change:fileChosen,
-            add:fileChosen,
-            done:uploadFinished,
-            dataType:"text"
+            change: fileChosen,
+            add: fileChosen,
+            done: uploadFinished,
+            fail: uploadFailed,
+            dataType: "text"
         });
 
         function fileChosen(e, data) {
@@ -83,21 +84,19 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             }
         }
 
-        function uploadFinished(e, data) {
-            var json = $.parseJSON(data.result)
-            if (json.status == "ok") {
-                self.model = new chorus.models.Workfile(json.resource[0]);
-                chorus.toast('workfiles.uploaded', {fileName:self.model.get("fileName")});
-                self.closeModal();
-                chorus.router.navigate(self.model.showUrl());
-            }
-            else {
-                e.preventDefault();
-                self.resource.serverErrors = json.message;
-                self.$("button.submit").stopLoading();
-                self.$("button.submit").prop("disabled", true);
-                self.resource.trigger("saveFailed");
-            }
+        function uploadFinished(e, json) {
+            self.model = new chorus.models.Workfile(json.response);
+            chorus.toast('workfiles.uploaded', {fileName: self.model.get("fileName")});
+            self.closeModal();
+            chorus.router.navigate(self.model.showUrl());
+        }
+
+        function uploadFailed(e, json) {
+            e.preventDefault();
+            self.resource.serverErrors = json.errors;
+            self.$("button.submit").stopLoading();
+            self.$("button.submit").prop("disabled", true);
+            self.resource.trigger("saveFailed");
         }
     }
 });

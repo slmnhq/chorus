@@ -19,7 +19,7 @@ describe("chorus.alerts.Error", function() {
             });
 
             it("gets the error message from the model's errorMessage function", function() {
-                expect(this.alert.body).toBe(this.task.errorMessage());
+                expect(this.alert.body).toBe(this.task.serverErrorMessage());
             });
         });
 

@@ -280,16 +280,12 @@ describe("chorus.views.TextWorkfileContentView", function() {
             context("when there is a version conflict", function() {
                 beforeEach(function() {
                     this.modalSpy = stubModals();
-                    message = {
-                        "message" : "Bad version, bro",
-                        "msgkey" : "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH"
-                    }
                     var model = this.view.model
                     var url = "/workspace/" + model.get("workspaceId") + "/workfile/" +
                         model.get("id") + "/version/" + model.get("versionInfo").versionNum;
                     _.find(this.server.updates(), function(request){
                         return request.url === url ;
-                    }).failUnprocessableEntity([message]);
+                    }).failUnprocessableEntity({fields: { version: {INVALID: {}}}});
                 });
 
                 it("should show the version conflict alert", function() {

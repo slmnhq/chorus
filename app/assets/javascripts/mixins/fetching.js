@@ -59,6 +59,10 @@ chorus.Mixins.Fetching = {
     parseErrors: function(data, xhr) {
         if (xhr.status === 401) {
             chorus.session.trigger("needsLogin");
+        } else if (xhr.status == 403) {
+            this.trigger("fetchForbidden");
+        } else if (xhr.status == 404) {
+            this.trigger("fetchNotFound")
         }
         this.errorData = data.response;
         this.serverErrors = this.dataErrors(data);

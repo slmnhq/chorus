@@ -7,8 +7,8 @@ describe("chorus.views.ImageUpload", function() {
         });
         this.view = new chorus.views.ImageUpload({model : this.user});
         this.view.model.loaded = true;
-        this.successfulResponse = {"result": '{"status": "ok"}'};
-        this.errorResponse = {"result": '{"status": "fail", "message" :[{"message":"Fake error message."}]}'};
+        this.successfulResponse = {"response":{}};
+        this.errorResponse = {errors : { fields: { a: { REQUIRED: {} } } }};
     })
 
     describe("#render", function() {
@@ -159,11 +159,11 @@ describe("chorus.views.ImageUpload", function() {
                 beforeEach(function() {
                     this.saveFailedSpy = jasmine.createSpy("saveFailed");
                     this.user.bind("saveFailed", this.saveFailedSpy);
-                    this.fileUploadOptions.done(null, this.errorResponse);
+                    this.fileUploadOptions.fail(null, this.errorResponse);
                 });
 
                 it("sets the server errors on the model", function() {
-                    expect(this.user.serverErrors[0].message).toBe("Fake error message.");
+                    expect(_.first(this.user.serverErrorMessages())).toBe("A is required");
                 });
 
                 it("triggers saveFailed on the model", function() {
@@ -195,7 +195,7 @@ describe("chorus.views.ImageUpload", function() {
                     });
 
                     it("clears the errors", function() {
-                        expect(this.user.serverErrors.length).toBe(0);
+                        expect(this.user.serverErrors).not.toBeDefined();
                     });
 
                     it("renders the good image", function() {

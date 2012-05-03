@@ -23,7 +23,6 @@ chorus.views.Bare = Backbone.View.include(
     setupSubviews: $.noop,
     resourcesLoaded: $.noop,
     displayLoadingSection: $.noop,
-    requiredResourcesFetchFailed: $.noop,
     cleanup: $.noop,
 
     beforeNavigateAway: function() {
@@ -57,7 +56,6 @@ chorus.views.Bare = Backbone.View.include(
         this.requiredResources = new chorus.RequiredResources();
         this.requiredResources.bind('add', function(resource) {
             resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
-            resource.bindOnce('fetchFailed', this.requiredResourcesFetchFailed, this);
         }, this);
         this.requiredResources.reset(options.requiredResources);
     },

@@ -588,13 +588,11 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             context("when the import fails", function() {
                 beforeEach(function() {
-                    this.server.lastCreateFor(this.dialog.csv).failUnprocessableEntity([
-                        {message: "oops"}
-                    ]);
+                    this.server.lastCreateFor(this.dialog.csv).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
                 });
 
                 it("displays the error", function() {
-                    expect(this.dialog.$(".errors")).toContainText("oops");
+                    expect(this.dialog.$(".errors")).toContainText("A is required");
                 });
 
                 it("re-enables the submit button", function() {
@@ -615,45 +613,47 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     });
 
     describe("more source columns than destination columns", function() {
-        context("when there's no destination columns", function() {
+        context("when there are no destination columns", function() {
             beforeEach(function() {
                 this.dialog.dataset.attributes.columnNames = undefined;
                 this.dialog.dataset.trigger("loaded");
                 this.dialog.render();
             });
+
             it("displays the error message", function() {
-                expect(this.dialog.$(".errors").text()).toContainTranslation("dataset.import.table.too_many_source_columns");
+                expect(this.dialog.$(".errors").text()).toContainTranslation("field_error.source_columns.LESS_THAN_OR_EQUAL_TO");
             })
         });
 
-        context("when there's destination columns", function() {
+        context("when there are fewer destination columns", function() {
             beforeEach(function() {
                 this.dialog.dataset.attributes.columnNames.shift();
                 this.dialog.dataset.trigger("loaded");
                 this.dialog.render();
             });
+
             it("displays error message", function() {
-                expect(this.dialog.$(".errors").text()).toContainTranslation("dataset.import.table.too_many_source_columns");
+                expect(this.dialog.$(".errors").text()).toContainTranslation("field_error.source_columns.LESS_THAN_OR_EQUAL_TO");
             });
 
             context("and then selecting a column", function() {
                 beforeEach(function() {
                     this.dialog.$(".column_mapping .map:eq(1)").click();
                     this.qtip.find(".qtip:eq(0) .ui-tooltip-content li:eq(1) a").click();
-                })
+                });
+
                 it("still shows the errors", function() {
-                    expect(this.dialog.$(".errors").text()).toContainTranslation("dataset.import.table.too_many_source_columns");
+                    expect(this.dialog.$(".errors").text()).toContainTranslation("field_error.source_columns.LESS_THAN_OR_EQUAL_TO");
                 })
             })
 
             context("and then changing the delimiter", function() {
-                context("when the number of source columns is less than destination columns", function() {
-                    beforeEach(function() {
-                        this.dialog.$("input.delimiter[value=';']").click();
-                    });
-                    it("should clear the error message", function() {
-                        expect(this.dialog.$(".errors").text()).toBe("");
-                    });
+                beforeEach(function() {
+                    this.dialog.$("input.delimiter[value=';']").click();
+                });
+
+                it("should clear the error message", function() {
+                    expect(this.dialog.$(".errors").text()).toBe("");
                 });
             });
         })

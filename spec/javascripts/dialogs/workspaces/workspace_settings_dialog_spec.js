@@ -491,9 +491,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("the server responds with failure", function() {
                         beforeEach(function() {
-                            this.server.lastUpdateFor(this.dialog.pageModel).failUnprocessableEntity([
-                                {"message": "fake error message"}
-                            ]);
+                            this.server.lastUpdateFor(this.dialog.pageModel).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
                         });
 
                         it("stops the spinner", function() {
@@ -505,7 +503,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         });
 
                         it("displays the errors", function() {
-                            expect(this.dialog.$(".errors").text()).toContain("fake error");
+                            expect(this.dialog.$(".errors").text()).toContain("A is required");
                         });
 
                         it("does not clear the form", function() {

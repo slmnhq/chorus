@@ -962,8 +962,10 @@ describe("handlebars", function() {
                     this.context = {
                         serverErrors: {
                             fields : {
-                                username_or_password: [ "INVALID" ],
-                                password: [ "REQUIRED" ]
+                                username_or_password: { INVALID: {}},
+                                password: { REQUIRED: {} },
+                                source_columns: { LESS_THAN_OR_EQUAL_TO: {}},
+                                connection: { INVALID: {message: "Server generated message"}}
                             }
                         }
                     };
@@ -971,9 +973,11 @@ describe("handlebars", function() {
 
                 it("renders the messages", function() {
                     var el = $(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context, Handlebars.helpers, Handlebars.partials));
-                    expect(el.find("li").length).toBe(2);
-                    expect(el.find("li:eq(0)")).toContainTranslation("field_error.username_or_password.INVALID")
-                    expect(el.find("li:eq(1)")).toContainTranslation("field_error.password.REQUIRED")
+                    expect(el.find("li").length).toBe(4);
+                    expect(el.find("li:eq(0)").text()).toContain("Username or password is invalid")
+                    expect(el.find("li:eq(1)").text()).toContain("Password is required")
+                    expect(el.find("li:eq(2)")).toContainTranslation("field_error.source_columns.LESS_THAN_OR_EQUAL_TO")
+                    expect(el.find("li:eq(3)").text()).toContain("Server generated message")
                 });
             });
         });

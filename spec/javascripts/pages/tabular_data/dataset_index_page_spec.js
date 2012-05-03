@@ -8,7 +8,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 "update"
             ]
         });
-        this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
+        chorus.page = this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
         chorus.bindModalLaunchingClicks(this.page);
     })
 
@@ -72,12 +72,12 @@ describe("chorus.pages.DatasetIndexPage", function() {
         })
 
         it("navigates to the 404 page when the workspace fetch fails", function() {
-            this.page.workspace.trigger('fetchFailed', this.page.workspace);
+            this.page.workspace.trigger('fetchNotFound', this.page.workspace);
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
         })
 
         it("navigates to the 404 page when the collection fetch fails", function() {
-            this.page.collection.trigger('fetchFailed', this.page.collection);
+            this.page.collection.trigger('fetchNotFound', this.page.collection);
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
         })
     });

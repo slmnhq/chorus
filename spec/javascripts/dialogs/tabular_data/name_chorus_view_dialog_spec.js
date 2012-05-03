@@ -90,14 +90,12 @@ describe("chorus.dialogs.NameChorusView", function() {
             beforeEach(function() {
                 spyOn(chorus.router, "navigate");
                 spyOnEvent($(document), "close.facebox");
-                this.dialog.model.set({serverErrors : [
-                    { message: "Hi there" }
-                ]});
+                this.dialog.model.set({serverErrors : { fields: { a: { REQUIRED: {} } } }});
                 this.dialog.model.trigger("saveFailed");
             });
 
             it("displays the error message", function() {
-                expect(this.dialog.$(".errors").text()).toContain("Hi there")
+                expect(this.dialog.$(".errors").text()).toContain("A is required")
             });
 
             it("does not dismiss the dialog", function() {

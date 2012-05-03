@@ -98,9 +98,7 @@ describe("chorus.views.userEdit", function() {
 
                     context("when user creation fails on the server", function() {
                         beforeEach(function() {
-                            this.view.model.serverErrors = [
-                                {message: "Hi there"}
-                            ];
+                            this.view.model.serverErrors = {fields: {a: {REQUIRED: {}}}};
                             this.view.model.trigger("saveFailed")
                         });
 
