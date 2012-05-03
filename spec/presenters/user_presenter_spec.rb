@@ -18,12 +18,8 @@ describe UserPresenter, :type => :view do
       @hash.should have_key(:last_name)
     end
 
-    it "includes the original image url" do
-      @hash[:image][:original].should == @user.image.url(:original)
-    end
-
-    it "includes the icon url" do
-      @hash[:image][:icon].should == @user.image.url(:icon)
+    it "uses the image presenter to serialize the image urls" do
+      @hash[:image].to_hash.should == (ImagePresenter.new(@user.image, view).to_hash)
     end
 
     it "does not include unwanted keys" do

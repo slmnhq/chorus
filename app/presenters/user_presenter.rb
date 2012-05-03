@@ -12,10 +12,7 @@ class UserPresenter < Presenter
       :dept => h(dept),
       :notes => h(notes),
       :admin => admin?,
-      :image => {
-        :original => image.url(:original),
-        :icon => image.url(:icon)
-      }
+      :image => present(image)
     }
   end
 end
