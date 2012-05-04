@@ -33,16 +33,5 @@ chorus.Mixins.SQLResults = {
                 values:_.pluck(rows, name)
             };
         });
-    },
-
-    // TODO: REWRITE do we need this still?
-    dataErrors: function(data) {
-        if (data.errors) {
-            return data.errors
-        }
-
-        if (data.response && data.response.result) {
-            return [data.response.result];
-        }
     }
 };
