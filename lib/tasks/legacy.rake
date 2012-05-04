@@ -1,13 +1,12 @@
 namespace :legacy do
   DUMP_FILE_PATH = File.join(Rails.root, 'db', 'legacy', 'legacy.sql')
   POSTGRES_ARGS  = "--host=localhost --port=8543 --username=edcadmin"
-  DEV_DB_NAME = "chorus"
   TEST_DB_NAME = "chorus_legacy_test"
 
   desc "Drop and recreate legacy test database, then import legacy data"
   task :setup => :environment do
     connection = User.connection
-    [DEV_DB_NAME, TEST_DB_NAME].each do |db_name|
+    [TEST_DB_NAME].each do |db_name|
       connection.execute "DROP DATABASE #{db_name}"
       connection.execute "CREATE DATABASE #{db_name}"
       system "psql #{POSTGRES_ARGS} #{db_name} < #{DUMP_FILE_PATH}"
