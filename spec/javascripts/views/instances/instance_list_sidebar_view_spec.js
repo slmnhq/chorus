@@ -132,7 +132,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     beforeEach(function() {
                         setLoggedInUser({ username : "benjamin", admin: true});
                         this.instance.set({
-                            state: "fault",
+                            state: "offline",
                             provision_type: "create"
                         });
                         this.view.render();

@@ -24,8 +24,8 @@ describe("chorus.models.Instance", function() {
     });
 
     describe("#stateIconUrl", function() {
-        it("returns the right url for 'fault' instances", function() {
-            this.instance.set({ state: "fault" });
+        it("returns the right url for 'offline' instances", function() {
+            this.instance.set({ state: "offline" });
             expect(this.instance.stateIconUrl()).toBe("/images/instances/red.png");
         });
 

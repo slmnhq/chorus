@@ -3,7 +3,7 @@
 
     var stateIconMap = {
         "online": "green.png",
-        "fault": "red.png"
+        "offline": "red.png"
     };
 
     var providerIconMap = {
@@ -129,7 +129,7 @@
         },
 
         isFault: function() {
-            return this.get("state") == "fault";
+            return this.get("state") == "offline";
         },
 
         isOnline: function() {

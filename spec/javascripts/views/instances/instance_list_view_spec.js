@@ -55,6 +55,10 @@ describe("chorus.views.InstanceList", function() {
                 expect(this.view.$("li.instance").length).toBe(this.collection.length);
             });
 
+            it("should display the green state icon for an online instance", function() {
+                expect(this.view.$("li.instance:eq(0) img.state")).toHaveAttr("src", "/images/instances/green.png");
+            });
+
             it("renders the three instance provider sections", function() {
                 expect(this.view.$("div.instance_provider").length).toBe(3);
             });
@@ -156,10 +160,10 @@ describe("chorus.views.InstanceList", function() {
                 });
             });
 
-            describe("when an instance has a provisioning fault", function() {
+            describe("when an instance is offline", function() {
                 beforeEach(function() {
                     this.collection.reset([
-                        newFixtures.instance.greenplum({ name: "Greenplum", state: "fault" })
+                        newFixtures.instance.greenplum({ name: "Greenplum", state: "offline" })
                     ]);
                     this.view.render();
                 });
