@@ -35,6 +35,18 @@ describe User do
     it { should validate_presence_of :username }
     it { should validate_presence_of :email }
 
+    describe "field length" do
+      it { should ensure_length_of(:username).is_at_most(256) }
+      it { should ensure_length_of(:first_name).is_at_most(256) }
+      it { should ensure_length_of(:last_name).is_at_most(256) }
+      it { should ensure_length_of(:email).is_at_most(256) }
+      it { should ensure_length_of(:title).is_at_most(256) }
+      it { should ensure_length_of(:dept).is_at_most(256) }
+      it { should ensure_length_of(:password).is_at_least(6) }
+      it { should ensure_length_of(:password).is_at_most(256) }
+      it { should ensure_length_of(:notes).is_at_most(4096) }
+    end
+
     describe "username" do
       context "when no other user with that username exists" do
         it "validates" do
@@ -117,17 +129,6 @@ describe User do
         user2.should be_valid
       end
     end
-
-    describe "field length" do
-      it { should ensure_length_of(:username).is_at_most(256) }
-      it { should ensure_length_of(:first_name).is_at_most(256) }
-      it { should ensure_length_of(:last_name).is_at_most(256) }
-      it { should ensure_length_of(:email).is_at_most(256) }
-      it { should ensure_length_of(:title).is_at_most(256) }
-      it { should ensure_length_of(:dept).is_at_most(256) }
-      it { should ensure_length_of(:password).is_at_most(256) }
-      it { should ensure_length_of(:notes).is_at_most(4096) }
-    end
   end
 
   describe "image" do
@@ -198,7 +199,12 @@ describe User do
 
     it "should not allow deleting a user who owns an instance" do
       user.instances << FactoryGirl.create(:instance, :owner => user)
-      lambda { user.destroy }.should raise_error ActiveRecord::RecordInvalid
+      begin
+        user.destroy
+        fail
+      rescue ActiveRecord::RecordInvalid => e
+        e.record.errors.messages[:instance_count].should == [[:equal_to, {:count => 0}]]
+      end
     end
   end
 

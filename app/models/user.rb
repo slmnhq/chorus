@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   has_many :instances, :foreign_key => :owner_id
 
-  has_attached_file :image, :default_url => '/images/default-user-icon.png', :styles => { :original => "", :icon => "50x50>" }
+  has_attached_file :image, :default_url => '/images/default-user-icon.png', :styles => {:original => "", :icon => "50x50>"}
 
   validates_presence_of :username, :first_name, :last_name, :email
   validate :uniqueness_of_non_deleted_username
@@ -71,8 +71,8 @@ class User < ActiveRecord::Base
   end
 
   def destroy
-    if !instances.empty?
-      errors.add(:delete , "not_allowed")
+    if instances.count > 0
+      errors.add(:instance_count, :equal_to, {:count => 0})
       raise ActiveRecord::RecordInvalid.new(self)
     end
     self.deleted_at = Time.now.utc
