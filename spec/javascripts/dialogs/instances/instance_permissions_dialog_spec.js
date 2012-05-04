@@ -10,28 +10,28 @@ describe("chorus.dialogs.InstancePermissions", function() {
             this.instance = newFixtures.instance.sharedAccount({instance_id: "5"});
             var launchElement = $("<a/>").data("instance", this.instance);
             this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
-        })
+        });
 
         it("does not re-render on model changes", function() {
             expect(this.dialog.persistent).toBeTruthy();
-        })
+        });
 
         it("fetches all chorus users", function() {
             expect(this.dialog.users).toBeA(chorus.collections.UserSet);
             expect(this.dialog.users.fetchAll).toHaveBeenCalled();
         });
-    })
+    });
 
     context("when the instance is a shared account", function() {
         beforeEach(function() {
             this.instance = newFixtures.instance.sharedAccount();
             var account = fixtures.instanceAccount(this.instance);
-            this.instance.set({ owner: {id: account.user().get("id")} });
+            this.instance.set({ owner: {id: account.user().get("id")}, shared: true });
             this.instance.accounts().reset(account);
 
             var launchElement = $("<a/>").data("instance", this.instance);
             this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
-        })
+        });
 
         describe("#render", function() {
             beforeEach(function() {
@@ -40,7 +40,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             it("displays the shared account subheader", function() {
                 expect(this.dialog.$(".sub_header .details_text").text()).toMatchTranslation("instances.shared_account")
-            })
+            });
 
             it("displays the account owner information", function() {
                 var li = this.dialog.$("li");
@@ -48,15 +48,15 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 expect(li).toExist();
                 expect(li.find("img.profile")).toHaveAttr("src", sharedAccountUser.fetchImageUrl());
                 expect(li.find(".name").text()).toBe(sharedAccountUser.displayName());
-            })
+            });
 
             it("displays an edit link", function() {
                 expect(this.dialog.$("a.edit")).toExist();
-            })
+            });
 
             it("displays the Change owner link", function() {
                 expect(this.dialog.$("a.change_owner")).toExist();
-            })
+            });
 
             describe("clicking the 'change owner' link", function() {
                 beforeEach(function() {
@@ -166,10 +166,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
                     });
 
-                    it("saves the instance account", function() {
-                        expect(this.server.lastUpdate().url).toBe("/instances/5/accounts/999");
-                        expect(this.server.lastUpdate().params()["account[id]"]).toBe("999");
-                        expect(this.server.lastUpdate().params()["account[shared]"]).toBe("false");
+                    it("saves the instance", function() {
+                        expect(this.server.lastUpdate().url).toBe("/instances/" + this.instance.id);
+                        expect(this.server.lastUpdate().params()["instance[shared]"]).toBe("false");
                     });
 
                     context("when the save succeeds", function() {
@@ -680,8 +679,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         context("clicking the switch to shared account link", function() {
             beforeEach(function() {
                 spyOn(this.dialog, "launchSubModal").andCallThrough();
-                this.ownerAccount = fixtures.instanceAccount({shared: 'false', db_username : "foo", id : "888", instance_id: 5});
-                spyOn(this.ownerAccount, "save").andCallThrough();
+                spyOn(this.instance, "save").andCallThrough();
                 spyOn(this.dialog.instance, 'accountForOwner').andReturn(this.ownerAccount);
                 this.dialog.$("a.add_shared_account").click();
             });
@@ -697,13 +695,12 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 it("calls save on the account with shared:true", function() {
-                    expect(this.ownerAccount.save.calls[0].args[0].shared).toBe("true");
+                    expect(this.instance.save.calls[0].args[0].shared).toBe("true");
                 });
 
                 it("only sends the shared parameter", function() {
-                    expect(this.server.lastRequest().url).toBe("/instances/5/accounts/888")
-                    expect(this.server.lastRequest().params()["account[id]"]).toBe("888");
-                    expect(this.server.lastRequest().params()["account[shared]"]).toBe("true");
+                    expect(this.server.lastRequest().url).toBe("/instances/" + this.instance.id)
+                    expect(this.server.lastRequest().params()["instance[shared]"]).toBe("true");
                 });
 
                 context("when the save succeeds", function() {
@@ -711,9 +708,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         spyOn(chorus, 'toast');
                         this.otherSavedSpy = jasmine.createSpy();
                         spyOn(this.dialog, "postRender").andCallThrough();
-                        this.ownerAccount.bind("saved", this.otherSavedSpy);
+                        this.instance.bind("saved", this.otherSavedSpy);
                         expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
-                        this.ownerAccount.trigger("saved");
+                        this.instance.trigger("saved");
                     });
 
                     it("displays a toast message", function() {
@@ -733,7 +730,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         it("doesn't display a toast message", function() {
                             chorus.toast.reset();
                             this.otherSavedSpy.reset();
-                            this.ownerAccount.trigger("saved");
+                            this.instance.trigger("saved");
 
                             expect(chorus.toast).not.toHaveBeenCalled();
                             expect(this.otherSavedSpy).toHaveBeenCalled();
@@ -744,7 +741,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 context("when the save fails", function() {
                     beforeEach(function() {
                         spyOn(chorus, 'toast');
-                        this.ownerAccount.trigger("saveFailed");
+                        this.instance.trigger("saveFailed");
                     });
 
                     it("displays a save failed toast message", function() {
@@ -754,7 +751,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     context("and then a save succeeds", function() {
                         beforeEach(function() {
                             chorus.toast.reset();
-                            this.ownerAccount.trigger("saved");
+                            this.instance.trigger("saved");
                         });
 
                         it("doesn't display the saved toast message", function() {
