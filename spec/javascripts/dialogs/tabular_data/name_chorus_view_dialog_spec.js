@@ -90,12 +90,12 @@ describe("chorus.dialogs.NameChorusView", function() {
             beforeEach(function() {
                 spyOn(chorus.router, "navigate");
                 spyOnEvent($(document), "close.facebox");
-                this.dialog.model.set({serverErrors : { fields: { a: { REQUIRED: {} } } }});
+                this.dialog.model.set({serverErrors : { fields: { a: { BLANK: {} } } }});
                 this.dialog.model.trigger("saveFailed");
             });
 
             it("displays the error message", function() {
-                expect(this.dialog.$(".errors").text()).toContain("A is required")
+                expect(this.dialog.$(".errors").text()).toContain("A can't be blank")
             });
 
             it("does not dismiss the dialog", function() {

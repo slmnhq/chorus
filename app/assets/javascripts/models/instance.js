@@ -113,8 +113,8 @@
         },
 
         sharedAccount:function () {
-            var db_username = this.get("sharedAccount") && this.get("sharedAccount").db_username;
-            if (db_username) {
+            if (this.get("shared") && this.get("sharedAccount")) {
+                var db_username = this.get("sharedAccount").db_username;
                 var sharedAccount = this.accounts().first();
                 if (!sharedAccount) {
                     sharedAccount = new chorus.models.InstanceAccount({ db_username:db_username, instance_id:this.get("id") });

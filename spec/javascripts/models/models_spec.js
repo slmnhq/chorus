@@ -204,7 +204,7 @@ describe("chorus.models.Abstract", function() {
 
                 describe("when the request fails", function() {
                     beforeEach(function() {
-                        this.errors = { fields: { a: { REQUIRED: {} } } };
+                        this.errors = { fields: { a: { BLANK: {} } } };
 
                         this.server.lastUpdate().failUnprocessableEntity(this.errors, {
                             foo: "bar"

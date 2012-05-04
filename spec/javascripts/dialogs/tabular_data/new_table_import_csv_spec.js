@@ -376,11 +376,11 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
         context("when the import fails", function() {
             beforeEach(function() {
-                this.server.lastCreateFor(this.dialog.csv).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                this.server.lastCreateFor(this.dialog.csv).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
             });
 
             it("displays the error", function() {
-                expect(this.dialog.$(".errors")).toContainText("A is required");
+                expect(this.dialog.$(".errors")).toContainText("A can't be blank");
             });
             it("re-enables the submit button", function() {
                 expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
@@ -388,13 +388,13 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             it("retains column names", function() {
                 this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
                 this.dialog.$("button.submit").click();
-                this.server.lastCreate().failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
             })
             it("retains the table name", function() {
                 this.dialog.$("input[name=toTable]").val("testisgreat").change();
                 this.dialog.$("button.submit").click();
-                this.server.lastCreate().failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 expect(this.dialog.$("input[name=toTable]").val()).toBe("testisgreat");
             })
         })

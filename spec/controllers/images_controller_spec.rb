@@ -14,10 +14,11 @@ describe ImagesController do
     end
 
     it "updates the user's image" do
-      @user.image.url.should == "/images/original/missing.png"
+      default_image_path = "/images/default-user-icon.png"
+      @user.image.url.should == default_image_path
       put :update, :id => @user.id, :files => [Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/small.png", Rails.root), "image/jpeg")]
       @user.reload
-      @user.image.url.should_not == "/images/original/missing.png"
+      @user.image.url.should_not == default_image_path
     end
 
     it "responds with the urls of the new image" do

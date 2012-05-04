@@ -174,7 +174,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
 
                     this.dialog.$("button.submit").click();
-                    this.server.lastCreate().failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                    this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 });
 
                 it("has no validation errors", function() {

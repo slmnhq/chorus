@@ -85,12 +85,12 @@ describe("chorus.dialogs.WorkspacesNew", function() {
         context("when workspace creation fails", function() {
             beforeEach(function() {
                 spyOn(chorus.router, "navigate");
-                this.dialog.resource.set({serverErrors : { fields: { a: { REQUIRED: {} } } }});
+                this.dialog.resource.set({serverErrors : { fields: { a: { BLANK: {} } } }});
                 this.dialog.resource.trigger("saveFailed");
             });
 
             it("displays the error message", function() {
-                expect(this.dialog.$(".errors").text()).toContain("A is required")
+                expect(this.dialog.$(".errors").text()).toContain("A can't be blank")
             });
 
             it("does not dismiss the dialog", function() {

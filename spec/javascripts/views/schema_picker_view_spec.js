@@ -437,7 +437,7 @@ describe("chorus.views.SchemaPicker", function() {
                                     context("when the schema list fetch fails", function() {
                                         beforeEach(function() {
                                             spyOnEvent(this.view, 'error');
-                                            this.server.lastFetchAllFor(this.view.schemas).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                                            this.server.lastFetchAllFor(this.view.schemas).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                                         });
 
                                         it("hides the loading section", function() {
@@ -454,7 +454,7 @@ describe("chorus.views.SchemaPicker", function() {
                             context("when the database list fetch fails", function() {
                                 beforeEach(function() {
                                     spyOnEvent(this.view, 'error');
-                                    this.server.lastFetchAllFor(this.view.databases).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                                    this.server.lastFetchAllFor(this.view.databases).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                                 });
 
                                 it("hides the loading section", function() {
@@ -472,7 +472,7 @@ describe("chorus.views.SchemaPicker", function() {
                 context("when the instance list fetch fails", function() {
                     beforeEach(function() {
                         spyOnEvent(this.view, 'error');
-                        this.server.lastFetchAllFor(this.view.instances).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                        this.server.lastFetchAllFor(this.view.instances).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                     });
 
                     it("triggers error with the message", function() {

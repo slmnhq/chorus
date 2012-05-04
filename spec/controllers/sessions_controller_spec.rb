@@ -45,7 +45,7 @@ describe SessionsController do
     describe "with incorrect credentials" do
       before do
         thing = Object.new
-        stub(thing).errors { {:field => ["error"]} }
+        stub(thing).errors.stub!.messages { {:field => [["error", {}]]} }
         invalid_exception = CredentialsValidator::Invalid.new(thing)
         stub(CredentialsValidator).user('admin', 'public') { raise(invalid_exception) }
         post :create, :session => {:username => 'admin', :password => 'public'}
@@ -56,7 +56,7 @@ describe SessionsController do
       end
 
       it "includes details of invalid credentials" do
-        decoded_errors.fields.field.should == ["error"]
+        decoded_errors.fields.field.ERROR.should == {}
       end
     end
   end

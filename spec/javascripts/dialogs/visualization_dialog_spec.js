@@ -233,11 +233,11 @@ describe("chorus.dialogs.Visualization", function() {
 
                         context("and the task save fails", function() {
                             beforeEach(function() {
-                                this.server.lastCreateFor(this.dialog.task).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                                this.server.lastCreateFor(this.dialog.task).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                             });
 
                             it("displays the error message in the dialog", function() {
-                                expect(this.dialog.$(".errors")).toContainText("A is required");
+                                expect(this.dialog.$(".errors")).toContainText("A can't be blank");
                             });
 
                             it("stops the spinner on the refresh button", function() {

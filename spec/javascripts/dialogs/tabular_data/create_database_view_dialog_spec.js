@@ -111,8 +111,8 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                 });
 
                 it("save fails", function() {
-                    this.server.lastCreateFor(this.view.model).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
-                    expect(this.view.$(".errors")).toContainText("A is required");
+                    this.server.lastCreateFor(this.view.model).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                    expect(this.view.$(".errors")).toContainText("A can't be blank");
                     expect(this.view.$("button.submit").isLoading()).toBeFalsy();
                 });
             });

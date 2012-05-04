@@ -105,7 +105,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             describe("when the API fails", function() {
                 beforeEach(function() {
                     this.dialog.closeModal.reset();
-                    this.server.lastCreate().failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                    this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 })
 
                 it("does not close the dialog", function() {
@@ -117,7 +117,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
                 });
 
                 it("displays the server error message", function() {
-                    expect(this.dialog.$(".errors ul").text().trim()).toBe("A is required")
+                    expect(this.dialog.$(".errors ul").text().trim()).toBe("A can't be blank")
                 })
             })
         });

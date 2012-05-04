@@ -2,12 +2,12 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   default_scope :conditions => {:deleted_at => nil}
-  attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes, :image
+  attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
   attr_reader :password
 
   has_many :instances, :foreign_key => :owner_id
 
-  has_attached_file :image, :styles => { :original => "", :icon => "100x100>" }
+  has_attached_file :image, :default_url => '/images/default-user-icon.png', :styles => { :original => "", :icon => "100x100>" }
 
   validates_presence_of :username, :first_name, :last_name, :email
   validate :uniqueness_of_non_deleted_username

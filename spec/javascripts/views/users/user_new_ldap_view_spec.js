@@ -179,7 +179,7 @@ describe("chorus.views.UserNewLdap", function() {
 
                         context("when user creation fails on the server", function() {
                             beforeEach(function() {
-                                this.view.model.serverErrors = {fields: {a: {REQUIRED: {}}}};
+                                this.view.model.serverErrors = {fields: {a: {BLANK: {}}}};
                                 this.view.$("form").submit();
                                 this.view.model.trigger("saveFailed");
                             });

@@ -194,7 +194,7 @@ describe("chorus.views.Base", function() {
                 });
 
                 it("calls #additionalContext, passing the default context (including the server errors)", function() {
-                    this.model.serverErrors = {fields: {a: {REQUIRED: {}}}};
+                    this.model.serverErrors = {fields: {a: {BLANK: {}}}};
                     this.view.context();
                     var contextPassed = this.view.additionalContext.mostRecentCall.args[0];
                     expect(contextPassed.serverErrors).toBe(this.model.serverErrors);

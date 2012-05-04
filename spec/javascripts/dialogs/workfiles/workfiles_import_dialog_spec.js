@@ -151,7 +151,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                     this.saveFailedSpy = jasmine.createSpy();
                     this.eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
                     this.dialog.resource.bind("saveFailed", this.saveFailedSpy);
-                    this.errorResponse = {errors : { fields: { a: { REQUIRED: {} } } }};
+                    this.errorResponse = {errors : { fields: { a: { BLANK: {} } } }};
                     this.fileUploadOptions.fail(this.eventSpy, this.errorResponse);
                 });
 
@@ -168,7 +168,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 });
 
                 it("displays the correct error", function() {
-                    expect(this.dialog.$(".errors ul").text()).toBe("A is required")
+                    expect(this.dialog.$(".errors ul").text()).toBe("A can't be blank")
                 });
 
                 it("sets the button text back to 'Upload File'", function() {

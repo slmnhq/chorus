@@ -631,7 +631,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
         describe("column errors", function() {
             beforeEach(function() {
                 spyOn(this.view, "showError");
-                this.collection.serverErrors = {fields: {a: {REQUIRED: {}}}};
+                this.collection.serverErrors = {fields: {a: {BLANK: {}}}};
                 this.view.render();
             });
 

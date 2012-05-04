@@ -1,19 +1,4 @@
 describe("chorus.Mixins.SQLResults", function() {
-    var serverFailure = {
-        errors: { fields: { a: { REQUIRED: {} } } },
-        response: []
-    };
-
-    var taskFailure = {
-        response: {
-            state: "failed",
-            result: {
-                message: "An error happened in the task",
-                executeResult: "failed"
-            }
-        }
-    };
-
     var HostModel;
 
     beforeEach(function() {
@@ -140,19 +125,5 @@ describe("chorus.Mixins.SQLResults", function() {
             })
         })
     })
-
-    describe("dataErrors", function() {
-        beforeEach(function() {
-            this.hostModel = new (chorus.models.Base.extend(chorus.Mixins.SQLResults));
-        });
-
-        it("returns the errors object when there is a server failure", function() {
-            expect(this.hostModel.dataErrors(serverFailure)).toEqual(serverFailure.errors)
-        })
-
-        it("returns the errors object when there is a task failure", function() {
-            expect(this.hostModel.dataErrors(taskFailure)).toEqual([taskFailure.response.result]);
-        })
-    });
 });
 

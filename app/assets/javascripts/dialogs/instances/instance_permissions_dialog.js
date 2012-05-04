@@ -254,16 +254,12 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     confirmRemoveSharedAccount:function () {
-        var sharedAccount = this.instance.sharedAccount();
-
         var localGroup = new chorus.BindingGroup(this);
-        localGroup.add(sharedAccount, "saved", displaySuccessToast);
-        localGroup.add(sharedAccount, "saveFailed", displayFailureToast);
+        localGroup.add(this.instance, "saved", displaySuccessToast);
+        localGroup.add(this.instance, "saveFailed", displayFailureToast);
 
-        var id = sharedAccount.get("id")
-        var instance_id = sharedAccount.get("instance_id")
-        sharedAccount.clear({silent:true});
-        sharedAccount.save({id:id, shared:"false", instance_id:instance_id});
+        var id = this.instance.get("id");
+        this.instance.save({shared: false});
 
         function displaySuccessToast() {
             chorus.toast("instances.shared_account_removed");
@@ -286,16 +282,12 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     confirmAddSharedAccount:function () {
-        var account = this.instance.accountForOwner();
-
         var localGroup = new chorus.BindingGroup(this);
-        localGroup.add(account, "saved", displaySuccessToast);
-        localGroup.add(account, "saveFailed", displayFailureToast);
+        localGroup.add(this.instance, "saved", displaySuccessToast);
+        localGroup.add(this.instance, "saveFailed", displayFailureToast);
 
-        var id = account.get("id")
-        var instance_id = account.get("instance_id")
-        account.clear({silent:true});
-        account.save({id:id, shared:"true", instance_id:instance_id});
+        var id = this.instance.get("id")
+        this.instance.save({shared:"true"});
 
         function displaySuccessToast() {
             chorus.toast("instances.shared_account_added");

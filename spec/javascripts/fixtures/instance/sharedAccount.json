@@ -22,6 +22,7 @@
     "port": "8020",
     "provisionName": null,
     "provision_type": "register",
+    "shared": true,
     "sharedAccount": {
         "db_username": "gpadmin"
     },

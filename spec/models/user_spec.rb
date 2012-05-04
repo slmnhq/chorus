@@ -130,6 +130,13 @@ describe User do
     end
   end
 
+  describe "image" do
+    it "is /image/default-user-icon.png by default" do
+      user = FactoryGirl.create :user, :image => nil
+      user.image.url.should == "/images/default-user-icon.png"
+    end
+  end
+
   describe "associations" do
     it { should have_many(:instances) }
   end

@@ -98,19 +98,19 @@ describe("chorus.views.DatasetEditChorusView", function() {
 
         context("when save fails", function() {
             beforeEach(function() {
-                this.view.model.set({serverErrors: { fields: { a: { REQUIRED: {} } } }})
+                this.view.model.set({serverErrors: { fields: { a: { BLANK: {} } } }})
                 this.view.model.trigger("saveFailed");
                 this.view.render();
             });
             it("displays the error message", function() {
-                expect(this.view.$(".errors ul li").text()).toBe("A is required");
+                expect(this.view.$(".errors ul li").text()).toBe("A can't be blank");
             })
         })
     });
 
     describe("cancel", function() {
         beforeEach(function() {
-            this.view.model.serverErrors = {fields: {a: {REQUIRED: {}}}};
+            this.view.model.serverErrors = {fields: {a: {BLANK: {}}}};
             chorus.PageEvents.broadcast("dataset:cancelEdit");
         });
 

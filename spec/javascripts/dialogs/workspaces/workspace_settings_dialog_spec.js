@@ -491,7 +491,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                     context("the server responds with failure", function() {
                         beforeEach(function() {
-                            this.server.lastUpdateFor(this.dialog.pageModel).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                            this.server.lastUpdateFor(this.dialog.pageModel).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                         });
 
                         it("stops the spinner", function() {
@@ -503,7 +503,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         });
 
                         it("displays the errors", function() {
-                            expect(this.dialog.$(".errors").text()).toContain("A is required");
+                            expect(this.dialog.$(".errors").text()).toContain("A can't be blank");
                         });
 
                         it("does not clear the form", function() {

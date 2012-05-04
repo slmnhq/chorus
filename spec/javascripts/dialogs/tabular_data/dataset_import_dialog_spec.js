@@ -263,7 +263,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             this.workfile = fixtures.workfile({id: "23", fileName: "myFile"});
                             this.data = {
                                 result: {
-                                    response: this.workfile.attributes,
+                                    response: this.workfile.attributes
                                 }
                             };
                         });
@@ -304,7 +304,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             this.data = {
                                 result: {
                                     response: [],
-                                    errors: { fields: { a: { REQUIRED: {} } } }
+                                    errors: { fields: { a: { BLANK: {} } } }
                                 }
                             };
                             this.fileUploadOptions.done(null, this.data)
@@ -316,7 +316,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         });
 
                         it("displays the errors", function() {
-                            expect(this.dialog.$('.errors')).toContainText('A is required');
+                            expect(this.dialog.$('.errors')).toContainText("A can't be blank");
                         })
 
                     });
@@ -454,7 +454,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         this.data = {
                             result: {
                                 resource: [],
-                                errors: { fields: { a: { REQUIRED: {} } } }
+                                errors: { fields: { a: { BLANK: {} } } }
                             },
                             files: [
                                 {name: "myfile"}
@@ -468,7 +468,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                     });
 
                     it("fills the error field", function() {
-                        expect(this.dialog.$(".errors li")).toHaveText("A is required");
+                        expect(this.dialog.$(".errors li")).toHaveText("A can't be blank");
                     });
 
                     it("does not hide the import controls or change file link", function() {
