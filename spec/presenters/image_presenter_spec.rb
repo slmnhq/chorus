@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ImagePresenter, :type => :view do
   before(:each) do
     @user = FactoryGirl.build :user
-    @user.image = Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/small.png", Rails.root), "image/jpeg")
+    @user.image = Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/small1.gif", Rails.root), "image/gif")
     @presenter = ImagePresenter.new(@user.image, view)
   end
 

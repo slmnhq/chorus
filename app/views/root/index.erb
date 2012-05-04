@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 
 <html>
-    <header>
-        <%= stylesheet_link_tag "application" %>
-        <%= javascript_include_tag "application.js" %>
-        <script type="text/javascript">
-          chorus.initialize();
-        </script>
-    </header>
-    <body>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="chrome=IE8">
 
-    </body>
+  <!--[if (IE) & (lt IE 9) ]>
+  <script type="text/javascript"
+          src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script> <![endif]-->
+
+  <title>Greenplum Chorus</title>
+
+  <script type="text/javascript" src="help/Chorus_Help.js"></script>
+  <%= stylesheet_link_tag "application" %>
+  <%= javascript_include_tag "application.js" %>
+
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+
+  <script type="text/javascript">
+      $(chorus.initialize);
+  </script>
+</head>
+<body>
+<div id="page"></div>
+</body>
 </html>

@@ -7,7 +7,7 @@ describe "editing user profiles" do
       visit("/#/users/#{current_user_id}/edit")
     end
 
-    it "displays error messages in a sane way" do
+    it "can edit a user" do
       fill_in "first_name", :with => "james"
       fill_in "last_name", :with => "brown"
       fill_in "email", :with => "fake@example.com"

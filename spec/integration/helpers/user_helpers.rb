@@ -15,6 +15,7 @@ def create_valid_user(username)
   visit("/#/users/new")
   fill_user_form(username)
   click_submit_button
+  wait_until { current_route == "/users" }
 end
 
 def current_user_id
