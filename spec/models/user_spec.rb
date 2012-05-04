@@ -80,6 +80,17 @@ describe User do
     end
 
     describe "password" do
+      context "when ldap is enabled" do
+        before do
+          stub(LdapClient).enabled? { true }
+        end
+
+        it "is not required for any user" do
+          user = FactoryGirl.build(:user, :password => nil, :password_digest => nil)
+          user.should be_valid
+        end
+      end
+
       context "when the password is not being modified" do
         it "is required if user does not have a saved password" do
           user = FactoryGirl.build(:user, :password_digest => nil, :password => nil)
