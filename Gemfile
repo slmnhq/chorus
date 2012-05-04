@@ -10,6 +10,7 @@ gem 'net-ldap'
 gem 'paperclip'
 gem 'queue_classic', "2.0.0rc14"
 gem 'clockwork'
+gem 'foreman'
 
 group :assets do
   gem 'sass-rails'
