@@ -34,7 +34,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts());
+                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([fixtures.instanceAccount()]));
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
             });
 
@@ -195,6 +195,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                             instance.loaded = true;
                             this.view.setInstance(instance);
                             this.server.completeFetchFor(instance.usage(), { workspaces: [] });
+                            this.server.completeFetchFor(instance.accounts(), this.instance.accounts().models);
                             this.server.completeAllFetches();
                         });
 
@@ -363,7 +364,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                         expect(editAccountsSection).toBeVisible();
                         expect(editAccountsLink).toBeVisible();
-                        expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 2});
+                        expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 3});
                         expect(editAccountsLink.data("instance")).toBe(this.instance);
                         expect(editAccountsLink.data("dialog")).toBe("InstancePermissions");
                     });
@@ -431,7 +432,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         context("when the user doesn't have permission to fetch the instances workspace usage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts());
+                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([fixtures.instanceAccount()]));
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
                 this.server.lastFetchFor(this.instance.usage()).failForbidden("Account map needed");
             });
