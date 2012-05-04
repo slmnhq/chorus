@@ -21,8 +21,8 @@ class InstanceCredentialMigrator
 
       legacy_credentials.each do |legacy_credential|
         new_credential = InstanceAccount.new
-        new_credential.username = legacy_credential["db_user_name"]
-        new_credential.password = decrypt_password(legacy_credential["db_password"], legacy_credential["secret_key"])
+        new_credential.db_username = legacy_credential["db_user_name"]
+        new_credential.db_password = decrypt_password(legacy_credential["db_password"], legacy_credential["secret_key"])
         new_credential.owner_id = legacy_credential["chorus_rails_user_id"]
         new_credential.instance_id = legacy_credential["chorus_rails_instance_id"]
         new_credential.save!

@@ -11,11 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120504210541) do
+ActiveRecord::Schema.define(:version => 20120504214919) do
 
   create_table "instance_accounts", :force => true do |t|
-    t.string  "username"
-    t.binary  "password"
+    t.string  "db_username"
+    t.binary  "db_password"
     t.integer "instance_id"
     t.integer "owner_id"
   end

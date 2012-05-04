@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe InstanceAccount do
   it "should allow mass-assignment of username and password" do
-    InstanceAccount.new(:username => 'aname').username.should == 'aname'
-    InstanceAccount.new(:password => 'apass').password.should == 'apass'
+    InstanceAccount.new(:db_username => 'aname').db_username.should == 'aname'
+    InstanceAccount.new(:db_password => 'apass').db_password.should == 'apass'
   end
 
   describe "associations" do

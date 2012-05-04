@@ -6,8 +6,8 @@ describe Gpdb::InstanceStatus do
     let(:user1) { FactoryGirl::create :user}
     let(:user2) { FactoryGirl::create :user}
 
-    let(:instance_account1) { FactoryGirl::create :instance_account, :username => "user1", :password => "pw1", :owner => user1 }
-    let(:instance_account2) { FactoryGirl::create :instance_account, :username => "user2", :password => "pw2", :owner => user2 }
+    let(:instance_account1) { FactoryGirl::create :instance_account, :db_username => "user1", :db_password => "pw1", :owner => user1 }
+    let(:instance_account2) { FactoryGirl::create :instance_account, :db_username => "user2", :db_password => "pw2", :owner => user2 }
 
     let(:instance1) { FactoryGirl.create :instance, :owner_id => user1.id }
     let(:instance2) { FactoryGirl.create :instance, :owner_id => user2.id }

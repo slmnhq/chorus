@@ -22,8 +22,8 @@ FactoryGirl.define do
   end
 
   factory :instance_account do
-    sequence(:username) { |n| "username#{n}" }
-    password "secret"
+    sequence(:db_username) { |n| "username#{n}" }
+    db_password "secret"
     owner
     instance
   end

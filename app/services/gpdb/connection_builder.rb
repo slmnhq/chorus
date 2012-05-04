@@ -20,8 +20,8 @@ module Gpdb
       instance = Instance.find(instance_id)
       raise SecurityTransgression unless updater.admin? || updater == instance.owner
       instance_account = InstanceAccount.find_by_owner_id_and_instance_id(instance.owner_id, instance_id)
-      connection_config[:db_username] = instance_account[:username] unless connection_config[:db_username]
-      connection_config[:db_password] = instance_account[:password] unless connection_config[:db_password]
+      connection_config[:db_username] = instance_account[:db_username] unless connection_config[:db_username]
+      connection_config[:db_password] = instance_account[:db_password] unless connection_config[:db_password]
 
       builder = for_update(connection_config, instance)
       builder.save!(updater)
@@ -105,8 +105,8 @@ module Gpdb
       return unless user == account.owner
 
       account.attributes = {
-          :username => username,
-          :password => password,
+          :db_username => username,
+          :db_password => password,
       }
       account.owner_id = owner.id if shared
       account.save!
@@ -117,8 +117,8 @@ module Gpdb
                 :host => instance.host,
                 :port => instance.port,
                 :database => instance.maintenance_db,
-                :user => account.username,
-                :password => account.password
+                :user => account.db_username,
+                :password => account.db_password
             )
       true
     rescue PG::Error => e

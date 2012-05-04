@@ -84,8 +84,8 @@ describe Gpdb::ConnectionBuilder do
       cached_instance = Instance.find_by_name_and_owner_id(valid_input_attributes[:name], owner.id)
       cached_instance_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, cached_instance.id)
 
-      cached_instance_account.username.should == valid_input_attributes[:db_username]
-      cached_instance_account.password.should == valid_input_attributes[:db_password]
+      cached_instance_account.db_username.should == valid_input_attributes[:db_username]
+      cached_instance_account.db_password.should == valid_input_attributes[:db_password]
     end
 
     it "shares the cached account" do
@@ -94,8 +94,8 @@ describe Gpdb::ConnectionBuilder do
       cached_instance = Instance.find_by_name(valid_input_attributes[:name])
       cached_instance_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, cached_instance.id)
 
-      cached_instance_account.username.should == valid_input_attributes[:db_username]
-      cached_instance_account.password.should == valid_input_attributes[:db_password]
+      cached_instance_account.db_username.should == valid_input_attributes[:db_username]
+      cached_instance_account.db_password.should == valid_input_attributes[:db_password]
     end
 
     it "can save a new instance that is shared" do
@@ -156,22 +156,22 @@ describe Gpdb::ConnectionBuilder do
 
       updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
       owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
-      owners_account.username.should == "bob"
-      owners_account.password.should == "secret"
+      owners_account.db_username.should == "bob"
+      owners_account.db_password.should == "secret"
     end
 
     it "saves the owner's changes to their account" do
       updated_attributes[:db_password] = "newpass"
       updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
       owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
-      owners_account.password.should == "newpass"
+      owners_account.db_password.should == "newpass"
     end
 
     it "ignores the admin's changes to the account" do
       updated_attributes[:db_password] = "newpass"
       updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, admin)
       owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
-      owners_account.password.should == "secret"
+      owners_account.db_password.should == "secret"
     end
 
     it "complains if it can't find an existing cached instance" do
@@ -235,8 +235,8 @@ describe Gpdb::ConnectionBuilder do
             @updated_instance.owner.should == new_owner
             @updated_instance.accounts.count.should == 1
             @updated_instance.owner_account.owner.should == new_owner
-            @updated_instance.owner_account.username.should == valid_input_attributes[:db_username]
-            @updated_instance.owner_account.password.should == valid_input_attributes[:db_password]
+            @updated_instance.owner_account.db_username.should == valid_input_attributes[:db_username]
+            @updated_instance.owner_account.db_password.should == valid_input_attributes[:db_password]
           end
         end
 
@@ -279,8 +279,8 @@ describe Gpdb::ConnectionBuilder do
     let(:instance1) { FactoryGirl::create :instance, :host => "hello" }
     let(:instance2) { FactoryGirl::create :instance, :host => "local" }
 
-    let(:instance_account1) { FactoryGirl::create :instance_account, :username => "user1", :password => "pw1" }
-    let(:instance_account2) { FactoryGirl::create :instance_account, :username => "user2", :password => "pw2" }
+    let(:instance_account1) { FactoryGirl::create :instance_account, :db_username => "user1", :db_password => "pw1" }
+    let(:instance_account2) { FactoryGirl::create :instance_account, :db_username => "user2", :db_password => "pw2" }
 
     before(:each) do
       stub(ActiveRecord::Base).postgresql_connection(

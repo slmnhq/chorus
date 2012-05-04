@@ -24,8 +24,8 @@ describe InstanceCredentialMigrator, :type => :data_migration do
                 JOIN edc_instance ON edc_account_map.instance_id = edc_instance.id
                 JOIN edc_user ON edc_user.user_name = edc_account_map.user_name
                 WHERE chorus_rails_instance_credentials_id = #{credential.id}")
-          credential.username.should == legacy["db_user_name"]
-          credential.password.should == "secret"
+          credential.db_username.should == legacy["db_user_name"]
+          credential.db_password.should == "secret"
           credential.owner_id.should == legacy["chorus_rails_user_id"].to_i
           credential.instance_id.should == legacy["chorus_rails_instance_id"].to_i
         end
@@ -36,7 +36,7 @@ describe InstanceCredentialMigrator, :type => :data_migration do
       end
       
       it "ignores the zombie credentials" do
-        InstanceAccount.where(:username => "zombie").should_not be_present
+        InstanceAccount.where(:db_username => "zombie").should_not be_present
       end
     end
   end
