@@ -1,293 +1,289 @@
 chorus.views.Bare = Backbone.View.include(
     chorus.Mixins.Events
 ).extend({
-    constructorName: "View",
+        constructorName: "View",
 
-    initialize: function initialize() {
-        this.bindings = new chorus.BindingGroup(this);
-        this.preInitialize.apply(this, arguments);
+        initialize: function initialize() {
+            this.bindings = new chorus.BindingGroup(this);
+            this.preInitialize.apply(this, arguments);
 
-        chorus.afterNavigate(_.bind(this.beforeNavigateAway, this));
-        this.setup.apply(this, arguments);
-        this.bindCallbacks()
-        this.bindHotkeys()
+            chorus.afterNavigate(_.bind(this.beforeNavigateAway, this));
+            this.setup.apply(this, arguments);
+            this.bindCallbacks()
+            this.bindHotkeys()
 
-        this.verifyResourcesLoaded(true);
-    },
+            this.verifyResourcesLoaded(true);
+        },
 
-    preInitialize: $.noop,
-    setup: $.noop,
-    postRender: $.noop,
-    bindCallbacks: $.noop,
-    preRender: $.noop,
-    setupSubviews: $.noop,
-    resourcesLoaded: $.noop,
-    displayLoadingSection: $.noop,
-    cleanup: $.noop,
+        preInitialize: $.noop,
+        setup: $.noop,
+        postRender: $.noop,
+        bindCallbacks: $.noop,
+        preRender: $.noop,
+        setupSubviews: $.noop,
+        resourcesLoaded: $.noop,
+        displayLoadingSection: $.noop,
+        cleanup: $.noop,
 
-    beforeNavigateAway: function() {
-        this.unbind();
-        this.bindings.removeAll();
-        this.requiredResources.cleanUp();
-        $(this.el).remove();
-    },
+        beforeNavigateAway: function() {
+            this.unbind();
+            this.bindings.removeAll();
+            this.requiredResources.cleanUp();
+            $(this.el).remove();
+        },
 
-    bindHotkeys: function() {
-        var keydownEventName = "keydown." + this.cid;
-        _.each(this.hotkeys, _.bind(function(eventName, hotkey) {
-            this.bindings.add($(document), keydownEventName, chorus.hotKeyMeta + '+' + hotkey, function(event) {
-                chorus.PageEvents.broadcast(eventName, event);
-            });
-        }, this));
+        bindHotkeys: function() {
+            var keydownEventName = "keydown." + this.cid;
+            _.each(this.hotkeys, _.bind(function(eventName, hotkey) {
+                this.bindings.add($(document), keydownEventName, chorus.hotKeyMeta + '+' + hotkey, function(event) {
+                    chorus.PageEvents.broadcast(eventName, event);
+                });
+            }, this));
 
-        if (this.hotkeys) {
-            chorus.afterNavigate(function() {
-                $(document).unbind(keydownEventName);
-            });
-        }
-    },
-
-    context: {},
-    subviews: {},
-
-    _configure: function(options) {
-        this._super('_configure', arguments);
-
-        this.requiredResources = new chorus.RequiredResources();
-        this.requiredResources.bind('add', function(resource) {
-            resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
-        }, this);
-        this.requiredResources.reset(options.requiredResources);
-    },
-
-    createDialog: function(e) {
-        e.preventDefault();
-        var button = $(e.target).closest("button, a");
-        var dialog = new chorus.dialogs[button.data("dialog")]({ launchElement: button, pageModel: this.model, pageCollection: this.collection });
-        dialog.launchModal();
-    },
-
-    createAlert: function(e) {
-        e.preventDefault();
-        var launchElement = $(e.target).closest("button, a");
-        var alert = new chorus.alerts[launchElement.data("alert")]({launchElement: launchElement, pageModel: this.model, pageCollection: this.collection });
-        alert.launchModal();
-    },
-
-    verifyResourcesLoaded: function(preventRender) {
-        if (this.requiredResources.length == 0) {
-            return;
-        }
-        if (this.requiredResources.allLoaded()) {
-            this.resourcesLoaded();
-
-            if (!preventRender) {
-                this.render();
+            if (this.hotkeys) {
+                chorus.afterNavigate(function() {
+                    $(document).unbind(keydownEventName);
+                });
             }
-        }
-    },
+        },
 
-    render: function render() {
-        this.preRender();
+        context: {},
+        subviews: {},
 
-        var evaluatedContext = {};
-        if (!this.displayLoadingSection()) {
-            if (!this.requiredResources.allLoaded()) {
-                return this;
+        _configure: function(options) {
+            this._super('_configure', arguments);
+
+            this.requiredResources = new chorus.RequiredResources();
+            this.requiredResources.bind('add', function(resource) {
+                resource.bindOnce('loaded', this.verifyResourcesLoaded, this);
+            }, this);
+            this.requiredResources.reset(options.requiredResources);
+        },
+
+        createDialog: function(e) {
+            e.preventDefault();
+            var button = $(e.target).closest("button, a");
+            var dialog = new chorus.dialogs[button.data("dialog")]({ launchElement: button, pageModel: this.model, pageCollection: this.collection });
+            dialog.launchModal();
+        },
+
+        createAlert: function(e) {
+            e.preventDefault();
+            var launchElement = $(e.target).closest("button, a");
+            var alert = new chorus.alerts[launchElement.data("alert")]({launchElement: launchElement, pageModel: this.model, pageCollection: this.collection });
+            alert.launchModal();
+        },
+
+        verifyResourcesLoaded: function(preventRender) {
+            if (this.requiredResources.length == 0) {
+                return;
             }
-            // The only template rendered when loading section is displayed is the loading section itself, so no context is needed.
-            evaluatedContext = _.isFunction(this.context) ? this.context() : this.context;
-        }
+            if (this.requiredResources.allLoaded()) {
+                this.resourcesLoaded();
 
-        if (!this.el.parentElement) {
-            $("body").append(this.el);
-        }
-
-        $(this.el).html(this.template(evaluatedContext))
-            .addClass(this.className || "")
-            .addClass(this.additionalClass || "")
-            .attr("data-template", this.templateName);
-        this.renderSubviews();
-        this.postRender($(this.el));
-        this.renderHelps();
-        this.trigger("content:changed");
-        return this;
-    },
-
-    renderSubviews: function() {
-        this.setupSubviews();
-        var subviews;
-        if (this.displayLoadingSection()) {
-            subviews = {".loading_section": "makeLoadingSectionView"};
-        } else {
-            subviews = this.subviews
-        }
-
-        _.each(subviews, this.renderSubview, this);
-    },
-
-    renderSubview: function(property, selector) {
-        var view = this.getSubview(property);
-        if (view) {
-            if (!selector) {
-                _.each(this.subviews, function(value, key) {
-                    if (value == property) {
-                        selector = key;
-                    }
-                })
-            }
-            var element = this.$(selector);
-            if (element.length) {
-                if(element[0] !== view.el) {
-                    var id = element.attr("id"), klass = element.attr("class");
-                    $(view.el).attr("id", id);
-                    $(view.el).addClass(klass);
-                    element.replaceWith(view.el);
+                if (!preventRender) {
+                    this.render();
                 }
-
-                if (!view.requiredResources || view.requiredResources.allLoaded()) {
-                    view.render()
-                }
-                view.delegateEvents();
-                view.bind("content:changed", function() {
-                    this.trigger("content:changed")
-                }, this)
             }
-        }
-    },
+        },
 
-    getSubview: function(property) {
-        return _.isFunction(this[property]) ? this[property]() : this[property];
-    },
+        render: function render() {
+            this.preRender();
 
-    renderHelps: function() {
-        var classes;
-        var helpElements = this.$(".help");
-        if (helpElements.length) {
-            if ($(this.el).closest(".dialog").length) {
-                classes = "tooltip-help tooltip-modal";
+            var evaluatedContext = {};
+            if (!this.displayLoadingSection()) {
+                if (!this.requiredResources.allLoaded()) {
+                    return this;
+                }
+                // The only template rendered when loading section is displayed is the loading section itself, so no context is needed.
+                evaluatedContext = _.isFunction(this.context) ? this.context() : this.context;
+            }
+
+            $(this.el).html(this.template(evaluatedContext))
+                .addClass(this.className || "")
+                .addClass(this.additionalClass || "")
+                .attr("data-template", this.templateName);
+            this.renderSubviews();
+            this.postRender($(this.el));
+            this.renderHelps();
+            this.trigger("content:changed");
+            return this;
+        },
+
+        renderSubviews: function() {
+            this.setupSubviews();
+            var subviews;
+            if (this.displayLoadingSection()) {
+                subviews = {".loading_section": "makeLoadingSectionView"};
             } else {
-                classes = "tooltip-help";
+                subviews = this.subviews
             }
-        }
-        _.each(helpElements, function(element) {
-            $(element).qtip({
-                content: $(element).data("text"),
-                show: 'mouseover',
-                hide: {
-                    delay: 1000,
-                    fixed: true,
-                    event: 'mouseout'
-                },
-                position: {
-                    viewport: $(window),
-                    my: "bottom center",
-                    at: "top center"
-                },
-                style: {
-                    classes: classes,
-                    tip: {
-                        width: 20,
-                        height: 13
-                    }
-                }
-            });
-        });
-    },
 
-    template: function template(context) {
-        if (this.displayLoadingSection()) {
-            return '<div class="loading_section"/>';
-        } else {
-            return Handlebars.helpers.renderTemplate(this.templateName, context).toString();
-        }
-    },
+            _.each(subviews, this.renderSubview, this);
+        },
 
-    makeLoadingSectionView: function() {
-        var opts = _.extend({}, this.loadingSectionOptions());
-        return new chorus.views.LoadingSection(opts);
-    },
-
-    loadingSectionOptions: function() {
-        return { delay: 125 };
-    },
-
-    setupScrolling: function(selector_or_element, options) {
-        _.defer(_.bind(function() {
-            var el = this.$(selector_or_element);
-
-            if (el.length > 0) {
-
-                var alreadyInitialized = el.data("jsp");
-
-                el.jScrollPane(options);
-                el.find('.jspVerticalBar').hide();
-                el.find('.jspHorizontalBar').hide();
-
-                el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
-
-                if (this.subviews) {
-                    _.each(this.subviews, _.bind(function(property, selector) {
-                        var view = this.getSubview(property);
-                        if (view) {
-                            view.unbind("content:changed").bind("content:changed", function() { this.recalculateScrolling(el) }, this)
+        renderSubview: function(property, selector) {
+            var view = this.getSubview(property);
+            if (view) {
+                if (!selector) {
+                    _.each(this.subviews, function(value, key) {
+                        if (value == property) {
+                            selector = key;
                         }
-                    }, this));
+                    })
                 }
-
-                if (!alreadyInitialized) {
-                    el.addClass("custom_scroll");
-                    el.unbind('hover').hover(function() {
-                        el.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150)
-                    }, function() {
-                        el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
-                    });
-
-                    el.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel);
-
-                    if (chorus.page && chorus.page.bind) {
-                        chorus.page.bind("resized", function() { this.recalculateScrolling(el) }, this);
+                var element = this.$(selector);
+                if (element.length) {
+                    if (element[0] !== view.el) {
+                        var id = element.attr("id"), klass = element.attr("class");
+                        $(view.el).attr("id", id);
+                        $(view.el).addClass(klass);
+                        element.replaceWith(view.el);
                     }
 
+                    if (!view.requiredResources || view.requiredResources.allLoaded()) {
+                        view.render()
+                    }
+                    view.delegateEvents();
+                    view.bind("content:changed", function() {
+                        this.trigger("content:changed")
+                    }, this)
                 }
             }
-        }, this))
-    },
+        },
 
-    onMouseWheel: function(event, d) {
-        event.preventDefault();
-    },
+        getSubview: function(property) {
+            return _.isFunction(this[property]) ? this[property]() : this[property];
+        },
 
-    recalculateScrolling: function(el) {
-        var elements = el ? [el] : this.$(".custom_scroll");
-        _.each(elements, function(el) {
-            el = $(el)
-            var api = el.data("jsp");
-            if (api) {
-                _.defer(_.bind(function() {
-                    api.reinitialise();
-                    if (!api.getIsScrollableH() && api.getContentPositionX() > 0) {
-                        el.find(".jspPane").css("left", 0)
+        renderHelps: function() {
+            var classes;
+            var helpElements = this.$(".help");
+            if (helpElements.length) {
+                if ($(this.el).closest(".dialog").length) {
+                    classes = "tooltip-help tooltip-modal";
+                } else {
+                    classes = "tooltip-help";
+                }
+            }
+            _.each(helpElements, function(element) {
+                $(element).qtip({
+                    content: $(element).data("text"),
+                    show: 'mouseover',
+                    hide: {
+                        delay: 1000,
+                        fixed: true,
+                        event: 'mouseout'
+                    },
+                    position: {
+                        viewport: $(window),
+                        my: "bottom center",
+                        at: "top center"
+                    },
+                    style: {
+                        classes: classes,
+                        tip: {
+                            width: 20,
+                            height: 13
+                        }
                     }
-                    if (!api.getIsScrollableV() && api.getContentPositionY() > 0) {
-                        el.find(".jspPane").css("top", 0)
-                    }
+                });
+            });
+        },
+
+        template: function template(context) {
+            if (this.displayLoadingSection()) {
+                return '<div class="loading_section"/>';
+            } else {
+                return Handlebars.helpers.renderTemplate(this.templateName, context).toString();
+            }
+        },
+
+        makeLoadingSectionView: function() {
+            var opts = _.extend({}, this.loadingSectionOptions());
+            return new chorus.views.LoadingSection(opts);
+        },
+
+        loadingSectionOptions: function() {
+            return { delay: 125 };
+        },
+
+        setupScrolling: function(selector_or_element, options) {
+            _.defer(_.bind(function() {
+                var el = this.$(selector_or_element);
+
+                if (el.length > 0) {
+
+                    var alreadyInitialized = el.data("jsp");
+
+                    el.jScrollPane(options);
                     el.find('.jspVerticalBar').hide();
                     el.find('.jspHorizontalBar').hide();
-                }, this));
-            }
-        })
-    }
-}, {
-    extended: function(subclass) {
-        var proto = subclass.prototype;
-        if (proto.templateName) {
-            proto.className = proto.templateName.replace(/\//g, "_");
-        }
 
-        _.defaults(proto.events, this.prototype.events);
-    }
-});
+                    el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
+
+                    if (this.subviews) {
+                        _.each(this.subviews, _.bind(function(property, selector) {
+                            var view = this.getSubview(property);
+                            if (view) {
+                                view.unbind("content:changed").bind("content:changed", function() { this.recalculateScrolling(el) }, this)
+                            }
+                        }, this));
+                    }
+
+                    if (!alreadyInitialized) {
+                        el.addClass("custom_scroll");
+                        el.unbind('hover').hover(function() {
+                            el.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150)
+                        }, function() {
+                            el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150)
+                        });
+
+                        el.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel);
+
+                        if (chorus.page && chorus.page.bind) {
+                            chorus.page.bind("resized", function() { this.recalculateScrolling(el) }, this);
+                        }
+
+                    }
+                }
+            }, this))
+        },
+
+        onMouseWheel: function(event, d) {
+            event.preventDefault();
+        },
+
+        recalculateScrolling: function(el) {
+            var elements = el ? [el] : this.$(".custom_scroll");
+            _.each(elements, function(el) {
+                el = $(el)
+                var api = el.data("jsp");
+                if (api) {
+                    _.defer(_.bind(function() {
+                        api.reinitialise();
+                        if (!api.getIsScrollableH() && api.getContentPositionX() > 0) {
+                            el.find(".jspPane").css("left", 0)
+                        }
+                        if (!api.getIsScrollableV() && api.getContentPositionY() > 0) {
+                            el.find(".jspPane").css("top", 0)
+                        }
+                        el.find('.jspVerticalBar').hide();
+                        el.find('.jspHorizontalBar').hide();
+                    }, this));
+                }
+            })
+        }
+    }, {
+        extended: function(subclass) {
+            var proto = subclass.prototype;
+            if (proto.templateName) {
+                proto.className = proto.templateName.replace(/\//g, "_");
+            }
+
+            _.defaults(proto.events, this.prototype.events);
+        }
+    });
 
 chorus.views.Bare.extend = chorus.classExtend;
 

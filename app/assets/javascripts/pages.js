@@ -1,4 +1,6 @@
 chorus.pages.Bare = chorus.views.Bare.extend({
+    el: 'body',
+
     bindCallbacks: function() {
         if (chorus.user) this.bindings.add(chorus.user, "change", this.render);
     },
