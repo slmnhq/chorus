@@ -232,7 +232,7 @@ describe UsersController do
       end
     end
 
-    it "generates a jasmine fixture" do
+    it "generates a jasmine fixture", :fixture => true do
       get :show, :id => @other_user.to_param
       save_fixture "user.json"
     end
