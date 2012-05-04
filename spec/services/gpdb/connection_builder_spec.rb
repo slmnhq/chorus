@@ -279,14 +279,30 @@ describe Gpdb::ConnectionBuilder do
     let(:instance1) { FactoryGirl::create :instance, :host => "hello" }
     let(:instance2) { FactoryGirl::create :instance, :host => "local" }
 
+    let(:instance_account1) { FactoryGirl::create :instance_account, :username => "user1", :password => "pw1" }
+    let(:instance_account2) { FactoryGirl::create :instance_account, :username => "user2", :password => "pw2" }
+
     before(:each) do
-      stub(ActiveRecord::Base).postgresql_connection(host: "hello", port: instance1.port, database: instance1.maintenance_db) { true }
-      stub(ActiveRecord::Base).postgresql_connection(host: "local", port: instance2.port, database: instance2.maintenance_db) { raise PG::Error }
+      stub(ActiveRecord::Base).postgresql_connection(
+          host: "hello",
+          port: instance1.port,
+          database: instance1.maintenance_db,
+          user: "user1",
+          password: "pw1"
+      ) { true }
+
+      stub(ActiveRecord::Base).postgresql_connection(
+          host: "local",
+          port: instance2.port,
+          database: instance2.maintenance_db,
+          user: "user2",
+          password: "pw2"
+      ) { raise PG::Error }
     end
 
     it "returns the correct connection status" do
-      Gpdb::ConnectionBuilder.test_connection(instance1).should == true
-      Gpdb::ConnectionBuilder.test_connection(instance2).should == false
+      Gpdb::ConnectionBuilder.test_connection(instance1, instance_account1).should == true
+      Gpdb::ConnectionBuilder.test_connection(instance2, instance_account2).should == false
     end
   end
 end

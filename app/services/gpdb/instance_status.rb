@@ -3,7 +3,8 @@ module Gpdb
     def self.check
       instances = Instance.scoped
       instances.each do |instance|
-        instance.state = ConnectionBuilder.test_connection(instance) ? "online" : "offline"
+        account = InstanceAccount.where(:owner_id => instance.owner_id).first
+        instance.state = Gpdb::ConnectionBuilder.test_connection(instance, account) ? "online" : "offline"
         instance.save!
       end
     end
