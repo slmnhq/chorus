@@ -2,7 +2,7 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   default_scope :conditions => {:deleted_at => nil}
-  attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes, :image
+  attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
   attr_reader :password
 
   has_many :instances, :foreign_key => :owner_id
