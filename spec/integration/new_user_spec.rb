@@ -13,7 +13,9 @@ describe "creating a user" do
     field_errors.should_not be_empty
 
     # user is a duplicate
-    create_valid_user("edcadmin")
+    visit("/#/users/new")
+    fill_user_form("edcadmin")
+    click_submit_button
     field_errors.should be_empty
     wait_until { !server_errors.empty? }
 
