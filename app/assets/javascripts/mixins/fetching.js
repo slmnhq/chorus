@@ -33,11 +33,11 @@ chorus.Mixins.Fetching = {
         options || (options = {});
         var success = options.success, error = options.error;
         options.success = this.makeSuccessFunction(options, success);
-        options.error = function(collection, xhr) {
+        options.error = function(collection_or_model, xhr) {
             var data = xhr.responseText && !!xhr.responseText.trim() && JSON.parse(xhr.responseText);
-            collection.parseErrors(data, xhr);
-            if (error) error(collection, xhr);
-            collection.trigger("fetchFailed", collection, xhr)
+            collection_or_model.parseErrors(data);
+            collection_or_model.respondToErrors(xhr);
+            if (error) error(collection_or_model, xhr);
         };
 
         return this._super('fetch', [options]).always(_.bind(function() {
@@ -56,7 +56,9 @@ chorus.Mixins.Fetching = {
         return data.errors;
     },
 
-    parseErrors: function(data, xhr) {
+    respondToErrors: function(xhr) {
+        this.trigger("fetchFailed", this, xhr)
+
         if (xhr.status === 401) {
             chorus.session.trigger("needsLogin");
         } else if (xhr.status == 403) {
@@ -64,6 +66,9 @@ chorus.Mixins.Fetching = {
         } else if (xhr.status == 404) {
             this.trigger("fetchNotFound")
         }
+    },
+
+    parseErrors: function(data) {
         this.errorData = data.response;
         this.serverErrors = this.dataErrors(data);
     }

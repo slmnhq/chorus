@@ -117,7 +117,7 @@ describe("chorus.Mixins.Fetching", function() {
             itHandlesFailure();
 
             it("triggers the 'needsLogin' event on the session", function() {
-                this.resource.parseErrors(this.data, this.xhr);
+                this.resource.respondToErrors(this.xhr);
                 expect("needsLogin").toHaveBeenTriggeredOn(chorus.session);
             });
         });
@@ -137,7 +137,7 @@ describe("chorus.Mixins.Fetching", function() {
             itHandlesFailure();
 
             it("triggers fetchForbidden on the resource", function() {
-                this.resource.parseErrors(this.data, this.xhr);
+                this.resource.respondToErrors(this.xhr);
                 expect(this.resource.trigger).toHaveBeenCalledWith("fetchForbidden");
             });
         });
@@ -156,24 +156,24 @@ describe("chorus.Mixins.Fetching", function() {
             itHandlesFailure();
 
             it("triggers fetchNotFound on the resource", function() {
-                this.resource.parseErrors(this.data, this.xhr);
+                this.resource.respondToErrors(this.xhr);
                 expect(this.resource.trigger).toHaveBeenCalledWith("fetchNotFound");
             });
         });
 
         function itHandlesFailure() {
             it("does not set loaded", function() {
-                this.resource.parseErrors(this.data, this.xhr);
+                this.resource.parseErrors(this.data);
                 expect(this.resource.loaded).toBeFalsy();
             });
 
             it("stores the errors as the resource's 'serverErrors'", function() {
-                this.resource.parseErrors(this.data, this.xhr);
+                this.resource.parseErrors(this.data);
                 expect(this.resource.serverErrors).toBe(this.data.errors);
             });
 
             it("stores the returned response as the resource's errorData", function() {
-                this.resource.parseErrors(this.data, this.xhr);
+                this.resource.parseErrors(this.data);
                 expect(this.resource.errorData).toEqual(this.data.response);
             });
         }
