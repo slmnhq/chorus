@@ -22,7 +22,7 @@ describe("chorus.dialogs.SandboxNew", function() {
         });
 
         it("shows the error", function() {
-            expect(this.dialog.$('.errors')).toContainText('A can't be blank');
+            expect(this.dialog.$('.errors')).toContainText("A can't be blank");
         });
 
         context("and then the schemaPicker triggers clearErrors", function(){

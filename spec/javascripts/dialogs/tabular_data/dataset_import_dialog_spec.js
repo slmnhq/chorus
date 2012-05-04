@@ -263,7 +263,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             this.workfile = fixtures.workfile({id: "23", fileName: "myFile"});
                             this.data = {
                                 result: {
-                                    response: this.workfile.attributes,
+                                    response: this.workfile.attributes
                                 }
                             };
                         });
@@ -316,7 +316,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         });
 
                         it("displays the errors", function() {
-                            expect(this.dialog.$('.errors')).toContainText('A can't be blank');
+                            expect(this.dialog.$('.errors')).toContainText("A can't be blank");
                         })
 
                     });
