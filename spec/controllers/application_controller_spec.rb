@@ -89,23 +89,25 @@ describe ApplicationController do
       before do
         FactoryGirl.create(:admin)
         FactoryGirl.create(:admin)
+        FactoryGirl.create(:admin)
       end
 
       let(:object_to_present) do
-        User.where(:admin => true).paginate(:per_page => 1, :page => 1)
+        User.where(:admin => true).paginate(:per_page => 2, :page => 1)
       end
 
       it "sets the response to an array with a hash for each model in current page" do
         get :action_that_presents
-        decoded_response.length.should == 1
+        decoded_response.length.should == 2
         decoded_response[0].username.should == object_to_present[0].username
       end
 
       it "adds pagination" do
         get :action_that_presents
         decoded_pagination.page.should == 1
-        decoded_pagination.per_page.should == 1
+        decoded_pagination.per_page.should == 2
         decoded_pagination.total.should == 2
+        decoded_pagination.records.should == 3
       end
     end
   end
