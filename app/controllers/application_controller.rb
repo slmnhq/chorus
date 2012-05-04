@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   private
 
   def render_not_valid(e)
-    present_validation_errors ErrorPresenter.new(e.record.errors), :status => :unprocessable_entity
+    present_validation_errors e.record.errors, :status => :unprocessable_entity
   end
 
   def render_not_found(e)
@@ -77,6 +77,6 @@ class ApplicationController < ActionController::Base
   end
 
   def present_validation_errors(errors, options={})
-    present_errors({ :fields => errors }, options)
+    present_errors({ :fields => ErrorPresenter.new(errors) }, options)
   end
 end
