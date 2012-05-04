@@ -15,7 +15,7 @@ describe("chorus.views.ImageUpload", function() {
         };
         this.errorResponse = {
             result: JSON.stringify({
-                errors : { fields: { a: { REQUIRED: {} } } }
+                errors : { fields: { a: { BLANK: {} } } }
             })
         };
     })
@@ -181,7 +181,7 @@ describe("chorus.views.ImageUpload", function() {
                 });
 
                 it("sets the server errors on the model", function() {
-                    expect(_.first(this.user.serverErrorMessages())).toBe("A is required");
+                    expect(_.first(this.user.serverErrorMessages())).toBe("A can't be blank");
                 });
 
                 it("triggers saveFailed on the model", function() {

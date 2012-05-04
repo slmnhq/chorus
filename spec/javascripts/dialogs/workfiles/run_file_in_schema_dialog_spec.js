@@ -239,12 +239,12 @@ describe("chorus.dialogs.RunFileInSchema", function () {
         context("when the SchemaPicker triggers an error", function() {
                 beforeEach(function() {
                     var modelWithError = fixtures.schemaSet();
-                    modelWithError.serverErrors = { fields: { a: { REQUIRED: {} } } }
+                    modelWithError.serverErrors = { fields: { a: { BLANK: {} } } }
                     this.dialog.schemaPicker.trigger("error", modelWithError);
                 });
 
                 it("shows the error", function() {
-                    expect(this.dialog.$('.errors')).toContainText('A is required');
+                    expect(this.dialog.$('.errors')).toContainText('A can't be blank');
                 });
 
                 context("and then the schemaPicker triggers clearErrors", function(){

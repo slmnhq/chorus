@@ -1,6 +1,6 @@
 describe("chorus.Mixins.SQLResults", function() {
     var serverFailure = {
-        errors: { fields: { a: { REQUIRED: {} } } },
+        errors: { fields: { a: { BLANK: {} } } },
         response: []
     };
 

@@ -9,11 +9,11 @@ describe("chorus.Mixins.ServerErrors", function() {
         context("when the model has serverErrors", function() {
             beforeEach(function() {
                 this.host = new HostModel({});
-                this.host.serverErrors = {fields: {a: {REQUIRED: {}}}}
+                this.host.serverErrors = {fields: {a: {BLANK: {}}}}
             });
 
             it("returns the error message", function() {
-                expect(_.first(this.host.serverErrorMessages())).toBe("A is required");
+                expect(_.first(this.host.serverErrorMessages())).toBe("A can't be blank");
             });
         });
 

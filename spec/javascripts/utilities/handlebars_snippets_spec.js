@@ -963,7 +963,7 @@ describe("handlebars", function() {
                         serverErrors: {
                             fields : {
                                 username_or_password: { INVALID: {}},
-                                password: { REQUIRED: {} },
+                                password: { BLANK: {} },
                                 source_columns: { LESS_THAN_OR_EQUAL_TO: {}},
                                 connection: { INVALID: {message: "Server generated message"}}
                             }
@@ -975,7 +975,7 @@ describe("handlebars", function() {
                     var el = $(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context, Handlebars.helpers, Handlebars.partials));
                     expect(el.find("li").length).toBe(4);
                     expect(el.find("li:eq(0)").text()).toContain("Username or password is invalid")
-                    expect(el.find("li:eq(1)").text()).toContain("Password is required")
+                    expect(el.find("li:eq(1)").text()).toContain("Password can't be blank")
                     expect(el.find("li:eq(2)")).toContainTranslation("field_error.source_columns.LESS_THAN_OR_EQUAL_TO")
                     expect(el.find("li:eq(3)").text()).toContain("Server generated message")
                 });

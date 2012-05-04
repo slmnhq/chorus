@@ -335,7 +335,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 describe("when the save fails", function() {
                     beforeEach(function() {
-                        this.accountBeingEdited.serverErrors = { fields: { a: { REQUIRED: {} } } };
+                        this.accountBeingEdited.serverErrors = { fields: { a: { BLANK: {} } } };
                         this.accountBeingEdited.trigger('saveFailed');
                     })
 
@@ -344,7 +344,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     })
 
                     it("displays error messages", function() {
-                        expect(this.dialog.$(".errors li:first-child").text().trim()).toBe("A is required");
+                        expect(this.dialog.$(".errors li:first-child").text().trim()).toBe("A can't be blank");
                     })
 
                     it("stops the spinner", function() {
@@ -445,10 +445,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 context("when the delete fails", function() {
                     beforeEach(function() {
-                        this.server.lastDestroy().failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                        this.server.lastDestroy().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                     });
                     it("displays the error", function() {
-                       expect(this.dialog.$(".errors")).toContainText("A is required");
+                       expect(this.dialog.$(".errors")).toContainText("A can't be blank");
                     });
                 });
             });
@@ -604,7 +604,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                             describe("when the save fails", function() {
                                 beforeEach(function() {
-                                    this.dialog.account.serverErrors = { fields: { a: { REQUIRED: {} } } };
+                                    this.dialog.account.serverErrors = { fields: { a: { BLANK: {} } } };
                                     this.dialog.account.trigger("saveFailed");
                                 });
 
@@ -823,7 +823,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             describe("when the save fails", function() {
                 beforeEach(function() {
-                    this.instance.serverErrors = { fields: { a: { REQUIRED: {} } } };
+                    this.instance.serverErrors = { fields: { a: { BLANK: {} } } };
                     this.instance.trigger("saveFailed");
                 });
 

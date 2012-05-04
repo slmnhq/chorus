@@ -588,11 +588,11 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             context("when the import fails", function() {
                 beforeEach(function() {
-                    this.server.lastCreateFor(this.dialog.csv).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                    this.server.lastCreateFor(this.dialog.csv).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 });
 
                 it("displays the error", function() {
-                    expect(this.dialog.$(".errors")).toContainText("A is required");
+                    expect(this.dialog.$(".errors")).toContainText("A can't be blank");
                 });
 
                 it("re-enables the submit button", function() {

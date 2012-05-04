@@ -309,12 +309,12 @@ describe("chorus.dialogs.InstanceNew", function() {
 
                 describe("when the save fails", function() {
                     beforeEach(function() {
-                        this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity({ fields: { a: { REQUIRED: {} } } });
+                        this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                     });
 
                     it("displays the errors", function() {
                         expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
-                        expect(this.dialog.$(".errors")).toContainText("A is required");
+                        expect(this.dialog.$(".errors")).toContainText("A can't be blank");
                     });
                 });
 
@@ -397,12 +397,12 @@ describe("chorus.dialogs.InstanceNew", function() {
 
                 context("when the upload gives a server error", function() {
                     beforeEach(function() {
-                        this.dialog.model.set({serverErrors: { fields: { a: { REQUIRED: {} } } }});
+                        this.dialog.model.set({serverErrors: { fields: { a: { BLANK: {} } } }});
                         this.dialog.model.trigger("saveFailed");
                     });
 
                     it("display the correct error", function() {
-                        expect(this.dialog.$(".errors").text()).toContain("A is required");
+                        expect(this.dialog.$(".errors").text()).toContain("A can't be blank");
                     });
 
                     itRecoversFromError();
