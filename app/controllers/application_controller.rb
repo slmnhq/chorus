@@ -65,7 +65,8 @@ class ApplicationController < ActionController::Base
       json[:pagination] = {
           :page => model_or_collection.current_page,
           :per_page => model_or_collection.per_page,
-          :total => model_or_collection.total_entries
+          :records => model_or_collection.total_entries,
+          :total => model_or_collection.total_pages
       }
     end
 
