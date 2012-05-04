@@ -2,7 +2,7 @@ class DataMigrator
   attr_accessor :migrators
 
   def initialize
-    @migrators = [LdapConfigMigrator.new, UserMigrator.new, InstanceMigrator.new, InstanceCredentialMigrator.new]
+    @migrators = [LdapConfigMigrator.new, UserMigrator.new, InstanceMigrator.new, InstanceAccountMigrator.new]
   end
 
   def migrate

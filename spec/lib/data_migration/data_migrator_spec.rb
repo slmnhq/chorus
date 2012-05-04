@@ -10,7 +10,7 @@ describe DataMigrator, :type => :data_migration do
     @data_migrator.migrators[i+=1].should be_instance_of LdapConfigMigrator
     @data_migrator.migrators[i+=1].should be_instance_of UserMigrator
     @data_migrator.migrators[i+=1].should be_instance_of InstanceMigrator
-    @data_migrator.migrators[i+=1].should be_instance_of InstanceCredentialMigrator
+    @data_migrator.migrators[i+=1].should be_instance_of InstanceAccountMigrator
   end
 
   describe ".migrate" do
