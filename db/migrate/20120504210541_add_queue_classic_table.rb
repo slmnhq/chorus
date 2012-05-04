@@ -1,6 +1,6 @@
 require 'queue_classic'
 
-class AddQueueClassic < ActiveRecord::Migration
+class AddQueueClassicTable < ActiveRecord::Migration
   def self.up
     QC::Setup.create
   end

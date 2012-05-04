@@ -1,1 +1,7 @@
-ENV["QC_DATABASE_URL"] = "postgres://edcadmin:secret@localhost:8543/queue_classic_chorus"
+config = Rails.configuration.database_configuration[Rails.env]
+username = config["username"]
+password = config["password"]
+port = config["port"]
+database = config["database"]
+
+ENV["QC_DATABASE_URL"] = "postgres://#{username}#{ ":" + password unless password.nil? }@localhost:#{port}/#{database}"

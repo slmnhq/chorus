@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120503221103) do
+ActiveRecord::Schema.define(:version => 20120504210541) do
 
   create_table "instance_accounts", :force => true do |t|
     t.string  "username"
@@ -36,6 +36,15 @@ ActiveRecord::Schema.define(:version => 20120503221103) do
   end
 
   add_index "instances", ["owner_id"], :name => "index_instances_on_owner_id"
+
+  create_table "queue_classic_jobs", :force => true do |t|
+    t.string   "q_name"
+    t.string   "method"
+    t.text     "args"
+    t.datetime "locked_at"
+  end
+
+  add_index "queue_classic_jobs", ["q_name", "id"], :name => "idx_qc_on_name_only_unlocked"
 
   create_table "users", :force => true do |t|
     t.string   "username"
