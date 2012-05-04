@@ -2,8 +2,11 @@ require 'spec_helper'
 
 describe LdapClient do
   before do
-    LdapClient.class_variable_set(:@@config, nil)
     stub(LdapClient).config_file_path { File.expand_path(config_file_path, Rails.root) }
+  end
+
+  after do
+    LdapClient.class_variable_set(:@@config, nil)
   end
 
   let(:config_file_path) { "spec/fixtures/ldap.yml" }

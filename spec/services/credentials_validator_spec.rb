@@ -47,7 +47,7 @@ describe CredentialsValidator do
 
     context "when the LDAP switch is configured" do
       it "uses the LdapClient authentication" do
-        Chorus::Application.config.ldap_authentication = true
+        stub(LdapClient).enabled? { true }
 
         user = stub
         stub(LdapClient).authenticate('a_username', 'a_password') { user }

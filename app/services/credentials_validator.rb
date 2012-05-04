@@ -24,7 +24,7 @@ class CredentialsValidator
   def user
     if valid?
 
-      user = if Chorus::Application.config.ldap_authentication
+      user = if LdapClient.enabled?
         LdapClient.authenticate(username, password)
       else
         User.authenticate(username, password)
