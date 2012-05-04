@@ -1,5 +1,5 @@
 class Instance < ActiveRecord::Base
-  attr_accessible :name, :description, :host, :port, :maintenance_db, :shared, :provision_type, :description, :instance_provider
+  attr_accessible :name, :description, :host, :port, :maintenance_db, :shared, :provision_type, :description, :instance_provider, :state
 
   validates_presence_of :name, :host, :port, :maintenance_db
 
@@ -8,10 +8,6 @@ class Instance < ActiveRecord::Base
 
   def owner_account
     accounts.where(:owner_id => owner_id).first
-  end
-
-  def state
-    "online"#TODO
   end
 
   def get_instance_provider

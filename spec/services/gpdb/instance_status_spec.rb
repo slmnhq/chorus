@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+
 describe Gpdb::InstanceStatus do
   describe "#check" do
     before(:each) do
@@ -7,19 +8,23 @@ describe Gpdb::InstanceStatus do
       @instance2 = FactoryGirl.create :instance
       @instance3 = FactoryGirl.create :instance
       mock(Instance).scoped.with_any_args { [@instance1, @instance2, @instance3] }
-      mock(ConnectionBuilder).temp_connection(@instance1) { true }
-      mock(ConnectionBuilder).temp_connection(@instance2) { true }
-      mock(ConnectionBuilder).temp_connection(@instance3) { false }
+      Gpdb::ConnectionBuilder.respond_to?(:test_connection).should == true
 
-      mock(Instance).save!.with_any_args.times(3)
+      mock(Gpdb::ConnectionBuilder).test_connection(@instance1) { true }
+      mock(Gpdb::ConnectionBuilder).test_connection(@instance2) { true }
+      mock(Gpdb::ConnectionBuilder).test_connection(@instance3) { false }
+
+      mock(@instance1).save!.with_any_args
+      mock(@instance2).save!.with_any_args
+      mock(@instance3).save!.with_any_args
     end
 
     it "checks the connection status for each instance" do
-      InstanceStatus.check
+      Gpdb::InstanceStatus.check
 
-      @instance1.status.should == "online"
-      @instance2.status.should == "online"
-      @instance3.status.should == "offline"
+      @instance1.state.should == "online"
+      @instance2.state.should == "online"
+      @instance3.state.should == "offline"
     end
   end
 end

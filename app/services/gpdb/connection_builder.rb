@@ -112,6 +112,17 @@ module Gpdb
       account.save!
     end
 
+    def self.test_connection(instance)
+      ActiveRecord::Base.postgresql_connection(
+                :host => instance.host,
+                :port => instance.port,
+                :database => instance.maintenance_db
+            )
+      true
+    rescue PG::Error => e
+      false
+    end
+
     private
 
     def connection

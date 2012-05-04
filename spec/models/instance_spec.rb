@@ -33,10 +33,6 @@ describe Instance do
     end
   end
 
-  it "#state temporarily returns 'online' in all situations" do
-    @instance.state.should == "online"
-  end
-
   describe "#for_user" do
     before(:each) do
       @user = FactoryGirl.create :user

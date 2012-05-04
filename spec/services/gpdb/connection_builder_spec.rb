@@ -274,4 +274,19 @@ describe Gpdb::ConnectionBuilder do
       end
     end
   end
+
+  describe "#test_connection" do
+    let(:instance1) { FactoryGirl::create :instance, :host => "hello" }
+    let(:instance2) { FactoryGirl::create :instance, :host => "local" }
+
+    before(:each) do
+      stub(ActiveRecord::Base).postgresql_connection(host: "hello", port: instance1.port, database: instance1.maintenance_db) { true }
+      stub(ActiveRecord::Base).postgresql_connection(host: "local", port: instance2.port, database: instance2.maintenance_db) { raise PG::Error }
+    end
+
+    it "returns the correct connection status" do
+      Gpdb::ConnectionBuilder.test_connection(instance1).should == true
+      Gpdb::ConnectionBuilder.test_connection(instance2).should == false
+    end
+  end
 end
