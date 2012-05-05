@@ -29,6 +29,8 @@ window.fixtureDefinitions = {
         }
     },
 
+    instanceAccount: {},
+
     activity: {
         unique: [ "id" ],
 

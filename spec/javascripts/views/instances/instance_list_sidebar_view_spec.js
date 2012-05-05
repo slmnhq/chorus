@@ -34,7 +34,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([fixtures.instanceAccount()]));
+                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount()]));
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
             });
 
@@ -235,7 +235,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     this.instance.set({
                         shared: true
                     });
-                    this.instance._accountForCurrentUser = fixtures.instanceAccount();
+                    this.instance._accountForCurrentUser = newFixtures.instanceAccount();
                     this.view.render();
                 });
 
@@ -295,7 +295,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                     context("when the user has set up an account for the instance", function() {
                         beforeEach(function() {
-                            var account = fixtures.instanceAccount();
+                            var account = newFixtures.instanceAccount();
                             spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
                             this.view.render();
                         });
@@ -341,9 +341,9 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the current user is an admin", function() {
                     beforeEach(function() {
-                        var account = fixtures.instanceAccount();
+                        var account = newFixtures.instanceAccount();
                         spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
-                        this.instance.accounts().add([fixtures.instanceAccount(), fixtures.instanceAccount()]);
+                        this.instance.accounts().add([newFixtures.instanceAccount(), newFixtures.instanceAccount()]);
                         setLoggedInUser({ username : "benjamin", admin: true});
                         this.view.render();
                     });
@@ -432,7 +432,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         context("when the user doesn't have permission to fetch the instances workspace usage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([fixtures.instanceAccount()]));
+                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount()]));
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
                 this.server.lastFetchFor(this.instance.usage()).failForbidden("Account map needed");
             });

@@ -1,6 +1,6 @@
 describe("chorus.models.InstanceAccount", function() {
     beforeEach(function() {
-        this.model = fixtures.instanceAccount({ id: '72', instance_id: '1045' });
+        this.model = newFixtures.instanceAccount({ id: '72', instance_id: '1045' });
     });
 
     it("wraps parameters in 'credentials'", function() {
@@ -106,22 +106,5 @@ describe("chorus.models.InstanceAccount", function() {
                 expect(this.model.isValid()).toBeFalsy();
             });
         });
-
-        context("when the instance account is a shared account", function() {
-            beforeEach(function() {
-                this.model = fixtures.instanceAccount({ shared : "true" })
-            });
-
-            describe("and it is changed to an individual account", function() {
-                beforeEach(function() {
-                    this.model.unset("db_username");
-                })
-
-                it("does not require db_username", function() {
-                    this.model.performValidation({ shared : "false" })
-                    expect(this.model.isValid()).toBeTruthy();
-                })
-            })
-        })
-    })
+    });
 });

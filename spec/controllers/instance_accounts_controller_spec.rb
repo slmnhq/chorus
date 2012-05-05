@@ -292,5 +292,11 @@ describe InstanceAccountsController do
       decoded_response.id.should == joes_account.id
       decoded_response.db_username.should == joes_account.db_username
     end
+
+    it "generates a jasmine fixture", :fixture => true do
+      log_in joe
+      get :show, :id => account1.id, :instance_id => instance.id
+      save_fixture "instanceAccount.json"
+    end
   end
 end

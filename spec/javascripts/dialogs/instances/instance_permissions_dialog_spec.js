@@ -25,7 +25,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
     context("when the instance is a shared account", function() {
         beforeEach(function() {
             this.instance = newFixtures.instance.sharedAccount();
-            var account = fixtures.instanceAccount(this.instance);
+            var account = newFixtures.instanceAccount({
+                db_username: this.instance.get("sharedAccount").db_username,
+                instance_id: this.instance.id
+            });
             this.instance.set({ owner: {id: account.user().get("id")}, shared: true });
             this.instance.accounts().reset(account);
 
@@ -94,7 +97,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("selects the current owner by default", function() {
-                        expect(this.dialog.$("select.name").val()).toBe(this.instance.owner().get("id"));
+                        expect(this.dialog.$("select.name").val()).toBe(this.instance.owner().get("id") + "");
                     });
 
                     it("displays the save owner options", function() {
@@ -151,7 +154,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "launchSubModal").andCallThrough();
                     spyOn(this.instance, "sharedAccount").andCallFake(function() {
-                        return fixtures.instanceAccount({ shared : "true", db_username : "foo", id : "999", instance_id: "5" });
+                        return newFixtures.instanceAccount({ db_username : "foo", id : "999", instance_id: "5" });
                     });
                     this.dialog.$("a.remove_shared_account").click();
                 });
@@ -176,7 +179,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                             spyOn(chorus, 'toast');
                             spyOn(this.dialog, "postRender").andCallThrough();
                             expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
-                            this.server.lastUpdate().succeed([fixtures.instanceAccount({ shared : "false", db_username : "foo", id : "999" })])
+                            this.server.lastUpdate().succeed([newFixtures.instanceAccount({ db_username : "foo", id : "999" })])
                         });
 
                         it("displays a toast message", function() {
@@ -220,9 +223,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
             this.accounts = this.instance.accounts();
             this.accounts.add([
-                fixtures.instanceAccount({ id: '1', owner: { first_name: "bob", last_name: "zzap", id: '111' } }),
-                fixtures.instanceAccount({ id: '2', owner: { first_name: "jim", last_name: "aardvark", id: '222' } }),
-                fixtures.instanceAccount({ id: '3', owner: this.owner})
+                newFixtures.instanceAccount({ id: '1', owner: { first_name: "bob", last_name: "zzap", id: '111' } }),
+                newFixtures.instanceAccount({ id: '2', owner: { first_name: "jim", last_name: "aardvark", id: '222' } }),
+                newFixtures.instanceAccount({ id: '3', owner: this.owner.attributes })
             ]);
             var launchElement = $("<a/>").data("instance", this.instance);
             this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });

@@ -166,8 +166,8 @@ describe("chorus.models.Instance", function() {
     describe("#accountForOwner", function() {
         beforeEach(function() {
             this.owner = this.instance.owner();
-            this.account1 = fixtures.instanceAccount();
-            this.account2 = fixtures.instanceAccount({
+            this.account1 = newFixtures.instanceAccount();
+            this.account2 = newFixtures.instanceAccount({
                 owner: this.owner.attributes
             })
             this.accounts = fixtures.instanceAccountSet([this.account1, this.account2]);
