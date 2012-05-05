@@ -47,11 +47,11 @@ describe CredentialsValidator do
 
     context "when the LDAP switch is configured" do
       it "uses the LdapClient authentication" do
+        user = FactoryGirl.create(:user)
         stub(LdapClient).enabled? { true }
 
-        user = stub
-        stub(LdapClient).authenticate('a_username', 'a_password') { user }
-        CredentialsValidator.user('a_username', 'a_password').should be(user)
+        stub(LdapClient).authenticate(user.username, 'a_password') { true }
+        CredentialsValidator.user(user.username, 'a_password').should == user
       end
     end
   end
