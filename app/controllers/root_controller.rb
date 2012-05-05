@@ -6,6 +6,6 @@ class RootController < ApplicationController
   end
 
   def not_found
-    render :text => '{"route": "not found"}'
+    render :json => {:route => :not_found}, :status => :not_found
   end
 end

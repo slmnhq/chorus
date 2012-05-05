@@ -18,5 +18,6 @@ Chorus::Application.routes.draw do
   end
   match "/" => "root#index"
 
+  # TODO: Remove this when it's no longer needed
   match '*not_found' => 'root#not_found'
 end
