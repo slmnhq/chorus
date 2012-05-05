@@ -31,7 +31,7 @@ describe InstanceDatabasesController do
 
       context "when instance and account available" do
         let!(:instance) {FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false}
-        let!(:account) {FactoryGirl.create :instance_account, :instance_id => instance.id, :owner_id => user.id, :username => dbconfig["username"], :password => dbconfig["password"]}
+        let!(:account) {FactoryGirl.create :instance_account, :instance_id => instance.id, :owner_id => user.id, :db_username => dbconfig["username"], :db_password => dbconfig["password"]}
 
         context "when unable to connect to instance" do
           before do
@@ -46,7 +46,7 @@ describe InstanceDatabasesController do
 
         context "when able to connect to instance" do
           let!(:instance) {FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false}
-          let!(:account) {FactoryGirl.create :instance_account, :instance_id => instance.id, :owner_id => user.id, :username => dbconfig["username"], :password => dbconfig["password"]}
+          let!(:account) {FactoryGirl.create :instance_account, :instance_id => instance.id, :owner_id => user.id, :db_username => dbconfig["username"], :db_password => dbconfig["password"]}
 
           it "should succeed" do
             get :index, :instance_id => instance.id

@@ -11,8 +11,8 @@ class InstanceAccount < ActiveRecord::Base
         :host => instance.host,
         :port => instance.port,
         :database => instance.maintenance_db,
-        :username => self.username,
-        :password => self.password
+        :username => self.db_username,
+        :password => self.db_password
     )
   end
 end

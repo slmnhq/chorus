@@ -17,7 +17,7 @@ describe InstanceAccount do
   context "#make_connection" do
     let(:dbconfig) {HashWithIndifferentAccess.new_from_hash_copying_default(YAML.load_file("config/database.yml")[Rails.env])}
     let(:instance) {FactoryGirl.create :instance, :host => dbconfig[:host]||"localhost", :port => dbconfig[:port]}
-    let(:account) {FactoryGirl.create :instance_account, :instance => instance, :username => dbconfig[:username], :password => dbconfig[:password]}
+    let(:account) {FactoryGirl.create :instance_account, :instance => instance, :db_username => dbconfig[:username], :db_password => dbconfig[:password]}
   
     it "yields a sql_connection" do
       account.make_connection.should be_instance_of ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
