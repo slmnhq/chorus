@@ -47,6 +47,14 @@ describe ApplicationController do
       response.code.should == "422"
       decoded_errors.fields.username.GENERIC.message.should == "some error"
     end
+
+    it "returns error 422 when a Postgres error occurs" do
+      stub(controller).any_action { raise PG::Error.new }
+
+      get :any_action
+
+      response.code.should == "422"
+    end
   end
 
   describe "#current_user" do

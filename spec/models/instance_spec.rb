@@ -67,4 +67,31 @@ describe Instance do
       end
     end
   end
+
+  describe "#account_for_user" do
+    let(:user) {FactoryGirl.create :user}
+
+    context "shared instance" do
+      let!(:instance) {FactoryGirl.create :instance, :shared => true}
+      let!(:owner_account) {FactoryGirl.create :instance_account, :instance => instance, :owner_id => instance.owner.id}
+
+      it "should return the same account for everyone" do
+        instance.account_for_user(user).should == owner_account
+        instance.account_for_user(instance.owner).should == owner_account
+      end
+    end
+
+    context "individual instance" do
+      let!(:instance) {FactoryGirl.create :instance, :shared => false}
+      let!(:owner_account) {FactoryGirl.create :instance_account, :instance => instance, :owner_id => instance.owner.id}
+      let!(:user_account) {FactoryGirl.create :instance_account, :instance => instance, :owner_id => user.id}
+      let!(:stranger) {FactoryGirl.create :user}
+
+      it "should return the account for the user or nil if the user has no account" do
+        instance.account_for_user(instance.owner).should == owner_account
+        instance.account_for_user(user).should == user_account
+        instance.account_for_user(stranger).should be_nil
+      end
+    end
+  end
 end

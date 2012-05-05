@@ -162,7 +162,7 @@ describe("chorus.views.SchemaPicker", function() {
                             });
 
                             it("fetches the list of databases", function() {
-                                expect(this.server.requests[1].url).toMatch("/instance/" + this.selectedInstance.get('id') + "/database");
+                                expect(this.server.requests[1].url).toMatch("/instances/" + this.selectedInstance.get('id') + "/databases");
                             });
 
                             itSortsTheSelectOptionsAlphabetically('database')

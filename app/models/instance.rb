@@ -14,6 +14,14 @@ class Instance < ActiveRecord::Base
     return "Greenplum Database"
   end
 
+  def account_for_user(user)
+    if shared?
+      owner_account
+    else
+      accounts.where(:owner_id => user.id).first
+    end
+  end
+
   def self.for_user(user)
     if user.admin?
       Instance.scoped

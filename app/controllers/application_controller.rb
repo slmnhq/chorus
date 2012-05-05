@@ -5,11 +5,16 @@ class ApplicationController < ActionController::Base
   rescue_from 'ActiveRecord::RecordNotFound', :with => :render_not_found
   rescue_from 'ActiveRecord::RecordInvalid', :with => :render_not_valid
   rescue_from 'SecurityTransgression', :with => :render_forbidden
+  rescue_from 'PG::Error', :with => :render_pg_error
 
   private
 
   def render_not_valid(e)
     present_validation_errors e.record.errors, :status => :unprocessable_entity
+  end
+
+  def render_pg_error(e)
+    head :unprocessable_entity
   end
 
   def render_not_found(e)
