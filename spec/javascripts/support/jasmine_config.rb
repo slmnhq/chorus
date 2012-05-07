@@ -1,12 +1,24 @@
 module Jasmine
-  class Config
+  class RunAdapter
+    def run(focused_suite = nil)
+      jasmine_files = @jasmine_files
+      css_files = @jasmine_stylesheets + (@config.css_files || [])
+      js_files = @config.src_files(focused_suite)
+      body = ERB.new(File.read("spec/javascripts/support/old-jasmine-core/run.html.erb")).result(binding)
+      [
+        200,
+        { 'Content-Type' => 'text/html', 'Pragma' => 'no-cache' },
+        [body]
+      ]
+    end
+  end
 
+  class Config
     def src_files
       Rails.application.assets["application"].dependencies.map do |asset|
         "assets/" + asset.logical_path
       end.push("public/help/Chorus_Help.js")
     end
-
   end
 end
 
@@ -95,7 +107,7 @@ module Jasmine
       map('/run.html')         { run Jasmine::Redirect.new('/') }
       map('/__suite__')        { run Jasmine::FocusedSuite.new(config) }
 
-      map('/__JASMINE_ROOT__') { run Rack::File.new(Jasmine::Core.path) }
+      map('/__JASMINE_ROOT__') { run Rack::File.new("spec/javascripts/support/old-jasmine-core") }
       map(config.spec_path)    { run Rack::File.new(config.spec_dir) }
       map(config.root_path)    { run Rack::File.new(config.project_root) }
 
