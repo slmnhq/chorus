@@ -1,26 +1,26 @@
 chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     constructorName: "InstancePermissions",
 
-    templateName:"instance_permissions",
-    title:t("instances.permissions_dialog.title"),
-    additionalClass:'with_sub_header',
-    persistent:true,
+    templateName: "instance_permissions",
+    title: t("instances.permissions_dialog.title"),
+    additionalClass: 'with_sub_header',
+    persistent: true,
 
-    events:{
-        "click a.edit":"editCredentials",
-        "click a.save":"save",
-        "click a.cancel":"cancel",
-        "click button.add_account":"newAccount",
-        "click a.add_shared_account":"addSharedAccountAlert",
-        "click a.change_owner":"changeOwner",
-        "click a.remove_shared_account":"removeSharedAccountAlert",
-        "click a.make_owner":"confirmChangeOwnerFromIndividualAccount",
-        "click a.save_owner":"confirmChangeOwnerFromSharedAccount",
-        "click a.cancel_change_owner":"cancelChangeOwner",
+    events: {
+        "click a.edit": "editCredentials",
+        "click a.save": "save",
+        "click a.cancel": "cancel",
+        "click button.add_account": "newAccount",
+        "click a.add_shared_account": "addSharedAccountAlert",
+        "click a.change_owner": "changeOwner",
+        "click a.remove_shared_account": "removeSharedAccountAlert",
+        "click a.make_owner": "confirmChangeOwnerFromIndividualAccount",
+        "click a.save_owner": "confirmChangeOwnerFromSharedAccount",
+        "click a.cancel_change_owner": "cancelChangeOwner",
         "click a.remove_credentials": "confirmRemoveCredentials"
     },
 
-    makeModel:function () {
+    makeModel: function() {
         this._super("makeModel", arguments);
         this.model = this.instance = this.options.launchElement.data("instance");
 
@@ -38,24 +38,24 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
     },
 
-    additionalContext:function (context) {
+    additionalContext: function(context) {
         return {
-            sharedAccount:!!this.instance.sharedAccount(),
-            accountCount:this.collection.reject(
-                function (account) {
+            sharedAccount: !!this.instance.sharedAccount(),
+            accountCount: this.collection.reject(
+                function(account) {
                     return account.isNew()
                 }).length
         };
     },
 
-    collectionModelContext:function (account) {
+    collectionModelContext: function(account) {
         var context = {};
         var user = account.user()
         if (user) {
             _.extend(context, {
-                fullName:user.displayName(),
-                imageUrl:user.fetchImageUrl(),
-                isOwner:this.instance.isOwner(account.user())
+                fullName: user.displayName(),
+                imageUrl: user.fetchImageUrl(),
+                isOwner: this.instance.isOwner(account.user())
             });
         }
         if (account.isNew()) {
@@ -65,11 +65,11 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         return context;
     },
 
-    postRender:function () {
+    postRender: function() {
         this.$("form").bind("submit", _.bind(this.save, this));
     },
 
-    editCredentials:function (event) {
+    editCredentials: function(event) {
         event.preventDefault();
         this.cancel();
         this.clearErrors();
@@ -79,7 +79,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         this.account = this.collection.get(accountId);
     },
 
-    cancelChangeOwner:function (e) {
+    cancelChangeOwner: function(e) {
         e.preventDefault();
         var ownerId = this.instance.accountForOwner().get("id");
         var ownerLi = this.$("li[data-id=" + ownerId + "]");
@@ -92,7 +92,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         ownerLi.find(".links .owner").removeClass("hidden");
     },
 
-    changeOwner:function (e) {
+    changeOwner: function(e) {
         if (e) e.preventDefault();
         var ownerId = this.instance.accountForOwner().get("id");
         var ownerLi = this.$("li[data-id=" + ownerId + "]");
@@ -106,40 +106,40 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         chorus.styleSelect(ownerLi.find("select.name"));
     },
 
-    confirmChangeOwnerFromIndividualAccount:function (e) {
+    confirmChangeOwnerFromIndividualAccount: function(e) {
         e.preventDefault();
         var accountId = $(e.target).closest("li").data("id");
         var selectedUser = this.collection.get(accountId).user();
         this.confirmChangeOwner(selectedUser);
     },
 
-    confirmChangeOwnerFromSharedAccount:function (e) {
+    confirmChangeOwnerFromSharedAccount: function(e) {
         e.preventDefault();
         var selectedUserId = this.$("select.name").val();
         var selectedUser = this.users.get(selectedUserId);
         this.confirmChangeOwner(selectedUser);
     },
 
-    confirmChangeOwner:function (newOwner) {
-        var confirmAlert = new chorus.alerts.InstanceChangeOwner({ model:newOwner });
+    confirmChangeOwner: function(newOwner) {
+        var confirmAlert = new chorus.alerts.InstanceChangeOwner({ model: newOwner });
         confirmAlert.bind("confirmChangeOwner", this.saveOwner, this);
         this.launchSubModal(confirmAlert);
     },
 
-    saveOwner:function (user) {
-        this.instance.save({ owner:{ id: user.get("id")} });
+    saveOwner: function(user) {
+        this.instance.save({ owner: { id: user.get("id")} });
         this.bindings.add(this.instance, "saveFailed", this.showErrors);
-        this.bindings.add(this.instance, "saved", function () {
+        this.bindings.add(this.instance, "saved", function() {
             chorus.toast("instances.confirm_change_owner.toast");
             this.instance.trigger("invalidated");
             this.closeModal();
         });
     },
 
-    newAccount:function (e) {
+    newAccount: function(e) {
         var button = this.$("button.add_account");
         if (button.is(":disabled")) return;
-        this.account = new chorus.models.InstanceAccount({instance_id:this.instance.get("id")});
+        this.account = new chorus.models.InstanceAccount({instance_id: this.instance.get("id")});
         this.collection.add(this.account);
         this.$("button.add_account").prop("disabled", true);
         var newLi = this.$("li[data-id=new]");
@@ -152,7 +152,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         chorus.styleSelect(newLi.find("select.name"));
     },
 
-    populateSelect:function () {
+    populateSelect: function() {
         if (this.instance.sharedAccount()) {
             this.populateOwnerSelect();
         } else {
@@ -160,8 +160,8 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         }
     },
 
-    populateOwnerSelect:function () {
-        var options = this.users.map(function (user) {
+    populateOwnerSelect: function() {
+        var options = this.users.map(function(user) {
             return $("<option/>").text(user.displayName()).val(user.get("id")).outerHtml();
         });
         var select = this.$("select.name");
@@ -174,9 +174,9 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         $('li[data-id=new] select').change(_.bind(this.updateUserSelect, this));
     },
 
-    populateNewAccountSelect:function () {
+    populateNewAccountSelect: function() {
         var collectionUserSet = new chorus.collections.UserSet(this.collection.users());
-        var otherUsers = this.users.select(function (user) {
+        var otherUsers = this.users.select(function(user) {
             return !collectionUserSet.get(user.get("id"))
         })
 
@@ -184,7 +184,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         select.empty();
         if (select) {
             select.append(_.map(otherUsers,
-                function (user) {
+                function(user) {
                     return $("<option/>").text(user.displayName()).val(user.get("id")).outerHtml();
                 }).join(""));
         }
@@ -192,38 +192,38 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         $('li[data-id=new] select').change(_.bind(this.updateUserSelect, this));
     },
 
-    updateUserSelect:function () {
+    updateUserSelect: function() {
         var selectedUser = this.users.get($('li[data-id=new] select').val());
         if (selectedUser) {
             this.$('li[data-id=new] img.profile').attr('src', selectedUser.fetchImageUrl());
         }
     },
 
-    save:function (event) {
+    save: function(event) {
         event.stopPropagation();
         event.preventDefault();
         var li = $(event.target).closest("li");
         li.find("a.save").startLoading("instances.permissions.saving")
 
-        this.bindings.add(this.account, "validationFailed", function () {
+        this.bindings.add(this.account, "validationFailed", function() {
             this.showErrors(this.account)
         });
-        this.bindings.add(this.account, "saveFailed", function () {
+        this.bindings.add(this.account, "saveFailed", function() {
             this.showErrors(this.account)
         });
         this.account.save({
-            owner_id:li.find("select").val(),
-            db_username:li.find("input[name=db_username]").val(),
-            db_password:li.find("input[name=db_password]").val()
+            owner_id: li.find("select").val(),
+            db_username: li.find("input[name=db_username]").val(),
+            db_password: li.find("input[name=db_password]").val()
         });
     },
 
-    modalClosed:function () {
+    modalClosed: function() {
         this.cancel();
         this._super('modalClosed');
     },
 
-    cancel:function (event) {
+    cancel: function(event) {
         if (event) {
             event.preventDefault();
         }
@@ -231,35 +231,35 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         this.$("li").removeClass("editing");
         this.$("li[data-id=new]").remove();
         if (this.account && this.account.isNew()) {
-            this.collection.remove(this.account, {silent:true});
+            this.collection.remove(this.account, {silent: true});
             delete this.account;
         }
     },
 
-    saved:function () {
+    saved: function() {
         this.instance.fetch();
         this.$("a.save").stopLoading();
         this.render();
     },
 
-    saveFailed:function () {
+    saveFailed: function() {
         this.$("a.save").stopLoading();
     },
 
-    removeSharedAccountAlert:function (e) {
+    removeSharedAccountAlert: function(e) {
         e.preventDefault();
         var alert = new chorus.alerts.RemoveSharedAccount();
         alert.bind("removeSharedAccount", _.bind(this.confirmRemoveSharedAccount, this));
         this.launchSubModal(alert);
     },
 
-    confirmRemoveSharedAccount:function () {
+    confirmRemoveSharedAccount: function() {
         var localGroup = new chorus.BindingGroup(this);
-        localGroup.add(this.instance, "saved", displaySuccessToast);
-        localGroup.add(this.instance, "saveFailed", displayFailureToast);
+        localGroup.add(this.instance.sharing(), "destroy", displaySuccessToast);
+        localGroup.add(this.instance.sharing(), "destroyFailed", displayFailureToast);
 
-        var id = this.instance.get("id");
-        this.instance.save({shared: false});
+        this.instance.sharing().set({id: -1}) // so that model isNew() is false, and destroy sends message to server
+        this.instance.sharing().destroy();
 
         function displaySuccessToast() {
             chorus.toast("instances.shared_account_removed");
@@ -274,20 +274,19 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         }
     },
 
-    addSharedAccountAlert:function (e) {
+    addSharedAccountAlert: function(e) {
         e.preventDefault();
         var alert = new chorus.alerts.AddSharedAccount();
         alert.bind("addSharedAccount", _.bind(this.confirmAddSharedAccount, this));
         this.launchSubModal(alert);
     },
 
-    confirmAddSharedAccount:function () {
+    confirmAddSharedAccount: function() {
         var localGroup = new chorus.BindingGroup(this);
-        localGroup.add(this.instance, "saved", displaySuccessToast);
-        localGroup.add(this.instance, "saveFailed", displayFailureToast);
+        localGroup.add(this.instance.sharing(), "saved", displaySuccessToast);
+        localGroup.add(this.instance.sharing(), "saveFailed", displayFailureToast);
 
-        var id = this.instance.get("id")
-        this.instance.save({shared:"true"});
+        this.instance.sharing().save();
 
         function displaySuccessToast() {
             chorus.toast("instances.shared_account_added");
@@ -317,7 +316,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         alert.bindOnce("removeIndividualAccount", _.bind(this.removeIndividualAccount, this, accountId));
     },
 
-    removeIndividualAccount : function(accountId) {
+    removeIndividualAccount: function(accountId) {
         var selectedUser = this.collection.get(accountId).user();
 
         var account = new chorus.models.InstanceAccount({id: accountId, instance_id: this.model.id });

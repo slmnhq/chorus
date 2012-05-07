@@ -382,19 +382,19 @@ describe("chorus.models.Instance", function() {
                 expect(this.instance.errors.size).toBeTruthy();
             })
 
-            it ("requires database name", function(){
+            it("requires database name", function() {
                 this.attrs.databaseName = "";
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.databaseName).toBeTruthy();
             });
 
-            it ("requires schema name", function(){
+            it("requires schema name", function() {
                 this.attrs.schemaName = "";
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.schemaName).toBeTruthy();
             });
 
-            it ("requires instance name", function(){
+            it("requires instance name", function() {
                 this.attrs.name = "";
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.name).toBeTruthy();
@@ -445,14 +445,14 @@ describe("chorus.models.Instance", function() {
                 expect(this.instance.errors.size).toBeTruthy();
             })
 
-            it ("requires name", function(){
+            it("requires name", function() {
                 this.attrs.name = "";
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
                 expect(this.instance.errors.name).toBeTruthy();
             });
 
-            it ("requires nothing else", function(){
-                this.attrs = {name : "foo", size: "1"}
+            it("requires nothing else", function() {
+                this.attrs = {name: "foo", size: "1"}
                 expect(this.instance.performValidation(this.attrs)).toBeTruthy();
             });
 
@@ -505,5 +505,17 @@ describe("chorus.models.Instance", function() {
             this.instance.usage().set({workspaces: []});
             expect(this.instance.hasWorkspaceUsageInfo()).toBeFalsy();
         });
+    });
+
+    describe("#sharing", function() {
+        it("returns an instance sharing model", function() {
+            expect(this.instance.sharing().get("instance_id")).toBe(this.instance.get("id"));
+        });
+
+        it("caches the sharing model", function() {
+            var originalModel = this.instance.sharing();
+            expect(this.instance.sharing()).toBe(originalModel);
+        });
+
     });
 });

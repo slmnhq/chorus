@@ -13,19 +13,19 @@
 
     chorus.models.Instance = chorus.models.Base.extend({
         constructorName: "Instance",
-        urlTemplate:"instances/{{id}}",
+        urlTemplate: "instances/{{id}}",
         nameAttribute: 'name',
 
         showUrlTemplate: function() {
-            if(this.isHadoop()) {
+            if (this.isHadoop()) {
                 return "instances/{{id}}/browse/";
             }
             return "instances/{{id}}/databases";
         },
 
-        entityType:"instance",
+        entityType: "instance",
 
-        declareValidations:function (newAttrs) {
+        declareValidations: function(newAttrs) {
             this.require("name", newAttrs);
             this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(), newAttrs, "instance.validation.name_pattern");
             switch (newAttrs.provision_type) {
@@ -42,7 +42,7 @@
                 case "create" :
                     this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
                     this.requireIntegerRange("size", 1, chorus.models.Config.instance().get("provisionMaxSizeInGB"), newAttrs);
-                    if( this.isNew()) {
+                    if (this.isNew()) {
                         this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                         this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                         this.require("db_username", newAttrs);
@@ -70,34 +70,34 @@
             return imagePrefix + filename;
         },
 
-        owner:function () {
+        owner: function() {
             return new chorus.models.User(
                 this.get("owner")
             )
         },
 
-        isOwner:function (user) {
+        isOwner: function(user) {
             return this.owner().get("id") == user.get('id') && user instanceof chorus.models.User
         },
 
-        databases:function () {
-            this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instance_id:this.get("id")}));
+        databases: function() {
+            this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instance_id: this.get("id")}));
             return this._databases;
         },
 
-        accounts:function () {
-            this._accounts || (this._accounts = new chorus.collections.InstanceAccountSet([], {instance_id:this.get("id")}));
+        accounts: function() {
+            this._accounts || (this._accounts = new chorus.collections.InstanceAccountSet([], {instance_id: this.get("id")}));
             return this._accounts;
         },
 
-        accountForUser:function (user) {
-            return new chorus.models.InstanceAccount({ instance_id:this.get("id"), userId: user.get("id") });
+        accountForUser: function(user) {
+            return new chorus.models.InstanceAccount({ instance_id: this.get("id"), userId: user.get("id") });
         },
 
-        accountForCurrentUser:function () {
+        accountForCurrentUser: function() {
             if (!this._accountForCurrentUser) {
                 this._accountForCurrentUser = this.accountForUser(chorus.session.user());
-                this._accountForCurrentUser.bind("destroy", function () {
+                this._accountForCurrentUser.bind("destroy", function() {
                     delete this._accountForCurrentUser;
                     this.trigger("change");
                 }, this);
@@ -105,19 +105,19 @@
             return this._accountForCurrentUser;
         },
 
-        accountForOwner:function () {
+        accountForOwner: function() {
             var ownerId = this.get("owner").id;
-            return _.find(this.accounts().models, function (account) {
+            return _.find(this.accounts().models, function(account) {
                 return account.get("owner").id == ownerId
             });
         },
 
-        sharedAccount:function () {
+        sharedAccount: function() {
             if (this.get("shared") && this.get("sharedAccount")) {
                 var db_username = this.get("sharedAccount").db_username;
                 var sharedAccount = this.accounts().first();
                 if (!sharedAccount) {
-                    sharedAccount = new chorus.models.InstanceAccount({ db_username:db_username, instance_id:this.get("id") });
+                    sharedAccount = new chorus.models.InstanceAccount({ db_username: db_username, instance_id: this.get("id") });
                     this.accounts().add(sharedAccount);
                 }
                 return sharedAccount;
@@ -136,27 +136,27 @@
             return this.get("state") == "online";
         },
 
-        attrToLabel:{
-            "db_username":"instances.dialog.database_account",
-            "db_password":"instances.dialog.database_password",
-            "userName":"instances.dialog.hadoop_account",
-            "userGroups":"instances.dialog.hadoop_group_list",
-            "name":"instances.dialog.instance_name",
-            "host":"instances.dialog.host",
-            "port":"instances.dialog.port",
+        attrToLabel: {
+            "db_username": "instances.dialog.database_account",
+            "db_password": "instances.dialog.database_password",
+            "userName": "instances.dialog.hadoop_account",
+            "userGroups": "instances.dialog.hadoop_group_list",
+            "name": "instances.dialog.instance_name",
+            "host": "instances.dialog.host",
+            "port": "instances.dialog.port",
             "databaseName": "instances.dialog.database_name",
-            "maintenance_db":"instances.dialog.maintenance_db",
-            "description":"instances.dialog.description",
-            "size":"instances.dialog.size"
+            "maintenance_db": "instances.dialog.maintenance_db",
+            "description": "instances.dialog.description",
+            "size": "instances.dialog.size"
         },
 
-        isShared:function () {
+        isShared: function() {
             return !(_.isEmpty(this.get('sharedAccount')));
         },
 
-        usage:function () {
+        usage: function() {
             if (!this.instanceUsage) {
-                this.instanceUsage = new chorus.models.InstanceUsage({ instance_id:this.get('id')})
+                this.instanceUsage = new chorus.models.InstanceUsage({ instance_id: this.get('id')})
             }
             return this.instanceUsage
         },
@@ -175,11 +175,18 @@
 
         version: function() {
             return this.get("instanceVersion");
+        },
+
+        sharing: function() {
+            if (!this._sharing) {
+                this._sharing = new chorus.models.InstanceSharing({instance_id: this.get("id")})
+            }
+            return this._sharing;
         }
     }, {
-        aurora:function () {
+        aurora: function() {
             if (!this._aurora) {
-                this._aurora = new chorus.models.Provisioning({provisionerPluginName:"A4CProvisioner", type:"install"});
+                this._aurora = new chorus.models.Provisioning({provisionerPluginName: "A4CProvisioner", type: "install"});
             }
             return this._aurora;
         },
