@@ -51,7 +51,6 @@ describe InstanceDatabasesController do
           it "should succeed" do
             get :index, :instance_id => instance.id
             response.code.should == "200"
-            puts decoded_response
             decoded_response[0].instance_id.should == instance.id
           end
         end
