@@ -161,6 +161,12 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
             });
 
+            it("displays a download link", function() {
+                expect(this.view.$("a.download")).toHaveData("dialog", "DatasetDownload");
+                expect(this.view.$("a.download")).toHaveData("dataset", this.dataset);
+                expect(this.view.$("a.download").text()).toMatchTranslation("actions.download");
+            });
+
             context("when in list mode", function() {
                 beforeEach(function() {
                     this.view.options.listMode = true;
@@ -199,9 +205,10 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 });
 
-                it("has no action links except for 'Preview Data'", function() {
-                    expect(this.view.$(".actions a").length).toBe(1);
+                it("has no action links except for 'Preview Data' and 'Download'", function() {
+                    expect(this.view.$(".actions a").length).toBe(2);
                     expect(this.view.$(".actions a.tabular_data_preview")).toExist();
+                    expect(this.view.$(".actions a.download")).toExist();
                 });
             });
 

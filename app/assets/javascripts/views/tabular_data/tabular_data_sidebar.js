@@ -104,9 +104,9 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender: function() {
-        var $importLinks = this.$("a.create_schedule, a.edit_schedule, a.import_now");
-        $importLinks.data("dataset", this.resource);
-        $importLinks.data("workspace", this.options.workspace);
+        var $actionLinks = this.$("a.create_schedule, a.edit_schedule, a.import_now, a.download");
+        $actionLinks.data("dataset", this.resource);
+        $actionLinks.data("workspace", this.options.workspace);
         this.showOrHideMultipleSelectionSection();
         this._super("postRender");
     },
