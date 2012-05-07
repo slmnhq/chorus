@@ -23,10 +23,9 @@ class CredentialsValidator
 
   def user
     if valid?
-
       user = if LdapClient.enabled?
-        LdapClient.authenticate(username, password)
-        User.find_by_username(username)
+        authenticated = LdapClient.authenticate(username, password)
+        User.find_by_username(username) if authenticated
       else
         User.authenticate(username, password)
       end

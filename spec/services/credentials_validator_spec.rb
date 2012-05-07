@@ -53,6 +53,14 @@ describe CredentialsValidator do
         stub(LdapClient).authenticate(user.username, 'a_password') { true }
         CredentialsValidator.user(user.username, 'a_password').should == user
       end
+
+      it "denies access with wrong LDAP credentials" do
+        user = FactoryGirl.create(:user)
+        stub(LdapClient).enabled? { true }
+        stub(LdapClient).authenticate(user.username, 'a_password') { false }
+
+        expect { CredentialsValidator.user(user.username, 'a_password') }.to raise_error(CredentialsValidator::Invalid)
+      end
     end
   end
 end
