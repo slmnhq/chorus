@@ -389,47 +389,18 @@ describe("chorus.dialogs.Visualization", function() {
             describe("downloading the chart", function() {
                 describe("clicking on the 'save chart' button", function() {
                     beforeEach(function() {
-                        this.submitSpy = jasmine.createSpy("submit");
-                        this.hideSpy = jasmine.createSpy("hide");
-
-                        this.fakeForm = {
-                            submit: this.submitSpy,
-                            hide: this.hideSpy
-                        }
-
-                        spyOn(this.dialog, "createDownloadForm").andReturn(this.fakeForm)
+                        spyOn($, "download");
                         this.dialog.$("button.save").prop("disabled", false);
                         this.dialog.$("button.save").click();
                         this.qtip.find("a[data-menu-name='save_to_desktop']").click();
                     });
 
-                    it("constructs a form for download", function() {
-                        expect(this.dialog.createDownloadForm).toHaveBeenCalled();
-                    });
-
-                    it("hides the form", function() {
-                        expect(this.hideSpy).toHaveBeenCalled();
-                    });
-
-                    it("submits the form", function() {
-                        expect(this.submitSpy).toHaveBeenCalled();
-                    });
-                })
-
-                describe("constructing the download form", function() {
-                    beforeEach(function() {
-                        this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
-                        this.form = this.dialog.createDownloadForm();
-                    });
-
-                    it("has the correct action", function() {
-                        expect(this.form).toHaveAttr("action", "/downloadChart.jsp");
-                    });
-
-                    it("has the correct form elements", function() {
-                        expect($("input[name=svg]", this.form)).toExist();
-                        expect($("input[name=chart-name]", this.form)).toHaveValue("Foo");
-                        expect($("input[name=chart-type]", this.form)).toHaveValue("boxplot");
+                    it("makes a request to the chart download api", function() {
+                        expect($.download).toHaveBeenCalledWith("/downloadChart.jsp", {
+                            "svg": this.dialog.makeSvgData(),
+                            "chart-name": "Foo",
+                            "chart-type": "boxplot"
+                        }, "post");
                     });
                 });
             });
