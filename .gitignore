@@ -10,6 +10,9 @@
 # Ignore paperclip's attachment directory
 /public/system
 
+# Ignore API doc directory
+/public/api
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 

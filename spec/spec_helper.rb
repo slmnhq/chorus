@@ -5,6 +5,7 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require "paperclip/matchers"
 require "json"
+require 'rspec_api_documentation/dsl'
 
 module Shoulda # :nodoc:
   module Matchers
@@ -55,6 +56,7 @@ RSpec.configure do |config|
   end
 
   config.include AuthHelper, :type => :controller
+  config.include AcceptanceAuthHelper, :type => :acceptance
   config.include RocketPants::TestHelper, :type => :controller
   config.include RocketPants::TestHelper, :type => :request
   config.include JsonHelper, :type => :controller
