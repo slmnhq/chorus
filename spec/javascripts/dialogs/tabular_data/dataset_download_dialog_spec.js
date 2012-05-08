@@ -2,7 +2,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
     beforeEach(function() {
         this.dataset = newFixtures.dataset.sandboxTable();
         spyOn(this.dataset, 'download');
-        this.dialog = new chorus.dialogs.DatasetDownload({ model: this.dataset });
+        this.dialog = new chorus.dialogs.DatasetDownload({ pageModel: this.dataset });
         this.dialog.render();
     });
 
@@ -11,7 +11,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
         beforeEach(function() {
             radioButtonSpecify = this.dialog.$("input[type=radio][id=specify_rows]");
             radioButtonAll = this.dialog.$("input[type=radio][id=all_rows]");
-            this.rowsInput = this.dialog.$("input[name=rows][type=text]");
+            this.rowsInput = this.dialog.$("input[name=numOfRows][type=text]");
             this.submitButton = this.dialog.$("button.submit");
         });
 
@@ -47,6 +47,55 @@ describe("chorus.dialogs.DatasetDownload", function() {
 
             it("starts a dataset download", function() {
                 expect(this.dataset.download).toHaveBeenCalledWith({ rows: "473" });
+            });
+        });
+
+        describe("validations", function() {
+            beforeEach(function() {
+                spyOnEvent($(document), "close.facebox");
+                spyOn(this.dialog, "showErrors").andCallThrough();
+            });
+
+            context("entering a negative number", function() {
+                beforeEach(function() {
+                    this.rowsInput.val("-100");
+                    this.submitButton.click();
+                });
+
+                it("does not start a dataset download", function() {
+                    expect(this.dataset.download).not.toHaveBeenCalled();
+                });
+
+                it("does not dismiss the dialog", function() {
+                    expect("close.facebox").not.toHaveBeenTriggeredOn($(document));
+                });
+
+                it("displays an error", function() {
+                    expect(this.rowsInput).toHaveClass("has_error");
+                    expect(this.dialog.$(".has_error").length).toBe(1)
+                    expect(this.dialog.showErrors).toHaveBeenCalled();
+                });
+            });
+
+            context("entering a string", function() {
+                beforeEach(function() {
+                    this.rowsInput.val("hello!");
+                    this.submitButton.click();
+                });
+
+                it("does not start a dataset download", function() {
+                    expect(this.dataset.download).not.toHaveBeenCalled();
+                });
+
+                it("does not dismiss the dialog", function() {
+                    expect("close.facebox").not.toHaveBeenTriggeredOn($(document));
+                });
+
+                it("displays an error", function() {
+                    expect(this.rowsInput).toHaveClass("has_error");
+                    expect(this.dialog.$(".has_error").length).toBe(1)
+                    expect(this.dialog.showErrors).toHaveBeenCalled();
+                });
             });
         });
 

@@ -7,16 +7,28 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
         "click button.submit": "submitDownload"
     },
 
+    setup: function() {
+        this._super("setup", arguments);
+        this.tabular_data = this.options.pageModel;
+        this.model = this.resource = new chorus.models.TabularDataDownloadConfiguration();
+    },
+
     submitDownload: function(e) {
         e.preventDefault();
 
         if (this.$("input[type=radio][id=specify_rows]").prop("checked")) {
-            this.model.download({ rows: this.$("input[name=rows]").val() });
+            var rows = this.$("input[name=numOfRows]").val();
+            this.model.set({ numOfRows: rows }, { silent: true })
+            if(this.model.performValidation()) {
+                this.tabular_data.download({ rows: rows });
+                this.closeModal();
+            } else {
+                this.showErrors();
+            }
         } else {
-            this.model.download();
+            this.tabular_data.download();
+            this.closeModal();
         }
-
-        this.closeModal();
     }
 });
 
