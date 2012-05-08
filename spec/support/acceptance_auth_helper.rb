@@ -1,16 +1,14 @@
 module AcceptanceAuthHelper
   def log_in(user)
-    old_document = client.metadata[:document]
-    client.metadata[:document] = false
-    client.post "/sessions", :session => {:username => user.username, :password => user.password }
-    client.metadata[:document] = old_document
+    no_doc do
+      client.post "/sessions", :session => {:username => user.username, :password => user.password}
+    end
   end
 
   def log_out
-    old_document = client.metadata[:document]
-    client.metadata[:document] = false
-    client.delete "/sessions"
-    client.metadata[:document] = old_document
+    no_doc do
+      client.delete "/sessions"
+    end
   end
 
   private
