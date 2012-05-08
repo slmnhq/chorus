@@ -7,8 +7,10 @@ describe("chorus.dialogs.DatasetDownload", function() {
     });
 
     describe("#render", function() {
+        var radioButtonSpecify, radioButtonAll;
         beforeEach(function() {
-            this.radioButtons = this.dialog.$("input[type=radio]");
+            radioButtonSpecify = this.dialog.$("input[type=radio][id=specify_rows]");
+            radioButtonAll = this.dialog.$("input[type=radio][id=all_rows]");
             this.rowsInput = this.dialog.$("input[name=rows][type=text]");
             this.submitButton = this.dialog.$("button.submit");
         });
@@ -18,18 +20,18 @@ describe("chorus.dialogs.DatasetDownload", function() {
         });
 
         it("has two radio buttons", function(){
-            expect(this.radioButtons.length).toBe(2);
+            expect(radioButtonSpecify.length).toBe(1);
+            expect(radioButtonAll.length).toBe(1);
         });
 
         it("the first option is 'x rows', checked by default", function(){
-            expect(this.radioButtons.eq(0)).toHaveId("specify_rows");
-            expect(this.radioButtons.eq(0)).toBe(":checked");
+            expect(radioButtonSpecify).toBeChecked();
             expect(this.dialog.$("label[for=specify_rows]")).toContainTranslation("dataset.download.specify_rows");
             expect(this.rowsInput).toExist();
         });
 
         it("the second option is 'all rows'", function(){
-            expect(this.radioButtons.eq(1)).toHaveId("all_rows");
+            expect(radioButtonAll).toHaveId("all_rows");
             expect(this.dialog.$("label[for=all_rows]")).toContainTranslation("dataset.download.all_rows");
         });
 
@@ -50,8 +52,8 @@ describe("chorus.dialogs.DatasetDownload", function() {
 
         describe("checking the 'all rows' box and clicking download", function() {
             beforeEach(function() {
-                this.radioButtons.eq(0).prop("checked", false);
-                this.radioButtons.eq(1).prop("checked", true);
+                radioButtonSpecify.prop("checked", false);
+                radioButtonAll.prop("checked", true);
                 this.submitButton.click();
             });
 
