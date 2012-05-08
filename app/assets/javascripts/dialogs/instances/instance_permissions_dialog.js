@@ -40,7 +40,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
     additionalContext: function(context) {
         return {
-            sharedAccount: !!this.instance.sharedAccount(),
+            sharedAccount: this.instance.isShared(),
             accountCount: this.collection.reject(
                 function(account) {
                     return account.isNew()
@@ -153,7 +153,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     populateSelect: function() {
-        if (this.instance.sharedAccount()) {
+        if (this.instance.isShared()) {
             this.populateOwnerSelect();
         } else {
             this.populateNewAccountSelect();
@@ -262,8 +262,8 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         this.instance.sharing().destroy();
 
         function displaySuccessToast() {
+            this.instance.set({shared: false});
             chorus.toast("instances.shared_account_removed");
-            this.instance.unset("sharedAccount");
             this.render();
             localGroup.removeAll();
         }
@@ -289,8 +289,8 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         this.instance.sharing().save();
 
         function displaySuccessToast() {
+            this.instance.set({shared: true});
             chorus.toast("instances.shared_account_added");
-            this.instance.unset("sharedAccount");
             this.render();
             localGroup.removeAll();
         }

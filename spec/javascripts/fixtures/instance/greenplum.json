@@ -22,7 +22,7 @@
     "port": "8020",
     "provisionName": null,
     "provision_type": "register",
-    "sharedAccount": {},
+    "shared": false,
     "size": null,
     "state": "online",
     "totalObject": null,

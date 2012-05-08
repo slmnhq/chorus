@@ -1882,8 +1882,7 @@ beforeEach(function() {
         emptyInstanceAccount: function(overrides) {
             var attributes = _.extend({
                 instance_id: "10020",
-                userName: "u1",
-                sharedAccount: {}
+                userName: "u1"
             }, overrides);
             return new chorus.models.InstanceAccount(attributes);
         },
@@ -1892,8 +1891,7 @@ beforeEach(function() {
             var overrides;
             if (overridesOrInstance instanceof chorus.models.Instance) {
                 overrides = {
-                    instance_id: overridesOrInstance.get("id"),
-                    db_username: overridesOrInstance.get("sharedAccount").db_username
+                    instance_id: overridesOrInstance.get("id")
                 };
             } else {
                 overrides = overridesOrInstance || {};

@@ -12,17 +12,17 @@ describe Instances::SharingController do
     it "sets the shared attribute on an unshared instance" do
       instance.update_attributes(:shared => false)
       post :create, :instance_id => instance.to_param
-      instance.reload.should be_shared
+      decoded_response.shared.should be_true
     end
 
     it "keeps the shared attribute on a shared instance" do
       instance.update_attributes(:shared => true)
       post :create, :instance_id => instance.to_param
-      instance.reload.should be_shared
+      decoded_response.shared.should be_true
     end
 
     it "deletes accounts other than those belonging to the instance owner" do
-      other_account = Factory.create(:instance_account, :instance => instance)
+      other_account = FactoryGirl.create(:instance_account, :instance => instance)
 
       post :create, :instance_id => instance.to_param
 
@@ -53,13 +53,13 @@ describe Instances::SharingController do
     it "removes the shared attribute from a shared instance" do
       instance.update_attributes(:shared => true)
       delete :destroy, :instance_id => instance.to_param
-      instance.reload.should_not be_shared
+      decoded_response.shared.should_not be_true
     end
 
     it "keeps the unshared attribute on an unshared instance" do
       instance.update_attributes(:shared => false)
       delete :destroy, :instance_id => instance.to_param
-      instance.reload.should_not be_shared
+      decoded_response.shared.should_not be_true
     end
 
     it "rejects non-owners" do

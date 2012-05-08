@@ -26,10 +26,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
         beforeEach(function() {
             this.instance = newFixtures.instance.sharedAccount();
             var account = newFixtures.instanceAccount({
-                db_username: this.instance.get("sharedAccount").db_username,
+                db_username: 'some_db_username',
                 instance_id: this.instance.id
             });
-            this.instance.set({ owner: {id: account.user().get("id")}, shared: true });
+            this.instance.set({ owner: {id: account.user().get("id")} });
             this.instance.accounts().reset(account);
 
             var launchElement = $("<a/>").data("instance", this.instance);
@@ -47,7 +47,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
             it("displays the account owner information", function() {
                 var li = this.dialog.$("li");
-                var sharedAccountUser = this.instance.sharedAccount().user();
+                var sharedAccountUser = this.instance.accounts().at(0).user();
                 expect(li).toExist();
                 expect(li.find("img.profile")).toHaveAttr("src", sharedAccountUser.fetchImageUrl());
                 expect(li.find(".name").text()).toBe(sharedAccountUser.displayName());
@@ -143,7 +143,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
 
             it("populates the db_username text field from the account map", function() {
-                expect(this.dialog.$("input[name=db_username]").val()).toBe(this.instance.sharedAccount().get('db_username'));
+                expect(this.dialog.$("input[name=db_username]").val()).toBe('some_db_username');
             })
 
             it("displays a 'switch to individual account' link", function() {
@@ -153,9 +153,6 @@ describe("chorus.dialogs.InstancePermissions", function() {
             context("clicking the switch to individual account link", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, "launchSubModal").andCallThrough();
-                    spyOn(this.instance, "sharedAccount").andCallFake(function() {
-                        return newFixtures.instanceAccount({ db_username: "foo", id: "999", instance_id: "5" });
-                    });
                     this.dialog.$("a.remove_shared_account").click();
                 });
 
@@ -177,7 +174,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         beforeEach(function() {
                             spyOn(chorus, 'toast');
                             spyOn(this.dialog, "postRender").andCallThrough();
-                            expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
+                            expect(this.dialog.instance.isShared()).toBeTruthy();
                             this.server.lastDestroy().succeed()
                         });
 
@@ -186,7 +183,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         });
 
                         it("clears shared account information from the instance model in the dialog", function() {
-                            expect(this.dialog.instance.has("sharedAccount")).toBeFalsy();
+                            expect(this.dialog.instance.isShared()).toBeFalsy();
                         })
 
                         it("re-renders the dialog in the new individual account state", function() {
@@ -706,7 +703,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         this.otherSavedSpy = jasmine.createSpy();
                         spyOn(this.dialog, "postRender").andCallThrough();
                         this.instance.sharing().bind("saved", this.otherSavedSpy);
-                        expect(this.dialog.instance.has("sharedAccount")).toBeTruthy();
+                        expect(this.dialog.instance.isShared()).toBeFalsy();
                         this.server.lastCreate().succeed()
                     });
 
@@ -716,7 +713,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("clears shared account information from the instance model in the dialog", function() {
-                        expect(this.dialog.instance.has("sharedAccount")).toBeFalsy();
+                        expect(this.dialog.instance.isShared()).toBeTruthy();
                     })
 
                     it("re-renders the dialog in the new individual account state", function() {

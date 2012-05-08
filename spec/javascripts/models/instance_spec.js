@@ -216,38 +216,6 @@ describe("chorus.models.Instance", function() {
         });
     });
 
-    describe("#sharedAccount", function() {
-        context("when the instance has a shared account", function() {
-            beforeEach(function() {
-                this.instance = newFixtures.instance.sharedAccount();
-            });
-
-            it("returns a instanceAccount based on the db_username of the instance", function() {
-                var sharedAccount = this.instance.sharedAccount();
-                expect(sharedAccount).toBeA(chorus.models.InstanceAccount);
-                expect(sharedAccount.get('db_username')).toBe(this.instance.get('sharedAccount').db_username);
-                expect(sharedAccount.get('instance_id')).toBe(this.instance.get('id'));
-            });
-
-            it("is a model in the same instance's #accounts collection'", function() {
-                var account = this.instance.sharedAccount();
-                expect(account.collection).toBe(this.instance.accounts());
-                expect(this.instance.accounts().first()).toBe(account);
-            });
-
-            it("memoizes", function() {
-                var sharedAccount = this.instance.sharedAccount();
-                expect(sharedAccount).toBe(this.instance.sharedAccount());
-            });
-        });
-
-        context("when the instance does not have a shared account", function() {
-            it("returns undefined", function() {
-                expect(this.instance.sharedAccount()).toBeUndefined();
-            })
-        });
-    });
-
     describe("#usage", function() {
         beforeEach(function() {
             this.instanceUsage = this.instance.usage();

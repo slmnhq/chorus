@@ -14,7 +14,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context("when an instance is selected", function() {
         beforeEach(function() {
-            this.instance = newFixtures.instance.greenplum({name : "Harry's House of Glamour", instanceVersion: "99.999" });
+            this.instance = newFixtures.instance.greenplum({name: "Harry's House of Glamour", instanceVersion: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
 
@@ -70,14 +70,14 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             context("when user is an admin or owner of the instance", function() {
                 it("displays edit instance link when user is admin", function() {
-                    setLoggedInUser({ username : "benjamin", admin: true});
+                    setLoggedInUser({ username: "benjamin", admin: true});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
                 it("displays edit instance link when user is owner", function() {
-                    setLoggedInUser({ username : "benjamin", admin: false});
-                    this.instance.set({owner:{id : chorus.session.user().get('id')} });
+                    setLoggedInUser({ username: "benjamin", admin: false});
+                    this.instance.set({owner: {id: chorus.session.user().get('id')} });
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
@@ -88,9 +88,9 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the instance is a hadoop instance", function() {
                     beforeEach(function() {
-                        setLoggedInUser({ username : "benjamin", admin: false});
+                        setLoggedInUser({ username: "benjamin", admin: false});
                         this.instance.set({
-                            owner : {id:chorus.session.user().get('id')},
+                            owner: {id: chorus.session.user().get('id')},
                             instance_provider: "Hadoop"
                         });
                         this.view.render();
@@ -107,7 +107,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the instance is provisioning", function() {
                     beforeEach(function() {
-                        setLoggedInUser({ username : "benjamin", admin: true});
+                        setLoggedInUser({ username: "benjamin", admin: true});
                         this.instance.set({
                             state: "provisioning",
                             provision_type: "create"
@@ -130,7 +130,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the instance failed to provision", function() {
                     beforeEach(function() {
-                        setLoggedInUser({ username : "benjamin", admin: true});
+                        setLoggedInUser({ username: "benjamin", admin: true});
                         this.instance.set({
                             state: "offline",
                             provision_type: "create"
@@ -163,8 +163,8 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             context("when user is not an admin or owner of the instance", function() {
                 beforeEach(function() {
-                    setLoggedInUser({ username : "benjamin", admin: false});
-                    this.instance.set({owner: {id:  "harry"}});
+                    setLoggedInUser({ username: "benjamin", admin: false});
+                    this.instance.set({owner: {id: "harry"}});
                     this.view.render();
                 });
 
@@ -219,7 +219,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 describe("for a new greenplum instance", function() {
                     beforeEach(function() {
-                        this.view.model = this.view.model.set({ size: "1", port: null, host: null, sharedAccount: {} });
+                        this.view.model = this.view.model.set({ size: "1", port: null, host: null });
                         this.view.render();
                     });
 
@@ -253,20 +253,20 @@ describe("chorus.views.InstanceListSidebar", function() {
                 });
 
                 it("displays edit instance link when user is admin", function() {
-                    setLoggedInUser({ username : "benjamin", admin: true});
+                    setLoggedInUser({ username: "benjamin", admin: true});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
                 it("displays edit instance link when user is owner", function() {
-                    setLoggedInUser({ username : "benjamin", admin: false});
-                    this.instance.set({owner: {id : chorus.session.user().get('id')}});
+                    setLoggedInUser({ username: "benjamin", admin: false});
+                    this.instance.set({owner: {id: chorus.session.user().get('id')}});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
                 });
 
                 it("does NOT display the edit instance link when user is not an admin or owner", function() {
-                    setLoggedInUser({ username : "benjamin", admin: false});
+                    setLoggedInUser({ username: "benjamin", admin: false});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).not.toExist();
                 });
@@ -349,7 +349,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         var account = newFixtures.instanceAccount();
                         spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
                         this.instance.accounts().add([newFixtures.instanceAccount(), newFixtures.instanceAccount()]);
-                        setLoggedInUser({ username : "benjamin", admin: true});
+                        setLoggedInUser({ username: "benjamin", admin: true});
                         this.view.render();
                     });
 

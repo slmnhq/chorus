@@ -112,18 +112,6 @@
             });
         },
 
-        sharedAccount: function() {
-            if (this.get("shared") && this.get("sharedAccount")) {
-                var db_username = this.get("sharedAccount").db_username;
-                var sharedAccount = this.accounts().first();
-                if (!sharedAccount) {
-                    sharedAccount = new chorus.models.InstanceAccount({ db_username: db_username, instance_id: this.get("id") });
-                    this.accounts().add(sharedAccount);
-                }
-                return sharedAccount;
-            }
-        },
-
         isProvisioning: function() {
             return this.get("state") == "provisioning";
         },
@@ -151,7 +139,7 @@
         },
 
         isShared: function() {
-            return !(_.isEmpty(this.get('sharedAccount')));
+            return !!this.get("shared");
         },
 
         usage: function() {

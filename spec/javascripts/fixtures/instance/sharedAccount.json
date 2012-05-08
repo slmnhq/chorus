@@ -23,9 +23,6 @@
     "provisionName": null,
     "provision_type": "register",
     "shared": true,
-    "sharedAccount": {
-        "db_username": "gpadmin"
-    },
     "size": null,
     "state": "online",
     "totalObject": null,

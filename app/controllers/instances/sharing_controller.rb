@@ -3,14 +3,14 @@ module Instances
     def create
       instance.shared = true
       instance.accounts.where("id != #{instance.owner_account.id}").destroy_all
-      instance.save
-      head :created
+      instance.save!
+      present instance, :status => :created
     end
 
     def destroy
       instance.shared = false
-      instance.save
-      head :no_content
+      instance.save!
+      present instance
     end
 
     private
