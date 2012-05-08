@@ -55,10 +55,15 @@ describe("chorus.dialogs.DatasetDownload", function() {
                 radioButtonSpecify.prop("checked", false);
                 radioButtonAll.prop("checked", true);
                 this.submitButton.click();
+                spyOnEvent($(document), "close.facebox");
             });
 
             it("starts a dataset download of all rows", function() {
                 expect(this.dataset.download).toHaveBeenCalledWith(/* should be called w/ no args */);
+            });
+
+            it("dismisses the dialog", function() {
+                expect("close.facebox").toHaveBeenTriggeredOn($(document));
             });
         });
     });

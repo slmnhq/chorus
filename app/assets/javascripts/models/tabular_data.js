@@ -160,7 +160,7 @@ chorus.models.TabularData = chorus.models.Base.include(
         download: function(options) {
             var data = { datasetId: this.id };
             if (options && options.rows) {
-                data.numOfRow = options.rows;
+                data.numOfRows = options.rows;
             }
 
             $.download("/edc/data/csvDownload", data, "get");

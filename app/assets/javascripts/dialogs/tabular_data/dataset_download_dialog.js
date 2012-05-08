@@ -15,6 +15,8 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
         } else {
             this.model.download();
         }
+
+        this.closeModal();
     }
 });
 
