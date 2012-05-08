@@ -22,7 +22,6 @@ describe("chorus.dialogs.DatasetDownload", function() {
         });
 
         it("the first option is 'x rows', checked by default", function(){
-            expect(this.radioButtons.eq(0)).toHaveId("specify_rows");
             expect(this.radioButtons.eq(0)).toBe(":checked");
             expect(this.dialog.$("label[for=specify_rows]")).toContainTranslation("dataset.download.specify_rows");
             expect(this.rowsInput).toExist();
