@@ -8,8 +8,8 @@ describe Schema do
 
       stub(Gpdb::ConnectionBuilder).make_connection_with_database_name(instance, instanceAccount, "test2") {
         fakeConnection = Object.new
-        stub(fakeConnection).query("select nspname from pg_namespace WHERE nspname NOT LIKE 'pg_%' AND nspname NOT IN('information_schema','gp_toolkit', 'gpperfmon') ") {
-          [["schema1"]]
+        stub(fakeConnection).query("select count(*) as datasetCount ,nspname from pg_namespace n, pg_tables t WHERE nspname NOT LIKE 'pg_%' AND nspname NOT IN('information_schema','gp_toolkit', 'gpperfmon') and n.nspname = t.schemaname group by t.schemaname , n.nspname") {
+          [["50", "schema1"]]
         }
         fakeConnection
       }
@@ -17,6 +17,7 @@ describe Schema do
       schemas = Schema.from_instance_account_and_db(instanceAccount, "test2")
       schemas.first.should be_a(Schema)
       schemas.first.name.should == "schema1"
+      schemas.first.dataset_count.should == 50
     end
   end
 end

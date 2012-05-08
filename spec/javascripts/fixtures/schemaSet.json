@@ -6,7 +6,7 @@
         "lastUpdatedTxStamp": "2012-03-14 15:57:25.912",
         "createdStamp": "2012-03-14 15:57:25.938",
         "createdTxStamp": "2012-03-14 15:57:25.912",
-        "datasetCount": 3
+        "dataset_count": 3
     },
     {
         "id": "10011",
@@ -15,7 +15,7 @@
         "lastUpdatedTxStamp": "2012-03-14 15:57:25.912",
         "createdStamp": "2012-03-14 15:57:25.939",
         "createdTxStamp": "2012-03-14 15:57:25.912",
-        "datasetCount": 245
+        "dataset_count": 245
     },
     {
         "id": "10012",
@@ -24,7 +24,7 @@
         "lastUpdatedTxStamp": "2012-03-14 15:57:25.912",
         "createdStamp": "2012-03-14 15:57:25.94",
         "createdTxStamp": "2012-03-14 15:57:25.912",
-        "datasetCount": 0
+        "dataset_count": 0
     },
     {
         "id": "10013",
@@ -33,7 +33,7 @@
         "lastUpdatedTxStamp": "2012-03-14 15:57:25.912",
         "createdStamp": "2012-03-14 15:57:25.941",
         "createdTxStamp": "2012-03-14 15:57:25.912",
-        "datasetCount": 2
+        "dataset_count": 2
     },
     {
         "id": "10014",
@@ -42,7 +42,7 @@
         "lastUpdatedTxStamp": "2012-03-14 15:57:25.912",
         "createdStamp": "2012-03-14 15:57:25.942",
         "createdTxStamp": "2012-03-14 15:57:25.912",
-        "datasetCount": 2
+        "dataset_count": 2
     },
     {
         "id": "10015",
@@ -51,6 +51,6 @@
         "lastUpdatedTxStamp": "2012-03-14 15:57:25.912",
         "createdStamp": "2012-03-14 15:57:25.943",
         "createdTxStamp": "2012-03-14 15:57:25.912",
-        "datasetCount": 0
+        "dataset_count": 0
     }
 ]
