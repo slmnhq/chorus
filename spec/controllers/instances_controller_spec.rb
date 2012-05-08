@@ -34,7 +34,7 @@ describe InstancesController do
 
     before do
       instance = FactoryGirl.build(:instance)
-      stub(Gpdb::ConnectionBuilder).update!('1', changed_attributes, @user) { instance }
+      stub(Gpdb::InstanceRegistrar).update!('1', changed_attributes, @user) { instance }
     end
 
     it "should reply with successful update" do
@@ -44,13 +44,13 @@ describe InstancesController do
 
     it "should handle invalid updates" do
       instance = FactoryGirl.build(:instance, :name => nil)
-      stub(Gpdb::ConnectionBuilder).update!('1', changed_attributes, @user) { raise(ActiveRecord::RecordInvalid.new(instance)) }
+      stub(Gpdb::InstanceRegistrar).update!('1', changed_attributes, @user) { raise(ActiveRecord::RecordInvalid.new(instance)) }
       put :update, :id => '1', :instance => changed_attributes
       response.code.should == "422"
     end
 
     it "should handle security transgressions" do
-      stub(Gpdb::ConnectionBuilder).update!('1', changed_attributes, @user) { raise(SecurityTransgression.new) }
+      stub(Gpdb::InstanceRegistrar).update!('1', changed_attributes, @user) { raise(SecurityTransgression.new) }
       put :update, :id => '1', :instance => changed_attributes
       response.code.should == "403"
     end
@@ -64,7 +64,7 @@ describe InstancesController do
 
       before do
         instance = FactoryGirl.build(:instance, :name => "new")
-        stub(Gpdb::ConnectionBuilder).create!(valid_attributes, @user) { instance }
+        stub(Gpdb::InstanceRegistrar).create!(valid_attributes, @user) { instance }
       end
 
       it "reports that the instance was created" do
@@ -83,7 +83,7 @@ describe InstancesController do
 
       before do
         instance = FactoryGirl.build(:instance, :name => nil)
-        stub(Gpdb::ConnectionBuilder).create!(invalid_attributes, @user) { raise(ActiveRecord::RecordInvalid.new(instance)) }
+        stub(Gpdb::InstanceRegistrar).create!(invalid_attributes, @user) { raise(ActiveRecord::RecordInvalid.new(instance)) }
       end
 
       it "responds with validation errors" do
