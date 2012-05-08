@@ -11,8 +11,8 @@ Chorus::Application.routes.draw do
   end
 
   resources :instances, :only => [:index, :create, :update] do
-    resources :accounts, :controller => :instance_accounts
-    resource :my_account, :controller => :instance_accounts
+    resources :accounts, :controller => :instance_accounts, :only => [:index, :show, :create, :update]
+    resource :my_account, :controller => :instance_accounts, :only => [:show, :create, :update]
 
     resources :databases, :controller => :instance_databases, :only => [:index] do
       resources :schemas, :only => [:index]

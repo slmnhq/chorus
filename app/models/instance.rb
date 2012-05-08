@@ -14,6 +14,20 @@ class Instance < ActiveRecord::Base
     end
   end
 
+  def self.accessible_to(user)
+    return scoped if user.admin?
+
+    accounts_with_membership = sanitize_sql(
+      [
+        'LEFT OUTER JOIN instance_accounts ON instance_accounts.instance_id = instances.id AND instance_accounts.owner_id = ?',
+        user.id
+      ]
+    )
+    scoped.
+      joins(accounts_with_membership).
+      where('instance_accounts.id IS NOT NULL OR instances.shared = true OR instances.owner_id = ?', user.id)
+  end
+
   def owner_account
     accounts.where(:owner_id => owner_id).first
   end
@@ -27,14 +41,6 @@ class Instance < ActiveRecord::Base
       owner_account
     else
       accounts.where(:owner_id => user.id).first
-    end
-  end
-
-  def self.for_user(user)
-    if user.admin?
-      Instance.scoped
-    else
-      Instance.scoped.where("owner_id = ? OR shared = true", user.id)
     end
   end
 end

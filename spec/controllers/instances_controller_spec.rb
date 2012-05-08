@@ -4,18 +4,28 @@ describe InstancesController do
   before do
     @user = FactoryGirl.create(:user)
     log_in @user
-    @instance1 = FactoryGirl.create(:instance)
-    @instance2 = FactoryGirl.create(:instance)
   end
 
   describe "#index" do
+    before do
+      FactoryGirl.create(:instance)
+      FactoryGirl.create(:instance, :owner => @user)
+      FactoryGirl.create(:instance, :shared => true)
+      FactoryGirl.create(:instance_account, :owner => @user) # Creates an instance too
+    end
+
     it_behaves_like "an action that requires authentication", :get, :index
 
-    it "returns instances to which the user has access" do
-      mock(Instance).for_user(@user)
-
+    it "returns all instances" do
       get :index
       response.code.should == "200"
+      decoded_response.size.should == 4
+    end
+
+    it "returns instances to which the user has access, if requested" do
+      get :index, :accessible => "true"
+      response.code.should == "200"
+      decoded_response.size.should == 3
     end
   end
 

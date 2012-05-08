@@ -9,13 +9,13 @@ describe("chorus.collections.InstanceSet", function() {
         ]);
     });
 
-    it("does not include the hasCredentials parameter by default", function() {
-        expect(this.collection.urlParams().hasCredentials).toBeFalsy();
+    it("does not include the accessible parameter by default", function() {
+        expect(this.collection.urlParams().accessible).toBeFalsy();
     });
 
-    it("includes hasCredentials=true when given it", function() {
+    it("includes accessible=true when requested", function() {
         this.collection.attributes = {hasCredentials: true};
-        expect(this.collection.urlParams().hasCredentials).toBeTruthy();
+        expect(this.collection.urlParams().accessible).toBeTruthy();
     });
 
     it("sorts the instances by name, case insensitively", function() {

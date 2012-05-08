@@ -1,6 +1,9 @@
 class InstancesController < ApplicationController
   def index
-    present Instance.for_user(current_user)
+    instances = Instance.scoped
+    instances = instances.accessible_to(current_user) if params[:accessible]
+
+    present instances
   end
 
   def create
