@@ -2,37 +2,35 @@ require 'spec_helper'
 
 
 describe Gpdb::InstanceStatus do
+  let(:user1) { FactoryGirl::create :user}
+
+  let(:instance_account1) { FactoryGirl::create :instance_account, :instance => instance1, :owner => user1 }
+  let(:instance_account2) { FactoryGirl::create :instance_account, :instance => instance2, :owner => user1 }
+  let(:instance_account3) { FactoryGirl::create :instance_account, :instance => instance3, :owner => user1 }
+
+  let(:instance1) { FactoryGirl.create :instance, :owner_id => user1.id }
+  let(:instance2) { FactoryGirl.create :instance, :owner_id => user1.id }
+  let(:instance3) { FactoryGirl.create :instance, :owner_id => user1.id }
+
   describe "#check" do
-    let(:user1) { FactoryGirl::create :user}
-    let(:user2) { FactoryGirl::create :user}
-
-    let(:instance_account1) { FactoryGirl::create :instance_account, :db_username => "user1", :db_password => "pw1", :owner => user1 }
-    let(:instance_account2) { FactoryGirl::create :instance_account, :db_username => "user2", :db_password => "pw2", :owner => user2 }
-
-    let(:instance1) { FactoryGirl.create :instance, :owner_id => user1.id }
-    let(:instance2) { FactoryGirl.create :instance, :owner_id => user2.id }
-    let(:instance3) { FactoryGirl.create :instance, :owner_id => user2.id }
-
-    before(:each) do
-      mock(Instance).scoped.with_any_args { [instance1, instance2, instance3] }
-      Gpdb::ConnectionBuilder.respond_to?(:test_connection).should == true
-      Gpdb::ConnectionBuilder.method(:test_connection).arity.should == 2
-
-      mock(Gpdb::ConnectionBuilder).test_connection(instance1, instance_account1) { true }
-      mock(Gpdb::ConnectionBuilder).test_connection(instance2, instance_account2) { true }
-      mock(Gpdb::ConnectionBuilder).test_connection(instance3, instance_account2) { false }
-
-      mock(instance1).save!.with_any_args
-      mock(instance2).save!.with_any_args
-      mock(instance3).save!.with_any_args
+    before do
+      stub(Gpdb::ConnectionBuilder).with_connection.with_any_args { nil }
+      stub(Gpdb::ConnectionBuilder).with_connection(instance1, instance_account1).yields
+      stub(Gpdb::ConnectionBuilder).with_connection(instance2, instance_account2).yields
+      stub(Gpdb::ConnectionBuilder).with_connection(instance3, instance_account3) { nil }
     end
 
     it "checks the connection status for each instance" do
+      instance1.state = "ffff"
+      instance2.state = "ffff"
+      instance3.state = "ffff"
+
       Gpdb::InstanceStatus.check
 
-      instance1.state.should == "online"
-      instance2.state.should == "online"
-      instance3.state.should == "offline"
+      instance1.reload.state.should == "online"
+      instance2.reload.state.should == "online"
+      instance3.reload.state.should == "offline"
+    end
     end
   end
 end

@@ -245,34 +245,77 @@ describe Gpdb::ConnectionBuilder do
     end
   end
 
-  describe "#test_connection" do
-    let(:instance1) { FactoryGirl::create :instance, :host => "hello" }
-    let(:instance2) { FactoryGirl::create :instance, :host => "local" }
-
-    let(:instance_account1) { FactoryGirl::create :instance_account, :db_username => "user1", :db_password => "pw1" }
-    let(:instance_account2) { FactoryGirl::create :instance_account, :db_username => "user2", :db_password => "pw2" }
-
-    before(:each) do
-      stub(ActiveRecord::Base).postgresql_connection(
-          host: "hello",
-          port: instance1.port,
-          database: instance1.maintenance_db,
-          user: "user1",
-          password: "pw1"
-      ) { true }
-
-      stub(ActiveRecord::Base).postgresql_connection(
-          host: "local",
-          port: instance2.port,
-          database: instance2.maintenance_db,
-          user: "user2",
-          password: "pw2"
-      ) { raise PG::Error }
+  describe "#with_connection" do
+    let(:instance) { FactoryGirl::create :instance, :host => "hello" }
+    let(:instance_account) { FactoryGirl::create :instance_account, :db_username => "user1", :db_password => "pw1" }
+    let(:fake_connection_adapter) do
+      a = Object.new
+      stub(a).disconnect!
+      a
     end
 
-    it "returns the correct connection status" do
-      Gpdb::ConnectionBuilder.test_connection(instance1, instance_account1).should == true
-      Gpdb::ConnectionBuilder.test_connection(instance2, instance_account2).should == false
+    let(:expected_connection_params) do
+      {
+          host: instance.host,
+          port: instance.port,
+          database: expected_database,
+          user: instance_account.db_username,
+          password: instance_account.db_password
+      }
+    end
+
+    let(:expected_database) { instance.maintenance_db }
+
+    before do
+      RR.reset
+      mock(ActiveRecord::Base).postgresql_connection(expected_connection_params) { fake_connection_adapter }
+    end
+
+    context "when a database name is passed" do
+      let(:expected_database) { "john_the_database" }
+
+      it "connections to the given database and instance, with the given account" do
+        Gpdb::ConnectionBuilder.with_connection(instance, instance_account, "john_the_database") {}
+      end
+    end
+
+    context "when no database name is passed" do
+      it "connects to the given instance's 'maintenance db''" do
+        Gpdb::ConnectionBuilder.with_connection(instance, instance_account) {}
+      end
+    end
+
+    context "when connection is successful" do
+      it "calls the given block with the postgres connection" do
+        mock(fake_connection_adapter).query("foo")
+        Gpdb::ConnectionBuilder.with_connection(instance, instance_account) do |conn|
+          conn.query("foo")
+        end
+      end
+
+      it "returns the result of the block" do
+        result = Gpdb::ConnectionBuilder.with_connection(instance, instance_account) do |conn|
+          "value returned by block"
+        end
+        result.should == "value returned by block"
+      end
+
+      it "disconnects afterward" do
+        mock(fake_connection_adapter).disconnect!
+        Gpdb::ConnectionBuilder.with_connection(instance, instance_account) { }
+      end
+    end
+
+    context "when the connection fails" do
+      let(:fake_connection_adapter) { raise PG::Error }
+
+      it "returns nil, and does not execute the given block" do
+        result = Gpdb::ConnectionBuilder.with_connection(instance, instance_account) do |conn|
+          @block_was_called = true
+        end
+        result.should be_nil
+        @block_was_called.should be_false
+      end
     end
   end
 end

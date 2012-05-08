@@ -112,29 +112,19 @@ module Gpdb
       account.save!
     end
 
-    def self.test_connection(instance, account)
-      ActiveRecord::Base.postgresql_connection(
-                :host => instance.host,
-                :port => instance.port,
-                :database => instance.maintenance_db,
-                :user => account.db_username,
-                :password => account.db_password
-            )
-      true
-    rescue PG::Error => e
-      false
-    end
-
-    def self.make_connection_with_database_name(instance, account, database_name)
-      ActiveRecord::Base.postgresql_connection(
+    def self.with_connection(instance, account, database_name=nil)
+      conn = ActiveRecord::Base.postgresql_connection(
           :host => instance.host,
           :port => instance.port,
-          :database => database_name,
+          :database => database_name || instance.maintenance_db,
           :user => account.db_username,
           :password => account.db_password
       )
-    rescue PG::Error => e
-      return nil
+      return_value = yield conn
+      conn.disconnect!
+      return_value
+    rescue PG::Error
+      nil
     end
 
     private
