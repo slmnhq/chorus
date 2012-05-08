@@ -11,8 +11,12 @@ describe("chorus.views.Login", function() {
     });
 
     it("requests the version string from the server", function() {
-        expect(this.server.requests[0].url).toBe("/VERSION");
+        expect(this.server.requests[0].url).toHaveUrlPath("/VERSION");
     })
+
+    it("uses a cache buster when requesting the version string", function() {
+        expect(this.server.requests[0].url.match(/buster=/)).toBeTruthy();
+    });
 
     it("focuses the username field by default", function() {
         expect($.fn.focus).toHaveBeenCalled();

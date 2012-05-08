@@ -373,6 +373,32 @@ describe("chorus.models.TabularData", function() {
         }
     });
 
+    describe("#download", function() {
+        beforeEach(function() {
+            this.tabularData.set({ id: '"foo"|"bar"|"baz"' });
+            spyOn(jQuery, "download");
+        });
+
+        context("when no number of rows is passed", function() {
+            it("includes the number of rows", function() {
+                this.tabularData.download();
+                expect($.download).toHaveBeenCalledWith("/edc/data/csvDownload", {
+                    datasetId: this.tabularData.id
+                }, "get");
+            });
+        });
+
+        context("when a number of rows is passed", function() {
+            it("makes a request to the tabular data download api", function() {
+                this.tabularData.download({ rows: "345" });
+                expect($.download).toHaveBeenCalledWith("/edc/data/csvDownload", {
+                    datasetId: this.tabularData.id,
+                    numOfRow: "345"
+                }, "get");
+            });
+        });
+    });
+
     describe("#instance", function() {
         beforeEach(function() {
             this.instance = this.tabularData.instance();

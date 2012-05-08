@@ -135,14 +135,6 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         return new XMLSerializer().serializeToString(svg);
     },
 
-    createDownloadForm: function() {
-        var form = $("<form action='/downloadChart.jsp' method='post'></form>");
-        form.append($("<input name='svg' type='hidden'/>").val(this.makeSvgData()));
-        form.append($("<input name='chart-name' type='hidden'/>").val(this.options.chartOptions.name));
-        form.append($("<input name='chart-type' type='hidden'>/").val(this.options.chartOptions.type));
-        return form;
-    },
-
     saveWorkfile: function(workspace) {
         this.$('button.save').startLoading("actions.saving");
 
@@ -228,10 +220,11 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     saveToDesktop: function() {
-        var form = this.createDownloadForm()
-        form.hide();
-        $("body").append(form)
-        form.submit();
+        $.download("/downloadChart.jsp", {
+            svg: this.makeSvgData(),
+            "chart-name": this.options.chartOptions.name,
+            "chart-type": this.options.chartOptions.type
+        }, "post");
     },
 
     saveAsNoteAttachment: function() {

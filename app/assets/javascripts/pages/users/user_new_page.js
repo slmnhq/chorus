@@ -7,7 +7,7 @@ chorus.pages.UserNewPage = chorus.pages.Base.extend({
     helpId: "user_new",
 
     setup:function () {
-        this.model = new chorus.models.User()
+        this.model = new chorus.models.User();
 
         this.mainContent = new chorus.views.MainContentView({
             model:this.model,
@@ -16,6 +16,7 @@ chorus.pages.UserNewPage = chorus.pages.Base.extend({
         });
 
         this.dependOn(chorus.models.Config.instance());
+        chorus.models.Config.instance().fetch(); // needs to refetch to see ldap #28824949
         chorus.models.Config.instance().onLoaded(this.configLoaded, this);
     },
 
