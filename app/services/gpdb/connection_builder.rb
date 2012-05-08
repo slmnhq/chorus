@@ -125,6 +125,18 @@ module Gpdb
       false
     end
 
+    def self.make_connection_with_database_name(instance, account, database_name)
+      ActiveRecord::Base.postgresql_connection(
+          :host => instance.host,
+          :port => instance.port,
+          :database => database_name,
+          :user => account.db_username,
+          :password => account.db_password
+      )
+    rescue PG::Error => e
+      return nil
+    end
+
     private
 
     def connection

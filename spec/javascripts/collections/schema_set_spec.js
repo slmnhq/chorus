@@ -5,7 +5,7 @@ describe("chorus.collections.SchemaSet", function() {
 
     it("has the right URL", function() {
         this.collection.attributes.databaseName = "%foo%";
-        expect(this.collection.url()).toContain("/instance/50/database/%25foo%25/schema");
+        expect(this.collection.url()).toContain("/instances/50/databases/%25foo%25/schemas");
     });
 
     it("includes the InstanceCredentials mixin", function() {
