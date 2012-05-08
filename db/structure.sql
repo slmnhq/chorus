@@ -158,8 +158,7 @@ CREATE TABLE instances (
     shared boolean DEFAULT false,
     provision_type character varying(255),
     instance_provider character varying(255),
-    state character varying(255) DEFAULT 'offline'::character varying,
-    version character varying(255)
+    state character varying(255) DEFAULT 'offline'::character varying
 );
 
 
@@ -255,6 +254,37 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: workspaces; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE workspaces (
+    id integer NOT NULL,
+    name character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: workspaces_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE workspaces_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: workspaces_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE workspaces_id_seq OWNED BY workspaces.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -280,6 +310,13 @@ ALTER TABLE queue_classic_jobs ALTER COLUMN id SET DEFAULT nextval('queue_classi
 --
 
 ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::regclass);
 
 
 --
@@ -312,6 +349,14 @@ ALTER TABLE ONLY queue_classic_jobs
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: workspaces_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY workspaces
+    ADD CONSTRAINT workspaces_pkey PRIMARY KEY (id);
 
 
 --
@@ -375,4 +420,4 @@ INSERT INTO schema_migrations (version) VALUES ('20120504210541');
 
 INSERT INTO schema_migrations (version) VALUES ('20120504214919');
 
-INSERT INTO schema_migrations (version) VALUES ('20120504235249');
+INSERT INTO schema_migrations (version) VALUES ('20120508175301');
