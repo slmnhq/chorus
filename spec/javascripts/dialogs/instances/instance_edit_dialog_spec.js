@@ -121,68 +121,9 @@ describe("chorus.dialogs.InstanceEdit", function() {
         });
     });
 
-    describe("#fetchUserSet", function() {
-        beforeEach(function() {
-            this.dialog.users = new chorus.collections.UserSet();
-        })
-        context("when the instance has shared account", function() {
-            beforeEach(function() {
-                spyOn(this.dialog.model, "isShared").andReturn(true);
-                spyOn(this.dialog.users, "fetchAll")
-                this.dialog.fetchUserSet();
-            });
-            it("users to be fetched", function() {
-                expect(this.dialog.users.fetchAll).toHaveBeenCalled();
-            });
-        });
-
-        context("when the instance has individual account", function() {
-            beforeEach(function() {
-                spyOn(this.dialog.model, "isShared").andReturn(false);
-                spyOn(this.dialog.users, "fetchAll")
-                spyOn(this.dialog.accounts, "fetchAll")
-                this.dialog.fetchUserSet();
-            });
-
-            it("fetches the accounts", function() {
-                expect(this.dialog.users.fetchAll).not.toHaveBeenCalled();
-                expect(this.dialog.accounts.fetchAll).toHaveBeenCalled();
-            });
-
-            it("fills in the users on a successful accounts fetch", function() {
-                spyOn(this.dialog.users, "add").andCallThrough();
-
-                var user1 = { id: '1', first_name: 'barnie', last_name: 'rubble' }
-                var user2 = { id: '2', first_name: 'fred', last_name: 'flinstone' }
-
-                var instanceAccounts = [
-                    newFixtures.instanceAccount({owner: user1}),
-                    newFixtures.instanceAccount({owner: user2})
-                ];
-                this.dialog.accounts.reset(instanceAccounts);
-                this.dialog.accounts.trigger("reset");
-                expect(this.dialog.users.add).toHaveBeenCalled();
-
-                expect(this.dialog.users.models[0]).toBeA(chorus.models.User);
-                expect(this.dialog.users.models[0].get("id")).toBe("2");
-                expect(this.dialog.users.models[0].get("first_name")).toBe("fred");
-                expect(this.dialog.users.models[0].get("last_name")).toBe("flinstone");
-
-                expect(this.dialog.users.models[1]).toBeA(chorus.models.User);
-                expect(this.dialog.users.models[1].get("id")).toBe("1");
-                expect(this.dialog.users.models[1].get("first_name")).toBe("barnie");
-                expect(this.dialog.users.models[1].get("last_name")).toBe("rubble");
-            });
-        });
-    });
-
     describe("saving", function() {
         beforeEach(function() {
             this.dialog.model.set({ provision_type: "register"});
-            this.user1 = new chorus.models.User({ id: '1', username: "niels", first_name: "ni", last_name: "slew"});
-            this.user2 = new chorus.models.User({ id: '2', username: "ludwig", first_name: "lu", last_name: "wig" });
-            this.user3 = new chorus.models.User({ id: '3', username: "isaac", first_name: "is", last_name: "ac" });
-            this.dialog.users.add([ this.user1, this.user2, this.user3 ]);
             this.dialog.render();
 
             spyOn(this.dialog, "closeModal");
