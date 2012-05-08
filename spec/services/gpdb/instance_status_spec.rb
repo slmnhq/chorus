@@ -31,6 +31,5 @@ describe Gpdb::InstanceStatus do
       instance2.reload.state.should == "online"
       instance3.reload.state.should == "offline"
     end
-    end
   end
 end
