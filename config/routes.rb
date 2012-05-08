@@ -18,6 +18,8 @@ Chorus::Application.routes.draw do
       resources :schemas, :only => [:index]
     end
   end
+  resources :workspaces, :only => [:index]
+
   match "/" => "root#index"
 
   # TODO: Remove this when it's no longer needed
