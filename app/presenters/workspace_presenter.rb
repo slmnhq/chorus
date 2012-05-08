@@ -1,8 +1,9 @@
 class WorkspacePresenter < Presenter
-  delegate :name, :summary, :owner, :archiver, :archived_at, :public, to: :model
+  delegate :id, :name, :summary, :owner, :archiver, :archived_at, :public, to: :model
 
   def to_hash
     {
+        :id => id,
         :name => h(name),
         :summary => h(summary),
         :owner => present(owner),

@@ -14,6 +14,7 @@ describe WorkspacePresenter, :type => :view do
     end
 
     it "includes the right keys" do
+      @hash.should have_key(:id)
       @hash.should have_key(:name)
       @hash.should have_key(:summary)
       @hash.should have_key(:archiver)
