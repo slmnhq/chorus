@@ -246,7 +246,7 @@ describe UsersController do
         log_in FactoryGirl.create(:admin)
       end
 
-      context "user with no instances" do
+      context "user with no instances or workspaces" do
         before do
           delete :destroy, :id => user.id
         end
@@ -268,6 +268,22 @@ describe UsersController do
       context "user owns an instance" do
         before do
           user.instances << FactoryGirl.create(:instance, :owner => user)
+          delete :destroy, :id => user.id
+        end
+
+        it "should fail" do
+          response.code.should == "422"
+        end
+
+        it "should not delete the user" do
+          live_user = User.find_with_destroyed(user.id)
+          live_user.deleted_at.should be_nil
+        end
+      end
+
+      context "user owns a workspace" do
+        before do
+          user.workspaces << FactoryGirl.create(:workspace, :owner => user)
           delete :destroy, :id => user.id
         end
 

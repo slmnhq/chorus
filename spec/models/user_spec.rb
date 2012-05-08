@@ -217,6 +217,17 @@ describe User do
         e.record.errors.messages[:instance_count].should == [[:equal_to, {:count => 0}]]
       end
     end
+
+    it "does not allow deleting a user who owns a workspace" do
+      user.workspaces << FactoryGirl.create(:workspace, :owner => user)
+      begin
+        user.destroy
+        fail
+      rescue ActiveRecord::RecordInvalid => e
+        e.record.errors.messages[:workspace_count].should == [[:equal_to, {:count => 0}]]
+      end
+    end
+
   end
 
   it { should have_attached_file(:image) }
