@@ -4,6 +4,9 @@ FactoryGirl.define do
     password "secret"
     first_name "John"
     last_name "Doe"
+    title "Grand Poo Bah"
+    dept "Corporation Corp., Inc."
+    notes "One of our top performers"
     sequence(:email) { |n| "person#{n}@example.com" }
   end
 
