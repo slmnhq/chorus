@@ -1,6 +1,6 @@
 class InstanceAccount < ActiveRecord::Base
 
-  attr_accessible :db_username, :db_password, :owner_id
+  attr_accessible :db_username, :db_password
   validates_presence_of :instance, :owner
 
   belongs_to :owner, :class_name => 'User'

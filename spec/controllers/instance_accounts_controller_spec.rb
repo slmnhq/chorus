@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe InstanceAccountsController do
-  let(:admin) {FactoryGirl.create :admin}
-  let(:instance_owner) {FactoryGirl.create :user}
-  let(:joe) {FactoryGirl.create :user}
-  let(:instance) {FactoryGirl.create :instance, :owner => instance_owner}
+  let(:admin) { FactoryGirl.create :admin }
+  let(:instance_owner) { FactoryGirl.create :user }
+  let(:joe) { FactoryGirl.create :user }
+  let(:instance) { FactoryGirl.create :instance, :owner => instance_owner }
 
   describe "#index" do
     let!(:account1) { FactoryGirl.create :instance_account, :instance => instance, :db_username => "instance_owner", :owner => instance_owner }
-    let!(:account2) { FactoryGirl.create :instance_account, :instance => instance, :db_username => "joe", :owner => joe}
+    let!(:account2) { FactoryGirl.create :instance_account, :instance => instance, :db_username => "joe", :owner => joe }
 
     before do
       log_in instance_owner
@@ -69,7 +69,7 @@ describe InstanceAccountsController do
 
         context "that does not already have accounts stored" do
           it "get saved correctly" do
-            post :create, :instance_id => instance.id, :account => { :db_username => "lenny", :db_password => "secret", :owner_id => owner.id }
+            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id}
             response.code.should == "201"
             rehydrated_account = InstanceAccount.find(decoded_response.id)
             rehydrated_account.should be_present
@@ -86,7 +86,7 @@ describe InstanceAccountsController do
           end
 
           it "fails" do
-            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id }
+            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id}
             response.code.should == "422"
           end
         end
@@ -94,7 +94,7 @@ describe InstanceAccountsController do
 
       context "for an individual accounts instance" do
         it "get saved correctly" do
-          post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => admin.id }
+          post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => admin.id}
           response.code.should == "201"
           rehydrated_account = InstanceAccount.find(decoded_response.id)
           rehydrated_account.should be_present
@@ -118,7 +118,7 @@ describe InstanceAccountsController do
 
         context "that does not already have accounts stored" do
           it "get saved correctly" do
-            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id }
+            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id}
             response.code.should == "201"
             rehydrated_account = InstanceAccount.find(decoded_response.id)
             rehydrated_account.should be_present
@@ -137,7 +137,7 @@ describe InstanceAccountsController do
           end
 
           it "fails" do
-            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id }
+            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id}
             response.code.should == "422"
           end
         end
@@ -145,7 +145,7 @@ describe InstanceAccountsController do
 
       context "for an individual accounts instance" do
         it "get saved correctly" do
-          post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id }
+          post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id}
           response.code.should == "201"
           rehydrated_account = InstanceAccount.find(decoded_response.id)
           rehydrated_account.should be_present
@@ -169,7 +169,7 @@ describe InstanceAccountsController do
 
         context "that does not already have accounts stored" do
           it "fails" do
-            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => joe.id }
+            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => joe.id}
             response.code.should == "403"
           end
         end
@@ -180,7 +180,7 @@ describe InstanceAccountsController do
           end
 
           it "fails" do
-            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => joe.id }
+            post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => joe.id}
             response.code.should == "403"
           end
         end
@@ -188,7 +188,7 @@ describe InstanceAccountsController do
 
       context "for an individual accounts instance" do
         it "get saved correctly" do
-          post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => joe.id }
+          post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => joe.id}
           response.code.should == "201"
           rehydrated_account = InstanceAccount.find(decoded_response.id)
           rehydrated_account.should be_present
@@ -210,13 +210,14 @@ describe InstanceAccountsController do
       end
 
       it "succeeds" do
-        put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed" }
+        put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.code.should == "200"
+
+        decoded_response.db_username.should == "changed"
+        decoded_response.owner.id.should == instance_owner.id
+
         rehydrated_account = InstanceAccount.find(decoded_response.id)
-        rehydrated_account.should be_present
-        rehydrated_account.db_username.should == "changed"
         rehydrated_account.db_password.should == "changed"
-        rehydrated_account.owner.should == instance_owner
       end
     end
 
@@ -226,18 +227,19 @@ describe InstanceAccountsController do
       end
 
       it "succeeds for user's account" do
-        put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed" }
+        put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.code.should == "200"
+
+        decoded_response.db_username.should == "changed"
+        decoded_response.owner.id.should == instance_owner.id
+
         rehydrated_account = InstanceAccount.find(decoded_response.id)
-        rehydrated_account.should be_present
-        rehydrated_account.db_username.should == "changed"
         rehydrated_account.db_password.should == "changed"
-        rehydrated_account.owner.should == instance_owner
       end
 
       it "fails for other's account" do
         account.update_attribute :owner, joe
-        put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed" }
+        put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.code.should == "403"
       end
     end
@@ -249,7 +251,7 @@ describe InstanceAccountsController do
 
       context "someone else's account'" do
         it "fails" do
-          put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed" }
+          put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
           response.should be_forbidden
         end
       end
@@ -261,13 +263,14 @@ describe InstanceAccountsController do
         end
 
         it "succeeds" do
-          put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed" }
+          put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
           response.code.should == "200"
+
+          decoded_response.db_username.should == "changed"
+          decoded_response.owner.id.should == joe.id
+
           rehydrated_account = InstanceAccount.find(decoded_response.id)
-          rehydrated_account.should be_present
-          rehydrated_account.db_username.should == "changed"
           rehydrated_account.db_password.should == "changed"
-          rehydrated_account.owner.should == joe
         end
       end
     end
