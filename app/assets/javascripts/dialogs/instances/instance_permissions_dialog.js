@@ -286,6 +286,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         localGroup.add(this.instance.sharing(), "saved", displaySuccessToast);
         localGroup.add(this.instance.sharing(), "saveFailed", displayFailureToast);
 
+        this.instance.sharing().unset("id") // so that model isNew() is true, and server sees a create
         this.instance.sharing().save();
 
         function displaySuccessToast() {

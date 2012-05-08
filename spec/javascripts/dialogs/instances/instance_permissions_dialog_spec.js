@@ -189,6 +189,17 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         it("re-renders the dialog in the new individual account state", function() {
                             expect(this.dialog.postRender).toHaveBeenCalled();
                         })
+
+                        context("if the user replaces the sharing", function() {
+                            beforeEach(function() {
+                                this.dialog.$("a.add_shared_account").click();
+                                this.dialog.launchSubModal.calls[1].args[0].confirmAlert();
+                            });
+
+                            it("sends a create to the server", function() {
+                                expect(this.server.lastCreate().url).toBe("/instances/" + this.instance.id + "/sharing")
+                            });
+                        });
                     });
 
                     context("when the destroy fails", function() {
@@ -678,8 +689,6 @@ describe("chorus.dialogs.InstancePermissions", function() {
         context("clicking the switch to shared account link", function() {
             beforeEach(function() {
                 spyOn(this.dialog, "launchSubModal").andCallThrough();
-                spyOn(this.instance, "save").andCallThrough();
-                spyOn(this.dialog.instance, 'accountForOwner').andReturn(this.ownerAccount);
                 this.dialog.$("a.add_shared_account").click();
             });
 
