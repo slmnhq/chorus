@@ -22,6 +22,7 @@ FactoryGirl.define do
     sequence(:port) { |n| 5000+n }
     maintenance_db "postgres"
     owner
+    version "9.1.2 - FactoryVersion"
   end
 
   factory :instance_account do
