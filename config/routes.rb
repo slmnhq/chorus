@@ -22,7 +22,7 @@ Chorus::Application.routes.draw do
       resource :sharing, :only => [:create, :destroy], :controller => :sharing
     end
   end
-  resources :workspaces, :only => [:index]
+  resources :workspaces, :only => [:index, :create]
 
   match "/" => "root#index"
 

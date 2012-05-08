@@ -18,4 +18,30 @@ describe WorkspacesController do
       decoded_response[1].name.should == "workspace2"
     end
   end
+
+  describe "#create" do
+    it_behaves_like "an action that requires authentication", :post, :create
+
+    context "with valid parameters" do
+      let(:parameters) { { :workspace => { :name => "foobar" } } }
+
+      it "creates a workspace" do
+        lambda {
+          post :create, parameters
+        }.should change(Workspace, :count).by(1)
+      end
+
+      it "presents the workspace" do
+        post :create, parameters
+        parameters[:workspace].keys.each do |key|
+          decoded_response[key].should == parameters[:workspace][key]
+        end
+      end
+
+      it "sets the authenticated user as the owner of the new workspace" do
+        post :create, parameters
+        Workspace.last.owner.should == @user
+      end
+    end
+  end
 end
