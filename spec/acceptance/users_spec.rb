@@ -98,6 +98,7 @@ resource "Users", :type => :acceptance do
     end
 
     example_request "Search for an LDAP user" do
+      explanation "This method only works if LDAP is enabled on the server"
       status.should == 200
     end
   end
