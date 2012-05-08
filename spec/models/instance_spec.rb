@@ -1,9 +1,5 @@
 require "spec_helper"
 describe Instance do
-  before do
-    @instance = FactoryGirl.create :instance
-  end
-
   describe "validations" do
     it { should validate_presence_of :name }
     it { should validate_presence_of :host }
@@ -17,10 +13,11 @@ describe Instance do
   end
 
   it "should not allow changing inaccessible attributes" do
+    instance = FactoryGirl.create :instance
     changed_id = 122222
-    @instance.attributes = {:id => changed_id, :owner_id => changed_id}
-    @instance.id.should_not == changed_id
-    @instance.owner_id.should_not == changed_id
+    instance.attributes = {:id => changed_id, :owner_id => changed_id}
+    instance.id.should_not == changed_id
+    instance.owner_id.should_not == changed_id
   end
 
   describe "#owner_account" do
@@ -33,7 +30,7 @@ describe Instance do
     end
   end
 
-  describe "#for_user" do
+  describe ".for_user" do
     before(:each) do
       @user = FactoryGirl.create :user
       @instance_allowed1 = FactoryGirl.create :instance, :owner => @user
@@ -68,12 +65,45 @@ describe Instance do
     end
   end
 
+  describe ".owned_by" do
+    let(:owner) { FactoryGirl.create(:user) }
+    let!(:shared_instance) { FactoryGirl.create(:instance, :shared => true) }
+    let!(:owned_instance) { FactoryGirl.create(:instance, :owner => owner) }
+    let!(:other_instance) { FactoryGirl.create(:instance) }
+
+    context "for owners" do
+      it "includes owned instances" do
+        Instance.owned_by(owner).should include owned_instance
+      end
+
+      it "excludes other users' instances" do
+        Instance.owned_by(owner).should_not include other_instance
+      end
+
+      it "excludes shared instances" do
+        Instance.owned_by(owner).should_not include shared_instance
+      end
+    end
+
+    context "for non-owners" do
+      it "excludes all instances" do
+        Instance.owned_by(FactoryGirl.create(:user)).should be_empty
+      end
+    end
+
+    context "for admins" do
+      it "includes all instances" do
+        Instance.owned_by(FactoryGirl.create(:admin)).should =~ [shared_instance, owned_instance, other_instance]
+      end
+    end
+  end
+
   describe "#account_for_user" do
-    let(:user) {FactoryGirl.create :user}
+    let(:user) { FactoryGirl.create :user }
 
     context "shared instance" do
-      let!(:instance) {FactoryGirl.create :instance, :shared => true}
-      let!(:owner_account) {FactoryGirl.create :instance_account, :instance => instance, :owner_id => instance.owner.id}
+      let!(:instance) { FactoryGirl.create :instance, :shared => true }
+      let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => instance.owner.id }
 
       it "should return the same account for everyone" do
         instance.account_for_user(user).should == owner_account
@@ -82,10 +112,10 @@ describe Instance do
     end
 
     context "individual instance" do
-      let!(:instance) {FactoryGirl.create :instance, :shared => false}
-      let!(:owner_account) {FactoryGirl.create :instance_account, :instance => instance, :owner_id => instance.owner.id}
-      let!(:user_account) {FactoryGirl.create :instance_account, :instance => instance, :owner_id => user.id}
-      let!(:stranger) {FactoryGirl.create :user}
+      let!(:instance) { FactoryGirl.create :instance, :shared => false }
+      let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => instance.owner.id }
+      let!(:user_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => user.id }
+      let!(:stranger) { FactoryGirl.create :user }
 
       it "should return the account for the user or nil if the user has no account" do
         instance.account_for_user(instance.owner).should == owner_account

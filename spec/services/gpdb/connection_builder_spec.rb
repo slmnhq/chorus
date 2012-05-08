@@ -190,36 +190,6 @@ describe Gpdb::ConnectionBuilder do
       end
     end
 
-    describe("switching from individual to shared") do
-      let!(:other_account) { FactoryGirl.create(:instance_account, :instance => cached_instance) }
-      let!(:instance_owner_account) { cached_instance.owner_account }
-
-      before do
-        @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes.merge(:shared => "true"), owner)
-      end
-
-      it "sets the shared attribute" do
-        @updated_instance.should be_shared
-      end
-
-      it "deletes accounts other than those belonging to the instance owner" do
-        InstanceAccount.where(:id => instance_owner_account.id).should be_present
-        InstanceAccount.where(:id => other_account.id).should_not be_present
-      end
-    end
-
-    describe("switching from shared to individual") do
-      before do
-        Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => "true"), owner)
-        @updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, valid_input_attributes.merge(:shared => "false"), owner)
-      end
-
-      it "clears the shared attribute" do
-        @updated_instance.should be_present
-        @updated_instance.should_not be_shared
-      end
-    end
-
     describe "giving ownership to another user" do
       let(:new_owner) { FactoryGirl.create :user }
 

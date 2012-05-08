@@ -55,7 +55,7 @@ module Gpdb
       Instance.transaction do
         save_instance!
         save_account!(user)
-        InstanceAccount.destroy_all("instance_id = #{instance.id} AND id != #{account.id}") if instance.shared
+        instance.accounts.where("id != #{account.id}").destroy_all if instance.shared
         raise(ActiveRecord::RecordInvalid.new(self)) if !instance.shared && instance.owner_account.nil?
       end
     end

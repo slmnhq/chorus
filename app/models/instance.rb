@@ -6,6 +6,14 @@ class Instance < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   has_many :accounts, :class_name => 'InstanceAccount'
 
+  def self.owned_by(user)
+    if user.admin?
+      Instance.scoped
+    else
+      Instance.where("owner_id = ?", user.id)
+    end
+  end
+
   def owner_account
     accounts.where(:owner_id => owner_id).first
   end
