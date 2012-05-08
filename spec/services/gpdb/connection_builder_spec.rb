@@ -4,26 +4,26 @@ describe Gpdb::ConnectionBuilder do
   let(:owner) { FactoryGirl.create(:user) }
   let(:valid_input_attributes) do
     {
-        :name => "new",
-        :port => 12345,
-        :host => "server.emc.com",
-        :maintenance_db => "postgres",
-        :db_username => "bob",
-        :db_password => "secret",
-        :provision_type => "register",
-        :description => "old description"
+      :name => "new",
+      :port => 12345,
+      :host => "server.emc.com",
+      :maintenance_db => "postgres",
+      :db_username => "bob",
+      :db_password => "secret",
+      :provision_type => "register",
+      :description => "old description"
     }
   end
   let(:valid_output_attributes) do
     {
-        :name => "new",
-        :port => 12345,
-        :host => "server.emc.com",
-        :maintenance_db => "postgres",
-        :username => "bob",
-        :password => "secret",
-        :provision_type => "register",
-        :description => "old description"
+      :name => "new",
+      :port => 12345,
+      :host => "server.emc.com",
+      :maintenance_db => "postgres",
+      :username => "bob",
+      :password => "secret",
+      :provision_type => "register",
+      :description => "old description"
     }
 
   end
@@ -105,8 +105,8 @@ describe Gpdb::ConnectionBuilder do
 
     it "saves the instance attributes" do
       instance = Gpdb::ConnectionBuilder.create!(valid_input_attributes, owner)
-      valid_output_attributes.each {| key, value |
-          instance[key].should == value unless (key == :username || key == :password)
+      valid_output_attributes.each { |key, value|
+        instance[key].should == value unless (key == :username || key == :password)
       }
     end
 
@@ -150,27 +150,10 @@ describe Gpdb::ConnectionBuilder do
       updated_instance.reload.description.should == "new description"
     end
 
-    it "uses the existing credentials if none are provided" do
-      updated_attributes[:db_password] = nil
-      updated_attributes[:db_username] = nil
-
+    it "keeps the existing credentials" do
       updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
-      owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
+      owners_account = updated_instance.owner_account
       owners_account.db_username.should == "bob"
-      owners_account.db_password.should == "secret"
-    end
-
-    it "saves the owner's changes to their account" do
-      updated_attributes[:db_password] = "newpass"
-      updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, owner)
-      owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
-      owners_account.db_password.should == "newpass"
-    end
-
-    it "ignores the admin's changes to the account" do
-      updated_attributes[:db_password] = "newpass"
-      updated_instance = Gpdb::ConnectionBuilder.update!(cached_instance.to_param, updated_attributes, admin)
-      owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
       owners_account.db_password.should == "secret"
     end
 
@@ -256,11 +239,11 @@ describe Gpdb::ConnectionBuilder do
 
     let(:expected_connection_params) do
       {
-          host: instance.host,
-          port: instance.port,
-          database: expected_database,
-          user: instance_account.db_username,
-          password: instance_account.db_password
+        host: instance.host,
+        port: instance.port,
+        database: expected_database,
+        user: instance_account.db_username,
+        password: instance_account.db_password
       }
     end
 
@@ -302,7 +285,7 @@ describe Gpdb::ConnectionBuilder do
 
       it "disconnects afterward" do
         mock(fake_connection_adapter).disconnect!
-        Gpdb::ConnectionBuilder.with_connection(instance, instance_account) { }
+        Gpdb::ConnectionBuilder.with_connection(instance, instance_account) {}
       end
     end
 
