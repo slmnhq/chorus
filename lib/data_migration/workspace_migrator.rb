@@ -7,6 +7,11 @@ class WorkspaceMigrator
     legacy_workspaces.each do |workspace|
       new_workspace = Workspace.new
       new_workspace.name = workspace["name"]
+      new_workspace.public = WorkspaceMigrator.str_to_bool(workspace["is_public"])
+      new_workspace.archived_at = workspace["archived_timestamp"]
+      new_workspace.archiver = workspace["archiver"] ? User.unscoped.find_by_username!(workspace["archiver"]) : nil
+      new_workspace.summary = workspace["summary"]
+      new_workspace.owner = User.unscoped.find_by_username!(workspace["owner"])
       new_workspace.save!
 
       id = workspace["id"]
@@ -19,5 +24,9 @@ class WorkspaceMigrator
       SELECT edc_workspace.*
       FROM edc_workspace
 SQL
+  end
+
+  def self.str_to_bool(str)
+    str == 'f' ? false : true
   end
 end

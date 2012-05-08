@@ -261,7 +261,12 @@ CREATE TABLE workspaces (
     id integer NOT NULL,
     name character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    public boolean DEFAULT true,
+    archived_at timestamp without time zone,
+    archiver_id integer,
+    summary text,
+    owner_id integer
 );
 
 
@@ -423,3 +428,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120504210541');
 INSERT INTO schema_migrations (version) VALUES ('20120504214919');
 
 INSERT INTO schema_migrations (version) VALUES ('20120508175301');
+
+INSERT INTO schema_migrations (version) VALUES ('20120508184817');
