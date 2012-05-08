@@ -5,7 +5,7 @@ module Gpdb
       instances.each do |instance|
         account = InstanceAccount.where(:owner_id => instance.owner_id, :instance_id => instance.id).first
         instance.state = "offline"
-        Gpdb::ConnectionBuilder.with_connection(instance, account) do |conn|
+        Gpdb::ConnectionBuilder.connect(instance, account) do |conn|
           instance.state = "online"
           version_string = conn.query("select version()")[0][0]
 

@@ -27,10 +27,10 @@ describe Gpdb::InstanceStatus do
     end
 
     before do
-      stub(Gpdb::ConnectionBuilder).with_connection.with_any_args { nil }
-      stub(Gpdb::ConnectionBuilder).with_connection(instance1, instance_account1).yields(fake_connection1)
-      stub(Gpdb::ConnectionBuilder).with_connection(instance2, instance_account2).yields(fake_connection2)
-      stub(Gpdb::ConnectionBuilder).with_connection(instance3, instance_account3) { nil }
+      stub(Gpdb::ConnectionBuilder).connect.with_any_args { nil }
+      stub(Gpdb::ConnectionBuilder).connect(instance1, instance_account1).yields(fake_connection1)
+      stub(Gpdb::ConnectionBuilder).connect(instance2, instance_account2).yields(fake_connection2)
+      stub(Gpdb::ConnectionBuilder).connect(instance3, instance_account3) { nil }
     end
 
     it "checks the connection status for each instance" do
