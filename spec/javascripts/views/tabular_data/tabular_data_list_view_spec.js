@@ -4,7 +4,7 @@ describe("chorus.views.TabularDataList", function() {
             newFixtures.dataset.chorusView({ hasCredentials: true, objectName: "foo" }),
             newFixtures.dataset.sandboxTable({ hasCredentials: true, objectName: "bar" }),
             newFixtures.dataset.sourceTable({ hasCredentials: true, objectName: "baz" })
-        ], { instanceId: "1", databaseName: "two", schemaName: "three" });
+        ], { instance_id: "1", databaseName: "two", schemaName: "three" });
         this.collection.loaded = true;
 
         this.view = new chorus.views.TabularDataList({ collection: this.collection, activeWorkspace: true });
@@ -139,7 +139,7 @@ describe("chorus.views.TabularDataList", function() {
 
     describe("the no datasets message", function() {
         beforeEach(function() {
-            this.view.collection = new chorus.collections.DatabaseObjectSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
+            this.view.collection = new chorus.collections.DatabaseObjectSet([], { instance_id: "1", databaseName: "two", schemaName: "three" });
             this.view.render();
         });
 

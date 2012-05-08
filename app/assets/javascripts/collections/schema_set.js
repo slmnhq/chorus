@@ -3,14 +3,14 @@ chorus.collections.SchemaSet = chorus.collections.Base.include(
 ).extend({
     constructorName: "SchemaSet",
     model:chorus.models.Schema,
-    urlTemplate:"instance/{{instance_id}}/database/{{encode databaseName}}/schema",
+    urlTemplate:"instances/{{instance_id}}/databases/{{encode databaseName}}/schemas",
 
     comparator:function (schema) {
         return schema.get('name').toLowerCase();
     },
 
     parse:function (resp) {
-        var resource = this._super("parse", arguments)
+        var resource = this._super("parse", arguments);
         return _.map(resource, function (model) {
             return _.extend({
                 instance_id: this.attributes.instance_id,

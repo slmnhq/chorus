@@ -69,7 +69,7 @@ describe("chorus.models.User", function() {
             });
 
             it("hits the right url for that user", function() {
-                var expectedUrl = "/workspace/?user=457&page=1&rows=50";
+                var expectedUrl = "/workspaces/?user=457&page=1&rows=50";
                 expect(this.server.requests[0].url).toBe(expectedUrl);
             });
         });
@@ -95,7 +95,7 @@ describe("chorus.models.User", function() {
             });
 
             it("hits the right url for that user", function() {
-                var expectedUrl = "/workspace/?user=457&page=1&rows=50&active=true";
+                var expectedUrl = "/workspaces/?user=457&page=1&rows=50&active=true";
                 expect(this.server.requests[0].url).toMatchUrl(expectedUrl);
             });
         });

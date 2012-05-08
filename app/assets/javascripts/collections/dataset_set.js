@@ -13,7 +13,7 @@ chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
         if (this.attributes.workspaceId) {
             return "workspace/{{workspaceId}}/dataset";
         } else {
-            return "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}";
+            return "data/{{instance_id}}/database/{{encode databaseName}}/schema/{{encode schemaName}}";
         }
     },
 

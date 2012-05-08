@@ -171,6 +171,10 @@
 
         hasWorkspaceUsageInfo: function() {
             return !this.isHadoop() && this.usage().has("workspaces");
+        },
+
+        version: function() {
+            return this.get("instanceVersion");
         }
     }, {
         aurora:function () {

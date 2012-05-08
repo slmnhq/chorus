@@ -14,7 +14,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context("when an instance is selected", function() {
         beforeEach(function() {
-            this.instance = newFixtures.instance.greenplum({name : "Harry's House of Glamour"});
+            this.instance = newFixtures.instance.greenplum({name : "Harry's House of Glamour", instanceVersion: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
 
@@ -187,6 +187,11 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".instance_configuration_details")).not.toHaveClass("hidden")
                     expect(this.view.$(".activity_list")).toHaveClass("hidden")
                 })
+
+                it("shows the database version", function() {
+                    expect(this.view.$(".instance_configuration_details")).toContainTranslation("instances.version");
+                    expect(this.view.$(".instance_configuration_details")).toContainText("99.999");
+                });
 
                 describe("for existing greenplum instance", function() {
                     context("and the instance has a shared account", function() {

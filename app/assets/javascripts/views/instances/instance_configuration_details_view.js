@@ -3,7 +3,8 @@ chorus.views.InstanceConfigurationDetails = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            db_username: this.model.accounts().at(0).get("username")
+            db_username: this.model.accounts().at(0).get("username"),
+            version: this.model.version()
         };
     }
 });

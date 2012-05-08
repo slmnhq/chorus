@@ -298,6 +298,17 @@ describe("chorus.models.Instance", function() {
         });
     });
 
+    describe("#version", function() {
+        var instance;
+        beforeEach(function() {
+            instance = newFixtures.instance.greenplum({ instanceVersion: "1234" });
+        });
+
+        it("returns the correct version number", function() {
+            expect(instance.version()).toBe("1234");
+        });
+    });
+
     describe("validations", function() {
         context("with a registered instance", function() {
             beforeEach(function() {

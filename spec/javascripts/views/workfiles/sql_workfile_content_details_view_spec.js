@@ -5,7 +5,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             sandboxInfo: {
                 databaseId: '3',
                 databaseName: "db",
-                instanceId: '2',
+                instance_id: '2',
                 instanceName: "instance",
                 sandboxId: "10001",
                 schemaId: '4',
@@ -131,7 +131,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             describe("when the workfile has been run in a schema other than its sandbox's schema", function() {
                 beforeEach(function() {
                     _.extend(this.model.get("executionInfo"), {
-                        instanceId: '51',
+                        instance_id: '51',
                         instanceName: "bob_the_instance",
                         databaseId: '52',
                         databaseName: "bar",
@@ -164,7 +164,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     _.extend(this.model.get("versionInfo"), {
                         databaseId: '3',
                         databaseName: "db",
-                        instanceId: '2',
+                        instance_id: '2',
                         instanceName: "instance",
                         schemaId: '4',
                         schemaName: "schema"
@@ -227,7 +227,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 spyOn(this.view, "render");
                 spyOnEvent(this.view.model, "change")
                 this.executionInfo = {
-                    instanceId: '51',
+                    instance_id: '51',
                     instanceName: "ned",
                     databaseId: '52',
                     databaseName: "rob",

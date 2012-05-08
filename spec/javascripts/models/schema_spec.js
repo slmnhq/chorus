@@ -1,7 +1,7 @@
 describe("chorus.models.Schema", function() {
     describe("#showUrl", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({instanceId : 10000, databaseName : "%foo%", name : "b/a/r"});
+            this.model = fixtures.schema({instance_id : 10000, databaseName : "%foo%", name : "b/a/r"});
         })
         it("should encode the url", function() {
             expect(this.model.showUrl()).toContain("instances/10000/databases/%25foo%25/schemas/b%2Fa%2Fr");
@@ -23,9 +23,9 @@ describe("chorus.models.Schema", function() {
                 expect(this.model.databaseObjects()).toBe(this.model.databaseObjects());
             });
 
-            it("should pass the instanceId, databaseName, and schemaName", function() {
+            it("should pass the instance_id, databaseName, and schemaName", function() {
                 var objects = this.model.databaseObjects();
-                expect(objects.attributes.instanceId).toBe(this.model.get('instanceId'));
+                expect(objects.attributes.instance_id).toBe(this.model.get('instance_id'));
                 expect(objects.attributes.databaseName).toBe(this.model.get('databaseName'));
                 expect(objects.attributes.schemaName).toBe(this.model.get('name'));
             });
@@ -41,8 +41,8 @@ describe("chorus.models.Schema", function() {
                 expect(this.model.functions()).toBe(this.model.functions());
             });
 
-            it("should pass the instanceId, databaseId, and schemaId", function() {
-                expect(this.model.functions().attributes.instanceId).toBe(this.model.get('instanceId'));
+            it("should pass the instance_id, databaseId, and schemaId", function() {
+                expect(this.model.functions().attributes.instance_id).toBe(this.model.get('instance_id'));
                 expect(this.model.functions().attributes.databaseId).toBe(this.model.get('databaseId'));
                 expect(this.model.functions().attributes.schemaId).toBe(this.model.get('id'));
             });
@@ -62,7 +62,7 @@ describe("chorus.models.Schema", function() {
     describe("#isEqual", function() {
         beforeEach(function() {
             this.model = fixtures.schema({
-                instanceId:   '1',
+                instance_id:   '1',
                 instanceName: 'bar',
                 databaseId:   '2',
                 databaseName: 'foo',
@@ -73,7 +73,7 @@ describe("chorus.models.Schema", function() {
 
         it("checks that the names and ids of the instances, databases and schemas are equal", function() {
             var other = fixtures.schema({
-                instanceId:   '1',
+                instance_id:   '1',
                 instanceName: 'bar',
                 databaseId:   '2',
                 databaseName: 'foo',
@@ -83,7 +83,7 @@ describe("chorus.models.Schema", function() {
 
             expect(this.model.isEqual(other)).toBeTruthy();
 
-            other.set({ instanceId: '5' });
+            other.set({ instance_id: '5' });
 
             expect(this.model.isEqual(other)).toBeFalsy();
         });
@@ -95,10 +95,10 @@ describe("chorus.models.Schema", function() {
             this.database = this.model.database();
         });
 
-        it("returns a database with the right id and instanceId", function() {
+        it("returns a database with the right id and instance_id", function() {
             expect(this.database).toBeA(chorus.models.Database);
             expect(this.database.get("id")).toBe(this.model.get("databaseId"));
-            expect(this.database.get("instanceId")).toBe(this.model.get("instanceId"));
+            expect(this.database.get("instance_id")).toBe(this.model.get("instance_id"));
         });
 
         it("memoizes", function() {

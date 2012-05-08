@@ -78,7 +78,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
             context("when the workspace has a sandbox", function () {
                 beforeEach(function () {
                     this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
-                        instanceId:44,
+                        instance_id:44,
                         instanceName:"instance",
                         databaseId:55,
                         databaseName:"database",
@@ -121,7 +121,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
             context("when the workspace does not have a sandbox", function () {
                 beforeEach(function () {
                     this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
-                        instanceId:null,
+                        instance_id:null,
                         instanceName:null,
                         databaseId:null,
                         databaseName:null,
@@ -139,7 +139,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
             describe("button handling", function () {
                 beforeEach(function () {
                     this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
-                        instanceId:44,
+                        instance_id:44,
                         instanceName:"instance",
                         databaseId:55,
                         databaseName:"database",
@@ -256,7 +256,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                 context("and then selecting 'within the workspace sandbox'", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(newFixtures.workspace({id: 999, sandboxInfo: {
-                            instanceId: 44,
+                            instance_id: 44,
                             instanceName: "instance",
                             databaseId: 55,
                             databaseName: "database",

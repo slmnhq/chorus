@@ -10,7 +10,7 @@ chorus.collections.InstanceAccountSet = chorus.collections.Base.extend({
 
     urlParams:function () {
         return {
-            instanceId:this.attributes.instanceId
+            instance_id:this.attributes.instance_id
         }
     },
 

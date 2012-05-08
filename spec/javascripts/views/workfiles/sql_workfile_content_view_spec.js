@@ -6,7 +6,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     name: "schema",
                     databaseId: '3',
                     databaseName: "db",
-                    instanceId: '2',
+                    instance_id: '2',
                     instanceName: "instance"
                 });
         spyOn(this.workfile, 'executionSchema').andCallFake(_.bind(function(){return this.schema}, this));
@@ -71,7 +71,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                 it("creates a task with the right parameters", function() {
                     expect(this.view.task.get("sql")).toBe("select * from foos");
-                    expect(this.view.task.get("instanceId")).toBe("4");
+                    expect(this.view.task.get("instance_id")).toBe("4");
                     expect(this.view.task.get("databaseId")).toBe("5");
                     expect(this.view.task.get("schemaId")).toBe("6");
                     expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
@@ -83,7 +83,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 context("when the workfile has a schema in which to execute", function() {
                     beforeEach(function() {
                         this.executionInfo = {
-                            instanceId: '4',
+                            instance_id: '4',
                             instanceName: "ned",
                             databaseId: '5',
                             databaseName: "rob",
@@ -96,7 +96,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
                     it("creates a task with the right parameters", function() {
                         expect(this.view.task.get("sql")).toBe("select * from foos");
-                        expect(this.view.task.get("instanceId")).toBe("2");
+                        expect(this.view.task.get("instance_id")).toBe("2");
                         expect(this.view.task.get("databaseId")).toBe("3");
                         expect(this.view.task.get("schemaId")).toBe("4");
                         expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
@@ -200,7 +200,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 context("when the workfile has an execution schema, and/or the workspace has a sandbox", function() {
                     beforeEach(function() {
                         this.view.model.unset("executionInfo");
-                        this.schema = fixtures.schema({id: "77", databaseId: "88", instanceId: "99"});
+                        this.schema = fixtures.schema({id: "77", databaseId: "88", instance_id: "99"});
                         this.view.textContent.editor.getSelection = function() {
                             return "select 1 from table";
                         };
@@ -211,7 +211,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         expect(this.view.task.get("sql")).toBe("select 1 from table");
                         expect(this.view.task.get("entityId")).toBe(this.workfile.get("id"));
                         expect(this.view.task.has("checkId")).toBeTruthy();
-                        expect(this.view.task.get("instanceId")).toBe("99");
+                        expect(this.view.task.get("instance_id")).toBe("99");
                         expect(this.view.task.get("databaseId")).toBe("88");
                         expect(this.view.task.get("schemaId")).toBe("77");
                     });

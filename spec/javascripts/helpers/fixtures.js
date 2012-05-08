@@ -314,7 +314,7 @@ beforeEach(function() {
             },
 
             "NOTE_ON_CHORUS_VIEW": function(overrides) {
-                var instanceId = fixtures.nextId().toString();
+                var instance_id = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE",
@@ -329,7 +329,7 @@ beforeEach(function() {
                         }
                     ],
                     chorusView: {
-                        id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
+                        id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_table_name"',
                         name: '__a_chorus_view_name',
                         objectName: "__a_chorus_view_name",
                         objectType: "QUERY",
@@ -357,7 +357,7 @@ beforeEach(function() {
             },
 
             "NOTE_ON_DATASET_TABLE": function(overrides) {
-                var instanceId = fixtures.nextId().toString();
+                var instance_id = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE",
@@ -372,7 +372,7 @@ beforeEach(function() {
                         }
                     ],
                     databaseObject: {
-                        id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
+                        id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_table_name"',
                         name: '__a_table_name',
                         objectType: "BASE_TABLE",
                         type: "databaseObject"
@@ -399,7 +399,7 @@ beforeEach(function() {
             },
 
             "NOTE_ON_DATABASE_TABLE": function(overrides) {
-                var instanceId = fixtures.nextId().toString();
+                var instance_id = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE",
@@ -414,7 +414,7 @@ beforeEach(function() {
                         }
                     ],
                     databaseObject: {
-                        id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
+                        id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_table_name"',
                         name: '__a_table_name',
                         objectType: "BASE_TABLE",
                         type: "databaseObject",
@@ -444,7 +444,7 @@ beforeEach(function() {
 
 
             "COMMENT_ON_NOTE_ON_CHORUS_VIEW": function(overrides) {
-                var instanceId = fixtures.nextId().toString();
+                var instance_id = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE_COMMENT",
@@ -465,7 +465,7 @@ beforeEach(function() {
                             }
                         ],
                         chorusView: {
-                            id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
+                            id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_table_name"',
                             name: '__a_chorus_view_name',
                             objectName: "__a_chorus_view_name",
                             objectType: "QUERY",
@@ -479,7 +479,7 @@ beforeEach(function() {
             },
 
             "COMMENT_ON_NOTE_ON_DATABASE_TABLE": function(overrides) {
-                var instanceId = fixtures.nextId().toString();
+                var instance_id = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE_COMMENT",
@@ -500,7 +500,7 @@ beforeEach(function() {
                             }
                         ],
                         databaseObject: {
-                            id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
+                            id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_table_name"',
                             name: '__a_table_name',
                             objectType: "BASE_TABLE",
                             type: "databaseObject",
@@ -530,7 +530,7 @@ beforeEach(function() {
             },
 
             "NOTE_ON_DATASET_VIEW": function(overrides) {
-                var instanceId = fixtures.nextId().toString();
+                var instance_id = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE",
@@ -545,7 +545,7 @@ beforeEach(function() {
                         }
                     ],
                     databaseObject: {
-                        id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_view_name"',
+                        id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_view_name"',
                         name: '__a_view_name',
                         objectType: "BASE_VIEW",
                         type: "databaseObject"
@@ -1629,7 +1629,7 @@ beforeEach(function() {
             return _.extend({
                 databaseId: null,
                 databaseName: null,
-                instanceId: null,
+                instance_id: null,
                 instanceName: null,
                 schemaId: null,
                 schemaName: null
@@ -1722,7 +1722,7 @@ beforeEach(function() {
             var attributes = _.extend({
                 id: this.nextId().toString(),
                 databaseId: this.nextId().toString(),
-                instanceId: this.nextId().toString(),
+                instance_id: this.nextId().toString(),
                 databaseName: "My fixture database"
             }, overrides);
             return new chorus.collections.SchemaSet([], attributes);
@@ -1738,9 +1738,9 @@ beforeEach(function() {
                 lastUpdatedTxStamp: "2012-01-04 14:42:15.309",
                 createdStamp: "2012-01-04 14:42:15.318",
                 createdTxStamp: "2012-01-04 14:42:15.309",
-                instanceId: this.nextId().toString(),
+                instance_id: this.nextId().toString(),
                 databaseName: "My fixture database",
-                datasetCount: 4
+                dataset_count: 4
             }, overrides);
             return new chorus.models.Schema(attributes);
         },
@@ -2386,7 +2386,7 @@ beforeEach(function() {
                     "some content;",
                     "second line"
                 ],
-                instanceId: "1234",
+                instance_id: "1234",
                 path: "%2Fdata%2FfixtureFile.sql"
             }, overrides)
         },

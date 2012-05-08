@@ -67,7 +67,7 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
         if (this.model.isShared()) {
             this.users.fetchAll();
         } else {
-            this.accounts = this.accounts || new chorus.collections.InstanceAccountSet({}, { instanceId:this.model.get("id") });
+            this.accounts = this.accounts || new chorus.collections.InstanceAccountSet({}, { instance_id:this.model.get("id") });
             this.accounts.fetchAll();
             this.bindings.add(this.accounts, "reset", function () {
                 this.users.add(this.accounts.users());

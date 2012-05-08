@@ -36,7 +36,7 @@ chorus.models.TabularData = chorus.models.Base.include(
             if (!this._columns) {
                 this._columns = new chorus.collections.DatabaseColumnSet([], {
                     tabularData: this,
-                    instanceId: this.get("instance").id,
+                    instance_id: this.get("instance").id,
                     databaseName: this.get("databaseName"),
                     schemaName: this.get("schemaName"),
                     type: options && options.type
@@ -61,7 +61,7 @@ chorus.models.TabularData = chorus.models.Base.include(
         schema: function() {
             if (!this._schema) {
                 this._schema = new chorus.models.Schema({
-                    instanceId: this.get("instance").id,
+                    instance_id: this.get("instance").id,
                     databaseName: this.get("databaseName"),
                     name: this.get("schemaName"),
                     instanceName: this.get("instance").name
@@ -73,7 +73,7 @@ chorus.models.TabularData = chorus.models.Base.include(
         database: function() {
             if (!this._database) {
                 this._database = new chorus.models.Database({
-                    instanceId: this.get("instance").id,
+                    instance_id: this.get("instance").id,
                     name: this.get("databaseName"),
                     instanceName: this.get("instance").name
                 });
@@ -104,7 +104,7 @@ chorus.models.TabularData = chorus.models.Base.include(
         statistics: function() {
             if (!this._statistics) {
                 this._statistics = new chorus.models.DatabaseObjectStatistics({
-                    instanceId: this.has("instance") ? this.get("instance").id : this.collection.attributes.instanceId,
+                    instance_id: this.has("instance") ? this.get("instance").id : this.collection.attributes.instance_id,
                     databaseName: this.get("databaseName"),
                     schemaName: this.get("schemaName"),
                     type: this.get("type"),
@@ -138,7 +138,7 @@ chorus.models.TabularData = chorus.models.Base.include(
 
         preview: function() {
             var commonAttributes = {
-                instanceId: this.get("instance").id,
+                instance_id: this.get("instance").id,
                 databaseName: this.get("databaseName"),
                 schemaName: this.get("schemaName"),
                 objectName: this.get("objectName")
@@ -251,7 +251,7 @@ chorus.models.TabularData = chorus.models.Base.include(
         analyze: function() {
             if (!this._analyze) {
                 this._analyze = new chorus.models.TabularDataAnalyze({
-                    instanceId: this.instance().get("id"),
+                    instance_id: this.instance().get("id"),
                     databaseName: this.database().get("name"),
                     schemaName: this.schema().get("name"),
                     objectName: this.name(),

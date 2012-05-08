@@ -4,7 +4,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
         this.file = fixtures.hdfsFile({
             path: "/folder/filename.txt",
-            instanceId: 9876,
+            instance_id: 9876,
             lastModificationTime: now
         })
         this.view = new chorus.views.HdfsShowFileSidebar({ model: this.file })
@@ -54,7 +54,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
                 var $linkExternalTable = this.view.$("a.external_table");
                 expect($linkExternalTable).toExist();
                 $linkExternalTable.click();
-                this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instanceId: "9876", path: "/folder/filename.txt", content: "hello\nworld"}).attributes);
+                this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instance_id: "9876", path: "/folder/filename.txt", content: "hello\nworld"}).attributes);
                 this.server.completeFetchFor(this.csv);
             });
 

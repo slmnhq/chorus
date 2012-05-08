@@ -3,18 +3,18 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 ).extend({
     helpId: "schema",
 
-    setup: function(instanceId, databaseName, schemaName) {
+    setup: function(instance_id, databaseName, schemaName) {
         this.schema = new chorus.models.Schema({
-            instanceId: instanceId,
+            instance_id: instance_id,
             databaseName: databaseName,
             name: schemaName
         });
 
-        this.instance = new chorus.models.Instance({id: instanceId});
+        this.instance = new chorus.models.Instance({id: instance_id});
         this.instance.fetch();
         this.dependOn(this.instance, this.instanceLoaded);
 
-        this.collection = new chorus.collections.DatabaseObjectSet([], {instanceId: instanceId, databaseName: databaseName, schemaName: schemaName });
+        this.collection = new chorus.collections.DatabaseObjectSet([], {instance_id: instance_id, databaseName: databaseName, schemaName: schemaName });
         this.collection.sortAsc("objectName");
         this.collection.fetch();
         this.dependOn(this.collection);
@@ -38,7 +38,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
     },
 
     crumbs: function() {
-        var database = new chorus.models.Database({instanceId: this.instance.id, name: this.schema.get("databaseName")});
+        var database = new chorus.models.Database({instance_id: this.instance.id, name: this.schema.get("databaseName")});
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.instances"), url: '#/instances'},

@@ -127,7 +127,7 @@ describe("chorus.Mixins.Fetching", function() {
             beforeEach(function() {
                 spyOn(this.resource, "trigger");
                 this.data = {
-                    response: { instanceId: 1 },
+                    response: { instance_id: 1 },
                     errors: { record: "no" }
                 };
 
@@ -146,7 +146,7 @@ describe("chorus.Mixins.Fetching", function() {
             beforeEach(function() {
                 spyOn(this.resource, "trigger");
                 this.data = {
-                    response: { instanceId: 1 },
+                    response: { instance_id: 1 },
                     errors: { record: "no" }
                 };
 
