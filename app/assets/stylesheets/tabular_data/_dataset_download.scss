@@ -1,0 +1,18 @@
+@import "_common.scss";
+
+.dataset_download {
+    width: 300px;
+
+    input[name=rows] {
+        display: inline-block;
+        width: 50px;
+    }
+
+    .specify {
+        margin-bottom: 10px;
+
+        input {
+            margin-right: 5px;
+        }
+    }
+}
