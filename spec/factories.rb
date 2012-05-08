@@ -34,6 +34,7 @@ FactoryGirl.define do
 
   factory :workspace do
     sequence(:name) { |n| "workspace#{n}" }
+    owner
   end
 end
 
