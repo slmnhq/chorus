@@ -19,6 +19,7 @@ describe WorkspacePresenter, :type => :view do
       @hash.should have_key(:archiver)
       @hash.should have_key(:owner)
       @hash.should have_key(:archived_at)
+      @hash.should have_key(:public)
     end
 
     it "should use ownerPresenter Hash method for owner" do
