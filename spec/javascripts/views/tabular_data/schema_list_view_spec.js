@@ -2,7 +2,7 @@ describe("chorus.views.SchemaList", function() {
     beforeEach(function() {
         this.schema1 = fixtures.schema();
         this.schema2 = fixtures.schema({datasetCount: 1});
-        this.collection = new chorus.collections.SchemaSet([], {instanceId: 456, databaseName: "Foo"});
+        this.collection = new chorus.collections.SchemaSet([], {instance_id: 456, databaseName: "Foo"});
         this.collection.reset([this.schema1, this.schema2]);
 
         this.view = new chorus.views.SchemaList({collection: this.collection});

@@ -14,7 +14,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             "val2.1,val2.2,val2.3,val2.4,val2.5",
             "val3.1,val3.2,val3.3,val3.4,val3.5"
         ],
-            instanceId: "234",
+            instance_id: "234",
             path: "/foo/bar.txt",
             toTable: "bar_txt"
         });
@@ -141,7 +141,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
                     expect(request.url).toMatchUrl("/workspace/" + workspaceId + "/externaltable");
                     expect(request.params()["csvhdfs[path]"]).toBe("/foo/bar.txt");
-                    expect(request.params()["csvhdfs[instanceId]"]).toBe("234");
+                    expect(request.params()["csvhdfs[instance_id]"]).toBe("234");
                     expect(request.params()["csvhdfs[statement]"]).toBe(statement);
                     expect(request.params()["csvhdfs[hasHeader]"]).toBe('true');
                 });

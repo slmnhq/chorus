@@ -46,7 +46,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                 sandboxInfo : {
                     databaseId: 4,
                     databaseName: "db",
-                    instanceId: 5,
+                    instance_id: 5,
                     instanceName: "instance",
                     sandboxId: "10001",
                     schemaId: 6,
@@ -112,7 +112,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                 sandboxInfo : {
                     databaseId: 4,
                     databaseName: "db",
-                    instanceId: 5,
+                    instance_id: 5,
                     instanceName: "instance",
                     sandboxId: "10001",
                     schemaId: 6,

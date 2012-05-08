@@ -30,8 +30,8 @@ chorus.models.InstanceAccount = chorus.models.Base.extend({
         "db_password":"instances.permissions.password"
     }
 }, {
-    findByInstanceId:function (instanceId) {
-        var account = new chorus.models.InstanceAccount({ instance_id:instanceId });
+    findByInstanceId:function (instance_id) {
+        var account = new chorus.models.InstanceAccount({ instance_id:instance_id });
         account.fetch();
         return account;
     }

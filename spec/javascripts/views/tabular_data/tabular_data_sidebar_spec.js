@@ -370,7 +370,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                             "sandboxInfo": {
                                                 databaseId: null,
                                                 databaseName: null,
-                                                instanceId: null,
+                                                instance_id: null,
                                                 instanceName: null,
                                                 sandboxId: null,
                                                 schemaId: null,

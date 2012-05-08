@@ -125,7 +125,7 @@
         "schemaName":"analytics",
         "instanceName":"comfort",
         "schemaId":"10001",
-        "instanceId":"10000",
+        "instance_id":"10000",
         "hasCredentials":true
     },
     "archiverLastName":null

@@ -1,9 +1,9 @@
 describe("chorus.pages.SchemaBrowsePage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
-        this.schema = fixtures.schema({ instanceId: "123", databaseName: "Foo%", name: "Bar/" });
+        this.schema = fixtures.schema({ instance_id: "123", databaseName: "Foo%", name: "Bar/" });
         this.instance = newFixtures.instance.greenplum({ id: "123" });
-        this.database = fixtures.database({ name: "Foo%", instanceId: "123" });
+        this.database = fixtures.database({ name: "Foo%", instance_id: "123" });
         this.page = new chorus.pages.SchemaBrowsePage("123", "Foo%", "Bar/");
     });
 
@@ -115,7 +115,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         });
 
         it("creates the collection with the right options", function() {
-            expect(this.page.collection.attributes.instanceId).toBe(this.schema.get("instanceId"))
+            expect(this.page.collection.attributes.instance_id).toBe(this.schema.get("instance_id"))
             expect(this.page.collection.attributes.databaseName).toBe(this.schema.get("databaseName"))
             expect(this.page.collection.attributes.schemaName).toBe(this.schema.get("name"))
         })

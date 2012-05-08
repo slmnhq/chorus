@@ -65,7 +65,7 @@
             var executionInfo = this.get("executionInfo");
             if (executionInfo && executionInfo.schemaName) {
                 return new chorus.models.Schema({
-                    instanceId: executionInfo.instanceId,
+                    instance_id: executionInfo.instance_id,
                     instanceName: executionInfo.instanceName,
                     databaseId: executionInfo.databaseId,
                     databaseName: executionInfo.databaseName,

@@ -38,7 +38,7 @@ describe("chorus.models.TabularData", function() {
         })
 
         it("sets the properties correctly", function() {
-            expect(this.tabularDataProperties.get('instanceId')).toBe(this.tabularData.get('instance').id)
+            expect(this.tabularDataProperties.get('instance_id')).toBe(this.tabularData.get('instance').id)
             expect(this.tabularDataProperties.get('databaseName')).toBe(this.tabularData.get("databaseName"))
             expect(this.tabularDataProperties.get('schemaName')).toBe(this.tabularData.get("schemaName"))
             expect(this.tabularDataProperties.get('type')).toBe(this.tabularData.get("type"))
@@ -181,7 +181,7 @@ describe("chorus.models.TabularData", function() {
         })
 
         it("returns a new database with the right attributes", function() {
-            expect(this.database.get("instanceId")).toBe(this.tabularData.get("instance").id);
+            expect(this.database.get("instance_id")).toBe(this.tabularData.get("instance").id);
             expect(this.database.get("instanceName")).toBe(this.tabularData.get("instance").name);
             expect(this.database.get("name")).toBe(this.tabularData.get("databaseName"));
         });
@@ -196,7 +196,7 @@ describe("chorus.models.TabularData", function() {
             this.schema = this.tabularData.schema();
         })
         it("returns a new schema with the right attributes", function() {
-            expect(this.schema.get("instanceId")).toBe(this.tabularData.get("instance").id);
+            expect(this.schema.get("instance_id")).toBe(this.tabularData.get("instance").id);
             expect(this.schema.get("databaseName")).toBe(this.tabularData.get("databaseName"));
             expect(this.schema.get("name")).toBe(this.tabularData.get("schemaName"));
             expect(this.schema.get("instanceName")).toBe(this.tabularData.get("instance").name);
@@ -290,7 +290,7 @@ describe("chorus.models.TabularData", function() {
 
             it("should return a database preview", function() {
                 expect(this.preview).toBeA(chorus.models.DataPreviewTask);
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
+                expect(this.preview.get("instance_id")).toBe(this.tabularData.get("instance").id);
                 expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
                 expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
                 expect(this.preview.get("objectName")).toBe(this.tabularData.get("objectName"));
@@ -309,7 +309,7 @@ describe("chorus.models.TabularData", function() {
             it("should return a database preview", function() {
                 expect(this.preview).toBeA(chorus.models.DataPreviewTask);
                 expect(this.preview.get("taskType")).toBe("previewTableOrView");
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
+                expect(this.preview.get("instance_id")).toBe(this.tabularData.get("instance").id);
                 expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
                 expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
                 expect(this.preview.get("objectName")).toBe(this.tabularData.get("objectName"));
@@ -332,7 +332,7 @@ describe("chorus.models.TabularData", function() {
             it("should return a dataset preview", function() {
                 expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
                 expect(this.preview.get("workspaceId")).toBe("234");
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
+                expect(this.preview.get("instance_id")).toBe(this.tabularData.get("instance").id);
                 expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
                 expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
                 expect(this.preview.get("query")).toBe("select * from hello_world");
@@ -354,7 +354,7 @@ describe("chorus.models.TabularData", function() {
             it("should return a dataset preview", function() {
                 expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
                 expect(this.preview.get("workspaceId")).toBe("234");
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
+                expect(this.preview.get("instance_id")).toBe(this.tabularData.get("instance").id);
                 expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
                 expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
                 expect(this.preview.get("query")).toBe("select * from hello_world");
@@ -430,7 +430,7 @@ describe("chorus.models.TabularData", function() {
 
         it("should pass the correct parameters to the DatabaseColumnSet", function() {
             var columns = this.tabularData.columns();
-            expect(columns.attributes.instanceId).toBe(this.tabularData.get("instance").id);
+            expect(columns.attributes.instance_id).toBe(this.tabularData.get("instance").id);
             expect(columns.attributes.databaseName).toBe(this.tabularData.get("databaseName"));
             expect(columns.attributes.schemaName).toBe(this.tabularData.get("schemaName"));
         });

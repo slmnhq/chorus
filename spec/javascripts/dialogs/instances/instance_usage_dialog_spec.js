@@ -32,7 +32,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
         context("when the usage and config have been fetched", function() {
             beforeEach(function(){
                 var sourceUsage = fixtures.instanceUsage();
-                sourceUsage.set({instanceId : this.dialog.usage.get("instanceId")});
+                sourceUsage.set({instance_id : this.dialog.usage.get("instance_id")});
                 this.server.completeFetchFor(sourceUsage);
                 this.server.completeFetchFor(chorus.models.Config.instance(), fixtures.configJson());
                 this.workspaces = this.dialog.usage.get("workspaces");

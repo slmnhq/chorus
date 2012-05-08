@@ -64,7 +64,7 @@ chorus.models.Sandbox = chorus.models.Base.extend({
             name: this.get("schemaName"),
             databaseId: this.get("databaseId"),
             databaseName: this.get("databaseName"),
-            instanceId: this.get("instanceId"),
+            instance_id: this.get("instance_id"),
             instanceName: this.get("instanceName")
         });
 
@@ -73,7 +73,7 @@ chorus.models.Sandbox = chorus.models.Base.extend({
 
     instance: function() {
         this._instance = this._instance || new chorus.models.Instance({
-            id: this.get("instanceId"),
+            id: this.get("instance_id"),
             name: this.get("instanceName")
         });
         return this._instance;
@@ -83,7 +83,7 @@ chorus.models.Sandbox = chorus.models.Base.extend({
         this._database = this._database || new chorus.models.Database({
             id: this.get("databaseId"),
             name: this.get("databaseName"),
-            instanceId: this.get("instanceId"),
+            instance_id: this.get("instance_id"),
             instanceName: this.get("instanceName")
         });
 

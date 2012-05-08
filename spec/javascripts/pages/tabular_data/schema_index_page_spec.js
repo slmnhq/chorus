@@ -19,7 +19,7 @@ describe("chorus.pages.SchemaIndexPage", function() {
 
     it("fetches the schema set with the right instance id and database name", function() {
         expect(this.page.collection.attributes.databaseName).toBe("Foo/");
-        expect(this.page.collection.attributes.instanceId).toBe("1234");
+        expect(this.page.collection.attributes.instance_id).toBe("1234");
         expect(this.page.collection).toHaveBeenFetched();
     });
 

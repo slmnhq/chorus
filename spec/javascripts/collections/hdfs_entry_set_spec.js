@@ -29,7 +29,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
         });
     });
 
-    context("when the collection does not have path and instanceId set", function() {
+    context("when the collection does not have path and instance_id set", function() {
         beforeEach(function() {
             this.hdfsEntrySet = fixtures.hdfsEntrySet([], {
                 path: null,

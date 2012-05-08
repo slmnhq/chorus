@@ -36,7 +36,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
-            var entries = fixtures.hdfsEntrySet(null, {instanceId: "1234", path: "/foo"});
+            var entries = fixtures.hdfsEntrySet(null, {instance_id: "1234", path: "/foo"});
             this.server.completeFetchFor(this.page.collection, entries.models);
             this.server.completeFetchFor(this.page.instance, this.instance);
         });

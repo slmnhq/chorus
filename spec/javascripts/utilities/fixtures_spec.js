@@ -103,9 +103,9 @@ describe("newFixtures", function() {
                     objectName: "outbreaks"
                 });
 
-                var instanceId = '"' + datasetJson.instance.id + '"';
+                var instance_id = '"' + datasetJson.instance.id + '"';
 
-                expect(datasetJson.id).toBe(instanceId + '|"chorus_events"|"plague"|"BASE_TABLE"|"outbreaks"');
+                expect(datasetJson.id).toBe(instance_id + '|"chorus_events"|"plague"|"BASE_TABLE"|"outbreaks"');
             });
         });
     });
