@@ -14,22 +14,9 @@ describe Gpdb::InstanceRegistrar do
         :description => "old description"
     }
   end
-  let(:valid_output_attributes) do
-    {
-        :name => "new",
-        :port => 12345,
-        :host => "server.emc.com",
-        :maintenance_db => "postgres",
-        :username => "bob",
-        :password => "secret",
-        :provision_type => "register",
-        :description => "old description"
-    }
-
-  end
 
   before do
-    stub(ActiveRecord::Base).postgresql_connection { valid_output_attributes }
+    stub(ActiveRecord::Base).postgresql_connection
   end
 
   describe ".create!" do
@@ -105,8 +92,8 @@ describe Gpdb::InstanceRegistrar do
 
     it "saves the instance attributes" do
       instance = Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
-      valid_output_attributes.each {| key, value |
-          instance[key].should == value unless (key == :username || key == :password)
+      valid_input_attributes.each {| key, value |
+          instance[key].should == value unless (key == :db_username || key == :db_password)
       }
     end
 
@@ -120,7 +107,7 @@ describe Gpdb::InstanceRegistrar do
     let(:admin) { FactoryGirl.create(:user, :admin => true) }
     let(:cached_instance) { Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner) }
     let(:updated_attributes) { valid_input_attributes.merge(:name => "new name") }
-    let(:updated_output_attributes) { valid_output_attributes.merge(:name => "new name") }
+    let(:updated_output_attributes) { valid_input_attributes.merge(:name => "new name") }
 
     it "allows admin to update" do
       updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, admin)

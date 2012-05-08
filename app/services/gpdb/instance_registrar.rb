@@ -11,9 +11,9 @@ module Gpdb
     attr_reader :owner
 
     def self.create!(connection_config, owner)
-      builder = new(connection_config, owner)
-      builder.save!(owner)
-      builder.instance
+      registrar = new(connection_config, owner)
+      registrar.save!(owner)
+      registrar.instance
     end
 
     def self.update!(instance_id, connection_config, updater)
@@ -23,17 +23,17 @@ module Gpdb
       connection_config[:db_username] = owner_account.db_username
       connection_config[:db_password] = owner_account.db_password
 
-      builder = for_update(connection_config, instance)
-      builder.save!(updater)
-      builder.instance
+      registrar = for_update(connection_config, instance)
+      registrar.save!(updater)
+      registrar.instance
     end
 
     def self.for_update(connection_config, instance)
       new_owner = connection_config[:owner] && connection_config[:owner][:id] ? User.find(connection_config[:owner][:id]) : instance.owner
-      builder = new(connection_config, new_owner)
-      builder.instance = instance
-      builder.account = instance.owner_account
-      builder
+      registrar = new(connection_config, new_owner)
+      registrar.instance = instance
+      registrar.account = instance.owner_account
+      registrar
     end
 
     def initialize(attributes, owner)
@@ -67,7 +67,15 @@ module Gpdb
     end
 
     def connection_must_be_established
-      @connection ||= connection
+      ActiveRecord::Base.postgresql_connection(
+          :host => host,
+          :port => port,
+          :database => maintenance_db,
+          :username => username,
+          :password => password
+      )
+    rescue PG::Error => e
+      errors.add(:connection, :generic, {:message => e.message})
     end
 
     def instance
@@ -110,21 +118,6 @@ module Gpdb
       }
       account.owner_id = owner.id if shared
       account.save!
-    end
-
-    private
-
-    def connection
-      @connection ||= ActiveRecord::Base.postgresql_connection(
-          :host => host,
-          :port => port,
-          :database => maintenance_db,
-          :username => username,
-          :password => password
-      )
-    rescue PG::Error => e
-      errors.add(:connection, :generic, {:message => e.message})
-      @connection = nil
     end
   end
 end
