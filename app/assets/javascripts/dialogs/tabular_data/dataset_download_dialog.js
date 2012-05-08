@@ -16,19 +16,35 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
     submitDownload: function(e) {
         e.preventDefault();
 
-        if (this.$("input[type=radio][id=specify_rows]").prop("checked")) {
-            var rows = this.$("input[name=numOfRows]").val();
-            this.model.set({ numOfRows: rows }, { silent: true })
-            if(this.model.performValidation()) {
-                this.tabular_data.download({ rows: rows });
-                this.closeModal();
-            } else {
-                this.showErrors();
-            }
+        if (this.specifyAll()) {
+            this.downloadAll();
         } else {
-            this.tabular_data.download();
-            this.closeModal();
+            this.downloadSome();
         }
+    },
+
+    downloadAll: function() {
+        this.tabular_data.download();
+        this.closeModal();
+    },
+
+    downloadSome: function() {
+        this.model.set({ numOfRows: this.numOfRows() }, { silent: true })
+
+        if (this.model.performValidation()) {
+            this.tabular_data.download({ rows: this.numOfRows() });
+            this.closeModal();
+        } else {
+            this.showErrors();
+        }
+    },
+
+    numOfRows: function() {
+        return this.$("input[name=numOfRows]").val();
+    },
+
+    specifyAll: function() {
+        return !this.$("input[type=radio][id=specify_rows]").prop("checked");
     }
 });
 
