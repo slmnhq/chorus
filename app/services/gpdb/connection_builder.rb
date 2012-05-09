@@ -8,9 +8,9 @@ module Gpdb
         :user => account.db_username,
         :password => account.db_password
       )
-      result = yield connection
-      connection.disconnect!
-      result
+      yield connection
+    ensure
+      connection.try(:disconnect!)
     end
 
     def self.connect(instance, account, database_name=nil, &block)
