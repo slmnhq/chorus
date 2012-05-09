@@ -18,7 +18,9 @@ module Instances
       instance = Instance.unshared.find(params[:instance_id])
 
       account = instance.accounts.find_or_initialize_by_owner_id(current_user.id)
-      account.update_attributes! params[:account]
+      account.attributes = params[:account]
+      Gpdb::ConnectionChecker.check!(instance, account)
+      account.save!
       account
     end
 

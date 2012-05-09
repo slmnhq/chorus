@@ -28,6 +28,7 @@ describe Instances::AccountController do
     let(:instance) { FactoryGirl.create :instance }
 
     before do
+      stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
       log_in joe
     end
 
@@ -40,6 +41,17 @@ describe Instances::AccountController do
 
       rehydrated_account = InstanceAccount.find(decoded_response.id)
       rehydrated_account.db_password.should == "secret"
+    end
+
+    context "when the credentials are invalid" do
+      before do
+        stub(Gpdb::ConnectionChecker).check!(anything, anything) { raise ApiValidationError }
+      end
+
+      it "fails" do
+        post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret"}
+        response.code.should == '422'
+      end
     end
 
     context "for a shared accounts instance" do
@@ -59,6 +71,7 @@ describe Instances::AccountController do
     let(:instance) { FactoryGirl.create :instance }
 
     before do
+      stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
       log_in joe
     end
 
@@ -81,6 +94,17 @@ describe Instances::AccountController do
       it "fails" do
         put :update, :instance_id => instance.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.should be_not_found
+      end
+    end
+
+    context "when credentials are invalid " do
+      before do
+        stub(Gpdb::ConnectionChecker).check!(anything, anything) { raise ApiValidationError }
+      end
+
+      it "fails" do
+        put :update, :instance_id => instance.id, :account => {:db_username => "changed", :db_password => "changed"}
+        response.code.should == '422'
       end
     end
   end
