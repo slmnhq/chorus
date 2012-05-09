@@ -23,20 +23,16 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this._super("beforeNavigateAway", arguments);
     },
 
-    createDownloadForm: function() {
-        var form = $("<form action='/generateCSV.jsp' method='post'></form>");
-        form.append($("<input name='columnData' type='hidden'/>").val(JSON.stringify(this.resource.getColumns())));
-        form.append($("<input name='rowsData' type='hidden'>/").val(JSON.stringify(this.resource.getRows())));
-        form.append($("<input name='datasetName' type='hidden'>/").val(this.resource.name()));
-        return form;
-    },
-
     saveToDesktop: function(e) {
-        e && e.preventDefault();
-        var form = this.createDownloadForm()
-        form.hide();
-        $("body").append(form)
-        form.submit();
+        e.preventDefault();
+
+        var data = { 
+            columnData: JSON.stringify(this.resource.getColumns()),
+            rowsData: JSON.stringify(this.resource.getRows()),
+            datasetName: this.resource.name()
+        };
+
+        $.download("/edc/data/cvsResultDownload", data, "post");
     },
 
     execute: function(task) {

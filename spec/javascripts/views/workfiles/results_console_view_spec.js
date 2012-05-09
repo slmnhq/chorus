@@ -461,73 +461,19 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 describe("clicking the download link", function() {
                     beforeEach(function() {
-                        this.submitSpy = jasmine.createSpy("submit");
-                        this.hideSpy = jasmine.createSpy("hide");
-
-                        this.fakeForm = {
-                            submit: this.submitSpy,
-                            hide: this.hideSpy
-                        }
-
-                        spyOn(this.view, "createDownloadForm").andReturn(this.fakeForm)
+                        spyOn($, "download");
                         this.view.$("a.download_csv").click();
                     });
 
-                    it("constructs a form for download", function() {
-                        expect(this.view.createDownloadForm).toHaveBeenCalled();
+                    it("starts the file download", function() {
+                        expect($.download).toHaveBeenCalledWith("/edc/data/cvsResultDownload",
+                        {
+                            columnData: this.view.resource.getColumns(),
+                            rowsData: this.view.resource.getRows(),
+                            datasetName: this.view.resource.name()
+                        }
+                        , "post");
                     });
-
-                    it("hides the form", function() {
-                        expect(this.hideSpy).toHaveBeenCalled();
-                    });
-
-                    it("submits the form", function() {
-                        expect(this.submitSpy).toHaveBeenCalled();
-                    });
-                });
-
-                describe("constructing the download form", function() {
-                    context("with a sql execution task (executing a workfile)", function() {
-                        beforeEach(function() {
-                            this.view.resource = new chorus.models.SqlExecutionTask({
-                                result: {
-                                    columns: [{name: "col1"}],
-                                    rows:    [{col1: "row1"}]
-                                }
-                            });
-                            spyOn(this.view.resource, "name").andReturn("john the resource");
-                            this.form = this.view.createDownloadForm();
-                        });
-
-                        itCreatesTheFormCorrectly();
-                        itCanExpandAndCollapseTheResults("minimized", "maximized");
-                    });
-
-                    context("with a data preview task (previewing a dataset)", function() {
-                        beforeEach(function() {
-                            this.view.resource = new chorus.models.DataPreviewTask({
-                                columns: [{name: "col1"}],
-                                rows:    [{col1: "row1"}]
-                            });
-                            spyOn(this.view.resource, "name").andReturn("john the resource");
-                            this.form = this.view.createDownloadForm();
-                        });
-
-                        itCreatesTheFormCorrectly();
-                        itCanExpandAndCollapseTheResults("minimized", "maximized");
-                    });
-                });
-            }
-
-            function itCreatesTheFormCorrectly() {
-                it("has the correct action", function() {
-                    expect(this.form).toHaveAttr("action", "/generateCSV.jsp");
-                });
-
-                it("has the correct form elements", function() {
-                    expect($("input[name=columnData]", this.form)).toHaveValue(JSON.stringify([{name: "col1"}]));
-                    expect($("input[name=rowsData]", this.form)).toHaveValue(JSON.stringify([{col1: "row1"}]));
-                    expect($("input[name=datasetName]", this.form)).toHaveValue("john the resource");
                 });
             }
 
