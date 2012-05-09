@@ -9,7 +9,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         })
 
         it("fetches the model", function() {
-            expect(this.server.requests[0].url).toBe("/workspace/4");
+            expect(this.server.requests[0].url).toBe("/workspaces/4");
         })
 
         it("has a helpId", function() {

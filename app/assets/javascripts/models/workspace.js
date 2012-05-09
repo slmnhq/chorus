@@ -1,7 +1,7 @@
 chorus.models.Workspace = chorus.models.Base.extend({
     constructorName: "Workspace",
 
-    urlTemplate:"workspace/{{id}}",
+    urlTemplate:"workspaces/{{id}}",
     showUrlTemplate:"workspaces/{{id}}",
     entityType:"workspace",
     nameAttribute: 'name',

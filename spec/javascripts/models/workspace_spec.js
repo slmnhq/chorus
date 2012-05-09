@@ -5,7 +5,7 @@ describe("chorus.models.Workspace", function() {
     });
 
     it("has the correct urlTemplate", function() {
-        expect(this.model.urlTemplate).toBe("workspace/{{id}}");
+        expect(this.model.urlTemplate).toBe("workspaces/{{id}}");
     });
 
     describe("#isActive", function() {
