@@ -24,7 +24,7 @@ describe LdapClient do
         mock(ldap).search.with_any_args { @entries }
       end
 
-      results = LdapClient.search(:username => "testguy")
+      results = LdapClient.search("testguy")
       results.should be_a(Array)
       results.first.should be_a(Hash)
       results.first.should == { :first_name => "Test", :last_name => "Guy", :title => "Big Kahuna", :dept => "Greenery", :email => "testguy@example.com", :username => "testguy" }
@@ -62,7 +62,7 @@ describe LdapClient do
       any_instance_of(Net::LDAP) do |ldap|
         mock(ldap).search.with_any_args do |options|
           options[:base].should == "dc=foo"
-          options[:filter].to_s.should == "(cn=foo*)"
+          options[:filter].to_s.should == "(uid=foo)"
           []
         end
         mock(ldap).auth("username=foo,cn=users_cn,dc=foo", "secret") { true }

@@ -3,7 +3,7 @@ require 'net/ldap'
 class LdapClient
   def self.search(username)
     ldap = client
-    filter = Net::LDAP::Filter.eq("cn", "#{username}*")
+    filter = Net::LDAP::Filter.eq("uid", "#{username}")
     results = ldap.search :base => "dc=#{config["dc"]}", :filter =>filter
 
     results.map do |result|
