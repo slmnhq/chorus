@@ -430,7 +430,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
 
                 it("should call delete on the accounts", function() {
-                    expect(this.server.lastDestroy().url).toBe("/instances/" + this.instance.get("id") + "/accounts/" + this.accountBeingRemoved.id);
+                    expect(this.server.lastDestroy().url).toBe("/instances/" + this.instance.get("id") + "/members/" + this.accountBeingRemoved.id);
                 });
 
                 context("when the delete succeeds", function() {

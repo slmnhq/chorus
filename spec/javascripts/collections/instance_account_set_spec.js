@@ -1,6 +1,6 @@
 describe("chorus.collections.InstanceAccountSet", function() {
     beforeEach(function() {
-        this.accountSet = new chorus.collections.InstanceAccountSet([], {instance_id : '1'});
+        this.accountSet = new chorus.collections.InstanceAccountSet([], {instance_id: '1'});
     });
 
     describe("#users", function() {
@@ -41,7 +41,7 @@ describe("chorus.collections.InstanceAccountSet", function() {
     describe("#url", function() {
         it("has the instance_id param", function() {
             var uri = new URI(this.accountSet.url());
-            expect(uri.path()).toMatchUrl("/instances/1/accounts");
+            expect(uri.path()).toMatchUrl("/instances/1/members");
         });
     });
 

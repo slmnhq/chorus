@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InstanceAccountsController do
+describe Instances::MembersController do
   let(:admin) { FactoryGirl.create :admin }
   let(:instance_owner) { FactoryGirl.create :user }
   let(:joe) { FactoryGirl.create :user }

@@ -10,14 +10,14 @@ describe("chorus.models.InstanceAccount", function() {
     describe("#url", function() {
         context("when updating or deleting", function() {
             it("has the right url for accessing an account by its id", function() {
-                expect(this.model.url({ method: 'update' })).toMatchUrl("/instances/1045/accounts/72");
-                expect(this.model.url({ method: 'delete' })).toMatchUrl("/instances/1045/accounts/72");
+                expect(this.model.url({ method: 'update' })).toMatchUrl("/instances/1045/members/72");
+                expect(this.model.url({ method: 'delete' })).toMatchUrl("/instances/1045/members/72");
             });
         });
 
         context("when creating", function() {
             it("has the base url for accounts (no id)", function() {
-                expect(this.model.url({ method: 'create' })).toMatchUrl("/instances/1045/accounts");
+                expect(this.model.url({ method: 'create' })).toMatchUrl("/instances/1045/members");
             });
         });
 
@@ -64,7 +64,7 @@ describe("chorus.models.InstanceAccount", function() {
     describe("#fetchByInstanceId", function() {
         it("hits the correct url", function() {
             chorus.models.InstanceAccount.findByInstanceId("4");
-            expect(this.server.requests[0].url).toMatchUrl("/instances/4/accounts")
+            expect(this.server.requests[0].url).toMatchUrl("/instances/4/members")
         })
 
         it("returns an InstanceAccount", function() {
