@@ -118,7 +118,7 @@ describe Instance do
     end
   end
 
-  describe "#account_for_user" do
+  describe "#account_for_user!" do
     let(:user) { FactoryGirl.create :user }
 
     context "shared instance" do
@@ -126,8 +126,8 @@ describe Instance do
       let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => instance.owner.id }
 
       it "should return the same account for everyone" do
-        instance.account_for_user(user).should == owner_account
-        instance.account_for_user(instance.owner).should == owner_account
+        instance.account_for_user!(user).should == owner_account
+        instance.account_for_user!(instance.owner).should == owner_account
       end
     end
 
@@ -137,8 +137,8 @@ describe Instance do
       let!(:user_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => user.id }
 
       it "should return the account for the user or nil if the user has no account" do
-        instance.account_for_user(instance.owner).should == owner_account
-        instance.account_for_user(user).should == user_account
+        instance.account_for_user!(instance.owner).should == owner_account
+        instance.account_for_user!(user).should == user_account
       end
     end
 
@@ -146,7 +146,19 @@ describe Instance do
       let!(:instance) { FactoryGirl.create :instance }
 
       it "raises an exception" do
-        expect { instance.account_for_user(user) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { instance.account_for_user!(user) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe "#account_for_user" do
+    let(:user) { FactoryGirl.create :user }
+
+    context "missing account" do
+      let!(:instance) { FactoryGirl.create :instance }
+
+      it "returns nil" do
+        instance.account_for_user(user).should be_nil
       end
     end
   end

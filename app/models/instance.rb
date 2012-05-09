@@ -41,11 +41,17 @@ class Instance < ActiveRecord::Base
     return "Greenplum Database"
   end
 
-  def account_for_user(user)
+  def account_for_user!(user)
     if shared?
       owner_account
     else
       accounts.find_by_owner_id!(user.id)
     end
+  end
+
+  def account_for_user(user)
+    account_for_user!(user)
+  rescue ActiveRecord::RecordNotFound
+    nil
   end
 end
