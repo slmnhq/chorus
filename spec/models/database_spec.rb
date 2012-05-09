@@ -5,15 +5,15 @@ describe Database do
     it "returns all the databases on the connection" do
       instance = FactoryGirl.build(:instance, :id => 123)
       account = FactoryGirl.build(:instance_account, :instance => instance)
-      fake_connection = mock(Object.new).query("select datname from pg_database") do
-          [["db_one"], ["db_two"], ["db_three"], ["db_four"]]
+      fake_connection = mock(Object.new).query("select datname from pg_database order by upper(datname)") do
+          [["db_a"], ["db_B"], ["db_C"], ["db_d"]]
       end.subject
       mock(Gpdb::ConnectionBuilder).connect!(instance, account) {|_, _, block| block.call(fake_connection) }
 
       databases = Database.from_instance_account(account)
 
       databases.length.should == 4
-      databases.map {|db| db.name }.should == ["db_one", "db_two", "db_three", "db_four"]
+      databases.map {|db| db.name }.should == ["db_a", "db_B", "db_C", "db_d"]
       databases.map {|db| db.instance_id }.should == [123, 123, 123, 123]
     end
   end
