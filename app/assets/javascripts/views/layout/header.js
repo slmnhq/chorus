@@ -22,7 +22,7 @@ chorus.views.Header = chorus.views.Base.extend({
         this.session = chorus.session;
         this.unreadNotifications = new chorus.collections.NotificationSet([], { type: 'unread' });
         this.notifications = new chorus.collections.NotificationSet();
-        this.requiredResources.add([this.session, this.unreadNotifications, this.notifications]);
+        this.requiredResources.add([this.unreadNotifications, this.notifications]);
 
         this.typeAheadView = new chorus.views.TypeAheadSearch();
 
