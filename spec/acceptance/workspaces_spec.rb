@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Workspaces", :type => :acceptance do
+resource "Workspaces" do
   let!(:user) { FactoryGirl.create :admin }
   let!(:workspace) { FactoryGirl.create :workspace, :owner => user }
 

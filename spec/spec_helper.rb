@@ -56,7 +56,7 @@ RSpec.configure do |config|
   end
 
   config.include AuthHelper, :type => :controller
-  config.include AcceptanceAuthHelper, :type => :acceptance
+  config.include AcceptanceAuthHelper, :api_docs_dsl => true
   config.include RocketPants::TestHelper, :type => :controller
   config.include RocketPants::TestHelper, :type => :request
   config.include JsonHelper, :type => :controller

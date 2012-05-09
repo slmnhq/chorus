@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Config", :type => :acceptance do
+resource "Config" do
   let(:user) { FactoryGirl.create :admin }
 
   get "/config" do

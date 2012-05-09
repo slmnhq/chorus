@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Sessions", :type => :acceptance do
+resource "Sessions" do
   let(:user) { FactoryGirl.create :admin }
 
   post "/sessions" do
