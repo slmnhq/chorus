@@ -34,7 +34,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount()]));
+                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount({owner: {id: this.instance.owner().id}})]));
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
             });
 
@@ -200,8 +200,8 @@ describe("chorus.views.InstanceListSidebar", function() {
                             instance.loaded = true;
                             this.view.setInstance(instance);
                             this.server.completeFetchFor(instance.usage(), { workspaces: [] });
-                            this.server.completeFetchFor(instance.accounts(), this.instance.accounts().models);
-                            this.server.completeAllFetches();
+                            this.server.completeFetchFor(instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount({owner: {id: instance.owner().id}})]));
+                            this.server.completeFetchFor(instance.accountForCurrentUser());
                         });
 
                         it("includes the shared account information", function() {
@@ -212,7 +212,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     context("and the instance does not have a shared account", function() {
                         it("does not include the shared account information", function() {
                             this.view.render();
-                            expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.shared_account"))).toBe(-1);
+                            expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
                         });
                     });
                 });
@@ -230,13 +230,14 @@ describe("chorus.views.InstanceListSidebar", function() {
                     it("does not include the port, host, or shared account information", function() {
                         expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
                         expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
-                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.sidebar.shared_account"))).toBe(-1);
+                        expect(this.view.$(".instance_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
                     });
                 });
             })
 
             context("when the instance has a shared account", function() {
                 beforeEach(function() {
+                    this.instance.accounts().reset([newFixtures.instanceAccount({owner: {id: this.instance.owner().id}})])
                     this.instance.set({
                         shared: true
                     });
@@ -260,6 +261,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 it("displays edit instance link when user is owner", function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
+                    this.instance.accounts().reset([newFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})])
                     this.instance.set({owner: {id: chorus.session.user().get('id')}});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
