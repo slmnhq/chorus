@@ -4,22 +4,16 @@
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET escape_string_warning = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+-- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: -
 --
 
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+CREATE OR REPLACE PROCEDURAL LANGUAGE plpgsql;
 
 
 SET search_path = public, pg_catalog;
@@ -273,7 +267,11 @@ CREATE TABLE workspaces (
     archived_at timestamp without time zone,
     archiver_id integer,
     summary text,
-    owner_id integer
+    owner_id integer,
+    image_file_name character varying(255),
+    image_content_type character varying(255),
+    image_file_size integer,
+    image_updated_at timestamp without time zone
 );
 
 
@@ -437,3 +435,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120504235249');
 INSERT INTO schema_migrations (version) VALUES ('20120508175301');
 
 INSERT INTO schema_migrations (version) VALUES ('20120508184817');
+
+INSERT INTO schema_migrations (version) VALUES ('20120509004549');

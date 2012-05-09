@@ -16,4 +16,5 @@ describe Workspace do
     end
   end
 
+  it { should have_attached_file(:image) }
 end
