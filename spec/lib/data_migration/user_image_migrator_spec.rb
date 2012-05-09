@@ -24,6 +24,7 @@ describe UserImageMigrator, :type => :data_migration do
     describe "copying the data" do
       before do
         UserMigrator.new.migrate
+        WorkspaceMigrator.new.migrate
         UserImageMigrator.new.migrate
       end
 
@@ -44,6 +45,26 @@ describe UserImageMigrator, :type => :data_migration do
           length = image_instance_row["length"]
 
           `identify #{new_user.image.path(:original)}`.should include "#{type} #{width}x#{length}"
+        end
+      end
+
+      it "gives an image attachment to all workspaces which had icons" do
+        legacy_workspaces_with_images = Legacy.connection.select_all("select * from edc_workspace where icon_id is not null")
+
+        legacy_workspaces_with_images.length.should == 1
+
+        legacy_workspaces_with_images.each do |legacy_workspace|
+          new_workspace = Workspace.find(legacy_workspace["chorus_rails_workspace_id"])
+
+          icon_id = legacy_workspace["icon_id"]
+          image_instance_row = Legacy.connection.select_one("select * from edc_image_instance where image_id = '#{icon_id}' and type = 'original'")
+          image_row = Legacy.connection.select_one("select * from edc_image where id = '#{icon_id}'")
+
+          type = TYPE_MAP[image_row["type"]]
+          width = image_instance_row["width"]
+          length = image_instance_row["length"]
+
+          `identify #{new_workspace.image.path(:original)}`.should include "#{type} #{width}x#{length}"
         end
       end
     end

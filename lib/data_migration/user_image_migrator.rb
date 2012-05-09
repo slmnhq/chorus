@@ -25,6 +25,18 @@ class UserImageMigrator
       new_user.image = file
       new_user.save!
     end
+
+    legacy_workspaces_with_images = Legacy.connection.select_all("select * from edc_workspace where icon_id is not null")
+    legacy_workspaces_with_images.each do |legacy_workspace|
+      new_workspace = Workspace.find(legacy_workspace["chorus_rails_workspace_id"])
+      icon_id = legacy_workspace["icon_id"]
+      icon = LegacyImage.where("image_id = '#{icon_id}' and type = 'original'").first
+
+      file = StringIO.new(icon.image.force_encoding("UTF-8"))
+
+      new_workspace.image = file
+      new_workspace.save!
+    end
   end
 end
 
