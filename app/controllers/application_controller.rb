@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   after_filter :extend_expiration
   rescue_from 'ActiveRecord::RecordNotFound', :with => :render_not_found
   rescue_from 'ActiveRecord::RecordInvalid', :with => :render_not_valid
+  rescue_from 'ApiValidationError', :with => :render_not_valid
   rescue_from 'SecurityTransgression', :with => :render_forbidden
   rescue_from 'PG::Error', :with => :render_pg_error
 
@@ -64,25 +65,25 @@ class ApplicationController < ActionController::Base
   end
 
   def present(model_or_collection, options={})
-    json = { :response => Presenter.present(model_or_collection, view_context) }
+    json = {:response => Presenter.present(model_or_collection, view_context)}
 
     if model_or_collection.respond_to? :current_page
       json[:pagination] = {
-          :page => model_or_collection.current_page,
-          :per_page => model_or_collection.per_page,
-          :records => model_or_collection.total_entries,
-          :total => model_or_collection.total_pages
+        :page => model_or_collection.current_page,
+        :per_page => model_or_collection.per_page,
+        :records => model_or_collection.total_entries,
+        :total => model_or_collection.total_pages
       }
     end
 
-    render options.merge({ :json => json })
+    render options.merge({:json => json})
   end
 
   def present_errors(errors, options={})
-    render options.reverse_merge(:status => :bad_request).merge(:json => { :errors => errors } )
+    render options.reverse_merge(:status => :bad_request).merge(:json => {:errors => errors})
   end
 
   def present_validation_errors(errors, options={})
-    present_errors({ :fields => ErrorPresenter.new(errors) }, options)
+    present_errors({:fields => ErrorPresenter.new(errors)}, options)
   end
 end

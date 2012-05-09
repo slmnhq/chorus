@@ -10,7 +10,7 @@ describe Gpdb::ConnectionBuilder do
       host: instance.host,
       port: instance.port,
       database: expected_database,
-      user: instance_account.db_username,
+      username: instance_account.db_username,
       password: instance_account.db_password
     }
   end

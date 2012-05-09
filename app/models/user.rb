@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
 
   has_many :instances, :foreign_key => :owner_id
   has_many :workspaces, :foreign_key => :owner_id
+  has_many :instance_accounts, :foreign_key => :owner_id
 
   has_attached_file :image, :default_url => '/images/default-user-icon.png', :styles => {:original => "", :icon => "50x50>"}
 

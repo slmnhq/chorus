@@ -1,5 +1,5 @@
 class Instance < ActiveRecord::Base
-  attr_accessible :name, :description, :host, :port, :maintenance_db, :shared,
+  attr_accessible :name, :description, :host, :port, :maintenance_db,
                   :provision_type, :description, :instance_provider, :version, :state
 
   validates_presence_of :name, :host, :port, :maintenance_db
@@ -37,10 +37,6 @@ class Instance < ActiveRecord::Base
     accounts.where(:owner_id => owner_id).first
   end
 
-  def get_instance_provider
-    return "Greenplum Database"
-  end
-
   def account_for_user!(user)
     if shared?
       owner_account
@@ -53,5 +49,9 @@ class Instance < ActiveRecord::Base
     account_for_user!(user)
   rescue ActiveRecord::RecordNotFound
     nil
+  end
+
+  def online?
+    state == "online"
   end
 end

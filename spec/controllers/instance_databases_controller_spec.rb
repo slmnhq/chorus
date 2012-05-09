@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe InstanceDatabasesController do
-  let!(:dbconfig) {YAML.load_file("config/database.yml")[Rails.env]}
-  let!(:user) { FactoryGirl.create :user}
+  let!(:dbconfig) { YAML.load_file("config/database.yml")[Rails.env] }
+  let!(:user) { FactoryGirl.create :user }
 
   before do
     log_in user
@@ -21,7 +21,7 @@ describe InstanceDatabasesController do
       end
 
       context "when no account for this instance" do
-        let!(:instance) {FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false}
+        let!(:instance) { FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false }
 
         it "should fail" do
           get :index, :instance_id => instance.id
@@ -30,8 +30,8 @@ describe InstanceDatabasesController do
       end
 
       context "when instance and account available" do
-        let!(:instance) {FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false}
-        let!(:account) {FactoryGirl.create :instance_account, :instance_id => instance.id, :owner_id => user.id, :db_username => dbconfig["username"], :db_password => dbconfig["password"]}
+        let!(:instance) { FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false }
+        let!(:account) { FactoryGirl.create :instance_account, :instance_id => instance.id, :owner_id => user.id, :db_username => dbconfig["username"], :db_password => "newpass" }
 
         context "when unable to connect to instance" do
           before do
@@ -45,8 +45,8 @@ describe InstanceDatabasesController do
         end
 
         context "when able to connect to instance" do
-          let!(:instance) {FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false}
-          let!(:account) {FactoryGirl.create :instance_account, :instance_id => instance.id, :owner_id => user.id, :db_username => dbconfig["username"], :db_password => dbconfig["password"]}
+          let!(:instance) { FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false }
+          let!(:account) { FactoryGirl.create :instance_account, :instance_id => instance.id, :owner_id => user.id, :db_username => dbconfig["username"], :db_password => "newpass" }
 
           it "should succeed" do
             get :index, :instance_id => instance.id

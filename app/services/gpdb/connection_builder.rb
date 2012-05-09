@@ -5,7 +5,7 @@ module Gpdb
         :host => instance.host,
         :port => instance.port,
         :database => database_name || instance.maintenance_db,
-        :user => account.db_username,
+        :username => account.db_username,
         :password => account.db_password
       )
       yield connection

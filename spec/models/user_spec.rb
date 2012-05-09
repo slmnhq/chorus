@@ -151,6 +151,7 @@ describe User do
 
   describe "associations" do
     it { should have_many(:instances) }
+    it { should have_many(:instance_accounts) }
   end
 
   describe ".admin_count" do
