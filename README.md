@@ -43,6 +43,11 @@ If you don't have a `/etc/sysctl.conf` file, just create one.
 OSX Lion may not retain these settings between reboots, so you may see the message
 could not create shared memory segment: Invalid argument` indicating that the `sysctl` commands need to be run again.
 
+Create the db folder:
+
+    initdb -D ~/workspace/chorusrails/var/db
+    createuser -h localhost -p8543 -sdr edcadmin;
+
 ### XCode
 
 You need XCode for a compiler
