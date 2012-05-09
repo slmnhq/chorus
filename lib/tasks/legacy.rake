@@ -9,7 +9,7 @@ namespace :legacy do
     [TEST_DB_NAME].each do |db_name|
       connection.execute "DROP DATABASE IF EXISTS #{db_name}"
       connection.execute "CREATE DATABASE #{db_name}"
-      system "psql #{POSTGRES_ARGS} #{db_name} < #{DUMP_FILE_PATH}"
+      system "psql #{POSTGRES_ARGS} #{db_name} < #{DUMP_FILE_PATH} > /dev/null"
     end
   end
 
