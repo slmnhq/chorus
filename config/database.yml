@@ -8,7 +8,7 @@ default: &default
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
   # domain sockets, so uncomment these lines.
-  #host: localhost
+  host: 127.0.0.1
 
   # Schema search path. The server defaults to $user,public
   #schema_search_path: myapp,sharedapp,public

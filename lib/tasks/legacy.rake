@@ -1,6 +1,6 @@
 namespace :legacy do
   DUMP_FILE_PATH = File.join(Rails.root, 'db', 'legacy', 'legacy.sql')
-  POSTGRES_ARGS  = "--host=localhost --port=8543 --username=edcadmin"
+  POSTGRES_ARGS  = "--host=127.0.0.1 --port=8543 --username=edcadmin"
   TEST_DB_NAME = "chorus_legacy_test"
 
   desc "Drop and recreate legacy test database, then import legacy data"
