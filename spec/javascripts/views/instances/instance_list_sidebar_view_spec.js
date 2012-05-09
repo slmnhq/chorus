@@ -34,7 +34,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount({owner: {id: this.instance.owner().id}})]));
+                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount({owner: {id: this.instance.owner().id}})]).models);
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
             });
 
@@ -200,7 +200,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                             instance.loaded = true;
                             this.view.setInstance(instance);
                             this.server.completeFetchFor(instance.usage(), { workspaces: [] });
-                            this.server.completeFetchFor(instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount({owner: {id: instance.owner().id}})]));
+                            this.server.completeFetchFor(instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount({owner: {id: instance.owner().id}})]).models);
                             this.server.completeFetchFor(instance.accountForCurrentUser());
                         });
 
@@ -237,7 +237,6 @@ describe("chorus.views.InstanceListSidebar", function() {
 
             context("when the instance has a shared account", function() {
                 beforeEach(function() {
-                    this.instance.accounts().reset([newFixtures.instanceAccount({owner: {id: this.instance.owner().id}})])
                     this.instance.set({
                         shared: true
                     });
@@ -439,7 +438,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         context("when the user doesn't have permission to fetch the instances workspace usage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount()]));
+                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount()]).models);
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
                 this.server.lastFetchFor(this.instance.usage()).failForbidden("Account map needed");
             });
