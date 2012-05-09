@@ -4,13 +4,17 @@ chorus.models.InstanceAccount = chorus.models.Base.extend({
 
     urlTemplate: function(options) {
         var method = options && options.method;
+        var isEditingOwnAccount = this.get("userId") == chorus.session.user().id;
+
+        if (isEditingOwnAccount) {
+            return "instances/{{instance_id}}/account";
+        }
+
         if (method === "update" || method === "delete") {
             return "instances/{{instance_id}}/members/{{id}}";
-        } else if (method === "read" && this.get("userId") == chorus.session.user().id) {
-            return "instances/{{instance_id}}/account"
-        } else {
-            return "instances/{{instance_id}}/members";
         }
+
+        return "instances/{{instance_id}}/members";
     },
 
     user: function() {
