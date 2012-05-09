@@ -26,8 +26,8 @@ app/assets/javascripts/environment.js
 .DS_Store
 .jhw-cache
 
-
-
-
 # Ignore ctags file
 tags
+
+# Ignore postgres database
+/var

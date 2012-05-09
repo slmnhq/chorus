@@ -11,7 +11,10 @@ set -e
 
 # source $SCRIPT_DIR/rbenv.sh
 
+echo "***** initializing database"
+script/init_db.sh
+
 echo "***** setting up project"
 bundle install
-rake db:create db:migrate db:test:prepare legacy:setup db:test:prepare:legacy
+rake db:reset db:test:prepare legacy:setup db:test:prepare:legacy
 script/test

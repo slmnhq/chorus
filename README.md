@@ -43,10 +43,6 @@ If you don't have a `/etc/sysctl.conf` file, just create one.
 OSX Lion may not retain these settings between reboots, so you may see the message
 could not create shared memory segment: Invalid argument` indicating that the `sysctl` commands need to be run again.
 
-Then create the database folder
-
-    initdb -D ~/workspace/chorusrails/var/db
-
 ### XCode
 
 You need XCode for a compiler
@@ -69,16 +65,6 @@ Note that this will break RVM in other systems, notably the chorus-java project.
 
 Start a new terminal.
 
-
-### Run postgres
-
-(Currently the database lives in the old Chorus project)
-    
-    ps aux | grep -- '-p8543' | grep -v grep | awk '{print $2}' | xargs kill -9 
-    postgres -D ~/workspace/chorus/var/db -h localhost -p8543 --bytea_output=escape
-
-
-
 #### Run script/bootstrap
 
 From the root directory of this project, run:
@@ -96,12 +82,9 @@ This script
 
 ## Development
 
-    cd ~/workspace/chorusrails && rails s
+    cd ~/workspace/chorusrails && foreman start
 
-    If your postgres is not running do the following:
-    (Currently the database lives in the old Chorus project)
-    ps aux | grep -- '-p8543' | grep -v grep | awk '{print $2}' | xargs kill -9
-    postgres -D ~/workspace/chorus/var/db -h localhost -p8543 --bytea_output=escape
+    In another terminal window, run
 
     rake db:migrate
     rake db:test:prepare
