@@ -63,5 +63,6 @@ RSpec.configure do |config|
   config.include JsonHelper, :type => :request
   config.include FixtureGenerator, :type => :controller
   config.include Paperclip::Shoulda::Matchers
+  config.include GpdbTestHelpers
 end
 

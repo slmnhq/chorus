@@ -13,24 +13,14 @@ describe Gpdb::InstanceStatus do
   let(:instance3) { FactoryGirl.create :instance, :owner_id => user1.id }
 
   describe "#check" do
-
-    let(:fake_connection1) do
-      mock(Object.new).query("select version()") do
-        [["PostgreSQL 8.2.15 (Greenplum Database 4.1.1.1 build 1) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"]]
-      end.subject
-    end
-
-    let(:fake_connection2) do
-      mock(Object.new).query("select version()") do
-        [["PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"]]
-      end.subject
-    end
-
     before do
-      stub(Gpdb::ConnectionBuilder).connect.with_any_args { nil }
-      stub(Gpdb::ConnectionBuilder).connect(instance1, instance_account1).yields(fake_connection1)
-      stub(Gpdb::ConnectionBuilder).connect(instance2, instance_account2).yields(fake_connection2)
-      stub(Gpdb::ConnectionBuilder).connect(instance3, instance_account3) { nil }
+      stub_gpdb(instance_account1,
+        "select version()" => [["PostgreSQL 9.2.15 (Greenplum Database 4.1.1.1 build 1) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"]]
+      )
+      stub_gpdb(instance_account2,
+        "select version()" => [["PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"]]
+      )
+      stub_gpdb_fail(instance_account3)
     end
 
     it "checks the connection status for each instance" do

@@ -5,10 +5,12 @@ describe Database do
     it "returns all the databases on the connection" do
       instance = FactoryGirl.build(:instance, :id => 123)
       account = FactoryGirl.build(:instance_account, :instance => instance)
-      fake_connection = mock(Object.new).query("select datname from pg_database order by upper(datname)") do
-          [["db_a"], ["db_B"], ["db_C"], ["db_d"]]
-      end.subject
-      mock(Gpdb::ConnectionBuilder).connect!(instance, account) {|_, _, block| block.call(fake_connection) }
+
+      stub_gpdb(account,
+        "select datname from pg_database order by upper(datname)" => [
+          ["db_a"], ["db_B"], ["db_C"], ["db_d"]
+        ]
+      )
 
       databases = Database.from_instance_account(account)
 
