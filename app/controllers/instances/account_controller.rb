@@ -1,5 +1,5 @@
 module Instances
-  class MyAccountController < ApplicationController
+  class AccountController < ApplicationController
     def show
       present instance.account_for_user(current_user)
     end

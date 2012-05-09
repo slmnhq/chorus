@@ -7,7 +7,7 @@ chorus.models.InstanceAccount = chorus.models.Base.extend({
         if (method === "update" || method === "delete") {
             return "instances/{{instance_id}}/members/{{id}}";
         } else if (method === "read" && this.get("userId") == chorus.session.user().id) {
-            return "instances/{{instance_id}}/my_account"
+            return "instances/{{instance_id}}/account"
         } else {
             return "instances/{{instance_id}}/members";
         }

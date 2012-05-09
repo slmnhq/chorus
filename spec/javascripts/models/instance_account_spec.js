@@ -24,7 +24,7 @@ describe("chorus.models.InstanceAccount", function() {
         context("when fetching", function() {
             it("has the right url for fetching current user's account for this instance", function() {
                 this.model.set({userId: chorus.session.user().id});
-                expect(this.model.url({ method: 'read' })).toMatchUrl("/instances/1045/my_account");
+                expect(this.model.url({ method: 'read' })).toMatchUrl("/instances/1045/account");
             });
         });
     });

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Instances::MyAccountController do
+describe Instances::AccountController do
   describe "#show" do
     let(:joe) { FactoryGirl.create(:user) }
     let(:instance) { FactoryGirl.create(:instance) }
