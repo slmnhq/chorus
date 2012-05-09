@@ -6,11 +6,10 @@ module Gpdb
 
       account = owner.instance_accounts.build(connection_config)
 
-      check_connection!(instance, account)
-
       ActiveRecord::Base.transaction do
         instance.save!
         account.instance = instance
+        ConnectionChecker.check!(instance, account)
         account.save!
       end
 
@@ -23,19 +22,10 @@ module Gpdb
 
       instance.attributes = connection_config
 
-      check_connection!(instance, instance.owner_account)
+      ConnectionChecker.check!(instance, instance.owner_account)
 
       instance.save!
       instance
-    end
-
-    def self.check_connection!(instance, account)
-      ConnectionBuilder.connect!(instance, account) {}
-      instance.state = "online"
-    rescue PG::Error => e
-      errors = ApiValidationError.new
-      errors.add(:connection, :generic, {:message => e.message})
-      raise errors
     end
   end
 end

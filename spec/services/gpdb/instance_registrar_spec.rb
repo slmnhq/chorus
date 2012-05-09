@@ -2,21 +2,30 @@ require 'spec_helper'
 
 describe Gpdb::InstanceRegistrar do
   let(:owner) { FactoryGirl.create(:user) }
-  let(:valid_input_attributes) do
+  let(:valid_instance_attributes) do
     {
       :name => "new",
       :port => 12345,
       :host => "server.emc.com",
       :maintenance_db => "postgres",
-      :db_username => "bob",
-      :db_password => "secret",
       :provision_type => "register",
       :description => "old description"
     }
   end
 
+  let(:valid_account_attributes) do
+    {
+      :db_username => "bob",
+      :db_password => "secret"
+    }
+  end
+
+  let :valid_input_attributes do
+    valid_instance_attributes.merge(valid_account_attributes)
+  end
+
   before do
-    stub(Gpdb::ConnectionBuilder).connect!
+    stub(Gpdb::ConnectionChecker).check! { true }
   end
 
   describe ".create!" do
@@ -43,14 +52,15 @@ describe Gpdb::InstanceRegistrar do
     end
 
     it "requires that a real connection to GPDB can be established" do
-      stub(Gpdb::ConnectionBuilder).connect! { raise(PG::Error.new("connection error")) }
+      stub(Gpdb::ConnectionChecker).check! { raise(ApiValidationError.new) }
 
-      begin
-        Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
-        fail
-      rescue ApiValidationError => e
-        e.record.errors.get(:connection).should == [[:generic, {:message => "connection error"}]]
-      end
+      expect { Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner) }.to raise_error
+      expect {
+        begin
+          Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
+        rescue
+        end
+      }.not_to change(Instance, 'count')
     end
 
     it "caches the db name, owner and connection params" do
@@ -63,11 +73,6 @@ describe Gpdb::InstanceRegistrar do
       cached_instance.maintenance_db.should == valid_input_attributes[:maintenance_db]
       cached_instance.provision_type.should == valid_input_attributes[:provision_type]
       cached_instance.description.should == valid_input_attributes[:description]
-    end
-
-    it "sets the instance's status to be 'online''" do
-      instance = Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
-      instance.should be_online
     end
 
     it "caches the db username and password" do
@@ -95,9 +100,9 @@ describe Gpdb::InstanceRegistrar do
 
   describe ".update!" do
     let(:admin) { FactoryGirl.create(:user, :admin => true) }
-    let(:cached_instance) { Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner) }
+    let(:cached_instance) { FactoryGirl.create(:instance, valid_instance_attributes.merge(:owner => owner)) }
+    let!(:cached_instance_account) { FactoryGirl.create(:instance_account, :db_username => "bob", :owner => owner, :instance => cached_instance) }
     let(:updated_attributes) { valid_input_attributes.merge(:name => "new name") }
-    let(:updated_output_attributes) { valid_input_attributes.merge(:name => "new name") }
 
     it "allows admin to update" do
       updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, admin)
@@ -141,14 +146,14 @@ describe Gpdb::InstanceRegistrar do
     end
 
     it "requires that a real connection to GPDB can be established" do
-      stub(Gpdb::ConnectionBuilder).connect! { raise(PG::Error.new("connection error")) }
-
-      begin
-        Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, owner)
-        fail
-      rescue ApiValidationError => e
-        e.record.errors.get(:connection).should == [[:generic, {:message => "connection error"}]]
-      end
+      stub(Gpdb::ConnectionChecker).check! { raise(ApiValidationError.new) }
+      expect { Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, owner) }.to raise_error
+      expect {
+        begin
+          Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
+        rescue
+        end
+      }.not_to change { cached_instance.reload.name }
     end
   end
 end

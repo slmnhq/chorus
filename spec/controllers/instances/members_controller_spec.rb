@@ -58,6 +58,11 @@ describe Instances::MembersController do
 
   describe "#create" do
     let!(:owner) { FactoryGirl.create :user }
+
+    before do
+      stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
+    end
+
     context "when admin" do
       before do
         log_in admin
@@ -141,10 +146,21 @@ describe Instances::MembersController do
         end
       end
     end
+
+    it "does not succeed when credentials are invalid" do
+      log_in instance_owner
+      stub(Gpdb::ConnectionChecker).check!(anything, anything) { raise ApiValidationError.new }
+      post :create, :instance_id => instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => owner.id}
+      response.code.should == "422"
+    end
   end
 
   describe "#update" do
     let(:account) { FactoryGirl.create :instance_account, :instance => instance, :owner => instance_owner }
+
+    before do
+      stub(Gpdb::ConnectionChecker).check!(anything, anything) { true }
+    end
 
     context "when admin" do
       before do
@@ -227,6 +243,13 @@ describe Instances::MembersController do
           response.should be_not_found
         end
       end
+    end
+
+    it "does not succeed when credentials are invalid" do
+      log_in instance_owner
+      stub(Gpdb::ConnectionChecker).check!(anything, anything) { raise ApiValidationError.new }
+      put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
+      response.code.should == "422"
     end
   end
 
