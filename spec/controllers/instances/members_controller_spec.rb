@@ -4,6 +4,7 @@ describe Instances::MembersController do
   let(:admin) { FactoryGirl.create :admin }
   let(:instance_owner) { FactoryGirl.create :user }
   let(:joe) { FactoryGirl.create :user }
+  let(:tom) { FactoryGirl.create :user }
   let(:instance) { FactoryGirl.create :instance, :owner => instance_owner }
 
   describe "#index" do
@@ -225,6 +226,52 @@ describe Instances::MembersController do
           put :update, :instance_id => instance.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
           response.should be_not_found
         end
+      end
+    end
+  end
+
+  describe "#destroy" do
+    before do
+      @joe_account = FactoryGirl.create :instance_account, :instance => instance, :owner => joe
+    end
+
+    context "when the current user is the instance's owner" do
+      before do
+        log_in instance_owner
+      end
+
+      it "removes the given account" do
+        instance.accounts.find_by_owner_id(joe.id).should_not be_nil
+        delete :destroy, :instance_id => instance.id, :id => @joe_account.id
+        instance.accounts.find_by_owner_id(joe.id).should be_nil
+      end
+
+      it "succeeds" do
+        delete :destroy, :instance_id => instance.id, :id => @joe_account.id
+        response.should be_ok
+      end
+
+      context "when there is no account for the given instance and user" do
+        it "responds with 'not found'" do
+          delete :destroy, :instance_id => instance.id, :id => 'not_an_id'
+          response.should be_not_found
+        end
+      end
+    end
+
+    context "when the current user is not an admin nor the instance's owner" do
+      before do
+        log_in FactoryGirl.create(:user)
+      end
+
+      it "does not remove the account" do
+        delete :destroy, :instance_id => instance.id, :id => @joe_account.id
+        instance.accounts.find_by_owner_id(joe.id).should_not be_nil
+      end
+
+      it "responds with 'forbidden'" do
+        delete :destroy, :instance_id => instance.id, :id => @joe_account.id
+        response.should be_forbidden
       end
     end
   end

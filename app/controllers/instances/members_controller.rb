@@ -20,5 +20,13 @@ module Instances
       account.update_attributes! params[:account]
       present account, :status => :ok
     end
+
+    def destroy
+      raise SecurityTransgression if Instance.find(params[:instance_id]).owner != current_user
+      account = InstanceAccount.find_by_instance_id_and_id(params[:instance_id], params[:id])
+      raise ActiveRecord::RecordNotFound unless account
+      account.delete
+      render :json => {}
+    end
   end
 end
