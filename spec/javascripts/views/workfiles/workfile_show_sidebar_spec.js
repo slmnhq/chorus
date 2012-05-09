@@ -182,7 +182,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             this.model.workspace().fetch();
 
             this.server.completeFetchFor(this.model);
-            this.server.completeFetchFor(this.model.workspace(), newFixtures.workspace({ active: false, state: "0" }));
+            this.server.completeFetchFor(this.model.workspace(), newFixtures.workspace({ archived_at: "2012-05-08 21:40:14" }));
 
             this.view.render();
         });

@@ -118,7 +118,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
 
         context("when the workfile's workspace is archived", function() {
             beforeEach(function() {
-                this.workspace.set({active: false});
+                this.workspace.set({archived_at: "2011-11-22 10:46:03.152"});
                 this.workfile = fixtures.sqlWorkfile({
                     lastUpdatedStamp: "2011-11-22 10:46:03.152"
                 });

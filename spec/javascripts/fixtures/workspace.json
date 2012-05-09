@@ -5,12 +5,11 @@
     "archiver":null,
     "archiverFirstName":null,
     "ownerLastName":"Admin",
-    "state":1,
     "permission":[
         "admin"
     ],
     "archivedTimestamp":null,
-    "isPublic":true,
+    "public":true,
     "latestInsightList":[
         {
         "text":"erg",
@@ -116,7 +115,7 @@
     "numberOfInsight":0,
     "owner":"edcadmin",
     "numberOfComment":3,
-    "active":true,
+    "archived_at":null,
     "iconId":null,
     "sandboxInfo":{
         "sandboxId":"10000",

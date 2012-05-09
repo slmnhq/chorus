@@ -151,7 +151,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             beforeEach(function() {
                 spyOn(this.model, "workspaceAdmin").andReturn(true);
                 spyOn(this.view.model, "sandbox").andReturn(false);
-                this.view.model.set({active: false});
+                this.view.model.set({archived_at: "2012-05-08 21:40:14"});
                 this.view.render();
             });
             it("does not have the 'add or edit members link'", function() {

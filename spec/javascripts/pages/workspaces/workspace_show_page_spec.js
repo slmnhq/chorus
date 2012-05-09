@@ -118,7 +118,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
             context("when the model changes", function() {
                 beforeEach(function() {
-                    this.page.model.set({name: "bar", isPublic: false});
+                    this.page.model.set({name: "bar", public: false});
                 });
 
                 it("displays the new breadcrumb automatically", function() {

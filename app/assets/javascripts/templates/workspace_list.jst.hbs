@@ -20,10 +20,10 @@
                     {{else}}
                         {{t "workspaces.archived_by"}}
                         <a href="{{archiverUrl}}">{{archiverFullName}}</a>
-                        <span class="timestamp">{{relativeTimestamp archivedTimestamp}}</span>
+                        <span class="timestamp">{{relativeTimestamp archived_at}}</span>
                     {{/if}}
                 </span>
-                {{#unless isPublic}}
+                {{#unless public}}
                     <span class="private">
                         <img src="/images/workspace-lock.png"/>
                         {{t "workspaces.private"}}

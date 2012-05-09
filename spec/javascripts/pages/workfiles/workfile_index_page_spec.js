@@ -222,7 +222,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
             context("and the workspace is archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({active: false});
+                    this.workspace.set({archived_at: "2012-05-08 21:40:14"});
                     this.server.completeFetchFor(this.workspace);
                     this.server.completeFetchFor(this.page.collection);
                 });

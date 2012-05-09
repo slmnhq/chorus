@@ -20,11 +20,11 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     isActive: function() {
-        return this.get("active") || this.get("state") == "1"
+        return (this.get("archived_at") == null)
     },
 
     isPublic: function() {
-        return this.get("isPublic");
+        return this.get("public");
     },
 
     owner: function() {
@@ -102,10 +102,9 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     archiver:function () {
-        return new chorus.models.User({
-            fullName:(this.get("archiverFirstName") + ' ' + this.get("archiverLastName")),
-            username:this.get("archiver")
-        });
+        return new chorus.models.User(
+          this.get("archiver")
+        );
     },
 
     displayName:function () {

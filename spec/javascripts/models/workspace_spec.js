@@ -1,7 +1,7 @@
 describe("chorus.models.Workspace", function() {
     var models = chorus.models;
     beforeEach(function() {
-        this.model = newFixtures.workspace({ active: true, state: null });
+        this.model = newFixtures.workspace({ archived_at: null });
     });
 
     it("has the correct urlTemplate", function() {
@@ -10,17 +10,12 @@ describe("chorus.models.Workspace", function() {
 
     describe("#isActive", function() {
         it("return true when active:true", function() {
-            this.model.set({active: true});
-            expect(this.model.isActive()).toBeTruthy();
-        });
-
-        it("returns true when state:1", function() {
-            this.model.set({state: "1"});
+            this.model.set({archived_at: null});
             expect(this.model.isActive()).toBeTruthy();
         });
 
         it("returns false otherwise", function() {
-            this.model.set({ active: false, state: 0 });
+            this.model.set({ archived_at: "2012-05-08 21:40:14" });
             expect(this.model.isActive()).toBeFalsy();
         });
     });
@@ -40,45 +35,35 @@ describe("chorus.models.Workspace", function() {
 
 
     describe("#isPublic", function() {
-        it("return true when isPublic: true", function() {
-            this.model.set({isPublic: true});
+        it("return true when public: true", function() {
+            this.model.set({public: true});
             expect(this.model.isPublic()).toBeTruthy();
         });
 
         it("returns false otherwise", function() {
-            this.model.set({ isPublic: false });
+            this.model.set({ public: false });
             expect(this.model.isPublic()).toBeFalsy();
         });
     })
 
     describe("#defaultIconUrl", function() {
-        it("links to the active url when active:true", function() {
-            this.model.set({active: true, isPublic: true});
+        it("links to the active url when workspace is active", function() {
+            this.model.set({archived_at: null, public: true});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_large.png");
         });
 
-        it("links to the active url when state:1", function() {
-            this.model.set({state: "1", isPublic: true});
-            expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_large.png");
-        });
-
-        it("links to the archive url active:false or state not equal to 1", function() {
-            this.model.set({active: false, state: "0", isPublic: true});
+        it("links to the archive url when workspace is not active  ", function() {
+            this.model.set({archived_at: "2012-05-08 21:40:14",   public: true});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_archived_large.png");
         });
 
-        it("links to the private active url when active:true and isPublic:false", function() {
-            this.model.set({active: true, isPublic: false});
-            expect(this.model.defaultIconUrl()).toBe("/images/workspaces/private_workspace_large.png");
-        });
-
-        it("links to the private active url when state:1 and isPublic:false", function() {
-            this.model.set({state: "1", isPublic: false});
+        it("links to the private active url when workspace is active and public:false", function() {
+            this.model.set({archived_at: null, public: false});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/private_workspace_large.png");
         });
 
         it("links to the private archive url otherwise", function() {
-            this.model.set({active: false, state: "0", isPublic: false});
+            this.model.set({archived_at: "2012-05-08 21:40:14", public: false});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/private_workspace_archived_large.png");
         });
     });
@@ -220,12 +205,12 @@ describe("chorus.models.Workspace", function() {
 
     describe("#archiver", function() {
         beforeEach(function() {
-            this.model.set({archiver: "jhenry", archiverFirstName: "John", archiverLastName: "Henry"})
+            this.model.set({archiver: {first_name: "John", last_name: "Henry", username: "jhenry"}})
         });
 
         it("returns a new User with the right username and fullName", function() {
             var archiver = this.model.archiver();
-            expect(archiver.get("fullName")).toBe("John Henry");
+            expect(archiver.displayName()).toBe("John Henry");
             expect(archiver.get("username")).toBe("jhenry");
         });
 
@@ -294,22 +279,22 @@ describe("chorus.models.Workspace", function() {
 
     describe("picklistImageUrl", function() {
         it("returns the correct URL when the workspace is archived and is public", function() {
-            this.model.set({active: false, isPublic: true});
+            this.model.set({archived_at: "2012-05-08 21:40:14", public: true});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/workspace_archived_small.png');
         });
 
         it("returns the correct URL when the workspace is not archived and is public", function() {
-            this.model.set({active: true, isPublic: true});
+            this.model.set({archived_at: null, public: true});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/workspace_small.png');
         });
 
         it("returns the correct URL when the workspace is archived and is private", function() {
-            this.model.set({active: false, isPublic: false});
+            this.model.set({archived_at: "2012-05-08 21:40:14", public: false});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/private_workspace_archived_small.png');
         });
 
         it("returns the correct URL when the workspace is not archived and is private", function() {
-            this.model.set({active: true, isPublic: false});
+            this.model.set({archived_at: null, public: false});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/private_workspace_small.png');
         });
     });

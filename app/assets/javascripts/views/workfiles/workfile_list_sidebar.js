@@ -41,7 +41,7 @@ chorus.views.WorkfileListSidebar = chorus.views.Sidebar.extend({
     additionalContext:function () {
         var ctx = {
             canUpdate: this.options.workspace && this.options.workspace.canUpdate(),
-            activeWorkspace: this.options.workspace && this.options.workspace.get("active"),
+            activeWorkspace: this.options.workspace && this.options.workspace.isActive(),
             hideAddNoteLink: this.options.hideAddNoteLink
         };
 

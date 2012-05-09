@@ -75,7 +75,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
     },
 
     updateButtons: function() {
-        if (this.mainContent.model.canUpdate() && this.mainContent.model.get("active")) {
+        if (this.mainContent.model.canUpdate() && this.mainContent.model.isActive()) {
             this.mainContent.contentDetails.options.buttons = [
                 {
                     view: "WorkfilesImport",

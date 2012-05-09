@@ -8,7 +8,7 @@ class WorkspacePresenter < Presenter
         :summary => h(summary),
         :owner => present(owner),
         :archiver => present(archiver),
-        :archived_at => archived_at,
+        :archived_at => archived_at.try(:strftime, "%Y-%m-%d %H:%M:%S"),
         :public => public
     }
   end

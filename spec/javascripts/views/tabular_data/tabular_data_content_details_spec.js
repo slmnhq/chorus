@@ -479,7 +479,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                 context("when the workspace is archived", function() {
                     beforeEach(function() {
                         var tabularData = newFixtures.dataset.sourceTable();
-                        var workspace = newFixtures.workspace({ active: false, state: 0 });
+                        var workspace = newFixtures.workspace({ archived_at: "2012-05-08 21:40:14"});
                         tabularData.initialQuery = "select * from abc";
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
                         this.server.completeFetchFor(tabularData.statistics());
@@ -493,7 +493,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                 context("when the workspace is active", function() {
                     beforeEach(function() {
                         var tabularData = newFixtures.dataset.sourceTable();
-                        var workspace = newFixtures.workspace({active: true});
+                        var workspace = newFixtures.workspace({archived_at: null});
                         tabularData.initialQuery = "select * from abc";
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
                         this.server.completeFetchFor(tabularData.statistics());
@@ -510,7 +510,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                 context("when the workspace is archived", function() {
                     beforeEach(function() {
                         var tabularData = newFixtures.dataset.chorusView();
-                        var workspace = newFixtures.workspace({ active: false, state: 0 });
+                        var workspace = newFixtures.workspace({ archived_at: "2012-05-08 21:40:14" });
                         tabularData.initialQuery = "select * from abc";
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
                         this.server.completeFetchFor(tabularData.statistics());
@@ -530,7 +530,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                     beforeEach(function() {
                         var tabularData = newFixtures.dataset.chorusView();
                         tabularData.initialQuery = "select * from abc";
-                        var workspace = newFixtures.workspace({active: true})
+                        var workspace = newFixtures.workspace({archived_at: null})
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
                         this.server.completeFetchFor(tabularData.statistics());
                         this.view.render();

@@ -40,7 +40,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
         context("when the workspace is archived", function() {
             beforeEach(function() {
-                this.model.workspace().set({ active: false });
+                this.model.workspace().set({ archived_at: "2012-05-08 21:40:14" });
                 this.view.render();
             });
 

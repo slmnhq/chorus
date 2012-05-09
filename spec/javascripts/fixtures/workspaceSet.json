@@ -6,12 +6,10 @@
       "archiver":null,
       "archiverFirstName":null,
       "ownerLastName":"Admin",
-      "state":1,
       "permission":[
          "admin"
       ],
-      "archivedTimestamp":null,
-      "isPublic":true,
+      "public":true,
       "latestInsightList":null,
       "id":"10000",
       "latestCommentList":null,
@@ -21,7 +19,7 @@
       "numberOfInsight":null,
       "owner":"edcadmin",
       "numberOfComment":null,
-      "active":true,
+      "archived_at":null,
       "iconId":null,
       "sandboxInfo":{
          "sandboxId":"10000",
@@ -42,12 +40,10 @@
       "archiver":null,
       "archiverFirstName":null,
       "ownerLastName":"Admin",
-      "state":1,
       "permission":[
          "admin"
       ],
-      "archivedTimestamp":null,
-      "isPublic":true,
+      "public":true,
       "latestInsightList":null,
       "id":"10002",
       "latestCommentList":null,
@@ -57,7 +53,7 @@
       "numberOfInsight":null,
       "owner":"edcadmin",
       "numberOfComment":null,
-      "active":true,
+      "archived_at": null,
       "iconId":null,
       "sandboxInfo":{
          "sandboxId":null,
@@ -78,12 +74,10 @@
       "archiver":null,
       "archiverFirstName":null,
       "ownerLastName":"Admin",
-      "state":1,
       "permission":[
          "admin"
       ],
-      "archivedTimestamp":null,
-      "isPublic":true,
+      "public":true,
       "latestInsightList":null,
       "id":"10003",
       "latestCommentList":null,
@@ -93,7 +87,7 @@
       "numberOfInsight":null,
       "owner":"edcadmin",
       "numberOfComment":null,
-      "active":true,
+      "archived_at":null,
       "iconId":null,
       "sandboxInfo":{
          "sandboxId":null,
@@ -114,12 +108,11 @@
       "archiver":null,
       "archiverFirstName":null,
       "ownerLastName":"Admin",
-      "state":1,
       "permission":[
          "admin"
       ],
-      "archivedTimestamp":null,
-      "isPublic":true,
+      "archived_at":null,
+      "public":true,
       "latestInsightList":null,
       "id":"10007",
       "latestCommentList":null,
@@ -129,7 +122,6 @@
       "numberOfInsight":null,
       "owner":"edcadmin",
       "numberOfComment":null,
-      "active":true,
       "iconId":null,
       "sandboxInfo":{
          "sandboxId":null,

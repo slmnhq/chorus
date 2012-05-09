@@ -197,7 +197,7 @@ describe("chorus.views.TabularDataSidebar", function() {
             context("when there is an archived workspace", function() {
                 beforeEach(function() {
                     this.view.options.listMode = true;
-                    this.view.options.workspace = newFixtures.workspace({active: false, state: 0, permission: ["update", "admin"]});
+                    this.view.options.workspace = newFixtures.workspace({archived_at: "2012-05-08 21:40:14", permission: ["update", "admin"]});
                     this.view.render();
                     this.dataset = newFixtures.dataset.sourceTable();
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
