@@ -10,10 +10,4 @@ module AcceptanceAuthHelper
       client.delete "/sessions"
     end
   end
-
-  private
-
-  def client
-    @client ||= RspecApiDocumentation::TestClient.new(self, :headers => {"HTTP_ACCEPT" => "application/json"})
-  end
 end
