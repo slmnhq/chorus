@@ -393,7 +393,7 @@ describe("chorus.models.TabularData", function() {
                 this.tabularData.download({ rows: "345" });
                 expect($.download).toHaveBeenCalledWith("/edc/data/csvDownload", {
                     datasetId: this.tabularData.id,
-                    numOfRow: "345"
+                    numOfRows: "345"
                 }, "get");
             });
         });
