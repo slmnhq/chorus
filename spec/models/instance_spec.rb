@@ -1,4 +1,5 @@
 require "spec_helper"
+
 describe Instance do
   describe "validations" do
     it { should validate_presence_of :name }
@@ -104,6 +105,19 @@ describe Instance do
     end
   end
 
+  describe ".unshared" do
+    it "returns unshared instances" do
+      unshared_instance = FactoryGirl.create(:instance, :shared => false)
+      another_unshared_instance = FactoryGirl.create(:instance, :shared => nil)
+      Instance.unshared.should =~ [unshared_instance, another_unshared_instance]
+    end
+
+    it "does not return shared instances" do
+      FactoryGirl.create(:instance, :shared => true)
+      Instance.unshared.should == []
+    end
+  end
+
   describe "#account_for_user" do
     let(:user) { FactoryGirl.create :user }
 
@@ -121,12 +135,18 @@ describe Instance do
       let!(:instance) { FactoryGirl.create :instance, :shared => false }
       let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => instance.owner.id }
       let!(:user_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => user.id }
-      let!(:stranger) { FactoryGirl.create :user }
 
       it "should return the account for the user or nil if the user has no account" do
         instance.account_for_user(instance.owner).should == owner_account
         instance.account_for_user(user).should == user_account
-        instance.account_for_user(stranger).should be_nil
+      end
+    end
+
+    context "missing account" do
+      let!(:instance) { FactoryGirl.create :instance }
+
+      it "raises an exception" do
+        expect { instance.account_for_user(user) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

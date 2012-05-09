@@ -7,11 +7,15 @@ class Instance < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   has_many :accounts, :class_name => 'InstanceAccount'
 
+  def self.unshared
+    where("instances.shared = false OR instances.shared IS NULL")
+  end
+
   def self.owned_by(user)
     if user.admin?
-      Instance.scoped
+      scoped
     else
-      Instance.where("owner_id = ?", user.id)
+      where("owner_id = ?", user.id)
     end
   end
 
@@ -41,7 +45,7 @@ class Instance < ActiveRecord::Base
     if shared?
       owner_account
     else
-      accounts.where(:owner_id => user.id).first
+      accounts.find_by_owner_id!(user.id)
     end
   end
 end

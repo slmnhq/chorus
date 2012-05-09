@@ -25,7 +25,7 @@ describe InstanceDatabasesController do
 
         it "should fail" do
           get :index, :instance_id => instance.id
-          response.code.should == "403"
+          response.code.should == "404"
         end
       end
 
