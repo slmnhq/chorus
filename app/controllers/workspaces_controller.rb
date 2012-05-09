@@ -1,6 +1,9 @@
 class WorkspacesController < ApplicationController
   def index
-    present Workspace.all
+    workspaces = Workspace.scoped
+    workspaces = workspaces.active if params[:active]
+    workspaces = workspaces.where(:owner_id => params[:user_id]) if params[:user_id]
+    present workspaces
   end
 
   def create

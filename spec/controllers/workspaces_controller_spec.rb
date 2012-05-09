@@ -4,8 +4,8 @@ describe WorkspacesController do
   before do
     @user = FactoryGirl.create(:user)
     log_in @user
-    @workspace1 = FactoryGirl.create(:workspace, :name => "workspace1")
-    @workspace2 = FactoryGirl.create(:workspace, :name => "workspace2")
+    @workspace1 = FactoryGirl.create(:workspace, :name => "workspace1", :owner => @user)
+    @workspace2 = FactoryGirl.create(:workspace, :name => "workspace2", :archived_at => 2.days.ago)
   end
 
   describe "#index" do
@@ -16,6 +16,18 @@ describe WorkspacesController do
       response.code.should == "200"
       decoded_response[0].name.should == "workspace1"
       decoded_response[1].name.should == "workspace2"
+    end
+
+    it "scopes by active status" do
+      get :index, :active => 1
+      decoded_response.size.should == 1
+      decoded_response[0].name.should == "workspace1"
+    end
+
+    it "scopes by owner" do
+      get :index, :user_id => @user.id
+      decoded_response.size.should == 1
+      decoded_response[0].name.should == "workspace1"
     end
   end
 

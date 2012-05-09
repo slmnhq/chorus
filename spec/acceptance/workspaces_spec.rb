@@ -9,6 +9,9 @@ resource "Workspaces" do
   end
 
   get "/workspaces" do
+    parameter :active, "1 if you only want active workspaces, 0 if you want all workspaces. Defaults to all workspaces if the parameter is not provided"
+    parameter :user_id, "If provided, only return workspaces belonging to the specified user"
+
     example_request "Get a list of workspaces" do
       status.should == 200
     end

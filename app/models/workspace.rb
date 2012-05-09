@@ -5,4 +5,6 @@ class Workspace < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
 
   validates_presence_of :name
+
+  scope :active, where(:archived_at => nil)
 end

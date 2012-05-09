@@ -17,9 +17,9 @@ describe("chorus.collections.WorkspaceSet", function() {
     });
 
     context("with a userId", function(){
-        it("sets the 'user' param", function() {
+        it("sets the 'user_id' param", function() {
             this.collection.attributes.userId = 199;
-            expect(this.collection.url()).toMatchUrl("/workspaces/?user=199&page=1&rows=50");
+            expect(this.collection.url()).toMatchUrl("/workspaces/?user_id=199&page=1&rows=50");
         });
     })
 
@@ -34,7 +34,7 @@ describe("chorus.collections.WorkspaceSet", function() {
         it("it has correct Url when both are true", function() {
             this.collection.attributes.userId = 20;
             this.collection.attributes.active = true;
-            expect(this.collection.url()).toMatchUrl("/workspaces/?active=true&user=20&page=1&rows=50");
+            expect(this.collection.url()).toMatchUrl("/workspaces/?active=true&user_id=20&page=1&rows=50");
         });
     });
 });

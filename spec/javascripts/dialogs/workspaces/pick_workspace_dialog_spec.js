@@ -9,7 +9,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
 
     describe("#setup", function() {
         it("fetches all the workspaces", function() {
-            expect(this.server.lastFetch().url).toBe("/workspaces/?user=4003&page=1&rows=1000");
+            expect(this.server.lastFetch().url).toBe("/workspaces/?user_id=4003&page=1&rows=1000");
         })
 
         it("only gets the chorus.session.users()'s workspaces", function() {

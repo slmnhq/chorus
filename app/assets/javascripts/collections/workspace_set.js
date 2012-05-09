@@ -11,7 +11,7 @@ chorus.collections.WorkspaceSet = chorus.collections.Base.extend({
         }
 
         if (this.attributes.userId) {
-            params.user = this.attributes.userId;
+            params.user_id = this.attributes.userId;
         }
 
         if (this.attributes.showLatestComments) {
