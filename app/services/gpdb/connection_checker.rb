@@ -5,7 +5,6 @@ module Gpdb
       validate_model!(account)
 
       ConnectionBuilder.connect!(instance, account)
-      instance.state = "online"
       true
     rescue PG::Error => e
       raise ApiValidationError.new(:connection, :generic, {:message => e.message})

@@ -158,8 +158,8 @@ CREATE TABLE instances (
     shared boolean DEFAULT false,
     provision_type character varying(255),
     instance_provider character varying(255),
-    state character varying(255) DEFAULT 'offline'::character varying,
-    version character varying(255)
+    version character varying(255),
+    online boolean DEFAULT true
 );
 
 
@@ -439,3 +439,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120508175301');
 INSERT INTO schema_migrations (version) VALUES ('20120508184817');
 
 INSERT INTO schema_migrations (version) VALUES ('20120509004549');
+
+INSERT INTO schema_migrations (version) VALUES ('20120510210331');

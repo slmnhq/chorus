@@ -4,9 +4,9 @@ module Gpdb
       instances = Instance.scoped
       instances.each do |instance|
         account = InstanceAccount.where(:owner_id => instance.owner_id, :instance_id => instance.id).first
-        instance.state = "offline"
+        instance.online = false
         Gpdb::ConnectionBuilder.connect(instance, account) do |conn|
-          instance.state = "online"
+          instance.online = true
           version_string = conn.query("select version()")[0][0]
 
           # if the version string looks like this:

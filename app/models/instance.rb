@@ -1,6 +1,6 @@
 class Instance < ActiveRecord::Base
   attr_accessible :name, :description, :host, :port, :maintenance_db,
-                  :provision_type, :description, :instance_provider, :version, :state
+                  :provision_type, :description, :instance_provider, :version
 
   validates_presence_of :name, :host, :port, :maintenance_db
 
@@ -23,8 +23,8 @@ class Instance < ActiveRecord::Base
     return scoped if user.admin?
 
     where('instances.shared OR instances.owner_id = :owned OR instances.id IN (:with_membership)',
-      :owned => user.id,
-      :with_membership => user.instance_accounts.pluck(:instance_id)
+          :owned => user.id,
+          :with_membership => user.instance_accounts.pluck(:instance_id)
     )
   end
 
@@ -44,9 +44,5 @@ class Instance < ActiveRecord::Base
     account_for_user!(user)
   rescue ActiveRecord::RecordNotFound
     nil
-  end
-
-  def online?
-    state == "online"
   end
 end
