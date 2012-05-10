@@ -110,6 +110,45 @@ $_$;
 
 
 --
+-- Name: hadoop_instances; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE hadoop_instances (
+    id integer NOT NULL,
+    name character varying(255),
+    description text,
+    host character varying(255),
+    port integer,
+    owner_id integer,
+    state character varying(255) DEFAULT 'offline'::character varying,
+    version character varying(255),
+    username character varying(255),
+    group_list character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: hadoop_instances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE hadoop_instances_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: hadoop_instances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE hadoop_instances_id_seq OWNED BY hadoop_instances.id;
+
+
+--
 -- Name: instance_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -332,6 +371,13 @@ ALTER SEQUENCE workspaces_id_seq OWNED BY workspaces.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE hadoop_instances ALTER COLUMN id SET DEFAULT nextval('hadoop_instances_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE instance_accounts ALTER COLUMN id SET DEFAULT nextval('instance_credentials_id_seq'::regclass);
 
 
@@ -368,6 +414,14 @@ ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 --
 
 ALTER TABLE workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::regclass);
+
+
+--
+-- Name: hadoop_instances_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY hadoop_instances
+    ADD CONSTRAINT hadoop_instances_pkey PRIMARY KEY (id);
 
 
 --
@@ -500,6 +554,8 @@ INSERT INTO schema_migrations (version) VALUES ('20120508175301');
 INSERT INTO schema_migrations (version) VALUES ('20120508184817');
 
 INSERT INTO schema_migrations (version) VALUES ('20120509004549');
+
+INSERT INTO schema_migrations (version) VALUES ('20120510172734');
 
 INSERT INTO schema_migrations (version) VALUES ('20120510210331');
 

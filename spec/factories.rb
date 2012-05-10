@@ -25,6 +25,13 @@ FactoryGirl.define do
     version "9.1.2 - FactoryVersion"
   end
 
+  factory :hadoop_instance do
+    sequence(:name) { |n| "instance#{n}" }
+    sequence(:host) { |n| "host#{n}.emc.com" }
+    sequence(:port) { |n| 5000+n }
+    owner
+  end
+
   factory :instance_account do
     sequence(:db_username) { |n| "username#{n}" }
     db_password "secret"
