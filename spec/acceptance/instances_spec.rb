@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB Instances" do
+resource "Greenplum DB instances" do
   let!(:owner) { FactoryGirl.create :user }
   let(:owned_instance) { FactoryGirl.create(:instance, :owner => owner) }
   let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => owned_instance, :owner => owner)}
