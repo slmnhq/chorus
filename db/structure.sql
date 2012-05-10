@@ -10,6 +10,13 @@ SET client_min_messages = warning;
 SET escape_string_warning = off;
 
 --
+-- Name: test; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA test;
+
+
+--
 -- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: -
 --
 
@@ -128,6 +135,17 @@ CREATE TABLE hadoop_instances (
     online boolean DEFAULT true
 );
 
+-- Name: gpdb_databases; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE gpdb_databases (
+    id integer NOT NULL,
+    instance_id integer,
+    name character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
 
 --
 -- Name: hadoop_instances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
@@ -140,12 +158,61 @@ CREATE SEQUENCE hadoop_instances_id_seq
     NO MAXVALUE
     CACHE 1;
 
+-- Name: gpdb_databases_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE gpdb_databases_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 --
 -- Name: hadoop_instances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE hadoop_instances_id_seq OWNED BY hadoop_instances.id;
+
+
+--
+-- Name: gpdb_databases_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE gpdb_databases_id_seq OWNED BY gpdb_databases.id;
+
+
+--
+-- Name: gpdb_schemas; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE gpdb_schemas (
+    id integer NOT NULL,
+    name character varying(255),
+    database_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: gpdb_schemas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE gpdb_schemas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: gpdb_schemas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE gpdb_schemas_id_seq OWNED BY gpdb_schemas.id;
 
 
 --
@@ -372,6 +439,14 @@ ALTER SEQUENCE workspaces_id_seq OWNED BY workspaces.id;
 --
 
 ALTER TABLE hadoop_instances ALTER COLUMN id SET DEFAULT nextval('hadoop_instances_id_seq'::regclass);
+ALTER TABLE gpdb_databases ALTER COLUMN id SET DEFAULT nextval('gpdb_databases_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE gpdb_schemas ALTER COLUMN id SET DEFAULT nextval('gpdb_schemas_id_seq'::regclass);
 
 
 --
@@ -422,6 +497,19 @@ ALTER TABLE workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::
 
 ALTER TABLE ONLY hadoop_instances
     ADD CONSTRAINT hadoop_instances_pkey PRIMARY KEY (id);
+-- Name: gpdb_databases_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY gpdb_databases
+    ADD CONSTRAINT gpdb_databases_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gpdb_schemas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY gpdb_schemas
+    ADD CONSTRAINT gpdb_schemas_pkey PRIMARY KEY (id);
 
 
 --
@@ -560,6 +648,10 @@ INSERT INTO schema_migrations (version) VALUES ('20120510172734');
 INSERT INTO schema_migrations (version) VALUES ('20120510210331');
 
 INSERT INTO schema_migrations (version) VALUES ('20120510211134');
+
+INSERT INTO schema_migrations (version) VALUES ('20120510223528');
+
+INSERT INTO schema_migrations (version) VALUES ('20120510223801');
 
 INSERT INTO schema_migrations (version) VALUES ('20120510224704');
 
