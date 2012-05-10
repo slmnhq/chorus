@@ -1,6 +1,6 @@
 class WorkspacesController < ApplicationController
   def index
-    workspaces = Workspace.scoped
+    workspaces = Workspace.order("lower(name) ASC")
     workspaces = workspaces.active if params[:active]
     workspaces = workspaces.where(:owner_id => params[:user_id]) if params[:user_id]
     present workspaces
