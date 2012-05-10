@@ -4,7 +4,7 @@ module Gpdb
       validate_model!(instance)
       validate_model!(account)
 
-      ConnectionBuilder.connect!(instance, account) {}
+      ConnectionBuilder.connect!(instance, account)
       instance.state = "online"
       true
     rescue PG::Error => e

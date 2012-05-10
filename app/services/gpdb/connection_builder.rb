@@ -8,7 +8,7 @@ module Gpdb
         :username => account.db_username,
         :password => account.db_password
       )
-      yield connection
+      yield connection if block_given?
     ensure
       connection.try(:disconnect!)
     end

@@ -26,13 +26,13 @@ describe Gpdb::ConnectionBuilder do
       let(:expected_database) { "john_the_database" }
 
       it "connections to the given database and instance, with the given account" do
-        Gpdb::ConnectionBuilder.connect!(instance, instance_account, "john_the_database") {}
+        Gpdb::ConnectionBuilder.connect!(instance, instance_account, "john_the_database")
       end
     end
 
     context "when no database name is passed" do
       it "connects to the given instance's 'maintenance db''" do
-        Gpdb::ConnectionBuilder.connect!(instance, instance_account) {}
+        Gpdb::ConnectionBuilder.connect!(instance, instance_account)
       end
     end
 
@@ -53,7 +53,7 @@ describe Gpdb::ConnectionBuilder do
 
       it "disconnects afterward" do
         mock(fake_connection_adapter).disconnect!
-        Gpdb::ConnectionBuilder.connect!(instance, instance_account) {}
+        Gpdb::ConnectionBuilder.connect!(instance, instance_account)
       end
     end
 
@@ -62,7 +62,7 @@ describe Gpdb::ConnectionBuilder do
 
       it "does not catch the error" do
         expect {
-          Gpdb::ConnectionBuilder.connect!(instance, instance_account) {}
+          Gpdb::ConnectionBuilder.connect!(instance, instance_account)
         }.to raise_error(PG::Error)
       end
     end
