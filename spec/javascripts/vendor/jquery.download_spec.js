@@ -10,7 +10,6 @@ describe("jQuery.download", function() {
             return form;
         }, this);
         $.download("foo bar", data, "get");
-        console.log(form);
     });
 
     it("has the correct URL", function() {
