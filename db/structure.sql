@@ -118,7 +118,9 @@ CREATE TABLE instance_accounts (
     db_username character varying(255),
     db_password bytea,
     instance_id integer,
-    owner_id integer
+    owner_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -189,7 +191,9 @@ ALTER SEQUENCE instances_id_seq OWNED BY instances.id;
 CREATE TABLE memberships (
     id integer NOT NULL,
     user_id integer,
-    workspace_id integer
+    workspace_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -500,3 +504,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120509004549');
 INSERT INTO schema_migrations (version) VALUES ('20120510210331');
 
 INSERT INTO schema_migrations (version) VALUES ('20120510211134');
+
+INSERT INTO schema_migrations (version) VALUES ('20120510224704');

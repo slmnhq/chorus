@@ -20,11 +20,11 @@ describe WorkspaceMigrator, :type => :data_migration do
         WorkspaceMigrator.new.migrate
       end
 
-      it "creates new workspaces for legacy GPDB instances" do
+      it "creates new workspaces for legacy workspaces" do
         Workspace.count.should == 73
       end
 
-      it "copies the correct data fields from the legacy instance" do
+      it "copies the correct data fields from the legacy workspace" do
         Legacy.connection.select_all("SELECT * FROM edc_workspace").each do |legacy_workspace|
           workspace = Workspace.find(legacy_workspace["chorus_rails_workspace_id"])
           workspace.name.should == legacy_workspace["name"]
