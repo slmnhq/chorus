@@ -808,16 +808,26 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     expect(chorus.toast).toHaveBeenCalledWith("instances.confirm_change_owner.toast");
                 });
 
-                it("closes the dialog", function() {
-                    expect(this.dialog.closeModal).toHaveBeenCalled();
-                });
+                describe("after re-fetching the accounts", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(this.dialog.collection, [newFixtures.instanceAccount({owner: { id: this.newOwner.get("id")}})]);
+                    });
 
-                it("triggers the 'invalidated' event on the instance", function() {
-                    expect('invalidated').toHaveBeenTriggeredOn(this.instance);
-                });
+                    it("closes the dialog", function() {
+                        expect(this.dialog.closeModal).toHaveBeenCalled();
+                    });
 
-                it("sets the owner id on the instance", function() {
-                    expect(this.instance.get("owner").id).toBe(this.newOwner.get("id"));
+                    it("triggers the 'invalidated' event on the instance", function() {
+                        expect('invalidated').toHaveBeenTriggeredOn(this.instance);
+                    });
+
+                    it("sets the owner id on the instance", function() {
+                        expect(this.instance.get("owner").id).toBe(this.newOwner.get("id"));
+                    });
+
+                    it("can render the instance's shared db username", function() {
+                        expect(this.instance.accountForOwner().get("db_username")).toBe("instance_owner")
+                    });
                 });
             });
 

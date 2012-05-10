@@ -16,6 +16,7 @@ Chorus::Application.routes.draw do
     end
 
     scope :module => :instances do
+      resource :owner, :only => :update, :controller => 'owner'
       resources :members, :only => [:index, :create, :update, :destroy]
       resource :sharing, :only => [:create, :destroy], :controller => :sharing
       resource :account, :only => [:show, :create, :update, :destroy], :controller => :account

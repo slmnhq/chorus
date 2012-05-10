@@ -129,15 +129,19 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
 
     saveOwner: function(user) {
         var newOwnerId = user.get("id")
-        this.ownership.save({ id: newOwnerId});
-
-        this.bindings.add(this.ownership, "saveFailed", _.bind(this.showErrors, this, this.ownership));
+        this.bindings.add(this.ownership, "saveFailed", function() { this.showErrors(this.ownership); });
         this.bindings.add(this.ownership, "saved", function() {
             chorus.toast("instances.confirm_change_owner.toast");
-            this.instance.set({ owner: { id: user.get("id")} });
-            this.instance.trigger("invalidated");
             this.closeModal();
+            this.collection.fetch({
+                success: _.bind(function() {
+                    this.instance.set({ owner: { id: newOwnerId } });
+                    this.instance.trigger("invalidated");
+                }, this)
+            })
         });
+
+        this.ownership.save({ id: newOwnerId });
     },
 
     newAccount: function(e) {
