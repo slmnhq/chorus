@@ -1578,7 +1578,7 @@ beforeEach(function() {
             return _.extend({
                 workspaceId: workspaceId,
                 workspaceName: "workspace" + workspaceId,
-                iconId: null,
+                image: { original: "/foo", icon: "/bar" },
                 workspaceOwnerFullName: "EDC Admin",
                 sandboxId: this.nextId().toString(),
                 databaseName: "Analytics",

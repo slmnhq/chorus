@@ -116,7 +116,10 @@
     "owner":"edcadmin",
     "numberOfComment":3,
     "archived_at":null,
-    "iconId":null,
+    "image": {
+        "icon": "",
+        "original": ""
+    },
     "sandboxInfo":{
         "sandboxId":"10000",
         "databaseName":"Analytics",

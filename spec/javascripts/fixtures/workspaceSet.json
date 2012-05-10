@@ -20,7 +20,10 @@
       "owner":"edcadmin",
       "numberOfComment":null,
       "archived_at":null,
-      "iconId":null,
+       "image": {
+           "icon": "",
+           "original": ""
+       },
       "sandboxInfo":{
          "sandboxId":"10000",
          "databaseName":"Analytics",
@@ -54,7 +57,10 @@
       "owner":"edcadmin",
       "numberOfComment":null,
       "archived_at": null,
-      "iconId":null,
+       "image": {
+           "icon": "",
+           "original": ""
+       },
       "sandboxInfo":{
          "sandboxId":null,
          "databaseName":null,
@@ -88,7 +94,10 @@
       "owner":"edcadmin",
       "numberOfComment":null,
       "archived_at":null,
-      "iconId":null,
+       "image": {
+           "icon": "",
+           "original": ""
+       },
       "sandboxInfo":{
          "sandboxId":null,
          "databaseName":null,
@@ -122,7 +131,10 @@
       "numberOfInsight":null,
       "owner":"edcadmin",
       "numberOfComment":null,
-      "iconId":null,
+       "image": {
+           "icon": "",
+           "original": ""
+       },
       "sandboxInfo":{
          "sandboxId":null,
          "databaseName":null,

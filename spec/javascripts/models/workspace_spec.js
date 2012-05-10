@@ -1,7 +1,13 @@
 describe("chorus.models.Workspace", function() {
     var models = chorus.models;
     beforeEach(function() {
-        this.model = newFixtures.workspace({ archived_at: null });
+        this.model = newFixtures.workspace({
+            archived_at: null,
+            image: {
+                icon: "/system/workspaces/images/000/000/005/icon/workspaceimage.jpg",
+                original: "/system/workspaces/images/000/000/005/original/workspaceimage.jpg"
+            }
+        });
     });
 
     it("has the correct urlTemplate", function() {
@@ -71,12 +77,12 @@ describe("chorus.models.Workspace", function() {
     describe("#customIconUrl", function() {
         it("links to the original url by default", function() {
             this.model.set({id: 5});
-            expect(this.model.customIconUrl()).toBe("/workspace/5/image?size=original");
+            expect(this.model.customIconUrl()).toBe("/system/workspaces/images/000/000/005/original/workspaceimage.jpg");
         });
 
         it("links to the requested size", function() {
             this.model.set({id: 5});
-            expect(this.model.customIconUrl({size: 'profile'})).toBe("/workspace/5/image?size=profile");
+            expect(this.model.customIconUrl({size: 'icon'})).toBe("/system/workspaces/images/000/000/005/icon/workspaceimage.jpg");
         });
     });
 
@@ -193,13 +199,45 @@ describe("chorus.models.Workspace", function() {
 
     describe("#hasImage", function() {
         it("returns false when the workspace's 'imageId' field is null", function() {
-            this.model.set({ iconId: null });
+            this.model.set({ image: {original: "", icon: ""} });
             expect(this.model.hasImage()).toBeFalsy();
         });
 
         it("returns true when the workspace's 'imageId' field is not null", function() {
-            this.model.set({ iconId: '123' });
+            this.model.set({ image: {original: "5.jpg", icon: "5.jpg"} });
             expect(this.model.hasImage()).toBeTruthy();
+        });
+    });
+
+    describe("#fetchImageUrl", function() {
+        var workspace;
+
+        beforeEach(function() {
+            spyOn(chorus, "cachebuster").andReturn(12345)
+            workspace = newFixtures.workspace({
+                archived_at: null,
+                image: {
+                    icon: "/system/workspaces/images/000/000/005/icon/workspaceimage.jpg",
+                    original: "/system/workspaces/images/000/000/005/original/workspaceimage.jpg"
+                }
+            });
+        });
+
+        it("returns undefined when the workspace does not have an image", function() {
+            workspace.unset("image");
+            expect(workspace.fetchImageUrl()).toBeUndefined();
+        });
+
+        it("appends a cache-busting query param", function() {
+            expect(workspace.fetchImageUrl()).toContainQueryParams({ iebuster: 12345 });
+        });
+
+        it("uses the URL for the original-sized image by default", function() {
+            expect(workspace.fetchImageUrl()).toHaveUrlPath("/system/workspaces/images/000/000/005/original/workspaceimage.jpg");
+        });
+
+        it("uses the icon url if the 'size' option is set to 'icon'", function() {
+            expect(workspace.fetchImageUrl({ size: "icon" })).toHaveUrlPath("/system/workspaces/images/000/000/005/icon/workspaceimage.jpg");
         });
     });
 
@@ -269,11 +307,7 @@ describe("chorus.models.Workspace", function() {
         })
 
         it("uses the right URL", function() {
-            expect(this.model.createImageUrl()).toBe("/workspace/10013/image?size=original");
-        });
-
-        xit("accepts the size argument", function() {
-            expect(this.model.createImageUrl({size: "icon"})).toBe("/workspace/10013/image?size=icon");
+            expect(this.model.createImageUrl()).toBe("/workspaces/10013/image");
         });
     });
 
@@ -361,7 +395,7 @@ describe("chorus.models.Workspace", function() {
                 this.model.members().add([
                     newFixtures.user({ id: "31" }),
                     newFixtures.user({ id: "32" }),
-                    newFixtures.user({ id: "33" }),
+                    newFixtures.user({ id: "33" })
                 ]);
 
                 setLoggedInUser({ id: "31" });

@@ -8,7 +8,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
 
     customIconUrl:function (options) {
         options = (options || {});
-        return "/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
+        return this.get("image")[(options.size ||"original")];
     },
 
     defaultIconUrl:function (size) {
@@ -119,13 +119,17 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     fetchImageUrl:function (options) {
-        options = (options || {});
-        return "/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
+        var size = (options && options.size) || "original";
+        url = this.get("image") && this.get("image")[size];
+        return url && new URI(url)
+            .addSearch({ iebuster: chorus.cachebuster() })
+            .toString();
     },
 
     createImageUrl:function (options) {
-        options = (options || {});
-        return "/workspace/" + this.get("id") + "/image?size=" + (options.size || "original");
+        var url = new URI(this.url());
+        url.path(url.path() + "/image");
+        return url.toString();
     },
 
     picklistImageUrl:function () {
@@ -141,7 +145,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     hasImage:function () {
-        return this.get("iconId") || this.get("imageId");
+        return this.get("image") && this.get("image")["original"]
     },
 
     canRead:function () {

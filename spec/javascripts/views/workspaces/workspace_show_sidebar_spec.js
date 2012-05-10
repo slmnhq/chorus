@@ -1,6 +1,12 @@
 describe("chorus.views.WorkspaceShowSidebar", function() {
     beforeEach(function() {
-            this.model = newFixtures.workspace({name: "A Cool Workspace", id: '123', iconId: '123'});
+            this.model = newFixtures.workspace({
+                name: "A Cool Workspace",
+                id: '123',
+                image: {
+                    icon: "/system/workspaces/images/000/000/005/icon/workspaceimage.jpg",
+                    original: "/system/workspaces/images/000/000/005/original/workspaceimage.jpg"
+                }});
     });
 
     describe("#setup", function() {
