@@ -1,6 +1,7 @@
 Chorus::Application.routes.draw do
   resource :sessions, :only => [:create, :destroy, :show]
   resource :config, :only => [:show]
+
   resources :users, :only => [:index, :show, :create, :update, :destroy] do
     collection do
       get :ldap
@@ -11,17 +12,18 @@ Chorus::Application.routes.draw do
   end
 
   resources :instances, :only => [:index, :create, :update] do
-    resources :databases, :controller => :instance_databases, :only => [:index] do
+    resources :databases, :only => [:index], :controller => 'instance_databases' do
       resources :schemas, :only => [:index]
     end
 
-    scope :module => :instances do
-      resource :owner, :only => :update, :controller => 'owner'
+    scope :module => 'instances' do
+      resource :owner, :only => [:update], :controller => 'owner'
+      resource :sharing, :only => [:create, :destroy], :controller => 'sharing'
+      resource :account, :only => [:show, :create, :update, :destroy], :controller => 'account'
       resources :members, :only => [:index, :create, :update, :destroy]
-      resource :sharing, :only => [:create, :destroy], :controller => :sharing
-      resource :account, :only => [:show, :create, :update, :destroy], :controller => :account
     end
   end
+
   resources :workspaces, :only => [:index, :create, :show] do
     member do
       resource :image, :only => [:update], :controller => :workspace_images
