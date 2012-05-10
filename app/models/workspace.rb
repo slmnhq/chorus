@@ -5,6 +5,8 @@ class Workspace < ActiveRecord::Base
 
   belongs_to :archiver, :class_name => 'User'
   belongs_to :owner, :class_name => 'User'
+  has_many :memberships
+  has_many :members, :through => :memberships, :source => :user
 
   validates_presence_of :name
 

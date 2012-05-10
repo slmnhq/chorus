@@ -152,6 +152,23 @@ describe User do
   describe "associations" do
     it { should have_many(:instances) }
     it { should have_many(:instance_accounts) }
+    it { should have_many(:workspaces) }
+    it { should have_many(:owned_workspaces) }
+  end
+
+  describe "#workspaces" do
+    it "should be the workspaces the user is a member of" do
+      user = FactoryGirl.create(:user)
+      owned_workspace = FactoryGirl.create(:workspace, :owner => user)
+      not_owned_workspace = FactoryGirl.create(:workspace)
+      not_owned_workspace.members << user
+      owned_workspace.members << user
+      not_owned_workspace.save!
+
+      user.reload.workspaces.size.should == 2
+      user.workspaces.should include(owned_workspace)
+      user.workspaces.should include(not_owned_workspace)
+    end
   end
 
   describe ".admin_count" do

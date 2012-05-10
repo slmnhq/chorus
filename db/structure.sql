@@ -183,6 +183,36 @@ ALTER SEQUENCE instances_id_seq OWNED BY instances.id;
 
 
 --
+-- Name: memberships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE memberships (
+    id integer NOT NULL,
+    user_id integer,
+    workspace_id integer
+);
+
+
+--
+-- Name: memberships_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE memberships_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: memberships_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE memberships_id_seq OWNED BY memberships.id;
+
+
+--
 -- Name: queue_classic_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -312,6 +342,13 @@ ALTER TABLE instances ALTER COLUMN id SET DEFAULT nextval('instances_id_seq'::re
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE memberships ALTER COLUMN id SET DEFAULT nextval('memberships_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE queue_classic_jobs ALTER COLUMN id SET DEFAULT nextval('queue_classic_jobs_id_seq'::regclass);
 
 
@@ -343,6 +380,14 @@ ALTER TABLE ONLY instance_accounts
 
 ALTER TABLE ONLY instances
     ADD CONSTRAINT instances_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY memberships
+    ADD CONSTRAINT memberships_pkey PRIMARY KEY (id);
 
 
 --
@@ -381,6 +426,20 @@ CREATE INDEX idx_qc_on_name_only_unlocked ON queue_classic_jobs USING btree (q_n
 --
 
 CREATE INDEX index_instances_on_owner_id ON instances USING btree (owner_id);
+
+
+--
+-- Name: index_memberships_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_memberships_on_user_id ON memberships USING btree (user_id);
+
+
+--
+-- Name: index_memberships_on_workspace_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_memberships_on_workspace_id ON memberships USING btree (workspace_id);
 
 
 --
@@ -424,8 +483,6 @@ INSERT INTO schema_migrations (version) VALUES ('20120502012345');
 
 INSERT INTO schema_migrations (version) VALUES ('20120502205544');
 
-INSERT INTO schema_migrations (version) VALUES ('20120503192341');
-
 INSERT INTO schema_migrations (version) VALUES ('20120503221103');
 
 INSERT INTO schema_migrations (version) VALUES ('20120504210541');
@@ -441,3 +498,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120508184817');
 INSERT INTO schema_migrations (version) VALUES ('20120509004549');
 
 INSERT INTO schema_migrations (version) VALUES ('20120510210331');
+
+INSERT INTO schema_migrations (version) VALUES ('20120510211134');

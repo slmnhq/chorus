@@ -9,7 +9,7 @@ class WorkspacesController < ApplicationController
   end
 
   def create
-    present current_user.workspaces.create!(params[:workspace]), :status => :created
+    present current_user.owned_workspaces.create!(params[:workspace]), :status => :created
   end
 
   def show

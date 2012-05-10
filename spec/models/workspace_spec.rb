@@ -24,4 +24,8 @@ describe Workspace do
   end
 
   it { should have_attached_file(:image) }
+
+  describe "associations" do
+    it { should have_many(:members) }
+  end
 end
