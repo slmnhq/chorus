@@ -1,0 +1,8 @@
+alias gs='git status'
+alias ga='git add'
+alias gaa='git add -A'
+alias gl='git log'
+alias gm='git commit -m'
+alias gc='git checkout'
+alias grm='git rm'
+alias gs='git status'
