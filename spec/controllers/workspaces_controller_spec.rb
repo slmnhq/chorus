@@ -90,4 +90,36 @@ describe WorkspacesController do
       end
     end
   end
+
+  describe "#show" do
+    before do
+      log_in @user
+    end
+
+    it_behaves_like "an action that requires authentication", :get, :show
+
+    context "with a valid workspace id" do
+      it "succeeds" do
+        get :show, :id => @workspace1.to_param
+        response.should be_success
+      end
+
+      it "presents the workspace" do
+        mock.proxy(controller).present(@workspace1)
+        get :show, :id => @workspace1.to_param
+      end
+    end
+
+    context "with an invalid workspace id" do
+      it "returns not found" do
+        get :show, :id => 'bogus'
+        response.should be_not_found
+      end
+    end
+
+    #it "generates a jasmine fixture", :fixture => true do
+    #  get :show, :id => @other_user.to_param
+    #  save_fixture "user.json"
+    #end
+  end
 end

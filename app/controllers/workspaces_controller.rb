@@ -1,4 +1,6 @@
 class WorkspacesController < ApplicationController
+  before_filter :load_workspace, :only => [:show]
+
   def index
     workspaces = Workspace.order("lower(name) ASC")
     workspaces = workspaces.active if params[:active]
@@ -8,5 +10,15 @@ class WorkspacesController < ApplicationController
 
   def create
     present current_user.workspaces.create!(params[:workspace]), :status => :created
+  end
+
+  def show
+    present @workspace
+  end
+
+  private
+
+  def load_workspace
+    @workspace = Workspace.find(params[:id])
   end
 end
