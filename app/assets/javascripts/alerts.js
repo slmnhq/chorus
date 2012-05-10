@@ -36,6 +36,7 @@ chorus.alerts.ModelDelete = chorus.alerts.Base.extend({
     events: _.extend({}, chorus.alerts.Base.prototype.events, {
         "click button.submit": "deleteModel"
     }),
+    constructorName: "ModelDelete",
 
     additionalClass: "error",
 

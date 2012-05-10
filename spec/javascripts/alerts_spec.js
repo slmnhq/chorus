@@ -59,6 +59,7 @@ describe("chorus.alerts", function() {
                 expect(this.alert.$("button.cancel").text()).toBe("Don't do it!");
             })
         })
+
         it("displays server errors", function() {
             this.alert.resource.set({serverErrors : { fields: { connection: { INVALID: { message: "Couldn't find host/port to connect to" } } } }});
             this.alert.render();
