@@ -16,5 +16,12 @@ describe Workspace do
     end
   end
 
+  describe "#image" do
+    it "should have a nil image instead of a default missing image" do
+      workspace = FactoryGirl.create(:workspace, :image => nil)
+      workspace.image.url.should == ""
+    end
+  end
+
   it { should have_attached_file(:image) }
 end

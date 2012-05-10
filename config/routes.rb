@@ -21,7 +21,11 @@ Chorus::Application.routes.draw do
       resource :account, :only => [:show, :create, :update, :destroy], :controller => :account
     end
   end
-  resources :workspaces, :only => [:index, :create, :show]
+  resources :workspaces, :only => [:index, :create, :show] do
+    member do
+      resource :image, :only => [:update], :controller => :workspace_images
+    end
+  end
 
   match "/" => "root#index"
 

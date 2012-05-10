@@ -21,7 +21,13 @@ describe WorkspacePresenter, :type => :view do
       @hash.should have_key(:owner)
       @hash.should have_key(:archived_at)
       @hash.should have_key(:public)
+      @hash.should have_key(:image)
     end
+
+    it "uses the image presenter to serialize the image urls" do
+      @hash[:image].to_hash.should == (ImagePresenter.new(@workspace.image, view).to_hash)
+    end
+
 
     it "should use ownerPresenter Hash method for owner" do
       owner = @hash[:owner]

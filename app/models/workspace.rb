@@ -1,7 +1,7 @@
 class Workspace < ActiveRecord::Base
   attr_accessible :name, :public, :summary
 
-  has_attached_file :image, :styles => {:original => "", :icon => "50x50>"}
+  has_attached_file :image, :default_url => "", :styles => {:original => "", :icon => "50x50>"}
 
   belongs_to :archiver, :class_name => 'User'
   belongs_to :owner, :class_name => 'User'
