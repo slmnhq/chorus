@@ -15,7 +15,7 @@ class Instance < ActiveRecord::Base
     if user.admin?
       scoped
     else
-      where("owner_id = ?", user.id)
+      where(:owner_id => user.id)
     end
   end
 

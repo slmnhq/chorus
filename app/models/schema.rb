@@ -1,5 +1,4 @@
 class Schema
-
   attr_reader :name, :instance_id, :database_name, :dataset_count
 
   def initialize name, instance_id, database_name, dataset_count

@@ -1,5 +1,4 @@
 class InstanceAccount < ActiveRecord::Base
-
   attr_accessible :db_username, :db_password
   validates_presence_of :db_username, :db_password, :instance_id, :owner_id
 
