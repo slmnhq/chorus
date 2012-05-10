@@ -1,4 +1,5 @@
 chorus.models.ChartTask = chorus.models.Task.extend({
+    constructorName: "ChartTask",
     taskType: "getChartData",
 
     name: function() {

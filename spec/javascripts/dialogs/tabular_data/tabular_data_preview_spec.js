@@ -23,6 +23,11 @@ describe("chorus.dialogs.TabularDataPreview", function () {
         expect(this.view.$('.dialog_header h1')).toContainTranslation('dataset.data_preview_title', {name: this.dataset.get('objectName')});
     });
 
+    it("sets the resultsConsole option 'showDownloadDialog' to true", function() {
+        expect(this.view.resultsConsole.showDownloadDialog).toBeTruthy();
+        expect(this.view.resultsConsole.tabularDataset).toBe(this.dataset);
+    });
+
     describe("event handling", function() {
         beforeEach(function() {
             spyOn(this.view.task, "cancel");

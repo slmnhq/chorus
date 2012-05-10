@@ -152,7 +152,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     itRemovesExecutionUI(true);
                 })
 
-                context("when the23688221 spinner has been started", function() {
+                context("when the spinner has been started", function() {
                     beforeEach(function() {
                         delete this.view.elapsedTimer;
                         this.view.$(".cancel").click();
@@ -460,19 +460,44 @@ describe("chorus.views.ResultsConsoleView", function() {
                 });
 
                 describe("clicking the download link", function() {
-                    beforeEach(function() {
-                        spyOn($, "download");
-                        this.view.$("a.download_csv").click();
+                    context("with the show download dialog option", function() {
+                        beforeEach(function() {
+                            this.modalSpy = stubModals();
+                            spyOn($, "download");
+                            this.view.showDownloadDialog = true;
+                            this.view.tabularDataset = new chorus.models.TabularData();
+                            this.view.$("a.download_csv").click();
+                        });
+
+                        it("should launch the dialog", function() {
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetDownload);
+                        });
+
+                        it("should not have called $.download", function() {
+                            expect($.download).not.toHaveBeenCalled();
+                        });
+
+                        it("should have a page model for the dataset download dialog", function() {
+                            expect(this.modalSpy.lastModal().pageModel).toBeA(chorus.models.TabularData);
+                        });
                     });
 
-                    it("starts the file download", function() {
-                        expect($.download).toHaveBeenCalledWith("/edc/data/cvsResultDownload",
-                        {
-                            columnData: this.view.resource.getColumns(),
-                            rowsData: this.view.resource.getRows(),
-                            datasetName: this.view.resource.name()
-                        }
-                        , "post");
+                    context("without the show download dialog option", function() {
+                        beforeEach(function() {
+                            spyOn($, "download");
+                            this.view.showDownloadDialog = false;
+                            this.view.$("a.download_csv").click();
+                        });
+
+                        it("starts the file download", function() {
+                            expect($.download).toHaveBeenCalledWith("/edc/data/cvsResultDownload",
+                            {
+                                columnData: this.view.resource.getColumns(),
+                                rowsData: this.view.resource.getRows(),
+                                datasetName: this.view.resource.name()
+                            }
+                            , "post");
+                        });
                     });
                 });
             }
