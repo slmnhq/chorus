@@ -10,3 +10,5 @@ alias gm='git commit -m'
 alias gc='git checkout'
 alias grm='git rm'
 alias gs='git status'
+
+alias vim='mvim -p'
