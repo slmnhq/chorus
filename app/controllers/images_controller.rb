@@ -1,15 +1,14 @@
 class ImagesController < ApplicationController
-  before_filter :load_user
+  before_filter :load_entity
 
   def update
-    @user.image = params[:files][0]
-    @user.save!
-    present @user.image
+    @entity.image = params[:files][0]
+    @entity.save!
+    present @entity.image
   end
 
-  private
-
-  def load_user
-    @user = User.find(params[:id])
+  protected
+  def load_entity
+    raise  NotImplementedError, "Method Not implemented"
   end
 end
