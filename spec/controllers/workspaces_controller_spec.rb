@@ -34,6 +34,35 @@ describe WorkspacesController do
       decoded_response.size.should == 1
       decoded_response[0].name.should == "Work"
     end
+
+    describe "pagination" do
+      before do
+        FactoryGirl.create(:workspace, :name=> 'zed')
+      end
+
+      it "paginates the collection" do
+        get :index, :page => 1, :per_page => 2
+        decoded_response.length.should == 2
+      end
+
+      it "defaults to page one" do
+        get :index, :per_page => 2
+        decoded_response.length.should == 2
+        decoded_response.first.name.should == "abacus"
+        decoded_response.second.name.should == "Work"
+      end
+
+      it "accepts a page parameter" do
+        get :index, :page => 2, :per_page => 2
+        decoded_response.length.should == 1
+        decoded_response.first.name.should == "zed"
+      end
+
+      it "defaults the per_page to fifty" do
+        get :index
+        request.params[:per_page].should == 50
+      end
+    end
   end
 
   describe "#create" do
