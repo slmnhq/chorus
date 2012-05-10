@@ -29,7 +29,7 @@ class Instance < ActiveRecord::Base
   end
 
   def owner_account
-    accounts.where(:owner_id => owner_id).first
+    accounts.find_by_owner_id!(owner_id)
   end
 
   def account_for_user!(user)
