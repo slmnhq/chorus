@@ -237,7 +237,7 @@ describe User do
     end
 
     it "does not allow deleting a user who owns a workspace" do
-      user.workspaces << FactoryGirl.create(:workspace, :owner => user)
+      user.owned_workspaces << FactoryGirl.create(:workspace, :owner => user)
       begin
         user.destroy
         fail
