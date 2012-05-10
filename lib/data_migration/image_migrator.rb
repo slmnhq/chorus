@@ -12,7 +12,7 @@ class LegacyImage < ActiveRecord::Base
   end
 end
 
-class UserImageMigrator
+class ImageMigrator
   def migrate
     legacy_users_with_images = Legacy.connection.select_all("select * from edc_user where image_id is not null")
     legacy_users_with_images.each do |legacy_user|

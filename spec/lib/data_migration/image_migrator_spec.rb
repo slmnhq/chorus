@@ -19,13 +19,13 @@ TYPE_MAP = {
   "image/gif" => "GIF"
 }
 
-describe UserImageMigrator, :type => :data_migration do
+describe ImageMigrator, :type => :data_migration do
   describe ".migrate" do
     describe "copying the data" do
       before do
         UserMigrator.new.migrate
         WorkspaceMigrator.new.migrate
-        UserImageMigrator.new.migrate
+        ImageMigrator.new.migrate
       end
 
       it "gives an image attachment to all users who had profile images" do
