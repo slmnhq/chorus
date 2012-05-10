@@ -12,6 +12,11 @@ module Instances
       present updated_account, :status => :ok
     end
 
+    def destroy
+      instance.account_for_user(current_user).delete
+      render :json => {}
+    end
+
     private
 
     def updated_account

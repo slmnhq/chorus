@@ -18,7 +18,7 @@ Chorus::Application.routes.draw do
     scope :module => :instances do
       resources :members, :only => [:index, :create, :update, :destroy]
       resource :sharing, :only => [:create, :destroy], :controller => :sharing
-      resource :account, :only => [:show, :create, :update], :controller => :account
+      resource :account, :only => [:show, :create, :update, :destroy], :controller => :account
     end
   end
   resources :workspaces, :only => [:index, :create]

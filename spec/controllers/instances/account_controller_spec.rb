@@ -108,4 +108,25 @@ describe Instances::AccountController do
       end
     end
   end
+
+  describe "#destroy" do
+    let(:joe) { FactoryGirl.create :user }
+    let(:instance) { FactoryGirl.create :instance }
+
+    before do
+      log_in joe
+      FactoryGirl.create :instance_account, :owner => joe, :instance => instance
+    end
+
+    it "succeeds" do
+      delete :destroy, :instance_id => instance.id
+      response.should be_success
+    end 
+
+    it "deletes the current users account for this instance" do
+      InstanceAccount.find_by_instance_id_and_owner_id(instance.id, joe.id).should_not be_nil
+      delete :destroy, :instance_id => instance.id
+      InstanceAccount.find_by_instance_id_and_owner_id(instance.id, joe.id).should be_nil
+    end
+  end
 end

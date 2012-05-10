@@ -1,6 +1,5 @@
 describe("chorus.alerts.InstanceAccountDelete", function() {
     beforeEach(function() {
-        this.launchElement = $("<a></a>");
         this.instance = newFixtures.instance.greenplum({ id: '456' });
         setLoggedInUser({ id: "1011" });
         this.alert = new chorus.alerts.InstanceAccountDelete({ pageModel: this.instance });
@@ -19,14 +18,13 @@ describe("chorus.alerts.InstanceAccountDelete", function() {
 
     describe("successful deletion", function() {
         beforeEach(function() {
-            spyOn(chorus.router, "navigate");
             spyOn(chorus, "toast");
-            spyOnEvent($(document), "close.facebox");
             this.alert.model.trigger("destroy", this.alert.model);
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("instances.account.delete.toast");
+            expect(chorus.toast).toHaveBeenCalledWith("instances.account.delete.toast", undefined);
+            expect(chorus.toast.callCount).toBe(1);
         });
-    })
-})
+    });
+});
