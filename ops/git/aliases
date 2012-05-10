@@ -1,4 +1,8 @@
+alias gpp="git pull --rebase && git push"
+alias gst='git status'
+
 alias gs='git status'
+alias gd='git diff'
 alias ga='git add'
 alias gaa='git add -A'
 alias gl='git log'
