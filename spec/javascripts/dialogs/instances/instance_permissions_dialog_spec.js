@@ -788,16 +788,12 @@ describe("chorus.dialogs.InstancePermissions", function() {
             beforeEach(function() {
                 expect(this.dialog.launchSubModal).toHaveBeenCalled();
                 var submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
-                spyOn(this.instance, 'save').andCallThrough();
+                spyOn(this.dialog.ownership, 'save').andCallThrough();
                 submodal.trigger("confirmChangeOwner", this.newOwner);
             });
 
-            it("sets the owner id on the instance", function() {
-                expect(this.instance.get("owner").id).toBe(this.newOwner.get("id"));
-            });
-
             it("saves the instance", function() {
-                expect(this.instance.save).toHaveBeenCalled();
+                expect(this.dialog.ownership.save).toHaveBeenCalled();
             });
 
             describe("when the save succeeds", function() {
@@ -805,7 +801,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     spyOn(chorus, 'toast');
                     spyOn(this.dialog, 'closeModal').andCallThrough();
                     spyOnEvent(this.instance, 'invalidated');
-                    this.instance.trigger("saved");
+                    this.dialog.ownership.trigger("saved");
                 });
 
                 it("shows a toast message", function() {
@@ -819,12 +815,16 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 it("triggers the 'invalidated' event on the instance", function() {
                     expect('invalidated').toHaveBeenTriggeredOn(this.instance);
                 });
+
+                it("sets the owner id on the instance", function() {
+                    expect(this.instance.get("owner").id).toBe(this.newOwner.get("id"));
+                });
             });
 
             describe("when the save fails", function() {
                 beforeEach(function() {
-                    this.instance.serverErrors = { fields: { a: { BLANK: {} } } };
-                    this.instance.trigger("saveFailed");
+                    this.dialog.ownership.serverErrors = { fields: { a: { BLANK: {} } } };
+                    this.dialog.ownership.trigger("saveFailed");
                 });
 
                 it("displays the server errors in the errors div", function() {

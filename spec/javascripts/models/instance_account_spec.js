@@ -3,7 +3,7 @@ describe("chorus.models.InstanceAccount", function() {
         this.model = newFixtures.instanceAccount({ id: '72', instance_id: '1045' });
     });
 
-    it("wraps parameters in 'credentials'", function() {
+    it("wraps parameters in 'account'", function() {
         expect(this.model.parameterWrapper).toBe("account")
     });
 

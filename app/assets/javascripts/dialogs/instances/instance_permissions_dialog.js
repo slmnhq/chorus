@@ -24,6 +24,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         this._super("makeModel", arguments);
         this.model = this.instance = this.options.launchElement.data("instance");
 
+        this.ownership = new chorus.models.InstanceOwnership({instance_id: this.instance.id});
         this.users = new chorus.collections.UserSet();
         this.bindings.add(this.users, "reset", this.populateSelect);
         this.users.sortAsc("first_name");
@@ -127,10 +128,13 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     },
 
     saveOwner: function(user) {
-        this.instance.save({ owner: { id: user.get("id")} });
-        this.bindings.add(this.instance, "saveFailed", this.showErrors);
-        this.bindings.add(this.instance, "saved", function() {
+        var newOwnerId = user.get("id")
+        this.ownership.save({ id: newOwnerId});
+
+        this.bindings.add(this.ownership, "saveFailed", _.bind(this.showErrors, this, this.ownership));
+        this.bindings.add(this.ownership, "saved", function() {
             chorus.toast("instances.confirm_change_owner.toast");
+            this.instance.set({ owner: { id: user.get("id")} });
             this.instance.trigger("invalidated");
             this.closeModal();
         });

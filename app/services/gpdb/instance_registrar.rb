@@ -10,6 +10,7 @@ module Gpdb
         instance.save!
         account.instance = instance
         ConnectionChecker.check!(instance, account)
+        instance.save!
         account.save!
       end
 
