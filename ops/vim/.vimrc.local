@@ -24,3 +24,10 @@ map <C-n> :tabnew
 autocmd FileType javascript set softtabstop=4 | set tabstop=4 | set shiftwidth=4
 autocmd FileType ruby       set softtabstop=2 | set tabstop=2 | set shiftwidth=2
 
+function! OpenHandlebars()
+    let file_path = "~/workspace/chorusrails/" . system("~/workspace/chorusrails/script/find_handlebars.rb " . expand("%"))
+    exec ":e " . file_path
+endfunction
+
+map <C-h> :call OpenHandlebars()<CR>
+map <D-H> :sp<CR><C-w>j<C-h>
