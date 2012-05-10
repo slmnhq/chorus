@@ -5,7 +5,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
 
         stubModals();
 
-        this.dialog = new chorus.dialogs.HdfsInstanceWorkspacePicker();
+        this.dialog = new chorus.dialogs.HdfsInstanceWorkspacePicker({model: new chorus.models.Instance(), activeOnly: true});
         this.dialog.launchModal();
 
         this.workspace1 = newFixtures.workspace({name: "Foo"});
@@ -39,37 +39,56 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                 expect("workspace:selected").toHaveBeenTriggeredOn(this.dialog, [this.dialog.collection.at(1)]);
             });
 
-//            it("checks the sandbox version", function() {
-//                expect(this.server.lastFetch().url).toBe("/workspace/sandboxVersion")
-//            });
-//
-//            context("when the fetch completes", function () {
-//                beforeEach(function() {
-//
-//                });
-//
-//                context("when there's no sandbox", function () {
-//                    it("", function() {
-//
-//                    });
-//                });
-//
-//                context("when the gpdb version is less than 4.2", function () {
-//                    it("", function() {
-//
-//                    });
-//                });
-//
-//                context("when the gpdb version is more than 4.2", function () {
-//                    it("", function() {
-//
-//                    });
-//                });
-//
-//            });
-//            it("closes the dialog", function() {
-//                expect(this.dialog.closeModal).toHaveBeenCalled();
-//            });
+            it("checks the sandbox version", function() {
+                expect(this.server.lastFetch().url).toBe("/edc/workspace/"+this.dialog.collection.at(1).id+"/sandboxDbVersion")
+            });
+
+            context("when the fetch completes", function () {
+                beforeEach(function() {
+                    spyOn(this.dialog, "launchSubModal").andCallThrough();
+                });
+                context("when there's no sandbox", function () {
+                    beforeEach(function() {
+                        this.dialog.sandboxVersion.serverErrors = [{message: "abc"}];
+                        this.dialog.sandboxVersion.trigger("fetchFailed");
+                    });
+
+                    it("displays the error message", function() {
+                        expect(this.dialog.$(".errors").text()).toContain("abc");
+                    });
+
+//                    it("does not open the create external dialog", function() {
+//                        expect(this.dialog.launchSubModal).not.toHaveBeenCalled();
+//                    })
+                });
+
+                context("when the gpdb version is less than 4.2", function () {
+                    beforeEach(function() {
+                        this.dialog.sandboxVersion.set({sandboxInstanceVersion: "4.1.1.1 build 1"})
+                        this.server.lastFetch().succeed(this.dialog.sandboxVersion);
+                    });
+                    it("displays the errors message", function() {
+                         expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.gpdb_version.too_old")
+                    });
+                });
+
+               context("when the gpdb version is more than 4.2", function () {
+                   beforeEach(function() {
+                       this.dialog.sandboxVersion.set({sandboxInstanceVersion: "4.2.1.1 build 1"})
+                       this.server.lastFetch().succeed(this.dialog.sandboxVersion);
+                   });
+
+                   it("does not display the error message", function() {
+                       expect(this.dialog.$(".errors").text()).toBe("");
+                   });
+
+//                   it("opens the Create External Table dialog", function() {
+//                        expect(this.dialog.launchSubModal).toHaveBeenCalled();
+//                   });
+
+               });
+
+            });
         });
     });
 });

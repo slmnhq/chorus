@@ -17,9 +17,8 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             });
 
             it("has a link to create an external table", function() {
-                expect(this.view.$("a.dialog.directory_external_table")).toExist();
-                expect(this.view.$("a.dialog.directory_external_table").data("activeonly")).toExist();
-                expect(this.view.$("a.dialog.directory_external_table").text()).toMatchTranslation("hdfs.create_directory_external_table")
+                expect(this.view.$("a.directory_external_table")).toExist();
+                expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs.create_directory_external_table")
             });
 
             it("calls the base implementation for postRender", function() {
