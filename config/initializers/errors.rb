@@ -4,8 +4,9 @@ class ApiValidationError < RuntimeError
   attr_reader :errors
   delegate :add, :to => :errors
 
-  def initialize
+  def initialize(*args)
     @errors = ActiveModel::Validations::UnlocalizedErrors.new(nil)
+    add(*args) if args.any?
   end
 
   def record

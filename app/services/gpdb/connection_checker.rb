@@ -8,9 +8,7 @@ module Gpdb
       instance.state = "online"
       true
     rescue PG::Error => e
-      errors = ApiValidationError.new
-      errors.add(:connection, :generic, {:message => e.message})
-      raise errors
+      raise ApiValidationError.new(:connection, :generic, {:message => e.message})
     end
 
     def self.validate_model!(model)
