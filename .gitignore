@@ -13,6 +13,9 @@
 # Ignore API doc directory
 /public/api
 
+# Ignore the directory where hadoop versions are installed
+/vendor/hadoop
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
