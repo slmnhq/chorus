@@ -1,11 +1,9 @@
 module Gpdb
   class InstanceStatus
     def self.check
-      instances = Instance.scoped
-      instances.each do |instance|
-        account = InstanceAccount.where(:owner_id => instance.owner_id, :instance_id => instance.id).first
+      Instance.scoped.each do |instance|
         instance.online = false
-        Gpdb::ConnectionBuilder.connect(instance, account) do |conn|
+        Gpdb::ConnectionBuilder.connect(instance, instance.owner_account) do |conn|
           instance.online = true
           version_string = conn.query("select version()")[0][0]
 

@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe Gpdb::InstanceStatus do
   let(:user1) { FactoryGirl::create :user }
 
