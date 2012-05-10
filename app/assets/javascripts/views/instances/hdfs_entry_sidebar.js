@@ -7,7 +7,8 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     },
 
     events : {
-        'click .external_table': 'createExternalTable'
+        'click .external_table': 'createExternalTable',
+        'click .directory_external_table': "openDirectoryExternalTable"
     },
 
     setup: function() {
@@ -90,5 +91,11 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
             var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({csv: csv});
             dialog.launchModal();
         });
+    },
+    openDirectoryExternalTable: function(e) {
+        e.preventDefault();
+
+        new chorus.dialogs.HdfsInstanceWorkspacePicker({model: this.resource, activeOnly: true}).launchModal();
     }
+
 });

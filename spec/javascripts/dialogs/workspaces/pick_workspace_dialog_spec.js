@@ -18,7 +18,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
 
         context("when the launch element activeOnly is set to true", function() {
             beforeEach(function() {
-                this.launchElement.data('activeOnly', true);
+                this.launchElement = $("<a data-activeOnly = 'true'></a>");
                 this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement});
             });
 
