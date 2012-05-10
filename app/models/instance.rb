@@ -22,15 +22,10 @@ class Instance < ActiveRecord::Base
   def self.accessible_to(user)
     return scoped if user.admin?
 
-    accounts_with_membership = sanitize_sql(
-      [
-        'LEFT OUTER JOIN instance_accounts ON instance_accounts.instance_id = instances.id AND instance_accounts.owner_id = ?',
-        user.id
-      ]
+    where('instances.shared OR instances.owner_id = :owned OR instances.id IN (:with_membership)',
+      :owned => user.id,
+      :with_membership => user.instance_accounts.pluck(:instance_id)
     )
-    scoped.
-      joins(accounts_with_membership).
-      where('instance_accounts.id IS NOT NULL OR instances.shared = true OR instances.owner_id = ?', user.id)
   end
 
   def owner_account
