@@ -17,10 +17,11 @@ Dir.chdir(hadoop_dir)
 hadoop_urls = YAML.load_file(config_file)
 
 hadoop_urls.each do |version, url|
-  filename = "#{version}.tar.gz"
-  run "curl #{url} > #{filename}"
-  run "tar -xzf #{filename}"
-  run "rm #{filename}"
+  tar_filename = "temp_tar"
+  run "curl #{url} > #{tar_filename}"
+  run "mkdir -p #{version}"
+  run "tar --extract --file=#{tar_filename} --strip-components=1 --directory=#{version}"
+  run "rm #{tar_filename}"
 end
 
 
