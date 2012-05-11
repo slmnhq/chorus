@@ -11,6 +11,9 @@ describe DataMigrator, :type => :data_migration do
     @data_migrator.migrators[i+=1].should be_instance_of UserMigrator
     @data_migrator.migrators[i+=1].should be_instance_of InstanceMigrator
     @data_migrator.migrators[i+=1].should be_instance_of InstanceAccountMigrator
+    @data_migrator.migrators[i+=1].should be_instance_of WorkspaceMigrator
+    @data_migrator.migrators[i+=1].should be_instance_of ImageMigrator
+    @data_migrator.migrators[i+=1].should be_instance_of MembershipMigrator
   end
 
   describe ".migrate" do

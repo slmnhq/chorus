@@ -19,7 +19,7 @@ namespace :legacy do
 
   desc "Migrate legacy data to the rails database"
   task :migrate => :environment do
-    DataMigrator.migrate
+    DataMigrator.new.migrate
   end
 end
 
