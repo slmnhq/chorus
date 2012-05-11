@@ -156,7 +156,7 @@ describe("chorus.models.Workspace", function() {
         });
 
         it("has the right url", function() {
-            expect(this.model.members().url()).toContain("/workspace/5/member");
+            expect(this.model.members().url()).toContain("/workspaces/5/members");
         });
 
         it("memoizes", function() {
