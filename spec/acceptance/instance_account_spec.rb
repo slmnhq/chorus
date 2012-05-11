@@ -19,6 +19,12 @@ resource "Greenplum DB account for current user" do
     end
 
     example_request "Get personal credentials" do
+      explanation <<-DESC
+        The current user's personal credentials for connecting to this
+        instance.  Does not return a shared account credential's, unless
+        the current user is the instance owner.
+      DESC
+
       status.should == 200
     end
   end

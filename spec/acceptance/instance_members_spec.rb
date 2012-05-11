@@ -17,6 +17,14 @@ resource "Greenplum DB members" do
 
   get "/instances/:instance_id/members" do
     example_request "List members with access to DB" do
+      explanation <<-DESC
+        For a Greenplum instance owner to manage which users can access their
+        instances.  When the instance is shared this list will only
+        return the instance owner's credentials.  When the instance
+        is not shared, this list includes people who added by the owner
+        or who have manually added their own credentials.
+      DESC
+
       status.should == 200
     end
   end
