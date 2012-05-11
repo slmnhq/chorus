@@ -23,8 +23,8 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
         this.trigger("workspace:selected", this.selectedItem());
     },
 
-    showDialogError : function(error) {
-        this.model.serverErrors = error || this.sandboxVersion.serverErrors;
+    showDialogError : function(errorText) {
+        this.model.serverErrors = errorText.serverErrors ? errorText.serverErrors :  [{ message : errorText }];
         this.render();
     },
 
@@ -32,10 +32,38 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
         var dbVersion = this.sandboxVersion.get("sandboxInstanceVersion");
         var dbCompare = parseFloat(dbVersion.substring(0,3));
         if(dbCompare < 4.2) {
-            var error = [{ message: t("hdfs_instance.gpdb_version.too_old")}];
-            this.showDialogError(error);
+            this.showDialogError(t("hdfs_instance.gpdb_version.too_old"));
         } else {
+
             this.model.serverErrors = [];
+
+            var path = this.model.get("path");
+            var separator = (path == "/") ? "" : "/";
+
+            this.hdfsFiles = new chorus.collections.CsvHdfsFileSet([], {
+                instance : this.model.get("instance"),
+                path : path + separator + this.model.get("name")
+            });
+
+            this.bindings.add(this.hdfsFiles, "loaded", this.launchCreateHdfsDialog)
+            this.hdfsFiles.fetchAll();
+
         }
+    },
+
+    launchCreateHdfsDialog : function() {
+        var hdfsTextFiles = this.hdfsFiles.hdfsEntryTextFiles();
+
+        if (hdfsTextFiles.length == 0) {
+            this.showDialogError(t("hdfs.no_text_files"))
+        } else {
+            this.externalTableDialog = new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
+            collection: hdfsTextFiles || [],
+            directoryName : this.model.get("name"),
+            workspaceId : this.selectedItem().id
+        });
+            this.launchSubModal(this.externalTableDialog);
+        }
+
     }
 });

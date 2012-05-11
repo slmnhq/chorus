@@ -4,6 +4,6 @@ describe("chorus.models.SandboxVersion", function () {
     });
 
     it("has the right url", function() {
-        expect(this.model.url()).toBe("workspace/44/sandboxDbVersion")
+        expect(this.model.url()).toBe("/edc/workspace/44/sandboxDbVersion")
     });
 });
