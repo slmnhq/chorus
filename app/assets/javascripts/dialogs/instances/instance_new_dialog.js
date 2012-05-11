@@ -11,10 +11,6 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     setup:function () {
-        this.bindings.add(this.model, "saved", this.saveSuccess);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
-
         this.aurora = chorus.models.Instance.aurora();
         this.bindings.add(this.aurora, "loaded", this.fetchTemplates, this);
         this.aurora.fetch();
@@ -62,9 +58,24 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     createInstance:function (e) {
         e && e.preventDefault();
+
+        this.resource = this.model = new (this.instanceClass());
+        this.bindings.add(this.model, "saved", this.saveSuccess);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+
         this.$("button.submit").startLoading("instances.new_dialog.saving");
         var values = this.fieldValues();
         this.model.save(values);
+    },
+
+    instanceClass: function() {
+        var instanceType = this.$("input[name=instance_type]").filter(":checked").attr("id");
+        if (instanceType === "register_existing_hadoop") {
+            return chorus.models.HadoopInstance;
+        } else {
+            return chorus.models.Instance;
+        }
     },
 
     fieldValues: function() {
@@ -98,6 +109,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     saveFailed:function () {
         this.$("button.submit").stopLoading();
+        this.showErrors();
     }
 });
 

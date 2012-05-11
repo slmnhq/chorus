@@ -14,7 +14,7 @@ end
 run "mkdir -p #{hadoop_dir}"
 Dir.chdir(hadoop_dir)
 
-hadoop_urls = YAML.load_file(config_file)
+hadoop_urls = YAML.load_file(config_file)['versions']
 
 hadoop_urls.each do |version, url|
   tar_filename = "temp_tar"

@@ -1,1 +1,4 @@
-"0.20.205.0": "http://apache.spinellicreations.com/hadoop/common/hadoop-0.20.205.0/hadoop-0.20.205.0.tar.gz"
+java_home: "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
+versions:
+  "0.20.205.0": "http://apache.spinellicreations.com/hadoop/common/hadoop-0.20.205.0/hadoop-0.20.205.0.tar.gz"
+

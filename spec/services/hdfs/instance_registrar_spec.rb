@@ -14,7 +14,7 @@ describe Hdfs::InstanceRegistrar do
   end
 
   before do
-    stub(Hdfs::ConnectionBuilder).check! { true }
+    stub(Hdfs::ConnectionBuilder).find_version { "0.1.2.3" }
   end
 
   describe ".create!" do
@@ -26,15 +26,26 @@ describe Hdfs::InstanceRegistrar do
       Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
     end
 
-    it "requires that a real connection to HDFS can be established" do
-      stub(Hdfs::ConnectionBuilder).check! { raise(ApiValidationError.new) }
-      expect { Hdfs::InstanceRegistrar.create!(instance_attributes, owner) }.to raise_error
-      expect {
-        begin
-          Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
-        rescue
-        end
-      }.not_to change(HadoopInstance, 'count')
+    context "when a connection is made using some hadoop version" do
+      it "save the instance with right version" do
+        stub(Hdfs::ConnectionBuilder).find_version(anything) { "0.1.2.3" }
+        instance = Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
+        instance.version.should == "0.1.2.3"
+        instance.id.should_not be_nil
+      end
+    end
+
+    context "when none of the hadoop versions can successfully connect" do
+      it "will not create the instance" do
+        stub(Hdfs::ConnectionBuilder).find_version { nil }
+        expect { Hdfs::InstanceRegistrar.create!(instance_attributes, owner) }.to raise_error ApiValidationError
+        expect {
+          begin
+            Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
+          rescue
+          end
+        }.not_to change(HadoopInstance, 'count')
+      end
     end
 
     it "caches the hdfs instance" do

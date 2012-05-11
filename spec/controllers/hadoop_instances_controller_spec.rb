@@ -16,12 +16,12 @@ describe HadoopInstancesController do
       end
 
       it "reports that the instance was created" do
-        post :create, :instance => valid_attributes
+        post :create, :hadoop_instance => valid_attributes
         response.code.should == "201"
       end
 
       it "renders the newly created instance" do
-        post :create, :instance => valid_attributes
+        post :create, :hadoop_instance => valid_attributes
         decoded_response.name.should == "new"
       end
     end
@@ -30,12 +30,12 @@ describe HadoopInstancesController do
       let(:invalid_attributes) { Hash.new }
 
       before do
-        instance = FactoryGirl.build(:instance, :name => nil)
+        instance = FactoryGirl.build(:hadoop_instance, :name => nil)
         stub(Hdfs::InstanceRegistrar).create!(invalid_attributes, @user) { raise(ActiveRecord::RecordInvalid.new(instance)) }
       end
 
       it "responds with validation errors" do
-        post :create, :instance => invalid_attributes
+        post :create, :hadoop_instance => invalid_attributes
         response.code.should == "422"
       end
     end

@@ -2,15 +2,15 @@ require 'spec_helper'
 
 describe Hdfs::ConnectionBuilder do
   let(:instance) do
-    FactoryGirl.build(:hadoop_instance,
-      :host => "gillette",
-      :port => 8020,
-      :version => "0.20.205.0"
-    )
+    FactoryGirl.build(:hadoop_instance, :host => "gillette", :port => 8020)
   end
 
   let(:client) { Hdfs::ConnectionBuilder.new(instance) }
 
+  it "set the JAVA_HOME environment variable " do
+    ENV["JAVA_HOME"].should == Hdfs::ConnectionBuilder::CONFIG['java_home']
+  end
+  
   describe ".check(instance)" do
     before do
       any_instance_of(Hdfs::ConnectionBuilder) do |builder|
@@ -39,41 +39,97 @@ describe Hdfs::ConnectionBuilder do
     end
   end
 
-  describe "#hadoop_binary" do
-    context "when the instance's version is present in `config/hadoop.yml'" do
-      it "returns the path to the correct hadoop client binary" do
-        instance.version = "0.20.205.0"
-        client.hadoop_binary.should == "vendor/hadoop/0.20.205.0/bin/hadoop"
+  describe ".find_version(instance)" do
+    let(:fake_versions) { ["0.1", "0.2", "0.3"] }
+
+    let(:fake_commands) do
+      fake_versions.map {|version| "vendor/hadoop/#{version}/bin/hadoop dfs -fs hdfs://gillette:8020 -ls /" }
+    end
+
+    before do
+      stub(Hdfs::ConnectionBuilder).supported_versions { fake_versions}
+      fake_commands.each_with_index do |cmd, i|
+        stub(Open3).capture3(cmd) { fake_responses[i] }
       end
     end
 
-    context "when the instance's version is NOT present in `config/hadoop.yml'" do
-      it "returns nil" do
-        instance.version = "9.9.9.9"
-        client.hadoop_binary.should be_nil
+    context "when connection succeeds with the first hadoop version" do
+      let(:fake_responses) do
+        [
+          ["stdout", "", 0],
+          ["", "stderr", 0],
+          ["", "stderr", 0]
+        ]
+      end
+
+      it "returns the first version" do
+        Hdfs::ConnectionBuilder.find_version(instance).should == "0.1"
+      end
+    end
+
+    context "when connection succeeds with the second hadoop version" do
+      let(:fake_responses) do
+        [
+          ["", "stderr", 0],
+          ["stdout", "", 0],
+          ["", "stderr", 0]
+        ]
+      end
+
+      it "updates the instance's version correctly" do
+        Hdfs::ConnectionBuilder.find_version(instance).should == "0.2"
+      end
+    end
+
+    context "when none of the known hadoop clients successfully connect" do
+      let(:fake_responses) do
+        [
+          ["", "stderr", 0],
+          ["", "stderr", 0],
+          ["", "stderr", 0]
+        ]
+      end
+
+      it "sets the instance's version to nil" do
+        Hdfs::ConnectionBuilder.find_version(instance).should be_nil
       end
     end
   end
 
-  describe "#run_hadoop(command)" do
+  describe ".hadoop_binary(version)" do
+    context "when the given version is present in the hadoop config file" do
+      it "returns the path to the correct hadoop client binary" do
+        Hdfs::ConnectionBuilder.hadoop_binary("0.20.205.0").should == "vendor/hadoop/0.20.205.0/bin/hadoop"
+      end
+    end
+
+    context "when the version is NOT present in the hadoop config file" do
+      it "returns nil" do
+        Hdfs::ConnectionBuilder.hadoop_binary("9.9.9.9").should be_nil
+      end
+    end
+  end
+
+  describe "#run_hadoop(command, [ version ])" do
     let(:hadoop_command) { "ls /" }
     let(:expected_shell_command) { "#{fake_binary_path} dfs -fs hdfs://gillette:8020 -ls /" }
     let(:fake_binary_path) { "vendor/hadoop/SOME_VERSION/hadoop/bin" }
+    let(:version) { "0.1.2.3" }
 
     before do
-      mock(client).hadoop_binary { fake_binary_path }
+      mock(Hdfs::ConnectionBuilder).hadoop_binary(version) { fake_binary_path }
     end
 
     it "runs the given hadoop command with the right host and port" do
       mock(Open3).capture3(expected_shell_command)
-      client.run_hadoop(hadoop_command)
+      client.run_hadoop(hadoop_command, version)
     end
 
     context "when the command writes to stderr" do
       it "raises an exception" do
         mock(Open3).capture3(expected_shell_command) { ["", "hadoop client stderr", 0] }
         expect {
-          client.run_hadoop(hadoop_command)
+          client.run_hadoop(hadoop_command, version)
         }.to raise_error(ApiValidationError)
       end
     end
@@ -81,7 +137,7 @@ describe Hdfs::ConnectionBuilder do
     context "when the command succeeds (nothing written to stderr)" do
       it "returns the command's stdout" do
         mock(Open3).capture3(expected_shell_command) { ["hadoop client stdout", "", 0] }
-        client.run_hadoop(hadoop_command).should == "hadoop client stdout"
+        client.run_hadoop(hadoop_command, version).should == "hadoop client stdout"
       end
     end
   end
