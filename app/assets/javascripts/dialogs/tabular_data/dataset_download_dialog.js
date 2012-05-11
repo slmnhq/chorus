@@ -1,7 +1,6 @@
 chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
     constructorName: "DatasetDownload",
     templateName: "dataset_download",
-    title: t("dataset.download.title"),
 
     events: {
         "click button.submit": "submitDownload"
@@ -11,6 +10,7 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
         this._super("setup", arguments);
         this.tabular_data = this.options.pageModel;
         this.model = this.resource = new chorus.models.TabularDataDownloadConfiguration();
+        this.title = t("dataset.download.title", {datasetName: this.tabular_data.name()});
     },
 
     submitDownload: function(e) {
@@ -29,7 +29,7 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
     },
 
     downloadSome: function() {
-        this.model.set({ numOfRows: this.numOfRows() }, { silent: true })
+        this.model.set({ numOfRows: this.numOfRows() }, { silent: true });
 
         if (this.model.performValidation()) {
             this.tabular_data.download({ rows: this.numOfRows() });

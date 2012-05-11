@@ -16,7 +16,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
         });
 
         it("has the right title", function(){
-            expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.download.title")
+            expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.download.title", {datasetName: this.dataset.name()})
         });
 
         it("has two radio buttons", function(){
@@ -72,7 +72,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
 
                 it("displays an error", function() {
                     expect(this.rowsInput).toHaveClass("has_error");
-                    expect(this.dialog.$(".has_error").length).toBe(1)
+                    expect(this.dialog.$(".has_error").length).toBe(1);
                     expect(this.dialog.showErrors).toHaveBeenCalled();
                 });
             });
@@ -93,7 +93,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
 
                 it("displays an error", function() {
                     expect(this.rowsInput).toHaveClass("has_error");
-                    expect(this.dialog.$(".has_error").length).toBe(1)
+                    expect(this.dialog.$(".has_error").length).toBe(1);
                     expect(this.dialog.showErrors).toHaveBeenCalled();
                 });
             });
