@@ -1,7 +1,7 @@
 chorus.collections.MemberSet = chorus.collections.Base.extend({
     constructorName: "MemberSet",
     model:chorus.models.User,
-    urlTemplate:"workspace/{{workspaceId}}/member",
+    urlTemplate:"workspaces/{{workspaceId}}/members",
 
     save: function() {
         var self = this;
