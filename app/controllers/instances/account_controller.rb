@@ -13,7 +13,7 @@ module Instances
     end
 
     def destroy
-      instance.account_for_user(current_user).delete
+      instance.account_for_user(current_user).destroy
       render :json => {}
     end
 

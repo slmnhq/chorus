@@ -29,10 +29,10 @@ module Instances
     end
 
     def destroy
-      raise SecurityTransgression if Instance.find(params[:instance_id]).owner != current_user
-      account = InstanceAccount.find_by_instance_id_and_id(params[:instance_id], params[:id])
-      raise ActiveRecord::RecordNotFound unless account
-      account.delete
+      instance = Instance.owned_by(current_user).find(params[:instance_id])
+      account = instance.accounts.find(params[:id])
+
+      account.destroy
       render :json => {}
     end
   end

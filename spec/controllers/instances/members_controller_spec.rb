@@ -292,9 +292,9 @@ describe Instances::MembersController do
         instance.accounts.find_by_owner_id(joe.id).should_not be_nil
       end
 
-      it "responds with 'forbidden'" do
+      it "responds with 'not found'" do
         delete :destroy, :instance_id => instance.id, :id => @joe_account.id
-        response.should be_forbidden
+        response.should be_not_found
       end
     end
   end
