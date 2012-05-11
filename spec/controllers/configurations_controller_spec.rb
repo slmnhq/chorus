@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ConfigsController do
+describe ConfigurationsController do
   before do
     @user = FactoryGirl.create(:user)
     log_in @user

@@ -1,6 +1,6 @@
 Chorus::Application.routes.draw do
   resource :sessions, :only => [:create, :destroy, :show]
-  resource :config, :only => [:show]
+  resource :config, :only => [:show], :controller => 'configurations'
 
   resources :users, :only => [:index, :show, :create, :update, :destroy] do
     collection do
