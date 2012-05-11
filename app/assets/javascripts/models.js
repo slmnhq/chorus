@@ -201,7 +201,7 @@ chorus.models = {
             if (this.parameterWrapper) {
                 result[this.parameterWrapper] = this._super("toJSON");
             } else if (this.constructorName && this.constructorName != "Model") {
-                result[this.constructorName.toLowerCase()] = this._super("toJSON");
+                result[_.underscored(this.constructorName)] = this._super("toJSON");
             } else {
                 result = this._super("toJSON")
 

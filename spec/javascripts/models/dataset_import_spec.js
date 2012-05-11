@@ -125,8 +125,8 @@ describe("chorus.models.DatasetImport", function() {
             it("sets the 'sampleMethod' parameter, as required by the API", function() {
                 this.model.save();
                 var params = this.server.lastCreate().params();
-                expect(params["datasetimport[sampleCount]"]).toBe('477');
-                expect(params["datasetimport[sampleMethod]"]).toBe("RANDOM_COUNT");
+                expect(params["dataset_import[sampleCount]"]).toBe('477');
+                expect(params["dataset_import[sampleMethod]"]).toBe("RANDOM_COUNT");
             });
         });
     });

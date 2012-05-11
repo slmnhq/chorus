@@ -879,8 +879,8 @@ describe("chorus.models.Abstract", function() {
 
                     it("scopes the attributes under the lowercased constructorName", function() {
                         var params = this.model.toJSON();
-                        expect(params.flimflam).toBeDefined();
-                        expect(params.flimflam.name).toBe("Lenny");
+                        expect(params.flim_flam).toBeDefined();
+                        expect(params.flim_flam.name).toBe("Lenny");
                     });
                 });
 

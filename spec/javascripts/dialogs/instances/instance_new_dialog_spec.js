@@ -165,8 +165,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                         form.find("textarea[name=description]").val("Instance Description");
                         form.find("input[name=host]").val("foo.bar");
                         form.find("input[name=port]").val("1234");
-                        form.find("input[name=userName]").val("user");
-                        form.find("input[name=userGroups]").val("hadoop");
+                        form.find("input[name=username]").val("user");
+                        form.find("input[name=group_list]").val("hadoop");
 
                         form.find("input[name=name]").trigger("change");
                     });
@@ -177,8 +177,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(values.description).toBe("Instance Description");
                         expect(values.host).toBe("foo.bar");
                         expect(values.port).toBe("1234");
-                        expect(values.userName).toBe("user");
-                        expect(values.userGroups).toBe("hadoop");
+                        expect(values.username).toBe("user");
+                        expect(values.group_list).toBe("hadoop");
                     });
 
                     it("#fieldValues should have the right values for 'provision_type' and 'shared'", function() {
@@ -204,53 +204,66 @@ describe("chorus.dialogs.InstanceNew", function() {
             ]);
         });
 
+        context("when registering a hadoop instance", function() {
+            beforeEach(function() {
+                var hadoopSection = this.dialog.$("fieldset.register_existing_hadoop")
+                hadoopSection.find("input[type=radio]").attr('checked', true).change();
+
+                hadoopSection.find("input[name=name]").val("Instance_Name");
+                hadoopSection.find("textarea[name=description]").val("Instance Description");
+                hadoopSection.find("input[name=host]").val("foo.bar");
+                hadoopSection.find("input[name=port]").val("1234");
+                hadoopSection.find("input[name=username]").val("user");
+                hadoopSection.find("input[name=group_list]").val("hadoop").change();
+
+                spyOn(chorus.models.HadoopInstance.prototype, "save").andCallThrough();
+                this.dialog.$("button.submit").click();
+            });
+
+            it("creates a hadoop instance model with the right data and saves it", function() {
+                var instance = this.dialog.model;
+                expect(instance.save).toHaveBeenCalled();
+
+                expect(instance.get("name")).toBe("Instance_Name");
+                expect(instance.get("description")).toBe("Instance Description");
+                expect(instance.get("host")).toBe("foo.bar");
+                expect(instance.get("port")).toBe("1234");
+                expect(instance.get("username")).toBe("user");
+                expect(instance.get("group_list")).toBe("hadoop");
+            });
+        });
+
         context("using register existing greenplum database", function() {
             beforeEach(function() {
-                this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
+                section = this.dialog.$(".register_existing_greenplum");
+                section.find("input[type=radio]").attr('checked', true).change();
+                section.find("input[name=name]").val("Instance_Name");
+                section.find("textarea[name=description]").val("Instance Description");
+                section.find("input[name=host]").val("foo.bar");
+                section.find("input[name=port]").val("1234");
+                section.find("input[name=db_username]").val("user");
+                section.find("input[name=db_password]").val("my_password");
+                section.find("input[name=maintenance_db]").val("foo");
+                section.find("input[name=name]").trigger("change");
+
+                spyOn(chorus.models.Instance.prototype, "save").andCallThrough();
             });
 
-            context("after filling in the form", function() {
-                beforeEach(function() {
-                    this.dialog.$(".register_existing_greenplum input[name=name]").val("Instance_Name");
-                    this.dialog.$(".register_existing_greenplum textarea[name=description]").val("Instance Description");
-                    this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
-                    this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
-                    this.dialog.$(".register_existing_greenplum input[name=db_username]").val("user");
-                    this.dialog.$(".register_existing_greenplum input[name=db_password]").val("my_password");
-                    this.dialog.$(".register_existing_greenplum input[name=maintenance_db]").val("foo");
-                    this.dialog.$(".register_existing_greenplum input[name=name]").trigger("change");
 
-                    spyOn(this.dialog.model, "save").andCallThrough();
-                });
+            it("calls save on the dialog's model", function() {
+                this.dialog.$("button.submit").click();
+                expect(this.dialog.model.save).toHaveBeenCalled();
 
-                it("calls save on the dialog's model", function() {
-                    this.dialog.$("button.submit").click();
-                    expect(this.dialog.model.save).toHaveBeenCalled();
+                var attrs = this.dialog.model.save.calls[0].args[0];
 
-                    var attrs = this.dialog.model.save.calls[0].args[0];
-
-                    expect(attrs.db_password).toBe("my_password");
-                    expect(attrs.name).toBe("Instance_Name");
-                    expect(attrs.provision_type).toBe("register");
-                    expect(attrs.description).toBe("Instance Description");
-                    expect(attrs.maintenance_db).toBe("foo");
-                });
-
-                context("when the form is not valid", function() {
-                    beforeEach(function() {
-                        this.dialog.$(".register_existing_greenplum input[name=name]").val("");
-                        this.dialog.$(".register_existing_greenplum input[type=radio]").attr('checked', true).change();
-                        spyOn(Backbone.Model.prototype, 'save');
-                        this.dialog.$("button.submit").click();
-                    });
-
-                    it("doesn't save or toast", function() {
-                        expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
-                    });
-                });
-
-                testUpload();
+                expect(attrs.db_password).toBe("my_password");
+                expect(attrs.name).toBe("Instance_Name");
+                expect(attrs.provision_type).toBe("register");
+                expect(attrs.description).toBe("Instance Description");
+                expect(attrs.maintenance_db).toBe("foo");
             });
+
+            testUpload();
         });
 
         context("using a new Greenplum database instance", function() {
@@ -264,12 +277,13 @@ describe("chorus.dialogs.InstanceNew", function() {
                 this.dialog.$(".create_new_greenplum input[name=db_username]").val("edcadmin");
                 this.dialog.$(".create_new_greenplum input[name=db_password]").val("supersecret");
                 this.dialog.$(".create_new_greenplum select").val("large");
+
+                spyOn(chorus.models.Instance.prototype, "save").andCallThrough();
+                spyOn(chorus, "toast");
             });
 
             context("saving", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog.model, "save").andCallThrough();
-                    spyOn(chorus, "toast");
                     this.dialog.$("button.submit").click();
                 });
 
@@ -337,21 +351,6 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(attrs.provision_type).toBe("create");
                         expect(attrs.description).toBe("Instance Description");
                         expect(attrs.host).toBeUndefined();
-                    });
-                });
-
-                context("when the form is not valid", function() {
-                    beforeEach(function() {
-                        this.dialog.$(".create_new_greenplum input[name=name]").val("");
-                        this.dialog.$(".create_new_greenplum input[type=radio]").attr('checked', true).change();
-                        chorus.toast.reset();
-                        spyOn(Backbone.Model.prototype, 'save');
-                        this.dialog.$("button.submit").click();
-                    });
-
-                    it("doesn't complete a save", function() {
-                        expect(Backbone.Model.prototype.save).not.toHaveBeenCalled();
-                        expect(chorus.toast).not.toHaveBeenCalled();
                     });
                 });
             });
