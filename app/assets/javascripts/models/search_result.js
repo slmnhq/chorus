@@ -50,6 +50,10 @@
             }
         },
 
+        download: function(options) {
+            this.selectedItem.download(options);
+        },
+
         isScoped: function() {
             return this.isScopedToSingleWorkspace() || this.isScopedToUserWorkspaces();
         },

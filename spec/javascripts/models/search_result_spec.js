@@ -475,4 +475,27 @@ describe("chorus.models.SearchResult", function() {
             expect("invalidated").toHaveBeenTriggeredOn(this.model.selectedItem);
         });
     });
+
+    describe("#download", function() {
+        var searchResult;
+        beforeEach(function() {
+            searchResult = fixtures.searchResult({
+                workspaceId: "123",
+                thisWorkspace: {
+                    numFound: 171,
+                    docs: [
+                        fixtures.searchResultDatabaseObjectJson()
+                    ]
+                }
+            });
+
+            this.model.selectedItem = searchResult.tabularData().at(0);
+            spyOn(this.model.selectedItem, "download");
+            this.model.download({ "theOption": "isTrue" });
+        });
+
+        it("delegates to selectedItem's #download method'", function() {
+            expect(this.model.selectedItem.download).toHaveBeenCalledWith({ "theOption": "isTrue" });
+        });
+    });
 });
