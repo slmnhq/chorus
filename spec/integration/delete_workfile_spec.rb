@@ -5,7 +5,7 @@ describe " add an instance " do
     login('edcadmin', 'secret')
   end
 
-  it "deletes a SQL workfile" do
+  xit "deletes a SQL workfile" do
     visit("#/workspaces")
     wait_until { current_route == '/workspaces' && page.has_selector?("button[data-dialog=WorkspacesNew]") }
     click_button "Create Workspace"

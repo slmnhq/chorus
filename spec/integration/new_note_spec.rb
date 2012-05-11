@@ -18,7 +18,7 @@ describe "creating a note on a workspace" do
       wait_until { page.has_selector?("#facebox .dialog h1") }
     end
 
-    it "dismisses each modal with each press of escape" do
+    xit "dismisses each modal with each press of escape" do
       page.find("body").native.send_keys :escape
       wait_until { page.has_selector?("#facebox .dialog h1") }
       page.find("body").native.send_keys :escape
@@ -35,7 +35,7 @@ describe "creating a note on a workspace" do
         attach_file "fileToUpload[]", file.path
       end
 
-      it "displays the file's name" do
+      xit "displays the file's name" do
           page.find(".name").should have_content("my_desktop_file_name")
       end
 
@@ -45,7 +45,7 @@ describe "creating a note on a workspace" do
           end
 
           context "when the file is within the size limits" do
-              it "shows the note in the workspace's activity stream" do
+              xit "shows the note in the workspace's activity stream" do
                   wait_until do
                       @note_li = page.find("ul.activities li.activity")
                   end
@@ -62,7 +62,7 @@ describe "creating a note on a workspace" do
                   file
               end
 
-              it "shows a server error" do
+              xit "shows a server error" do
                   wait_until do
                       page.find(".dialog .errors").has_css?("li")
                   end

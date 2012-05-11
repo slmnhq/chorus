@@ -13,6 +13,7 @@ describe "creating an instance credential" do
     wait_until { current_route == "/instances" && page.has_selector?("a[data-dialog=InstancePermissions]") }
     click_link "Edit"
     within("#facebox") do
+      wait_until { page.has_button?("Add Account") }
       click_button "Add Account"
 
       #TODO actually select the correct user

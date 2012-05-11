@@ -8,7 +8,8 @@ describe "creating a note on a workspace" do
     click_link "Edit Workspace"
     wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
   end
-  it"edits workspace settings" do
+
+  xit "edits workspace settings" do
     within("#facebox") do
     fill_in 'name', :with => "change_ws_name#{Time.now.to_i}"
 #    set_cleditor_value("body", "Changing the summary of the workspace")

@@ -5,7 +5,8 @@ describe "deleting a workspace" do
     login('edcadmin', 'secret')
     create_valid_workspace
   end
-  it "deletes the workspace" do
+
+  xit "deletes the workspace" do
     click_link "Delete this Workspace"
     wait_until { page.has_selector?(".submit") }
     find(".submit").click

@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "workfile show page" do
-  it "pops up the right menu" do
+  xit "pops up the right menu" do
     login('edcadmin', 'secret')
     visit("#/workspaces")
 
