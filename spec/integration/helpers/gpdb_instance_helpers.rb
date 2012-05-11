@@ -13,7 +13,7 @@ def create_valid_instance(name=nil)
         fill_in 'db_username', :with => "gpadmin"
         #fill_in 'db_username', :with => "edcadmin"
         fill_in 'db_password', :with => "secret"
-        check("register_greenplum_shared")
+        #check("register_greenplum_shared")
         find(".submit").click
     end
 end

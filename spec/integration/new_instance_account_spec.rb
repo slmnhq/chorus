@@ -14,6 +14,7 @@ describe "creating an instance credential" do
     click_link "Edit"
     within("#facebox") do
       click_button "Add Account"
+
       #TODO actually select the correct user
       #select('Joe Blow', :from => '#user_name_select')
       fill_in 'db_username', :with => "gpadmin"

@@ -6,7 +6,9 @@ describe " add an instance " do
     page.find("a.add.dialog").click
   end
 
-  xit "creates an instance" do
+  it "creates an instance" do
+    new_instance_name = "GPDB_inst_sel_test#{Time.now.to_i}"
+
     within("#facebox") do
       wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
       choose("register_existing_greenplum")
@@ -19,7 +21,7 @@ describe " add an instance " do
         wait_until { find("input[name=db_username]").visible? }
         wait_until { find("input[name=db_password]").visible? }
 
-        fill_in 'name', :with => "GPDB_inst_sel_test#{Time.now.to_i}"
+        fill_in 'name', :with => new_instance_name
         fill_in 'description', :with => "GPDB instance creation"
         fill_in 'host', :with => "gillette.sf.pivotallabs.com"
         fill_in 'port', :with => "5432"
@@ -31,6 +33,10 @@ describe " add an instance " do
 
       find(".submit").click
     end
+
+    find('.instance_list').should have_content(new_instance_name)
+    visit("/#/instances")
+    find('.instance_list').should have_content(new_instance_name)
   end
 
   xit "creates an Hadoop Instance" do
