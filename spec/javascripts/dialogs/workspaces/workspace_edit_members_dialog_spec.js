@@ -31,7 +31,7 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
         });
 
         it("passes the workspace owner as an un-removable item in the shuttle widget", function() {
-            expect(this.dialog.shuttle.nonRemovableModels).toContain(this.workspace.owner());
+            expect(this.dialog.shuttle.nonRemovableModels[0].get("id")).toBe(this.workspace.owner().get("id"));
         });
 
         it("passes the right text for the non-removable owner to the shuttle widget", function() {
