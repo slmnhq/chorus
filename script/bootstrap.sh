@@ -14,6 +14,9 @@ set -e
 echo "***** initializing database"
 script/init_db.sh
 
+echo "***** installing hadoop"
+script/install_hadoop.sh
+
 echo "***** setting up project"
 bundle install
 rake db:reset db:test:prepare legacy:setup db:test:prepare:legacy
