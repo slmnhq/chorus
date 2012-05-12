@@ -2432,13 +2432,11 @@ beforeEach(function() {
 
         hdfsFileJson: function(overrides) {
             return _.extend({
-                lastModificationTime: "2012-03-05 15:23:44.34",
+                lastUpdatedStamp: "2012-03-05 15:23:44.34",
                 lines: [
                     "some content;",
                     "second line"
-                ],
-                instanceId: "1234",
-                path: "%2Fdata%2FfixtureFile.sql"
+                ]
             }, overrides)
         },
 
