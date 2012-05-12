@@ -120,12 +120,12 @@ CREATE TABLE hadoop_instances (
     host character varying(255),
     port integer,
     owner_id integer,
-    state character varying(255) DEFAULT 'offline'::character varying,
     version character varying(255),
     username character varying(255),
     group_list character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    online boolean DEFAULT true
 );
 
 
@@ -562,3 +562,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120510210331');
 INSERT INTO schema_migrations (version) VALUES ('20120510211134');
 
 INSERT INTO schema_migrations (version) VALUES ('20120510224704');
+
+INSERT INTO schema_migrations (version) VALUES ('20120511233557');

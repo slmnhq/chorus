@@ -1,5 +1,5 @@
 class HadoopInstancePresenter < Presenter
-  delegate :name, :host, :port, :id, :owner, :description, :version, :state, to: :model
+  delegate :name, :host, :port, :id, :owner, :description, :version, :online?, to: :model
 
   def to_hash
     {
@@ -8,7 +8,7 @@ class HadoopInstancePresenter < Presenter
         :port => port,
         :id => id,
         :owner => present(owner),
-        :state => state,
+        :state => online? ? "online" :"offline",
         :description => description,
         :version => version
     }

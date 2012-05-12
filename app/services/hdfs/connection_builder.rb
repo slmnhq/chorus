@@ -8,7 +8,7 @@ module Hdfs
     def self.check!(instance)
       validate_model!(instance)
       new(instance).run_hadoop("ls /")
-      instance.state = "online"
+      instance.online = true
       true
     end
 
