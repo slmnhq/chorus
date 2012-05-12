@@ -3,8 +3,8 @@ require 'spec_helper'
 describe UsersController do
   describe "#index" do
     before do
-      log_in FactoryGirl.create(:user, :username => 'some_user', :first_name => "marty")
-      FactoryGirl.create(:user, :username => 'other_user', :first_name => "andy")
+      log_in FactoryGirl.create(:user, :username => 'some_user', :first_name => "marty", :last_name => "alpha")
+      FactoryGirl.create(:user, :username => 'other_user', :first_name => "andy", :last_name => "bravo")
     end
 
     it_behaves_like "an action that requires authentication", :get, :index
