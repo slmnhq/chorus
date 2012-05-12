@@ -25,20 +25,45 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         });
 
         describe("when we are in quickstart mode", function() {
-            beforeEach(function() {
-                spyOn(chorus.views.WorkspaceQuickstart, "quickstartFinishedFor").andReturn(false);
-                spyOn(chorus.router, "navigate");
-                this.page = new chorus.pages.WorkspaceShowPage('4');
+            context("as the workspace owner", function(){
+                beforeEach(function() {
+                    spyOn(chorus.views.WorkspaceQuickstart, "quickstartFinishedFor").andReturn(false);
+                    spyOn(chorus.router, "navigate");
+
+                    this.page = new chorus.pages.WorkspaceShowPage('4');
+                    this.page.model._owner = { id: 4 };
+                    setLoggedInUser({id: "4", userName: "iAmNumberFour"}, this.chorus);
+                });
+
+                describe("the fetch completes", function() {
+                    beforeEach(function() {
+                        this.server.completeFetchFor(this.page.model, newFixtures.workspace({ "ownerId" : "4" }));
+                    });
+
+                    it("navigates to the quickstart page", function() {
+                        expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor).toHaveBeenCalledWith('4');
+                        expect(chorus.router.navigate).toHaveBeenCalledWith("/workspaces/4/quickstart");
+                    });
+
+                    it("doesn't break the breadcrumbs", function() {
+                        var page = this.page;
+                        expect(function(){ page.crumbs() }).not.toThrow();
+                    });
+                });
             });
 
-            it("navigates to the quickstart page", function() {
-                expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor).toHaveBeenCalledWith('4');
-                expect(chorus.router.navigate).toHaveBeenCalledWith("/workspaces/4/quickstart");
-            });
+            context("as somebody else", function() {
+                beforeEach(function() {
+                    spyOn(chorus.views.WorkspaceQuickstart, "quickstartFinishedFor").andReturn(false);
+                    spyOn(chorus.router, "navigate");
+                    this.page = new chorus.pages.WorkspaceShowPage('4');
+                    this.page.model._owner = { id: 9877 };
+                    setLoggedInUser({id: "4", userName: "iAmNumberFour"}, this.chorus);
+                });
 
-            it("doesn't break the breadcrumbs", function() {
-                var page = this.page;
-                expect(function(){ page.crumbs() }).not.toThrow();
+                it("does not navigate to the quickstart page", function() {
+                    expect(chorus.router.navigate).not.toHaveBeenCalled();
+                });
             });
         });
 
@@ -47,11 +72,19 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 spyOn(chorus.views.WorkspaceQuickstart, "quickstartFinishedFor").andReturn(true);
                 spyOn(chorus.router, "navigate");
                 this.page = new chorus.pages.WorkspaceShowPage('4');
+                this.page.model._owner = { id: 4 };
+                setLoggedInUser({id: "4", userName: "iAmNumberFour"}, this.chorus);
             });
 
-            it("navigates to the quickstart page", function() {
-                expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor).toHaveBeenCalledWith('4');
-                expect(chorus.router.navigate).not.toHaveBeenCalled();
+            describe("the fetch completes", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.page.model, newFixtures.workspace({ "ownerId" : "4" }));
+                });
+
+                it("navigates to the quickstart page", function() {
+                    expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor).toHaveBeenCalledWith('4');
+                    expect(chorus.router.navigate).not.toHaveBeenCalled();
+                });
             });
         });
     });
