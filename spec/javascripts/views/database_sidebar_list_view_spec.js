@@ -68,7 +68,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             });
 
             it("renders", function() {
-               expect(this.view.postRender).toHaveBeenCalled();
+                expect(this.view.postRender).toHaveBeenCalled();
             });
             context("selecting a schema", function() {
                 beforeEach(function() {
@@ -139,5 +139,35 @@ describe("chorus.views.DatabaseSidebarList", function() {
                 });
             });
         });
+    });
+
+    context("when there are no valid credentials", function() {
+        beforeEach(function() {
+            this.schema = newFixtures.sandbox({ schemaName: "righteous_tables" }).schema();
+            this.collection = new chorus.collections.Base([]);
+            this.collection.serverErrors = [
+                {message: "Account map needed"}
+            ]
+
+            var subclass = chorus.views.DatabaseSidebarList.extend({
+                templateName: "database_dataset_sidebar_list"
+            });
+
+            this.view = new subclass({collection: this.collection, schema: this.schema });
+
+            spyOn(this.view, "postRender").andCallThrough();
+            this.server.completeFetchFor(this.schema.database().schemas(), [
+                this.schema,
+                fixtures.schema({ name: "awesome_tables", id: "5" }),
+                fixtures.schema({ name: "orphaned_tables", id: "6" })
+            ]);
+        })
+
+        it("should show the missing credentials error messages", function() {
+            expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
+                linkText: t("dataset.credentials.missing.linkText"),
+                instanceName: this.schema.get("instanceName")
+            });
+        })
     });
 });
