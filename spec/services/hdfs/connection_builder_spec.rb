@@ -10,7 +10,7 @@ describe Hdfs::ConnectionBuilder do
   it "set the JAVA_HOME environment variable " do
     ENV["JAVA_HOME"].should == Hdfs::ConnectionBuilder::CONFIG['java_home']
   end
-  
+
   describe ".check(instance)" do
     before do
       any_instance_of(Hdfs::ConnectionBuilder) do |builder|
@@ -121,7 +121,7 @@ describe Hdfs::ConnectionBuilder do
     end
 
     it "runs the given hadoop command with the right host and port" do
-      mock(Open3).capture3(expected_shell_command)
+      mock(Open3).capture3(expected_shell_command) { ["ok", "", 0]}
       client.run_hadoop(hadoop_command, version)
     end
 
@@ -134,7 +134,16 @@ describe Hdfs::ConnectionBuilder do
       end
     end
 
-    context "when the command succeeds (nothing written to stderr)" do
+    context "when the command fails (exit code non-zero)" do
+      it "raises an exception" do
+        mock(Open3).capture3(expected_shell_command) { ["JAVA_HOME is not set", "", 1] }
+        expect {
+          client.run_hadoop(hadoop_command, version)
+        }.to raise_error(ApiValidationError)
+      end
+    end
+
+    context "when the command succeeds (nothing written to stderr, exit code 0)" do
       it "returns the command's stdout" do
         mock(Open3).capture3(expected_shell_command) { ["hadoop client stdout", "", 0] }
         client.run_hadoop(hadoop_command, version).should == "hadoop client stdout"

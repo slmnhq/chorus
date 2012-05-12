@@ -34,8 +34,8 @@ module Hdfs
 
     def run_hadoop(command, version=nil)
       binary = self.class.hadoop_binary(version || @instance.version)
-      out, err = Open3.capture3("#{binary} dfs -fs hdfs://#{@instance.host}:#{@instance.port} -#{command}")
-      raise ApiValidationError if err.present?
+      out, err, exit = Open3.capture3("#{binary} dfs -fs hdfs://#{@instance.host}:#{@instance.port} -#{command}")
+      raise ApiValidationError if (err.present? || exit != 0)
       out
     end
 
