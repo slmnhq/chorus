@@ -11,9 +11,9 @@ describe("chorus.collections.CsvHdfsFileSet", function () {
         expect(this.collection.url()).toMatchUrl("/edc/data/1/hdfs/%2Ffoo", {paramsToIgnore: ["page", "rows"]})
     });
 
-    describe("#hdfsEntryTextFiles", function () {
-        it("returns only text files", function() {
-            expect(this.collection.hdfsEntryTextFiles().length).toBe(1);
+    describe("#filesOnly", function () {
+        it("returns only hdfs files", function() {
+            expect(this.collection.filesOnly().length).toBe(2);
         });
     });
 });

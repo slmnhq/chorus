@@ -2358,6 +2358,25 @@ beforeEach(function() {
             return result;
         },
 
+        csvHdfsFileSet: function(models, overrides) {
+            models = models || [
+                fixtures.hdfsEntryDirJson(),
+                fixtures.hdfsEntryFileJson(),
+                fixtures.hdfsEntryBinaryFileJson(),
+                fixtures.hdfsEntryUnknownIfBinaryFileJson()
+            ];
+            var attributes = _.extend({
+                path: '/data',
+                instance: {
+                    id: this.nextId().toString(),
+                    name: 'instanceName'
+                }
+            }, overrides);
+            var result = new chorus.collections.CsvHdfsFileSet(null, attributes);
+            result.reset(models);
+            return result;
+        },
+
         hdfsEntryDir: function(overrides) {
             return new chorus.models.HdfsEntry(this.hdfsEntryDirJson(overrides));
         },

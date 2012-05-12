@@ -58,7 +58,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
         it("styles the select", function() {
             expect(chorus.styleSelect).toHaveBeenCalled();
-        })
+        });
 
         it("has the right labels", function() {
             expect(this.dialog.title).toMatchTranslation("hdfs.create_external.title");

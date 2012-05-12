@@ -103,28 +103,41 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                            this.server.completeFetchFor(this.dialog.hdfsFiles, hdfsFiles);
                        });
 
-                       it("opens the Create External Table dialog", function() {
-                           expect(this.dialog.launchSubModal).toHaveBeenCalledWith(this.dialog.externalTableDialog);
+                       it("doesn't open the Create External Table dialog", function() {
+                           expect(this.dialog.launchSubModal).not.toHaveBeenCalledWith(this.dialog.externalTableDialog);
                        });
 
-                       it("filters out binary and directory files", function() {
-                           expect(this.dialog.externalTableDialog.collection.length).toBe(2);
+                       it("filters out directories", function() {
+                           expect(this.dialog.externalTableDialog.collection.length).toBe(3);
+                       });
+
+                       it("fetches the first item in the collection", function() {
+                           expect(this.dialog.externalTableDialog.csv).toHaveBeenFetched();
+                       })
+
+                       context("when the fetch for hdfs file sample completes", function () {
+                           beforeEach(function() {
+                               this.server.completeFetchFor(this.dialog.externalTableDialog.csv);
+                           });
+                           it("opens the Create External Table dialog", function() {
+                               expect(this.dialog.launchSubModal).toHaveBeenCalledWith(this.dialog.externalTableDialog);
+                           });
                        });
                    });
 
                    context("when the hdfs entries fetch completes with no text files", function () {
                        beforeEach(function() {
                             var hdfsFiles2 = [
-                               fixtures.hdfsEntryBinaryFileJson(),
                                fixtures.hdfsEntryDirJson()
                            ];
                            this.server.completeFetchFor(this.dialog.hdfsFiles, hdfsFiles2);
 
                        });
                        it("displays error when the directory doesn't have a text files", function() {
-                           expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs.no_text_files")
+                           expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_instance.no_text_files")
                        })
                    });
+
                });
 
             });
