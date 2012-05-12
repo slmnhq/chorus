@@ -40,4 +40,16 @@ describe HadoopInstancesController do
       end
     end
   end
+
+  describe "#index" do
+    it "presents all hadoop instances" do
+      FactoryGirl.create(:hadoop_instance, :name => "hadoop1")
+      FactoryGirl.create(:hadoop_instance, :name => "hadoop2")
+      FactoryGirl.create(:hadoop_instance, :name => "hadoop3")
+
+      get :index
+      decoded_response.length.should == 3
+      decoded_response.map { |model| model.name }.should == ["hadoop1", "hadoop2", "hadoop3"]
+    end
+  end
 end
