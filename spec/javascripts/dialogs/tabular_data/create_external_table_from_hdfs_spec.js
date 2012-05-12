@@ -104,7 +104,6 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     var statement = "testisgreat (column_1 text, column_2 text, column_3 text, column_4 text, column_5 text)";
 
                     expect(request.url).toMatchUrl("/workspace/" + workspaceId + "/externaltable");
-                    console.log(request.params());
                     expect(request.params()["csv_hdfs[statement]"]).toBe(statement);
                     expect(request.params()["csv_hdfs[hasHeader]"]).toBe('false');
                 });
