@@ -1,10 +1,9 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-#TODO will not work until online state of instance is implemented
 describe "creating an instance credential" do
   before(:each) do
     login('edcadmin', 'secret')
-    create_valid_instance('instance1')
+    create_valid_instance
     create_valid_user("testuser1")
   end
 
