@@ -1,7 +1,11 @@
 @import "_common.scss";
 
 .dataset_download {
-    width: 300px;
+    width: 350px;
+
+    .dialog_header h1 {
+        @include ellipsis;
+    }
 
     input[name=numOfRows] {
         display: inline-block;
