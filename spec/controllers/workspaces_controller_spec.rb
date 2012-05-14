@@ -84,6 +84,11 @@ describe WorkspacesController do
         end
       end
 
+      it "adds the owner as a member of the workspace" do
+        post :create, parameters
+        Workspace.last.memberships.first.user.should == @user
+      end
+
       it "sets the authenticated user as the owner of the new workspace" do
         post :create, parameters
         Workspace.last.owner.should == @user
