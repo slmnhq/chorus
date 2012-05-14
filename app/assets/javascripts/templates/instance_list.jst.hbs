@@ -1,10 +1,8 @@
 <div class='instance_provider greenplum_instance'>
     <div class="details">{{t "instances.list.type.greenplum"}}</div>
     <ul class="list selectable">
-        {{#each models}}
-            {{#if isGreenplum}}
-                <li class="instance" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
-            {{/if}}
+        {{#each greenplum}}
+            <li class="instance" data-type="greenplum" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
         {{/each}}
     </ul>
     {{#unless hasGreenplum}}
@@ -15,10 +13,8 @@
 <div class="instance_provider hadoop_instance">
     <div class="details">{{t "instances.list.type.hdfs"}}</div>
     <ul class="list selectable">
-        {{#each models}}
-            {{#if isHadoop}}
-                <li class="instance" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
-            {{/if}}
+        {{#each hadoop}}
+            <li class="instance" data-type="hadoop" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
         {{/each}}
     </ul>
     {{#unless hasHadoop}}
@@ -29,10 +25,8 @@
 <div class="instance_provider other_instance">
     <div class="details">{{t "instances.list.type.other"}}</div>
     <ul class="list selectable">
-        {{#each models}}
-            {{#if isOther}}
-                <li class="instance" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
-            {{/if}}
+        {{#each other}}
+            <li class="instance" data-type="other" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
         {{/each}}
     </ul>
     {{#unless hasOther}}

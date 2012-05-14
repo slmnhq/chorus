@@ -65,6 +65,10 @@
             return imagePrefix + filename;
         },
 
+        stateText: function() {
+            return t("instances.state." + (this.get("state") || "unknown"));
+        },
+
         providerIconUrl: function() {
             var filename = providerIconMap[this.get("instance_provider")] || "other_instance.png";
             return imagePrefix + filename;

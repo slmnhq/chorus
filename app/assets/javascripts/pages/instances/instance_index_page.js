@@ -6,14 +6,20 @@ chorus.pages.InstanceIndexPage = chorus.pages.Base.extend({
     helpId: "instances",
 
     setup:function () {
-        this.collection = new chorus.collections.InstanceSet();
-        this.collection.fetchAll();
-        this.dependOn(this.collection, this.setPreselection);
+        var greenplumInstances = new chorus.collections.InstanceSet();
+        var hadoopInstances = new chorus.collections.HadoopInstanceSet();
+        greenplumInstances.fetchAll();
+        hadoopInstances.fetchAll();
+
+        this.dependOn(greenplumInstances, this.setPreselection);
 
         this.mainContent = new chorus.views.MainContentView({
-            contentHeader:new chorus.views.StaticTemplate("default_content_header", {title:t("instances.title_plural")}),
-            contentDetails:new chorus.views.InstanceIndexContentDetails({collection:this.collection}),
-            content:new chorus.views.InstanceList({collection:this.collection})
+            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("instances.title_plural")}),
+            contentDetails: new chorus.views.InstanceIndexContentDetails(),
+            content: new chorus.views.InstanceList({
+                greenplumInstances: greenplumInstances,
+                hadoopInstances: hadoopInstances
+            })
         });
 
         this.sidebar = new chorus.views.InstanceListSidebar();

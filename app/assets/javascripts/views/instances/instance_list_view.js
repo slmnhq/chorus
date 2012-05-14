@@ -6,15 +6,27 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         "click li":"selectItem"
     },
 
-    setup:function () {
+    makeModel: function() {
+        this.greenplumInstances = this.options.greenplumInstances;
+        this.hadoopInstances = this.options.hadoopInstances;
+
+        this.bindings.add(this.greenplumInstances, "reset", this.render);
+        this.bindings.add(this.hadoopInstances, "reset", this.render);
+    },
+
+    setup: function() {
         chorus.PageEvents.subscribe("instance:added", function (id) {
-            this.collection.fetchAll();
+            this.greenplumInstances.fetchAll();
+            this.hadoopInstances.fetchAll();
             this.selectedInstanceId = id;
         }, this);
-        this.bindings.add(this.collection, "remove", function(model) {
-            if (this.selectedInstanceId === model.get("id")) delete this.selectedInstanceId;
-            this.render();
-        });
+        this.bindings.add(this.greenplumInstances, "remove", this.instanceDestroyed);
+        this.bindings.add(this.hadoopInstances, "remove", this.instanceDestroyed);
+    },
+
+    instanceDestroyed: function(model) {
+        if (this.selectedInstanceId === model.get("id")) delete this.selectedInstanceId;
+        this.render();
     },
 
     postRender: function() {
@@ -25,32 +37,9 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         }
     },
 
-    additionalContext: function(originalContext) {
-        var models = _.clone(originalContext.models);
-        models.sort(function (a, b) {
-            return naturalSort(a.name.toLowerCase(), b.name.toLowerCase());
-        });
-
-        return {
-            models: models,
-            hasHadoop: this.collection.any(function(model) { return model.isHadoop(); }),
-            hasGreenplum: this.collection.any(function(model) { return model.isGreenplum(); }),
-            hasOther: this.collection.any(function(model) { return !(model.isGreenplum() || model.isHadoop()); })
-        }
-    },
-
-    collectionModelContext: function(model) {
-        return {
-            stateUrl: model.stateIconUrl(),
-            showUrl: model.showUrl(),
-            stateText: _.str.capitalize(model.get("state") || "unknown"),
-            providerUrl: model.providerIconUrl(),
-            isGreenplum: model.isGreenplum(),
-            isHadoop: model.isHadoop(),
-            isOther: !(model.isHadoop() || model.isGreenplum()),
-            isProvisioning: model.isProvisioning(),
-            isFault: model.isFault()
-        }
+    context: function() {
+        var presenter = new chorus.presenters.InstanceList({ hadoop: this.hadoopInstances, greenplum: this.greenplumInstances });
+        return presenter.present();
     },
 
     selectItem:function (e) {
@@ -61,7 +50,9 @@ chorus.views.InstanceList = chorus.views.Base.extend({
 
         this.$("li").removeClass("selected");
         target.addClass("selected");
-        var instance = this.collection.get(target.data("instanceId"));
+
+        var collection = (target.data("type") === "hadoop") ? this.hadoopInstances : this.greenplumInstances;
+        var instance = collection.get(target.data("instanceId"));
         this.selectedInstanceId = instance.get("id");
         chorus.PageEvents.broadcast("instance:selected", instance);
     }
