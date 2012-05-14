@@ -46,6 +46,8 @@ class Instance < ActiveRecord::Base
     nil
   end
 
+  private
+
   def account_owned_by!(user)
     accounts.find_by_owner_id!(user.id)
   end

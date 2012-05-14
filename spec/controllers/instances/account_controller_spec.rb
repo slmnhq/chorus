@@ -111,32 +111,42 @@ describe Instances::AccountController do
 
   describe "#destroy" do
     let(:owner) { FactoryGirl.create :user }
-    let(:instance) { FactoryGirl.create :instance, :owner => owner }
+    let!(:instance_account) { FactoryGirl.create(:instance_account, :instance => instance, :owner => owner) }
     let(:joe) { FactoryGirl.create(:user) }
 
-    before do
-      log_in owner
-      FactoryGirl.create :instance_account, :owner => owner, :instance => instance
+    context "of an unshared account" do
+      let(:instance) { FactoryGirl.create :instance, :owner => owner }
+
+      before do
+        log_in owner
+      end
+
+      it "succeeds" do
+        delete :destroy, :instance_id => instance.id
+        response.should be_success
+      end
+
+      it "deletes the current users account for this instance" do
+        InstanceAccount.find_by_instance_id_and_owner_id(instance.id, owner.id).should_not be_nil
+        delete :destroy, :instance_id => instance.id
+        InstanceAccount.find_by_instance_id_and_owner_id(instance.id, owner.id).should be_nil
+      end
     end
 
-    it "succeeds" do
-      delete :destroy, :instance_id => instance.id
-      response.should be_success
-    end 
+    context "of a shared account" do
+      let(:instance) { FactoryGirl.create :instance, :owner => owner, :shared => true }
 
-    it "deletes the current users account for this instance" do
-      InstanceAccount.find_by_instance_id_and_owner_id(instance.id, owner.id).should_not be_nil
-      delete :destroy, :instance_id => instance.id
-      InstanceAccount.find_by_instance_id_and_owner_id(instance.id, owner.id).should be_nil
-    end
+      it "does not delete the owner's account" do
+        log_in owner
+        lambda { delete :destroy, :instance_id => instance.id }.should_not change { InstanceAccount.count }
+        response.code.should == "404"
+      end
 
-    it "does not delete a shared account" do
-      instance.shared = true
-      instance.save!
-
-      log_in joe
-      lambda { delete :destroy, :instance_id => instance.id }.should_not change { InstanceAccount.count }
-      response.code.should == "404"
+      it "does not delete the shared account" do
+        log_in joe
+        lambda { delete :destroy, :instance_id => instance.id }.should_not change { InstanceAccount.count }
+        response.code.should == "404"
+      end
     end
   end
 end

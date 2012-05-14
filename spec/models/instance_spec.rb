@@ -162,18 +162,4 @@ describe Instance do
       end
     end
   end
-
-  describe "#account_owned_by!" do
-    let(:instance) { FactoryGirl.create(:instance) }
-    let(:member) { FactoryGirl.create(:instance_account, :instance => instance).owner }
-    let(:joe) { FactoryGirl.create(:user) }
-
-    it "returns the account for the user" do
-      instance.account_owned_by!(member).should be
-    end
-
-    it "raises an exception if no account is found" do
-      lambda { instance.account_owned_by!(joe) }.should raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
 end
