@@ -29,14 +29,14 @@ class Instance < ActiveRecord::Base
   end
 
   def owner_account
-    accounts.find_by_owner_id!(owner_id)
+    account_owned_by!(owner)
   end
 
   def account_for_user!(user)
     if shared?
       owner_account
     else
-      accounts.find_by_owner_id!(user.id)
+      account_owned_by!(user)
     end
   end
 
@@ -44,5 +44,9 @@ class Instance < ActiveRecord::Base
     account_for_user!(user)
   rescue ActiveRecord::RecordNotFound
     nil
+  end
+
+  def account_owned_by!(user)
+    accounts.find_by_owner_id!(user.id)
   end
 end

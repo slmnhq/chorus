@@ -110,12 +110,13 @@ describe Instances::AccountController do
   end
 
   describe "#destroy" do
-    let(:joe) { FactoryGirl.create :user }
-    let(:instance) { FactoryGirl.create :instance }
+    let(:owner) { FactoryGirl.create :user }
+    let(:instance) { FactoryGirl.create :instance, :owner => owner }
+    let(:joe) { FactoryGirl.create(:user) }
 
     before do
-      log_in joe
-      FactoryGirl.create :instance_account, :owner => joe, :instance => instance
+      log_in owner
+      FactoryGirl.create :instance_account, :owner => owner, :instance => instance
     end
 
     it "succeeds" do
@@ -124,9 +125,18 @@ describe Instances::AccountController do
     end 
 
     it "deletes the current users account for this instance" do
-      InstanceAccount.find_by_instance_id_and_owner_id(instance.id, joe.id).should_not be_nil
+      InstanceAccount.find_by_instance_id_and_owner_id(instance.id, owner.id).should_not be_nil
       delete :destroy, :instance_id => instance.id
-      InstanceAccount.find_by_instance_id_and_owner_id(instance.id, joe.id).should be_nil
+      InstanceAccount.find_by_instance_id_and_owner_id(instance.id, owner.id).should be_nil
+    end
+
+    it "does not delete a shared account" do
+      instance.shared = true
+      instance.save!
+
+      log_in joe
+      lambda { delete :destroy, :instance_id => instance.id }.should_not change { InstanceAccount.count }
+      response.code.should == "404"
     end
   end
 end

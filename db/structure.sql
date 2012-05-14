@@ -117,24 +117,6 @@ $_$;
 
 
 --
--- Name: hadoop_instances; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE hadoop_instances (
-    id integer NOT NULL,
-    name character varying(255),
-    description text,
-    host character varying(255),
-    port integer,
-    owner_id integer,
-    version character varying(255),
-    username character varying(255),
-    group_list character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    online boolean DEFAULT true
-);
-
 -- Name: gpdb_databases; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -148,16 +130,6 @@ CREATE TABLE gpdb_databases (
 
 
 --
--- Name: hadoop_instances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE hadoop_instances_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
 -- Name: gpdb_databases_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -167,13 +139,6 @@ CREATE SEQUENCE gpdb_databases_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-
---
--- Name: hadoop_instances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE hadoop_instances_id_seq OWNED BY hadoop_instances.id;
 
 
 --
@@ -213,6 +178,45 @@ CREATE SEQUENCE gpdb_schemas_id_seq
 --
 
 ALTER SEQUENCE gpdb_schemas_id_seq OWNED BY gpdb_schemas.id;
+
+
+--
+-- Name: hadoop_instances; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE hadoop_instances (
+    id integer NOT NULL,
+    name character varying(255),
+    description text,
+    host character varying(255),
+    port integer,
+    owner_id integer,
+    version character varying(255),
+    username character varying(255),
+    group_list character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    online boolean DEFAULT true
+);
+
+
+--
+-- Name: hadoop_instances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE hadoop_instances_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: hadoop_instances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE hadoop_instances_id_seq OWNED BY hadoop_instances.id;
 
 
 --
@@ -438,7 +442,6 @@ ALTER SEQUENCE workspaces_id_seq OWNED BY workspaces.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE hadoop_instances ALTER COLUMN id SET DEFAULT nextval('hadoop_instances_id_seq'::regclass);
 ALTER TABLE gpdb_databases ALTER COLUMN id SET DEFAULT nextval('gpdb_databases_id_seq'::regclass);
 
 
@@ -520,19 +523,6 @@ ALTER TABLE ONLY gpdb_schemas
 
 ALTER TABLE ONLY hadoop_instances
     ADD CONSTRAINT hadoop_instances_pkey PRIMARY KEY (id);
--- Name: gpdb_databases_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY gpdb_databases
-    ADD CONSTRAINT gpdb_databases_pkey PRIMARY KEY (id);
-
-
---
--- Name: gpdb_schemas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY gpdb_schemas
-    ADD CONSTRAINT gpdb_schemas_pkey PRIMARY KEY (id);
 
 
 --
