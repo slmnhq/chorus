@@ -22,7 +22,7 @@ module Hdfs
         begin
           builder.run_hadoop("ls /", version)
           true
-        rescue ApiValidationError
+        rescue InvalidVersion
           false
         end
       end
@@ -34,8 +34,14 @@ module Hdfs
 
     def run_hadoop(command, version=nil)
       binary = self.class.hadoop_binary(version || @instance.version)
-      out, err, exit = Open3.capture3("#{binary} dfs -fs hdfs://#{@instance.host}:#{@instance.port} -#{command}")
-      raise ApiValidationError if (err.present? || exit != 0)
+      begin
+        out, err, exit = Timeout.timeout(0.5) do
+          Open3.capture3("#{binary} dfs -fs hdfs://#{@instance.host}:#{@instance.port} -#{command}")
+        end
+      rescue Timeout::Error
+        raise ApiValidationError.new(:connection, :timeout)
+      end
+      raise InvalidVersion if (err.present? || exit != 0)
       out
     end
 
@@ -48,5 +54,8 @@ module Hdfs
     def self.supported_versions
       @supported_versions ||= CONFIG['versions'].keys
     end
+  end
+
+  class InvalidVersion < Exception
   end
 end

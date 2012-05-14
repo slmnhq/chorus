@@ -130,7 +130,7 @@ describe Hdfs::ConnectionBuilder do
         mock(Open3).capture3(expected_shell_command) { ["", "hadoop client stderr", 0] }
         expect {
           client.run_hadoop(hadoop_command, version)
-        }.to raise_error(ApiValidationError)
+        }.to raise_error(Hdfs::InvalidVersion)
       end
     end
 
@@ -139,7 +139,18 @@ describe Hdfs::ConnectionBuilder do
         mock(Open3).capture3(expected_shell_command) { ["JAVA_HOME is not set", "", 1] }
         expect {
           client.run_hadoop(hadoop_command, version)
-        }.to raise_error(ApiValidationError)
+        }.to raise_error(Hdfs::InvalidVersion)
+      end
+    end
+
+    context "when the command takes too long" do
+      it "raises an exception" do
+        mock(Open3).capture3(expected_shell_command) { sleep 1 }
+        begin
+          client.run_hadoop(hadoop_command, version)
+        rescue ApiValidationError => e
+          e.errors.messages[:connection].should == [[:timeout, {}]]
+        end
       end
     end
 
