@@ -63,7 +63,7 @@ module Chorus
     config.assets.version = '1.0'
 
     config.generators do |g|
-      g.test_framework :rspec
+      g.test_framework false
       g.helper false
       g.assets false
       g.stylesheets false
