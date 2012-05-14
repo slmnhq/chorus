@@ -1,14 +1,17 @@
 require 'spec_helper'
 
 describe WorkspacesController do
+  let(:owner) { FactoryGirl.create(:user)}
   before do
-    @user = FactoryGirl.create(:user)
-    log_in @user
-    @workspace1 = FactoryGirl.create(:workspace, :name => "Work", :owner => @user)
-    @workspace2 = FactoryGirl.create(:workspace, :name => "abacus", :archived_at => 2.days.ago)
+    log_in owner
   end
 
   describe "#index" do
+    before do
+      FactoryGirl.create(:workspace, :name => "Work", :owner => owner)
+      FactoryGirl.create(:workspace, :name => "abacus", :archived_at => 2.days.ago)
+    end
+
     it_behaves_like "an action that requires authentication", :get, :index
 
     it "returns all workspaces (access control not implemented)" do
@@ -30,7 +33,7 @@ describe WorkspacesController do
     end
 
     it "scopes by owner" do
-      get :index, :user_id => @user.id
+      get :index, :user_id => owner.id
       decoded_response.size.should == 1
       decoded_response[0].name.should == "Work"
     end
@@ -86,32 +89,34 @@ describe WorkspacesController do
 
       it "adds the owner as a member of the workspace" do
         post :create, parameters
-        Workspace.last.memberships.first.user.should == @user
+        Workspace.last.memberships.first.user.should == owner
       end
 
       it "sets the authenticated user as the owner of the new workspace" do
         post :create, parameters
-        Workspace.last.owner.should == @user
+        Workspace.last.owner.should == owner
       end
     end
   end
 
   describe "#show" do
+    let(:workspace) { FactoryGirl.create(:workspace) }
+
     before do
-      log_in @user
+      log_in owner
     end
 
     it_behaves_like "an action that requires authentication", :get, :show
 
     context "with a valid workspace id" do
       it "succeeds" do
-        get :show, :id => @workspace1.to_param
+        get :show, :id => workspace.to_param
         response.should be_success
       end
 
       it "presents the workspace" do
-        mock.proxy(controller).present(@workspace1)
-        get :show, :id => @workspace1.to_param
+        mock.proxy(controller).present(workspace)
+        get :show, :id => workspace.to_param
       end
     end
 
@@ -122,6 +127,11 @@ describe WorkspacesController do
       end
     end
 
+    context "of a private workspace" do
+      it "returns not found for a non-member" do
+
+      end
+    end
     #it "generates a jasmine fixture", :fixture => true do
     #  get :show, :id => @other_user.to_param
     #  save_fixture "user.json"
