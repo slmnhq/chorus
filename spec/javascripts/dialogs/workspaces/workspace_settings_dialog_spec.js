@@ -163,7 +163,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
             context("and the workspace is not archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({ active: true })
+                    this.workspace.set({ archivedAt: null })
                     this.dialog.render();
                 })
 
@@ -184,7 +184,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
             context("and the workspace is archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({ active: false })
+                    this.workspace.set({ archivedAt: "2012-01-01 12:34:56" })
                     this.dialog.render();
                 })
 
@@ -248,7 +248,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ active: true })
+                        this.workspace.set({ archivedAt: null })
                         this.dialog.render();
                     });
 
@@ -262,7 +262,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ active: false })
+                        this.workspace.set({ archivedAt: "2012-02-02 22:22:22" })
                         this.dialog.render();
                     });
 
@@ -323,7 +323,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ active: true })
+                        this.workspace.set({ archivedAt: null })
                         this.dialog.render();
                     })
 
@@ -342,7 +342,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ active: false })
+                        this.workspace.set({ archivedAt: "2013-03-03 11:11:11" })
                         this.dialog.render();
                     });
 
