@@ -22,6 +22,7 @@
 //= require vendor/es5-shim
 //= require vendor/d3
 //= require_tree ./vendor
+//= require environment
 //= require bootstrap
 //= require chorus
 //= require_tree ./utilities

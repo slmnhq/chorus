@@ -19,9 +19,6 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
-# Ignore js environment file
-app/assets/javascripts/environment.js
-
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
