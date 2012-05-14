@@ -7,7 +7,7 @@ describe "creating an instance credential" do
     create_valid_user("testuser1")
   end
 
-  it "works" do
+  xit "works" do
     visit("/#/instances")
     wait_until { current_route == "/instances" && page.has_selector?("a[data-dialog=InstancePermissions]") }
     click_link "Edit"
