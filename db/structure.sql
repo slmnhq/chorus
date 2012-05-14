@@ -453,6 +453,13 @@ ALTER TABLE gpdb_schemas ALTER COLUMN id SET DEFAULT nextval('gpdb_schemas_id_se
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE hadoop_instances ALTER COLUMN id SET DEFAULT nextval('hadoop_instances_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE instance_accounts ALTER COLUMN id SET DEFAULT nextval('instance_credentials_id_seq'::regclass);
 
 
@@ -489,6 +496,22 @@ ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 --
 
 ALTER TABLE workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::regclass);
+
+
+--
+-- Name: gpdb_databases_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY gpdb_databases
+    ADD CONSTRAINT gpdb_databases_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gpdb_schemas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY gpdb_schemas
+    ADD CONSTRAINT gpdb_schemas_pkey PRIMARY KEY (id);
 
 
 --
@@ -628,6 +651,8 @@ INSERT INTO schema_migrations (version) VALUES ('20120502001925');
 INSERT INTO schema_migrations (version) VALUES ('20120502012345');
 
 INSERT INTO schema_migrations (version) VALUES ('20120502205544');
+
+INSERT INTO schema_migrations (version) VALUES ('20120503192341');
 
 INSERT INTO schema_migrations (version) VALUES ('20120503221103');
 
