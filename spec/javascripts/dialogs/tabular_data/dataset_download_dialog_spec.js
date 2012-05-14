@@ -1,14 +1,13 @@
 describe("chorus.dialogs.DatasetDownload", function() {
-    beforeEach(function() {
-        this.dataset = newFixtures.dataset.sandboxTable();
-        spyOn(this.dataset, 'download');
-        this.dialog = new chorus.dialogs.DatasetDownload({ pageModel: this.dataset });
-        this.dialog.render();
-    });
-
     describe("#render", function() {
         var radioButtonSpecify, radioButtonAll;
+
         beforeEach(function() {
+            this.dataset = newFixtures.dataset.sandboxTable();
+            spyOn(this.dataset, 'download');
+            this.dialog = new chorus.dialogs.DatasetDownload({ pageModel: this.dataset });
+            this.dialog.render();
+
             radioButtonSpecify = this.dialog.$("input[type=radio][id=specify_rows]");
             radioButtonAll = this.dialog.$("input[type=radio][id=all_rows]");
             this.rowsInput = this.dialog.$("input[name=numOfRows][type=text]");
@@ -114,6 +113,20 @@ describe("chorus.dialogs.DatasetDownload", function() {
             it("dismisses the dialog", function() {
                 expect("close.facebox").toHaveBeenTriggeredOn($(document));
             });
+        });
+    });
+
+    describe("with a search result", function() {
+        beforeEach(function() {
+            var searchResult = fixtures.searchResult();
+            this.selectedItem = searchResult.selectedItem = searchResult.tabularData().at(0);
+            this.selectedItem.set({"objectName" : "test_tabular_data"})
+            this.dialog = new chorus.dialogs.DatasetDownload({ pageModel: searchResult });
+            this.dialog.render();
+        });
+
+        it("has the right title", function(){
+            expect(this.dialog.$("h1").text()).toMatchTranslation("dataset.download.title", {datasetName: "test_tabular_data"})
         });
     });
 });
