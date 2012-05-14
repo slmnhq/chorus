@@ -7,6 +7,16 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
             directoryName: "test",
             collection: this.collection
         });
+
+        this.csv = new chorus.models.CsvHdfs({lines: [
+            "COL1,col2, col3 ,col 4,Col_5",
+            "val1.1,val1.2,val1.3,val1.4,val1.5",
+            "val2.1,val2.2,val2.3,val2.4,val2.5",
+            "val3.1,val3.2,val3.3,val3.4,val3.5"
+        ],
+            instanceId: "234",
+            path: "/foo/bar.txt"
+        });
     });
 
     describe("#setup", function() {
@@ -18,7 +28,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
     describe("#setupCsv", function () {
         context("when the directory path is /", function() {
             beforeEach(function() {
-                this.dialog.csv.set({path: "/"});
+                this.dialog.collection.attributes.path = "/";
                 this.dialog.setupCsv();
             });
             it("prevents an extra / from being included in the file path", function() {
@@ -53,6 +63,33 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
         it("creates a textbox for the file expression", function() {
             expect(this.dialog.$("[name=expression]")).toExist();
+        });
+
+        describe("changing the file", function () {
+            beforeEach(function() {
+                var selElement = this.dialog.$("select").val(this.collection.at(1).get("name"))
+                selElement.change();
+            });
+            it("should fetch the new sample", function() {
+                expect(this.server.lastFetch().url).toBe("/edc/data/"+this.collection.at(1).get("instanceId")+"/hdfs/"+
+                    encodeURIComponent(this.collection.at(1).get("path")) + "/sample")
+            });
+            it("display spinner", function() {
+                expect(this.dialog.$(".data_table").isLoading()).toBeTruthy();
+
+            })
+            context("when the fetch completes", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.dialog.csv, this.csv);
+                });
+
+                it("stops the spinner", function() {
+                    expect(this.dialog.$(".data_table").isLoading()).toBeFalsy();
+                });
+                it("display the correct toTable name", function() {
+                    expect(this.dialog.$("input[name=toTable]").val()).toBe("test")
+                });
+            });
         });
     });
 });
