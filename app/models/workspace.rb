@@ -13,8 +13,6 @@ class Workspace < ActiveRecord::Base
   scope :active, where(:archived_at => nil)
 
   def self.accessible_to(user)
-    return scoped if user.admin?
-
     with_membership = user.memberships.pluck(:workspace_id)
     where('workspaces.public OR
           workspaces.id IN (:with_membership) OR

@@ -52,18 +52,6 @@ describe Workspace do
         Workspace.accessible_to(owner).should_not include workspace_without_ownership
       end
     end
-
-    context "admin" do
-      let(:admin) { FactoryGirl.create :admin }
-
-      it "sees public workspaces" do
-        Workspace.accessible_to(admin).should include public_workspace
-      end
-
-      it "sees private workspaces" do
-        Workspace.accessible_to(admin).should include private_workspace
-      end
-    end
   end
 
   describe "#image" do
