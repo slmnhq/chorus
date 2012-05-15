@@ -47,18 +47,21 @@ function git_clone {
 ####################################################################
 
 # Paths
-TARGET_DIR="download_dir"
+TARGET_DIR="downloads"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 resolve_path "$SCRIPT_DIR/.."
-DIR=$RESOLVED_PATH
+TEMP_DIR=$RESOLVED_PATH
 
 PACKAGE_NAME="chorusrails-packages"
-resolve_path "$DIR/../$PACKAGE_NAME"
+mkdir -p "$TEMP_DIR/../$PACKAGE_NAME"
+resolve_path "$TEMP_DIR/../$PACKAGE_NAME"
+
 PACKAGE_DIR="$RESOLVED_PATH"
 
 HADOOP_DIR="$PACKAGE_DIR/$TARGET_DIR/hadoop"
+mkdir -p "$HADOOP_DIR"
 
 DATE="$( date "+%Y-%m-%d-%H%M%S" )"
 
@@ -66,15 +69,17 @@ DATE="$( date "+%Y-%m-%d-%H%M%S" )"
 ####################################################################
 
 # Gems
-bundle package
+echo "Running bundle package..."
+bundle package > /dev/null 2>&1
 
 # Tar up the app
 mkdir -p $PACKAGE_DIR/$TARGET_DIR
 
-EXCLUDE_FROM_APP="vendor/hadoop"
+EXCLUDE_FROM_APP="--exclude vendor/hadoop --exclude var --exclude tmp --exclude .git --exclude public/system --exclude log"
 
-resolve_path "$DIR/../chorusrails"
-tar -cf "$PACKAGE_DIR/$TARGET_DIR/app.tar" --exclude "$EXCLUDE_FROM_APP" "$RESOLVED_PATH"
+resolve_path "$TEMP_DIR/../chorusrails"
+cd "$TEMP_DIR/.."
+tar -cf "$PACKAGE_DIR/$TARGET_DIR/app.tar" $EXCLUDE_FROM_APP chorusrails
 
 # Download ruby and rbenv
 RUBY_SRC="ruby-src.tar.gz"
@@ -96,5 +101,6 @@ download $HADOOP_URL3 "hadoop-0.20.1.tar.gz" $HADOOP_DIR
 # Tar up everything into a huge bundle
 TARGET_NAME="$PACKAGE_DIR/chorus-rails-$DATE.tar"
 echo "Creating target package: $TARGET_NAME"
-tar -cf $TARGET_NAME "$PACKAGE_DIR/$TARGET_DIR"
+cd "$PACKAGE_DIR"
+tar -cf $TARGET_NAME "$TARGET_DIR"
 rm $PACKAGE_DIR/$TARGET_DIR/app.tar
