@@ -20,13 +20,13 @@ describe WorkspaceImagesController do
       it "updates the workspace's image" do
         default_image_path = "/images/original/missing.png"
         @workspace.image.url.should == ""
-        put :update, :id => @workspace.id, :files => files
+        put :update, :workspace_id => @workspace.id, :files => files
         @workspace.reload
         @workspace.image.url.should_not == default_image_path
       end
 
       it "responds with the urls of the new image" do
-        put :update, :id => @workspace.id, :files => files
+        put :update, :workspace_id => @workspace.id, :files => files
         @workspace.reload
         response.code.should == "200"
         decoded_response.original.should == @workspace.image.url(:original)

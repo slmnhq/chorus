@@ -6,9 +6,7 @@ Chorus::Application.routes.draw do
     collection do
       get :ldap
     end
-    member do
-      resource :image, :only => [:update], :controller => :user_images
-    end
+    resource :image, :only => [:update], :controller => :user_images
   end
 
   resources :hadoop_instances, :only => [:create, :index, :show]
@@ -29,9 +27,7 @@ Chorus::Application.routes.draw do
   resources :workspaces, :only => [:index, :create, :show] do
     resources :members, :only => [:index]
 
-    member do
-      resource :image, :only => [:update], :controller => :workspace_images
-    end
+    resource :image, :only => [:update], :controller => :workspace_images
   end
 
   match "/" => "root#index"
