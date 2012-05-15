@@ -35,9 +35,9 @@ describe Instance do
     before(:each) do
       @user = FactoryGirl.create :user
       @instance_owned = FactoryGirl.create :instance, :owner => @user
-      @instance_forbidden = FactoryGirl.create :instance
       @instance_shared = FactoryGirl.create :instance, :shared => true
       @instance_with_membership = FactoryGirl.create(:instance_account, :owner => @user).instance
+      @instance_forbidden = FactoryGirl.create :instance
     end
 
     it "returns owned instances" do

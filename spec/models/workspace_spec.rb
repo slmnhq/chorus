@@ -17,40 +17,25 @@ describe Workspace do
 
   describe ".accessible_to" do
     let!(:public_workspace) { FactoryGirl.create(:workspace, :public => true) }
+    let!(:owned_workspace) { FactoryGirl.create(:workspace, :public => false, :owner => user)}
     let!(:private_workspace) { FactoryGirl.create(:workspace, :public => false) }
+    let(:user) { FactoryGirl.create(:user) }
 
-    context "member" do
-      let(:member) { FactoryGirl.create(:membership, :workspace => private_workspace).user }
-
-      it "sees public workspaces" do
-        Workspace.accessible_to(member).should include public_workspace
-      end
-
-      it "sees private workspaces with membership" do
-        Workspace.accessible_to(member).should include private_workspace
-      end
-
-      it "does not see private workspaces without membership" do
-        workspace_without_membership = FactoryGirl.create(:workspace, :public => false)
-        Workspace.accessible_to(member).should_not include workspace_without_membership
-      end
+    it "returns public workspaces" do
+      Workspace.accessible_to(user).should include public_workspace
     end
 
-    context "owner" do
-      let(:owner) { private_workspace.owner }
+    it "returns private workspaces with membership" do
+      FactoryGirl.create(:membership, :user => user, :workspace => private_workspace)
+      Workspace.accessible_to(user).should include private_workspace
+    end
 
-      it "sees public workspaces" do
-        Workspace.accessible_to(owner).should include public_workspace
-      end
+    it "returns private owned workspaces" do
+      Workspace.accessible_to(user).should include owned_workspace
+    end
 
-      it "sees private workspaces with ownership" do
-        Workspace.accessible_to(owner).should include private_workspace
-      end
-
-      it "does not see private workspaces owned by someone else" do
-        workspace_without_ownership = FactoryGirl.create(:workspace, :public => false)
-        Workspace.accessible_to(owner).should_not include workspace_without_ownership
-      end
+    it "does not return private workspaces" do
+      Workspace.accessible_to(user).should_not include private_workspace
     end
   end
 
