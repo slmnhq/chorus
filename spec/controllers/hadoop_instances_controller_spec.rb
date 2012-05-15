@@ -52,4 +52,12 @@ describe HadoopInstancesController do
       decoded_response.map { |model| model.name }.should == ["hadoop1", "hadoop2", "hadoop3"]
     end
   end
+
+  describe "#show" do
+    it "presents the hadoop instance with the given id" do
+      instance = FactoryGirl.create(:hadoop_instance, :name => "hadoop3")
+      get :show, :id => instance.id
+      decoded_response.name.should == "hadoop3"
+    end
+  end
 end

@@ -11,7 +11,7 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :hadoop_instances, :only => [:create, :index]
+  resources :hadoop_instances, :only => [:create, :index, :show]
 
   resources :instances, :only => [:index, :create, :update] do
     resources :databases, :only => [:index], :controller => 'instance_databases' do

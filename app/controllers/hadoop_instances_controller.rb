@@ -7,4 +7,8 @@ class HadoopInstancesController < ApplicationController
   def index
     present HadoopInstance.scoped
   end
+
+  def show
+    present HadoopInstance.find(params[:id])
+  end
 end
