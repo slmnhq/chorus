@@ -12,3 +12,5 @@ alias grm='git rm'
 alias gs='git status'
 
 alias vim='mvim -p'
+alias l='ls'
+alias ll='ls -la'
