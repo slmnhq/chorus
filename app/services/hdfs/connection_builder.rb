@@ -1,4 +1,5 @@
 require "open3"
+require "timeout"
 
 module Hdfs
   class ConnectionBuilder
@@ -35,7 +36,7 @@ module Hdfs
     def run_hadoop(command, version=nil)
       binary = self.class.hadoop_binary(version || @instance.version)
       begin
-        out, err, exit = Timeout.timeout(0.5) do
+        out, err, exit = Timeout.timeout(1.5) do
           Open3.capture3("#{binary} dfs -fs hdfs://#{@instance.host}:#{@instance.port} -#{command}")
         end
       rescue Timeout::Error
