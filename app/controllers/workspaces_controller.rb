@@ -13,6 +13,6 @@ class WorkspacesController < ApplicationController
   end
 
   def show
-    present Workspace.find(params[:id])
+    present Workspace.accessible_to(current_user).find(params[:id])
   end
 end

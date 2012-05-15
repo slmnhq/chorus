@@ -11,4 +11,16 @@ class Workspace < ActiveRecord::Base
   validates_presence_of :name
 
   scope :active, where(:archived_at => nil)
+
+  def self.accessible_to(user)
+    return scoped if user.admin?
+
+    with_membership = user.memberships.pluck(:workspace_id)
+    where('workspaces.public OR
+          workspaces.id IN (:with_membership) OR
+          workspaces.owner_id = :user_id',
+          :with_membership => with_membership,
+          :user_id => user.id
+         )
+  end
 end

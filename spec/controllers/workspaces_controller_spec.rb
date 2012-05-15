@@ -100,7 +100,7 @@ describe WorkspacesController do
   end
 
   describe "#show" do
-    let(:workspace) { FactoryGirl.create(:workspace) }
+    let(:joe) { FactoryGirl.create(:user) }
 
     before do
       log_in owner
@@ -109,6 +109,8 @@ describe WorkspacesController do
     it_behaves_like "an action that requires authentication", :get, :show
 
     context "with a valid workspace id" do
+      let(:workspace) { FactoryGirl.create(:workspace) }
+
       it "succeeds" do
         get :show, :id => workspace.to_param
         response.should be_success
@@ -128,8 +130,12 @@ describe WorkspacesController do
     end
 
     context "of a private workspace" do
-      it "returns not found for a non-member" do
+      let(:workspace) { FactoryGirl.create(:workspace, :public => false) }
 
+      it "returns not found for a non-member" do
+        log_in joe
+        get :show, :id => workspace.to_param
+        response.should be_not_found
       end
     end
     #it "generates a jasmine fixture", :fixture => true do
