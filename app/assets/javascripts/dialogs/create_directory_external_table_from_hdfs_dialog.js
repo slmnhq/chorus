@@ -5,28 +5,30 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
     loadingKey: "hdfs.create_external.creating",
     templateName: "create_directory_external_table_from_hdfs",
 
+    events: {
+        "change select" : "fetchSample"
+    },
+
     setup: function() {
         this.csv = this.options.csv = this.collection && this.collection.at(0);
         this.setupCsv();
         this._super("setup", arguments);
     },
 
-    events: {
-        "change select" : "fetchSample"
-    },
-
     setupCsv: function(){
         this.csv.set({toTable: chorus.models.CSVImport.normalizeForDatabase(this.options.directoryName)});
         this.csv.set({instanceId : this.csv.get("instance").id}, {silent: true});
+        this.csv.set({path: this.pathWithSlash() + this.csv.get("name")}, {silent: true});
 
-        var path = this.collection.attributes.path;
-        var separator = (path == "/") ? "" : "/";
-        this.csv.set({path: path + separator + this.csv.get("name")}, {silent: true});
+        $(document).one('reveal.facebox', _.bind(this.setupSelects, this));
+    },
+
+    setupSelects: function() {
+        chorus.styleSelect(this.$("select"));
     },
 
     postRender: function() {
         this._super("postRender", arguments);
-
         this.$("select").val(this.csv.get("name"));
         this.$("input#" + this.pathType).prop("checked", true);
     },
@@ -37,6 +39,11 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='toTable' value='" + Handlebars.Utils.escapeExpression(this.csv.get("toTable")) + "'/>");
         parentCtx.hasHeader = this.csv.get("hasHeader");
         return parentCtx;
+    },
+
+    pathWithSlash: function() {
+        var path = this.collection.attributes.path;
+        return (path == "/") ? path : path + "/";
     },
 
     performValidation: function() {
@@ -64,6 +71,13 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         chorus.PageEvents.broadcast("csv_import:started");
     },
 
+    saveFailed: function() {
+        if(this.csv.serverErrors) {
+            this.showErrors();
+        }
+        this.$("button.submit").stopLoading();
+    },
+
     prepareCsv: function() {
         var $names = this.$(".column_names input:text");
         var $types = this.$(".data_types .chosen");
@@ -80,7 +94,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         this.tableName = this.$(".directions input:text").val();
 
         var pathType = this.$("input[name='pathType']:checked").val();
-        var path = (pathType === "pattern") ? this.collection.attributes.path + "/" + this.$("input[name='expression']").val() : this.csv.get("path");
+        var path = (pathType === "pattern") ? this.pathWithSlash() + this.$("input[name='expression']").val() : this.collection.attributes.path;
 
         this.csv.set({
             fileType: "TEXT",
@@ -88,7 +102,8 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
             workspaceId: this.options.workspaceId,
             statement: statement,
             toTable: chorus.models.CSVImport.normalizeForDatabase(toTable),
-            path: path
+            path: path,
+            delimiter: this.delimiter
         }, {silent : true});
     },
 
@@ -96,7 +111,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         e && e.preventDefault();
         this.pathType = this.$("input[name='pathType']:checked").val();
         this.pattern = this.$("input[name='expression']").val();
-        this.csv = this.collection.find(function(csvSet) {
+        this.resource = this.csv = this.collection.find(function(csvSet) {
             return csvSet.get('name') == $(e.target).val()
         });
 
@@ -110,9 +125,11 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         this.csv.set({hasHeader: !!(this.$("#hasHeader").prop("checked"))}, {silent: true});
 
         this.$(".data_table").startLoading();
+
         this.csv.onLoaded(function() {
             this.$(".data_table").stopLoading();
             this.render();
+            this.setupSelects();
         }, this)
     }
 });

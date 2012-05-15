@@ -69,6 +69,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
         describe("changing the file", function () {
             beforeEach(function() {
+                spyOn(chorus, 'styleSelect')
                 this.dialog.$("input[name='expression']").val("*.csv")
                 this.dialog.$("input#pattern").prop("checked", "checked").change();
                 this.dialog.$("input#hasHeader").prop("checked", false);
@@ -100,6 +101,10 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     expect(this.dialog.$("input#pattern:checked")).toBeTruthy();
                     expect(this.dialog.$("input#hasHeader").prop("checked")).toBeFalsy();
                     expect(this.dialog.$(".field_name input").eq(0).val()).toBe("column_1");
+                });
+
+                it("uses the custom styleSelect", function() {
+                    expect(chorus.styleSelect).toHaveBeenCalled();
                 });
             });
         });
@@ -189,7 +194,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     var statement = "test (col1 text, col2 text, col3 text, col_4 text, col_5 text)";
 
                     expect(request.url).toMatchUrl("/edc/workspace/22/externaltable");
-                    expect(request.params().path).toBe("/data/bar.csv");
+                    expect(request.params().path).toBe("/data");
                     expect(request.params().instanceId).toBe("234");
                     expect(request.params().statement).toBe(statement);
                     expect(request.params().hasHeader).toBe('true');
@@ -241,11 +246,10 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     this.$type.find(".popup_filter li").eq(3).find("a").click();
                     this.dialog.$("input[name=toTable]").val("testisgreat").change();
                     this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
-
                     this.dialog.$("button.submit").click();
-                    this.server.lastCreate().fail([
-                        { message: "I like cheese" }
-                    ]);
+
+                    this.server.lastCreate().fail();
+                    this.dialog.csv.serverErrors = [{message: "I like Cheese"}];
                 });
 
                 it("has no validation errors", function() {
@@ -266,6 +270,14 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     expect(this.$type).toHaveClass("date");
                 });
             });
+        });
+    });
+
+    describe("select styling", function() {
+        it("uses custom styled select box", function() {
+            spyOn(chorus, 'styleSelect')
+            $(document).trigger("reveal.facebox");
+            expect(chorus.styleSelect).toHaveBeenCalled();
         });
     });
 

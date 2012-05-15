@@ -143,4 +143,14 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
             });
         });
     });
+
+    context("when csv_import:started event is triggered", function() {
+        beforeEach(function() {
+            spyOn(this.dialog, "closeModal")
+            chorus.PageEvents.broadcast("csv_import:started");
+        });
+        it("closes the modal", function() {
+            expect(this.dialog.closeModal).toHaveBeenCalled();
+        });
+    });
 });

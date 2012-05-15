@@ -7,10 +7,15 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
     setup: function() {
         this.requiredResources.add(this.collection);
         this._super("setup", arguments);
+        chorus.PageEvents.subscribe("csv_import:started", this.closeDialog, this);
     },
 
     resourcesLoaded: function() {
         this.render();    
+    },
+
+    closeDialog: function() {
+        this.closeModal();
     },
 
     submit : function() {
