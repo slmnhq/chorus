@@ -69,6 +69,9 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
         describe("changing the file", function () {
             beforeEach(function() {
+                this.dialog.$("input[name='expression']").val("*.csv")
+                this.dialog.$("input#pattern").prop("checked", "checked").change();
+                this.dialog.$("input#hasHeader").prop("checked", false);
                 var selElement = this.dialog.$("select").val(this.collection.at(1).get("name"))
                 selElement.change();
             });
@@ -78,8 +81,8 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
             });
             it("display spinner", function() {
                 expect(this.dialog.$(".data_table").isLoading()).toBeTruthy();
+            });
 
-            })
             context("when the fetch completes", function() {
                 beforeEach(function() {
                     this.server.completeFetchFor(this.dialog.csv, this.csv);
@@ -90,6 +93,13 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 });
                 it("display the correct toTable name", function() {
                     expect(this.dialog.$("input[name=toTable]").val()).toBe("test")
+                });
+
+                it("display the correct elements", function() {
+                    expect(this.dialog.$("input[name='expression']").val()).toBe("*.csv");
+                    expect(this.dialog.$("input#pattern:checked")).toBeTruthy();
+                    expect(this.dialog.$("input#hasHeader").prop("checked")).toBeFalsy();
+                    expect(this.dialog.$(".field_name input").eq(0).val()).toBe("column_1");
                 });
             });
         });
