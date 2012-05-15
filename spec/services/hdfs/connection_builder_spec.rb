@@ -145,9 +145,13 @@ describe Hdfs::ConnectionBuilder do
 
     context "when the command takes too long" do
       it "raises an exception" do
-        mock(Open3).capture3(expected_shell_command) { sleep 1 }
+        # TODO - this usage of Timecop is not working, so the test is pausing
+        # for the length of the actual timeout. fix this.
+
+        mock(Open3).capture3(expected_shell_command) { sleep 5 }
         begin
           client.run_hadoop(hadoop_command, version)
+          Timecop.travel(10)
         rescue ApiValidationError => e
           e.errors.messages[:connection].should == [[:timeout, {}]]
         end
