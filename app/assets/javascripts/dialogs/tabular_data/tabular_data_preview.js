@@ -17,7 +17,7 @@ chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
         this.resultsConsole = new chorus.views.ResultsConsole({
             footerSize: _.bind(this.footerSize, this), 
             showDownloadDialog: true,
-            tabularDataset: this.model,
+            tabularData: this.model
             enableResize: true,
             enableExpander: true
         });

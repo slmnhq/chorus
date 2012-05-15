@@ -35,6 +35,8 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
             enableResize: true,
             enableExpander: true,
             enableClose: true
+            showDownloadDialog: true,
+            tabularData: this.tabularData
         });
         this.filterWizardView = new chorus.views.DatasetFilterWizard({columnSet: this.collection});
 

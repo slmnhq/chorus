@@ -25,7 +25,7 @@ describe("chorus.dialogs.TabularDataPreview", function() {
 
     it("sets the resultsConsole option 'showDownloadDialog' to true", function() {
         expect(this.view.resultsConsole.showDownloadDialog).toBeTruthy();
-        expect(this.view.resultsConsole.tabularDataset).toBe(this.dataset);
+        expect(this.view.resultsConsole.tabularData).toBe(this.dataset);
     });
 
     it("shows the resize area in the results console", function() {

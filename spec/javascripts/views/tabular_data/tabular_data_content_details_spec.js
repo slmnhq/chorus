@@ -30,6 +30,12 @@ describe("chorus.views.TabularDataContentDetails", function() {
             expect(this.view.$(".column_count .preview").text().trim()).toMatchTranslation("dataset.data_preview");
         })
 
+        it("sets up the result console to show the dataset download dialog", function() {
+            var console = this.view.resultsConsole;
+            expect(console.tabularData).toBe(this.tabularData);
+            expect(console.options.showDownloadDialog).toBeTruthy();
+        });
+
         it("hides the filters div", function() {
             expect(this.view.$(".filters")).toHaveClass("hidden");
         });

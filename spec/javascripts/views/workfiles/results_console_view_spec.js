@@ -479,7 +479,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                             this.modalSpy = stubModals();
                             spyOn($, "download");
                             this.view.showDownloadDialog = true;
-                            this.view.tabularDataset = new chorus.models.TabularData();
+                            this.view.tabularData = new chorus.models.TabularData();
                             this.view.$("a.download_csv").click();
                         });
 
