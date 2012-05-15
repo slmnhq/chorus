@@ -8,6 +8,7 @@ HADOOP_URL2="http://apache.spinellicreations.com/hadoop/common/hadoop-0.20.205.0
 HADOOP_URL3="http://archive.apache.org/dist/hadoop/core/hadoop-0.20.1/hadoop-0.20.1.tar.gz"
 
 POSTGRES_URL="http://ftp.postgresql.org/pub/source/v9.0.4/postgresql-9.0.4.tar.gz"
+IMAGEMAGICK_URL="http://www.imagemagick.org/download/legacy/ImageMagick-6.7.1-10.tar.gz"
 
 # WARNING: We assume that git and gcc are installed
 
@@ -85,6 +86,7 @@ POSTGRES_SRC="postgresql-9.0.4.tar.gz"
 download $POSTGRES_URL $POSTGRES_SRC "$PACKAGE_DIR/$TARGET_DIR"
 
 # Download imagemagick
+download $IMAGEMAGICK_URL "ImageMagick-6.7.1-10.tar.gz" "$PACKAGE_DIR/$TARGET_DIR"
 
 # Download Hadoop vendor jars
 download $HADOOP_URL1 "hadoop-1.0.0.tar.gz" $HADOOP_DIR
