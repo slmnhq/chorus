@@ -44,7 +44,10 @@
 
 <input type="radio" class="path_types" id="pattern" name="pathType" value="pattern"/>
 <label class="path_types" for="pattern">{{t "hdfs_instance.create_external.specify_expression"}}</label>
-<input type='text' class='hdfs' name='expression'></input>
+
+<input type='text' class='hdfs' name='expression' value="{{expression}}"></input>
+<img class="help" src="/images/more-info.png" data-text='{{t "hdfs_instance.create_external.specify_expression_help_text"}}'/>
+
 </div>
 
 <div class="result_table">

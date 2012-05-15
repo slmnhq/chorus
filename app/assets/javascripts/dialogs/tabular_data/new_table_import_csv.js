@@ -123,7 +123,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.prepareCsv();
 
             this.$("button.submit").startLoading(this.loadingKey);
-
             this.csv.save();
         }
     },

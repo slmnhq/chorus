@@ -21,27 +21,72 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
 
         var path = this.collection.attributes.path;
         var separator = (path == "/") ? "" : "/";
-
         this.csv.set({path: path + separator + this.csv.get("name")}, {silent: true});
     },
 
     postRender: function() {
         this._super("postRender", arguments);
         this.$("select").val(this.csv.get("name"));
+
+        this.$("input#" + this.pathType).prop("checked", true);
     },
 
     additionalContext: function() {
         var parentCtx = this._super("additionalContext", arguments);
+        parentCtx.expression = this.pattern;
         parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='toTable' value='" + Handlebars.Utils.escapeExpression(this.csv.get("toTable")) + "'/>");
+        parentCtx.hasHeader = this.csv.get("hasHeader");
         return parentCtx;
+    },
+
+    saved: function() {
+        this.closeModal();
+        chorus.toast("hdfs.create_external.success", {tableName: this.csv.get("toTable")});
+        chorus.PageEvents.broadcast("csv_import:started");
+    },
+
+    prepareCsv: function() {
+        var $names = this.$(".column_names input:text");
+        var $types = this.$(".data_types .chosen");
+        var toTable = this.$(".directions input:text").val();
+        var columns = _.map($names, function(name, i) {
+            var $name = $names.eq(i);
+            var $type = $types.eq(i);
+            return chorus.Mixins.dbHelpers.safePGName($name.val()) + " " + $type.text();
+        })
+
+        var statement = toTable + " (" + columns.join(", ") + ")";
+
+
+        this.tableName = this.$(".directions input:text").val();
+
+        var pathType = this.$("input[name='pathType']:checked").val();
+        var path = (pathType === "pattern") ? this.collection.attributes.path + "/" + this.$("input[name='expression']").val() : this.csv.get("path");
+
+        this.csv.set({
+            fileType: "TEXT",
+            pathType : pathType,
+            workspaceId: this.options.workspaceId,
+            statement: statement,
+            toTable: chorus.models.CSVImport.normalizeForDatabase(toTable),
+            path: path
+        }, {silent : true});
     },
 
     fetchSample: function(e) {
         e && e.preventDefault();
+
+        this.csv.set({expression: this.$("input[name='expression']").val()}, {silent: true});
+        this.pathType = this.$("input[name='pathType']:checked").val();
+        this.pattern = this.$("input[name='expression']").val();
         this.csv = this.collection.find(function(csvSet) {
             return csvSet.get('name') == $(e.target).val()
         });
         this.setupCsv();
+
+        this.bindings.add(this.csv, "saved", this.saved);
+        this.bindings.add(this.csv, "saveFailed", this.saveFailed);
+        this.bindings.add(this.csv, "validationFailed", this.saveFailed);
         this.csv.fetch();
 
         this.$(".data_table").startLoading();
