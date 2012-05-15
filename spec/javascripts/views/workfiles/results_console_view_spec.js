@@ -18,16 +18,17 @@ describe("chorus.views.ResultsConsoleView", function() {
             expect(this.view.$("a.close")).not.toExist();
         });
 
+        it("does not display the resize area", function() {
+            expect(this.view.$("a.minimize")).not.toExist();
+            expect(this.view.$("a.maximize")).not.toExist();
+        });
+
         it("does not display the executing spinner", function() {
             expect(this.view.$(".right")).not.toHaveClass("executing");
         })
 
         it("displays save to csv file download link", function() {
             expect(this.view.$("a.download_csv")).toExist();
-        })
-        it("hides the minimize and maximize links", function() {
-            expect(this.view.$("a.minimize")).toHaveClass('hidden')
-            expect(this.view.$("a.maximize")).toHaveClass('hidden')
         })
 
         it("hides the bottom gutter", function() {
@@ -60,6 +61,18 @@ describe("chorus.views.ResultsConsoleView", function() {
             });
         });
 
+        context("when the resize area is enabled", function() {
+            beforeEach(function() {
+                this.view.options.enableResize = true;
+                this.view.render();
+            });
+
+            it("hides the minimize and maximize links", function() {
+                expect(this.view.$("a.minimize")).toHaveClass('hidden')
+                expect(this.view.$("a.maximize")).toHaveClass('hidden')
+            });
+        });
+
         context("when the expander arrow should be hidden", function() {
             beforeEach(function() {
                 this.view.options.hideExpander = true;
@@ -75,6 +88,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
     describe("event handling", function() {
         beforeEach(function() {
+            this.view.options.enableResize = true;
             this.view.render();
         });
 

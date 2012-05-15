@@ -121,6 +121,10 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         expect(this.view.$(".data_preview .close")).toExist();
                     })
 
+                    it("should display a resize area", function() {
+                        expect(this.view.$(".data_preview .minimize")).toExist();
+                    })
+
                     context("when the close button is clicked", function() {
                         beforeEach(function() {
                             this.view.$(".data_preview .close").click();

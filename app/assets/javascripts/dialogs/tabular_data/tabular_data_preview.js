@@ -17,7 +17,8 @@ chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
         this.resultsConsole = new chorus.views.ResultsConsole({
             footerSize: _.bind(this.footerSize, this), 
             showDownloadDialog: true,
-            tabularDataset: this.model
+            tabularDataset: this.model,
+            enableResize: true
         });
         this.closePreviewHandle = chorus.PageEvents.subscribe("action:closePreview", this.closeModal, this);
         this.modalClosedHandle = chorus.PageEvents.subscribe("modal:closed", this.cancelTask, this);

@@ -26,7 +26,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.filters = this.options.filters.clone();
         this.lastSavedFilters = this.options.filters.clone();
         this.filterWizard = new chorus.views.DatasetFilterWizard({collection: this.filters, columnSet: this.options.columnSet});
-        this.tableData = new chorus.views.ResultsConsole({shuttle: false, hideExpander: true, model: this.task, footerSize: _.bind(this.footerSize, this)});
+        this.tableData = new chorus.views.ResultsConsole({shuttle: false, enableResize: true, hideExpander: true, model: this.task, footerSize: _.bind(this.footerSize, this)});
         this.bindings.add(this.filters, "add remove change", this.filtersChanged, this);
     },
 

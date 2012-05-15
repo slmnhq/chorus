@@ -28,6 +28,10 @@ describe("chorus.dialogs.TabularDataPreview", function () {
         expect(this.view.resultsConsole.tabularDataset).toBe(this.dataset);
     });
 
+    it("shows the resize area in the results console", function() {
+        expect(this.view.resultsConsole.options.enableResize).toBeTruthy();
+    });
+
     describe("event handling", function() {
         beforeEach(function() {
             spyOn(this.view.task, "cancel");

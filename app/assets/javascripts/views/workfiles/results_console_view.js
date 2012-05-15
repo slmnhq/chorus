@@ -216,6 +216,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         return {
             titleKey: this.options.titleKey || "results_console_view.title",
             enableClose: this.options.enableClose,
+            enableResize: this.options.enableResize,
             expander: !(this.options.hideExpander)
         }
     }

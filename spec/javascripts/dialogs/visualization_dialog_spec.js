@@ -555,6 +555,10 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.tableData.model).toBe(this.dialog.task)
             });
 
+            it("should enable the table resize area", function() {
+                expect(this.dialog.tableData.options.enableResize).toBeTruthy();
+            });
+
             it("should show the data table", function() {
                 expect(this.dialog.$(".results_console")).not.toHaveClass("hidden");
             })
