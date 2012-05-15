@@ -15,9 +15,9 @@ chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
     setup: function() {
         _.bindAll(this, 'title');
         this.resultsConsole = new chorus.views.ResultsConsole({
-            footerSize: _.bind(this.footerSize, this), 
+            footerSize: _.bind(this.footerSize, this),
             showDownloadDialog: true,
-            tabularData: this.model
+            tabularData: this.model,
             enableResize: true,
             enableExpander: true
         });
