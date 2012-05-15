@@ -7,11 +7,12 @@ HADOOP_URL1="http://www.reverse.net/pub/apache/hadoop/common/hadoop-1.0.0/hadoop
 HADOOP_URL2="http://apache.spinellicreations.com/hadoop/common/hadoop-0.20.205.0/hadoop-0.20.205.0.tar.gz"
 HADOOP_URL3="http://archive.apache.org/dist/hadoop/core/hadoop-0.20.1/hadoop-0.20.1.tar.gz"
 
-####################################################################
-####################################################################
+POSTGRES_URL="http://ftp.postgresql.org/pub/source/v9.0.4/postgresql-9.0.4.tar.gz"
 
 # WARNING: We assume that git and gcc are installed
 
+####################################################################
+####################################################################
 
 function resolve_path {
     RESOLVED_PATH="$( cd "$1" && pwd )"
@@ -45,6 +46,8 @@ function git_clone {
 ####################################################################
 
 # Paths
+TARGET_DIR="download_dir"
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 resolve_path "$SCRIPT_DIR/.."
@@ -54,7 +57,7 @@ PACKAGE_NAME="chorusrails-packages"
 resolve_path "$DIR/../$PACKAGE_NAME"
 PACKAGE_DIR="$RESOLVED_PATH"
 
-HADOOP_DIR="$PACKAGE_DIR/hadoop"
+HADOOP_DIR="$PACKAGE_DIR/$TARGET_DIR/hadoop"
 
 DATE="$( date "+%Y-%m-%d-%H%M%S" )"
 
@@ -65,21 +68,25 @@ DATE="$( date "+%Y-%m-%d-%H%M%S" )"
 bundle package
 
 # Tar up the app
-mkdir -p $PACKAGE_DIR
+mkdir -p $PACKAGE_DIR/$TARGET_DIR
+
+EXCLUDE_FROM_APP="vendor/hadoop"
 
 resolve_path "$DIR/../chorusrails"
-tar -cf "$PACKAGE_DIR/app.tar" "$RESOLVED_PATH"
+tar -cf "$PACKAGE_DIR/$TARGET_DIR/app.tar" --exclude "$EXCLUDE_FROM_APP" "$RESOLVED_PATH"
 
-# Download and tar up ruby and rbenv
+# Download ruby and rbenv
 RUBY_SRC="ruby-src.tar.gz"
-download $RUBY_URL $RUBY_SRC $PACKAGE_DIR
-git_clone $RBENV_URL "rbenv" $PACKAGE_DIR
+download $RUBY_URL $RUBY_SRC "$PACKAGE_DIR/$TARGET_DIR"
+git_clone $RBENV_URL "rbenv" "$PACKAGE_DIR/$TARGET_DIR"
 
-# Download and tar up Postgres
+# Download Postgres
+POSTGRES_SRC="postgresql-9.0.4.tar.gz"
+download $POSTGRES_URL $POSTGRES_SRC "$PACKAGE_DIR/$TARGET_DIR"
 
-# Download and tar up imagemagick
+# Download imagemagick
 
-# Tar up Hadoop vendor jars
+# Download Hadoop vendor jars
 download $HADOOP_URL1 "hadoop-1.0.0.tar.gz" $HADOOP_DIR
 download $HADOOP_URL2 "hadoop-0.20.205.0.tar.gz" $HADOOP_DIR
 download $HADOOP_URL3 "hadoop-0.20.1.tar.gz" $HADOOP_DIR
@@ -87,5 +94,5 @@ download $HADOOP_URL3 "hadoop-0.20.1.tar.gz" $HADOOP_DIR
 # Tar up everything into a huge bundle
 TARGET_NAME="$PACKAGE_DIR/chorus-rails-$DATE.tar"
 echo "Creating target package: $TARGET_NAME"
-tar -cf $TARGET_NAME $PACKAGE_DIR/rbenv $PACKAGE_DIR/app.tar $PACKAGE_DIR/$RUBY_SRC
-rm $PACKAGE_DIR/app.tar
+tar -cf $TARGET_NAME "$PACKAGE_DIR/$TARGET_DIR"
+rm $PACKAGE_DIR/$TARGET_DIR/app.tar
