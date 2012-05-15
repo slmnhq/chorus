@@ -56,4 +56,34 @@ describe AccessPolicy do
       end
     end
   end
+
+  describe ".workspace_member_for" do
+    let(:workspace) { Object.new }
+    context "user is admin" do
+      let(:user) do
+        stub(user = Object.new).admin? { true }
+        user
+      end
+
+      it "returns all members" do
+        mock(workspace).members
+
+        described_class.workspace_members_for(user, workspace)
+      end
+    end
+
+    context "user is not admin" do
+      let(:user) do
+        stub(user = Object.new).admin? { false }
+        user
+      end
+
+      it "calls workspace.members_accessible_to" do
+        mock(workspace).members_accessible_to(user)
+
+        described_class.workspace_members_for(user, workspace)
+      end
+    end
+  end
+
 end

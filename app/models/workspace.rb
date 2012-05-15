@@ -21,4 +21,12 @@ class Workspace < ActiveRecord::Base
           :user_id => user.id
          )
   end
+
+  def members_accessible_to(user)
+    if public? || members.include?(user)
+      members
+    else
+      []
+    end
+  end
 end

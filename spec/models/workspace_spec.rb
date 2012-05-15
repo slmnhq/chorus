@@ -39,6 +39,44 @@ describe Workspace do
     end
   end
 
+  describe "#members_accessible_to" do
+    let(:private_workspace) { FactoryGirl.create(:workspace, :public => false) }
+    let(:workspace) { FactoryGirl.create(:workspace, :public => true) }
+
+    let(:joe) { FactoryGirl.create(:user) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:admin) { FactoryGirl.create(:admin) }
+
+    context "public workspace" do
+      it "returns all members" do
+        workspace.members << joe
+
+        members = workspace.members_accessible_to(user)
+        members.should have(1).member
+      end
+    end
+
+    context "user is a member of a private workspace" do
+      it "returns all members" do
+        workspace.members << user
+        workspace.members << joe
+
+        members = workspace.members_accessible_to(user)
+        members.should have(2).members
+      end
+    end
+
+    context "user is not a member of a private workspace" do
+      it "returns nothing" do
+        workspace.members << joe
+        workspace.update_attributes :public => false
+
+        members = workspace.members_accessible_to(user)
+        members.should be_empty
+      end
+    end
+  end
+
   describe "#image" do
     it "should have a nil image instead of a default missing image" do
       workspace = FactoryGirl.create(:workspace, :image => nil)
