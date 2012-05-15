@@ -20,7 +20,11 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         this.bindings.add(this.task, "saveFailed", this.executionFailed);
 
         this.textContent = new chorus.views.TextWorkfileContent({ model: this.model, hotkeys: this.hotkeys })
-        this.resultsConsole = new chorus.views.ResultsConsole({ model: this.task, enableResize: true});
+        this.resultsConsole = new chorus.views.ResultsConsole({
+            model: this.task,
+            enableResize: true,
+            enableExpander: true
+        });
         chorus.PageEvents.subscribe("file:runCurrent", this.runInDefault, this);
         chorus.PageEvents.subscribe("file:runSelected", this.runSelected, this);
         chorus.PageEvents.subscribe("file:runInSchema", this.runInSchema, this);

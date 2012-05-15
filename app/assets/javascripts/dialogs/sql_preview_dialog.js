@@ -14,7 +14,7 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableClose: true, enableResize: false});
+        this.resultsConsole = new chorus.views.ResultsConsole({titleKey: "dataset.data_preview", enableExpander: true, enableClose: true, enableResize: false});
 
         chorus.PageEvents.subscribe("action:closePreview", this.hidePreviewData, this);
         this.modalClosedHandle = chorus.PageEvents.subscribe("modal:closed", this.cancelTask, this);

@@ -1,5 +1,5 @@
-describe("chorus.dialogs.TabularDataPreview", function () {
-    beforeEach(function () {
+describe("chorus.dialogs.TabularDataPreview", function() {
+    beforeEach(function() {
         this.dataset = newFixtures.dataset.sandboxTable();
         spyOn(chorus.views.ResultsConsole.prototype, 'execute').andCallThrough();
         spyOn(chorus.dialogs.TabularDataPreview.prototype, "closeModal");
@@ -10,11 +10,11 @@ describe("chorus.dialogs.TabularDataPreview", function () {
         this.view.launchModal();
     });
 
-    it('should have a close link', function () {
+    it('should have a close link', function() {
         expect(this.view.$('.modal_controls .cancel')).toContainTranslation("actions.close_window");
     });
 
-    it("should pass the dataset to execute on the results console", function () {
+    it("should pass the dataset to execute on the results console", function() {
         expect(this.view.resultsConsole.execute).toHaveBeenCalledWithSorta(this.dataset.preview(), ["checkId"]);
         expect(this.view.resultsConsole.el).toBe(this.view.$('.results_console').get(0));
     });
@@ -30,6 +30,10 @@ describe("chorus.dialogs.TabularDataPreview", function () {
 
     it("shows the resize area in the results console", function() {
         expect(this.view.resultsConsole.options.enableResize).toBeTruthy();
+    });
+
+    it("shows the expander in the results console", function() {
+        expect(this.view.resultsConsole.options.enableExpander).toBeTruthy();
     });
 
     describe("event handling", function() {

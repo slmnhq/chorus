@@ -75,20 +75,20 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         context("when the expander arrow should be hidden", function() {
             beforeEach(function() {
-                this.view.options.hideExpander = true;
+                this.view.options.enableExpander = false;
                 this.view.render();
             });
 
             it("hides the expander", function() {
                 expect(this.view.$(".expander_button")).not.toExist();
             });
-
         })
     })
 
     describe("event handling", function() {
         beforeEach(function() {
             this.view.options.enableResize = true;
+            this.view.options.enableExpander = true;
             this.view.render();
         });
 

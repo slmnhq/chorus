@@ -2,14 +2,14 @@ describe("chorus.views.SqlWorkfileContentView", function() {
     beforeEach(function() {
         this.workfile = fixtures.sqlWorkfile({ content: "select * from foos where bar_id = 1;" });
         this.schema = fixtures.schema({
-                    id: '4',
-                    name: "schema",
-                    databaseId: '3',
-                    databaseName: "db",
-                    instanceId: '2',
-                    instanceName: "instance"
-                });
-        spyOn(this.workfile, 'executionSchema').andCallFake(_.bind(function(){return this.schema}, this));
+            id: '4',
+            name: "schema",
+            databaseId: '3',
+            databaseName: "db",
+            instanceId: '2',
+            instanceName: "instance"
+        });
+        spyOn(this.workfile, 'executionSchema').andCallFake(_.bind(function() {return this.schema}, this));
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runInDefault").andCallThrough();
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runSelected").andCallThrough();
         this.view = new chorus.views.SqlWorkfileContent({model: this.workfile});
@@ -28,6 +28,10 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
         it("enables the resize area of the results console", function() {
             expect(this.view.resultsConsole.options.enableResize).toBeTruthy();
+        });
+
+        it("displays the expander of the results console", function() {
+            expect(this.view.resultsConsole.options.enableExpander).toBeTruthy();
         });
 
         it("declares hotkeys", function() {

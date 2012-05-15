@@ -121,6 +121,10 @@ describe("chorus.views.TabularDataContentDetails", function() {
                         expect(this.view.$(".data_preview .close")).toExist();
                     })
 
+                    it("should display an expander", function() {
+                        expect(this.view.$(".data_preview .expander_button")).toExist();
+                    })
+
                     it("should display a resize area", function() {
                         expect(this.view.$(".data_preview .minimize")).toExist();
                     })
@@ -281,7 +285,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                     });
 
                     it("broadcasts cancel:visualization", function() {
-                       expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("cancel:visualization");
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("cancel:visualization");
                     });
                 })
 
@@ -635,7 +639,9 @@ describe("chorus.views.TabularDataContentDetails", function() {
         describe("column errors", function() {
             beforeEach(function() {
                 spyOn(this.view, "showError");
-                this.collection.serverErrors = [{message: "No permission"}];
+                this.collection.serverErrors = [
+                    {message: "No permission"}
+                ];
                 this.view.render();
             });
 
@@ -714,7 +720,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
             });
 
             it("cleans up the old chartConfig", function() {
-               expect(this.originalChartConfig.cleanup).toHaveBeenCalled();
+                expect(this.originalChartConfig.cleanup).toHaveBeenCalled();
             });
 
             it("renders a visualization configuration view for the given chart type", function() {

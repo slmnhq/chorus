@@ -87,7 +87,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     showResultTable: function(task) {
-        this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, hideExpander: this.options.hideExpander, model: task});
+        this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, model: task});
         this.dataTable.render();
         this.$(".result_table").removeClass("hidden").html(this.dataTable.el);
         this.$(".controls").removeClass("hidden");
@@ -217,7 +217,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             titleKey: this.options.titleKey || "results_console_view.title",
             enableClose: this.options.enableClose,
             enableResize: this.options.enableResize,
-            expander: !(this.options.hideExpander)
+            enableExpander: this.options.enableExpander
         }
     }
 });
