@@ -20,8 +20,6 @@ class Instance < ActiveRecord::Base
   end
 
   def self.accessible_to(user)
-    return scoped if user.admin?
-
     where('instances.shared OR instances.owner_id = :owned OR instances.id IN (:with_membership)',
           :owned => user.id,
           :with_membership => user.instance_accounts.pluck(:instance_id)

@@ -1,7 +1,10 @@
 class InstancesController < ApplicationController
   def index
-    instances = Instance.scoped
-    instances = instances.accessible_to(current_user) if params[:accessible]
+    instances = if params[:accessible]
+                  AccessPolicy.instances_for(current_user)
+                else
+                  Instance.scoped
+                end
 
     present instances
   end
