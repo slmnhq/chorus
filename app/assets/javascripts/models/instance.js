@@ -16,12 +16,7 @@
         urlTemplate: "instances/{{id}}",
         nameAttribute: 'name',
 
-        showUrlTemplate: function() {
-            if (this.isHadoop()) {
-                return "instances/{{id}}/browse/";
-            }
-            return "instances/{{id}}/databases";
-        },
+        showUrlTemplate: "instances/{{id}}/databases",
 
         entityType: "instance",
 

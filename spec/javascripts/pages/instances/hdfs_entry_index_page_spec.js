@@ -9,11 +9,11 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
     });
 
     it("fetches the Hdfs entries for that directory", function() {
-        expect(this.page.collection).toHaveBeenFetched();
+        expect(this.instance.entriesForPath("/foo")).toHaveBeenFetched();
     });
 
     it("fetches the instance", function() {
-        expect(this.page.instance).toHaveBeenFetched();
+        expect(this.instance).toHaveBeenFetched();
     });
 
     describe("before the instance fetch completes", function() {
@@ -36,9 +36,12 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
-            var entries = fixtures.hdfsEntrySet(null, {instance_id: "1234", path: "/foo"});
-            this.server.completeFetchFor(this.page.collection, entries.models);
-            this.server.completeFetchFor(this.page.instance, this.instance);
+            this.server.completeFetchFor(this.instance);
+            this.server.completeFetchFor(this.instance.entriesForPath("/foo"), [
+                fixtures.hdfsEntryDir(),
+                fixtures.hdfsEntryDir(),
+                fixtures.hdfsEntryDir()
+            ]);
         });
 
         it("should have title in the mainContentList", function() {
@@ -62,25 +65,12 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             expect(this.page.sidebar).toBeA(chorus.views.HdfsEntrySidebar);
         })
 
-        it("shows a link if a file is not binary", function() {
-            var filename = this.page.collection.models[1].get('name')
-            expect(this.page.$(".hdfs_entry_list li:eq(1) .name a").attr('href')).toEqual('#/instances/1234/browseFile/foo/' + filename)
-        })
-
-        it("shows no link if a file is binary", function() {
-            expect(this.page.$(".hdfs_entry_list li:eq(2) .name a")).not.toExist()
-        })
-
-        it("shows no link if isBinary equals 'null'", function() {
-            expect(this.page.$(".hdfs_entry_list li:eq(3) .name a")).not.toExist()
-        })
 
         describe("when the path is long", function() {
             beforeEach(function() {
                 spyOn(chorus, "menu")
 
                 this.page = new chorus.pages.HdfsEntryIndexPage("1234", "start/m1/m2/m3/end");
-                this.page.collection.loaded = true;
                 this.server.completeFetchFor(this.page.collection, [fixtures.hdfsEntryFile()]);
                 this.server.completeFetchFor(this.page.instance, this.instance);
             });
@@ -93,6 +83,8 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                 var options = chorus.menu.mostRecentCall.args[1]
 
                 var $content = $(options.content);
+
+                debugger;
 
                 expect($content.find("a").length).toBe(5);
 

@@ -5,11 +5,11 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
 
     setup:function (instance_id, path) {
         this.path = "/" + path;
-        this.instance = new chorus.models.Instance({id: instance_id});
+        this.instance = new chorus.models.HadoopInstance({ id: instance_id });
         this.instance.fetch();
         this.bindings.add(this.instance, "loaded", this.entriesFetched);
 
-        this.collection = new chorus.collections.HdfsEntrySet([], {instance: this.instance, path: this.path});
+        this.collection = this.instance.entriesForPath(this.path);
         this.collection.fetch();
 
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.entrySelected, this)

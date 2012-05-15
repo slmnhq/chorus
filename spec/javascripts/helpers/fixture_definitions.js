@@ -23,7 +23,9 @@ window.fixtureDefinitions = {
         unique: [ "id" ],
 
         children: {
-            hadoop:         {},
+            hadoop: {
+                model: "HadoopInstance"
+            },
             greenplum:      {},
             sharedAccount:  {}
         }

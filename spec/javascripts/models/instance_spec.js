@@ -3,20 +3,8 @@ describe("chorus.models.Instance", function() {
         this.instance = newFixtures.instance.greenplum({id: 1});
     });
 
-    describe("showUrl", function() {
-        it("links to the database index page", function() {
-            expect(this.instance.showUrl()).toBe("#/instances/1/databases");
-        });
-
-        context("for a hadoop instance", function() {
-            beforeEach(function() {
-                this.instance = newFixtures.instance.hadoop();
-            });
-
-            it("links to the root of the hadoop instance", function() {
-                expect(this.instance.showUrl()).toBe("#/instances/" + this.instance.get('id') + "/browse/");
-            })
-        });
+    it("has the right show url", function() {
+        expect(this.instance.showUrl()).toBe("#/instances/1/databases");
     });
 
     it("has a valid url", function() {

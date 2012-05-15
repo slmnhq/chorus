@@ -14,4 +14,17 @@ describe("chorus.models.HadoopInstance", function() {
     it("has the right provider icon url", function() {
         expect(this.model.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");
     });
+
+    it("links to the root directory of the hadoop instance", function() {
+        expect(this.model.showUrl()).toBe("#/instances/" + this.model.get('id') + "/browse/");
+    });
+
+    describe("#entriesForDir(directoryName)", function() {
+        it("returns an HdfsEntrySet with the right instance id and path", function() {
+            var entries = this.model.entriesForPath("foo");
+            expect(entries).toBeA(chorus.collections.HdfsEntrySet);
+            expect(entries.attributes.path).toBe("foo");
+            expect(entries.attributes.instance.id).toBe(this.model.get("id"));
+        });
+    });
 });

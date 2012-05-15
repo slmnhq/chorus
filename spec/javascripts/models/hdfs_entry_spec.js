@@ -92,8 +92,8 @@ describe("chorus.models.HdfsEntry", function() {
             this.instance = this.model.getInstance();
         });
 
-        it('returns an instance object', function() {
-            expect(this.instance).toBeA(chorus.models.Instance);
+        it('returns a hadoop instance', function() {
+            expect(this.instance).toBeA(chorus.models.HadoopInstance);
         });
 
         it('has the correct attributes', function() {
