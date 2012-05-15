@@ -8,7 +8,9 @@ class WorkspacesController < ApplicationController
 
   def create
     workspace = current_user.owned_workspaces.create!(params[:workspace])
-    member = Membership.create!({:user => current_user, :workspace => workspace})
+    membership = workspace.memberships.build
+    membership.user = current_user
+    membership.save!
     present workspace, :status => :created
   end
 
