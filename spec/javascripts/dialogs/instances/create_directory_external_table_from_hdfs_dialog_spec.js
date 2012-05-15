@@ -10,7 +10,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
         ],
             instance: {id : "234"},
             path: "/foo/bar.txt",
-            name: "bar"
+            name: "bar.csv"
         });
 
         this.collection.at(0).set(this.csv);
@@ -34,7 +34,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 this.dialog.setupCsv();
             });
             it("prevents an extra / from being included in the file path", function() {
-                expect(this.dialog.csv.get("path")).toBe("/bar");
+                expect(this.dialog.csv.get("path")).toBe("/bar.csv");
             });
 
         });
@@ -42,7 +42,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
         it("sets the toTable, instanceId and file path to the model", function() {
             expect(this.dialog.csv.get("toTable")).toBe("test");
             expect(this.dialog.csv.get("instanceId")).toBe("234");
-            expect(this.dialog.csv.get("path")).toBe("/data/bar");
+            expect(this.dialog.csv.get("path")).toBe("/data/bar.csv");
         });
     });
 
@@ -95,7 +95,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
         });
 
         context("clicking submit", function() {
-            xcontext("with invalid values", function() {
+            context("with invalid values", function() {
                 beforeEach(function() {
                     this.dialog.$(".directions input:text").val("");
                     this.dialog.$("button.submit").click();
@@ -103,6 +103,29 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
                 it("marks the table name as having an error", function() {
                     expect(this.dialog.$(".directions input:text")).toHaveClass("has_error");
+                });
+            });
+
+            context("with an invalid file name expression", function() {
+                it("succeeds when the pathType expression is not checked even if no match", function() {
+                    this.dialog.$("input[name='expression']").val(".*.txt");
+                    this.dialog.$("button.submit").click();
+                    expect(this.dialog.$("input[name='expression']")).not.toHaveClass("has_error");
+                });
+
+                it("fails validation when the current sample does not match the expression", function() {
+                    this.dialog.$("input#directory").removeAttr('checked');
+                    this.dialog.$("input#pattern").attr('checked', 'checked').change();
+                    this.dialog.$("input[name='expression']").val(".*.txt");
+                    this.dialog.$("button.submit").click();
+                    expect(this.dialog.$("input[name='expression']")).toHaveClass("has_error");
+                });
+
+                it("fails validation when the current sample does match the expression", function() {
+
+                    this.dialog.$("input[name='expression']").val("*.csv");
+                    this.dialog.$("button.submit").click();
+                    expect(this.dialog.$("input[name='expression']")).not.toHaveClass("has_error");
                 });
             });
 
@@ -156,7 +179,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     var statement = "test (col1 text, col2 text, col3 text, col_4 text, col_5 text)";
 
                     expect(request.url).toMatchUrl("/edc/workspace/22/externaltable");
-                    expect(request.params().path).toBe("/data/bar");
+                    expect(request.params().path).toBe("/data/bar.csv");
                     expect(request.params().instanceId).toBe("234");
                     expect(request.params().statement).toBe(statement);
                     expect(request.params().hasHeader).toBe('true');
@@ -169,7 +192,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
                         this.dialog.$("input#directory").removeAttr('checked');
                         this.dialog.$("input#pattern").attr('checked', 'checked').change();
-                        this.dialog.$("input[name='expression']").val("*.js");
+                        this.dialog.$("input[name='expression']").val("*.csv");
                         this.dialog.$('button.submit').click();
                     });
 
@@ -178,7 +201,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
                         expect(request.url).toMatchUrl("/edc/workspace/22/externaltable");
                         expect(request.params().pathType).toBe('pattern');
-                        expect(request.params().path).toBe("/data/*.js");
+                        expect(request.params().path).toBe("/data/*.csv");
                     });
                 })
 

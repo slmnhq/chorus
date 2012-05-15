@@ -39,6 +39,25 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         return parentCtx;
     },
 
+    performValidation: function() {
+        var parent_dialog_valid = this._super("performValidation", arguments);
+
+        if(this.$("input[name='pathType']:checked").val() == "pattern") {
+            var regexp_s = this.$("input[name='expression']").val();
+
+            regexp_s = regexp_s.replace(/\*/g, ".*");
+            var regexp = new RegExp(regexp_s, "i");
+            var result = regexp.test(this.csv.get("name"));
+
+            if (!result) {
+                this.markInputAsInvalid(this.$("input[name='expression']"), t("hdfs_instance.create_external.validation.expression"), true);
+            }
+            return result && parent_dialog_valid;
+        }
+
+        return parent_dialog_valid;
+    },
+
     saved: function() {
         this.closeModal();
         chorus.toast("hdfs.create_external.success", {tableName: this.csv.get("toTable")});
