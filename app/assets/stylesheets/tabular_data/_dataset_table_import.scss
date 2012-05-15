@@ -63,6 +63,19 @@ $cell-width: 150px;
         }
     }
 
+    .path_types {
+        padding: 0 15px;
+
+        input#pattern {
+            margin-left: 15px;
+        }
+
+        input[name=expression] {
+            width: 215px;
+            display: inline-block;
+        }
+    }
+
     .data_table {
 
         .th, .td {
