@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RUBY_URL="http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p125.tar.gz"
-RBENV_URL="git://github.com/sstephenson/rbenv.git"
+#RBENV_URL="git://github.com/sstephenson/rbenv.git"
 
 HADOOP_URL1="http://www.reverse.net/pub/apache/hadoop/common/hadoop-1.0.0/hadoop-1.0.0.tar.gz"
 HADOOP_URL2="http://apache.spinellicreations.com/hadoop/common/hadoop-0.20.205.0/hadoop-0.20.205.0.tar.gz"
@@ -84,7 +84,7 @@ tar -cf "$PACKAGE_DIR/$TARGET_DIR/app.tar" $EXCLUDE_FROM_APP chorusrails
 # Download ruby and rbenv
 RUBY_SRC="ruby-src.tar.gz"
 download $RUBY_URL $RUBY_SRC "$PACKAGE_DIR/$TARGET_DIR"
-git_clone $RBENV_URL "rbenv" "$PACKAGE_DIR/$TARGET_DIR"
+#git_clone $RBENV_URL "rbenv" "$PACKAGE_DIR/$TARGET_DIR"
 
 # Download Postgres
 POSTGRES_SRC="postgresql-9.0.4.tar.gz"
