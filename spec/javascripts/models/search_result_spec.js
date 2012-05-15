@@ -498,4 +498,18 @@ describe("chorus.models.SearchResult", function() {
             expect(this.model.selectedItem.download).toHaveBeenCalledWith({ "theOption": "isTrue" });
         });
     });
+
+    describe("#name", function() {
+        var searchResult;
+        beforeEach(function() {
+            searchResult = fixtures.searchResult();
+
+            this.model.selectedItem = searchResult.tabularData().at(0);
+            this.model.selectedItem.set({"objectName": "the_name"})
+        });
+
+        it("delegates to selectedItem's #name", function() {
+            expect(this.model.name()).toEqual("the_name")
+        });
+    });
 });

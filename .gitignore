@@ -18,3 +18,6 @@
 
 # Ignore ctags file
 tags
+
+# Ignore local changes to dev mode
+app/assets/javascripts/environment.js
