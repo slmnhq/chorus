@@ -10,6 +10,9 @@ HADOOP_URL3="http://archive.apache.org/dist/hadoop/core/hadoop-0.20.1/hadoop-0.2
 POSTGRES_URL="http://ftp.postgresql.org/pub/source/v9.0.4/postgresql-9.0.4.tar.gz"
 IMAGEMAGICK_URL="http://www.imagemagick.org/download/legacy/ImageMagick-6.7.1-10.tar.gz"
 
+BUNDLER_URL="http://rubygems.org/downloads/bundler-1.1.3.gem"
+RUBYGEMS_URL="http://production.cf.rubygems.org/rubygems/rubygems-1.8.24.tgz"
+
 # WARNING: We assume that git and gcc are installed
 
 ####################################################################
@@ -71,6 +74,10 @@ DATE="$( date "+%Y-%m-%d-%H%M%S" )"
 # Gems
 echo "Running bundle package..."
 bundle package > /dev/null 2>&1
+
+# also need to add rubygems and the bundler gem to the package
+download $RUBYGEMS_URL "rubygems-1.8.24.tgz" "$PACKAGE_DIR/$TARGET_DIR"
+download $BUNDLER_URL "bundler-1.1.3.gem" "$PACKAGE_DIR/$TARGET_DIR"
 
 # Tar up the app
 mkdir -p $PACKAGE_DIR/$TARGET_DIR
