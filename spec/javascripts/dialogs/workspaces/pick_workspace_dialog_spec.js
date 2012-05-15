@@ -70,6 +70,16 @@ describe("chorus.dialogs.PickWorkspace", function() {
                 expect(this.dialog.$("li:eq(2) img")).toHaveAttr("src", "/images/workspaces/workspace_small.png");
             });
 
+            describe("typing in the search bar", function() {
+                it("filters the list correctly", function() {
+                    this.dialog.$("input").val("Bar").trigger("textchange");
+                    var listItems = this.dialog.$("ul li");
+                    expect(listItems.eq(0)).not.toHaveClass("hidden");
+                    expect(listItems.eq(1)).toHaveClass("hidden");
+                    expect(listItems.eq(2)).toHaveClass("hidden");
+                });
+            });
+
             describe("clicking the choose workspace button", function() {
                 beforeEach(function() {
                     this.dialog.$("li:eq(0)").click();

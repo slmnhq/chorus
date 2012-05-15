@@ -24,9 +24,7 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
     makeModel: function() {
         this.pageModel = this.options.pageModel;
         this.collection = this.collection || this.defaultWorkspaces();
-        this.bindings.add(this.collection, "reset", this.render);
         this.collection.fetchAll();
-
     },
 
     defaultWorkspaces: function() {
