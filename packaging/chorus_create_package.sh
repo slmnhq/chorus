@@ -75,6 +75,8 @@ DATE="$( date "+%Y-%m-%d-%H%M%S" )"
 echo "Running bundle package..."
 bundle package > /dev/null 2>&1
 
+rake assets:precompile
+
 # also need to add rubygems and the bundler gem to the package
 download $RUBYGEMS_URL "rubygems-1.8.24.tgz" "$PACKAGE_DIR/$TARGET_DIR"
 download $BUNDLER_URL "bundler-1.1.3.gem" "$PACKAGE_DIR/$TARGET_DIR"
@@ -111,3 +113,7 @@ echo "Creating target package: $TARGET_NAME"
 cd "$PACKAGE_DIR"
 tar -cf $TARGET_NAME "$TARGET_DIR"
 rm $PACKAGE_DIR/$TARGET_DIR/app.tar
+
+# Clean up the precompiled assets in our app directory
+cd "$SCRIPT_DIR"
+rake assets:clean
