@@ -9,6 +9,17 @@
     {{directions}}
 </div>
 
+<div class="path_types">
+    <input type="radio" id="directory" name="pathType" value="directory" checked="checked"/>
+    <label  for="directory">{{t "hdfs_instance.create_external.include_all_files"}}</label>
+
+    <input type="radio" id="pattern" name="pathType" value="pattern"/>
+    <label for="pattern">{{t "hdfs_instance.create_external.specify_expression"}}</label>
+
+    <input type='text' class='hdfs' name='expression' value="{{expression}}"></input>
+    <img class="help" src="/images/more-info.png" data-text='{{t "hdfs_instance.create_external.specify_expression_help_text"}}'/>
+</div>
+
 <div class="options">
     <div class="header_options">
         <input id="hasHeader" type="checkbox" {{#if hasHeader}}checked="checked"{{/if}}></input>
@@ -33,18 +44,6 @@
     <label class="delimiter" for="delimiter_other">Other</label>
 
     <input type="text" class="delimiter" name="custom_delimiter" value="{{delimiter}}" maxlength="1"/>
-</div>
-
-<div class="path_types">
-    <input type="radio" id="directory" name="pathType" value="directory" checked="checked"/>
-    <label  for="directory">{{t "hdfs_instance.create_external.include_all_files"}}</label>
-
-    <input type="radio" id="pattern" name="pathType" value="pattern"/>
-    <label for="pattern">{{t "hdfs_instance.create_external.specify_expression"}}</label>
-
-    <input type='text' class='hdfs' name='expression' value="{{expression}}"></input>
-    <img class="help" src="/images/more-info.png" data-text='{{t "hdfs_instance.create_external.specify_expression_help_text"}}'/>
-
 </div>
 
 <div class="result_table">
