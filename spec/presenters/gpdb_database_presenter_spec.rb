@@ -1,8 +1,9 @@
 require 'spec_helper'
 
-describe DatabasePresenter, :type => :view do
+describe GpdbDatabasePresenter, :type => :view do
   before(:each) do
-    @presenter = DatabasePresenter.new(Database.new("abc", 123), view)
+    database = FactoryGirl.build(:gpdb_database, name: "abc", instance: FactoryGirl.build(:instance, :id => 123))
+    @presenter = GpdbDatabasePresenter.new(database, view)
   end
 
   describe "#to_hash" do
