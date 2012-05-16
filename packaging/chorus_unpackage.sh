@@ -1,3 +1,5 @@
+# TODO make the install script work from any directory location
+
 echo "Installing chorus..."
 
 # with the Chorus package as first argument, untar to tmp
@@ -58,11 +60,11 @@ echo "Creating and starting chorus db..."
 sleep 5
 /home/vagrant/pgsql/bin/createuser -h localhost -p 8543 -sdr edcadmin
 
-#TODO: need a Javascript runtime to precompile assets
-
 PATH=/home/vagrant/ruby/bin:$PATH
 PATH=/home/vagrant/rubygems/bin:$PATH
 PATH=/home/vagrant/pgsql/bin:$PATH
+
+# TODO this will connect to the internet, and fail if it does not succeed
 /home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/bundle install --local
 
 gem install pg --local vendor/cache/pg-0.13.2.gem -- --with-pg-config=/home/vagrant/pgsql/bin/pg_config --with-pg-dir=/home/vagrant/pgsql
@@ -73,6 +75,7 @@ bundle exec rake db:create
 bundle exec rake db:migrate
 bundle exec rake db:seed
 bundle exec rake assets:compile
+
 
 # /home/vagrant/pgsql/bin/pg_ctl -D ~/chorusrails/var/db/ stop
 # rm -rf ~/chorusrails
