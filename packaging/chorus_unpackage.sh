@@ -1,8 +1,11 @@
+#needs git, java
+# sudo yum install git
+# sudo yum install java
+
 echo "Installing chorus..."
 
 # with the Chorus package as first argument, untar to tmp
-tar xf $1 --directory=/tmp/ 
-
+tar xf $1 --directory=/tmp/
 
 echo "Installing postgres into /home/vagrant/pgsql..."
 # extract postgres
@@ -75,7 +78,6 @@ LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/
 bundle exec rake db:create
 bundle exec rake db:migrate
 bundle exec rake db:seed
-bundle exec rake assets:precompile
 
 bundle exec rails s
 
