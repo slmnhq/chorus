@@ -37,7 +37,15 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
         if(this.collection.length === 0 && this.collection.loaded) {
             var linkText = Handlebars.helpers.linkTo("#/instances", "browse your instances");
             var noDatasetEl = $("<div class='browse_more'></div>");
-            noDatasetEl.append(t("dataset.browse_more", {linkText: linkText}));
+
+            var hintText;
+            if (this.collection.hasFilter && this.collection.hasFilter()) {
+                hintText = t("dataset.filtered_empty")
+            } else {
+                hintText = t("dataset.browse_more", {linkText: linkText})
+            }
+
+            noDatasetEl.append(hintText);
             $list.append(noDatasetEl);
         }
 

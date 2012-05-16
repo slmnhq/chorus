@@ -19,14 +19,25 @@ describe("chorus.collections.DatasetSet", function() {
             });
         });
 
+        it("knows that it does not have a name pattern", function() {
+            expect(this.collection.hasFilter()).toBeFalsy();
+        });
+
         context("with name pattern", function() {
-            it("appends the name pattern", function() {
+            beforeEach(function() {
                 this.collection.attributes.namePattern = "Foo";
+            });
+
+            it("appends the name pattern", function() {
                 expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({
                     namePattern: "Foo",
                     rows: "10",
                     page: "1"
                 });
+            });
+
+            it("knows that it has a name pattern", function() {
+                expect(this.collection.hasFilter()).toBeTruthy();
             });
         });
 

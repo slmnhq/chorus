@@ -159,7 +159,18 @@ describe("chorus.views.TabularDataList", function() {
             });
         });
 
+        context("when it is a DatasetSet and a name filter is applied", function() {
+            beforeEach(function() {
+                this.view.collection = new chorus.collections.DatasetSet();
+                this.view.collection.loaded = true;
+                this.view.collection.attributes.namePattern = "Liger";
+                this.view.render();
+            });
 
+            it("renders the no datasets message if there are no datasets", function() {
+                expect($(this.view.el)).toContainTranslation("dataset.filtered_empty");
+            });
+        });
     });
 
     it("should broadcast tabularData:selected when itemSelected is called", function() {
