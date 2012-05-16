@@ -34,7 +34,7 @@ chorus.views.TabularDataContentDetails = chorus.views.Base.extend({
             titleKey: "dataset.data_preview",
             enableResize: true,
             enableExpander: true,
-            enableClose: true
+            enableClose: true,
             showDownloadDialog: true,
             tabularData: this.tabularData
         });
