@@ -35,7 +35,7 @@ group :test do
 end
 
 group :test, :development do
-  gem 'jasmine', :git => "git://github.com/pivotal/jasmine-gem.git"
+  gem 'jasmine', :git => "git://github.com/pivotal/jasmine-gem.git", :ref => 'c72e8d2'
   gem 'rspec_api_documentation'
 end
 
