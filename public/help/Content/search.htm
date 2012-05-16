@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="4" MadCap:lastHeight="493" MadCap:lastWidth="662" MadCap:ignoredWords="HDFS;Datasets" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="Chorus_Help.xml" MadCap:SearchType="Stem">
-    <!-- saved from url=(0014)about:internet -->
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="10" MadCap:lastHeight="2095" MadCap:lastWidth="681" MadCap:ignoredWords="HDFS;Datasets" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Search</title>
+        <link href="Resources/Stylesheets/Table_Styles.css" rel="stylesheet" MadCap:stylesheetType="table" />
         <link href="Resources/Stylesheets/Styles.css" rel="stylesheet" type="text/css" />
         <script src="SkinSupport/MadCapAll.js" type="text/javascript">
         </script>
@@ -11,6 +11,9 @@
     <body>
         <h1>Search</h1>
         <p>The Search page displays the results of your query.</p>
+        <p>See the <i>Searchable Chorus fields</i> table below for details on what information is indexed and therefore searchable.</p>
+        <p>Note that instances are indexed by default daily with the instance owner's credential at midnight. The time and frequency can be configured by a Chorus administrator, as described in the <i>Chorus Installation Guide</i>.</p>
+        <p>Chorus search also supports a <i>typeahead</i> search that matches on names of objects.</p>
         <h3>Features of the Search page</h3>
         <ul>
             <li value="1">Viewing the results of your search</li>
@@ -19,20 +22,250 @@
         <h2>Viewing the results of your search</h2>
         <p>When you submit a search string from any of the pages, you are presented with the Search page and will notice the following:</p>
         <ul>
-            <li value="1">Defaults to <b>Show all results</b>and <b>Show All Results</b>.</li>
+            <li value="1">Defaults to Search in <b>All of Chorus</b> and Show <b>All Results</b>.</li>
             <li value="2">Displays all the recent activity associated with the search object.</li>
         </ul>
+        <p>Note that results are rolled up into primary Chorus objects such as datasets, users, and so on.</p>
         <h2>Using the options on the Search page</h2>
-        <p><b>Search in</b>: Narrow the scope of your search to your own files by selecting <b>My Workspaces</b>.</p>
-        <p><b>Show</b> : Narrow your search to look within a specific object group. Here are the options:</p>
+        <p><b>Search in</b>: Use this drop-down menu to narrow the scope of your search to your own files by selecting <b>My Workspaces</b>.</p>
+        <p><b>Show</b> : Use this drop-down menu to narrow your search to look within a specific object group. Here are the options:</p>
         <ul>
             <li value="1">Work Files</li>
             <li value="2">HDFS&#160;Files</li>
-            <li value="3">Datasets</li>
-            <li value="4">Instances</li>
-            <li value="5">Workspaces</li>
-            <li value="6">People</li>
+            <li value="3">Desktop File Attachments directly to Notes/Insights</li>
+            <li value="4">Datasets</li>
+            <li value="5">Instances</li>
+            <li value="6">Workspaces</li>
+            <li value="7">People</li>
         </ul>
+        <p>Note that wildcards are supported.</p>
+        <p>The table below describes what Chorus fields are searchable, and what Chorus objects they are rolled into in the search results:</p>
+        <p>&#160;</p>
+        <table style="border-collapse: separate;mc-table-style: url('Resources/Stylesheets/Table_Styles.css');border-left-style: solid;border-left-width: 1px;border-left-color: #333333;border-right-style: solid;border-right-width: 1px;border-right-color: #333333;border-top-style: solid;border-top-width: 1px;border-top-color: #333333;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #333333;margin-left: 0;margin-right: auto;" class="TableStyle_IBC_Table" cellspacing="0">
+            <caption><a name="Searchable fields"></a>Searchable Chorus fields</caption>
+            <col style="width: 105pt;" />
+            <col style="width: 125pt;" />
+            <thead>
+                <tr>
+                    <th class="TableStyle_IBC_Table_Head_0_0_RowSep_ColSep">
+                        <p>Chorus Objects </p>
+                    </th>
+                    <th class="TableStyle_IBC_Table_Head_0_0_RowSep_ColEnd">
+                        <p>Indexed Fields</p>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColSep" rowspan="7">
+                        <p>User</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>name</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>rstName</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>lastName</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>emailAddress</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>title</p>
+                    </td>
+                </tr>
+                <tr style="height: 16pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>ou</p>
+                    </td>
+                </tr>
+                <tr style="height: 16pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>content</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColSep" rowspan="4">
+                        <p>Instance</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>name</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>description</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>host</p>
+                    </td>
+                </tr>
+                <tr style="height: 16pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>port</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColSep" rowspan="2">
+                        <p>Workspace</p>
+                        <p>&#160;</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>name</p>
+                    </td>
+                </tr>
+                <tr style="height: 16pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>description</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColSep" rowspan="2">
+                        <p>Sandbox</p>
+                        <p>&#160;</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>databaseName</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>schemaName</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColSep" rowspan="2">
+                        <p>Work File</p>
+                        <p>&#160;</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>name</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>description</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColSep">
+                        <p>Desktop File</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>name</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColSep">
+                        <p>Insights/Notes/<br />Comments</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>content</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColSep" rowspan="2">
+                        <p>Dataset</p>
+                        <p>&#160;</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>content</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>objectName</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColSep" rowspan="4">
+                        <p>GPDB Table</p>
+                        <p>and View</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>name</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>description</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>databaseName</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>schemaName</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColSep" rowspan="4">
+                        <p>GPDB Column</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>name</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>description</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>databaseName</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowSep_ColEnd">
+                        <p>schemaName</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColSep" rowspan="2">
+                        <p>HDFS Files</p>
+                    </td>
+                    <td class="TableStyle_IBC_Table_Body_1_0_RowSep_ColEnd">
+                        <p>name</p>
+                    </td>
+                </tr>
+                <tr style="height: 14pt;">
+                    <td class="TableStyle_IBC_Table_Body_0_0_RowEnd_ColEnd">
+                        <p>Directory</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <script type="text/javascript" src="SkinSupport/MadCapBodyEnd.js">
         </script>
     </body>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CatapultToc Version="1" DescendantCount="11">
-    <!-- saved from url=(0014)about:internet -->
     <TocEntry Title="Home" Link="/Content/dashboard.htm" ComputedResetPageLayout="true" ComputedFirstTopic="true" DescendantCount="0" />
     <TocEntry Title="Getting Started with Greenplum Chorus" Link="/Content/getting_started.htm" ComputedFirstTopic="false" DescendantCount="0" />
     <TocEntry Title="Users" Link="/Content/user.htm" ComputedFirstTopic="false" DescendantCount="0" />

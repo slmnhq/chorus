@@ -51,7 +51,7 @@
 //    displaying the search results for the query 'quarterly report'. The topic from the first result will be opened:
 //    FMCOpenHelp( null, null, 'quarterly report', true );
 
-var gHelpSystemName = "Chorus_Help.htm";
+var gHelpSystemName = "Default.htm";
 
 function FMCOpenHelp( id, skinName, searchQuery, firstPick, pathToHelpSystem )
 {

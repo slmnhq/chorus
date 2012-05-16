@@ -2,7 +2,6 @@ CMCXmlParser._FilePathToXmlStringMap.Add(
 	'Alias',
 	'<?xml version=\"1.0\" encoding=\"utf-8\"?>' +
 	'<CatapultAliasFile DefaultSkinName=\"NewSkin\">' +
-	'    <!-- saved from url=(0014)about:internet -->' +
 	'    <Map Name=\"workfiles\" Link=\"workfiles.htm\" ResolvedId=\"1008\" />' +
 	'    <Map Name=\"workspaces\" Link=\"workspaces.htm\" ResolvedId=\"1010\" />' +
 	'    <Map Name=\"workspace_summary\" Link=\"workspace_summary.htm\" ResolvedId=\"1009\" />' +
