@@ -161,7 +161,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     workspaceAdmin:function () {
-        return this._hasPermission(['admin']);
+        return this.currentUserIsOwner() || chorus.session.user().get("admin");
     },
 
     _hasPermission:function (validPermissions) {

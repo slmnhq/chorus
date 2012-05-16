@@ -4,4 +4,11 @@ class MembersController < ApplicationController
 
     present AccessPolicy.workspace_members_for(current_user, workspace)
   end
+
+  def create
+    workspace = Workspace.find(params[:workspace_id])
+    workspace.member_ids = params[:member_ids]
+    workspace.save!
+    present workspace.reload.members
+  end
 end

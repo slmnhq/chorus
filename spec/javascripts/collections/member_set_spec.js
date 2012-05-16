@@ -21,8 +21,8 @@ describe("chorus.collections.MemberSet", function() {
             this.memberSet.save();
         });
 
-        it("does a PUT", function() {
-            expect(this.server.requests[0].method).toBe("PUT");
+        it("does a POST", function() {
+            expect(this.server.requests[0].method).toBe("POST");
         });
 
         it("hits the url for the members api", function() {
@@ -30,12 +30,12 @@ describe("chorus.collections.MemberSet", function() {
         });
 
         it("passes a list of user names as data", function() {
-            expect(this.server.requests[0].requestBody).toBe("members=1&members=2&members=4");
+            expect(this.server.requests[0].requestBody).toBe($.param({ member_ids : _.pluck(this.memberSet.models, "id")}));
         });
 
         context("when the request succeeds", function() {
             beforeEach(function() {
-                this.server.completeUpdateFor(this.memberSet);
+                this.server.completeSaveFor(this.memberSet);
             });
 
             it("triggers the 'saved' event on the member set", function() {
@@ -45,7 +45,7 @@ describe("chorus.collections.MemberSet", function() {
 
         context("when the request fails", function() {
             beforeEach(function() {
-                this.server.lastUpdateFor(this.memberSet).failUnprocessableEntity();
+                this.server.lastCreateFor(this.memberSet).failUnprocessableEntity();
             });
 
             it("triggers the 'saveFailed' event on the member set", function() {

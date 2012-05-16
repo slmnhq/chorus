@@ -6,7 +6,7 @@ chorus.collections.MemberSet = chorus.collections.Base.extend({
     save: function() {
         var self = this;
 
-        Backbone.sync('update', this, {
+        Backbone.sync('create', this, {
             data: this.toUrlParams(),
             success: function(resp, status, xhr) {
                 self.trigger("saved");
@@ -18,8 +18,7 @@ chorus.collections.MemberSet = chorus.collections.Base.extend({
     },
 
     toUrlParams:function () {
-        return this.map(function(model) {
-            return "members=" + model.id;
-        }).join("&");
+        var ids = _.pluck(this.models, 'id');
+        return $.param({ member_ids : ids});
     }
 });

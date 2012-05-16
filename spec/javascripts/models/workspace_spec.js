@@ -467,12 +467,12 @@ describe("chorus.models.Workspace", function() {
 
         describe("workspaceAdmin", function() {
             it("is true when permission contains 'admin'", function() {
-                this.model.set({permission: ['admin']});
+                setLoggedInUser({ id: "31", admin: true });
                 expect(this.model.workspaceAdmin()).toBeTruthy();
             });
 
             it("is false when it does not contain 'admin'", function() {
-                this.model.set({permission: ['update']});
+                setLoggedInUser({ id: "31", admin: false});
                 expect(this.model.workspaceAdmin()).toBeFalsy();
             });
         });
