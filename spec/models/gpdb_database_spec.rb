@@ -48,7 +48,7 @@ describe GpdbDatabase do
       databases.map {|db| db.instance_id }.should == [123, 123]
     end
 
-    it "does not destroy database on other instances" do
+    it "does not destroy databases on other instances" do
       other_account = FactoryGirl.create(:instance_account)
       stub_gpdb(other_account,
         "select datname from pg_database order by upper(datname)" => [
@@ -66,5 +66,9 @@ describe GpdbDatabase do
 
       other_account.reload.instance.databases.count.should == 2
     end
+  end
+
+  context "association" do
+    it { should have_many :schemas }
   end
 end

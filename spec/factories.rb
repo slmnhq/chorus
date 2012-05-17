@@ -53,5 +53,10 @@ FactoryGirl.define do
     sequence(:name) { "database#{n}" }
     instance
   end
+
+  factory :gpdb_schema do
+    sequence(:name) { "database#{n}" }
+    association :database, :factory => :gpdb_database
+  end
 end
 

@@ -1,5 +1,6 @@
 class GpdbDatabase < ActiveRecord::Base
   belongs_to :instance
+  has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id
 
   def self.refresh(account)
     db_names = Gpdb::ConnectionBuilder.connect!(account.instance, account) do |conn|
