@@ -392,6 +392,45 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: workfile_versions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE workfile_versions (
+    id integer NOT NULL,
+    workfile_id integer,
+    version_num integer,
+    owner_id integer,
+    commit_message character varying(255),
+    modifier_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    contents_file_name character varying(255),
+    contents_content_type character varying(255),
+    contents_file_size integer,
+    contents_updated_at timestamp without time zone
+);
+
+
+--
+-- Name: workfile_versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE workfile_versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: workfile_versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE workfile_versions_id_seq OWNED BY workfile_versions.id;
+
+
+--
 -- Name: workfiles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -524,6 +563,13 @@ ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE workfile_versions ALTER COLUMN id SET DEFAULT nextval('workfile_versions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE workfiles ALTER COLUMN id SET DEFAULT nextval('workfiles_id_seq'::regclass);
 
 
@@ -596,6 +642,14 @@ ALTER TABLE ONLY queue_classic_jobs
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: workfile_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY workfile_versions
+    ADD CONSTRAINT workfile_versions_pkey PRIMARY KEY (id);
 
 
 --
@@ -712,3 +766,7 @@ INSERT INTO schema_migrations (version) VALUES ('20120510224704');
 INSERT INTO schema_migrations (version) VALUES ('20120511233557');
 
 INSERT INTO schema_migrations (version) VALUES ('20120517204230');
+
+INSERT INTO schema_migrations (version) VALUES ('20120517221325');
+
+INSERT INTO schema_migrations (version) VALUES ('20120517221427');
