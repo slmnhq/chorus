@@ -21,6 +21,13 @@ chorus.models.ChartTask = chorus.models.Task.extend({
         this.set({ "chart[type]": this.chartType });
     },
 
+    workspace: function() {
+        if (this.get("workspaceId")) {
+            this._workspace || (this._workspace = new chorus.models.Workspace({ id: this.get("workspaceId") }));
+            return this._workspace;
+        }
+    },
+
     beforeSave: function() {
         var relation = "SELECT * FROM ";
 

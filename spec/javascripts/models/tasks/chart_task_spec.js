@@ -35,6 +35,28 @@ describe("chorus.models.ChartTask", function() {
         expect(this.model.get("relation")).toEqual('SELECT * FROM "ANIMALS"."DOG_BREEDs"');
     })
 
+    describe("#workspace", function() {
+        context("when the task has a workspace id", function() {
+            it("returns a workspace with the right id", function() {
+                var workspace = this.model.workspace();
+                expect(workspace).toBeA(chorus.models.Workspace);
+                expect(workspace.get("id")).toBe(this.model.get("workspaceId"));
+                expect(workspace.get("id")).toBeDefined();
+            });
+
+            it("memoizes", function() {
+                expect(this.model.workspace()).toBe(this.model.workspace());
+            });
+        });
+
+        context("when the task has no workspace id", function() {
+            it("returns undefined", function() {
+                this.model.unset("workspaceId");
+                expect(this.model.workspace()).toBeUndefined();
+            });
+        });
+    });
+
     describe("creating the task", function() {
         beforeEach(function() {
             this.model.save();

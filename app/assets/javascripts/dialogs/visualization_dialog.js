@@ -21,6 +21,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.task = this.options.task;
+        this.requiredResources.add(this.task.workspace());
+        this.task.workspace().fetch();
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
         this.filters = this.options.filters.clone();
@@ -39,25 +41,32 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.tableData.$('.expander_button').remove();
         this.$('.chart_icon.' + this.type).addClass("selected");
 
+        var menuItems = [
+            {
+                name: "save_as_note",
+                text: t("visualization.save_as_note"),
+                onSelect: _.bind(this.saveAsNoteAttachment, this)
+            },
+            {
+                name: "save_to_desktop",
+                text: t("visualization.save_to_desktop"),
+                onSelect: _.bind(this.saveToDesktop, this)
+            }
+        ];
+
+        var inArchivedWorkspace = this.task.workspace() && !this.task.workspace().isActive();
+        if (!inArchivedWorkspace) {
+            menuItems.unshift({
+                name: "save_as_workfile",
+                text: t("visualization.save_as_workfile"),
+                onSelect: _.bind(this.saveAsWorkfile, this)
+            });
+        }
+
         new chorus.views.Menu({
             launchElement: this.$('button.save'),
             orientation: "right",
-            items: [
-                {
-                    name: "save_as_workfile",
-                    text: t("visualization.save_as_workfile"),
-                    onSelect: _.bind(this.saveAsWorkfile, this)
-                },
-                {   name: "save_as_note",
-                    text: t("visualization.save_as_note"),
-                    onSelect: _.bind(this.saveAsNoteAttachment, this)
-                },
-                {
-                    name: "save_to_desktop",
-                    text: t("visualization.save_to_desktop"),
-                    onSelect: _.bind(this.saveToDesktop, this)
-                }
-            ]
+            items: menuItems
         });
     },
 

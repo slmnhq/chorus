@@ -51,6 +51,11 @@ describe("chorus.dialogs.Visualization", function() {
                     expect(this.dialog.$("button.save")).toBeEnabled();
                 });
 
+                it("has the workspace as a required resource (so it can check whether its archived)", function() {
+                    expect(this.dialog.task.workspace()).toHaveBeenFetched();
+                    expect(this.dialog.requiredResources.models).toContain(this.dialog.task.workspace());
+                });
+
                 it("shows the Show Data link", function() {
                     expect(this.dialog.$("a.show")).not.toHaveClass('hidden');
                 });
@@ -112,8 +117,13 @@ describe("chorus.dialogs.Visualization", function() {
         describe("it has rows", function() {
             beforeEach(function() {
                 this.chartOptions["type"] = "histogram";
-                this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
-                this.dialog.task = fixtures.boxplotTaskWithResult();
+                this.dialog = new chorus.dialogs.Visualization({
+                    model: this.dataset,
+                    task: fixtures.boxplotTaskWithResult(),
+                    chartOptions: this.chartOptions,
+                    filters: this.filters,
+                    columnSet: this.columns
+                });
             })
 
             it("should be valid", function() {
@@ -124,8 +134,13 @@ describe("chorus.dialogs.Visualization", function() {
         describe("it has no rows", function() {
             beforeEach(function() {
                 this.chartOptions["type"] = "histogram";
-                this.dialog = new chorus.dialogs.Visualization({model: this.dataset, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
-                this.dialog.task = fixtures.task({result: {rows: []}});
+                this.dialog = new chorus.dialogs.Visualization({
+                    model: this.dataset,
+                    chartOptions: this.chartOptions,
+                    filters: this.filters,
+                    columnSet: this.columns,
+                    task: fixtures.boxplotTaskWithResult({ rows: [] })
+                });
             })
 
             it("should not be valid", function() {
@@ -136,6 +151,7 @@ describe("chorus.dialogs.Visualization", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            this.server.completeFetchFor(this.dialog.task.workspace(), { active: true });
             this.dialog.render();
         });
 
@@ -402,6 +418,29 @@ describe("chorus.dialogs.Visualization", function() {
                             "chart-type": "boxplot"
                         }, "post");
                     });
+                });
+            });
+
+            describe("when the dialog was launched from an archived workspace", function() {
+                beforeEach(function() {
+                    this.dialog = new chorus.dialogs.Visualization({
+                        model: this.dataset,
+                        task: fixtures.boxplotTaskWithResult(),
+                        chartOptions: this.chartOptions,
+                        filters: this.filters,
+                        columnSet: this.columns
+                    });
+
+                    spyOn(this.dialog.task.workspace(), "isActive").andReturn(false);
+
+                    this.dialog.launchModal();
+                    this.dialog.$("button.save").click();
+                });
+
+                it("does not display the 'save as workfile' option", function() {
+                    var menuItems = this.qtip.find("li a");
+                    expect(menuItems.length).toBe(2);
+                    expect(menuItems.filter("[data-menu-name='save_as_workfile']")).not.toExist();
                 });
             });
 
