@@ -62,8 +62,8 @@ chorus.models.Sandbox = chorus.models.Base.extend({
         this._schema = this._schema || new chorus.models.Schema({
             id: this.get("schemaId"),
             name: this.get("schemaName"),
-            databaseId: this.get("databaseId"),
-            databaseName: this.get("databaseName"),
+            database_id: this.get("databaseId"),
+            database_name: this.get("databaseName"),
             instance_id: this.get("instance_id"),
             instanceName: this.get("instanceName")
         });

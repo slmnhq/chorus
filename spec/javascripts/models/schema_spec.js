@@ -1,10 +1,10 @@
 describe("chorus.models.Schema", function() {
     describe("#showUrl", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({instance_id : 10000, databaseName : "%foo%", name : "b/a/r"});
+            this.model = fixtures.schema({instance_id : 10000, database_id: "42", name : "b/a/r"});
         })
         it("should encode the url", function() {
-            expect(this.model.showUrl()).toContain("instances/10000/databases/%25foo%25/schemas/b%2Fa%2Fr");
+            expect(this.model.showUrl()).toContain("instances/10000/databases/42/schemas/b%2Fa%2Fr");
         });
     });
 
@@ -23,10 +23,10 @@ describe("chorus.models.Schema", function() {
                 expect(this.model.databaseObjects()).toBe(this.model.databaseObjects());
             });
 
-            it("should pass the instance_id, databaseName, and schemaName", function() {
+            it("should pass the instance_id, database_name, and schemaName", function() {
                 var objects = this.model.databaseObjects();
                 expect(objects.attributes.instance_id).toBe(this.model.get('instance_id'));
-                expect(objects.attributes.databaseName).toBe(this.model.get('databaseName'));
+                expect(objects.attributes.databaseName).toBe(this.model.database().name());
                 expect(objects.attributes.schemaName).toBe(this.model.get('name'));
             });
         });
@@ -43,7 +43,7 @@ describe("chorus.models.Schema", function() {
 
             it("should pass the instance_id, databaseId, and schemaId", function() {
                 expect(this.model.functions().attributes.instance_id).toBe(this.model.get('instance_id'));
-                expect(this.model.functions().attributes.databaseId).toBe(this.model.get('databaseId'));
+                expect(this.model.functions().attributes.databaseId).toBe(this.model.database().id);
                 expect(this.model.functions().attributes.schemaId).toBe(this.model.get('id'));
             });
         });
@@ -51,7 +51,7 @@ describe("chorus.models.Schema", function() {
 
     describe("#canonicalName", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({instanceName : "instance", databaseName : "database", name : "schema"});
+            this.model = fixtures.schema({instanceName : "instance", database_name : "database", name : "schema"});
         })
 
         it("should create the canonical name", function() {
@@ -64,8 +64,8 @@ describe("chorus.models.Schema", function() {
             this.model = fixtures.schema({
                 instance_id:   '1',
                 instanceName: 'bar',
-                databaseId:   '2',
-                databaseName: 'foo',
+                database_id:   '2',
+                database_name: 'foo',
                 id:           '3',
                 name:         'baz'
             });
@@ -75,8 +75,8 @@ describe("chorus.models.Schema", function() {
             var other = fixtures.schema({
                 instance_id:   '1',
                 instanceName: 'bar',
-                databaseId:   '2',
-                databaseName: 'foo',
+                database_id:   '2',
+                database_name: 'foo',
                 id:           '3',
                 name:         'baz'
             });
@@ -91,13 +91,13 @@ describe("chorus.models.Schema", function() {
 
     describe("#database", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({instanceName : "instance", databaseName : "database", name : "schema"});
+            this.model = fixtures.schema({instanceName : "instance", database_name : "database", name : "schema"});
             this.database = this.model.database();
         });
 
         it("returns a database with the right id and instance_id", function() {
             expect(this.database).toBeA(chorus.models.Database);
-            expect(this.database.get("id")).toBe(this.model.get("databaseId"));
+            expect(this.database.get("id")).toBe(this.model.database().id);
             expect(this.database.get("instance_id")).toBe(this.model.get("instance_id"));
         });
 

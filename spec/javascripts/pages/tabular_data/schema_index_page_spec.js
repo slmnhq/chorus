@@ -1,7 +1,7 @@
 describe("chorus.pages.SchemaIndexPage", function() {
     beforeEach(function() {
-        this.instance = newFixtures.instance.greenplum({id: "1234"});
-        this.page = new chorus.pages.SchemaIndexPage("1234", "Foo/");
+        this.database = fixtures.database({id: "5678", name: "Foo", instance_id: "1234", instanceName: "Foo"})
+        this.page = new chorus.pages.SchemaIndexPage("REMOVEME", "5678");
         this.page.render();
     });
 
@@ -13,13 +13,12 @@ describe("chorus.pages.SchemaIndexPage", function() {
         expect(this.page.helpId).toBe("instances")
     });
 
-    it("fetches the instance", function() {
-        expect(this.page.instance).toHaveBeenFetched();
+    it("fetches the database", function() {
+        expect(this.page.database).toHaveBeenFetched();
     });
 
-    it("fetches the schema set with the right instance id and database name", function() {
-        expect(this.page.collection.attributes.databaseName).toBe("Foo/");
-        expect(this.page.collection.attributes.instance_id).toBe("1234");
+    it("fetches the schema set with the right database id", function() {
+        expect(this.page.collection.attributes.database_id).toBe("5678");
         expect(this.page.collection).toHaveBeenFetched();
     });
 
@@ -31,7 +30,7 @@ describe("chorus.pages.SchemaIndexPage", function() {
 
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.instance);
+            this.server.completeFetchFor(this.database);
             this.server.completeFetchFor(this.page.collection, [
                 fixtures.schema({name: "bar"}), fixtures.schema({name: "foo"})
             ]);
@@ -66,8 +65,8 @@ describe("chorus.pages.SchemaIndexPage", function() {
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/instances");
             expect(this.page.$(".breadcrumb:eq(1)")).toContainTranslation("breadcrumbs.instances");
 
-            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe(this.instance.showUrl());
-            expect(this.page.$(".breadcrumb:eq(2)")).toContainText(this.instance.get("name"));
+            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe(this.database.instance().showUrl());
+            expect(this.page.$(".breadcrumb:eq(2)")).toContainText(this.database.instance().name());
 
             expect(this.page.$(".breadcrumb:eq(3)")).toContainText("Foo");
         });

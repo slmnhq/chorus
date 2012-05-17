@@ -128,7 +128,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     var datasetSet = new chorus.collections.DatasetSet([], { workspaceId: chorus.page.workspace.get("id") })
                     datasetSet.sortAsc("objectName");
                     datasetSet.urlParams = {
-                        databaseName: this.view.focusSchema.get("databaseName")
+                        databaseName: this.view.focusSchema.database().name()
                     }
 
                     expect(this.server.lastFetchFor(datasetSet)).toBeDefined();

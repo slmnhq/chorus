@@ -4,8 +4,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         this.schema = fixtures.schema({
                     id: '4',
                     name: "schema",
-                    databaseId: '3',
-                    databaseName: "db",
+                    database_id: '3',
+                    database_name: "db",
                     instance_id: '2',
                     instanceName: "instance"
                 });
@@ -200,7 +200,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 context("when the workfile has an execution schema, and/or the workspace has a sandbox", function() {
                     beforeEach(function() {
                         this.view.model.unset("executionInfo");
-                        this.schema = fixtures.schema({id: "77", databaseId: "88", instance_id: "99"});
+                        this.schema = fixtures.schema({id: "77", database_id: "88", instance_id: "99"});
                         this.view.textContent.editor.getSelection = function() {
                             return "select 1 from table";
                         };

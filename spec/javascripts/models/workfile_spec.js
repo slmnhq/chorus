@@ -79,8 +79,8 @@ describe("chorus.models.Workfile", function() {
                     var schema = this.model.executionSchema();
                     expect(schema.get("instance_id")).toBe('5');
                     expect(schema.get("instanceName")).toBe('instance');
-                    expect(schema.get("databaseId")).toBe('4');
-                    expect(schema.get("databaseName")).toBe('db');
+                    expect(schema.database().id).toBe('4');
+                    expect(schema.database().name()).toBe('db');
                     expect(schema.get("id")).toBe('6');
                     expect(schema.get("name")).toBe('schema');
                 });
@@ -102,8 +102,8 @@ describe("chorus.models.Workfile", function() {
                     var schema = this.model.executionSchema();
                     expect(schema.get("instance_id")).toBe('51');
                     expect(schema.get("instanceName")).toBe('ned');
-                    expect(schema.get("databaseId")).toBe('52');
-                    expect(schema.get("databaseName")).toBe('rob');
+                    expect(schema.database().id).toBe('52');
+                    expect(schema.database().name()).toBe('rob');
                     expect(schema.get("id")).toBe('53');
                     expect(schema.get("name")).toBe('louis');
                 });
@@ -126,8 +126,8 @@ describe("chorus.models.Workfile", function() {
                     var schema = this.model.executionSchema();
                     expect(schema.get("instance_id")).toBe('5');
                     expect(schema.get("instanceName")).toBe('instance');
-                    expect(schema.get("databaseId")).toBe('4');
-                    expect(schema.get("databaseName")).toBe('db');
+                    expect(schema.database().id).toBe('4');
+                    expect(schema.database().name()).toBe('db');
                     expect(schema.get("id")).toBe('6');
                     expect(schema.get("name")).toBe('schema');
                 });

@@ -19,10 +19,10 @@ describe("chorus.models.Sandbox", function() {
 
         it("should be created with instance, database, and schema names and ids", function() {
             expect(this.schema.get('instance_id')).toBe(this.model.get('instance_id'));
-            expect(this.schema.get('databaseId')).toBe(this.model.get('databaseId'));
+            expect(this.schema.database().id).toBe(this.model.get('databaseId'));
             expect(this.schema.get('id')).toBe(this.model.get('schemaId'));
             expect(this.schema.get('instanceName')).toBe(this.model.get('instanceName'));
-            expect(this.schema.get('databaseName')).toBe(this.model.get('databaseName'));
+            expect(this.schema.database().name()).toBe(this.model.get('databaseName'));
             expect(this.schema.get('name')).toBe(this.model.get('schemaName'));
         });
 

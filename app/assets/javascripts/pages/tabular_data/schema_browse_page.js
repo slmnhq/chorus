@@ -3,10 +3,11 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 ).extend({
     helpId: "schema",
 
-    setup: function(instance_id, databaseName, schemaName) {
+    setup: function(instance_id, database_id, schemaName) {
         this.schema = new chorus.models.Schema({
             instance_id: instance_id,
-            databaseName: databaseName,
+            database_id: database_id,
+            database_name: "REMOVEME",
             name: schemaName
         });
 
@@ -14,7 +15,8 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         this.instance.fetch();
         this.dependOn(this.instance, this.instanceLoaded);
 
-        this.collection = new chorus.collections.DatabaseObjectSet([], {instance_id: instance_id, databaseName: databaseName, schemaName: schemaName });
+        // TODO: We no longer have db name, so eventually we need to remove databaseName from the DatabaseObjectSet constructor
+        this.collection = new chorus.collections.DatabaseObjectSet([], {instance_id: instance_id, databaseName: "REMOVEME", schemaName: schemaName });
         this.collection.sortAsc("objectName");
         this.collection.fetch();
         this.dependOn(this.collection);
@@ -38,12 +40,11 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
     },
 
     crumbs: function() {
-        var database = new chorus.models.Database({instance_id: this.instance.id, name: this.schema.get("databaseName")});
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.instances"), url: '#/instances'},
             {label: this.instance.get("name"), url: this.instance.showUrl()},
-            {label: this.schema.get("databaseName"), url: database.showUrl() },
+            {label: this.schema.database().name(), url: this.schema.database().showUrl() },
             {label: this.schema.get("name")}
         ];
     },

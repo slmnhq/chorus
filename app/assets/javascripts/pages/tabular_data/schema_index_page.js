@@ -4,21 +4,20 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
     constructorName: "SchemaIndexPage",
     helpId: "instances",
 
-    setup: function(instance_id, databaseName) {
-        this.databaseName = databaseName;
-        this.instance = new chorus.models.Instance({id: instance_id});
-        this.collection = new chorus.collections.SchemaSet([], {instance_id: instance_id, databaseName: this.databaseName});
+    setup: function(instance_id, database_id) {
+        this.database = new chorus.models.Database({id: database_id});
+        this.collection = this.database.schemas();
 
-        this.instance.fetch();
+        this.database.fetch();
         this.collection.fetchAll();
 
-        this.dependOn(this.instance);
+        this.dependOn(this.database);
         this.dependOn(this.collection);
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Schema",
             collection: this.collection,
-            title: this.databaseName,
+            title: _.bind(this.database.name, this.database),
             imageUrl: "/images/instances/greenplum_database.png",
             search: {
                 selector: ".name",
@@ -34,8 +33,8 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
         return [
             { label: t("breadcrumbs.home"), url: "#/" },
             { label: t("breadcrumbs.instances"), url: "#/instances" },
-            { label: this.instance.get("name"), url: this.instance.showUrl() },
-            { label: this.databaseName }
+            { label: this.database.instance().name(), url: this.database.instance().showUrl() },
+            { label: this.database.name() }
         ];
     }
 });

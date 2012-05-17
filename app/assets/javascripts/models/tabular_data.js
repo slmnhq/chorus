@@ -62,7 +62,7 @@ chorus.models.TabularData = chorus.models.Base.include(
             if (!this._schema) {
                 this._schema = new chorus.models.Schema({
                     instance_id: this.get("instance").id,
-                    databaseName: this.get("databaseName"),
+                    database_name: this.get("databaseName"),
                     name: this.get("schemaName"),
                     instanceName: this.get("instance").name
                 });

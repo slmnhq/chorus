@@ -67,8 +67,8 @@
                 return new chorus.models.Schema({
                     instance_id: executionInfo.instance_id,
                     instanceName: executionInfo.instanceName,
-                    databaseId: executionInfo.databaseId,
-                    databaseName: executionInfo.databaseName,
+                    database_id: executionInfo.databaseId,
+                    database_name: executionInfo.databaseName,
                     id: executionInfo.schemaId,
                     name: executionInfo.schemaName
                 });

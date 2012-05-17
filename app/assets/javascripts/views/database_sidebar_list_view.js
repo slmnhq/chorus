@@ -144,10 +144,14 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     workfileExecuted: function(workfile, executionSchema) {
         if (!this.schema ||
             (executionSchema.instance_id != this.schema.get("instance_id")) ||
-            (executionSchema.databaseName != this.schema.get("databaseName")) ||
-            (executionSchema.schemaName != this.schema.get("name")))
+            (executionSchema.databaseName != this.schema.database().name()) ||
+            (executionSchema.schemaName != this.schema.name()))
         {
-            this.setSchema(new chorus.models.Schema(_.extend(executionSchema, { name: executionSchema.schemaName })))
+            this.setSchema(new chorus.models.Schema(_.extend(executionSchema, {
+                name: executionSchema.schemaName,
+                database_name: executionSchema.databaseName,
+                database_id: executionSchema.databaseId
+            })))
         }
     },
 

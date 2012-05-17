@@ -33,7 +33,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
             this.collection.sortAsc("objectName");
 
             if (this.focusSchema) {
-                this.collection.attributes.databaseName = this.focusSchema.get("databaseName")
+                this.collection.attributes.databaseName = this.focusSchema.database().name()
             }
 
             this.collection.fetch();

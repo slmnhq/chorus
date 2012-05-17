@@ -37,7 +37,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
             var schema = this.model.executionSchema();
             if(schema){
                 runOptions.instance = schema.get("instance_id");
-                runOptions.database = schema.get("databaseId");
+                runOptions.database = schema.database().id;
                 runOptions.schema = schema.get("id");
             }
 
@@ -49,7 +49,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         if (!this.model.executionSchema()) return;
         this.run({
             instance: this.model.executionSchema().get('instance_id'),
-            database: this.model.executionSchema().get('databaseId'),
+            database: this.model.executionSchema().database().id,
             schema: this.model.executionSchema().get('id')
         })
     },

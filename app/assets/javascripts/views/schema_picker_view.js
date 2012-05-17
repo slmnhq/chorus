@@ -193,8 +193,8 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
 
         if (this.selectedDatabase && this.selectedDatabase.get('id')) {
             attrs.database = this.selectedDatabase.get("id");
-        } else if(this.selectedDatabase && this.selectedDatabase.get("name")) {
-            attrs.databaseName = this.selectedDatabase.get('name');
+        } else if(this.selectedDatabase && this.selectedDatabase.name()) {
+            attrs.databaseName = this.selectedDatabase.name();
         } else {
             attrs.databaseName = this.$(".database input.name:visible").val();
         }

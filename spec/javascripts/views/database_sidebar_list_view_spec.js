@@ -115,6 +115,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
                     context("when the execution schema is the same as the view's schema", function() {
                         beforeEach(function() {
                             this.executionSchema = _.clone(this.schema.attributes);
+                            this.executionSchema.databaseName = this.schema.database().name();
+                            this.executionSchema.databaseId = this.schema.database().id;
                             this.executionSchema.schemaName = this.executionSchema.name;
                             delete this.executionSchema.name;
                             delete this.executionSchema.id;

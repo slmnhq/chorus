@@ -197,7 +197,7 @@ describe("chorus.models.TabularData", function() {
         })
         it("returns a new schema with the right attributes", function() {
             expect(this.schema.get("instance_id")).toBe(this.tabularData.get("instance").id);
-            expect(this.schema.get("databaseName")).toBe(this.tabularData.get("databaseName"));
+            expect(this.schema.database().name()).toBe(this.tabularData.get("databaseName"));
             expect(this.schema.get("name")).toBe(this.tabularData.get("schemaName"));
             expect(this.schema.get("instanceName")).toBe(this.tabularData.get("instance").name);
         });
