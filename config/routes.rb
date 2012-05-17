@@ -22,7 +22,7 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :databases, :only => [], :controller => 'instance_databases' do
+  resources :databases, :only => [:show], :controller => 'instance_databases' do
     resources :schemas, :only => [:index]
   end
 

@@ -6,4 +6,9 @@ class InstanceDatabasesController < ApplicationController
 
     present instance.databases.order("lower(name)")
   end
+
+  def show
+    database = AccessPolicy.databases_for(current_user).find(params[:id])
+    present database
+  end
 end

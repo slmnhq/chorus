@@ -16,6 +16,14 @@ class AccessPolicy
       end
     end
 
+    def databases_for(user)
+      if user.admin?
+        GpdbDatabase.scoped
+      else
+        GpdbDatabase.where(:instance_id => instances_for(user).pluck(:id))
+      end
+    end
+
     private
     def resources_for(user, resources)
       if user.admin?

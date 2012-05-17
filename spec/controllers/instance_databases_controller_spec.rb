@@ -57,4 +57,39 @@ describe InstanceDatabasesController do
       end
     end
   end
+
+  describe "#show" do
+    let(:database) { FactoryGirl.create(:gpdb_database) }
+
+    before do
+      stub(AccessPolicy).databases_for(user) { GpdbDatabase }
+    end
+
+    it "renders the database" do
+      get :show, :id => database.to_param
+      response.code.should == "200"
+      decoded_response.instance_id.should == database.instance.id
+      decoded_response.instance_name.should == database.instance.name
+      decoded_response.id.should == database.id
+      decoded_response.name.should == database.name
+    end
+
+    context "when an account can't be found" do
+      before do
+        stub(AccessPolicy).databases_for(user) { GpdbDatabase.where(:id => -1) }
+      end
+
+      it "returns 404" do
+        get :show, :id => database.to_param
+        response.code.should == "404"
+      end
+    end
+
+    context "when the db can't be found" do
+      it "returns 404" do
+        get :show, :id => "-1"
+        response.code.should == "404"
+      end
+    end
+  end
 end
