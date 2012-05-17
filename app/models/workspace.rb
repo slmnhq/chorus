@@ -22,6 +22,16 @@ class Workspace < ActiveRecord::Base
          )
   end
 
+  def self.writable_by(user)
+    return scoped if user.admin?
+    with_membership = user.memberships.pluck(:workspace_id)
+    where('workspaces.id IN (:with_membership) OR
+          workspaces.owner_id = :user_id',
+          :with_membership => with_membership,
+          :user_id => user.id
+         )
+  end
+
   def members_accessible_to(user)
     if public? || members.include?(user)
       members
