@@ -20,8 +20,8 @@ describe InstanceDatabasesController do
         response.code.should == "404"
       end
 
-      context "when no account for this instance" do
-        let!(:instance) { FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false }
+      context "when instance inaccessible" do
+        let!(:instance) { FactoryGirl.create :instance, :shared => false }
 
         it "should fail" do
           get :index, :instance_id => instance.id
@@ -29,13 +29,13 @@ describe InstanceDatabasesController do
         end
       end
 
-      context "when instance and account available" do
-        let!(:instance) { FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false }
-        let!(:account) { FactoryGirl.create :instance_account, :instance_id => instance.id, :owner_id => user.id, :db_username => dbconfig["username"], :db_password => "newpass" }
+      context "when instance accessible" do
+        let(:instance) { FactoryGirl.create :instance, :shared => true }
+        let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner => instance.owner }
 
-        context "when unable to connect to instance" do
+        context "when the refresh of the db fails" do
           before do
-            instance.update_attribute :host, "no.such.host"
+            stub(GpdbDatabase).refresh { raise PG::Error.new }
           end
 
           it "should fail" do
@@ -44,13 +44,17 @@ describe InstanceDatabasesController do
           end
         end
 
-        context "when able to connect to instance" do
-          let!(:instance) { FactoryGirl.create :instance, :host => dbconfig["host"]||"localhost", :port => dbconfig["port"], :shared => false }
-          let!(:account) { FactoryGirl.create :instance_account, :instance_id => instance.id, :owner_id => user.id, :db_username => dbconfig["username"], :db_password => "newpass" }
+        context "when refresh of the db succeeds" do
+          let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance) }
+
+          before do
+            stub(GpdbDatabase).refresh { [database] }
+          end
 
           it "should succeed" do
             get :index, :instance_id => instance.id
             response.code.should == "200"
+            decoded_response[0].id.should == database.id
             decoded_response[0].instance_id.should == instance.id
           end
         end
