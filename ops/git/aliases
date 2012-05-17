@@ -15,3 +15,6 @@ alias gb='git branch'
 alias vim='mvim -p'
 alias l='ls'
 alias ll='ls -la'
+
+alias st='script/test'
+alias rage='rake db:migrate db:test:prepare db:test:prepare:legacy'
