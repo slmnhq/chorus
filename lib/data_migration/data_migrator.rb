@@ -8,7 +8,8 @@ class DataMigrator
                   InstanceAccountMigrator.new,
                   WorkspaceMigrator.new,
                   ImageMigrator.new,
-                  MembershipMigrator.new]
+                  MembershipMigrator.new,
+                  WorkfileMigrator.new]
   end
 
   def migrate

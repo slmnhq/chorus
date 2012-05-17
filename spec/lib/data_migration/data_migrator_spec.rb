@@ -14,6 +14,7 @@ describe DataMigrator, :type => :data_migration do
     @data_migrator.migrators[i+=1].should be_instance_of WorkspaceMigrator
     @data_migrator.migrators[i+=1].should be_instance_of ImageMigrator
     @data_migrator.migrators[i+=1].should be_instance_of MembershipMigrator
+    @data_migrator.migrators[i+=1].should be_instance_of WorkfileMigrator
   end
 
   describe ".migrate" do

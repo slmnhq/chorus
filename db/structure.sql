@@ -392,6 +392,39 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: workfiles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE workfiles (
+    id integer NOT NULL,
+    workspace_id integer,
+    owner_id integer,
+    description text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: workfiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE workfiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: workfiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE workfiles_id_seq OWNED BY workfiles.id;
+
+
+--
 -- Name: workspaces; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -491,6 +524,13 @@ ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE workfiles ALTER COLUMN id SET DEFAULT nextval('workfiles_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::regclass);
 
 
@@ -556,6 +596,14 @@ ALTER TABLE ONLY queue_classic_jobs
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: workfiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY workfiles
+    ADD CONSTRAINT workfiles_pkey PRIMARY KEY (id);
 
 
 --
@@ -662,3 +710,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120510223801');
 INSERT INTO schema_migrations (version) VALUES ('20120510224704');
 
 INSERT INTO schema_migrations (version) VALUES ('20120511233557');
+
+INSERT INTO schema_migrations (version) VALUES ('20120517204230');
