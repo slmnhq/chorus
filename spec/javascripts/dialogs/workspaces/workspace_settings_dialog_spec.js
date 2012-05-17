@@ -104,23 +104,23 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
         context("when the workspace is public", function() {
             beforeEach(function() {
-                this.workspace.set({ isPublic: true })
+                this.workspace.set({ public: true })
                 this.dialog.render();
             })
 
             it("checks the 'Publicly available' checkbox", function() {
-                expect(this.dialog.$("input[name=isPublic]")).toBeChecked();
+                expect(this.dialog.$("input[name=public]")).toBeChecked();
             })
         })
 
         context("when the workspace is not public", function() {
             beforeEach(function() {
-                this.workspace.set({ isPublic: false })
+                this.workspace.set({ public: false })
                 this.dialog.render();
             })
 
             it("does not check the 'Publicly available' checkbox", function() {
-                expect(this.dialog.$("input[name=isPublic]")).not.toBeChecked();
+                expect(this.dialog.$("input[name=public]")).not.toBeChecked();
             })
         })
 
@@ -133,7 +133,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             })
 
             it("does not disable the 'Publicly available' checkbox", function() {
-                expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
+                expect(this.dialog.$("input[name=public]")).not.toBeDisabled();
             })
 
             itHasEditableNameAndSummmary();
@@ -229,7 +229,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 });
 
                 it("disables the 'Publicly available' checkbox", function() {
-                    expect(this.dialog.$("input[name=isPublic]")).toBeDisabled();
+                    expect(this.dialog.$("input[name=public]")).toBeDisabled();
                 })
 
                 it("disables the workspace summary", function() {
@@ -284,7 +284,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 });
 
                 it("does not disable the 'Publicly available' checkbox", function() {
-                    expect(this.dialog.$("input[name=isPublic]")).not.toBeDisabled();
+                    expect(this.dialog.$("input[name=public]")).not.toBeDisabled();
                 });
 
                 it("does not disable the cleditor", function() {
@@ -421,25 +421,25 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                         expect(this.dialog.$("button.submit")).toHaveSpinner();
                     });
 
-                    context("when the isPublic checkbox is checked", function() {
+                    context("when the public checkbox is checked", function() {
                         beforeEach(function() {
-                            this.dialog.$("input[name=isPublic]").prop("checked", true);
+                            this.dialog.$("input[name=public]").prop("checked", true);
                             this.dialog.$('form').submit();
                         })
 
-                        it("sets the isPublic model attribute to true", function() {
-                            expect(this.dialog.pageModel.get("isPublic")).toBe(true);
+                        it("sets the public model attribute to true", function() {
+                            expect(this.dialog.pageModel.get("public")).toBe(true);
                         })
                     })
 
-                    context("when the isPublic checkbox is not checked", function() {
+                    context("when the public checkbox is not checked", function() {
                         beforeEach(function() {
-                            this.dialog.$("input[name=isPublic]").prop("checked", false);
+                            this.dialog.$("input[name=public]").prop("checked", false);
                             this.dialog.$('form').submit();
                         })
 
-                        it("sets the isPublic model attribute to false", function() {
-                            expect(this.dialog.pageModel.get("isPublic")).toBe(false);
+                        it("sets the public model attribute to false", function() {
+                            expect(this.dialog.pageModel.get("public")).toBe(false);
                         });
                     });
 

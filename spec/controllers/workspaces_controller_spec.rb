@@ -21,20 +21,33 @@ describe WorkspacesController do
       get :index
       response.code.should == "200"
       decoded_response.length.should == 3
-      p decoded_response
       decoded_response.map(&:name).should include("secret1")
+    end
+
+    it "does not return private workspaces" do
+      FactoryGirl.create(:workspace, :name => "private", :public => false)
+      get :index
+      decoded_response.collect(&:name).should_not include "private"
+    end
+
+    it "includes private workspaces owned by the authenticated user" do
+      FactoryGirl.create(:workspace, :name => "private", :public => false, :owner => owner)
+      get :index
+      decoded_response.collect(&:name).should include "private"
     end
 
     it "sorts by workspace name" do
       get :index
       decoded_response[0].name.should == "abacus"
-      decoded_response[1].name.should == "Work"
+      decoded_response[1].name.should == "secret1"
+      decoded_response[2].name.should == "Work"
     end
 
     it "scopes by active status" do
       get :index, :active => 1
-      decoded_response.size.should == 1
-      decoded_response[0].name.should == "Work"
+      decoded_response.size.should == 2
+      decoded_response[0].name.should == "secret1"
+      decoded_response[1].name.should == "Work"
     end
 
     it "scopes by owner" do
@@ -57,13 +70,14 @@ describe WorkspacesController do
         get :index, :per_page => 2
         decoded_response.length.should == 2
         decoded_response.first.name.should == "abacus"
-        decoded_response.second.name.should == "Work"
+        decoded_response.second.name.should == "secret1"
       end
 
       it "accepts a page parameter" do
         get :index, :page => 2, :per_page => 2
-        decoded_response.length.should == 1
-        decoded_response.first.name.should == "zed"
+        decoded_response.length.should == 2
+        decoded_response.first.name.should == "Work"
+        decoded_response.last.name.should == "zed"
       end
 
       it "defaults the per_page to fifty" do

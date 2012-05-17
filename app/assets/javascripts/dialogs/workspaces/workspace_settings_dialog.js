@@ -68,10 +68,10 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
         if (this.userIsOwnerOrAdmin()) {
             canUpdateName = true;
         } else if (this.pageModel.currentUserIsMember()) {
-            this.$('input[name=isPublic], input[name=status]').attr('disabled', 'disabled');
+            this.$('input[name=public], input[name=status]').attr('disabled', 'disabled');
             canUpdateName = true;
         } else {
-            this.$('input[name=name], input[name=isPublic], textarea[name=summary], input[name=status]').attr('disabled', 'disabled');
+            this.$('input[name=name], input[name=public], textarea[name=summary], input[name=status]').attr('disabled', 'disabled');
         }
 
         this.$("select.owner").val(this.model.get("ownerId"));
@@ -89,7 +89,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
         var attrs = {
             name: this.$("input[name=name]").val().trim(),
             summary: this.getNormalizedText(this.$("textarea[name=summary]")),
-            isPublic: !!this.$("input[name=isPublic]").is(":checked"),
+            public: !!this.$("input[name=public]").is(":checked"),
             active: active,
             archived: !active
         };
