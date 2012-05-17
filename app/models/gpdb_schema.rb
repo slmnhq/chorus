@@ -4,16 +4,17 @@ class GpdbSchema < ActiveRecord::Base
     schemas.nspname as schema_name,
     count(*) as dataset_count
   FROM
-    pg_namespace schemas,
+    pg_namespace schemas
+  INNER JOIN
     pg_tables tables
+      ON schemas.nspname = tables.schemaname
   WHERE
     schemas.nspname NOT LIKE 'pg_%'
-    AND schemas.nspname NOT IN('information_schema','gp_toolkit', 'gpperfmon')
-    AND schemas.nspname = tables.schemaname
+    AND schemas.nspname NOT IN ('information_schema', 'gp_toolkit', 'gpperfmon')
   GROUP BY
     schemas.nspname
   SQL
-  
+
   belongs_to :database, :class_name => 'GpdbDatabase'
   attr_accessor :dataset_count
 
