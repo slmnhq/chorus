@@ -121,7 +121,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                            });
                            it("opens the Create External Table dialog, passing the workspace information", function() {
                                expect(this.dialog.launchSubModal).toHaveBeenCalledWith(this.dialog.externalTableDialog);
-                               expect(this.dialog.externalTableDialog.options.workspaceId).toEqual("227");
+                               expect(this.dialog.externalTableDialog.options.workspaceId).toEqual(this.workspace1.id);
                                expect(this.dialog.externalTableDialog.options.workspaceName).toEqual("Foo");
                            });
                        });
