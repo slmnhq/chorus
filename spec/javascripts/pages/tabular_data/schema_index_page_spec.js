@@ -1,7 +1,7 @@
 describe("chorus.pages.SchemaIndexPage", function() {
     beforeEach(function() {
         this.database = fixtures.database({id: "5678", name: "Foo", instance_id: "1234", instanceName: "Foo"})
-        this.page = new chorus.pages.SchemaIndexPage("REMOVEME", "5678");
+        this.page = new chorus.pages.SchemaIndexPage("5678");
         this.page.render();
     });
 

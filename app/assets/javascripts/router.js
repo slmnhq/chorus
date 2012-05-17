@@ -33,7 +33,7 @@
             ["/workspaces/:workspaceId/search/:scope/:entityType/:query", "WorkspaceSearchIndex"],
             ["/instances", "InstanceIndex"],
             ["/instances/:instance_id/databases", "DatabaseIndex"],
-            ["/instances/:instance_id/databases/:database_id", "SchemaIndex"],
+            ["/databases/:database_id", "SchemaIndex"],
             ["/instances/:instance_id/databases/:database_id/schemas/:schemaName", "SchemaBrowse"],
             ["/instances/:instance_id/databases/:databaseName/schemas/:schemaName/:metaType/:objectName", "TabularDataShow"],
             ["/instances/:instance_id/browse/*path", "HdfsEntryIndex"],
