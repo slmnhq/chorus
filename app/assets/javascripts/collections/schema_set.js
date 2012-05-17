@@ -3,7 +3,7 @@ chorus.collections.SchemaSet = chorus.collections.Base.include(
 ).extend({
     constructorName: "SchemaSet",
     model:chorus.models.Schema,
-    urlTemplate:"instances/{{instance_id}}/databases/{{database_id}}/schemas",
+    urlTemplate:"databases/{{database_id}}/schemas",
 
     comparator:function (schema) {
         return schema.get('name').toLowerCase();

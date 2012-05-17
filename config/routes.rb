@@ -12,9 +12,7 @@ Chorus::Application.routes.draw do
   resources :hadoop_instances, :only => [:create, :index, :show]
 
   resources :instances, :only => [:index, :create, :update] do
-    resources :databases, :only => [:index], :controller => 'instance_databases' do
-      resources :schemas, :only => [:index]
-    end
+    resources :databases, :only => [:index], :controller => 'instance_databases'
 
     scope :module => 'instances' do
       resource :owner, :only => [:update], :controller => 'owner'
@@ -22,6 +20,10 @@ Chorus::Application.routes.draw do
       resource :account, :only => [:show, :create, :update, :destroy], :controller => 'account'
       resources :members, :only => [:index, :create, :update, :destroy]
     end
+  end
+
+  resources :databases, :only => [], :controller => 'instance_databases' do
+    resources :schemas, :only => [:index]
   end
 
   resources :workspaces, :only => [:index, :create, :show, :update] do

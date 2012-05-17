@@ -20,7 +20,7 @@ describe SchemasController do
       schema2.dataset_count = 40
       stub(GpdbSchema).refresh(instanceAccount, database) { [schema1, schema2] }
 
-      get :index, :instance_id => instance.to_param, :database_id => database.to_param
+      get :index, :database_id => database.to_param
 
       response.code.should == "200"
       decoded_response.length.should == 2

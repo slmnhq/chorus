@@ -271,7 +271,7 @@ describe("chorus.views.SchemaPicker", function() {
                                     itTriggersTheChangeEvent(false);
 
                                     it("fetches the list of schemas", function() {
-                                        expect(this.server.requests[2].url).toMatch("/instances/" + this.selectedInstance.get('id') + "/databases/" + this.selectedDatabase.get("id") + "/schemas");
+                                        expect(this.server.requests[2].url).toMatch("/databases/" + this.selectedDatabase.get("id") + "/schemas");
                                     });
 
                                     itShowsUnavailableTextWhenResponseIsEmptyFor('schema');
