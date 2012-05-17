@@ -4,6 +4,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
     ok: t("hdfs.create_external.ok"),
     loadingKey: "hdfs.create_external.creating",
     templateName: "create_directory_external_table_from_hdfs",
+    includeHeader: false,
 
     events: {
         "change select" : "fetchSample"

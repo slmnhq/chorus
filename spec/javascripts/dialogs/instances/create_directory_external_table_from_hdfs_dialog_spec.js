@@ -22,6 +22,10 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
         });
     });
 
+    it("does not include a header row", function() {
+        expect(this.dialog.includeHeader).toBeFalsy();
+    });
+
     describe("#setup", function() {
         it("sets csv to be the first models in the collection", function() {
             expect(this.dialog.csv).toEqual(this.collection.at(0))
@@ -73,7 +77,6 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 spyOn(chorus, 'styleSelect')
                 this.dialog.$("input[name='expression']").val("*.csv")
                 this.dialog.$("input#pattern").prop("checked", "checked").change();
-                this.dialog.$("input#hasHeader").prop("checked", false);
                 var selElement = this.dialog.$("select").val(this.collection.at(1).get("name"))
                 selElement.change();
             });
@@ -100,7 +103,6 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 it("display the correct elements", function() {
                     expect(this.dialog.$("input[name='expression']").val()).toBe("*.csv");
                     expect(this.dialog.$("input#pattern:checked")).toBeTruthy();
-                    expect(this.dialog.$("input#hasHeader").prop("checked")).toBeFalsy();
                     expect(this.dialog.$(".field_name input").eq(0).val()).toBe("column_1");
                 });
 
@@ -145,43 +147,9 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 });
             });
 
-            context("with has header false", function() {
-                beforeEach(function() {
-                    this.dialog.$("#hasHeader").prop('checked', true).change();
-                    this.dialog.$("input[name=toTable]").val("testisgreat").change();
-                    this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
-                    this.dialog.$("#hasHeader").prop('checked', false).change();
-                    this.dialog.$('button.submit').click();
-                });
-
-                it("posts to the right URL", function() {
-                    var request = this.server.lastCreate();
-                    var statement = "testisgreat (column_1 text, column_2 text, column_3 text, column_4 text, column_5 text)";
-
-                    expect(request.url).toMatchUrl("/edc/workspace/22/externaltable");
-                    expect(request.params().statement).toBe(statement);
-                    expect(request.params().hasHeader).toBe('false');
-                });
-
-                context("switch header to on again", function() {
-                    beforeEach(function() {
-                        this.dialog.$("#hasHeader").prop("checked", true).change();
-                    })
-
-                    it("retains column names when changing column names back and forth between generated and header", function() {
-                        expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
-                    })
-
-
-                    it("retains the table name when changing column names back and forth between generated and header", function() {
-                        expect(this.dialog.$("input[name=toTable]").val()).toBe("testisgreat");
-                    })
-                })
-            });
-            context("with has header true", function() {
+            context("when importing an entire directory", function() {
                 beforeEach(function() {
                     this.dialog.$("input#directory").attr('checked', 'checked');
-                    this.dialog.$("#hasHeader").prop("checked", true).change();
                     this.dialog.$('button.submit').click();
                 });
 
@@ -192,34 +160,14 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
                 it("posts to the right URL", function() {
                     var request = this.server.lastCreate();
-                    var statement = "test (col1 text, col2 text, col3 text, col_4 text, col_5 text)";
+                    var statement = "test (column_1 text, column_2 text, column_3 text, column_4 text, column_5 text)";
 
                     expect(request.url).toMatchUrl("/edc/workspace/22/externaltable");
                     expect(request.params().path).toBe("/data");
                     expect(request.params().instanceId).toBe("234");
                     expect(request.params().statement).toBe(statement);
-                    expect(request.params().hasHeader).toBe('true');
                     expect(request.params().pathType).toBe('directory');
                 });
-
-                context("when the pathType is pattern", function() {
-                    beforeEach(function() {
-                        this.dialog.$("#hasHeader").prop("checked", true).change();
-
-                        this.dialog.$("input#directory").removeAttr('checked');
-                        this.dialog.$("input#pattern").attr('checked', 'checked').change();
-                        this.dialog.$("input[name='expression']").val("*.csv");
-                        this.dialog.$('button.submit').click();
-                    });
-
-                    it("posts to the right URL", function() {
-                        var request = this.server.lastCreate();
-
-                        expect(request.url).toMatchUrl("/edc/workspace/22/externaltable");
-                        expect(request.params().pathType).toBe('pattern');
-                        expect(request.params().path).toBe("/data/*.csv");
-                    });
-                })
 
                 context("when the post to import responds with success", function() {
                     beforeEach(function() {
@@ -240,7 +188,24 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 })
             });
 
-            context("retain entered values when clicking submit", function() {
+            context("when importing only files that match a pattern", function() {
+                beforeEach(function() {
+                    this.dialog.$("input#directory").removeAttr('checked');
+                    this.dialog.$("input#pattern").attr('checked', 'checked').change();
+                    this.dialog.$("input[name='expression']").val("*.csv");
+                    this.dialog.$('button.submit').click();
+                });
+
+                it("posts to the right URL", function() {
+                    var request = this.server.lastCreate();
+
+                    expect(request.url).toMatchUrl("/edc/workspace/22/externaltable");
+                    expect(request.params().pathType).toBe('pattern');
+                    expect(request.params().path).toBe("/data/*.csv");
+                });
+            })
+
+            context("when the server responds with errors", function() {
                 beforeEach(function() {
                     this.$type = this.dialog.$(".th .type").eq(1);
                     this.$type.find(".chosen").click();
