@@ -89,4 +89,26 @@ describe Workspace do
   describe "associations" do
     it { should have_many(:members) }
   end
+
+  describe "permissions_for" do
+    it "should have the correct permissions per user" do
+      owner = FactoryGirl.create(:user)
+      private_workspace = FactoryGirl.create(:workspace, :public => false, :owner => owner)
+      member = FactoryGirl.create(:user)
+      member.workspaces << private_workspace
+      admin = FactoryGirl.create(:admin)
+      anon = FactoryGirl.create(:user)
+      public_workspace = FactoryGirl.create(:workspace, :public => true)
+
+      [
+        [private_workspace, owner, [:admin]],
+        [private_workspace, member, [:read, :commenting, :update]],
+        [private_workspace, admin, [:admin]],
+        [private_workspace, anon, []],
+        [public_workspace, anon, [:read, :commenting]]
+      ].each do |workspace, user, list|
+        workspace.permissions_for(user).should == list
+      end
+    end
+  end
 end

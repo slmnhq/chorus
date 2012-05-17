@@ -10,14 +10,19 @@ describe WorkspacesController do
     before do
       FactoryGirl.create(:workspace, :name => "Work", :owner => owner)
       FactoryGirl.create(:workspace, :name => "abacus", :archived_at => 2.days.ago)
+      @private_workspace = FactoryGirl.create(:workspace, :public => false)
+      @joined_private_workspace = FactoryGirl.create(:workspace, :public => false, :name => "secret1")
+      owner.workspaces << @joined_private_workspace
     end
 
     it_behaves_like "an action that requires authentication", :get, :index
 
-    it "returns all workspaces (access control not implemented)" do
+    it "returns all workspaces that are public or which the current user is a member of" do
       get :index
       response.code.should == "200"
-      decoded_response.length.should == 2
+      decoded_response.length.should == 3
+      p decoded_response
+      decoded_response.map(&:name).should include("secret1")
     end
 
     it "sorts by workspace name" do

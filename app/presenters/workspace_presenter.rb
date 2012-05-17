@@ -1,5 +1,5 @@
 class WorkspacePresenter < Presenter
-  delegate :id, :name, :summary, :owner, :archiver, :archived_at, :public, :image, to: :model
+  delegate :id, :name, :summary, :owner, :archiver, :archived_at, :public, :image, :permissions_for, to: :model
 
   def to_hash
     {
@@ -10,7 +10,8 @@ class WorkspacePresenter < Presenter
         :archiver => present(archiver),
         :archived_at => archived_at.try(:strftime, "%Y-%m-%d %H:%M:%S"),
         :public => public,
-        :image => present(image)
+        :image => present(image),
+        :permission => permissions_for(@view_context.current_user)
     }
   end
 end

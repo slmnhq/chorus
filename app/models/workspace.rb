@@ -29,4 +29,17 @@ class Workspace < ActiveRecord::Base
       []
     end
   end
+
+  def permissions_for(user)
+    permissions = []
+
+    if user.admin? || (owner.id == user.id)
+      permissions.push(:admin)
+    elsif user.memberships.find_by_workspace_id(id)
+      permissions.push(:read, :commenting, :update)
+    elsif public?
+      permissions.push(:read, :commenting)
+    end
+    permissions
+  end
 end
