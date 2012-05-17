@@ -18,9 +18,8 @@ class GpdbSchema < ActiveRecord::Base
   attr_accessor :dataset_count
 
   def self.refresh(account, database)
-    schema_rows = nil
-    Gpdb::ConnectionBuilder.connect!(account.instance, account, database.name) do |conn|
-      schema_rows = conn.query(SCHEMAS_AND_DATASET_COUNT)
+    schema_rows = Gpdb::ConnectionBuilder.connect!(account.instance, account, database.name) do |conn|
+      conn.query(SCHEMAS_AND_DATASET_COUNT)
     end
 
     schema_names = schema_rows.map { |row| row[0] }

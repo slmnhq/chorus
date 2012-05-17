@@ -1,8 +1,9 @@
 class InstanceDatabasesController < ApplicationController
   def index
-    account = Instance.find(params[:instance_id]).account_for_user! current_user
+    instance = Instance.find(params[:instance_id])
+    account = instance.account_for_user! current_user
     GpdbDatabase.refresh(account)
 
-    present GpdbDatabase.scoped
+    present instance.databases.order("lower(name)")
   end
 end
