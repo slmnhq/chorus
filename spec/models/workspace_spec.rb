@@ -39,6 +39,34 @@ describe Workspace do
     end
   end
 
+  describe ".writable_by" do
+    let!(:user) { FactoryGirl.create(:user) }
+    let!(:owned_workspace) { FactoryGirl.create(:workspace, :public => false, :owner => user)}
+    let!(:non_member_workspace) { FactoryGirl.create(:workspace, :public => true) }
+    let!(:member_workspace) do
+      workspace = FactoryGirl.create(:workspace, :public => false)
+      FactoryGirl.create(:membership, :user => user, :workspace => workspace)
+      workspace
+    end
+
+    it "returns workspaces of which the given user is a member" do
+      Workspace.writable_by(user).should include member_workspace
+    end
+
+    it "returns workspaces owned by the given user" do
+      Workspace.writable_by(user).should include owned_workspace
+    end
+
+    it "does not include other workspaces" do
+      Workspace.writable_by(user).should_not include non_member_workspace
+    end
+
+    it "includes all workspaces when the given user is an admin" do
+      user.admin = true
+      Workspace.writable_by(user).should include non_member_workspace
+    end
+  end
+
   describe "#members_accessible_to" do
     let(:private_workspace) { FactoryGirl.create(:workspace, :public => false) }
     let(:workspace) { FactoryGirl.create(:workspace, :public => true) }

@@ -17,4 +17,10 @@ class WorkspacesController < ApplicationController
   def show
     present AccessPolicy.workspaces_for(current_user).find(params[:id])
   end
+
+  def update
+    workspace = Workspace.writable_by(current_user).find(params[:id])
+    workspace.update_attributes!(params[:workspace])
+    present workspace
+  end
 end

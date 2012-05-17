@@ -155,4 +155,56 @@ describe WorkspacesController do
     #  save_fixture "user.json"
     #end
   end
+
+  describe "#update" do
+    let(:workspace) { FactoryGirl.create :workspace, :owner => owner }
+    let(:admin) { FactoryGirl.create :admin }
+    let(:non_owner) { FactoryGirl.create :user }
+
+    context "when the current user is the workspace's owner" do
+      it "allows updating the workspace's name, summary, and privacy" do
+        do_request
+
+        workspace.reload
+        workspace.name.should == "new name"
+        workspace.summary.should == "new summary"
+        workspace.should_not be_public
+        response.should be_success
+      end
+    end
+
+    context "when the current user is an admin" do
+      it "allows updating the workspace's name, summary, and privacy" do
+        log_in admin
+        do_request
+
+        workspace.reload
+        workspace.name.should == "new name"
+        workspace.summary.should == "new summary"
+        workspace.should_not be_public
+        response.should be_success
+      end
+    end
+
+    context "when the current user is NOT an admin" do
+      it "does not allow updates" do
+        log_in non_owner
+        do_request
+
+        workspace.reload
+        workspace.name.should_not == "new name"
+        workspace.summary.should_not == "new summary"
+        workspace.should be_public
+        response.should be_not_found
+      end
+    end
+
+    def do_request
+      put :update, :id => workspace.id, :workspace => {
+        :name => "new name",
+        :summary => "new summary",
+        :public => false
+      }
+    end
+  end
 end
