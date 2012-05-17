@@ -193,7 +193,33 @@ describe WorkspacesController do
       end
     end
 
-    context "when the current user is NOT an admin" do
+    context "when the current user is just a member" do
+      it "allows updates to name and summary" do
+        member_non_owner = FactoryGirl.create(:user)
+        member_non_owner.workspaces << workspace
+        log_in member_non_owner
+
+        put :update, :id => workspace.id, :workspace => {
+          :name => "new name",
+          :summary => "new summary"
+        }
+        response.should be_success
+      end
+
+      it "does not allow updates to other attrs" do
+        member_non_owner = FactoryGirl.create(:user)
+        member_non_owner.workspaces << workspace
+        log_in member_non_owner
+
+        do_request
+        workspace.reload
+        workspace.public.should be_true
+        workspace.name.should == "new name"
+        workspace.summary.should == "new summary"
+      end
+    end
+
+    context "when the current user is NOT an admin or a member" do
       it "does not allow updates" do
         log_in non_owner
         do_request

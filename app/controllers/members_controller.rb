@@ -6,7 +6,7 @@ class MembersController < ApplicationController
   end
 
   def create
-    workspace = Workspace.find(params[:workspace_id])
+    workspace = Workspace.membership_editable_by(current_user).find(params[:workspace_id])
     workspace.member_ids = params[:member_ids]
     workspace.save!
     present workspace.reload.members

@@ -20,6 +20,7 @@ class WorkspacesController < ApplicationController
 
   def update
     workspace = Workspace.writable_by(current_user).find(params[:id])
+    params[:workspace] = workspace.filter_writable_params(current_user, params[:workspace])
     workspace.update_attributes!(params[:workspace])
     present workspace
   end
