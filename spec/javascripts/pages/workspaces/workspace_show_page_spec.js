@@ -1,4 +1,8 @@
 describe("chorus.pages.WorkspaceShowPage", function() {
+    beforeEach(function() {
+        spyOn($, 'cookie').andReturn(null)
+    });
+
     describe("#initialize", function() {
         beforeEach(function() {
             this.page = new chorus.pages.WorkspaceShowPage('4');

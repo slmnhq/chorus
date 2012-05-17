@@ -1,10 +1,11 @@
-# TODO make the install script work from any directory location
+#needs git, java
+# sudo yum install git
+# sudo yum install java
 
 echo "Installing chorus..."
 
 # with the Chorus package as first argument, untar to tmp
-tar xf $1 --directory=/tmp/ 
-
+tar xf $1 --directory=/tmp/
 
 echo "Installing postgres into /home/vagrant/pgsql..."
 # extract postgres
@@ -64,7 +65,10 @@ PATH=/home/vagrant/ruby/bin:$PATH
 PATH=/home/vagrant/rubygems/bin:$PATH
 PATH=/home/vagrant/pgsql/bin:$PATH
 
-# TODO this will connect to the internet, and fail if it does not succeed
+cd ~/chorusrails
+echo "installing bundler..."
+gem install --local /tmp/downloads/bundler-1.1.3.gem --no-ri --no-rdoc
+
 /home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/bundle install --local
 
 gem install pg --local vendor/cache/pg-0.13.2.gem -- --with-pg-config=/home/vagrant/pgsql/bin/pg_config --with-pg-dir=/home/vagrant/pgsql
@@ -74,7 +78,8 @@ LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/
 bundle exec rake db:create
 bundle exec rake db:migrate
 bundle exec rake db:seed
-bundle exec rake assets:compile
+
+bundle exec rails s
 
 
 # /home/vagrant/pgsql/bin/pg_ctl -D ~/chorusrails/var/db/ stop

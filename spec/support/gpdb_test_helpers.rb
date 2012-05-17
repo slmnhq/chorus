@@ -2,7 +2,7 @@ module GpdbTestHelpers
   def stub_gpdb(account, database_name=nil, query_values)
     fake_connection = Object.new
     query_values.each do |query, response|
-      mock(fake_connection).query(query) { response }
+      mock(fake_connection).query(query).times(any_times) { response }
     end
     stub(Gpdb::ConnectionBuilder).connect!(account.instance, account) {|_, _, block| block.call(fake_connection) }
     stub(Gpdb::ConnectionBuilder).connect!(account.instance, account, anything) {|_, _, _, block| block.call(fake_connection) }

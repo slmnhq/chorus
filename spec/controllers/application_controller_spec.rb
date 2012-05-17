@@ -14,6 +14,10 @@ describe ApplicationController do
     end
   end
 
+  it "should have a uuid for every web request" do
+    Chorus::Application.config.log_tags.should == [:uuid]
+  end
+
   describe "rescuing from errors" do
     before do
       log_in FactoryGirl.create :user

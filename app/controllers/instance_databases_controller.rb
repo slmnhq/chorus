@@ -1,7 +1,9 @@
 class InstanceDatabasesController < ApplicationController
   def index
-    account = Instance.find(params[:instance_id]).account_for_user! current_user
-    raise SecurityTransgression.new unless account
-    present Database.from_instance_account(account)
+    instance = Instance.find(params[:instance_id])
+    account = instance.account_for_user! current_user
+    GpdbDatabase.refresh(account)
+
+    present instance.databases.order("lower(name)")
   end
 end

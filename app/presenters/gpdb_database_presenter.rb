@@ -1,4 +1,4 @@
-class DatabasePresenter < Presenter
+class GpdbDatabasePresenter < Presenter
   def to_hash
     {
         :name => model.name,

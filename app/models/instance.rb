@@ -6,6 +6,7 @@ class Instance < ActiveRecord::Base
 
   belongs_to :owner, :class_name => 'User'
   has_many :accounts, :class_name => 'InstanceAccount'
+  has_many :databases, :class_name => 'GpdbDatabase'
 
   def self.unshared
     where("instances.shared = false OR instances.shared IS NULL")

@@ -19,7 +19,6 @@ group :assets do
 
   # gem 'coffee-rails', '~> 3.2.1'
   # # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyrhino'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -36,7 +35,7 @@ group :test do
 end
 
 group :test, :development do
-  gem 'jasmine'
+  gem 'jasmine', :git => "git://github.com/pivotal/jasmine-gem.git", :ref => 'c72e8d2'
   gem 'rspec_api_documentation'
 end
 
