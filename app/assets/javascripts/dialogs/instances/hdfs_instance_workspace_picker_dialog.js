@@ -66,7 +66,7 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
             collection: hdfsTextFiles || [],
             directoryName : this.model.get("name"),
             workspaceId : this.selectedItem().id,
-            workspaceName: this.selectedItem().name
+            workspaceName: this.selectedItem().get("name")
         });
 
         this.externalTableDialog.csv.fetch();
