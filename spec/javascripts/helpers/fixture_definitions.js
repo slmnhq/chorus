@@ -22,7 +22,9 @@ window.fixtureDefinitions = {
 
         children: {
             provisioningSuccess: {},
-            provisioningFail:    {}
+            provisioningFail:    {},
+            addHdfsPatternAsExtTable: {},
+            addHdfsDirectoryAsExtTable: {}
         }
     },
 

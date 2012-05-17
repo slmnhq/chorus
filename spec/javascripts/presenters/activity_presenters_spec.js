@@ -1234,6 +1234,100 @@ describe("chorus.presenters.Activity", function() {
         itShouldHaveTheAuthorsIconAndUrl();
     });
 
+    context(".WORKSPACE_ADD_HDFS_PATTERN_AS_EXT_TABLE", function() {
+        beforeEach(function() {
+            this.model = newFixtures.activity.addHdfsPatternAsExtTable({
+                hdfs: {
+                    name: "*.csv",
+                    path: "/imports/latest"
+                }
+            });
+            this.dataset = this.model.dataset();
+            this.workspace = this.model.workspace();
+            this.hdfsEntry = this.model.hdfs();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the correct workspace name", function() {
+            expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the correct workspace url", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+            expect(this.presenter.workspaceUrl).toBe(url);
+        });
+
+        it("should have the correct table name", function() {
+            expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
+        });
+
+        it("should have the correct table url", function() {
+            expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+        });
+
+        it("links to the right directory", function() {
+            var link = $(this.presenter.header.directoryLink.toString());
+            expect(link).toHaveText(this.hdfsEntry.parent().name());
+            expect(link).toHaveHref(this.hdfsEntry.parent().showUrl());
+        });
+
+        it("should have the correct hdfs name", function() {
+            expect(this.presenter.header.pattern).toBe(this.hdfsEntry.get("name"));
+        });
+
+        it("should have the correct hdfs url", function() {
+            expect(this.presenter.hdfsUrl).toBe(this.hdfsEntry.showUrl());
+            expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+        });
+
+        it("should have all the pieces", function() {
+            expect(this.presenter.headerHtml.toString()).not.toContain("[missing")
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
+    context(".WORKSPACE_ADD_HDFS_DIRECTORY_AS_EXT_TABLE", function() {
+        beforeEach(function() {
+            this.model = newFixtures.activity.addHdfsDirectoryAsExtTable({
+                hdfs: {
+                    name: "latest",
+                    path: "/users/chuck/imports"
+                }
+            });
+            this.dataset = this.model.dataset();
+            this.workspace = this.model.workspace();
+            this.hdfsEntry = this.model.hdfs();
+            this.presenter = new chorus.presenters.Activity(this.model);
+        });
+
+        it("should have the correct workspace name", function() {
+            expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+        });
+
+        it("should have the correct workspace url", function() {
+            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+            expect(this.presenter.workspaceUrl).toBe(url);
+        });
+
+        it("should link to the newly-created external table", function() {
+            expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
+            expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+        });
+
+        it("should link to the hdfs directory", function() {
+            var link = $(this.presenter.header.hdfsLink.toString());
+            expect(link).toHaveText(this.hdfsEntry.name());
+            expect(link).toHaveHref(this.hdfsEntry.showUrl());
+        });
+
+        it("should have all the pieces", function() {
+            expect(this.presenter.headerHtml.toString()).not.toContain("[missing")
+        });
+
+        itShouldHaveTheAuthorsIconAndUrl();
+    });
+
     context(".SOURCE_TABLE_CREATED", function() {
         context("for a table", function() {
             beforeEach(function() {

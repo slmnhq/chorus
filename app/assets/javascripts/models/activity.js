@@ -110,9 +110,11 @@ chorus.models.Activity = chorus.models.Base.extend({
 
     hdfs: function() {
         var hdfsJson = this.get("hdfs");
-        if (hdfsJson) {
-            return new chorus.models.HdfsEntry(hdfsJson);
+        if (!hdfsJson) return;
+        if (this.get("type") === "WORKSPACE_ADD_HDFS_DIRECTORY_AS_EXT_TABLE") {
+            hdfsJson.isDir = true;
         }
+        return new chorus.models.HdfsEntry(hdfsJson);
     },
 
     parentComment: function() {
