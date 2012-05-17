@@ -414,40 +414,6 @@ describe("chorus.models.Workspace", function() {
             });
         });
 
-        describe("canRead", function() {
-            it("is true when permission contains 'read'", function() {
-                this.model.set({permission: ['read', 'commenting']});
-                expect(this.model.canRead()).toBeTruthy();
-            });
-
-            it("is true when permission contains 'admin'", function() {
-                this.model.set({permission: ['admin']});
-                expect(this.model.canRead()).toBeTruthy();
-            });
-
-            it("is false when it does not contain either 'read' or 'admin'", function() {
-                this.model.set({permission: []});
-                expect(this.model.canRead()).toBeFalsy();
-            });
-        });
-
-        describe("canComment", function() {
-            it("is true when permission contains 'commenting'", function() {
-                this.model.set({permission: ['commenting']});
-                expect(this.model.canComment()).toBeTruthy();
-            });
-
-            it("is true when permission contains 'admin'", function() {
-                this.model.set({permission: ['admin']});
-                expect(this.model.canComment()).toBeTruthy();
-            });
-
-            it("is false when it does not contain either 'commenting' or 'admin'", function() {
-                this.model.set({permission: []});
-                expect(this.model.canComment()).toBeFalsy();
-            });
-        });
-
         describe("canUpdate", function() {
             it("is true when permission contains 'commenting'", function() {
                 this.model.set({permission: ['read', 'update']});
@@ -465,15 +431,19 @@ describe("chorus.models.Workspace", function() {
             });
         });
 
-        describe("workspaceAdmin", function() {
-            it("is true when permission contains 'admin'", function() {
-                this.model.set({permission: ['admin']});
-                expect(this.model.workspaceAdmin()).toBeTruthy();
+        describe("isEditableBy", function() {
+            it("is true when the given user is an admin", function() {
+                expect(this.model.isEditableBy(newFixtures.user({ admin: true }))).toBeTruthy();
             });
 
-            it("is false when it does not contain 'admin'", function() {
-                this.model.set({permission: ['update']});
-                expect(this.model.workspaceAdmin()).toBeFalsy();
+            it("is true when the given user is the owner", function() {
+                var user = this.model.owner().clone();
+                expect(this.model.isEditableBy(user)).toBeTruthy();
+            });
+
+            it("is false otherwise", function() {
+                var user = newFixtures.user();
+                expect(this.model.isEditableBy(user)).toBeFalsy();
             });
         });
     });

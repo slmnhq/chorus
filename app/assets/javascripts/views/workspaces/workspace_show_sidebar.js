@@ -16,7 +16,7 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
 
     additionalContext:function () {
         return {
-            workspaceAdmin:this.model.workspaceAdmin(),
+            currentUserCanEdit: this.model.isEditableBy(chorus.session.user()),
             imageUrl:this.model.fetchImageUrl(),
             hasImage:this.model.hasImage(),
             hasSandbox:!!this.model.sandbox(),

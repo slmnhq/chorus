@@ -81,7 +81,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
 
         context("when the current user has workspace admin permissions on the workspace", function() {
             beforeEach(function() {
-                spyOn(this.model, "workspaceAdmin").andReturn(true);
+                spyOn(this.model, "isEditableBy").andReturn(true);
                 this.view.render();
             });
 
@@ -123,7 +123,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
 
         context("when the current user is a member of the workspace, but not an admin/owner", function() {
             beforeEach(function() {
-                spyOn(this.model, "workspaceAdmin").andReturn(false);
+                spyOn(this.model, "isEditableBy").andReturn(false);
                 spyOn(this.model, "currentUserIsMember").andReturn(true);
                 this.view.render();
             });
@@ -135,7 +135,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
 
         context("when the current user is not a member of the workspace", function() {
             beforeEach(function() {
-                spyOn(this.model, "workspaceAdmin").andReturn(false);
+                spyOn(this.model, "isEditableBy").andReturn(false);
                 spyOn(this.model, "currentUserIsMember").andReturn(false);
                 this.view.render();
             });
@@ -155,7 +155,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
 
         context("when the workspace is archived", function() {
             beforeEach(function() {
-                spyOn(this.model, "workspaceAdmin").andReturn(true);
+                spyOn(this.model, "isEditableBy").andReturn(true);
                 spyOn(this.view.model, "sandbox").andReturn(false);
                 this.view.model.set({archived_at: "2012-05-08 21:40:14"});
                 this.view.render();

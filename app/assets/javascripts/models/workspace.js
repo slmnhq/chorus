@@ -148,20 +148,13 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return this.get("image") && this.get("image")["original"]
     },
 
-    canRead:function () {
-        return this._hasPermission(['admin', 'read']);
+    isEditableBy: function(user) {
+        return user.isAdmin() || (this.owner().id === user.id);
     },
 
-    canComment:function () {
-        return this._hasPermission(['admin', 'commenting']);
-    },
-
+    // TODO - remove this method and #_hasPermission
     canUpdate:function () {
         return this._hasPermission(['admin', 'update']);
-    },
-
-    workspaceAdmin:function () {
-        return this._hasPermission(['admin']);
     },
 
     _hasPermission:function (validPermissions) {

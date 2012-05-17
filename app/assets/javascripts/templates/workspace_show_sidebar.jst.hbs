@@ -12,14 +12,14 @@
                 <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="InsightsNew">{{t "actions.add_insight"}}</a></li>
             {{/if}}
             <li><a class="dialog" href="#" data-dialog="WorkspaceSettings">
-                {{#ifAny workspaceAdmin currentUserIsMember}}
+                {{#ifAny currentUserCanEdit currentUserIsMember}}
                     {{t "actions.edit_workspace"}}
                 {{else}}
                     {{t "actions.view_workspace_settings"}}
                 {{/ifAny}}
             </a></li>
 
-            {{#if workspaceAdmin}}
+            {{#if currentUserCanEdit}}
                 {{#if active}}
                     <li><a class="dialog" href="#" data-dialog="WorkspaceEditMembers">{{t "workspace.edit_members"}}</a></li>
                     {{#unless hasSandbox}}
