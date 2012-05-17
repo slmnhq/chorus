@@ -14,10 +14,22 @@ describe WorkspacesController do
 
     it_behaves_like "an action that requires authentication", :get, :index
 
-    it "returns all workspaces (access control not implemented)" do
+    it "returns all public workspaces" do
       get :index
       response.code.should == "200"
       decoded_response.length.should == 2
+    end
+
+    it "does not return private workspaces" do
+      FactoryGirl.create(:workspace, :name => "private", :public => false)
+      get :index
+      decoded_response.collect(&:name).should_not include "private"
+    end
+
+    it "includes private workspaces owned by the authenticated user" do
+      FactoryGirl.create(:workspace, :name => "private", :public => false, :owner => owner)
+      get :index
+      decoded_response.collect(&:name).should include "private"
     end
 
     it "sorts by workspace name" do

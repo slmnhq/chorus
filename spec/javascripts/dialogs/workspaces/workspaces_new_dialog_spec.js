@@ -40,19 +40,19 @@ describe("chorus.dialogs.WorkspacesNew", function() {
         beforeEach(function() {
             this.dialog.render();
             this.dialog.$("input[name=name]").val("   Super Dataland   ").keyup();
-            this.dialog.$("input[type=checkbox][name=isPublic]").prop("checked", true);
+            this.dialog.$("input[type=checkbox][name=public]").prop("checked", true);
             this.dialog.$("form.new_workspace").submit();
         })
 
         it("fills in the workspace, with trim", function() {
             expect(this.dialog.resource.get("name")).toBe("Super Dataland")
-            expect(this.dialog.resource.get("isPublic")).toBe(true)
+            expect(this.dialog.resource.get("public")).toBe(true)
         })
 
-        it("sets isPublic to false when the box isn't checked", function() {
-            this.dialog.$("input[type=checkbox][name=isPublic]").prop("checked", false);
+        it("sets public to false when the box isn't checked", function() {
+            this.dialog.$("input[type=checkbox][name=public]").prop("checked", false);
             this.dialog.$("form.new_workspace").submit();
-            expect(this.dialog.resource.get("isPublic")).toBe(false)
+            expect(this.dialog.resource.get("public")).toBe(false)
         })
 
         it("saves the workspace", function() {

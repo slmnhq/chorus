@@ -2689,7 +2689,7 @@ beforeEach(function() {
                             entityType: "workspace",
                             id: "10000",
                             isDeleted: false,
-                            isPublic: false,
+                            public: false,
                             lastUpdatedStamp: "2012-02-24 16:08:32",
                             name: "ws",
                             owner: {
@@ -2706,7 +2706,7 @@ beforeEach(function() {
                             entityType: "workspace",
                             id: "10001",
                             isDeleted: false,
-                            isPublic: false,
+                            public: false,
                             lastUpdatedStamp: "2012-02-24 16:08:32",
                             name: "other_ws",
                             owner: {
@@ -3305,7 +3305,7 @@ beforeEach(function() {
                 },
                 id: "10011",
                 isDeleted: false,
-                isPublic: true,
+                public: true,
                 lastUpdatedStamp: "2012-03-12 10:11:47",
                 name: "three",
                 owner: {
@@ -3400,7 +3400,7 @@ beforeEach(function() {
                             "entityType": "workspace",
                             "id": "10000",
                             "isDeleted": false,
-                            "isPublic": true,
+                            "public": true,
                             "name": "ws",
                             "highlightedAttributes": {
                                 "name": ["<em>ws<\/em>"]

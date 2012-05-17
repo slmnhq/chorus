@@ -1,8 +1,8 @@
 <form>
     <label class="required">{{t "workspace.settings.name"}}</label>
     <input type="text" name="name" maxlength="256" value="{{name}}" tabindex="1"/>
-    <input type="checkbox" id="public_checkbox" name="isPublic"
-        {{#if isPublic}}
+    <input type="checkbox" id="public_checkbox" name="public"
+        {{#if public}}
             checked="checked"
         {{/if}}
     />
