@@ -42,6 +42,9 @@ FactoryGirl.define do
   factory :workspace do
     sequence(:name) { |n| "workspace#{n}" }
     owner
+    after_create do |workspace|
+      FactoryGirl.create(:membership, :workspace => workspace, :user => workspace.owner)
+    end
   end
 
   factory :membership do

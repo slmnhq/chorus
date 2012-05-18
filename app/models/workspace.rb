@@ -9,6 +9,7 @@ class Workspace < ActiveRecord::Base
   has_many :members, :through => :memberships, :source => :user
 
   validates_presence_of :name
+  validate :owner_is_member, :on => :update
 
   scope :active, where(:archived_at => nil)
 
@@ -32,6 +33,22 @@ class Workspace < ActiveRecord::Base
          )
   end
 
+  def filter_writable_params(user, workspace_params)
+    if user.admin? || (owner.id == user.id)
+      workspace_params
+    else
+      workspace_params.slice(:name, :summary)
+    end
+  end
+
+  def self.membership_editable_by(user)
+    if user.admin?
+      return scoped
+    else
+      user.owned_workspaces
+    end
+  end
+
   def members_accessible_to(user)
     if public? || members.include?(user)
       members
@@ -51,5 +68,13 @@ class Workspace < ActiveRecord::Base
       permissions.push(:read, :commenting)
     end
     permissions
+  end
+
+  private
+
+  def owner_is_member
+    unless members.include? owner
+      errors.add(:owner, "Owner must be a member")
+    end
   end
 end

@@ -67,6 +67,28 @@ describe Workspace do
     end
   end
 
+  describe "#membership_editable_by" do
+    let!(:user) { FactoryGirl.create(:user) }
+    let!(:owned_workspace) { FactoryGirl.create(:workspace, :public => false, :owner => user)}
+    let!(:non_member_workspace) { FactoryGirl.create(:workspace, :public => true) }
+    let!(:member_workspace) do
+      workspace = FactoryGirl.create(:workspace, :public => false)
+      FactoryGirl.create(:membership, :user => user, :workspace => workspace)
+      workspace
+    end
+
+    it "returns only the workspaces owned by the given user" do
+      Workspace.membership_editable_by(user).length.should == 1
+      Workspace.membership_editable_by(user).should include owned_workspace
+    end
+
+    it "includes all workspaces when the given user is an admin" do
+      user.admin = true
+      user.save!
+      Workspace.membership_editable_by(user).length.should == 3
+    end
+  end
+
   describe "#members_accessible_to" do
     let(:private_workspace) { FactoryGirl.create(:workspace, :public => false) }
     let(:workspace) { FactoryGirl.create(:workspace, :public => true) }
@@ -80,7 +102,7 @@ describe Workspace do
         workspace.members << joe
 
         members = workspace.members_accessible_to(user)
-        members.should have(1).member
+        members.should have(2).members # including the owner
       end
     end
 
@@ -90,7 +112,7 @@ describe Workspace do
         workspace.members << joe
 
         members = workspace.members_accessible_to(user)
-        members.should have(2).members
+        members.should have(3).members # including the owner
       end
     end
 

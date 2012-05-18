@@ -2,7 +2,7 @@
    {
       "summary":"as<div><br><\/div><div>asdf<\/div><div><br><\/div><div>asdf<\/div>",
       "archiverId":null,
-      "ownerId":"InitialUser",
+      "owner_id":"InitialUser",
       "archiver":null,
       "archiverFirstName":null,
       "ownerLastName":"Admin",
@@ -39,7 +39,7 @@
    {
       "summary":null,
       "archiverId":null,
-      "ownerId":"InitialUser",
+      "owner_id":"InitialUser",
       "archiver":null,
       "archiverFirstName":null,
       "ownerLastName":"Admin",
@@ -76,7 +76,7 @@
    {
       "summary":null,
       "archiverId":null,
-      "ownerId":"InitialUser",
+      "owner_id":"InitialUser",
       "archiver":null,
       "archiverFirstName":null,
       "ownerLastName":"Admin",
@@ -113,7 +113,7 @@
    {
       "summary":null,
       "archiverId":null,
-      "ownerId":"InitialUser",
+      "owner_id":"InitialUser",
       "archiver":null,
       "archiverFirstName":null,
       "ownerLastName":"Admin",

@@ -53,6 +53,10 @@ RSpec.configure do |config|
 
   config.before(:each, :type => :data_migration) do
     Legacy.establish_connection :legacy_test
+
+    # stub file reads of legacy workfiles
+    #
+    stub(File).read(/.+\/\d{5}\/[\d_]+$/) { "123" }
   end
 
   config.include AuthHelper, :type => :controller

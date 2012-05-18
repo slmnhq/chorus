@@ -74,7 +74,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
             this.$('input[name=name], input[name=public], textarea[name=summary], input[name=status]').attr('disabled', 'disabled');
         }
 
-        this.$("select.owner").val(this.model.get("ownerId"));
+        this.$("select.owner").val(this.model.owner().get("id"));
 
         _.defer(_.bind(function() {
             var clEditor = this.makeEditor($(this.el), ".toolbar", "summary")
@@ -95,8 +95,8 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
         };
 
         if (this.$("select.owner").length > 0) {
-            attrs.ownerId = this.$("select.owner").val();
-            attrs.ownerName = this.model.members().get(attrs.ownerId).get("username");
+            attrs.owner_id = this.$("select.owner").val();
+            attrs.ownerName = this.model.members().get(attrs.owner_id).get("username");
         }
 
         this.$("button.submit").startLoading("actions.saving");

@@ -25,6 +25,7 @@ describe ImageMigrator, :type => :data_migration do
       before do
         UserMigrator.new.migrate
         WorkspaceMigrator.new.migrate
+        MembershipMigrator.new.migrate
         ImageMigrator.new.migrate
       end
 
