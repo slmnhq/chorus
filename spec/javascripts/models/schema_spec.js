@@ -100,9 +100,5 @@ describe("chorus.models.Schema", function() {
             expect(this.database.get("id")).toBe(this.model.database().id);
             expect(this.database.get("instance_id")).toBe(this.model.get("instance_id"));
         });
-
-        it("memoizes", function() {
-            expect(this.database).toBe(this.model.database());
-        });
     });
 });

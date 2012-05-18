@@ -27,14 +27,12 @@ chorus.models.Schema = chorus.models.Base.extend({
     },
 
     database: function() {
-        this._database = this._database || new chorus.models.Database({
-            id:this.get("database_id"),
-            name:this.get("database_name"),
-            instance_id:this.get("instance_id"),
-            instance_name:this.get("instance_name")
+        return new chorus.models.Database({
+            id: this.get("database_id"),
+            name: this.get("database_name"),
+            instance_id: this.get("instance_id"),
+            instance_name: this.get("instance_name")
         });
-
-        return this._database;
     },
 
     canonicalName:function () {

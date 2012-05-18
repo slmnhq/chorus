@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe SchemasController do
+  let(:user) { FactoryGirl.create :user}
+
+  before do
+    log_in user
+  end
+
   context "#index" do
-    let!(:user) { FactoryGirl.create :user}
-
-    before do
-      log_in user
-    end
-
     it "should retrieve all schemas for a database" do
       instance = FactoryGirl.create(:instance, :owner_id => user.id)
       instanceAccount = FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id)
@@ -32,6 +32,38 @@ describe SchemasController do
       decoded_response[1].instance_id.should == instance.id
       decoded_response[1].database_name.should == "test2"
       decoded_response[1].dataset_count.should == 40
+    end
+  end
+
+  context "#show" do
+    let(:schema) { FactoryGirl.create(:gpdb_schema)}
+
+    before do
+      stub(AccessPolicy).schemas_for(user) { GpdbSchema }
+    end
+
+    it "renders the schema" do
+      get :show, :id => schema.to_param
+      response.code.should == "200"
+      decoded_response.id.should == schema.id
+    end
+
+    context "when an account can't be found" do
+      before do
+        stub(AccessPolicy).schemas_for(user) { GpdbSchema.where(:id => -1) }
+      end
+
+      it "returns 404" do
+        get :show, :id => schema.to_param
+        response.code.should == "404"
+      end
+    end
+
+    context "when the schema can't be found" do
+      it "returns 404" do
+        get :show, :id => "-1"
+        response.code.should == "404"
+      end
     end
   end
 end
