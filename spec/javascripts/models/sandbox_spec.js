@@ -21,7 +21,7 @@ describe("chorus.models.Sandbox", function() {
             expect(this.schema.get('instance_id')).toBe(this.model.get('instance_id'));
             expect(this.schema.database().id).toBe(this.model.get('databaseId'));
             expect(this.schema.get('id')).toBe(this.model.get('schemaId'));
-            expect(this.schema.get('instanceName')).toBe(this.model.get('instanceName'));
+            expect(this.schema.get('instance_name')).toBe(this.model.get('instance_name'));
             expect(this.schema.database().name()).toBe(this.model.get('databaseName'));
             expect(this.schema.get('name')).toBe(this.model.get('schemaName'));
         });
@@ -55,7 +55,7 @@ describe("chorus.models.Sandbox", function() {
         it("returns an instance with the right id and name", function() {
             expect(this.instance).toBeA(chorus.models.Instance);
             expect(this.instance.get("id")).toBe(this.model.get("instance_id"));
-            expect(this.instance.get("name")).toBe(this.model.get("instanceName"));
+            expect(this.instance.get("name")).toBe(this.model.get("instance_name"));
         });
 
         it("memoizes", function() {
@@ -90,24 +90,24 @@ describe("chorus.models.Sandbox", function() {
 
         context("without an instance id", function() {
             beforeEach(function() {
-                this.model.set({ instanceName: "my_instance", size: "45" });
+                this.model.set({ instance_name: "my_instance", size: "45" });
                 this.model.unset("instance")
                 expectValid({}, this.model);
             });
 
             it("requires an instance name", function() {
-                this.model.unset("instanceName")
-                expectInvalid({}, this.model, [ "instanceName" ]);
-                expect(this.model.errors["instanceName"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("instanceName") })
+                this.model.unset("instance_name")
+                expectInvalid({}, this.model, [ "instance_name" ]);
+                expect(this.model.errors["instance_name"]).toMatchTranslation("validation.required", { fieldName : this.model._textForAttr("instance_name") })
             })
 
             it("requires an instance name that starts with an alphabetic character", function() {
-                expectInvalid({ instanceName: "_asdf" }, this.model, [ "instanceName" ]);
+                expectInvalid({ instance_name: "_asdf" }, this.model, [ "instance_name" ]);
             });
 
             it("requires an instance name that is less than 44 characters", function() {
                 this.model.unset("instance")
-                expectInvalid({instanceName: _.repeat("a", 45)}, this.model, ["instanceName"]);
+                expectInvalid({instance_name: _.repeat("a", 45)}, this.model, ["instance_name"]);
             });
 
             it("requires an database name that is less than 63 characters", function() {

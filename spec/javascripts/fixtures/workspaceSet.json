@@ -29,7 +29,7 @@
          "databaseName":"Analytics",
          "databaseId":"10006",
          "schemaName":"analytics",
-         "instanceName":"comfort",
+         "instance_name":"comfort",
          "schemaId":"10001",
          "instance_id":"10000",
          "hasCredentials":true
@@ -66,7 +66,7 @@
          "databaseName":null,
          "databaseId":null,
          "schemaName":null,
-         "instanceName":null,
+         "instance_name":null,
          "schemaId":null,
          "instance_id":null,
          "hasCredentials":false
@@ -103,7 +103,7 @@
          "databaseName":null,
          "databaseId":null,
          "schemaName":null,
-         "instanceName":null,
+         "instance_name":null,
          "schemaId":null,
          "instance_id":null,
          "hasCredentials":false
@@ -140,7 +140,7 @@
          "databaseName":null,
          "databaseId":null,
          "schemaName":null,
-         "instanceName":null,
+         "instance_name":null,
          "schemaId":null,
          "instance_id":null,
          "hasCredentials":false

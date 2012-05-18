@@ -82,7 +82,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     this.workspace.set({
                         sandboxInfo: {
                             databaseName: "Analytics",
-                            instanceName: "Gillette",
+                            instance_name: "Gillette",
                             sandboxId: "10070",
                             schemaName: "analytics"
                         }

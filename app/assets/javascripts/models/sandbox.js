@@ -1,7 +1,7 @@
 chorus.models.Sandbox = chorus.models.Base.extend({
     constructorName: "Sandbox",
     attrToLabel: {
-        "instanceName": "instances.dialog.instance_name",
+        "instance_name": "instances.dialog.instance_name",
         "databaseName": "instances.dialog.database_name",
         "schemaName": "instances.dialog.schema_name",
         "size": "instances.dialog.size",
@@ -28,8 +28,8 @@ chorus.models.Sandbox = chorus.models.Base.extend({
 
     declareValidations: function(attrs) {
         if (this.isCreatingNew("instance", attrs)) {
-            this.require("instanceName", attrs);
-            this.requirePattern("instanceName", chorus.ValidationRegexes.ChorusIdentifier(44), attrs);
+            this.require("instance_name", attrs);
+            this.requirePattern("instance_name", chorus.ValidationRegexes.ChorusIdentifier(44), attrs);
             this.require("size", attrs);
 
             if (this.maximumSize) {
@@ -65,7 +65,7 @@ chorus.models.Sandbox = chorus.models.Base.extend({
             database_id: this.get("databaseId"),
             database_name: this.get("databaseName"),
             instance_id: this.get("instance_id"),
-            instanceName: this.get("instanceName")
+            instance_name: this.get("instance_name")
         });
 
         return this._schema;
@@ -74,7 +74,7 @@ chorus.models.Sandbox = chorus.models.Base.extend({
     instance: function() {
         this._instance = this._instance || new chorus.models.Instance({
             id: this.get("instance_id"),
-            name: this.get("instanceName")
+            name: this.get("instance_name")
         });
         return this._instance;
     },
@@ -84,7 +84,7 @@ chorus.models.Sandbox = chorus.models.Base.extend({
             id: this.get("databaseId"),
             name: this.get("databaseName"),
             instance_id: this.get("instance_id"),
-            instanceName: this.get("instanceName")
+            instance_name: this.get("instance_name")
         });
 
         return this._database;

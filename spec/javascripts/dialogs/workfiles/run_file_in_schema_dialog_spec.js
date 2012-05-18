@@ -79,7 +79,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                 beforeEach(function () {
                     this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
                         instance_id:44,
-                        instanceName:"instance",
+                        instance_name:"instance",
                         databaseId:55,
                         databaseName:"database",
                         schemaId:66,
@@ -122,7 +122,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                 beforeEach(function () {
                     this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
                         instance_id:null,
-                        instanceName:null,
+                        instance_name:null,
                         databaseId:null,
                         databaseName:null,
                         schemaId:null,
@@ -140,7 +140,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                 beforeEach(function () {
                     this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
                         instance_id:44,
-                        instanceName:"instance",
+                        instance_name:"instance",
                         databaseId:55,
                         databaseName:"database",
                         schemaId:66,
@@ -257,7 +257,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                     beforeEach(function() {
                         this.server.completeFetchFor(newFixtures.workspace({id: 999, sandboxInfo: {
                             instance_id: 44,
-                            instanceName: "instance",
+                            instance_name: "instance",
                             databaseId: 55,
                             databaseName: "database",
                             schemaId: 66,

@@ -6,7 +6,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 databaseId: '3',
                 databaseName: "db",
                 instance_id: '2',
-                instanceName: "instance",
+                instance_name: "instance",
                 sandboxId: "10001",
                 schemaId: '4',
                 schemaName: "schema"
@@ -132,7 +132,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 beforeEach(function() {
                     _.extend(this.model.get("executionInfo"), {
                         instance_id: '51',
-                        instanceName: "bob_the_instance",
+                        instance_name: "bob_the_instance",
                         databaseId: '52',
                         databaseName: "bar",
                         schemaId: '53',
@@ -165,7 +165,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                         databaseId: '3',
                         databaseName: "db",
                         instance_id: '2',
-                        instanceName: "instance",
+                        instance_name: "instance",
                         schemaId: '4',
                         schemaName: "schema"
                     });
@@ -228,7 +228,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 spyOnEvent(this.view.model, "change")
                 this.executionInfo = {
                     instance_id: '51',
-                    instanceName: "ned",
+                    instance_name: "ned",
                     databaseId: '52',
                     databaseName: "rob",
                     schemaId: '53',

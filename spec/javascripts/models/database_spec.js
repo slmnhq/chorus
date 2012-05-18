@@ -26,7 +26,7 @@ describe("chorus.models.Database", function() {
             expect(this.schemas.attributes.instance_id).toBe("1");
             expect(this.schemas.attributes.database_id).toBe("2");
 
-            expect(this.schemas.attributes.instanceName).toBe("insta_whip");
+            expect(this.schemas.attributes.instance_name).toBe("insta_whip");
             expect(this.schemas.attributes.database_name).toBe("love_poems");
         });
 

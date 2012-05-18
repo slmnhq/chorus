@@ -371,7 +371,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                                 databaseId: null,
                                                 databaseName: null,
                                                 instance_id: null,
-                                                instanceName: null,
+                                                instance_name: null,
                                                 sandboxId: null,
                                                 schemaId: null,
                                                 schemaName: null

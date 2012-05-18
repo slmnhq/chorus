@@ -23,7 +23,7 @@ describe("chorus.dialogs.SandboxNewStandaloneMode", function() {
 
         it("calls the name 'name'", function() {
             expect(this.view.$("input[name='name']")).toExist();
-            expect(this.view.$("input[name='instanceName']")).not.toExist();
+            expect(this.view.$("input[name='instance_name']")).not.toExist();
         });
 
         itHasTheRightFieldValues();
@@ -43,9 +43,9 @@ describe("chorus.dialogs.SandboxNewStandaloneMode", function() {
             expect(this.view.$("textarea")).not.toExist();
         });
 
-        it("calls the name 'instanceName'", function() {
+        it("calls the name 'instance_name'", function() {
             expect(this.view.$("input[name='name']")).not.toExist();
-            expect(this.view.$("input[name='instanceName']")).toExist();
+            expect(this.view.$("input[name='instance_name']")).toExist();
         });
 
         itHasTheRightFieldValues();
@@ -55,7 +55,7 @@ describe("chorus.dialogs.SandboxNewStandaloneMode", function() {
         describe("#fieldValues", function() {
             beforeEach(function() {
                 this.view.$("input[name=name]").val("my_instance");
-                this.view.$("input[name=instanceName]").val("my_instance");
+                this.view.$("input[name=instance_name]").val("my_instance");
                 this.view.$("input[name=databaseName]").val("my_database");
                 this.view.$("input[name=schemaName]").val("my_schema");
                 this.view.$("input[name=size]").val("5");
@@ -65,7 +65,7 @@ describe("chorus.dialogs.SandboxNewStandaloneMode", function() {
 
             it("returns the entered instance name, database name, schema name and size", function() {
                 expect(this.view.fieldValues()).toEqual({
-                    instanceName: 'my_instance',
+                    instance_name: 'my_instance',
                     databaseName: 'my_database',
                     schemaName: 'my_schema',
                     size: '5',

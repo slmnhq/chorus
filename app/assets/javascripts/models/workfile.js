@@ -66,7 +66,7 @@
             if (executionInfo && executionInfo.schemaName) {
                 return new chorus.models.Schema({
                     instance_id: executionInfo.instance_id,
-                    instanceName: executionInfo.instanceName,
+                    instance_name: executionInfo.instance_name,
                     database_id: executionInfo.databaseId,
                     database_name: executionInfo.databaseName,
                     id: executionInfo.schemaId,

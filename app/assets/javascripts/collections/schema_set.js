@@ -14,7 +14,7 @@ chorus.collections.SchemaSet = chorus.collections.Base.include(
         return _.map(resource, function (model) {
             return _.extend({
                 instance_id: this.attributes.instance_id,
-                instanceName: this.attributes.instanceName
+                instance_name: this.attributes.instance_name
             }, model)
         }, this)
     }

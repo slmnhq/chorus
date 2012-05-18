@@ -7,7 +7,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     database_id: '3',
                     database_name: "db",
                     instance_id: '2',
-                    instanceName: "instance"
+                    instance_name: "instance"
                 });
         spyOn(this.workfile, 'executionSchema').andCallFake(_.bind(function(){return this.schema}, this));
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runInDefault").andCallThrough();
@@ -84,7 +84,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     beforeEach(function() {
                         this.executionInfo = {
                             instance_id: '4',
-                            instanceName: "ned",
+                            instance_name: "ned",
                             databaseId: '5',
                             databaseName: "rob",
                             schemaId: '6',

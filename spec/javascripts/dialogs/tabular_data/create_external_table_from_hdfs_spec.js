@@ -5,7 +5,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
         this.sandbox = newFixtures.sandbox({
             schemaName: "mySchema",
             databaseName: "myDatabase",
-            instanceName: "myInstance"
+            instance_name: "myInstance"
         })
         chorus.page.workspace = newFixtures.workspace();
         this.csv = new chorus.models.CsvHdfs({lines: [

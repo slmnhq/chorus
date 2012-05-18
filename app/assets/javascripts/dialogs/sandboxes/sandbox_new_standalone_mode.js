@@ -16,7 +16,7 @@ chorus.views.SandboxNewStandaloneMode = chorus.views.Base.extend({
 
     fieldValues:function () {
         return {
-            instanceName: this.$("input[name='" + (this.options.addingSandbox ? "instanceName" : "name") + "']").val(),
+            instance_name: this.$("input[name='" + (this.options.addingSandbox ? "instance_name" : "name") + "']").val(),
             databaseName: this.$("input[name='databaseName']").val(),
             schemaName: this.$("input[name='schemaName']").val(),
             size: this.$("input[name='size']").val(),

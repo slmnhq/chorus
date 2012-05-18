@@ -6,7 +6,7 @@ describe("chorus.pages.DatasetShowPage", function() {
                 databaseId: "4",
                 databaseName: "db",
                 instance_id: "5",
-                instanceName: "instance",
+                instance_name: "instance",
                 schemaId: "6",
                 schemaName: "schema",
                 sandboxId: "99"
@@ -18,7 +18,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
         this.dataset = newFixtures.dataset.sourceTable({
             id: this.datasetId,
-            instance: { id: sanboxInfo.instance_id, name: sanboxInfo.instanceName},
+            instance: { id: sanboxInfo.instance_id, name: sanboxInfo.instance_name},
             databaseName: sanboxInfo.databaseName,
             schemaName: sanboxInfo.schemaName,
             importFrequency: null,

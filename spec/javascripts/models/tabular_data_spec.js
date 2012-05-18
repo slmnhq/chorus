@@ -182,7 +182,7 @@ describe("chorus.models.TabularData", function() {
 
         it("returns a new database with the right attributes", function() {
             expect(this.database.get("instance_id")).toBe(this.tabularData.get("instance").id);
-            expect(this.database.get("instanceName")).toBe(this.tabularData.get("instance").name);
+            expect(this.database.get("instance_name")).toBe(this.tabularData.get("instance").name);
             expect(this.database.get("name")).toBe(this.tabularData.get("databaseName"));
         });
 
@@ -199,7 +199,7 @@ describe("chorus.models.TabularData", function() {
             expect(this.schema.get("instance_id")).toBe(this.tabularData.get("instance").id);
             expect(this.schema.database().name()).toBe(this.tabularData.get("databaseName"));
             expect(this.schema.get("name")).toBe(this.tabularData.get("schemaName"));
-            expect(this.schema.get("instanceName")).toBe(this.tabularData.get("instance").name);
+            expect(this.schema.get("instance_name")).toBe(this.tabularData.get("instance").name);
         });
 
         it("memoizes", function() {

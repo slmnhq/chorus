@@ -200,7 +200,7 @@ beforeEach(function() {
                     hdfs: {
                         instance: {
                             id: '10010',
-                            name: 'instanceName'
+                            name: 'instance_name'
                         },
                         path: '/data',
                         name: "import.csv"
@@ -732,7 +732,7 @@ beforeEach(function() {
                     hdfs: {
                         instance: {
                             id: '10010',
-                            name: 'instanceName'
+                            name: 'instance_name'
                         },
                         path: '/webui',
                         name: "chart.html",
@@ -1630,7 +1630,7 @@ beforeEach(function() {
                 databaseId: null,
                 databaseName: null,
                 instance_id: null,
-                instanceName: null,
+                instance_name: null,
                 schemaId: null,
                 schemaName: null
             }, overrides);
@@ -2297,7 +2297,7 @@ beforeEach(function() {
                 path: '/data',
                 instance: {
                     id: this.nextId().toString(),
-                    name: 'instanceName'
+                    name: 'instance_name'
                 }
             }, overrides);
             var result = new chorus.collections.HdfsEntrySet(null, attributes);

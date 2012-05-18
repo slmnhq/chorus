@@ -66,7 +66,7 @@ describe("chorus.models.Workfile", function() {
                         databaseId: "4",
                         databaseName: "db",
                         instance_id: "5",
-                        instanceName: "instance",
+                        instance_name: "instance",
                         sandboxId: "10001",
                         schemaId: "6",
                         schemaName: "schema"
@@ -78,7 +78,7 @@ describe("chorus.models.Workfile", function() {
                 it("returns the sandbox's schema", function() {
                     var schema = this.model.executionSchema();
                     expect(schema.get("instance_id")).toBe('5');
-                    expect(schema.get("instanceName")).toBe('instance');
+                    expect(schema.get("instance_name")).toBe('instance');
                     expect(schema.database().id).toBe('4');
                     expect(schema.database().name()).toBe('db');
                     expect(schema.get("id")).toBe('6');
@@ -90,7 +90,7 @@ describe("chorus.models.Workfile", function() {
                 beforeEach(function() {
                     _.extend(this.model.get("executionInfo"), {
                         instance_id: '51',
-                        instanceName: "ned",
+                        instance_name: "ned",
                         databaseId: '52',
                         databaseName: "rob",
                         schemaId: '53',
@@ -101,7 +101,7 @@ describe("chorus.models.Workfile", function() {
                 it("returns that schema", function() {
                     var schema = this.model.executionSchema();
                     expect(schema.get("instance_id")).toBe('51');
-                    expect(schema.get("instanceName")).toBe('ned');
+                    expect(schema.get("instance_name")).toBe('ned');
                     expect(schema.database().id).toBe('52');
                     expect(schema.database().name()).toBe('rob');
                     expect(schema.get("id")).toBe('53');
@@ -115,7 +115,7 @@ describe("chorus.models.Workfile", function() {
                         databaseId: "4",
                         databaseName: "db",
                         instance_id: "5",
-                        instanceName: "instance",
+                        instance_name: "instance",
                         sandboxId: "10001",
                         schemaId: "6",
                         schemaName: "schema"
@@ -125,7 +125,7 @@ describe("chorus.models.Workfile", function() {
                 it("returns the sandbox's schema", function() {
                     var schema = this.model.executionSchema();
                     expect(schema.get("instance_id")).toBe('5');
-                    expect(schema.get("instanceName")).toBe('instance');
+                    expect(schema.get("instance_name")).toBe('instance');
                     expect(schema.database().id).toBe('4');
                     expect(schema.database().name()).toBe('db');
                     expect(schema.get("id")).toBe('6');
@@ -149,7 +149,7 @@ describe("chorus.models.Workfile", function() {
                         databaseId: 4,
                         databaseName: "db",
                         instance_id: 5,
-                        instanceName: "instance",
+                        instance_name: "instance",
                         sandboxId: "10001",
                         schemaId: 6,
                         schemaName: "schema"

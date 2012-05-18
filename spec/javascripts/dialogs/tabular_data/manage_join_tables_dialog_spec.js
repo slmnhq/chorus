@@ -9,11 +9,11 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             objectType: "BASE_TABLE",
             id: "abc"
         });
-        this.instanceName = "john";
+        this.instance_name = "john";
         var dataset = newFixtures.dataset.sourceTable({
             objectName: "original",
             instance: {
-                name: this.instanceName,
+                name: this.instance_name,
                 id: 11
             },
             type: "SOURCE_TABLE",
@@ -46,8 +46,8 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
     describe("when the fetches complete", function() {
         beforeEach(function() {
-            this.schemaBob = fixtures.schema({name: "Bob", database_name: this.schema.database().name(), instanceName: this.instanceName });
-            this.schemaTed = fixtures.schema({name: "Ted", database_name: this.schema.database().name(), instanceName: this.instanceName });
+            this.schemaBob = fixtures.schema({name: "Bob", database_name: this.schema.database().name(), instance_name: this.instance_name });
+            this.schemaTed = fixtures.schema({name: "Ted", database_name: this.schema.database().name(), instance_name: this.instance_name });
             this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
 
             this.databaseObject1 = newFixtures.databaseObject({

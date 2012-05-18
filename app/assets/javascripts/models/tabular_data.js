@@ -64,7 +64,7 @@ chorus.models.TabularData = chorus.models.Base.include(
                     instance_id: this.get("instance").id,
                     database_name: this.get("databaseName"),
                     name: this.get("schemaName"),
-                    instanceName: this.get("instance").name
+                    instance_name: this.get("instance").name
                 });
             }
             return this._schema;
@@ -75,7 +75,7 @@ chorus.models.TabularData = chorus.models.Base.include(
                 this._database = new chorus.models.Database({
                     instance_id: this.get("instance").id,
                     name: this.get("databaseName"),
-                    instanceName: this.get("instance").name
+                    instance_name: this.get("instance").name
                 });
             }
             return this._database;
