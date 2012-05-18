@@ -10,7 +10,7 @@ bundle install
 rake legacy:setup db:migrate db:test:prepare db:test:prepare:legacy
 
 # Run rspec unit tests
-script/test 2>&1 | tee $WORKSPACE/rspec_tests.log
+script/test 2>&1
 
 # Run Jasmine tests
 
@@ -21,9 +21,10 @@ echo "Jasmine process id is : $jasmine_pid"
 sleep 5
 
 RAILS_ENV=development rake devmode:enable assets:precompile
-rake phantom 2>&1 | tee $WORKSPACE/jasmine_tests.log
+rake phantom 2>&1
 echo "Cleaning up jasmine process $jasmine_pid"
 kill $jasmine_pid
 
 # Run integration tests
-script/test spec/integration/ 2>&1 | tee $WORKSPACE/integration_tests.log
+script/test spec/integration/ 2>&1
+
