@@ -15,14 +15,15 @@ script/test 2>&1 | tee $WORKSPACE/rspec_tests.log
 # Run Jasmine tests
 
 # start jasmine
-ps aux | grep jasmine | grep -v grep | awk '{print $2}' | xargs kill -9
-bundle exec rake jasmine 2>&1 | tee $WORKSPACE/jasmine.log  &
+bundle exec rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
 jasmine_pid=$!
-echo $jasmine_pid
+echo "Jasmine process id is : $jasmine_pid"
 sleep 5
 
 RAILS_ENV=development rake devmode:enable assets:precompile
 rake phantom 2>&1 | tee $WORKSPACE/jasmine_tests.log
+echo "Cleaning up jasmine process $jasmine_pid"
+kill $jasmine_pid
 
 # Run integration tests
 script/test spec/integration/ 2>&1 | tee $WORKSPACE/integration_tests.log
