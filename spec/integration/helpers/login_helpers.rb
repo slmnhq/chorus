@@ -1,6 +1,6 @@
 module LoginHelpers
   def login(username, password)
-    visit("/#/login")
+    visit(WEBPATH['login_route'])
     fill_in 'username', :with => username
     fill_in 'password', :with => password
     click_button "Login"

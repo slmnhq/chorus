@@ -1,6 +1,7 @@
 require 'capybara/rspec'
 require 'capybara-screenshot'
 require 'database_cleaner'
+require 'yaml'
 
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../../config/environment", __FILE__)
@@ -14,6 +15,8 @@ Capybara.save_and_open_page_path = ENV['CC_BUILD_ARTIFACTS'] || File.join(File.d
 DatabaseCleaner.strategy = :truncation
 DatabaseCleaner.clean
 load "#{Rails.root}/db/seeds.rb"
+
+WEBPATH = YAML.load_file("spec/integration/webpath.yaml") unless defined? WEBPATH
 
 def current_route
   route = URI.parse(current_url).fragment
