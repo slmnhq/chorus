@@ -8,6 +8,7 @@ class Workspace < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   has_many :memberships
   has_many :members, :through => :memberships, :source => :user
+  has_many :workfiles
 
   validates_presence_of :name
   validate :owner_is_member, :on => :update
