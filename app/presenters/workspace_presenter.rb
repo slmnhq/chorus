@@ -5,7 +5,7 @@ class WorkspacePresenter < Presenter
     {
         :id => id,
         :name => h(name),
-        :summary => h(summary),
+        :summary => sanitize(summary),
         :owner => present(owner),
         :archiver => present(archiver),
         :archived_at => archived_at.try(:strftime, "%Y-%m-%d %H:%M:%S"),

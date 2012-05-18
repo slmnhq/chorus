@@ -44,17 +44,13 @@ describe WorkspacePresenter, :type => :view do
       archiver.to_hash.should == (UserPresenter.new(@archiver, view).to_hash)
     end
 
-    it "sanitizes values" do
-      bad_value = "<script>alert('got your cookie')</script>"
-      fields_to_sanitize = [:summary, :name]
+    context "summary" do
+      it "allows safe tags and removes dangerous ones" do
+        safe_value = "<b>this is bold</b><script src='evil.com'></script><i>this is italic</i>"
+        workspace = FactoryGirl.build :workspace, :summary => safe_value
+        json = WorkspacePresenter.new(workspace, view).to_hash
 
-      dangerous_params = fields_to_sanitize.inject({}) { |params, field| params.merge(field => bad_value) }
-
-      workspace = FactoryGirl.build :workspace, dangerous_params
-      json = WorkspacePresenter.new(workspace, view).to_hash
-
-      fields_to_sanitize.each do |sanitized_field|
-        json[sanitized_field].should_not match "<"
+        json[:summary].should == "<b>this is bold</b><i>this is italic</i>"
       end
     end
   end

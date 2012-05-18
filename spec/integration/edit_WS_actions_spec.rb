@@ -9,14 +9,15 @@ describe "creating a note on a workspace" do
     wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
   end
 
-  xit "edits workspace settings" do
+  it "edits workspace settings" do
     within("#facebox") do
-    fill_in 'name', :with => "change_ws_name#{Time.now.to_i}"
-#    set_cleditor_value("body", "Changing the summary of the workspace")
-    choose("workspace_archived")
-    find(".submit").click
+      fill_in 'name', :with => "change_ws_name#{Time.now.to_i}"
+      set_cleditor_value("summary", "Changing the <b>summary</b> <script>foo</script> of the workspace")
+      #choose("workspace_archived")
+
+      find(".submit").click
     end
- # wait_until { page.find(".dailog h1).text == "Change_ws_name#" }
+    page.find(".styled_text").should have_content "Changing the summary of the workspace"
   end
 end
 

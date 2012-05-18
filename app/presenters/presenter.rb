@@ -41,7 +41,7 @@ class Presenter
     @view_context = view_context
   end
 
-  delegate :h, :to => :@view_context
+  delegate :h, :sanitize, :to => :@view_context
 
   attr_reader :model
 end
