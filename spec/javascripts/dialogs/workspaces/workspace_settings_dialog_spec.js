@@ -6,7 +6,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             name: "my name",
             summary: "my summary",
             id: "457",
-            ownerId: "12",
+            owner_id: "12",
             ownerFirstName: "Deborah",
             ownerLastName: "D"
         });
@@ -410,7 +410,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     });
 
                     it("sets the owner id on the workspace", function() {
-                        expect(this.dialog.pageModel.get("ownerId")).toBe("13");
+                        expect(this.dialog.pageModel.get("owner_id")).toBe("13");
                     });
 
                     it("does not close the dialog before the server responds", function() {
@@ -524,8 +524,8 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                             expect(this.dialog.pageModel.save).toHaveBeenCalled();
                         });
 
-                        it("does not provide ownerId in the API call", function() {
-                            expect(this.dialog.pageModel.save.calls[1].args.hasOwnProperty("ownerId")).toBeFalsy();
+                        it("does not provide owner_id in the API call", function() {
+                            expect(this.dialog.pageModel.save.calls[1].args.hasOwnProperty("owner_id")).toBeFalsy();
                         })
                     })
                 });

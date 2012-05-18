@@ -100,7 +100,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
         context("and the user is the workspace owner", function() {
             beforeEach(function() {
-                setLoggedInUser({ id: this.workspace.get("ownerId"), admin: false});
+                setLoggedInUser({ id: this.workspace.get("owner_id"), admin: false});
                 this.server.completeFetchFor(this.workspace);
             });
 

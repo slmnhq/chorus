@@ -105,7 +105,7 @@ describe("chorus.models.Workspace", function() {
     describe("#owner", function() {
         context('when owner data is not nested', function() {
             beforeEach(function() {
-                this.model.set({ owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47" });
+                this.model.set({ owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", owner_id: "47" });
             });
 
             it("has the attributes", function() {
@@ -387,7 +387,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("permissions checking", function() {
         beforeEach(function() {
-            this.model.set({ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47"})
+            this.model.set({ownerFirstName: "John", ownerLastName: "Henry", owner_id: "47"})
         });
 
         describe("#currentUserIsMember", function() {

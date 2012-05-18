@@ -36,7 +36,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
             ownerAttrs = this.get("owner");
         } else {
             ownerAttrs = {
-                id: this.get("ownerId"),
+                id: this.get("owner_id"),
                 username: this.get("owner"),
                 first_name: this.get("ownerFirstName"),
                 last_name: this.get("ownerLastName")

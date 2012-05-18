@@ -1676,7 +1676,7 @@ beforeEach(function() {
                 isDeleted: false,
                 modifiedBy: modifiedByUser,
                 owner: ownerUser.username,
-                ownerId: ownerUser.id,
+                owner_id: ownerUser.id,
                 workspaceId: this.nextId().toString(),
                 imageId: null,
                 isBinary: false,
