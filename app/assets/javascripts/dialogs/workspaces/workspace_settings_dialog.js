@@ -26,7 +26,7 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
             ownerName: owner.displayName(),
             ownerUrl: owner.showUrl(),
             sandboxLocation: sandboxLocation,
-            active: this.pageModel.get("archivedAt") == null
+            active: this.pageModel.isActive()
         }
     },
 

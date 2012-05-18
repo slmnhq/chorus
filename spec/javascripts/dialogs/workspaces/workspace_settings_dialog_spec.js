@@ -8,7 +8,9 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             id: "457",
             owner_id: "12",
             ownerFirstName: "Deborah",
-            ownerLastName: "D"
+            ownerLastName: "D",
+            archived_at: null,
+            archiver: null
         });
         this.workspace.unset("sandboxInfo");
 
@@ -168,7 +170,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
             context("and the workspace is not archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({ archivedAt: null })
+                    this.workspace.set({ archived_at: null })
                     this.dialog.render();
                 })
 
@@ -189,7 +191,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
             context("and the workspace is archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({ archivedAt: "2012-01-01 12:34:56" })
+                    this.workspace.set({ archived_at: "2012-01-01 12:34:56" })
                     this.dialog.render();
                 })
 
@@ -256,7 +258,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archivedAt: null })
+                        this.workspace.set({ archived_at: null })
                         this.dialog.render();
                     });
 
@@ -270,7 +272,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archivedAt: "2012-02-02 22:22:22" })
+                        this.workspace.set({ archived_at: "2012-02-02 22:22:22" })
                         this.dialog.render();
                     });
 
@@ -332,7 +334,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archivedAt: null })
+                        this.workspace.set({ archived_at: null })
                         this.dialog.render();
                     })
 
@@ -351,7 +353,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archivedAt: "2013-03-03 11:11:11" })
+                        this.workspace.set({ archived_at: "2013-03-03 11:11:11" })
                         this.dialog.render();
                     });
 
