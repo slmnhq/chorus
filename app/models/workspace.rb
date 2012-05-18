@@ -9,6 +9,7 @@ class Workspace < ActiveRecord::Base
   has_many :members, :through => :memberships, :source => :user
 
   validates_presence_of :name
+  validate :owner_is_member, :on => :update
 
   scope :active, where(:archived_at => nil)
 
@@ -67,5 +68,13 @@ class Workspace < ActiveRecord::Base
       permissions.push(:read, :commenting)
     end
     permissions
+  end
+
+  private
+
+  def owner_is_member
+    unless members.include? owner
+      errors.add(:owner, "Owner must be a member")
+    end
   end
 end
