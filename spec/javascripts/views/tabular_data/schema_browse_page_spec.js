@@ -1,9 +1,9 @@
 describe("chorus.pages.SchemaBrowsePage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
-        this.schema = fixtures.schema({ instance_id: "123", database_id: "456", database_name: "Foo%", name: "Bar/" });
+        this.schema = fixtures.schema({id: "789", name: "Bar/", instance_id: "123", instance_name: "AnInstance", database_id: "456", database_name: "Foo%" });
         this.instance = newFixtures.instance.greenplum({ id: "123" });
-        this.page = new chorus.pages.SchemaBrowsePage("123", "456", "Bar/");
+        this.page = new chorus.pages.SchemaBrowsePage("123", "456", "789");
     });
 
     it("has a helpId", function() {
@@ -13,7 +13,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
     it("fetches the database object set with the right (decoded) database name and schema names", function() {
         expect(this.page.collection).toBeA(chorus.collections.DatabaseObjectSet);
         expect(this.page.collection.attributes.databaseName).toBe("REMOVEME"); // or rather, fix by removing databaseName from the showUrl and fetch url of DatabaseObjectSets.
-        expect(this.page.collection.attributes.schemaName).toBe("Bar/");
+        expect(this.page.collection.attributes.schemaName).toBe("REMOVEME"); // or rather, fix by removing databaseName from the showUrl and fetch url of DatabaseObjectSets.
     });
 
     it("includes the InstanceCredentials mixin", function() {
@@ -25,8 +25,8 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             spyOn(Backbone.history, "loadUrl")
         })
 
-        it("navigates to the 404 page when the instance fetch fails", function() {
-            this.page.instance.trigger('fetchNotFound', this.page.instance);
+        it("navigates to the 404 page when the schema fetch fails", function() {
+            this.page.schema.trigger('fetchNotFound', this.page.schema);
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
         })
 
@@ -36,9 +36,9 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         })
     });
 
-    context("when only the instance has been fetched", function() {
+    context("when only the schema has been fetched", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.instance);
+            this.server.completeFetchFor(this.schema);
         });
 
         it("renders the schema's canonical name", function() {
@@ -52,7 +52,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
 
     context("after everything has been fetched", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.instance);
+            this.server.completeFetchFor(this.schema);
             this.server.completeFetchFor(this.page.collection, [
                 fixtures.databaseTable({ objectName: "bar" }),
                 fixtures.databaseView({ objectName: "foo" })
@@ -69,10 +69,6 @@ describe("chorus.pages.SchemaBrowsePage", function() {
 
         it("displays the search input", function() {
             expect(this.page.$("input.search").attr("placeholder")).toMatchTranslation("schema.search");
-        });
-
-        it("sets the instanceName on the schema", function() {
-            expect(this.page.schema.get("instanceName")).toBe(this.instance.get("name"));
         });
 
         it("pre-selects the first item", function() {
@@ -92,10 +88,10 @@ describe("chorus.pages.SchemaBrowsePage", function() {
             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toHaveHref("#/instances");
             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toContainTranslation("breadcrumbs.instances");
 
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toContainText(this.instance.get("name"));
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveHref(this.instance.showUrl());
+            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toContainText("AnInstance");
+            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveHref(this.schema.database().instance().showUrl());
 
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toContainText("REMOVEME"); // or rather, fix with a fetch of the schema
+            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toContainText("Foo%");
             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toHaveHref(this.schema.database().showUrl());
 
             expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.page.schema.get("name"));
@@ -114,9 +110,9 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         });
 
         it("creates the collection with the right options", function() {
-            expect(this.page.collection.attributes.instance_id).toBe(this.schema.get("instance_id"))
-            expect(this.page.collection.attributes.databaseName).toBe("REMOVEME");  // or rather, fix with a fetch of the schema
-            expect(this.page.collection.attributes.schemaName).toBe(this.schema.get("name"))
+            expect(this.page.collection.attributes.instance_id).toBe("REMOVEME") // or rather, fix by changing the DatabaseObjectSet url
+            expect(this.page.collection.attributes.databaseName).toBe("REMOVEME"); // or rather, fix by changing the DatabaseObjectSet url
+            expect(this.page.collection.attributes.schemaName).toBe("REMOVEME"); // or rather, fix by changing the DatabaseObjectSet url
         })
 
         describe("search", function() {

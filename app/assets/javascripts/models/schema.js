@@ -1,7 +1,7 @@
 chorus.models.Schema = chorus.models.Base.extend({
     constructorName: "Schema",
-    showUrlTemplate:"instances/{{instance_id}}/databases/{{database_id}}/schemas/{{encode name}}",
-    loaded: true,
+    showUrlTemplate:"instances/{{instance_id}}/databases/{{database_id}}/schemas/{{id}}",
+    urlTemplate: "schemas/{{id}}",
 
     functions:function () {
         this._schemaFunctions = this._schemaFunctions || new chorus.collections.SchemaFunctionSet([], {
@@ -31,18 +31,18 @@ chorus.models.Schema = chorus.models.Base.extend({
             id:this.get("database_id"),
             name:this.get("database_name"),
             instance_id:this.get("instance_id"),
-            instanceName:this.get("instanceName")
+            instance_name:this.get("instance_name")
         });
 
         return this._database;
     },
 
     canonicalName:function () {
-        return [this.get("instanceName"), this.database().name(), this.name()].join(".");
+        return [this.database().instance().name(), this.database().name(), this.name()].join(".");
     },
 
     isEqual:function (other) {
-        return _.all(["instance_id", "instanceName", "database_id", "id", "name"], function (attr) {
+        return _.all(["instance_id", "instance_name", "database_id", "id", "name"], function (attr) {
             return this.get(attr) === other.get(attr)
         }, this)
     }

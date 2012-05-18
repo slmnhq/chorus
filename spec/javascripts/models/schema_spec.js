@@ -1,10 +1,10 @@
 describe("chorus.models.Schema", function() {
     describe("#showUrl", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({instance_id : 10000, database_id: "42", name : "b/a/r"});
+            this.model = fixtures.schema({id: 1234, instance_id : 10000, database_id: "42", name : "b/a/r"});
         })
         it("should encode the url", function() {
-            expect(this.model.showUrl()).toContain("instances/10000/databases/42/schemas/b%2Fa%2Fr");
+            expect(this.model.showUrl()).toContain("instances/10000/databases/42/schemas/1234");
         });
     });
 
@@ -51,7 +51,7 @@ describe("chorus.models.Schema", function() {
 
     describe("#canonicalName", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({instanceName : "instance", database_name : "database", name : "schema"});
+            this.model = fixtures.schema({instance_name : "instance", database_name : "database", name : "schema"});
         })
 
         it("should create the canonical name", function() {
@@ -63,7 +63,7 @@ describe("chorus.models.Schema", function() {
         beforeEach(function() {
             this.model = fixtures.schema({
                 instance_id:   '1',
-                instanceName: 'bar',
+                instance_name: 'bar',
                 database_id:   '2',
                 database_name: 'foo',
                 id:           '3',
@@ -74,7 +74,7 @@ describe("chorus.models.Schema", function() {
         it("checks that the names and ids of the instances, databases and schemas are equal", function() {
             var other = fixtures.schema({
                 instance_id:   '1',
-                instanceName: 'bar',
+                instance_name: 'bar',
                 database_id:   '2',
                 database_name: 'foo',
                 id:           '3',
@@ -91,7 +91,7 @@ describe("chorus.models.Schema", function() {
 
     describe("#database", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({instanceName : "instance", database_name : "database", name : "schema"});
+            this.model = fixtures.schema({instance_name : "instance", database_name : "database", name : "schema"});
             this.database = this.model.database();
         });
 

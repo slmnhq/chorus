@@ -3,20 +3,14 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 ).extend({
     helpId: "schema",
 
-    setup: function(instance_id, database_id, schemaName) {
-        this.schema = new chorus.models.Schema({
-            instance_id: instance_id,
-            database_id: database_id,
-            database_name: "REMOVEME",
-            name: schemaName
-        });
+    setup: function(instance_id, database_id, schema_id) {
+        this.schema = new chorus.models.Schema({ id: schema_id });
 
-        this.instance = new chorus.models.Instance({id: instance_id});
-        this.instance.fetch();
-        this.dependOn(this.instance, this.instanceLoaded);
+        this.schema.fetch();
+        this.dependOn(this.schema, this.schemaLoaded);
 
-        // TODO: We no longer have db name, so eventually we need to remove databaseName from the DatabaseObjectSet constructor
-        this.collection = new chorus.collections.DatabaseObjectSet([], {instance_id: instance_id, databaseName: "REMOVEME", schemaName: schemaName });
+        // TODO: Remove the REMOVEME's
+        this.collection = new chorus.collections.DatabaseObjectSet([], {schema_id: schema_id, instance_id: "REMOVEME", databaseName: "REMOVEME", schemaName: "REMOVEME" });
         this.collection.sortAsc("objectName");
         this.collection.fetch();
         this.dependOn(this.collection);
@@ -43,15 +37,13 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.instances"), url: '#/instances'},
-            {label: this.instance.get("name"), url: this.instance.showUrl()},
+            {label: this.schema.database().instance().name(), url: this.schema.database().instance().showUrl()},
             {label: this.schema.database().name(), url: this.schema.database().showUrl() },
-            {label: this.schema.get("name")}
+            {label: this.schema.name()}
         ];
     },
 
-    instanceLoaded: function() {
-        this.schema.set({instanceName: this.instance.get("name")});
-
+    schemaLoaded: function() {
         var onTextChangeFunction = _.debounce(_.bind(function(e) {
             this.collection.search($(e.target).val());
             this.mainContent.contentDetails.startLoading(".count");
