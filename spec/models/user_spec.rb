@@ -163,9 +163,7 @@ describe User do
       owned_workspace = FactoryGirl.create(:workspace, :owner => user)
       not_owned_workspace = FactoryGirl.create(:workspace)
       not_owned_workspace.members << user
-      owned_workspace.members << user
       not_owned_workspace.save!
-
       user.reload.workspaces.size.should == 2
       user.workspaces.should include(owned_workspace)
       user.workspaces.should include(not_owned_workspace)

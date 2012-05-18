@@ -102,7 +102,7 @@ describe Workspace do
         workspace.members << joe
 
         members = workspace.members_accessible_to(user)
-        members.should have(1).member
+        members.should have(2).members # including the owner
       end
     end
 
@@ -112,7 +112,7 @@ describe Workspace do
         workspace.members << joe
 
         members = workspace.members_accessible_to(user)
-        members.should have(2).members
+        members.should have(3).members # including the owner
       end
     end
 

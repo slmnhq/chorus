@@ -7,9 +7,10 @@ class DataMigrator
                   InstanceMigrator.new,
                   InstanceAccountMigrator.new,
                   WorkspaceMigrator.new,
-                  ImageMigrator.new,
                   MembershipMigrator.new,
-                  WorkfileMigrator.new]
+                  ImageMigrator.new,
+                  WorkfileMigrator.new
+                 ]
   end
 
   def migrate

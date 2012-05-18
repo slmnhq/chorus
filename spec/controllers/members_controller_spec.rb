@@ -33,7 +33,7 @@ describe MembersController do
         get :index, :workspace_id => workspace.id
 
         response.code.should == "200"
-        decoded_response.should have(2).items
+        decoded_response.should have(3).items #including the owner
       end
     end
 
@@ -48,7 +48,7 @@ describe MembersController do
         get :index, :workspace_id => workspace.id
 
         response.code.should == "200"
-        decoded_response.should have(1).item
+        decoded_response.should have(2).items #including the owner
       end
     end
 
@@ -63,7 +63,7 @@ describe MembersController do
         get :index, :workspace_id => workspace.id
 
         response.code.should == "200"
-        decoded_response.should have(1).item
+        decoded_response.should have(2).items # including the owner
       end
     end
 
@@ -86,7 +86,7 @@ describe MembersController do
     let(:member1) { FactoryGirl.create(:user) }
     let(:member2) { FactoryGirl.create(:user) }
     let(:member3) { FactoryGirl.create(:user) }
-    let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id, member2.id]} }
+    let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id, member2.id, workspace.owner.id]} }
 
     context "as the owner" do
       before :each do
@@ -107,7 +107,7 @@ describe MembersController do
       end
 
       context "change some of the members for the workspace" do
-        let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id]} }
+        let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id, workspace.owner.id]} }
 
         it "should remove members for the workspace" do
           workspace.members << member1

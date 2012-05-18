@@ -6,6 +6,7 @@ describe WorkfileMigrator, :type => :data_migration do
       before do
         UserMigrator.new.migrate
         WorkspaceMigrator.new.migrate
+        MembershipMigrator.new.migrate
         WorkfileMigrator.new.migrate
         @legacy_workfiles = Legacy.connection.select_all("select * from edc_work_file WHERE is_deleted = 'f'")
         @legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version WHERE is_deleted = 'f'")
