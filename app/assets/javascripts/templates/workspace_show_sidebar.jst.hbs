@@ -12,7 +12,7 @@
                 <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="InsightsNew">{{t "actions.add_insight"}}</a></li>
             {{/if}}
             <li><a class="dialog" href="#" data-dialog="WorkspaceSettings">
-                {{#ifAny workspaceAdmin currentUserIsMember}}
+                {{#ifAny workspaceAdmin canUpdate}}
                     {{t "actions.edit_workspace"}}
                 {{else}}
                     {{t "actions.view_workspace_settings"}}

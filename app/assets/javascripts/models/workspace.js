@@ -85,12 +85,6 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return this.owner().id === chorus.session.user().id;
     },
 
-    currentUserIsMember: function() {
-        return !!this.members().find(function(member) {
-            return member.id === chorus.session.user().id;
-        });
-    },
-
     members:function () {
         if (!this._members) {
             this._members = new chorus.collections.MemberSet([], {workspaceId:this.get("id")})

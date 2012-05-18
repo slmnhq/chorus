@@ -20,7 +20,7 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
             imageUrl:this.model.fetchImageUrl(),
             hasImage:this.model.hasImage(),
             hasSandbox:!!this.model.sandbox(),
-            currentUserIsMember: this.model.currentUserIsMember(),
+            canUpdate: this.model.canUpdate(),
             active: this.model.isActive()
         };
     },

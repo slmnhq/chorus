@@ -404,21 +404,6 @@ describe("chorus.models.Workspace", function() {
             this.model.set({ownerFirstName: "John", ownerLastName: "Henry", owner_id: "47"})
         });
 
-        describe("#currentUserIsMember", function() {
-            it("returns true iff the current logged-in user is a member", function() {
-                this.model.members().add([
-                    newFixtures.user({ id: "31" }),
-                    newFixtures.user({ id: "32" }),
-                    newFixtures.user({ id: "33" })
-                ]);
-
-                setLoggedInUser({ id: "31" });
-                expect(this.model.currentUserIsMember()).toBeTruthy();
-                setLoggedInUser({ id: "48" });
-                expect(this.model.currentUserIsMember()).toBeFalsy();
-            });
-        });
-
         describe("#currentUserIsOwner", function() {
             it("returns true iff the current logged-in user is the owner", function() {
                 setLoggedInUser({ id: "47" });

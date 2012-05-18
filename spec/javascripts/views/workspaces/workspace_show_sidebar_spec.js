@@ -124,7 +124,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
         context("when the current user is a member of the workspace, but not an admin/owner", function() {
             beforeEach(function() {
                 spyOn(this.model, "workspaceAdmin").andReturn(false);
-                spyOn(this.model, "currentUserIsMember").andReturn(true);
+                spyOn(this.model, "canUpdate").andReturn(true);
                 this.view.render();
             });
 
@@ -136,7 +136,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
         context("when the current user is not a member of the workspace", function() {
             beforeEach(function() {
                 spyOn(this.model, "workspaceAdmin").andReturn(false);
-                spyOn(this.model, "currentUserIsMember").andReturn(false);
+                spyOn(this.model, "canUpdate").andReturn(false);
                 this.view.render();
             });
 
