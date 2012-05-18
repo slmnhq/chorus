@@ -202,7 +202,7 @@ describe WorkspacesController do
 
       it "allows archiving the workspace" do
         put :update, :id => workspace.id, :workspace => {
-            :archived => true
+            :archived => "true"
         }
         workspace.reload
         workspace.archived_at.should_not be_nil
@@ -214,7 +214,7 @@ describe WorkspacesController do
         workspace.save!
 
         put :update, :id => workspace.id, :workspace => {
-            :archived => false
+            :archived => "false"
         }
 
         workspace.reload

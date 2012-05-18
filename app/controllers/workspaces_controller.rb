@@ -34,7 +34,7 @@ class WorkspacesController < ApplicationController
 
   def update_archived_status(workspace)
     return unless params[:workspace].has_key?(:archived)
-    if params[:workspace][:archived]
+    if params[:workspace][:archived] == "true"
       workspace.archive_as(current_user)
     else
       workspace.unarchive
