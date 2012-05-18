@@ -9,6 +9,7 @@ describe WorkfileMigrator, :type => :data_migration do
         WorkfileMigrator.new.migrate
         @legacy_workfiles = Legacy.connection.select_all("select * from edc_work_file WHERE is_deleted = 'f'")
         @legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version WHERE is_deleted = 'f'")
+        @legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE is_deleted = 'f'")
       end
 
       it "creates a workfile for every non-deleted legacy workfile" do
@@ -102,6 +103,56 @@ describe WorkfileMigrator, :type => :data_migration do
           @legacy_versions.each do |legacy_version|
             new_version = WorkfileVersion.find(legacy_version["chorus_rails_workfile_version_id"])
             new_version.contents_file_name.should be_present
+          end
+        end
+      end
+
+      describe "draft" do
+        it "migrates non-deleted drafts" do
+          @legacy_workfiles.each do |legacy_workfile|
+            new_workfile = Workfile.find(legacy_workfile["chorus_rails_workfile_id"])
+            legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE workfile_id = '#{legacy_workfile["id"]}' AND is_deleted = 'f'")
+            new_workfile.drafts.count.should == legacy_drafts.length
+          end
+        end
+
+        it "saves the id of the new workfile draft on the legacy workfile draft" do
+          legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE is_deleted = 'f'")
+          legacy_drafts.each do |legacy_draft|
+            legacy_draft["chorus_rails_workfile_draft_id"].should be_present
+          end
+        end
+
+        it "associates new drafts with the appropriate workfile" do
+          @legacy_drafts.each do |legacy_draft|
+            legacy_workfile = Legacy.connection.select_one("select * from edc_work_file where id = '#{legacy_draft["workfile_id"]}'")
+            new_draft = WorkfileDraft.find(legacy_draft["chorus_rails_workfile_draft_id"])
+            new_draft.workfile.id.should == legacy_workfile["chorus_rails_workfile_id"].to_i
+          end
+        end
+
+        it "associates the new draft with the appropriate owner" do
+          @legacy_drafts.each do |legacy_draft|
+            legacy_owner = Legacy.connection.select_one("select * from edc_user where user_name = '#{legacy_draft["draft_owner"]}'")
+            new_owner = User.find(legacy_owner["chorus_rails_user_id"])
+            new_draft = WorkfileDraft.find(legacy_draft["chorus_rails_workfile_draft_id"])
+            new_draft.owner_id.should == new_owner.id
+          end
+        end
+
+        it "copies the interesting fields" do
+          @legacy_drafts.each do |legacy_draft|
+            new_draft = WorkfileDraft.find(legacy_draft["chorus_rails_workfile_draft_id"])
+            new_draft.base_version.should == legacy_draft["base_version_num"].to_i
+            new_draft.created_at.should == DateTime.parse(legacy_draft["created_stamp"])
+            new_draft.updated_at.should == DateTime.parse(legacy_draft["last_updated_stamp"])
+          end
+        end
+
+        it "attaches the legacy workfile draft content to the new workfile draft model" do
+          @legacy_drafts.each do |legacy_draft|
+            new_draft = WorkfileDraft.find(legacy_draft["chorus_rails_workfile_draft_id"])
+            new_draft.contents_file_name.should be_present
           end
         end
       end

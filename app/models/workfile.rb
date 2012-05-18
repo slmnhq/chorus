@@ -5,4 +5,5 @@ class Workfile < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
 
   has_many :versions, :class_name => 'WorkfileVersion'
+  has_many :drafts, :class_name => 'WorkfileDraft'
 end
