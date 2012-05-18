@@ -3,7 +3,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         spyOn(_, "debounce").andCallThrough();
         this.schema = fixtures.schema({id: "789", name: "Bar/", instance_id: "123", instance_name: "AnInstance", database_id: "456", database_name: "Foo%" });
         this.instance = newFixtures.instance.greenplum({ id: "123" });
-        this.page = new chorus.pages.SchemaBrowsePage("123", "456", "789");
+        this.page = new chorus.pages.SchemaBrowsePage("789");
     });
 
     it("has a helpId", function() {

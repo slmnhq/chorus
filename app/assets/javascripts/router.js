@@ -34,7 +34,7 @@
             ["/instances", "InstanceIndex"],
             ["/instances/:instance_id/databases", "DatabaseIndex"],
             ["/databases/:database_id", "SchemaIndex"],
-            ["/instances/:instance_id/databases/:database_id/schemas/:schema_id", "SchemaBrowse"],
+            ["/schemas/:schema_id", "SchemaBrowse"],
             ["/instances/:instance_id/databases/:databaseName/schemas/:schemaName/:metaType/:objectName", "TabularDataShow"],
             ["/instances/:instance_id/browse/*path", "HdfsEntryIndex"],
             ["/instances/:instance_id/browseFile/*path", "HdfsShowFile"],

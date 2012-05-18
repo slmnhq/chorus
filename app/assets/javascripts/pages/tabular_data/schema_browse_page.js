@@ -3,7 +3,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 ).extend({
     helpId: "schema",
 
-    setup: function(instance_id, database_id, schema_id) {
+    setup: function(schema_id) {
         this.schema = new chorus.models.Schema({ id: schema_id });
 
         this.schema.fetch();

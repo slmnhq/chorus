@@ -4,7 +4,7 @@ describe("chorus.models.Schema", function() {
             this.model = fixtures.schema({id: 1234, instance_id : 10000, database_id: "42", name : "b/a/r"});
         })
         it("should encode the url", function() {
-            expect(this.model.showUrl()).toContain("instances/10000/databases/42/schemas/1234");
+            expect(this.model.showUrl()).toContain("schemas/1234");
         });
     });
 
