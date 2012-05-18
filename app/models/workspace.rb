@@ -70,6 +70,16 @@ class Workspace < ActiveRecord::Base
     permissions
   end
 
+  def archive_as(user)
+    self.archived_at = Time.current
+    self.archiver = user
+  end
+
+  def unarchive
+    self.archived_at = nil
+    self.archiver = nil
+  end
+
   private
 
   def owner_is_member

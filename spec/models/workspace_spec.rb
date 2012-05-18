@@ -134,6 +134,28 @@ describe Workspace do
     end
   end
 
+  describe "#archive_as(user)" do
+    let(:archive_time) { Time.now }
+    let(:user) { FactoryGirl.create :user }
+
+    before do
+      Timecop.freeze(archive_time)
+      subject.archive_as(user)
+    end
+
+    its(:archived_at) { should == archive_time }
+    its(:archiver) { should == user }
+
+    describe "#unarchive" do
+      before do
+        subject.unarchive
+      end
+
+      its(:archived_at) { should be_nil }
+      its(:archiver) { should be_nil }
+    end
+  end
+
   it { should have_attached_file(:image) }
 
   describe "associations" do

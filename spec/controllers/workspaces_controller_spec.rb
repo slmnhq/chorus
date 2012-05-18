@@ -199,6 +199,28 @@ describe WorkspacesController do
         workspace.owner.should == owner
         response.should_not be_success
       end
+
+      it "allows archiving the workspace" do
+        put :update, :id => workspace.id, :workspace => {
+            :archived => true
+        }
+        workspace.reload
+        workspace.archived_at.should_not be_nil
+        workspace.archiver.should == owner
+      end
+
+      it "allows unarchiving the workspace" do
+        workspace.archive_as(owner)
+        workspace.save!
+
+        put :update, :id => workspace.id, :workspace => {
+            :archived => false
+        }
+
+        workspace.reload
+        workspace.archived_at.should be_nil
+        workspace.archiver.should be_nil
+      end
     end
 
     context "when the current user is an admin" do
@@ -224,11 +246,13 @@ describe WorkspacesController do
     end
 
     context "when the current user is just a member" do
-      it "allows updates to name and summary" do
+      before do
         member_non_owner = FactoryGirl.create(:user)
         member_non_owner.workspaces << workspace
         log_in member_non_owner
+      end
 
+      it "allows updates to name and summary" do
         put :update, :id => workspace.id, :workspace => {
           :name => "new name",
           :summary => "new summary"
@@ -237,16 +261,21 @@ describe WorkspacesController do
       end
 
       it "does not allow updates to other attrs" do
-        member_non_owner = FactoryGirl.create(:user)
-        member_non_owner.workspaces << workspace
-        log_in member_non_owner
-
         do_request
         workspace.reload
         workspace.public.should be_true
         workspace.name.should == "new name"
         workspace.summary.should == "new summary"
         workspace.owner.should == owner
+      end
+
+      it "does not allow archiving the workspace" do
+        put :update, :id => workspace.id, :workspace => {
+            :archived => true
+        }
+        workspace.reload
+        workspace.archived_at.should be_nil
+        workspace.archiver.should be_nil
       end
     end
 
