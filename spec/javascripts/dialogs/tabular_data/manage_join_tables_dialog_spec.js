@@ -121,7 +121,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             it("fetches filtered database objects", function() {
                 expect(this.server.lastFetch().url).toMatchUrl(
-                   "/data/11/database/Analytics/schema/public?type=meta&filter=a+query&page=1&rows=9",
+                   "/data/REMOVEME/database/REMOVEME/schema/REMOVEME?type=meta&filter=a+query&page=1&rows=9",
                     { paramsToIgnore: ["page", "rows", "type"] }
                 );
             });

@@ -18,9 +18,10 @@ chorus.models.Schema = chorus.models.Base.extend({
     databaseObjects: function () {
         if (!this._databaseObjects) {
             this._databaseObjects = new chorus.collections.DatabaseObjectSet([], {
-                instance_id:this.get("instance_id"),
-                databaseName:this.database().name(),
-                schemaName:this.get("name")
+                schema_id: this.id,
+                instance_id: "REMOVEME",
+                databaseName: "REMOVEME",
+                schemaName: "REMOVEME"
             });
         }
         return this._databaseObjects;

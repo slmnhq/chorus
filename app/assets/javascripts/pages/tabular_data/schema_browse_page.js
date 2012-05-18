@@ -5,15 +5,14 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 
     setup: function(schema_id) {
         this.schema = new chorus.models.Schema({ id: schema_id });
+        this.collection = this.schema.databaseObjects();
+
+        this.dependOn(this.schema, this.schemaLoaded);
+        this.dependOn(this.collection);
 
         this.schema.fetch();
-        this.dependOn(this.schema, this.schemaLoaded);
-
-        // TODO: Remove the REMOVEME's
-        this.collection = new chorus.collections.DatabaseObjectSet([], {schema_id: schema_id, instance_id: "REMOVEME", databaseName: "REMOVEME", schemaName: "REMOVEME" });
         this.collection.sortAsc("objectName");
         this.collection.fetch();
-        this.dependOn(this.collection);
 
         this.sidebar = new chorus.views.TabularDataSidebar({listMode: true});
 

@@ -23,11 +23,9 @@ describe("chorus.models.Schema", function() {
                 expect(this.model.databaseObjects()).toBe(this.model.databaseObjects());
             });
 
-            it("should pass the instance_id, database_name, and schemaName", function() {
+            it("should pass its id", function() {
                 var objects = this.model.databaseObjects();
-                expect(objects.attributes.instance_id).toBe(this.model.get('instance_id'));
-                expect(objects.attributes.databaseName).toBe(this.model.database().name());
-                expect(objects.attributes.schemaName).toBe(this.model.get('name'));
+                expect(objects.attributes.schema_id).toBe(this.model.id);
             });
         });
 
