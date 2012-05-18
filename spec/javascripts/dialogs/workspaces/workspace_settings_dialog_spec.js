@@ -91,7 +91,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 });
 
                 it("shows sandbox info", function() {
-                    expect(this.dialog.$(".sandboxLocation").text()).toBe("Gillette / Analytics / analytics");
+                    expect(this.dialog.$(".sandboxLocation").text()).toBe("Gillette.Analytics.analytics");
                 });
             });
 
@@ -126,11 +126,16 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
         context("when the user is the owner of the workspace", function() {
             beforeEach(function() {
-                setLoggedInUser({ id: "12" });
+                setLoggedInUser({ id: 12 });
+                this.workspace.set({ permission: ["admin", "read", "commenting", "update"] });
+                this.workspace.set({ owner: {
+                    id: 12,
+                    name: "richard"
+                }});
                 disableSpy.reset();
                 this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                 this.dialog.render();
-            })
+            });
 
             it("does not disable the 'Publicly available' checkbox", function() {
                 expect(this.dialog.$("input[name=public]")).not.toBeDisabled();
@@ -201,7 +206,9 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
         context("when the user is not the owner, but is a member of the workspace", function() {
             beforeEach(function() {
+                this.workspace.set({ permission: ["read", "commenting", "update"] });
                 setLoggedInUser({ id: 11 });
+                this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                 this.dialog.render();
             });
 
@@ -213,6 +220,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
         context("when the user is not a member of the workspace", function() {
             beforeEach(function() {
+                this.workspace.set({ permission: ["read", "commenting"] });
                 setLoggedInUser({ id: 18 });
             });
 
@@ -278,6 +286,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             context("and the user is an admin", function() {
                 beforeEach(function() {
                     setLoggedInUser({ admin: true });
+                    this.workspace.set({ permission: ["admin"] });
                     disableSpy.reset();
                     this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                     this.dialog.render();
@@ -587,7 +596,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             it("renders the owner as link to the user profile", function() {
                 expect(this.dialog.$("select.owner")).not.toExist();
                 expect(this.dialog.$("div.owner a")).toHaveText("Deborah D");
-                expect(this.dialog.$("div.owner a").attr("href")).toBe(this.dialog.owner.showUrl());
+                expect(this.dialog.$("div.owner a").attr("href")).toBe(this.workspace.owner().showUrl());
             });
         }
     })

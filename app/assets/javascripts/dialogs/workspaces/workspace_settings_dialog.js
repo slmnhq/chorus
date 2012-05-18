@@ -14,36 +14,29 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
 
     additionalContext:function () {
         var sandbox = this.pageModel.sandbox();
-        var sandboxLocation = sandbox ?
-            sandbox.get("instanceName") + ' / ' + sandbox.get("databaseName") + ' / ' + sandbox.get("schemaName")
-            : t("workspace.settings.sandbox.none");
+        var sandboxLocation = sandbox ? sandbox.canonicalName() : t("workspace.settings.sandbox.none");
+        var owner = this.pageModel.owner();
 
         return {
             imageUrl:this.pageModel.fetchImageUrl(),
             hasImage:this.pageModel.hasImage(),
             members:this.pageModel.members().models,
-            canSave : this.pageModel.currentUserIsMember() || this.userIsOwnerOrAdmin(),
-            isOwnerOrAdmin : this.userIsOwnerOrAdmin(),
-            ownerName: this.owner && this.owner.displayName(),
-            ownerUrl: this.owner.showUrl(),
-            sandboxLocation:sandboxLocation,
+            canSave : this.pageModel.canUpdate(),
+            canChangeOwner: this.pageModel.workspaceAdmin(),
+            ownerName: owner.displayName(),
+            ownerUrl: owner.showUrl(),
+            sandboxLocation: sandboxLocation,
             active: this.pageModel.get("archivedAt") == null
         }
     },
 
-    userIsOwnerOrAdmin: function() {
-        return this.pageModel.currentUserIsOwner() || chorus.session.user().get("admin");
-    },
-
     setup: function() {
-        this.owner = this.pageModel.owner();
-
         this.imageUpload = new chorus.views.ImageUpload({
             model:this.pageModel,
             addImageKey:"workspace.settings.image.add",
             changeImageKey:"workspace.settings.image.change",
             spinnerSmall:true,
-            editable: this.userIsOwnerOrAdmin()
+            editable: this.pageModel.workspaceAdmin()
         });
 
         this.bindings.add(this.pageModel, "saved", this.saved);
@@ -65,16 +58,16 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
 
     postRender: function() {
         var canUpdateName = false;
-        if (this.userIsOwnerOrAdmin()) {
+        if (this.pageModel.workspaceAdmin()) {
             canUpdateName = true;
-        } else if (this.pageModel.currentUserIsMember()) {
+        } else if (this.pageModel.canUpdate()) {
             this.$('input[name=public], input[name=status]').attr('disabled', 'disabled');
             canUpdateName = true;
         } else {
             this.$('input[name=name], input[name=public], textarea[name=summary], input[name=status]').attr('disabled', 'disabled');
         }
 
-        this.$("select.owner").val(this.model.owner().get("id"));
+        this.$("select.owner").val(this.pageModel.owner().get("id"));
 
         _.defer(_.bind(function() {
             var clEditor = this.makeEditor($(this.el), ".toolbar", "summary")
@@ -96,7 +89,6 @@ chorus.dialogs.WorkspaceSettings = chorus.dialogs.Base.include(
 
         if (this.$("select.owner").length > 0) {
             attrs.owner_id = this.$("select.owner").val();
-            attrs.ownerName = this.model.members().get(attrs.owner_id).get("username");
         }
 
         this.$("button.submit").startLoading("actions.saving");

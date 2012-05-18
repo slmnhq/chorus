@@ -19,6 +19,10 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return "/images/workspaces/" + publicIcon + "workspace" + activeIcon + "_"+ iconSize +".png";
     },
 
+    initialize: function() {
+        this.bind("change:owner", function() { delete this._owner; }, this);
+    },
+
     isActive: function() {
         return (this.get("archived_at") == null)
     },

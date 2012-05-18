@@ -146,6 +146,20 @@ describe("chorus.models.Workspace", function() {
                 var owner = this.model.owner();
                 expect(owner).toBe(this.model.owner());
             });
+
+            it("stays up-to-date when the owner is updated", function() {
+                var initialOwner = this.model.owner();
+
+                this.model.set({ owner: {
+                    id: "101",
+                    username: "new_guy"
+                }});
+
+                var newOwner = this.model.owner();
+                expect(newOwner).not.toBe(initialOwner);
+                expect(newOwner.get("id")).toBe("101");
+                expect(newOwner.get("username")).toBe("new_guy");
+            });
         });
     });
 
