@@ -1,0 +1,19 @@
+test: value_of_test
+
+admin:
+  login: edcadmin
+  password: secret
+
+login_route: '/#/login'
+new_user_route: '/#/users/new'
+
+user:
+  first_name: Joe
+  last_name: Blow
+  email: '@blow.com'
+  password: password
+
+user_menu:
+  menu: '.header .username a'
+  profile: 
+  signout: '.menu.popup_username a[href="#/logout"]' 
