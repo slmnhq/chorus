@@ -3,7 +3,7 @@ chorus.collections.DatabaseObjectSet = chorus.collections.LastFetchWins.include(
 ).extend({
     constructorName: 'DatabaseObjectSet',
     model: chorus.models.DatabaseObject,
-    urlTemplate: "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}",
+    urlTemplate: "schemas/{{schemaId}}/database_objects",
 
     urlParams: function() {
         if (this.attributes && this.attributes.filter) {

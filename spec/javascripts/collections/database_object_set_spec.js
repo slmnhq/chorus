@@ -1,7 +1,8 @@
 describe("chorus.collections.DatabaseObjectSet", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatabaseObjectSet([], {
-            instanceId: '10000', databaseName:"some_database", schemaName: "some_schema"
+            schemaId: 987,
+            instanceId: 'REMOVEME', databaseName:"REMOVEME", schemaName: "REMOVEME"
         });
     });
 
@@ -17,19 +18,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
         it("is correct", function() {
             var url = this.collection.url({ rows: 10, page: 1});
             expect(url).toContainQueryParams({ rows: 10, page: 1, type: "meta" });
-            expect(url).toHaveUrlPath("/data/10000/database/some_database/schema/some_schema");
-        });
-
-        context("when the url needs to be encoded", function() {
-            beforeEach(function() {
-                this.collection = new chorus.collections.DatabaseObjectSet([], {
-                    instanceId: '10000', databaseName: "some%database", schemaName: "some schema"
-                });
-            });
-
-            it("should encode the url", function() {
-                expect(this.collection.url()).toContain("/data/10000/database/some%25database/schema/some%20schema");
-            });
+            expect(url).toHaveUrlPath("/schemas/987/database_objects");
         });
 
         context("filtering", function() {
@@ -39,7 +28,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
 
             it("should include the filter in the url", function() {
                 var url = this.collection.url({rows: 10, page: 1});
-                expect(url).toHaveUrlPath("/data/10000/database/some_database/schema/some_schema");
+                expect(url).toHaveUrlPath("/schemas/987/database_objects");
                 expect(url).toContainQueryParams({ rows: 10, page: 1, filter: "foo" });
             });
         });
@@ -55,13 +44,13 @@ describe("chorus.collections.DatabaseObjectSet", function() {
         });
 
         it("sets the instance id, databaseName, and schemaName from the collection on each model", function() {
-            expect(this.collection.at(0).get("instance").id).toBe("10000");
-            expect(this.collection.at(0).get("databaseName")).toBe("some_database");
-            expect(this.collection.at(0).get("schemaName")).toBe("some_schema");
+            expect(this.collection.at(0).get("instance").id).toBe("REMOVEME");
+            expect(this.collection.at(0).get("databaseName")).toBe("REMOVEME");
+            expect(this.collection.at(0).get("schemaName")).toBe("REMOVEME");
 
-            expect(this.collection.at(1).get("instance").id).toBe("10000");
-            expect(this.collection.at(1).get("databaseName")).toBe("some_database");
-            expect(this.collection.at(1).get("schemaName")).toBe("some_schema");
+            expect(this.collection.at(1).get("instance").id).toBe("REMOVEME");
+            expect(this.collection.at(1).get("databaseName")).toBe("REMOVEME");
+            expect(this.collection.at(1).get("schemaName")).toBe("REMOVEME");
         });
     });
 
@@ -69,7 +58,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
         it("triggers an API query for the given term", function() {
             this.collection.search("search term");
             expect(this.server.lastFetch().url).toMatchUrl(
-                "/data/10000/database/some_database/schema/some_schema?filter=search+term",
+                "/schemas/987/database_objects?filter=search+term",
                 {paramsToIgnore: ["type", "page", "rows"]}
             );
         });

@@ -121,7 +121,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             it("fetches filtered database objects", function() {
                 expect(this.server.lastFetch().url).toMatchUrl(
-                   "/data/REMOVEME/database/REMOVEME/schema/REMOVEME?type=meta&filter=a+query&page=1&rows=9",
+                   "/schemas/2/database_objects?type=meta&filter=a+query&page=1&rows=9",
                     { paramsToIgnore: ["page", "rows", "type"] }
                 );
             });
@@ -151,7 +151,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 });
 
                 it("shows a drop-down menu when the schema link is clicked", function() {
-                    var $link = this.dialog.$(".canonical_name a.schema_qtip")
+                    var $link = this.dialog.$(".canonical_name a.schema_qtip");
                     expect($link).toContainText(this.schema.get("name"));
                     $link.click();
                     expect(this.qtip).toHaveVisibleQtip();

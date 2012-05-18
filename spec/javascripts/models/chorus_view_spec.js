@@ -8,7 +8,7 @@ describe("chorus.models.ChorusView", function() {
 
 
     it("delegates to the source object for #schema and #workspace", function() {
-        expect(this.model.schema()).toBe(this.sourceDataset.schema());
+        expect(this.model.schema().name()).toBe(this.sourceDataset.schema().name());
         expect(this.model.workspace()).toBe(this.sourceDataset.workspace());
     });
 

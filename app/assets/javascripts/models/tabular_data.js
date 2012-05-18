@@ -36,9 +36,9 @@ chorus.models.TabularData = chorus.models.Base.include(
             if (!this._columns) {
                 this._columns = new chorus.collections.DatabaseColumnSet([], {
                     tabularData: this,
-                    instanceId: this.get("instance").id,
-                    databaseName: this.get("databaseName"),
-                    schemaName: this.get("schemaName"),
+                    instance_id: this.instance().id,
+                    databaseName: this.database().name(),
+                    schemaName: this.schema().name(),
                     type: options && options.type
                 });
 
@@ -49,36 +49,22 @@ chorus.models.TabularData = chorus.models.Base.include(
         },
 
         instance: function() {
-            if (!this._instance) {
-                this._instance = new chorus.models.Instance({
-                    id: this.get("instance").id,
-                    name: this.get("instance").name
-                });
-            }
-            return this._instance;
-        },
-
-        schema: function() {
-            if (!this._schema) {
-                this._schema = new chorus.models.Schema({
-                    instanceId: this.get("instance").id,
-                    databaseName: this.get("databaseName"),
-                    name: this.get("schemaName"),
-                    instanceName: this.get("instance").name
-                });
-            }
-            return this._schema;
+            return this.database().instance();
         },
 
         database: function() {
-            if (!this._database) {
-                this._database = new chorus.models.Database({
-                    instanceId: this.get("instance").id,
-                    name: this.get("databaseName"),
-                    instanceName: this.get("instance").name
-                });
-            }
-            return this._database;
+            return this.schema().database();
+        },
+
+        schema: function() {
+            return new chorus.models.Schema({
+                id: this.get("schemaId"),
+                name: this.get("schemaName"),
+                instanceId: this.get("instance").id,
+                instanceName: this.get("instance").name,
+                databaseId: this.get("databaseId"),
+                databaseName: this.get("databaseName")
+            });
         },
 
         workspace: function() {
@@ -105,8 +91,8 @@ chorus.models.TabularData = chorus.models.Base.include(
             if (!this._statistics) {
                 this._statistics = new chorus.models.DatabaseObjectStatistics({
                     instanceId: this.has("instance") ? this.get("instance").id : this.collection.attributes.instanceId,
-                    databaseName: this.get("databaseName"),
-                    schemaName: this.get("schemaName"),
+                    databaseName: this.database().name(),
+                    schemaName: this.schema().name(),
                     type: this.get("type"),
                     objectType: this.get("objectType"),
                     objectName: this.get("objectName"),
@@ -251,9 +237,9 @@ chorus.models.TabularData = chorus.models.Base.include(
         analyze: function() {
             if (!this._analyze) {
                 this._analyze = new chorus.models.TabularDataAnalyze({
-                    instanceId: this.instance().get("id"),
-                    databaseName: this.database().get("name"),
-                    schemaName: this.schema().get("name"),
+                    instanceId: this.instance().id,
+                    databaseName: this.database().name(),
+                    schemaName: this.schema().name(),
                     objectName: this.name(),
                     metaType: this.metaType()
                 });

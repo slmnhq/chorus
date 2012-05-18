@@ -18,8 +18,8 @@ describe("chorus.views.DatasetAndColumnList", function() {
     it("creates a dataset list and a column list with the right schema", function() {
         expect(this.view.datasetList).toBeA(chorus.views.DatabaseDatasetSidebarList);
         expect(this.view.columnList).toBeA(chorus.views.DatabaseColumnSidebarList);
-        expect(this.view.datasetList.schema).toBe(this.dataset.schema());
-        expect(this.view.columnList.schema).toBe(this.dataset.schema());
+        expect(this.view.datasetList.schema.name()).toBe(this.dataset.schema().name());
+        expect(this.view.columnList.schema.name()).toBe(this.dataset.schema().name());
     });
 
     context("when a table is selected in the dataset list", function() {

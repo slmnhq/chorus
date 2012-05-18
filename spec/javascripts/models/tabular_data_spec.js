@@ -175,35 +175,28 @@ describe("chorus.models.TabularData", function() {
         });
     });
 
-    describe("#database", function() {
+    describe("#instance", function() {
         beforeEach(function() {
-            this.database = this.tabularData.database();
-        })
-
-        it("returns a new database with the right attributes", function() {
-            expect(this.database.get("instanceId")).toBe(this.tabularData.get("instance").id);
-            expect(this.database.get("instanceName")).toBe(this.tabularData.get("instance").name);
-            expect(this.database.get("name")).toBe(this.tabularData.get("databaseName"));
+            this.instance = this.tabularData.instance();
         });
 
-        it("memoizes", function() {
-            expect(this.database).toBe(this.tabularData.database());
+        it("returns an instance with the right id and name", function() {
+            expect(this.instance).toBeA(chorus.models.Instance);
+
+            expect(this.instance.id).toBe(this.tabularData.get("instance").id);
+            expect(this.instance.name()).toBe(this.tabularData.get("instance").name);
+        });
+    });
+
+    describe("#database", function() {
+        it("returns a new database with the right attributes", function() {
+            expect(this.tabularData.database().name()).toBe(this.tabularData.get("databaseName"));
         });
     });
 
     describe("#schema", function() {
-        beforeEach(function() {
-            this.schema = this.tabularData.schema();
-        })
         it("returns a new schema with the right attributes", function() {
-            expect(this.schema.get("instanceId")).toBe(this.tabularData.get("instance").id);
-            expect(this.schema.database().name()).toBe(this.tabularData.get("databaseName"));
-            expect(this.schema.get("name")).toBe(this.tabularData.get("schemaName"));
-            expect(this.schema.get("instanceName")).toBe(this.tabularData.get("instance").name);
-        });
-
-        it("memoizes", function() {
-            expect(this.schema).toBe(this.tabularData.schema());
+            expect(this.tabularData.schema().name()).toBe(this.tabularData.get("schemaName"));
         });
     });
 
@@ -397,22 +390,6 @@ describe("chorus.models.TabularData", function() {
                     numOfRow: "345"
                 }, "get");
             });
-        });
-    });
-
-    describe("#instance", function() {
-        beforeEach(function() {
-            this.instance = this.tabularData.instance();
-        });
-
-        it("returns an instance with the right id and name", function() {
-            expect(this.instance).toBeA(chorus.models.Instance);
-            expect(this.instance.get("id")).toBe(this.tabularData.get("instance").id);
-            expect(this.instance.get("name")).toBe(this.tabularData.get("instance").name);
-        });
-
-        it("memoizes", function() {
-            expect(this.instance).toBe(this.tabularData.instance());
         });
     });
 
