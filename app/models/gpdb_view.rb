@@ -1,0 +1,2 @@
+class GpdbView < GpdbDatabaseObject
+end

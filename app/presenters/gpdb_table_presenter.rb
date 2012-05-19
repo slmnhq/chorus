@@ -1,0 +1,2 @@
+class GpdbTablePresenter < GpdbDatabaseObjectPresenter
+end

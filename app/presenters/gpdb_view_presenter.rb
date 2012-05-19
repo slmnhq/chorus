@@ -1,0 +1,2 @@
+class GpdbViewPresenter < GpdbDatabaseObjectPresenter
+end

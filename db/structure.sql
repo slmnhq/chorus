@@ -110,6 +110,40 @@ $_$;
 
 
 --
+-- Name: gpdb_database_objects; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE gpdb_database_objects (
+    id integer NOT NULL,
+    type character varying(255),
+    name character varying(255),
+    comment text,
+    schema_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: gpdb_database_objects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE gpdb_database_objects_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: gpdb_database_objects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE gpdb_database_objects_id_seq OWNED BY gpdb_database_objects.id;
+
+
+--
 -- Name: gpdb_databases; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -545,6 +579,13 @@ ALTER SEQUENCE workspaces_id_seq OWNED BY workspaces.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE gpdb_database_objects ALTER COLUMN id SET DEFAULT nextval('gpdb_database_objects_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE gpdb_databases ALTER COLUMN id SET DEFAULT nextval('gpdb_databases_id_seq'::regclass);
 
 
@@ -623,6 +664,14 @@ ALTER TABLE workfiles ALTER COLUMN id SET DEFAULT nextval('workfiles_id_seq'::re
 --
 
 ALTER TABLE workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::regclass);
+
+
+--
+-- Name: gpdb_database_objects_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY gpdb_database_objects
+    ADD CONSTRAINT gpdb_database_objects_pkey PRIMARY KEY (id);
 
 
 --
@@ -827,5 +876,7 @@ INSERT INTO schema_migrations (version) VALUES ('20120517221427');
 INSERT INTO schema_migrations (version) VALUES ('20120518002042');
 
 INSERT INTO schema_migrations (version) VALUES ('20120518002110');
+
+INSERT INTO schema_migrations (version) VALUES ('20120518215640');
 
 INSERT INTO schema_migrations (version) VALUES ('20120519000854');

@@ -53,13 +53,25 @@ FactoryGirl.define do
   end
 
   factory :gpdb_database do
-    sequence(:name) { "database#{n}" }
+    sequence(:name) { |n| "database#{n}" }
     instance
   end
 
   factory :gpdb_schema do
-    sequence(:name) { "database#{n}" }
+    sequence(:name) { |n| "database#{n}" }
     association :database, :factory => :gpdb_database
+  end
+
+  factory :gpdb_table do
+    sequence(:name) { |n| "table#{n}" }
+    comment "A helpful table"
+    association :schema, :factory => :gpdb_schema
+  end
+
+  factory :gpdb_view do
+    sequence(:name) { |n| "view#{n}" }
+    comment "A helpful view"
+    association :schema, :factory => :gpdb_schema
   end
 end
 
