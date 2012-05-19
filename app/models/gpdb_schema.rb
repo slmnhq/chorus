@@ -16,6 +16,7 @@ class GpdbSchema < ActiveRecord::Base
   SQL
 
   belongs_to :database, :class_name => 'GpdbDatabase'
+  has_many :database_objects, :class_name => 'GpdbDatabaseObject', :foreign_key => :schema_id
   attr_accessor :dataset_count
 
   def self.refresh(account, database)
