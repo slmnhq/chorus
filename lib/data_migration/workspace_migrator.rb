@@ -12,6 +12,7 @@ class WorkspaceMigrator
       new_workspace.archiver = workspace["archiver"] ? User.unscoped.find_by_username!(workspace["archiver"]) : nil
       new_workspace.summary = workspace["summary"]
       new_workspace.owner = User.unscoped.find_by_username!(workspace["owner"])
+      new_workspace.deleted_at = workspace["last_updated_tx_stamp"] if workspace["is_deleted"] == "t"
       new_workspace.save!
 
       id = workspace["id"]

@@ -1,4 +1,5 @@
 class Workspace < ActiveRecord::Base
+  include SoftDelete
   attr_accessible :name, :public, :summary
 
   has_attached_file :image, :default_url => "", :styles => {:original => "", :icon => "50x50>"}
