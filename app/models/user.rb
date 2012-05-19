@@ -1,7 +1,8 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  default_scope :conditions => {:deleted_at => nil}
+  include SoftDelete
+
   attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
   attr_reader :password
 
@@ -74,21 +75,5 @@ class User < ActiveRecord::Base
     else
       self.password_digest = nil
     end
-  end
-
-  def destroy
-    if instances.count > 0
-      errors.add(:instance_count, :equal_to, {:count => 0})
-      raise ActiveRecord::RecordInvalid.new(self)
-    elsif owned_workspaces.count > 0
-      errors.add(:workspace_count, :equal_to, {:count => 0})
-      raise ActiveRecord::RecordInvalid.new(self)
-    end
-    self.deleted_at = Time.now.utc
-    save
-  end
-
-  def self.find_with_destroyed *args
-    self.with_exclusive_scope { find(*args) }
   end
 end
