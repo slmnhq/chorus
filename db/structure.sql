@@ -517,7 +517,8 @@ CREATE TABLE workspaces (
     image_file_name character varying(255),
     image_content_type character varying(255),
     image_file_size integer,
-    image_updated_at timestamp without time zone
+    image_updated_at timestamp without time zone,
+    deleted_at timestamp without time zone
 );
 
 
@@ -826,3 +827,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120517221427');
 INSERT INTO schema_migrations (version) VALUES ('20120518002042');
 
 INSERT INTO schema_migrations (version) VALUES ('20120518002110');
+
+INSERT INTO schema_migrations (version) VALUES ('20120519000854');
