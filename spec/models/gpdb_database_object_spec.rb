@@ -6,11 +6,12 @@ describe GpdbDatabaseObject do
   end
 
   context "#refresh" do
-    let(:account) { FactoryGirl.build(:instance_account) }
-    let(:schema) { FactoryGirl.build(:gpdb_schema) }
+    let(:account) { FactoryGirl.create(:instance_account) }
+    let(:schema) { FactoryGirl.create(:gpdb_schema) }
+    let(:db_objects_sql) { ActiveRecord::Base.send(:sanitize_sql, [GpdbDatabaseObject::DATABASE_OBJECTS_SQL, schema.name], nil) }
 
     before(:each) do
-      stub_gpdb(account, GpdbDatabaseObject::DATABASE_OBJECTS_SQL => [
+      stub_gpdb(account, db_objects_sql => [
           ["r", "table1", "Great new table"],
           ["v", "view1", "Great new view"]
       ])
@@ -19,7 +20,7 @@ describe GpdbDatabaseObject do
     it "creates new copies of the db objects in our db" do
       GpdbDatabaseObject.refresh(account, schema)
 
-      db_objects = GpdbDatabaseObject.order(:name).all
+      db_objects = schema.database_objects.order(:name).all
       db_objects.length.should == 2
       db_objects.map { |obj| obj.name }.should == ["table1", "view1"]
       db_objects.map { |obj| obj.class }.should == [GpdbTable, GpdbView]
@@ -36,7 +37,7 @@ describe GpdbDatabaseObject do
     it "destroy db objects that no longer exist in gpdb" do
       GpdbDatabaseObject.refresh(account, schema)
 
-      stub_gpdb(account, GpdbDatabaseObject::DATABASE_OBJECTS_SQL => [
+      stub_gpdb(account, db_objects_sql => [
           ["r", "table1", "Great new table"]
       ])
 
@@ -52,7 +53,7 @@ describe GpdbDatabaseObject do
       to_be_kept = FactoryGirl.create(:gpdb_table, :schema => other_schema, :name => "matching")
       to_be_deleted = FactoryGirl.create(:gpdb_table, :schema => schema, :name => "matching")
 
-      stub_gpdb(account, GpdbDatabaseObject::DATABASE_OBJECTS_SQL => [
+      stub_gpdb(account, db_objects_sql => [
           ["r", "new", ""]
           #["r", "matching", ""] # deleting
       ])

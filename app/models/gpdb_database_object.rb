@@ -47,7 +47,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
 
   def self.refresh(account, schema)
     db_objects = Gpdb::ConnectionBuilder.connect!(account.instance, account, schema.database.name) do |conn|
-      conn.query(sanitize_sql(DATABASE_OBJECTS_SQL, schema.name))
+      conn.query(sanitize_sql([DATABASE_OBJECTS_SQL, schema.name]))
     end
 
     db_object_names = db_objects.map { |_, name, _| name }
@@ -56,19 +56,10 @@ class GpdbDatabaseObject < ActiveRecord::Base
     db_objects.map do |type, name, comment|
       klass = type == 'r' ? GpdbTable : GpdbView
       db_object = klass.find_or_create_by_name(name)
+      db_object.schema = schema
       db_object.comment = comment
       db_object.save!
       db_object
     end
-
-    #schema_names = schema_rows.map { |row| row[0] }
-    #database.schemas.where("gpdb_schemas.name NOT IN (?)", schema_names).destroy_all
-    #
-    #schema_rows.map do |row|
-    #  schema = database.schemas.find_or_create_by_name(row[0])
-    #  schema.dataset_count = row[1].to_i
-    #  schema
-    #end
-    #
   end
 end
