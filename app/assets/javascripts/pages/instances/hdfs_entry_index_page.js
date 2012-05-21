@@ -3,9 +3,9 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
 ).extend({
     helpId: "instances",
 
-    setup:function (instance_id, path) {
+    setup:function (instanceId, path) {
         this.path = "/" + path;
-        this.instance = new chorus.models.HadoopInstance({ id: instance_id });
+        this.instance = new chorus.models.HadoopInstance({ id: instanceId });
         this.instance.fetch();
         this.bindings.add(this.instance, "loaded", this.entriesFetched);
 
@@ -21,7 +21,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
 
         this.sidebar = new chorus.views.HdfsEntrySidebar({
             rootPath: this.path,
-            instance_id: instance_id
+            instanceId: instanceId
         });
     },
 

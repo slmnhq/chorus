@@ -1,6 +1,6 @@
 describe("chorus.pages.SchemaIndexPage", function() {
     beforeEach(function() {
-        this.database = fixtures.database({id: "5678", name: "Foo", instance_id: "1234", instance_name: "Foo"})
+        this.database = fixtures.database({id: "5678", name: "Foo", instanceId: "1234", instanceName: "Foo"})
         this.page = new chorus.pages.SchemaIndexPage("5678");
         this.page.render();
     });
@@ -18,7 +18,7 @@ describe("chorus.pages.SchemaIndexPage", function() {
     });
 
     it("fetches the schema set with the right database id", function() {
-        expect(this.page.collection.attributes.database_id).toBe("5678");
+        expect(this.page.collection.attributes.databaseId).toBe("5678");
         expect(this.page.collection).toHaveBeenFetched();
     });
 

@@ -197,14 +197,14 @@ chorus.models = {
 
         toJSON: function() {
             var result = {};
+            var attributes = this.underscoreKeys(this._super("toJSON", arguments));
 
             if (this.parameterWrapper) {
-                result[this.parameterWrapper] = this._super("toJSON");
+                result[this.parameterWrapper] = attributes;
             } else if (this.constructorName && this.constructorName != "Model") {
-                result[_.underscored(this.constructorName)] = this._super("toJSON");
+                result[_.underscored(this.constructorName)] = attributes;
             } else {
-                result = this._super("toJSON")
-
+                result = attributes;
             }
             return result;
         },

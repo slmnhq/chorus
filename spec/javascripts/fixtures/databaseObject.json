@@ -1,15 +1,16 @@
 {
-    "desc": null,
-    "definition": "SELECT clv_data.customerid, clv_data.status, clv_data.gender, clv_data.age_bracket, clv_data.landing_page, clv_data.first_purchase_amount, clv_data.nbr_of_items_in_shopping_cart, clv_data.nbr_of_pages_viewed, clv_data.amount_of_time_spent_sec, clv_data.at_least_one_prod_on_sale, clv_data.referrer, clv_data.black_friday, clv_data.payment_method, clv_data.email_domain, clv_data.zipcode, clv_data.city, clv_data.state, clv_data.region, clv_data.percent_urban, clv_data.adj_gross_income, clv_data.wants_to_receive_emails, clv_data.next_day_shipping, clv_data.tenure, clv_data.value FROM analytics.clv_data;",
-    "schemaName": "analytics",
-    "objectName": "__gp_fullname",
-    "columns": 24,
-    "commentCount": 0,
-    "type": "SOURCE_TABLE",
-    "workspaceUsed": {
-        "workspaceCount": 4,
-        "workspaceList": [
-            {
+    "response": {
+        "desc": null,
+        "definition": "SELECT clv_data.customerid, clv_data.status, clv_data.gender, clv_data.age_bracket, clv_data.landing_page, clv_data.first_purchase_amount, clv_data.nbr_of_items_in_shopping_cart, clv_data.nbr_of_pages_viewed, clv_data.amount_of_time_spent_sec, clv_data.at_least_one_prod_on_sale, clv_data.referrer, clv_data.black_friday, clv_data.payment_method, clv_data.email_domain, clv_data.zipcode, clv_data.city, clv_data.state, clv_data.region, clv_data.percent_urban, clv_data.adj_gross_income, clv_data.wants_to_receive_emails, clv_data.next_day_shipping, clv_data.tenure, clv_data.value FROM analytics.clv_data;",
+        "schemaName": "analytics",
+        "objectName": "__gp_fullname",
+        "columns": 24,
+        "commentCount": 0,
+        "type": "SOURCE_TABLE",
+        "workspaceUsed": {
+            "workspaceCount": 4,
+            "workspaceList": [
+                {
                 "id": "10032",
                 "name": "Analytics2"
             },
@@ -25,43 +26,44 @@
                 "id": "10000",
                 "name": "ergonomics"
             }
+            ]
+        },
+        "id": "\"10000\"|\"Analytics\"|\"analytics\"|\"VIEW\"|\"__gp_fullname\"",
+        "tables": [
+            "clv_data"
+        ],
+        "databaseName": "Analytics",
+        "recentComment": null,
+        "instance": {
+            "id": "10000",
+            "name": "comfort"
+        },
+        "objectType": "VIEW",
+        "columnNames": [
+            "customerid",
+            "status",
+            "gender",
+            "age_bracket",
+            "landing_page",
+            "first_purchase_amount",
+            "nbr_of_items_in_shopping_cart",
+            "nbr_of_pages_viewed",
+            "amount_of_time_spent_sec",
+            "at_least_one_prod_on_sale",
+            "referrer",
+            "black_friday",
+            "payment_method",
+            "email_domain",
+            "zipcode",
+            "city",
+            "state",
+            "region",
+            "percent_urban",
+            "adj_gross_income",
+            "wants_to_receive_emails",
+            "next_day_shipping",
+            "tenure",
+            "value"
         ]
-    },
-    "id": "\"10000\"|\"Analytics\"|\"analytics\"|\"VIEW\"|\"__gp_fullname\"",
-    "tables": [
-        "clv_data"
-    ],
-    "databaseName": "Analytics",
-    "recentComment": null,
-    "instance": {
-        "id": "10000",
-        "name": "comfort"
-    },
-    "objectType": "VIEW",
-    "columnNames": [
-        "customerid",
-        "status",
-        "gender",
-        "age_bracket",
-        "landing_page",
-        "first_purchase_amount",
-        "nbr_of_items_in_shopping_cart",
-        "nbr_of_pages_viewed",
-        "amount_of_time_spent_sec",
-        "at_least_one_prod_on_sale",
-        "referrer",
-        "black_friday",
-        "payment_method",
-        "email_domain",
-        "zipcode",
-        "city",
-        "state",
-        "region",
-        "percent_urban",
-        "adj_gross_income",
-        "wants_to_receive_emails",
-        "next_day_shipping",
-        "tenure",
-        "value"
-    ]
+    }
 }

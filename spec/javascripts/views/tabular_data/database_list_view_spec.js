@@ -2,7 +2,7 @@ describe("chorus.views.DatabaseList", function() {
     beforeEach(function() {
         this.database1 = fixtures.database();
         this.database2 = fixtures.database();
-        this.collection = new chorus.collections.DatabaseSet([], {instance_id: 456});
+        this.collection = new chorus.collections.DatabaseSet([], {instanceId: 456});
         this.collection.reset([this.database1, this.database2]);
 
         this.view = new chorus.views.DatabaseList({collection: this.collection});

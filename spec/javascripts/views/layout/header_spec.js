@@ -1,8 +1,8 @@
 describe("chorus.views.Header", function() {
     beforeEach(function() {
         chorus.session = new chorus.models.Session({
-            "first_name": "Daniel",
-            "last_name": "Burke",
+            "firstName": "Daniel",
+            "lastName": "Burke",
             username: "dburke",
             id: "55"
         });
@@ -527,8 +527,8 @@ describe("chorus.views.Header", function() {
     context("when in dev mode", function() {
         beforeEach(function() {
             this.users = new chorus.collections.UserSet([
-                newFixtures.user({first_name: "user", last_name: "one", id: "1", admin: false}),
-                newFixtures.user({first_name: "user", last_name: "two", id: "2", admin: false})
+                newFixtures.user({firstName: "user", lastName: "one", id: "1", admin: false}),
+                newFixtures.user({firstName: "user", lastName: "two", id: "2", admin: false})
             ]);
             chorus.isDevMode.andReturn(true);
 

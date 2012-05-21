@@ -4,7 +4,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         this.sandbox = newFixtures.sandbox({
             schemaName: "mySchema",
             databaseName: "myDatabase",
-            instance_name: "myInstance"
+            instanceName: "myInstance"
         })
         chorus.page.workspace = newFixtures.workspace();
         this.csv = newFixtures.csvImport({
@@ -554,13 +554,13 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             it("imports the file", function() {
                 expect(this.server.lastCreate().url).toBe(this.dialog.csv.url());
                 var params = this.server.lastCreate().params();
-                expect(params["csvimport[fileName]"]).toBe(this.dialog.csv.get("fileName"));
-                expect(params["csvimport[toTable]"]).toBe("existingTable");
+                expect(params["csvimport[file_name]"]).toBe(this.dialog.csv.get("fileName"));
+                expect(params["csvimport[to_table]"]).toBe("existingTable");
                 expect(params["csvimport[delimiter]"]).toBe(",");
                 expect(params["csvimport[type]"]).toBe("existingTable");
-                expect(params["csvimport[hasHeader]"]).toBe('true');
+                expect(params["csvimport[has_header]"]).toBe('true');
                 expect(params["csvimport[truncate]"]).toBe('true');
-                expect(JSON.parse(params["csvimport[columnsMap]"])).toEqual(this.expectedColumnsMap);
+                expect(JSON.parse(params["csvimport[columns_map]"])).toEqual(this.expectedColumnsMap);
 
             });
 

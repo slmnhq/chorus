@@ -1,8 +1,8 @@
 describe("chorus.pages.UserIndexPage", function() {
     beforeEach(function() {
         chorus.user = new chorus.models.User({
-            "first_name" : "Daniel",
-            "last_name" : "Burkes",
+            "firstName" : "Daniel",
+            "lastName" : "Burkes",
             "fullName": "Daniel Francis Burkes"
         });
     });
@@ -13,7 +13,7 @@ describe("chorus.pages.UserIndexPage", function() {
         })
 
         it("defaults to first name sorting ascending", function() {
-            expect(this.page.collection.order).toBe("first_name")
+            expect(this.page.collection.order).toBe("firstName")
         })
 
         it("has a helpId", function() {
@@ -32,8 +32,8 @@ describe("chorus.pages.UserIndexPage", function() {
         })
 
         it("defaults to first name sorting", function() {
-            expect(this.view.$("li[data-type=last_name] .check")).toHaveClass("hidden");
-            expect(this.view.$("li[data-type=first_name] .check")).not.toHaveClass("hidden");
+            expect(this.view.$("li[data-type=lastName] .check")).toHaveClass("hidden");
+            expect(this.view.$("li[data-type=firstName] .check")).not.toHaveClass("hidden");
         })
 
         describe("when the collection is loading", function() {
@@ -88,19 +88,19 @@ describe("chorus.pages.UserIndexPage", function() {
             });
 
             it("has options for sorting", function() {
-                expect(this.page.$("ul[data-event=sort] li[data-type=first_name]")).toExist();
-                expect(this.page.$("ul[data-event=sort] li[data-type=last_name]")).toExist();
+                expect(this.page.$("ul[data-event=sort] li[data-type=firstName]")).toExist();
+                expect(this.page.$("ul[data-event=sort] li[data-type=lastName]")).toExist();
             })
 
             it("can sort the list by first name ascending", function() {
-                this.page.$("li[data-type=first_name] a").click();
-                expect(this.page.collection.order).toBe("first_name")
+                this.page.$("li[data-type=firstName] a").click();
+                expect(this.page.collection.order).toBe("firstName")
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             })
 
             it("can sort the list by last name ascending", function() {
-                this.page.$("li[data-type=last_name] a").click();
-                expect(this.page.collection.order).toBe("last_name")
+                this.page.$("li[data-type=lastName] a").click();
+                expect(this.page.collection.order).toBe("lastName")
             })
         })
     })

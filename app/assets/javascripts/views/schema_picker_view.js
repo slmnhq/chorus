@@ -161,7 +161,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
 
     updateInstances:function () {
         this.updateFor('instance', function (instance) {
-                return instance.get("instance_provider") != "Hadoop";
+                return instance.get("instanceProvider") != "Hadoop";
             },
             function(instance) {
                 return !instance.get("hasCredentials");

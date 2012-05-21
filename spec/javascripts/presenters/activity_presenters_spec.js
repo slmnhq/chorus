@@ -767,7 +767,7 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             this.model = fixtures.activities.PROVISIONING_SUCCESS();
             this.instance = this.model.instance();
-            this.instance.set({instance_provider: "Greenplum Database"});
+            this.instance.set({instanceProvider: "Greenplum Database"});
             this.presenter = new chorus.presenters.Activity(this.model)
         });
 
@@ -803,7 +803,7 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             this.model = fixtures.activities.START_PROVISIONING();
             this.instance = this.model.instance();
-            this.instance.set({instance_provider: "Greenplum Database"});
+            this.instance.set({instanceProvider: "Greenplum Database"});
             this.presenter = new chorus.presenters.Activity(this.model)
         });
 

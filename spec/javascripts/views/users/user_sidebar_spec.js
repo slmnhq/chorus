@@ -1,7 +1,7 @@
 describe("chorus.views.UserSidebar", function() {
     beforeEach(function() {
         this.user = new chorus.models.User({username: "bill", id: "42"})
-        this.config = new chorus.models.Config({ external_auth_enabled: false })
+        this.config = new chorus.models.Config({ externalAuthEnabled: false })
 
         spyOn(chorus.views.UserSidebar.prototype, "setUser").andCallThrough();
         this.view = new chorus.views.UserSidebar({model: this.user, listMode: false});
@@ -76,7 +76,7 @@ describe("chorus.views.UserSidebar", function() {
 
                 context("and external auth is configured", function() {
                     it("does not show the change password option", function() {
-                        this.view.config.set({ external_auth_enabled: true })
+                        this.view.config.set({ externalAuthEnabled: true })
                         this.view.render();
                         expect(this.view.$("a.change_password")).not.toExist();
                     });

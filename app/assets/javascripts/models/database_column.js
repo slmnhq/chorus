@@ -1,6 +1,6 @@
 chorus.models.DatabaseColumn = chorus.models.Base.extend({
     constructorName: "DatabaseColumn",
-    urlTemplate: "data/{{instance_id}}/database/{{encode databaseName}}/schema/{{encode schemaName}}/{{parentType}}/{{encode parentName}}/column",
+    urlTemplate: "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}/{{parentType}}/{{encode parentName}}/column",
 
     urlParams: function() {
         return {
@@ -12,7 +12,7 @@ chorus.models.DatabaseColumn = chorus.models.Base.extend({
     initialize: function() {
         if (this.tabularData) {
             this.set({
-                instance_id: this.tabularData.get("instance").id,
+                instanceId: this.tabularData.get("instance").id,
                 databaseName: this.tabularData.get("databaseName"),
                 schemaName: this.tabularData.get("schemaName"),
                 parentName: this.tabularData.get("objectName"),

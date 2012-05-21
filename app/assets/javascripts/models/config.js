@@ -3,7 +3,7 @@ chorus.models.Config = chorus.models.Base.extend({
     urlTemplate:"config/",
 
     isExternalAuth: function() {
-        return this.get("external_auth_enabled")
+        return this.get("externalAuthEnabled")
     },
 
     timezoneOffset: function() {

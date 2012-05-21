@@ -3,7 +3,7 @@ chorus.collections.DatabaseObjectSet = chorus.collections.LastFetchWins.include(
 ).extend({
     constructorName: 'DatabaseObjectSet',
     model: chorus.models.DatabaseObject,
-    urlTemplate: "data/{{instance_id}}/database/{{encode databaseName}}/schema/{{encode schemaName}}",
+    urlTemplate: "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}",
 
     urlParams: function() {
         if (this.attributes && this.attributes.filter) {
@@ -23,7 +23,7 @@ chorus.collections.DatabaseObjectSet = chorus.collections.LastFetchWins.include(
         var modelsJson = this._super("parse", arguments);
         return _.map(modelsJson, function (modelJson) {
             return _.extend({
-                instance: { id: this.attributes.instance_id },
+                instance: { id: this.attributes.instanceId },
                 databaseName: this.attributes.databaseName,
                 schemaName: this.attributes.schemaName
             }, modelJson);

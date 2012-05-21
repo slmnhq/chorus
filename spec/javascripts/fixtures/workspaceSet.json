@@ -1,150 +1,152 @@
-[
-   {
-      "summary":"as<div><br><\/div><div>asdf<\/div><div><br><\/div><div>asdf<\/div>",
-      "archiverId":null,
-      "owner_id":"InitialUser",
-      "archiver":null,
-      "archiverFirstName":null,
-      "ownerLastName":"Admin",
-      "permission":[
-         "admin"
-      ],
-      "public":true,
-      "latestInsightList":null,
-      "id":"10000",
-      "latestCommentList":null,
-      "createdStamp":"2012-03-29 16:03:29.692",
-      "name":"ergonomics",
-      "ownerFirstName":"EDC",
-      "numberOfInsight":null,
-      "owner":"edcadmin",
-      "numberOfComment":null,
-      "archived_at":null,
-       "image": {
-           "icon": "",
-           "original": ""
-       },
-      "sandboxInfo":{
-         "sandboxId":"10000",
-         "databaseName":"Analytics",
-         "databaseId":"10006",
-         "schemaName":"analytics",
-         "instance_name":"comfort",
-         "schemaId":"10001",
-         "instance_id":"10000",
-         "hasCredentials":true
-      },
-      "archiverLastName":null
-   },
-   {
-      "summary":null,
-      "archiverId":null,
-      "owner_id":"InitialUser",
-      "archiver":null,
-      "archiverFirstName":null,
-      "ownerLastName":"Admin",
-      "permission":[
-         "admin"
-      ],
-      "public":true,
-      "latestInsightList":null,
-      "id":"10002",
-      "latestCommentList":null,
-      "createdStamp":"2012-04-02 14:52:23.955",
-      "name":"GinNJuice1333403543",
-      "ownerFirstName":"EDC",
-      "numberOfInsight":null,
-      "owner":"edcadmin",
-      "numberOfComment":null,
-      "archived_at": null,
-       "image": {
-           "icon": "",
-           "original": ""
-       },
-      "sandboxInfo":{
-         "sandboxId":null,
-         "databaseName":null,
-         "databaseId":null,
-         "schemaName":null,
-         "instance_name":null,
-         "schemaId":null,
-         "instance_id":null,
-         "hasCredentials":false
-      },
-      "archiverLastName":null
-   },
-   {
-      "summary":null,
-      "archiverId":null,
-      "owner_id":"InitialUser",
-      "archiver":null,
-      "archiverFirstName":null,
-      "ownerLastName":"Admin",
-      "permission":[
-         "admin"
-      ],
-      "public":true,
-      "latestInsightList":null,
-      "id":"10003",
-      "latestCommentList":null,
-      "createdStamp":"2012-04-02 14:52:27.854",
-      "name":"GinNJuice1333403546",
-      "ownerFirstName":"EDC",
-      "numberOfInsight":null,
-      "owner":"edcadmin",
-      "numberOfComment":null,
-      "archived_at":null,
-       "image": {
-           "icon": "",
-           "original": ""
-       },
-      "sandboxInfo":{
-         "sandboxId":null,
-         "databaseName":null,
-         "databaseId":null,
-         "schemaName":null,
-         "instance_name":null,
-         "schemaId":null,
-         "instance_id":null,
-         "hasCredentials":false
-      },
-      "archiverLastName":null
-   },
-   {
-      "summary":null,
-      "archiverId":null,
-      "owner_id":"InitialUser",
-      "archiver":null,
-      "archiverFirstName":null,
-      "ownerLastName":"Admin",
-      "permission":[
-         "admin"
-      ],
-      "archived_at":null,
-      "public":true,
-      "latestInsightList":null,
-      "id":"10007",
-      "latestCommentList":null,
-      "createdStamp":"2012-04-02 14:52:55.058",
-      "name":"GinNJuice1333403574",
-      "ownerFirstName":"EDC",
-      "numberOfInsight":null,
-      "owner":"edcadmin",
-      "numberOfComment":null,
-       "image": {
-           "icon": "",
-           "original": ""
-       },
-      "sandboxInfo":{
-         "sandboxId":null,
-         "databaseName":null,
-         "databaseId":null,
-         "schemaName":null,
-         "instance_name":null,
-         "schemaId":null,
-         "instance_id":null,
-         "hasCredentials":false
-      },
-      "archiverLastName":null
-   }
-]
+{
+    "response": [
+        {
+            "summary":"as<div><br><\/div><div>asdf<\/div><div><br><\/div><div>asdf<\/div>",
+            "archiverId":null,
+            "owner_id":"InitialUser",
+            "archiver":null,
+            "archiverFirstName":null,
+            "ownerLastName":"Admin",
+            "permission":[
+                "admin"
+            ],
+            "public":true,
+            "latestInsightList":null,
+            "id":"10000",
+            "latestCommentList":null,
+            "createdStamp":"2012-03-29 16:03:29.692",
+            "name":"ergonomics",
+            "ownerFirstName":"EDC",
+            "numberOfInsight":null,
+            "owner":"edcadmin",
+            "numberOfComment":null,
+            "archived_at":null,
+            "image": {
+                "icon": "",
+                "original": ""
+            },
+            "sandboxInfo":{
+                "sandboxId":"10000",
+                "databaseName":"Analytics",
+                "databaseId":"10006",
+                "schemaName":"analytics",
+                "instance_name":"comfort",
+                "schemaId":"10001",
+                "instance_id":"10000",
+                "hasCredentials":true
+            },
+            "archiverLastName":null
+        },
+        {
+            "summary":null,
+            "archiverId":null,
+            "owner_id":"InitialUser",
+            "archiver":null,
+            "archiverFirstName":null,
+            "ownerLastName":"Admin",
+            "permission":[
+                "admin"
+            ],
+            "public":true,
+            "latestInsightList":null,
+            "id":"10002",
+            "latestCommentList":null,
+            "createdStamp":"2012-04-02 14:52:23.955",
+            "name":"GinNJuice1333403543",
+            "ownerFirstName":"EDC",
+            "numberOfInsight":null,
+            "owner":"edcadmin",
+            "numberOfComment":null,
+            "archived_at": null,
+            "image": {
+                "icon": "",
+                "original": ""
+            },
+            "sandboxInfo":{
+                "sandboxId":null,
+                "databaseName":null,
+                "databaseId":null,
+                "schemaName":null,
+                "instance_name":null,
+                "schemaId":null,
+                "instance_id":null,
+                "hasCredentials":false
+            },
+            "archiverLastName":null
+        },
+        {
+            "summary":null,
+            "archiverId":null,
+            "owner_id":"InitialUser",
+            "archiver":null,
+            "archiverFirstName":null,
+            "ownerLastName":"Admin",
+            "permission":[
+                "admin"
+            ],
+            "public":true,
+            "latestInsightList":null,
+            "id":"10003",
+            "latestCommentList":null,
+            "createdStamp":"2012-04-02 14:52:27.854",
+            "name":"GinNJuice1333403546",
+            "ownerFirstName":"EDC",
+            "numberOfInsight":null,
+            "owner":"edcadmin",
+            "numberOfComment":null,
+            "archived_at":null,
+            "image": {
+                "icon": "",
+                "original": ""
+            },
+            "sandboxInfo":{
+                "sandboxId":null,
+                "databaseName":null,
+                "databaseId":null,
+                "schemaName":null,
+                "instance_name":null,
+                "schemaId":null,
+                "instance_id":null,
+                "hasCredentials":false
+            },
+            "archiverLastName":null
+        },
+        {
+            "summary":null,
+            "archiverId":null,
+            "owner_id":"InitialUser",
+            "archiver":null,
+            "archiverFirstName":null,
+            "ownerLastName":"Admin",
+            "permission":[
+                "admin"
+            ],
+            "archived_at":null,
+            "public":true,
+            "latestInsightList":null,
+            "id":"10007",
+            "latestCommentList":null,
+            "createdStamp":"2012-04-02 14:52:55.058",
+            "name":"GinNJuice1333403574",
+            "ownerFirstName":"EDC",
+            "numberOfInsight":null,
+            "owner":"edcadmin",
+            "numberOfComment":null,
+            "image": {
+                "icon": "",
+                "original": ""
+            },
+            "sandboxInfo":{
+                "sandboxId":null,
+                "databaseName":null,
+                "databaseId":null,
+                "schemaName":null,
+                "instance_name":null,
+                "schemaId":null,
+                "instance_id":null,
+                "hasCredentials":false
+            },
+            "archiverLastName":null
+        }
+    ]
+}

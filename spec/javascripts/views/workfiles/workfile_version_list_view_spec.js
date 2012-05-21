@@ -5,8 +5,8 @@ describe("chorus.views.WorkfileVersionList", function() {
                 fileName: "Foo",
                 modifiedBy: {
                     id: "1",
-                    first_name: "Bob",
-                    last_name: "Smith"
+                    firstName: "Bob",
+                    lastName: "Smith"
                 },
                 versionInfo: {
                     versionNum: "1"
@@ -17,8 +17,8 @@ describe("chorus.views.WorkfileVersionList", function() {
                 fileName: "Foo",
                 modifiedBy: {
                     id: "1",
-                    first_name: "Jim",
-                    last_name: "Jones"
+                    firstName: "Jim",
+                    lastName: "Jones"
                 },
                 versionInfo: {
                     versionNum: "2"

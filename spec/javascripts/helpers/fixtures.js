@@ -200,7 +200,7 @@ beforeEach(function() {
                     hdfs: {
                         instance: {
                             id: '10010',
-                            name: 'instance_name'
+                            name: 'instanceName'
                         },
                         path: '/data',
                         name: "import.csv"
@@ -215,10 +215,10 @@ beforeEach(function() {
                 return new chorus.models.Activity(_.extend({
                     type: "WORKSPACE_CHANGE_NAME",
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
                         isDeleted: false,
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     id: fixtures.nextId().toString(),
@@ -314,7 +314,7 @@ beforeEach(function() {
             },
 
             "NOTE_ON_CHORUS_VIEW": function(overrides) {
-                var instance_id = fixtures.nextId().toString();
+                var instanceId = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE",
@@ -329,7 +329,7 @@ beforeEach(function() {
                         }
                     ],
                     chorusView: {
-                        id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_table_name"',
+                        id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
                         name: '__a_chorus_view_name',
                         objectName: "__a_chorus_view_name",
                         objectType: "QUERY",
@@ -357,7 +357,7 @@ beforeEach(function() {
             },
 
             "NOTE_ON_DATASET_TABLE": function(overrides) {
-                var instance_id = fixtures.nextId().toString();
+                var instanceId = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE",
@@ -372,7 +372,7 @@ beforeEach(function() {
                         }
                     ],
                     databaseObject: {
-                        id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_table_name"',
+                        id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
                         name: '__a_table_name',
                         objectType: "BASE_TABLE",
                         type: "databaseObject"
@@ -399,7 +399,7 @@ beforeEach(function() {
             },
 
             "NOTE_ON_DATABASE_TABLE": function(overrides) {
-                var instance_id = fixtures.nextId().toString();
+                var instanceId = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE",
@@ -414,7 +414,7 @@ beforeEach(function() {
                         }
                     ],
                     databaseObject: {
-                        id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_table_name"',
+                        id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
                         name: '__a_table_name',
                         objectType: "BASE_TABLE",
                         type: "databaseObject",
@@ -444,7 +444,7 @@ beforeEach(function() {
 
 
             "COMMENT_ON_NOTE_ON_CHORUS_VIEW": function(overrides) {
-                var instance_id = fixtures.nextId().toString();
+                var instanceId = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE_COMMENT",
@@ -465,7 +465,7 @@ beforeEach(function() {
                             }
                         ],
                         chorusView: {
-                            id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_table_name"',
+                            id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
                             name: '__a_chorus_view_name',
                             objectName: "__a_chorus_view_name",
                             objectType: "QUERY",
@@ -479,7 +479,7 @@ beforeEach(function() {
             },
 
             "COMMENT_ON_NOTE_ON_DATABASE_TABLE": function(overrides) {
-                var instance_id = fixtures.nextId().toString();
+                var instanceId = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE_COMMENT",
@@ -500,7 +500,7 @@ beforeEach(function() {
                             }
                         ],
                         databaseObject: {
-                            id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_table_name"',
+                            id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
                             name: '__a_table_name',
                             objectType: "BASE_TABLE",
                             type: "databaseObject",
@@ -530,7 +530,7 @@ beforeEach(function() {
             },
 
             "NOTE_ON_DATASET_VIEW": function(overrides) {
-                var instance_id = fixtures.nextId().toString();
+                var instanceId = fixtures.nextId().toString();
                 var attrs = _.extend({
                     author: fixtures.authorJson(),
                     type: "NOTE",
@@ -545,7 +545,7 @@ beforeEach(function() {
                         }
                     ],
                     databaseObject: {
-                        id: '"' + instance_id + '"|"dca_demo"|"public"|"__a_view_name"',
+                        id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_view_name"',
                         name: '__a_view_name',
                         objectType: "BASE_VIEW",
                         type: "databaseObject"
@@ -732,7 +732,7 @@ beforeEach(function() {
                     hdfs: {
                         instance: {
                             id: '10010',
-                            name: 'instance_name'
+                            name: 'instanceName'
                         },
                         path: '/webui',
                         name: "chart.html",
@@ -801,7 +801,7 @@ beforeEach(function() {
                     _.extend(this.NOTE_ON_DATASET_JSON(), {
                         type: "INSIGHT_CREATED",
                         isInsight: true,
-                        promotionActioner: {id: 10010, last_name: "1", first_name: "u"},
+                        promotionActioner: {id: 10010, lastName: "1", firstName: "u"},
                         promotionTime: "2012-02-14 12:34:56"
                     }, overrides));
             },
@@ -809,9 +809,9 @@ beforeEach(function() {
             "IMPORT_UPDATED_TABLE": function() {
                 return new chorus.models.Activity({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     databaseObject: {
@@ -840,9 +840,9 @@ beforeEach(function() {
             "IMPORT_UPDATED_VIEW": function() {
                 return new chorus.models.Activity({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     databaseObject: {
@@ -871,9 +871,9 @@ beforeEach(function() {
             "IMPORT_SUCCESS_FILE": function() {
                 return new chorus.models.Activity({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     databaseObject: {
@@ -903,10 +903,10 @@ beforeEach(function() {
             "IMPORT_SUCCESS_CHORUS_VIEW": function() {
                 return new chorus.models.Activity({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
                         isDeleted: false,
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     chorusView: {
                         id: '"10002"|"Analytics"|"analytics"|"QUERY"|"a_chorus_view"',
@@ -944,9 +944,9 @@ beforeEach(function() {
             "IMPORT_SUCCESS_SOURCE_TABLE": function() {
                 return new chorus.models.Activity({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     databaseObject: {
@@ -978,9 +978,9 @@ beforeEach(function() {
             "IMPORT_SUCCESS_VIEW": function() {
                 return new chorus.models.Activity({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     databaseObject: {
@@ -1012,9 +1012,9 @@ beforeEach(function() {
             "IMPORT_FAILED_FILE": function(overrides) {
                 return new chorus.models.Activity(_.extend({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     file: {
@@ -1045,9 +1045,9 @@ beforeEach(function() {
             "IMPORT_FAILED_SOURCE_TABLE": function(overrides) {
                 return new chorus.models.Activity(_.extend({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     databaseObject: {
@@ -1083,9 +1083,9 @@ beforeEach(function() {
             "IMPORT_FAILED_VIEW": function(overrides) {
                 return new chorus.models.Activity(_.extend({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     databaseObject: {
@@ -1121,9 +1121,9 @@ beforeEach(function() {
             "IMPORT_CREATED_FILE": function() {
                 return new chorus.models.Activity({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     databaseObject: {
@@ -1153,9 +1153,9 @@ beforeEach(function() {
             "IMPORT_CREATED_SOURCE_TABLE": function() {
                 return new chorus.models.Activity({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     databaseObject: {
@@ -1187,9 +1187,9 @@ beforeEach(function() {
             "IMPORT_CREATED_VIEW": function() {
                 return new chorus.models.Activity({
                     author: {
-                        first_name: "EDC",
+                        firstName: "EDC",
                         id: "InitialUser",
-                        last_name: "Admin"
+                        lastName: "Admin"
                     },
                     comments: [],
                     databaseObject: {
@@ -1278,7 +1278,7 @@ beforeEach(function() {
 
             "INSTANCE_DELETED": function(overrides) {
                 var attrs = _.extend({
-                    "author": {id: "InitialUser", last_name: "Admin", isDeleted: false, first_name: "EDC"},
+                    "author": {id: "InitialUser", lastName: "Admin", isDeleted: false, firstName: "EDC"},
                     "comments": [],
                     "id": "10380",
                     "instance": {id: "10033", name: "aurora_to_be_deleted_del_1334876442675", isDeleted: true},
@@ -1309,9 +1309,9 @@ beforeEach(function() {
                     "id": 10301,
                     "author": {
                         "id": "InitialUser",
-                        "last_name": "Admin",
+                        "lastName": "Admin",
                         "isDeleted": false,
-                        "first_name": "EDC"
+                        "firstName": "EDC"
                     },
                     "instance": {
                         "id": "10220",
@@ -1335,9 +1335,9 @@ beforeEach(function() {
                     "id": 10311,
                     "author": {
                         "id": "InitialUser",
-                        "last_name": "Admin",
+                        "lastName": "Admin",
                         "isDeleted": false,
-                        "first_name": "EDC"
+                        "firstName": "EDC"
                     },
                     "instance": {
                         "id": "10230",
@@ -1531,8 +1531,8 @@ beforeEach(function() {
             return {
                 image: { original: "/foo", icon: "/bar" },
                 id: "1234",
-                last_name: "Smith",
-                first_name: "Bob"
+                lastName: "Smith",
+                firstName: "Bob"
             }
         },
 
@@ -1615,8 +1615,8 @@ beforeEach(function() {
                 lastUpdatedStamp: "2011-11-29 10:46:03.255",
                 versionFileId: this.nextId().toString(),
                 content: "Workfile Content!" + id,
-                modifiedByFirstName: modifiedByUser.first_name,
-                modifiedByLastName: modifiedByUser.last_name,
+                modifiedByFirstName: modifiedByUser.firstName,
+                modifiedByLastName: modifiedByUser.lastName,
                 modifiedById: modifiedByUser.id,
                 versionOwner: "edcadmin",
                 "versionFilePath": "/Users/pivotal/workspace/chorus/ofbiz/runtime/data/workfile/10003/1332867012541_2971",
@@ -1629,8 +1629,8 @@ beforeEach(function() {
             return _.extend({
                 databaseId: null,
                 databaseName: null,
-                instance_id: null,
-                instance_name: null,
+                instanceId: null,
+                instanceName: null,
                 schemaId: null,
                 schemaName: null
             }, overrides);
@@ -1676,7 +1676,7 @@ beforeEach(function() {
                 isDeleted: false,
                 modifiedBy: modifiedByUser,
                 owner: ownerUser.username,
-                owner_id: ownerUser.id,
+                ownerId: ownerUser.id,
                 workspaceId: this.nextId().toString(),
                 imageId: null,
                 isBinary: false,
@@ -1721,9 +1721,9 @@ beforeEach(function() {
         schemaSet: function(overrides) {
             var attributes = _.extend({
                 id: this.nextId().toString(),
-                database_id: this.nextId().toString(),
-                instance_id: this.nextId().toString(),
-                database_name: "My fixture database"
+                databaseId: this.nextId().toString(),
+                instanceId: this.nextId().toString(),
+                databaseName: "My fixture database"
             }, overrides);
             return new chorus.collections.SchemaSet([], attributes);
         },
@@ -1738,7 +1738,7 @@ beforeEach(function() {
                 lastUpdatedTxStamp: "2012-01-04 14:42:15.309",
                 createdStamp: "2012-01-04 14:42:15.318",
                 createdTxStamp: "2012-01-04 14:42:15.309",
-                instance_id: this.nextId().toString(),
+                instanceId: this.nextId().toString(),
                 databaseName: "My fixture database",
                 dataset_count: 4
             }, overrides);
@@ -1881,7 +1881,7 @@ beforeEach(function() {
 
         emptyInstanceAccount: function(overrides) {
             var attributes = _.extend({
-                instance_id: "10020",
+                instanceId: "10020",
                 userName: "u1"
             }, overrides);
             return new chorus.models.InstanceAccount(attributes);
@@ -1891,7 +1891,7 @@ beforeEach(function() {
             var overrides;
             if (overridesOrInstance instanceof chorus.models.Instance) {
                 overrides = {
-                    instance_id: overridesOrInstance.get("id")
+                    instanceId: overridesOrInstance.get("id")
                 };
             } else {
                 overrides = overridesOrInstance || {};
@@ -1900,9 +1900,9 @@ beforeEach(function() {
                 id: this.nextId().toString(),
                 shared: "true",
                 expiration: null,
-                instance_id: this.nextId().toString(),
+                instanceId: this.nextId().toString(),
                 owner: _.extend(newFixtures.userJson(), overrides.owner),
-                db_username: "gpadmin"
+                dbUsername: "gpadmin"
             }, overrides);
             return new chorus.models.InstanceAccount(attributes);
         },
@@ -2099,7 +2099,7 @@ beforeEach(function() {
         schemaFunction: function(overrides) {
             var attributes = _.extend({
                 argTypes: ['text', 'text', 'text'],
-                argNames: ['first_name', 'last_name', ''],
+                argNames: ['firstName', 'lastName', ''],
                 language: "plpgsql",
                 functionName: "function" + this.nextId().toString(),
                 schemaName: 'mmmmySchema',
@@ -2297,7 +2297,7 @@ beforeEach(function() {
                 path: '/data',
                 instance: {
                     id: this.nextId().toString(),
-                    name: 'instance_name'
+                    name: 'instanceName'
                 }
             }, overrides);
             var result = new chorus.collections.HdfsEntrySet(null, attributes);
@@ -2384,7 +2384,7 @@ beforeEach(function() {
                     "some content;",
                     "second line"
                 ],
-                instance_id: "1234",
+                instanceId: "1234",
                 path: "%2Fdata%2FfixtureFile.sql"
             }, overrides)
         },
@@ -2405,8 +2405,8 @@ beforeEach(function() {
                 },
                 "owner": {
                     "id": "InitialUser",
-                    "last_name": "Admin",
-                    "first_name": "EDC"
+                    "lastName": "Admin",
+                    "firstName": "EDC"
                 },
                 "workspace": {
                     "id": "10000",
@@ -2421,8 +2421,8 @@ beforeEach(function() {
                         "versionFileId": "1331770521971_1380",
                         "modifiedBy": {
                             "id": "InitialUser",
-                            "last_name": "Admin",
-                            "first_name": "EDC"
+                            "lastName": "Admin",
+                            "firstName": "EDC"
                         },
                         "versionFilePath": "/Users/pivotal/workspace/chorus/ofbiz/runtime/data/workfile/10003/1332867012541_2971",
                         "versionOwner": "edcadmin",
@@ -2435,14 +2435,14 @@ beforeEach(function() {
                     },
                     "modifiedBy": {
                         "id": "InitialUser",
-                        "last_name": "Admin",
-                        "first_name": "EDC"
+                        "lastName": "Admin",
+                        "firstName": "EDC"
                     },
                     "fileName": "buildout.txt",
                     "owner": {
                         "id": "InitialUser",
-                        "last_name": "Admin",
-                        "first_name": "EDC"
+                        "lastName": "Admin",
+                        "firstName": "EDC"
                     },
                     "isDeleted": false,
                     "entityType": "workfile",
@@ -2470,8 +2470,8 @@ beforeEach(function() {
                     },
                     "owner": {
                         "id": "InitialUser",
-                        "last_name": "Admin",
-                        "first_name": "EDC"
+                        "lastName": "Admin",
+                        "firstName": "EDC"
                     },
                     "workspace": {},
                     "hdfs": {
@@ -2527,8 +2527,8 @@ beforeEach(function() {
                 },
                 owner: {
                     id: "InitialUser",
-                    last_name: "Admin",
-                    first_name: "EDC"
+                    lastName: "Admin",
+                    firstName: "EDC"
                 },
                 workspace: {
                 },
@@ -2566,8 +2566,8 @@ beforeEach(function() {
                 },
                 "owner": {
                     "id": "InitialUser",
-                    "last_name": "Admin",
-                    "first_name": "EDC"
+                    "lastName": "Admin",
+                    "firstName": "EDC"
                 },
                 "workspace": {},
                 "instance": {
@@ -2578,11 +2578,11 @@ beforeEach(function() {
                     "name": "gillette",
                     "owner": {
                         "id": "InitialUser",
-                        "last_name": "Admin",
-                        "first_name": "EDC"
+                        "lastName": "Admin",
+                        "firstName": "EDC"
                     },
                     "state": "online",
-                    "instance_provider": "Greenplum Database",
+                    "instanceProvider": "Greenplum Database",
                     "isDeleted": false,
                     "entityType": "instance",
                     "database": "postgres"
@@ -2609,8 +2609,8 @@ beforeEach(function() {
                 },
                 "owner": {
                     "id": "InitialUser",
-                    "last_name": "Admin",
-                    "first_name": "EDC"
+                    "lastName": "Admin",
+                    "firstName": "EDC"
                 },
                 "workspace": {
                     "id": "10000",
@@ -2634,14 +2634,14 @@ beforeEach(function() {
                             "entityType": "workfile",
                             "modifiedBy": {
                                 "id": "422",
-                                "first_name": "John",
-                                "last_name": "Smith",
+                                "firstName": "John",
+                                "lastName": "Smith",
                                 "username": "johnny192"
                             },
                             "owner": {
                                 "id": "InitialUser",
-                                "last_name": "Admin",
-                                "first_name": "EDC"
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
                             "workspace": {
                                 "id": "10050",
@@ -2661,14 +2661,14 @@ beforeEach(function() {
                             "entityType": "workfile",
                             "modifiedBy": {
                                 "id": "422",
-                                "first_name": "John",
-                                "last_name": "Smith",
+                                "firstName": "John",
+                                "lastName": "Smith",
                                 "username": "johnny192"
                             },
                             "owner": {
                                 "id": "InitialUser",
-                                "last_name": "Admin",
-                                "first_name": "EDC"
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
                             "workspace": {
                                 "id": "10039",
@@ -2693,9 +2693,9 @@ beforeEach(function() {
                             lastUpdatedStamp: "2012-02-24 16:08:32",
                             name: "ws",
                             owner: {
-                                first_name: "EDC",
+                                firstName: "EDC",
                                 id: "InitialUser",
-                                last_name: "Admin"
+                                lastName: "Admin"
                             },
                             highlightedAttributes: {
                                 name: ["<em>ws</em>"]
@@ -2710,9 +2710,9 @@ beforeEach(function() {
                             lastUpdatedStamp: "2012-02-24 16:08:32",
                             name: "other_ws",
                             owner: {
-                                first_name: "EDC",
+                                firstName: "EDC",
                                 id: "InitialUser",
-                                last_name: "Admin"
+                                lastName: "Admin"
                             },
                             highlightedAttributes: {
                                 name: ["other_<em>ws</em>"]
@@ -2954,7 +2954,7 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdatedStamp": "2012-03-07 12:59:45",
                             "host": "gillette",
-                            "instance_provider": "Hadoop",
+                            "instanceProvider": "Hadoop",
                             "name": "my_hadoop",
                             "state": "online",
                             "highlightedAttributes": {
@@ -2963,8 +2963,8 @@ beforeEach(function() {
                             "entityType": "instance",
                             "owner": {
                                 "id": "InitialUser",
-                                "last_name": "Admin",
-                                "first_name": "EDC"
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
                             "comments": []
                         },
@@ -2974,7 +2974,7 @@ beforeEach(function() {
                             "isDeleted": false,
                             "lastUpdatedStamp": "2012-03-07 12:59:45",
                             "host": "gillette",
-                            "instance_provider": "Greenplum Database",
+                            "instanceProvider": "Greenplum Database",
                             "name": "my_instance",
                             "state": "fault",
                             "highlightedAttributes": {
@@ -2983,8 +2983,8 @@ beforeEach(function() {
                             "entityType": "instance",
                             "owner": {
                                 "id": "InitialUser",
-                                "last_name": "Admin",
-                                "first_name": "EDC"
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
                             "comments": []
                         }
@@ -2998,10 +2998,10 @@ beforeEach(function() {
                             "comments": [],
                             "email": null,
                             "entityType": "user",
-                            "first_name": "John",
+                            "firstName": "John",
                             "id": "10023",
                             "isDeleted": "false",
-                            "last_name": "Doe",
+                            "lastName": "Doe",
                             "lastUpdatedStamp": "2012-03-01 11:07:13",
                             "name": "test",
                             "title": "",
@@ -3018,10 +3018,10 @@ beforeEach(function() {
                             comments: [],
                             email: "test1@emc.com",
                             entityType: "user",
-                            first_name: "Test",
+                            firstName: "Test",
                             id: "10020",
                             isDeleted: "false",
-                            last_name: "McTest",
+                            lastName: "McTest",
                             lastUpdatedStamp: "2012-03-01 11:06:05",
                             name: null,
                             title: "nobody",
@@ -3029,7 +3029,7 @@ beforeEach(function() {
                             content: "Test",
                             owner: {},
                             highlightedAttributes: {
-                                first_name: ["<em>Test</em>"],
+                                firstName: ["<em>Test</em>"],
                                 content: ["<em>Test</em>"]
                             }
                         },
@@ -3038,16 +3038,16 @@ beforeEach(function() {
                             comments: [],
                             email: "test2@emc.com",
                             entityType: "user",
-                            first_name: "Jack",
+                            firstName: "Jack",
                             id: "10021",
                             isDeleted: "false",
-                            last_name: "Test",
+                            lastName: "Test",
                             lastUpdatedStamp: "2012-03-01 11:06:32",
                             name: "",
                             "title": "tester",
                             owner: {},
                             highlightedAttributes: {
-                                last_name: ["<em>Test</em>"],
+                                lastName: ["<em>Test</em>"],
                                 "title": ["<em>test</em>er"]
                             }
                         }
@@ -3090,8 +3090,8 @@ beforeEach(function() {
                             },
                             owner: {
                                 id: "InitialUser",
-                                last_name: "Admin",
-                                first_name: "EDC"
+                                lastName: "Admin",
+                                firstName: "EDC"
                             },
                             workspace: {
                                 id: "10000",
@@ -3123,8 +3123,8 @@ beforeEach(function() {
                             },
                             owner: {
                                 id: "InitialUser",
-                                last_name: "Admin",
-                                first_name: "EDC"
+                                lastName: "Admin",
+                                firstName: "EDC"
                             },
                             workspace: {
                                 id: "10000",
@@ -3173,7 +3173,7 @@ beforeEach(function() {
                 isDeleted: false,
                 lastUpdatedStamp: "2012-03-19 16:17:04",
                 name: "tracker_dot.jpeg",
-                owner: {id: 'InitialUser', last_name: 'Admin', first_name: 'EDC'},
+                owner: {id: 'InitialUser', lastName: 'Admin', firstName: 'EDC'},
                 type: "attachment",
                 workspace: {id: 10000, name: 'danny'}
             }, overrides);
@@ -3230,13 +3230,13 @@ beforeEach(function() {
                     "entityType": "workfile",
                     "owner": {
                         "id": "InitialUser",
-                        "last_name": "Admin",
-                        "first_name": "EDC"
+                        "lastName": "Admin",
+                        "firstName": "EDC"
                     },
                     "modifiedBy": {
                         "id": "InitialUser",
-                        "last_name": "Admin",
-                        "first_name": "EDC"
+                        "lastName": "Admin",
+                        "firstName": "EDC"
                     },
                     "workspace": {
                         "id": "10000",
@@ -3247,8 +3247,8 @@ beforeEach(function() {
                         "versionFileId": "1331228426846_64",
                         "modifiedBy": {
                             "id": "InitialUser",
-                            "last_name": "Admin",
-                            "first_name": "EDC"
+                            "lastName": "Admin",
+                            "firstName": "EDC"
                         },
                         "versionFilePath": "/Users/pivotal/workspace/chorus/ofbiz/runtime/data/workfile/10003/1332867012541_2971",
                         "versionOwner": "edcadmin",
@@ -3309,9 +3309,9 @@ beforeEach(function() {
                 lastUpdatedStamp: "2012-03-12 10:11:47",
                 name: "three",
                 owner: {
-                    first_name: "EDC",
+                    firstName: "EDC",
                     id: "InitialUser",
-                    last_name: "Admin"
+                    lastName: "Admin"
                 },
                 state: 0
             }, overrides);
@@ -3352,8 +3352,8 @@ beforeEach(function() {
                             },
                             "owner": {
                                 "id": "InitialUser",
-                                "last_name": "Admin",
-                                "first_name": "EDC"
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
                             "workspace": {},
                             "instance": {
@@ -3364,11 +3364,11 @@ beforeEach(function() {
                                 "name": "gillette",
                                 "owner": {
                                     "id": "InitialUser",
-                                    "last_name": "Admin",
-                                    "first_name": "EDC"
+                                    "lastName": "Admin",
+                                    "firstName": "EDC"
                                 },
                                 "state": "online",
-                                "instance_provider": "Greenplum Database",
+                                "instanceProvider": "Greenplum Database",
                                 "isDeleted": false,
                                 "entityType": "instance",
                                 "database": "postgres"
@@ -3407,8 +3407,8 @@ beforeEach(function() {
                             },
                             "owner": {
                                 "id": "InitialUser",
-                                "last_name": "Admin",
-                                "first_name": "EDC"
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
                             "active": true,
                             "comments": []
@@ -3421,7 +3421,7 @@ beforeEach(function() {
                             "state": "online",
                             "provision_type": "register",
                             "entityType": "instance",
-                            "instance_provider": "Greenplum Database",
+                            "instanceProvider": "Greenplum Database",
                             "id": "10000",
                             "isDeleted": false,
                             "name": "gillette",
@@ -3430,8 +3430,8 @@ beforeEach(function() {
                             },
                             "owner": {
                                 "id": "InitialUser",
-                                "last_name": "Admin",
-                                "first_name": "EDC"
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
                             "comments": []
                         },
@@ -3441,15 +3441,15 @@ beforeEach(function() {
                             "entityType": "user",
                             "id": "10010",
                             "name": "user1",
-                            "first_name": "user1",
+                            "firstName": "user1",
                             "isDeleted": false,
                             "admin": false,
-                            "last_name": "user1",
+                            "lastName": "user1",
                             "email": "user1@user.com",
                             "highlightedAttributes": {
-                                "last_name": ["<em>user<\/em>1"],
+                                "lastName": ["<em>user<\/em>1"],
                                 "name": ["<em>user<\/em>1"],
-                                "first_name": ["<em>user<\/em>1"]
+                                "firstName": ["<em>user<\/em>1"]
                             },
                             "owner": {},
                             "comments": []
@@ -3469,13 +3469,13 @@ beforeEach(function() {
                             },
                             "owner": {
                                 "id": "InitialUser",
-                                "last_name": "Admin",
-                                "first_name": "EDC"
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
                             "modifiedBy": {
                                 "id": "InitialUser",
-                                "last_name": "Admin",
-                                "first_name": "EDC"
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
                             "workspace": {
                                 "id": "10000",
@@ -3486,8 +3486,8 @@ beforeEach(function() {
                                 "versionFileId": "1331770521971_1380",
                                 "modifiedBy": {
                                     "id": "InitialUser",
-                                    "last_name": "Admin",
-                                    "first_name": "EDC"
+                                    "lastName": "Admin",
+                                    "firstName": "EDC"
                                 },
                                 "versionFilePath": "/Users/pivotal/workspace/chorus/ofbiz/runtime/data/workfile/10003/1332867012541_2971",
                                 "versionOwner": "edcadmin",
@@ -3542,8 +3542,8 @@ beforeEach(function() {
                             },
                             "owner": {
                                 "id": "InitialUser",
-                                "last_name": "Admin",
-                                "first_name": "EDC"
+                                "lastName": "Admin",
+                                "firstName": "EDC"
                             },
                             "workspace": {
                                 "id": "10000",

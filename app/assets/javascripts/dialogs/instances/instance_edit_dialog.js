@@ -35,7 +35,7 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
             provision_type: this.model.get("provision_type")
         };
 
-        _(["size", "maintenance_db", "userName", "userGroups"]).each(function(name) {
+        _(["size", "maintenanceDb", "userName", "userGroups"]).each(function(name) {
             var input = this.$("input[name=" + name + "]")
             if (input) {
                 attrs[name] = input.val();

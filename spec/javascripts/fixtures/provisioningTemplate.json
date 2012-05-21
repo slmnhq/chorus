@@ -1,5 +1,7 @@
 {
-   "name":"large",
-   "cpuNumber":"4",
-   "memorySize":"16"
+    "response": {
+        "name":"large",
+        "cpuNumber":"4",
+        "memorySize":"16"
+    }
 }

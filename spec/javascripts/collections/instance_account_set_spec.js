@@ -1,13 +1,13 @@
 describe("chorus.collections.InstanceAccountSet", function() {
     beforeEach(function() {
-        this.accountSet = new chorus.collections.InstanceAccountSet([], {instance_id: '1'});
+        this.accountSet = new chorus.collections.InstanceAccountSet([], {instanceId: '1'});
     });
 
     describe("#users", function() {
         beforeEach(function() {
             this.accountSet.reset([
-                newFixtures.instanceAccount({ owner: { id: '1', first_name: 'barnie', last_name: 'rubble' } }),
-                newFixtures.instanceAccount({ owner: { id: '2', first_name: 'fred', last_name: 'flinstone' } })
+                newFixtures.instanceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                newFixtures.instanceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
             ]);
             this.users = this.accountSet.users();
         });
@@ -18,12 +18,12 @@ describe("chorus.collections.InstanceAccountSet", function() {
 
         it("builds user models with the 'user' attribute of the accounts", function() {
             expect(this.users[0].get("id")).toBe("2");
-            expect(this.users[0].get("first_name")).toBe("fred");
-            expect(this.users[0].get("last_name")).toBe("flinstone");
+            expect(this.users[0].get("firstName")).toBe("fred");
+            expect(this.users[0].get("lastName")).toBe("flinstone");
 
             expect(this.users[1].get("id")).toBe("1");
-            expect(this.users[1].get("first_name")).toBe("barnie");
-            expect(this.users[1].get("last_name")).toBe("rubble");
+            expect(this.users[1].get("firstName")).toBe("barnie");
+            expect(this.users[1].get("lastName")).toBe("rubble");
         });
 
         context("when there are no models in the collection", function() {
@@ -39,7 +39,7 @@ describe("chorus.collections.InstanceAccountSet", function() {
     });
 
     describe("#url", function() {
-        it("has the instance_id param", function() {
+        it("has the instanceId param", function() {
             var uri = new URI(this.accountSet.url());
             expect(uri.path()).toMatchUrl("/instances/1/members");
         });
@@ -48,14 +48,14 @@ describe("chorus.collections.InstanceAccountSet", function() {
     describe("sort", function() {
         beforeEach(function() {
             this.accountSet.reset([
-                newFixtures.instanceAccount({ owner: { first_name: 'fred', last_name: 'zzz' } }),
-                newFixtures.instanceAccount({ owner: { first_name: 'barnie', last_name: 'zzz' } }),
-                newFixtures.instanceAccount({ owner: { first_name: 'sammy', last_name: 'aaa' } })
+                newFixtures.instanceAccount({ owner: { firstName: 'fred', lastName: 'zzz' } }),
+                newFixtures.instanceAccount({ owner: { firstName: 'barnie', lastName: 'zzz' } }),
+                newFixtures.instanceAccount({ owner: { firstName: 'sammy', lastName: 'aaa' } })
             ]);
         })
         it("sorts by last name, and first name", function() {
             var userNames = this.accountSet.map(function(account) {
-                return account.user().get('first_name')
+                return account.user().get('firstName')
             });
             expect(userNames).toEqual(['sammy', 'barnie', 'fred']);
         })

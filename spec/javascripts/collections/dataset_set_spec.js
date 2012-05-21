@@ -50,7 +50,7 @@ describe("chorus.collections.DatasetSet", function() {
         context("when the url needs to be encoded", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.DatasetSet([], {
-                    instance_id: 10000, databaseName: "%foo%", schemaName: " bar "
+                    instanceId: 10000, databaseName: "%foo%", schemaName: " bar "
                 });
             });
 

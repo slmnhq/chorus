@@ -1,6 +1,6 @@
 describe("chorus.models.InstanceSharing", function() {
     beforeEach(function() {
-        this.sharing = new chorus.models.InstanceSharing({instance_id: 1})
+        this.sharing = new chorus.models.InstanceSharing({instanceId: 1})
     });
 
     it("has a valid url", function() {

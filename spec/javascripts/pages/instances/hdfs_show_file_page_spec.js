@@ -12,7 +12,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
     it("constructs an HDFS file model with the right instance id and path", function() {
         expect(this.page.model).toBeA(chorus.models.HdfsFile);
         expect(this.page.model.get("path")).toBe("/my/path/my file.txt");
-        expect(this.page.model.get("instance_id")).toBe("1234");
+        expect(this.page.model.get("instanceId")).toBe("1234");
     });
 
     describe("before fetches complete", function() {
@@ -65,7 +65,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
         it("shows the hdfs file", function() {
             expect(this.page.mainContent.content).toBeA(chorus.views.HdfsShowFileView);
-            expect(this.page.mainContent.content.model.get('instance_id')).toBe(this.file.get('instance_id'));
+            expect(this.page.mainContent.content.model.get('instanceId')).toBe(this.file.get('instanceId'));
             expect(this.page.mainContent.content.model.get('content')).toBe(this.file.get('content'));
             expect(this.page.mainContent.content.model.get('path')).toBe(this.file.get('path'));
         })

@@ -31,8 +31,8 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                     timestamp: (50).hours().ago().toString("yyyy-MM-dd hh:mm:ss"),
                     text: "I prefer my lemonade with whiskey",
                     author: {
-                        first_name: "Boa",
-                        last_name: "Constrictor"
+                        firstName: "Boa",
+                        lastName: "Constrictor"
                     }
                 });
                 this.workspace1.comments().add(this.comment);

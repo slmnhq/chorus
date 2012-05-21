@@ -25,8 +25,8 @@ chorus.models.User = chorus.models.Base.extend({
     },
 
     declareValidations:function (newAttrs) {
-        this.require('first_name', newAttrs);
-        this.require('last_name', newAttrs);
+        this.require('firstName', newAttrs);
+        this.require('lastName', newAttrs);
         this.require('username', newAttrs);
         this.requireValidEmailAddress('email', newAttrs);
 
@@ -79,23 +79,23 @@ chorus.models.User = chorus.models.Base.extend({
     },
 
     displayName:function () {
-        if (!this.get('first_name') && !this.get('last_name') && this.get('fullName')) {
+        if (!this.get('firstName') && !this.get('lastName') && this.get('fullName')) {
             return this.get('fullName');
         }
-        return [this.get("first_name"), this.get("last_name")].join(' ');
+        return [this.get("firstName"), this.get("lastName")].join(' ');
     },
 
     displayShortName:function (length) {
         length = length || 20;
 
         var name = this.displayName();
-        return (name.length < length) ? name : this.get("first_name") + " " + this.get("last_name")[0] + ".";
+        return (name.length < length) ? name : this.get("firstName") + " " + this.get("lastName")[0] + ".";
     },
 
     attrToLabel:{
         "email":"users.email",
-        "first_name":"users.first_name",
-        "last_name":"users.last_name",
+        "firstName":"users.first_name",
+        "lastName":"users.last_name",
         "username":"users.username",
         "password":"users.password",
         "title":"users.title",

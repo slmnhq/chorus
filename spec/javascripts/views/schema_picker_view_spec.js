@@ -27,7 +27,7 @@ describe("chorus.views.SchemaPicker", function() {
         context("when an instance and a database are provided", function() {
             beforeEach(function() {
                 this.instance = newFixtures.instance.greenplum();
-                this.database = fixtures.database({instance_id: this.instance.get("id")});
+                this.database = fixtures.database({instanceId: this.instance.get("id")});
                 this.database.unset('id');
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance, database: this.database });
                 this.view.render();
@@ -35,7 +35,7 @@ describe("chorus.views.SchemaPicker", function() {
 
             it('does not try to fetch the instances or the databases', function() {
                 expect(this.server.lastFetchAllFor(new chorus.collections.InstanceSet())).toBeUndefined();
-                expect(this.server.lastFetchAllFor(new chorus.collections.DatabaseSet({instance_id: this.instance.get("id")}))).toBeUndefined();
+                expect(this.server.lastFetchAllFor(new chorus.collections.DatabaseSet({instanceId: this.instance.get("id")}))).toBeUndefined();
             });
 
             it("renders a label instead of a select for instance and database", function() {

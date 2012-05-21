@@ -1,7 +1,7 @@
 describe("sinon extensions", function() {
     beforeEach(function() {
         this.errors = { record: "not accessible" };
-        this.response = { instance_id: 1 };
+        this.response = { instanceId: 1 };
         this.fakeRequest = new sinon.FakeXMLHttpRequest();
     });
 

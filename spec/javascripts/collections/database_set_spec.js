@@ -1,7 +1,7 @@
     describe("chorus.collections.DatabaseSet", function() {
     beforeEach(function() {
-        this.instance_id = '86'
-        this.collection = new chorus.collections.DatabaseSet([], {instance_id: this.instance_id});
+        this.instanceId = '86'
+        this.collection = new chorus.collections.DatabaseSet([], {instanceId: this.instanceId});
     });
 
     it("has the right show url", function() {
@@ -9,10 +9,10 @@
     });
 
     describe("reset", function() {
-        it("sets the instance_id on all the new models", function() {
+        it("sets the instanceId on all the new models", function() {
             var database = fixtures.database();
             this.collection.reset(database);
-            expect(database.get("instance_id")).toBe(this.instance_id);
+            expect(database.get("instanceId")).toBe(this.instanceId);
         });
     });
 

@@ -2,14 +2,14 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     constructorName: "HdfsShowFilePage",
     helpId: "instances",
 
-    setup:function (instance_id, path) {
+    setup:function (instanceId, path) {
         this.path = "/" + path;
 
-        this.model = new chorus.models.HdfsFile({ instance_id: instance_id, path: this.path });
+        this.model = new chorus.models.HdfsFile({ instanceId: instanceId, path: this.path });
         this.bindings.add(this.model, "change", this.render);
         this.model.fetch()
 
-        this.instance = new chorus.models.Instance({id: instance_id});
+        this.instance = new chorus.models.Instance({id: instanceId});
         this.instance.fetch();
         this.dependOn(this.instance);
 
@@ -38,11 +38,11 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     },
 
     postRender: function() {
-        var instance_id = this.instance.get("id")
+        var instanceId = this.instance.get("id")
         var $content = $("<ul class='hdfs_link_menu'/>");
 
         var $li = $("<li/>");
-        $li.append($("<a/>").attr("href", "#/instances/" + instance_id + "/browse/").text(this.instance.get("name")))
+        $li.append($("<a/>").attr("href", "#/instances/" + instanceId + "/browse/").text(this.instance.get("name")))
         $content.append($li);
 
         var pathElements = _.initial(_.compact(this.path.split("/")))
@@ -52,7 +52,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
             var shortPath = (path.length <= maxLength) ? path : path.slice(0, maxLength) + "..."
             var $li = $("<li/>");
             var fullPath = _.first(arr, index + 1).join('/');
-            $li.append($("<a/>").attr("href", "#/instances/" + instance_id + "/browse/" + fullPath).text(shortPath))
+            $li.append($("<a/>").attr("href", "#/instances/" + instanceId + "/browse/" + fullPath).text(shortPath))
             $content.append($li);
         });
 

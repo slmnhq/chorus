@@ -33,7 +33,7 @@ describe("chorus.models.FrequencyTask", function() {
 
         it("renames the 'yAxis' field to 'chart[yAxis]' as required by the api", function() {
             var request = this.server.lastCreate();
-            expect(request.params()['chart[yAxis]']).toBe("height");
+            expect(request.params()['chart[y_axis]']).toBe("height");
         });
 
         it("renames the 'bins' field to 'chart[bins]' as required by the api", function() {

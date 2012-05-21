@@ -24,7 +24,7 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     isActive: function() {
-        return (this.get("archived_at") == null)
+        return (this.get("archivedAt") == null)
     },
 
     isPublic: function() {
@@ -40,10 +40,10 @@ chorus.models.Workspace = chorus.models.Base.extend({
             ownerAttrs = this.get("owner");
         } else {
             ownerAttrs = {
-                id: this.get("owner_id"),
+                id: this.get("ownerId"),
                 username: this.get("owner"),
-                first_name: this.get("ownerFirstName"),
-                last_name: this.get("ownerLastName")
+                firstName: this.get("ownerFirstName"),
+                lastName: this.get("ownerLastName")
             };
         }
         this._owner = new chorus.models.User(ownerAttrs);

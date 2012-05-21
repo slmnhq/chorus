@@ -203,7 +203,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                 $el.find("input[name=size]").val("2500");
 
                 this.dialog.$("button.submit").click();
-                expect($el.find("input[name=instance_name]")).toHaveClass("has_error");
+                expect($el.find("input[name=instanceName]")).toHaveClass("has_error");
                 expect($el.find("input[name=schemaName]")).not.toHaveClass("has_error");
                 expect($el.find("input[name=databaseName]")).toHaveClass("has_error");
                 expect($el.find("input[name=size]")).toHaveClass("has_error");
@@ -214,12 +214,12 @@ describe("chorus.dialogs.SandboxNew", function() {
                     spyOn(this.dialog, "closeModal");
                     this.server.reset();
                     var $el = this.dialog.$(".standalone_mode");
-                    $el.find("input[name=instance_name]").val("spiderman");
+                    $el.find("input[name=instanceName]").val("spiderman");
                     $el.find("input[name=schemaName]").val("batman");
                     $el.find("input[name=databaseName]").val("aquaman");
                     $el.find("input[name=size]").val("1000");
-                    $el.find("input[name=db_username]").val("edcadmin");
-                    $el.find("input[name=db_password]").val("foobar");
+                    $el.find("input[name=dbUsername]").val("edcadmin");
+                    $el.find("input[name=dbPassword]").val("foobar");
 
                     this.dialog.$("button.submit").click();
                 });

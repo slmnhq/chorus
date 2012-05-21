@@ -24,10 +24,10 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         this._super("makeModel", arguments);
         this.model = this.instance = this.options.launchElement.data("instance");
 
-        this.ownership = new chorus.models.InstanceOwnership({instance_id: this.instance.id});
+        this.ownership = new chorus.models.InstanceOwnership({instanceId: this.instance.id});
         this.users = new chorus.collections.UserSet();
         this.bindings.add(this.users, "reset", this.populateSelect);
-        this.users.sortAsc("first_name");
+        this.users.sortAsc("firstName");
         this.users.fetchAll();
         this.collection = this.instance.accounts();
 
@@ -147,7 +147,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     newAccount: function(e) {
         var button = this.$("button.add_account");
         if (button.is(":disabled")) return;
-        this.account = new chorus.models.InstanceAccount({instance_id: this.instance.get("id")});
+        this.account = new chorus.models.InstanceAccount({instanceId: this.instance.get("id")});
         this.collection.add(this.account);
         this.$("button.add_account").prop("disabled", true);
         var newLi = this.$("li[data-id=new]");
@@ -220,9 +220,9 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
             this.showErrors(this.account)
         });
         this.account.save({
-            owner_id: li.find("select").val(),
-            db_username: li.find("input[name=db_username]").val(),
-            db_password: li.find("input[name=db_password]").val()
+            ownerId: li.find("select").val(),
+            dbUsername: li.find("input[name=dbUsername]").val(),
+            dbPassword: li.find("input[name=dbPassword]").val()
         });
     },
 
@@ -328,7 +328,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
     removeIndividualAccount: function(accountId) {
         var selectedUser = this.collection.get(accountId).user();
 
-        var account = new chorus.models.InstanceAccount({id: accountId, instance_id: this.model.id });
+        var account = new chorus.models.InstanceAccount({id: accountId, instanceId: this.model.id });
 
         this.bindings.add(account, "destroyFailed", function() {
             this.showErrors(account);

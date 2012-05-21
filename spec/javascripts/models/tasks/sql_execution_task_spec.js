@@ -2,7 +2,7 @@ describe("chorus.models.SqlExecutionTask", function() {
     beforeEach(function() {
         this.model = fixtures.task({
             id: 1,
-            instance_id: '5',
+            instanceId: '5',
             databaseId: '6',
             schemaId: '7',
             sql: "show tables"

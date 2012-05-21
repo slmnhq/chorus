@@ -1,7 +1,7 @@
 describe("chorus.collections.DatabaseObjectSet", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatabaseObjectSet([], {
-            instance_id: '10000', databaseName:"some_database", schemaName: "some_schema"
+            instanceId: '10000', databaseName:"some_database", schemaName: "some_schema"
         });
     });
 
@@ -23,7 +23,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
         context("when the url needs to be encoded", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.DatabaseObjectSet([], {
-                    instance_id: '10000', databaseName: "some%database", schemaName: "some schema"
+                    instanceId: '10000', databaseName: "some%database", schemaName: "some schema"
                 });
             });
 

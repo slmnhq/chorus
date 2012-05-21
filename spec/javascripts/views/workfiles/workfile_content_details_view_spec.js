@@ -1,7 +1,7 @@
 describe("chorus.views.WorkfileContentDetails", function() {
     beforeEach(function() {
         this.model = fixtures.workfile();
-        this.model.workspace().set({ archived_at: null });
+        this.model.workspace().set({ archivedAt: null });
     });
 
     describe(".buildFor", function() {
@@ -119,7 +119,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
         context("when the workpsace is archived", function() {
             beforeEach(function() {
-                this.model.workspace().set({ archived_at: "2012-05-08 21:40:14" });
+                this.model.workspace().set({ archivedAt: "2012-05-08 21:40:14" });
                 this.view.render();
             });
 

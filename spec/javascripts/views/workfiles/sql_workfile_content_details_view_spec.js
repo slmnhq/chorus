@@ -5,8 +5,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             sandboxInfo: {
                 databaseId: '3',
                 databaseName: "db",
-                instance_id: '2',
-                instance_name: "instance",
+                instanceId: '2',
+                instanceName: "instance",
                 sandboxId: "10001",
                 schemaId: '4',
                 schemaName: "schema"
@@ -40,7 +40,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
         context("when the workspace is archived", function() {
             beforeEach(function() {
-                this.model.workspace().set({ archived_at: "2012-05-08 21:40:14" });
+                this.model.workspace().set({ archivedAt: "2012-05-08 21:40:14" });
                 this.view.render();
             });
 
@@ -131,8 +131,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             describe("when the workfile has been run in a schema other than its sandbox's schema", function() {
                 beforeEach(function() {
                     _.extend(this.model.get("executionInfo"), {
-                        instance_id: '51',
-                        instance_name: "bob_the_instance",
+                        instanceId: '51',
+                        instanceName: "bob_the_instance",
                         databaseId: '52',
                         databaseName: "bar",
                         schemaId: '53',
@@ -164,8 +164,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     _.extend(this.model.get("versionInfo"), {
                         databaseId: '3',
                         databaseName: "db",
-                        instance_id: '2',
-                        instance_name: "instance",
+                        instanceId: '2',
+                        instanceName: "instance",
                         schemaId: '4',
                         schemaName: "schema"
                     });
@@ -227,8 +227,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 spyOn(this.view, "render");
                 spyOnEvent(this.view.model, "change")
                 this.executionInfo = {
-                    instance_id: '51',
-                    instance_name: "ned",
+                    instanceId: '51',
+                    instanceName: "ned",
                     databaseId: '52',
                     databaseName: "rob",
                     schemaId: '53',

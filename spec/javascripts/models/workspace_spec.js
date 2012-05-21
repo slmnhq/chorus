@@ -2,7 +2,7 @@ describe("chorus.models.Workspace", function() {
     var models = chorus.models;
     beforeEach(function() {
         this.model = newFixtures.workspace({
-            archived_at: null,
+            archivedAt: null,
             image: {
                 icon: "/system/workspaces/images/000/000/005/icon/workspaceimage.jpg",
                 original: "/system/workspaces/images/000/000/005/original/workspaceimage.jpg"
@@ -16,19 +16,19 @@ describe("chorus.models.Workspace", function() {
 
     describe("#isActive", function() {
         it("return true when active:true", function() {
-            this.model.set({archived_at: null});
+            this.model.set({archivedAt: null});
             expect(this.model.isActive()).toBeTruthy();
         });
 
         it("returns false otherwise", function() {
-            this.model.set({ archived_at: "2012-05-08 21:40:14" });
+            this.model.set({ archivedAt: "2012-05-08 21:40:14" });
             expect(this.model.isActive()).toBeFalsy();
         });
     });
 
     describe("#datasetsInDatabase(database)", function() {
         beforeEach(function() {
-            var database = newFixtures.schema({ database_name: "foo" }).database();
+            var database = newFixtures.schema({ databaseName: "foo" }).database();
             this.datasets = this.model.datasetsInDatabase(database)
         });
 
@@ -54,22 +54,22 @@ describe("chorus.models.Workspace", function() {
 
     describe("#defaultIconUrl", function() {
         it("links to the active url when workspace is active", function() {
-            this.model.set({archived_at: null, public: true});
+            this.model.set({archivedAt: null, public: true});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_large.png");
         });
 
         it("links to the archive url when workspace is not active  ", function() {
-            this.model.set({archived_at: "2012-05-08 21:40:14",   public: true});
+            this.model.set({archivedAt: "2012-05-08 21:40:14",   public: true});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/workspace_archived_large.png");
         });
 
         it("links to the private active url when workspace is active and public:false", function() {
-            this.model.set({archived_at: null, public: false});
+            this.model.set({archivedAt: null, public: false});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/private_workspace_large.png");
         });
 
         it("links to the private archive url otherwise", function() {
-            this.model.set({archived_at: "2012-05-08 21:40:14", public: false});
+            this.model.set({archivedAt: "2012-05-08 21:40:14", public: false});
             expect(this.model.defaultIconUrl()).toBe("/images/workspaces/private_workspace_archived_large.png");
         });
     });
@@ -105,14 +105,14 @@ describe("chorus.models.Workspace", function() {
     describe("#owner", function() {
         context('when owner data is not nested', function() {
             beforeEach(function() {
-                this.model.set({ owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", owner_id: "47" });
+                this.model.set({ owner: "jhenry", ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47" });
             });
 
             it("has the attributes", function() {
                 expect(this.model.owner().get("id")).toBe("47");
                 expect(this.model.owner().get("username")).toBe("jhenry");
-                expect(this.model.owner().get("first_name")).toBe("John");
-                expect(this.model.owner().get("last_name")).toBe("Henry");
+                expect(this.model.owner().get("firstName")).toBe("John");
+                expect(this.model.owner().get("lastName")).toBe("Henry");
             });
 
             it("doesn't automatically fetch the User", function() {
@@ -229,7 +229,7 @@ describe("chorus.models.Workspace", function() {
         beforeEach(function() {
             spyOn(chorus, "cachebuster").andReturn(12345)
             workspace = newFixtures.workspace({
-                archived_at: null,
+                archivedAt: null,
                 image: {
                     icon: "/system/workspaces/images/000/000/005/icon/workspaceimage.jpg",
                     original: "/system/workspaces/images/000/000/005/original/workspaceimage.jpg"
@@ -257,7 +257,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#archiver", function() {
         beforeEach(function() {
-            this.model.set({archiver: {first_name: "John", last_name: "Henry", username: "jhenry"}})
+            this.model.set({archiver: {firstName: "John", lastName: "Henry", username: "jhenry"}})
         });
 
         it("returns a new User with the right username and fullName", function() {
@@ -327,22 +327,22 @@ describe("chorus.models.Workspace", function() {
 
     describe("picklistImageUrl", function() {
         it("returns the correct URL when the workspace is archived and is public", function() {
-            this.model.set({archived_at: "2012-05-08 21:40:14", public: true});
+            this.model.set({archivedAt: "2012-05-08 21:40:14", public: true});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/workspace_archived_small.png');
         });
 
         it("returns the correct URL when the workspace is not archived and is public", function() {
-            this.model.set({archived_at: null, public: true});
+            this.model.set({archivedAt: null, public: true});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/workspace_small.png');
         });
 
         it("returns the correct URL when the workspace is archived and is private", function() {
-            this.model.set({archived_at: "2012-05-08 21:40:14", public: false});
+            this.model.set({archivedAt: "2012-05-08 21:40:14", public: false});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/private_workspace_archived_small.png');
         });
 
         it("returns the correct URL when the workspace is not archived and is private", function() {
-            this.model.set({archived_at: null, public: false});
+            this.model.set({archivedAt: null, public: false});
             expect(this.model.picklistImageUrl()).toMatchUrl('/images/workspaces/private_workspace_small.png');
         });
     });
@@ -354,8 +354,8 @@ describe("chorus.models.Workspace", function() {
                     sandboxInfo: {
                         databaseId: 4,
                         databaseName: "db",
-                        instance_id: 5,
-                        instance_name: "instance",
+                        instanceId: 5,
+                        instanceName: "instance",
                         sandboxId: "10001",
                         schemaId: 6,
                         schemaName: "schema"
@@ -383,8 +383,8 @@ describe("chorus.models.Workspace", function() {
                     sandboxInfo: {
                         databaseId: null,
                         databaseName: null,
-                        instance_id: null,
-                        instance_name: null,
+                        instanceId: null,
+                        instanceName: null,
                         sandboxId: null,
                         schemaId: null,
                         schemaName: null
@@ -401,7 +401,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("permissions checking", function() {
         beforeEach(function() {
-            this.model.set({ownerFirstName: "John", ownerLastName: "Henry", owner_id: "47"})
+            this.model.set({ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47"})
         });
 
         describe("#currentUserIsOwner", function() {

@@ -72,7 +72,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
             if (this.resource.get("id")) {
                 return this.resource.get("id");
             } else {
-                return this.options.instance_id + "|" + (this.options.rootPath + "/" +this.resource.get("name"));
+                return this.options.instanceId + "|" + (this.options.rootPath + "/" +this.resource.get("name"));
             }
         }
     },
@@ -80,7 +80,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     createExternalTable: function(e) {
         e && e.preventDefault();
         var csv = new chorus.models.CsvHdfs({
-            instance_id: this.options.instance_id,
+            instanceId: this.options.instanceId,
             toTable: this.resource.get("name"),
             path: this.options.rootPath+"/"+this.resource.get("name")
         });

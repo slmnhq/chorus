@@ -461,7 +461,7 @@ describe("chorus.views.Activity", function() {
 
             context("when the current user is the creator of the insight", function() {
                 beforeEach(function() {
-                    setLoggedInUser({name: "Lenny", last_name: "lalala", id: this.view.model.author().id});
+                    setLoggedInUser({name: "Lenny", lastName: "lalala", id: this.view.model.author().id});
                     this.view.render();
                 });
 
@@ -470,7 +470,7 @@ describe("chorus.views.Activity", function() {
 
             context("when the current user is not an admin or the creator of the insight", function() {
                 beforeEach(function() {
-                    setLoggedInUser({name: "Johnny", last_name: "nobody", id: this.view.model.author().id + 1});
+                    setLoggedInUser({name: "Johnny", lastName: "nobody", id: this.view.model.author().id + 1});
                     this.view.render();
                 });
 

@@ -1,11 +1,13 @@
 {
-    "provisionMaxSizeInGB": 2000,
-    "external_auth_enabled": false,
-    "logLevel": "INFO",
-    "provisionMaxSize": "2000 GB",
-    "sandboxRecommendSizeInBytes": 5368709120,
-    "serverTime": "2012-04-24 09:52:10 -0700",
-    "timezoneOffset": -7,
-    "sandboxRecommendSize": "5 GB"
-}
+    "response": {
+        "provisionMaxSizeInGB": 2000,
+        "external_auth_enabled": false,
+        "logLevel": "INFO",
+        "provisionMaxSize": "2000 GB",
+        "sandboxRecommendSizeInBytes": 5368709120,
+        "serverTime": "2012-04-24 09:52:10 -0700",
+        "timezoneOffset": -7,
+        "sandboxRecommendSize": "5 GB"
+    }
 
+}

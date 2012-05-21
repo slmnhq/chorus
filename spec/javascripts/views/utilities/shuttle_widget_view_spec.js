@@ -1,9 +1,9 @@
 describe("chorus.views.ShuttleWidget", function() {
     beforeEach(function() {
         this.collection = newFixtures.userSet([
-            {id: 10000, first_name: "a", last_name: "a", admin: false},
-            {id: 10001, first_name: "b", last_name: "b", admin: true},
-            {id: 10002, first_name: "a", last_name: "c", admin: false}
+            {id: 10000, firstName: "a", lastName: "a", admin: false},
+            {id: 10001, firstName: "b", lastName: "b", admin: true},
+            {id: 10002, firstName: "a", lastName: "c", admin: false}
         ]);
         this.selectedItems = new Backbone.Collection([this.collection.get("10001")]);
         this.nonRemovableItems = [this.collection.get("10000")];

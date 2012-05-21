@@ -178,9 +178,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 it("should put the values in the correct API form fields", function() {
                     var params = this.server.lastCreate().params();
                     expect(params["dataset_import[truncate]"]).toBe("false");
-                    expect(params["dataset_import[sampleCount]"]).toBe("123");
-                    expect(params["dataset_import[scheduleStartTime]"]).toBe("2012-02-29 12:09:00.0");
-                    expect(params["dataset_import[scheduleEndTime]"]).toBe("2012-03-21")
+                    expect(params["dataset_import[sample_count]"]).toBe("123");
+                    expect(params["dataset_import[schedule_start_time]"]).toBe("2012-02-29 12:09:00.0");
+                    expect(params["dataset_import[schedule_end_time]"]).toBe("2012-03-21")
                 });
             });
 
@@ -212,9 +212,9 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 it("should put the values in the correct API form fields", function() {
                     var params = this.server.lastCreate().params();
                     expect(params["dataset_import[truncate]"]).toBe("false");
-                    expect(params["dataset_import[sampleCount]"]).toBe('0');
-                    expect(params["dataset_import[scheduleStartTime]"]).toBe("2012-02-29 12:09:00.0");
-                    expect(params["dataset_import[scheduleEndTime]"]).toBe("2012-03-21");
+                    expect(params["dataset_import[sample_count]"]).toBe('0');
+                    expect(params["dataset_import[schedule_start_time]"]).toBe("2012-02-29 12:09:00.0");
+                    expect(params["dataset_import[schedule_end_time]"]).toBe("2012-03-21");
                 });
 
             });
@@ -377,7 +377,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     this.dialog.$("input[name='schedule']").prop("checked", false);
                     this.dialog.$("button.submit").trigger("click");
                     // must explicitly be false https://www.pivotaltracker.com/story/show/25783061
-                    expect(this.server.lastUpdate().params()["dataset_import[activateSchedule]"]).toBe("false");
+                    expect(this.server.lastUpdate().params()["dataset_import[activate_schedule]"]).toBe("false");
                 });
 
                 describe("submitting the form", function() {
@@ -393,11 +393,11 @@ describe("chorus.dialogs.ImportScheduler", function() {
 
                     it("sends activateSchedule", function() {
                         // must explicitly be true https://www.pivotaltracker.com/story/show/25783061
-                        expect(this.server.lastUpdate().params()["dataset_import[activateSchedule]"]).toBe("true");
+                        expect(this.server.lastUpdate().params()["dataset_import[activate_schedule]"]).toBe("true");
                     });
 
                     it('correctly sets sampleCount to 0 when limit_num_rows is unchecked', function() {
-                        expect(this.server.lastUpdate().params()["dataset_import[sampleCount]"]).toBe('0');
+                        expect(this.server.lastUpdate().params()["dataset_import[sample_count]"]).toBe('0');
                     });
 
                     context("when the save completes", function() {

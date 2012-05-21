@@ -101,8 +101,8 @@ describe("chorus.models.HdfsEntry", function() {
             expect(this.instance.get('name')).toBe('obscene');
         });
 
-        it("should have an instance_provider of Hadoop", function() {
-            expect(this.instance.get('instance_provider')).toBe('Hadoop');
+        it("should have an instanceProvider of Hadoop", function() {
+            expect(this.instance.get('instanceProvider')).toBe('Hadoop');
         })
     });
 });

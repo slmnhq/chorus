@@ -1,39 +1,41 @@
 {
-    "schemaName": "analytics",
-    "importFrequency": null,
-    "workspace": {
-        "id": "10000",
-        "name": "danny"
-    },
-    "objectName": "ext_table",
-    "modifiedBy": {
-        "id": "InitialUser",
-        "username": "edcadmin"
-    },
-    "columns": 1,
-    "commentCount": 0,
-    "type": "SANDBOX_TABLE",
-    "isDeleted": false,
-    "hasCredentials": true,
-    "id": "\"10000\"|\"Analytics\"|\"analytics\"|\"EXTERNAL_TABLE\"|\"ext_table\"",
-    "databaseName": "Analytics",
-    "recentComment": null,
-    "owner": {
-        "id": "InitialUser",
-        "username": "edcadmin"
-    },
-    "instance": {
-        "id": "10000",
-        "name": "gillette"
-    },
-    "columnNames": [
-        {
-        "name": "id",
-        "typeCategory": "LONG_STRING",
-        "comment": null,
-        "type": "text",
-        "ordinalPosition": "1"
+    "response": {
+        "schemaName": "analytics",
+        "importFrequency": null,
+        "workspace": {
+            "id": "10000",
+            "name": "danny"
+        },
+        "objectName": "ext_table",
+        "modifiedBy": {
+            "id": "InitialUser",
+            "username": "edcadmin"
+        },
+        "columns": 1,
+        "commentCount": 0,
+        "type": "SANDBOX_TABLE",
+        "isDeleted": false,
+        "hasCredentials": true,
+        "id": "\"10000\"|\"Analytics\"|\"analytics\"|\"EXTERNAL_TABLE\"|\"ext_table\"",
+        "databaseName": "Analytics",
+        "recentComment": null,
+        "owner": {
+            "id": "InitialUser",
+            "username": "edcadmin"
+        },
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "columnNames": [
+            {
+                "name": "id",
+                "typeCategory": "LONG_STRING",
+                "comment": null,
+                "type": "text",
+                "ordinalPosition": "1"
+            }
+        ],
+        "objectType": "EXTERNAL_TABLE"
     }
-    ],
-    "objectType": "EXTERNAL_TABLE"
 }

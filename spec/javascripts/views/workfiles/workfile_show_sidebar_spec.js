@@ -46,8 +46,8 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                 sandboxInfo : {
                     databaseId: 4,
                     databaseName: "db",
-                    instance_id: 5,
-                    instance_name: "instance",
+                    instanceId: 5,
+                    instanceName: "instance",
                     sandboxId: "10001",
                     schemaId: 6,
                     schemaName: "schema"
@@ -112,8 +112,8 @@ describe("chorus.views.WorkfileShowSidebar", function() {
                 sandboxInfo : {
                     databaseId: 4,
                     databaseName: "db",
-                    instance_id: 5,
-                    instance_name: "instance",
+                    instanceId: 5,
+                    instanceName: "instance",
                     sandboxId: "10001",
                     schemaId: 6,
                     schemaName: "schema"
@@ -182,7 +182,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             this.model.workspace().fetch();
 
             this.server.completeFetchFor(this.model);
-            this.server.completeFetchFor(this.model.workspace(), newFixtures.workspace({ archived_at: "2012-05-08 21:40:14" }));
+            this.server.completeFetchFor(this.model.workspace(), newFixtures.workspace({ archivedAt: "2012-05-08 21:40:14" }));
 
             this.view.render();
         });

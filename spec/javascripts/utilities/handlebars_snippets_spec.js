@@ -224,7 +224,7 @@ describe("handlebars", function() {
 
         describe("displayNameFromPerson", function() {
             it("renders the fullname", function() {
-                expect(Handlebars.helpers.displayNameFromPerson({first_name: "EDC", last_name: "Admin"})).toBe("EDC Admin");
+                expect(Handlebars.helpers.displayNameFromPerson({firstName: "EDC", lastName: "Admin"})).toBe("EDC Admin");
             })
         })
 
@@ -785,7 +785,7 @@ describe("handlebars", function() {
                 expect($(this.result).find("a.instance")).toContainText(instance.get("name"));
                 expect($(this.result).find("a.instance")).toHaveHref(instance.showUrl());
 
-                var database = new chorus.models.Database({instance_id: instance.id, name: this.model.get("databaseName")});
+                var database = new chorus.models.Database({instanceId: instance.id, name: this.model.get("databaseName")});
                 expect($(this.result).find("a.database")).toContainText(database.get("name"));
                 expect($(this.result).find("a.database")).toHaveHref(database.showUrl());
 

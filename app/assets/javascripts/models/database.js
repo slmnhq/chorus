@@ -5,18 +5,18 @@ chorus.models.Database = chorus.models.Base.extend({
 
     instance: function() {
         return new chorus.models.Instance({
-            id: this.get("instance_id"),
-            name: this.get("instance_name")
+            id: this.get("instanceId"),
+            name: this.get("instanceName")
         })
     },
 
     schemas: function() {
         if (!this._schemas) {
             this._schemas = new chorus.collections.SchemaSet([], {
-                instance_id: this.get("instance_id"),
-                instance_name: this.get("instance_name"),
-                database_id: this.get('id'),
-                database_name: this.get('name')
+                instanceId: this.get("instanceId"),
+                instanceName: this.get("instanceName"),
+                databaseId: this.get('id'),
+                databaseName: this.get('name')
             })
         }
         return this._schemas;

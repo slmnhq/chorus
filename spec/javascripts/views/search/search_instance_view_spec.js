@@ -41,8 +41,8 @@ describe("chorus.views.SearchInstance", function() {
                         },
                         "owner": {
                             "id": "InitialUser",
-                            "last_name": "Admin",
-                            "first_name": "EDC"
+                            "lastName": "Admin",
+                            "firstName": "EDC"
                         }
                     }
                 ]

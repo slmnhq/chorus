@@ -5,7 +5,7 @@ chorus.models.Schema = chorus.models.Base.extend({
 
     functions:function () {
         this._schemaFunctions = this._schemaFunctions || new chorus.collections.SchemaFunctionSet([], {
-            instance_id:this.get("instance_id"),
+            instanceId:this.get("instanceId"),
             databaseId:this.database().id,
             // TODO Is databaseName used?
             databaseName:this.database().name(),
@@ -19,7 +19,7 @@ chorus.models.Schema = chorus.models.Base.extend({
         if (!this._databaseObjects) {
             this._databaseObjects = new chorus.collections.DatabaseObjectSet([], {
                 schema_id: this.id,
-                instance_id: "REMOVEME",
+                instanceId: "REMOVEME",
                 databaseName: "REMOVEME",
                 schemaName: "REMOVEME"
             });
@@ -29,10 +29,10 @@ chorus.models.Schema = chorus.models.Base.extend({
 
     database: function() {
         return new chorus.models.Database({
-            id: this.get("database_id"),
-            name: this.get("database_name"),
-            instance_id: this.get("instance_id"),
-            instance_name: this.get("instance_name")
+            id: this.get("databaseId"),
+            name: this.get("databaseName"),
+            instanceId: this.get("instanceId"),
+            instanceName: this.get("instanceName")
         });
     },
 
@@ -41,7 +41,7 @@ chorus.models.Schema = chorus.models.Base.extend({
     },
 
     isEqual:function (other) {
-        return _.all(["instance_id", "instance_name", "database_id", "id", "name"], function (attr) {
+        return _.all(["instanceId", "instanceName", "databaseId", "id", "name"], function (attr) {
             return this.get(attr) === other.get(attr)
         }, this)
     }

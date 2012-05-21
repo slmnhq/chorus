@@ -38,10 +38,10 @@ describe("chorus.models.HeatmapTask", function() {
 
         it("renames the 'xAxis', 'yAxis', 'xBins' and 'yBins' fields as required by the api", function() {
             var request = this.server.lastCreate();
-            expect(request.params()['chart[xAxis]']).toBe("age");
-            expect(request.params()['chart[yAxis]']).toBe("height");
-            expect(request.params()['chart[xBins]']).toBe('5');
-            expect(request.params()['chart[yBins]']).toBe('6');
+            expect(request.params()['chart[x_axis]']).toBe("age");
+            expect(request.params()['chart[y_axis]']).toBe("height");
+            expect(request.params()['chart[x_bins]']).toBe('5');
+            expect(request.params()['chart[y_bins]']).toBe('6');
         });
     });
 })

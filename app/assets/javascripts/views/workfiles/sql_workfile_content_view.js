@@ -36,7 +36,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
             var runOptions = {selection: selectedText};
             var schema = this.model.executionSchema();
             if(schema){
-                runOptions.instance = schema.get("instance_id");
+                runOptions.instance = schema.get("instanceId");
                 runOptions.database = schema.database().id;
                 runOptions.schema = schema.get("id");
             }
@@ -48,7 +48,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     runInDefault: function() {
         if (!this.model.executionSchema()) return;
         this.run({
-            instance: this.model.executionSchema().get('instance_id'),
+            instance: this.model.executionSchema().get('instanceId'),
             database: this.model.executionSchema().database().id,
             schema: this.model.executionSchema().get('id')
         })
@@ -64,7 +64,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
                 sql: options && options.selection ? options.selection : this.textContent.editor.getValue(),
                 entityId: this.model.get("id"),
                 schemaId: options.schema,
-                instance_id: options.instance,
+                instanceId: options.instance,
                 databaseId: options.database,
                 checkId: (new Date().getTime().toString())
             }, { silent: true });

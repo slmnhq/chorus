@@ -78,8 +78,8 @@ describe("chorus.dialogs.RunFileInSchema", function () {
             context("when the workspace has a sandbox", function () {
                 beforeEach(function () {
                     this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
-                        instance_id:44,
-                        instance_name:"instance",
+                        instanceId:44,
+                        instanceName:"instance",
                         databaseId:55,
                         databaseName:"database",
                         schemaId:66,
@@ -121,8 +121,8 @@ describe("chorus.dialogs.RunFileInSchema", function () {
             context("when the workspace does not have a sandbox", function () {
                 beforeEach(function () {
                     this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
-                        instance_id:null,
-                        instance_name:null,
+                        instanceId:null,
+                        instanceName:null,
                         databaseId:null,
                         databaseName:null,
                         schemaId:null,
@@ -139,8 +139,8 @@ describe("chorus.dialogs.RunFileInSchema", function () {
             describe("button handling", function () {
                 beforeEach(function () {
                     this.server.completeFetchFor(newFixtures.workspace({id:999, sandboxInfo:{
-                        instance_id:44,
-                        instance_name:"instance",
+                        instanceId:44,
+                        instanceName:"instance",
                         databaseId:55,
                         databaseName:"database",
                         schemaId:66,
@@ -256,8 +256,8 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                 context("and then selecting 'within the workspace sandbox'", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(newFixtures.workspace({id: 999, sandboxInfo: {
-                            instance_id: 44,
-                            instance_name: "instance",
+                            instanceId: 44,
+                            instanceName: "instance",
                             databaseId: 55,
                             databaseName: "database",
                             schemaId: 66,

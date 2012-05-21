@@ -65,10 +65,10 @@
             var executionInfo = this.get("executionInfo");
             if (executionInfo && executionInfo.schemaName) {
                 return new chorus.models.Schema({
-                    instance_id: executionInfo.instance_id,
-                    instance_name: executionInfo.instance_name,
-                    database_id: executionInfo.databaseId,
-                    database_name: executionInfo.databaseName,
+                    instanceId: executionInfo.instanceId,
+                    instanceName: executionInfo.instanceName,
+                    databaseId: executionInfo.databaseId,
+                    databaseName: executionInfo.databaseName,
                     id: executionInfo.schemaId,
                     name: executionInfo.schemaName
                 });
@@ -79,8 +79,8 @@
 
         modifier: function() {
             return new chorus.models.User({
-                first_name: this.get("modifiedBy").first_name,
-                last_name: this.get("modifiedBy").last_name,
+                firstName: this.get("modifiedBy").firstName,
+                lastName: this.get("modifiedBy").lastName,
                 id: this.get("modifiedBy").id
             })
         },

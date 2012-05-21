@@ -7,7 +7,7 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
         describe("#url", function() {
             it("should call the right API when the metaType is a table", function() {
                 this.databaseObjectStatistics.set({
-                    instance_id: 1,
+                    instanceId: 1,
                     databaseName: "%foo%",
                     schemaName: "b/a",
                     type: "CHORUS_VIEW",
@@ -21,7 +21,7 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
 
             it("calls the right API when the metaType is a view", function() {
                 this.databaseObjectStatistics.set({
-                    instance_id: 1,
+                    instanceId: 1,
                     databaseName: "%foo%",
                     schemaName: "b/a",
                     type: "CHORUS_VIEW",
@@ -37,7 +37,7 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
         describe("when it has a datasetId property", function() {
             it("uses the dataset API", function() {
                 this.databaseObjectStatistics.set({
-                    instance_id: 1,
+                    instanceId: 1,
                     databaseName: "theDatabase",
                     schemaName: "theSchema",
                     type: "CHORUS_VIEW",

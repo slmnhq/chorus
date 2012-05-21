@@ -40,14 +40,14 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
     },
 
     getEntityId: function() {
-        return this.model.get("instance_id") + "|" + this.model.get("path");
+        return this.model.get("instanceId") + "|" + this.model.get("path");
     },
 
     createExternalTable: function(e) {
         e && e.preventDefault();
 
         var csv = new chorus.models.CsvHdfs({
-            instance_id: this.model.get("instance_id"),
+            instanceId: this.model.get("instanceId"),
             toTable: this.model.fileNameFromPath(),
             path: this.model.get("path")
         });

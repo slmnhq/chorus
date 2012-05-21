@@ -100,7 +100,7 @@ describe("chorus.models.Dataset", function() {
                 expect(this.copy.get(attrName)).toBeDefined();
             }, this);
 
-            expect(this.copy.get("instance_id")).toBe(this.model.get("instance").id);
+            expect(this.copy.get("instanceId")).toBe(this.model.get("instance").id);
             expect(this.copy.get("sourceObjectId")).toBe(this.model.id);
         });
 
@@ -202,7 +202,7 @@ describe("chorus.models.Dataset", function() {
 
         it("has the right data from the dataset", function() {
             expect(this.chorusView).toHaveAttrs({
-                instance_id: this.dataset.get("instance").id,
+                instanceId: this.dataset.get("instance").id,
                 databaseName: this.dataset.get("databaseName"),
                 schemaName: this.dataset.get("schemaName"),
                 workspace: this.dataset.get("workspace"),

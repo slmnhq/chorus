@@ -1,11 +1,11 @@
 describe("chorus.views.WorkspaceList", function() {
     beforeEach(function() {
-        this.activeWorkspace = new chorus.models.Workspace({id: 1, archived_at: null, name: "my active workspace"});
+        this.activeWorkspace = new chorus.models.Workspace({id: 1, archivedAt: null, name: "my active workspace"});
         this.archivedWorkspace = new chorus.models.Workspace({
             id: 2,
-            archived_at: "2011-12-05 13:25:25.704",
+            archivedAt: "2011-12-05 13:25:25.704",
             name: "my archived workspace",
-            archiver: { first_name: "John", last_name :"Henry"},
+            archiver: { firstName: "John", lastName :"Henry"},
 //            archiverFirstName: "John",
 //            archiverLastName: "Henry",
             summary: " this is an archived workspace"
@@ -15,7 +15,7 @@ describe("chorus.views.WorkspaceList", function() {
         this.privateWorkspace = new chorus.models.Workspace({
             id: 3,
             public: false,
-            archived_at: null,
+            archivedAt: null,
             ownerFirstName: "Dr",
             ownerLastName: "Mario",
             name: "my private workspace"
@@ -23,7 +23,7 @@ describe("chorus.views.WorkspaceList", function() {
 
         this.archivedBigSummaryWorkspace = new chorus.models.Workspace({
             id: 5,
-            archived_at: "2012-05-08 21:40:14",
+            archivedAt: "2012-05-08 21:40:14",
             name: "my archived workspace",
             archiverFirstName: "John",
             archiverLastName: "Henry",
@@ -111,7 +111,7 @@ describe("chorus.views.WorkspaceList", function() {
 
             it("displays archived relative time", function() {
                 var whackyDateFormat = (2).hours().ago().toString("yyyy-MM-dd HH:mm:ss") + ".001"
-                this.archivedWorkspace.set({"archived_at": whackyDateFormat})
+                this.archivedWorkspace.set({"archivedAt": whackyDateFormat})
                 this.view.render();
                 expect($(".timestamp", this.view.$("li[data-id=2]")).text()).toBe("2 hours ago");
             });

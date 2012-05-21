@@ -1,7 +1,7 @@
 describe("chorus.models.TabularDataAnalyze", function() {
     beforeEach(function() {
         this.analyze = new chorus.models.TabularDataAnalyze({
-            instance_id: "1",
+            instanceId: "1",
             databaseName: "foo",
             schemaName: "bar",
             objectName: "baz",

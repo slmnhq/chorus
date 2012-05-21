@@ -122,8 +122,8 @@ describe("chorus.views.TabularData", function() {
                 text: "I love you john.",
                 author: {
                     id: "1",
-                    last_name: "Smith",
-                    first_name: "Bob"
+                    lastName: "Smith",
+                    firstName: "Bob"
                 },
                 timestamp: "2011-12-15 12:34:56"
             }});

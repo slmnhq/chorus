@@ -25,8 +25,8 @@ chorus.dialogs.Account = chorus.dialogs.Base.extend({
     save:function (e) {
         e.preventDefault();
         this.model.save({
-            db_username:this.$("input[name=db_username]").val(),
-            db_password:this.$("input[name=db_password]").val()
+            dbUsername:this.$("input[name=dbUsername]").val(),
+            dbPassword:this.$("input[name=dbPassword]").val()
         });
     },
 

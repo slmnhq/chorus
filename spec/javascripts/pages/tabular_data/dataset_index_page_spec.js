@@ -100,7 +100,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
         context("and the user is the workspace owner", function() {
             beforeEach(function() {
-                setLoggedInUser({ id: this.workspace.get("owner_id"), admin: false});
+                setLoggedInUser({ id: this.workspace.get("ownerId"), admin: false});
                 this.server.completeFetchFor(this.workspace);
             });
 
@@ -405,7 +405,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
         context("and the workspace is archived", function() {
             beforeEach(function() {
-                this.workspace.set({ archived_at: "2012-05-08 21:40:14"});
+                this.workspace.set({ archivedAt: "2012-05-08 21:40:14"});
                 this.server.completeFetchFor(this.workspace);
             });
 

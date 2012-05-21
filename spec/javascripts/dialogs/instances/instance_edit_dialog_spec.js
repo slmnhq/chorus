@@ -6,7 +6,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             host: "greenplum",
             port: "8555",
             description: "it is a food name",
-            maintenance_db: "postgres"
+            maintenanceDb: "postgres"
         });
         this.launchElement.data("instance", this.instance);
         this.dialog = new chorus.dialogs.InstanceEdit({launchElement: this.launchElement});
@@ -45,9 +45,9 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
 
             it("has a 'database' field that is pre-populated", function() {
-                expect(this.dialog.$("input[name='maintenance_db']").val()).toBe("postgres");
-                expect(this.dialog.$("label[name='maintenance_db']").text()).toMatchTranslation("instances.dialog.database_name");
-                expect(this.dialog.$("input[name='maintenance_db']").prop("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name='maintenanceDb']").val()).toBe("postgres");
+                expect(this.dialog.$("label[name='maintenanceDb']").text()).toMatchTranslation("instances.dialog.database_name");
+                expect(this.dialog.$("input[name='maintenanceDb']").prop("disabled")).toBeFalsy();
             });
         });
 
@@ -132,7 +132,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             this.dialog.$("input[name=name]").val("test1");
             this.dialog.$("input[name=port]").val("8555");
             this.dialog.$("input[name=host]").val("testhost");
-            this.dialog.$("input[name=maintenance_db]").val("not_postgres");
+            this.dialog.$("input[name=maintenanceDb]").val("not_postgres");
         });
 
         it("puts the button in 'loading' mode", function() {
@@ -154,7 +154,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.model.save.argsForCall[0][0].name).toBe("test1");
             expect(this.dialog.model.save.argsForCall[0][0].port).toBe("8555");
             expect(this.dialog.model.save.argsForCall[0][0].host).toBe("testhost");
-            expect(this.dialog.model.save.argsForCall[0][0].maintenance_db).toBe("not_postgres");
+            expect(this.dialog.model.save.argsForCall[0][0].maintenanceDb).toBe("not_postgres");
             expect(this.dialog.model.save.argsForCall[0][0].provision_type).toBe("register");
         });
 
@@ -194,7 +194,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 expect(this.server.lastUpdate().params()["instance[port]"]).toBe("8556");
                 expect(this.server.lastUpdate().params()["instance[host]"]).toBe("testhost2");
                 expect(this.server.lastUpdate().params()["instance[size]"]).toBe("123");
-                expect(this.server.lastUpdate().params()["instance[maintenance_db]"]).toBeUndefined();
+                expect(this.server.lastUpdate().params()["instance[maintenanceDb]"]).toBeUndefined();
             });
         });
 
@@ -216,7 +216,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 expect(this.dialog.model.get("host")).toBe("testhost3");
                 expect(this.dialog.model.get("userName")).toBe("userName");
                 expect(this.dialog.model.get("userGroups")).toBe("userGroups");
-                expect(this.dialog.model.has("maintenance_db")).toBeFalsy();
+                expect(this.dialog.model.has("maintenanceDb")).toBeFalsy();
             });
         });
 

@@ -1,8 +1,8 @@
 <input type="hidden" name="provision_type" value="create" />
 
 {{#if addingSandbox}}
-    <label class="required" name="instance_name">{{t "instances.dialog.instance_name"}}</label>
-    <input type="text" name="instance_name" maxlength="44"/>
+    <label class="required" name="instanceName">{{t "instances.dialog.instance_name"}}</label>
+    <input type="text" name="instanceName" maxlength="44"/>
 {{else}}
     <label class="required" name="name">{{t "instances.dialog.instance_name"}}</label>
     <input type="text" name="name" maxlength="44"/>
@@ -28,8 +28,8 @@
 
 <span class="instructions">{{t "instances.dialog.provisioning_instructions"}}</span>
 
-<label name="db_username" class="required">{{t "instances.dialog.database_account"}}</label>
-<label name="db_password" class="required">{{t "instances.dialog.database_password"}}</label>
+<label name="dbUsername" class="required">{{t "instances.dialog.database_account"}}</label>
+<label name="dbPassword" class="required">{{t "instances.dialog.database_password"}}</label>
 
-<input type="text" name="db_username" maxlength="256"/>
-<input type="password" name="db_password" maxlength="256"/>
+<input type="text" name="dbUsername" maxlength="256"/>
+<input type="password" name="dbPassword" maxlength="256"/>

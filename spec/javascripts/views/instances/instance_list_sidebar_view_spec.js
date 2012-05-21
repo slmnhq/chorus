@@ -91,7 +91,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                         setLoggedInUser({ username: "benjamin", admin: false});
                         this.instance.set({
                             owner: {id: chorus.session.user().get('id')},
-                            instance_provider: "Hadoop"
+                            instanceProvider: "Hadoop"
                         });
                         this.view.render();
                     });
@@ -424,7 +424,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the instance is a hadoop instance", function() {
                     beforeEach(function() {
-                        this.view.instance.set({instance_provider: "Hadoop"});
+                        this.view.instance.set({instanceProvider: "Hadoop"});
                         this.instance.usage().trigger("loaded");
                     });
 

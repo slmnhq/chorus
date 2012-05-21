@@ -4,8 +4,8 @@ chorus.pages.SchemaIndexPage = chorus.pages.Base.include(
     constructorName: "SchemaIndexPage",
     helpId: "instances",
 
-    setup: function(database_id) {
-        this.database = new chorus.models.Database({id: database_id});
+    setup: function(databaseId) {
+        this.database = new chorus.models.Database({id: databaseId});
         this.collection = this.database.schemas();
 
         this.database.fetch();

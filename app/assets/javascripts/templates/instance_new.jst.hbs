@@ -17,13 +17,13 @@
         <input type="text" name="host"/>
         <input type="text" name="port"/>
 
-        <label class="required" name="maintenance_db">{{t "instances.dialog.maintenance_db"}}</label>
-        <input type="text" name="maintenance_db" value="postgres"/>
+        <label class="required" name="maintenanceDb">{{t "instances.dialog.maintenance_db"}}</label>
+        <input type="text" name="maintenanceDb" value="postgres"/>
 
-        <label class="required" name="db_username">{{t "instances.dialog.database_account"}}</label>
-        <label class="required" name="db_password">{{t "instances.dialog.database_password"}}</label>
-        <input type="text" name="db_username" maxlength="256"/>
-        <input type="password" name="db_password" maxlength="256"/>
+        <label class="required" name="dbUsername">{{t "instances.dialog.database_account"}}</label>
+        <label class="required" name="dbPassword">{{t "instances.dialog.database_password"}}</label>
+        <input type="text" name="dbUsername" maxlength="256"/>
+        <input type="password" name="dbPassword" maxlength="256"/>
 
         <input type="checkbox" name="shared" id="register_greenplum_shared"/>
         <label for="register_greenplum_shared">{{t "instances.dialog.is_community_account"}}

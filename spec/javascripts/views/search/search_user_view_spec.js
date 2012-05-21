@@ -6,7 +6,7 @@ describe("chorus.views.SearchUser", function() {
             highlightedAttributes: {
                 title: '<em>test</em>er',
                 email: '<em>test</em>@example.com',
-                first_name: "<em>John</em>",
+                firstName: "<em>John</em>",
                 ou: "<em>John</em>",
                 content: "<em>Here is some content</em>",
                 name: "<em>foo</em>"
@@ -57,10 +57,10 @@ describe("chorus.views.SearchUser", function() {
                     "comments": [],
                     "email": "test@emc.com",
                     "entityType": "user",
-                    "first_name": "John",
+                    "firstName": "John",
                     "id": "10023",
                     "isDeleted": "false",
-                    "last_name": "Doe",
+                    "lastName": "Doe",
                     "lastUpdatedStamp": "2012-03-01 11:07:13",
                     "name": "test",
                     "title": "affd",
@@ -71,7 +71,7 @@ describe("chorus.views.SearchUser", function() {
                         "name": "<em>test</em>",
                         "ou": "<em>Test</em>",
                         "title": "<em>affd</em>",
-                        "first_name": "<em>affd</em>",
+                        "firstName": "<em>affd</em>",
                         "email": "<em>test</em>@emc.com",
                         "content": "<em>Hello</em>"
                     }
@@ -122,10 +122,10 @@ describe("chorus.views.SearchUser", function() {
                     "comments": [],
                     "email": "test@emc.com",
                     "entityType": "user",
-                    "first_name": "John",
+                    "firstName": "John",
                     "id": "10023",
                     "isDeleted": "false",
-                    "last_name": "Doe",
+                    "lastName": "Doe",
                     "lastUpdatedStamp": "2012-03-01 11:07:13",
                     "name": "test",
                     "content": "",

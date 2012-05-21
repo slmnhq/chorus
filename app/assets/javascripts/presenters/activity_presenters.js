@@ -246,7 +246,7 @@
 
         START_PROVISIONING: function(model){
             var instance = model.instance();
-            instance.set({instance_provider: "Greenplum Database"});
+            instance.set({instanceProvider: "Greenplum Database"});
             return {
                 objectName: instance.get("name"),
                 objectUrl: instance.showUrl(),
@@ -258,7 +258,7 @@
 
         PROVISIONING_SUCCESS: function(model){
             var instance = model.instance();
-            instance.set({instance_provider: "Greenplum Database"});
+            instance.set({instanceProvider: "Greenplum Database"});
             return {
                 objectName: instance.get("name"),
                 objectUrl: instance.showUrl(),

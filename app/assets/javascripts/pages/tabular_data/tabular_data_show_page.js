@@ -36,9 +36,9 @@ chorus.pages.TabularDataShowPage = chorus.pages.Base.include(
             ];
         },
 
-        makeModel: function(instance_id, databaseName, schemaName, objectType, objectName) {
+        makeModel: function(instanceId, databaseName, schemaName, objectType, objectName) {
             this.model = this.tabularData = new chorus.models.DatabaseObject({
-                instance: { id: instance_id },
+                instance: { id: instanceId },
                 databaseName: databaseName,
                 schemaName: schemaName,
                 objectName: objectName,

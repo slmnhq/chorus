@@ -66,7 +66,7 @@
         },
 
         displayNameFromPerson: function(person) {
-            return [person.first_name, person.last_name].join(' ')
+            return [person.firstName, person.lastName].join(' ')
         },
 
         displayTimestamp: function(timestamp) {

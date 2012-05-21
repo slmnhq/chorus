@@ -113,7 +113,7 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     additionalContext: function() {
         var schema = this.pageModel.schema();
         return {
-            instance_name: schema.get("instance_name"),
+            instanceName: schema.get("instanceName"),
             databaseName: schema.database().name()
         };
     }

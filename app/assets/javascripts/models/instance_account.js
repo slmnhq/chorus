@@ -7,14 +7,14 @@ chorus.models.InstanceAccount = chorus.models.Base.extend({
         var isEditingOwnAccount = this.get("userId") == chorus.session.user().id;
 
         if (isEditingOwnAccount) {
-            return "instances/{{instance_id}}/account";
+            return "instances/{{instanceId}}/account";
         }
 
         if (method === "update" || method === "delete") {
-            return "instances/{{instance_id}}/members/{{id}}";
+            return "instances/{{instanceId}}/members/{{id}}";
         }
 
-        return "instances/{{instance_id}}/members";
+        return "instances/{{instanceId}}/members";
     },
 
     user: function() {
@@ -22,20 +22,20 @@ chorus.models.InstanceAccount = chorus.models.Base.extend({
     },
 
     declareValidations: function(newAttrs) {
-        this.require('db_username', newAttrs);
+        this.require('dbUsername', newAttrs);
 
-        if (this.isNew() || (newAttrs && newAttrs.hasOwnProperty('db_password'))) {
-            this.require('db_password', newAttrs);
+        if (this.isNew() || (newAttrs && newAttrs.hasOwnProperty('dbPassword'))) {
+            this.require('dbPassword', newAttrs);
         }
     },
 
     attrToLabel: {
-        "db_username": "instances.permissions.username",
-        "db_password": "instances.permissions.password"
+        "dbUsername": "instances.permissions.username",
+        "dbPassword": "instances.permissions.password"
     }
 }, {
-    findByInstanceId: function(instance_id) {
-        var account = new chorus.models.InstanceAccount({ instance_id: instance_id });
+    findByInstanceId: function(instanceId) {
+        var account = new chorus.models.InstanceAccount({ instanceId: instanceId });
         account.fetch();
         return account;
     }

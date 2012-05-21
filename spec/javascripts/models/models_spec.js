@@ -457,22 +457,6 @@ describe("chorus.models.Abstract", function() {
             });
         });
 
-        describe("#parse", function() {
-            beforeEach(function() {
-                this.thing = { hi: "there" };
-            })
-
-            it("returns the enclosed resource", function() {
-                expect(this.model.parse({
-                    status: "ok",
-                    foo: "bar",
-                    response: this.thing
-                }, {
-                    status: 200
-                })).toBe(this.thing);
-            });
-        });
-
         describe("#require", function() {
             beforeEach(function() {
                 this.model.errors = {};
@@ -867,7 +851,7 @@ describe("chorus.models.Abstract", function() {
         describe("#toJSON", function() {
             beforeEach(function() {
                 this.model.set({
-                    "name": "Lenny"
+                    "firstName": "Lenny"
                 });
             });
 
@@ -877,16 +861,16 @@ describe("chorus.models.Abstract", function() {
                         this.model.constructorName = "FlimFlam";
                     });
 
-                    it("scopes the attributes under the lowercased constructorName", function() {
+                    it("scopes the attributes under the lowercased constructorName, converted to snake case", function() {
                         var params = this.model.toJSON();
                         expect(params.flim_flam).toBeDefined();
-                        expect(params.flim_flam.name).toBe("Lenny");
+                        expect(params.flim_flam.first_name).toBe("Lenny");
                     });
                 });
 
                 context("and constructorName is not defined", function() {
-                    it("uses the base toJSON method", function() {
-                        expect(this.model.toJSON()).toEqual(this.model.attributes);
+                    it("converts the model's attributes to snake case", function() {
+                        expect(this.model.toJSON().first_name).toEqual("Lenny");
                     });
                 });
             });
@@ -896,10 +880,10 @@ describe("chorus.models.Abstract", function() {
                     this.model.parameterWrapper = "foo";
                 });
 
-                it("scopes the attributes under the parameterWrapper key", function() {
+                it("scopes the attributes under the parameterWrapper key, converted to snake case", function() {
                     var params = this.model.toJSON();
                     expect(params.foo).toBeDefined();
-                    expect(params.foo.name).toBe("Lenny");
+                    expect(params.foo.first_name).toBe("Lenny");
                 });
             });
         });
@@ -1006,25 +990,25 @@ describe("chorus.models.Abstract", function() {
 
         describe("#findWhere", function() {
             beforeEach(function() {
-                this.m1 = newFixtures.user({ first_name: "john", last_name: "coltrane", id: "5", admin: false });
-                this.m2 = newFixtures.user({ first_name: "ravi", last_name: "coltrane", id: "6", admin: true });
-                this.m3 = newFixtures.user({ first_name: "john", last_name: "medeski", id: "7", admin: true  });
+                this.m1 = newFixtures.user({ firstName: "john", lastName: "coltrane", id: "5", admin: false });
+                this.m2 = newFixtures.user({ firstName: "ravi", lastName: "coltrane", id: "6", admin: true });
+                this.m3 = newFixtures.user({ firstName: "john", lastName: "medeski", id: "7", admin: true  });
                 this.collection.reset([ this.m1, this.m2, this.m3 ]);
             });
 
             context("when a model with the given attributes exists in the collection", function() {
                 it("returns that model", function() {
-                    expect(this.collection.findWhere({ first_name: "john", last_name: "coltrane" })).toBe(this.m1);
-                    expect(this.collection.findWhere({ first_name: "john", admin: false })).toBe(this.m1);
-                    expect(this.collection.findWhere({ last_name: "coltrane", admin: true })).toBe(this.m2);
-                    expect(this.collection.findWhere({ first_name: "john", admin: true })).toBe(this.m3);
-                    expect(this.collection.findWhere({ last_name: "medeski" })).toBe(this.m3);
+                    expect(this.collection.findWhere({ firstName: "john", lastName: "coltrane" })).toBe(this.m1);
+                    expect(this.collection.findWhere({ firstName: "john", admin: false })).toBe(this.m1);
+                    expect(this.collection.findWhere({ lastName: "coltrane", admin: true })).toBe(this.m2);
+                    expect(this.collection.findWhere({ firstName: "john", admin: true })).toBe(this.m3);
+                    expect(this.collection.findWhere({ lastName: "medeski" })).toBe(this.m3);
                 });
             });
 
             context("when no model with the given attributes exists in the collection", function() {
                 it("returns undefined", function() {
-                    expect(this.collection.findWhere({ first_name: "ravi", last_name: "medeski" })).toBeUndefined();
+                    expect(this.collection.findWhere({ firstName: "ravi", lastName: "medeski" })).toBeUndefined();
                 });
             });
         });

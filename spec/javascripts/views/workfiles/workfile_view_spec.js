@@ -7,8 +7,8 @@ describe("chorus.views.Workfile", function() {
                 text: "my pinky hurts.",
                 author: {
                     id: "1",
-                    first_name: "marvin",
-                    last_name: "teh_martian"
+                    firstName: "marvin",
+                    lastName: "teh_martian"
                 },
                 timestamp: "2011-12-15 12:34:56"
             }]

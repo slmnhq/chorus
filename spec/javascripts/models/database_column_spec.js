@@ -25,8 +25,8 @@ describe("chorus.models.DatabaseColumn", function() {
                 this.model.initialize();
             });
 
-            it("sets instance_id, databaseName, schemaName, parentName, and parentType", function() {
-                expect(this.model.get("instance_id")).toBe(this.model.tabularData.get('instance').id);
+            it("sets instanceId, databaseName, schemaName, parentName, and parentType", function() {
+                expect(this.model.get("instanceId")).toBe(this.model.tabularData.get('instance').id);
                 expect(this.model.get("databaseName")).toBe(this.model.tabularData.get('databaseName'));
                 expect(this.model.get("schemaName")).toBe(this.model.tabularData.get('schemaName'));
                 expect(this.model.get("parentName")).toBe(this.model.tabularData.get('objectName'));
@@ -36,7 +36,7 @@ describe("chorus.models.DatabaseColumn", function() {
             describe("#url", function() {
                 it("is correct", function() {
                     this.model.set({
-                        instance_id: 5,
+                        instanceId: 5,
                         databaseName: "%foo%",
                         schemaName: "b/a/r",
                         parentName: "a space"

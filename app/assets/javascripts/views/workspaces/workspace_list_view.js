@@ -4,7 +4,7 @@ chorus.views.WorkspaceList = chorus.views.SelectableList.extend({
     eventName: "workspace",
 
     collectionModelContext: function(model) {
-        var date = Date.parseFromApi(model.get("archived_at"));
+        var date = Date.parseFromApi(model.get("archivedAt"));
         return {
             imageUrl: model.defaultIconUrl(),
             showUrl: model.showUrl(),

@@ -94,6 +94,91 @@ describe("chorus.Mixins.Fetching", function() {
         });
     });
 
+    describe("#parse", function() {
+        it("returns the enclosed resource", function() {
+            expect(this.resource.parse({
+                status: "ok",
+                foo: "bar",
+                response: { hi_there: { youre_cool: true } }
+            }, {
+                status: 200
+            })).toEqual({
+                hiThere: { youreCool: true }
+            });
+        });
+    });
+
+    describe("#camelizeKeys", function() {
+        var params;
+
+        beforeEach(function() {
+            params = {
+                ownerId: 1,
+                two_words: {
+                    nested_attribute: 2,
+                    double_nested: [
+                        {other_thing: 3},
+                        {other_other_thing: 4}
+                    ]
+                }
+            };
+        });
+
+        it("recursively converts the keys of the given hash to camel case", function() {
+            expect(this.resource.camelizeKeys(params)).toEqual({
+                ownerId: 1,
+                twoWords: {
+                    nestedAttribute: 2,
+                    doubleNested: [
+                        {otherThing: 3},
+                        {otherOtherThing: 4}
+                    ]
+                }
+            });
+        });
+
+        it("knows the difference between arrays and objects", function() {
+            var arrayProperty = this.resource.camelizeKeys(params).twoWords.doubleNested;
+            expect(_.isArray(arrayProperty)).toBeTruthy();
+        });
+    });
+
+    describe("#underscoreKeys", function() {
+        var params;
+
+        beforeEach(function() {
+          params = {
+                ownerId: 1,
+                twoWords: {
+                    nestedAttribute: 2,
+                    doubleNested: [
+                        {otherThing: 3},
+                        {otherOtherThing: 4}
+                    ]
+                }
+            };
+        });
+
+        it("recursively converts the keys of the given hash to snake case", function() {
+
+            expect(this.resource.underscoreKeys(params)).toEqual({
+                owner_id: 1,
+                two_words: {
+                    nested_attribute: 2,
+                    double_nested: [
+                        {other_thing: 3},
+                        {other_other_thing: 4}
+                    ]
+                }
+            });
+        });
+
+        it(" knows the difference between arrays and objects", function() {
+            var arrayProperty = this.resource.underscoreKeys(params).two_words.double_nested;
+            expect(_.isArray(arrayProperty)).toBeTruthy();
+        } );
+    });
+
     describe("#parseErrors", function() {
         beforeEach(function() {
             this.things = [
@@ -127,7 +212,7 @@ describe("chorus.Mixins.Fetching", function() {
             beforeEach(function() {
                 spyOn(this.resource, "trigger");
                 this.data = {
-                    response: { instance_id: 1 },
+                    response: { instanceId: 1 },
                     errors: { record: "no" }
                 };
 
@@ -146,7 +231,7 @@ describe("chorus.Mixins.Fetching", function() {
             beforeEach(function() {
                 spyOn(this.resource, "trigger");
                 this.data = {
-                    response: { instance_id: 1 },
+                    response: { instanceId: 1 },
                     errors: { record: "no" }
                 };
 

@@ -1,13 +1,15 @@
 {
-    "id" : "10030",
-    "workspaceId" : "10022",
-    "instance_id" : "10000",
-    "instance_name" : "gillette",
-    "databaseName" : "dca_demo",
-    "schemaName" : "ddemo",
-    "status" : "ok",
-    "databaseId" : "10006",
-    "schemaId" : "10011",
-    "type" : "000",
-    "instanceStatus" : "online"
+    "response": {
+        "id" : "10030",
+        "workspaceId" : "10022",
+        "instance_id" : "10000",
+        "instance_name" : "gillette",
+        "databaseName" : "dca_demo",
+        "schemaName" : "ddemo",
+        "status" : "ok",
+        "databaseId" : "10006",
+        "schemaId" : "10011",
+        "type" : "000",
+        "instanceStatus" : "online"
+    }
 }

@@ -14,7 +14,7 @@ describe("chorus.pages.UserNewPage", function() {
         describe("when the configuration fetch completes", function() {
             context("when external auth is enabled", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.config, { external_auth_enabled: true });
+                    this.server.completeFetchFor(this.config, { externalAuthEnabled: true });
                 });
 
                 it("instantiates a user new ldap view", function() {
@@ -25,7 +25,7 @@ describe("chorus.pages.UserNewPage", function() {
 
             context("when external auth is *not* enabled", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.config, { external_auth_enabled: false });
+                    this.server.completeFetchFor(this.config, { externalAuthEnabled: false });
                 });
 
                 it("instantiates the normal user new view", function() {

@@ -123,7 +123,7 @@ describe("chorus.models.User", function() {
             expect(this.model.performValidation()).toBeTruthy();
         });
 
-        _.each(["first_name", "last_name", "username", "password"], function(attr) {
+        _.each(["firstName", "lastName", "username", "password"], function(attr) {
             it("requires " + attr, function() {
                 this.model.performValidation();
                 expect(this.model.require).toHaveBeenCalledWith(attr, undefined);
@@ -138,8 +138,8 @@ describe("chorus.models.User", function() {
         context("when the user is new", function() {
             beforeEach(function() {
                 this.model = new chorus.models.User({
-                    first_name: "bob",
-                    last_name: "jenkins",
+                    firstName: "bob",
+                    lastName: "jenkins",
                     username: "bobjenk",
                     email: "bobj@raisetheroof.us"
                 });
@@ -163,8 +163,8 @@ describe("chorus.models.User", function() {
         context("when the user is in LDAP", function() {
             beforeEach(function() {
                 this.model = newFixtures.user({
-                    first_name: "bob",
-                    last_name: "jenkins",
+                    firstName: "bob",
+                    lastName: "jenkins",
                     username: "bobjenk",
                     email: "bobj@raisetheroof.us"
                 });
@@ -177,8 +177,8 @@ describe("chorus.models.User", function() {
 
             it("does still require the other stuff", function() {
                 this.model.set({
-                    first_name: null,
-                    last_name: "",
+                    firstName: null,
+                    lastName: "",
                     username: "",
                     email: "bob@bob.com"
                 });
@@ -191,8 +191,8 @@ describe("chorus.models.User", function() {
             beforeEach(function() {
                 this.model = newFixtures.user({
                     id: "5",
-                    first_name: "bob",
-                    last_name: "jenkins",
+                    firstName: "bob",
+                    lastName: "jenkins",
                     username: "bobjenk",
                     email: "bobj@raisetheroof.us"
                 });
@@ -270,18 +270,18 @@ describe("chorus.models.User", function() {
 
     describe("#displayName", function() {
         beforeEach(function() {
-            this.model.set({ first_name: "Danny", last_name: "Burkes" });
+            this.model.set({ firstName: "Danny", lastName: "Burkes" });
         })
 
         it("returns the full name", function() {
             expect(this.model.displayName()).toBe("Danny Burkes");
         })
 
-        context("when first_name and last_name are blank, but fullName exists", function() {
+        context("when firstName and lastName are blank, but fullName exists", function() {
             it("uses fullName", function() {
                 var user = newFixtures.user({
-                    first_name: '',
-                    last_name: ''
+                    firstName: '',
+                    lastName: ''
                 });
                 user.set({fullName: "SomeGuy"});
                 expect(user.displayName()).toBe('SomeGuy');
@@ -292,7 +292,7 @@ describe("chorus.models.User", function() {
     describe("displayShortName", function() {
         context("with a short user name", function() {
             beforeEach(function() {
-                this.model.set({first_name: "Party", last_name: "Man"});
+                this.model.set({firstName: "Party", lastName: "Man"});
             })
             it("displays the normal display name", function() {
                 expect(this.model.displayShortName(20)).toBe(this.model.displayName());
@@ -301,7 +301,7 @@ describe("chorus.models.User", function() {
 
         context("where the full name is longer than the allowed length", function() {
             beforeEach(function() {
-                this.model.set({first_name: "Party", last_name: "ManiManiManiManiManiManiMani"});
+                this.model.set({firstName: "Party", lastName: "ManiManiManiManiManiManiMani"});
             })
             it("displays the normal display name", function() {
                 expect(this.model.displayShortName(20)).toBe("Party M.");

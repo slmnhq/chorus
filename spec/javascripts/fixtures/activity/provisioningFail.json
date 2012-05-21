@@ -1,13 +1,15 @@
 {
-    "errorMessage": {
-        "responseMessage": "fail",
-        "errorMessage": "Can not connect to Aurora server."
-    },
-    "timestamp": "2012-04-05 16:19:54.37",
-    "id": "10221",
-    "instance": {
-        "id": "10230",
-        "name": "aurora_wrong"
-    },
-    "type": "PROVISIONING_FAIL"
+    "response": {
+        "errorMessage": {
+            "responseMessage": "fail",
+            "errorMessage": "Can not connect to Aurora server."
+        },
+        "timestamp": "2012-04-05 16:19:54.37",
+        "id": "10221",
+        "instance": {
+            "id": "10230",
+            "name": "aurora_wrong"
+        },
+        "type": "PROVISIONING_FAIL"
+    }
 }

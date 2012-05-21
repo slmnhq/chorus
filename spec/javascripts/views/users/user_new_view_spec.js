@@ -15,8 +15,8 @@ describe("chorus.views.userNew", function() {
 
             context("submitting the form", function() {
                 beforeEach(function() {
-                    this.view.$("input[name=first_name]").val("Frankie");
-                    this.view.$("input[name=last_name]").val("Knuckles");
+                    this.view.$("input[name=firstName]").val("Frankie");
+                    this.view.$("input[name=lastName]").val("Knuckles");
                     this.view.$("input[name=username]").val("frankie2002");
                     this.view.$("input[name=email]").val("frankie_knuckles@nyclol.com");
                     this.view.$("input[name=password]").val("whoaomg");
@@ -28,8 +28,8 @@ describe("chorus.views.userNew", function() {
 
                 it("creates a user with the forms attributes", function() {
                     this.view.$("form").submit();
-                    expect(this.user.attributes["first_name"]).toBe("Frankie");
-                    expect(this.user.attributes["last_name"]).toBe("Knuckles");
+                    expect(this.user.attributes["firstName"]).toBe("Frankie");
+                    expect(this.user.attributes["lastName"]).toBe("Knuckles");
                     expect(this.user.attributes["username"]).toBe("frankie2002");
                     expect(this.user.attributes["email"]).toBe("frankie_knuckles@nyclol.com");
                     expect(this.user.attributes["password"]).toBe("whoaomg");
@@ -95,8 +95,8 @@ describe("chorus.views.userNew", function() {
                         })
 
                         it("retains the data already entered", function() {
-                            expect(this.view.$("input[name=first_name]").val()).toBe("Frankie");
-                            expect(this.view.$("input[name=last_name]").val()).toBe("Knuckles");
+                            expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
+                            expect(this.view.$("input[name=lastName]").val()).toBe("Knuckles");
                             expect(this.view.$("input[name=username]").val()).toBe("frankie2002");
                             expect(this.view.$("input[name=email]").val()).toBe("frankie_knuckles@nyclol.com");
                             expect(this.view.$("input[name=password]").val()).toBe("whoaomg");
@@ -119,7 +119,7 @@ describe("chorus.views.userNew", function() {
                     });
 
                     it("retains the data already entered", function() {
-                        expect(this.view.$("input[name=first_name]").val()).toBe("Frankie");
+                        expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
                     });
                 });
             });

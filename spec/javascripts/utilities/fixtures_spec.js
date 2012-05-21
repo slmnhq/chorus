@@ -10,8 +10,8 @@ describe("newFixtures", function() {
             model = newFixtures.test.withOverrides();
             var fixtureScript = $("#fixtures [data-fixture-path='test/withOverrides']");
             var fixtureJson = JSON.parse(fixtureScript.html());
-            expect(model.get("first_name")).toBeDefined();
-            expect(model.get("first_name")).toBe(fixtureJson.first_name);
+            expect(model.get("firstName")).toBeDefined();
+            expect(model.get("firstName")).toBe(fixtureJson.response.first_name);
         });
 
         context("when the nested definition overrides the parent definition", function() {
@@ -40,13 +40,18 @@ describe("newFixtures", function() {
 
         it("includes the user fixture data", function() {
             expect(window.fixtureData.user).toBeDefined();
-            expect(window.fixtureData.user.username).toBeDefined();
-            expect(userJson.username).toBe(window.fixtureData.user.username);
+            expect(window.fixtureData.user.response.username).toBeDefined();
+            expect(userJson.username).toBe(window.fixtureData.user.response.username);
         });
 
         it("allows for overrides", function() {
             userJson = newFixtures.userJson({username: "Foo Bar"});
             expect(userJson.username).toBe("Foo Bar");
+        });
+
+        it("allows camel-case attribute names for overrides", function() {
+            userJson = newFixtures.userJson({ firstName: "Foo" });
+            expect(userJson.firstName).toBe("Foo");
         });
 
         it("does not allow overrides for non-existant attributes", function() {
@@ -103,9 +108,9 @@ describe("newFixtures", function() {
                     objectName: "outbreaks"
                 });
 
-                var instance_id = '"' + datasetJson.instance.id + '"';
+                var instanceId = '"' + datasetJson.instance.id + '"';
 
-                expect(datasetJson.id).toBe(instance_id + '|"chorus_events"|"plague"|"BASE_TABLE"|"outbreaks"');
+                expect(datasetJson.id).toBe(instanceId + '|"chorus_events"|"plague"|"BASE_TABLE"|"outbreaks"');
             });
         });
     });
@@ -143,7 +148,7 @@ describe("newFixtures", function() {
         });
 
         it("sets attributes of the models based on the fixture data", function() {
-            var data = window.fixtureData.userSet[0];
+            var data = window.fixtureData.userSet.response[0];
             expect(data).toBeDefined();
             expect(data.username).toBeDefined();
             expect(userSet.at(0).get("username")).toBe(data.username);

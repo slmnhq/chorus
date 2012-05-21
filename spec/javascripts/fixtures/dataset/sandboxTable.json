@@ -1,65 +1,69 @@
 {
-    "schemaName": "ddemo",
-    "importFrequency": null,
-    "workspace": {
-        "id": "10022",
-        "name": "another stupidly long workspace name"
-    },
-    "objectName": "2010_report_on_white_house",
-    "modifiedBy": {
-        "id": "InitialUser",
-        "username": "edcadmin"
-    },
-    "columns": 5,
-    "commentCount": 0,
-    "type": "SANDBOX_TABLE",
-    "isDeleted": false,
-    "hasCredentials": true,
-    "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"2010_report_on_white_house\"",
-    "databaseName": "dca_demo",
-    "recentComment": null,
-    "owner": {
-        "id": "InitialUser",
-        "username": "edcadmin"
-    },
-    "instance": {
-        "id": "10000",
-        "name": "gillette"
-    },
-    "columnNames": [{
-        "name": "position_title",
-        "typeCategory": "LONG_STRING",
-        "comment": null,
-        "type": "text",
-        "ordinalPosition": "1"
-    },
-    {
-        "name": "pay_basis",
-        "typeCategory": "LONG_STRING",
-        "comment": null,
-        "type": "text",
-        "ordinalPosition": "2"
-    },
-    {
-        "name": "salary",
-        "typeCategory": "LONG_STRING",
-        "comment": null,
-        "type": "text",
-        "ordinalPosition": "3"
-    },
-    {
-        "name": "employee_status",
-        "typeCategory": "LONG_STRING",
-        "comment": null,
-        "type": "text",
-        "ordinalPosition": "4"
-    },
-    {
-        "name": "employee_name",
-        "typeCategory": "LONG_STRING",
-        "comment": null,
-        "type": "text",
-        "ordinalPosition": "5"
-    }],
-    "objectType": "BASE_TABLE"
+    "response": {
+        "schemaName": "ddemo",
+        "importFrequency": null,
+        "workspace": {
+            "id": "10022",
+            "name": "another stupidly long workspace name"
+        },
+        "objectName": "2010_report_on_white_house",
+        "modifiedBy": {
+            "id": "InitialUser",
+            "username": "edcadmin"
+        },
+        "columns": 5,
+        "commentCount": 0,
+        "type": "SANDBOX_TABLE",
+        "isDeleted": false,
+        "hasCredentials": true,
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"2010_report_on_white_house\"",
+        "databaseName": "dca_demo",
+        "recentComment": null,
+        "owner": {
+            "id": "InitialUser",
+            "username": "edcadmin"
+        },
+        "instance": {
+            "id": "10000",
+            "name": "gillette"
+        },
+        "columnNames": [
+            {
+                "name": "position_title",
+                "typeCategory": "LONG_STRING",
+                "comment": null,
+                "type": "text",
+                "ordinalPosition": "1"
+            },
+            {
+                "name": "pay_basis",
+                "typeCategory": "LONG_STRING",
+                "comment": null,
+                "type": "text",
+                "ordinalPosition": "2"
+            },
+            {
+                "name": "salary",
+                "typeCategory": "LONG_STRING",
+                "comment": null,
+                "type": "text",
+                "ordinalPosition": "3"
+            },
+            {
+                "name": "employee_status",
+                "typeCategory": "LONG_STRING",
+                "comment": null,
+                "type": "text",
+                "ordinalPosition": "4"
+            },
+            {
+                "name": "employee_name",
+                "typeCategory": "LONG_STRING",
+                "comment": null,
+                "type": "text",
+                "ordinalPosition": "5"
+            }
+        ],
+        "objectType": "BASE_TABLE"
+    }
 }

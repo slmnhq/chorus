@@ -7,7 +7,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
     describe("#setup", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
-            this.instance = newFixtures.instance.sharedAccount({instance_id: "5"});
+            this.instance = newFixtures.instance.sharedAccount({instanceId: "5"});
             var launchElement = $("<a/>").data("instance", this.instance);
             this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
         });
@@ -26,8 +26,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
         beforeEach(function() {
             this.instance = newFixtures.instance.sharedAccount();
             var account = newFixtures.instanceAccount({
-                db_username: 'some_db_username',
-                instance_id: this.instance.id
+                dbUsername: 'some_db_username',
+                instanceId: this.instance.id
             });
             this.instance.set({ owner: {id: account.user().get("id")} });
             this.instance.accounts().reset(account);
@@ -78,11 +78,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 describe("when the user fetch completes", function() {
                     beforeEach(function() {
                         this.dialog.users.reset([
-                            newFixtures.user({ first_name: "jim", last_name: "aardvark", id: '222' }),
+                            newFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
                             this.instance.owner(),
-                            newFixtures.user({ first_name: "harold", last_name: "four", id: '444' }),
-                            newFixtures.user({ first_name: "suzie", last_name: "three", id: '333' }),
-                            newFixtures.user({ first_name: "bob", last_name: "zzap", id: '111' })
+                            newFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
+                            newFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                            newFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
                         ]);
                     });
 
@@ -142,8 +142,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 });
             });
 
-            it("populates the db_username text field from the account map", function() {
-                expect(this.dialog.$("input[name=db_username]").val()).toBe('some_db_username');
+            it("populates the dbUsername text field from the account map", function() {
+                expect(this.dialog.$("input[name=dbUsername]").val()).toBe('some_db_username');
             })
 
             it("displays a 'switch to individual account' link", function() {
@@ -220,18 +220,18 @@ describe("chorus.dialogs.InstancePermissions", function() {
     context("when the instance has individual accounts", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll').andCallThrough();
-            this.owner = newFixtures.user({first_name: 'EDC', last_name: 'Admin'});
+            this.owner = newFixtures.user({firstName: 'EDC', lastName: 'Admin'});
             this.instance = newFixtures.instance.greenplum({owner: {
                 id: this.owner.get("id"),
                 username: this.owner.get("username"),
-                first_name: this.owner.get("first_name"),
-                last_name: this.owner.get("last_name")
+                firstName: this.owner.get("firstName"),
+                lastName: this.owner.get("lastName")
             }
             });
             this.accounts = this.instance.accounts();
             this.accounts.add([
-                newFixtures.instanceAccount({ id: '1', owner: { first_name: "bob", last_name: "zzap", id: '111' } }),
-                newFixtures.instanceAccount({ id: '2', owner: { first_name: "jim", last_name: "aardvark", id: '222' } }),
+                newFixtures.instanceAccount({ id: '1', owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
+                newFixtures.instanceAccount({ id: '2', owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
                 newFixtures.instanceAccount({ id: '3', owner: this.owner.attributes })
             ]);
             var launchElement = $("<a/>").data("instance", this.instance);
@@ -292,8 +292,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 this.liBeingEdited = this.dialog.$("li[data-id=2]");
                 this.otherLi = this.dialog.$("li[data-id=1]");
                 this.liBeingEdited.find("a.edit").click();
-                this.liBeingEdited.find("input[name=db_username]").val("jughead");
-                this.liBeingEdited.find("input[name=db_password]").val("gogogo");
+                this.liBeingEdited.find("input[name=dbUsername]").val("jughead");
+                this.liBeingEdited.find("input[name=dbPassword]").val("gogogo");
             });
 
             it("adds the 'editing' class to the parent li", function() {
@@ -309,8 +309,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 })
 
                 it("populates the account map from the form", function() {
-                    expect(this.accountBeingEdited.get("db_username")).toBe("jughead");
-                    expect(this.accountBeingEdited.get("db_password")).toBe("gogogo");
+                    expect(this.accountBeingEdited.get("dbUsername")).toBe("jughead");
+                    expect(this.accountBeingEdited.get("dbPassword")).toBe("gogogo");
                 })
 
                 it("saves the acccount map", function() {
@@ -379,8 +379,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 })
 
                 it("does not populate the account from the form", function() {
-                    expect(this.accountBeingEdited.get("db_username")).not.toBe("jughead");
-                    expect(this.accountBeingEdited.get("db_password")).not.toBe("gogogo");
+                    expect(this.accountBeingEdited.get("dbUsername")).not.toBe("jughead");
+                    expect(this.accountBeingEdited.get("dbPassword")).not.toBe("gogogo");
                 })
 
                 it("does not save the account", function() {
@@ -466,11 +466,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
         describe("when the chorus users are fetched", function() {
             beforeEach(function() {
                 this.dialog.users.reset([
-                    newFixtures.user({ first_name: "jim", last_name: "aardvark", id: '222' }),
+                    newFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
                     this.instance.owner(),
-                    newFixtures.user({ first_name: "harold", last_name: "four", id: '444' }),
-                    newFixtures.user({ first_name: "suzie", last_name: "three", id: '333' }),
-                    newFixtures.user({ first_name: "bob", last_name: "zzap", id: '111' })
+                    newFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
+                    newFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                    newFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
                 ]);
             });
 
@@ -565,8 +565,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         });
 
                         it("shows errors", function() {
-                            expect(this.dialog.$('input[name=db_username]:visible')).toHaveClass('has_error');
-                            expect(this.dialog.$('input[name=db_password]:visible')).toHaveClass('has_error');
+                            expect(this.dialog.$('input[name=dbUsername]:visible')).toHaveClass('has_error');
+                            expect(this.dialog.$('input[name=dbPassword]:visible')).toHaveClass('has_error');
                         });
                     });
 
@@ -574,10 +574,10 @@ describe("chorus.dialogs.InstancePermissions", function() {
                         beforeEach(function() {
                             spyOn(this.dialog, "render").andCallThrough();
                             spyOn(this.dialog.account, "save").andCallThrough();
-                            this.dialog.$('input[name=db_username]').val('badUser!');
-                            this.dialog.$('input[name=db_password]').val('badPassword!');
-                            this.dialog.$('li[data-id=new] input[name=db_username]').val('user!');
-                            this.dialog.$('li[data-id=new] input[name=db_password]').val('password!');
+                            this.dialog.$('input[name=dbUsername]').val('badUser!');
+                            this.dialog.$('input[name=dbPassword]').val('badPassword!');
+                            this.dialog.$('li[data-id=new] input[name=dbUsername]').val('user!');
+                            this.dialog.$('li[data-id=new] input[name=dbPassword]').val('password!');
                             this.dialog.$('li select').val('111');
                         });
                         context("clicking save", function() {
@@ -587,18 +587,18 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                             it("saves the correct fields", function() {
                                 expect(this.dialog.account.save).toHaveBeenCalledWith({
-                                    owner_id: '444',
-                                    db_username: 'user!',
-                                    db_password: 'password!'
+                                    ownerId: '444',
+                                    dbUsername: 'user!',
+                                    dbPassword: 'password!'
                                 });
                             });
 
-                            it("has the correct instance_id", function() {
-                                expect(this.dialog.account.get('instance_id')).toBe(this.dialog.instance.get('id'));
+                            it("has the correct instanceId", function() {
+                                expect(this.dialog.account.get('instanceId')).toBe(this.dialog.instance.get('id'));
                             });
 
-                            it("has the selected owner_id", function() {
-                                expect(this.dialog.account.get('owner_id')).toBe('444');
+                            it("has the selected ownerId", function() {
+                                expect(this.dialog.account.get('ownerId')).toBe('444');
                             });
 
                             context("after the save returns successfully", function() {
@@ -674,8 +674,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
             describe("when the fetch for all chorus users completes", function() {
                 beforeEach(function() {
                     this.dialog.users.reset([
-                        newFixtures.user({ first_name: "anna", last_name: "cannon" }),
-                        newFixtures.user({ first_name: "ben", last_name: "maulden" })
+                        newFixtures.user({ firstName: "anna", lastName: "cannon" }),
+                        newFixtures.user({ firstName: "ben", lastName: "maulden" })
                     ]);
                 });
 
@@ -826,7 +826,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("can render the instance's shared db username", function() {
-                        expect(this.instance.accountForOwner().get("db_username")).toBe("instance_owner")
+                        expect(this.instance.accountForOwner().get("dbUsername")).toBe("instance_owner")
                     });
                 });
             });

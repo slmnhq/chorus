@@ -27,11 +27,11 @@
                 case "register" :
                     this.require("host", newAttrs);
                     this.require("port", newAttrs);
-                    this.require("maintenance_db", newAttrs);
+                    this.require("maintenanceDb", newAttrs);
                     this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
                     if (this.isNew()) {
-                        this.require("db_username", newAttrs);
-                        this.require("db_password", newAttrs);
+                        this.require("dbUsername", newAttrs);
+                        this.require("dbPassword", newAttrs);
                     }
                     break;
                 case "create" :
@@ -40,8 +40,8 @@
                     if (this.isNew()) {
                         this.requirePattern("databaseName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
                         this.requirePattern("schemaName", chorus.ValidationRegexes.ChorusIdentifier(63), newAttrs);
-                        this.require("db_username", newAttrs);
-                        this.requirePattern("db_password", chorus.ValidationRegexes.Password({min: 6, max: 256}), newAttrs);
+                        this.require("dbUsername", newAttrs);
+                        this.requirePattern("dbPassword", chorus.ValidationRegexes.Password({min: 6, max: 256}), newAttrs);
                     }
                     break;
                 case "registerHadoop":
@@ -65,7 +65,7 @@
         },
 
         providerIconUrl: function() {
-            var filename = providerIconMap[this.get("instance_provider")] || "other_instance.png";
+            var filename = providerIconMap[this.get("instanceProvider")] || "other_instance.png";
             return imagePrefix + filename;
         },
 
@@ -80,17 +80,17 @@
         },
 
         databases: function() {
-            this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instance_id: this.get("id")}));
+            this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instanceId: this.get("id")}));
             return this._databases;
         },
 
         accounts: function() {
-            this._accounts || (this._accounts = new chorus.collections.InstanceAccountSet([], {instance_id: this.get("id")}));
+            this._accounts || (this._accounts = new chorus.collections.InstanceAccountSet([], {instanceId: this.get("id")}));
             return this._accounts;
         },
 
         accountForUser: function(user) {
-            return new chorus.models.InstanceAccount({ instance_id: this.get("id"), userId: user.get("id") });
+            return new chorus.models.InstanceAccount({ instanceId: this.get("id"), userId: user.get("id") });
         },
 
         accountForCurrentUser: function() {
@@ -124,15 +124,15 @@
         },
 
         attrToLabel: {
-            "db_username": "instances.dialog.database_account",
-            "db_password": "instances.dialog.database_password",
+            "dbUsername": "instances.dialog.database_account",
+            "dbPassword": "instances.dialog.database_password",
             "userName": "instances.dialog.hadoop_account",
             "userGroups": "instances.dialog.hadoop_group_list",
             "name": "instances.dialog.instance_name",
             "host": "instances.dialog.host",
             "port": "instances.dialog.port",
             "databaseName": "instances.dialog.database_name",
-            "maintenance_db": "instances.dialog.maintenance_db",
+            "maintenanceDb": "instances.dialog.maintenance_db",
             "description": "instances.dialog.description",
             "size": "instances.dialog.size"
         },
@@ -143,17 +143,17 @@
 
         usage: function() {
             if (!this.instanceUsage) {
-                this.instanceUsage = new chorus.models.InstanceUsage({ instance_id: this.get('id')})
+                this.instanceUsage = new chorus.models.InstanceUsage({ instanceId: this.get('id')})
             }
             return this.instanceUsage
         },
 
         isGreenplum: function() {
-            return this.get('instance_provider') == 'Greenplum Database'
+            return this.get('instanceProvider') == 'Greenplum Database'
         },
 
         isHadoop: function() {
-            return this.get("instance_provider") == "Hadoop";
+            return this.get("instanceProvider") == "Hadoop";
         },
 
         hasWorkspaceUsageInfo: function() {
@@ -166,7 +166,7 @@
 
         sharing: function() {
             if (!this._sharing) {
-                this._sharing = new chorus.models.InstanceSharing({instance_id: this.get("id")})
+                this._sharing = new chorus.models.InstanceSharing({instanceId: this.get("id")})
             }
             return this._sharing;
         }

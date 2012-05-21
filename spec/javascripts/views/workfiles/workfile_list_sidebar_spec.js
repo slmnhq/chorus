@@ -39,7 +39,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
                 });
 
                 it("displays the name of the person who updated the workfile", function() {
-                    var updaterName = this.workfile.get("modifiedBy").first_name + " " + this.workfile.get("modifiedBy").last_name;
+                    var updaterName = this.workfile.get("modifiedBy").firstName + " " + this.workfile.get("modifiedBy").lastName;
                     expect(this.view.$(".updated_by").text().trim()).toBe(updaterName);
                 });
 
@@ -118,7 +118,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
 
         context("when the workfile's workspace is archived", function() {
             beforeEach(function() {
-                this.workspace.set({archived_at: "2011-11-22 10:46:03.152"});
+                this.workspace.set({archivedAt: "2011-11-22 10:46:03.152"});
                 this.workfile = fixtures.sqlWorkfile({
                     lastUpdatedStamp: "2011-11-22 10:46:03.152"
                 });

@@ -6,18 +6,18 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             name: "my name",
             summary: "my summary",
             id: "457",
-            owner_id: "12",
+            ownerId: "12",
             ownerFirstName: "Deborah",
             ownerLastName: "D",
-            archived_at: null,
+            archivedAt: null,
             archiver: null
         });
         this.workspace.unset("sandboxInfo");
 
         this.workspace.members().add([
-            new chorus.models.User({ id: 11, first_name: "Mikey", last_name: "B" }),
-            new chorus.models.User({ id: 12, first_name: "Deborah", last_name: "D" }),
-            new chorus.models.User({ id: 13, first_name: "Richard", last_name: "G" })
+            new chorus.models.User({ id: 11, firstName: "Mikey", lastName: "B" }),
+            new chorus.models.User({ id: 12, firstName: "Deborah", lastName: "D" }),
+            new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
         ]);
 
         this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
@@ -37,7 +37,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
         });
 
         it("sorts the members by last name ascending", function() {
-            expect(_.last(this.server.requests).url).toContain("order=last_name");
+            expect(_.last(this.server.requests).url).toContain("order=lastName");
         });
     });
 
@@ -84,7 +84,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     this.workspace.set({
                         sandboxInfo: {
                             databaseName: "Analytics",
-                            instance_name: "Gillette",
+                            instanceName: "Gillette",
                             sandboxId: "10070",
                             schemaName: "analytics"
                         }
@@ -170,7 +170,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
             context("and the workspace is not archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({ archived_at: null })
+                    this.workspace.set({ archivedAt: null })
                     this.dialog.render();
                 })
 
@@ -191,7 +191,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
             context("and the workspace is archived", function() {
                 beforeEach(function() {
-                    this.workspace.set({ archived_at: "2012-01-01 12:34:56" })
+                    this.workspace.set({ archivedAt: "2012-01-01 12:34:56" })
                     this.dialog.render();
                 })
 
@@ -258,7 +258,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archived_at: null })
+                        this.workspace.set({ archivedAt: null })
                         this.dialog.render();
                     });
 
@@ -272,7 +272,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archived_at: "2012-02-02 22:22:22" })
+                        this.workspace.set({ archivedAt: "2012-02-02 22:22:22" })
                         this.dialog.render();
                     });
 
@@ -334,7 +334,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is not archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archived_at: null })
+                        this.workspace.set({ archivedAt: null })
                         this.dialog.render();
                     })
 
@@ -353,7 +353,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
                 context("and the workspace is archived", function() {
                     beforeEach(function() {
-                        this.workspace.set({ archived_at: "2013-03-03 11:11:11" })
+                        this.workspace.set({ archivedAt: "2013-03-03 11:11:11" })
                         this.dialog.render();
                     });
 
@@ -421,7 +421,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     });
 
                     it("sets the owner id on the workspace", function() {
-                        expect(this.dialog.pageModel.get("owner_id")).toBe("13");
+                        expect(this.dialog.pageModel.get("ownerId")).toBe("13");
                     });
 
                     it("does not close the dialog before the server responds", function() {
@@ -535,8 +535,8 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                             expect(this.dialog.pageModel.save).toHaveBeenCalled();
                         });
 
-                        it("does not provide owner_id in the API call", function() {
-                            expect(this.dialog.pageModel.save.calls[1].args.hasOwnProperty("owner_id")).toBeFalsy();
+                        it("does not provide ownerId in the API call", function() {
+                            expect(this.dialog.pageModel.save.calls[1].args.hasOwnProperty("ownerId")).toBeFalsy();
                         })
                     })
                 });

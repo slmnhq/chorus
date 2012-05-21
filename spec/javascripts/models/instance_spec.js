@@ -33,17 +33,17 @@ describe("chorus.models.Instance", function() {
 
     describe("#providerIconUrl", function() {
         it("returns the right url for greenplum instances", function() {
-            this.instance.set({ instance_provider: "Greenplum Database" });
+            this.instance.set({ instanceProvider: "Greenplum Database" });
             expect(this.instance.providerIconUrl()).toBe("/images/instances/greenplum_instance.png");
         });
 
         it("returns the right url for hadoop instances", function() {
-            this.instance.set({ instance_provider: "Hadoop" });
+            this.instance.set({ instanceProvider: "Hadoop" });
             expect(this.instance.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");
         });
 
         it("returns the right url for other instances", function() {
-            this.instance.set({ instance_provider: "Something Else" });
+            this.instance.set({ instanceProvider: "Something Else" });
             expect(this.instance.providerIconUrl()).toBe("/images/instances/other_instance.png");
         });
     });
@@ -118,7 +118,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("sets the instance id", function() {
-            expect(this.account.get("instance_id")).toBe(this.instance.get("id"));
+            expect(this.account.get("instanceId")).toBe(this.instance.get("id"));
         });
 
         it("sets the user id based on the given user", function() {
@@ -181,7 +181,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("sets the instance id", function() {
-            expect(this.instanceAccounts.attributes.instance_id).toBe(this.instance.get('id'));
+            expect(this.instanceAccounts.attributes.instanceId).toBe(this.instance.get('id'));
         });
 
         it("memoizes", function() {
@@ -199,7 +199,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("sets the instance id", function() {
-            expect(this.databases.attributes.instance_id).toBe(this.instance.get('id'));
+            expect(this.databases.attributes.instanceId).toBe(this.instance.get('id'));
         });
 
         it("memoizes", function() {
@@ -217,7 +217,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("sets the instance id", function() {
-            expect(this.instanceUsage.attributes.instance_id).toBe(this.instance.get('id'));
+            expect(this.instanceUsage.attributes.instanceId).toBe(this.instance.get('id'));
         });
 
         it("memoizes", function() {
@@ -236,7 +236,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("returns false otherwise", function() {
-            instance.set({instance_provider: "somethingElse"});
+            instance.set({instanceProvider: "somethingElse"});
             expect(instance.isGreenplum()).toBeFalsy();
         });
     });
@@ -252,7 +252,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("returns false otherwise", function() {
-            instance.set({instance_provider: "somethingElse"});
+            instance.set({instanceProvider: "somethingElse"});
             expect(instance.isHadoop()).toBeFalsy();
         });
     });
@@ -274,10 +274,10 @@ describe("chorus.models.Instance", function() {
                 this.attrs = {
                     name: "foo",
                     host: "gillette",
-                    db_username: "dude",
-                    db_password: "whatever",
+                    dbUsername: "dude",
+                    dbPassword: "whatever",
                     port: "1234",
-                    maintenance_db: "postgres",
+                    maintenanceDb: "postgres",
                     provision_type: "register"
                 }
             });
@@ -291,7 +291,7 @@ describe("chorus.models.Instance", function() {
                     expect(this.instance.performValidation(this.attrs)).toBeTruthy();
                 })
 
-                _.each(["name", "host", "db_username", "db_password", "port", "maintenance_db"], function(attr) {
+                _.each(["name", "host", "dbUsername", "dbPassword", "port", "maintenanceDb"], function(attr) {
                     it("requires " + attr, function() {
                         this.attrs[attr] = "";
                         expect(this.instance.performValidation(this.attrs)).toBeFalsy();
@@ -313,9 +313,9 @@ describe("chorus.models.Instance", function() {
             });
 
             context("when the instance has already been created", function() {
-                it("does not require a db_username or db_password", function() {
-                    delete this.attrs.db_password;
-                    delete this.attrs.db_username;
+                it("does not require a dbUsername or dbPassword", function() {
+                    delete this.attrs.dbPassword;
+                    delete this.attrs.dbUsername;
                     expect(this.instance.performValidation(this.attrs)).toBeTruthy();
                 });
             });
@@ -329,8 +329,8 @@ describe("chorus.models.Instance", function() {
                     provision_type: "create",
                     databaseName: "thisDatabase",
                     schemaName: "thisSchema",
-                    db_username: "foo",
-                    db_password: "bar123"
+                    dbUsername: "foo",
+                    dbPassword: "bar123"
                 }
                 spyOn(this.instance, "isNew").andReturn("true");
             });
@@ -360,15 +360,15 @@ describe("chorus.models.Instance", function() {
             });
 
             it("requires a user name", function() {
-                this.attrs.db_username = "";
+                this.attrs.dbUsername = "";
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                expect(this.instance.errors.db_username).toBeTruthy();
+                expect(this.instance.errors.dbUsername).toBeTruthy();
             });
 
             it("requires a password", function() {
-                this.attrs.db_password = "";
+                this.attrs.dbPassword = "";
                 expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                expect(this.instance.errors.db_password).toBeTruthy();
+                expect(this.instance.errors.dbPassword).toBeTruthy();
             });
 
             it("requires size to be less than the config's max provision size", function() {
@@ -392,8 +392,8 @@ describe("chorus.models.Instance", function() {
                     provision_type: "create",
                     databaseName: "thisDatabase",
                     schemaName: "thisSchema",
-                    db_username: "foo",
-                    db_password: "bar123"
+                    dbUsername: "foo",
+                    dbPassword: "bar123"
                 }
                 spyOn(this.instance, "isNew").andReturn("false");
             });
@@ -468,7 +468,7 @@ describe("chorus.models.Instance", function() {
 
     describe("#sharing", function() {
         it("returns an instance sharing model", function() {
-            expect(this.instance.sharing().get("instance_id")).toBe(this.instance.get("id"));
+            expect(this.instance.sharing().get("instanceId")).toBe(this.instance.get("id"));
         });
 
         it("caches the sharing model", function() {

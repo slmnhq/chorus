@@ -1,6 +1,6 @@
 describe("chorus.models.HdfsFile", function() {
     beforeEach(function() {
-        this.file = fixtures.hdfsFile({ instance_id: "1234", path: "/my/complicated/home/folder/my file.txt" });
+        this.file = fixtures.hdfsFile({ instanceId: "1234", path: "/my/complicated/home/folder/my file.txt" });
     })
 
     it("gets the correct filename from the path", function() {

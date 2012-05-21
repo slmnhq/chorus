@@ -1,6 +1,6 @@
 describe("chorus.views.HdfsEntrySidebar", function() {
     beforeEach(function() {
-        this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/foo", instance_id: 123});
+        this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/foo", instanceId: 123});
     });
 
     describe("#render", function() {
@@ -45,7 +45,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             describe("clicking the external table link", function() {
                 beforeEach(function() {
                     this.view.$("a.external_table").click();
-                    this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instance_id: "123", path: "/foo/my_file.sql", content: "hello\nworld"}).attributes);
+                    this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instanceId: "123", path: "/foo/my_file.sql", content: "hello\nworld"}).attributes);
                     this.server.completeFetchFor(this.csv);
                 });
 

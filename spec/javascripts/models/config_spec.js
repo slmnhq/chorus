@@ -26,10 +26,10 @@ describe("chorus.models.Config", function() {
 
     describe("#isExternalAuth", function() {
         beforeEach(function() {
-            this.model = new chorus.models.Config({ external_auth_enabled: true })
+            this.model = new chorus.models.Config({ externalAuthEnabled: true })
         });
 
-        it("returns external_auth_enabled", function() {
+        it("returns externalAuthEnabled", function() {
             expect(this.model.isExternalAuth()).toBeTruthy();
         })
     })

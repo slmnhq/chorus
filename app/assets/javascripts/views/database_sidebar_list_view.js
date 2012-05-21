@@ -143,14 +143,14 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     workfileExecuted: function(workfile, executionSchema) {
         if (!this.schema ||
-            (executionSchema.instance_id != this.schema.get("instance_id")) ||
+            (executionSchema.instanceId != this.schema.get("instanceId")) ||
             (executionSchema.databaseName != this.schema.database().name()) ||
             (executionSchema.schemaName != this.schema.name()))
         {
             this.setSchema(new chorus.models.Schema(_.extend(executionSchema, {
                 name: executionSchema.schemaName,
-                database_name: executionSchema.databaseName,
-                database_id: executionSchema.databaseId
+                databaseName: executionSchema.databaseName,
+                databaseId: executionSchema.databaseId
             })))
         }
     },
@@ -167,7 +167,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     launchAddCredentialsDialog: function(e) {
         e && e.preventDefault();
-        var instance = new chorus.models.Instance({id: this.schema.get("instance_id")});
+        var instance = new chorus.models.Instance({id: this.schema.get("instanceId")});
         new chorus.dialogs.InstanceAccount({ instance: instance, title: t("instances.sidebar.add_credentials"), reload: true }).launchModal();
     }
 });

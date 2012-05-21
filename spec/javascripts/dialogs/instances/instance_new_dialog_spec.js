@@ -115,7 +115,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                 });
 
                 it("uses 'postgres' as the default database name", function() {
-                    expect(this.dialog.$(".register_existing_greenplum input[name=maintenance_db]").val()).toBe("postgres");
+                    expect(this.dialog.$(".register_existing_greenplum input[name=maintenanceDb]").val()).toBe("postgres");
                 });
 
                 describe("filling out the form", function() {
@@ -124,9 +124,9 @@ describe("chorus.dialogs.InstanceNew", function() {
                         this.dialog.$(".register_existing_greenplum textarea[name=description]").val("Instance Description");
                         this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
                         this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
-                        this.dialog.$(".register_existing_greenplum input[name=db_username]").val("user");
-                        this.dialog.$(".register_existing_greenplum input[name=db_password]").val("my_password");
-                        this.dialog.$(".register_existing_greenplum input[name=maintenance_db]").val("foo");
+                        this.dialog.$(".register_existing_greenplum input[name=dbUsername]").val("user");
+                        this.dialog.$(".register_existing_greenplum input[name=dbPassword]").val("my_password");
+                        this.dialog.$(".register_existing_greenplum input[name=maintenanceDb]").val("foo");
 
                         this.dialog.$(".register_existing_greenplum input[name=name]").trigger("change");
                     });
@@ -137,9 +137,9 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(values.description).toBe("Instance Description");
                         expect(values.host).toBe("foo.bar");
                         expect(values.port).toBe("1234");
-                        expect(values.db_username).toBe("user");
-                        expect(values.db_password).toBe("my_password");
-                        expect(values.maintenance_db).toBe("foo");
+                        expect(values.dbUsername).toBe("user");
+                        expect(values.dbPassword).toBe("my_password");
+                        expect(values.maintenanceDb).toBe("foo");
                     });
                 });
             });
@@ -241,9 +241,9 @@ describe("chorus.dialogs.InstanceNew", function() {
                 section.find("textarea[name=description]").val("Instance Description");
                 section.find("input[name=host]").val("foo.bar");
                 section.find("input[name=port]").val("1234");
-                section.find("input[name=db_username]").val("user");
-                section.find("input[name=db_password]").val("my_password");
-                section.find("input[name=maintenance_db]").val("foo");
+                section.find("input[name=dbUsername]").val("user");
+                section.find("input[name=dbPassword]").val("my_password");
+                section.find("input[name=maintenanceDb]").val("foo");
                 section.find("input[name=name]").trigger("change");
 
                 spyOn(chorus.models.Instance.prototype, "save").andCallThrough();
@@ -256,11 +256,11 @@ describe("chorus.dialogs.InstanceNew", function() {
 
                 var attrs = this.dialog.model.save.calls[0].args[0];
 
-                expect(attrs.db_password).toBe("my_password");
+                expect(attrs.dbPassword).toBe("my_password");
                 expect(attrs.name).toBe("Instance_Name");
                 expect(attrs.provision_type).toBe("register");
                 expect(attrs.description).toBe("Instance Description");
-                expect(attrs.maintenance_db).toBe("foo");
+                expect(attrs.maintenanceDb).toBe("foo");
             });
 
             testUpload();
@@ -274,8 +274,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                 this.dialog.$(".create_new_greenplum input[name=size]").val("1");
                 this.dialog.$(".create_new_greenplum input[name=databaseName]").val("dbTest");
                 this.dialog.$(".create_new_greenplum input[name=schemaName]").val("schemaTest");
-                this.dialog.$(".create_new_greenplum input[name=db_username]").val("edcadmin");
-                this.dialog.$(".create_new_greenplum input[name=db_password]").val("supersecret");
+                this.dialog.$(".create_new_greenplum input[name=dbUsername]").val("edcadmin");
+                this.dialog.$(".create_new_greenplum input[name=dbPassword]").val("supersecret");
                 this.dialog.$(".create_new_greenplum select").val("large");
 
                 spyOn(chorus.models.Instance.prototype, "save").andCallThrough();
@@ -299,8 +299,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                     expect(attrs.description).toBe("Instance Description");
                     expect(attrs.databaseName).toBe("dbTest");
                     expect(attrs.schemaName).toBe("schemaTest");
-                    expect(attrs.db_username).toBe("edcadmin");
-                    expect(attrs.db_password).toBe("supersecret");
+                    expect(attrs.dbUsername).toBe("edcadmin");
+                    expect(attrs.dbPassword).toBe("supersecret");
                     expect(attrs.template).toBe("large");
 
                     expect(chorus.toast).not.toHaveBeenCalledWith("instances.new_dialog.provisioning")

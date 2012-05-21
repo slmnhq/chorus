@@ -2,7 +2,7 @@ describe("chorus.dialogs.WorkspaceEditMembers", function() {
     beforeEach(function() {
         this.workspace = new chorus.models.Workspace({
             id : "17",
-            "owner_id": "34",
+            "ownerId": "34",
             "ownerFullName": "President Henderson"
         });
         this.dialog = new chorus.dialogs.WorkspaceEditMembers({ pageModel: this.workspace });

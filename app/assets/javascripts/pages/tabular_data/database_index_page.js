@@ -11,8 +11,8 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
         };
     },
 
-    setup: function(instance_id) {
-        this.instance = new chorus.models.Instance({id: instance_id});
+    setup: function(instanceId) {
+        this.instance = new chorus.models.Instance({id: instanceId});
         this.collection = this.instance.databases();
 
         this.instance.fetch();

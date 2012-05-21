@@ -29,9 +29,10 @@
         var module = parentName ? newFixtures[parentName] : newFixtures;
         var klass = getClass(definition, parentName || name);
         var jsonMethodName = name + "Json";
+        var dummyInstance = new klass();
 
         module[jsonMethodName] = function(overrides, uncheckedOverrides) {
-            var rawData = getFixture(name, parentName);
+            var rawData = dummyInstance.parse(getFixture(name, parentName));
             overrides || (overrides = defaultOverridesFor(rawData));
             addUniqueDefaults(overrides, definition.unique);
             var attrs = safeExtend(rawData, overrides, name);
@@ -62,7 +63,7 @@
         } else {
             var isCollection = name.match(/Set/);
             var className = _.titleize(name);
-            return isCollection ? chorus.collections[className] : chorus.models[className];
+            return (isCollection ? chorus.collections[className] : chorus.models[className]) || chorus.models.Base;
         }
     }
 

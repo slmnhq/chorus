@@ -3,8 +3,8 @@ describe("chorus.models.Notification", function() {
         this.notification = fixtures.notifications.BE_MEMBER({
             author: {
                 id: "10000",
-                first_name: "Colonel",
-                last_name: "Sanders"
+                firstName: "Colonel",
+                lastName: "Sanders"
             }
         });
     });
@@ -34,8 +34,8 @@ describe("chorus.models.Notification", function() {
 
         it("has the right author data", function() {
             expect(this.activity.get("author").id).toBe("10000");
-            expect(this.activity.get("author").first_name).toBe("Colonel");
-            expect(this.activity.get("author").last_name).toBe("Sanders");
+            expect(this.activity.get("author").firstName).toBe("Colonel");
+            expect(this.activity.get("author").lastName).toBe("Sanders");
         });
     });
 })
