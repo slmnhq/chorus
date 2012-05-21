@@ -15,11 +15,15 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 "val3.1,val3.2,val3.3,val3.4,val3.5",
                 "val4.1,val4.2,val4.3,val4.4,val4.5"
             ]
-        }, {
+        });
+
+        // todo - why aren't these attributes in our fixture?
+        this.csv.set({
             toTable: "existingTable",
             truncate: true,
             hasHeader: true
-        });
+        }, { silent: true });
+
         this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
         this.columns = [
             {name: "col1", typeCategory: "WHOLE_NUMBER", ordinalPosition: "3"},
@@ -102,9 +106,12 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                         "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
                         "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
                     ]
-                }, {
-                    toTable: "existingTable"
                 });
+
+                this.csv.set({
+                    toTable: "existingTable"
+                }, { silent: true });
+
                 this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
                 this.server.completeFetchFor(this.dataset);
                 this.dialog.render();
@@ -167,9 +174,12 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                             "val2.1zval2.2zval2.3zval2.4zval2.5",
                             "val3.1zval3.2zval3.3zval3.4zval3.5"
                         ]
-                    }, {
-                        toTable: "existingTable"
                     });
+
+                    this.csv.set({
+                        toTable: "existingTable"
+                    }, { silent: true });
+
                     this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
                     this.server.completeFetchFor(this.dataset);
                     this.dialog.render();
@@ -231,9 +241,12 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                     "val2.1, val2.2, val2.3",
                     "val3.1, val3.2, val3.3"
                 ]
-            }, {
-                toTable: "existingTable"
             });
+
+            this.csv.set({
+                toTable: "existingTable",
+            }, { silent: true });
+
             this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
             this.server.completeFetchFor(this.dataset);
             this.dialog.render();

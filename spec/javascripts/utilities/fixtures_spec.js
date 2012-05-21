@@ -31,46 +31,41 @@ describe("newFixtures", function() {
         });
     });
 
-    describe("#userJson", function() {
-        var userJson;
+    describe("#user", function() {
+        var user;
 
         beforeEach(function() {
-            userJson = newFixtures.userJson();
+            user = newFixtures.user();
         });
 
         it("includes the user fixture data", function() {
             expect(window.fixtureData.user).toBeDefined();
             expect(window.fixtureData.user.response.username).toBeDefined();
-            expect(userJson.username).toBe(window.fixtureData.user.response.username);
+            expect(user.get("username")).toBe(window.fixtureData.user.response.username);
         });
 
         it("allows for overrides", function() {
-            userJson = newFixtures.userJson({username: "Foo Bar"});
-            expect(userJson.username).toBe("Foo Bar");
+            user = newFixtures.user({username: "Foo Bar"});
+            expect(user.get("username")).toBe("Foo Bar");
         });
 
         it("allows camel-case attribute names for overrides", function() {
-            userJson = newFixtures.userJson({ firstName: "Foo" });
-            expect(userJson.firstName).toBe("Foo");
+            user = newFixtures.user({ firstName: "Foo" });
+            expect(user.get("firstName")).toBe("Foo");
         });
 
         it("does not allow overrides for non-existant attributes", function() {
-            expect(function() { newFixtures.userJson({ foo: "Bar" }) }).toThrow();
+            expect(function() { newFixtures.user({ foo: "Bar" }) }).toThrow();
         });
 
         it("gives each user a unique id", function() {
-            var userJson2 = newFixtures.userJson();
-            expect(userJson2.id).not.toEqual(userJson.id);
+            var user2 = newFixtures.user();
+            expect(user2.get("id")).not.toEqual(user.get("id"));
         });
 
         it("uses the override id, if one is specified", function() {
-            var userJson2 = newFixtures.userJson({ id: '501' });
-            expect(userJson2.id).toBe("501");
-        });
-
-        it("allows arbitrary overrides passed as a second argument", function() {
-            var userJson2 = newFixtures.userJson({ id: 1 }, { coolName: "dude1" })
-            expect(userJson2.coolName).toBe("dude1");
+            var user2 = newFixtures.user({ id: '501' });
+            expect(user2.get("id")).toBe("501");
         });
     });
 
@@ -115,24 +110,23 @@ describe("newFixtures", function() {
         });
     });
 
-    describe("#user", function() {
+    describe("#userJson", function() {
         var fakeAttrs;
 
         beforeEach(function() {
             fakeAttrs = { ping: "pong", paddle: "ball" };
-            spyOn(newFixtures, 'userJson').andReturn(fakeAttrs);
+            spyOn(newFixtures, 'user').andReturn(new chorus.models.User(fakeAttrs));
         });
 
-        it("creates a user model with attributes given by #userJson", function() {
-            var user = newFixtures.user();
-            expect(user.attributes).toEqual(fakeAttrs);
-            expect(user).toBeA(chorus.models.User);
+        it("returns the attributes of the model returned by newFixtures.user", function() {
+            var json = newFixtures.userJson();
+            expect(json).toEqual(fakeAttrs);
         });
 
-        it("passes all of its arguments to #userJson", function() {
-            var args = [{ foo: 1 }, { bar: 2 }];
-            var user = newFixtures.user(args[0], args[1]);
-            expect(newFixtures.userJson).toHaveBeenCalledWith(args[0], args[1]);
+        it("passes its overrides to #user", function() {
+            var overrides = { foo: 1 };
+            newFixtures.userJson(overrides);
+            expect(newFixtures.user).toHaveBeenCalledWith(overrides);
         });
     });
 

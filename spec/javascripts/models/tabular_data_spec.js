@@ -346,6 +346,7 @@ describe("chorus.models.TabularData", function() {
                     objectName: "my_chorusview",
                     workspace: {id: "234", name: "abc"}
                 });
+                this.tabularData.set({ type: "CHORUS_VIEW" });
                 this.preview = this.tabularData.preview();
             });
 

@@ -29,21 +29,21 @@
         var module = parentName ? newFixtures[parentName] : newFixtures;
         var klass = getClass(definition, parentName || name);
         var jsonMethodName = name + "Json";
-        var dummyInstance = new klass();
 
-        module[jsonMethodName] = function(overrides, uncheckedOverrides) {
-            var rawData = dummyInstance.parse(getFixture(name, parentName));
+        module[name] = function(overrides) {
+            var result = new klass();
+            var rawData = result.parse(getFixture(name, parentName));
             overrides || (overrides = defaultOverridesFor(rawData));
             addUniqueDefaults(overrides, definition.unique);
             var attrs = safeExtend(rawData, overrides, name);
-            _.extend(attrs, uncheckedOverrides);
             addDerivedAttributes(attrs, overrides, definition.derived);
-            return attrs;
+
+            var setMethod = (result instanceof chorus.collections.Base) ? "reset" : "set";
+            return result[setMethod](attrs, { silent: true });
         };
 
-        module[name] = function() {
-            var attrs = module[jsonMethodName].apply(this, arguments);
-            return new klass(attrs);
+        module[jsonMethodName] = function() {
+            return module[name].apply(this, arguments).attributes;
         };
     }
 

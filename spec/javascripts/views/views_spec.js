@@ -264,7 +264,7 @@ describe("chorus.views.Base", function() {
 
                     context("when the subview has required resources", function() {
                         beforeEach(function() {
-                            this.subviewModel = newFixtures.user();
+                            this.subviewModel = new chorus.models.User();
                             this.subview.requiredResources.add(this.subviewModel);
                         })
 
