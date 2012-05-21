@@ -267,8 +267,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         jobName: "job123"
                     },
                     toTable: "my_table",
-                    destinationTable: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"my_table"',
-                    sourceId: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"somebodys_table"'
+                    destinationTable: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"my_table"',
+                    sourceId: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"somebodys_table"'
                 });
                 this.launchElement.addClass("edit_schedule");
                 this.dataset.setImport(this.import);
@@ -436,8 +436,8 @@ describe("chorus.dialogs.ImportScheduler", function() {
                         frequency: "HOURLY"
                     },
                     toTable: "my_table",
-                    destinationTable: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"my_table"',
-                    sourceId: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"somebodys_table"'
+                    destinationTable: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"my_table"',
+                    sourceId: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"somebodys_table"'
                 });
                 this.launchElement.addClass("edit_schedule");
                 this.dataset.setImport(this.import);

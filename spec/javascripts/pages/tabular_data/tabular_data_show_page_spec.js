@@ -4,7 +4,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
             instance: { id: "123", name: "bob_the_instance" },
             databaseName: "Foo/",
             schemaName: "Bar%",
-            objectType: "BASE_TABLE",
+            objectType: "TABLE",
             objectName: "slashes/"
         });
         this.databaseObject.get('workspaceUsed').workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
@@ -14,7 +14,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
             "123",
             "Foo/",
             "Bar%",
-            "BASE_TABLE",
+            "TABLE",
             "slashes/"
         );
     });
@@ -137,7 +137,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                             "123",
                             "Foo%2F",
                             "Bar%25",
-                            "BASE_TABLE",
+                            "TABLE",
                             "slashes%2F"
                         );
                         this.server.completeFetchFor(this.databaseObject);

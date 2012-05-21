@@ -6,13 +6,13 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
         datasets = new chorus.collections.DatasetSet([
             newFixtures.dataset.sandboxTable({ objectName: "A", columns: 42, id: "REAL_ID" }),
             newFixtures.dataset.sandboxTable({ objectName: "B", columns: 666, id: "AGENT_SMITH" })
-        ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" });
+        ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
     });
 
     describe("#render", function() {
         var options;
         beforeEach(function() {
-            options = { order: "objectName", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" };
+            options = { order: "objectName", type: "SANDBOX_TABLE", objectType: "TABLE" };
             dialog.launchModal();
         });
 
@@ -87,7 +87,7 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
                 datasets = new chorus.collections.DatasetSet([
                     newFixtures.dataset.sandboxTable({ objectName: "A", columns: null, id: "NOBODY" }),
                     newFixtures.dataset.sandboxTable({ objectName: "B", columns: undefined, id: "NONE" })
-                ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "BASE_TABLE" });
+                ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
                 this.server.completeFetchFor(datasets, datasets.models, options);
             });
 

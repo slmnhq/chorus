@@ -55,14 +55,14 @@ describe("chorus.models.TabularData", function() {
             },
 
             "SOURCE_TABLE": {
-                "BASE_TABLE": "source_table_large.png",
+                "TABLE": "source_table_large.png",
                 "EXTERNAL_TABLE": "source_table_large.png",
                 "MASTER_TABLE": "source_table_large.png",
                 "VIEW": "source_view_large.png"
             },
 
             "SANDBOX_TABLE": {
-                "BASE_TABLE": "sandbox_table_large.png",
+                "TABLE": "sandbox_table_large.png",
                 "EXTERNAL_TABLE": "sandbox_table_large.png",
                 "MASTER_TABLE": "sandbox_table_large.png",
                 "VIEW": "sandbox_view_large.png",
@@ -76,14 +76,14 @@ describe("chorus.models.TabularData", function() {
             },
 
             "SOURCE_TABLE": {
-                "BASE_TABLE": "source_table_medium.png",
+                "TABLE": "source_table_medium.png",
                 "EXTERNAL_TABLE": "source_table_medium.png",
                 "MASTER_TABLE": "source_table_medium.png",
                 "VIEW": "source_view_medium.png"
             },
 
             "SANDBOX_TABLE": {
-                "BASE_TABLE": "sandbox_table_medium.png",
+                "TABLE": "sandbox_table_medium.png",
                 "EXTERNAL_TABLE": "sandbox_table_medium.png",
                 "MASTER_TABLE": "sandbox_table_medium.png",
                 "VIEW": "sandbox_view_medium.png",
@@ -231,7 +231,7 @@ describe("chorus.models.TabularData", function() {
 
     describe("#metaType", function() {
         var expectedTypeMap = {
-            "BASE_TABLE": "table",
+            "TABLE": "table",
             "VIEW": "view",
             "QUERY": "query",
             "EXTERNAL_TABLE": "table",
@@ -275,7 +275,7 @@ describe("chorus.models.TabularData", function() {
     describe("#preview", function() {
         context("with a table", function() {
             beforeEach(function() {
-                this.tabularData.set({objectType: "BASE_TABLE", objectName: "foo"});
+                this.tabularData.set({objectType: "TABLE", objectName: "foo"});
                 this.preview = this.tabularData.preview();
             });
 
@@ -287,7 +287,7 @@ describe("chorus.models.TabularData", function() {
                 expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
                 expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
                 expect(this.preview.get("objectName")).toBe(this.tabularData.get("objectName"));
-                expect(this.preview.get("objectType")).toBe("BASE_TABLE");
+                expect(this.preview.get("objectType")).toBe("TABLE");
             });
         });
 
@@ -825,7 +825,7 @@ describe("chorus.models.TabularData", function() {
                 databaseName: "db",
                 schemaName: "myScheme",
                 objectName: "MrTable",
-                objectType: "BASE_TABLE"
+                objectType: "TABLE"
             });
         });
 

@@ -222,7 +222,7 @@ describe("chorus.models.Dataset", function() {
             beforeEach(function() {
                 this.dataset.set({ importInfo: {
                     completedStamp: "2012-02-29 14:35:38.165",
-                    sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
+                    sourceId: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
                     sourceTable: "some_source_table"
                 }})
                 this.source = this.dataset.lastImportSource();
@@ -233,7 +233,7 @@ describe("chorus.models.Dataset", function() {
             });
 
             it("has the right name, id and workspace id", function() {
-                expect(this.source.get("id")).toBe('"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"');
+                expect(this.source.get("id")).toBe('"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"');
                 expect(this.source.get("workspaceId")).toBe(this.dataset.get("workspace").id);
                 expect(this.source.get("objectName")).toBe("some_source_table");
             });

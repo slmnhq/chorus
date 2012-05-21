@@ -24,7 +24,7 @@ chorus.dialogs.ImportDatasetsPicker = chorus.dialogs.PickItems.extend({
         this.collection = new chorus.collections.DatasetSet([], {
             workspaceId: this.options.workspaceId,
             type: "SANDBOX_TABLE",
-            objectType: "BASE_TABLE"
+            objectType: "TABLE"
         });
         this.collection.sortAsc("objectName");
         this.collection.fetch();

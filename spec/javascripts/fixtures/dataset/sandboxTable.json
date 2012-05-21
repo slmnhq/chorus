@@ -16,7 +16,7 @@
         "type": "SANDBOX_TABLE",
         "isDeleted": false,
         "hasCredentials": true,
-        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"2010_report_on_white_house\"",
+        "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"TABLE\"|\"2010_report_on_white_house\"",
         "databaseName": "dca_demo",
         "recentComment": null,
         "owner": {
@@ -64,6 +64,6 @@
                 "ordinalPosition": "5"
             }
         ],
-        "objectType": "BASE_TABLE"
+        "objectType": "TABLE"
     }
 }

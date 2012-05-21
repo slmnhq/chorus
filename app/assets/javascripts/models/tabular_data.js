@@ -231,7 +231,7 @@ chorus.models.TabularData = chorus.models.Base.include(
         },
 
         canAnalyze: function() {
-            return this.get("objectType") === "BASE_TABLE";
+            return this.get("objectType") === "TABLE";
         },
 
         analyze: function() {
@@ -299,7 +299,7 @@ chorus.models.TabularData = chorus.models.Base.include(
     }, {
 
         metaTypeMap: {
-            "BASE_TABLE": "table",
+            "TABLE": "table",
             "VIEW": "view",
             "EXTERNAL_TABLE": "table",
             "MASTER_TABLE": "table",
@@ -319,7 +319,7 @@ chorus.models.TabularData = chorus.models.Base.include(
             },
 
             "SOURCE_TABLE": {
-                "BASE_TABLE": "source_table",
+                "TABLE": "source_table",
                 "EXTERNAL_TABLE": "source_table",
                 "MASTER_TABLE": "source_table",
                 "VIEW": "source_view",
@@ -327,7 +327,7 @@ chorus.models.TabularData = chorus.models.Base.include(
             },
 
             "SANDBOX_TABLE": {
-                "BASE_TABLE": "sandbox_table",
+                "TABLE": "sandbox_table",
                 "EXTERNAL_TABLE": "sandbox_table",
                 "MASTER_TABLE": "sandbox_table",
                 "VIEW": "sandbox_view",

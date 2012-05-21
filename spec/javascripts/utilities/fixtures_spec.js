@@ -75,11 +75,11 @@ describe("newFixtures", function() {
                 instance: { id: "45" },
                 databaseName: "chorus_events",
                 schemaName: "plague",
-                objectType: "BASE_TABLE",
+                objectType: "TABLE",
                 objectName: "outbreaks"
             });
 
-            expect(datasetJson.id).toBe('"45"|"chorus_events"|"plague"|"BASE_TABLE"|"outbreaks"');
+            expect(datasetJson.id).toBe('"45"|"chorus_events"|"plague"|"TABLE"|"outbreaks"');
         });
 
         context("when the id is overridden manually", function() {
@@ -105,7 +105,7 @@ describe("newFixtures", function() {
 
                 var instanceId = '"' + datasetJson.instance.id + '"';
 
-                expect(datasetJson.id).toBe(instanceId + '|"chorus_events"|"plague"|"BASE_TABLE"|"outbreaks"');
+                expect(datasetJson.id).toBe(instanceId + '|"chorus_events"|"plague"|"TABLE"|"outbreaks"');
             });
         });
     });

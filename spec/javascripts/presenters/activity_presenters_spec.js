@@ -45,7 +45,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10010"|"Analytics"|"analytics"|"TABLE"|"clv_data"'));
             });
 
 
@@ -134,7 +134,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10010"|"Analytics"|"analytics"|"TABLE"|"clv_data"'));
             });
 
 
@@ -255,7 +255,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right importSourceUrl", function() {
-                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"'));
+                expect(this.presenter.importSourceUrl).toMatchUrl('#/workspaces/10000/datasets/' + encodeURIComponent('"10010"|"Analytics"|"analytics"|"TABLE"|"clv_data"'));
             });
 
             it("should have an importSourceLink in the header", function() {

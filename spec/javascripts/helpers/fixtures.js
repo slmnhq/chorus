@@ -174,7 +174,7 @@ beforeEach(function() {
                         id: '"10000"|"Analytics"|"analytics"|"VIEW"|"__gp_fullname"',
                         name: "__gp_fullname",
                         objectName: "__gp_fullname",
-                        objectType: "BASE_TABLE",
+                        objectType: "TABLE",
                         query: null,
                         type: "SANDBOX_TABLE",
                         workspaceId: workspace.id
@@ -374,7 +374,7 @@ beforeEach(function() {
                     databaseObject: {
                         id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
                         name: '__a_table_name',
-                        objectType: "BASE_TABLE",
+                        objectType: "TABLE",
                         type: "databaseObject"
                     },
                     artifacts: [
@@ -416,7 +416,7 @@ beforeEach(function() {
                     databaseObject: {
                         id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
                         name: '__a_table_name',
-                        objectType: "BASE_TABLE",
+                        objectType: "TABLE",
                         type: "databaseObject",
                         databaseName: "dca_demo",
                         schemaName: "public",
@@ -502,7 +502,7 @@ beforeEach(function() {
                         databaseObject: {
                             id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
                             name: '__a_table_name',
-                            objectType: "BASE_TABLE",
+                            objectType: "TABLE",
                             type: "databaseObject",
                             databaseName: "dca_demo",
                             schemaName: "public",
@@ -815,9 +815,9 @@ beforeEach(function() {
                     },
                     comments: [],
                     databaseObject: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"morley2"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"morley2"',
                         objectName: "morley2",
-                        objectType: "BASE_TABLE",
+                        objectType: "TABLE",
                         type: "SOURCE_TABLE"
                     },
                     id: fixtures.nextId().toString(),
@@ -825,7 +825,7 @@ beforeEach(function() {
                         id: fixtures.nextId().toString()
                     },
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     timestamp: "2012-03-02 12:19:50",
@@ -846,7 +846,7 @@ beforeEach(function() {
                     },
                     comments: [],
                     databaseObject: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"morley2"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"morley2"',
                         objectName: "morley2",
                         objectType: "VIEW",
                         type: "SOURCE_VIEW"
@@ -856,7 +856,7 @@ beforeEach(function() {
                         id: fixtures.nextId().toString()
                     },
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     timestamp: "2012-03-02 12:19:50",
@@ -877,7 +877,7 @@ beforeEach(function() {
                     },
                     comments: [],
                     databaseObject: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"morley2"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"morley2"',
                         name: "morley2"
                     },
                     file: {
@@ -888,7 +888,7 @@ beforeEach(function() {
                         id: fixtures.nextId().toString()
                     },
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     timestamp: "2012-03-02 12:19:50",
@@ -927,7 +927,7 @@ beforeEach(function() {
                     },
                     isDeleted: false,
                     table: {
-                        id: '"10002"|"Analytics"|"analytics"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"Analytics"|"analytics"|"TABLE"|"new_imported_table"',
                         isDeleted: false,
                         name: "new_imported_table"
                     },
@@ -950,10 +950,10 @@ beforeEach(function() {
                     },
                     comments: [],
                     databaseObject: {
-                        id: '"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"',
+                        id: '"10010"|"Analytics"|"analytics"|"TABLE"|"clv_data"',
                         name: "clv_data",
                         objectName: "clv_data",
-                        objectType: "BASE_TABLE",
+                        objectType: "TABLE",
                         query: null,
                         type: "SOURCE_TABLE",
                         workspaceId: "10000"
@@ -963,7 +963,7 @@ beforeEach(function() {
                         id: fixtures.nextId().toString()
                     },
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     timestamp: "2012-03-02 12:19:50",
@@ -997,7 +997,7 @@ beforeEach(function() {
                         id: fixtures.nextId().toString()
                     },
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     timestamp: "2012-03-02 12:19:50",
@@ -1030,7 +1030,7 @@ beforeEach(function() {
                     },
 
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     timestamp: "2012-03-02 12:19:50",
@@ -1051,10 +1051,10 @@ beforeEach(function() {
                     },
                     comments: [],
                     databaseObject: {
-                        id: '"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"',
+                        id: '"10010"|"Analytics"|"analytics"|"TABLE"|"clv_data"',
                         name: "clv_data",
                         objectName: "clv_data",
-                        objectType: "BASE_TABLE",
+                        objectType: "TABLE",
                         query: null,
                         type: "SOURCE_TABLE",
                         workspaceId: "10000"
@@ -1064,7 +1064,7 @@ beforeEach(function() {
                         id: fixtures.nextId().toString()
                     },
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     task: {
@@ -1106,7 +1106,7 @@ beforeEach(function() {
                         isDeleted: false
                     },
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     timestamp: "2012-03-02 12:19:50",
@@ -1127,7 +1127,7 @@ beforeEach(function() {
                     },
                     comments: [],
                     databaseObject: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"morley2"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"morley2"',
                         name: "morley2"
                     },
                     file: {
@@ -1138,7 +1138,7 @@ beforeEach(function() {
                         id: fixtures.nextId().toString()
                     },
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     timestamp: "2012-03-02 12:19:50",
@@ -1159,10 +1159,10 @@ beforeEach(function() {
                     },
                     comments: [],
                     databaseObject: {
-                        id: '"10010"|"Analytics"|"analytics"|"BASE_TABLE"|"clv_data"',
+                        id: '"10010"|"Analytics"|"analytics"|"TABLE"|"clv_data"',
                         name: "clv_data",
                         objectName: "clv_data",
-                        objectType: "BASE_TABLE",
+                        objectType: "TABLE",
                         query: null,
                         type: "SOURCE_TABLE",
                         workspaceId: "10000"
@@ -1172,7 +1172,7 @@ beforeEach(function() {
                         id: fixtures.nextId().toString()
                     },
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     timestamp: "2012-03-02 12:19:50",
@@ -1206,7 +1206,7 @@ beforeEach(function() {
                         id: fixtures.nextId().toString()
                     },
                     table: {
-                        id: '"10002"|"bizarro_world"|"public"|"BASE_TABLE"|"new_imported_table"',
+                        id: '"10002"|"bizarro_world"|"public"|"TABLE"|"new_imported_table"',
                         name: "new_imported_table"
                     },
                     timestamp: "2012-03-02 12:19:50",
@@ -1747,7 +1747,7 @@ beforeEach(function() {
 
         databaseTable: function(overrides) {
             var attributes = _.extend(newFixtures.databaseObjectJson(), {
-                objectType: "BASE_TABLE",
+                objectType: "TABLE",
                 type: "SOURCE_TABLE"
             }, overrides);
             return new chorus.models.DatabaseObject(attributes);
@@ -1873,7 +1873,7 @@ beforeEach(function() {
             return _.extend({
                 id: this.nextId().toString(),
                 entityType: "databaseObject",
-                objectType: "BASE_TABLE",
+                objectType: "TABLE",
                 type: "SANDBOX_TABLE",
                 workspaceId: this.nextId().toString()
             }, overrides);
@@ -1992,7 +1992,7 @@ beforeEach(function() {
                 id: fixtures.nextId().toString(),
                 lastUpdatedStamp: "2012-01-24 12:25:11.077",
                 lastUpdatedTxStamp: "2012-01-24 12:25:10.701",
-                objectType: "BASE_TABLE",
+                objectType: "TABLE",
                 type: "SOURCE_TABLE"
             }, overrides);
             return new chorus.models.DatabaseObjectStatistics(attributes);
@@ -2035,7 +2035,7 @@ beforeEach(function() {
             var in1yearStr = in1year.toString("yyyy-MM-dd HH:mm:ss.000");
 
             var attributes = _.extend({
-                destinationTable: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"asdfsfsdf"',
+                destinationTable: '"10000"|"Analytics"|"analytics"|"TABLE"|"asdfsfsdf"',
                 id: this.nextId().toString(),
                 nextImportTime: in1yearStr,
                 sampleCount: 500,
@@ -2056,7 +2056,7 @@ beforeEach(function() {
                     jobName: "ScheduleJob_1330719934443",
                     startTime: "2012-02-29 14:23:58.169"
                 },
-                sourceId: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"_uspresident"',
+                sourceId: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"_uspresident"',
                 sourceTable: null,
                 sourceType: "dataset",
                 toTable: "asdfsfsdf",
@@ -2110,7 +2110,7 @@ beforeEach(function() {
 
         tabularData: function(overrides) {
             return new chorus.models.TabularData(this.tabularDataJson(_.extend({
-                objectType: "BASE_TABLE",
+                objectType: "TABLE",
                 type: "SANDBOX_TABLE"
             }, overrides)));
         },
@@ -2533,7 +2533,7 @@ beforeEach(function() {
                 workspace: {
                 },
                 databaseObject: {
-                    id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"2010_report_on_white_house"',
+                    id: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"2010_report_on_white_house"',
                     databaseName: "dca_demo",
                     schemaName: "ddemo",
                     objectName: "2010_report_on_white_house",
@@ -2543,7 +2543,7 @@ beforeEach(function() {
                         name: "gillette"
                     },
                     entityType: "databaseObject",
-                    objectType: "BASE_TABLE"
+                    objectType: "TABLE"
                 },
                 comments: []
             });
@@ -2726,8 +2726,8 @@ beforeEach(function() {
                         {
                             schemaName: "public",
                             parentType: "gpdb_10000_data_types",
-                            objectType: "BASE_TABLE",
-                            id: '"10000"|"data_types"|"public"|"BASE_TABLE"|"a"',
+                            objectType: "TABLE",
+                            id: '"10000"|"data_types"|"public"|"TABLE"|"a"',
                             databaseName: "data_types",
                             objectName: "a",
                             isDeleted: false,
@@ -2770,8 +2770,8 @@ beforeEach(function() {
                         {
                             schemaName: "analytics",
                             parentType: "gpdb_10000_Analytics",
-                            objectType: "BASE_TABLE",
-                            id: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"test1"',
+                            objectType: "TABLE",
+                            id: '"10000"|"Analytics"|"analytics"|"TABLE"|"test1"',
                             databaseName: "Analytics",
                             objectName: "test1",
                             isDeleted: false,
@@ -2792,8 +2792,8 @@ beforeEach(function() {
                         {
                             "schemaName": "analytics",
                             "parentType": "gpdb_10000_Analytics",
-                            "objectType": "BASE_TABLE",
-                            "id": '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"test2"',
+                            "objectType": "TABLE",
+                            "id": '"10000"|"Analytics"|"analytics"|"TABLE"|"test2"',
                             "databaseName": "Analytics",
                             "objectName": "test2",
                             "isDeleted": false,
@@ -2814,8 +2814,8 @@ beforeEach(function() {
                         {
                             "schemaName": "analytics",
                             "parentType": "gpdb_10000_Analytics",
-                            "objectType": "BASE_TABLE",
-                            "id": '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"test3"',
+                            "objectType": "TABLE",
+                            "id": '"10000"|"Analytics"|"analytics"|"TABLE"|"test3"',
                             "databaseName": "Analytics",
                             "objectName": "test3",
                             "isDeleted": false,
@@ -2836,8 +2836,8 @@ beforeEach(function() {
                         {
                             "schemaName": "analytics",
                             "parentType": "gpdb_10000_Analytics",
-                            "objectType": "BASE_TABLE",
-                            "id": '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"test4"',
+                            "objectType": "TABLE",
+                            "id": '"10000"|"Analytics"|"analytics"|"TABLE"|"test4"',
                             "databaseName": "Analytics",
                             "objectName": "test4",
                             "isDeleted": false,
@@ -2858,8 +2858,8 @@ beforeEach(function() {
                         {
                             "schemaName": "analytics",
                             "parentType": "gpdb_10000_Analytics",
-                            "objectType": "BASE_TABLE",
-                            "id": '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"test5"',
+                            "objectType": "TABLE",
+                            "id": '"10000"|"Analytics"|"analytics"|"TABLE"|"test5"',
                             "databaseName": "Analytics",
                             "objectName": "test5",
                             "isDeleted": false,
@@ -2880,8 +2880,8 @@ beforeEach(function() {
                         {
                             "schemaName": "analytics",
                             "parentType": "gpdb_10000_Analytics",
-                            "objectType": "BASE_TABLE",
-                            "id": '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"test6"',
+                            "objectType": "TABLE",
+                            "id": '"10000"|"Analytics"|"analytics"|"TABLE"|"test6"',
                             "databaseName": "Analytics",
                             "objectName": "test6",
                             "issearch_result_list.js:65Deleted": false,
@@ -2902,8 +2902,8 @@ beforeEach(function() {
                         {
                             "schemaName": "analytics",
                             "parentType": "gpdb_10000_Analytics",
-                            "objectType": "BASE_TABLE",
-                            "id": '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"test"',
+                            "objectType": "TABLE",
+                            "id": '"10000"|"Analytics"|"analytics"|"TABLE"|"test"',
                             "databaseName": "Analytics",
                             "objectName": "test",
                             "isDeleted": false,
@@ -2924,8 +2924,8 @@ beforeEach(function() {
                         {
                             "schemaName": "analytics",
                             "parentType": "gpdb_10000_Analytics",
-                            "objectType": "BASE_TABLE",
-                            "id": '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"test7"',
+                            "objectType": "TABLE",
+                            "id": '"10000"|"Analytics"|"analytics"|"TABLE"|"test7"',
                             "databaseName": "Analytics",
                             "objectName": "test7",
                             "isDeleted": false,
@@ -3142,8 +3142,8 @@ beforeEach(function() {
             return _.extend({
                 schemaName: "public",
                 parentType: "gpdb_10000_data_types",
-                objectType: "BASE_TABLE",
-                id: '"10000"|"data_types"|"public"|"BASE_TABLE"|"a"',
+                objectType: "TABLE",
+                id: '"10000"|"data_types"|"public"|"TABLE"|"a"',
                 databaseName: "data_types",
                 objectName: "a",
                 isDeleted: false,
@@ -3499,8 +3499,8 @@ beforeEach(function() {
                         {
                             "schemaName": "ddemo",
                             "entityType": "databaseObject",
-                            "id": '10000\"|"dca_demo"|"ddemo"|"BASE_TABLE"|"_uspresident"',
-                            "objectType": "BASE_TABLE",
+                            "id": '10000\"|"dca_demo"|"ddemo"|"TABLE"|"_uspresident"',
+                            "objectType": "TABLE",
                             "databaseName": "dca_demo",
                             "workspaceIds": ["10000", "10030"],
                             "objectName": "_uspresident",

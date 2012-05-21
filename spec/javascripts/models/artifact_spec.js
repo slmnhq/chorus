@@ -59,13 +59,13 @@ describe("chorus.models.Artifact", function() {
 
         it("shows the URL for a tabularData set in a workspace", function() {
             var model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
-            var encoded_id = encodeURIComponent('"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"2010_report_on_white_house"');
+            var encoded_id = encodeURIComponent('"10000"|"dca_demo"|"ddemo"|"TABLE"|"2010_report_on_white_house"');
             expect(model.showUrl()).toBe("#/workspaces/33333/datasets/" + encoded_id);
         });
 
         it("shows the URL for a tabularData with no workspace", function() {
             var model = fixtures.attachmentOnDatasetNotInWorkspaceSearchResult();
-            expect(model.showUrl()).toBe("#/instances/22222/databases/dca_demo/schemas/ddemo/BASE_TABLE/2010_report_on_white_house");
+            expect(model.showUrl()).toBe("#/instances/22222/databases/dca_demo/schemas/ddemo/TABLE/2010_report_on_white_house");
         });
 
         it("shows the URL for a workfile in a workspace", function() {

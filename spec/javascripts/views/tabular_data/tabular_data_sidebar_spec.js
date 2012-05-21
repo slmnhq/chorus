@@ -260,14 +260,14 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     completedStamp: "2012-02-29 14:35:38.165"
                                 },
                                 id: "123",
-                                sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
+                                sourceId: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
                                 sourceTable: "some_source_table"
                             });
                         });
 
                         it("has an 'imported xx ago' description", function() {
                             var sourceTable = new chorus.models.Dataset({
-                                id: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
+                                id: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
                                 workspaceId: this.dataset.get("workspace").id
                             });
                             expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
@@ -290,7 +290,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     completedStamp: "2012-02-29 14:35:38.165"
                                 },
                                 id: "123",
-                                sourceId: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
+                                sourceId: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
                                 sourceTable: "some_source_file.csv",
                                 sourceType: "upload_file"
                             });
@@ -298,7 +298,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                         it("has an 'imported xx ago' description", function() {
                             var sourceTable = new chorus.models.Dataset({
-                                id: '"10032"|"dca_demo"|"ddemo"|"BASE_TABLE"|"a2"',
+                                id: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
                                 workspaceId: this.dataset.get("workspace").id
                             });
                             expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
@@ -425,7 +425,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     },
                                     workspaceId: this.dataset.workspace().id,
                                     toTable: "our_destination",
-                                    destinationTable: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"'
+                                    destinationTable: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"'
                                 });
                                 this.view.options.workspace = newFixtures.workspace({ permission: ["update"] })
                             });
@@ -439,7 +439,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 expect(this.view.$(".next_import a")).toContainText("our_destinat...");
 
                                 var destTable = new chorus.models.Dataset({
-                                    id: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"',
+                                    id: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
                                     workspaceId: this.dataset.get("workspace").id
                                 });
                                 expect(this.view.$(".next_import a")).toHaveHref(destTable.showUrl());
@@ -456,7 +456,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                             },
                                             state: "success",
                                             toTable: 'our_destination',
-                                            toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"',
+                                            toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
                                             creator: "InitialUser"
                                         }
                                     });
@@ -482,7 +482,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                         executionInfo: {
                                             startedStamp: "2012-02-29 14:23:58.169",
                                             toTable: 'our_destination_plus_some_more',
-                                            toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination_plus_some_more"',
+                                            toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination_plus_some_more"',
                                             creator: "InitialUser",
                                             state: "success"
                                         }
@@ -510,7 +510,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     this.importResponse.set({
                                         executionInfo: {
                                             toTable: "bad_destination_table",
-                                            toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"bad_destination_table"',
+                                            toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"bad_destination_table"',
                                             startedStamp: "2012-02-29 14:23:58.169",
                                             completedStamp: "2012-02-29 14:23:59.027",
                                             result: {
@@ -566,7 +566,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                                 executeResult: "success"
                                             },
                                             toTable: 'our_destination',
-                                            toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"',
+                                            toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
                                             state: "success",
                                             creator: "InitialUser"
                                         }
@@ -597,7 +597,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                             },
                                             state: "failed",
                                             toTable: 'our_destination',
-                                            toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"our_destination"',
+                                            toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"',
                                             creator: "InitialUser"
                                         }
                                     })
@@ -623,7 +623,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     this.importResponse.set({executionInfo: {
                                         startedStamp: "2012-02-29 14:23:58.169",
                                         toTable: "our_destination",
-                                        toTableId: '"10000"|"Analytics"|"analytics"|"BASE_TABLE"|"bad_destination_table"'
+                                        toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"bad_destination_table"'
                                     }});
 
                                     this.server.completeFetchFor(this.view.importConfiguration, this.importResponse);
@@ -742,7 +742,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
 
                 context("when the dataset is a source table", function() {
-                    _.each(["BASE_TABLE", "EXTERNAL_TABLE", "MASTER_TABLE", "HDFS_EXTERNAL_TABLE"], function(type) {
+                    _.each(["TABLE", "EXTERNAL_TABLE", "MASTER_TABLE", "HDFS_EXTERNAL_TABLE"], function(type) {
                         beforeEach(function() {
                             this.dataset = newFixtures.dataset.sourceTable({ objectType : type});
                             chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
@@ -1105,7 +1105,7 @@ describe("chorus.views.TabularDataSidebar", function() {
         })
 
         describe("has all the translations for all objectTypes", function() {
-            _.each(["QUERY", "VIEW", "TABLE", "BASE_TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
+            _.each(["QUERY", "VIEW", "TABLE", "TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
                 it("does not have any missing translations for" + type, function() {
                     this.dataset = newFixtures.dataset.sourceTable({objectType: type});
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);

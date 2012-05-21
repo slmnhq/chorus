@@ -18,7 +18,7 @@
         "type": "SOURCE_TABLE",
         "isDeleted": false,
         "hasCredentials": true,
-        "id": "10021|Analytics|public|BASE_TABLE|2010_report_toasdfasdf_congress_on_white_house_staff",
+        "id": "10021|Analytics|public|TABLE|2010_report_toasdfasdf_congress_on_white_house_staff",
         "databaseName": "Analytics",
         "createdTxStamp": "2012-03-02 12:25:16.934",
         "createdStamp": "2012-03-02 12:25:17.722",
@@ -35,7 +35,7 @@
             "type": "NOTE",
             "isDeleted": false,
             "databaseObject": {
-                "id": "10021|Analytics|public|BASE_TABLE|2010_report_toasdfasdf_congress_on_white_house_staff",
+                "id": "10021|Analytics|public|TABLE|2010_report_toasdfasdf_congress_on_white_house_staff",
                 "databaseName": "Analytics",
                 "schemaName": "public",
                 "name": "2010_report_toasdfasdf_congress_on_white_house_staff",
@@ -46,7 +46,7 @@
                     "isDeleted": false
                 },
                 "type": "SOURCE_TABLE",
-                "objectType": "BASE_TABLE"
+                "objectType": "TABLE"
             },
             "artifacts": [
                 {
@@ -81,7 +81,7 @@
             "id": "10021",
             "name": "Another_instance"
         },
-        "objectType": "BASE_TABLE",
+        "objectType": "TABLE",
         "lastUpdatedTxStamp": "2012-03-06 09:38:46.938"
     }
 }

@@ -4,7 +4,7 @@ describe("chorus.models.DatabaseObject", function() {
             instance: { id: 12 },
             databaseName: "beers",
             schemaName: "ipa",
-            objectType: "BASE_TABLE"
+            objectType: "TABLE"
         });
     });
 
@@ -49,12 +49,12 @@ describe("chorus.models.DatabaseObject", function() {
             });
 
             it("has the correct url", function() {
-                expect(this.databaseObject.showUrl()).toContain("instances/" + this.databaseObject.get("instance").id + "/databases/%25foo%25/schemas/b%2Fa%2Fr/BASE_TABLE/a%20space")
+                expect(this.databaseObject.showUrl()).toContain("instances/" + this.databaseObject.get("instance").id + "/databases/%25foo%25/schemas/b%2Fa%2Fr/TABLE/a%20space")
             });
 
             it("works when there is markup in the name (e.g. result from type ahead search", function() {
                 this.databaseObject.set({objectName: "<em>a</em> space"})
-                expect(this.databaseObject.showUrl()).toContain("instances/" + this.databaseObject.get("instance").id + "/databases/%25foo%25/schemas/b%2Fa%2Fr/BASE_TABLE/a%20space");
+                expect(this.databaseObject.showUrl()).toContain("instances/" + this.databaseObject.get("instance").id + "/databases/%25foo%25/schemas/b%2Fa%2Fr/TABLE/a%20space");
             })
         });
 
@@ -82,7 +82,7 @@ describe("chorus.models.DatabaseObject", function() {
         context("when it contains html", function() {
             it("removes the html", function() {
                 this.databaseObject.set({ objectName: "<em>mmmm</em> good" });
-                expect(this.databaseObject.showUrl()).toMatchUrl("#/instances/12/databases/beers/schemas/ipa/BASE_TABLE/mmmm%20good");
+                expect(this.databaseObject.showUrl()).toMatchUrl("#/instances/12/databases/beers/schemas/ipa/TABLE/mmmm%20good");
             })
         })
     })

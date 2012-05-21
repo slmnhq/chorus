@@ -13,8 +13,8 @@
             "partitions": 0,
             "hasData": true,
             "desc": null,
-            "objectType": "BASE_TABLE",
-            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"2010_report_on_white_house\"",
+            "objectType": "TABLE",
+            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"TABLE\"|\"2010_report_on_white_house\"",
             "instance": {
                 "id": "10000",
                 "name": "gillette"
@@ -80,8 +80,8 @@
             "partitions": 0,
             "hasData": true,
             "desc": null,
-            "objectType": "BASE_TABLE",
-            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"_copy123copy\"",
+            "objectType": "TABLE",
+            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"TABLE\"|\"_copy123copy\"",
             "instance": {
                 "id": "10000",
                 "name": "gillette"
@@ -111,8 +111,8 @@
             "partitions": 0,
             "hasData": true,
             "desc": null,
-            "objectType": "BASE_TABLE",
-            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"_uspresident\"",
+            "objectType": "TABLE",
+            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"TABLE\"|\"_uspresident\"",
             "instance": {
                 "id": "10000",
                 "name": "gillette"
@@ -142,8 +142,8 @@
             "partitions": 0,
             "hasData": true,
             "desc": null,
-            "objectType": "BASE_TABLE",
-            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"_uspresident_wikipedia_urls_thmbs_hs\"",
+            "objectType": "TABLE",
+            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"TABLE\"|\"_uspresident_wikipedia_urls_thmbs_hs\"",
             "instance": {
                 "id": "10000",
                 "name": "gillette"
@@ -181,8 +181,8 @@
             "partitions": 0,
             "hasData": true,
             "desc": null,
-            "objectType": "BASE_TABLE",
-            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"_uspresident_wikipedia_urls_thmbs_hs444\"",
+            "objectType": "TABLE",
+            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"TABLE\"|\"_uspresident_wikipedia_urls_thmbs_hs444\"",
             "instance": {
                 "id": "10000",
                 "name": "gillette"
@@ -212,8 +212,8 @@
             "partitions": 0,
             "hasData": false,
             "desc": null,
-            "objectType": "BASE_TABLE",
-            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"a2\"",
+            "objectType": "TABLE",
+            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"TABLE\"|\"a2\"",
             "instance": {
                 "id": "10000",
                 "name": "gillette"
@@ -251,8 +251,8 @@
             "partitions": 0,
             "hasData": false,
             "desc": null,
-            "objectType": "BASE_TABLE",
-            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"a2x\"",
+            "objectType": "TABLE",
+            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"TABLE\"|\"a2x\"",
             "instance": {
                 "id": "10000",
                 "name": "gillette"
@@ -313,8 +313,8 @@
             "partitions": 0,
             "hasData": false,
             "desc": null,
-            "objectType": "BASE_TABLE",
-            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"a___import\"",
+            "objectType": "TABLE",
+            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"TABLE\"|\"a___import\"",
             "instance": {
                 "id": "10000",
                 "name": "gillette"
@@ -344,8 +344,8 @@
             "partitions": 0,
             "hasData": true,
             "desc": null,
-            "objectType": "BASE_TABLE",
-            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"BASE_TABLE\"|\"a_import\"",
+            "objectType": "TABLE",
+            "id": "\"10000\"|\"dca_demo\"|\"ddemo\"|\"TABLE\"|\"a_import\"",
             "instance": {
                 "id": "10000",
                 "name": "gillette"

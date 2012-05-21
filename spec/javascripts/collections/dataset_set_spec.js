@@ -33,12 +33,12 @@ describe("chorus.collections.DatasetSet", function() {
         context("with lots of url params", function() {
             it("correctly builds the url", function() {
                 this.collection.attributes.type = "SOURCE_TABLE";
-                this.collection.attributes.objectType = "BASE_TABLE";
+                this.collection.attributes.objectType = "TABLE";
                 this.collection.attributes.namePattern = "Foo";
                 this.collection.attributes.databaseName = "dbName";
                 expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({
                     type: "SOURCE_TABLE",
-                    objectType: "BASE_TABLE",
+                    objectType: "TABLE",
                     namePattern: "Foo",
                     databaseName: "dbName",
                     rows: "10",

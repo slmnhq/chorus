@@ -6,7 +6,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             objectName: "original",
             columns: 23,
             type: "SOURCE_TABLE",
-            objectType: "BASE_TABLE",
+            objectType: "TABLE",
             id: "abc"
         });
         this.instanceName = "john";
@@ -17,7 +17,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 id: 11
             },
             type: "SOURCE_TABLE",
-            objectType: "BASE_TABLE",
+            objectType: "TABLE",
             id: "abc"
         });
 
@@ -62,8 +62,8 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                 objectName: "dogs",
                 columns: 22,
                 type: "SOURCE_TABLE",
-                objectType: "BASE_TABLE",
-                id: '"10000"|"dca_demo"|"ddemo"|"BASE_TABLE"|"dogs"'
+                objectType: "TABLE",
+                id: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"dogs"'
             });
 
             this.databaseObject3 = newFixtures.databaseObject({

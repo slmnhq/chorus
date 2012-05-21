@@ -240,7 +240,7 @@ describe("chorus.models.Activity", function() {
                         id: '"10014"|"silverware"|"forks"|"shiny"',
                         name: "shiny",
                         type: "SOURCE_TABLE",
-                        objectType: "BASE_TABLE"
+                        objectType: "TABLE"
                     },
                     workspace: {
                         id: '4',
@@ -254,7 +254,7 @@ describe("chorus.models.Activity", function() {
                 expect(this.model.dataset().get("id")).toBe('"10014"|"silverware"|"forks"|"shiny"');
                 expect(this.model.dataset().get("objectName")).toBe("shiny");
                 expect(this.model.dataset().get("type")).toBe("SOURCE_TABLE");
-                expect(this.model.dataset().get("objectType")).toBe("BASE_TABLE");
+                expect(this.model.dataset().get("objectType")).toBe("TABLE");
             });
 
             it("has the right workspace information", function() {
