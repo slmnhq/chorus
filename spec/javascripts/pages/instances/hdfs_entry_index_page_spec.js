@@ -84,8 +84,6 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
                 var $content = $(options.content);
 
-                debugger;
-
                 expect($content.find("a").length).toBe(5);
 
                 expect($content.find("a").eq(0).attr("href")).toBe("#/instances/1234/browse/")
