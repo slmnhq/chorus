@@ -46,5 +46,11 @@ describe DatabaseObjectsController do
       get :index, :schema_id => schema.to_param
       decoded_response.first.object_name.should == 'aaaa'
     end
+
+    it "should filter db objects by name" do
+      get :index, :schema_id => schema.to_param, :filter => 'view'
+      decoded_response.length.should == 1
+      decoded_response.first.object_name.should == 'view1'
+    end
   end
 end

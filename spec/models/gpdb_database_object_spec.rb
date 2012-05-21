@@ -5,6 +5,27 @@ describe GpdbDatabaseObject do
     it { should belong_to(:schema) }
   end
 
+  describe ".with_name_like" do
+    it "scopes objects by name" do
+      FactoryGirl.create(:gpdb_table, :name => "match")
+      FactoryGirl.create(:gpdb_table, :name => "nope")
+
+      GpdbDatabaseObject.with_name_like("match").count.should == 1
+    end
+
+    it "matches anywhere in the name, regardless of case" do
+      FactoryGirl.create(:gpdb_table, :name => "amatCHingtable")
+
+      GpdbDatabaseObject.with_name_like("match").count.should == 1
+      GpdbDatabaseObject.with_name_like("MATCH").count.should == 1
+    end
+
+    it "returns all objects if name is not provided" do
+      FactoryGirl.create(:gpdb_table)
+      GpdbDatabaseObject.with_name_like(nil).count.should == 1
+    end
+  end
+
   context "#refresh" do
     let(:account) { FactoryGirl.create(:instance_account) }
     let(:schema) { FactoryGirl.create(:gpdb_schema) }

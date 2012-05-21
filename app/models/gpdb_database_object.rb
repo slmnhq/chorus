@@ -62,4 +62,12 @@ class GpdbDatabaseObject < ActiveRecord::Base
       db_object
     end
   end
+
+  def self.with_name_like(name)
+    if name.present?
+      where("name ILIKE ?", "%#{name}%")
+    else
+      scoped
+    end
+  end
 end
