@@ -8,8 +8,8 @@ describe "editing user profiles" do
     end
 
     it "can edit a user" do
-      fill_in "first_name", :with => "james"
-      fill_in "last_name", :with => "brown"
+      fill_in "firstName", :with => "james"
+      fill_in "lastName", :with => "brown"
       fill_in "email", :with => "fake@example.com"
       click_submit_button
 

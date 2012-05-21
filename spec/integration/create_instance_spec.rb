@@ -18,15 +18,15 @@ describe " add an instance " do
         wait_until { find("textarea[name=description]").visible? }
         wait_until { find("input[name=host]").visible? }
         wait_until { find("input[name=port]").visible? }
-        wait_until { find("input[name=db_username]").visible? }
-        wait_until { find("input[name=db_password]").visible? }
+        wait_until { find("input[name=dbUsername]").visible? }
+        wait_until { find("input[name=dbPassword]").visible? }
 
         fill_in 'name', :with => new_instance_name
         fill_in 'description', :with => "GPDB instance creation"
         fill_in 'host', :with => "gillette.sf.pivotallabs.com"
         fill_in 'port', :with => "5432"
-        fill_in 'db_username', :with => "gpadmin"
-        fill_in 'db_password', :with => "secret"
+        fill_in 'dbUsername', :with => "gpadmin"
+        fill_in 'dbPassword', :with => "secret"
 
         check("register_greenplum_shared")
       end

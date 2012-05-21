@@ -1,6 +1,6 @@
 def fill_user_form(username)
-  fill_in 'first_name', :with => "Joe"
-  fill_in 'last_name', :with => "Blow"
+  fill_in 'firstName', :with => "Joe"
+  fill_in 'lastName', :with => "Blow"
   fill_in 'username', :with => username
   fill_in 'email', :with => "#{username}@blow.com"
   fill_in 'password', :with => "password"
