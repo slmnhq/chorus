@@ -25,6 +25,27 @@ describe User do
     end
   end
 
+  describe ".order" do
+    let!(:beta) { FactoryGirl.create(:user, :first_name => "Beta", :last_name => "Pi") }
+    let!(:alpha) { FactoryGirl.create(:user, :first_name => "Alpha", :last_name => "Zeta") }
+
+    it "sorts by first name, by default" do
+      User.order(nil).should == [alpha, beta]
+    end
+
+    context "with a recognized sort order" do
+      it "respects the sort order" do
+        User.order("last_name").should == [beta, alpha]
+      end
+    end
+
+    context "with an unrecognized sort order" do
+      it "sorts by first name" do
+        User.order("last_name; DROP TABLE users;").should == [alpha, beta]
+      end
+    end
+  end
+
   describe "validations" do
     before do
       @user = FactoryGirl.create :user #, :username => 'aDmin'

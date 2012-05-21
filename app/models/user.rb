@@ -2,6 +2,13 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   include SoftDelete
+  
+  VALID_SORT_ORDERS = HashWithIndifferentAccess.new(
+      :first_name => "LOWER(users.first_name)",
+      :last_name => "LOWER(users.last_name)"
+  )
+
+  DEFAULT_SORT_ORDER = VALID_SORT_ORDERS[:first_name]
 
   attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
   attr_reader :password
@@ -33,6 +40,11 @@ class User < ActiveRecord::Base
         errors.add(:username, :taken)
       end
     end
+  end
+
+  def self.order(field)
+    sort_by = VALID_SORT_ORDERS[field] || DEFAULT_SORT_ORDER
+    super(sort_by)
   end
 
   def self.authenticate(username, password)

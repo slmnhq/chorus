@@ -33,13 +33,6 @@ describe UsersController do
           decoded_response.second.username.should == "other_user"
         end
       end
-
-      context "with an unrecognized sort order" do
-        it "fails" do
-          get :index, :order => "last_name; DROP TABLE users;"
-          response.code.should == "400"
-        end
-      end
     end
 
     describe "pagination" do

@@ -59,11 +59,6 @@ class ApplicationController < ActionController::Base
 
   def set_collection_defaults
     params.reverse_merge!(Chorus::Application.config.collection_defaults)
-    require_white_listed_order
-  end
-
-  def require_white_listed_order
-    head :bad_request unless (Chorus::Application.config.sorting_order_white_list.include?(params[:order]))
   end
 
   def present(model_or_collection, options={})
