@@ -1,8 +1,7 @@
 describe("chorus.collections.DatabaseObjectSet", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatabaseObjectSet([], {
-            schemaId: 987,
-            instanceId: 'REMOVEME', databaseName:"REMOVEME", schemaName: "REMOVEME"
+            schemaId: 987
         });
     });
 
@@ -31,26 +30,6 @@ describe("chorus.collections.DatabaseObjectSet", function() {
                 expect(url).toHaveUrlPath("/schemas/987/database_objects");
                 expect(url).toContainQueryParams({ rows: 10, page: 1, filter: "foo" });
             });
-        });
-    });
-
-    describe("#parse", function() {
-        beforeEach(function() {
-            this.collection.fetch();
-            this.server.lastFetchFor(this.collection).succeed([
-                { objectName: "brian_the_table" },
-                { objectName: "rand_the_table" }
-            ]);
-        });
-
-        it("sets the instance id, databaseName, and schemaName from the collection on each model", function() {
-            expect(this.collection.at(0).get("instance").id).toBe("REMOVEME");
-            expect(this.collection.at(0).get("databaseName")).toBe("REMOVEME");
-            expect(this.collection.at(0).get("schemaName")).toBe("REMOVEME");
-
-            expect(this.collection.at(1).get("instance").id).toBe("REMOVEME");
-            expect(this.collection.at(1).get("databaseName")).toBe("REMOVEME");
-            expect(this.collection.at(1).get("schemaName")).toBe("REMOVEME");
         });
     });
 

@@ -20,8 +20,8 @@ describe GpdbTablePresenter, :type => :view do
       @hash[:name].should == "table1"
       @hash[:schema_id].should == 456
       @hash[:schema_name].should == "abc"
-      @hash[:instance_id].should == 123
-      @hash[:instance_name].should == "instance1"
+      @hash[:instance][:id].should == 123
+      @hash[:instance][:name].should == "instance1"
       @hash[:database_id].should == 789
       @hash[:database_name].should == "db1"
     end

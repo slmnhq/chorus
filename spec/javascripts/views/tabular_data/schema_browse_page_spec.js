@@ -10,12 +10,6 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         expect(this.page.helpId).toBe("schema")
     });
 
-    it("fetches the database object set with the right (decoded) database name and schema names", function() {
-        expect(this.page.collection).toBeA(chorus.collections.DatabaseObjectSet);
-        expect(this.page.collection.attributes.databaseName).toBe("REMOVEME"); // or rather, fix by removing databaseName from the showUrl and fetch url of DatabaseObjectSets.
-        expect(this.page.collection.attributes.schemaName).toBe("REMOVEME"); // or rather, fix by removing databaseName from the showUrl and fetch url of DatabaseObjectSets.
-    });
-
     it("includes the InstanceCredentials mixin", function() {
         expect(this.page.requiredResourcesFetchForbidden).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchForbidden);
     });
@@ -108,12 +102,6 @@ describe("chorus.pages.SchemaBrowsePage", function() {
 
             expect(this.page.$(this.page.mainContent.el).length).toBe(1);
         });
-
-        it("creates the collection with the right options", function() {
-            expect(this.page.collection.attributes.instanceId).toBe("REMOVEME") // or rather, fix by changing the DatabaseObjectSet url
-            expect(this.page.collection.attributes.databaseName).toBe("REMOVEME"); // or rather, fix by changing the DatabaseObjectSet url
-            expect(this.page.collection.attributes.schemaName).toBe("REMOVEME"); // or rather, fix by changing the DatabaseObjectSet url
-        })
 
         describe("search", function() {
             beforeEach(function() {

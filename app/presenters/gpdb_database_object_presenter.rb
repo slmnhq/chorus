@@ -7,8 +7,10 @@ class GpdbDatabaseObjectPresenter < Presenter
       :schema_name => model.schema.name,
       :database_id => model.schema.database.id,
       :database_name => model.schema.database.name,
-      :instance_id => model.schema.database.instance.id,
-      :instance_name => model.schema.database.instance.name
+      :instance => {
+          :id => model.schema.database.instance.id,
+          :name => model.schema.database.instance.name
+      }
     }
   end
 end

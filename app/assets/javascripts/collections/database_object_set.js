@@ -17,16 +17,5 @@ chorus.collections.DatabaseObjectSet = chorus.collections.LastFetchWins.include(
         var self = this;
         self.attributes.filter = term;
         self.fetch({silent: true, success: function() { self.trigger('searched'); }});
-    },
-
-    parse: function(resp) {
-        var modelsJson = this._super("parse", arguments);
-        return _.map(modelsJson, function (modelJson) {
-            return _.extend({
-                instance: { id: this.attributes.instanceId },
-                databaseName: this.attributes.databaseName,
-                schemaName: this.attributes.schemaName
-            }, modelJson);
-        }, this);
     }
 });
