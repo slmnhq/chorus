@@ -40,5 +40,11 @@ describe DatabaseObjectsController do
       get :index, :schema_id => schema.to_param, :per_page => 1
       decoded_response.length.should == 1
     end
+
+    it "should sort db objects by name" do
+      FactoryGirl.create(:gpdb_table, :name => 'aaaa', :schema => schema)
+      get :index, :schema_id => schema.to_param
+      decoded_response.first.object_name.should == 'aaaa'
+    end
   end
 end

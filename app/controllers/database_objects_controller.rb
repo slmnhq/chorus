@@ -4,6 +4,6 @@ class DatabaseObjectsController < ApplicationController
     account = schema.database.instance.account_for_user! current_user
     GpdbDatabaseObject.refresh(account, schema)
 
-    present schema.database_objects.paginate(params.slice(:page, :per_page))
+    present schema.database_objects.order("lower(name)").paginate(params.slice(:page, :per_page))
   end
 end
