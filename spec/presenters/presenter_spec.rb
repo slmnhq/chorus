@@ -66,6 +66,21 @@ describe Presenter, :type => :view do
       end
     end
 
+    context "with a heterogeneous list of models" do
+      let(:object_to_present) do
+        [
+            FactoryGirl.build(:user, :username => 'user'),
+            FactoryGirl.build(:instance, :name => 'instance')
+        ]
+      end
+
+      it "presents an array with a hash for each model" do
+        json.length.should == 2
+        json[0][:username].should == 'user'
+        json[1][:name].should == 'instance'
+      end
+    end
+
     context "with an empty relation" do
       let(:object_to_present) { User.where(:username => "not_real") }
 
