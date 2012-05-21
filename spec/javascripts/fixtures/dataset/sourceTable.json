@@ -1,27 +1,10 @@
 {
-    "lastUpdatedStamp": "2012-03-06 09:38:47.013",
-    "importFrequency": "DAILY",
-    "schemaId": 2,
-    "schemaName": "public",
-    "workspace": {
-        "id": "10000",
-        "name": "danny"
-    },
-    "objectName": "2010_report_toasdfasdf_congress_on_white_house_staff",
-    "modifiedBy": {
-        "id": "InitialUser",
-        "username": "edcadmin"
-    },
-    "commentCount": 4,
-    "type": "SOURCE_TABLE",
-    "isDeleted": false,
-    "hasCredentials": true,
-    "id": "10021|Analytics|public|BASE_TABLE|2010_report_toasdfasdf_congress_on_white_house_staff",
-    "databaseName": "Analytics",
-    "createdTxStamp": "2012-03-02 12:25:16.934",
-    "createdStamp": "2012-03-02 12:25:17.722",
-    "recentComment": {
-        "text": "foo 3",
+    "response": {
+        "lastUpdatedStamp": "2012-03-06 09:38:47.013",
+        "importFrequency": "DAILY",
+        "schemaId": 2,
+        "schemaName": "public",
+
         "workspace": {
             "id": "10000",
             "name": "danny"

@@ -25,7 +25,7 @@ describe("chorus.models.Schema", function() {
 
             it("should pass its id", function() {
                 var objects = this.model.databaseObjects();
-                expect(objects.attributes.schema_id).toBe(this.model.id);
+                expect(objects.attributes.schemaId).toBe(this.model.id);
             });
         });
 

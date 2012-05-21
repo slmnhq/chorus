@@ -36,7 +36,7 @@ chorus.models.TabularData = chorus.models.Base.include(
             if (!this._columns) {
                 this._columns = new chorus.collections.DatabaseColumnSet([], {
                     tabularData: this,
-                    instance_id: this.instance().id,
+                    instanceId: this.instance().id,
                     databaseName: this.database().name(),
                     schemaName: this.schema().name(),
                     type: options && options.type
