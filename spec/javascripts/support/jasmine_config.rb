@@ -1,24 +1,14 @@
 module Jasmine
-  class RunAdapter
-    def run(focused_suite = nil)
-      jasmine_files = @jasmine_files
-      css_files = @jasmine_stylesheets + (@config.css_files || [])
-      js_files = @config.js_files(focused_suite)
-      body = ERB.new(File.read("spec/javascripts/support/old-jasmine-core/run.html.erb")).result(binding)
-      [
-        200,
-        { 'Content-Type' => 'text/html', 'Pragma' => 'no-cache' },
-        [body]
-      ]
-    end
-  end
-
   class Config
     def src_files
       Rails.application.assets["application"].dependencies.map do |asset|
         "assets/" + asset.logical_path
       end.push("public/help/Chorus_Help.js")
     end
+  end
+
+  def self.runner_template
+    File.read("spec/javascripts/support/old-jasmine-core/run.html.erb")
   end
 end
 
@@ -98,22 +88,29 @@ end
 
 module Jasmine
   def self.app(config)
-    puts("Constructing custom Jasmine app from jasmine_config.rb")
+    jasmine_stylesheets = ::Jasmine::Core.css_files.map {|f| "/__JASMINE_ROOT__/#{f}"}
+    config_shim = OpenStruct.new({:jasmine_files => ::Jasmine::Core.js_files.map {|f| "/__JASMINE_ROOT__/#{f}"},
+                                  :js_files => config.js_files,
+                                  :css_files => jasmine_stylesheets + (config.css_files || [])})
+    page = Jasmine::Page.new(config_shim.instance_eval { binding })
     Rack::Builder.app do
       use Rack::Head
-      use Rack::ETag, "max-age=0, private, must-revalidate"
+      use Rack::Jasmine::CacheControl
       use DummyMiddleware
+      if Jasmine::Dependencies.rails_3_asset_pipeline?
+        map('/assets') do
+          run Rails.application.assets
+        end
+      end
 
-      map('/run.html')         { run Jasmine::Redirect.new('/') }
-      map('/__suite__')        { run Jasmine::FocusedSuite.new(config) }
+      map('/run.html')         { run Rack::Jasmine::Redirect.new('/') }
+      map('/__suite__')        { run Rack::Jasmine::FocusedSuite.new(config) }
 
+      # map('/__JASMINE_ROOT__') { run Rack::File.new(Jasmine::Core.path) }
       map('/__JASMINE_ROOT__') { run Rack::File.new("spec/javascripts/support/old-jasmine-core") }
+
       map(config.spec_path)    { run Rack::File.new(config.spec_dir) }
       map(config.root_path)    { run Rack::File.new(config.project_root) }
-
-      map('/assets') do
-        run Rails.application.assets
-      end
 
       map("/messages/Messages_en.properties") do
         run MessageMiddleware.new(self)
@@ -125,10 +122,11 @@ module Jasmine
 
       map('/') do
         run Rack::Cascade.new([
-            Rack::URLMap.new('/' => Rack::File.new(config.src_dir)),
-            Jasmine::RunAdapter.new(config)
+          Rack::URLMap.new('/' => Rack::File.new(config.src_dir)),
+          Rack::Jasmine::Runner.new(page)
         ])
       end
     end
   end
 end
+

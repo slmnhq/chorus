@@ -36,7 +36,7 @@ end
 
 group :test, :development do
   gem 'debugger'
-  gem 'jasmine', :path => "vendor/jasmine"
+  gem 'jasmine'
   gem 'rspec_api_documentation'
 end
 
