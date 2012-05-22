@@ -5,6 +5,10 @@ describe GpdbDatabaseObject do
     it { should belong_to(:schema) }
   end
 
+  describe "validations" do
+    it { should validate_presence_of :name }
+  end
+
   describe ".with_name_like" do
     it "scopes objects by name" do
       FactoryGirl.create(:gpdb_table, :name => "match")

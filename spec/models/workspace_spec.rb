@@ -183,4 +183,24 @@ describe Workspace do
       end
     end
   end
+
+  describe "#destroy" do
+    let(:workspace) { FactoryGirl.create :workspace }
+
+    before do
+      workspace.destroy
+    end
+
+    it "should not delete the database entry" do
+      Workspace.find_with_destroyed(workspace.id).should_not be_nil
+    end
+
+    it "should update the deleted_at field" do
+      Workspace.find_with_destroyed(workspace.id).deleted_at.should_not be_nil
+    end
+
+    it "should be hidden from subsequent #find calls" do
+      Workspace.find_by_id(workspace.id).should be_nil
+    end
+  end
 end

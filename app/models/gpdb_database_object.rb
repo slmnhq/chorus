@@ -1,6 +1,8 @@
 class GpdbDatabaseObject < ActiveRecord::Base
   belongs_to :schema, :class_name => 'GpdbSchema'
 
+  validates_presence_of :name
+
   DATABASE_OBJECTS_SQL = <<-SQL
     SELECT
       c.relkind AS type,
