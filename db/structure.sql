@@ -545,7 +545,7 @@ CREATE TABLE workspaces (
     updated_at timestamp without time zone NOT NULL,
     public boolean DEFAULT true,
     archived_at timestamp without time zone,
-    archiver_id integer NOT NULL,
+    archiver_id integer,
     summary text,
     owner_id integer NOT NULL,
     image_file_name character varying(255),
@@ -987,3 +987,7 @@ INSERT INTO schema_migrations (version) VALUES ('20120518215640');
 INSERT INTO schema_migrations (version) VALUES ('20120519000854');
 
 INSERT INTO schema_migrations (version) VALUES ('20120522000542');
+
+INSERT INTO schema_migrations (version) VALUES ('20120522015308');
+
+INSERT INTO schema_migrations (version) VALUES ('20120522020546');

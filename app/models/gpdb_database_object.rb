@@ -57,8 +57,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
 
     db_objects.map do |type, name, comment|
       klass = type == 'r' ? GpdbTable : GpdbView
-      db_object = klass.find_or_create_by_name(name)
-      db_object.schema = schema
+      db_object = klass.find_or_initialize_by_name_and_schema_id(name, schema.id)
       db_object.comment = comment
       db_object.save!
       db_object
