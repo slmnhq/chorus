@@ -1,6 +1,7 @@
 ROOT_DIR = File.expand_path("../../..", __FILE__)
-PACKAGES_DIR  = File.join(ROOT_DIR, "packaging/packages")
-COMPONENTS_DIR = File.join(ROOT_DIR, "packaging/components")
+PACKAGING_DIR  = File.join(ROOT_DIR, "packaging")
+PACKAGES_DIR   = File.join(PACKAGING_DIR, "packages")
+COMPONENTS_DIR = File.join(PACKAGING_DIR, "components")
 
 EXTERNAL_DEPENDENCIES = {
   'ruby' => "http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p125.tar.gz",
@@ -13,7 +14,7 @@ EXTERNAL_DEPENDENCIES = {
 desc 'Generate new package'
 task :package do
   setup_directories
-  # download_external_dependencies
+  download_external_dependencies
   download_bundler
   archive_app
   create_package
@@ -38,28 +39,34 @@ def download_external_dependencies
 end
 
 def download_bundler
-  run "cd #{COMPONENTS_DIR} && gem fetch bundler -v 1.1.3"
+  Dir.chdir(COMPONENTS_DIR) do
+    run "gem fetch bundler -v 1.1.3"
+  end
 end
 
 def archive_app
-  copy_dir = File.join(COMPONENTS_DIR, "app")
-  compiled_assets_path = "public/assets"
-  run "rm -rf #{copy_dir}" if Dir.exist?(copy_dir)
-  run "git clone --depth 1 file://#{ROOT_DIR} #{copy_dir}"
+  copy_name = "app"
 
-  Dir.chdir(copy_dir) do
-    run "rake assets:clean assets:precompile"
-    run "bundle package"
+  Dir.chdir(COMPONENTS_DIR) do
+    compiled_assets_path = "public/assets"
+    run "rm -rf #{copy_name}" if Dir.exist?(copy_name)
+    run "git clone --depth 1 file://#{ROOT_DIR} #{copy_name}"
+
+    Dir.chdir(File.join(COMPONENTS_DIR, copy_name)) do
+      run "rake assets:clean assets:precompile"
+      run "bundle package"
+    end
+
+    run "tar -czf #{COMPONENTS_DIR}/app.tar.gz #{copy_name}"
+    run "rm -rf #{copy_name}"
   end
-
-  run "rm -rf #{copy_dir}/.git"
-  run "tar -czf #{COMPONENTS_DIR}/app.tar.gz #{copy_dir}"
-  run "rm -rf #{copy_dir}"
 end
 
 def create_package
-  filename = "chorus-#{head_sha}.tar.gz"
-  run "tar -czf #{PACKAGES_DIR}/#{filename} #{COMPONENTS_DIR}"
+  Dir.chdir(PACKAGING_DIR) do
+    filename = "chorus-#{head_sha}.tar.gz"
+    run "tar -czf #{PACKAGES_DIR}/#{filename} #{relative(COMPONENTS_DIR)} chorus_unpackage.sh"
+  end
 end
 
 def head_sha
@@ -71,3 +78,7 @@ def run(cmd)
   system cmd
 end
 
+def relative(path)
+  current = Pathname.new(Dir.pwd)
+  Pathname.new(path).relative_path_from(current).to_s
+end
