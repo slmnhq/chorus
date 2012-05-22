@@ -7,9 +7,9 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     persistent: true,
 
     events: {
-        "change input[name=description]": "descriptionChanged",
-        "paste input[name=description]": "descriptionChanged",
-        "keyup input[name=description]": "descriptionChanged",
+        "change input[name=workfile[description]]": "descriptionChanged",
+        "paste input[name=workfile[description]]": "descriptionChanged",
+        "keyup input[name=workfile[description]]": "descriptionChanged",
         "click button.submit": "upload",
         "submit form": "upload"
     },
@@ -85,7 +85,8 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         }
 
         function uploadFinished(e, json) {
-            self.model = new chorus.models.Workfile(json.response);
+            self.model = new chorus.models.Workfile();
+            self.model.set(self.model.parse(JSON.parse(json.result)));
             chorus.toast('workfiles.uploaded', {fileName: self.model.get("fileName")});
             self.closeModal();
             chorus.router.navigate(self.model.showUrl());

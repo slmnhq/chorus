@@ -4,7 +4,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         this.model = fixtures.workfile({ workspaceId: 4 });
         var workfileSet = new chorus.collections.WorkfileSet([this.model], { workspaceId: 4 });
         this.dialog = new chorus.dialogs.WorkfilesImport({ launchElement : this.launchElement, pageModel: this.model, pageCollection: workfileSet });
-        this.successfulResponseTxt = {"response":{"id":"9", "fileName" : "new_file.txt", "mimeType" : "text/plain", "workspaceId" : "4"}};
+        this.successfulResponseTxt = {"result" : '{"response":{"id":"9", "file_name" : "new_file.txt", "mime_type" : "text/plain", "workspace" : {"id" : "4"}}}'};
     });
 
     it("does not re-render when the model changes", function() {
@@ -14,11 +14,11 @@ describe("chorus.dialogs.WorkfilesImport", function() {
     describe("#render", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeModal");
-            this.dialog.render()
+            this.dialog.render();
         });
 
         it("has the right action url", function() {
-            expect(this.dialog.$("form").attr("action")).toBe("/workspace/4/workfile");
+            expect(this.dialog.$("form").attr("action")).toBe("/workspaces/4/workfiles");
         });
 
         it("disables the upload button", function() {
@@ -57,7 +57,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
 
         it("navigates to the show page of the workfile", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl());
+            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles/9");
         });
     });
 
@@ -177,7 +177,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
 
                 context("when the user changes the description text", function() {
                     beforeEach(function() {
-                        this.dialog.$("input[name='description']").change();
+                        this.dialog.$("input[name='workfile[description]']").change();
                     });
 
                     it("re-enables the button", function() {

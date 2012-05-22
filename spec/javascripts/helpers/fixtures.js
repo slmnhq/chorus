@@ -1615,10 +1615,12 @@ beforeEach(function() {
                 lastUpdatedStamp: "2011-11-29 10:46:03.255",
                 versionFileId: this.nextId().toString(),
                 content: "Workfile Content!" + id,
-                modifiedByFirstName: modifiedByUser.firstName,
-                modifiedByLastName: modifiedByUser.lastName,
-                modifiedById: modifiedByUser.id,
-                versionOwner: "edcadmin",
+                modifier: {
+                    firstName : modifiedByUser.firstName,
+                    lastName : modifiedByUser.lastName,
+                    id : modifiedByUser.id
+                },
+                owner: { username: "edcadmin" },
                 "versionFilePath": "/Users/pivotal/workspace/chorus/ofbiz/runtime/data/workfile/10003/1332867012541_2971",
                 commitMessage: null,
                 isEditable: true
@@ -1677,6 +1679,9 @@ beforeEach(function() {
                 modifiedBy: modifiedByUser,
                 owner: ownerUser.username,
                 ownerId: ownerUser.id,
+                workspace: {
+                    id: this.nextId().toString()
+                },
                 workspaceId: this.nextId().toString(),
                 imageId: null,
                 isBinary: false,
@@ -2622,6 +2627,7 @@ beforeEach(function() {
         },
 
         searchResultJson: function(overrides) {
+            var modifiedByUser = newFixtures.userJson();
             return _.extend({
                 "workfile": {
                     "docs": [
@@ -2632,6 +2638,7 @@ beforeEach(function() {
                             "fileType": "SQL",
                             "fileName": "test.sql",
                             "entityType": "workfile",
+                            "versionInfo": this.versionInfoJson(overrides && overrides.versionInfo, modifiedByUser),
                             "modifiedBy": {
                                 "id": "422",
                                 "firstName": "John",
@@ -2659,6 +2666,7 @@ beforeEach(function() {
                             "fileType": "SQL",
                             "fileName": "test.sql",
                             "entityType": "workfile",
+                            "versionInfo": this.versionInfoJson(overrides && overrides.versionInfo, modifiedByUser),
                             "modifiedBy": {
                                 "id": "422",
                                 "firstName": "John",

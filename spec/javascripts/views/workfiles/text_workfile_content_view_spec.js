@@ -281,8 +281,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
                 beforeEach(function() {
                     this.modalSpy = stubModals();
                     var model = this.view.model
-                    var url = "/workspace/" + model.get("workspaceId") + "/workfile/" +
-                        model.get("id") + "/version/" + model.get("versionInfo").versionNum;
+                    var url = "/workfiles/" + model.get("id") + "/versions/" + model.get("versionInfo").versionNum;
                     _.find(this.server.updates(), function(request){
                         return request.url === url ;
                     }).failUnprocessableEntity({fields: { version: {INVALID: {}}}});

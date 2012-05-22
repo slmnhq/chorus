@@ -1,8 +1,14 @@
 class WorkfilesController < ApplicationController
-  before_filter :load_workspace, :only => [:create]
+  def show
+    workfile = Workfile.find(params[:id])
+    workspace = AccessPolicy.workspaces_for(current_user).find(workfile.workspace_id)
+    workfile = workspace.workfiles.find(params[:id])
+    present workfile
+  end
 
   def create
-    workfile = @workspace.workfiles.build(params[:workfile])
+    workspace = Workspace.writable_by(current_user).find(params[:workspace_id])
+    workfile = workspace.workfiles.build(params[:workfile])
     workfile.owner = current_user
     workfile.save!
     workfile_version = WorkfileVersion.new
@@ -11,14 +17,8 @@ class WorkfilesController < ApplicationController
     workfile_version.commit_message = ""
     workfile_version.owner = current_user
     workfile_version.modifier = current_user
-    workfile_version.contents = params[:workfile][:contents][0]
+    workfile_version.contents = params[:workfile][:contents]
     workfile_version.save!
-    head :ok
-  end
-
-  private
-
-  def load_workspace
-    @workspace = Workspace.writable_by(current_user).find(params[:workspace_id])
+    present workfile
   end
 end

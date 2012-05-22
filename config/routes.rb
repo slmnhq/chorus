@@ -36,6 +36,8 @@ Chorus::Application.routes.draw do
     resource :workfiles, :only => [:create]
   end
 
+  resources :workfiles, :only => [:show]
+
   match "/" => "root#index"
 
   # TODO: Remove this when it's no longer needed

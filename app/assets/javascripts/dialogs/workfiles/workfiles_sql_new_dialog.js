@@ -14,7 +14,7 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
 
     makeModel:function () {
         this.model = this.model || new chorus.models.Workfile({
-            workspaceId:this.options.launchElement.data("workspace-id")
+            workspace: { id: this.options.launchElement.data("workspace-id") }
         })
     },
 

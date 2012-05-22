@@ -1,6 +1,6 @@
 describe("chorus.models.Workfile", function() {
     beforeEach(function() {
-        this.model = fixtures.workfile({workspaceId: '10000', id: '10020'});
+        this.model = fixtures.workfile({workspace: { id: "10000"}, id: '10020'});
     });
 
     describe("#modifier", function() {
@@ -15,7 +15,7 @@ describe("chorus.models.Workfile", function() {
     describe("#thumbnailUrl", function() {
         it("is correct", function() {
             this.model.get("versionInfo").versionNum = 6
-            expect(this.model.thumbnailUrl()).toBe("/workspace/10000/workfile/10020/version/6/thumbnail");
+            expect(this.model.thumbnailUrl()).toBe("/workspace/" + this.model.workspace().get("id") + "/workfile/10020/version/6/thumbnail");
         });
     });
 
@@ -216,7 +216,9 @@ describe("chorus.models.Workfile", function() {
         beforeEach(function() {
             this.model = fixtures.workfile({
                 id: 5,
-                workspaceId: 10,
+                workspace: {
+                    id: 10
+                },
                 versionInfo: {
                     versionFileId: '12345'
                 },
@@ -228,7 +230,7 @@ describe("chorus.models.Workfile", function() {
         });
 
         it("has the right backend URL", function() {
-            expect(this.model.url()).toBe("/workspace/10/workfile/5");
+            expect(this.model.url()).toBe("/workfiles/5");
         });
 
         describe("#showUrl", function() {
@@ -280,7 +282,7 @@ describe("chorus.models.Workfile", function() {
             });
 
             it("has the right download URL", function() {
-                expect(this.model.downloadUrl()).toBe("/workspace/10/workfile/5/file/99999?download=true&iebuster=12345");
+                expect(this.model.downloadUrl()).toBe("/workfiles/5/file/99999?download=true&iebuster=12345");
             });
         })
     });
@@ -499,7 +501,7 @@ describe("chorus.models.Workfile", function() {
             })
 
             it("fetches the correct url", function() {
-                expect(this.server.lastFetch().url).toBe("/workspace/10000/workfile/10020")
+                expect(this.server.lastFetch().url).toBe("/workfiles/10020")
             })
         })
 
@@ -511,7 +513,7 @@ describe("chorus.models.Workfile", function() {
             })
 
             it("fetches the correct url", function() {
-                expect(this.server.lastFetch().url).toBe("/workspace/10000/workfile/10020/version/88")
+                expect(this.server.lastFetch().url).toBe("/workfiles/10020/versions/88")
             })
         })
     })
@@ -546,7 +548,7 @@ describe("chorus.models.Workfile", function() {
                 })
 
                 it("saves to the correct url", function() {
-                    expect(this.server.lastUpdate().url).toBe("/workspace/10000/workfile/10020/version/99")
+                    expect(this.server.lastUpdate().url).toBe("/workfiles/10020/versions/99")
                 });
                 it("saves with the versionInfo lastUpdatedStamp", function() {
                     expect(this.server.lastUpdate().requestBody).toContain("THEVERSIONSTAMP");
@@ -560,7 +562,7 @@ describe("chorus.models.Workfile", function() {
                 })
 
                 it("saves to the correct url", function() {
-                    expect(this.server.lastCreate().url).toBe("/workspace/10000/workfile/10020/version")
+                    expect(this.server.lastCreate().url).toBe("/workfiles/10020/versions")
                 })
             })
         })
@@ -628,7 +630,7 @@ describe("chorus.models.Workfile", function() {
         })
     });
 
-    describe("#fileExtension", function () {
+    describe("#fileExtension", function() {
         it("uses fileType", function() {
             expect(this.model.fileExtension()).toBe('txt');
         })

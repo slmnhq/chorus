@@ -14,7 +14,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
     describe("#setup", function() {
         it("fetches the source workfile", function() {
-            expect(this.server.lastFetch().url).toBe("/workspace/4/workfile/10")
+            expect(this.server.lastFetch().url).toBe("/workfiles/10")
         })
     });
 

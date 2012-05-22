@@ -12,29 +12,32 @@
         entityType: "workfile",
         nameAttribute: 'fileName',
 
-        urlTemplate: function() {
+        urlTemplate: function(options) {
+            var method = options && options.method;
+
             if(this.isNew()) {
-                return "workspace/{{workspaceId}}/workfile";
+                return "workspaces/{{workspaceId}}/workfiles";
             }
+
             if (this.isLatestVersion()) {
-                return "workspace/{{workspaceId}}/workfile/{{id}}"
+                return "workfiles/{{id}}";
             } else {
-                return "workspace/{{workspaceId}}/workfile/{{id}}/version/{{versionInfo.versionNum}}"
+                return "workfiles/{{id}}/versions/{{versionInfo.versionNum}}";
             }
         },
 
         showUrlTemplate: function(options) {
             options || (options = {});
             if (this.isLatestVersion() && !options.version) {
-                return "workspaces/{{workspaceId}}/workfiles/{{id}}"
+                return "workspaces/{{workspace.id}}/workfiles/{{id}}"
             } else {
                 var version = options.version || this.get('versionInfo').versionNum;
-                return "workspaces/{{workspaceId}}/workfiles/{{id}}/versions/" + version;
+                return "workspaces/{{workspace.id}}/workfiles/{{id}}/versions/" + version;
             }
         },
 
         thumbnailUrl: function() {
-            return "/workspace/" + this.get('workspaceId') + "/workfile/" + this.get('id') + "/version/" + this.get('versionInfo').versionNum + "/thumbnail";
+            return "/workspace/" + this.get('workspace').id + "/workfile/" + this.get('id') + "/version/" + this.get('versionInfo').versionNum + "/thumbnail";
         },
 
         initialize: function() {
@@ -78,11 +81,7 @@
         },
 
         modifier: function() {
-            return new chorus.models.User({
-                firstName: this.get("modifiedBy").firstName,
-                lastName: this.get("modifiedBy").lastName,
-                id: this.get("modifiedBy").id
-            })
+            return new chorus.models.User(this.get("versionInfo").modifier);
         },
 
         content: function(newContent, options) {
@@ -187,7 +186,7 @@
                 path += this.get("draftInfo").draftFileId;
                 url.path(path)
             } else if (this.get("versionInfo")) {
-                url = URI("/workspace/" + this.get("workspaceId") + "/workfile/" + this.id + "/file/" + this.get("versionInfo").versionFileId);
+                url = URI("/workspace/" + this.get("workspace").id + "/workfile/" + this.id + "/file/" + this.get("versionInfo").versionFileId);
             } else {
                 url.path(path)
             }
@@ -218,7 +217,7 @@
                 var overrides = {};
 
                 if (this.get("versionInfo") && this.get("versionInfo").versionNum) {
-                    overrides.url = "/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version/" + this.get("versionInfo").versionNum;
+                    overrides.url = "/workfiles/" + this.get("id") + "/versions/" + this.get("versionInfo").versionNum;
                     attrs['lastUpdatedStamp'] = this.get("versionInfo").lastUpdatedStamp;
                 }
 
@@ -231,7 +230,7 @@
 
             var overrides = {
                 method: 'create',
-                url: "/workspace/" + this.get("workspaceId") + "/workfile/" + this.get("id") + "/version"
+                url: "/workfiles/" + this.get("id") + "/versions"
             };
 
             return this._super("save", [attrs, _.extend(options, overrides)])

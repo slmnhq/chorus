@@ -63,7 +63,7 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
             })
 
             it("posts to the correct URL", function() {
-                expect(this.server.requests[0].url).toBe("/workspace/4/workfile")
+                expect(this.server.requests[0].url).toBe("/workspaces/4/workfiles")
             })
 
             it("puts the button in the loading state", function() {

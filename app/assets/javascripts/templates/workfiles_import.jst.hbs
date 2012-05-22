@@ -1,17 +1,17 @@
-<form action="/workspace/{{workspaceId}}/workfile" enctype="multipart/form-data" method="post">
+<form action="/workspaces/{{workspaceId}}/workfiles" enctype="multipart/form-data" method="post">
     <div class="details">
         <img src="/images/workfiles/medium/plain.png"/>
         <div class="file">
             <div class="fileName"/>
             <span class="file-wrapper">
                 <button class="choose">{{t "workfiles.import_select_file"}}</button>
-                <input type="file" name="importFile"/>
+                <input type="file" name="workfile[contents]"/>
             </span>
             <span class="defaultText">{{t "workfile.no_file_selected"}}</span>
         </div>
     </div>
     <div class="comment">
-        <input type="text" name="description" placeholder='{{t "workfiles.import_placeholder"}}' tabindex="1" maxlength="256"></input>
+        <input type="text" name="workfile[description]" placeholder='{{t "workfiles.import_placeholder"}}' tabindex="1" maxlength="256"></input>
     </div>
 
     <div class="modal_controls">
