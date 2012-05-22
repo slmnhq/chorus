@@ -52,8 +52,6 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
 
   config.before(:each, :type => :data_migration) do
-    Legacy.establish_connection :legacy_test
-
     # stub file reads of legacy workfiles
     #
     stub(File).read(/.+\/\d{5}\/[\d_]+$/) { "123" }
