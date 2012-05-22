@@ -11,6 +11,7 @@ gem 'paperclip'
 gem 'queue_classic', "2.0.0rc14"
 gem 'clockwork'
 gem 'foreman'
+gem 'allowy'
 
 group :assets do
   gem 'sass-rails'
