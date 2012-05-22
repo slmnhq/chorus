@@ -34,8 +34,11 @@ function waitFor(testFx, onReady, timeOutMillis) {
 };
 
 
-if (phantom.args.length > 1) {
-    console.log('Usage: run-jasmine.js [spec_name_filter]');
+var port = phantom.args[0];
+var filter = phantom.args[1];
+
+if (!parseInt(port) || phantom.args.length > 2) {
+    console.log('Usage: run-jasmine.js PORT [spec_name_filter]');
     phantom.exit(1);
 }
 
@@ -47,9 +50,9 @@ page.onConsoleMessage = function(msg, lineNumber, sourceIdentifier) {
     fs.write('/dev/stdout', msg, 'w');
 };
 
-var url = 'http://localhost:8888/'
-if (phantom.args[0]) {
-    url += '?spec=' + encodeURIComponent(phantom.args[0]);
+var url = 'http://localhost:' + port
+if (filter) {
+    url += '?spec=' + encodeURIComponent(filter);
 }
 
 var loadedAnsi = false;
