@@ -79,7 +79,8 @@ rake assets:precompile
 
 # also need to add rubygems and the bundler gem to the package
 download $RUBYGEMS_URL "rubygems-1.8.24.tgz" "$PACKAGE_DIR/$TARGET_DIR"
-download $BUNDLER_URL "bundler-1.1.3.gem" "$PACKAGE_DIR/$TARGET_DIR"
+gem fetch bundler -v 1.1.3
+mv bundler-1.1.3.gem "$PACKAGE_DIR/$TARGET_DIR"
 
 # Tar up the app
 mkdir -p $PACKAGE_DIR/$TARGET_DIR
