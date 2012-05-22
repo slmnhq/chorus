@@ -1,7 +1,7 @@
 describe("chorus.views.SchemaList", function() {
     beforeEach(function() {
         this.schema1 = fixtures.schema();
-        this.schema2 = fixtures.schema({dataset_count: 1});
+        this.schema2 = fixtures.schema({datasetCount: 1});
         this.collection = new chorus.collections.SchemaSet([], {instanceId: 456, databaseName: "Foo"});
         this.collection.reset([this.schema1, this.schema2]);
 
@@ -26,7 +26,7 @@ describe("chorus.views.SchemaList", function() {
     })
 
     it("displays the dataset count for each schema", function() {
-        expect(this.view.$("li.schema .description").eq(0)).toContainTranslation("entity.name.Dataset", {count: this.schema1.get("dataset_count")});
+        expect(this.view.$("li.schema .description").eq(0)).toContainTranslation("entity.name.Dataset", {count: this.schema1.get("datasetCount")});
         expect(this.view.$("li.schema .description").eq(1)).toContainTranslation("entity.name.Dataset", {count: 1});
     })
 

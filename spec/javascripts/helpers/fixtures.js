@@ -1740,7 +1740,7 @@ beforeEach(function() {
                 createdTxStamp: "2012-01-04 14:42:15.309",
                 instanceId: this.nextId().toString(),
                 databaseName: "My fixture database",
-                dataset_count: 4
+                datasetCount: 4
             }, overrides);
             return new chorus.models.Schema(attributes);
         },
