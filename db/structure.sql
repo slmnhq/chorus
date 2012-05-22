@@ -118,7 +118,7 @@ CREATE TABLE gpdb_database_objects (
     type character varying(255),
     name character varying(255),
     comment text,
-    schema_id integer,
+    schema_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -149,7 +149,7 @@ ALTER SEQUENCE gpdb_database_objects_id_seq OWNED BY gpdb_database_objects.id;
 
 CREATE TABLE gpdb_databases (
     id integer NOT NULL,
-    instance_id integer,
+    instance_id integer NOT NULL,
     name character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -182,7 +182,7 @@ ALTER SEQUENCE gpdb_databases_id_seq OWNED BY gpdb_databases.id;
 CREATE TABLE gpdb_schemas (
     id integer NOT NULL,
     name character varying(255),
-    database_id integer,
+    database_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -217,7 +217,7 @@ CREATE TABLE hadoop_instances (
     description text,
     host character varying(255),
     port integer,
-    owner_id integer,
+    owner_id integer NOT NULL,
     version character varying(255),
     username character varying(255),
     group_list character varying(255),
@@ -254,8 +254,8 @@ CREATE TABLE instance_accounts (
     id integer NOT NULL,
     db_username character varying(255),
     db_password bytea,
-    instance_id integer,
-    owner_id integer,
+    instance_id integer NOT NULL,
+    owner_id integer NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -327,8 +327,8 @@ ALTER SEQUENCE instances_id_seq OWNED BY instances.id;
 
 CREATE TABLE memberships (
     id integer NOT NULL,
-    user_id integer,
-    workspace_id integer,
+    user_id integer NOT NULL,
+    workspace_id integer NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -431,9 +431,9 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 CREATE TABLE workfile_drafts (
     id integer NOT NULL,
-    workfile_id integer,
+    workfile_id integer NOT NULL,
     base_version integer,
-    owner_id integer,
+    owner_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     contents_file_name character varying(255),
@@ -468,11 +468,11 @@ ALTER SEQUENCE workfile_drafts_id_seq OWNED BY workfile_drafts.id;
 
 CREATE TABLE workfile_versions (
     id integer NOT NULL,
-    workfile_id integer,
+    workfile_id integer NOT NULL,
     version_num integer,
-    owner_id integer,
+    owner_id integer NOT NULL,
     commit_message character varying(255),
-    modifier_id integer,
+    modifier_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     contents_file_name character varying(255),
@@ -507,8 +507,8 @@ ALTER SEQUENCE workfile_versions_id_seq OWNED BY workfile_versions.id;
 
 CREATE TABLE workfiles (
     id integer NOT NULL,
-    workspace_id integer,
-    owner_id integer,
+    workspace_id integer NOT NULL,
+    owner_id integer NOT NULL,
     description text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -545,9 +545,9 @@ CREATE TABLE workspaces (
     updated_at timestamp without time zone NOT NULL,
     public boolean DEFAULT true,
     archived_at timestamp without time zone,
-    archiver_id integer,
+    archiver_id integer NOT NULL,
     summary text,
-    owner_id integer,
+    owner_id integer NOT NULL,
     image_file_name character varying(255),
     image_content_type character varying(255),
     image_file_size integer,
@@ -778,6 +778,48 @@ CREATE INDEX idx_qc_on_name_only_unlocked ON queue_classic_jobs USING btree (q_n
 
 
 --
+-- Name: index_gpdb_database_objects_on_schema_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_gpdb_database_objects_on_schema_id ON gpdb_database_objects USING btree (schema_id);
+
+
+--
+-- Name: index_gpdb_databases_on_instance_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_gpdb_databases_on_instance_id ON gpdb_databases USING btree (instance_id);
+
+
+--
+-- Name: index_gpdb_schemas_on_database_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_gpdb_schemas_on_database_id ON gpdb_schemas USING btree (database_id);
+
+
+--
+-- Name: index_hadoop_instances_on_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_hadoop_instances_on_owner_id ON hadoop_instances USING btree (owner_id);
+
+
+--
+-- Name: index_instance_accounts_on_instance_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_instance_accounts_on_instance_id ON instance_accounts USING btree (instance_id);
+
+
+--
+-- Name: index_instance_accounts_on_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_instance_accounts_on_owner_id ON instance_accounts USING btree (owner_id);
+
+
+--
 -- Name: index_instances_on_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -796,6 +838,69 @@ CREATE INDEX index_memberships_on_user_id ON memberships USING btree (user_id);
 --
 
 CREATE INDEX index_memberships_on_workspace_id ON memberships USING btree (workspace_id);
+
+
+--
+-- Name: index_workfile_drafts_on_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_workfile_drafts_on_owner_id ON workfile_drafts USING btree (owner_id);
+
+
+--
+-- Name: index_workfile_drafts_on_workfile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_workfile_drafts_on_workfile_id ON workfile_drafts USING btree (workfile_id);
+
+
+--
+-- Name: index_workfile_versions_on_modifier_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_workfile_versions_on_modifier_id ON workfile_versions USING btree (modifier_id);
+
+
+--
+-- Name: index_workfile_versions_on_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_workfile_versions_on_owner_id ON workfile_versions USING btree (owner_id);
+
+
+--
+-- Name: index_workfile_versions_on_workfile_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_workfile_versions_on_workfile_id ON workfile_versions USING btree (workfile_id);
+
+
+--
+-- Name: index_workfiles_on_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_workfiles_on_owner_id ON workfiles USING btree (owner_id);
+
+
+--
+-- Name: index_workfiles_on_workspace_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_workfiles_on_workspace_id ON workfiles USING btree (workspace_id);
+
+
+--
+-- Name: index_workspaces_on_archiver_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_workspaces_on_archiver_id ON workspaces USING btree (archiver_id);
+
+
+--
+-- Name: index_workspaces_on_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_workspaces_on_owner_id ON workspaces USING btree (owner_id);
 
 
 --
@@ -880,3 +985,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120518002110');
 INSERT INTO schema_migrations (version) VALUES ('20120518215640');
 
 INSERT INTO schema_migrations (version) VALUES ('20120519000854');
+
+INSERT INTO schema_migrations (version) VALUES ('20120522000542');
