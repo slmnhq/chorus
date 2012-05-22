@@ -17,6 +17,12 @@
 /vendor/hadoop
 /vendor/cache
 
+# Ignore vagrant shared dir
+/packaging/vagrant/shared
+/packaging/vagrant/.vagrant
+/packaging/components
+/packaging/packages
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
