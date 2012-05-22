@@ -1,0 +1,1 @@
+../../../../../lib/generators/jasmine/templates/lib/tasks/jasmine.rake

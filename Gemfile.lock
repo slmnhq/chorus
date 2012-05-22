@@ -1,7 +1,5 @@
-GIT
-  remote: git://github.com/pivotal/jasmine-gem.git
-  revision: c72e8d248d49a1ebe53f31a09ac511194ad4edf1
-  ref: c72e8d2
+PATH
+  remote: vendor/jasmine
   specs:
     jasmine (1.2.0.rc3)
       jasmine-core (>= 1.2.0.rc3)
