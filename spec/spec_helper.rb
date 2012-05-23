@@ -59,6 +59,7 @@ RSpec.configure do |config|
     stub(File).read(/.+\/\d{5}\/[\d_]+$/) { "123" }
   end
 
+  config.include FileHelper
   config.include AuthHelper, :type => :controller
   config.include AcceptanceAuthHelper, :api_doc_dsl => :resource
   config.include RocketPants::TestHelper, :type => :controller
