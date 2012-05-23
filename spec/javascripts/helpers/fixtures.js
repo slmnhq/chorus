@@ -1681,7 +1681,6 @@ beforeEach(function() {
                 workspace: {
                     id: this.nextId().toString()
                 },
-                workspaceId: this.nextId().toString(),
                 imageId: null,
                 source: "empty",
                 lastUpdatedStamp: "2011-11-29 10:46:03.152",
@@ -1793,7 +1792,10 @@ beforeEach(function() {
 
         draft: function(overrides) {
             var attributes = _.extend({draftInfo: this.workfileDraft(), hasDraft: true}, overrides);
-            return new chorus.models.Draft(this.workfileJson(attributes));
+            // TODO: REMOVEME
+            var workfileJson = this.workfileJson(attributes)
+            workfileJson.workspaceId = overrides.workspaceId || workfileJson.workspace.id;
+            return new chorus.models.Draft(workfileJson);
         },
 
         textWorkfile: function(overrides) {

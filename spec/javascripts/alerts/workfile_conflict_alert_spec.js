@@ -45,7 +45,7 @@ describe("chorus.alerts.WorkfileConflict", function() {
             spyOn(this.alert, "closeModal");
             spyOnEvent(this.alert.model, "invalidated");
             this.alert.$("button.cancel").click();
-            this.draft = fixtures.draft({workspaceId: this.workfile.get("workspaceId"), workfileId: this.workfile.get("id")});
+            this.draft = fixtures.draft({workspaceId: this.workfile.workspace().id, workfileId: this.workfile.get("id")});
         });
 
         it("fetches the draft", function() {

@@ -95,7 +95,7 @@ chorus.models.Activity = chorus.models.Base.extend({
                 }
 
                 if (this.workspace() && this.workspace().get("id")) {
-                    this._workfile.set({ workspaceId: this.workspace().get("id") });
+                    this._workfile.set({ workspace: {id: this.workspace().get("id")} });
                 }
             }
         }

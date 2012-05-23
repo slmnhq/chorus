@@ -16,7 +16,7 @@
             var method = options && options.method;
 
             if(this.isNew()) {
-                return "workspaces/{{workspaceId}}/workfiles";
+                return "workspaces/{{workspace.id}}/workfiles";
             }
 
             if (this.isLatestVersion()) {
@@ -42,22 +42,17 @@
 
         initialize: function() {
             if (this.collection && this.collection.attributes && this.collection.attributes.workspaceId) {
-                this.set({workspaceId: this.collection.attributes.workspaceId}, {silent: true});
-            }
-
-            if (!this.get("workspaceId") && this.get("workspace") && this.get("workspace").id) {
-                this.set({workspaceId: this.get("workspace").id})
+                this.set({workspace: { id: this.collection.attributes.workspaceId}}, {silent: true});
             }
         },
 
         workspace: function() {
-            var workspaceAttrs = this.get("workspace") || { id: this.get("workspaceId") };
-            this._workspace = (this._workspace || new chorus.models.Workspace(workspaceAttrs));
+            this._workspace = (this._workspace || new chorus.models.Workspace(this.get("workspace")));
             return this._workspace;
         },
 
         setWorkspace: function(workspace) {
-            this.set({workspaceId: workspace.get("id")});
+            this.workspace().set({id: workspace.id});
         },
 
         sandbox: function() {
@@ -108,7 +103,7 @@
         },
 
         createDraft: function() {
-            var draft = new chorus.models.Draft({workfileId: this.get("id"), workspaceId: this.get("workspaceId"), content: this.content()});
+            var draft = new chorus.models.Draft({workfileId: this.get("id"), workspaceId: this.workspace().id, content: this.content()});
             draft.bind("saved", function() {
                 this.isDraft = true;
                 this.set({ hasDraft: true }, { silent: true });
@@ -118,7 +113,7 @@
 
         allVersions: function() {
             return new chorus.collections.WorkfileVersionSet([], {
-                workspaceId: this.get("workspaceId"),
+                workspaceId: this.workspace().id,
                 workfileId: this.get("id")
             });
         },

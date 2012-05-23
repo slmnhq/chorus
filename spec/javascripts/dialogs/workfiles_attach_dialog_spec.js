@@ -3,7 +3,7 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
         this.workfile1 = fixtures.workfile({
             mimeType: "image/png",
             lastUpdatedStamp: "2011-11-29 10:46:03.152",
-            workspaceId: "33",
+            workspace: { id: "33" },
             versionInfo: {
                 versionNum: "1"
             }
@@ -11,7 +11,7 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
         this.workfile2 = fixtures.workfile({
             fileType: "SANDWICH",
             lastUpdatedStamp: "2012-11-29 10:46:03.152",
-            workspaceId: "33",
+            workspace: { id: "33" },
             versionInfo: {
                 versionNum: "5"
             }

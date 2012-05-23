@@ -1,6 +1,6 @@
 describe("chorus.dialogs.WorkfileNewVersion", function() {
     beforeEach(function() {
-        this.workfile = fixtures.workfile({id: "55", workspaceId: "44", versionNum: "4", latestVersionNum: "4"});
+        this.workfile = fixtures.workfile({id: "55", workspace: { id: "44" }, versionNum: "4", latestVersionNum: "4"});
         var launchElement = $("<a></a>");
         this.dialog = new chorus.dialogs.WorkfileNewVersion({ pageModel: this.workfile, launchElement: launchElement });
         this.dialog.render();

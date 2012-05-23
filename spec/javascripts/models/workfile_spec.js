@@ -27,24 +27,6 @@ describe("chorus.models.Workfile", function() {
         it("memoizes", function() {
             expect(this.model.workspace()).toBe(this.model.workspace());
         });
-
-        context("when the workfile only has a workspaceId", function() {
-            it("returns a workspace with the right id", function() {
-                expect(this.model.workspace().get("id")).toBe("10000");
-            });
-        });
-
-        context("when the workfile has a nested workspace hash", function() {
-            beforeEach(function() {
-                this.model.unset("workspaceId");
-                this.model.set({ workspace: { id: "12", name: "my_workspace" } });
-            });
-
-            it("returns a workspace with that data", function() {
-                expect(this.model.workspace().get("id")).toBe("12");
-                expect(this.model.workspace().get("name")).toBe("my_workspace");
-            });
-        });
     });
 
     describe("#executionSchema", function() {
@@ -376,7 +358,7 @@ describe("chorus.models.Workfile", function() {
         it("sets the required attributes", function() {
             var draft = this.workfile.createDraft();
             expect(draft.get("workfileId")).toBe(this.workfile.get('id'));
-            expect(draft.get("workspaceId")).toBe(this.workfile.get('workspaceId'));
+            expect(draft.get("workspaceId")).toBe(this.workfile.workspace().id);
 
             // backend expects content to be a first level property when saving, but it returns content nested elsewhere
             expect(draft.get("content")).toBe(this.workfile.content());
@@ -407,7 +389,7 @@ describe("chorus.models.Workfile", function() {
         it("sets the required attributes", function() {
             var workfileVersionSet = this.model.allVersions();
             expect(workfileVersionSet).toBeA(chorus.collections.WorkfileVersionSet);
-            expect(workfileVersionSet.attributes.workspaceId).toBe(this.model.get("workspaceId"));
+            expect(workfileVersionSet.attributes.workspaceId).toBe(this.model.workspace().id);
             expect(workfileVersionSet.attributes.workfileId).toBe(this.model.get("id"));
         });
     });
@@ -488,7 +470,7 @@ describe("chorus.models.Workfile", function() {
             this.collection.add({versionInfo: {versionNum: 5}});
 
             expect(this.collection.models[0]).toBeA(chorus.models.Workfile);
-            expect(this.collection.models[0].get("workspaceId")).toBe(this.collection.attributes.workspaceId);
+            expect(this.collection.models[0].workspace().id).toBe(this.collection.attributes.workspaceId);
         });
     });
 
@@ -646,16 +628,4 @@ describe("chorus.models.Workfile", function() {
             expect(this.model.fileExtension()).toBe('afm');
         })
     });
-
-
-    describe("#setWorkspace", function() {
-        beforeEach(function() {
-            this.newWorkspace = newFixtures.workspace();
-            this.model.setWorkspace(this.newWorkspace);
-        });
-
-        it("should set the workspaceId properly", function() {
-            expect(this.model.get("workspaceId")).toBe(this.newWorkspace.get("id"))
-        })
-    })
 });

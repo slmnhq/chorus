@@ -1,8 +1,8 @@
 describe("chorus.pages.WorkfileIndexPage", function() {
     beforeEach(function() {
         this.workspace = newFixtures.workspace();
-        this.model = fixtures.sqlWorkfile({workspaceId: this.workspace.get('id')});
-        this.page = new chorus.pages.WorkfileIndexPage(this.model.get('workspaceId'));
+        this.model = fixtures.sqlWorkfile({workspace: {id: this.workspace.id}});
+        this.page = new chorus.pages.WorkfileIndexPage(this.workspace.id);
     });
 
     it("has a helpId", function() {
@@ -24,7 +24,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
             expect(this.page.$(".breadcrumb:eq(1) a").text()).toMatchTranslation("breadcrumbs.workspaces");
 
-            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/" + this.model.get('workspaceId'));
+            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/" + this.model.workspace().id);
             expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("Cool Workspace");
 
             expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
@@ -37,7 +37,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             });
 
             it("ellipsizes the workspace name in the breadcrumb view", function() {
-                expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/" + this.model.get('workspaceId'));
+                expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/" + this.model.workspace().id);
                 expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("LongLongLongLongLong...");
             });
         });
@@ -45,7 +45,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
     describe("#setup", function() {
         it("fetches the model", function() {
-            expect(this.server.requests[0].url).toBe("/workspaces/" + this.model.get('workspaceId'));
+            expect(this.server.requests[0].url).toBe("/workspaces/" + this.model.workspace().id);
         });
 
         it("sets the workspace id, for prioritizing search", function() {

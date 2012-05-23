@@ -50,7 +50,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
                 it("displays a link to delete the workfile", function() {
                     var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
                     expect(deleteLink).toExist();
-                    expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+                    expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
                     expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
                     expect(deleteLink).toHaveAttr("data-workfile-name", this.workfile.get("fileName"))
                 })
@@ -58,7 +58,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
                 it("displays a link to copy the workfile to another workspace", function() {
                     var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
                     expect(copyLink).toExist();
-                    expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+                    expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
                     expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
                     expect(copyLink).toHaveAttr("data-active-only", 'true')
                 })
@@ -127,7 +127,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
             it("displays a link to copy the workfile to another workspace", function() {
                 var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
                 expect(copyLink).toExist();
-                expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+                expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
                 expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
                 expect(copyLink).toHaveAttr("data-active-only", 'true')
             });

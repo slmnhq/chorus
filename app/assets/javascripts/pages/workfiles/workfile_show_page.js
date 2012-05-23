@@ -4,7 +4,7 @@
 
         setup: function(workspaceId, workfileId, versionNum) {
             this.workspaceId = workspaceId;
-            this.model = new chorus.models.Workfile({id:workfileId, workspaceId:workspaceId});
+            this.model = new chorus.models.Workfile({id:workfileId, workspace: {id: workspaceId}});
             if (versionNum) {
                 this.model.set({ versionInfo : { versionNum: versionNum } }, { silent:true })
             }

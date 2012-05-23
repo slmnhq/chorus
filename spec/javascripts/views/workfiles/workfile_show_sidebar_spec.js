@@ -43,6 +43,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
             this.server.completeFetchFor(this.workfile);
             this.server.completeFetchFor(this.workfile.workspace(), newFixtures.workspace({
+                id: this.workfile.workspace().id,
                 sandboxInfo : {
                     databaseId: 4,
                     databaseName: "db",
@@ -60,7 +61,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         it("displays a link to copy the workfile to another workspace", function() {
             var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
             expect(copyLink).toExist();
-            expect(copyLink).toHaveAttr("data-workspace-id", this.view.model.get("workspaceId"))
+            expect(copyLink).toHaveAttr("data-workspace-id", this.view.model.workspace().id)
             expect(copyLink).toHaveAttr("data-workfile-id", this.view.model.get("id"))
             expect(copyLink).toHaveAttr("data-active-only", 'true')
         })
@@ -109,6 +110,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
             this.server.completeFetchFor(this.workfile);
             this.server.completeFetchFor(this.workfile.workspace(), newFixtures.workspace({
+                id: this.workfile.workspace().id,
                 sandboxInfo : {
                     databaseId: 4,
                     databaseName: "db",
@@ -132,7 +134,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         it("displays a link to copy the workfile to another workspace", function() {
             var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
             expect(copyLink).toExist();
-            expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+            expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
             expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
         })
 
@@ -155,7 +157,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         it("displays a link to delete the workfile", function() {
             var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
             expect(deleteLink).toExist();
-            expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"))
+            expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
             expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
         });
 
@@ -164,7 +166,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             expect(addLink).toExist();
             expect(addLink).toHaveAttr("data-entity-type", "workfile");
             expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"));
-            expect(addLink).toHaveAttr("data-workspace-id", this.workfile.get("workspaceId"));
+            expect(addLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id);
             expect(addLink).toHaveAttr("data-allow-workspace-attachments", "true");
         });
 

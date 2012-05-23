@@ -491,7 +491,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            var workfile = new chorus.models.Workfile({id: this.workfile.get("id"), workspaceId: this.workspace.get("id")});
+            var workfile = new chorus.models.Workfile({id: this.workfile.get("id"), workspace: {id: this.workspace.get("id")}});
             spyOn(workfile, 'isText').andReturn(true)
             expect(this.presenter.objectUrl).toBe(workfile.showUrl());
         });

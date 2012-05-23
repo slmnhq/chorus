@@ -371,7 +371,7 @@ describe("chorus.models.Activity", function() {
                 });
 
                 it("sets the workspace id in the workfile", function() {
-                    expect(this.model.workfile().get("workspaceId")).toBeDefined();
+                    expect(this.model.workfile().workspace().id).toBeDefined();
                 })
 
                 it("sets workfileId in the workfile", function() {
