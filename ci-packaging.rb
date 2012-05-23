@@ -25,6 +25,15 @@ def vagrant_ssh(cmds)
   system "vagrant ssh -c '#{cmds.join(' && ')}'"
 end
 
+# install imagemagick and hadoop
+# echo "Installing imagemagick into /home/vagrant/imagemagick..."
+# make imagemagick
+# cd /tmp/downloads
+# tar zxf ImageMagick-6.7.1-10.tar.gz
+# cd ImageMagick-6.7.1-10
+# ./configure --prefix=/home/vagrant/imagemagick > /dev/null 2>&1
+# make > /dev/null 2>&1
+# make install > /dev/null 2>&1
 
 Dir.chdir('packaging/vagrant/') do
   begin
