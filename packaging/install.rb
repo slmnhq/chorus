@@ -8,7 +8,6 @@ def install
   setup_directories
   install_postgres
   start_database
-  create_database
   install_ruby #TODO: need LibYAML
   install_rubygems_and_bundler
   puts "Setting up environment..."
