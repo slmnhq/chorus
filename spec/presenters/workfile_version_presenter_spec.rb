@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe WorkfileVersionPresenter, :type => :view do
   before(:each) do
-    @owner = FactoryGirl.build :user
-    stub(view).current_user { @owner }
-    @workspace = FactoryGirl.build :workspace
-    @workfile = FactoryGirl.build :workfile, :workspace => @workspace, :owner => @owner
-    @presenter = WorkfileVersionPresenter.new(@workfile.versions.first, view)
+    @owner = FactoryGirl.create :user
+    workfile = FactoryGirl.create :workfile, :owner => @owner
+
+    version = FactoryGirl.create(:workfile_version, :workfile => workfile, :owner => @owner, :modifier => @owner)
+    @presenter = WorkfileVersionPresenter.new(version, view)
   end
 
   describe "#to_hash" do

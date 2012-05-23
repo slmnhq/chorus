@@ -13,6 +13,10 @@ describe WorkfilesController do
 
   describe "#show" do
     context "for a private workspace" do
+      before do
+        FactoryGirl.create(:workfile_version, :workfile => private_workfile, :contents => file)
+      end
+
       context "as a workspace member" do
         before(:each) do
           private_workspace.members << member
@@ -40,7 +44,11 @@ describe WorkfilesController do
     end
 
     context "for a public workspace" do
-      before { log_in non_member }
+      before do
+        FactoryGirl.create(:workfile_version, :workfile => public_workfile, :contents => file)
+
+        log_in non_member
+      end
 
       it "responds with a success" do
         get :show, {:id => public_workfile}

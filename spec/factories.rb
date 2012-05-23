@@ -78,9 +78,6 @@ FactoryGirl.define do
     owner
     workspace
     description "A nice description"
-    after(:build) do |workfile|
-      FactoryGirl.create(:workfile_version, :workfile => workfile, :owner => workfile.owner, :modifier => workfile.owner)
-    end
   end
 
   factory :workfile_version do
@@ -89,7 +86,6 @@ FactoryGirl.define do
     owner
     commit_message "Factory commit message"
     modifier
-    contents File.new("FactoryFileObject", "w")
   end
 end
 

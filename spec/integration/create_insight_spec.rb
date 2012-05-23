@@ -1,5 +1,4 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
-require 'tempfile'
 
 describe "creating a note on a workspace" do
   before(:each) do

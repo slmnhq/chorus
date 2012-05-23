@@ -5,6 +5,7 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require "paperclip/matchers"
 require "json"
+require "tempfile"
 require 'rspec_api_documentation/dsl'
 require 'allowy/rspec'
 
