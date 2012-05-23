@@ -4,10 +4,7 @@ chorus.models.Database = chorus.models.Base.extend({
     urlTemplate: "databases/{{id}}",
 
     instance: function() {
-        return new chorus.models.Instance({
-            id: this.get("instanceId"),
-            name: this.get("instanceName")
-        })
+        return new chorus.models.Instance(this.get("instance"))
     },
 
     schemas: function() {

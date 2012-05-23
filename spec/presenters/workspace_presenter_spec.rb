@@ -44,14 +44,6 @@ describe WorkspacePresenter, :type => :view do
       archiver.to_hash.should == (UserPresenter.new(@archiver, view).to_hash)
     end
 
-    context "summary" do
-      it "allows safe tags and removes dangerous ones" do
-        safe_value = "<b>this is bold</b><script src='evil.com'></script><i>this is italic</i>"
-        workspace = FactoryGirl.build :workspace, :summary => safe_value
-        json = WorkspacePresenter.new(workspace, view).to_hash
-
-        json[:summary].should == "<b>this is bold</b><i>this is italic</i>"
-      end
-    end
+    it_behaves_like "sanitized presenter", :workspace, :summary
   end
 end

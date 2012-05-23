@@ -96,7 +96,7 @@ describe("chorus.models.Schema", function() {
         it("returns a database with the right id and instanceId", function() {
             expect(this.database).toBeA(chorus.models.Database);
             expect(this.database.get("id")).toBe(this.model.database().id);
-            expect(this.database.get("instanceId")).toBe(this.model.get("instanceId"));
+            expect(this.database.instance().id).toBe(this.model.get("instanceId"));
         });
     });
 });

@@ -31,13 +31,6 @@ describe InstanceAccountPresenter, :type => :view do
       @owner.to_hash.should == (UserPresenter.new(@user, view).to_hash)
     end
 
-    it "sanitizes values" do
-      bad_value = "<script>alert('got your cookie')</script>"
-
-      account = FactoryGirl.build :instance_account, :db_username => bad_value
-      json = InstanceAccountPresenter.new(account, view).to_hash
-
-      json[:db_username].should_not match "<"
-    end
+    it_behaves_like "sanitized presenter", :instance_account, :db_username
   end
 end

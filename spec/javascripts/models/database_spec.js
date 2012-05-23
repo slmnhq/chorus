@@ -1,6 +1,6 @@
 describe("chorus.models.Database", function() {
     beforeEach(function() {
-        this.model = fixtures.database({ instanceId: '1', instanceName: "insta_whip", id: '2', name: "love_poems" });
+        this.model = fixtures.database({ id: '2', name: "love_poems", instance: {id: '1', name: "insta_whip"} });
     });
 
     describe("#urlTemplate", function() {

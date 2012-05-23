@@ -14,7 +14,9 @@ describe GpdbDatabasePresenter, :type => :view do
     it "includes the fields" do
       @hash[:name].should == "abc"
       @hash[:id].should == 456
-      @hash[:instance_id].should == 123
+      @hash[:instance][:id].should == 123
     end
+
+    it_behaves_like "sanitized presenter", :gpdb_database, :name
   end
 end

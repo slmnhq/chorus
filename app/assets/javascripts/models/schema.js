@@ -28,8 +28,10 @@ chorus.models.Schema = chorus.models.Base.extend({
         return new chorus.models.Database({
             id: this.get("databaseId"),
             name: this.get("databaseName"),
-            instanceId: this.get("instanceId"),
-            instanceName: this.get("instanceName")
+            instance: {
+                id: this.get("instanceId"),
+                name: this.get("instanceName")
+            }
         });
     },
 
