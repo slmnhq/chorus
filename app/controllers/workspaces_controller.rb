@@ -15,18 +15,31 @@ class WorkspacesController < ApplicationController
   end
 
   def show
-    present AccessPolicy.workspaces_for(current_user).find(params[:id])
+    workspace = Workspace.find(params[:id])
+    authorize! :show, workspace
+    present workspace
   end
 
   def update
-    workspace = Workspace.writable_by(current_user).find(params[:id])
-    # TODO authorization
-    params[:workspace] = workspace.filter_writable_params(current_user, params[:workspace])
-    params[:workspace].delete(:owner)
+    w = params[:workspace] || {}
+    workspace = Workspace.find(params[:id])
 
-    update_archived_status(workspace)
-    new_owner_id = params[:workspace].delete(:owner_id)
-    workspace.owner = User.find(new_owner_id) if new_owner_id
+    if w.has_key?(:owner) && (workspace.owner.id.to_s != w[:owner][:id])
+      authorize! :administrative_edit, workspace
+      workspace.owner = User.find(w[:owner][:id])
+    end
+
+    if workspace.public.to_s != w[:public]
+      authorize! :administrative_edit, workspace
+      workspace.public = w[:public]
+    end
+
+    if w.has_key?(:archived) && (!!workspace.archived_at).to_s != w[:archived]
+      authorize! :administrative_edit, workspace
+      update_archived_status(workspace)
+    end
+
+    authorize! :member_edit, workspace
     workspace.update_attributes!(params[:workspace])
     present workspace
   end
@@ -34,7 +47,6 @@ class WorkspacesController < ApplicationController
   private
 
   def update_archived_status(workspace)
-    return unless params[:workspace].has_key?(:archived)
     if params[:workspace][:archived] == "true"
       workspace.archive_as(current_user)
     else

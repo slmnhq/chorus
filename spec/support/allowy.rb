@@ -4,7 +4,7 @@ require 'rr'
 module AllowyRSpecHelpers
   extend ActiveSupport::Concern
 
-  def it_awaits_authorization(*args)
+  def it_uses_authorization(*args)
     mock(subject).authorize!(*args)
     args.count.should == 2
   end

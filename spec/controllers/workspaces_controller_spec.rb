@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe WorkspacesController do
+  ignore_authorization!
+
   let(:owner) { FactoryGirl.create(:user)}
   before do
     log_in owner
@@ -14,8 +16,6 @@ describe WorkspacesController do
       @joined_private_workspace = FactoryGirl.create(:workspace, :public => false, :name => "secret1")
       owner.workspaces << @joined_private_workspace
     end
-
-    it_behaves_like "an action that requires authentication", :get, :index
 
     it "returns all workspaces that are public or which the current user is a member of" do
       get :index
@@ -91,8 +91,6 @@ describe WorkspacesController do
     context "with valid parameters" do
       let(:parameters) { { :workspace => { :name => "foobar" } } }
 
-      it_behaves_like "an action that requires authentication", :post, :create
-
       it "creates a workspace" do
         lambda {
           post :create, parameters
@@ -121,14 +119,13 @@ describe WorkspacesController do
   describe "#show" do
     let(:joe) { FactoryGirl.create(:user) }
 
-    before do
-      log_in owner
-    end
-
-    it_behaves_like "an action that requires authentication", :get, :show
-
     context "with a valid workspace id" do
       let(:workspace) { FactoryGirl.create(:workspace) }
+
+      it "uses authentication" do
+        mock(subject).authorize!(:show, workspace)
+        get :show, :id => workspace.to_param
+      end
 
       it "succeeds" do
         get :show, :id => workspace.to_param
@@ -148,15 +145,6 @@ describe WorkspacesController do
       end
     end
 
-    context "of a private workspace" do
-      let(:workspace) { FactoryGirl.create(:workspace, :public => false) }
-
-      it "returns not found for a non-member" do
-        log_in joe
-        get :show, :id => workspace.to_param
-        response.should be_not_found
-      end
-    end
     #it "generates a jasmine fixture", :fixture => true do
     #  get :show, :id => @other_user.to_param
     #  save_fixture "user.json"
@@ -168,41 +156,33 @@ describe WorkspacesController do
     let(:admin) { FactoryGirl.create :admin }
     let(:non_owner) { FactoryGirl.create :user }
 
-    context "when the current user is the workspace's owner" do
-      it "allows updating the workspace's name, summary, privacy and owner" do
+    context "when the current user has administrative authorization" do
+      it "uses authentication" do
+        mock(subject).authorize!(:administrative_edit, workspace)
+        put :update, :id => workspace.id, :workspace => {
+          :owner => { id: "3" },
+          :public => "false"
+        }
+      end
+
+      it "allows updating the workspace's privacy and owner" do
         member = FactoryGirl.create(:user)
         member.workspaces << workspace
 
         put :update, :id => workspace.id, :workspace => {
-          :owner_id => member.id,
-          :name => "new name",
-          :summary => "new summary",
-          :public => false
+          :owner => { id: member.id.to_s },
+          :public => "false"
         }
 
         workspace.reload
-        workspace.name.should == "new name"
-        workspace.summary.should == "new summary"
         workspace.should_not be_public
         workspace.owner.should == member
         response.should be_success
       end
 
-      it "does not allow updating the owner to a non-member" do
-        non_member = FactoryGirl.create(:user)
-
-        put :update, :id => workspace.id, :workspace => {
-          :owner_id => non_member.id,
-        }
-
-        workspace.reload
-        workspace.owner.should == owner
-        response.should_not be_success
-      end
-
       it "allows archiving the workspace" do
         put :update, :id => workspace.id, :workspace => {
-            :archived => "true"
+          :archived => "true"
         }
         workspace.reload
         workspace.archived_at.should_not be_nil
@@ -214,7 +194,7 @@ describe WorkspacesController do
         workspace.save!
 
         put :update, :id => workspace.id, :workspace => {
-            :archived => "false"
+          :archived => "false"
         }
 
         workspace.reload
@@ -223,33 +203,10 @@ describe WorkspacesController do
       end
     end
 
-    context "when the current user is an admin" do
-      it "allows updating the workspace's name, summary, privacy and owner" do
-        log_in admin
-        member = FactoryGirl.create(:user)
-        member.workspaces << workspace
-
-        put :update, :id => workspace.id, :workspace => {
-          :owner_id => member.id,
-          :name => "new name",
-          :summary => "new summary",
-          :public => false
-        }
-
-        workspace.reload
-        workspace.name.should == "new name"
-        workspace.summary.should == "new summary"
-        workspace.should_not be_public
-        workspace.owner.should == member
-        response.should be_success
-      end
-    end
-
-    context "when the current user is just a member" do
-      before do
-        member_non_owner = FactoryGirl.create(:user)
-        member_non_owner.workspaces << workspace
-        log_in member_non_owner
+    context "when the current user has membership access" do
+      it "uses authentication" do
+        mock(subject).authorize!(:member_edit, workspace)
+        get :update, :id => workspace.to_param
       end
 
       it "allows updates to name and summary" do
@@ -257,49 +214,11 @@ describe WorkspacesController do
           :name => "new name",
           :summary => "new summary"
         }
-        response.should be_success
-      end
-
-      it "does not allow updates to other attrs" do
-        do_request
         workspace.reload
-        workspace.public.should be_true
         workspace.name.should == "new name"
         workspace.summary.should == "new summary"
-        workspace.owner.should == owner
+        response.should be_success
       end
-
-      it "does not allow archiving the workspace" do
-        put :update, :id => workspace.id, :workspace => {
-            :archived => true
-        }
-        workspace.reload
-        workspace.archived_at.should be_nil
-        workspace.archiver.should be_nil
-      end
-    end
-
-    context "when the current user is NOT an admin or a member" do
-      it "does not allow updates" do
-        log_in non_owner
-        do_request
-
-        workspace.reload
-        workspace.name.should_not == "new name"
-        workspace.summary.should_not == "new summary"
-        workspace.should be_public
-        workspace.owner.should == owner
-        response.should be_not_found
-      end
-    end
-
-    def do_request
-      put :update, :id => workspace.id, :workspace => {
-        :owner_id => non_owner.id,
-        :name => "new name",
-        :summary => "new summary",
-        :public => false
-      }
     end
   end
 end

@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'ApiValidationError', :with => :render_not_valid
   rescue_from 'SecurityTransgression', :with => :render_forbidden
   rescue_from 'PG::Error', :with => :render_pg_error
+  rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
 
   helper_method :current_user
 

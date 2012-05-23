@@ -35,14 +35,6 @@ class Workspace < ActiveRecord::Base
          )
   end
 
-  def filter_writable_params(user, workspace_params)
-    if user.admin? || (owner.id == user.id)
-      workspace_params
-    else
-      workspace_params.slice(:name, :summary)
-    end
-  end
-
   def self.membership_editable_by(user)
     if user.admin?
       return scoped
