@@ -8,9 +8,23 @@ class WorkfileVersionPresenter < Presenter
         :commit_message => h(commit_message),
         :owner => present(owner),
         :modifier => present(modifier),
-        :contents => present(contents),
         :created_at => created_at,
-        :updated_at => updated_at
+        :updated_at => updated_at,
+        :content_url => contents.url,
+        :icon_url => icon_url,
+        :content => file_content
     }
+  end
+
+  def icon_url
+    contents.url(:icon) if model.image?
+  end
+
+  def file_content
+    File.read(contents.path) if model.text?
+  end
+
+  def filetype_icon_url
+    "images/workfiles/medium/#{model.extension}.png"
   end
 end

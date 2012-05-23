@@ -39,20 +39,6 @@ describe WorkfilePresenter, :type => :view do
       @hash[:version_info].to_hash.should == (WorkfileVersionPresenter.new(@workfile.versions.last, view).to_hash)
     end
 
-    it "extracts the file extension from the filename" do
-      workfile = FactoryGirl.create :workfile
-      FactoryGirl.create(:workfile_version, :contents => test_file("multiple_extensions.png.xls.txt"), :workfile => workfile)
-      WorkfilePresenter.new(workfile, view).last_version_file_extension.should == "TXT"
-
-      workfile = FactoryGirl.create :workfile
-      FactoryGirl.create(:workfile_version, :contents => test_file("small1.gif"), :workfile => workfile)
-      WorkfilePresenter.new(workfile, view).last_version_file_extension.should == "GIF"
-
-      workfile = FactoryGirl.create :workfile
-      FactoryGirl.create(:workfile_version, :contents => test_file("no_extension"), :workfile => workfile)
-      WorkfilePresenter.new(workfile, view).last_version_file_extension.should be_nil
-    end
-
     it "sanitizes file name" do
       bad_value = 'file_ending_in_invalid_quote"'
       workfile = FactoryGirl.create(:workfile)
