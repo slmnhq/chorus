@@ -25,8 +25,9 @@ def vagrant_ssh(cmds)
   system "vagrant ssh -c '#{cmds.join(' && ')}'"
 end
 
-begin
-  Dir.chdir('packaging/vagrant/') do
+
+Dir.chdir('packaging/vagrant/') do
+  begin
     system('vagrant up')
     vagrant_ssh [
        "tar xzvf /shared/#{package_name}",
@@ -38,11 +39,11 @@ begin
     response = Net::HTTP.get_response(uri)
     @web_response = (response.code == "200" ? 0 : 1)
     puts "Connecting to the web server returned #{@web_response}"
+  ensure
+    system('vagrant destroy --force')
+    system "rm packaging/packages/#{package_name}"
+    system "rm #{SHARED_DIR}/#{package_name}"
   end
-ensure
-  system('vagrant destroy --force')
-  system "rm packaging/packages/#{package_name}"
-  system "rm #{SHARED_DIR}/#{package_name}"
 end
 
 exit(@web_response)

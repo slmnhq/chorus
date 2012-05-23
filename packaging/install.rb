@@ -11,7 +11,9 @@ def install
   create_database
   install_ruby #TODO: need LibYAML
   install_rubygems_and_bundler
+  puts "Setting up environment..."
   setup_environment
+  puts "Installing chorus..."
   install_chorus
   run_chorus
 end
@@ -59,6 +61,7 @@ def install_rubygems_and_bundler
       run "#{RUBY_DIR}/bin/ruby setup.rb --prefix=~/rubygems/"
     end
     run "#{ROOT}/rubygems/bin/gem install --local bundler-1.1.3.gem --no-ri --no-rdoc"
+    puts "Finished installing bundler"
   end
 end
 
@@ -98,3 +101,4 @@ def run(cmd)
 end
 
 install
+exit(0)
