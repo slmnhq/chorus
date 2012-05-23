@@ -23,21 +23,20 @@ def vagrant_ssh(cmds)
   system "vagrant ssh -c '#{cmds.join(' && ')}'"
 end
 
-Dir.chdir('packaging/vagrant/') do
-  begin
+begin
+  Dir.chdir('packaging/vagrant/') do
     system('vagrant up')
-
-
     vagrant_ssh [
        "tar xzvf /shared/#{package_name}",
        "ruby install.rb"
     ]
-
     @db_response = vagrant_ssh [ "~/pgsql/bin/psql -p8543 chorus_rails_production -c \"select * from pg_tables limit 1;\"" ]
     puts "Connecting to the db locally returned #{@db_response}"
-  ensure
-    system('vagrant destroy --force')
   end
+ensure
+  system('vagrant destroy --force')
+  system "rm packaging/packages/#{package_name}"
+  system "rm #{SHARED_DIR}/#{package_name}"
 end
 
 exit(@db_response)
