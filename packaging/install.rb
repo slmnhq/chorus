@@ -69,6 +69,7 @@ def setup_environment
   run "export RAILS_ENV=production"
   run "PATH=/home/vagrant/ruby/bin:$PATH"
   run "PATH=/home/vagrant/rubygems/bin:$PATH"
+  run "PATH=home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/"
   run "PATH=/home/vagrant/pgsql/bin:$PATH"
   run "LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/"
 end
