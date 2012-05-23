@@ -12,6 +12,7 @@ gem 'queue_classic', "2.0.0rc14"
 gem 'clockwork'
 gem 'foreman'
 gem 'allowy'
+gem 'httparty', :require => false
 
 group :assets do
   gem 'sass-rails'
