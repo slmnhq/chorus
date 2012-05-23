@@ -20,4 +20,8 @@ class GpdbDatabase < ActiveRecord::Base
       account.instance.databases.find_or_create_by_name!(name)
     end
   end
+
+  def with_gpdb_connection(account, &block)
+    Gpdb::ConnectionBuilder.connect!(account.instance, account, name, &block)
+  end
 end

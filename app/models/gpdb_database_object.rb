@@ -48,7 +48,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
 
 
   def self.refresh(account, schema)
-    db_objects = Gpdb::ConnectionBuilder.connect!(account.instance, account, schema.database.name) do |conn|
+    db_objects = schema.with_gpdb_connection(account) do |conn|
       conn.query(sanitize_sql([DATABASE_OBJECTS_SQL, schema.name]))
     end
 
