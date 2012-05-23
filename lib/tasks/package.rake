@@ -4,11 +4,11 @@ PACKAGES_DIR   = File.join(PACKAGING_DIR, "packages")
 COMPONENTS_DIR = File.join(PACKAGING_DIR, "components")
 
 EXTERNAL_DEPENDENCIES = {
-  'ruby' => "http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p125.tar.gz",
-  'rubygems' => "http://production.cf.rubygems.org/rubygems/rubygems-1.8.24.tgz",
+  'ruby' => "http://greenplum-ci.sf.pivotallabs.com/~ci/chorus_packaging_mirror/ruby-1.9.3-p125.tar.gz",
+  'rubygems' => "http://greenplum-ci.sf.pivotallabs.com/~ci/chorus_packaging_mirror/rubygems-1.8.24.tgz",
   # 'hadoop' => "http://www.reverse.net/pub/apache/hadoop/common/hadoop-1.0.0/hadoop-1.0.0.tar.gz",
-  'postgres' => "http://ftp.postgresql.org/pub/source/v9.0.4/postgresql-9.0.4.tar.gz",
-  'imagemagick' => "http://www.imagemagick.org/download/legacy/ImageMagick-6.7.1-10.tar.gz"
+  'postgres' => "http://greenplum-ci.sf.pivotallabs.com/~ci/chorus_packaging_mirror/postgresql-9.0.4.tar.gz",
+  'imagemagick' => "http://greenplum-ci.sf.pivotallabs.com/~ci/chorus_packaging_mirror/ImageMagick-6.7.1-10.tar.gz"
 }
 
 desc 'Generate new package'

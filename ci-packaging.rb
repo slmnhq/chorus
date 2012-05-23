@@ -33,7 +33,7 @@ Dir.chdir('packaging/vagrant/') do
        "ruby install.rb"
     ]
 
-    @db_response = vagrant_ssh [ "#{PG_DIR}/bin/psql -p8543 chorus_rails_production -c \"select * from pg_tables limit 1;\"" ]
+    @db_response = vagrant_ssh [ "~/pgsql/bin/psql -p8543 chorus_rails_production -c \"select * from pg_tables limit 1;\"" ]
     puts "Connecting to the db locally returned #{@db_response}"
   ensure
     system('vagrant destroy --force')
