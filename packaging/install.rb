@@ -6,6 +6,8 @@ PG_DIR = File.join(ROOT, "pgsql")
 def install
   setup_directories
   install_postgres
+  start_database
+  create_database
 end
 
 def setup_directories
@@ -15,20 +17,24 @@ end
 def install_postgres
   Dir.chdir(COMPONENTS_DIR) do
     run "tar xzf postgres"
-  end
-
-  Dir.chdir("postgresql-9.0.4") do
-    run "./configure --prefix=#{PG_DIR}"
-    run "make"
-    run "make install"
+     Dir.chdir("postgresql-9.0.4") do
+      run "./configure --prefix=#{PG_DIR}"
+      run "make"
+      run "make install"
+    end
   end
 
   puts "installed postgres to #{PG_DIR}"
 end
 
+def create_database
+  run "#{PG_DIR}/bin/createdb -p 8543 chorus_rails_production"
+end
+
 def start_database
   run "#{PG_DIR}/bin/pg_ctl init -D #{APP_DIR}/var/db -U vagrant"
   run "#{PG_DIR}/bin/pg_ctl start -D #{APP_DIR}/var/db -o '-h localhost -p8543 --bytea_output=escape'"
+  sleep(5)
 end
 
 def run(cmd)
