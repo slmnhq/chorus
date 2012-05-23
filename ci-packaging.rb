@@ -6,7 +6,9 @@
 # centos5 http://dl.dropbox.com/u/9227672/centos-5.6-x86_64-netinstall-4.1.6.box
 # centos6 http://dl.dropbox.com/u/9227672/CentOS-6.0-x86_64-netboot-4.1.6.box
 # Suse 10 ??
- 
+
+require "net/http"
+require "uri"
 
 SHARED_DIR = "packaging/vagrant/shared"
 
@@ -30,8 +32,12 @@ begin
        "tar xzvf /shared/#{package_name}",
        "ruby install.rb"
     ]
-    @db_response = vagrant_ssh [ "~/pgsql/bin/psql -p8543 chorus_rails_production -c \"select * from pg_tables limit 1;\"" ]
+    @db_response = vagrant_ssh [ "~/pgsql/bin/psql -p8543 postgres -c \"select * from pg_tables limit 1;\"" ]
     puts "Connecting to the db locally returned #{@db_response}"
+    uri = URI.parse("http://33.33.33.33:3000/")
+    response = Net::HTTP.get_response(uri)
+    @web_response = (response.code == "200" ? 0 : 1)
+    puts "Connecting to the web server returned #{@web_response}"
   end
 ensure
   system('vagrant destroy --force')
@@ -39,5 +45,5 @@ ensure
   system "rm #{SHARED_DIR}/#{package_name}"
 end
 
-exit(@db_response)
+exit(@web_response)
 

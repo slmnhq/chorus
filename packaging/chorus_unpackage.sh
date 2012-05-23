@@ -81,7 +81,6 @@ bundle exec rake db:seed
 
 bundle exec rails s
 
-
 # /home/vagrant/pgsql/bin/pg_ctl -D ~/chorusrails/var/db/ stop
 # rm -rf ~/chorusrails
 # rm -rf ~/pgsql

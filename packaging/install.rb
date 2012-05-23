@@ -11,6 +11,9 @@ def install
   create_database
   install_ruby #TODO: need LibYAML
   install_rubygems_and_bundler
+  setup_environment
+  install_chorus
+  run_chorus
 end
 
 def setup_directories
@@ -30,13 +33,10 @@ def install_postgres
   puts "installed postgres to #{PG_DIR}"
 end
 
-def create_database
-  run "#{PG_DIR}/bin/createdb -p 8543 chorus_rails_production"
-end
-
 def start_database
   run "#{PG_DIR}/bin/pg_ctl init -D #{APP_DIR}/var/db -U vagrant"
   run "#{PG_DIR}/bin/pg_ctl start -D #{APP_DIR}/var/db -o '-h localhost -p8543 --bytea_output=escape'"
+  run "#{PG_DIR}/bin/createuser -h localhost -p 8543 -sdr edcadmin"
   sleep(5)
 end
 
@@ -59,6 +59,36 @@ def install_rubygems_and_bundler
       run "#{RUBY_DIR}/bin/ruby setup.rb --prefix=~/rubygems/"
     end
     run "#{ROOT}/rubygems/bin/gem install --local bundler-1.1.3.gem --no-ri --no-rdoc"
+  end
+end
+
+def setup_environment
+  # Perhaps write a Bashrc to set these environment variables.
+  run "export RAILS_ENV=production"
+  run "PATH=/home/vagrant/ruby/bin:$PATH"
+  run "PATH=/home/vagrant/rubygems/bin:$PATH"
+  run "PATH=/home/vagrant/pgsql/bin:$PATH"
+  run "LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/"
+end
+
+def install_chorus
+  Dir.chdir(ROOT) do
+    run "tar xf #{COMPONENTS_DIR}/app.tar"
+  end
+
+  Dir.chdir(APP_DIR) do
+    run "bundle install --local"
+    run "gem install pg --local vendor/cache/pg-0.13.2.gem -- --with-pg-config=#{PG_DIR}/bin/pg_config --with-pg-dir=#{PG_DIR}"
+    run "bundle exec rake db:create"
+    run "bundle exec rake db:migrate"
+    run "bundle exec rake db:seed"
+  end
+end
+
+def run_chorus
+  Dir.chdir(APP_DIR) do
+    run "bundle exec rails s &"
+    sleep(10)
   end
 end
 
