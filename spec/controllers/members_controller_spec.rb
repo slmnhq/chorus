@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe MembersController do
+  ignore_authorization!
+
   let(:user) { FactoryGirl.create(:user) }
   let(:admin) { FactoryGirl.create(:admin) }
   let(:workspace) { FactoryGirl.create(:workspace, {:public => false}) }
@@ -88,46 +90,38 @@ describe MembersController do
     let(:member3) { FactoryGirl.create(:user) }
     let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id, member2.id, workspace.owner.id]} }
 
-    context "as the owner" do
-      before :each do
-        log_in workspace.owner
-      end
+    before :each do
+      log_in workspace.owner
+    end
 
-      it "should respond with a 200" do
-        post :create, parameters
-        response.code.should == "200"
-      end
+    it "uses authorization" do
+      mock(subject).authorize!(:administrative_edit, workspace)
+      post :create, parameters
+    end
 
-      context "add the members for the workspace" do
-        it "should add members for the workspace" do
-          lambda {
-            post :create, parameters
-          }.should change(Membership, :count).by(2)
-        end
-      end
+    it "should respond with a 200" do
+      post :create, parameters
+      response.code.should == "200"
+    end
 
-      context "change some of the members for the workspace" do
-        let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id, workspace.owner.id]} }
-
-        it "should remove members for the workspace" do
-          workspace.members << member1
-          workspace.members << member2
-
-          lambda {
-            post :create, parameters
-          }.should change(Membership, :count).by(-1)
-        end
+    context "add the members for the workspace" do
+      it "should add members for the workspace" do
+        lambda {
+          post :create, parameters
+        }.should change(Membership, :count).by(2)
       end
     end
 
-    context "as a non-member (and not the admin" do
-      before :each do
-        log_in FactoryGirl.create(:user)
-      end
+    context "change some of the members for the workspace" do
+      let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id, workspace.owner.id]} }
 
-      it "should not allow membership creation" do
-        parameters = {:workspace_id => workspace.id, :member_ids => [member1.id]}
-        lambda { post :create, parameters }.should_not change(Membership, :count)
+      it "should remove members for the workspace" do
+        workspace.members << member1
+        workspace.members << member2
+
+        lambda {
+          post :create, parameters
+        }.should change(Membership, :count).by(-1)
       end
     end
   end

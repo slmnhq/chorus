@@ -35,14 +35,6 @@ class Workspace < ActiveRecord::Base
          )
   end
 
-  def self.membership_editable_by(user)
-    if user.admin?
-      return scoped
-    else
-      user.owned_workspaces
-    end
-  end
-
   def members_accessible_to(user)
     if public? || members.include?(user)
       members
