@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe WorkspaceAccess do
-  describe "#view?" do
+  describe "#show?" do
     context "in a public workspace" do
       let(:workspace) { FactoryGirl.create(:workspace) }
 
@@ -10,7 +10,7 @@ describe WorkspaceAccess do
         let(:workspace_access) { WorkspaceAccess.new user }
 
         it "allows access" do
-          workspace_access.can?(:view, workspace).should be_true
+          workspace_access.can?(:show, workspace).should be_true
         end
       end
 
@@ -18,7 +18,7 @@ describe WorkspaceAccess do
         let(:workspace_access) { WorkspaceAccess.new nil }
 
         it "forbids acess" do
-          workspace_access.can?(:view, workspace).should be false
+          workspace_access.can?(:show, workspace).should be false
         end
       end
     end
@@ -28,7 +28,7 @@ describe WorkspaceAccess do
 
       it "forbids access when the user is not logged in" do
         workspace_access = WorkspaceAccess.new nil
-        workspace_access.can?(:view, workspace).should be_false
+        workspace_access.can?(:show, workspace).should be_false
       end
 
       context "when the user is logged in" do
@@ -36,12 +36,12 @@ describe WorkspaceAccess do
         let(:workspace_access) { WorkspaceAccess.new user }
 
         it "forbids access when the user is not owner nor member" do
-          workspace_access.can?(:view, workspace).should be_false
+          workspace_access.can?(:show, workspace).should be_false
         end
 
         it "allows access when the user is a member of the workspace" do
           workspace.members << user
-          workspace_access.can?(:view, workspace).should be_true
+          workspace_access.can?(:show, workspace).should be_true
         end
       end
     end

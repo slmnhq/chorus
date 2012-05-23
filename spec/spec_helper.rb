@@ -6,6 +6,7 @@ require 'rspec/autorun'
 require "paperclip/matchers"
 require "json"
 require 'rspec_api_documentation/dsl'
+require 'allowy/rspec'
 
 module Shoulda # :nodoc:
   module Matchers
@@ -66,5 +67,6 @@ RSpec.configure do |config|
   config.include FixtureGenerator, :type => :controller
   config.include Paperclip::Shoulda::Matchers
   config.include GpdbTestHelpers
+  config.include AllowyRSpecHelpers
 end
 

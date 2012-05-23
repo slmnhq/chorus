@@ -1,5 +1,6 @@
 class WorkspacesController < ApplicationController
   def index
+    authorize! :index
     workspaces = AccessPolicy.workspaces_for(current_user).order("lower(name) ASC")
     workspaces = workspaces.active if params[:active]
     workspaces = workspaces.where(:owner_id => params[:user_id]) if params[:user_id]
@@ -7,7 +8,10 @@ class WorkspacesController < ApplicationController
   end
 
   def create
-    workspace = current_user.owned_workspaces.create!(params[:workspace])
+    authorize! :create
+    workspace = Workspace.new(params[:workspace])
+    workspace.owner = current_user
+    workspace.save!
     membership = workspace.memberships.build
     membership.user = current_user
     membership.save!
@@ -15,7 +19,10 @@ class WorkspacesController < ApplicationController
   end
 
   def show
-    present AccessPolicy.workspaces_for(current_user).find(params[:id])
+    # workspace = AccessPolicy.workspaces_for(current_user).find(params[:id])
+    workspace = Workspace.find(params[:id])
+    authorize! :show, workspace
+    present workspace
   end
 
   def update

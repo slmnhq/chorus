@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe WorkspacesController do
+  ignore_authorization!
+
   let(:owner) { FactoryGirl.create(:user)}
   before do
     log_in owner
@@ -15,7 +17,10 @@ describe WorkspacesController do
       owner.workspaces << @joined_private_workspace
     end
 
-    it_behaves_like "an action that requires authentication", :get, :index
+    it "checks for authorization" do
+      it_awaits_authorization :index
+      get :index
+    end
 
     it "returns all workspaces that are public or which the current user is a member of" do
       get :index
@@ -88,10 +93,13 @@ describe WorkspacesController do
   end
 
   describe "#create" do
-    it_behaves_like "an action that requires authentication", :post, :create
-
     context "with valid parameters" do
       let(:parameters) { { :workspace => { :name => "foobar" } } }
+
+      it "checks for authorization" do
+        it_awaits_authorization :create
+        post :create, parameters
+      end
 
       it "creates a workspace" do
         lambda {
@@ -125,10 +133,15 @@ describe WorkspacesController do
       log_in owner
     end
 
-    it_behaves_like "an action that requires authentication", :get, :show
+    # it_behaves_like "an action that requires authentication", :get, :show
 
     context "with a valid workspace id" do
       let(:workspace) { FactoryGirl.create(:workspace) }
+
+      it("checks for authorization") do
+        it_awaits_authorization :show, workspace
+        get :show, :id => workspace.to_param
+      end
 
       it "succeeds" do
         get :show, :id => workspace.to_param
@@ -151,10 +164,9 @@ describe WorkspacesController do
     context "of a private workspace" do
       let(:workspace) { FactoryGirl.create(:workspace, :public => false) }
 
-      it "returns not found for a non-member" do
-        log_in joe
+      it "checks for authorization" do
+        it_awaits_authorization :show, workspace
         get :show, :id => workspace.to_param
-        response.should be_not_found
       end
     end
     #it "generates a jasmine fixture", :fixture => true do
