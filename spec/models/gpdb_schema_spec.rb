@@ -6,10 +6,11 @@ describe GpdbSchema do
     let(:database) { FactoryGirl.create(:gpdb_database) }
 
     before(:each) do
-      stub_gpdb(account, GpdbSchema::SCHEMAS_AND_DATASET_COUNT => [
-          ["schema1", "50"],
-          ["schema2", "30"]
+      stub_gpdb(account, GpdbSchema::SCHEMAS_SQL => [
+          ["schema1"],
+          ["schema2"]
       ])
+      stub(GpdbDatabaseObject).refresh
     end
 
     it "creates new copies of the schemas in our db" do
@@ -17,7 +18,15 @@ describe GpdbSchema do
 
       schemas.length.should == 2
       schemas.map { |schema| schema.name }.should == ["schema1", "schema2"]
-      schemas.map { |schema| schema.dataset_count }.should == [50, 30]
+    end
+
+    it "populates new schemas with their tables and views" do
+      stub(GpdbDatabaseObject).refresh(account, anything) { |account, schema|
+        FactoryGirl.create(:gpdb_table, :schema => schema)
+      }
+
+      GpdbSchema.refresh(account, database)
+      GpdbSchema.find_by_name("schema1").database_objects.count.should == 1
     end
 
     it "does not re-create schemas that already exist in our database" do
@@ -30,8 +39,8 @@ describe GpdbSchema do
     it "destroy schemas that no longer exist in gpdb" do
       GpdbSchema.refresh(account, database)
 
-      stub_gpdb(account, GpdbSchema::SCHEMAS_AND_DATASET_COUNT => [
-          ["schema1", "50"]
+      stub_gpdb(account, GpdbSchema::SCHEMAS_SQL => [
+          ["schema1"]
       ])
 
       GpdbSchema.refresh(account, database)
@@ -46,8 +55,8 @@ describe GpdbSchema do
       to_be_kept = FactoryGirl.create(:gpdb_schema, :database => other_database, :name => "matching")
       to_be_deleted = FactoryGirl.create(:gpdb_schema, :database => database, :name => "matching")
 
-      stub_gpdb(account, GpdbSchema::SCHEMAS_AND_DATASET_COUNT => [
-          ["new", "50"]
+      stub_gpdb(account, GpdbSchema::SCHEMAS_SQL => [
+          ["new"]
           #["matching", "50"] # deleting
       ])
       GpdbSchema.refresh(account, database)

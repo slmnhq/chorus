@@ -15,9 +15,14 @@ describe SchemasController do
       database = FactoryGirl.create(:gpdb_database, :instance => instance, :name => "test2")
 
       schema1 = FactoryGirl.build(:gpdb_schema, :name => 'schema1', :database => database)
-      schema1.dataset_count = 30
+      FactoryGirl.create(:gpdb_table, :name => "table1", :schema => schema1)
+      FactoryGirl.create(:gpdb_view, :name => "view1", :schema => schema1)
+      schema1.reload
+
       schema2 = FactoryGirl.build(:gpdb_schema, :name => 'schema2', :database => database)
-      schema2.dataset_count = 40
+      FactoryGirl.create(:gpdb_table, :name => "table2", :schema => schema2)
+      schema2.reload
+
       stub(GpdbSchema).refresh(instanceAccount, database) { [schema1, schema2] }
 
       get :index, :database_id => database.to_param
@@ -27,11 +32,11 @@ describe SchemasController do
       decoded_response[0].name.should == "schema1"
       decoded_response[0].instance_id.should == instance.id
       decoded_response[0].database_name.should == "test2"
-      decoded_response[0].dataset_count.should == 30
+      decoded_response[0].dataset_count.should == 2
       decoded_response[1].name.should == "schema2"
       decoded_response[1].instance_id.should == instance.id
       decoded_response[1].database_name.should == "test2"
-      decoded_response[1].dataset_count.should == 40
+      decoded_response[1].dataset_count.should == 1
     end
   end
 

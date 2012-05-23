@@ -184,7 +184,8 @@ CREATE TABLE gpdb_schemas (
     name character varying(255),
     database_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    database_objects_count integer DEFAULT 0
 );
 
 
@@ -988,4 +989,8 @@ INSERT INTO schema_migrations (version) VALUES ('20120519000854');
 
 INSERT INTO schema_migrations (version) VALUES ('20120522000542');
 
+INSERT INTO schema_migrations (version) VALUES ('20120522015308');
+
 INSERT INTO schema_migrations (version) VALUES ('20120522020546');
+
+INSERT INTO schema_migrations (version) VALUES ('20120523174942');

@@ -9,7 +9,7 @@ class GpdbSchemaPresenter < Presenter
         # TODO: This should be a sub-presenter
         :database_id => model.database.id,
         :database_name => model.database.name,
-        :dataset_count => model.dataset_count
+        :dataset_count => model.database_objects.size
     }
   end
 end
