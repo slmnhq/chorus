@@ -1,16 +1,10 @@
 class WorkspaceAccess < DefaultAccess
 
   def show?(workspace)
-    return false unless logged_in?
-    workspace.public || workspace.members.include?(context)
+    current_user.admin? || workspace.public || workspace.members.include?(current_user)
   end
 
-  def index?
-    logged_in?
-  end
-
-  def edit?(workspace)
-    return false unless logged_in?
-    workspace.members.include?(context)
+  def member_edit?(workspace)
+    current_user.admin? || workspace.members.include?(current_user)
   end
 end

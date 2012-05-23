@@ -6,6 +6,7 @@ module AllowyRSpecHelpers
 
   def it_awaits_authorization(*args)
     mock(subject).authorize!(*args)
+    args.count.should == 2
   end
 
   module ClassMethods
