@@ -11,7 +11,7 @@ Dir.chdir('packaging/vagrant/') do
   system('mkdir -p shared')
   system('vagrant up')
   p = system('ping -c 1 -t 1 33.33.33.33')
-  system('vagrant destroy')
+  system('vagrant destroy --force')
   @exit_code = p ? 0 : 1
 end
 
