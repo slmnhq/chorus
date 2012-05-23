@@ -8,11 +8,12 @@
 # psql chorus --host 33.33.33.33 --port 8543
 
 Dir.chdir('packaging/vagrant/') do
+  system('mkdir -p shared')
   system('vagrant up')
   p = system('ping -c 1 -t 1 33.33.33.33')
   system('vagrant destroy')
-  exit_code = p ? 0 : 1
+  @exit_code = p ? 0 : 1
 end
 
-exit(exit_code)
+exit(@exit_code)
 
