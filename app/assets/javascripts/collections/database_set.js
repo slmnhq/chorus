@@ -14,15 +14,5 @@ chorus.collections.DatabaseSet = chorus.collections.Base.include(
         this.each(function (db) {
             db.attributes.instanceId = id;
         });
-    },
-
-    parse:function (data) {
-        // TODO - remove the check for 'data.response' once we've converted
-        // the #fail method to use the new format
-        if (data.response && data.response.length && data.response[0].databaseList) {
-            data.response = data.response[0].databaseList;
-        }
-
-        return this._super('parse', [data]);
     }
 });
