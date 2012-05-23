@@ -50,8 +50,8 @@ Dir.chdir('packaging/vagrant/') do
     puts "Connecting to the web server returned #{@web_response}"
   ensure
     system('vagrant destroy --force')
-    system "rm packaging/packages/#{package_name}"
-    system "rm #{SHARED_DIR}/#{package_name}"
+    system "rm ../packages/#{package_name}"
+    system "rm shared/#{package_name}"
   end
 end
 
