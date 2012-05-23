@@ -75,7 +75,7 @@ end
 
 def install_chorus
   Dir.chdir(ROOT) do
-    run "tar xf #{COMPONENTS_DIR}/app.tar"
+    run "tar xzf #{COMPONENTS_DIR}/app.tar.gz"
   end
 
   Dir.chdir(APP_DIR) do
