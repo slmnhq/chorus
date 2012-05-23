@@ -1722,10 +1722,7 @@ beforeEach(function() {
 
         schemaSet: function(overrides) {
             var attributes = _.extend({
-                id: this.nextId().toString(),
-                databaseId: this.nextId().toString(),
-                instanceId: this.nextId().toString(),
-                databaseName: "My fixture database"
+                databaseId: this.nextId().toString()
             }, overrides);
             return new chorus.collections.SchemaSet([], attributes);
         },

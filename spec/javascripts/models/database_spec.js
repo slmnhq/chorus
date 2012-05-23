@@ -21,13 +21,9 @@ describe("chorus.models.Database", function() {
             this.schemas = this.model.schemas();
         });
 
-        it("returns a schema set with the right instance and database name and id", function() {
+        it("returns a schema set with the right database id", function() {
             expect(this.schemas).toBeA(chorus.collections.SchemaSet);
-            expect(this.schemas.attributes.instanceId).toBe("1");
             expect(this.schemas.attributes.databaseId).toBe("2");
-
-            expect(this.schemas.attributes.instanceName).toBe("insta_whip");
-            expect(this.schemas.attributes.databaseName).toBe("love_poems");
         });
 
         it("memoizes", function() {
