@@ -181,7 +181,7 @@
                 path += this.get("draftInfo").draftFileId;
                 url.path(path)
             } else if (this.get("versionInfo")) {
-                url = URI("/workspace/" + this.get("workspace").id + "/workfile/" + this.id + "/file/" + this.get("versionInfo").versionFileId);
+                url = URI("/workspace/" + this.workspace().id + "/workfile/" + this.id + "/file/" + this.get("versionInfo").versionFileId);
             } else {
                 url.path(path)
             }
