@@ -149,7 +149,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
         });
 
         it("links to the profile page of the modifier", function() {
-            expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("modifiedBy").id);
+            expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("versionInfo").modifier.id);
         })
 
         it("displays a link to delete the workfile", function() {

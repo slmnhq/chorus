@@ -1676,7 +1676,6 @@ beforeEach(function() {
                 },
                 hasDraft: false,
                 isDeleted: false,
-                modifiedBy: modifiedByUser,
                 owner: ownerUser.username,
                 ownerId: ownerUser.id,
                 workspace: {
@@ -1684,7 +1683,6 @@ beforeEach(function() {
                 },
                 workspaceId: this.nextId().toString(),
                 imageId: null,
-                isBinary: false,
                 source: "empty",
                 lastUpdatedStamp: "2011-11-29 10:46:03.152",
                 createdStamp: "2011-11-29 10:46:03.152"
@@ -2424,7 +2422,7 @@ beforeEach(function() {
                     "versionInfo": {
                         "lastUpdatedStamp": "2012-03-14 17:15:21.984",
                         "versionFileId": "1331770521971_1380",
-                        "modifiedBy": {
+                        "modifier": {
                             "id": "InitialUser",
                             "lastName": "Admin",
                             "firstName": "EDC"
@@ -2437,11 +2435,6 @@ beforeEach(function() {
                     "workspace": {
                         "id": "10000",
                         "name": "ws"
-                    },
-                    "modifiedBy": {
-                        "id": "InitialUser",
-                        "lastName": "Admin",
-                        "firstName": "EDC"
                     },
                     "fileName": "buildout.txt",
                     "owner": {
@@ -2639,12 +2632,6 @@ beforeEach(function() {
                             "fileName": "test.sql",
                             "entityType": "workfile",
                             "versionInfo": this.versionInfoJson(overrides && overrides.versionInfo, modifiedByUser),
-                            "modifiedBy": {
-                                "id": "422",
-                                "firstName": "John",
-                                "lastName": "Smith",
-                                "username": "johnny192"
-                            },
                             "owner": {
                                 "id": "InitialUser",
                                 "lastName": "Admin",
@@ -2667,12 +2654,6 @@ beforeEach(function() {
                             "fileName": "test.sql",
                             "entityType": "workfile",
                             "versionInfo": this.versionInfoJson(overrides && overrides.versionInfo, modifiedByUser),
-                            "modifiedBy": {
-                                "id": "422",
-                                "firstName": "John",
-                                "lastName": "Smith",
-                                "username": "johnny192"
-                            },
                             "owner": {
                                 "id": "InitialUser",
                                 "lastName": "Admin",
@@ -3241,11 +3222,6 @@ beforeEach(function() {
                         "lastName": "Admin",
                         "firstName": "EDC"
                     },
-                    "modifiedBy": {
-                        "id": "InitialUser",
-                        "lastName": "Admin",
-                        "firstName": "EDC"
-                    },
                     "workspace": {
                         "id": "10000",
                         "name": "a"
@@ -3253,7 +3229,7 @@ beforeEach(function() {
                     "versionInfo": {
                         "lastUpdatedStamp": "2012-03-08 09:40:26.847",
                         "versionFileId": "1331228426846_64",
-                        "modifiedBy": {
+                        "modifier": {
                             "id": "InitialUser",
                             "lastName": "Admin",
                             "firstName": "EDC"
@@ -3480,11 +3456,6 @@ beforeEach(function() {
                                 "lastName": "Admin",
                                 "firstName": "EDC"
                             },
-                            "modifiedBy": {
-                                "id": "InitialUser",
-                                "lastName": "Admin",
-                                "firstName": "EDC"
-                            },
                             "workspace": {
                                 "id": "10000",
                                 "name": "ws"
@@ -3492,7 +3463,7 @@ beforeEach(function() {
                             "versionInfo": {
                                 "lastUpdatedStamp": "2012-03-14 17:15:21.984",
                                 "versionFileId": "1331770521971_1380",
-                                "modifiedBy": {
+                                "modifier": {
                                     "id": "InitialUser",
                                     "lastName": "Admin",
                                     "firstName": "EDC"
