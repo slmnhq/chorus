@@ -1,19 +1,36 @@
 #!/usr/bin/env ruby
 
-# # rake package
-# cd packaging/vagrant/
-# cp ../packages/something.tar shared/
-# vagrant ssh -c 'untar /shared/something.tar ~/'
-# vagrant ssh -c 'ruby install.rb'
-# psql chorus --host 33.33.33.33 --port 8543
+SHARED_DIR = "packaging/vagrant/shared"
+
+system("mkdir -p #{SHARED_DIR}")
+#system "rake package"
+#package = Dir.glob("packaging/packages/chorus*").first
+#package_name = File.basename(package)
+
+#exit unless package
+
+#system "mv #{package} #{SHARED_DIR}"
 
 Dir.chdir('packaging/vagrant/') do
-  system('mkdir -p shared')
-  system('vagrant up')
-  p = system('ping -c 1 -t 1 33.33.33.33')
-  system('vagrant destroy --force')
-  @exit_code = p ? 0 : 1
+  begin
+    system('vagrant up')
+    p = system('ping -c 1 -t 1 33.33.33.33')
+    @ping_response = p ? 0 : 1
+    puts "Pinging the machine returned #{@ping_response}"
+  ensure
+    system('vagrant destroy --force')
+  end
 end
 
-exit(@exit_code)
+# vagrant_ssh [
+#   "tar xzvf /shared/#{package_name}",
+#   "cd #{package_name}",
+#   "ruby install.rb"
+# ]
+
+def vagrant_ssh(cmds)
+  system "vagrant ssh -c '#{cmds.join(' && ')}'"
+end
+
+exit(@ping_response)
 
