@@ -65,7 +65,7 @@ end
 def create_package
   Dir.chdir(PACKAGING_DIR) do
     filename = "chorus-#{head_sha}.tar.gz"
-    run "tar -czf #{PACKAGES_DIR}/#{filename} #{relative(COMPONENTS_DIR)} chorus_unpackage.sh"
+    run "tar -czf #{PACKAGES_DIR}/#{filename} #{relative(COMPONENTS_DIR)} install.rb"
   end
 end
 
