@@ -7,7 +7,7 @@ def current_user_id
 end
 
 
-def fill_user_form(params)
+def fill_user_form(params = {})
 
   first_name = Forgery::Name.first_name
   last_name = Forgery::Name.last_name
@@ -22,7 +22,7 @@ def fill_user_form(params)
   fill_in 'title', :with => params[:title] ||Forgery::Name.title
 end
 
-def create_valid_user(params)
+def create_valid_user(params = {})
   visit("/#/users/new")
   fill_user_form(params)
   page.find("button[type=submit]").click

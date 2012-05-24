@@ -24,9 +24,9 @@ class WorkspacesController < ApplicationController
     w = params[:workspace] || {}
     workspace = Workspace.find(params[:id])
 
-    if w.has_key?(:owner) && (workspace.owner.id.to_s != w[:owner][:id])
+    if w.has_key?(:owner_id) && (workspace.owner.id.to_s != w[:owner_id])
       authorize! :administrative_edit, workspace
-      workspace.owner = User.find(w[:owner][:id])
+      workspace.owner = User.find(w[:owner_id])
     end
 
     if workspace.public.to_s != w[:public]

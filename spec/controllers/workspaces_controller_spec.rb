@@ -170,7 +170,7 @@ describe WorkspacesController do
         member.workspaces << workspace
 
         put :update, :id => workspace.id, :workspace => {
-          :owner => { id: member.id.to_s },
+          :owner_id => member.id.to_s,
           :public => "false"
         }
 

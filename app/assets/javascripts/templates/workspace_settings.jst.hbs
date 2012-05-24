@@ -28,7 +28,7 @@
     <div class="sandboxLocation">{{sandboxLocation}}</div>
     {{#if canChangeOwner}}
         <label>{{ t "workspace.settings.change_owner"}}</label>
-        <select name="owner" class="owner">
+        <select name="owner" id="selectowner" class="owner">
             {{#each members}}
                 <option value={{id}}>{{displayNameFromPerson attributes}}</option>
             {{/each}}
