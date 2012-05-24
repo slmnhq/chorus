@@ -4,7 +4,7 @@ require 'httparty'
 module Hdfs
   class QueryService
     SERVICE_HOST = YAML.load_file(Rails.root.join("config", "hdfs_service.yml"))["query_service_url"]
-    TIMEOUT = 1.0 # second
+    TIMEOUT = 5.0 # second
 
     def self.instance_version(instance)
       new(instance).version
