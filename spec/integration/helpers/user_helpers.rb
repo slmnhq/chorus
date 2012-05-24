@@ -28,3 +28,10 @@ def create_valid_user(params = {})
   page.find("button[type=submit]").click
   wait_until { current_route == "/users" }
 end
+
+def as_user(username)
+  logout
+  login(username, 'password')
+  yield
+  logout
+end

@@ -20,9 +20,10 @@ describe "creating a note on a workspace" do
   end
 
   it "can change the owner of a workspace" do
-    create_valid_user(:first_name => "John", :last_name => "Smith")
+    create_valid_user(:first_name => "John", :last_name => "Smith", :username => "JohnSmith")
     user_id = User.find_by_username("JohnSmith").id
-    create_valid_workspace()
+    create_valid_workspace(:name => "OwnerChangedWorkspace")
+    workspace_id = Workspace.find_by_name("OwnerChangedWorkspace").id
 
     wait_until { page.find('a[data-dialog="WorkspaceEditMembers"]').text == "Add or Edit Members"}
     click_link "Add or Edit Members"
@@ -50,25 +51,25 @@ describe "creating a note on a workspace" do
       within('.ui-selectmenu-status') { page.should have_content "John Smith" }
     end
 
-    #as_user("John Smith") do
-    #
-    #
-    #end
-    #
-    #within(".actions") do
-    #  page.should_not have_content("Add or Edit Members")
-    #  page.should_not have_content("Add an insight")
-    #  page.should_not have_content("Add a note")
-    #  page.should_not have_content("Add a sandbox")
-    #end
-    #
-    #visit('/#/workspaces')
-    #within(".workspace_list") { page.should_not have_content("WorkspaceToArchive") }
-    #
-    #page.execute_script("$('.popup').click()")
-    #click_link("All Workspaces")
-    #
-    #within(".workspace_list") { page.should have_content("WorkspaceToArchive" }
+    as_user("JohnSmith") do
+      visit("#/workspaces/#{workspace_id}")
+
+      within(".actions") do
+        page.should have_content("Add or Edit Members")
+        page.should have_content("Add an insight")
+        page.should have_content("Add a note")
+        page.should have_content("Add a sandbox")
+      end
+
+      click_link "Edit Workspace"
+      wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
+      within("#facebox") do
+        choose("workspace_archived")
+        find(".submit").click
+      end
+
+      page.should_not have_content("Add or Edit Members")
+    end
   end
 
   it "can archive and unarchive the workspace" do
