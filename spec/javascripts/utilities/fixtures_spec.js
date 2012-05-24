@@ -14,6 +14,11 @@ describe("newFixtures", function() {
             expect(model.get("firstName")).toBe(fixtureJson.response.first_name);
         });
 
+        it("caches the json data in a nested structure", function() {
+            model = newFixtures.test.withOverrides();
+            expect(window.fixtureData.test.withOverrides).toBeDefined();
+        });
+
         context("when the nested definition overrides the parent definition", function() {
             it("uses the values in the nested definition", function() {
                 model = newFixtures.test.withOverrides();

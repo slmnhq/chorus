@@ -76,13 +76,17 @@
     }
 
     function getFixture(name, parentName) {
-        if (!window.fixtureData[name]) {
+        var outerHash = window.fixtureData;
+        if (parentName) {
+            outerHash = window.fixtureData[parentName] || (window.fixtureData[parentName] = {});
+        }
+        if (!outerHash[name]) {
             var path = _.compact([parentName, name]).join("/");
             var $element = $("#fixtures [data-fixture-path='" + path + "']");
             if (!$element.length) throw "No fixture for " + path;
-            window.fixtureData[name] = JSON.parse($element.html());
+            outerHash[name] = JSON.parse($element.html());
         }
-        return window.fixtureData[name];
+        return outerHash[name];
     }
 
     function addUniqueDefaults(attributeObjects, keyStrings) {
