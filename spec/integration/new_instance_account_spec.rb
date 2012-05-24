@@ -8,21 +8,22 @@ describe "creating an instance credential" do
   it "creates a new instance account" do
     create_valid_instance
     create_valid_user(:username => "EddyNice", :first_name => "Eddy", :last_name => "Nice")
+    user_id = User.find_by_username("EddyNice").id
 
     visit("/#/instances")
     wait_until { current_route == "/instances" && page.has_selector?("a[data-dialog=InstancePermissions]") }
     click_link "Edit"
     within("#facebox") do
       click_button "Add Account"
-      #TODO actually select the correct user
+      page.execute_script("$('#selectowner').selectmenu('value', #{user_id})")
       fill_in 'dbUsername', :with => "gpadmin"
       fill_in 'dbPassword', :with => "secret"
-    end
 
-    click_link('Save Changes')
-    page.should_not have_selector('.close_errors')
-    within('.collection_list') do
-      page.should have_content("Eddy Nice")
+      click_link('Save Changes')
+      page.should_not have_selector('.close_errors')
+      within('.collection_list') do
+        page.should have_content("Eddy Nice")
+      end
     end
   end
 

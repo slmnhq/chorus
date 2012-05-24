@@ -189,6 +189,7 @@ chorus.dialogs.InstancePermissions = chorus.dialogs.Base.extend({
         })
 
         var select = this.$("li.new select.name");
+        select.attr('id', 'select_new_instance_account_owner'); // need handle for Selenium to interact with JQ Select
         select.empty();
         if (select) {
             select.append(_.map(otherUsers,
