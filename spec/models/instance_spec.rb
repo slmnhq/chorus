@@ -121,10 +121,15 @@ describe Instance do
       let!(:instance) { FactoryGirl.create :instance, :shared => false }
       let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => instance.owner.id }
       let!(:user_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => user.id }
+      let!(:admin) { FactoryGirl.create :admin }
 
       it "should return the account for the user or nil if the user has no account" do
         instance.account_for_user!(instance.owner).should == owner_account
         instance.account_for_user!(user).should == user_account
+      end
+
+      it "should return the owner's account if current user is admin" do
+        instance.account_for_user!(admin).should == owner_account
       end
     end
 

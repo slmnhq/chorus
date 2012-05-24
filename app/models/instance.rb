@@ -32,7 +32,7 @@ class Instance < ActiveRecord::Base
   end
 
   def account_for_user!(user)
-    if shared?
+    if shared? || user.admin?
       owner_account
     else
       account_owned_by!(user)
