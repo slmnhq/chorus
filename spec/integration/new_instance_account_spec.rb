@@ -22,6 +22,7 @@ describe "creating an instance credential" do
       click_link('Save Changes')
       page.should_not have_selector('.close_errors')
       within('.collection_list') do
+        wait_until { page.has_content?("Eddy Nice") }
         page.should have_content("Eddy Nice")
       end
     end
