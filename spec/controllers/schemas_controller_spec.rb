@@ -35,14 +35,16 @@ describe SchemasController do
       get :index, :database_id => database.to_param
 
       response.code.should == "200"
-      decoded_response.length.should == 2
+      decoded_response.should have(2).items
+
       decoded_response[0].name.should == "schema1"
-      decoded_response[0].instance_id.should == instance.id
-      decoded_response[0].database_name.should == "test2"
+      decoded_response[0].database.instance.id.should == instance.id
+      decoded_response[0].database.name.should == "test2"
       decoded_response[0].dataset_count.should == 2
+
       decoded_response[1].name.should == "schema2"
-      decoded_response[1].instance_id.should == instance.id
-      decoded_response[1].database_name.should == "test2"
+      decoded_response[1].database.instance.id.should == instance.id
+      decoded_response[1].database.name.should == "test2"
       decoded_response[1].dataset_count.should == 1
     end
   end

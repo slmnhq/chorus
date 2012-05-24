@@ -26,6 +26,8 @@ describe UserPresenter, :type => :view do
       @hash.should_not have_key(:password_digest)
     end
 
-    it_behaves_like "sanitized presenter", :user, :username, :first_name, :last_name, :email, :title, :dept, :notes
+    [:username, :first_name, :last_name, :email, :title, :dept, :notes].each do |attribute|
+      it_behaves_like "sanitized presenter", :user, attribute
+    end
   end
 end

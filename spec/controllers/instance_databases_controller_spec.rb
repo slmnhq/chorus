@@ -55,7 +55,7 @@ describe InstanceDatabasesController do
             get :index, :instance_id => instance.id
             response.code.should == "200"
             decoded_response[0].id.should == database.id
-            decoded_response[0].instance_id.should == instance.id
+            decoded_response[0].instance.id.should == instance.id
           end
         end
       end
@@ -72,8 +72,8 @@ describe InstanceDatabasesController do
     it "renders the database" do
       get :show, :id => database.to_param
       response.code.should == "200"
-      decoded_response.instance_id.should == database.instance.id
-      decoded_response.instance_name.should == database.instance.name
+      decoded_response.instance.id.should == database.instance.id
+      decoded_response.instance.name.should == database.instance.name
       decoded_response.id.should == database.id
       decoded_response.name.should == database.name
     end

@@ -15,17 +15,10 @@ describe GpdbViewPresenter, :type => :view do
       @hash = @presenter.to_hash
     end
 
-    it "includes the fields" do
-      @hash[:id].should == 321
-      @hash[:object_name].should == "view1"
-      @hash[:schema_id].should == 456
-      @hash[:schema_name].should == "abc"
-      @hash[:instance][:id].should == 123
-      @hash[:instance][:name].should == "instance1"
-      @hash[:database_id].should == 789
-      @hash[:database_name].should == "db1"
-      @hash[:type].should == "SOURCE_TABLE"
+    it "sets the object type to VIEW" do
       @hash[:object_type].should == "VIEW"
     end
   end
+
+  it_behaves_like "database object presenter", :gpdb_view
 end
