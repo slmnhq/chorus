@@ -40,6 +40,7 @@ group :test, :development do
   gem 'debugger'
   gem 'jasmine'
   gem 'rspec_api_documentation'
+  gem 'forgery'
 end
 
 
