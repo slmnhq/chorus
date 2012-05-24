@@ -63,14 +63,7 @@ describe("chorus.views.SearchWorkfile", function() {
     });
 
     describe("thumbnails", function() {
-        it("uses the thumbnail when the workfile is an image", function() {
-            spyOn(this.model, "isImage").andReturn(true);
-            this.view.render();
-            expect(this.view.$("img")).toHaveAttr("src", this.model.thumbnailUrl());
-        });
-
-        it("uses the icon when the workfile is not an image", function() {
-            spyOn(this.model, "isImage").andReturn(false);
+        it("uses the icon url", function() {
             this.view.render();
             expect(this.view.$("img")).toHaveAttr("src", this.model.iconUrl());
         });

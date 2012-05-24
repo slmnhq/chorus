@@ -6,7 +6,7 @@ chorus.views.SearchWorkfile = chorus.views.SearchItemBase.extend({
     additionalContext: function () {
         return {
             showUrl: this.model.showUrl(),
-            iconUrl: this.model.isImage() ? this.model.thumbnailUrl() : this.model.iconUrl(),
+            iconUrl: this.model.iconUrl(),
             workspaces: [this.model.workspace().attributes]
         }
     },

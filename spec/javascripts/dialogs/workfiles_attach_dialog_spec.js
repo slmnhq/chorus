@@ -42,7 +42,7 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
 
     it("has the correct iconUrl", function() {
         expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl(this.workfile2.get("fileType"), 'medium'));
-        expect(this.dialog.$('li:eq(1) img')).toHaveAttr('src', this.workfile1.thumbnailUrl());
+        expect(this.dialog.$('li:eq(1) img')).toHaveAttr('src', this.workfile1.iconUrl());
     });
 
     it("has the correct name", function() {

@@ -24,9 +24,11 @@ describe("chorus.views.WorkfileListSidebar", function() {
         context("when a workfile is selected", function() {
             context("when the workfile's workspace is active", function() {
                 beforeEach(function() {
-                    this.workfile = fixtures.sqlWorkfile({
-                        lastUpdatedStamp: "2011-11-22 10:46:03.152"
-                    });
+                    this.workfile = newFixtures.workfile.sql();
+
+                    // TODO: REMOVEME
+                    this.workfile.set({ lastUpdatedStamp: "2011-11-22 10:46:03.152" });
+
                     chorus.PageEvents.broadcast("workfile:selected", this.workfile);
                 })
 
@@ -118,12 +120,11 @@ describe("chorus.views.WorkfileListSidebar", function() {
 
         context("when the workfile's workspace is archived", function() {
             beforeEach(function() {
-                this.workspace.set({archivedAt: "2011-11-22 10:46:03.152"});
-                this.workfile = fixtures.sqlWorkfile({
-                    lastUpdatedStamp: "2011-11-22 10:46:03.152"
-                });
+                this.workspace.set({ archivedAt: "2011-11-22 10:46:03.152" });
+                this.workfile = newFixtures.workfile.sql();
                 chorus.PageEvents.broadcast("workfile:selected", this.workfile);
             });
+
             it("displays a link to copy the workfile to another workspace", function() {
                 var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
                 expect(copyLink).toExist();
@@ -141,7 +142,6 @@ describe("chorus.views.WorkfileListSidebar", function() {
             it("doesn't display any other links", function() {
                 expect(this.view.$('.actions a').length).toBe(2);
             });
-
         });
     });
 

@@ -6,7 +6,7 @@ describe("chorus.views.SearchAttachment", function() {
     });
 
     it("shows the thumbnail for an image", function() {
-        expect(this.view.$("img.icon").attr("src")).toBe(this.result.thumbnailUrl());
+        expect(this.view.$("img.icon").attr("src")).toBe(this.result.iconUrl());
     });
 
     it("shows the iconUrl for a non-image", function() {

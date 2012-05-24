@@ -1,6 +1,6 @@
 describe("chorus.views.AlpineWorkfileContentDetails", function() {
     beforeEach(function() {
-        this.model = fixtures.alpineWorkfile();
+        this.model = newFixtures.workfile.binary({ fileType: "AFM" });
         this.model.get("versionInfo").versionFilePath = "/tmp/run_file_test.afm";
         this.view = new chorus.views.AlpineWorkfileContentDetails({ model: this.model })
     });

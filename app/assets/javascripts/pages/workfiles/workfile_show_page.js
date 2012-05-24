@@ -60,7 +60,7 @@
 
         additionalContext:function () {
             return {
-                iconUrl: this.model.isImage() ? this.model.thumbnailUrl() : this.model.iconUrl()
+                iconUrl: this.model.iconUrl()
             };
         }
     });

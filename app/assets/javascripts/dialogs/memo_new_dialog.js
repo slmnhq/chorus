@@ -224,7 +224,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         }, this);
 
         this.model.workfiles.each(function(workfile) {
-            var iconUrl = workfile.isImage() ? workfile.thumbnailUrl() : workfile.iconUrl({size: 'medium'});
+            var iconUrl = workfile.iconUrl({size: 'medium'});
             this.showFile(workfile, workfile.get("fileName"), iconUrl);
         }, this);
     },

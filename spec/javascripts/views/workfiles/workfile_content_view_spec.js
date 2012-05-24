@@ -42,7 +42,7 @@ describe("chorus.views.WorkfileContent", function() {
 
         context("when the given workfile is an alpine file", function() {
             beforeEach(function() {
-                this.model = fixtures.alpineWorkfile();
+                this.model = newFixtures.workfile.binary({ fileType: "AFM" });
                 spyOn(chorus.views, "AlpineWorkfileContent");
                 chorus.views.WorkfileContent.buildFor(this.model);
             });

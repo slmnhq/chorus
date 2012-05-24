@@ -18,7 +18,7 @@ chorus.dialogs.WorkfilesAttach = chorus.dialogs.PickItems.extend({
     collectionModelContext: function (model) {
         return {
             name: model.get("fileName"),
-            imageUrl: model.isImage() ? model.thumbnailUrl() : model.iconUrl({size:"medium"})
+            imageUrl: model.iconUrl({size:"medium"})
         }
     },
 

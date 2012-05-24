@@ -34,7 +34,7 @@ chorus.views.SearchAttachment = chorus.views.SearchItemBase.extend({
 
         return {
             downloadUrl: this.model.downloadUrl(),
-            iconUrl: this.model.isImage() ? this.model.thumbnailUrl() : this.model.iconUrl(),
+            iconUrl: this.model.iconUrl(),
             composedLinkString: new Handlebars.SafeString(composedLinkString)
         }
     }

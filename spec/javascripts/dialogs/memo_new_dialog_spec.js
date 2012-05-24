@@ -164,7 +164,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 beforeEach(function() {
                     this.workfile1 = fixtures.workfile({ id: 1, fileName: "greed.sql", fileType: "sql" });
                     this.workfile2 = fixtures.workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" });
-                    this.workfile3 = fixtures.workfile({ id: 3, fileName: "sloth.afm", fileType: "N/A" });
+                    this.workfile3 = fixtures.workfile({ id: 3, fileName: "sloth", fileType: "N/A" });
 
                     spyOn(this.workfile2, "isImage").andReturn(true);
                     this.modalSpy.lastModal().trigger("files:selected", [this.workfile1, this.workfile2, this.workfile3]);
@@ -179,8 +179,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 it("displays the appropriate file icons", function() {
                     var fileIcons = this.dialog.$(".file_details:visible img.icon");
                     expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
-                    expect(fileIcons.eq(1).attr("src")).toBe(this.workfile2.thumbnailUrl());
-                    expect(fileIcons.eq(2).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("afm", "medium"));
+                    expect(fileIcons.eq(1).attr("src")).toBe(this.workfile2.iconUrl());
+                    expect(fileIcons.eq(2).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("plain", "medium"));
                 });
 
                 it("stores the collection", function() {

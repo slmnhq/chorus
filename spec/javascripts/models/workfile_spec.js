@@ -1,6 +1,6 @@
 describe("chorus.models.Workfile", function() {
     beforeEach(function() {
-        this.model = fixtures.workfile({workspace: { id: "10000"}, id: '10020'});
+        this.model = newFixtures.workfile.sql({workspace: { id: "10000"}, id: '10020'});
     });
 
     describe("#modifier", function() {
@@ -9,13 +9,6 @@ describe("chorus.models.Workfile", function() {
             expect(modifier.get("firstName")).toBe(this.model.get("versionInfo").modifier.firstName);
             expect(modifier.get("lastName")).toBe(this.model.get("versionInfo").modifier.lastName);
             expect(modifier.get("id")).toBe(this.model.get("versionInfo").modifier.id);
-        });
-    });
-
-    describe("#thumbnailUrl", function() {
-        it("is correct", function() {
-            this.model.get("versionInfo").versionNum = 6
-            expect(this.model.thumbnailUrl()).toBe("/workspace/" + this.model.workspace().get("id") + "/workfile/10020/version/6/thumbnail");
         });
     });
 
@@ -70,14 +63,14 @@ describe("chorus.models.Workfile", function() {
 
             context("when the workfile was last executed in a schema other than its sandbox's schema", function() {
                 beforeEach(function() {
-                    _.extend(this.model.get("executionInfo"), {
+                    this.model.set({ executionInfo: {
                         instanceId: '51',
                         instanceName: "ned",
                         databaseId: '52',
                         databaseName: "rob",
                         schemaId: '53',
                         schemaName: "louis"
-                    });
+                    }});
                 });
 
                 it("returns that schema", function() {
@@ -93,7 +86,7 @@ describe("chorus.models.Workfile", function() {
 
             context("when the workfile was last executed in a its sandbox schema", function() {
                 beforeEach(function() {
-                    _.extend(this.model.get("executionInfo"), {
+                    this.model.set({ executionInfo: {
                         databaseId: "4",
                         databaseName: "db",
                         instanceId: "5",
@@ -101,7 +94,7 @@ describe("chorus.models.Workfile", function() {
                         sandboxId: "10001",
                         schemaId: "6",
                         schemaName: "schema"
-                    });
+                    }});
                 });
 
                 it("returns the sandbox's schema", function() {
@@ -151,7 +144,7 @@ describe("chorus.models.Workfile", function() {
         })
     });
 
-    describe("#lastComment", function() {
+    xdescribe("#lastComment", function() {
         beforeEach(function() {
             this.comment = this.model.lastComment();
             this.lastCommentJson = this.model.get('recentComments')[0];
@@ -196,18 +189,10 @@ describe("chorus.models.Workfile", function() {
 
     describe("urls", function() {
         beforeEach(function() {
-            this.model = fixtures.workfile({
+            this.model = newFixtures.workfile.sql({
                 id: 5,
-                workspace: {
-                    id: 10
-                },
-                versionInfo: {
-                    versionFileId: '12345'
-                },
-                hasDraft: false,
-                draftInfo: {
-                    draftFileId: "99999"
-                }
+                workspace: { id: 10 },
+                versionInfo: { contentUrl: "this/is/content/url" }
             });
         });
 
@@ -237,27 +222,13 @@ describe("chorus.models.Workfile", function() {
                     expect(this.model.showUrl({ version: 72 })).toBe("#/workspaces/10/workfiles/5/versions/72")
                 });
             });
-
         });
 
-        describe("#downloadUrl", function() {
-            beforeEach(function() {
-                spyOn(chorus, "cachebuster").andReturn(12345);
-            });
-
-            it("has the right download URL", function() {
-                expect(this.model.downloadUrl()).toBe("/workspace/10/workfile/5/file/12345?download=true&iebuster=12345");
-            });
-
-            it("has the right download URL, even if iebuster is appended as a parameter", function() {
-                expect(this.model.downloadUrl()).toContain("/workspace/10/workfile/5/file/12345")
-                expect(this.model.downloadUrl()).toContain("?")
-                expect(this.model.downloadUrl()).toContain("download=true");
-                expect(this.model.downloadUrl()).toContain("iebuster=12345");
-            });
+        it("has the right download URL", function() {
+            expect(this.model.downloadUrl()).toBe("this/is/content/url");
         });
 
-        context("when the workfile is a draft", function() {
+        xcontext("when the workfile is a draft", function() {
             beforeEach(function() {
                 this.model.set({ hasDraft: true })
                 spyOn(chorus, "cachebuster").andReturn(12345);
@@ -271,90 +242,65 @@ describe("chorus.models.Workfile", function() {
 
     describe("isImage", function() {
         context("when the workfile is an image", function() {
-            beforeEach(function() {
-                this.model.set({ mimeType: "image/jpeg" });
-            });
-
             it("returns true", function() {
-                expect(this.model.isImage()).toBeTruthy();
+                var workfile = newFixtures.workfile.image();
+                expect(workfile.isImage()).toBeTruthy();
             });
         });
 
         context("when the workfile is NOT an image", function() {
-            beforeEach(function() {
-                this.model.set({ mimeType: "text/plain" });
-            });
-
             it("returns false", function() {
-                expect(this.model.isImage()).toBeFalsy();
+                var workfile = newFixtures.workfile.sql();
+                expect(workfile.isImage()).toBeFalsy();
             });
         });
     });
 
     describe("isSql", function() {
         it("returns true when the workfile is a sql file", function() {
-            this.model.set({ fileType: 'SQL'});
-            expect(this.model.isSql()).toBeTruthy();
+            var workfile = newFixtures.workfile.sql();
+            expect(workfile.isSql()).toBeTruthy();
         })
 
         it("returns false when the workfile is NOT a sql file", function() {
-            this.model.set({ fileType: 'CSV'});
-            expect(this.model.isSql()).toBeFalsy();
+            var workfile = newFixtures.workfile.binary();
+            expect(workfile.isSql()).toBeFalsy();
         })
     });
 
     describe("isAlpine", function() {
-        it("returns true when the workfile's fileName ends with 'afm'", function() {
-            this.model.set({ fileName: 'example.afm'});
-            expect(this.model.isAlpine()).toBeTruthy();
+        it("returns true when the workfile is a afm file", function() {
+            var workfile = newFixtures.workfile.binary({
+                fileType: "AFM",
+                mimeType: "application/octet-stream"
+            });
+            expect(workfile.isAlpine()).toBeTruthy();
         })
 
-        it("returns true when the workfile's name ends with 'afm'", function() {
-            this.model.unset('fileName');
-            this.model.set({ name: 'example.afm'});
-            expect(this.model.isAlpine()).toBeTruthy();
-        })
-
-        it("returns true when the workfile's fileName ends with 'AFM'", function() {
-            this.model.set({ fileName: 'example.AFM'});
-            expect(this.model.isAlpine()).toBeTruthy();
-        })
-
-        it("returns false when the workfile only contains the letters afm", function() {
-            this.model.set({ fileName: 'example.afm.xml'});
-            expect(this.model.isAlpine()).toBeFalsy();
-        })
-
-        it("returns false when the workfile's fileName and name are missing", function() {
-            this.model.unset('fileName');
-            expect(this.model.isAlpine()).toBeFalsy();
-        })
-
-        it("returns false when the workfile is NOT a an afm file", function() {
-            this.model.set({ fileName: 'example.csv'});
-            expect(this.model.isAlpine()).toBeFalsy();
+        it("returns false when the workfile is NOT an afm file", function() {
+            var workfile = newFixtures.workfile.sql();
+            expect(workfile.isAlpine()).toBeFalsy();
         })
     });
 
     describe("isBinary", function() {
         it("returns true when the workfile is a binary file", function() {
-            this.model.set({ mimeType: 'exe/MSI'});
-            expect(this.model.isBinary()).toBeTruthy();
+            var workfile = newFixtures.workfile.binary();
+            expect(workfile.isBinary()).toBeTruthy();
         })
 
         it("returns false when the workfile is NOT a binary file", function() {
-            this.model.set({ mimeType: 'text/plain'});
-            expect(this.model.isBinary()).toBeFalsy();
-            this.model.set({ fileType: 'SQL'});
-            expect(this.model.isBinary()).toBeFalsy();
+            var workfile = newFixtures.workfile.sql();
+            expect(workfile.isBinary()).toBeFalsy();
         })
 
     })
 
     describe("createDraft", function() {
         beforeEach(function() {
-            this.workfile = fixtures.workfile();
+            this.workfile = newFixtures.workfile.sql();
         });
+
         it("sets the required attributes", function() {
             var draft = this.workfile.createDraft();
             expect(draft.get("workfileId")).toBe(this.workfile.get('id'));
@@ -420,44 +366,24 @@ describe("chorus.models.Workfile", function() {
     });
 
     describe("isText", function() {
-        context("when the workfile is a plain textfile", function() {
-            beforeEach(function() {
-                this.model.set({ mimeType: "text/plain" });
-            });
-
-            it("returns true", function() {
-                expect(this.model.isText()).toBeTruthy();
-            });
+        it("returns true for plain text files", function() {
+            var workfile = newFixtures.workfile.text();
+            expect(workfile.isText()).toBeTruthy();
         });
 
-        context("when the workfile is an html file", function() {
-            beforeEach(function() {
-                this.model.set({ mimeType: "text/html" });
-            });
-
-            it("returns true", function() {
-                expect(this.model.isText()).toBeTruthy();
-            });
+        it("returns true for html files", function() {
+            var workfile = newFixtures.workfile.text({ fileType: "HTML", mimeType: "text/html" });
+            expect(workfile.isText()).toBeTruthy();
         });
 
-        context("when the workfile is an sql file", function() {
-            beforeEach(function() {
-                this.model.set({ mimeType: "text/x-sql" });
-            });
-
-            it("returns true", function() {
-                expect(this.model.isText()).toBeTruthy();
-            });
+        it("returns true for sql files", function() {
+            var workfile = newFixtures.workfile.sql();
+            expect(workfile.isText()).toBeTruthy();
         });
 
-        context("when the workfile is NOT text", function() {
-            beforeEach(function() {
-                this.model.set({ mimeType: "image/jpeg" });
-            });
-
-            it("returns false", function() {
-                expect(this.model.isText()).toBeFalsy();
-            });
+        it("returns false for image files", function() {
+            var workfile = newFixtures.workfile.image();
+            expect(workfile.isText()).toBeFalsy();
         });
     });
 
@@ -532,6 +458,7 @@ describe("chorus.models.Workfile", function() {
                 it("saves to the correct url", function() {
                     expect(this.server.lastUpdate().url).toBe("/workfiles/10020/versions/99")
                 });
+
                 it("saves with the versionInfo lastUpdatedStamp", function() {
                     expect(this.server.lastUpdate().requestBody).toContain("THEVERSIONSTAMP");
                     expect(this.server.lastUpdate().requestBody).not.toContain("THEWORKFILESTAMP");
@@ -601,31 +528,23 @@ describe("chorus.models.Workfile", function() {
     })
 
     describe("#iconUrl", function() {
-        it("proxies to fileIconUrl helper", function() {
-            var url = this.model.iconUrl({size: 'medium'});
-            expect(url).toBe(chorus.urlHelpers.fileIconUrl('txt', 'medium'));
-        })
+        context("when the workfile is an image", function() {
+            it("returns the url of the image thumbnail", function() {
+                var workfile = newFixtures.workfile.image({
+                    versionInfo: { iconUrl: "some/file" }
+                });
 
-        it("defaults to large size", function() {
-            var url = this.model.iconUrl();
-            expect(url).toBe(chorus.urlHelpers.fileIconUrl('txt', 'large'));
-        })
-    });
+                expect(workfile.iconUrl()).toBe("some/file");
+                expect(workfile.iconUrl({ size: "medium" })).toBe("some/file");
+            });
+        });
 
-    describe("#fileExtension", function() {
-        it("uses fileType", function() {
-            expect(this.model.fileExtension()).toBe('txt');
-        })
-
-        it("uses type when fileType is not available", function() {
-            this.model.unset("fileType");
-            this.model.attributes.type = 'SQL';
-            expect(this.model.fileExtension()).toBe('SQL');
-        })
-
-        it("handles afm files specially", function() {
-            this.model.attributes.fileName = 'example.afm';
-            expect(this.model.fileExtension()).toBe('afm');
-        })
+        context("when the workfile is not an image", function() {
+            it("proxies to fileIconUrl helper", function() {
+                var workfile = newFixtures.workfile.sql();
+                expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('sql', 'large'));
+                expect(workfile.iconUrl({ size: "medium" })).toBe(chorus.urlHelpers.fileIconUrl('sql', 'medium'));
+            })
+        });
     });
 });

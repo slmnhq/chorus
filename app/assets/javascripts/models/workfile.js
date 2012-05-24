@@ -36,10 +36,6 @@
             }
         },
 
-        thumbnailUrl: function() {
-            return "/workspace/" + this.get('workspace').id + "/workfile/" + this.get('id') + "/version/" + this.get('versionInfo').versionNum + "/thumbnail";
-        },
-
         initialize: function() {
             if (this.collection && this.collection.attributes && this.collection.attributes.workspaceId) {
                 this.set({workspace: { id: this.collection.attributes.workspaceId}}, {silent: true});
@@ -135,7 +131,7 @@
         },
 
         isText: function() {
-            return this.workfileType() == TEXT;
+            return _.include([SQL, TEXT], this.workfileType());
         },
 
         isAlpine: function() {
@@ -154,7 +150,7 @@
 
             // Check most specific cases first, with more general cases later so
             // we are sure to see the unusual ones.
-            if (fileName && _.str.endsWith(fileName.toLowerCase(), ".afm")) {
+            if (fileType == "AFM") {
                 return ALPINE;
             }
 
@@ -174,22 +170,7 @@
         },
 
         downloadUrl: function() {
-            var url = URI(this.url())
-            var path = url.path() + "/file/";
-
-            if (this.get("hasDraft")) {
-                path += this.get("draftInfo").draftFileId;
-                url.path(path)
-            } else if (this.get("versionInfo")) {
-                url = URI("/workspace/" + this.workspace().id + "/workfile/" + this.id + "/file/" + this.get("versionInfo").versionFileId);
-            } else {
-                url.path(path)
-            }
-
-            url.addSearch({ download: "true" })
-            url.addSearch({ iebuster: chorus.cachebuster() });
-
-            return url.normalizeSearch().toString();
+            return this.get("versionInfo").contentUrl;
         },
 
         workfilesUrl: function() {
@@ -197,7 +178,7 @@
         },
 
         canEdit: function() {
-            return this.get("canEdit") && this.isLatestVersion() && this.workspace().isActive();
+            return this.isLatestVersion() && this.workspace().isActive();
         },
 
         isLatestVersion: function() {
@@ -232,12 +213,11 @@
         },
 
         iconUrl: function(options) {
-            return chorus.urlHelpers.fileIconUrl(this.fileExtension(), options && options.size);
-        },
-
-        fileExtension: function () {
-            if (this.isAlpine()) { return 'afm'; }
-            return this.get("fileType") || this.get('type');
+            if (this.isImage()) {
+                return this.get("versionInfo").iconUrl;
+            } else {
+                return chorus.urlHelpers.fileIconUrl(this.get("fileType"), options && options.size);
+            }
         },
 
         hasOwnPage: function() {
