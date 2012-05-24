@@ -8,6 +8,7 @@ require "json"
 require "tempfile"
 require 'rspec_api_documentation/dsl'
 require 'allowy/rspec'
+require "vcr"
 
 module Shoulda # :nodoc:
   module Matchers
@@ -21,6 +22,11 @@ module Shoulda # :nodoc:
       end
     end
   end
+end
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
+  c.hook_into :webmock # or :fakeweb
 end
 
 

@@ -2,7 +2,7 @@ module Hdfs
   class InstanceRegistrar
     def self.create!(connection_config, owner)
       instance = owner.hadoop_instances.build(connection_config)
-      instance.version = ConnectionBuilder.find_version(instance)
+      instance.version = Hdfs::QueryService.instance_version(instance)
       raise ApiValidationError.new(:connection, :generic, {:message => "Invalid Parameters for the connection"}) unless instance.version
       instance.save!
       instance

@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:5000/version?host=garcia&port=8020&username=pivotal
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers: {}
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 24 May 2012 18:45:58 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '20'
+    body:
+      encoding: US-ASCII
+      string: ! '{"response":"1.0.0"}'
+    http_version: 
+  recorded_at: Thu, 24 May 2012 18:45:59 GMT
+- request:
+    method: get
+    uri: http://localhost:5000/1.0.0/list/%2Fnon_existing%2F?host=garcia&port=8020&username=pivotal
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers: {}
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 24 May 2012 18:45:59 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2'
+    body:
+      encoding: US-ASCII
+      string: ! '[]'
+    http_version: 
+  recorded_at: Thu, 24 May 2012 18:45:59 GMT
+recorded_with: VCR 2.1.1

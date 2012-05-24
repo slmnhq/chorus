@@ -1,0 +1,307 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:5000/version?host=garcia&port=8020&username=pivotal
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers: {}
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 24 May 2012 18:45:59 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '20'
+    body:
+      encoding: US-ASCII
+      string: ! '{"response":"1.0.0"}'
+    http_version: 
+  recorded_at: Thu, 24 May 2012 18:45:59 GMT
+- request:
+    method: get
+    uri: http://localhost:5000/1.0.0/show/%2Ffiletypes%2FAccountMapHelper.java?host=garcia&port=8020&username=pivotal
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers: {}
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 24 May 2012 18:45:59 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '25119'
+    body:
+      encoding: US-ASCII
+      string: ! '{"response":"/** * Copyright (c) 2011 EMC Corporation All Rights
+        Reserved * * This software is protected, without limitation, by copyright
+        law * and international treaties. Use of this software and the intellectual
+        * property contained therein is expressly limited to the terms and * conditions
+        of the License Agreement under which it is provided by * or on behalf of EMC.
+        */package com.emc.edc.util;import java.util.Date;import java.util.HashSet;import
+        java.util.List;import java.util.Map;import java.util.Set;import javolution.util.FastList;import
+        javolution.util.FastMap;import org.apache.commons.lang.StringUtils;import
+        org.ofbiz.entity.Delegator;import org.ofbiz.entity.GenericEntityException;import
+        org.ofbiz.entity.GenericValue;import org.ofbiz.entity.condition.EntityCondition;import
+        org.ofbiz.entity.condition.EntityJoinOperator;import org.ofbiz.entity.condition.EntityOperator;import
+        org.ofbiz.entity.util.EntityFindOptions;import org.ofbiz.entity.util.EntityListIterator;import
+        com.emc.edc.common.AccountMapException;import com.emc.edc.common.InstanceProvider;import
+        com.emc.edc.common.RuntimeMessageException;import com.emc.edc.config.EdcConfig;import
+        com.emc.edc.crypto.PasswordCryptoOnDb;import com.emc.edc.crypto.PasswordCryptos;import
+        com.emc.edc.dbacl.DbAclHelper;import com.emc.edc.hadoop.HadoopFileSystemFactory;import
+        com.emc.edc.resource.response.MessageCode;import com.emc.edc.resource.response.Pagination;public
+        abstract class AccountMapHelper {\tpublic static final String ENTITY_ACCOUNT_MAP
+        = \"EdcAccountMap\";\tpublic static final String COLUMN_ID = \"id\";\tpublic
+        static final String COLUMN_INSTANCE_ID = \"instanceId\";\tpublic static final
+        String COLUMN_USER_NAME = \"userName\";    public static final String COLUMN_USER_ID
+        = \"userId\";\tpublic static final String COLUMN_DB_USERNAME = \"dbUserName\";\tpublic
+        static final String COLUMN_DB_PASSWORD = \"dbPassword\";\tpublic static final
+        String COLUMN_EXPIRATION = \"expiration\";\tpublic static final String COLUMN_SCOPE
+        = \"scope\";\tpublic static final String COLUMN_SHARED = \"shared\";\tpublic
+        static final String COLUMN_CREATOR = \"creator\";\tpublic static final String
+        COLUMN_SECRET_KEY = \"secretKey\";\tpublic static final String SCOPE_SESSION
+        = \"session\";\tpublic static final String SCOPE_PERSISTENT = \"persistent\";\tpublic
+        static final String SHARED_YES = \"yes\";\tpublic static final String SHARED_NO
+        = \"no\";\tpublic static final String TEST_CONNECTION = \"testConnection\";\tpublic
+        static final String ACTOR = \"actor\";\t/**\t * Get the active account map
+        for given user on given instance according to\t * Chorus guideline: in V1,
+        if there is shared account map, then use shared\t * account map, otherwise
+        use individual account map, return null otherwise.\t *\t * Account map client
+        code should call this method as far as possible.\t *\t * Also this method
+        will decrypt password on target database if exists.\t *\t * @param delegator\t
+        * @param instanceId\t * @param userName\t * @return\t * @throws GenericEntityException\t
+        */\tpublic static Map<String, Object> getActiveClearAccountMap(\t\t\tDelegator
+        delegator, String instanceId, String userName)\t\t\tthrows GenericEntityException
+        {\t\tGenericValue instance = DbAclHelper.getInstanceFromId(delegator,\t\t\t\tinstanceId);\t\tGenericValue
+        account = AccountMapHelper.getSharedAccountOnInstance(\t\t\t\tdelegator, instanceId);\t\tif
+        (account == null) {\t\t\taccount = AccountMapHelper.getIndividualAccountOnInstance(\t\t\t\t\tdelegator,
+        instanceId, userName);\t\t}\t\tif (account == null) {\t\t\tthrow new AccountMapException(instanceId,\t\t\t\t\tinstance.getString(EntityStrings.EdcInstance.name),\t\t\t\t\tMessageCode.ACCOUNTMAP_NO_ACTIVE_ACCOUNT);\t\t}\t\treturn
+        decryptAccountMap(account);\t}    // this mehtod is to see if the user has
+        any account map for the worspace/Instance\tpublic static Map<String, Object>
+        getAccountMapForUser(\t\t\tDelegator delegator, String instanceId, String
+        userName)\t\t\tthrows GenericEntityException {\t\tGenericValue account = AccountMapHelper.getSharedAccountOnInstance(\t\t\t\tdelegator,
+        instanceId);\t\tif (account == null) {\t\t\taccount = AccountMapHelper.getIndividualAccountOnInstance(\t\t\t\t\tdelegator,
+        instanceId, userName);\t\t}\t\tif (account == null) {\t\t\treturn null;\t\t}\t\treturn
+        decryptAccountMap(account);\t}\tpublic static Map<String, Object> decryptAccountMap(GenericValue
+        acctmap) {\t\tMap<String, Object> clearAccountMap = FastMap.newInstance();\t\tclearAccountMap.putAll(acctmap);\t\tString
+        userName = acctmap.getString(COLUMN_USER_NAME);\t\tString instanceId = acctmap.getString(COLUMN_INSTANCE_ID);\t\tbyte[]
+        ciphertext = acctmap.getBytes(COLUMN_DB_PASSWORD);\t\tString cleartext = decryptPassword(userName,
+        instanceId, ciphertext);\t\tclearAccountMap.put(COLUMN_DB_PASSWORD, cleartext);\t\treturn
+        clearAccountMap;\t}\tstatic String decryptPassword(String userName, String
+        instanceId,\t\t\tbyte[] cipherPassword) {\t\tbyte[] secretKey = PasswordCryptos.getSecretKey(userName,
+        instanceId);\t\treturn PasswordCryptos.decrypt(secretKey, cipherPassword);\t}\t/**\t
+        * Get account map by account map primary key (password is encrypted)\t *\t
+        * @param delegator\t * @param id\t * @return\t * @throws GenericEntityException\t
+        * @throws RuntimeMessageException\t *             if account map does not
+        exist\t */\tpublic static GenericValue getAccountMapById(Delegator delegator,
+        String id)\t\t\tthrows GenericEntityException {\t\tGenericValue acctmap =
+        delegator.findOne(ENTITY_ACCOUNT_MAP, false,\t\t\t\tAccountMapHelper.COLUMN_ID,
+        id);\t\tif (acctmap == null) {\t\t\tthrow new RuntimeMessageException(MessageCode.ACCOUNTMAP_NOT_EXIST,\t\t\t\t\tid);\t\t}\t\treturn
+        acctmap;\t}\tpublic static List<GenericValue> getAccountMapByInstanceId(\t\t\tDelegator
+        delegator, String instanceId)\t\t\tthrows GenericEntityException {\t\treturn
+        delegator.findByAnd(ENTITY_ACCOUNT_MAP, COLUMN_INSTANCE_ID,\t\t\t\tinstanceId);\t}\t/**\t
+        * Get given user''s account map on given instance, either shared or\t * individual
+        account map.\t *\t * Currently one user could have only one account map on
+        given instance, no\t * matter it is shared or individual.\t *\t * @param delegator\t
+        * @param instanceId\t * @param userName\t * @return\t * @throws GenericEntityException\t
+        * @throws RuntimeMessageException\t *             if account map does not
+        exist\t */\tpublic static GenericValue getAccountMapByInstanceIdAndUserName(\t\t\tDelegator
+        delegator, String instanceId, String userName)\t\t\tthrows GenericEntityException
+        {\t\tList<GenericValue> acctmaps = delegator.findByAnd(ENTITY_ACCOUNT_MAP,\t\t\t\tCOLUMN_INSTANCE_ID,
+        instanceId, COLUMN_USER_NAME, userName);\t\tif (acctmaps == null || acctmaps.isEmpty())
+        {\t\t\tthrow new RuntimeMessageException(\t\t\t\t\tMessageCode.ACCOUNTMAP_NOT_EXIST_INST_USER,
+        instanceId,\t\t\t\t\tuserName);\t\t}\t\treturn acctmaps.get(0);\t}\t/**\t
+        * Get individual account map for given instance and user name.\t *\t * @param
+        delegator\t * @param instanceId\t * @param userName\t * @return\t * @throws
+        GenericEntityException\t */\tpublic static GenericValue getIndividualAccountOnInstance(\t\t\tDelegator
+        delegator, String instanceId, String userName)\t\t\tthrows GenericEntityException
+        {\t\tList<GenericValue> acctmaps = delegator.findByAnd(ENTITY_ACCOUNT_MAP,\t\t\t\tCOLUMN_INSTANCE_ID,
+        instanceId, COLUMN_USER_NAME, userName,\t\t\t\tCOLUMN_SHARED, SHARED_NO);\t\tif
+        (acctmaps == null || acctmaps.isEmpty()) {\t\t\treturn null;\t\t}\t\treturn
+        acctmaps.get(0);\t}\tpublic static boolean hasIndividualAccountOnInstance(Delegator
+        delegator,\t\t\tString instanceId, String userName) throws GenericEntityException
+        {\t\tGenericValue acctmap = getIndividualAccountOnInstance(delegator,\t\t\t\tinstanceId,
+        userName);\t\treturn (acctmap != null);\t}\t/**\t * Get shared account map
+        for given instance.\t *\t * @param delegator\t * @param instanceId\t * @return\t
+        * @throws GenericEntityException\t */\tpublic static GenericValue getSharedAccountOnInstance(Delegator
+        delegator,\t\t\tString instanceId) throws GenericEntityException {\t\tList<GenericValue>
+        acctmaps = delegator.findByAnd(ENTITY_ACCOUNT_MAP,\t\t\t\tCOLUMN_INSTANCE_ID,
+        instanceId, COLUMN_SHARED, SHARED_YES);\t\tif (acctmaps != null && !acctmaps.isEmpty())
+        {\t\t\treturn acctmaps.get(0);\t\t}\t\treturn null;\t}\t/**\t * Whether a
+        instance has shared credential or not.\t *\t * @throws GenericEntityException\t
+        */\tpublic static boolean hasSharedAccountOnInstance(Delegator delegator,\t\t\tString
+        instanceId) throws GenericEntityException {\t\tGenericValue acctmap = getSharedAccountOnInstance(delegator,
+        instanceId);\t\treturn (acctmap != null);\t}\t/**\t * Whether account map
+        identified by account map id is shared credential or\t * not.\t *\t * @param
+        delegator\t * @param accountMapId\t * @return\t * @throws GenericEntityException\t
+        */\tpublic static boolean isSharedAccountMap(Delegator delegator,\t\t\tString
+        accountMapId) throws GenericEntityException {\t\tGenericValue acctmap = AccountMapHelper.getAccountMapById(delegator,\t\t\t\taccountMapId);\t\treturn
+        isSharedAccountMap(acctmap);\t}\t/**\t * Whether given account map is shared
+        credential or not\t *\t * @param acctmap\t * @return\t */\tpublic static boolean
+        isSharedAccountMap(GenericValue acctmap) {\t\treturn acctmap.get(COLUMN_SHARED)
+        != null\t\t\t\t&& SHARED_YES\t\t\t\t\t\t.equalsIgnoreCase(acctmap.getString(COLUMN_SHARED));\t}\t//
+        ============= Following methods are commonly used by Services.\t/**\t * Helper
+        method to create account map according to parameters.\t *\t * @param delegator\t
+        * @param instanceId\t * @param userName\t * @param dbUserName\t * @param dbPassword\t
+        * @param sharedStatus\t * @return\t * @throws GenericEntityException\t */\tpublic
+        static GenericValue createAccountMap(Delegator delegator,\t\t\tString instanceId,
+        String userName, String dbUserName,\t\t\tString dbPassword, String sharedStatus,
+        String actor)\t\t\tthrows GenericEntityException {\t\treturn createAccountMap(delegator,
+        instanceId, userName, dbUserName, dbPassword, sharedStatus, actor, null);\t}    public
+        static GenericValue createAccountMap(Delegator delegator,            String
+        instanceId, String userName, String dbUserName,            String dbPassword,
+        String sharedStatus, String actor, String testConnection)            throws
+        GenericEntityException {        Map<String, Object> context = FastMap.newInstance();        context.put(AccountMapHelper.COLUMN_INSTANCE_ID,
+        instanceId);        context.put(AccountMapHelper.COLUMN_USER_NAME, userName);        context.put(AccountMapHelper.COLUMN_DB_USERNAME,
+        dbUserName);        context.put(AccountMapHelper.COLUMN_DB_PASSWORD, dbPassword);        context.put(AccountMapHelper.COLUMN_SHARED,
+        sharedStatus);        context.put(AccountMapHelper.ACTOR, actor);        context.put(AccountMapHelper.TEST_CONNECTION,
+        testConnection);        return createAccountMap(context, delegator);    }\tpublic
+        static GenericValue createAccountMap(\t\t\tMap<String, ? extends Object> context,
+        Delegator delegator)\t\t\tthrows GenericEntityException {\t\tString instanceId
+        = (String) context\t\t\t\t.get(AccountMapHelper.COLUMN_INSTANCE_ID);        String
+        userId = (String) context                .get(AccountMapHelper.COLUMN_USER_ID);        String
+        userName = null;        if(userId != null) {\t\t userName = UserHelper.getEdcUserNameById(delegator,
+        userId);        } else {         userName = (String) context                 .get(AccountMapHelper.COLUMN_USER_NAME);        }\t\tString
+        dbUserName = (String) context\t\t\t\t.get(AccountMapHelper.COLUMN_DB_USERNAME);\t\tString
+        dbPassword = (String) context\t\t\t\t.get(AccountMapHelper.COLUMN_DB_PASSWORD);\t    String
+        testConnection = (String) context.get(AccountMapHelper.TEST_CONNECTION);\t\t//
+        Check dbUserName: must not empty\t\tGenericValue instance = DbAclHelper.getInstanceFromId(delegator,\t\t\t\tinstanceId);\t\tGenericValue
+        user = DbAclHelper.getUserByName(delegator, userName);\t\tif (StringUtils.isBlank(dbUserName))
+        {\t\t\tthrow new RuntimeMessageException(\t\t\t\t\tMessageCode.ACCOUNTMAP_PARAM_REQUIRED,\t\t\t\t\tAccountMapHelper.COLUMN_DB_USERNAME);\t\t}\t\t//
+        Check scope: session or persistent\t\tString scope = (String) context.get(AccountMapHelper.COLUMN_SCOPE);\t\tif
+        (StringUtils.isNotBlank(scope)) {\t\t\tscope = scope.toLowerCase();\t\t\tif
+        (!StringUtils.equals(scope, AccountMapHelper.SCOPE_PERSISTENT)\t\t\t\t\t&&
+        !StringUtils.equals(scope,\t\t\t\t\t\t\tAccountMapHelper.SCOPE_SESSION)) {\t\t\t\tthrow
+        new RuntimeMessageException(\t\t\t\t\t\tMessageCode.ACCOUNTMAP_SCOPE_INVALID);\t\t\t}\t\t}
+        else {\t\t\tscope = AccountMapHelper.SCOPE_PERSISTENT;\t\t}\t\t// Check shared:
+        yes or no\t\tString shared = (String) context.get(AccountMapHelper.COLUMN_SHARED);\t\tif
+        (StringUtils.isNotBlank(shared)) {\t\t\tshared = shared.toLowerCase();\t\t\tif
+        (!StringUtils.equals(shared, AccountMapHelper.SHARED_NO)\t\t\t\t\t&& !StringUtils.equals(shared,
+        AccountMapHelper.SHARED_YES)) {\t\t\t\tthrow new RuntimeMessageException(\t\t\t\t\t\tMessageCode.ACCOUNTMAP_SHARED_INVALID);\t\t\t}\t\t}
+        else {\t\t\tshared = AccountMapHelper.SHARED_NO;\t\t}\t\t// Get current login
+        user from pass-in arguments for async services.\t\tString creator = (String)
+        context.get(AccountMapHelper.ACTOR);\t\tif (creator == null) {\t\t\tcreator
+        = UserHelper.getEdcUserName();\t\t}\t\tif (creator == null) {\t\t\tthrow new
+        RuntimeMessageException(\t\t\t\t\tMessageCode.ACCOUNTMAP_CREATOR_IS_NULL);\t\t}\t\t//
+        Privilege check: only admin or instance owner could create account\t\t// map
+        for others\t\tif (shared.equals(AccountMapHelper.SHARED_NO)\t\t\t\t&& !StringUtils.equals(userName,
+        creator)) {\t\t\tif (!DbAclHelper.isAdminOrInstanceOwner(delegator, creator,\t\t\t\t\tinstanceId))
+        {\t\t\t\tthrow new RuntimeMessageException(\t\t\t\t\t\tMessageCode.ACCOUNTMAP_ERR_CREATE_AM_FOR_OTHER,\t\t\t\t\t\tcreator,
+        userName);\t\t\t}\t\t}\t\t// If shared account exists already, then could
+        not create shared or\t\t// individual account map\t\t// any more.\t\tif (AccountMapHelper.hasSharedAccountOnInstance(delegator,
+        instanceId)) {\t\t\tthrow new RuntimeMessageException(\t\t\t\t\tMessageCode.ACCOUNTMAP_SHARED_EXIST_ALREADY,\t\t\t\t\tinstance.getString(\"name\"));\t\t}\t\t//
+        One user could have at most one account map on one instance.\t\tif (AccountMapHelper.hasIndividualAccountOnInstance(delegator,\t\t\t\tinstanceId,
+        userName)) {\t\t\tthrow new RuntimeMessageException(\t\t\t\t\tMessageCode.ACCOUNTMAP_EXIST_ALREADY,\t\t\t\t\tinstance.getString(\"name\"),\t\t\t\t\tUserHelper.getUserFullName(user));\t\t}\t\t//
+        Lastly check whether the dbUserName and dbPassword is correct\t\tif (StringUtils.isBlank(testConnection)
+        || testConnection.equalsIgnoreCase(Boolean.TRUE.toString())) {        \t\tString
+        providerName = instance.getString(\"instanceProvider\");        \t\tif (InstanceProvider.isDBType(providerName))
+        {        \t\t    DBUtil.testConnectionAndThrowException(instance, dbUserName,
+        dbPassword);        \t\t} else if (InstanceProvider.HADOOP.isType(providerName))
+        {        \t\t    String host = instance.getString(\"host\");        \t\t    Integer
+        port = instance.getInteger(\"port\");                    String version =
+        instance.getString(EntityStrings.EdcInstance.instanceVersion);        \t\t    HadoopFileSystemFactory.getFactory().checkInstanceConnectable(host,
+        port, dbUserName, version);        \t\t}\t\t}\t\tGenericValue acctmap = delegator\t\t\t\t.makeValue(AccountMapHelper.ENTITY_ACCOUNT_MAP);\t\tbyte[]
+        secretKey = PasswordCryptos.generateSecretKey();\t\tbyte[] ciphertext = PasswordCryptos.encrypt(secretKey,
+        dbPassword);\t\tacctmap.set(COLUMN_DB_PASSWORD, ciphertext);\t\tacctmap.set(COLUMN_DB_USERNAME,
+        dbUserName);\t\tacctmap.set(COLUMN_EXPIRATION,\t\t\t\tcontext.get(AccountMapHelper.COLUMN_EXPIRATION));\t\tacctmap.set(COLUMN_INSTANCE_ID,
+        instanceId);\t\tacctmap.set(COLUMN_SHARED, shared);\t\tacctmap.set(COLUMN_USER_NAME,
+        userName);\t\tacctmap.set(COLUMN_CREATOR, creator);\t\tif (PasswordCryptos.getPasswordCrypto()
+        instanceof PasswordCryptoOnDb) {\t\t\tacctmap.set(COLUMN_SECRET_KEY, secretKey);\t\t}\t\tacctmap
+        = delegator.createSetNextSeqId(acctmap);\t\tPasswordCryptos.saveSecretKey(userName,
+        instanceId, secretKey);\t\treturn acctmap;\t}\tpublic static GenericValue
+        updateAccountMap(\t\t\tMap<String, ? extends Object> context, Delegator delegator)\t\t\tthrows
+        GenericEntityException {\t\tString id = (String) context.get(AccountMapHelper.COLUMN_ID);\t\tGenericValue
+        acctmap = getAccountMapById(delegator, id);\t\tString userName = acctmap.getString(COLUMN_USER_NAME);\t\tString
+        instanceId = acctmap.getString(COLUMN_INSTANCE_ID);\t\tGenericValue instance
+        = DbAclHelper.getInstanceFromId(delegator,\t\t\t\tinstanceId);\t\t// Check
+        user name: must not be empty.\t\tString dbUserName = (String) context\t\t\t\t.get(AccountMapHelper.COLUMN_DB_USERNAME);\t\tString
+        dbPassword = (String) context\t\t\t\t.get(AccountMapHelper.COLUMN_DB_PASSWORD);\t\tif
+        (StringUtils.isNotBlank(dbUserName)) {\t\t\tacctmap.set(AccountMapHelper.COLUMN_DB_USERNAME,
+        dbUserName);\t\t}\t\tbyte[] secretKey = null;\t\tif (dbPassword != null) {
+        // update dbPassword\t\t\t// Re-generate secret key and re-encrypt password\t\t\tsecretKey
+        = PasswordCryptos.generateSecretKey();\t\t\tbyte[] ciphertext = PasswordCryptos.encrypt(secretKey,
+        dbPassword);\t\t\tacctmap.set(AccountMapHelper.COLUMN_DB_PASSWORD, ciphertext);\t\t\tif
+        (PasswordCryptos.getPasswordCrypto() instanceof PasswordCryptoOnDb) {\t\t\t\tacctmap.set(COLUMN_SECRET_KEY,
+        secretKey);\t\t\t}\t\t}\t\t// Shared or not\t\tString shared = (String) context.get(AccountMapHelper.COLUMN_SHARED);\t\tif
+        (StringUtils.isNotBlank(shared)) {\t\t\t// check shared: ''yes'' or ''no''\t\t\tshared
+        = shared.toLowerCase();\t\t\tif (!StringUtils.equals(shared, AccountMapHelper.SHARED_NO)\t\t\t\t\t&&
+        !StringUtils.equals(shared, AccountMapHelper.SHARED_YES)) {                throw
+        new RuntimeMessageException(                        MessageCode.ACCOUNTMAP_SHARED_INVALID);            }            String
+        creator = UserHelper.getEdcUserName();            if (shared.equals(AccountMapHelper.SHARED_YES)                    &&
+        AccountMapHelper.SHARED_NO.equalsIgnoreCase(acctmap.getString(EntityStrings.EdcAccountMap.shared)))
+        {                // Want to change                // account map                //
+        as ''shared''                String instanceOwner = instance.getString(\"owner\");                //
+        Only admin or instance owner could create shared account map                if
+        (!(UserHelper.isCurrentUserAdmin(delegator) || StringUtils\t\t\t\t\t\t.equals(creator,
+        instanceOwner))) {\t\t\t\t\tthrow new RuntimeMessageException(\t\t\t\t\t\t\tMessageCode.ACCOUNTMAP_SHARED_NO_PRIVILEGE);\t\t\t\t}\t\t\t\t//
+        One instance could have only 1 shared account map\t\t\t\tif (AccountMapHelper.hasSharedAccountOnInstance(delegator,\t\t\t\t\t\tinstanceId))
+        {\t\t\t\t\tthrow new RuntimeMessageException(\t\t\t\t\t\t\tMessageCode.ACCOUNTMAP_SHARED_EXIST_ALREADY,\t\t\t\t\t\t\tinstance.getString(\"name\"));\t\t\t\t}\t\t\t}\t\t\tacctmap.set(AccountMapHelper.COLUMN_SHARED,
+        shared);\t\t}\t\tDate expiration = (Date) context\t\t\t\t.get(AccountMapHelper.COLUMN_EXPIRATION);\t\tif
+        (expiration != null) {\t\t\tacctmap.set(AccountMapHelper.COLUMN_EXPIRATION,
+        expiration);\t\t}\t\t// Lastly check whether the updated dbUserName and dbPassword
+        is correct\t\tif (dbPassword != null || dbUserName != null) {\t\t\tif (dbUserName
+        == null) {\t\t\t\tdbUserName = acctmap.getString(COLUMN_DB_USERNAME);\t\t\t}\t\t\tif
+        (dbPassword == null) {\t\t\t\tdbPassword = acctmap.getString(COLUMN_DB_PASSWORD);\t\t\t}\t\t\tDBUtil.testConnectionAndThrowException(instance,
+        dbUserName,\t\t\t\t\tdbPassword);\t\t}\t\tdelegator.store(acctmap);\t\tif
+        (secretKey != null) {\t\t\tPasswordCryptos.saveSecretKey(userName, instanceId,
+        secretKey);\t\t}\t\treturn acctmap;\t}\t/**\t * Get VISIBLE account maps for
+        given user name on given instance id.\t *\t * @param context\t * @param delegator\t
+        * @return\t * @throws GenericEntityException\t */\tpublic static Map<String,
+        Object> getAccountMapList(\t\t\tMap<String, ? extends Object> context, Delegator
+        delegator)\t\t\tthrows GenericEntityException {\t\tString instanceId = (String)
+        context\t\t\t\t.get(AccountMapHelper.COLUMN_INSTANCE_ID);        String userId
+        =  (String) context                .get(AccountMapHelper.COLUMN_USER_ID);\t\tString
+        userName = UserHelper.getEdcUserNameById(delegator, userId);\t\tInteger page
+        = (Integer) context.get(\"paging.page\");\t\tInteger limit = (Integer) context.get(\"paging.limit\");\t\tif(page
+        == null || limit == null){\t\t   page = 1;\t\t   limit = EdcConfig.getPaginationRow();\t\t}\t\t@SuppressWarnings(\"unchecked\")\t\tList<String>
+        orderBy = (List<String>) context.get(\"search.orderby\");\t\tEntityListIterator
+        iterator = null;\t\ttry {\t\t\tList<EntityCondition> exprs = FastList.newInstance();\t\t\texprs.add(EntityCondition.makeCondition(\t\t\t\t\tAccountMapHelper.COLUMN_INSTANCE_ID,
+        EntityOperator.EQUALS,\t\t\t\t\tinstanceId));\t\t\tif (!DbAclHelper.isAdminOrInstanceOwner(delegator,
+        userName,\t\t\t\t\tinstanceId)) {\t\t\t\tEntityCondition nameCond = EntityCondition.makeCondition(\t\t\t\t\t\tAccountMapHelper.COLUMN_USER_NAME,\t\t\t\t\t\tEntityOperator.EQUALS,
+        userName);\t\t\t\tEntityCondition shareCond = EntityCondition.makeCondition(\t\t\t\t\t\tAccountMapHelper.COLUMN_SHARED,
+        EntityOperator.EQUALS,\t\t\t\t\t\tSHARED_YES);\t\t\t\texprs.add(EntityCondition.makeCondition(nameCond,\t\t\t\t\t\tEntityJoinOperator.OR,
+        shareCond));\t\t\t}\t\t\tEntityCondition entityCondition = EntityCondition.makeCondition(\t\t\t\t\texprs,
+        EntityOperator.AND);\t\t\tSet<String> fieldsToSelect = new HashSet<String>();\t\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_ID);\t\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_DB_USERNAME);\t\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_EXPIRATION);\t\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_INSTANCE_ID);\t\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_SHARED);\t\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_USER_NAME);\t\t\tList<GenericValue>
+        accountMapList = FastList.newInstance();\t\t\tMap<String, Object> result =
+        FastMap.newInstance();\t\t\tEntityFindOptions options = new EntityFindOptions();\t\t\toptions.setLimit(limit);\t\t\toptions.setOffset((page
+        - 1) * limit);\t\t\titerator = delegator.find(ENTITY_ACCOUNT_MAP, entityCondition,\t\t\t\t\tnull,
+        fieldsToSelect, orderBy, options);\t\t\tlong count = delegator.findCountByCondition(ENTITY_ACCOUNT_MAP,\t\t\t\t\tentityCondition,
+        null, null);\t\t\tPagination pagination = new Pagination(page, limit, count);\t\t\taccountMapList
+        = iterator.getCompleteList();\t\t\tresult.put(\"pagination\", pagination);\t\t\tresult.put(\"resource\",
+        accountMapList);\t\t\treturn result;\t\t} catch (GenericEntityException e)
+        {\t\t\tthrow e;\t\t} finally {\t\t\ttry {\t\t\t\tif (iterator != null) {\t\t\t\t\titerator.close();\t\t\t\t}\t\t\t}
+        catch (GenericEntityException e) {\t\t\t\tthrow e;\t\t\t}\t\t}\t}\t/**\t *
+        Get account map created for given user on given instance.\t *\t * @param context\t
+        * @param delegator\t * @return\t * @throws GenericEntityException\t */\tpublic
+        static List<GenericValue> getAccountMapByInstanceIdAndUserName(\t\t\tMap<String,
+        ? extends Object> context, Delegator delegator)\t\t\tthrows GenericEntityException
+        {\t\tString instanceId = (String) context\t\t\t\t.get(AccountMapHelper.COLUMN_INSTANCE_ID);        String
+        userId = (String) context.get(AccountMapHelper.COLUMN_USER_ID);        String
+        userName = UserHelper.getEdcUserNameById(delegator, userId);\t\tList<EntityCondition>
+        exprs = FastList.newInstance();\t\texprs.add(EntityCondition.makeCondition(\t\t\t\tAccountMapHelper.COLUMN_INSTANCE_ID,
+        EntityOperator.EQUALS,\t\t\t\tinstanceId));\t\texprs.add(EntityCondition.makeCondition(\t\t\t\tAccountMapHelper.COLUMN_USER_NAME,
+        EntityOperator.EQUALS,\t\t\t\tuserName));\t\tEntityCondition entityCondition
+        = EntityCondition.makeCondition(exprs,\t\t\t\tEntityOperator.AND);\t\treturn
+        listAccountMap(delegator, entityCondition);\t}\tstatic List<GenericValue>
+        listAccountMap(Delegator delegator,\t\t\tEntityCondition entityCondition)
+        throws GenericEntityException {\t\tSet<String> fieldsToSelect = new HashSet<String>();\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_ID);\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_DB_USERNAME);\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_EXPIRATION);\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_INSTANCE_ID);\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_SHARED);\t\tfieldsToSelect.add(AccountMapHelper.COLUMN_USER_NAME);\t\tEntityFindOptions
+        options = new EntityFindOptions();\t\treturn delegator.findList(ENTITY_ACCOUNT_MAP,
+        entityCondition,\t\t\t\tfieldsToSelect, null, options, false);\t}\t/**\t *
+        Physical delete one account map, commonly used by service.\t *\t * @param
+        context\t * @param delegator\t * @throws GenericEntityException\t */\tpublic
+        static void deleteAccountMaps(Map<String, ? extends Object> context,\t\t\tDelegator
+        delegator) throws GenericEntityException {\t\tString id = (String) context.get(AccountMapHelper.COLUMN_ID);\t\tGenericValue
+        acctmap = getAccountMapById(delegator, id);\t\tdelegator.removeValue(acctmap);\t}}"}'
+    http_version: 
+  recorded_at: Thu, 24 May 2012 18:46:00 GMT
+recorded_with: VCR 2.1.1

@@ -9,9 +9,9 @@ describe Hdfs::InstanceStatus do
 
   describe "#check" do
     before do
-      stub(Hdfs::ConnectionBuilder).find_version(instance1) { "1.0.0" }
-      stub(Hdfs::ConnectionBuilder).find_version(instance2) { nil }
-      stub(Hdfs::ConnectionBuilder).find_version(instance3) { "0.20.205" }
+      mock(Hdfs::QueryService).instance_version(instance1) { "1.0.0" }
+      mock(Hdfs::QueryService).instance_version(instance2) { nil }
+      mock(Hdfs::QueryService).instance_version(instance3) { "0.20.205" }
     end
 
     it "updates the connection status for each instance" do

@@ -3,7 +3,7 @@ module Hdfs
     def self.check
       HadoopInstance.scoped.each do |instance|
         instance.online = false
-        version = Hdfs::ConnectionBuilder.find_version(instance)
+        version = Hdfs::QueryService.instance_version(instance)
         if version
           instance.version = version
           instance.online = true

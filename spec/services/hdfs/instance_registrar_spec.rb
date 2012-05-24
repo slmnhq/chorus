@@ -14,31 +14,52 @@ describe Hdfs::InstanceRegistrar do
   end
 
   before do
-    stub(Hdfs::ConnectionBuilder).find_version { "0.1.2.3" }
+    mock(Hdfs::QueryService).instance_version(is_a(HadoopInstance)) { hadoop_version }
   end
 
   describe ".create!" do
-    it "requires that the instance be valid" do
-      any_instance_of(HadoopInstance) do |instance|
-        mock(instance).valid?.with_any_args { true }
-      end
+    context "when connection succeeds but instance is invalid" do
+      let(:hadoop_version) { "0.1.2.3" }
 
-      Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
+      it "does not save the object" do
+        expect {
+          Hdfs::InstanceRegistrar.create!({}, owner)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
 
     context "when a connection is made using some hadoop version" do
+      let(:hadoop_version) { "0.1.2.3" }
+
       it "save the instance with right version" do
-        stub(Hdfs::ConnectionBuilder).find_version(anything) { "0.1.2.3" }
         instance = Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
+
         instance.version.should == "0.1.2.3"
         instance.id.should_not be_nil
+        instance.should be_valid
+      end
+
+      it "saves the hdfs instance" do
+        Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
+
+        cached_instance = HadoopInstance.find_by_name_and_owner_id(instance_attributes[:name], owner.id)
+        cached_instance.host.should == instance_attributes[:host]
+        cached_instance.port.should == instance_attributes[:port]
+        cached_instance.description.should == instance_attributes[:description]
+        cached_instance.description.should == instance_attributes[:description]
+        cached_instance.username.should == instance_attributes[:username]
+        cached_instance.group_list.should == instance_attributes[:group_list]
       end
     end
 
     context "when none of the hadoop versions can successfully connect" do
-      it "will not create the instance" do
-        stub(Hdfs::ConnectionBuilder).find_version { nil }
+      let(:hadoop_version) { nil }
+
+      it "raises an exception" do
         expect { Hdfs::InstanceRegistrar.create!(instance_attributes, owner) }.to raise_error ApiValidationError
+      end
+
+      it "will not create the instance" do
         expect {
           begin
             Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
@@ -46,23 +67,6 @@ describe Hdfs::InstanceRegistrar do
           end
         }.not_to change(HadoopInstance, 'count')
       end
-    end
-
-    it "caches the hdfs instance" do
-      Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
-
-      cached_instance = HadoopInstance.find_by_name_and_owner_id(instance_attributes[:name], owner.id)
-      cached_instance.host.should == instance_attributes[:host]
-      cached_instance.port.should == instance_attributes[:port]
-      cached_instance.description.should == instance_attributes[:description]
-      cached_instance.description.should == instance_attributes[:description]
-      cached_instance.username.should == instance_attributes[:username]
-      cached_instance.group_list.should == instance_attributes[:group_list]
-    end
-
-    it "returns the cached instance" do
-      instance = Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
-      instance.should == HadoopInstance.find_by_name_and_owner_id(instance_attributes[:name], owner.id)
     end
   end
 end

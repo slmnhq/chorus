@@ -1,7 +1,1 @@
-java_home: "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
-
-versions:
-  "1.0.0":      "http://www.reverse.net/pub/apache/hadoop/common/hadoop-1.0.0/hadoop-1.0.0.tar.gz"
-  "0.20.205.0": "http://apache.spinellicreations.com/hadoop/common/hadoop-0.20.205.0/hadoop-0.20.205.0.tar.gz"
-  "0.20.1":     "http://archive.apache.org/dist/hadoop/core/hadoop-0.20.1/hadoop-0.20.1.tar.gz"
-
+query_service_url: 'http://localhost:5000'

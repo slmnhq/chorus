@@ -34,6 +34,7 @@ group :test do
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'hashie'
+  gem 'vcr'
 end
 
 group :test, :development do
