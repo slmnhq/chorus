@@ -26,25 +26,25 @@ describe("chorus.models.TabularData", function() {
 
     describe("#statistics", function() {
         beforeEach(function() {
-            this.tabularDataProperties = this.tabularData.statistics()
+            this.statistics = this.tabularData.statistics()
         })
 
         it("returns an instance of DatabaseObjectStatistics", function() {
-            expect(this.tabularDataProperties).toBeA(chorus.models.DatabaseObjectStatistics)
+            expect(this.statistics).toBeA(chorus.models.DatabaseObjectStatistics)
         })
 
         it("should memoize the result", function() {
-            expect(this.tabularDataProperties).toBe(this.tabularData.statistics());
+            expect(this.statistics).toBe(this.tabularData.statistics());
         })
 
         it("sets the properties correctly", function() {
-            expect(this.tabularDataProperties.get('instanceId')).toBe(this.tabularData.get('instance').id)
-            expect(this.tabularDataProperties.get('databaseName')).toBe(this.tabularData.get("databaseName"))
-            expect(this.tabularDataProperties.get('schemaName')).toBe(this.tabularData.get("schemaName"))
-            expect(this.tabularDataProperties.get('type')).toBe(this.tabularData.get("type"))
-            expect(this.tabularDataProperties.get('objectType')).toBe(this.tabularData.get("objectType"))
-            expect(this.tabularDataProperties.get('objectName')).toBe(this.tabularData.get("objectName"))
-            expect(this.tabularDataProperties.get("metaType")).toBe(this.tabularData.metaType())
+            expect(this.statistics.get('instanceId')).toBe(this.tabularData.instance().id)
+            expect(this.statistics.get('databaseName')).toBe(this.tabularData.database().name())
+            expect(this.statistics.get('schemaName')).toBe(this.tabularData.schema().name())
+            expect(this.statistics.get('type')).toBe(this.tabularData.get("type"))
+            expect(this.statistics.get('objectType')).toBe(this.tabularData.get("objectType"))
+            expect(this.statistics.get('objectName')).toBe(this.tabularData.name())
+            expect(this.statistics.get("metaType")).toBe(this.tabularData.metaType())
         })
     })
 
@@ -183,20 +183,20 @@ describe("chorus.models.TabularData", function() {
         it("returns an instance with the right id and name", function() {
             expect(this.instance).toBeA(chorus.models.Instance);
 
-            expect(this.instance.id).toBe(this.tabularData.get("instance").id);
-            expect(this.instance.name()).toBe(this.tabularData.get("instance").name);
+            expect(this.instance.id).toBe(this.tabularData.get("schema").database.instance.id);
+            expect(this.instance.name()).toBe(this.tabularData.get("schema").database.instance.name);
         });
     });
 
     describe("#database", function() {
         it("returns a new database with the right attributes", function() {
-            expect(this.tabularData.database().name()).toBe(this.tabularData.get("databaseName"));
+            expect(this.tabularData.database().name()).toBe(this.tabularData.get("schema").database.name);
         });
     });
 
     describe("#schema", function() {
         it("returns a new schema with the right attributes", function() {
-            expect(this.tabularData.schema().name()).toBe(this.tabularData.get("schemaName"));
+            expect(this.tabularData.schema().name()).toBe(this.tabularData.get("schema").name);
         });
     });
 
@@ -283,10 +283,10 @@ describe("chorus.models.TabularData", function() {
 
             it("should return a database preview", function() {
                 expect(this.preview).toBeA(chorus.models.DataPreviewTask);
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
-                expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
-                expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
-                expect(this.preview.get("objectName")).toBe(this.tabularData.get("objectName"));
+                expect(this.preview.get("instanceId")).toBe(this.tabularData.instance().id);
+                expect(this.preview.get("databaseName")).toBe(this.tabularData.database().name());
+                expect(this.preview.get("schemaName")).toBe(this.tabularData.schema().name());
+                expect(this.preview.get("objectName")).toBe(this.tabularData.name());
                 expect(this.preview.get("objectType")).toBe("TABLE");
             });
         });
@@ -302,10 +302,10 @@ describe("chorus.models.TabularData", function() {
             it("should return a database preview", function() {
                 expect(this.preview).toBeA(chorus.models.DataPreviewTask);
                 expect(this.preview.get("taskType")).toBe("previewTableOrView");
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
-                expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
-                expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
-                expect(this.preview.get("objectName")).toBe(this.tabularData.get("objectName"));
+                expect(this.preview.get("instanceId")).toBe(this.tabularData.instance().id);
+                expect(this.preview.get("databaseName")).toBe(this.tabularData.database().name());
+                expect(this.preview.get("schemaName")).toBe(this.tabularData.schema().name());
+                expect(this.preview.get("objectName")).toBe(this.tabularData.name());
                 expect(this.preview.get("objectType")).toBe("VIEW");
             });
         });
@@ -325,9 +325,9 @@ describe("chorus.models.TabularData", function() {
             it("should return a dataset preview", function() {
                 expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
                 expect(this.preview.get("workspaceId")).toBe("234");
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
-                expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
-                expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
+                expect(this.preview.get("instanceId")).toBe(this.tabularData.instance().id);
+                expect(this.preview.get("databaseName")).toBe(this.tabularData.database().name());
+                expect(this.preview.get("schemaName")).toBe(this.tabularData.schema().name());
                 expect(this.preview.get("query")).toBe("select * from hello_world");
             });
         });
@@ -348,9 +348,9 @@ describe("chorus.models.TabularData", function() {
             it("should return a dataset preview", function() {
                 expect(this.preview).toBeA(chorus.models.ChorusViewPreviewTask);
                 expect(this.preview.get("workspaceId")).toBe("234");
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.get("instance").id);
-                expect(this.preview.get("databaseName")).toBe(this.tabularData.get("databaseName"));
-                expect(this.preview.get("schemaName")).toBe(this.tabularData.get("schemaName"));
+                expect(this.preview.get("instanceId")).toBe(this.tabularData.instance().id);
+                expect(this.preview.get("databaseName")).toBe(this.tabularData.database().name());
+                expect(this.preview.get("schemaName")).toBe(this.tabularData.schema().name());
                 expect(this.preview.get("query")).toBe("select * from hello_world");
             });
         });
@@ -408,9 +408,9 @@ describe("chorus.models.TabularData", function() {
 
         it("should pass the correct parameters to the DatabaseColumnSet", function() {
             var columns = this.tabularData.columns();
-            expect(columns.attributes.instanceId).toBe(this.tabularData.get("instance").id);
-            expect(columns.attributes.databaseName).toBe(this.tabularData.get("databaseName"));
-            expect(columns.attributes.schemaName).toBe(this.tabularData.get("schemaName"));
+            expect(columns.attributes.instanceId).toBe(this.tabularData.instance().id);
+            expect(columns.attributes.databaseName).toBe(this.tabularData.database().name());
+            expect(columns.attributes.schemaName).toBe(this.tabularData.schema().name());
         });
 
         context("when the object has a metaType of 'query'", function() {
@@ -432,7 +432,7 @@ describe("chorus.models.TabularData", function() {
 
             it("passes its name to the column set as 'tableName'", function() {
                 var columns = this.tabularData.columns();
-                expect(columns.attributes.tableName).toBe(this.tabularData.get("objectName"));
+                expect(columns.attributes.tableName).toBe(this.tabularData.name());
                 expect(columns.attributes.viewName).toBeFalsy();
             });
         });
@@ -444,7 +444,7 @@ describe("chorus.models.TabularData", function() {
 
             it("passes its name to the column set as 'viewName'", function() {
                 var columns = this.tabularData.columns();
-                expect(columns.attributes.viewName).toBe(this.tabularData.get("objectName"));
+                expect(columns.attributes.viewName).toBe(this.tabularData.name());
                 expect(columns.attributes.tableName).toBeFalsy();
             });
         });
@@ -456,14 +456,14 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("uses the safePGName helper", function() {
-            expect(this.tabularData.quotedName()).toBe(chorus.Mixins.dbHelpers.safePGName(this.tabularData.get("objectName")));
+            expect(this.tabularData.quotedName()).toBe(chorus.Mixins.dbHelpers.safePGName(this.tabularData.name()));
         });
     });
 
     describe("#toText", function() {
         context("with lowercase names", function() {
             beforeEach(function() {
-                this.tabularData.set({objectName: "tabler", schemaName: "party_schema" })
+                this.tabularData.set({objectName: "tabler", schema: {name: "party_schema"} })
             });
 
             it("formats the string to put into the sql editor", function() {
@@ -473,7 +473,7 @@ describe("chorus.models.TabularData", function() {
 
         context("with uppercase names", function() {
             beforeEach(function() {
-                this.tabularData.set({objectName: "Tabler", schemaName: "PartyMAN"});
+                this.tabularData.set({objectName: "Tabler", schema: {name: "PartyMAN"}});
             });
 
             it("puts quotes around the uppercase names", function() {
@@ -513,7 +513,7 @@ describe("chorus.models.TabularData", function() {
     describe("#fromClause", function() {
         context("when a datasetNumber is not set", function() {
             it("returns the quoted schema name and table name", function() {
-                expect(this.tabularData.fromClause()).toBe(this.tabularData.get("schemaName") + "." + this.tabularData.quotedName());
+                expect(this.tabularData.fromClause()).toBe(this.tabularData.schema().name() + "." + this.tabularData.quotedName());
             });
         });
 
@@ -523,7 +523,7 @@ describe("chorus.models.TabularData", function() {
             });
 
             it("returns the aliased from clause", function() {
-                expect(this.tabularData.fromClause()).toBe(this.tabularData.get("schemaName") + "." + this.tabularData.quotedName() + " AS a");
+                expect(this.tabularData.fromClause()).toBe(this.tabularData.schema().name() + "." + this.tabularData.quotedName() + " AS a");
             });
         });
 
@@ -821,11 +821,15 @@ describe("chorus.models.TabularData", function() {
     describe("Analyze", function() {
         beforeEach(function() {
             this.tabularData = fixtures.tabularData({
-                instance: {id: "2"},
-                databaseName: "db",
-                schemaName: "myScheme",
                 objectName: "MrTable",
-                objectType: "TABLE"
+                objectType: "TABLE",
+                schema: {
+                    name: "myScheme",
+                    database: {
+                        name: "db",
+                        instance: {id: "2"}
+                    }
+                }
             });
         });
 

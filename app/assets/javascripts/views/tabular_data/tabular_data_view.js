@@ -15,7 +15,7 @@ chorus.views.TabularData = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        this.$("a.instance, a.database").data("instance", this.model.get("instance"));
+        this.$("a.instance, a.database").data("instance", this.model.instance().attributes);
         var $menu = this.$('.found_in .open_other_menu');
         chorus.menu($menu, {
             content: $menu.parent().find('.other_menu'),

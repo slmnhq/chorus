@@ -84,7 +84,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                     expect(this.view.$(".actions a.analyze")).not.toExist();
                 });
 
-                it("does not display the action for a external table", function() {
+                it("does not display the action for a hadoop external table", function() {
                     this.dataset = fixtures.datasetHadoopExternalTable();
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     expect(this.view.$(".actions a.analyze")).not.toExist();

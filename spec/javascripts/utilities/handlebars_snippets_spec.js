@@ -781,23 +781,27 @@ describe("handlebars", function() {
             });
 
             it("includes the instance name, database name, and schema name", function() {
-                var instance = new chorus.models.Instance({id: this.model.get("instance").id, name: this.model.get("instance").name});
-                expect($(this.result).find("a.instance")).toContainText(instance.get("name"));
+                var instance = this.model.instance();
+                expect($(this.result).find("a.instance")).toContainText(instance.name());
                 expect($(this.result).find("a.instance")).toHaveHref(instance.showUrl());
 
-                var database = new chorus.models.Database({instanceId: instance.id, name: this.model.get("databaseName")});
-                expect($(this.result).find("a.database")).toContainText(database.get("name"));
+                var database = this.model.database();
+                expect($(this.result).find("a.database")).toContainText(database.name());
                 expect($(this.result).find("a.database")).toHaveHref(database.showUrl());
 
-                expect($(this.result).find("a.schema")).toContainText(this.model.get("schemaName"));
+                expect($(this.result).find("a.schema")).toContainText(this.model.schema().name());
                 expect($(this.result).find("a.schema").attr("href")).toMatchUrl(this.model.schema().showUrl());
             });
 
             it("includes the highlighted database and schema name", function() {
-                this.model = fixtures.tabularData({highlightedAttributes: {
-                    databaseName: 'db_<em>name</em>',
-                    schemaName: 'schema_<em>name</em>'
-                }});
+                this.model = fixtures.tabularData({
+                    schema: {
+                        highlightedAttributes: { name: 'schema_<em>name</em>' },
+                        database: {
+                            highlightedAttributes: { name: 'db_<em>name</em>' }
+                        }
+                    }
+                });
                 this.result = Handlebars.helpers.tabularDataLocation(this.model).toString();
                 expect($(this.result).find('em').length).toBe(2);
             });
@@ -810,9 +814,9 @@ describe("handlebars", function() {
                 });
 
                 it("includes the instance name, database name, and schema name", function() {
-                    expect($(this.result)).toContainText(this.model.get("instance").name);
-                    expect($(this.result)).toContainText(this.model.get("databaseName"));
-                    expect($(this.result)).toContainText(this.model.get("schemaName"));
+                    expect($(this.result)).toContainText(this.model.instance().name());
+                    expect($(this.result)).toContainText(this.model.database().name());
+                    expect($(this.result)).toContainText(this.model.schema().name());
                     expect($(this.result).find('a')).not.toExist();
                 });
             });
@@ -847,7 +851,7 @@ describe("handlebars", function() {
                 });
 
                 it("doesn't complain if highlighted value is not wrapped in an array", function() {
-                    var attributes = {highlightedAttributes: {content : "SELECT * FROM <em>test</em> AS a"}};
+                    var attributes = {highlightedAttributes: {content: "SELECT * FROM <em>test</em> AS a"}};
                     expect(Handlebars.helpers.displaySearchMatch.call(attributes, 'content').toString()).toBe("SELECT * FROM <em>test</em> AS a");
                 });
 
@@ -879,7 +883,7 @@ describe("handlebars", function() {
                 });
 
                 it("doesn't complain if highlighted value is not wrapped in an array", function() {
-                    var model = new chorus.models.Base({highlightedAttributes: {content : "SELECT * FROM <em>test</em> AS a"}});
+                    var model = new chorus.models.Base({highlightedAttributes: {content: "SELECT * FROM <em>test</em> AS a"}});
                     expect(Handlebars.helpers.displaySearchMatch.call(model, 'content').toString()).toBe("SELECT * FROM <em>test</em> AS a");
                 });
             });
@@ -961,7 +965,7 @@ describe("handlebars", function() {
                 beforeEach(function() {
                     this.context = {
                         serverErrors: {
-                            fields : {
+                            fields: {
                                 username_or_password: { INVALID: {}},
                                 password: { BLANK: {} }
                             }

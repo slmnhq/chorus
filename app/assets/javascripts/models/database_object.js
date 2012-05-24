@@ -2,18 +2,18 @@ chorus.models.DatabaseObject = chorus.models.TabularData.extend({
     constructorName: "DatabaseObject",
 
     urlTemplate: function() {
-        return "data/" + this.get("instance").id + "/database/{{encode databaseName}}/schema/{{encode schemaName}}/" + this.metaType() + "/{{encode objectName}}"
+        return "data/" + this.instance().id + "/database/{{encode databaseName}}/schema/{{encode schemaName}}/" + this.metaType() + "/{{encode objectName}}"
     },
 
     showUrlTemplate: function() {
-        return "instances/" + (this.get("instance") && this.get("instance").id) + "/databases/{{encode databaseName}}/schemas/{{encode schemaName}}/{{objectType}}/" + encodeURIComponent($.stripHtml(this.get("objectName")))
+        return "instances/" + this.instance().id + "/databases/{{encode databaseName}}/schemas/{{encode schemaName}}/{{objectType}}/" + encodeURIComponent($.stripHtml(this.get("objectName")))
     },
 
     urlTemplateAttributes: function() {
         return {
-            databaseName: $.stripHtml(this.get("databaseName")),
-            schemaName: $.stripHtml(this.get("schemaName")),
-            objectName: $.stripHtml(this.get("objectName")),
+            databaseName: $.stripHtml(this.database().name()),
+            schemaName: $.stripHtml(this.schema().name()),
+            objectName: $.stripHtml(this.name()),
             objectType: this.get("objectType")
         }
     },

@@ -43,7 +43,7 @@ chorus.models.TabularData = chorus.models.Base.include(
                 });
 
                 var objectNameField = this.metaType() + "Name";
-                this._columns.attributes[objectNameField] = (this.metaType() == "query") ? this.get("id") : this.get("objectName");
+                this._columns.attributes[objectNameField] = (this.metaType() == "query") ? this.get("id") : this.name();
             }
             return this._columns;
         },
@@ -57,18 +57,7 @@ chorus.models.TabularData = chorus.models.Base.include(
         },
 
         schema: function() {
-            return new chorus.models.Schema({
-                id: this.get("schemaId"),
-                name: this.get("schemaName"),
-                database: {
-                    id: this.get("databaseId"),
-                    name: this.get("databaseName"),
-                    instance: {
-                        id: this.get("instance").id,
-                        name: this.get("instance").name
-                    }
-                }
-            });
+            return new chorus.models.Schema(this.get("schema"));
         },
 
         workspace: function() {
@@ -94,12 +83,12 @@ chorus.models.TabularData = chorus.models.Base.include(
         statistics: function() {
             if (!this._statistics) {
                 this._statistics = new chorus.models.DatabaseObjectStatistics({
-                    instanceId: this.has("instance") ? this.get("instance").id : this.collection.attributes.instanceId,
+                    instanceId: this.instance().id,
                     databaseName: this.database().name(),
                     schemaName: this.schema().name(),
                     type: this.get("type"),
                     objectType: this.get("objectType"),
-                    objectName: this.get("objectName"),
+                    objectName: this.name(),
                     metaType: this.metaType()
                 });
             }
@@ -128,10 +117,10 @@ chorus.models.TabularData = chorus.models.Base.include(
 
         preview: function() {
             var commonAttributes = {
-                instanceId: this.get("instance").id,
-                databaseName: this.get("databaseName"),
-                schemaName: this.get("schemaName"),
-                objectName: this.get("objectName")
+                instanceId: this.instance().id,
+                databaseName: this.database().name(),
+                schemaName: this.schema().name(),
+                objectName: this.name()
             };
 
             if (this.isChorusView()) {
@@ -165,14 +154,16 @@ chorus.models.TabularData = chorus.models.Base.include(
         },
 
         quotedName: function() {
-            return this.safePGName(this.get("objectName"));
+            return this.safePGName(this.name());
         },
 
         toText: function() {
             if (this.has("query")) {
                 var query = this.get("query").trim().replace(/;$/, "").trim();
                 return "(" + query + ") AS " + this.safePGName(this.name());
-            } else return this.safePGName(this.get("schemaName")) + '.' + this.safePGName(this.get("objectName"));
+            } else {
+                return this.safePGName(this.schema().name()) + '.' + this.safePGName(this.name());
+            }
         },
 
         selectName: function() {
@@ -196,7 +187,7 @@ chorus.models.TabularData = chorus.models.Base.include(
             if (this.has("query")) {
                 return "(" + this.get("query") + ")";
             }
-            return this.safePGName(this.get("schemaName")) + "." + this.quotedName();
+            return this.safePGName(this.schema().name()) + "." + this.quotedName();
         },
 
         alias: function() {

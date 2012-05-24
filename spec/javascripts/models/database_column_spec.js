@@ -26,11 +26,11 @@ describe("chorus.models.DatabaseColumn", function() {
             });
 
             it("sets instanceId, databaseName, schemaName, parentName, and parentType", function() {
-                expect(this.model.get("instanceId")).toBe(this.model.tabularData.get('instance').id);
-                expect(this.model.get("databaseName")).toBe(this.model.tabularData.get('databaseName'));
-                expect(this.model.get("schemaName")).toBe(this.model.tabularData.get('schemaName'));
-                expect(this.model.get("parentName")).toBe(this.model.tabularData.get('objectName'));
-                expect(this.model.get("parentType")).toBe(this.model.tabularData.metaType());
+                expect(this.model.get("instanceId")).toBe(this.tabularData.instance().id);
+                expect(this.model.get("databaseName")).toBe(this.tabularData.database().name());
+                expect(this.model.get("schemaName")).toBe(this.tabularData.schema().name());
+                expect(this.model.get("parentName")).toBe(this.tabularData.name());
+                expect(this.model.get("parentType")).toBe(this.tabularData.metaType());
             });
 
             describe("#url", function() {

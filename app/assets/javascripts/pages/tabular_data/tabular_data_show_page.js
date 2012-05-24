@@ -29,20 +29,24 @@ chorus.pages.TabularDataShowPage = chorus.pages.Base.include(
             return [
                 {label: t("breadcrumbs.home"), url: "#/"},
                 {label: t("breadcrumbs.instances"), url: '#/instances'},
-                {label: this.tabularData.get("instance").name, url: this.tabularData.instance().databases().showUrl() },
-                {label: this.tabularData.get("databaseName"), url: this.tabularData.database().showUrl() },
-                {label: this.tabularData.get("schemaName"), url: this.tabularData.schema().showUrl()},
-                {label: this.tabularData.get("objectName")}
+                {label: this.tabularData.instance().name(), url: this.tabularData.instance().databases().showUrl() },
+                {label: this.tabularData.database().name(), url: this.tabularData.database().showUrl() },
+                {label: this.tabularData.schema().name(), url: this.tabularData.schema().showUrl()},
+                {label: this.tabularData.name()}
             ];
         },
 
         makeModel: function(instanceId, databaseName, schemaName, objectType, objectName) {
             this.model = this.tabularData = new chorus.models.DatabaseObject({
-                instance: { id: instanceId },
-                databaseName: databaseName,
-                schemaName: schemaName,
                 objectName: objectName,
-                objectType: objectType
+                objectType: objectType,
+                schema: {
+                    name: schemaName,
+                    database: {
+                        name: databaseName,
+                        instance: { id: instanceId }
+                    }
+                }
             });
         },
 

@@ -1880,10 +1880,19 @@ beforeEach(function() {
         tabularDataJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
-                databaseName: "dca_demo",
-                instance: {id: fixtures.nextId(), name: "some_instance"},
                 objectName: "Dataset" + id,
-                schemaName: "some_schema",
+                schema: {
+                    id: fixtures.nextId(),
+                    name: "some_schema",
+                    database: {
+                        id: fixtures.nextId(),
+                        name: "dca_demo",
+                        instance: {
+                            id: fixtures.nextId(),
+                            name: "some_instance"
+                        }
+                    }
+                },
                 recentComment: fixtures.activities.NOTE_ON_DATASET_JSON(),
                 commentCount: 1
             }, overrides);
@@ -1904,10 +1913,12 @@ beforeEach(function() {
                     workspaceList: [newFixtures.workspaceJson()]
                 }
             }, overrides);
+            attributes.instance = attributes.instance || {};
+            attributes.instance.id = attributes.schema.database.instance.id;
             attributes.id = _.map([
-                attributes.instance.id,
-                attributes.databaseName,
-                attributes.schemaName,
+                attributes.schema.database.instance.id,
+                attributes.schema.database.name,
+                attributes.schema.name,
                 attributes.objectType,
                 attributes.objectName
             ],
@@ -2479,14 +2490,18 @@ beforeEach(function() {
                 },
                 databaseObject: {
                     id: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"2010_report_on_white_house"',
-                    databaseName: "dca_demo",
-                    schemaName: "ddemo",
+                    schema: {
+                        name: "ddemo",
+                        database: {
+                            name: "dca_demo",
+                            instance: {
+                                id: "22222",
+                                name: "gillette"
+                            }
+                        }
+                    },
                     objectName: "2010_report_on_white_house",
                     workspaces: [],
-                    instance: {
-                        id: "22222",
-                        name: "gillette"
-                    },
                     entityType: "databaseObject",
                     objectType: "TABLE"
                 },

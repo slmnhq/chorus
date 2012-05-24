@@ -24,6 +24,22 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
         ].join("/");
     },
 
+    schema: function() {
+        // TODO: Convert this to new chorus.models.Schema(this.get("schema")) when we rebuild the dataset API.
+        return new chorus.models.Schema({
+            id: this.get("schemaId"),
+            name: this.get("schemaName"),
+            database: {
+                id: this.get("databaseId"),
+                name: this.get("databaseName"),
+                instance: {
+                    id: this.get("instance").id,
+                    name: this.get("instance").name
+                }
+            }
+        });
+    },
+
     iconUrl: function() {
         var result = this._super("iconUrl", arguments);
         if (this.get('hasCredentials') === false) {

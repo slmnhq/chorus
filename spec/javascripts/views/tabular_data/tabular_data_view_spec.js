@@ -32,8 +32,8 @@ describe("chorus.views.TabularData", function() {
     });
 
     it("attaches the instance model to the instance and database breadcrumbs", function() {
-        expect(this.view.$(".instance").data("instance")).toBe(this.dataset.get("instance"));
-        expect(this.view.$(".database").data("instance")).toBe(this.dataset.get("instance"));
+        expect(this.view.$(".instance").data("instance")).toEqual(this.dataset.get("instance"));
+        expect(this.view.$(".database").data("instance")).toEqual(this.dataset.get("instance"));
     });
 
     describe("found in workspaces tooltip (when rendered from the schema browse page)", function() {
@@ -45,7 +45,7 @@ describe("chorus.views.TabularData", function() {
                     workspaceList: [
                         { id: '1', name: "Hoge" },
                         { id: '2', name: "Fuga" },
-                        { id: '3', name: "Piyo" },
+                        { id: '3', name: "Piyo" }
                     ]
                 }
             });

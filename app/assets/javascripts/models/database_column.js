@@ -12,10 +12,10 @@ chorus.models.DatabaseColumn = chorus.models.Base.extend({
     initialize: function() {
         if (this.tabularData) {
             this.set({
-                instanceId: this.tabularData.get("instance").id,
-                databaseName: this.tabularData.get("databaseName"),
-                schemaName: this.tabularData.get("schemaName"),
-                parentName: this.tabularData.get("objectName"),
+                instanceId: this.tabularData.instance().id,
+                databaseName: this.tabularData.database().name(),
+                schemaName: this.tabularData.schema().name(),
+                parentName: this.tabularData.name(),
                 parentType: this.tabularData.metaType()
             });
         }

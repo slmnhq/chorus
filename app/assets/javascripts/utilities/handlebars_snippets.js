@@ -293,9 +293,9 @@
             var database = schema.database();
 
             var schemaPieces = [];
-            var instanceName = instance.get("name")
-            var databaseName = highlightedTabularData.get('databaseName')
-            var schemaName = highlightedTabularData.get('schemaName')
+            var instanceName = instance.name();
+            var databaseName = chorus.helpers.withSearchResults(database).name()
+            var schemaName = chorus.helpers.withSearchResults(schema).name()
 
             if (tabularData.get('hasCredentials') === false) {
                 schemaPieces.push(instanceName);
