@@ -16,8 +16,8 @@ def fill_user_form(params = {})
   username = "#{params[:first_name] || first_name}#{params[:last_name] || last_name}"
   fill_in 'username', :with => params[:username] || username
   fill_in 'email', :with => "#{params[:username] || username}@email.com"
-  fill_in 'password', :with => "password"
-  fill_in 'passwordConfirmation', :with => "password"
+  fill_in 'password', :with => "secret"
+  fill_in 'passwordConfirmation', :with => "secret"
   fill_in 'dept', :with => params[:department] ||Forgery::Name.industry
   fill_in 'title', :with => params[:title] ||Forgery::Name.title
 end
@@ -31,7 +31,7 @@ end
 
 def as_user(username)
   logout
-  login(username, 'password')
+  login(username, 'secret')
   yield
   logout
 end
