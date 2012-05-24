@@ -21,7 +21,7 @@ describe("chorus.views.userNew", function() {
                     this.view.$("input[name=email]").val("frankie_knuckles@nyclol.com");
                     this.view.$("input[name=password]").val("whoaomg");
                     this.view.$("input[name=passwordConfirmation]").val("whoaomg");
-                    this.view.$("input[name=ou]").val("awesomeness dept");
+                    this.view.$("input[name=dept]").val("awesomeness dept");
                     this.view.$("input[name=admin]").prop("checked", true);
                     this.view.$("textarea[name=notes]").val("some notes");
                 })
@@ -34,7 +34,7 @@ describe("chorus.views.userNew", function() {
                     expect(this.user.attributes["email"]).toBe("frankie_knuckles@nyclol.com");
                     expect(this.user.attributes["password"]).toBe("whoaomg");
                     expect(this.user.attributes["passwordConfirmation"]).toBe("whoaomg");
-                    expect(this.user.attributes["ou"]).toBe("awesomeness dept");
+                    expect(this.user.attributes["dept"]).toBe("awesomeness dept");
                     expect(this.user.attributes["admin"]).toBe(true);
                     expect(this.user.get("notes")).toBe("some notes");
                 });
@@ -101,7 +101,7 @@ describe("chorus.views.userNew", function() {
                             expect(this.view.$("input[name=email]").val()).toBe("frankie_knuckles@nyclol.com");
                             expect(this.view.$("input[name=password]").val()).toBe("whoaomg");
                             expect(this.view.$("input[name=passwordConfirmation]").val()).toBe("whoaomg");
-                            expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");
+                            expect(this.view.$("input[name=dept]").val()).toBe("awesomeness dept");
                             expect(this.view.$("input[name=admin]")).toBeChecked();
                             
                         });
