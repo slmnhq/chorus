@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe SchemaAccess do
+describe GpdbSchemaAccess do
   let(:user) { FactoryGirl.create(:user) }
   let(:owner) { FactoryGirl.build(:user) }
   let(:database) { FactoryGirl.build(:gpdb_database, :instance => instance) }
@@ -8,29 +8,29 @@ describe SchemaAccess do
   let(:schema_access) {
     controller = SchemasController.new
     stub(controller).current_user { user }
-    SchemaAccess.new(controller)
+    GpdbSchemaAccess.new(controller)
   }
 
   describe "#index?" do
     let(:account) { FactoryGirl.build(:instance_account, :owner => owner, :instance => instance) }
     context "Private Instance" do
       it "prevents non-members from indexing" do
-        schema_access.can?(:index, database, nil).should be_false
+        schema_access.can?(:index, GpdbSchema, database, nil).should be_false
       end
 
       it "allow members to index" do
         InstanceAccount.new(:owner => user, :instance => instance)
-        schema_access.can?(:index, database, account).should be_true
+        schema_access.can?(:index, GpdbSchema, database, account).should be_true
       end
 
       it "allows owners to index" do
         instance.owner = user
-        schema_access.can?(:index, database, account).should be_true
+        schema_access.can?(:index, GpdbSchema, database, account).should be_true
       end
 
       it "allows admins to index" do
         user.admin = true
-        schema_access.can?(:index, database, account).should be_true
+        schema_access.can?(:index, GpdbSchema, database, account).should be_true
       end
     end
 
@@ -39,22 +39,22 @@ describe SchemaAccess do
         instance.shared = true
       end
       it "allows non-members to index" do
-        schema_access.can?(:index, database, nil).should be_true
+        schema_access.can?(:index, GpdbSchema, database, nil).should be_true
       end
 
       it "allow members to index" do
         InstanceAccount.new(:owner => user, :instance => instance)
-        schema_access.can?(:index, database, account).should be_true
+        schema_access.can?(:index, GpdbSchema, database, account).should be_true
       end
 
       it "allows owners to index" do
         instance.owner = user
-        schema_access.can?(:index, database, account).should be_true
+        schema_access.can?(:index, GpdbSchema, database, account).should be_true
       end
 
       it "allows admins to index" do
         user.admin = true
-        schema_access.can?(:index, database, account).should be_true
+        schema_access.can?(:index, GpdbSchema, database, account).should be_true
       end
     end
   end
