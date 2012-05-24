@@ -9,7 +9,7 @@ describe WorkfilesController do
   let(:private_workspace) { FactoryGirl.create(:workspace, :public => false) }
   let(:private_workfile) { FactoryGirl.create(:workfile, :workspace => private_workspace) }
   let(:public_workfile) { FactoryGirl.create(:workfile, :workspace => workspace) }
-  let(:file) { Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/workfile.sql", Rails.root), "text/sql") }
+  let(:file) { test_file("workfile.sql", "text/sql") }
 
   describe "#show" do
     context "for a private workspace" do
@@ -54,6 +54,26 @@ describe WorkfilesController do
         get :show, {:id => public_workfile}
         response.should be_success
       end
+    end
+
+    describe "jasmine fixtures" do
+      before do
+        log_in admin
+      end
+
+      def self.generate_fixture(json_filename, uploaded_filename, mime_type)
+        self.it "generates a JSON fixture" do
+          file = test_file(uploaded_filename, mime_type)
+          FactoryGirl.create(:workfile_version, :workfile => public_workfile, :contents => file)
+          get :show, :id => public_workfile
+          save_fixture("workfile/#{json_filename}")
+        end
+      end
+
+      generate_fixture("sql.json", "workfile.sql", "text/plain")
+      generate_fixture("text.json", "some.txt", "text/plain")
+      generate_fixture("image.json", "small1.gif", "image/gif")
+      generate_fixture("binary.json", "binary.tar.gz", "application/octet-stream")
     end
   end
 

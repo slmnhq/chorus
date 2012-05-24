@@ -8,6 +8,16 @@ window.fixtureDefinitions = {
     workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] },
     workspaceSet: { unique: [ "id", "sandboxInfo.sandboxId" ] },
 
+    workfile: {
+        unique: [ "id" ],
+        children: {
+            sql: {},
+            binary: {},
+            image: {},
+            text: {}
+        }
+    },
+
     sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
 
     csvImport: { model: "CSVImport" },
