@@ -41,12 +41,11 @@ describe("chorus.views.WorkfileListSidebar", function() {
                 });
 
                 it("displays the name of the person who updated the workfile", function() {
-                    var updaterName = this.workfile.get("versionInfo").modifier.firstName + " " + this.workfile.get("versionInfo").modifier.lastName;
-                    expect(this.view.$(".updated_by").text().trim()).toBe(updaterName);
+                    expect(this.view.$(".updated_by").text().trim()).toBe(this.workfile.modifier().displayName());
                 });
 
                 it("links to the profile page of the modifier", function() {
-                    expect(this.view.$("a.updated_by").attr("href")).toBe("#/users/" + this.workfile.get("versionInfo").modifier.id);
+                    expect(this.view.$("a.updated_by").attr("href")).toBe(this.workfile.modifier().showUrl());
                 })
 
                 it("displays a link to delete the workfile", function() {
