@@ -2,7 +2,7 @@ require 'httparty'
 
 module Hdfs
   class QueryService
-    SERVICE_HOST = YAML.load_file(Rails.root.join("config", "hadoop.yml"))["query_service_url"]
+    SERVICE_HOST = YAML.load_file(Rails.root.join("config", "hdfs_service.yml"))["query_service_url"]
 
     def self.instance_version(instance)
       new(instance).version
