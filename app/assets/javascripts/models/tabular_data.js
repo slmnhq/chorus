@@ -60,10 +60,14 @@ chorus.models.TabularData = chorus.models.Base.include(
             return new chorus.models.Schema({
                 id: this.get("schemaId"),
                 name: this.get("schemaName"),
-                instanceId: this.get("instance").id,
-                instanceName: this.get("instance").name,
-                databaseId: this.get("databaseId"),
-                databaseName: this.get("databaseName")
+                database: {
+                    id: this.get("databaseId"),
+                    name: this.get("databaseName"),
+                    instance: {
+                        id: this.get("instance").id,
+                        name: this.get("instance").name
+                    }
+                }
             });
         },
 

@@ -4,10 +4,14 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         this.schema = fixtures.schema({
                     id: '4',
                     name: "schema",
-                    databaseId: '3',
-                    databaseName: "db",
-                    instanceId: '2',
-                    instanceName: "instance"
+                    database: {
+                        id: '3',
+                        name: "db",
+                        instance: {
+                            id: '2',
+                            name: "instance"
+                        }
+                    }
                 });
         spyOn(this.workfile, 'executionSchema').andCallFake(_.bind(function(){return this.schema}, this));
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runInDefault").andCallThrough();
@@ -200,7 +204,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 context("when the workfile has an execution schema, and/or the workspace has a sandbox", function() {
                     beforeEach(function() {
                         this.view.model.unset("executionInfo");
-                        this.schema = fixtures.schema({id: "77", databaseId: "88", instanceId: "99"});
+                        this.schema = fixtures.schema({id: "77", database: {id: "88", instance: {id: "99"}}});
                         this.view.textContent.editor.getSelection = function() {
                             return "select 1 from table";
                         };

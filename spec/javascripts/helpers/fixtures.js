@@ -1737,8 +1737,14 @@ beforeEach(function() {
                 lastUpdatedTxStamp: "2012-01-04 14:42:15.309",
                 createdStamp: "2012-01-04 14:42:15.318",
                 createdTxStamp: "2012-01-04 14:42:15.309",
-                instanceId: this.nextId().toString(),
-                databaseName: "My fixture database",
+                database: {
+                    id: this.nextId().toString(),
+                    name: "My fixture database",
+                    instance: {
+                        id: this.nextId().toString(),
+                        name: "My fixture instance"
+                    }
+                },
                 datasetCount: 4
             }, overrides);
             return new chorus.models.Schema(attributes);

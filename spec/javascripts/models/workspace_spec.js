@@ -28,7 +28,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#datasetsInDatabase(database)", function() {
         beforeEach(function() {
-            var database = newFixtures.schema({ databaseName: "foo" }).database();
+            var database = newFixtures.schema({ database: {name: "foo"} }).database();
             this.datasets = this.model.datasetsInDatabase(database)
         });
 

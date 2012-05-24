@@ -59,12 +59,16 @@
             var executionInfo = this.get("executionInfo");
             if (executionInfo && executionInfo.schemaName) {
                 return new chorus.models.Schema({
-                    instanceId: executionInfo.instanceId,
-                    instanceName: executionInfo.instanceName,
-                    databaseId: executionInfo.databaseId,
-                    databaseName: executionInfo.databaseName,
                     id: executionInfo.schemaId,
-                    name: executionInfo.schemaName
+                    name: executionInfo.schemaName,
+                    database: {
+                        id: executionInfo.databaseId,
+                        name: executionInfo.databaseName,
+                        instance: {
+                            id: executionInfo.instanceId,
+                            name: executionInfo.instanceName
+                        }
+                    }
                 });
             } else {
                 return this.sandbox() && this.sandbox().schema();

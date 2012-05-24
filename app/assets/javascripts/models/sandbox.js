@@ -58,28 +58,32 @@ chorus.models.Sandbox = chorus.models.Base.extend({
         return !this.get(type) && !attrs[type];
     },
 
-    schema: function() {
-        this._schema = this._schema || new chorus.models.Schema({
-            id: this.get("schemaId"),
-            name: this.get("schemaName"),
-            databaseId: this.get("databaseId"),
-            databaseName: this.get("databaseName"),
-            instanceId: this.get("instanceId"),
-            instanceName: this.get("instanceName")
-        });
-
-        return this._schema;
-    },
-
     instance: function() {
         this._instance = this._instance || this.database().instance();
         return this._instance;
     },
 
     database: function() {
-        this._database = this._database || this.schema.database();
+        this._database = this._database || this.schema().database();
 
         return this._database;
+    },
+
+    schema: function() {
+        this._schema = this._schema || new chorus.models.Schema({
+            id: this.get("schemaId"),
+            name: this.get("schemaName"),
+            database: {
+                id: this.get("databaseId"),
+                name: this.get("databaseName"),
+                instance: {
+                    id: this.get("instanceId"),
+                    name: this.get("instanceName")
+                }
+            }
+        });
+
+        return this._schema;
     },
 
     canonicalName: function() {

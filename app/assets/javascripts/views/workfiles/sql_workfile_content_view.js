@@ -36,7 +36,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
             var runOptions = {selection: selectedText};
             var schema = this.model.executionSchema();
             if(schema){
-                runOptions.instance = schema.get("instanceId");
+                runOptions.instance = schema.database().instance().id;
                 runOptions.database = schema.database().id;
                 runOptions.schema = schema.get("id");
             }
@@ -48,7 +48,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     runInDefault: function() {
         if (!this.model.executionSchema()) return;
         this.run({
-            instance: this.model.executionSchema().get('instanceId'),
+            instance: this.model.executionSchema().database().instance().id,
             database: this.model.executionSchema().database().id,
             schema: this.model.executionSchema().get('id')
         })

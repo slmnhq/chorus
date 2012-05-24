@@ -20,11 +20,14 @@ describe GpdbSchemaPresenter, :type => :view do
     it "includes the fields" do
       @hash[:id].should == 456
       @hash[:name].should == "abc"
-      @hash[:instance_id].should == 123
-      @hash[:instance_name].should == "instance1"
-      @hash[:database_id].should == 789
-      @hash[:database_name].should == "db1"
       @hash[:dataset_count].should == 2
+      database = @hash[:database]
+      database[:id].should == 789
+      database[:name].should == "db1"
+      database[:instance][:id].should == 123
+      database[:instance][:name].should == "instance1"
     end
   end
+
+  it_behaves_like "sanitized presenter", :gpdb_schema, :name
 end

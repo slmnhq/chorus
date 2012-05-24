@@ -18,11 +18,7 @@ describe("chorus.models.Sandbox", function() {
         });
 
         it("should be created with instance, database, and schema names and ids", function() {
-            expect(this.schema.get('instanceId')).toBe(this.model.get('instanceId'));
-            expect(this.schema.database().id).toBe(this.model.get('databaseId'));
             expect(this.schema.get('id')).toBe(this.model.get('schemaId'));
-            expect(this.schema.get('instanceName')).toBe(this.model.get('instanceName'));
-            expect(this.schema.database().name()).toBe(this.model.get('databaseName'));
             expect(this.schema.get('name')).toBe(this.model.get('schemaName'));
         });
 
@@ -39,7 +35,7 @@ describe("chorus.models.Sandbox", function() {
         it("returns a database with the right id and instanceId", function() {
             expect(this.database).toBeA(chorus.models.Database);
             expect(this.database.get("id")).toBe(this.model.get("databaseId"));
-            expect(this.database.get("instanceId")).toBe(this.model.get("instanceId"));
+            expect(this.database.get("name")).toBe(this.model.get("databaseName"));
         });
 
         it("memoizes", function() {

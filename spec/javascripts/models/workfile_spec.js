@@ -52,8 +52,8 @@ describe("chorus.models.Workfile", function() {
             context("when the workfile has never been executed", function() {
                 it("returns the sandbox's schema", function() {
                     var schema = this.model.executionSchema();
-                    expect(schema.get("instanceId")).toBe('5');
-                    expect(schema.get("instanceName")).toBe('instance');
+                    expect(schema.database().instance().id).toBe('5');
+                    expect(schema.database().instance().name()).toBe('instance');
                     expect(schema.database().id).toBe('4');
                     expect(schema.database().name()).toBe('db');
                     expect(schema.get("id")).toBe('6');
@@ -75,8 +75,8 @@ describe("chorus.models.Workfile", function() {
 
                 it("returns that schema", function() {
                     var schema = this.model.executionSchema();
-                    expect(schema.get("instanceId")).toBe('51');
-                    expect(schema.get("instanceName")).toBe('ned');
+                    expect(schema.database().instance().id).toBe('51');
+                    expect(schema.database().instance().name()).toBe('ned');
                     expect(schema.database().id).toBe('52');
                     expect(schema.database().name()).toBe('rob');
                     expect(schema.get("id")).toBe('53');
@@ -99,8 +99,8 @@ describe("chorus.models.Workfile", function() {
 
                 it("returns the sandbox's schema", function() {
                     var schema = this.model.executionSchema();
-                    expect(schema.get("instanceId")).toBe('5');
-                    expect(schema.get("instanceName")).toBe('instance');
+                    expect(schema.database().instance().id).toBe('5');
+                    expect(schema.database().instance().name()).toBe('instance');
                     expect(schema.database().id).toBe('4');
                     expect(schema.database().name()).toBe('db');
                     expect(schema.get("id")).toBe('6');
