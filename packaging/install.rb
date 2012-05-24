@@ -67,11 +67,11 @@ end
 def setup_environment
   # Perhaps write a Bashrc to set these environment variables.
   run "export RAILS_ENV=production"
-  run "PATH=/home/vagrant/ruby/bin:$PATH"
-  run "PATH=/home/vagrant/rubygems/bin:$PATH"
-  run "PATH=/home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:$PATH"
-  run "PATH=/home/vagrant/pgsql/bin:$PATH"
-  run "LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/"
+  run "export PATH=/home/vagrant/ruby/bin:$PATH"
+  run "export PATH=/home/vagrant/rubygems/bin:$PATH"
+  run "export PATH=/home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:$PATH"
+  run "export PATH=/home/vagrant/pgsql/bin:$PATH"
+  run "export LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/"
 end
 
 def install_chorus
