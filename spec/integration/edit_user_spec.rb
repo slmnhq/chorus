@@ -22,7 +22,7 @@ describe "editing user profiles" do
   describe "editing another user's profile" do
     before(:each) do
       login('edcadmin', 'secret')
-      create_valid_user("johnny")
+      create_valid_user(:username => "johnny")
       @new_user_id = User.find_by_username("johnny").id
       visit("/#/users/#{@new_user_id}/edit")
     end

@@ -5,26 +5,7 @@ describe "creating a user" do
     login('edcadmin', 'secret')
   end
 
-  def fill_user_form(params)
-    first_name = Forgery::Name.first_name
-    last_name = Forgery::Name.last_name
-    username = "#{first_name}#{last_name}"
-    fill_in 'firstName', :with => params[:firstName] || first_name
-    fill_in 'lastName', :with => params[:lastName] || last_name
-    fill_in 'username', :with => params[:username] || username
-    fill_in 'email', :with => "#{params[:username]}@email.com" || "#{username}@gmail.com"
-    fill_in 'password', :with => "password"
-    fill_in 'passwordConfirmation', :with => "password"
-    fill_in 'dept', :with => params[:department] ||Forgery::Name.industry
-    fill_in 'title', :with => params[:title] ||Forgery::Name.title
-  end
 
-  def create_valid_user(params)
-    visit("/#/users/new")
-    fill_user_form(params)
-    page.find("button[type=submit]").click
-    wait_until { current_route == "/users" }
-  end
 
   it "Creates a user and saves their information" do
     visit("/#/users/new")
@@ -37,7 +18,7 @@ describe "creating a user" do
     department = Forgery::Name.industry
     title = Forgery::Name.title
 
-    create_valid_user(:username => username, :firstName => first_name, :lastName => last_name,
+    create_valid_user(:username => username, :first_name => first_name, :last_name => last_name,
                        :department => department, :title => title)
     wait_until { current_route == "/users" }
     click_link("#{first_name} #{last_name}")

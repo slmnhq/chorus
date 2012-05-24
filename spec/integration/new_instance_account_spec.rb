@@ -4,7 +4,7 @@ describe "creating an instance credential" do
   before(:each) do
     login('edcadmin', 'secret')
     create_valid_instance
-    create_valid_user("testuser1")
+    create_valid_user(:username => "testuser1")
   end
 
   xit "works" do
