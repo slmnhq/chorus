@@ -71,7 +71,7 @@ describe "creating a note on a workspace" do
     #within(".workspace_list") { page.should have_content("WorkspaceToArchive" }
   end
 
-  it "can archive the workspace" do
+  it "can archive and unarchive the workspace" do
     workspace_name = "#{Forgery::Name.first_name}'s Workspace'"
     create_valid_workspace(:name => workspace_name)
     click_link "Edit Workspace"
@@ -89,13 +89,28 @@ describe "creating a note on a workspace" do
     end
 
     visit('/#/workspaces')
-    sleep(10)
     within(".workspace_list") { page.should_not have_content(workspace_name) }
 
     page.execute_script("$('.popup').click()")
     click_link("All Workspaces")
 
     within(".workspace_list") { page.should have_content(workspace_name) }
+
+    click_link(workspace_name)
+
+    click_link "Edit Workspace"
+    wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
+    within("#facebox") do
+      choose("workspace_active")
+      find(".submit").click
+    end
+
+    within(".actions") do
+      page.should have_content("Add or Edit Members")
+      page.should have_content("Add an insight")
+      page.should have_content("Add a note")
+      page.should have_content("Add a sandbox")
+    end
   end
 end
 
