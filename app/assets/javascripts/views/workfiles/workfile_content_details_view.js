@@ -17,7 +17,7 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
     additionalContext: function() {
         return {
             isLatestVersion: this.model.isLatestVersion()
-        }
+        };
     },
 
     postRender:function () {

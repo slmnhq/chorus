@@ -2,7 +2,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
     beforeEach(function() {
         spyOn(chorus.views.Sidebar.prototype, "jumpToTop");
         chorus.page = { workspace: newFixtures.workspace() };
-        this.workfile = fixtures.textWorkfile();
+        this.workfile = newFixtures.workfile.text();
         spyOn(chorus.views.WorkfileShowSidebar.prototype, "recalculateScrolling").andCallThrough();
         this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
     });
@@ -35,7 +35,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
     context("with a sql workfile", function() {
         beforeEach(function() {
-            this.workfile = fixtures.sqlWorkfile();
+            this.workfile = newFixtures.workfile.sql();
             this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
 
             this.view.model.fetch();
@@ -98,9 +98,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
     context("with a non-sql workfile", function() {
         beforeEach(function() {
-            this.workfile = fixtures.textWorkfile({
-                lastUpdatedStamp: "2011-11-22 10:46:03.152"
-            });
+            this.workfile = newFixtures.workfile.text({ versionInfo: { updatedAt: "2011-11-22 10:46:03.152" }});
             expect(this.workfile.isText()).toBeTruthy();
 
             this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
@@ -177,7 +175,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
     context("with an archived workspace", function() {
         beforeEach(function() {
-            this.model = fixtures.sqlWorkfile();
+            this.model = newFixtures.workfile.sql();
             this.view = new chorus.views.WorkfileShowSidebar({ model : this.model });
 
             this.model.fetch();

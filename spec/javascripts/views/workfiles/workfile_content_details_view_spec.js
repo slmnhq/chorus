@@ -1,13 +1,13 @@
 describe("chorus.views.WorkfileContentDetails", function() {
     beforeEach(function() {
-        this.model = fixtures.workfile();
+        this.model = newFixtures.workfile.sql();
         this.model.workspace().set({ archivedAt: null });
     });
 
     describe(".buildFor", function() {
         context("when the given workfile is an image", function() {
             beforeEach(function() {
-                this.model = fixtures.imageWorkfile();
+                this.model = newFixtures.workfile.image();
                 spyOn(chorus.views, "ImageWorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
@@ -19,7 +19,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
         context("when the given workfile is a SQL file", function() {
             beforeEach(function() {
-                this.model = fixtures.sqlWorkfile();
+                this.model = newFixtures.workfile.sql();
                 spyOn(chorus.views, "ArchivedWorkfileContentDetails");
                 spyOn(chorus.views, "SqlWorkfileContentDetails");
             });
@@ -55,7 +55,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
         context("when the workfile is a binary file", function() {
             beforeEach(function() {
-                this.model = fixtures.binaryWorkfile();
+                this.model = newFixtures.workfile.binary();
                 spyOn(chorus.views, "BinaryWorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
@@ -67,7 +67,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
         context("when given anything else", function() {
             beforeEach(function() {
-                fixtures.textWorkfile();
+                this.model = newFixtures.workfile.text();
                 spyOn(chorus.views, "WorkfileContentDetails");
                 chorus.views.WorkfileContentDetails.buildFor = chorus.views.WorkfileContentDetails.originalValue.buildFor;
                 chorus.views.WorkfileContentDetails.buildFor(this.model);
@@ -170,7 +170,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
                 context("when the workfile is not the most recent version", function() {
                     beforeEach(function() {
-                        this.view.model.set({ latestVersionNum: 2 })
+                        this.view.model.set({ versionInfo: { versionNum: 1 }, latestVersionNum: 2 });
                         this.view.render();
                         this.view.$(".save_as").click();
                     });

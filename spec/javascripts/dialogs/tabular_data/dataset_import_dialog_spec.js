@@ -260,7 +260,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         beforeEach(function() {
                             spyOn(chorus.router, "navigate");
                             spyOn(chorus, "toast");
-                            this.workfile = fixtures.workfile({id: "23", fileName: "myFile"});
+                            this.workfile = newFixtures.workfile.text({id: "23", fileName: "myFile"});
                             this.data = {
                                 result: {
                                     response: this.workfile.attributes
@@ -300,7 +300,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         beforeEach(function() {
                             spyOn(chorus.router, "navigate");
                             spyOn(chorus, "toast");
-                            this.workfile = fixtures.workfile({id: "23", fileName: "myFile"});
+                            this.workfile = newFixtures.workfile.text({id: "23", fileName: "myFile"});
                             this.data = {
                                 result: {
                                     response: [],

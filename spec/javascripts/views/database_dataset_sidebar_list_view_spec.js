@@ -283,7 +283,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
     describe("after workfile execution", function() {
         beforeEach(function() {
             this.executionSchema = newFixtures.sandbox().schema();
-            chorus.PageEvents.broadcast("workfile:executed", fixtures.workfile(), this.executionSchema)
+            chorus.PageEvents.broadcast("workfile:executed", newFixtures.workfile.text(), this.executionSchema)
         });
 
         it("updates focusSchema", function() {

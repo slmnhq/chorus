@@ -1,7 +1,7 @@
 describe("chorus.dialogs.WorkfilesImport", function() {
     beforeEach(function() {
         this.launchElement = $("<a data-workspace-id='4'></a>")
-        this.model = fixtures.workfile({ workspace: { id: 4 } });
+        this.model = newFixtures.workfile.sql({ workspace: { id: 4 } });
         var workfileSet = new chorus.collections.WorkfileSet([this.model], { workspaceId: 4 });
         this.dialog = new chorus.dialogs.WorkfilesImport({ launchElement : this.launchElement, pageModel: this.model, pageCollection: workfileSet });
         this.successfulResponseTxt = {"result" : '{"response":{"id":"9", "file_name" : "new_file.txt", "mime_type" : "text/plain", "workspace" : {"id" : "4"}}}'};

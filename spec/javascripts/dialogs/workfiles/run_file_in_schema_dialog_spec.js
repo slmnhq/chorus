@@ -1,7 +1,7 @@
 describe("chorus.dialogs.RunFileInSchema", function () {
     beforeEach(function () {
         chorus.page = { workspace:newFixtures.workspace({ id:999 }) };
-        this.workfile = fixtures.workfile({ fileType:"SQL", workspace:{ id: chorus.page.workspace.get("id")}});
+        this.workfile = newFixtures.workfile.sql({ fileType:"SQL", workspace:{ id: chorus.page.workspace.get("id")}});
         this.dialog = new chorus.dialogs.RunFileInSchema({ pageModel:this.workfile });
     });
 

@@ -120,7 +120,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
                             this.executionSchema.schemaName = this.executionSchema.name;
                             delete this.executionSchema.name;
                             delete this.executionSchema.id;
-                            chorus.PageEvents.broadcast("workfile:executed", fixtures.workfile(), this.executionSchema)
+                            chorus.PageEvents.broadcast("workfile:executed", newFixtures.workfile.sql(), this.executionSchema)
                         });
 
                         it("does not fetch anything", function() {
@@ -131,7 +131,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
                     context("when the execution schema is not the same as the view's schema", function() {
                         beforeEach(function() {
                             this.executionSchema = fixtures.schema();
-                            chorus.PageEvents.broadcast("workfile:executed", fixtures.workfile(), this.executionSchema)
+                            chorus.PageEvents.broadcast("workfile:executed", newFixtures.workfile.sql(), this.executionSchema)
                         });
 
                         it("fetches the execution schema", function() {

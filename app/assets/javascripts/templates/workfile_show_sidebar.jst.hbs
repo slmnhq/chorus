@@ -5,7 +5,7 @@
         <span class="chosen">{{t "workfile.version_title" versionNum=versionInfo.versionNum}}</span>
         <img src="/images/blue-menu-triangle.png"/>
     </a>
-    <div class="updated">{{t "workfiles.updated_by"}} <a class="updated_by" href="{{modifierUrl}}">{{updatedBy}}</a> on <span class="updated_on">{{displayTimestamp lastUpdatedStamp}}</span></div>
+    <div class="updated">{{t "workfiles.updated_by"}} <a class="updated_by" href="{{modifierUrl}}">{{updatedBy}}</a> on <span class="updated_on">{{displayTimestamp versionInfo.updatedAt}}</span></div>
 </div>
 <div class="actions">
     <ul>

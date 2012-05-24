@@ -1,6 +1,6 @@
 describe("chorus.views.AlpineWorkfileContent", function() {
     beforeEach(function() {
-        this.model = fixtures.imageWorkfile();
+        this.model = newFixtures.workfile.image();
         this.view = new chorus.views.AlpineWorkfileContent({ model: this.model })
     });
 

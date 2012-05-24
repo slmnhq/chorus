@@ -17,12 +17,10 @@ describe("chorus.views.WorkfileList", function() {
 
     context("with some workfiles in the collection", function() {
         beforeEach(function() {
-            this.model1 = fixtures.sqlWorkfile();
-            this.model1.get('recentComments').length = 1;
-            this.model1.set({commentCount: 1});
-            this.model2 = fixtures.textWorkfile();
-            this.model3 = fixtures.otherWorkfile();
-            this.model3.set({recentComments: [], commentCount: 0});
+            this.model1 = newFixtures.workfile.sql();
+            this.model2 = newFixtures.workfile.text();
+            this.model3 = newFixtures.workfile.binary();
+
             this.collection = new chorus.collections.WorkfileSet([this.model1, this.model2, this.model3], {workspaceId: 1234});
             this.view = new chorus.views.WorkfileList({collection: this.collection, activeWorkspace: true});
             this.view.render();

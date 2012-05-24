@@ -162,11 +162,10 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
             describe("when workfiles are selected", function() {
                 beforeEach(function() {
-                    this.workfile1 = fixtures.workfile({ id: 1, fileName: "greed.sql", fileType: "sql" });
-                    this.workfile2 = fixtures.workfile({ id: 2, fileName: "generosity.cpp", fileType: "cpp" });
-                    this.workfile3 = fixtures.workfile({ id: 3, fileName: "sloth", fileType: "N/A" });
+                    this.workfile1 = newFixtures.workfile.sql({ id: 1, fileName: "greed.sql", fileType: "sql" });
+                    this.workfile2 = newFixtures.workfile.text({ id: 2, fileName: "generosity.cpp", fileType: "cpp" });
+                    this.workfile3 = newFixtures.workfile.binary({ id: 3, fileName: "sloth", fileType: "N/A" });
 
-                    spyOn(this.workfile2, "isImage").andReturn(true);
                     this.modalSpy.lastModal().trigger("files:selected", [this.workfile1, this.workfile2, this.workfile3]);
                 });
 
@@ -179,7 +178,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 it("displays the appropriate file icons", function() {
                     var fileIcons = this.dialog.$(".file_details:visible img.icon");
                     expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "medium"));
-                    expect(fileIcons.eq(1).attr("src")).toBe(this.workfile2.iconUrl());
+                    expect(fileIcons.eq(1).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("cpp", "medium"));
                     expect(fileIcons.eq(2).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("plain", "medium"));
                 });
 
@@ -201,8 +200,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                     context("when additional workfiles are selected", function() {
                         beforeEach(function() {
-                            this.newWorkfile1 = fixtures.workfile({id: 4});
-                            this.newWorkfile2 = fixtures.workfile({id: 1});
+                            this.newWorkfile1 = newFixtures.workfile.text({id: 4});
+                            this.newWorkfile2 = newFixtures.workfile.text({id: 1});
                             this.modalSpy.lastModal().trigger("files:selected", [this.newWorkfile1, this.newWorkfile2]);
                         });
 

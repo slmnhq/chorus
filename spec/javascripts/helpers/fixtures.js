@@ -1785,11 +1785,6 @@ beforeEach(function() {
             return collection;
         },
 
-        workfile: function(overrides) {
-            var attributes = this.workfileJson(overrides);
-            return new chorus.models.Workfile(attributes);
-        },
-
         draft: function(overrides) {
             var attributes = _.extend({draftInfo: this.workfileDraft(), hasDraft: true}, overrides);
             // TODO: REMOVEME
@@ -1798,61 +1793,8 @@ beforeEach(function() {
             return new chorus.models.Draft(workfileJson);
         },
 
-        textWorkfile: function(overrides) {
-            overrides = _.extend({
-                mimeType: "text/plain",
-                fileType: "txt"
-            }, overrides);
-            return this.workfile(overrides);
-        },
-
-        imageWorkfile: function(overrides) {
-            overrides = _.extend({
-                mimeType: "image/jpeg",
-                fileName: "avatar.jpg"
-            }, overrides);
-            return this.workfile(overrides);
-        },
-
-        otherWorkfile: function(overrides) {
-            overrides = _.extend({
-                fileType: "N/A",
-                fileName: "zipfile.zip",
-                mimeType: "application/zip"
-            }, overrides);
-            return this.workfile(overrides);
-        },
-
-        alpineWorkfile: function(overrides) {
-            overrides = _.extend({
-                fileName: "sample.afm",
-                fileType: "N/A",
-                mimeType: "application/octet-stream"
-            }, overrides);
-            return this.workfile(overrides);
-
-        },
-
-        sqlWorkfile: function(overrides) {
-            overrides = _.extend({
-                fileName: "sample.sql",
-                fileType: "SQL",
-                mimeType: "text/x-sql"
-            }, overrides);
-            return this.workfile(overrides);
-        },
-
-        binaryWorkfile: function(overrides) {
-            overrides = _.extend({
-                fileType: "N/A",
-                fileName: "zipfile.zip",
-                mimeType: "application/zip"
-            }, overrides);
-            return this.workfile(overrides);
-        },
-
         workfileSet: function(models) {
-            models = models || [this.workfile(), this.workfile()];
+            models = models || [newFixtures.workfile.sql(), newFixtures.workfile.sql()];
             return new chorus.collections.WorkfileSet(models);
         },
 

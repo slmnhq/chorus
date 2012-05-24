@@ -1,21 +1,23 @@
 describe("chorus.dialogs.WorkfilesAttach", function() {
     beforeEach(function() {
-        this.workfile1 = fixtures.workfile({
+        this.workfile1 = newFixtures.workfile.sql({
             mimeType: "image/png",
-            lastUpdatedStamp: "2011-11-29 10:46:03.152",
             workspace: { id: "33" },
             versionInfo: {
                 versionNum: "1"
             }
         });
-        this.workfile2 = fixtures.workfile({
+        this.workfile2 = newFixtures.workfile.sql({
             fileType: "SANDWICH",
-            lastUpdatedStamp: "2012-11-29 10:46:03.152",
             workspace: { id: "33" },
             versionInfo: {
                 versionNum: "5"
             }
         });
+
+        // TODO: REMOVEME (this view needs to use 'versionInfo.updatedAt'
+        this.workfile1.set({ lastUpdatedStamp: "2011-11-29 10:46:03.152" });
+        this.workfile2.set({ lastUpdatedStamp: "2012-11-29 10:46:03.152" });
 
         this.workfiles = fixtures.workfileSet([this.workfile1, this.workfile2]);
         this.dialog = new chorus.dialogs.WorkfilesAttach({ workspaceId : "33" });
@@ -42,7 +44,7 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
 
     it("has the correct iconUrl", function() {
         expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl(this.workfile2.get("fileType"), 'medium'));
-        expect(this.dialog.$('li:eq(1) img')).toHaveAttr('src', this.workfile1.iconUrl());
+        expect(this.dialog.$('li:eq(1) img')).toHaveAttr('src', this.workfile1.iconUrl({ size: "medium" }));
     });
 
     it("has the correct name", function() {

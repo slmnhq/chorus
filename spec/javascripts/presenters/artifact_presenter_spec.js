@@ -1,7 +1,7 @@
 describe("chorus.presenters.Artifact", function() {
     context("given a model with its own page", function() {
         it("includes the model's show url", function() {
-            var model = fixtures.workfile({ mimeType: "text/plain" });
+            var model = newFixtures.workfile.text({ mimeType: "text/plain" });
             expect(model.hasOwnPage()).toBeTruthy();
             var presenter = new chorus.presenters.Artifact(model);
             expect(presenter.url).toBe(model.showUrl());
@@ -25,7 +25,7 @@ describe("chorus.presenters.Artifact", function() {
         })
 
         it("uses nothing otherwise", function() {
-            var model = fixtures.workfile();
+            var model = newFixtures.workfile.text();
             var presenter = new chorus.presenters.Artifact(model);
             expect(presenter.name).toBeUndefined();
         })

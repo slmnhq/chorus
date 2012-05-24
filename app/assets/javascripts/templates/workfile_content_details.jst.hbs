@@ -1,22 +1,20 @@
-{{#if canEdit}}
-    <div class="save">
-        <span class="auto_save hidden"></span>
-        <span class="view">
-            {{t "workfile.content_details.view"}}
-            <button class="save_as">{{t "workfile.content_details.save_as"}}<span class="down_arrow"/></button>
-        </span>
-        <div class="save_options hidden">
-            <ul class="save_menu">
-                <li><a href="#" class="save_as_new">{{t "workfile.content_details.save_new_version"}}</a></li>
-                <li>
-                {{#if isLatestVersion}}
-                    <a href="#" class="save_as_current">{{t "workfile.content_details.replace"}}</a>
-                {{else}}
-                    <span class="save_as_current disabled">{{t "workfile.content_details.replace"}}</span>
-                {{/if}}
-                </li>
-            </ul>
-        </div>
+<div class="save">
+    <span class="auto_save hidden"></span>
+    <span class="view">
+        {{t "workfile.content_details.view"}}
+        <button class="save_as">{{t "workfile.content_details.save_as"}}<span class="down_arrow"/></button>
+    </span>
+    <div class="save_options hidden">
+        <ul class="save_menu">
+            <li><a href="#" class="save_as_new">{{t "workfile.content_details.save_new_version"}}</a></li>
+            <li>
+            {{#if isLatestVersion}}
+                <a href="#" class="save_as_current">{{t "workfile.content_details.replace"}}</a>
+            {{else}}
+                <span class="save_as_current disabled">{{t "workfile.content_details.replace"}}</span>
+            {{/if}}
+            </li>
+        </ul>
     </div>
-{{/if}}
+</div>
 

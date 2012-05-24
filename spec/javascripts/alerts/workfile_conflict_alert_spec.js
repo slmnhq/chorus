@@ -3,7 +3,7 @@ describe("chorus.alerts.WorkfileConflict", function() {
         this.modalSpy = stubModals();
         this.useFakeTimers();
 
-        this.workfile = fixtures.workfile({ content : "version content" });
+        this.workfile = newFixtures.workfile.sql({ versionInfo: { content : "version content" } });
         this.message = "This work file has been modified by Christine Klunk";
         // TODO: REWRITE: Maybe server should provide {INVALID: {editor: "Christine Klunk"}} instead
         this.workfile.serverErrors = {fields: {version: {GENERIC: {message: this.message}}}};

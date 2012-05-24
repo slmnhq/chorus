@@ -494,7 +494,12 @@ describe("chorus.models.Activity", function() {
     describe("#attachments", function() {
         beforeEach(function() {
             this.model.set({
-                artifacts: [fixtures.workfile({ entityType: "workfile" }).attributes, fixtures.artifact().attributes, fixtures.datasetArtifactJson(), fixtures.chorusViewArtifactJson()]
+                artifacts: [
+                    { entityType: "workfile", id: 1 },
+                    { entityType: "artifact", id: 2 },
+                    { entityType: "databaseObject", id: 3 },
+                    { entityType: "chorusView", id: 4 }
+                ]
             });
             this.attachments = this.model.attachments();
         });
