@@ -38,3 +38,7 @@ tags
 
 # Ignore postgres database
 /var
+
+# Ignore test coverage report
+/coverage
+

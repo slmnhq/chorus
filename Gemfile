@@ -35,6 +35,7 @@ group :test do
   gem 'timecop'
   gem 'hashie'
   gem 'vcr'
+  gem 'simplecov'
 end
 
 group :test, :development do
