@@ -43,17 +43,20 @@ describe("chorus.dialogs.WorkfilesImport", function() {
 
     describe("when the upload completes", function() {
         beforeEach(function() {
-            spyOn($.fn, 'fileupload');
-            this.dialog.render();
-            this.fileList = [
-                {name: 'foo.txt'}
-            ];
-            expect($.fn.fileupload).toHaveBeenCalled();
-            this.fileUploadArgs = $.fn.fileupload.mostRecentCall.args[0];
-            this.fileUploadArgs.add(null, {files: this.fileList});
-
             spyOn(chorus.router, "navigate");
-            this.fileUploadArgs.done(null, this.successfulResponseTxt);
+            this.fakeUpload = stubFileUpload();
+
+            this.dialog.render();
+
+            this.fakeUpload.add([ "foo.txt "]);
+            this.fakeUpload.succeed({
+                response: {
+                    id: "9",
+                    file_name: "new_file.txt",
+                    mime_type: "text/plain",
+                    workspace: { id: "4" }
+                }
+            });
         });
 
         it("navigates to the show page of the workfile", function() {
@@ -63,18 +66,12 @@ describe("chorus.dialogs.WorkfilesImport", function() {
 
     context("when a file has been chosen", function() {
         beforeEach(function() {
-            spyOn($.fn, 'fileupload');
+            this.fakeUpload = stubFileUpload();
             spyOn(this.dialog, "closeModal").andCallThrough();
+
             this.dialog.render();
-            this.fileList = [
-                {
-                    name: 'foo.bar'
-                }
-            ];
-            expect($.fn.fileupload).toHaveBeenCalled();
-            this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
-            this.request = jasmine.createSpyObj('request', ['abort']);
-            this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+
+            this.fakeUpload.add([ "foo.bar" ]);
         });
 
         it("enables the upload button", function() {
@@ -107,7 +104,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             });
 
             it("uploads the specified file", function() {
-                expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
+                expect(this.fakeUpload.wasSubmitted).toBeTruthy();
             });
 
             it("puts the upload button in the loading state", function() {
@@ -132,7 +129,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 });
 
                 it("cancels the upload", function() {
-                    expect(this.dialog.request.abort).toHaveBeenCalled();
+                    expect(this.fakeUpload.wasAborted).toBeTruthy();
                 });
             });
 
@@ -142,17 +139,15 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 });
 
                 it("cancels the upload", function() {
-                    expect(this.dialog.request.abort).toHaveBeenCalled();
+                    expect(this.fakeUpload.wasAborted).toBeTruthy();
                 });
             });
 
             context("when the upload gives a server error", function() {
                 beforeEach(function() {
                     this.saveFailedSpy = jasmine.createSpy();
-                    this.eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
                     this.dialog.resource.bind("saveFailed", this.saveFailedSpy);
-                    this.errorResponse = {errors : { fields: { a: { BLANK: {} } } }};
-                    this.fileUploadOptions.fail(this.eventSpy, this.errorResponse);
+                    this.fakeUpload.fail({ errors : { fields: { a: { BLANK: {} } } }});
                 });
 
                 it("triggers saveFailed on the model", function() {
@@ -193,7 +188,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             });
 
             it("uploads the specified file", function() {
-                expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
+                expect(this.fakeUpload.wasSubmitted).toBeTruthy();
             });
         });
 
@@ -203,7 +198,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             });
 
             it("uploads the specified file", function() {
-                expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
+                expect(this.fakeUpload.wasSubmitted).toBeTruthy();
             });
         });
     });

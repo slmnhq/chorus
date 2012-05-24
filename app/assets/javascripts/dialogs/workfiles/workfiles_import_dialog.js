@@ -84,6 +84,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             }
         }
 
+        // TODO: abstract away all of this JSON parsing into some model
         function uploadFinished(e, json) {
             self.model = new chorus.models.Workfile();
             self.model.set(self.model.parse(JSON.parse(json.result)));
@@ -94,7 +95,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
 
         function uploadFailed(e, json) {
             e.preventDefault();
-            self.resource.serverErrors = json.errors;
+            self.resource.serverErrors = JSON.parse(json.jqXHR.responseText).errors;
             self.$("button.submit").stopLoading();
             self.$("button.submit").prop("disabled", true);
             self.resource.trigger("saveFailed");
