@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe SchemasController do
+  ignore_authorization!
+
   let(:user) { FactoryGirl.create :user}
 
   before do
@@ -8,11 +10,16 @@ describe SchemasController do
   end
 
   context "#index" do
-    it "should retrieve all schemas for a database" do
-      instance = FactoryGirl.create(:instance, :owner_id => user.id)
-      instanceAccount = FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id)
+    let(:instance) { FactoryGirl.create(:instance, :owner_id => user.id) }
+    let(:instanceAccount) { FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id) }
+    let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance, :name => "test2") }
 
-      database = FactoryGirl.create(:gpdb_database, :instance => instance, :name => "test2")
+    it "uses authorization" do
+      mock(subject).authorize!(:index, database, instanceAccount)
+      get :index, :database_id => database.to_param
+    end
+
+    it "should retrieve all schemas for a database" do
 
       schema1 = FactoryGirl.build(:gpdb_schema, :name => 'schema1', :database => database)
       FactoryGirl.create(:gpdb_table, :name => "table1", :schema => schema1)
@@ -43,25 +50,15 @@ describe SchemasController do
   context "#show" do
     let(:schema) { FactoryGirl.create(:gpdb_schema)}
 
-    before do
-      stub(AccessPolicy).schemas_for(user) { GpdbSchema }
+    it "uses authorization" do
+      mock(subject).authorize!(:show, schema)
+      get :show, :id => schema.to_param
     end
 
     it "renders the schema" do
       get :show, :id => schema.to_param
       response.code.should == "200"
       decoded_response.id.should == schema.id
-    end
-
-    context "when an account can't be found" do
-      before do
-        stub(AccessPolicy).schemas_for(user) { GpdbSchema.where(:id => -1) }
-      end
-
-      it "returns 404" do
-        get :show, :id => schema.to_param
-        response.code.should == "404"
-      end
     end
 
     context "when the schema can't be found" do

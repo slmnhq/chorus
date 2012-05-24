@@ -1,5 +1,4 @@
 class WorkspaceAccess < DefaultAccess
-
   def show?(workspace)
     current_user.admin? || workspace.public || workspace.members.include?(current_user)
   end

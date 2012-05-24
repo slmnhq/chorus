@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe InstancesController do
+  ignore_authorization!
+
   before do
     @user = FactoryGirl.create(:user)
     log_in @user
@@ -13,8 +15,6 @@ describe InstancesController do
       FactoryGirl.create(:instance, :shared => true)
       FactoryGirl.create(:instance_account, :owner => @user) # Creates an instance too
     end
-
-    it_behaves_like "an action that requires authentication", :get, :index
 
     it "returns all instances" do
       get :index
@@ -31,28 +31,28 @@ describe InstancesController do
 
   describe "#update" do
     let(:changed_attributes) { {"name" => "changed"} }
+    let(:instance) { FactoryGirl.create(:instance) }
 
     before do
-      instance = FactoryGirl.build(:instance)
-      stub(Gpdb::InstanceRegistrar).update!('1', changed_attributes, @user) { instance }
+      stub(Gpdb::InstanceRegistrar).update!(instance, changed_attributes, @user) { instance }
+    end
+
+    it "uses authorization" do
+      mock(subject).authorize!(:edit, instance)
+      put :update, :id => instance.id, :instance => changed_attributes
     end
 
     it "should reply with successful update" do
-      put :update, :id => '1', :instance => changed_attributes
+      put :update, :id => instance.id, :instance => changed_attributes
       response.code.should == "200"
     end
 
     it "should handle invalid updates" do
-      instance = FactoryGirl.build(:instance, :name => nil)
-      stub(Gpdb::InstanceRegistrar).update!('1', changed_attributes, @user) { raise(ActiveRecord::RecordInvalid.new(instance)) }
-      put :update, :id => '1', :instance => changed_attributes
+      tmp_instance = FactoryGirl.create(:instance)
+      tmp_instance.name = nil
+      stub(Gpdb::InstanceRegistrar).update!(tmp_instance, changed_attributes, @user) { raise(ActiveRecord::RecordInvalid.new(instance)) }
+      put :update, :id => tmp_instance.id, :instance => changed_attributes
       response.code.should == "422"
-    end
-
-    it "should handle security transgressions" do
-      stub(Gpdb::InstanceRegistrar).update!('1', changed_attributes, @user) { raise(SecurityTransgression.new) }
-      put :update, :id => '1', :instance => changed_attributes
-      response.code.should == "403"
     end
   end
 

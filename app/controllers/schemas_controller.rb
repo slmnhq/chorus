@@ -2,11 +2,13 @@ class SchemasController < ApplicationController
   def index
     database = GpdbDatabase.find(params[:database_id])
     account = database.instance.account_for_user! current_user
+    authorize! :index, database, account
     present GpdbSchema.refresh(account, database)
   end
 
   def show
-    schema = AccessPolicy.schemas_for(current_user).find(params[:id])
+    schema = GpdbSchema.find(params[:id])
+    authorize! :show, schema
     present schema
   end
 end

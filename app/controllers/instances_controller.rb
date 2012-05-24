@@ -15,7 +15,9 @@ class InstancesController < ApplicationController
   end
 
   def update
-    cached_instance = Gpdb::InstanceRegistrar.update!(params[:id], params[:instance], current_user)
+    instance = Instance.find(params[:id])
+    authorize! :edit, instance
+    cached_instance = Gpdb::InstanceRegistrar.update!(instance, params[:instance], current_user)
     present cached_instance
   end
 end

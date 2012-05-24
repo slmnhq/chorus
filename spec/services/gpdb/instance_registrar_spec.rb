@@ -105,35 +105,28 @@ describe Gpdb::InstanceRegistrar do
     let(:updated_attributes) { valid_input_attributes.merge(:name => "new name") }
 
     it "allows admin to update" do
-      updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, admin)
+      updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, admin)
       updated_instance.name.should == "new name"
     end
 
     it "allows instance owners to update" do
-      updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, owner)
+      updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, owner)
       updated_instance.name.should == "new name"
     end
 
-    it "disallows anyone else" do
-      other_user = FactoryGirl.create(:user)
-      expect {
-        Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, other_user)
-      }.to raise_error(SecurityTransgression)
-    end
-
     it "saves the changes to the instance" do
-      updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, owner)
+      updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, owner)
       updated_instance.reload.name.should == "new name"
     end
 
     it "saves the change of description to the instance" do
       updated_attributes[:description] = "new description"
-      updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, owner)
+      updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, owner)
       updated_instance.reload.description.should == "new description"
     end
 
     it "keeps the existing credentials" do
-      updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, owner)
+      updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, owner)
       owners_account = InstanceAccount.find_by_owner_id_and_instance_id(owner.id, updated_instance.id)
       owners_account.db_username.should == "bob"
       owners_account.db_password.should == "secret"
@@ -141,13 +134,13 @@ describe Gpdb::InstanceRegistrar do
 
     it "complains if it can't find an existing cached instance" do
       expect {
-        Gpdb::InstanceRegistrar.update!('-1', updated_attributes, admin)
-      }.to raise_error(ActiveRecord::RecordNotFound)
+        Gpdb::InstanceRegistrar.update!(nil, updated_attributes, admin)
+      }.to raise_error(Gpdb::InstanceRegistrar::InvalidInstanceError)
     end
 
     it "requires that a real connection to GPDB can be established" do
       stub(Gpdb::ConnectionChecker).check! { raise(ApiValidationError.new) }
-      expect { Gpdb::InstanceRegistrar.update!(cached_instance.to_param, updated_attributes, owner) }.to raise_error
+      expect { Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, owner) }.to raise_error
       expect {
         begin
           Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
