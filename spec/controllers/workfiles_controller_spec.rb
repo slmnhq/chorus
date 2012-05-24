@@ -62,7 +62,7 @@ describe WorkfilesController do
       end
 
       def self.generate_fixture(json_filename, uploaded_filename, mime_type)
-        self.it "generates a JSON fixture" do
+        self.it "generates a JSON fixture", :fixture => true do
           file = test_file(uploaded_filename, mime_type)
           FactoryGirl.create(:workfile_version, :workfile => public_workfile, :contents => file)
           get :show, :id => public_workfile
