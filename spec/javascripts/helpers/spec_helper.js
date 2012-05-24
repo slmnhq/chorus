@@ -241,7 +241,7 @@
 
                 toContainQueryParams: function(queryParams) {
                     var actualQueryParams = new URI(this.actual).query(true);
-                    var targetQueryParams = new URI("").addSearch(queryParams).query(true);
+                    var targetQueryParams = new URI("").addSearch(chorus.Mixins.Fetching.underscoreKeys(queryParams)).query(true);
 
                     return _.all(targetQueryParams, function(targetValue, targetKey) {
                         return actualQueryParams[targetKey] === targetValue;

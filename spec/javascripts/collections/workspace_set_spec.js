@@ -26,7 +26,7 @@ describe("chorus.collections.WorkspaceSet", function() {
     context("with showLatestComments", function() {
         it("it sets the 'showLatestComments' param", function() {
             this.collection.attributes.showLatestComments = true
-            expect(this.collection.url()).toMatchUrl("/workspaces/?showLatestComments=true&page=1&rows=50");
+            expect(this.collection.url()).toMatchUrl("/workspaces/?show_latest_comments=true&page=1&rows=50");
         });
     })
 

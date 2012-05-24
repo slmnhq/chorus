@@ -17,9 +17,11 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
         });
 
         it("fetches the results sorted by objectName", function() {
-            var url = this.server.lastFetch().url
+            var url = this.server.lastFetch().url;
+            var urlParams = _.extend({}, options);
+            urlParams.order = "object_name";
             expect(url).toHaveUrlPath("/workspace/33/dataset");
-            expect(url).toContainQueryParams(options);
+            expect(url).toContainQueryParams(urlParams);
         });
 
         describe("when the fetch completes", function() {

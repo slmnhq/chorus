@@ -19,7 +19,7 @@ chorus.models = {
             var uri = new URI("/" + Handlebars.compile(template, {noEscape: true})(context));
             if (this.urlParams) {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
-                uri.addSearch(params);
+                uri.addSearch(this.underscoreKeys(params));
             }
             if (!window.jasmine) { uri.addSearch({iebuster: chorus.cachebuster()}); }
             return uri.toString();
@@ -251,7 +251,7 @@ chorus.collections = {
 
             if (this.urlParams) {
                 var params = _.isFunction(this.urlParams) ? this.urlParams(options) : this.urlParams;
-                uri.addSearch(params);
+                uri.addSearch(this.underscoreKeys(params));
             }
 
             uri.addSearch({
@@ -261,13 +261,13 @@ chorus.collections = {
 
             if (options.order) {
                 uri.addSearch({
-                    order: options.order
+                    order: _.underscored(options.order)
                 });
             }
 
             if (this.order) {
                 uri.addSearch({
-                    order: this.order
+                    order: _.underscored(this.order)
                 });
             }
 

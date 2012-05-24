@@ -9,7 +9,7 @@ describe("chorus.models.SearchResult", function() {
                 this.model.set({ workspaceId: "5", searchIn: "this_workspace" });
             });
 
-            expectPaginatedUrl("/search/workspace/?workspaceId=5&query=jackson5");
+            expectPaginatedUrl("/search/workspace/?workspace_id=5&query=jackson5");
             expectShowUrl("#/workspaces/5/search/this_workspace/all/jackson5");
         });
 
@@ -28,7 +28,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "workfile" });
                     });
 
-                    expectPaginatedUrl("/search/workspaces/?query=jackson5&entityType=workfile&workspaceId=5");
+                    expectPaginatedUrl("/search/workspaces/?query=jackson5&entity_type=workfile&workspace_id=5");
                     expectShowUrl("#/workspaces/5/search/my_workspaces/workfile/jackson5");
                 });
 
@@ -37,7 +37,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "all" });
                     });
 
-                    expectUrl("/search/workspaces/?query=jackson5&workspaceId=5&rows=50&page=1");
+                    expectUrl("/search/workspaces/?query=jackson5&workspace_id=5&rows=50&page=1");
                     expectShowUrl("#/workspaces/5/search/my_workspaces/all/jackson5");
                 });
             });
@@ -52,7 +52,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "workfile" });
                     });
 
-                    expectPaginatedUrl("/search/global/?query=jackson5&entityType=workfile&workspaceId=5");
+                    expectPaginatedUrl("/search/global/?query=jackson5&entity_type=workfile&workspace_id=5");
                     expectShowUrl("#/workspaces/5/search/all/workfile/jackson5");
                 });
 
@@ -61,7 +61,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "all" });
                     });
 
-                    expectUrl("/search/global/?query=jackson5&workspaceId=5");
+                    expectUrl("/search/global/?query=jackson5&workspace_id=5");
                     expectShowUrl("#/workspaces/5/search/jackson5");
                 });
             });
@@ -82,7 +82,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "workfile" });
                     });
 
-                    expectPaginatedUrl("/search/workspaces/?query=jackson5&entityType=workfile");
+                    expectPaginatedUrl("/search/workspaces/?query=jackson5&entity_type=workfile");
                     expectShowUrl("#/search/my_workspaces/workfile/jackson5");
                 });
 
@@ -106,7 +106,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "workfile" });
                     });
 
-                    expectPaginatedUrl("/search/global/?query=jackson5&entityType=workfile");
+                    expectPaginatedUrl("/search/global/?query=jackson5&entity_type=workfile");
                     expectShowUrl("#/search/all/workfile/jackson5");
                 });
 

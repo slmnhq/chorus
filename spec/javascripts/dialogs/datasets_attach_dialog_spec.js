@@ -21,7 +21,7 @@ describe("chorus.dialogs.DatasetsAttach", function() {
     it("fetches the results sorted by objectName ascending", function() {
         var url = this.server.lastFetch().url
         expect(url).toHaveUrlPath("/workspace/33/dataset");
-        expect(url).toContainQueryParams({ order: "objectName"});
+        expect(url).toContainQueryParams({ order: "object_name"});
     });
 
     describe("when the fetch completes", function() {

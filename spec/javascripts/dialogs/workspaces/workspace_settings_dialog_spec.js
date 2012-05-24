@@ -37,7 +37,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
         });
 
         it("sorts the members by last name ascending", function() {
-            expect(_.last(this.server.requests).url).toContain("order=lastName");
+            expect(_.last(this.server.requests).url).toContain("order=last_name");
         });
     });
 

@@ -73,11 +73,11 @@ describe("chorus.models.Abstract", function() {
 
                 context("when the url params are a property", function() {
                     beforeEach(function() {
-                        this.model.urlParams = { dance: "the thizzle" }
+                        this.model.urlParams = { danceDance: "the thizzle" }
                     });
 
                     it("url-encodes the params and appends them to the url", function() {
-                        expect(this.model.url()).toMatchUrl("/my_items/foo?dance=the+thizzle");
+                        expect(this.model.url()).toMatchUrl("/my_items/foo?dance_dance=the+thizzle");
                     });
 
                     context("when the base url template includes a query string", function() {
@@ -86,7 +86,7 @@ describe("chorus.models.Abstract", function() {
                         });
 
                         it("merges the query strings properly", function() {
-                            expect(this.model.url()).toMatchUrl("/my_items/foo?dance=the+thizzle&size=medium");
+                            expect(this.model.url()).toMatchUrl("/my_items/foo?dance_dance=the+thizzle&size=medium");
                         });
                     });
                 });
@@ -948,14 +948,51 @@ describe("chorus.models.Abstract", function() {
             });
 
             it("mixes in order from collection ascending", function() {
-                this.collection.sortAsc("foo");
-                expect(this.collection.url()).toBe("/bar/bar?page=1&rows=50&order=foo")
+                this.collection.sortAsc("fooBar");
+                expect(this.collection.url()).toBe("/bar/bar?page=1&rows=50&order=foo_bar")
             });
 
             it("plays nicely with existing parameters in the url template", function() {
                 this.collection.urlTemplate = "bar/{{foo}}?why=not";
                 expect(this.collection.url()).toBe("/bar/bar?why=not&page=1&rows=50");
             })
+
+            context("when the collection has additional url params", function() {
+                context("when the urlParams is a function", function() {
+                    beforeEach(function() {
+                        this.collection.urlParams = function() {
+                            return { dance: "the thizzle" };
+                        };
+                    });
+
+                    it("passes any options to the urlParams function", function() {
+                        spyOn(this.collection, 'urlParams').andCallThrough();
+                        this.collection.url({ method: 'create' });
+                        expect(this.collection.urlParams).toHaveBeenCalledWith({ method: 'create', rows : 50, page : 1 });
+                    });
+                });
+
+                context("when the url params are a property", function() {
+                    beforeEach(function() {
+                        this.collection.urlParams = { danceDance: "the thizzle" }
+                    });
+
+                    it("url-encodes the params and appends them to the url", function() {
+                        expect(this.collection.url()).toMatchUrl("/bar/bar?dance_dance=the+thizzle&page=1&rows=50");
+                    });
+
+                    context("when the base url template includes a query string", function() {
+                        beforeEach(function() {
+                            this.collection.urlTemplate = "bar/{{foo}}?size=medium";
+                        });
+
+                        it("merges the query strings properly", function() {
+                            expect(this.collection.url()).toMatchUrl("/bar/bar?size=medium&dance_dance=the+thizzle&page=1&rows=50");
+                        });
+                    });
+                });
+            });
+
         });
 
         describe("before parsing", function() {
