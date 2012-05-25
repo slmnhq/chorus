@@ -1,9 +1,14 @@
 class WorkfileVersion < ActiveRecord::Base
   attr_accessible :commit_message, :owner, :modifier, :contents, :version_num
-  has_attached_file :contents
+  has_attached_file :contents, :styles => {:original => "", :icon => "50x50>"}
   belongs_to :workfile
   belongs_to :owner, :class_name => 'User'
   belongs_to :modifier, :class_name => 'User'
+  before_post_process :check_file_type
+
+  def check_file_type
+    image?
+  end
 
   CODE_EXTENSIONS = ["cpp", "r"]
 
