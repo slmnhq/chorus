@@ -6,12 +6,16 @@ describe "creating an instance credential" do
   end
 
   it "creates a new instance account" do
-    create_valid_instance
+    create_valid_instance(:name => "NewInstanceAccountNameInstance")
+    instance_id = Instance.find_by_name("NewInstanceAccountNameInstance").id
     create_valid_user(:username => "EddyNice", :first_name => "Eddy", :last_name => "Nice")
     user_id = User.find_by_username("EddyNice").id
 
     visit("/#/instances")
     wait_until { current_route == "/instances" && page.has_selector?("a[data-dialog=InstancePermissions]") }
+    within(".instance_provider") do
+      page.find("li[data-instance-id='#{instance_id}']").click
+    end
     click_link "Edit"
     within("#facebox") do
       click_button "Add Account"

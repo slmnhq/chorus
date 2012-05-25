@@ -16,5 +16,5 @@ unless User.where(:username => "edcadmin").present?
     :password_confirmation => "secret"
   )
   user.admin = true
-  user.save
+  user.save!
 end

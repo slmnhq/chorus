@@ -10,10 +10,10 @@ Capybara.app = Rails.application
 Capybara.default_driver = :selenium
 Capybara.run_server = true #Whether start server when testing
 Capybara.server_port = 8200
-Capybara.save_and_open_page_path = ENV['CC_BUILD_ARTIFACTS'] || File.join(File.dirname(__FILE__), '..', '..', '..', '..', '..', 'rspec_failures')
+Capybara.save_and_open_page_path = ENV['WORKSPACE']
 
-DatabaseCleaner.strategy = :truncation
-DatabaseCleaner.clean
+DatabaseCleaner.strategy = :transaction
+DatabaseCleaner.clean_with :truncation
 load "#{Rails.root}/db/seeds.rb"
 
 WEBPATH = YAML.load_file("spec/integration/webpath.yaml") unless defined? WEBPATH
@@ -33,4 +33,12 @@ RSpec.configure do |c|
   c.include CleditorHelpers
 
   Capybara.default_wait_time = 5
+
+  c.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  c.after(:each) do
+    DatabaseCleaner.clean
+  end
 end
