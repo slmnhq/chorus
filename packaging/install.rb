@@ -71,7 +71,7 @@ def install_chorus
 
   Dir.chdir(APP_DIR) do
     run "bundle config build.pg --with-pg-config=/home/vagrant/pgsql/bin/pg_config --with-pg-dir=/home/vagrant/pgsql/"
-    run "bundle install"
+    run "bundle install --local --deployment"
     run "bundle exec rake db:create"
     run "bundle exec rake db:migrate"
     run "bundle exec rake db:seed"
