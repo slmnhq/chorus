@@ -1,9 +1,9 @@
 require "spec_helper"
 
 describe InstanceAccess do
-  let(:user) { FactoryGirl.build(:user) }
-  let(:owner) { FactoryGirl.build(:user) }
-  let(:instance) { FactoryGirl.build(:instance, :owner => owner) }
+  let(:user) { FactoryGirl.create(:user) }
+  let(:owner) { FactoryGirl.create(:user) }
+  let(:instance) { FactoryGirl.create(:instance, :owner => owner) }
   let(:instance_access) {
     controller = InstancesController.new
     stub(controller).current_user { user }
@@ -23,6 +23,35 @@ describe InstanceAccess do
     it "allows admins to edit" do
       user.admin = true
       instance_access.can?(:edit, instance).should be_true
+    end
+  end
+
+  describe "show?" do
+    context "for public instances" do
+      it "shows for everybody, including non-owner, non-admin users" do
+        instance.shared = true
+        instance_access.can?(:show, instance).should be_true
+      end
+    end
+
+    context "for private instances" do
+      before do
+        instance.shared = false
+      end
+
+      it "allows admin to show" do
+        user.admin = true
+        instance_access.can?(:show, instance).should be_true
+      end
+
+      it "allows members to show (which includes owner)" do
+        instance_account = FactoryGirl.create(:instance_account, :owner => user, :instance => instance)
+        instance_access.can?(:show, instance).should be_true
+      end
+
+      it "prevents non-members from showing" do
+        instance_access.can?(:show, instance).should be_false
+      end
     end
   end
 end

@@ -9,6 +9,12 @@ class InstancesController < ApplicationController
     present instances
   end
 
+  def show
+    instance = Instance.find(params[:id])
+    authorize! :show, instance
+    present instance
+  end
+
   def create
     cached_instance = Gpdb::InstanceRegistrar.create!(params[:instance], current_user)
     present cached_instance, :status => :created

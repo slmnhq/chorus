@@ -29,6 +29,34 @@ describe InstancesController do
     end
   end
 
+  describe "#show" do
+    context "with a valid instance id" do
+      let(:instance) { FactoryGirl.create(:instance) }
+
+      it "uses authorization" do
+        mock(subject).authorize!(:show, instance)
+        get :show, :id => instance.to_param
+      end
+
+      it "succeeds" do
+        get :show, :id => instance.to_param
+        response.should be_success
+      end
+
+      it "presents the instance" do
+        mock.proxy(controller).present(instance)
+        get :show, :id => instance.to_param
+      end
+    end
+
+    context "with an invalid instance id" do
+      it "returns not found" do
+        get :show, :id => 'invalid'
+        response.should be_not_found
+      end
+    end
+  end
+
   describe "#update" do
     let(:changed_attributes) { {"name" => "changed"} }
     let(:instance) { FactoryGirl.create(:instance) }
