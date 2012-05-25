@@ -4,7 +4,7 @@ class Hdfs::FilesController < ApplicationController
   end
 
   def show
-    present HdfsEntry.list("/" + params[:id] + '/', hadoop_instance)
+    present HdfsEntry.list(params[:id].chomp('/') + '/', hadoop_instance)
   end
 
   private

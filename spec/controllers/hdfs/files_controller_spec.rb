@@ -31,7 +31,7 @@ describe Hdfs::FilesController do
       end
 
       it "renders the path correctly, appending slashes" do
-        get :show, :hadoop_instance_id => hadoop_instance.id, :id => 'data'
+        get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/data'
 
         response.code.should == "200"
         parsed_response = JSON.parse(response.body)
@@ -45,7 +45,7 @@ describe Hdfs::FilesController do
       end
 
       it "renders the path correctly, appending slashes" do
-        get :show, :hadoop_instance_id => hadoop_instance.id, :id => 'data%12?3'
+        get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/data%12?3'
 
         response.code.should == "200"
         parsed_response = JSON.parse(response.body)

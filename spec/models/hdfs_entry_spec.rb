@@ -4,14 +4,15 @@ describe HdfsEntry do
   describe "constructor" do
     context "convert query response item to hdfs entry" do
       it "should convert valid response item to an object" do
-        hdfs_entry = HdfsEntry.new("path" => "/abc", "size" => "10", "directory" => "true", "modifiedAt" => "2010-10-20 22:00:00")
+        hdfs_entry = HdfsEntry.new("path" => "/abc", "size" => 10, "directory" => "true", "modifiedAt" => "2010-10-20 22:00:00", 'contentCount' => 4)
 
         modified_at = Time.new(2010, 10, 20, 22, 00, 00)
 
         hdfs_entry.path.should == "/abc"
-        hdfs_entry.size.should == "10"
+        hdfs_entry.size.should == 10
         hdfs_entry.is_directory.should be_true
         hdfs_entry.modified_at.should == modified_at
+        hdfs_entry.content_count.should == 4
       end
     end
   end
@@ -27,6 +28,7 @@ describe HdfsEntry do
           first_result.is_directory.should be_true
           first_result.path.should == '/empty'
           first_result.size.should == 0
+          first_result.content_count.should == 0
           first_result.modified_at.should == Time.parse("2012-05-24 11:25:50")
         end
       end
