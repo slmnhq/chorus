@@ -1,4 +1,4 @@
-;(function() {
+(function() {
     window.stubFileUpload = function(el) {
         return new FakeFileUpload(el);
     };
