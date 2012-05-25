@@ -7,6 +7,7 @@ describe "creating an instance credential" do
 
   it "creates a new instance account" do
     create_valid_instance(:name => "NewInstanceAccountNameInstance")
+    sleep(1)
     instance_id = Instance.find_by_name("NewInstanceAccountNameInstance").id
     create_valid_user(:username => "EddyNice", :first_name => "Eddy", :last_name => "Nice")
     user_id = User.find_by_username("EddyNice").id
@@ -19,7 +20,7 @@ describe "creating an instance credential" do
     click_link "Edit"
     within("#facebox") do
       click_button "Add Account"
-      page.execute_script("$('#selectowner').selectmenu('value', #{user_id})")
+      page.execute_script("$('#select_new_instance_account_owner').selectmenu('value', #{user_id})")
       fill_in 'dbUsername', :with => "gpadmin"
       fill_in 'dbPassword', :with => "secret"
 

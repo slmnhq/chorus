@@ -21,4 +21,5 @@ def create_valid_instance(params = {})
     check("register_greenplum_shared") if params[:shared] == true
     find(".submit").click
   end
+  wait_until { current_route == "/instances" }
 end
