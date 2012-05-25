@@ -39,7 +39,7 @@ describe("chorus.presenters.Artifact", function() {
 
             it("uses the thumbnail url", function() {
                 var presenter = new chorus.presenters.Artifact(this.model);
-                expect(presenter.iconSrc).toBe(this.model.thumbnailUrl());
+                expect(presenter.iconSrc).toBe(this.model.iconUrl({size: "medium"}));
             });
         });
 
