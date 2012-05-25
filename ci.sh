@@ -23,7 +23,7 @@ sleep 5
 RAILS_ENV=development rake devmode:enable assets:precompile
 rake phantom 2>&1
 echo "Cleaning up jasmine process $jasmine_pid"
-kill -9 $jasmine_pid
+kill -s SIGINT $jasmine_pid
 
 # Run integration tests
 script/test spec/integration/ 2>&1
