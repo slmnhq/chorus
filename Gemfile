@@ -13,6 +13,7 @@ gem 'clockwork'
 gem 'foreman'
 gem 'allowy'
 gem 'httparty', :require => false
+gem 'thin'
 
 group :assets do
   gem 'sass-rails'
