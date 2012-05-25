@@ -72,10 +72,10 @@ describe Hdfs::QueryService do
     context "show an existing file" do
       it "should return part of the content" do
         VCR.use_cassette("query_service_show_file") do
-          response = @service.show("/filetypes/AccountMapHelper.java");
+          response = @service.show("/filetypes/AccountMapHelper.java")
 
           response.should_not be_empty
-          response.should include("EMC Corporation All Rights Reserved")
+          response.should include(" * Copyright (c) 2011 EMC Corporation All Rights Reserved")
         end
       end
     end

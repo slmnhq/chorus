@@ -34,7 +34,7 @@ module Hdfs
     def show(path)
       timeout {
         escaped_path = Rack::Utils.escape(path)
-        HTTParty.get("#{SERVICE_HOST}/#{version}/show/#{escaped_path}", :query => @query)["response"]
+        HTTParty.get("#{SERVICE_HOST}/#{version}/show/#{escaped_path}", :query => @query)
       }
     end
 
