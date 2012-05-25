@@ -6,38 +6,33 @@ def header(title)
   puts "=" * 20
 end
 
-def remove_plurals(list)
-  result = list.reject do |word|
-    list.include?(word.chop)
+class Route < Struct.new(:method, :path)
+  include Comparable
+  def to_s
+    "#{method.upcase} #{path}"
   end
-  result = result.map do |word|
-    word.chop! if word.end_with?('s')
-    word
+
+  def <=> other
+    path <=> other.path
   end
-  return result
 end
 
-def find_missing(routes, existing_docs)
-  remove_plurals(routes) - remove_plurals(existing_docs)
-end
-
-routes = `rake routes | awk '{print $1}'`.split("\n")
-routes.reject! do |line|
-  ["GET", "POST", "PUT", "DELETE"].include? line
-end
+routes = `rake routes`.split("\n").map { |line|
+  match = line.match(/(\w+) +(\/[^( ]+)/)
+  match && Route.new(match[1].downcase, match[2])
+}.compact
 
 header "Routes"
 routes.each { |r| puts r }
 
-existing_docs = `ls spec/acceptance`.split("\n")
-
-existing_docs.map! do |doc|
-  doc.split("_spec.rb").first
-end
+existing_docs = `egrep -Rh "^\\W*(post|put|get|delete)" spec/acceptance`.split("\n").map { |line|
+  match = line.match(/(\w+) +['"](\S+)['"]/)
+  match && Route.new(match[1].downcase, match[2])
+}.compact
 
 header "Existing docs"
 existing_docs.each { |r| puts r }
 
 header "Missing docs"
-missing = find_missing(routes, existing_docs)
-missing.each { |r| puts r }
+missing = routes - existing_docs
+missing.sort.each { |r| puts r }
