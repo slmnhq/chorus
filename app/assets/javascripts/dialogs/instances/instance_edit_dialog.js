@@ -19,9 +19,9 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            registeredInstance: this.model.get("provision_type") == "register",
-            provisionedInstance: this.model.get("provision_type") == "create",
-            hadoopInstance: this.model.get("provision_type") == "registerHadoop"
+            registeredInstance: this.model.get("provisionType") == "register",
+            provisionedInstance: this.model.get("provisionType") == "create",
+            hadoopInstance: this.model.get("provisionType") == "registerHadoop"
         };
     },
 
@@ -32,7 +32,7 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
             description: this.$("textarea[name=description]").val().trim(),
             host: this.$("input[name=host]").val(),
             port: this.$("input[name=port]").val(),
-            provision_type: this.model.get("provision_type")
+            provisionType: this.model.get("provisionType")
         };
 
         _(["size", "maintenanceDb", "userName", "userGroups"]).each(function(name) {

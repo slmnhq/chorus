@@ -20,7 +20,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
     describe("#render", function() {
         describe("when editing a registered instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provision_type: "register"})
+                this.dialog.model.set({ provisionType: "register"})
                 this.dialog.render();
             });
 
@@ -53,7 +53,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         describe("when editing a provisioned instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provision_type: "create", size: "10"})
+                this.dialog.model.set({ provisionType: "create", size: "10"})
                 this.dialog.render();
             });
 
@@ -85,7 +85,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         describe("when editing a hadoop instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provision_type: "registerHadoop", userName: "user", userGroups: "hadoop"})
+                this.dialog.model.set({ provisionType: "registerHadoop", userName: "user", userGroups: "hadoop"})
                 this.dialog.render();
             });
 
@@ -123,7 +123,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
     describe("saving", function() {
         beforeEach(function() {
-            this.dialog.model.set({ provision_type: "register"});
+            this.dialog.model.set({ provisionType: "register"});
             this.dialog.render();
 
             spyOn(this.dialog, "closeModal");
@@ -147,7 +147,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.model.save).toHaveBeenCalled();
         });
 
-        it("should call save with the right parameters ( to make sure that we pass in the provision_type for validation )", function() {
+        it("should call save with the right parameters ( to make sure that we pass in the provisionType for validation )", function() {
             spyOn(this.dialog.model, "save").andCallThrough();
             this.dialog.$("button[type=submit]").submit();
 
@@ -155,11 +155,11 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.model.save.argsForCall[0][0].port).toBe("8555");
             expect(this.dialog.model.save.argsForCall[0][0].host).toBe("testhost");
             expect(this.dialog.model.save.argsForCall[0][0].maintenanceDb).toBe("not_postgres");
-            expect(this.dialog.model.save.argsForCall[0][0].provision_type).toBe("register");
+            expect(this.dialog.model.save.argsForCall[0][0].provisionType).toBe("register");
         });
 
         it("saves silently (to prevent re-rendering in aurora instances)", function() {
-            this.dialog.model.set({ provision_type: "create"});
+            this.dialog.model.set({ provisionType: "create"});
             this.dialog.render();
             spyOn(this.dialog.model, "save");
             this.dialog.$("button.submit").submit();
@@ -180,7 +180,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         context("with a provisioned instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provision_type: "create"});
+                this.dialog.model.set({ provisionType: "create"});
                 this.dialog.render();
                 this.dialog.$("input[name=name]").val("test2");
                 this.dialog.$("input[name=port]").val("8556");
@@ -200,7 +200,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         context("with a hadoop instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provision_type: "registerHadoop"});
+                this.dialog.model.set({ provisionType: "registerHadoop"});
                 this.dialog.render();
                 this.dialog.$("input[name=name]").val("test3");
                 this.dialog.$("input[name=port]").val("8557");

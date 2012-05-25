@@ -4,7 +4,7 @@
 
     <label>{{t "instances.dialog.description"}}</label>
     <textarea name="description" maxlength="4095" rows="6" tabindex="2">{{description}}</textarea>
-    <input type="hidden" name="provision_type" value="{{provision_type}}"/>
+    <input type="hidden" name="provisionType" value="{{provisionType}}"/>
     {{#if registeredInstance}}
         <label class="required" name="host">{{t "instances.dialog.host"}}</label>
         <label class="required" name="port">{{t "instances.dialog.port"}}</label>
