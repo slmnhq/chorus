@@ -54,7 +54,6 @@ resource "Greenplum DB instances" do
     parameter :port, "Port"
     parameter :maintenance_db, "Database to use for initial connection (usually 'postgres')"
 
-    required_parameters :name, :host, :port, :maintenance_db
     scope_parameters :instance, :all
 
     let(:id) { owned_instance.to_param }
