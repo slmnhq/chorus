@@ -1,5 +1,5 @@
 class WorkfileVersion < ActiveRecord::Base
-  attr_accessible :commit_message
+  attr_accessible :commit_message, :owner, :modifier, :contents, :version_num
   has_attached_file :contents
   belongs_to :workfile
   belongs_to :owner, :class_name => 'User'

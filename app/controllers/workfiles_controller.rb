@@ -11,14 +11,15 @@ class WorkfilesController < ApplicationController
     workfile = workspace.workfiles.build(params[:workfile])
     workfile.owner = current_user
     workfile.save!
-    workfile_version = WorkfileVersion.new
-    workfile_version.workfile = workfile
-    workfile_version.version_num = 1
-    workfile_version.commit_message = ""
-    workfile_version.owner = current_user
-    workfile_version.modifier = current_user
-    workfile_version.contents = params[:workfile][:contents]
-    workfile_version.save!
+
+    workfile_version = workfile.versions.create!(
+      :owner => current_user,
+      :modifier => current_user,
+      :contents => params[:workfile][:contents],
+      :version_num => 1,
+      :commit_message => "",
+    )
+
     present workfile
   end
 end
