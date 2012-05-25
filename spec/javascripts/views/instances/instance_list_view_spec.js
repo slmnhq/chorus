@@ -138,8 +138,8 @@ describe("chorus.views.InstanceList", function() {
                 this.view.render();
             });
 
-            it("should display the red state icon", function() {
-                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/red.png");
+            it("should display the unknown state icon", function() {
+                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/unknown.png");
             });
 
             it("should not display the name as a link", function() {

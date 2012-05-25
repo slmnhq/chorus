@@ -14,7 +14,7 @@ describe("chorus.models.Instance", function() {
     describe("#stateIconUrl and #stateText", function() {
         it("works for 'offline' instances", function() {
             this.instance.set({ state: "offline" });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/red.png");
+            expect(this.instance.stateIconUrl()).toBe("/images/instances/unknown.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.offline");
         });
 

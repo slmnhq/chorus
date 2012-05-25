@@ -3,7 +3,7 @@
 
     var stateIconMap = {
         "online": "green.png",
-        "offline": "red.png"
+        "offline": "unknown.png"
     };
 
     var providerIconMap = {
