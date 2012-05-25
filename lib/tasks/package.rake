@@ -55,6 +55,8 @@ def archive_app
     Dir.chdir(File.join(COMPONENTS_DIR, copy_name)) do
       run "rake assets:clean assets:precompile"
       run "bundle package"
+      # TODO why doesn't it copy it in the right place
+      run "cp -r #{ROOT_DIR}/vendor/cache vendor/cache"
     end
 
     run "tar -czf #{COMPONENTS_DIR}/app.tar.gz #{copy_name}"
