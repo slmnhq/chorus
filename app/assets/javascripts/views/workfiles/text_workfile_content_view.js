@@ -16,6 +16,14 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
         }
     },
 
+    mode: function() {
+        if (this.model.isSql()) {
+            return "text/x-sql";
+        } else {
+            return "text/plain";
+        }
+    },
+
     postRender: function() {
         var readOnlyMode = this.model.canEdit() ? false : "nocursor";
         var self = this;
@@ -24,7 +32,7 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
         var opts = {
             readOnly: readOnlyMode,
             lineNumbers: true,
-            mode: this.model.get("mimeType"),
+            mode: this.mode(),
             fixedGutter: true,
             theme: "default",
             lineWrapping: true,

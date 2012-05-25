@@ -1,16 +1,16 @@
 {
   "response": {
-    "id": 446,
+    "id": 2,
     "workspace": {
-      "id": 491,
-      "name": "workspace17",
+      "id": 2,
+      "name": "workspace2",
       "summary": null,
       "owner": {
-        "id": 1377,
-        "username": "user291",
+        "id": 13,
+        "username": "user11",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person316@example.com",
+        "email": "person12@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -32,11 +32,11 @@
       ]
     },
     "owner": {
-      "id": 1378,
-      "username": "user292",
+      "id": 14,
+      "username": "user12",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person317@example.com",
+      "email": "person13@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -47,15 +47,15 @@
       }
     },
     "version_info": {
-      "id": 446,
+      "id": 2,
       "version_num": 1,
       "commit_message": "Factory commit message",
       "owner": {
-        "id": 1379,
-        "username": "user293",
+        "id": 15,
+        "username": "user13",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person318@example.com",
+        "email": "person14@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -66,11 +66,11 @@
         }
       },
       "modifier": {
-        "id": 1380,
-        "username": "user294",
+        "id": 16,
+        "username": "user14",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person319@example.com",
+        "email": "person15@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -80,15 +80,14 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-05-23T17:01:48-07:00",
-      "updated_at": "2012-05-23T17:01:48-07:00",
-      "content_url": "/system/workfile_versions/contents/000/000/446/original/some.txt?1337817708",
+      "created_at": "2012-05-24T16:53:25-07:00",
+      "updated_at": "2012-05-24T16:53:25-07:00",
+      "content_url": "/system/workfile_versions/contents/000/000/002/original/some.txt?1337903605",
       "icon_url": null,
       "content": "<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\nhello\n</body>\n</html>\n\n"
     },
     "file_name": "some.txt",
-    "mime_type": "text/plain",
-    "file_type": "TXT",
+    "file_type": "text",
     "latest_version_num": 1
   }
 }

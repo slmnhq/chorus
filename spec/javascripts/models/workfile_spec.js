@@ -270,10 +270,7 @@ describe("chorus.models.Workfile", function() {
 
     describe("isAlpine", function() {
         it("returns true when the workfile is a afm file", function() {
-            var workfile = newFixtures.workfile.binary({
-                fileType: "AFM",
-                mimeType: "application/octet-stream"
-            });
+            var workfile = newFixtures.workfile.binary({ fileType: "alpine" });
             expect(workfile.isAlpine()).toBeTruthy();
         })
 
@@ -293,8 +290,29 @@ describe("chorus.models.Workfile", function() {
             var workfile = newFixtures.workfile.sql();
             expect(workfile.isBinary()).toBeFalsy();
         })
+    });
 
-    })
+    describe("#extension", function() {
+        it("returns the extension from the file's name", function() {
+            var workfile = newFixtures.workfile.sql();
+            expect(workfile.extension()).toBe("sql");
+
+            workfile.set({ fileName: "foo.cpp" });
+            expect(workfile.extension()).toBe("cpp");
+
+            workfile.set({ fileName: "foo.js.coffee.erb" });
+            expect(workfile.extension()).toBe("erb");
+
+            workfile.set({ fileName: "FOO.CPP" });
+            expect(workfile.extension()).toBe("cpp");
+
+            workfile.set({ fileName: "foo" });
+            expect(workfile.extension()).toBeNull();
+
+            workfile.unset("fileName");
+            expect(workfile.extension()).toBeUndefined();
+        });
+    });
 
     describe("createDraft", function() {
         beforeEach(function() {
@@ -368,11 +386,6 @@ describe("chorus.models.Workfile", function() {
     describe("isText", function() {
         it("returns true for plain text files", function() {
             var workfile = newFixtures.workfile.text();
-            expect(workfile.isText()).toBeTruthy();
-        });
-
-        it("returns true for html files", function() {
-            var workfile = newFixtures.workfile.text({ fileType: "HTML", mimeType: "text/html" });
             expect(workfile.isText()).toBeTruthy();
         });
 
@@ -541,9 +554,13 @@ describe("chorus.models.Workfile", function() {
 
         context("when the workfile is not an image", function() {
             it("proxies to fileIconUrl helper", function() {
-                var workfile = newFixtures.workfile.sql();
-                expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('sql', 'large'));
-                expect(workfile.iconUrl({ size: "medium" })).toBe(chorus.urlHelpers.fileIconUrl('sql', 'medium'));
+                var workfile = newFixtures.workfile.text({ fileName: "foo.cpp" });
+                expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'large'));
+                expect(workfile.iconUrl({ size: "medium" })).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'medium'));
+
+                var workfile = newFixtures.workfile.text({ fileName: "foo.java" });
+                expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('java', 'large'));
+                expect(workfile.iconUrl({ size: "medium" })).toBe(chorus.urlHelpers.fileIconUrl('java', 'medium'));
             })
         });
     });

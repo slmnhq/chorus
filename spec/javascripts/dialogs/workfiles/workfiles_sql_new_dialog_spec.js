@@ -76,7 +76,6 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
                     spyOnEvent($(document), "close.facebox");
                     this.server.completeSaveFor(this.dialog.model, _.extend({}, this.dialog.model.attributes, {
                         fileType: 'SQL',
-                        mimeType: 'text/something',
                         id: '10108'
                     }));
                 })

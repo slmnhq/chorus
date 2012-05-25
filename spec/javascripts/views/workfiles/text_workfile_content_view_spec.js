@@ -99,7 +99,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
             context("when the model is an SQL file", function() {
                 beforeEach(function() {
-                    this.textfile.set({ mimeType : "text/x-sql" });
+                    this.textfile.set({ fileType : "sql" });
                     this.view.render();
                 });
 

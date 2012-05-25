@@ -22,7 +22,6 @@ describe WorkfilePresenter, :type => :view do
 
       @hash.should have_key(:version_info)
       @hash.should have_key(:file_name)
-      @hash.should have_key(:mime_type)
       @hash.should have_key(:file_type)
       @hash.should have_key(:latest_version_num)
     end

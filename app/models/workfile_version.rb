@@ -5,8 +5,24 @@ class WorkfileVersion < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   belongs_to :modifier, :class_name => 'User'
 
+  CODE_EXTENSIONS = ["cpp", "r"]
+
   def extension
-    File.extname(contents.original_filename)[1..-1].try(:upcase)
+    File.extname(contents.original_filename)[1..-1].try(:downcase)
+  end
+
+  def file_type
+    if image?
+      "image"
+    elsif code?
+      "code"
+    elsif sql?
+      "sql"
+    elsif text?
+      "text"
+    else
+      "other"
+    end
   end
 
   def image?
@@ -15,6 +31,14 @@ class WorkfileVersion < ActiveRecord::Base
 
   def text?
     content_type && content_type.include?('text')
+  end
+
+  def sql?
+    extension == "sql"
+  end
+
+  def code?
+    CODE_EXTENSIONS.include?(extension)
   end
 
   def content_type

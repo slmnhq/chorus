@@ -1,11 +1,13 @@
 (function() {
     var imageRegex = /^image\//;
     var textRegex = /^text\//;
-    var IMAGE = 'IMAGE';
-    var SQL = 'SQL';
-    var TEXT = 'TEXT';
-    var ALPINE = 'ALPINE';
-    var BINARY = 'BINARY';
+    var extensionRegex = /\.([^\.]+)$/;
+    var IMAGE = 'image';
+    var SQL = 'sql';
+    var CODE = 'code';
+    var TEXT = 'text';
+    var ALPINE = 'alpine';
+    var OTHER = 'other';
 
     chorus.models.Workfile = chorus.models.Base.extend({
         constructorName: "Workfile",
@@ -127,50 +129,29 @@
         },
 
         isImage: function() {
-            return this.workfileType() == IMAGE;
+            return this.get("fileType") == IMAGE;
         },
 
         isSql: function() {
-            return this.workfileType() == SQL;
+            return this.get("fileType") == SQL;
         },
 
         isText: function() {
-            return _.include([SQL, TEXT], this.workfileType());
+            return _.include([SQL, TEXT, CODE], this.get("fileType"));
         },
 
         isAlpine: function() {
-            return this.workfileType() == ALPINE;
+            return this.get("fileType") == ALPINE;
         },
 
         isBinary: function() {
-            return this.workfileType() == BINARY;
+            return this.get("fileType") == OTHER;
         },
 
-        workfileType: function () {
-            // This function ensures a file has one and only one type
-            var mimeType = this.get("mimeType");
-            var fileType = this.get("fileType");
-            var fileName = this.get("fileName") || this.get("name");
-
-            // Check most specific cases first, with more general cases later so
-            // we are sure to see the unusual ones.
-            if (fileType == "AFM") {
-                return ALPINE;
-            }
-
-            if (fileType == "SQL") {
-                return SQL;
-            }
-
-            if (mimeType && !!mimeType.match(imageRegex)) {
-                return IMAGE;
-            }
-
-            if (mimeType && !!mimeType.match(textRegex)) {
-                return TEXT;
-            }
-
-            return BINARY;
+        extension: function() {
+            var fileName = this.get("fileName");
+            var matches = fileName && fileName.match(extensionRegex);
+            return matches && matches[1].toLowerCase();
         },
 
         downloadUrl: function() {
@@ -220,7 +201,7 @@
             if (this.isImage()) {
                 return this.get("versionInfo").iconUrl;
             } else {
-                return chorus.urlHelpers.fileIconUrl(this.get("fileType"), options && options.size);
+                return chorus.urlHelpers.fileIconUrl(this.extension(), options && options.size);
             }
         },
 

@@ -1,16 +1,16 @@
 {
   "response": {
-    "id": 445,
+    "id": 1,
     "workspace": {
-      "id": 490,
-      "name": "workspace16",
+      "id": 1,
+      "name": "workspace1",
       "summary": null,
       "owner": {
-        "id": 1372,
-        "username": "user286",
+        "id": 8,
+        "username": "user6",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person311@example.com",
+        "email": "person7@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -32,11 +32,11 @@
       ]
     },
     "owner": {
-      "id": 1373,
-      "username": "user287",
+      "id": 9,
+      "username": "user7",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person312@example.com",
+      "email": "person8@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -47,15 +47,15 @@
       }
     },
     "version_info": {
-      "id": 445,
+      "id": 1,
       "version_num": 1,
       "commit_message": "Factory commit message",
       "owner": {
-        "id": 1374,
-        "username": "user288",
+        "id": 10,
+        "username": "user8",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person313@example.com",
+        "email": "person9@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -66,11 +66,11 @@
         }
       },
       "modifier": {
-        "id": 1375,
-        "username": "user289",
+        "id": 11,
+        "username": "user9",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person314@example.com",
+        "email": "person10@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -80,15 +80,14 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-05-23T17:01:48-07:00",
-      "updated_at": "2012-05-23T17:01:48-07:00",
-      "content_url": "/system/workfile_versions/contents/000/000/445/original/workfile.sql?1337817708",
+      "created_at": "2012-05-24T16:53:24-07:00",
+      "updated_at": "2012-05-24T16:53:24-07:00",
+      "content_url": "/system/workfile_versions/contents/000/000/001/original/workfile.sql?1337903604",
       "icon_url": null,
       "content": "SELECT test FROM rspec WHERE lame = 'false';\n"
     },
     "file_name": "workfile.sql",
-    "mime_type": "text/plain",
-    "file_type": "SQL",
+    "file_type": "sql",
     "latest_version_num": 1
   }
 }

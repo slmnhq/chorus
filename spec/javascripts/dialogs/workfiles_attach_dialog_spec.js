@@ -1,14 +1,12 @@
 describe("chorus.dialogs.WorkfilesAttach", function() {
     beforeEach(function() {
         this.workfile1 = newFixtures.workfile.sql({
-            mimeType: "image/png",
             workspace: { id: "33" },
             versionInfo: {
                 versionNum: "1"
             }
         });
-        this.workfile2 = newFixtures.workfile.sql({
-            fileType: "SANDWICH",
+        this.workfile2 = newFixtures.workfile.text({
             workspace: { id: "33" },
             versionInfo: {
                 versionNum: "5"
@@ -43,7 +41,7 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
     });
 
     it("has the correct iconUrl", function() {
-        expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl(this.workfile2.get("fileType"), 'medium'));
+        expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', this.workfile2.iconUrl({ size: "medium" }));
         expect(this.dialog.$('li:eq(1) img')).toHaveAttr('src', this.workfile1.iconUrl({ size: "medium" }));
     });
 

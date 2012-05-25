@@ -10,8 +10,7 @@ class WorkfilePresenter < Presenter
 
         # TODO: Should these go in version_info?
         :file_name => h(last_version_file.original_filename),
-        :mime_type => h(last_version_file.content_type),
-        :file_type => h(last_version.extension),
+        :file_type => h(last_version.file_type),
         :latest_version_num => last_version.version_num
     }
   end
