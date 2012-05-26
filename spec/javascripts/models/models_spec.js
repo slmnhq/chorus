@@ -219,9 +219,6 @@ describe("chorus.models.Abstract", function() {
                         expect(this.saveFailedSpy).toHaveBeenCalled();
                         var args = this.saveFailedSpy.mostRecentCall.args;
                         expect(args[0]).toBe(this.model);
-                        expect(args[1].response).toEqual({
-                            foo: "bar"
-                        });
                     });
 
                     describe("and then another request succeeds", function() {

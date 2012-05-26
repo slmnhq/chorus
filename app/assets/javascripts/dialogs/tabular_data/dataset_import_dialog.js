@@ -62,7 +62,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     },
 
     enableButton: function() {
-        if(this.selectedDataset || this.importTarget !== "existing") {
+        if (this.selectedDataset || this.importTarget !== "existing") {
             this.$("button.submit").prop("disabled", false);
         } else {
             this.$("button.submit").prop("disabled", true);
@@ -85,7 +85,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     importDestination: function() {
         if (this.importTarget === "existing") {
             return (this.selectedDataset && this.selectedDataset.name()) || "";
-        } else if(this.importTarget === "new"){
+        } else if (this.importTarget === "new") {
             return chorus.models.CSVImport.normalizeForDatabase(this.$('.new_table input:text').val());
         }
     },
@@ -166,7 +166,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             if (self.importTarget === "workfile") {
                 var workfile = new chorus.models.Workfile();
                 workfile.set(workfile.parse(data.result), {silent: true});
-                workfile.parseErrors(data.result, { status: 200 });
+                workfile.parseErrors(data.result);
 
                 if (workfile.serverErrors) {
                     self.showErrors(workfile);
@@ -177,7 +177,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             } else {
                 var workingCsv = self.csv.clone();
                 workingCsv.set(workingCsv.parse(data.result), {silent: true});
-                workingCsv.parseErrors(data.result, { status: 200 });
+                workingCsv.parseErrors(data.result);
 
                 if (workingCsv.serverErrors) {
                     self.csv.serverErrors = workingCsv.serverErrors;

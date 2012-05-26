@@ -2,18 +2,18 @@ describe("chorus.views.SqlWorkfileContentView", function() {
     beforeEach(function() {
         this.workfile = newFixtures.workfile.sql({ versionInfo: { content: "select * from foos where bar_id = 1;" } });
         this.schema = fixtures.schema({
-                    id: '4',
-                    name: "schema",
-                    database: {
-                        id: '3',
-                        name: "db",
-                        instance: {
-                            id: '2',
-                            name: "instance"
-                        }
-                    }
-                });
-        spyOn(this.workfile, 'executionSchema').andCallFake(_.bind(function(){return this.schema}, this));
+            id: '4',
+            name: "schema",
+            database: {
+                id: '3',
+                name: "db",
+                instance: {
+                    id: '2',
+                    name: "instance"
+                }
+            }
+        });
+        spyOn(this.workfile, 'executionSchema').andCallFake(_.bind(function() {return this.schema}, this));
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runInDefault").andCallThrough();
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runSelected").andCallThrough();
         this.view = new chorus.views.SqlWorkfileContent({model: this.workfile});
@@ -159,7 +159,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         })
 
                         it("broadcasts file:executionFailed", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.SqlExecutionTask), jasmine.any(Object));
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.SqlExecutionTask));
                         });
 
                         it("sets the executing property to false", function() {
@@ -178,7 +178,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         })
 
                         it("broadcasts file:executionFailed", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.SqlExecutionTask), jasmine.any(Object));
+                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:executionFailed", jasmine.any(chorus.models.SqlExecutionTask));
                         });
 
                         it("sets the executing property to false", function() {

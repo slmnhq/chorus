@@ -51,10 +51,7 @@ chorus.models = {
                 };
 
                 options.error = function(model, xhr) {
-                    var data = xhr.responseText && JSON.parse(xhr.responseText);
-                    model.parseErrors(data, xhr);
-                    model.trigger("saveFailed", model, data, xhr)
-                    model.respondToErrors(xhr);
+                    model.handleRequestFailure("saveFailed", xhr)
                     if (error) error(model, xhr);
                 };
 
@@ -79,10 +76,7 @@ chorus.models = {
                     if (success) success(model, data);
                 };
                 options.error = function(xhr) {
-                    var data = xhr.responseText && JSON.parse(xhr.responseText);
-                    model.parseErrors(data, xhr);
-                    model.trigger("destroyFailed", model, model.collection, options);
-                    model.respondToErrors(xhr);
+                    model.handleRequestFailure("destroyFailed", xhr)
                     if (error) error(model);
                 };
                 return (this.sync || Backbone.sync).call(this, 'delete', this, options);

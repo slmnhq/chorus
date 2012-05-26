@@ -35,7 +35,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         if (selectedText) {
             var runOptions = {selection: selectedText};
             var schema = this.model.executionSchema();
-            if(schema){
+            if (schema) {
                 runOptions.instance = schema.database().instance().id;
                 runOptions.database = schema.database().id;
                 runOptions.schema = schema.get("id");
@@ -84,10 +84,10 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         chorus.PageEvents.broadcast("workfile:executed", this.model, task.get("executionInfo"))
     },
 
-    executionFailed: function(task, data) {
+    executionFailed: function(task) {
         this.executing = false;
-        chorus.PageEvents.broadcast("file:executionFailed", task, data);
-        var executionInfo = data.response && data.response.executionInfo;
+        chorus.PageEvents.broadcast("file:executionFailed", task);
+        var executionInfo = task.errorData && task.errorData.executionInfo;
         if (executionInfo) {
             chorus.PageEvents.broadcast("workfile:executed", this.model, executionInfo);
         }

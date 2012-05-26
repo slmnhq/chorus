@@ -39,10 +39,7 @@
             var success = options.success, error = options.error;
             options.success = this.makeSuccessFunction(options, success);
             options.error = function(collection_or_model, xhr) {
-                var data = xhr.responseText && !!xhr.responseText.trim() && JSON.parse(xhr.responseText);
-                collection_or_model.parseErrors(data);
-                collection_or_model.trigger("fetchFailed", collection_or_model, xhr);
-                collection_or_model.respondToErrors(xhr);
+                collection_or_model.handleRequestFailure("fetchFailed", xhr);
                 if (error) error(collection_or_model, xhr);
             };
 
@@ -58,25 +55,32 @@
             return this.camelizeKeys(data.response);
         },
 
-        dataErrors: function(data) {
-            return data.errors;
+        handleRequestFailure: function(failureEvent, xhr) {
+            var data = xhr.responseText && !!xhr.responseText.trim() && JSON.parse(xhr.responseText);
+            this.parseErrors(data);
+            this.trigger(failureEvent, this);
+            this.respondToErrors(xhr.status);
         },
 
-        respondToErrors: function(xhr) {
-            if (xhr.status === 401) {
+        parseErrors: function(data) {
+            this.errorData = data.response;
+            this.serverErrors = this.dataErrors(data);
+        },
+
+        respondToErrors: function(status) {
+            if (status === 401) {
                 chorus.session.trigger("needsLogin");
-            } else if (xhr.status == 403) {
+            } else if (status == 403) {
                 this.trigger("resourceForbidden");
-            } else if (xhr.status == 404) {
+            } else if (status == 404) {
                 this.trigger("resourceNotFound");
             } else {
                 chorus.toast("server_error");
             }
         },
 
-        parseErrors: function(data) {
-            this.errorData = data.response;
-            this.serverErrors = this.dataErrors(data);
+        dataErrors: function(data) {
+            return data.errors;
         }
     };
 

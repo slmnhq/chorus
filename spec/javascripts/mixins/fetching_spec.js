@@ -195,14 +195,12 @@ describe("chorus.Mixins.Fetching", function() {
                     response: { foo: "bar" },
                     errors: { record: "bad" }
                 };
-
-                this.xhr = { status: 401 };
             });
 
             itHandlesFailure();
 
             it("triggers the 'needsLogin' event on the session", function() {
-                this.resource.respondToErrors(this.xhr);
+                this.resource.respondToErrors(401);
                 expect("needsLogin").toHaveBeenTriggeredOn(chorus.session);
             });
         });
@@ -215,14 +213,12 @@ describe("chorus.Mixins.Fetching", function() {
                     response: { instanceId: 1 },
                     errors: { record: "no" }
                 };
-
-                this.xhr = { status: 403 };
             });
 
             itHandlesFailure();
 
             it("triggers resourceForbidden on the resource", function() {
-                this.resource.respondToErrors(this.xhr);
+                this.resource.respondToErrors(403);
                 expect(this.resource.trigger).toHaveBeenCalledWith("resourceForbidden");
             });
         });
@@ -231,14 +227,12 @@ describe("chorus.Mixins.Fetching", function() {
             beforeEach(function() {
                 spyOn(this.resource, "trigger");
                 this.data = {};
-
-                this.xhr = { status: 404 };
             });
 
             itHandlesFailure();
 
             it("triggers resourceNotFound on the resource", function() {
-                this.resource.respondToErrors(this.xhr);
+                this.resource.respondToErrors(404);
                 expect(this.resource.trigger).toHaveBeenCalledWith("resourceNotFound");
             });
         });
@@ -247,14 +241,12 @@ describe("chorus.Mixins.Fetching", function() {
             beforeEach(function() {
                 spyOn(chorus, "toast");
                 this.data = {};
-
-                this.xhr = { status: 500 };
             });
 
             itHandlesFailure();
 
             it("shows a toast message", function() {
-                this.resource.respondToErrors(this.xhr);
+                this.resource.respondToErrors(500);
                 expect(chorus.toast).toHaveBeenCalledWith("server_error");
             });
         });
