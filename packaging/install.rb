@@ -80,7 +80,7 @@ end
 
 def run_chorus
   Dir.chdir(APP_DIR) do
-    run "bundle exec rails s -d"
+    Process.spawn "bundle exec rails s -d"
   end
 end
 
