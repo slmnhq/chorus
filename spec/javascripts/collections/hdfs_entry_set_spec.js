@@ -7,13 +7,13 @@ describe("chorus.collections.HdfsEntrySet", function() {
         });
 
         it("has the right URL", function() {
-            expect(this.hdfsEntrySet.url()).toContain("/data/" + this.hdfsEntrySet.attributes.instance.id + "/hdfs/%2Fdata%2Fsomewhere");
+            expect(this.hdfsEntrySet.url()).toContain("/hadoop_instances/" + this.hdfsEntrySet.attributes.hadoopInstance.id + "/files/%2Fdata%2Fsomewhere");
         });
 
         describe("add", function() {
             it("sets the path and instance on the added entries", function() {
                 expect(this.hdfsEntrySet.at(0).get('path')).toBe('/data/somewhere');
-                expect(this.hdfsEntrySet.at(0).get('instance')).toBe(this.hdfsEntrySet.attributes.instance);
+                expect(this.hdfsEntrySet.at(0).get('hadoopInstance')).toBe(this.hdfsEntrySet.attributes.hadoopInstance);
             })
         });
 
@@ -23,7 +23,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
                 expect(model).toBeA(chorus.models.HdfsEntry);
                 expect(model.get('name')).toBe('somewhere');
                 expect(model.get('path')).toBe('/data');
-                expect(model.get('instance')).toBe(this.hdfsEntrySet.attributes.instance);
+                expect(model.get('hadoopInstance')).toBe(this.hdfsEntrySet.attributes.hadoopInstance);
                 expect(model.get('isDir')).toBeTruthy();
             });
         });

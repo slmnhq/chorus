@@ -1,6 +1,6 @@
 describe("chorus.pages.HdfsShowFileView", function() {
     beforeEach(function() {
-        this.file = fixtures.hdfsFile({ path: "myFile.txt", lines: ["My secret content", "next line"] });
+        this.file = fixtures.hdfsFile({ path: "myFile.txt", contents: ["My secret content", "next line"] });
         this.view = new chorus.views.HdfsShowFileView({ model: this.file });
     });
 

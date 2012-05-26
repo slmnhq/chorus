@@ -29,7 +29,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var hdfs = this.result.get("typeAhead").docs[1];
             var result = this.view.$("li.result:eq(0)");
             expect(result.find(".name").html()).toBe(hdfs.highlightedAttributes.name[0]);
-            expect(result.find(".name").attr("href")).toBe('#/instances/10020/browseFile' + hdfs.path + '/' + hdfs.name);
+            expect(result.find(".name").attr("href")).toBe('#/hadoop_instances/10020/browseFile' + hdfs.path + '/' + hdfs.name);
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hdfs");
         });
 

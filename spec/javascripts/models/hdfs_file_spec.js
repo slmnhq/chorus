@@ -1,6 +1,10 @@
 describe("chorus.models.HdfsFile", function() {
     beforeEach(function() {
-        this.file = fixtures.hdfsFile({ instanceId: "1234", path: "/my/complicated/home/folder/my file.txt" });
+        this.file = fixtures.hdfsFile({
+            hadoopInstanceId: "1234",
+            path: "/my/complicated/home/folder/my file.txt",
+            hadoopInstance: { id: "1234" }
+        });
     })
 
     it("gets the correct filename from the path", function() {
@@ -12,6 +16,10 @@ describe("chorus.models.HdfsFile", function() {
     })
 
     it("has the right url", function() {
-        expect(this.file.url()).toBe("/data/1234/hdfs/%2Fmy%2Fcomplicated%2Fhome%2Ffolder%2Fmy%20file.txt/sample");
+        expect(this.file.url()).toBe("/hadoop_instances/1234/contents/%2Fmy%2Fcomplicated%2Fhome%2Ffolder%2Fmy%20file.txt");
+    });
+
+    it("has the show url template", function(){
+        expect(this.file.showUrlTemplate()).toBe("hadoop_instances/1234/browseFile/%2Fmy%2Fcomplicated%2Fhome%2Ffolder%2Fmy%20file.txt")
     });
 })

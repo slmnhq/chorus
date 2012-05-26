@@ -81,7 +81,7 @@ describe("chorus.views.SearchAttachment", function() {
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.file_in_hdfs",
                 {
-                    hdfsFileLink: '<a href="#/instances/10020/browseFile/data/cleardb.sql">cleardb.sql</a>'
+                    hdfsFileLink: '<a href="#/hadoop_instances/10020/browseFile/%2Fdata%2Fcleardb.sql">cleardb.sql</a>'
                 }
             );
         });

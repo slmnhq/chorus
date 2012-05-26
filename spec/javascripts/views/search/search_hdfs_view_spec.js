@@ -80,7 +80,7 @@ describe("chorus.views.SearchHdfs", function() {
             var $inst = this.view.$(".instance a");
 
             expect($inst.text()).toBe("hadoop");
-            expect($inst.attr("href")).toBe("#/instances/10001/browse/");
+            expect($inst.attr("href")).toBe("#/hadoop_instances/10001/browse/");
         });
 
         it("should render a link to each file", function() {
@@ -92,10 +92,10 @@ describe("chorus.views.SearchHdfs", function() {
             expect($links.length).toBe(2);
 
             expect($links.eq(0).html()).toEqual("<em>aaa</em>");
-            expect($links.eq(0).attr("href")).toBe("#/instances/10001/browse/aaa");
+            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/10001/browse/aaa");
 
             expect($links.eq(1).html()).toEqual("bbb");
-            expect($links.eq(1).attr("href")).toBe("#/instances/10001/browse/aaa/bbb");
+            expect($links.eq(1).attr("href")).toBe("#/hadoop_instances/10001/browse/aaa/bbb");
         });
     });
 
@@ -121,7 +121,7 @@ describe("chorus.views.SearchHdfs", function() {
             var $inst = this.view.$(".instance a");
 
             expect($inst.text()).toBe("hadoop");
-            expect($inst.attr("href")).toBe("#/instances/10001/browse/");
+            expect($inst.attr("href")).toBe("#/hadoop_instances/10001/browse/");
         });
 
         it("should not render a link to each file", function() {
@@ -134,10 +134,10 @@ describe("chorus.views.SearchHdfs", function() {
             expect($links.length).toBe(2);
 
             expect($links.eq(0).text()).toBe("aaa");
-            expect($links.eq(0).attr("href")).toBe("#/instances/10001/browse/aaa");
+            expect($links.eq(0).attr("href")).toBe("#/hadoop_instances/10001/browse/aaa");
 
             expect($links.eq(1).text()).toBe("bbb");
-            expect($links.eq(1).attr("href")).toBe("#/instances/10001/browse/aaa/bbb");
+            expect($links.eq(1).attr("href")).toBe("#/hadoop_instances/10001/browse/aaa/bbb");
         });
     });
 });

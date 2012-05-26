@@ -11,12 +11,14 @@ chorus.models.Artifact = chorus.models.Base.extend({
         var workfileUrl = this.workfile() && this.workfile().showUrl();
         var hdfsFileUrl = this.hdfsFile() && this.hdfsFile().showUrl();
         var instanceUrl = this.instance() && this.instance().showUrl();
+        var hadoopInstanceUrl = this.hadoopInstance() && this.hadoopInstance().showUrl();
 
         return tabularDataUrl ||
             (workspaceUrl && workfileUrl) ||
             hdfsFileUrl ||
             workspaceUrl ||
-            instanceUrl;
+            instanceUrl ||
+            hadoopInstanceUrl;
     },
 
     iconUrl: function(options) {
@@ -59,6 +61,13 @@ chorus.models.Artifact = chorus.models.Base.extend({
     instance: function() {
         if (!this._instance) {
             this._instance = this.get('instance') && new chorus.models.Instance(this.get('instance'));
+        }
+        return this._instance;
+    },
+
+    hadoopInstance: function() {
+        if (!this._hadoopInstance) {
+            this._hadoopInstance = this.get('hadoopInstance') && new chorus.models.HadoopInstance(this.get('hadoopInstance'));
         }
         return this._instance;
     },

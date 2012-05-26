@@ -16,7 +16,7 @@ describe("chorus.models.HadoopInstance", function() {
     });
 
     it("links to the root directory of the hadoop instance", function() {
-        expect(this.model.showUrl()).toBe("#/instances/" + this.model.get('id') + "/browse/");
+        expect(this.model.showUrl()).toBe("#/hadoop_instances/" + this.model.get('id') + "/browse/");
     });
 
     describe("#entriesForDir(directoryName)", function() {
@@ -24,7 +24,7 @@ describe("chorus.models.HadoopInstance", function() {
             var entries = this.model.entriesForPath("foo");
             expect(entries).toBeA(chorus.collections.HdfsEntrySet);
             expect(entries.attributes.path).toBe("foo");
-            expect(entries.attributes.instance.id).toBe(this.model.get("id"));
+            expect(entries.attributes.hadoopInstance.id).toBe(this.model.get("id"));
         });
     });
 });

@@ -3,15 +3,16 @@ chorus.models.HdfsFile = chorus.models.Base.extend({
     entityType: "hdfs",
 
     name: function() {
-        return this.attributes.name;
+        splittedPath = this.attributes.path.split('/');
+        return splittedPath[splittedPath.length - 1];
     },
 
     showUrlTemplate: function() {
-        return "instances/" + this.get('instance').id + "/browseFile/" + this.get("path") + "/" + this.get("name");
+        return "hadoop_instances/" + this.get('hadoopInstance').id + "/browseFile/" + encodeURIComponent(this.get("path"));
     },
 
     urlTemplate: function() {
-        return "data/{{instanceId}}/hdfs/" + encodeURIComponent(this.get("path")) + "/sample";
+        return "hadoop_instances/{{hadoopInstanceId}}/contents/" + encodeURIComponent(this.get("path"));
     },
 
     fileNameFromPath: function() {

@@ -36,8 +36,8 @@
             ["/databases/:databaseId", "SchemaIndex"],
             ["/schemas/:schema_id", "SchemaBrowse"],
             ["/instances/:instanceId/databases/:databaseName/schemas/:schemaName/:metaType/:objectName", "TabularDataShow"],
-            ["/instances/:instanceId/browse/*path", "HdfsEntryIndex"],
-            ["/instances/:instanceId/browseFile/*path", "HdfsShowFile"],
+            ["/hadoop_instances/:instanceId/browse/*path", "HdfsEntryIndex"],
+            ["/hadoop_instances/:instanceId/browseFile/*path", "HdfsShowFile"],
             ["/notifications", "NotificationIndex"],
             ["/styleguide", "StyleGuide"]
         ],

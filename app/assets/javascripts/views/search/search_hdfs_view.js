@@ -14,13 +14,13 @@ chorus.views.SearchHdfs = chorus.views.SearchItemBase.extend({
                 return chorus.helpers.linkTo(entry.showUrl(), entry.get("name"));
             }
         }, this);
-        var instance = this.model.getInstance();
+        var hadoopInstance = this.model.getHadoopInstance();
 
         return {
             showUrl: this.model.showUrl(),
             humanSize: I18n.toHumanSize(this.model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(this.model.get("name").split("."))),
-            instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.get('name')),
+            instanceLink: chorus.helpers.linkTo(hadoopInstance.showUrl(), hadoopInstance.get('name')),
             completePath: new Handlebars.SafeString(pathLinks.join(" / ")),
             displayableFiletype: this.model.get('isBinary') === false
         }

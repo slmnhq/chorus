@@ -5,9 +5,9 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
 
     showUrlTemplate: function() {
         if(this.get("isDir")) {
-            return "instances/{{instance.id}}/browse" + this.getPath() + "/{{encode name}}";
+            return "hadoop_instances/{{hadoopInstance.id}}/browse" + this.getPath() + "/{{encode name}}";
         } else {
-            return "instances/{{instance.id}}/browseFile" + this.getPath() + "/{{encode name}}";
+            return "hadoop_instances/{{hadoopInstance.id}}/browseFile" + this.getPath() + "/{{encode name}}";
         }
     },
 
@@ -23,7 +23,7 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
         }, this)
     },
 
-    getInstance: function() {
-        return new chorus.models.HadoopInstance(this.get('instance')).set({ instanceProvider: "Hadoop" })
+    getHadoopInstance: function() {
+        return new chorus.models.HadoopInstance(this.get('hadoopInstance')).set({ instanceProvider: "Hadoop" })
     }
 });

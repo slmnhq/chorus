@@ -1,6 +1,4 @@
-chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
-    chorus.Mixins.InstanceCredentials.page
-).extend({
+chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.extend({
     helpId: "instances",
 
     setup:function (instanceId, path) {
@@ -21,7 +19,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
 
         this.sidebar = new chorus.views.HdfsEntrySidebar({
             rootPath: this.path,
-            instanceId: instanceId
+            hadoopInstanceId: instanceId
         });
     },
 

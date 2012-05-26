@@ -1,6 +1,6 @@
 describe("chorus.views.HdfsEntryList", function() {
     beforeEach(function() {
-        this.collection = fixtures.hdfsEntrySet(null, {instance: {id: "1234"}, path: "/abc"});
+        this.collection = fixtures.hdfsEntrySet(null, {hadoopInstance: {id: "1234"}, path: "/abc"});
         this.view = new chorus.views.HdfsEntryList({ collection : this.collection});
     });
 
@@ -40,7 +40,7 @@ describe("chorus.views.HdfsEntryList", function() {
         })
 
         it("links the directory name to that browse page", function() {
-            expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/instances/1234/browse/abc/" + this.collection.at(0).get("name"));
+            expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hadoop_instances/1234/browse/abc/" + this.collection.at(0).get("name"));
         })
 
         it("shows 'Directory - x files' in the subtitle line for the directory", function() {
@@ -55,7 +55,7 @@ describe("chorus.views.HdfsEntryList", function() {
             });
 
             it("links the directory name to that browse page", function() {
-                expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/instances/1234/browse/" + this.collection.at(0).get("name"));
+                expect(this.view.$("li:eq(0) a.name").attr("href")).toBe("#/hadoop_instances/1234/browse/" + this.collection.at(0).get("name"));
             })
         })
 

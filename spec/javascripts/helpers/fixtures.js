@@ -1573,6 +1573,17 @@ beforeEach(function() {
             }, overrides);
         },
 
+        hadoopInstance: function(overrides) {
+            return new chorus.models.HadoopInstance(this.hadoopInstanceJson(overrides));
+        },
+
+        hadoopInstanceJson: function(overrides) {
+            return _.extend({
+                id: "1234",
+                name: "hadoop_1"
+            }, overrides);
+        },
+
         instanceWorkspaceUsageJson: function(overrides) {
             var workspaceId = this.nextId().toString();
             return _.extend({
@@ -2256,7 +2267,7 @@ beforeEach(function() {
             ];
             var attributes = _.extend({
                 path: '/data',
-                instance: {
+                hadoopInstance: {
                     id: this.nextId().toString(),
                     name: 'instanceName'
                 }
@@ -2345,7 +2356,7 @@ beforeEach(function() {
                     "some content;",
                     "second line"
                 ],
-                instanceId: "1234",
+                hadoopInstanceId: "1234",
                 path: "%2Fdata%2FfixtureFile.sql"
             }, overrides)
         },
@@ -2432,9 +2443,8 @@ beforeEach(function() {
                     "workspace": {},
                     "hdfs": {
                         "id": "10020|/data/cleardb.sql",
-                        "name": "cleardb.sql",
-                        "path": "/data",
-                        "instance": {
+                        "path": "/data/cleardb.sql",
+                        "hadoopInstance": {
                             "id": "10020",
                             "name": "hadoooooooooop"
                         },
@@ -3013,7 +3023,7 @@ beforeEach(function() {
                             highlightedAttributes: {
                                 name: ["Thumbs.<em>db</em>"]
                             },
-                            instance: {
+                            hadoopInstance: {
                                 id: "10001",
                                 name: "hadoop"
                             },
@@ -3052,7 +3062,7 @@ beforeEach(function() {
                                 id: "10020|/webui/help/publish/Data/Index.js",
                                 name: "Index.js",
                                 path: "/webui/help/publish/Data",
-                                instance: {
+                                hadoopInstance: {
                                     id: "10020",
                                     name: "hadoooooooooop"
                                 },
@@ -3215,7 +3225,7 @@ beforeEach(function() {
                 highlightedAttributes: {
                     name: ["Thumbs.<em>db</em>"]
                 },
-                instance: {
+                hadoopInstance: {
                     id: "10001",
                     name: "hadoop"
                 },
@@ -3333,7 +3343,7 @@ beforeEach(function() {
                             "highlightedAttributes": {
                                 "name": ["<em>Edc<\/em>Views.js"]
                             },
-                            "instance": {
+                            "hadoopInstance": {
                                 "id": "10020",
                                 "name": "hadoooooooooop"
                             },

@@ -80,7 +80,7 @@ describe("chorus.models.Artifact", function() {
 
         it("shows the URL for an hdfsFile", function() {
             var model = fixtures.attachmentOnFileInHdfsSearchResult();
-            expect(model.showUrl()).toBe("#/instances/10020/browseFile/data/cleardb.sql");
+            expect(model.showUrl()).toBe("#/hadoop_instances/10020/browseFile/%2Fdata%2Fcleardb.sql");
         });
     });
 

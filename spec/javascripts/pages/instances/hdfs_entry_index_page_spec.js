@@ -86,11 +86,11 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
                 expect($content.find("a").length).toBe(5);
 
-                expect($content.find("a").eq(0).attr("href")).toBe("#/instances/1234/browse/")
-                expect($content.find("a").eq(1).attr("href")).toBe("#/instances/1234/browse/start")
-                expect($content.find("a").eq(2).attr("href")).toBe("#/instances/1234/browse/start/m1")
-                expect($content.find("a").eq(3).attr("href")).toBe("#/instances/1234/browse/start/m1/m2")
-                expect($content.find("a").eq(4).attr("href")).toBe("#/instances/1234/browse/start/m1/m2/m3")
+                expect($content.find("a").eq(0).attr("href")).toBe("#/hadoop_instances/1234/browse/")
+                expect($content.find("a").eq(1).attr("href")).toBe("#/hadoop_instances/1234/browse/start")
+                expect($content.find("a").eq(2).attr("href")).toBe("#/hadoop_instances/1234/browse/start/m1")
+                expect($content.find("a").eq(3).attr("href")).toBe("#/hadoop_instances/1234/browse/start/m1/m2")
+                expect($content.find("a").eq(4).attr("href")).toBe("#/hadoop_instances/1234/browse/start/m1/m2/m3")
 
                 expect($content.find("a").eq(0).text()).toBe(this.instance.get("name"))
                 expect($content.find("a").eq(1).text()).toBe("start")

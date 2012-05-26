@@ -1,7 +1,7 @@
 chorus.models.HadoopInstance = chorus.models.Instance.extend({
     constructorName: "HadoopInstance",
     urlTemplate: "hadoop_instances/{{id}}",
-    showUrlTemplate: "instances/{{id}}/browse/",
+    showUrlTemplate: "hadoop_instances/{{id}}/browse/",
 
     providerIconUrl: function() {
         return "/images/instances/hadoop_instance.png";
@@ -12,7 +12,7 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
     entriesForPath: function(path) {
         return new chorus.collections.HdfsEntrySet([], {
             path: path,
-            instance: {
+            hadoopInstance: {
                 id: this.get("id")
             }
         });

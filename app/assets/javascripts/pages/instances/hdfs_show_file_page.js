@@ -1,17 +1,17 @@
 chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     constructorName: "HdfsShowFilePage",
-    helpId: "instances",
+    helpId: "hadoop_instances",
 
-    setup:function (instanceId, path) {
+    setup:function (hadoopInstanceId, path) {
         this.path = "/" + path;
 
-        this.model = new chorus.models.HdfsFile({ instanceId: instanceId, path: this.path });
+        this.model = new chorus.models.HdfsFile({ hadoopInstanceId: hadoopInstanceId, path: this.path });
         this.bindings.add(this.model, "change", this.render);
-        this.model.fetch()
+        this.model.fetch();
 
-        this.instance = new chorus.models.Instance({id: instanceId});
-        this.instance.fetch();
-        this.dependOn(this.instance);
+        this.hadoopInstance = new chorus.models.HadoopInstance({id: hadoopInstanceId});
+        this.hadoopInstance.fetch();
+        this.dependOn(this.hadoopInstance);
 
         this.mainContent = new chorus.views.MainContentView({
             model:this.model,
@@ -26,23 +26,23 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     crumbs: function() {
         var pathLength = _.compact(this.path.split("/")).length - 1
 
-        var instanceCrumb = this.instance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "");
+        var instanceCrumb = this.hadoopInstance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "");
         var fileNameCrumb = this.model.fileNameFromPath();
 
         return [
             { label: t("breadcrumbs.home"), url: "#/" },
             { label: t("breadcrumbs.instances"), url: "#/instances" },
-            { label: this.instance.loaded ? instanceCrumb : "..." , url: "#/instances"},
+            { label: this.hadoopInstance.loaded ? instanceCrumb : "..." , url: "#/hadoop_instances"},
             { label: this.model.loaded ? fileNameCrumb : "..."}
         ];
     },
 
     postRender: function() {
-        var instanceId = this.instance.get("id")
+        var hadoopInstanceId = this.hadoopInstance.get("id")
         var $content = $("<ul class='hdfs_link_menu'/>");
 
         var $li = $("<li/>");
-        $li.append($("<a/>").attr("href", "#/instances/" + instanceId + "/browse/").text(this.instance.get("name")))
+        $li.append($("<a/>").attr("href", "#/hadoop_instances/" + hadoopInstanceId + "/browse/").text(this.hadoopInstance.get("name")))
         $content.append($li);
 
         var pathElements = _.initial(_.compact(this.path.split("/")))
@@ -52,7 +52,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
             var shortPath = (path.length <= maxLength) ? path : path.slice(0, maxLength) + "..."
             var $li = $("<li/>");
             var fullPath = _.first(arr, index + 1).join('/');
-            $li.append($("<a/>").attr("href", "#/instances/" + instanceId + "/browse/" + fullPath).text(shortPath))
+            $li.append($("<a/>").attr("href", "#/hadoop_instances/" + hadoopInstanceId + "/browse/" + fullPath).text(shortPath))
             $content.append($li);
         });
 
