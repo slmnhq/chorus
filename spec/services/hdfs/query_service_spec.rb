@@ -27,6 +27,19 @@ describe Hdfs::QueryService do
         end
       end
     end
+
+    context "timeout" do
+      let(:slow_instance) do
+        HadoopInstance.new :host => "garcia", :port => "8888", :username => "pivotal"
+      end
+
+      it "returns nil" do
+        mock(HTTParty).get(anything, anything) { raise Timeout::Error }
+
+        version = described_class.instance_version(slow_instance)
+        version.should be_nil
+      end
+    end
   end
 
   describe "#list" do

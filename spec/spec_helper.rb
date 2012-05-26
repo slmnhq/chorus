@@ -12,6 +12,7 @@ require "tempfile"
 require 'rspec_api_documentation/dsl'
 require 'allowy/rspec'
 require "vcr"
+require "webmock/rspec"
 
 module Shoulda # :nodoc:
   module Matchers

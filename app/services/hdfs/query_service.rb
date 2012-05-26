@@ -19,29 +19,37 @@ module Hdfs
     end
 
     def version
-      timeout {
-        @version ||= HTTParty.get("#{SERVICE_HOST}/version", :query => @query)["response"]
-      }
+      @version ||= load_version
     end
 
     def list(path)
-      timeout {
+      timeout do
         escaped_path = Rack::Utils.escape(path)
         HTTParty.get("#{SERVICE_HOST}/#{version}/list/#{escaped_path}", :query => @query)
-      }
+      end
     end
 
     def show(path)
-      timeout {
+      timeout do
         escaped_path = Rack::Utils.escape(path)
         HTTParty.get("#{SERVICE_HOST}/#{version}/show/#{escaped_path}", :query => @query)
-      }
+      end
     end
 
     private
 
     def timeout(&block)
         Timeout::timeout(TIMEOUT, &block)
+    end
+
+    def load_version
+      timeout do
+        HTTParty.get("#{SERVICE_HOST}/version", :query => @query)["response"]
+      end
+    rescue Errno::ECONNREFUSED
+      nil
+    rescue Timeout::Error
+      nil
     end
   end
 end
