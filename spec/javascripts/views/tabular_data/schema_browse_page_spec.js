@@ -11,7 +11,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
     });
 
     it("includes the InstanceCredentials mixin", function() {
-        expect(this.page.requiredResourcesFetchForbidden).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchForbidden);
+        expect(this.page.dependentResourceForbidden).toBe(chorus.Mixins.InstanceCredentials.page.dependentResourceForbidden);
     });
 
     describe("when a fetch fails", function() {
@@ -20,12 +20,12 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         })
 
         it("navigates to the 404 page when the schema fetch fails", function() {
-            this.page.schema.trigger('fetchNotFound', this.page.schema);
+            this.page.schema.trigger('resourceNotFound', this.page.schema);
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
         })
 
         it("navigates to the 404 page when the collection fetch fails", function() {
-            this.page.collection.trigger('fetchNotFound', this.page.collection);
+            this.page.collection.trigger('resourceNotFound', this.page.collection);
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute")
         })
     });

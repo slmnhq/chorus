@@ -1,4 +1,5 @@
-;(function() {
+;
+(function() {
     chorus.Mixins.Fetching = {
         fetchIfNotLoaded: function(options) {
             if (this.loaded) {
@@ -40,6 +41,7 @@
             options.error = function(collection_or_model, xhr) {
                 var data = xhr.responseText && !!xhr.responseText.trim() && JSON.parse(xhr.responseText);
                 collection_or_model.parseErrors(data);
+                collection_or_model.trigger("fetchFailed", collection_or_model, xhr);
                 collection_or_model.respondToErrors(xhr);
                 if (error) error(collection_or_model, xhr);
             };
@@ -61,14 +63,14 @@
         },
 
         respondToErrors: function(xhr) {
-            this.trigger("fetchFailed", this, xhr)
-
             if (xhr.status === 401) {
                 chorus.session.trigger("needsLogin");
             } else if (xhr.status == 403) {
-                this.trigger("fetchForbidden");
+                this.trigger("resourceForbidden");
             } else if (xhr.status == 404) {
-                this.trigger("fetchNotFound")
+                this.trigger("resourceNotFound");
+            } else {
+                chorus.toast("server_error");
             }
         },
 
@@ -80,7 +82,7 @@
 
     function transformKeys(keyFn) {
         var transformer = function(hash) {
-            var result = _.isArray(hash) ?  [] : {};
+            var result = _.isArray(hash) ? [] : {};
             _.each(hash, function(val, key) {
                 var newKey = keyFn(key);
                 if (_.isObject(val)) {

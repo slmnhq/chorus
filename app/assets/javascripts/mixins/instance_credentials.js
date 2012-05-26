@@ -7,7 +7,7 @@ chorus.Mixins.InstanceCredentials.model = {
 };
 
 chorus.Mixins.InstanceCredentials.page = {
-    requiredResourcesFetchForbidden: function(resource) {
+    dependentResourceForbidden: function(resource) {
         var instance = resource.instanceRequiringCredentials && resource.instanceRequiringCredentials();
         if (instance) {
             var dialog = new chorus.dialogs.InstanceAccount({
@@ -18,7 +18,7 @@ chorus.Mixins.InstanceCredentials.page = {
             });
             dialog.launchModal();
         } else {
-            this._super("requiredResourcesFetchForbidden", arguments);
+            this._super("dependentResourceForbidden", arguments);
         }
     }
 };

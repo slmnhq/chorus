@@ -14,23 +14,23 @@ describe("chorus.Mixins.Fetching", function() {
                 this.resource.fetchIfNotLoaded();
                 expect(this.resource.fetch).toHaveBeenCalled();
             })
-        })
+        });
 
         context("when loaded", function() {
             beforeEach(function() {
                 this.resource.loaded = true;
-            })
+            });
 
             it("it won't start fetching again", function() {
                 this.resource.fetchIfNotLoaded();
                 expect(this.resource.fetch).not.toHaveBeenCalled();
             })
-        })
+        });
 
         context("when fetching", function() {
             beforeEach(function() {
                 this.resource.fetch();
-            })
+            });
 
             it("it won't start a second fetch", function() {
                 this.resource.fetch.reset();
@@ -43,19 +43,19 @@ describe("chorus.Mixins.Fetching", function() {
             beforeEach(function() {
                 this.resource.fetch();
                 this.server.completeFetchFor(this.resource);
-            })
+            });
 
             context("if the model is declared unloaded", function() {
                 beforeEach(function() {
                     this.resource.loaded = false;
                     this.resource.fetch.reset();
-                })
+                });
 
                 it('will fetch again', function() {
                     this.resource.fetchIfNotLoaded();
                     expect(this.resource.fetch).toHaveBeenCalled();
-                })
-            })
+                });
+            });
         });
 
         context("after the fetch fails", function() {
@@ -68,7 +68,7 @@ describe("chorus.Mixins.Fetching", function() {
             it('will fetch again', function() {
                 this.resource.fetchIfNotLoaded();
                 expect(this.resource.fetch).toHaveBeenCalled();
-            })
+            });
         });
 
         context("after the fetch errors", function() {
@@ -81,7 +81,7 @@ describe("chorus.Mixins.Fetching", function() {
             it('will fetch again', function() {
                 this.resource.fetchIfNotLoaded();
                 expect(this.resource.fetch).toHaveBeenCalled();
-            })
+            });
         });
 
         context("fetching with options", function() {
@@ -90,7 +90,7 @@ describe("chorus.Mixins.Fetching", function() {
             });
             it("should pass options to fetch", function() {
                 expect(this.resource.fetch.mostRecentCall.args[0].rows).toBe(10);
-            })
+            });
         });
     });
 
@@ -103,8 +103,8 @@ describe("chorus.Mixins.Fetching", function() {
             }, {
                 status: 200
             })).toEqual({
-                hiThere: { youreCool: true }
-            });
+                    hiThere: { youreCool: true }
+                });
         });
     });
 
@@ -147,7 +147,7 @@ describe("chorus.Mixins.Fetching", function() {
         var params;
 
         beforeEach(function() {
-          params = {
+            params = {
                 ownerId: 1,
                 twoWords: {
                     nestedAttribute: 2,
@@ -176,7 +176,7 @@ describe("chorus.Mixins.Fetching", function() {
         it(" knows the difference between arrays and objects", function() {
             var arrayProperty = this.resource.underscoreKeys(params).two_words.double_nested;
             expect(_.isArray(arrayProperty)).toBeTruthy();
-        } );
+        });
     });
 
     describe("#parseErrors", function() {
@@ -221,28 +221,41 @@ describe("chorus.Mixins.Fetching", function() {
 
             itHandlesFailure();
 
-            it("triggers fetchForbidden on the resource", function() {
+            it("triggers resourceForbidden on the resource", function() {
                 this.resource.respondToErrors(this.xhr);
-                expect(this.resource.trigger).toHaveBeenCalledWith("fetchForbidden");
+                expect(this.resource.trigger).toHaveBeenCalledWith("resourceForbidden");
             });
         });
 
         context("when the response is '404 not found'", function() {
             beforeEach(function() {
                 spyOn(this.resource, "trigger");
-                this.data = {
-                    response: { instanceId: 1 },
-                    errors: { record: "no" }
-                };
+                this.data = {};
 
                 this.xhr = { status: 404 };
             });
 
             itHandlesFailure();
 
-            it("triggers fetchNotFound on the resource", function() {
+            it("triggers resourceNotFound on the resource", function() {
                 this.resource.respondToErrors(this.xhr);
-                expect(this.resource.trigger).toHaveBeenCalledWith("fetchNotFound");
+                expect(this.resource.trigger).toHaveBeenCalledWith("resourceNotFound");
+            });
+        });
+
+        context("when the response is any other error", function() {
+            beforeEach(function() {
+                spyOn(chorus, "toast");
+                this.data = {};
+
+                this.xhr = { status: 500 };
+            });
+
+            itHandlesFailure();
+
+            it("shows a toast message", function() {
+                this.resource.respondToErrors(this.xhr);
+                expect(chorus.toast).toHaveBeenCalledWith("server_error");
             });
         });
 
@@ -276,7 +289,7 @@ describe("chorus.Mixins.Fetching", function() {
 
             this.resource.fetch({
                 success: this.successSpy,
-                error: this.errorSpy,
+                error: this.errorSpy
             });
         });
 

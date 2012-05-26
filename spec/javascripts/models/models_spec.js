@@ -239,6 +239,17 @@ describe("chorus.models.Abstract", function() {
                         });
                     });
                 });
+
+                describe("when an unexpected error occurs", function() {
+                    beforeEach(function() {
+                        spyOn(chorus, 'toast');
+                        this.server.lastUpdate().failServerError();
+                    });
+
+                    it("responds to the errors", function() {
+                        expect(chorus.toast).toHaveBeenCalledWith("server_error");
+                    });
+                });
             });
 
             describe("when the model is invalid", function() {
@@ -421,6 +432,17 @@ describe("chorus.models.Abstract", function() {
 
                 it("returns the error information", function() {
                     expect(this.model.serverErrors).toEqual({ record: "not_found" });
+                });
+            });
+
+            describe("when an unexpected error occurs", function() {
+                beforeEach(function() {
+                    spyOn(chorus, 'toast');
+                    this.server.lastDestroy().failServerError();
+                });
+
+                it("responds to the errors", function() {
+                    expect(chorus.toast).toHaveBeenCalledWith("server_error");
                 });
             });
         })
@@ -968,7 +990,7 @@ describe("chorus.models.Abstract", function() {
                     it("passes any options to the urlParams function", function() {
                         spyOn(this.collection, 'urlParams').andCallThrough();
                         this.collection.url({ method: 'create' });
-                        expect(this.collection.urlParams).toHaveBeenCalledWith({ method: 'create', rows : 50, page : 1 });
+                        expect(this.collection.urlParams).toHaveBeenCalledWith({ method: 'create', rows: 50, page: 1 });
                     });
                 });
 

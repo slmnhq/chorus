@@ -58,12 +58,12 @@ describe("chorus.pages.WorkfileShowPage", function() {
             });
 
             it("navigates to the 404 page for the model", function() {
-                this.page.model.trigger('fetchNotFound', this.page.model);
+                this.page.model.trigger('resourceNotFound', this.page.model);
                 expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
             });
 
             it("navigates to the 404 page for the workspace", function() {
-                this.page.workspace.trigger('fetchNotFound', this.page.workspace);
+                this.page.workspace.trigger('resourceNotFound', this.page.workspace);
                 expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
             });
         });
@@ -127,7 +127,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
         });
     });
 
-    describe("#render", function(){
+    describe("#render", function() {
         beforeEach(function() {
             this.spy = spyOn(chorus.views.DatabaseFunctionSidebarList.prototype, "forwardEvent").andCallThrough();
             this.page = new chorus.pages.WorkfileShowPage(this.workspaceId, this.workfileId);

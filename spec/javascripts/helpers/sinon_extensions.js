@@ -227,6 +227,17 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         );
     },
 
+    failServerError: function(errors, response) {
+        return this.respond(
+            500,
+            { 'Content-Type': 'application/json' },
+            JSON.stringify({
+                response: response || [],
+                errors: errors || {}
+            })
+        );
+    },
+
     params: function() {
         var uri;
         if (this.requestBody) {

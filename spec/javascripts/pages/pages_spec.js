@@ -26,13 +26,13 @@ describe("chorus.pages.Base", function() {
             beforeEach(function() {
                 this.page = new chorus.pages.Bare();
                 this.model = new chorus.models.Base();
-                spyOn(this.page, "requiredResourcesFetchNotFound");
+                spyOn(this.page, "dependentResourceNotFound");
                 this.page.dependOn(this.model);
             });
 
-            it("calls requiredResourcesFetchNotFound", function() {
-                this.model.trigger("fetchNotFound");
-                expect(this.page.requiredResourcesFetchNotFound).toHaveBeenCalled();
+            it("calls dependentResourceNotFound", function() {
+                this.model.trigger("resourceNotFound");
+                expect(this.page.dependentResourceNotFound).toHaveBeenCalled();
             });
         });
 
@@ -40,13 +40,13 @@ describe("chorus.pages.Base", function() {
             beforeEach(function() {
                 this.page = new chorus.pages.Bare();
                 this.model = new chorus.models.Base();
-                spyOn(this.page, "requiredResourcesFetchForbidden");
+                spyOn(this.page, "dependentResourceForbidden");
                 this.page.dependOn(this.model);
             });
 
-            it("calls requiredResourcesFetchForbidden", function() {
-                this.model.trigger("fetchForbidden");
-                expect(this.page.requiredResourcesFetchForbidden).toHaveBeenCalled();
+            it("calls dependentResourceForbidden", function() {
+                this.model.trigger("resourceForbidden");
+                expect(this.page.dependentResourceForbidden).toHaveBeenCalled();
             });
         });
 
@@ -127,7 +127,7 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     spyOn(Backbone.history, "loadUrl");
                     spyOn(this.view, "failurePageOptions").andReturn({foo: "bar"});
-                    this.resource.trigger("fetchNotFound");
+                    this.resource.trigger("resourceNotFound");
                 });
 
                 it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
@@ -140,7 +140,7 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     spyOn(Backbone.history, "loadUrl");
                     spyOn(this.view, "failurePageOptions").andReturn({foo: "bar"});
-                    this.resource.trigger("fetchForbidden");
+                    this.resource.trigger("resourceForbidden");
                 });
 
                 it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {

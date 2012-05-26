@@ -108,7 +108,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         context("when the model fails to load properly", function() {
             beforeEach(function() {
                 spyOn(Backbone.history, "loadUrl")
-                this.page.model.trigger('fetchNotFound')
+                this.page.model.trigger('resourceNotFound')
             })
 
             it("navigates to the 404 page", function() {

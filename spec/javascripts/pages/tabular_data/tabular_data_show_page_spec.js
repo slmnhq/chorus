@@ -24,7 +24,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
     });
 
     it("includes the InstanceCredentials mixin", function() {
-        expect(this.page.requiredResourcesFetchForbidden).toBe(chorus.Mixins.InstanceCredentials.page.requiredResourcesFetchForbidden);
+        expect(this.page.dependentResourceForbidden).toBe(chorus.Mixins.InstanceCredentials.page.dependentResourceForbidden);
     });
 
     it("has a helpId", function() {
@@ -112,7 +112,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
             context("when the model fails to load properly", function() {
                 beforeEach(function() {
                     spyOn(Backbone.history, "loadUrl")
-                    this.page.model.trigger('fetchNotFound', this.page.model);
+                    this.page.model.trigger('resourceNotFound', this.page.model);
                 })
 
                 it("navigates to the 404 page", function() {
