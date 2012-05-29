@@ -44,16 +44,15 @@ class Workspace < ActiveRecord::Base
   end
 
   def permissions_for(user)
-    permissions = []
-
     if user.admin? || (owner.id == user.id)
-      permissions.push(:admin)
+      [:admin]
     elsif user.memberships.find_by_workspace_id(id)
-      permissions.push(:read, :commenting, :update)
+      [:read, :commenting, :update]
     elsif public?
-      permissions.push(:read, :commenting)
+      [:read, :commenting]
+    else
+      []
     end
-    permissions
   end
 
   def archive_as(user)
