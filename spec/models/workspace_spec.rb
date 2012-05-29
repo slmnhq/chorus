@@ -42,6 +42,7 @@ describe Workspace do
   describe ".writable_by" do
     let!(:user) { FactoryGirl.create(:user) }
     let!(:owned_workspace) { FactoryGirl.create(:workspace, :public => false, :owner => user)}
+    let!(:archived_workspace) { FactoryGirl.create(:workspace, :public => false, :owner => user, :archived_at => Time.now)}
     let!(:non_member_workspace) { FactoryGirl.create(:workspace, :public => true) }
     let!(:member_workspace) do
       workspace = FactoryGirl.create(:workspace, :public => false)
@@ -64,6 +65,10 @@ describe Workspace do
     it "includes all workspaces when the given user is an admin" do
       user.admin = true
       Workspace.writable_by(user).should include non_member_workspace
+    end
+
+    it "excludes archived workspaces" do
+      Workspace.writable_by(user).should_not include archived_workspace
     end
   end
 

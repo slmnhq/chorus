@@ -32,7 +32,7 @@ class Workspace < ActiveRecord::Base
           workspaces.owner_id = :user_id',
           :with_membership => with_membership,
           :user_id => user.id
-         )
+         ).active
   end
 
   def members_accessible_to(user)

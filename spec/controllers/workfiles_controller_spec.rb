@@ -124,5 +124,82 @@ describe WorkfilesController do
         }.should_not change(WorkfileVersion, :count)
       end
     end
+
+    context "archived workspaces" do
+      let(:archived_workspace) { FactoryGirl.create(:workspace, :owner => user, :archived_at => Time.current) }
+
+      before do
+        log_in user
+      end
+
+      it "does not find the workspace to create the workfile" do
+        post :create, { :workspace_id => archived_workspace.id, :workfile => {} }
+        response.code.should == "404"
+      end
+    end
+
+    context "creating a blank file" do
+      let(:current_user) { user }
+
+      before(:each) do
+        log_in current_user
+
+        @params = {
+            :workspace_id => workspace.to_param,
+            :workfile => {
+                :file_name => "empty_file.sql",
+                :source => 'empty'
+            }
+        }
+      end
+
+      before do
+        post :create, @params
+      end
+
+      subject { Workfile.last }
+
+      it "associates the new workfile with its workspace" do
+        subject.workspace.should == workspace
+      end
+
+      it "sets the owner of the new workfile as the authenticated user" do
+        subject.owner.should == current_user
+      end
+
+      it "sets the right description on the workfile" do
+        subject.description.should be_blank
+      end
+
+      describe "workfile version" do
+        subject { WorkfileVersion.last }
+
+        it "associates the new version with its workfile" do
+          subject.workfile.should == Workfile.last
+        end
+
+        it "sets the version number of the workfile version to 1" do
+          subject.version_num.should == 1
+        end
+
+        it "sets the workfile version owner to the current user" do
+          subject.owner.should == current_user
+        end
+
+        it "sets the commit message to be empty" do
+          subject.commit_message.should == ""
+        end
+
+        it "sets the last modifier to the current user" do
+          subject.modifier.should == current_user
+        end
+
+        it "uploads the correct file contents" do
+          subject.contents.should be_present
+          subject.contents.original_filename.should == "empty_file.sql"
+          subject.contents.size.should == 0
+        end
+      end
+    end
   end
 end

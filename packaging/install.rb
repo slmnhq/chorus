@@ -4,6 +4,7 @@ APP_DIR = File.join(ROOT, "app")
 PG_DIR = File.join(ROOT, "pgsql")
 RUBY_DIR = File.join(ROOT, "ruby")
 PREFIX = "export LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/:$LD_LIBRARY_PATH && export RAILS_ENV=production && export PATH=/home/vagrant/pgsql/bin:/home/vagrant/rubygems/bin:/home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:/home/vagrant/ruby/bin:$PATH &&"
+
 def install
   setup_directories
   install_postgres
@@ -23,7 +24,7 @@ end
 def install_postgres
   Dir.chdir(COMPONENTS_DIR) do
     run "tar xzf postgres"
-     Dir.chdir("postgresql-9.0.4") do
+    Dir.chdir("postgresql-9.0.4") do
       run "./configure --prefix=#{PG_DIR}"
       run "make"
       run "make install"
@@ -46,9 +47,9 @@ def install_ruby
   Dir.chdir(COMPONENTS_DIR) do
     run "tar xzf ruby"
     Dir.chdir("ruby-1.9.3-p125") do
-        run("./configure --prefix=#{RUBY_DIR}")
-        run ("make")
-        run("make install")
+      run("./configure --prefix=#{RUBY_DIR}")
+      run("make")
+      run("make install")
     end
   end
 end
