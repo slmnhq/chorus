@@ -22,4 +22,5 @@ def create_valid_instance(params = {})
     find(".submit").click
   end
   wait_until { current_route == "/instances" }
+  sleep(3)
 end

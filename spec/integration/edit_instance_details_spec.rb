@@ -5,7 +5,7 @@ describe "Editing instance details" do
     login('edcadmin', 'secret')
   end
 
-  it "should allow editing of the instance name and description" do
+  xit "should allow editing of the instance name and description" do
     create_valid_instance(:name => "Instance1")
     create_valid_instance(:name => "Instance2")
 
@@ -24,5 +24,21 @@ describe "Editing instance details" do
 
     page.find("li[data-instance-id='#{instance_1_id}']").should have_content("ChangeInstanceName")
     page.find("li[data-instance-id='#{instance_1_id}']").should have_content("Change Description")
+  end
+
+  it "should allow the editing of the instance host and port" do
+    create_valid_instance(:name => "validinstance")
+    validinstance_id = Instance.find_by_name("validinstance").id
+    visit("#/instances")
+    within(".instance_provider") do
+          page.find("li[data-instance-id='#{validinstance_id}']").click
+        end
+    click_link "Edit Instance"
+    within("#facebox") do
+      fill_in 'host', :with => "gillette.sf.pivotallabs.com"
+      fill_in 'port', :with => "5432"
+      click_button "Save Configuration"
+    end
+
   end
 end
