@@ -3,7 +3,8 @@ class SchemasController < ApplicationController
     database = GpdbDatabase.find(params[:database_id])
     account = database.instance.account_for_user! current_user
     authorize! :index, GpdbSchema, database, account
-    present GpdbSchema.refresh(account, database)
+    GpdbSchema.refresh(account, database)
+    present database.schemas.order("lower(name)")
   end
 
   def show
