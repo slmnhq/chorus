@@ -1,0 +1,9 @@
+--- 
+whitelist: 
+- MIT
+- Apache 2.0
+- GPLv2
+- ruby
+ignore_groups:
+- test
+- development
