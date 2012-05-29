@@ -4,9 +4,11 @@ def create_valid_workspace(params = {})
     click_button "Create Workspace"
     within("#facebox") do
         fill_in 'name', :with => params[:name] || "GinNJuice#{Time.now.to_i}"
+        check("public") if params[:shared] == true
         click_button "Create Workspace"
     end
     wait_until { current_route =~ /workspaces\/\d+\/quickstart/ && page.has_selector?("a.dismiss")}
     click_link "Dismiss the workspace quick start guide"
     wait_until { current_route =~ /workspaces\/\d+/ && page.has_selector?("a[data-dialog=NotesNew]")}
+    sleep(2)
 end
