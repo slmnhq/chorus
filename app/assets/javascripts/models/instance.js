@@ -44,13 +44,6 @@
                         this.requirePattern("dbPassword", chorus.ValidationRegexes.Password({min: 6, max: 256}), newAttrs);
                     }
                     break;
-                case "registerHadoop":
-                    this.require("host", newAttrs);
-                    this.require("port", newAttrs);
-                    this.require("userName", newAttrs);
-                    this.require("userGroups", newAttrs);
-                    this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
-                    break;
                 default :
             }
         },

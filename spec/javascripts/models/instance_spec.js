@@ -427,25 +427,6 @@ describe("chorus.models.Instance", function() {
                 expect(this.instance.errors.size).toBeTruthy();
             });
         });
-
-
-        context("when registering an existing hadoop instance", function() {
-            beforeEach(function() {
-                this.attrs = {
-                    name: "foo",
-                    size: "100000",
-                    provision_type: "registerHadoop"
-                }
-            });
-
-            _.each(["name", "host", "userName", "userGroups", "port"], function(attr) {
-                it("requires " + attr, function() {
-                    this.attrs[attr] = "";
-                    expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                    expect(this.instance.errors[attr]).toBeTruthy();
-                })
-            });
-        });
     })
 
     describe("#hasWorkspaceUsageInfo", function() {
