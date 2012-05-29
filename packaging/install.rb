@@ -3,7 +3,7 @@ ROOT = ENV['HOME']
 APP_DIR = File.join(ROOT, "app")
 PG_DIR = File.join(ROOT, "pgsql")
 RUBY_DIR = File.join(ROOT, "ruby")
-
+PREFIX = "export LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/:$LD_LIBRARY_PATH && export RAILS_ENV=production && export PATH=/home/vagrant/pgsql/bin:/home/vagrant/rubygems/bin:/home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:/home/vagrant/ruby/bin:$PATH &&"
 def install
   setup_directories
   install_postgres
@@ -81,7 +81,7 @@ end
 def run_chorus
   Dir.chdir(APP_DIR) do
     child = fork do
-      exec "bundle exec rails s -d"
+      exec "#{PREFIX} bundle exec rails s -d"
     end
     Process.detach(child)
   end
@@ -89,7 +89,7 @@ end
 
 def run(cmd)
   puts cmd
-  system "export LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/:$LD_LIBRARY_PATH && export RAILS_ENV=production && export PATH=/home/vagrant/pgsql/bin:/home/vagrant/rubygems/bin:/home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:/home/vagrant/ruby/bin:$PATH && #{cmd}" 
+  system "#{PREFIX} #{cmd}"
 end
 
 install
