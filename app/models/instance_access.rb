@@ -4,7 +4,7 @@ class InstanceAccess < DefaultAccess
   end
 
   def show?(instance)
-    instance.shared? || current_user.admin? || current_user.instance_accounts.pluck(:instance_id).include?(instance.id)
+    instance.shared? || current_user.admin? || current_user.instance_accounts.where(:instance_id => instance.id).exists?
   end
 end
 
