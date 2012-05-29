@@ -14,7 +14,7 @@ describe("chorus.views.Header", function() {
 
     describe("initialization", function() {
         it("has required resources", function() {
-            expect(this.view.requiredResources.length).toBe(3);
+            expect(this.view.requiredResources.length).toBe(2);
         });
 
         it("does not have a model", function() {
