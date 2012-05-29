@@ -26,6 +26,7 @@ describe "logging in" do
       wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace"}
       Timecop.travel(Time.current + 6.hours) do
         click_link("Home")
+        wait_until { page.find("input#username").present? }
         current_route.should == "/login"
       end
     end
