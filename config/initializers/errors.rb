@@ -13,4 +13,3 @@ class ApiValidationError < RuntimeError
     self
   end
 end
-

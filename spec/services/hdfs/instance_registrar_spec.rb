@@ -51,22 +51,5 @@ describe Hdfs::InstanceRegistrar do
         cached_instance.group_list.should == instance_attributes[:group_list]
       end
     end
-
-    context "when none of the hadoop versions can successfully connect" do
-      let(:hadoop_version) { nil }
-
-      it "raises an exception" do
-        expect { Hdfs::InstanceRegistrar.create!(instance_attributes, owner) }.to raise_error ApiValidationError
-      end
-
-      it "will not create the instance" do
-        expect {
-          begin
-            Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
-          rescue
-          end
-        }.not_to change(HadoopInstance, 'count')
-      end
-    end
   end
 end

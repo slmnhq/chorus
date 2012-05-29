@@ -19,18 +19,23 @@ module Hdfs
     end
 
     def version
-      @version ||= load_version
+      @version ||= query_version
+      if @version.blank?
+        raise ApiValidationError.new(:connection, :generic, {:message => 'Unable to determine HDFS server version. Check connection parameters.'})
+      else
+        @version
+      end
     end
 
     def list(path)
-      timeout do
+      protect_remote_query do
         escaped_path = Rack::Utils.escape(path)
         HTTParty.get("#{SERVICE_HOST}/#{version}/list/#{escaped_path}", :query => @query)
       end
     end
 
     def show(path)
-      timeout do
+      protect_remote_query do
         escaped_path = Rack::Utils.escape(path)
         HTTParty.get("#{SERVICE_HOST}/#{version}/show/#{escaped_path}", :query => @query)
       end
@@ -38,18 +43,18 @@ module Hdfs
 
     private
 
-    def timeout(&block)
-        Timeout::timeout(TIMEOUT, &block)
-    end
-
-    def load_version
-      timeout do
+    def query_version
+      protect_remote_query do
         HTTParty.get("#{SERVICE_HOST}/version", :query => @query)["response"]
       end
+    end
+
+    def protect_remote_query(&block)
+      Timeout::timeout(TIMEOUT, &block)
     rescue Errno::ECONNREFUSED
-      nil
+      raise ApiValidationError.new(:connection, :generic, {:message => "Impossible to connect to HDFS Query Service."})
     rescue Timeout::Error
-      nil
+      raise ApiValidationError.new(:connection, :generic, {:message => "Timeout while connecting to HDFS Query Service."})
     end
   end
 end
