@@ -5,7 +5,7 @@ describe "Editing instance details" do
     login('edcadmin', 'secret')
   end
 
-  xit "should allow editing of the instance name and description" do
+  it "should allow editing of the instance name and description" do
     create_valid_instance(:name => "Instance1")
     create_valid_instance(:name => "Instance2")
 
