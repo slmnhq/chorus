@@ -27,7 +27,7 @@ class WorkfilesController < ApplicationController
     workfile.owner = current_user
     workfile.save!
 
-    workfile_version = workfile.versions.create!(
+    workfile.versions.create!(
       :owner => current_user,
       :modifier => current_user,
       :contents => source_file,
