@@ -14,6 +14,8 @@ class UserMigrator
                              :dept       => user["ou"],
                              :notes      => user["notes"]
       new_user.deleted_at = user["last_updated_tx_stamp"] if user["is_deleted"] == "t"
+      new_user.updated_at = user["last_updated_tx_stamp"]
+      new_user.created_at = user["created_tx_stamp"]
       new_user.password_digest = user["password"][5..-1]
       new_user.save!
 
