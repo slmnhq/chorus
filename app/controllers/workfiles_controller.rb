@@ -1,8 +1,7 @@
 class WorkfilesController < ApplicationController
   def show
     workfile = Workfile.find(params[:id])
-    workspace = AccessPolicy.workspaces_for(current_user).find(workfile.workspace_id)
-    workfile = workspace.workfiles.find(params[:id])
+    AccessPolicy.workspaces_for(current_user).find(workfile.workspace_id)
     present workfile
   end
 
