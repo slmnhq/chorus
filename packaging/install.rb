@@ -80,7 +80,10 @@ end
 
 def run_chorus
   Dir.chdir(APP_DIR) do
-    Process.spawn "bundle exec rails s -d"
+    child = fork do
+      exec "bundle exec rails s -d"
+    end
+    Process.detach(child)
   end
 end
 
