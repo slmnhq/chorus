@@ -23,7 +23,7 @@ class WorkfilesController < ApplicationController
   end
 
   def create_workfile(source_file)
-    workspace = Workspace.active.writable_by(current_user).find(params[:workspace_id])
+    workspace = Workspace.writable_by(current_user).find(params[:workspace_id])
     workfile = workspace.workfiles.build(params[:workfile])
     workfile.owner = current_user
     workfile.save!
