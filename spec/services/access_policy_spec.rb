@@ -86,28 +86,4 @@ describe AccessPolicy do
       end
     end
   end
-
-  describe ".schemas_for" do
-    context "user is admin" do
-      it "returns all schemas" do
-        mock(GpdbSchema).scoped
-        described_class.schemas_for(admin)
-      end
-    end
-
-    context "user has access to instances" do
-      before do
-        stub(Instance).accessible_to(non_admin).stub!.pluck
-      end
-
-      it "returns databases' schemas" do
-        stub(GpdbDatabase).where do |database_scope|
-          stub(database_scope).pluck(:id) { [1, 2] }
-        end
-
-        mock(GpdbSchema).where(:database_id => [1, 2])
-        described_class.schemas_for(non_admin)
-      end
-    end
-  end
 end
