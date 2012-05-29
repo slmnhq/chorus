@@ -40,6 +40,9 @@ describe " add an instance " do
   end
 
   it "creates an Hadoop Instance" do
-    create_valid_hadoop_instance(:name => "hadoop_instance")
+    hadoop_instance_name = "hadoop_instance"
+    create_valid_hadoop_instance(:name => hadoop_instance_name)
+    visit("#/instances")
+    find('.instance_list').should have_content(hadoop_instance_name)
   end
 end
