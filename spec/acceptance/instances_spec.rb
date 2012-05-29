@@ -47,6 +47,14 @@ resource "Greenplum DB instances" do
     end
   end
 
+  get "/instances/:id" do
+    let(:id) { owned_instance.to_param }
+
+    example_request "Get the specific Instance" do
+      status.should == 200
+    end
+  end
+
   put "/instances/:id" do
     parameter :name, "Instance alias"
     parameter :description, "Description"
