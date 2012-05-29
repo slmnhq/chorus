@@ -115,8 +115,8 @@ $_$;
 
 CREATE TABLE gpdb_database_objects (
     id integer NOT NULL,
-    type character varying(255),
-    name character varying(255),
+    type character varying(256),
+    name character varying(256),
     comment text,
     schema_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -150,7 +150,7 @@ ALTER SEQUENCE gpdb_database_objects_id_seq OWNED BY gpdb_database_objects.id;
 CREATE TABLE gpdb_databases (
     id integer NOT NULL,
     instance_id integer NOT NULL,
-    name character varying(255),
+    name character varying(256),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -181,7 +181,7 @@ ALTER SEQUENCE gpdb_databases_id_seq OWNED BY gpdb_databases.id;
 
 CREATE TABLE gpdb_schemas (
     id integer NOT NULL,
-    name character varying(255),
+    name character varying(256),
     database_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -214,14 +214,14 @@ ALTER SEQUENCE gpdb_schemas_id_seq OWNED BY gpdb_schemas.id;
 
 CREATE TABLE hadoop_instances (
     id integer NOT NULL,
-    name character varying(255),
+    name character varying(256),
     description text,
-    host character varying(255),
+    host character varying(256),
     port integer,
     owner_id integer NOT NULL,
-    version character varying(255),
-    username character varying(255),
-    group_list character varying(255),
+    version character varying(256),
+    username character varying(256),
+    group_list character varying(256),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     online boolean DEFAULT true
@@ -253,7 +253,7 @@ ALTER SEQUENCE hadoop_instances_id_seq OWNED BY hadoop_instances.id;
 
 CREATE TABLE instance_accounts (
     id integer NOT NULL,
-    db_username character varying(255),
+    db_username character varying(256),
     db_password bytea,
     instance_id integer NOT NULL,
     owner_id integer NOT NULL,
@@ -287,18 +287,18 @@ ALTER SEQUENCE instance_credentials_id_seq OWNED BY instance_accounts.id;
 
 CREATE TABLE instances (
     id integer NOT NULL,
-    name character varying(255),
+    name character varying(256),
     description text,
-    host character varying(255),
+    host character varying(256),
     port integer,
-    maintenance_db character varying(255),
+    maintenance_db character varying(256),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     owner_id integer NOT NULL,
     shared boolean DEFAULT false,
-    provision_type character varying(255),
-    instance_provider character varying(255),
-    version character varying(255),
+    provision_type character varying(256),
+    instance_provider character varying(256),
+    version character varying(256),
     online boolean DEFAULT true
 );
 
@@ -388,20 +388,20 @@ CREATE TABLE schema_migrations (
 
 CREATE TABLE users (
     id integer NOT NULL,
-    username character varying(255),
-    password_digest character varying(255),
+    username character varying(256),
+    password_digest character varying(256),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    first_name character varying(255),
-    last_name character varying(255),
-    email character varying(255),
-    title character varying(255),
-    dept character varying(255),
+    first_name character varying(256),
+    last_name character varying(256),
+    email character varying(256),
+    title character varying(256),
+    dept character varying(256),
     notes text,
     admin boolean DEFAULT false,
     deleted_at timestamp without time zone,
-    image_file_name character varying(255),
-    image_content_type character varying(255),
+    image_file_name character varying(256),
+    image_content_type character varying(256),
     image_file_size integer,
     image_updated_at timestamp without time zone
 );
@@ -437,8 +437,8 @@ CREATE TABLE workfile_drafts (
     owner_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    contents_file_name character varying(255),
-    contents_content_type character varying(255),
+    contents_file_name character varying(256),
+    contents_content_type character varying(256),
     contents_file_size integer,
     contents_updated_at timestamp without time zone
 );
@@ -472,12 +472,12 @@ CREATE TABLE workfile_versions (
     workfile_id integer NOT NULL,
     version_num integer,
     owner_id integer NOT NULL,
-    commit_message character varying(255),
+    commit_message character varying(256),
     modifier_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    contents_file_name character varying(255),
-    contents_content_type character varying(255),
+    contents_file_name character varying(256),
+    contents_content_type character varying(256),
     contents_file_size integer,
     contents_updated_at timestamp without time zone
 );
@@ -541,7 +541,7 @@ ALTER SEQUENCE workfiles_id_seq OWNED BY workfiles.id;
 
 CREATE TABLE workspaces (
     id integer NOT NULL,
-    name character varying(255),
+    name character varying(256),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     public boolean DEFAULT true,
@@ -549,8 +549,8 @@ CREATE TABLE workspaces (
     archiver_id integer,
     summary text,
     owner_id integer NOT NULL,
-    image_file_name character varying(255),
-    image_content_type character varying(255),
+    image_file_name character varying(256),
+    image_content_type character varying(256),
     image_file_size integer,
     image_updated_at timestamp without time zone,
     deleted_at timestamp without time zone
@@ -989,8 +989,8 @@ INSERT INTO schema_migrations (version) VALUES ('20120519000854');
 
 INSERT INTO schema_migrations (version) VALUES ('20120522000542');
 
-INSERT INTO schema_migrations (version) VALUES ('20120522015308');
-
 INSERT INTO schema_migrations (version) VALUES ('20120522020546');
 
 INSERT INTO schema_migrations (version) VALUES ('20120523174942');
+
+INSERT INTO schema_migrations (version) VALUES ('20120529165510');

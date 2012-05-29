@@ -98,6 +98,10 @@ describe User do
       it "fails with invalid username" do
         FactoryGirl.build(:user, :username => "My Name Is Michael Cane").should_not be_valid
       end
+
+      it "allows a username of 256 characters" do
+        expect { FactoryGirl.build(:user, :username => 'a' * 256).save! }.to change{ User.count }.by(1)
+      end
     end
 
     describe "password" do
