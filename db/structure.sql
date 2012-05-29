@@ -120,7 +120,8 @@ CREATE TABLE gpdb_database_objects (
     comment text,
     schema_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    master_table boolean DEFAULT false
 );
 
 
@@ -994,3 +995,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120522020546');
 INSERT INTO schema_migrations (version) VALUES ('20120523174942');
 
 INSERT INTO schema_migrations (version) VALUES ('20120529165510');
+
+INSERT INTO schema_migrations (version) VALUES ('20120529231954');

@@ -33,12 +33,12 @@ describe GpdbDatabaseObject do
   context "#refresh" do
     let(:account) { FactoryGirl.create(:instance_account) }
     let(:schema) { FactoryGirl.create(:gpdb_schema) }
-    let(:db_objects_sql) { ActiveRecord::Base.send(:sanitize_sql, [GpdbDatabaseObject::DATABASE_OBJECTS_SQL, schema.name], nil) }
+    let(:db_objects_sql) { ActiveRecord::Base.send(:sanitize_sql, [GpdbDatabaseObject::DATABASE_OBJECTS_SQL, :schema => schema.name], nil) }
 
     before(:each) do
       stub_gpdb(account, db_objects_sql => [
-          ["r", "table1", "Great new table"],
-          ["v", "view1", "Great new view"]
+          ["r", "table1", "Great new table", 't'],
+          ["v", "view1", "Great new view", 'f']
       ])
     end
 
@@ -50,6 +50,7 @@ describe GpdbDatabaseObject do
       db_objects.map { |obj| obj.name }.should == ["table1", "view1"]
       db_objects.map { |obj| obj.class }.should == [GpdbTable, GpdbView]
       db_objects.map { |obj| obj.comment }.should == ["Great new table", "Great new view"]
+      db_objects.map { |obj| obj.master_table }.should == [true, false]
     end
 
     it "does not re-create db objects that already exist in our database" do
