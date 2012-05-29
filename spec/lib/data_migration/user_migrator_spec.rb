@@ -38,6 +38,8 @@ describe UserMigrator, :type => :data_migration do
           else
             user.deleted_at.should == legacy_user["last_updated_tx_stamp"]
           end
+          user.updated_at.should == legacy_user["last_updated_tx_stamp"]
+          user.created_at.should == legacy_user["created_tx_stamp"]
         end
       end
 

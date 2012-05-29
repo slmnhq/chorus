@@ -20,18 +20,30 @@ describe Hdfs::QueryService do
         HadoopInstance.new :host => "garcia1", :port => "8888", :username => "pivotal"
       end
 
-      it "returns nil" do
+      it "raises ApiValidationError" do
         VCR.use_cassette("query_service_unexisting_server") do
-          version = described_class.instance_version(unexisting_instance)
-          version.should be_nil
+          expect { described_class.instance_version(unexisting_instance) }.to raise_error(ApiValidationError)
         end
+      end
+    end
+
+    context "timeout" do
+      let(:slow_instance) do
+        HadoopInstance.new :host => "garcia", :port => "8888", :username => "pivotal"
+      end
+
+      it "raises ApiValidationError" do
+        mock(HTTParty).get(anything, anything) { raise Timeout::Error }
+
+        expect { described_class.instance_version(slow_instance) }.to raise_error(ApiValidationError)
       end
     end
   end
 
   describe "#list" do
+    let(:instance) { HadoopInstance.new :name => "instance", :host => "garcia", :port => "8020", :username => "pivotal" }
+
     before do
-      instance = HadoopInstance.new :name => "instance", :host => "garcia", :port => "8020", :username => "pivotal";
       @service = Hdfs::QueryService.new(instance)
     end
 
@@ -61,11 +73,31 @@ describe Hdfs::QueryService do
         end
       end
     end
+
+    context "connection times out" do
+      it "raises ApiValidationError" do
+        mock(HTTParty).get(anything, anything) { raise Timeout::Error }
+
+        expect { @service.list("/") }.to raise_error(ApiValidationError)
+      end
+    end
+
+    context "connection is invalid" do
+      let(:unexistent_instance) { HadoopInstance.new :name => "instance", :host => "garcia123", :port => "8020", :username => "pivotal" }
+      let(:service) { Hdfs::QueryService.new(unexistent_instance) }
+
+      it "raises ApiValidationError" do
+        VCR.use_cassette('query_service_list_unexistent_server') do
+          expect { service.list("/") }.to raise_error(ApiValidationError)
+        end
+      end
+    end
   end
 
   describe "#show" do
+    let(:instance) { HadoopInstance.new :name => "instance", :host => "garcia", :port => "8020", :username => "pivotal" }
+
     before do
-      instance = HadoopInstance.new :name => "instance", :host => "garcia", :port => "8020", :username => "pivotal";
       @service = Hdfs::QueryService.new(instance)
     end
 
@@ -85,6 +117,25 @@ describe Hdfs::QueryService do
         VCR.use_cassette("query_service_show_nonexisting_file") do
           response = @service.show("/file")
           response.should be_empty
+        end
+      end
+    end
+
+    context "connection times out" do
+      it "raises ApiValidationError" do
+        mock(HTTParty).get(anything, anything) { raise Timeout::Error }
+
+        expect { @service.show("/file") }.to raise_error(ApiValidationError)
+      end
+    end
+
+    context "connection is invalid" do
+      let(:unexistent_instance) { HadoopInstance.new :name => "instance", :host => "garcia123", :port => "8020", :username => "pivotal" }
+      let(:service) { Hdfs::QueryService.new(unexistent_instance) }
+
+      it "raises ApiValidationError" do
+        VCR.use_cassette('query_service_show_unexistent_server') do
+          expect { service.show("/file") }.to raise_error(ApiValidationError)
         end
       end
     end

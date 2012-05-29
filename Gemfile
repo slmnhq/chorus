@@ -46,8 +46,9 @@ group :test, :development do
   gem 'forgery'
 end
 
-
-# gem 'jquery-rails'
+group :development do
+  #gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
