@@ -35,5 +35,7 @@ class WorkfilesController < ApplicationController
       :version_num => 1,
       :commit_message => "",
     )
+
+    workfile
   end
 end

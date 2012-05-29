@@ -161,6 +161,7 @@ describe WorkfilesController do
 
       it "associates the new workfile with its workspace" do
         subject.workspace.should == workspace
+        decoded_response.workspace.should be_present
       end
 
       it "sets the owner of the new workfile as the authenticated user" do
