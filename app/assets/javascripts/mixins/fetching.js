@@ -74,7 +74,7 @@
                 this.trigger("resourceForbidden");
             } else if (status == 404) {
                 this.trigger("resourceNotFound");
-            } else {
+            } else if (status == 500) {
                 chorus.toast("server_error");
             }
         },
