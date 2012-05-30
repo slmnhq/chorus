@@ -24,9 +24,7 @@ def install_postgres
   Dir.chdir(COMPONENTS_DIR) do
     run "tar xzf postgres"
     Dir.chdir("postgresql-9.0.4") do
-      run "./configure --prefix=#{PG_DIR}"
-      run "make"
-      run "make install"
+      run "./configure --prefix=#{PG_DIR} && make && make install"
     end
   end
 
@@ -46,9 +44,7 @@ def install_ruby
   Dir.chdir(COMPONENTS_DIR) do
     run "tar xzf ruby"
     Dir.chdir("ruby-1.9.3-p125") do
-      run("./configure --prefix=#{RUBY_DIR}")
-      run("make")
-      run("make install")
+      run("./configure --prefix=#{RUBY_DIR} && make && make install")
     end
   end
 end
