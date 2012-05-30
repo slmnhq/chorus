@@ -6,7 +6,8 @@ class WorkfilesController < ApplicationController
   end
 
   def create
-    workspace = Workspace.writable_by(current_user).find(params[:workspace_id])
+    workspace = Workspace.active.find(params[:workspace_id])
+    authorize! :workfile_create, workspace
 
     present create_workfile(workspace, uploaded_file)
   end

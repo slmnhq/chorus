@@ -16,7 +16,11 @@ class WorkspaceAccess < DefaultAccess
   end
 
   def show?(workspace)
-    workspace.public || workspace.members.include?(current_user)
+    workspace.public || member_edit?(workspace)
+  end
+
+  def workfile_create?(workspace)
+    member_edit?(workspace) || administrative_edit?(workspace)
   end
 
   def member_edit?(workspace)

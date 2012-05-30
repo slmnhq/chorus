@@ -85,6 +85,22 @@ describe WorkspaceAccess do
     end
   end
 
+  describe "#workspace_create?" do
+    it "doesn't allow non-members to edit'" do
+      workspace_access.can?(:workfile_create, private_workspace).should be_false
+    end
+
+    it "allows members to edit" do
+      private_workspace.members << user
+      workspace_access.can?(:workfile_create, private_workspace).should be_true
+    end
+
+    it "allows admin to edit" do
+      user.admin = true
+      workspace_access.can?(:workfile_create, private_workspace).should be_true
+    end
+  end
+
   describe "#member_edit?" do
     context "in a public workspace" do
       it "doesn't allow non-members to edit" do

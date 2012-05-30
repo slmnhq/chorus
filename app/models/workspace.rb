@@ -55,6 +55,10 @@ class Workspace < ActiveRecord::Base
     end
   end
 
+  def archived?
+    archived_at?
+  end
+
   def archive_as(user)
     self.archived_at = Time.current
     self.archiver = user
