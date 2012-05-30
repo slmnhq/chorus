@@ -13,12 +13,11 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
 
         it("links the 'Run File' button to the Alpine Illuminator page", function() {
             this.view.render();
-            expect(this.view.$('a.button.run_file')).toHaveHref(
-                '/AlpineIlluminator/alpine/result/runflow.jsp?' +
-                'flowFilePath=/tmp/run_file_test.afm' +
-                'actions[create_workfile_insight]=' +
-                encodeURIComponent('http://localhost:8888/edc/comment/workfile/1?isInsight=true')
-            );
+            url = URI('/AlpineIlluminator/alpine/result/runflow.jsp?')
+                  .addQuery("flowFilePath", "/tmp/run_file_test.afm");
+            url.addQuery('actions[create_workfile_insight]',
+                          'http://' + window.location.host + '/edc/comment/workfile/1?isInsight=true');
+            expect(this.view.$('a.button.run_file')).toHaveHref(url);
         });
 
         it("opens the Alpine Illuminator in a new tab", function() {
