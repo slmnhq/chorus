@@ -44,7 +44,7 @@ Dir.chdir('packaging/vagrant/') do
        "export LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/:$LD_LIBRARY_PATH &&
         export RAILS_ENV=production &&
         export PATH=/home/vagrant/pgsql/bin:/home/vagrant/rubygems/bin:/home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:/home/vagrant/ruby/bin:$PATH &&
-        cd /home/vagrant/app && bundle exec rails s -d"
+        cd /home/vagrant/app && nohup bundle exec rails s -d &"
     ]
     @db_response = vagrant_ssh [ "~/pgsql/bin/psql -p8543 postgres -c \"select * from pg_tables limit 1;\"" ]
     puts "Connecting to the db locally returned #{@db_response}"
