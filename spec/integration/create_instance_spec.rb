@@ -6,8 +6,7 @@ describe " add an instance " do
     page.find("a.add.dialog").click
   end
 
-  xit "creates an instance" do
-    # TODO blocked on having query service running for tests
+  it "creates an instance" do
     new_instance_name = "GPDB_inst_sel_test#{Time.now.to_i}"
 
     within("#facebox") do
@@ -40,7 +39,8 @@ describe " add an instance " do
     find('.instance_list').should have_content(new_instance_name)
   end
 
-  it "creates an Hadoop Instance" do
+  xit "creates an Hadoop Instance" do
+    # TODO blocked on having query service running for tests
     hadoop_instance_name = "hadoop_instance"
     create_valid_hadoop_instance(:name => hadoop_instance_name)
     visit("#/instances")
