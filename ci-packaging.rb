@@ -25,22 +25,26 @@ def vagrant_ssh(cmds)
   system "vagrant ssh -c '#{cmds.join(' && ')}'"
 end
 
-# install imagemagick and hadoop
-# echo "Installing imagemagick into /home/vagrant/imagemagick..."
-# make imagemagick
-# cd /tmp/downloads
-# tar zxf ImageMagick-6.7.1-10.tar.gz
-# cd ImageMagick-6.7.1-10
-# ./configure --prefix=/home/vagrant/imagemagick > /dev/null 2>&1
-# make > /dev/null 2>&1
-# make install > /dev/null 2>&1
+#install imagemagick and hadoop
+#echo "Installing imagemagick into /home/vagrant/imagemagick..."
+#make imagemagick
+#cd /tmp/downloads
+#tar zxf ImageMagick-6.7.1-10.tar.gz
+#cd ImageMagick-6.7.1-10
+#./configure --prefix=/home/vagrant/imagemagick > /dev/null 2>&1
+#make > /dev/null 2>&1
+#make install > /dev/null 2>&1
 
 Dir.chdir('packaging/vagrant/') do
   begin
     system('vagrant up')
     vagrant_ssh [
        "tar xzvf /shared/#{package_name}",
-       "ruby install.rb"
+       "ruby install.rb",
+       "export LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/:$LD_LIBRARY_PATH &&
+        export RAILS_ENV=production &&
+        export PATH=/home/vagrant/pgsql/bin:/home/vagrant/rubygems/bin:/home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:/home/vagrant/ruby/bin:$PATH &&
+        cd /home/vagrant/app && bundle exec rails s -d"
     ]
     @db_response = vagrant_ssh [ "~/pgsql/bin/psql -p8543 postgres -c \"select * from pg_tables limit 1;\"" ]
     puts "Connecting to the db locally returned #{@db_response}"
@@ -56,4 +60,3 @@ Dir.chdir('packaging/vagrant/') do
 end
 
 exit(@web_response)
-

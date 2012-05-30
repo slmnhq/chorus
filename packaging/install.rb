@@ -14,7 +14,6 @@ def install
   install_rubygems_and_bundler
   puts "Installing chorus..."
   install_chorus
-  run_chorus
 end
 
 def setup_directories
@@ -76,15 +75,6 @@ def install_chorus
     run "bundle exec rake db:create"
     run "bundle exec rake db:migrate"
     run "bundle exec rake db:seed"
-  end
-end
-
-def run_chorus
-  Dir.chdir(APP_DIR) do
-    child = fork do
-      exec "#{PREFIX} bundle exec rails s -d"
-    end
-    Process.detach(child)
   end
 end
 
