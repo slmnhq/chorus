@@ -66,24 +66,4 @@ describe AccessPolicy do
       end
     end
   end
-
-  describe ".databases_for" do
-    context "user is admin" do
-      it "returns all databases" do
-        mock(GpdbDatabase).scoped
-        described_class.databases_for(admin)
-      end
-    end
-
-    context "user has access to instances" do
-      it "returns instances' databases" do
-        stub(Instance).accessible_to(non_admin) do |instance_scope|
-          stub(instance_scope).pluck(:id) { [1, 2] }
-        end
-
-        mock(GpdbDatabase).where(:instance_id => [1, 2])
-        described_class.databases_for(non_admin)
-      end
-    end
-  end
 end

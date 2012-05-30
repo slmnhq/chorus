@@ -7,7 +7,8 @@ class InstanceDatabasesController < ApplicationController
   end
 
   def show
-    database = AccessPolicy.databases_for(current_user).find(params[:id])
+    database = GpdbDatabase.find(params[:id])
+    authorize! :show, database
     present database
   end
 end
