@@ -51,9 +51,21 @@ describe("chorus.dialogs.Visualization", function() {
                     expect(this.dialog.$("button.save")).toBeEnabled();
                 });
 
-                it("has the workspace as a required resource (so it can check whether its archived)", function() {
+                it("has the workspace as a required resource (so it can check whether its archived) when task has workspace", function() {
                     expect(this.dialog.task.workspace()).toHaveBeenFetched();
                     expect(this.dialog.requiredResources.models).toContain(this.dialog.task.workspace());
+                });
+
+                context("when task doesn't have workspace ( from instance browser page)", function() {
+                    beforeEach(function() {
+                        this.server.reset();
+                        var task = fixtures.boxplotTaskWithResult({tabularData : fixtures.databaseTable()})
+                        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, task: task, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
+                    });
+                    it("doesn't add workspace as a requiredResources", function() {
+                        expect(this.server.requests.length).toBe(0);
+                        expect(this.dialog.requiredResources.models.length).toBe(0);
+                    });
                 });
 
                 it("shows the Show Data link", function() {

@@ -21,8 +21,12 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.task = this.options.task;
-        this.requiredResources.add(this.task.workspace());
-        this.task.workspace().fetch();
+
+        var workspace = this.task.workspace();
+        if(workspace) {
+            this.requiredResources.add(workspace);
+            workspace.fetch();
+        }
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
         this.filters = this.options.filters.clone();

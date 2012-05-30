@@ -13,7 +13,7 @@ chorus.models.ChartTask = chorus.models.Task.extend({
         }, {silent: true});
         if (this.tabularData.get("workspace")) {
             this.set({
-                workspaceId: this.tabularData.get("workspace").id,
+                workspaceId: this.tabularData.get("workspace").id
             }, {silent: true});
         }
         this.unset("tabularData");
