@@ -6,7 +6,8 @@ describe " add an instance " do
     page.find("a.add.dialog").click
   end
 
-  it "creates an instance" do
+  xit "creates an instance" do
+    # TODO blocked on having query service running for tests
     new_instance_name = "GPDB_inst_sel_test#{Time.now.to_i}"
 
     within("#facebox") do
