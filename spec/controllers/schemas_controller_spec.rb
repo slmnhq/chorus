@@ -15,7 +15,7 @@ describe SchemasController do
     let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance, :name => "test2") }
 
     it "uses authorization" do
-      mock(subject).authorize!(:index, GpdbSchema, database, instanceAccount)
+      mock(subject).authorize!(:show, instance)
       get :index, :database_id => database.to_param
     end
 
@@ -53,7 +53,7 @@ describe SchemasController do
     let(:schema) { FactoryGirl.create(:gpdb_schema)}
 
     it "uses authorization" do
-      mock(subject).authorize!(:show, schema)
+      mock(subject).authorize!(:show, schema.instance)
       get :show, :id => schema.to_param
     end
 

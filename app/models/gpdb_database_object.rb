@@ -1,5 +1,6 @@
 class GpdbDatabaseObject < ActiveRecord::Base
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :database_objects_count
+  delegate :instance, :to => :schema
 
   validates_presence_of :name
 

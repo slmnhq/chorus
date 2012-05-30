@@ -11,54 +11,43 @@ describe InstanceDatabasesController do
   end
 
   describe "#index" do
-    it "fails without instance id" do
-      get :index
+    it "fails when no such instance" do
+      get :index, :instance_id => 12345
       response.code.should == "404"
     end
 
-    context "with instance id" do
-      it "when no such instance should fail" do
-        get :index, :instance_id => 12345
-        response.code.should == "404"
+    context "when instance accessible" do
+      let(:instance) { FactoryGirl.create :instance, :shared => true }
+      let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner => instance.owner }
+
+      it "checks authorization" do
+        mock(subject).authorize!(:show, instance)
+        get :index, :instance_id => instance.id
       end
 
-      context "when instance inaccessible" do
-        let!(:instance) { FactoryGirl.create :instance, :shared => false }
+      context "when the refresh of the db fails" do
+        before do
+          stub(GpdbDatabase).refresh { raise PG::Error.new }
+        end
 
         it "should fail" do
           get :index, :instance_id => instance.id
-          response.code.should == "404"
+          response.code.should == "422"
         end
       end
 
-      context "when instance accessible" do
-        let(:instance) { FactoryGirl.create :instance, :shared => true }
-        let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner => instance.owner }
+      context "when refresh of the db succeeds" do
+        let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance) }
 
-        context "when the refresh of the db fails" do
-          before do
-            stub(GpdbDatabase).refresh { raise PG::Error.new }
-          end
-
-          it "should fail" do
-            get :index, :instance_id => instance.id
-            response.code.should == "422"
-          end
+        before do
+          stub(GpdbDatabase).refresh { [database] }
         end
 
-        context "when refresh of the db succeeds" do
-          let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance) }
-
-          before do
-            stub(GpdbDatabase).refresh { [database] }
-          end
-
-          it "should succeed" do
-            get :index, :instance_id => instance.id
-            response.code.should == "200"
-            decoded_response[0].id.should == database.id
-            decoded_response[0].instance.id.should == instance.id
-          end
+        it "should succeed" do
+          get :index, :instance_id => instance.id
+          response.code.should == "200"
+          decoded_response[0].id.should == database.id
+          decoded_response[0].instance.id.should == instance.id
         end
       end
     end
@@ -68,7 +57,7 @@ describe InstanceDatabasesController do
     let(:database) { FactoryGirl.create(:gpdb_database) }
 
     it "uses authorization" do
-      mock(subject).authorize!(:show, database)
+      mock(subject).authorize!(:show, database.instance)
       get :show, :id => database.to_param
     end
 

@@ -45,6 +45,10 @@ class Instance < ActiveRecord::Base
     nil
   end
 
+  def instance
+    self
+  end
+
   private
 
   def account_owned_by!(user)

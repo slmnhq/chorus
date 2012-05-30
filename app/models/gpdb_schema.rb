@@ -12,6 +12,7 @@ class GpdbSchema < ActiveRecord::Base
   belongs_to :database, :class_name => 'GpdbDatabase'
   has_many :database_objects, :class_name => 'GpdbDatabaseObject', :foreign_key => :schema_id
   delegate :with_gpdb_connection, :to => :database
+  delegate :instance, :to => :database
 
   def self.refresh(account, database)
     schema_rows = database.with_gpdb_connection(account) do |conn|
