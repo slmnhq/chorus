@@ -24,13 +24,21 @@ describe("chorus.views.UserSidebar", function() {
 
         context("when logged in as an admin", function() {
             beforeEach(function() {
-                setLoggedInUser({admin: true});
+                setLoggedInUser({admin: true, username: "edcadmin"});
                 this.view.render();
             })
 
-            it("should have a 'delete user' action", function() {
+            it("should have a 'delete user' action when current user is not the same user", function() {
                 expect(this.view.$(".actions a.delete_user[data-alert=UserDelete]")).toExist();
             });
+
+            it("should not have a 'delete user' action when current user is the same user", function() {
+                setLoggedInUser({admin: true, username: this.user.get("username")});
+                this.view.render();
+
+                expect(this.view.$(".actions a.delete_user[data-alert=UserDelete]")).not.toExist();
+            });
+
 
             it("displays the 'change password' link", function() {
                 expect(this.view.$("a.change_password[data-dialog=ChangePassword]")).toExist();

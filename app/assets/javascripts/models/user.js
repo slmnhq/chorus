@@ -70,6 +70,11 @@ chorus.models.User = chorus.models.Base.extend({
         return currentUser.isAdmin() || this.get("username") === currentUser.get("username");
     },
 
+    currentUserCanDelete : function() {
+        var currentUser = chorus.session.user();
+        return currentUser.isAdmin() && this.get("username") !== currentUser.get("username");
+    },
+
     isAdmin: function() {
         return !!this.get("admin");
     },

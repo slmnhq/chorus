@@ -26,7 +26,8 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
                 permission: currentUserCanEdit,
                 listMode: this.options.listMode,
                 changePasswordAvailable: currentUserCanEdit && !this.config.isExternalAuth(),
-                isInEditMode: this.options.editMode
+                isInEditMode: this.options.editMode,
+                deleteAvailable : this.model.currentUserCanDelete()
             });
         }
 

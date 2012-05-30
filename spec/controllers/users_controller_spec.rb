@@ -306,6 +306,19 @@ describe UsersController do
         live_user.deleted_at.should be_nil
       end
     end
+
+    context "admin trying to delete himself" do
+      let(:admin) { FactoryGirl.create :admin }
+
+      before do
+        log_in admin
+        delete :destroy, :id => admin.id
+      end
+
+      it "should not succeed" do
+        response.code.should == "403"
+      end
+    end
   end
 
   describe "#ldap" do

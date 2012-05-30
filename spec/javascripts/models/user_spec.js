@@ -32,6 +32,27 @@ describe("chorus.models.User", function() {
         });
     });
 
+    describe("#currentUserCanDelete", function() {
+        beforeEach(function() {
+            this.model.set({ username: "chris" });
+        });
+
+        it("returns true if the current user is an admin and not the same user", function() {
+            setLoggedInUser({ admin: true, username: "fog" });
+            expect(this.model.currentUserCanDelete()).toBeTruthy();
+        });
+
+        it("returns false if the current user is admin and the same user", function() {
+            setLoggedInUser({ admin: true, username: "chris" });
+            expect(this.model.currentUserCanDelete()).toBeFalsy();
+        });
+
+        it("returns false otherwise", function() {
+            setLoggedInUser({ admin: false, username: "joe" });
+            expect(this.model.currentUserCanDelete()).toBeFalsy();
+        });
+    });
+
     describe("#workspaces", function() {
         beforeEach(function() {
             this.user = newFixtures.user({username: "dr_charlzz", id: "457"});

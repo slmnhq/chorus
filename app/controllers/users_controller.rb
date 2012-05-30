@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_filter :load_user, :only => [:show, :update, :destroy]
   before_filter :require_admin, :only => [:create, :destroy, :ldap]
+  before_filter :require_not_current_user, :only => [:destroy]
   before_filter :require_admin_or_referenced_user, :only => :update
 
   def index
@@ -38,5 +39,9 @@ class UsersController < ApplicationController
 
   def load_user
     @user = User.find(params[:id])
+  end
+
+  def require_not_current_user
+    render_forbidden if current_user.id == @user.id
   end
 end
