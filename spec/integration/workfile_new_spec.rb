@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe " add an instance " do
+describe " add a workfile" do
   before(:each) do
     login('edcadmin', 'secret')
   end

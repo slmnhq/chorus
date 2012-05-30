@@ -15,6 +15,14 @@ class WorkfilesController < ApplicationController
     present create_workfile(file)
   end
 
+  def index
+    workspace = Workspace.find(params[:workspace_id])
+    authorize! :show, workspace
+    sort_column = params[:order] ? (params[:order] == "file_name" ? "lower(file_name)" : "updated_at") : "lower(file_name)"
+    workfiles = workspace.workfiles.order("#{sort_column} ASC")
+    present workfiles.paginate(params.slice(:page, :per_page))
+  end
+
   private
 
   def create_empty_file(filename)

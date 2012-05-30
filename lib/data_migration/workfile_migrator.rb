@@ -23,7 +23,6 @@ class WorkfileMigrator
       new_workfile.owner_id = legacy_owner["chorus_rails_user_id"]
       new_workfile.description = legacy_workfile["description"]
       new_workfile.created_at = legacy_workfile["created_stamp"]
-      new_workfile.updated_at = legacy_workfile["last_updated_stamp"]
       new_workfile.file_name  = legacy_workfile["file_name"]
 
       new_workfile.save!
@@ -47,6 +46,9 @@ class WorkfileMigrator
 
         id = legacy_version["id"]
         Legacy.connection.update("Update edc_workfile_version SET chorus_rails_workfile_version_id = #{new_version.id} WHERE id = '#{id}'")
+
+        new_workfile.updated_at = legacy_workfile["last_updated_stamp"]
+        new_workfile.save!
       end
 
       legacy_drafts = Legacy.connection.select_all("SELECT * from edc_workfile_draft WHERE workfile_id = '#{legacy_workfile["id"]}' AND is_deleted = 'f'")

@@ -11,6 +11,75 @@ describe WorkfilesController do
   let(:public_workfile) { FactoryGirl.create(:workfile, :workspace => workspace) }
   let(:file) { test_file("workfile.sql", "text/sql") }
 
+  describe "#index" do
+    before(:each) do
+      log_in user
+
+      @wf4 = FactoryGirl.create(:workfile, :file_name => "workfile4.sql", :workspace => workspace)
+      FactoryGirl.create(:workfile_version, :workfile => @wf4, :contents => file)
+
+      @wf3 = FactoryGirl.create(:workfile, :file_name => "workfile3.sql", :workspace => workspace)
+      FactoryGirl.create(:workfile_version, :workfile => @wf3, :contents => file)
+
+      @wf2 = FactoryGirl.create(:workfile, :file_name => "workfile2.sql", :workspace => workspace)
+      FactoryGirl.create(:workfile_version, :workfile => @wf2, :contents => file)
+
+      @wf1 = FactoryGirl.create(:workfile, :file_name => "workfile1.sql", :workspace => workspace)
+      FactoryGirl.create(:workfile_version, :workfile => @wf1, :contents => file)
+    end
+
+    it "responds with a success" do
+      get :index, :workspace_id => workspace.id
+      response.code.should == "200"
+    end
+
+    it "sorts by file name by default" do
+      get :index, :workspace_id => workspace.id
+      decoded_response.first.id.should == @wf1.id
+      end
+
+    it "sorts by last updated " do
+      get :index, :workspace_id => workspace.id, :order => "date"
+      decoded_response.first.id.should == @wf4.id
+    end
+
+    it "sorts by Workfile name " do
+      get :index, :workspace_id => workspace.id, :order => "file_name"
+      decoded_response.first.id.should == @wf1.id
+    end
+
+
+    describe "pagination" do
+          before(:each) do
+          end
+
+          it "defaults the per_page to fifty" do
+            get :index, :workspace_id => workspace.id
+            decoded_response.length.should == 4
+            request.params[:per_page].should == 50
+          end
+
+          it "paginates the collection" do
+            get :index, :workspace_id => workspace.id, :page => 1, :per_page => 2
+            decoded_response.length.should == 2
+          end
+
+          it "defaults to page one" do
+            get :index, :workspace_id => workspace.id, :per_page => 2
+            decoded_response.length.should == 2
+            decoded_response.first.id.should == @wf1.id
+            decoded_response.second.id.should == @wf2.id
+          end
+
+          it "accepts a page parameter" do
+            get :index, :workspace_id => workspace.id, :page => 2, :per_page => 2
+            decoded_response.length.should == 2
+            decoded_response.first.id.should == @wf3.id
+            decoded_response.last.id.should == @wf4.id
+          end
+        end
+  end
+  
   describe "#show" do
     context "for a private workspace" do
       before do

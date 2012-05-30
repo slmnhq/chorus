@@ -38,7 +38,7 @@ Chorus::Application.routes.draw do
   resources :workspaces, :only => [:index, :create, :show, :update] do
     resources :members, :only => [:index, :create]
     resource :image, :only => [:update], :controller => :workspace_images
-    resources :workfiles, :only => [:create]
+    resources :workfiles, :only => [:create, :index]
   end
 
   resources :workfiles, :only => [:show]
