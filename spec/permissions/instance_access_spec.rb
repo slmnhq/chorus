@@ -29,7 +29,7 @@ describe InstanceAccess do
   describe "show?" do
     context "for public instances" do
       it "shows for everybody, including non-owner, non-admin users" do
-        instance.shared = true
+        instance.update_attribute :shared, true
         instance_access.can?(:show, instance).should be_true
       end
     end

@@ -5,7 +5,7 @@ set -e
 if [ $# -gt 0 ]; then # we have args
     filename=$1
 else # we have no args
-    filename='spec/controllers spec/models spec/lib spec/presenters spec/requests spec/services'
+    filename='spec/controllers spec/permissions spec/models spec/lib spec/presenters spec/requests spec/services'
 fi
 
 command="ruby -S bundle exec rspec"
