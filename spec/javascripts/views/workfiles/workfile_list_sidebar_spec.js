@@ -27,7 +27,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
                     this.workfile = newFixtures.workfile.sql();
 
                     // TODO: REMOVEME
-                    this.workfile.set({ lastUpdatedStamp: "2011-11-22 10:46:03.152" });
+                    this.workfile.set({ lastUpdatedStamp: "2011-11-22T10:46:03Z" });
 
                     chorus.PageEvents.broadcast("workfile:selected", this.workfile);
                 })
@@ -119,7 +119,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
 
         context("when the workfile's workspace is archived", function() {
             beforeEach(function() {
-                this.workspace.set({ archivedAt: "2011-11-22 10:46:03.152" });
+                this.workspace.set({ archivedAt: "2011-11-22T10:46:03Z" });
                 this.workfile = newFixtures.workfile.sql();
                 chorus.PageEvents.broadcast("workfile:selected", this.workfile);
             });

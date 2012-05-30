@@ -3,7 +3,7 @@ describe("chorus.views.WorkspaceList", function() {
         this.activeWorkspace = new chorus.models.Workspace({id: 1, archivedAt: null, name: "my active workspace"});
         this.archivedWorkspace = new chorus.models.Workspace({
             id: 2,
-            archivedAt: "2011-12-05 13:25:25.704",
+            archivedAt: "2011-12-05T13:25:25Z",
             name: "my archived workspace",
             archiver: { firstName: "John", lastName :"Henry"},
 //            archiverFirstName: "John",
@@ -23,7 +23,7 @@ describe("chorus.views.WorkspaceList", function() {
 
         this.archivedBigSummaryWorkspace = new chorus.models.Workspace({
             id: 5,
-            archivedAt: "2012-05-08 21:40:14",
+            archivedAt: "2012-05-08T21:40:14Z",
             name: "my archived workspace",
             archiverFirstName: "John",
             archiverLastName: "Henry",
@@ -110,8 +110,8 @@ describe("chorus.views.WorkspaceList", function() {
             });
 
             it("displays archived relative time", function() {
-                var whackyDateFormat = (2).hours().ago().toString("yyyy-MM-dd HH:mm:ss") + ".001"
-                this.archivedWorkspace.set({"archivedAt": whackyDateFormat})
+                var dateFormat = Date.formatForApi((2).hours().ago());
+                this.archivedWorkspace.set({"archivedAt": dateFormat})
                 this.view.render();
                 expect($(".timestamp", this.view.$("li[data-id=2]")).text()).toBe("2 hours ago");
             });

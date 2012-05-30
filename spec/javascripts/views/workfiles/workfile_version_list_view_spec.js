@@ -10,7 +10,7 @@ describe("chorus.views.WorkfileVersionList", function() {
                         firstName: "Bob",
                         lastName: "Smith"
                     },
-                    updatedAt: "2011-11-29 10:46:03.255"
+                    updatedAt: "2011-11-29T10:46:03Z"
                 }
             }),
 
@@ -23,7 +23,7 @@ describe("chorus.views.WorkfileVersionList", function() {
                         firstName: "Jim",
                         lastName: "Jones"
                     },
-                    updatedAt: "2012-11-29 10:46:03.255"
+                    updatedAt: "2012-11-29T10:46:03Z"
                 }
             })
         ]);

@@ -229,12 +229,8 @@ describe("handlebars", function() {
         })
 
         describe("displayTimestamp", function() {
-            it("renders the timestamp with milliseconds", function() {
-                expect(Handlebars.helpers.displayTimestamp("2011-11-23 15:42:02.321")).toBe("November 23");
-            })
-
             it("renders the timestamp without milliseconds", function() {
-                expect(Handlebars.helpers.displayTimestamp("2011-1-23 15:42:02")).toBe("January 23");
+                expect(Handlebars.helpers.displayTimestamp("2011-1-23T15:42:02Z")).toBe("January 23");
             });
 
             it("tolerates bogus timestamps", function() {
@@ -248,7 +244,7 @@ describe("handlebars", function() {
 
         describe("relativeTimestamp", function() {
             it("renders the relative timestamp", function() {
-                var tm = (50).hours().ago().toString("yyyy-MM-dd hh:mm:ss");
+                var tm = Date.formatForApi((50).hours().ago());
                 expect(Handlebars.helpers.relativeTimestamp(tm)).toBe("2 days ago");
             })
 

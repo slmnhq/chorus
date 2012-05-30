@@ -72,7 +72,7 @@ describe "creating a note on a workspace" do
     end
   end
 
-  it "can archive and unarchive the workspace" do
+  it "can archive and unarchive the workspace, displaying a localized relative time" do
     workspace_name = "#{Forgery::Name.first_name}'s Workspace'"
     create_valid_workspace(:name => workspace_name)
     click_link "Edit Workspace"
@@ -94,8 +94,10 @@ describe "creating a note on a workspace" do
 
     page.execute_script("$('.popup').click()")
     click_link("All Workspaces")
-
-    within(".workspace_list") { page.should have_content(workspace_name) }
+    within(".workspace_list") do
+      page.should have_content(workspace_name)
+      page.find(".timestamp").text.should == ('Just now')
+    end
 
     click_link(workspace_name)
 

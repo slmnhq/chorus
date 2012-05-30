@@ -98,7 +98,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
     context("with a non-sql workfile", function() {
         beforeEach(function() {
-            this.workfile = newFixtures.workfile.text({ versionInfo: { updatedAt: "2011-11-22 10:46:03.152" }});
+            this.workfile = newFixtures.workfile.text({ versionInfo: { updatedAt: "2011-11-22T10:46:03Z" }});
             expect(this.workfile.isText()).toBeTruthy();
 
             this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
@@ -182,7 +182,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             this.model.workspace().fetch();
 
             this.server.completeFetchFor(this.model);
-            this.server.completeFetchFor(this.model.workspace(), newFixtures.workspace({ archivedAt: "2012-05-08 21:40:14" }));
+            this.server.completeFetchFor(this.model.workspace(), newFixtures.workspace({ archivedAt: "2012-05-08T21:40:14Z" }));
 
             this.view.render();
         });

@@ -28,7 +28,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
         context("when a workspace has recent comments", function() {
             beforeEach(function() {
                 this.comment = fixtures.comment({
-                    timestamp: (50).hours().ago().toString("yyyy-MM-dd hh:mm:ss"),
+                    timestamp: (50).hours().ago().toString("yyyy-MM-ddThh:mm:ssZ"),
                     text: "I prefer my lemonade with whiskey",
                     author: {
                         firstName: "Boa",

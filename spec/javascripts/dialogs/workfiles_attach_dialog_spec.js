@@ -14,8 +14,8 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
         });
 
         // TODO: REMOVEME (this view needs to use 'versionInfo.updatedAt'
-        this.workfile1.set({ lastUpdatedStamp: "2011-11-29 10:46:03.152" });
-        this.workfile2.set({ lastUpdatedStamp: "2012-11-29 10:46:03.152" });
+        this.workfile1.set({ lastUpdatedStamp: "2011-11-29T10:46:03Z" });
+        this.workfile2.set({ lastUpdatedStamp: "2012-11-29T10:46:03Z" });
 
         this.workfiles = fixtures.workfileSet([this.workfile1, this.workfile2]);
         this.dialog = new chorus.dialogs.WorkfilesAttach({ workspaceId : "33" });

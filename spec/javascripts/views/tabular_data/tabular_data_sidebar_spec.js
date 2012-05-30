@@ -197,7 +197,7 @@ describe("chorus.views.TabularDataSidebar", function() {
             context("when there is an archived workspace", function() {
                 beforeEach(function() {
                     this.view.options.listMode = true;
-                    this.view.options.workspace = newFixtures.workspace({archivedAt: "2012-05-08 21:40:14", permission: ["update", "admin"]});
+                    this.view.options.workspace = newFixtures.workspace({archivedAt: "2012-05-08T21:40:14Z", permission: ["update", "admin"]});
                     this.view.render();
                     this.dataset = newFixtures.dataset.sourceTable();
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
@@ -256,8 +256,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                         beforeEach(function() {
                             this.server.completeFetchFor(this.dataset.getImport(), {
                                 executionInfo: {
-                                    startedStamp: "2012-02-29 14:35:38.100",
-                                    completedStamp: "2012-02-29 14:35:38.165"
+                                    startedStamp: "2012-02-29T14:35:38Z",
+                                    completedStamp: "2012-02-29T14:35:38Z"
                                 },
                                 id: "123",
                                 sourceId: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
@@ -271,7 +271,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 workspaceId: this.dataset.get("workspace").id
                             });
                             expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
-                                timeAgo: chorus.helpers.relativeTimestamp("2012-02-29 14:35:38.165"),
+                                timeAgo: chorus.helpers.relativeTimestamp("2012-02-29T14:35:38Z"),
                                 tableLink: "some_source_..."
                             });
                             expect(this.view.$(".last_import a")).toHaveHref(sourceTable.showUrl())
@@ -286,8 +286,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                         beforeEach(function() {
                             this.server.completeFetchFor(this.dataset.getImport(), {
                                 executionInfo: {
-                                    startedStamp: "2012-02-29 14:35:38.100",
-                                    completedStamp: "2012-02-29 14:35:38.165"
+                                    startedStamp: "2012-02-29T14:35:38Z",
+                                    completedStamp: "2012-02-29T14:35:38Z"
                                 },
                                 id: "123",
                                 sourceId: '"10032"|"dca_demo"|"ddemo"|"TABLE"|"a2"',
@@ -302,7 +302,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 workspaceId: this.dataset.get("workspace").id
                             });
                             expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
-                                timeAgo: chorus.helpers.relativeTimestamp("2012-02-29 14:35:38.165"),
+                                timeAgo: chorus.helpers.relativeTimestamp("2012-02-29T14:35:38Z"),
                                 tableLink: "some_source_..."
                             });
                         });
@@ -418,10 +418,10 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     sourceId: this.dataset.id,
                                     executionInfo: {},
                                     scheduleInfo: {
-                                        endTime: "2013-06-02",
+                                        endTime: "2013-06-02T00:00:00Z",
                                         frequency: "WEEKLY",
                                         jobName: "ScheduleJob_1330719934443",
-                                        startTime: "2012-02-29 14:23:58.169"
+                                        startTime: "2012-02-29T14:23:58Z"
                                     },
                                     workspaceId: this.dataset.workspace().id,
                                     toTable: "our_destination",
@@ -449,8 +449,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 beforeEach(function() {
                                     this.importResponse.set({
                                         executionInfo: {
-                                            startedStamp: "2012-02-29 14:23:58.169",
-                                            completedStamp: "2012-02-29 14:23:59.027",
+                                            startedStamp: "2012-02-29T14:23:58Z",
+                                            completedStamp: "2012-02-29T14:23:59Z",
                                             result: {
                                                 executeResult: "success"
                                             },
@@ -480,7 +480,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 beforeEach(function() {
                                     this.importResponse.set({
                                         executionInfo: {
-                                            startedStamp: "2012-02-29 14:23:58.169",
+                                            startedStamp: "2012-02-29T14:23:58Z",
                                             toTable: 'our_destination_plus_some_more',
                                             toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination_plus_some_more"',
                                             creator: "InitialUser",
@@ -511,8 +511,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                                         executionInfo: {
                                             toTable: "bad_destination_table",
                                             toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"bad_destination_table"',
-                                            startedStamp: "2012-02-29 14:23:58.169",
-                                            completedStamp: "2012-02-29 14:23:59.027",
+                                            startedStamp: "2012-02-29T14:23:58Z",
+                                            completedStamp: "2012-02-29T14:23:59Z",
                                             result: {
                                                 executeResult: "failed"
                                             },
@@ -560,8 +560,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 beforeEach(function() {
                                     this.importResponse.set({
                                         executionInfo: {
-                                            startedStamp: "2012-02-29 14:23:58.169",
-                                            completedStamp: "2012-02-29 14:23:59.027",
+                                            startedStamp: "2012-02-29T14:23:58Z",
+                                            completedStamp: "2012-02-29T14:23:59Z",
                                             result: {
                                                 executeResult: "success"
                                             },
@@ -590,8 +590,8 @@ describe("chorus.views.TabularDataSidebar", function() {
                                 beforeEach(function() {
                                     this.importResponse.set({
                                         executionInfo: {
-                                            startedStamp: "2012-02-29 14:23:58.169",
-                                            completedStamp: "2012-02-29 14:23:59.027",
+                                            startedStamp: "2012-02-29T14:23:58Z",
+                                            completedStamp: "2012-02-29T14:23:59Z",
                                             result: {
                                                 executeResult: "failed"
                                             },
@@ -621,7 +621,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                             context("when an Import Now is in progress", function() {
                                 beforeEach(function() {
                                     this.importResponse.set({executionInfo: {
-                                        startedStamp: "2012-02-29 14:23:58.169",
+                                        startedStamp: "2012-02-29T14:23:58Z",
                                         toTable: "our_destination",
                                         toTableId: '"10000"|"Analytics"|"analytics"|"TABLE"|"bad_destination_table"'
                                     }});
@@ -960,7 +960,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
 
                 chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
-                this.view.resource.statistics().set({lastAnalyzedTime: "2012-01-24 12:25:11.077"});
+                this.view.resource.statistics().set({lastAnalyzedTime: "2012-01-24T12:25:11Z"});
                 chorus.PageEvents.broadcast("column:selected", this.column);
                 this.view.render();
             });

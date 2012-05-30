@@ -2004,7 +2004,7 @@ beforeEach(function() {
         datasetImport: function(overrides) {
             var in1year = new Date();
             in1year.setFullYear(in1year.getFullYear() + 1);
-            var in1yearStr = in1year.toString("yyyy-MM-dd HH:mm:ss.000");
+            var in1yearStr = Date.formatForApi(in1year);
 
             var attributes = _.extend({
                 destinationTable: '"10000"|"Analytics"|"analytics"|"TABLE"|"asdfsfsdf"',
@@ -2013,8 +2013,8 @@ beforeEach(function() {
                 sampleCount: 500,
                 sampleMethod: "RANDOM_COUNT",
                 executionInfo: {
-                    startedStamp: "2012-02-29 14:23:58.169",
-                    completedStamp: "2012-02-29 14:23:59.027",
+                    startedStamp: "2012-02-29T14:23:58Z",
+                    completedStamp: "2012-02-29T14:23:59Z",
                     result: {
                         executeResult: "success"
                     },
@@ -2026,7 +2026,7 @@ beforeEach(function() {
                     endTime: "2013-06-02",
                     frequency: "WEEKLY",
                     jobName: "ScheduleJob_1330719934443",
-                    startTime: "2012-02-29 14:23:58.169"
+                    startTime: "2012-02-29T14:23:58Z"
                 },
                 sourceId: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"_uspresident"',
                 sourceTable: null,
@@ -2290,7 +2290,7 @@ beforeEach(function() {
             return _.extend({
                 "name": "folder" + id,
                 "isDir": true,
-                "lastUpdatedStamp": "2012-02-24 10:28:42.337",
+                "lastUpdatedStamp": "2012-02-24T10:28:42Z",
                 "size": 0,
                 "count": 6,
                 "owner": "hadoop",
@@ -2305,7 +2305,7 @@ beforeEach(function() {
                 "name": "file" + id + ".sql",
                 "isDir": false,
                 "isBinary": false,
-                "lastUpdatedStamp": "2012-02-24 10:28:42.320",
+                "lastUpdatedStamp": "2012-02-24T10:28:42Z",
                 "size": 23,
                 "count": 0,
                 "owner": "hadoop",
@@ -2320,7 +2320,7 @@ beforeEach(function() {
                 "name": "file" + id + ".bin",
                 "isDir": false,
                 "isBinary": true,
-                "lastUpdatedStamp": "2012-02-24 10:28:42.320",
+                "lastUpdatedStamp": "2012-02-24T10:28:42Z",
                 "size": 1337,
                 "count": 0,
                 "owner": "hadoop",
@@ -2335,7 +2335,7 @@ beforeEach(function() {
                 "name": "file" + id + ".???",
                 "isDir": false,
                 "isBinary": null,
-                "lastUpdatedStamp": "2012-02-24 10:28:42.320",
+                "lastUpdatedStamp": "2012-02-24T10:28:42Z",
                 "size": 1337,
                 "count": 0,
                 "owner": "hadoop",
@@ -2351,7 +2351,7 @@ beforeEach(function() {
 
         hdfsFileJson: function(overrides) {
             return _.extend({
-                lastModificationTime: "2012-03-05 15:23:44.34",
+                lastModificationTime: "2012-03-05T15:23:44Z",
                 lines: [
                     "some content;",
                     "second line"
@@ -2389,7 +2389,7 @@ beforeEach(function() {
                     "lastUpdatedStamp": "2012-03-14 17:15:21",
                     "fileType": "TXT",
                     "versionInfo": {
-                        "lastUpdatedStamp": "2012-03-14 17:15:21.984",
+                        "lastUpdatedStamp": "2012-03-14T17:15:21Z",
                         "versionFileId": "1331770521971_1380",
                         "modifier": {
                             "id": "InitialUser",
@@ -3199,7 +3199,7 @@ beforeEach(function() {
                         "name": "a"
                     },
                     "versionInfo": {
-                        "lastUpdatedStamp": "2012-03-08 09:40:26.847",
+                        "lastUpdatedStamp": "2012-03-08T09:40:26Z",
                         "versionFileId": "1331228426846_64",
                         "modifier": {
                             "id": "InitialUser",
@@ -3433,7 +3433,7 @@ beforeEach(function() {
                                 "name": "ws"
                             },
                             "versionInfo": {
-                                "lastUpdatedStamp": "2012-03-14 17:15:21.984",
+                                "lastUpdatedStamp": "2012-03-14T17:15:21Z",
                                 "versionFileId": "1331770521971_1380",
                                 "modifier": {
                                     "id": "InitialUser",

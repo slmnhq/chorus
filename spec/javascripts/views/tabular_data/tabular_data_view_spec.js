@@ -125,7 +125,7 @@ describe("chorus.views.TabularData", function() {
                     lastName: "Smith",
                     firstName: "Bob"
                 },
-                timestamp: "2011-12-15 12:34:56"
+                timestamp: "2011-12-15T12:34:56Z"
             }});
         });
 

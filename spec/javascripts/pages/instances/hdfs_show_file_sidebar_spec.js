@@ -1,6 +1,6 @@
-describe("chorus.views.HdfsShowFileSidebar", function() {
+    describe("chorus.views.HdfsShowFileSidebar", function() {
     beforeEach(function() {
-        var now = new Date().addDays(-1).toString("yyyy-MM-dd HH:mm:ss.000")
+        var now = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ")
 
         this.file = fixtures.hdfsFile({
             path: "/folder/filename.txt",

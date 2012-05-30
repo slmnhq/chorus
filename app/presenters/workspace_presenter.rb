@@ -8,7 +8,7 @@ class WorkspacePresenter < Presenter
         :summary => sanitize(summary),
         :owner => present(owner),
         :archiver => present(archiver),
-        :archived_at => archived_at.try(:strftime, "%Y-%m-%d %H:%M:%S"),
+        :archived_at => archived_at,
         :public => public,
         :image => present(image),
         :permission => permissions_for(@view_context.current_user)
