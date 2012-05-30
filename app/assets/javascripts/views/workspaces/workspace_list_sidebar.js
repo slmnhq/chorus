@@ -17,7 +17,8 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
         return this.model ? {
             imageSrc: this.model.fetchImageUrl(),
             hasImage: this.model.hasImage(),
-            prettyName: $.stripHtml(this.model.get("name"))
+            prettyName: $.stripHtml(this.model.get("name")),
+            showAddNoteInsightLinks: !!this.model
         } : {};
     },
 

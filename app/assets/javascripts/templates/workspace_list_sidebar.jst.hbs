@@ -6,10 +6,12 @@
     <div title="{{prettyName}}" class="name">{{prettyName}}</div>
 </div>
 
+{{#if showAddNoteInsightLinks}}
 <ul class="actions">
     <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
     <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workspace" data-workspace-id="{{id}}" data-allow-workspace-attachments="true" data-dialog="InsightsNew">{{t "actions.add_insight"}}</a></li>
 </ul>
+{{/if}}
 
 <div class="workspace_member_list"></div>
 
