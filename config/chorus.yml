@@ -1,0 +1,12 @@
+defaults: &defaults
+  session_timeout_minutes: 120
+  instance_poll_interval_minutes: 1
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

@@ -142,7 +142,7 @@ describe ApplicationController do
       end
 
       it "uses the configured session timeout" do
-        Chorus::Application.config.session_timeout = 4.hours
+        Chorus::Application.config.chorus['session_timeout_minutes'] = 60 * 4
         Timecop.freeze(2012, 4, 17, 10, 30) do
           get :action_requiring_session
           session[:expires_at].should == 4.hours.from_now

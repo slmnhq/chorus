@@ -9,4 +9,4 @@ handler do |job|
   QC.enqueue("Hdfs::InstanceStatus.check")
 end
 
-every(1.minute, 'check.instance.status.job')
+every(Chorus::Application.config.chorus['instance_poll_interval_minutes'].minutes, 'check.instance.status.job')
