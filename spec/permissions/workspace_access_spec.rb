@@ -11,6 +11,54 @@ describe WorkspaceAccess do
     WorkspaceAccess.new(controller)
   }
 
+  let(:admin) do
+    stub(user = Object.new).admin? { true }
+    user
+  end
+
+  let(:non_admin) do
+    stub(user = Object.new).admin? { false }
+    user
+  end
+
+  describe ".workspaces_for" do
+    context "user is admin" do
+      it "returns unscoped workspaces" do
+        mock(Workspace).scoped
+
+        described_class.workspaces_for(admin)
+      end
+    end
+
+    context "user is not admin" do
+      it "returns limited workspaces" do
+        mock(Workspace).accessible_to(non_admin)
+
+        described_class.workspaces_for(non_admin)
+      end
+    end
+  end
+
+  describe ".members_for" do
+    let(:workspace) { Object.new }
+
+    context "user is admin" do
+      it "returns all members" do
+        mock(workspace).members
+
+        described_class.members_for(admin, workspace)
+      end
+    end
+
+    context "user is not admin" do
+      it "calls workspace.members_accessible_to" do
+        mock(workspace).members_accessible_to(non_admin)
+
+        described_class.members_for(non_admin, workspace)
+      end
+    end
+  end
+
   describe "#show?" do
     context "in a public workspace" do
 

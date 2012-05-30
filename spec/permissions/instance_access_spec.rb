@@ -10,6 +10,35 @@ describe InstanceAccess do
     InstanceAccess.new(controller)
   }
 
+  describe ".instances_for" do
+    let(:admin) do
+      stub(user = Object.new).admin? { true }
+      user
+    end
+
+    let(:non_admin) do
+      stub(user = Object.new).admin? { false }
+      user
+    end
+
+    context "user is admin" do
+      it "returns unscoped instances" do
+        mock(Instance).scoped
+
+        described_class.instances_for(admin)
+      end
+    end
+
+   context "user is not admin" do
+      it "returns limited instances" do
+        mock(Instance).accessible_to(non_admin)
+
+        described_class.instances_for(non_admin)
+      end
+    end
+
+  end
+
   describe "#edit?" do
     it "prevents regular users from editing" do
       instance_access.can?(:edit, instance).should be_false

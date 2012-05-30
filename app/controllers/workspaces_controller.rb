@@ -1,6 +1,6 @@
 class WorkspacesController < ApplicationController
   def index
-    workspaces = AccessPolicy.workspaces_for(current_user).order("lower(name) ASC")
+    workspaces = WorkspaceAccess.workspaces_for(current_user).order("lower(name) ASC")
     workspaces = workspaces.active if params[:active]
     workspaces = workspaces.where(:owner_id => params[:user_id]) if params[:user_id]
     present workspaces.paginate(params.slice(:page, :per_page))

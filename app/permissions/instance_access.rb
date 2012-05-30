@@ -1,4 +1,12 @@
 class InstanceAccess < DefaultAccess
+  def self.instances_for(current_user)
+    if current_user.admin?
+      Instance.scoped
+    else
+      Instance.accessible_to(current_user)
+    end
+  end
+
   def edit?(instance)
     instance.owner == current_user
   end

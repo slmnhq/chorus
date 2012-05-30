@@ -1,7 +1,7 @@
 class InstancesController < GpdbController
   def index
     instances = if params[:accessible]
-                  AccessPolicy.instances_for(current_user)
+                  InstanceAccess.instances_for(current_user)
                 else
                   Instance.scoped
                 end

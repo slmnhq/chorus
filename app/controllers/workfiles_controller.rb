@@ -1,18 +1,14 @@
 class WorkfilesController < ApplicationController
   def show
     workfile = Workfile.find(params[:id])
-    AccessPolicy.workspaces_for(current_user).find(workfile.workspace_id)
+    authorize! :show, workfile.workspace
     present workfile
   end
 
   def create
-    file = if params[:workfile][:source] == "empty"
-             create_empty_file(params[:workfile][:file_name])
-           else
-             params[:workfile][:contents]
-           end
+    workspace = Workspace.writable_by(current_user).find(params[:workspace_id])
 
-    present create_workfile(file)
+    present create_workfile(workspace, uploaded_file)
   end
 
   def index
@@ -25,12 +21,19 @@ class WorkfilesController < ApplicationController
 
   private
 
+  def uploaded_file
+    if params[:workfile][:source] == "empty"
+      create_empty_file(params[:workfile][:file_name])
+    else
+      params[:workfile][:contents]
+    end
+  end
+
   def create_empty_file(filename)
     ActionDispatch::Http::UploadedFile.new(:filename => filename, :tempfile => Tempfile.new(filename))
   end
 
-  def create_workfile(source_file)
-    workspace = Workspace.writable_by(current_user).find(params[:workspace_id])
+  def create_workfile(workspace, source_file)
     workfile = workspace.workfiles.build(params[:workfile])
     workfile.file_name ||= source_file.original_filename
     workfile.owner = current_user
