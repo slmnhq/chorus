@@ -1,6 +1,8 @@
 describe("chorus.pages.InstanceIndexPage", function() {
     beforeEach(function() {
         this.page = new chorus.pages.InstanceIndexPage();
+        this.instanceSet = new chorus.collections.InstanceSet();
+        this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet();
     });
 
     describe("#initialize", function() {
@@ -9,11 +11,17 @@ describe("chorus.pages.InstanceIndexPage", function() {
         });
 
         it("fetches all registered greenplum instances", function() {
-            expect(new chorus.collections.InstanceSet()).toHaveBeenFetched();
+            expect(this.instanceSet).toHaveBeenFetched();
         });
 
         it("fetches all registered hadoop instances", function() {
-            expect(new chorus.collections.HadoopInstanceSet()).toHaveBeenFetched();
+            expect(this.hadoopInstanceSet).toHaveBeenFetched();
+        });
+
+        it("passes the greenplumn and hadoop instances to the content details view", function() {
+            var contentDetails = this.page.mainContent.contentDetails;
+            expect(contentDetails.options.hadoopInstances).toBeA(chorus.collections.HadoopInstanceSet);
+            expect(contentDetails.options.greenplumInstances).toBeA(chorus.collections.InstanceSet);
         });
 
         it("passes the greenplumn and hadoop instances to the list view", function() {
@@ -25,8 +33,7 @@ describe("chorus.pages.InstanceIndexPage", function() {
 
     describe("when the instances are fetched", function() {
         beforeEach(function() {
-            var instances = new chorus.collections.InstanceSet();
-            this.server.completeFetchAllFor(instances, [
+            this.server.completeFetchAllFor(this.instanceSet, [
                 newFixtures.instance.greenplum(),
                 newFixtures.instance.greenplum({id: 123456})
             ]);
@@ -63,6 +70,26 @@ describe("chorus.pages.InstanceIndexPage", function() {
                 chorus.PageEvents.broadcast('instance:selected', instance);
                 expect(this.page.model).toBe(instance);
             });
+
+            it("displays the loading text", function() {
+                expect(this.page.mainContent.contentDetails.$(".loading")).toExist();
+            });
+
+
+            describe("when the hadoopInstances are fetched", function() {
+                beforeEach(function() {
+                    this.server.completeFetchAllFor(this.hadoopInstanceSet, [
+                        newFixtures.instance.hadoop(),
+                        newFixtures.instance.hadoop({id: 123456})
+                    ]);
+                });
+
+                it("doesn't display the loading text and display the instances count", function() {
+                    expect(this.page.mainContent.contentDetails.$(".loading")).not.toExist();
+                    expect(this.page.mainContent.contentDetails.$(".number").text()).toBe("4");
+                });
+            });
+
         });
     });
 });
