@@ -6,7 +6,7 @@ describe WorkfilePresenter, :type => :view do
     @user = FactoryGirl.build :user
     stub(view).current_user { @user }
     @workspace = FactoryGirl.build :workspace, :owner => @user
-    @workfile = FactoryGirl.create :workfile, :workspace => @workspace, :owner => @workspace.owner
+    @workfile = FactoryGirl.create :workfile, :workspace => @workspace, :owner => @workspace.owner, :file_name => 'work (space).sql'
     FactoryGirl.create(:workfile_version, :contents => test_file, :workfile => @workfile)
     @presenter = WorkfilePresenter.new(@workfile, view)
   end
@@ -36,6 +36,10 @@ describe WorkfilePresenter, :type => :view do
 
     it "uses the version presenter to serialize the last version" do
       @hash[:version_info].to_hash.should == (WorkfileVersionPresenter.new(@workfile.versions.last, view).to_hash)
+    end
+
+    it "uses the workfile file name" do
+      @hash[:file_name].should == "work (space).sql"
     end
 
     it "sanitizes file name" do

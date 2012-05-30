@@ -45,6 +45,7 @@ describe WorkfileMigrator, :type => :data_migration do
         @legacy_workfiles.each do |legacy_workfile|
           new_workfile = Workfile.find(legacy_workfile["chorus_rails_workfile_id"])
           new_workfile.description.should == legacy_workfile["description"]
+          new_workfile.file_name.should == legacy_workfile["file_name"]
           new_workfile.created_at.should == DateTime.parse(legacy_workfile["created_stamp"])
           new_workfile.updated_at.should == DateTime.parse(legacy_workfile["last_updated_stamp"])
         end

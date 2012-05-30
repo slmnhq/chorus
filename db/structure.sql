@@ -513,7 +513,8 @@ CREATE TABLE workfiles (
     owner_id integer NOT NULL,
     description text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    file_name character varying(255)
 );
 
 
@@ -999,3 +1000,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120523174942');
 INSERT INTO schema_migrations (version) VALUES ('20120529165510');
 
 INSERT INTO schema_migrations (version) VALUES ('20120529231954');
+
+INSERT INTO schema_migrations (version) VALUES ('20120530001157');

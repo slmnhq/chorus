@@ -24,6 +24,7 @@ class WorkfileMigrator
       new_workfile.description = legacy_workfile["description"]
       new_workfile.created_at = legacy_workfile["created_stamp"]
       new_workfile.updated_at = legacy_workfile["last_updated_stamp"]
+      new_workfile.file_name  = legacy_workfile["file_name"]
 
       new_workfile.save!
 

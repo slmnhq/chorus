@@ -138,6 +138,29 @@ describe WorkfilesController do
       end
     end
 
+    context "creating work file with invalid name" do
+      let(:current_user) { user }
+
+      before(:each) do
+        log_in current_user
+
+        @params = {
+            :workspace_id => workspace.to_param,
+            :workfile => {
+                :file_name => "empty []file?.sql",
+                :source => 'empty'
+            }
+        }
+      end
+      before do
+        post :create, @params
+      end
+
+      it "should fail" do
+        response.code.should == "422"
+      end
+    end
+
     context "creating a blank file" do
       let(:current_user) { user }
 
@@ -147,7 +170,7 @@ describe WorkfilesController do
         @params = {
             :workspace_id => workspace.to_param,
             :workfile => {
-                :file_name => "empty_file.sql",
+                :file_name => "empty file.sql",
                 :source => 'empty'
             }
         }
@@ -170,6 +193,10 @@ describe WorkfilesController do
 
       it "sets the right description on the workfile" do
         subject.description.should be_blank
+      end
+
+      it "sets the file name" do
+        subject.file_name.should == 'empty file.sql'
       end
 
       describe "workfile version" do

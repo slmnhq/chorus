@@ -38,6 +38,11 @@ shared_examples_for "uploading a new workfile" do
     Workfile.last.description.should == "Nice workfile, good workfile, I've always wanted a workfile like you"
   end
 
+  it "sets the filename correctly" do
+    post :create, @params
+    Workfile.last.file_name.should == "workfile.sql"
+  end
+
   describe "workfile version" do
     before(:each) do
       post :create, @params
@@ -67,5 +72,6 @@ shared_examples_for "uploading a new workfile" do
       WorkfileVersion.last.contents.should be_present
       WorkfileVersion.last.contents_file_name.should == "workfile.sql"
     end
+
   end
 end
