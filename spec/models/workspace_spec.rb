@@ -10,7 +10,7 @@ describe Workspace do
 
     it "returns only active workspaces" do
       workspaces = Workspace.active
-      workspaces.length.should == 1
+      workspaces.should have(1).workspace
       workspaces.should_not include(archived_workspace)
     end
   end
@@ -131,6 +131,19 @@ describe Workspace do
       ].each do |workspace, user, list|
         workspace.permissions_for(user).should == list
       end
+    end
+  end
+
+  describe "#archived?" do
+    let(:active_workspace) { FactoryGirl.create :workspace }
+    let(:archived_workspace) { FactoryGirl.create :workspace, :archived_at => 2.days.ago }
+
+    it "says that active workspace is not archived" do
+      active_workspace.should_not be_archived
+    end
+
+    it "says active workspace is not archived" do
+      archived_workspace.should be_archived
     end
   end
 
