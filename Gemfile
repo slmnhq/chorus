@@ -40,6 +40,7 @@ group :test do
 end
 
 group :test, :development do
+  gem 'awesome_print'
   gem 'debugger'
   gem 'jasmine'
   gem 'rspec_api_documentation'
