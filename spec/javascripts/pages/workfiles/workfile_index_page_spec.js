@@ -123,6 +123,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 expect(this.page.$("ul[data-event=filter] li[data-type=SQL]")).toExist();
                 expect(this.page.$("ul[data-event=filter] li[data-type=CODE]")).toExist();
                 expect(this.page.$("ul[data-event=filter] li[data-type=TEXT]")).toExist();
+                expect(this.page.$("ul[data-event=filter] li[data-type=IMAGE]")).toExist();
                 expect(this.page.$("ul[data-event=filter] li[data-type=OTHER]")).toExist();
             })
 
@@ -147,6 +148,12 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             it("can filter the list by 'TEXT'", function() {
                 this.page.$("li[data-type=TEXT] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("TEXT");
+                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+            })
+
+            it("can filter the list by 'IMAGE'", function() {
+                this.page.$("li[data-type=IMAGE] a").click();
+                expect(this.page.collection.attributes.fileType).toBe("IMAGE");
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
             })
 

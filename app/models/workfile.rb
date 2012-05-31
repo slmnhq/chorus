@@ -9,6 +9,10 @@ class Workfile < ActiveRecord::Base
 
   validates_format_of :file_name, :with => /^[a-zA-Z0-9_ \.\(\)\-]+$/
 
+  def self.by_type(file_type)
+    scoped.find_all { |workfile| workfile.versions.last.file_type == file_type.downcase }
+  end
+  
   def create_new_version(user, source_file, message)
     versions.create!(
       :owner => user,

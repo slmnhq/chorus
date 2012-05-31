@@ -14,7 +14,7 @@ describe("chorus.collections.WorkfileSet", function() {
                 this.collection.attributes.fileType = "sql"
             })
             it("it has correct Url", function() {
-                expect(this.collection.url()).toBe("/workspaces/1234/workfiles?fileType=sql&page=1&rows=50");
+                expect(this.collection.url()).toBe("/workspaces/1234/workfiles?file_type=sql&page=1&rows=50");
             })
         })
         describe("with sorting", function() {
@@ -23,7 +23,7 @@ describe("chorus.collections.WorkfileSet", function() {
                 this.collection.sortAsc("name")
             })
             it("it has correct Url", function() {
-                expect(this.collection.url()).toBe("/workspaces/1234/workfiles?fileType=sql&page=1&rows=50&order=name");
+                expect(this.collection.url()).toBe("/workspaces/1234/workfiles?file_type=sql&page=1&rows=50&order=name");
             })
         })
     });

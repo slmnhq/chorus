@@ -48,6 +48,25 @@ describe WorkfilesController do
       decoded_response.first.id.should == @wf1.id
     end
 
+    context "with file types" do
+      before do
+        code_file = test_file("code.cpp", "text/plain")
+        wf = FactoryGirl.create(:workfile, :file_name => "code.cpp", :workspace => workspace)
+        FactoryGirl.create(:workfile_version, :workfile => wf, :contents => code_file)
+      end
+
+      it "filters by file type: sql" do
+        get :index, :workspace_id => workspace.id, :order => "file_name", :file_type => "sql"
+        response.code.should == "200"
+        decoded_response.length.should == 4
+      end
+
+      it "filters by file type: code" do
+        get :index, :workspace_id => workspace.id, :order => "file_name", :file_type => "code"
+        response.code.should == "200"
+        decoded_response.length.should == 1
+      end
+    end
 
     describe "pagination" do
       it "defaults the per_page to fifty" do

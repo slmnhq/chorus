@@ -28,6 +28,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
                         {data: "SQL", text: t("workfiles.header.menu.filter.sql")},
                         {data: "CODE", text: t("workfiles.header.menu.filter.code")},
                         {data: "TEXT", text: t("workfiles.header.menu.filter.text")},
+                        {data: "IMAGE", text: t("workfiles.header.menu.filter.image")},
                         {data: "OTHER", text: t("workfiles.header.menu.filter.other")}
                     ],
                     event: "filter"

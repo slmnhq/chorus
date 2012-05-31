@@ -1,3 +1,5 @@
+require 'will_paginate/array'
+
 class WorkfilesController < ApplicationController
   def show
     workfile = Workfile.find(params[:id])
@@ -17,6 +19,8 @@ class WorkfilesController < ApplicationController
     authorize! :show, workspace
 
     workfiles = workspace.workfiles.order(workfile_sort(params[:order]))
+    workfiles = workfiles.by_type(params[:file_type]) if params.has_key?(:file_type)
+
     present workfiles.paginate(params.slice(:page, :per_page))
   end
 
