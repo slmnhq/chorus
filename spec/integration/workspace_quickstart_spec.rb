@@ -16,6 +16,7 @@ describe "Showing the workspace quickstart page" do
         fill_in 'name', :with => "QuicklyStartedWorkspace"
         click_button "Create Workspace"
     end
+    sleep 1
     @workspace_id = Workspace.find_by_name("QuicklyStartedWorkspace").id
   end
 
