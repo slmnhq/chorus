@@ -1,5 +1,5 @@
 set guifont=Monaco:h16
-set cursorline
+set nocursorline
 
 " switch to spec or implementation file
 
