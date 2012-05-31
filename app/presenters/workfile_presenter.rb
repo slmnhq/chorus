@@ -15,10 +15,6 @@ class WorkfilePresenter < Presenter
     }
   end
 
-  def last_version_file
-    last_version.contents
-  end
-
   def last_version
     @last_version ||= versions.order("version_num").last
   end
