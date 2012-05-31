@@ -25,6 +25,8 @@ chorus.views.TabularData = chorus.views.Base.extend({
         if (!this.model.hasCredentials()) {
             $(this.el).addClass("no_credentials");
         }
+
+        $(this.el).attr("data-database-object-id", this.model.id); // selenium handle
     },
 
     additionalContext: function() {
