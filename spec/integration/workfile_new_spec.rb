@@ -57,4 +57,28 @@ describe " add a workfile" do
       page.should have_content("This work file cannot be previewed")
     end
   end
+
+  it "creates and displays a text workfile and take care of name conflict" do
+    create_valid_workspace(:name => "WorkspaceForFileNameConflict")
+    wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
+    click_link("Work Files")
+    click_button("Upload File")
+    within("#facebox") do
+      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+      click_button("Upload File")
+    end
+    click_link("Work Files")
+    click_button("Upload File")
+    within("#facebox") do
+      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+      click_button("Upload File")
+    end
+
+    click_link("Work Files")
+    wait_until { page.find('button[data-dialog="WorkfilesImport"]').text == "Upload File" }
+    workfiles = page.all("li.workfile")
+
+    workfiles.first.text.should == "some.txt"
+    workfiles.last.text.should == "some_1.txt"
+  end
 end

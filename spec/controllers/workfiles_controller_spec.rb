@@ -295,5 +295,33 @@ describe WorkfilesController do
         end
       end
     end
+    context "File name conflicts" do
+      let(:current_user) { user }
+
+      before(:each) do
+        log_in current_user
+
+        @params = {
+            :workspace_id => workspace.to_param,
+            :workfile => {
+                :file_name => "test.sql",
+                :source => 'empty'
+            }
+        }
+
+        post :create, @params
+      end
+
+      it "appends a number to the file name if there is a conflict" do
+        post :create, @params
+
+        Workfile.last.file_name.should == "test_1.sql"
+        post :create, @params
+        Workfile.last.file_name.should == "test_2.sql"
+        post :create, @params
+        Workfile.last.file_name.should == "test_3.sql"
+      end
+
+    end
   end
 end
