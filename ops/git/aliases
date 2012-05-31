@@ -1,4 +1,4 @@
-alias gpp="git pull --rebase && git push"
+alias gpp="git pull --rebase && git push && rage"
 alias gst='git status'
 
 alias gs='git status'
