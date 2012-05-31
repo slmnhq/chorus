@@ -1,5 +1,36 @@
 require 'spec_helper'
 
+module RspecApiDocumentation
+  class WurlWriter
+    def write
+       File.open(configuration.docs_dir.join("index.html"), "w+") do |f|
+        f.write WurlIndex.new(index, configuration).render
+      end
+      index.examples.each do |example|
+
+        # TODO: fix this horrible monkey patch
+        data = example.example.metadata
+        begin
+          if data[:requests][0][:request_body].include?("Content-Type: image")
+            addendum = "..content redacted"
+            end_word = data[:requests][0][:request_body].index("Content-Length:")
+            data[:requests][0][:request_body] = data[:requests][0][:request_body][0..end_word-1] + addendum
+            data[:requests][0][:curl][:data] = data[:requests][0][:curl][:data][0..end_word-1] + addendum
+          end
+        rescue
+        end
+
+        html_example = WurlExample.new(example, configuration)
+        FileUtils.mkdir_p(configuration.docs_dir.join(html_example.dirname))
+        File.open(configuration.docs_dir.join(html_example.dirname, html_example.filename), "w+") do |f|
+          content = html_example.render
+          f.write content
+        end
+      end
+    end
+  end
+end
+
 resource "Users" do
   let!(:user) { FactoryGirl.create :admin }
   let!(:otherUser) { FactoryGirl.create :user }
@@ -99,6 +130,16 @@ resource "Users" do
 
     example_request "Search for an LDAP user" do
       explanation "This method only works if LDAP is enabled on the server"
+      status.should == 200
+    end
+  end
+
+  put "/users/:user_id/image" do
+    parameter :files, "Picture file"
+    let(:user_id) { user.to_param }
+    let(:files) { [Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/small2.png", Rails.root), "image/png")] }
+
+    example_request "Update a user's profile image" do
       status.should == 200
     end
   end
