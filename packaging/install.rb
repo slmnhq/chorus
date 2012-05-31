@@ -44,7 +44,7 @@ def install_ruby
   Dir.chdir(COMPONENTS_DIR) do
     run "tar xzf ruby"
     Dir.chdir("ruby-1.9.3-p125") do
-      run("./configure --prefix=#{RUBY_DIR} && make && make install")
+      run("./configure --prefix=#{RUBY_DIR} 2>&1 && make && make install")
     end
   end
 end
