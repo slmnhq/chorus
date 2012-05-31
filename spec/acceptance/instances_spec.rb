@@ -42,7 +42,7 @@ resource "Greenplum DB instances" do
     parameter :accessible, "1 to limit the list to instances the current user can access, 0 for all instances"
     let(:accessible) { "1" }
 
-    example_request "Get a list of registered Greenplum databases" do
+    example_request "Get a list of Greenplum instances" do
       status.should == 200
     end
   end
