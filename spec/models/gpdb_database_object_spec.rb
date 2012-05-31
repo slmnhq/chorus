@@ -37,20 +37,21 @@ describe GpdbDatabaseObject do
 
     before(:each) do
       stub_gpdb(account, db_objects_sql => [
-          ["r", "table1", "Great new table", 't'],
-          ["v", "view1", "Great new view", 'f']
+        { 'type' => "r", "name" => "table1", "comment" => "Great new table", "master_table" => 't', "definition" => nil },
+        { 'type' => "v", "name" => "view1", "comment" => "Great new view", "master_table" => 'f', "definition" => 'SELECT * from table1' }
       ])
     end
 
     it "creates new copies of the db objects in our db" do
       GpdbDatabaseObject.refresh(account, schema)
 
-      db_objects = schema.database_objects.order(:name).all
-      db_objects.length.should == 2
-      db_objects.map { |obj| obj.name }.should == ["table1", "view1"]
-      db_objects.map { |obj| obj.class }.should == [GpdbTable, GpdbView]
-      db_objects.map { |obj| obj.comment }.should == ["Great new table", "Great new view"]
-      db_objects.map { |obj| obj.master_table }.should == [true, false]
+      db_objects = schema.database_objects.order(:name)
+      db_objects.size.should == 2
+      db_objects.map(&:class).should == [GpdbTable, GpdbView]
+      db_objects.pluck(:name).should == ["table1", "view1"]
+      db_objects.pluck(:comment).should == ["Great new table", "Great new view"]
+      db_objects.pluck(:master_table).should == [true, false]
+      db_objects.pluck(:definition).should == [nil, "SELECT * from table1"]
     end
 
     it "does not re-create db objects that already exist in our database" do
@@ -64,7 +65,7 @@ describe GpdbDatabaseObject do
       GpdbDatabaseObject.refresh(account, schema)
 
       stub_gpdb(account, db_objects_sql => [
-          ["r", "table1", "Great new table"]
+        { 'type' => "r", "name" => "table1", "comment" => "Great new table" }
       ])
 
       GpdbDatabaseObject.refresh(account, schema)
@@ -80,8 +81,7 @@ describe GpdbDatabaseObject do
       to_be_deleted = FactoryGirl.create(:gpdb_table, :schema => schema, :name => "matching")
 
       stub_gpdb(account, db_objects_sql => [
-          ["r", "new", ""]
-          #["r", "matching", ""] # deleting
+          { 'type' => "r", 'name' => "new", 'comment' => "" }
       ])
       GpdbDatabaseObject.refresh(account, schema)
 

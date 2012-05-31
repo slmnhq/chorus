@@ -9,7 +9,8 @@ class GpdbDatabaseObject < ActiveRecord::Base
       c.relkind AS type,
       c.relname AS name,
       d.description AS comment,
-      c.relhassubclass AS master_table
+      c.relhassubclass AS master_table,
+      e.definition AS definition
     FROM
       pg_catalog.pg_class c
     LEFT JOIN
@@ -18,6 +19,9 @@ class GpdbDatabaseObject < ActiveRecord::Base
     LEFT JOIN
       pg_catalog.pg_partitions p
       ON c.relname = p.partitiontablename AND p.schemaname = :schema AND c.relhassubclass = 'f'
+    LEFT JOIN
+      pg_views e
+      ON c.relname=e.viewname AND e.schemaname = :schema
     WHERE
       c.relkind IN ('r', 'v') AND
       ((c.relhassubclass = 't') OR (c.relhassubclass = 'f' AND p.partitiontablename IS NULL))
@@ -55,19 +59,17 @@ class GpdbDatabaseObject < ActiveRecord::Base
 
   def self.refresh(account, schema)
     db_objects = schema.with_gpdb_connection(account) do |conn|
-      conn.query(sanitize_sql([DATABASE_OBJECTS_SQL, :schema => schema.name]))
+      conn.select_all(sanitize_sql([DATABASE_OBJECTS_SQL, :schema => schema.name]))
     end
 
-    db_object_names = db_objects.map { |_, name, _| name }
+    db_object_names = db_objects.map {|attrs| attrs['name']}
     schema.database_objects.where("gpdb_database_objects.name NOT IN (?)", db_object_names).destroy_all
 
-    db_objects.map do |type, name, comment, master_table|
+    db_objects.each do |attrs|
+      type = attrs.delete('type')
       klass = type == 'r' ? GpdbTable : GpdbView
-      db_object = klass.find_or_initialize_by_name_and_schema_id(name, schema.id)
-      db_object.comment = comment
-      db_object.master_table = master_table
-      db_object.save!
-      db_object
+      db_object = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
+      db_object.update_attributes(attrs, :without_protection => true)
     end
   end
 

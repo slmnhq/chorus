@@ -121,7 +121,8 @@ CREATE TABLE gpdb_database_objects (
     schema_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    master_table boolean DEFAULT false
+    master_table boolean DEFAULT false,
+    definition text
 );
 
 
@@ -991,6 +992,8 @@ INSERT INTO schema_migrations (version) VALUES ('20120519000854');
 
 INSERT INTO schema_migrations (version) VALUES ('20120522000542');
 
+INSERT INTO schema_migrations (version) VALUES ('20120522015308');
+
 INSERT INTO schema_migrations (version) VALUES ('20120522020546');
 
 INSERT INTO schema_migrations (version) VALUES ('20120523174942');
@@ -1000,3 +1003,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120529165510');
 INSERT INTO schema_migrations (version) VALUES ('20120529231954');
 
 INSERT INTO schema_migrations (version) VALUES ('20120530001157');
+
+INSERT INTO schema_migrations (version) VALUES ('20120531165316');

@@ -14,7 +14,12 @@ shared_examples "database object presenter" do |database_object_factory_name|
     instance = FactoryGirl.build(:instance, :id => 123, :name => "instance1")
     database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :instance => instance)
     schema = FactoryGirl.build(:gpdb_schema, :id => 456, :name => "abc", :database => database)
-    @database_object = FactoryGirl.build(database_object_factory_name, :id => 321, :name => "object1", :schema => schema)
+    @database_object = FactoryGirl.build(database_object_factory_name,
+      :id => 321,
+      :name => "object1",
+      :schema => schema,
+      :comment => "This is a great table"
+    )
   end
 
   let(:presenter) { described_class.new(@database_object, view) }
@@ -24,6 +29,7 @@ shared_examples "database object presenter" do |database_object_factory_name|
     hash[:id].should == 321
     hash[:object_name].should == "object1"
     hash[:type].should == "SOURCE_TABLE"
+    hash[:comment].should == "This is a great table"
 
     schema = hash[:schema]
     schema[:id].should == 456
