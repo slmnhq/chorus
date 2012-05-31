@@ -23,8 +23,4 @@ class WorkfileVersionPresenter < Presenter
   def file_content
     File.read(contents.path) if model.text?
   end
-
-  def filetype_icon_url
-    "images/workfiles/medium/#{model.extension}.png"
-  end
 end
