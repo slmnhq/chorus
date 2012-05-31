@@ -11,7 +11,7 @@
  * @param timeOutMillis the max amount of time to wait. If not specified, 3 sec is used.
  */
 function waitFor(testFx, onReady, timeOutMillis) {
-    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 600001, //< Default Max Timeout is 3s
+    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 300001, //< Default Max Timeout is 3s
         start = new Date().getTime(),
         condition = false,
         interval = setInterval(function() {
@@ -134,6 +134,6 @@ page.open(url, function(status){
                 return failedCount;
             });
             phantom.exit(exitCode);
-        }, 1000 * 60 * 10); // wait 10 minutes (CI can be slow)
+        }, 1000 * 60 * 20); // wait 20 minutes (CI can be slow)
     }
 });
