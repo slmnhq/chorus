@@ -6,8 +6,8 @@ class WorkfilesController < ApplicationController
   end
 
   def create
-    workspace = Workspace.active.find(params[:workspace_id])
-    authorize! :workfile_create, workspace
+    workspace = Workspace.find(params[:workspace_id])
+    authorize! :workfile_change, workspace
 
     present create_workfile(workspace, uploaded_file)
   end
@@ -51,13 +51,7 @@ class WorkfilesController < ApplicationController
     workfile.owner = current_user
     workfile.save!
 
-    workfile.versions.create!(
-      :owner => current_user,
-      :modifier => current_user,
-      :contents => source_file,
-      :version_num => 1,
-      :commit_message => "",
-    )
+    workfile.create_new_version(current_user, source_file, "")
 
     workfile
   end

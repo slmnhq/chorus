@@ -85,19 +85,25 @@ describe WorkspaceAccess do
     end
   end
 
-  describe "#workspace_create?" do
-    it "doesn't allow non-members to edit'" do
-      workspace_access.can?(:workfile_create, private_workspace).should be_false
+  describe "#workfile_change?" do
+    it "doesn't allow non-members to change workfiles'" do
+      workspace_access.can?(:workfile_change, private_workspace).should be_false
     end
 
-    it "allows members to edit" do
+    it "allows members to change workfiles" do
       private_workspace.members << user
-      workspace_access.can?(:workfile_create, private_workspace).should be_true
+      workspace_access.can?(:workfile_change, private_workspace).should be_true
     end
 
-    it "allows admin to edit" do
+    it "allows admin to change workfiles" do
       user.admin = true
-      workspace_access.can?(:workfile_create, private_workspace).should be_true
+      workspace_access.can?(:workfile_change, private_workspace).should be_true
+    end
+
+    it "does not allow archived workspace to have its workfiles changed" do
+      private_workspace.archived_at = Time.current
+      private_workspace.members << user
+      workspace_access.can?(:workfile_change, private_workspace).should be_false
     end
   end
 

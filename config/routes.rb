@@ -11,8 +11,8 @@ Chorus::Application.routes.draw do
 
   resources :hadoop_instances, :only => [:create, :index, :show] do
     scope :module => 'hdfs' do
-      resources :files, :only => [:show, :index], :constraints => { :id => /.*/ }
-      resources :contents, :only => :show, :constraints => { :id => /.*/ }
+      resources :files, :only => [:show, :index], :constraints => {:id => /.*/}
+      resources :contents, :only => :show, :constraints => {:id => /.*/}
     end
   end
 
@@ -41,7 +41,9 @@ Chorus::Application.routes.draw do
     resources :workfiles, :only => [:create, :index]
   end
 
-  resources :workfiles, :only => [:show]
+  resources :workfiles, :only => [:show] do
+    resources :versions, :only => [:update, :create], :controller => 'workfile_versions'
+  end
 
   match "/" => "root#index"
 

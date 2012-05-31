@@ -19,8 +19,8 @@ class WorkspaceAccess < DefaultAccess
     workspace.public || member_edit?(workspace)
   end
 
-  def workfile_create?(workspace)
-    member_edit?(workspace) || administrative_edit?(workspace)
+  def workfile_change?(workspace)
+    !workspace.archived? && (member_edit?(workspace) || administrative_edit?(workspace))
   end
 
   def member_edit?(workspace)

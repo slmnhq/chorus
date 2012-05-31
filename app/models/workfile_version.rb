@@ -49,4 +49,10 @@ class WorkfileVersion < ActiveRecord::Base
   def content_type
     contents.content_type
   end
+
+  def update_content(new_content)
+    File.open(contents.path, "w") do |file|
+      file.write new_content
+    end
+  end
 end

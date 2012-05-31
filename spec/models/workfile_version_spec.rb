@@ -51,4 +51,19 @@ describe WorkfileVersion do
       its(:text?)  { should be_false }
     end
   end
+
+  describe "#Update_content" do
+
+    before do
+      version.contents = test_file("workfile.sql")
+      version.save
+    end
+
+    context "Updating the content of workfile" do
+      it "changes the content " do
+        version.update_content("this is new content")
+        File.read(version.contents.path).should == "this is new content"
+      end
+    end
+  end
 end

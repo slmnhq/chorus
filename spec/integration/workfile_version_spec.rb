@@ -25,7 +25,7 @@ describe "save as Menu" do
     }
   end
 
-  xit "pops up the right menu" do
+  it "pops up the right menu" do
     page.find(".save_options .save_as_new").should_not be_visible
     page.find(".save_options .save_as_current").should_not be_visible
     page.find(".save .save_as").click
@@ -34,7 +34,7 @@ describe "save as Menu" do
     page.find("a.save_as_current").should be_visible
   end
 
-  xit "click the save as replace version" do
+  it "click the save as replace version" do
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood")')
     page.find(".save .save_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
@@ -43,7 +43,7 @@ describe "save as Menu" do
     page.find("textarea.text_editor").should have_content('new Blood')
   end
 
-  xit "click the save as new  version" do
+  it "click the save as new  version" do
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood -2")')
     page.find(".save .save_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }

@@ -8,4 +8,23 @@ class Workfile < ActiveRecord::Base
   has_many :drafts, :class_name => 'WorkfileDraft'
 
   validates_format_of :file_name, :with => /^[a-zA-Z0-9_ \.\(\)\-]+$/
+
+  def create_new_version(user, source_file, message)
+    versions.create!(
+      :owner => user,
+      :modifier => user,
+      :contents => source_file,
+      :version_num => last_version_number + 1,
+      :commit_message => message,
+    )
+  end
+
+  def last_version
+    versions.order("version_num").last
+  end
+
+  private
+  def last_version_number
+    last_version.try(:version_num) || 0
+  end
 end

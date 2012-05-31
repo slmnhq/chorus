@@ -198,9 +198,9 @@ describe WorkfilesController do
         log_in user
       end
 
-      it "does not find the workspace to create the workfile" do
+      it "does authorize the user to create the workfile" do
         post :create, { :workspace_id => archived_workspace.id, :workfile => { } }
-        response.code.should == "404"
+        response.code.should == "403"
       end
     end
 

@@ -1,5 +1,5 @@
 class WorkfilePresenter < Presenter
-  delegate :id, :workspace, :owner, :versions, :file_name, to: :model
+  delegate :id, :workspace, :owner, :versions, :file_name, :last_version, to: :model
 
   def to_hash
     {
@@ -13,9 +13,5 @@ class WorkfilePresenter < Presenter
         :file_type => h(last_version.file_type),
         :latest_version_num => last_version.version_num
     }
-  end
-
-  def last_version
-    @last_version ||= versions.order("version_num").last
   end
 end
