@@ -24,7 +24,7 @@ def install_postgres
   Dir.chdir(COMPONENTS_DIR) do
     run "tar xzf postgres"
     Dir.chdir("postgresql-9.0.4") do
-      run "./configure --prefix=#{PG_DIR} && make && make install"
+      run "./configure --prefix=#{PG_DIR} 2>&1 && make && make install"
     end
   end
 
