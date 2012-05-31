@@ -15,12 +15,20 @@ class WorkfilesController < ApplicationController
   def index
     workspace = Workspace.find(params[:workspace_id])
     authorize! :show, workspace
-    sort_column = params[:order] ? (params[:order] == "file_name" ? "lower(file_name)" : "updated_at") : "lower(file_name)"
-    workfiles = workspace.workfiles.order("#{sort_column} ASC")
+
+    workfiles = workspace.workfiles.order(workfile_sort(params[:order]))
     present workfiles.paginate(params.slice(:page, :per_page))
   end
 
   private
+
+  def workfile_sort(column_name)
+    if column_name.blank? || column_name == "file_name"
+      "lower(file_name)"
+    else
+      "updated_at"
+    end
+  end
 
   def uploaded_file
     if params[:workfile][:source] == "empty"

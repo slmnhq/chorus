@@ -36,7 +36,7 @@ describe WorkfilesController do
     it "sorts by file name by default" do
       get :index, :workspace_id => workspace.id
       decoded_response.first.id.should == @wf1.id
-      end
+    end
 
     it "sorts by last updated " do
       get :index, :workspace_id => workspace.id, :order => "date"
@@ -50,36 +50,33 @@ describe WorkfilesController do
 
 
     describe "pagination" do
-          before(:each) do
-          end
+      it "defaults the per_page to fifty" do
+        get :index, :workspace_id => workspace.id
+        decoded_response.length.should == 4
+        request.params[:per_page].should == 50
+      end
 
-          it "defaults the per_page to fifty" do
-            get :index, :workspace_id => workspace.id
-            decoded_response.length.should == 4
-            request.params[:per_page].should == 50
-          end
+      it "paginates the collection" do
+        get :index, :workspace_id => workspace.id, :page => 1, :per_page => 2
+        decoded_response.length.should == 2
+      end
 
-          it "paginates the collection" do
-            get :index, :workspace_id => workspace.id, :page => 1, :per_page => 2
-            decoded_response.length.should == 2
-          end
+      it "defaults to page one" do
+        get :index, :workspace_id => workspace.id, :per_page => 2
+        decoded_response.length.should == 2
+        decoded_response.first.id.should == @wf1.id
+        decoded_response.second.id.should == @wf2.id
+      end
 
-          it "defaults to page one" do
-            get :index, :workspace_id => workspace.id, :per_page => 2
-            decoded_response.length.should == 2
-            decoded_response.first.id.should == @wf1.id
-            decoded_response.second.id.should == @wf2.id
-          end
-
-          it "accepts a page parameter" do
-            get :index, :workspace_id => workspace.id, :page => 2, :per_page => 2
-            decoded_response.length.should == 2
-            decoded_response.first.id.should == @wf3.id
-            decoded_response.last.id.should == @wf4.id
-          end
-        end
+      it "accepts a page parameter" do
+        get :index, :workspace_id => workspace.id, :page => 2, :per_page => 2
+        decoded_response.length.should == 2
+        decoded_response.first.id.should == @wf3.id
+        decoded_response.last.id.should == @wf4.id
+      end
+    end
   end
-  
+
   describe "#show" do
     context "for a private workspace" do
       before do
@@ -93,20 +90,20 @@ describe WorkfilesController do
         end
 
         it "responds with a success" do
-          get :show, {:id => private_workfile}
+          get :show, { :id => private_workfile }
           response.should be_success
         end
 
         it "presents the workfile" do
           mock.proxy(controller).present(private_workfile)
-          get :show, {:id => private_workfile}
+          get :show, { :id => private_workfile }
         end
       end
 
       context "as a non-member" do
         it "responds with unsuccessful" do
           log_in non_member
-          get :show, {:id => private_workfile}
+          get :show, { :id => private_workfile }
           response.should_not be_success
         end
       end
@@ -120,7 +117,7 @@ describe WorkfilesController do
       end
 
       it "responds with a success" do
-        get :show, {:id => public_workfile}
+        get :show, { :id => public_workfile }
         response.should be_success
       end
     end
@@ -149,11 +146,11 @@ describe WorkfilesController do
   describe "#create" do
     before(:each) do
       @params = {
-          :workspace_id => workspace.to_param,
-          :workfile => {
-              :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
-              :contents => file
-          }
+        :workspace_id => workspace.to_param,
+        :workfile => {
+          :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
+          :contents => file
+        }
       }
     end
 
@@ -202,7 +199,7 @@ describe WorkfilesController do
       end
 
       it "does not find the workspace to create the workfile" do
-        post :create, { :workspace_id => archived_workspace.id, :workfile => {} }
+        post :create, { :workspace_id => archived_workspace.id, :workfile => { } }
         response.code.should == "404"
       end
     end
@@ -214,11 +211,11 @@ describe WorkfilesController do
         log_in current_user
 
         @params = {
-            :workspace_id => workspace.to_param,
-            :workfile => {
-                :file_name => "empty []file?.sql",
-                :source => 'empty'
-            }
+          :workspace_id => workspace.to_param,
+          :workfile => {
+            :file_name => "empty []file?.sql",
+            :source => 'empty'
+          }
         }
       end
       before do
@@ -237,11 +234,11 @@ describe WorkfilesController do
         log_in current_user
 
         @params = {
-            :workspace_id => workspace.to_param,
-            :workfile => {
-                :file_name => "empty file.sql",
-                :source => 'empty'
-            }
+          :workspace_id => workspace.to_param,
+          :workfile => {
+            :file_name => "empty file.sql",
+            :source => 'empty'
+          }
         }
       end
 
