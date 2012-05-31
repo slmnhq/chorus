@@ -51,6 +51,17 @@ describe("chorus.views.userNew", function() {
                     expect(this.user.get("notes")).toBe("   foo   ");
                 });
 
+                it("clears the serverErrors", function() {
+                    this.user.serverErrors = { fields: { a: { INVALID: { message: "Hi there"}}} };
+                    this.view.showErrors();
+
+                    spyOn(this.view, "clearErrors");
+                    this.view.$("form").submit();
+                    expect(this.user.serverErrors).toBeUndefined();
+                    expect(this.view.clearErrors).toHaveBeenCalled();
+                });
+
+
                 context("when the user form has admin unchecked", function() {
                     beforeEach(function() {
                         this.view.$("input[name=admin]").prop("checked", false);

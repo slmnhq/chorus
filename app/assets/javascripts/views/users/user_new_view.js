@@ -23,6 +23,9 @@ chorus.views.UserNew = chorus.views.Base.extend({
     submitNewUser:function submitNewUser(e) {
         e.preventDefault();
 
+        delete this.model.serverErrors;
+        this.clearErrors();
+
         var updates = {};
         _.each(this.$("input, textarea"), function (i) {
             var input = $(i);
