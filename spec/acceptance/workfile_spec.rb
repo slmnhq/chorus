@@ -22,7 +22,7 @@ resource "Workfiles" do
 
   # TODO: the workfileversion controller update action seems buggy, wait til fixed
 
-  # put "/workfiles/:workfile_id/versions/:id" do
+  # put "/worXXXXXXXXBREAK MISSING SCRIPTkfiles/:workfile_id/versions/:id" do
   #   let!(:id) { workfile_version.to_param }
 
   #   parameter :owner_id, "Workfile owner"
