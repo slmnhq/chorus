@@ -165,8 +165,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                         form.find("textarea[name=description]").val("Instance Description");
                         form.find("input[name=host]").val("foo.bar");
                         form.find("input[name=port]").val("1234");
-                        form.find("input[name=username]").val("user");
-                        form.find("input[name=group_list]").val("hadoop");
+                        form.find("input[name=userName]").val("user");
+                        form.find("input[name=userGroups]").val("hadoop");
 
                         form.find("input[name=name]").trigger("change");
                     });
@@ -177,13 +177,12 @@ describe("chorus.dialogs.InstanceNew", function() {
                         expect(values.description).toBe("Instance Description");
                         expect(values.host).toBe("foo.bar");
                         expect(values.port).toBe("1234");
-                        expect(values.username).toBe("user");
-                        expect(values.group_list).toBe("hadoop");
+                        expect(values.userName).toBe("user");
+                        expect(values.userGroups).toBe("hadoop");
                     });
 
                     it("#fieldValues should have the right values for 'provision_type' and 'shared'", function() {
                         var values = this.dialog.fieldValues();
-                        expect(values.provision_type).toBe("registerHadoop");
                         expect(values.shared).toBe("true");
                     });
                 });
@@ -213,8 +212,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                 hadoopSection.find("textarea[name=description]").val("Instance Description");
                 hadoopSection.find("input[name=host]").val("foo.bar");
                 hadoopSection.find("input[name=port]").val("1234");
-                hadoopSection.find("input[name=username]").val("user");
-                hadoopSection.find("input[name=group_list]").val("hadoop").change();
+                hadoopSection.find("input[name=userName]").val("user");
+                hadoopSection.find("input[name=userGroups]").val("hadoop").change();
 
                 spyOn(chorus.models.HadoopInstance.prototype, "save").andCallThrough();
                 this.dialog.$("button.submit").click();
@@ -228,8 +227,8 @@ describe("chorus.dialogs.InstanceNew", function() {
                 expect(instance.get("description")).toBe("Instance Description");
                 expect(instance.get("host")).toBe("foo.bar");
                 expect(instance.get("port")).toBe("1234");
-                expect(instance.get("username")).toBe("user");
-                expect(instance.get("group_list")).toBe("hadoop");
+                expect(instance.get("userName")).toBe("user");
+                expect(instance.get("userGroups")).toBe("hadoop");
             });
         });
 

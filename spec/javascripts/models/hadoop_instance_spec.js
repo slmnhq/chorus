@@ -20,7 +20,7 @@ describe("chorus.models.HadoopInstance", function() {
         expect(this.model.showUrl()).toBe("#/hadoop_instances/" + this.model.get('id') + "/browse/");
     });
 
-    _.each(["name", "host", "username", "group_list", "port"], function(attr) {
+    _.each(["name", "host", "userName", "userGroups", "port"], function(attr) {
         it("requires " + attr, function() {
             this.attrs[attr] = "";
             expect(this.model.performValidation(this.attrs)).toBeFalsy();

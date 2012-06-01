@@ -6,9 +6,10 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
     events: {
         "submit form": "save"
     },
+
     makeModel: function() {
         this.sourceModel = this.options.launchElement.data("instance")
-        this.model = new chorus.models.Instance(this.sourceModel.attributes);
+        this.model = new chorus.models[this.sourceModel.constructorName](this.sourceModel.attributes);
     },
 
     setup: function() {
@@ -21,7 +22,7 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
         return {
             registeredInstance: this.model.get("provisionType") == "register",
             provisionedInstance: this.model.get("provisionType") == "create",
-            hadoopInstance: this.model.get("provisionType") == "registerHadoop"
+            hadoopInstance: this.model.constructorName == "HadoopInstance"
         };
     },
 
@@ -32,6 +33,8 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
             description: this.$("textarea[name=description]").val().trim(),
             host: this.$("input[name=host]").val(),
             port: this.$("input[name=port]").val(),
+            userName: this.$("input[name=userName]").val(),
+            userGroups: this.$("input[name=userGroups]").val(),
             provisionType: this.model.get("provisionType")
         };
 

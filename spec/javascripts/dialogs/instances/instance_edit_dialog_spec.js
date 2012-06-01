@@ -85,7 +85,8 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         describe("when editing a hadoop instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provisionType: "registerHadoop", userName: "user", userGroups: "hadoop"})
+                this.dialog.model.set({ userName: "user", userGroups: "hadoop"})
+                this.dialog.model = new chorus.models.HadoopInstance(this.dialog.model.attributes);
                 this.dialog.render();
             });
 
@@ -200,7 +201,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         context("with a hadoop instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ provisionType: "registerHadoop"});
+                this.dialog.model = new chorus.models.HadoopInstance();
                 this.dialog.render();
                 this.dialog.$("input[name=name]").val("test3");
                 this.dialog.$("input[name=port]").val("8557");

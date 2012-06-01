@@ -13,8 +13,8 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
         this.requirePattern("name", chorus.ValidationRegexes.ChorusIdentifier(44), newAttrs);
         this.require("host", newAttrs);
         this.require("port", newAttrs);
-        this.require("username", newAttrs);
-        this.require("group_list", newAttrs);
+        this.require("userName", newAttrs);
+        this.require("userGroups", newAttrs);
         this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
     },
 
