@@ -2,6 +2,7 @@ class GpdbTable < GpdbDatabaseObject
 
   TABLE_STATS_SQL = <<-SQL
     SELECT c.relname AS table_name, c.reltuples AS rows, c.relnatts AS columns, c.relhassubclass AS master_table, d.description AS description, s.statime AS last_analyzed, e.location as protocol,
+          (SELECT COUNT(tablename) FROM pg_catalog.pg_partitions WHERE schemaname = :schema AND tablename = :table_name) AS partition_count,
       CASE WHEN position('''' in c.relname) > 0 THEN 'unknown'
       WHEN position('\\' in c.relname) > 0 THEN 'unknown'
       ELSE pg_size_pretty(pg_total_relation_size(c.oid))
@@ -33,6 +34,7 @@ class GpdbTable < GpdbDatabaseObject
     stats.last_analyzed = table_stats[0]["last_analyzed"]
     stats.protocol = table_stats[0]["protocol"]
     stats.disk_size = table_stats[0]["disk_size"]
+    stats.partition_count = table_stats[0]["partition_count"]
 
     stats
   end

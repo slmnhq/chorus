@@ -10,7 +10,7 @@ describe GpdbTable do
       stub_gpdb(account, table_stats_sql => [{'table_name' => "clv_data", "rows" => 100, "columns" => 3,
                                               "master_table" => "t", "description" => "a table",
                                               "last_analyzed" => "2012-03-22 21:35:54.148935+00",
-                                              "protocol" => nil, "disk_size" => "160 kB"}] )
+                                              "protocol" => nil, "disk_size" => "160 kB", "partition_count" => 10}] )
     end
 
     it "return stats for a table" do
@@ -24,7 +24,7 @@ describe GpdbTable do
       stats.last_analyzed.should == "2012-03-22 21:35:54.148935+00"
       stats.protocol.should == nil
       stats.disk_size.should == "160 kB"
-
+      stats.partition_count.should == 10
     end
   end
 end
