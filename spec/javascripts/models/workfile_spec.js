@@ -429,12 +429,13 @@ describe("chorus.models.Workfile", function() {
         context("when the versionNum is not equal to the latestVersionNum", function() {
             beforeEach(function() {
                 this.model.get('versionInfo').versionNum = 88;
+                this.model.get('versionInfo').id = 123;
                 this.model.set({ latestVersionNum: 99 });
                 this.model.fetch();
             })
 
             it("fetches the correct url", function() {
-                expect(this.server.lastFetch().url).toBe("/workfiles/10020/versions/88")
+                expect(this.server.lastFetch().url).toBe("/workfiles/10020/versions/123")
             })
         })
     })
@@ -459,6 +460,7 @@ describe("chorus.models.Workfile", function() {
         context("with the latest version", function() {
             beforeEach(function() {
                 this.model.get('versionInfo').versionNum = 99
+                this.model.get('versionInfo').id = 213
                 this.model.get('versionInfo').lastUpdatedStamp = "THEVERSIONSTAMP"
                 this.model.set({ latestVersionNum: 99, lastUpdatedStamp: "THEWORKFILESTAMP"});
             })
@@ -469,7 +471,7 @@ describe("chorus.models.Workfile", function() {
                 })
 
                 it("saves to the correct url", function() {
-                    expect(this.server.lastUpdate().url).toBe("/workfiles/10020/versions/99")
+                    expect(this.server.lastUpdate().url).toBe("/workfiles/10020/versions/213")
                 });
 
                 it("saves with the versionInfo lastUpdatedStamp", function() {

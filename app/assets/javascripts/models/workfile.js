@@ -24,7 +24,7 @@
             if (this.isLatestVersion()) {
                 return "workfiles/{{id}}";
             } else {
-                return "workfiles/{{id}}/versions/{{versionInfo.versionNum}}";
+                return "workfiles/{{id}}/versions/{{versionInfo.id}}";
             }
         },
 
@@ -177,8 +177,8 @@
                 attrs = attrs || {};
                 var overrides = {};
 
-                if (this.get("versionInfo") && this.get("versionInfo").versionNum) {
-                    overrides.url = "/workfiles/" + this.get("id") + "/versions/" + this.get("versionInfo").versionNum;
+                if (this.get("versionInfo") && this.get("versionInfo").id) {
+                    overrides.url = "/workfiles/" + this.get("id") + "/versions/" + this.get("versionInfo").id;
                     attrs['lastUpdatedStamp'] = this.get("versionInfo").lastUpdatedStamp;
                 }
 

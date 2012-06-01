@@ -2,7 +2,7 @@ class WorkfileVersionsController < ApplicationController
   def update
     workfile = Workfile.find(params[:workfile_id])
     authorize! :workfile_change,  workfile.workspace
-    workfile_version = workfile.versions.find_by_version_num(params[:id])
+    workfile_version = workfile.versions.find(params[:id])
     workfile_version.update_content(params[:workfile][:content])
     present workfile
   end

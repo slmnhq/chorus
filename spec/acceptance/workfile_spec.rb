@@ -21,7 +21,7 @@ resource "Workfiles" do
   end
 
   put "/workfiles/:workfile_id/versions/:id" do
-    let!(:id) { workfile_version.version_num } # workfiles expect version_num, not actual workfile id
+    let!(:id) { workfile_version.to_param }
 
     parameter :owner_id, "Workfile owner"
     parameter :commit_message, "Commit message"

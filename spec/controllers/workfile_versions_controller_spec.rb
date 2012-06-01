@@ -18,7 +18,7 @@ describe WorkfileVersionsController do
     end
 
     it "changes the file content" do
-      post :update, :workfile_id => workfile.id, :id => 1, :workfile => {:content => 'New content'}
+      post :update, :workfile_id => workfile.id, :id => workfile_version.id, :workfile => {:content => 'New content'}
 
       File.read(workfile.last_version.contents.path).should == 'New content'
     end
