@@ -36,13 +36,13 @@ class WorkfilesController < ApplicationController
 
   def uploaded_file
     if params[:workfile][:source] == "empty"
-      create_empty_file(params[:workfile][:file_name])
+      create_sql_file(params[:workfile][:file_name])
     else
       params[:workfile][:contents]
     end
   end
 
-  def create_empty_file(filename)
+  def create_sql_file(filename)
     ActionDispatch::Http::UploadedFile.new(:filename => filename, :tempfile => Tempfile.new(filename))
   end
 

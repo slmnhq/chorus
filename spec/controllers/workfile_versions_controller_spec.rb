@@ -19,7 +19,8 @@ describe WorkfileVersionsController do
 
     it "changes the file content" do
       post :update, :workfile_id => workfile.id, :id => 1, :workfile => {:content => 'New content'}
-      decoded_response[:content].should == 'New content'
+
+      File.read(workfile.last_version.contents.path).should == 'New content'
     end
   end
 
@@ -36,9 +37,11 @@ describe WorkfileVersionsController do
     it "changes the file content" do
       post :create, :workfile_id => workfile.id, :workfile => {:content => 'New content', :commit_message => 'A new version'}
 
-      decoded_response[:content].should == 'New content'
-      decoded_response[:commit_message].should == 'A new version'
-      decoded_response[:version_num].should == 2
+      File.read(workfile.last_version.contents.path).should == 'New content'
+      decoded_response[:version_info][:content].should == 'New content'
+
+      decoded_response[:version_info][:commit_message].should == 'A new version'
+      decoded_response[:version_info][:version_num].should == 2
     end
   end
 end

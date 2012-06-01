@@ -26,7 +26,7 @@ chorus.dialogs.WorkfileNewVersion = chorus.dialogs.Base.extend({
     },
 
     saved:function () {
-        this.pageModel.trigger("invalidated");
         this.closeModal();
+        this.pageModel.trigger("invalidated");
     }
 });

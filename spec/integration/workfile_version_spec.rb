@@ -17,7 +17,8 @@ describe "save as Menu" do
     wait_until { current_route =~ /workspaces\/\d+\/workfiles/ }
 
     click_button "Create SQL File"
-    fill_in 'fileName', :with => "wicked_data#{Time.now.to_i}"
+    @file_name = "wicked_data#{Time.now.to_i}"
+    fill_in 'fileName', :with => @file_name
     click_button "Add SQL File"
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
     wait_until {
@@ -40,6 +41,11 @@ describe "save as Menu" do
     wait_until { page.find(".qtip[aria-hidden=false]") }
     page.find("a.save_as_current").click
     wait_until { page.find(".qtip[aria-hidden=true]") }
+    page.find("textarea.text_editor").should have_content('new Blood')
+    click_link "Work Files"
+    wait_until { current_route =~ /workspaces\/\d+\/workfiles/ }
+    click_link @file_name
+    wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
     page.find("textarea.text_editor").should have_content('new Blood')
   end
 

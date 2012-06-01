@@ -78,7 +78,7 @@ FactoryGirl.define do
     owner
     workspace
     description "A nice description"
-    file_name "workfile.sql"
+    file_name "workfile.doc"
   end
 
   factory :workfile_version do

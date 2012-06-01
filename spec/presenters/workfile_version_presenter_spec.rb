@@ -37,16 +37,13 @@ describe WorkfileVersionPresenter, :type => :view do
 
     it "sanitizes values" do
       bad_value = "<script>alert('got your cookie')</script>"
-      fields_to_sanitize = [:commit_message]
 
-      dangerous_params = fields_to_sanitize.inject({}) { |params, field| params.merge(field => bad_value) }
+      workfile_version = FactoryGirl.build :workfile_version, :commit_message => bad_value
+      workfile_version.contents = test_file('small1.gif')
 
-      workfile_version = FactoryGirl.build :workfile_version, dangerous_params
       json = WorkfileVersionPresenter.new(workfile_version, view).to_hash
 
-      fields_to_sanitize.each do |sanitized_field|
-        json[sanitized_field].should_not match "<"
-      end
+      json[:commit_message].should_not match "<"
     end
 
     context "when the file is an image" do
@@ -83,6 +80,23 @@ describe WorkfileVersionPresenter, :type => :view do
     context "when the file is text" do
       let(:file_name) { "workfile.sql" }
       let(:mime_type) { "text/plain" }
+
+      it "includes the url of the file" do
+        @hash[:content_url].should == @version.contents.url
+      end
+
+      it "uses a static image for the icon (based on the filetype)" do
+        @hash[:icon_url].should be_nil
+      end
+
+      it "includes the text of the file" do
+        @hash[:content].should == File.read(@version.contents.path)
+      end
+    end
+
+    context "when the file is sql" do
+      let(:file_name) { "workfile.sql" }
+      let(:mime_type) { "application/x-sql" }
 
       it "includes the url of the file" do
         @hash[:content_url].should == @version.contents.url

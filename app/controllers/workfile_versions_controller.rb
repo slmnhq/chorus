@@ -4,7 +4,7 @@ class WorkfileVersionsController < ApplicationController
     authorize! :workfile_change,  workfile.workspace
     workfile_version = workfile.versions.find_by_version_num(params[:id])
     workfile_version.update_content(params[:workfile][:content])
-    present workfile_version
+    present workfile
   end
 
   def create
@@ -12,8 +12,9 @@ class WorkfileVersionsController < ApplicationController
     authorize! :workfile_change,  workfile.workspace
     file = build_new_file(workfile.file_name, params[:workfile][:content])
     file.content_type = workfile.last_version.contents_content_type
+    workfile.create_new_version(current_user, file, params[:workfile][:commit_message])
 
-    present workfile.create_new_version(current_user, file, params[:workfile][:commit_message])
+    present workfile
   end
 
   private

@@ -21,6 +21,6 @@ class WorkfileVersionPresenter < Presenter
   end
 
   def file_content
-    File.read(contents.path) if model.text?
+    File.read(contents.path) if model.text? || model.sql?
   end
 end
