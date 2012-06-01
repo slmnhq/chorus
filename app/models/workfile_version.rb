@@ -13,7 +13,8 @@ class WorkfileVersion < ActiveRecord::Base
   CODE_EXTENSIONS = ["cpp", "r"]
 
   def extension
-    File.extname(contents.original_filename)[1..-1].try(:downcase)
+    file_name = contents.original_filename || ''
+    File.extname(file_name)[1..-1].try(:downcase)
   end
 
   def file_type
