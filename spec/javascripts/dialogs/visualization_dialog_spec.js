@@ -568,6 +568,7 @@ describe("chorus.dialogs.Visualization", function() {
                 context("when the dialog is launched outside workspace context", function() {
                     beforeEach(function() {
                         this.dialog.task.unset("workspaceId");
+                        this.dialog.model.unset("workspace");
                         this.dialog.render();
                         this.dialog.$("button.save").prop("disabled", false);
                         this.dialog.$("button.save").click();

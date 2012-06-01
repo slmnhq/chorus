@@ -246,7 +246,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             entityId: this.model.get("id"),
             entityName: this.model.name(),
             entityType: "databaseObject",
-            workspaceId: this.model.get("workspace").id,
+            workspaceId: this.model.get("workspace") && this.model.get("workspace").id,
             allowWorkspaceAttachments: !!this.task.get("workspaceId"),
             attachVisualization: {
                 fileName: this.makeFilename(),
