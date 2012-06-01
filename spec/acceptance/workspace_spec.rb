@@ -16,6 +16,7 @@ resource "Workspace" do
   end
 
   put "/workspaces/:id" do
+    # TODO: this doesn't seem to actually put any data
     example_request "Update workspace details" do
       status.should == 200
     end
