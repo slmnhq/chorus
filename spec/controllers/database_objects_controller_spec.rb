@@ -17,7 +17,8 @@ describe DatabaseObjectsController do
     let!(:view) { FactoryGirl.create(:gpdb_view, :name => 'view1', :schema => schema) }
 
     before do
-      stub(GpdbDatabaseObject).refresh(instanceAccount, schema) { [] }
+      mock(GpdbDatabaseObject).refresh(instanceAccount, schema)
+      stub(GpdbDatabaseObject).add_metadata!(anything, instanceAccount)
     end
 
     it "should retrieve all db objects for a schema" do

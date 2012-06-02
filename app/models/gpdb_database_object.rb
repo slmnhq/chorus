@@ -1,32 +1,52 @@
 class GpdbDatabaseObject < ActiveRecord::Base
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :database_objects_count
   delegate :instance, :to => :schema
-
   validates_presence_of :name
 
-  DATABASE_OBJECTS_SQL = <<-SQL
-    SELECT
-      c.relkind AS type,
-      c.relname AS name,
-      d.description AS comment,
-      c.relhassubclass AS master_table,
-      e.definition AS definition
-    FROM
-      pg_catalog.pg_class c
-    LEFT JOIN
-      pg_description d
-      ON c.oid=d.objoid
-    LEFT JOIN
-      pg_catalog.pg_partitions p
-      ON c.relname = p.partitiontablename AND p.schemaname = :schema AND c.relhassubclass = 'f'
-    LEFT JOIN
-      pg_views e
-      ON c.relname=e.viewname AND e.schemaname = :schema
-    WHERE
-      c.relkind IN ('r', 'v') AND
-      ((c.relhassubclass = 't') OR (c.relhassubclass = 'f' AND p.partitiontablename IS NULL))
-      AND c.relnamespace IN (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = :schema);
-  SQL
+  attr_accessor :comment, :definition, :column_count
+
+  RELATIONS = Arel::Table.new("pg_catalog.pg_class")
+  DESCRIPTIONS = Arel::Table.new("pg_description")
+  SCHEMAS = Arel::Table.new("pg_namespace")
+  PARTITIONS = Arel::Table.new("pg_partitions")
+
+  def self.tables_and_views_in_schema(schema_name)
+    relations_in_schema(schema_name).where(RELATIONS[:relkind].in(['r', 'v']))
+  end
+
+  def self.database_objects(schema_name)
+    tables_and_views_in_schema(schema_name).
+      join(PARTITIONS, Arel::Nodes::OuterJoin).
+      on(
+        RELATIONS[:relname].eq(PARTITIONS[:partitiontablename]).
+        and(RELATIONS[:relhassubclass].eq('f')).
+        and(PARTITIONS[:schemaname].eq(schema_name))
+      ).
+      where(
+        RELATIONS[:relhassubclass].eq('t').or(PARTITIONS[:partitiontablename].eq(nil))
+      ).project(
+        RELATIONS[:relkind].as('type'),
+        RELATIONS[:relname].as('name'),
+        RELATIONS[:relhassubclass].as('master_table')
+      )
+  end
+
+  def self.comments_for_tables(schema_name, table_names)
+    relations_in_schema(schema_name).
+      where(RELATIONS[:relname].in(table_names)).
+      join(DESCRIPTIONS).
+      on(RELATIONS[:oid].
+      eq(DESCRIPTIONS[:objoid])).
+      project(
+        RELATIONS[:relname].as('object_name'),
+        DESCRIPTIONS[:description].as('comment')
+      )
+  end
+
+  def self.relations_in_schema(schema_name)
+    schema_ids = SCHEMAS.where(SCHEMAS[:nspname].eq(schema_name)).project(:oid)
+    RELATIONS.where(RELATIONS[:relnamespace].in(schema_ids))
+  end
 
   # From PostgresDBAccess.TableAndViewNamesQuery
   #     	sb.append("SELECT c.relname AS tableName, 'storage' AS storage, 'protocol' AS protocol, c.relkind AS type, c.relhassubclass AS masterTable , c.relnatts as columns ")
@@ -59,7 +79,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
 
   def self.refresh(account, schema)
     db_objects = schema.with_gpdb_connection(account) do |conn|
-      conn.select_all(sanitize_sql([DATABASE_OBJECTS_SQL, :schema => schema.name]))
+      conn.select_all(database_objects(schema.name).to_sql)
     end
 
     db_object_names = db_objects.map {|attrs| attrs['name']}
@@ -70,6 +90,20 @@ class GpdbDatabaseObject < ActiveRecord::Base
       klass = type == 'r' ? GpdbTable : GpdbView
       db_object = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
       db_object.update_attributes(attrs, :without_protection => true)
+    end
+  end
+
+  def self.add_metadata!(db_objects, account)
+    db_objects = db_objects.to_a
+    return if db_objects.empty?
+
+    schema = db_objects.first.schema
+    names  = db_objects.map(&:name)
+    result = schema.with_gpdb_connection(account) do |conn|
+      conn.select_all(comments_for_tables(schema.name, names).to_sql)
+    end
+    result.each do |hsh|
+      db_objects.detect { |r| r.name == hsh["object_name"] }.comment = hsh["comment"]
     end
   end
 
