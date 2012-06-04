@@ -12,7 +12,7 @@ class GpdbTable < GpdbDatabaseObject
            WHEN e.location is NULL THEN 'BASE_TABLE'
            WHEN position('gphdfs' in e.location[1]) > 0 THEN 'HD_EXT_TABLE'
            WHEN position('gpfdist' in e.location[1]) > 0 THEN 'EXT_TABLE'
-           ELSE 'UNKNOWN_TABLE_TYPE'
+           ELSE 'EXT_TABLE'
       END AS table_type
     FROM pg_namespace n
     LEFT JOIN pg_class c
@@ -38,11 +38,17 @@ class GpdbTable < GpdbDatabaseObject
     stats.rows = table_stats[0]["rows"]
     stats.columns = table_stats[0]["columns"]
     stats.description = table_stats[0]["description"]
-    stats.last_analyzed = Time.parse(table_stats[0]["last_analyzed"]).utc
+    stats.last_analyzed = analyzed_date(table_stats[0])
     stats.disk_size = table_stats[0]["disk_size"]
     stats.partition_count = table_stats[0]["partition_count"]
 
     stats
   end
 
+  def analyzed_date(table_stats)
+    analyzed_date = table_stats.fetch("last_analyzed", '')
+    if analyzed_date.present?
+      Time.parse(analyzed_date).utc
+    end
+  end
 end
