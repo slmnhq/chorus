@@ -39,6 +39,55 @@ describe " add an instance " do
     find('.instance_list').should have_content(new_instance_name)
   end
 
+  it "creates an instance with an invalid host and port" do
+    within("#facebox") do
+      wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
+      choose("register_existing_greenplum")
+      wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
+      within(".register_existing_greenplum") do
+        wait_until { find("input[name=name]").visible? }
+        wait_until { find("textarea[name=description]").visible? }
+        wait_until { find("input[name=host]").visible? }
+        wait_until { find("input[name=port]").visible? }
+        wait_until { find("input[name=dbUsername]").visible? }
+        wait_until { find("input[name=dbPassword]").visible? }
+
+        fill_in 'name', :with => "invalid_instance"
+        fill_in 'description', :with => "GPDB instance creation"
+        fill_in 'host', :with => "gillette.sf.pivotallabs.com"
+        fill_in 'port', :with => "2344"
+        fill_in 'dbUsername', :with => "gpadmin"
+        fill_in 'dbPassword', :with => "secret"
+        check("register_greenplum_shared")
+      end
+      click_button "Add Instance"
+      page.find('.errors').should have_content("could not connect to server")
+
+      within(".register_existing_greenplum") do
+        fill_in 'host', :with => "gillett.sf.pivotallabs.com"
+        fill_in 'port', :with => "5432"
+      end
+      click_button "Add Instance"
+      page.find('.errors').should have_content("could not translate host name")
+
+      within(".register_existing_greenplum") do
+        fill_in 'host', :with => "gillett.sf.pivotallabs.com"
+        fill_in 'port', :with => "2344"
+      end
+      click_button "Add Instance"
+      page.find('.errors').should have_content("could not translate host name")
+
+      within(".register_existing_greenplum")do
+        fill_in 'host', :with => "gillette.sf.pivotallabs.com"
+        fill_in 'port', :with => "5432"
+      end
+      click_button "Add Instance"
+    end
+    find('.instance_list').should have_content("invalid_instance")
+    visit("/#/instances")
+    find('.instance_list').should have_content("invalid_instance")
+  end
+
   xit "creates an Hadoop Instance" do
     # TODO blocked on having query service running for tests
     hadoop_instance_name = "hadoop_instance"
