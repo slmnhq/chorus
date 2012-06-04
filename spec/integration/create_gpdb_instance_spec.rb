@@ -6,7 +6,7 @@ describe " add an instance " do
     page.find("a.add.dialog").click
   end
 
-  xit "creates an instance" do
+  it "creates an instance" do
     new_instance_name = "GPDB_inst_sel_test#{Time.now.to_i}"
 
     within("#facebox") do
@@ -39,7 +39,7 @@ describe " add an instance " do
     find('.instance_list').should have_content(new_instance_name)
   end
 
-  xit "tries to create an instance with an invalid name" do
+  it "tries to create an instance with an invalid name" do
 
       within("#facebox") do
         wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
@@ -77,7 +77,7 @@ describe " add an instance " do
       find('.instance_list').should have_content("instance_name")
     end
 
-  xit "tries to create an instance with an invalid host and port" do
+  it "tries to create an instance with an invalid host and port" do
     within("#facebox") do
       wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
       choose("register_existing_greenplum")
