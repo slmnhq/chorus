@@ -35,6 +35,11 @@ Chorus::Application.routes.draw do
     resources :database_objects, :only => [:index]
   end
 
+  # TODO: Make it generally available for either views and tables
+  resources :tables, :only => [] do
+    resource :statistics, :only => :show
+  end
+
   resources :workspaces, :only => [:index, :create, :show, :update] do
     resources :members, :only => [:index, :create]
     resource :image, :only => [:update], :controller => :workspace_images

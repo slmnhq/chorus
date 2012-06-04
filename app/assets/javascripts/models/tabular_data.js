@@ -83,6 +83,7 @@ chorus.models.TabularData = chorus.models.Base.include(
         statistics: function() {
             if (!this._statistics) {
                 this._statistics = new chorus.models.DatabaseObjectStatistics({
+                    databaseObjectId: this.id,
                     instanceId: this.instance().id,
                     databaseName: this.database().name(),
                     schemaName: this.schema().name(),
