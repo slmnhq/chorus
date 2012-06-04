@@ -5,8 +5,8 @@ describe("chorus.views.InstanceIndexContentDetails", function() {
             newFixtures.instance.greenplum()
         ]);
         var hadoopInstances = new chorus.collections.HadoopInstanceSet([
-            newFixtures.instance.hadoop(),
-            newFixtures.instance.hadoop()
+            newFixtures.hadoopInstance(),
+            newFixtures.hadoopInstance()
         ]);
 
         this.view = new chorus.views.InstanceIndexContentDetails({greenplumInstances : greenplumInstances, hadoopInstances: hadoopInstances});

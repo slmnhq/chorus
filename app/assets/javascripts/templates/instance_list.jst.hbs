@@ -14,7 +14,7 @@
     <div class="details">{{t "instances.list.type.hdfs"}}</div>
     <ul class="list selectable">
         {{#each hadoop}}
-            <li class="instance" data-type="hadoop" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
+            <li class="instance" data-type="hadoop" data-hadoop-instance-id="{{id}}">{{renderTemplate "hadoop_instance" this}}</li>
         {{/each}}
     </ul>
     {{#unless hasHadoop}}

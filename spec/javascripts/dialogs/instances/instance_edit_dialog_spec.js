@@ -85,7 +85,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
 
         describe("when editing a hadoop instance", function() {
             beforeEach(function() {
-                this.dialog.model.set({ userName: "user", userGroups: "hadoop"})
+                this.dialog.model.set({ username: "user", groupList: "hadoop"})
                 this.dialog.model = new chorus.models.HadoopInstance(this.dialog.model.attributes);
                 this.dialog.render();
             });
@@ -111,13 +111,13 @@ describe("chorus.dialogs.InstanceEdit", function() {
             });
 
             it("has a pre-populated and enabled 'HDFS account' field", function() {
-                expect(this.dialog.$("input[name=userName]").val()).toBe("user");
-                expect(this.dialog.$("input[name=userName]").prop("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=username]").val()).toBe("user");
+                expect(this.dialog.$("input[name=username]").prop("disabled")).toBeFalsy();
             });
 
             it("has a pre-populated and enabled 'group list' field", function() {
-                expect(this.dialog.$("input[name=userGroups]").val()).toBe("hadoop");
-                expect(this.dialog.$("input[name=userGroups]").prop("disabled")).toBeFalsy();
+                expect(this.dialog.$("input[name=groupList]").val()).toBe("hadoop");
+                expect(this.dialog.$("input[name=groupList]").prop("disabled")).toBeFalsy();
             });
         });
     });
@@ -206,8 +206,8 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 this.dialog.$("input[name=name]").val("test3");
                 this.dialog.$("input[name=port]").val("8557");
                 this.dialog.$("input[name=host]").val("testhost3");
-                this.dialog.$("input[name=userName]").val("userName");
-                this.dialog.$("input[name=userGroups]").val("userGroups");
+                this.dialog.$("input[name=username]").val("username");
+                this.dialog.$("input[name=groupList]").val("groupList");
                 this.dialog.$("button[type=submit]").submit();
             });
 
@@ -215,8 +215,8 @@ describe("chorus.dialogs.InstanceEdit", function() {
                 expect(this.dialog.model.get("name")).toBe("test3");
                 expect(this.dialog.model.get("port")).toBe("8557");
                 expect(this.dialog.model.get("host")).toBe("testhost3");
-                expect(this.dialog.model.get("userName")).toBe("userName");
-                expect(this.dialog.model.get("userGroups")).toBe("userGroups");
+                expect(this.dialog.model.get("username")).toBe("username");
+                expect(this.dialog.model.get("groupList")).toBe("groupList");
                 expect(this.dialog.model.has("maintenanceDb")).toBeFalsy();
             });
         });

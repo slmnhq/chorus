@@ -28,18 +28,17 @@
         width: $host-width;
     }
 
-    label[name=userName], input[name=userName],
-    label[name=userGroups], input[name=userGroups]
+    .username, .group_list
     {
         display: inline-block;
         width: $account_width;
     }
 
-    label[name=userGroups], input[name=userGroups] {
+    .group_list {
         margin-left: $input-spacing;
     }
 
-    label[name=port], input[name=port] {
+    .port {
         width: $dialog-width - $host-width - 40px;
         margin-left: 4px;
         display: inline-block;

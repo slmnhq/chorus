@@ -27,6 +27,8 @@ window.fixtureDefinitions = {
 
     config: {},
 
+    hadoopInstance: {},
+
     image: {},
 
     instance: {

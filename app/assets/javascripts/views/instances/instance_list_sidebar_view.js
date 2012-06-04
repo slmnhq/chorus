@@ -16,19 +16,35 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         if (!this.model) {
             return {};
         }
-        var account = this.model.accountForCurrentUser();
-        return {
-            isGreenplum: this.model.isGreenplum(),
-            userHasAccount: account && account.has("id"),
-            userCanEditPermissions: this.canEditPermissions(),
-            userCanEditInstance: this.canEditInstance(),
-            instanceAccountsCount: this.instance.accounts().length,
-            editable: !this.instance.isFault() && !this.instance.isProvisioning(),
-            deleteable: this.instance.isFault() && this.instance.get("provision_type") == "create",
-            isProvisioning: this.instance.isProvisioning(),
-            isFault: this.instance.isFault(),
-            isOnline: this.instance.isOnline()
-        };
+
+        if(this.instance.constructorName != "HadoopInstance") {
+            var account = this.model.accountForCurrentUser();
+            return {
+                isGreenplum: this.model.isGreenplum(),
+                isHadoop: false,
+                userHasAccount: account && account.has("id"),
+                userCanEditPermissions: this.canEditPermissions(),
+                userCanEditInstance: this.canEditInstance(),
+                instanceAccountsCount: this.instance.accounts().length,
+                editable: !this.instance.isFault() && !this.instance.isProvisioning(),
+                deleteable: this.instance.isFault() && this.instance.get("provision_type") == "create",
+                isProvisioning: this.instance.isProvisioning(),
+                isFault: this.instance.isFault(),
+                isOnline: this.instance.isOnline()
+            };
+        } else {
+            return {
+                isHadoop: true,
+                isGreenplum: false,
+                userCanEditPermissions: false,
+                userCanEditInstance: true,
+                editable: !this.instance.isFault() && !this.instance.isProvisioning(),
+                deleteable: this.instance.isFault() && this.instance.get("provision_type") == "create",
+                isProvisioning: this.instance.isProvisioning(),
+                isFault: this.instance.isFault(),
+                isOnline: this.instance.isOnline()
+            };
+        }
     },
 
     setupSubviews: function() {
@@ -44,28 +60,35 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
 
     setInstance: function(instance) {
         this.resource = this.instance = this.model = instance;
-        var account = this.instance.accountForCurrentUser();
-        var instanceUsage = this.instance.usage();
 
+        this.resource.loaded = true;
         this.instance.activities().fetch();
-        this.instance.accounts().fetch();
 
-        account.fetchIfNotLoaded();
+
         this.requiredResources.reset();
-        this.requiredResources.push(this.instance.accounts());
-        this.requiredResources.push(account);
+        if(instance.constructorName != "HadoopInstance") {
+            this.instance.accounts().fetch();
+            var instanceUsage = this.instance.usage();
+            var account = this.instance.accountForCurrentUser();
+            account.fetchIfNotLoaded();
+            this.requiredResources.push(this.instance.accounts());
+            this.requiredResources.push(account);
+        }
 
         var update = _.debounce(_.bind(function() {
             this.updateWorkspaceUsage();
         }, this), 100);
 
         this.bindings.removeAll();
-        this.bindings.add(account, "change", this.render);
-        this.bindings.add(account, "fetchFailed", this.render);
-        this.bindings.add(this.resource, "change", this.render, this);
-        this.bindings.add(instanceUsage, "loaded", update, this);
-        this.bindings.add(instanceUsage, "fetchFailed", update, this);
 
+        if(this.instance.constructorName != "HadoopInstance") {
+            this.bindings.add(account, "change", this.render);
+            this.bindings.add(account, "fetchFailed", this.render);
+            this.bindings.add(instanceUsage, "loaded", update, this);
+            this.bindings.add(instanceUsage, "fetchFailed", update, this);
+        }
+
+        this.bindings.add(this.resource, "change", this.render, this);
         this.render();
     },
 
@@ -73,7 +96,10 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         this._super("postRender");
         if (this.instance) {
             this.$("a.dialog").data("instance", this.instance);
-            this.instance.usage().fetch();
+            console.log(this.instance.constructorName);
+            if(this.instance.constructorName != "HadoopInstance") {
+                this.instance.usage().fetch();
+            }
         }
     },
 

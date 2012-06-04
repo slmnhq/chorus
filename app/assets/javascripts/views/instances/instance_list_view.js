@@ -10,28 +10,30 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         this.greenplumInstances = this.options.greenplumInstances;
         this.hadoopInstances = this.options.hadoopInstances;
 
+        this.bindings.add(this.greenplumInstances, "change", this.render);
+        this.bindings.add(this.hadoopInstances, "change", this.render);
         this.bindings.add(this.greenplumInstances, "reset", this.render);
         this.bindings.add(this.hadoopInstances, "reset", this.render);
     },
 
     setup: function() {
-        chorus.PageEvents.subscribe("instance:added", function (id) {
+        chorus.PageEvents.subscribe("instance:added", function (instance) {
             this.greenplumInstances.fetchAll();
             this.hadoopInstances.fetchAll();
-            this.selectedInstanceId = id;
+            this.selectedInstance = instance;
         }, this);
         this.bindings.add(this.greenplumInstances, "remove", this.instanceDestroyed);
         this.bindings.add(this.hadoopInstances, "remove", this.instanceDestroyed);
     },
 
     instanceDestroyed: function(model) {
-        if (this.selectedInstanceId === model.get("id")) delete this.selectedInstanceId;
+        if (this.selectedInstance.get("id") === model.get("id")) delete this.selectedInstance;
         this.render();
     },
 
     postRender: function() {
-        if (this.selectedInstanceId) {
-            this.$('.instance_provider li[data-instance-id= ' + this.selectedInstanceId + ']').click();
+        if (this.selectedInstance) {
+            this.$('.instance_provider li[' + this.selectedInstance.dataBinding + '=' + this.selectedInstance.get("id") + ']').click();
         } else {
             this.$('.instance_provider li:first').click();
         }
@@ -52,8 +54,15 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         target.addClass("selected");
 
         var collection = (target.data("type") === "hadoop") ? this.hadoopInstances : this.greenplumInstances;
-        var instance = collection.get(target.data("instanceId"));
-        this.selectedInstanceId = instance.get("id");
-        chorus.PageEvents.broadcast("instance:selected", instance);
+
+        if(target.data("instanceId")) {
+            var instance = collection.get(target.data("instanceId"))
+            this.selectedInstance = instance;
+            chorus.PageEvents.broadcast("instance:selected", instance);
+        } else {
+            var hadoopInstance = collection.get(target.data("hadoopInstanceId"));
+            this.selectedInstance = hadoopInstance;
+            chorus.PageEvents.broadcast("instance:selected", hadoopInstance);
+        }
     }
 });

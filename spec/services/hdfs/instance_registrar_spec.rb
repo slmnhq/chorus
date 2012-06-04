@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Hdfs::InstanceRegistrar do
   let(:owner) { FactoryGirl.create(:user) }
+  let(:hadoop_version) { "0.1.2.3" }
   let(:instance_attributes) do
     {
       :name => "new",
@@ -19,8 +20,6 @@ describe Hdfs::InstanceRegistrar do
 
   describe ".create!" do
     context "when connection succeeds but instance is invalid" do
-      let(:hadoop_version) { "0.1.2.3" }
-
       it "does not save the object" do
         expect {
           Hdfs::InstanceRegistrar.create!({}, owner)
@@ -29,8 +28,6 @@ describe Hdfs::InstanceRegistrar do
     end
 
     context "when a connection is made using some hadoop version" do
-      let(:hadoop_version) { "0.1.2.3" }
-
       it "save the instance with right version" do
         instance = Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
 
@@ -49,6 +46,41 @@ describe Hdfs::InstanceRegistrar do
         cached_instance.description.should == instance_attributes[:description]
         cached_instance.username.should == instance_attributes[:username]
         cached_instance.group_list.should == instance_attributes[:group_list]
+      end
+    end
+  end
+
+  describe ".update!" do
+    let(:hadoop_instance) { HadoopInstance.new(instance_attributes) }
+
+    context "invalid changes to the instance are made" do
+      before do
+        hadoop_instance.owner = owner
+        hadoop_instance.save
+
+        instance_attributes[:name] = ''
+      end
+
+      it "raises an exception" do
+        expect do
+          described_class.update!(hadoop_instance.id, instance_attributes)
+        end.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context "valid changes to the instance are made" do
+      before do
+        hadoop_instance.owner = owner
+        hadoop_instance.save
+
+        instance_attributes[:username] = "another_username"
+      end
+
+      it "raises an exception" do
+        described_class.update!(hadoop_instance.id, instance_attributes)
+        hadoop_instance.reload
+
+        hadoop_instance.username.should == 'another_username'
       end
     end
   end

@@ -8,9 +8,9 @@ describe("chorus.presenters.InstanceList", function() {
         ]);
 
         hadoopInstances = new chorus.collections.HadoopInstanceSet([
-            newFixtures.instance.hadoop({ state: "offline" }),
-            newFixtures.instance.hadoop({ description: "special instance", state: "online" }),
-            newFixtures.instance.hadoop({ state: null })
+            newFixtures.hadoopInstance({ state: "offline" }),
+            newFixtures.hadoopInstance({ description: "special instance", state: "online" }),
+            newFixtures.hadoopInstance({ state: null })
         ]);
 
         presenter = new chorus.presenters.InstanceList({ greenplum: greenplumInstances, hadoop: hadoopInstances });

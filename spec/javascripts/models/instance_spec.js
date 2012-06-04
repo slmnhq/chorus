@@ -244,7 +244,7 @@ describe("chorus.models.Instance", function() {
     describe("#isHadoop", function() {
         var instance;
         beforeEach(function() {
-            instance = newFixtures.instance.hadoop();
+            instance = newFixtures.hadoopInstance();
         });
 
         it("returns true for hadoop instances", function() {
@@ -437,12 +437,6 @@ describe("chorus.models.Instance", function() {
 
         it("returns false when the instances's usage is not loaded", function() {
             this.instance.usage().unset("workspaces");
-            expect(this.instance.hasWorkspaceUsageInfo()).toBeFalsy();
-        });
-
-        it("returns false for hadoop instances", function() {
-            this.instance = newFixtures.instance.hadoop();
-            this.instance.usage().set({workspaces: []});
             expect(this.instance.hasWorkspaceUsageInfo()).toBeFalsy();
         });
     });

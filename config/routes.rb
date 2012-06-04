@@ -9,7 +9,7 @@ Chorus::Application.routes.draw do
     resource :image, :only => [:update], :controller => :user_images
   end
 
-  resources :hadoop_instances, :only => [:create, :index, :show] do
+  resources :hadoop_instances, :only => [:create, :index, :show, :update] do
     scope :module => 'hdfs' do
       resources :files, :only => [:show, :index], :constraints => {:id => /.*/}
       resources :contents, :only => :show, :constraints => {:id => /.*/}

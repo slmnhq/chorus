@@ -3,7 +3,7 @@ chorus.views.InstanceConfigurationDetails = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            dbUsername: this.model.isShared() && this.model.accountForOwner().get("dbUsername"),
+            dbUsername: this.model.isShared && this.model.isShared() && this.model.accountForOwner().get("dbUsername"),
             version: this.model.version()
         };
     }

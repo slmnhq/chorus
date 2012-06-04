@@ -59,8 +59,9 @@
                 <li><a class="alert delete_instance" href="#" data-alert="InstanceDelete">{{t "instances.sidebar.delete_instance"}}</a></li>
             {{/if}}
         {{/if}}
-        <li class="workspace_usage_container"><span class="disabled workspace_usage">{{t "instances.sidebar.usage_loading"}}</span></li>
-
+        {{#if isGreenplum}}
+            <li class="workspace_usage_container"><span class="disabled workspace_usage">{{t "instances.sidebar.usage_loading"}}</span></li>
+        {{/if}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="instance" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
     </ul>
 </div>

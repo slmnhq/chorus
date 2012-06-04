@@ -79,8 +79,8 @@ describe("chorus.pages.InstanceIndexPage", function() {
             describe("when the hadoopInstances are fetched", function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.hadoopInstanceSet, [
-                        newFixtures.instance.hadoop(),
-                        newFixtures.instance.hadoop({id: 123456})
+                        newFixtures.hadoopInstance(),
+                        newFixtures.hadoopInstance({id: 123456})
                     ]);
                 });
 

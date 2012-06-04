@@ -271,6 +271,10 @@ describe("chorus.views.InstanceListSidebar", function() {
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).not.toExist();
                 });
+
+                it("shows shared account information", function() {
+                    expect(this.view.$(".account_info")).toContainTranslation("instances.sidebar.is_shared_account");
+                });
             });
 
             context("when the instance does not have a shared account", function() {

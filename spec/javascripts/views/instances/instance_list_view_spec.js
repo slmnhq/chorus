@@ -34,9 +34,9 @@ describe("chorus.views.InstanceList", function() {
             ]);
 
             this.server.completeFetchFor(this.hadoopInstances, [
-                newFixtures.instance.hadoop({name : "Hadoop9", id: "h9"}),
-                newFixtures.instance.hadoop({name : "hadoop1", id: "h1"}),
-                newFixtures.instance.hadoop({name : "Hadoop10", id: "h10"})
+                newFixtures.hadoopInstance({name : "Hadoop9", id: "h9"}),
+                newFixtures.hadoopInstance({name : "hadoop1", id: "h1"}),
+                newFixtures.hadoopInstance({name : "Hadoop10", id: "h10"})
             ]);
         });
 
@@ -153,7 +153,7 @@ describe("chorus.views.InstanceList", function() {
                 this.newInstance = newFixtures.instance.greenplum({id: "1234567"});
                 spyOn(this.view.greenplumInstances, "fetchAll");
                 spyOn(this.view.hadoopInstances, "fetchAll");
-                chorus.PageEvents.broadcast("instance:added", "1234567");
+                chorus.PageEvents.broadcast("instance:added", this.newInstance);
             });
 
             it("re-fetches the greenplum and hadoop instances", function() {

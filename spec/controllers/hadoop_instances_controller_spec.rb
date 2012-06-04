@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe HadoopInstancesController do
+  ignore_authorization!
+
   before do
     @user = FactoryGirl.create :user
     log_in @user
@@ -36,6 +38,38 @@ describe HadoopInstancesController do
 
       it "responds with validation errors" do
         post :create, :hadoop_instance => invalid_attributes
+        response.code.should == "422"
+      end
+    end
+  end
+
+  describe "#update" do
+    context "with valid attributes" do
+      let(:attributes) { {'name' => 'new_name'} }
+      let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
+
+      before do
+        mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, attributes)
+      end
+
+      it "responds with validation error" do
+        put :update, :id => hadoop_instance.id, :hadoop_instance => attributes
+        response.code.should == "200"
+      end
+    end
+
+    context "with invalid attributes" do
+      let(:invalid_attributes) { {'name' => ''} }
+      let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
+
+      before do
+        mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, invalid_attributes) do
+          raise(ActiveRecord::RecordInvalid.new(hadoop_instance))
+        end
+      end
+
+      it "responds with validation error" do
+        put :update, :id => hadoop_instance.id, :hadoop_instance => invalid_attributes
         response.code.should == "422"
       end
     end

@@ -33,12 +33,12 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
             description: this.$("textarea[name=description]").val().trim(),
             host: this.$("input[name=host]").val(),
             port: this.$("input[name=port]").val(),
-            userName: this.$("input[name=userName]").val(),
-            userGroups: this.$("input[name=userGroups]").val(),
+            username: this.$("input[name=username]").val(),
+            groupList: this.$("input[name=groupList]").val(),
             provisionType: this.model.get("provisionType")
         };
 
-        _(["size", "maintenanceDb", "userName", "userGroups"]).each(function(name) {
+        _(["size", "maintenanceDb", "username", "groupList"]).each(function(name) {
             var input = this.$("input[name=" + name + "]")
             if (input) {
                 attrs[name] = input.val();

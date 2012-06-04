@@ -1,0 +1,14 @@
+<span class="spacer_left"></span>
+<div class="images">
+    <img class="state" src="{{stateUrl}}" title="{{stateText}}"/>
+    <img class="provider" src="{{providerUrl}}"/>
+</div>
+<div class="instance_details">
+    {{#ifAny isProvisioning isFault}}
+        <span class="name">{{name}}</span>
+    {{else}}
+        <a class="name" href="{{showUrl}}">{{name}}</a>
+    {{/ifAny}}
+    <div class="description">{{description}}</div>
+</div>
+<span class="spacer_right"></span>

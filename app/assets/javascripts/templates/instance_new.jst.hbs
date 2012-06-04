@@ -66,10 +66,10 @@
         <input type="text" name="host"/>
         <input type="text" name="port"/>
 
-        <label class="required" name="userName">{{t "instances.dialog.hadoop_account"}}</label>
-        <label class="required" name="userGroups">{{t "instances.dialog.hadoop_group_list"}}</label>
-        <input type="text" name="userName" maxlength="255"/>
-        <input type="text" name="userGroups" maxlength="255"/>
+        <label class="username required" name="username">{{t "instances.dialog.hadoop_account"}}</label>
+        <label class="group_list required" name="groupList">{{t "instances.dialog.hadoop_group_list"}}</label>
+        <input class="username" type="text" name="username" maxlength="255"/>
+        <input class="group_list" type="text" name="groupList" maxlength="255"/>
     </form></div>
 </fieldset>
 

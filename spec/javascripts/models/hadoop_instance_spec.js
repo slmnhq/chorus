@@ -4,12 +4,12 @@ describe("chorus.models.HadoopInstance", function() {
         this.attrs = {};
     });
 
-    it("inherits from Instance", function() {
-        expect(this.model).toBeA(chorus.models.Instance);
-    });
-
     it("has the right url", function() {
         expect(this.model.url()).toBe("/hadoop_instances/123");
+    });
+
+    it("is shared", function() {
+        expect(this.model.get("shared")).toBeTruthy();
     });
 
     it("has the right provider icon url", function() {
@@ -20,7 +20,7 @@ describe("chorus.models.HadoopInstance", function() {
         expect(this.model.showUrl()).toBe("#/hadoop_instances/" + this.model.get('id') + "/browse/");
     });
 
-    _.each(["name", "host", "userName", "userGroups", "port"], function(attr) {
+    _.each(["name", "host", "username", "groupList", "port"], function(attr) {
         it("requires " + attr, function() {
             this.attrs[attr] = "";
             expect(this.model.performValidation(this.attrs)).toBeFalsy();

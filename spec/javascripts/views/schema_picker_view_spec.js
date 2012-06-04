@@ -90,7 +90,7 @@ describe("chorus.views.SchemaPicker", function() {
                 it("does not add Hadoop instances to the instance list", function() {
                     this.server.completeFetchAllFor(this.view.instances, [
                         newFixtures.instance.greenplum(),
-                        newFixtures.instance.hadoop(),
+                        newFixtures.hadoopInstance(),
                         newFixtures.instance.greenplum()
                     ]);
                     var options = this.view.$(".instance select option");
