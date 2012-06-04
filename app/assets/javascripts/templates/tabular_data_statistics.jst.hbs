@@ -29,12 +29,12 @@
                 <div class="key">{{t "dataset.statistics.last_analyzed_time"}}</div>
                 <div class="value" title="{{relativeTimestamp statistics.lastAnalyzedTime}}">{{relativeTimestamp statistics.lastAnalyzedTime}}</div>
             </div>
-            {{#if statistics.rows}}
-            <div class="pair rows">
-                <div class="key">{{t "dataset.statistics.rows"}}</div>
-                <div class="value" title="{{statistics.rows}}">{{statistics.rows}}</div>
-            </div>
-            {{/if}}
+                {{#if statistics.rows}}
+                <div class="pair rows">
+                    <div class="key">{{t "dataset.statistics.rows"}}</div>
+                    <div class="value" title="{{statistics.rows}}">{{statistics.rows}}</div>
+                </div>
+                {{/if}}
             {{/if}}
             {{#if statistics.onDiskSize}}
             <div class="pair size">

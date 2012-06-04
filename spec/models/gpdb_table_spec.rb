@@ -7,22 +7,21 @@ describe GpdbTable do
     let(:table_stats_sql) { ActiveRecord::Base.send(:sanitize_sql, [GpdbTable::TABLE_STATS_SQL, :schema => table.schema.name, :table_name => table.name], nil) }
 
     before do
-      stub_gpdb(account, table_stats_sql => [{'table_name' => "clv_data", "rows" => 100, "columns" => 3,
-                                              "master_table" => "t", "description" => "a table",
+      stub_gpdb(account, table_stats_sql => [{'table_name' => "clv_data", "table_type" => "BASE_TABLE", "rows" => 100, "columns" => 3,
+                                              "description" => "a table",
                                               "last_analyzed" => "2012-03-22 21:35:54.148935+00",
-                                              "protocol" => nil, "disk_size" => "160 kB", "partition_count" => 10}] )
+                                              "disk_size" => "160 kB", "partition_count" => 10}] )
     end
 
     it "return stats for a table" do
       stats = table.stats(account)
 
       stats.table_name.should == "clv_data"
+      stats.table_type.should == "BASE_TABLE"
       stats.rows.should == 100
       stats.columns.should == 3
-      stats.master_table.should == true
       stats.description.should == "a table"
-      stats.last_analyzed.should == "2012-03-22 21:35:54.148935+00"
-      stats.protocol.should == nil
+      stats.last_analyzed.to_s.should == Time.utc(2012, 03, 22, 21, 35, 54).to_s
       stats.disk_size.should == "160 kB"
       stats.partition_count.should == 10
     end

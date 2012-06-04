@@ -61,6 +61,17 @@ FactoryGirl.define do
     association :schema, :factory => :gpdb_schema
   end
 
+  factory :gpdb_table_statistics do
+    table_name 'A1000'
+    table_type 'BASE_TABLE'
+    rows 1000
+    columns 5
+    description 'This is a nice table.'
+    last_analyzed Time.utc(2012, 10, 20, 10, 30, 00)
+    disk_size 2048
+    partition_count 0
+  end
+
   factory :workspace do
     sequence(:name) { |n| "workspace#{n}" }
     owner
