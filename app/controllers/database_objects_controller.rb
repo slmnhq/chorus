@@ -13,4 +13,9 @@ class DatabaseObjectsController < GpdbController
 
     present db_objects
   end
+
+  def show
+    table = GpdbDatabaseObject.find(params[:id])
+    present table
+  end
 end

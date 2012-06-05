@@ -1,13 +1,14 @@
 class GpdbColumnPresenter < Presenter
-  delegate :data_type, :name, :to => :model
+  delegate :name, :data_type, :description, :to => :model
 
   def to_hash
     {
-      :name => name,
-      :type_category => type_category
+      :name => h(name),
+      :type_category => type_category,
+      :description => h(description)
     }
   end
-
+  
   def type_category
     case data_type
     when /\[\]/, "time with time zone"

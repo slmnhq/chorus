@@ -54,4 +54,20 @@ describe DatabaseObjectsController do
       decoded_response.first.object_name.should == 'view1'
     end
   end
+  context "#show" do
+    let(:instance) { FactoryGirl.create(:instance, :owner_id => user.id) }
+    let(:instanceAccount) { FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id) }
+
+    let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance, :name => "database1") }
+    let(:schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema1', :database => database) }
+    let!(:table) { FactoryGirl.create(:gpdb_table, :name => 'table1', :schema => schema) }
+
+    it "should retrieve the db object for a schema" do
+      get :show, :id => table.to_param
+
+      response.code.should == "200"
+      decoded_response.object_name.should == table.name
+      decoded_response.object_type.should == "TABLE"
+    end
+  end
 end

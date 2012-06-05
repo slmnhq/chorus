@@ -40,6 +40,10 @@ Chorus::Application.routes.draw do
     resource :statistics, :only => :show
     resources :previews, :only => [:create]
   end
+  
+  resources :database_objects, :only => [:show] do
+    resources :columns, :only=> [:index], :controller => 'column'
+  end
 
   resources :workspaces, :only => [:index, :create, :show, :update] do
     resources :members, :only => [:index, :create]

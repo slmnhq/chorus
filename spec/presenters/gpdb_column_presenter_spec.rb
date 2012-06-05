@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe GpdbColumnPresenter, :type => :view do
-  let(:gpdb_column) { GpdbColumn.new(:name => "column1", :data_type => type_string) }
+  let(:gpdb_column) { GpdbColumn.new(:name => "column1", :data_type => type_string, :description => 'nothing') }
   subject { GpdbColumnPresenter.new(gpdb_column, view) }
 
   describe "#to_hash" do
@@ -11,6 +11,7 @@ describe GpdbColumnPresenter, :type => :view do
       hash = subject.to_hash
       hash[:name].should == "column1"
       hash[:type_category].should == "WHOLE_NUMBER"
+      hash[:description].should == "nothing"
     end
   end
 
