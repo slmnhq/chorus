@@ -15,7 +15,7 @@ describe "creating an instance credential" do
     visit("/#/instances")
     wait_until { current_route == "/instances" && page.has_selector?("a[data-dialog=InstancePermissions]") }
     within(".instance_provider") do
-      page.find("li[data-instance-id='#{instance_id}']").click
+      page.find("li[data-greenplum-instance-id='#{instance_id}']").click
     end
     click_link "Edit"
     within("#facebox") do

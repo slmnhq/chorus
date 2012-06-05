@@ -1,0 +1,32 @@
+{
+    "response": {
+        "id": "1",
+        "name": "Foo",
+        "description": "description for jasmine",
+        "expire": null,
+        "freeSpace": null,
+        "hasCredentials": true,
+        "host": "localhost",
+        "instance_id": "5",
+        "instance_provider": "Greenplum Database",
+        "instanceVersion": null,
+        "isDeleted": false,
+        "lastCheck": null,
+        "owner": {
+            "id": 1,
+            "admin": true,
+            "username": "edcadmin",
+            "first_name": "EDC",
+            "last_name": "Admin",
+            "email": "edcadmin@greenplum.com"
+        },
+        "port": "8020",
+        "provisionName": null,
+        "provision_type": "register",
+        "shared": true,
+        "size": null,
+        "state": "online",
+        "totalObject": null,
+        "maintenance_db": "foo"
+    }
+}

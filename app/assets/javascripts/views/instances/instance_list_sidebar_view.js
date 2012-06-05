@@ -96,7 +96,6 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
         this._super("postRender");
         if (this.instance) {
             this.$("a.dialog").data("instance", this.instance);
-            console.log(this.instance.constructorName);
             if(this.instance.constructorName != "HadoopInstance") {
                 this.instance.usage().fetch();
             }

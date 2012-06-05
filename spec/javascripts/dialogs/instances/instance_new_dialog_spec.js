@@ -1,4 +1,4 @@
-describe("chorus.dialogs.InstanceNew", function() {
+describe("chorus.dialogs.InstancesNew", function() {
     beforeEach(function() {
         this.launchElement = $("<button/>");
         this.dialog = new chorus.dialogs.InstancesNew({launchElement: this.launchElement});

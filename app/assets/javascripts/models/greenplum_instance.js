@@ -19,6 +19,7 @@
         showUrlTemplate: "instances/{{id}}/databases",
 
         entityType: "instance",
+        parameterWrapper: "instance",
 
         dataBinding: 'data-greenplum-instance-id',
 
