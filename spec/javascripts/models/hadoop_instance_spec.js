@@ -20,6 +20,14 @@ describe("chorus.models.HadoopInstance", function() {
         expect(this.model.showUrl()).toBe("#/hadoop_instances/" + this.model.get('id') + "/browse/");
     });
 
+    it("returns true for isHadoop", function() {
+        expect(this.model.isHadoop()).toBeTruthy();
+    });
+
+    it("returns false for isGreenplum", function() {
+        expect(this.model.isGreenplum()).toBeFalsy();
+    });
+
     _.each(["name", "host", "username", "groupList", "port"], function(attr) {
         it("requires " + attr, function() {
             this.attrs[attr] = "";
@@ -36,4 +44,11 @@ describe("chorus.models.HadoopInstance", function() {
             expect(entries.attributes.hadoopInstance.id).toBe(this.model.get("id"));
         });
     });
+
+    describe("#providerIconUrl", function() {
+        it("returns the right url for hadoop instances", function() {
+            expect(this.model.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");
+        });
+    });
+
 });

@@ -37,7 +37,7 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
                 isHadoop: true,
                 isGreenplum: false,
                 userCanEditPermissions: false,
-                userCanEditInstance: true,
+                userCanEditInstance: this.canEditInstance(),
                 editable: !this.instance.isFault() && !this.instance.isProvisioning(),
                 deleteable: this.instance.isFault() && this.instance.get("provision_type") == "create",
                 isProvisioning: this.instance.isProvisioning(),

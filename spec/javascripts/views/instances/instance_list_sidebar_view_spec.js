@@ -89,10 +89,12 @@ describe("chorus.views.InstanceListSidebar", function() {
                 context("when the instance is a hadoop instance", function() {
                     beforeEach(function() {
                         setLoggedInUser({ username: "benjamin", admin: false});
-                        this.instance.set({
-                            owner: {id: chorus.session.user().get('id')},
-                            instanceProvider: "Hadoop"
+                        this.instance = newFixtures.hadoopInstance({
+                            name: "Harry's House of Glamour",
+                            instanceVersion: "99.999",
+                            owner: {id: chorus.session.user().get('id')}
                         });
+                        chorus.PageEvents.broadcast("instance:selected", this.instance);
                         this.view.render();
                     });
 
@@ -425,17 +427,6 @@ describe("chorus.views.InstanceListSidebar", function() {
                         expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: 2});
                     });
                 });
-
-                context("when the instance is a hadoop instance", function() {
-                    beforeEach(function() {
-                        this.view.instance.set({instanceProvider: "Hadoop"});
-                        this.instance.usage().trigger("loaded");
-                    });
-
-                    it("does not display workspace usage information", function() {
-                        expect(this.view.$(".workspace_usage")).not.toExist();
-                    });
-                })
             });
         });
 

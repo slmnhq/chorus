@@ -11,43 +11,6 @@ describe("chorus.models.GreenplumInstance", function() {
         expect(this.instance.url()).toBe("/instances/" + this.instance.get('id'));
     });
 
-    describe("#stateIconUrl and #stateText", function() {
-        it("works for 'offline' instances", function() {
-            this.instance.set({ state: "offline" });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/unknown.png");
-            expect(this.instance.stateText()).toMatchTranslation("instances.state.offline");
-        });
-
-        it("works for online instances", function() {
-            this.instance.set({ state: "online" });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/green.png");
-            expect(this.instance.stateText()).toMatchTranslation("instances.state.online");
-        });
-
-        it("works for other instances", function() {
-            this.instance.set({ state: null });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/unknown.png");
-            expect(this.instance.stateText()).toMatchTranslation("instances.state.unknown");
-        });
-    });
-
-    describe("#providerIconUrl", function() {
-        it("returns the right url for greenplum instances", function() {
-            this.instance.set({ instanceProvider: "Greenplum Database" });
-            expect(this.instance.providerIconUrl()).toBe("/images/instances/greenplum_instance.png");
-        });
-
-        it("returns the right url for hadoop instances", function() {
-            this.instance.set({ instanceProvider: "Hadoop" });
-            expect(this.instance.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");
-        });
-
-        it("returns the right url for other instances", function() {
-            this.instance.set({ instanceProvider: "Something Else" });
-            expect(this.instance.providerIconUrl()).toBe("/images/instances/other_instance.png");
-        });
-    });
-
     describe(".aurora", function() {
         beforeEach(function() {
             this.aurora = chorus.models.GreenplumInstance.aurora();
@@ -79,32 +42,6 @@ describe("chorus.models.GreenplumInstance", function() {
         it("memoizes", function() {
             expect(this.templates).toBe(chorus.models.GreenplumInstance.auroraTemplates());
         });
-    });
-
-    describe("#owner", function() {
-        it("returns a user", function() {
-            var owner = this.instance.owner();
-            expect(owner.get("id")).toBe(this.instance.get("owner").id);
-            expect(owner.get("username")).toBe("edcadmin");
-            expect(owner.displayName()).toBe("EDC Admin");
-        })
-    });
-
-    describe("#isOwner", function() {
-        it("returns true if object has same id", function() {
-            var owner = this.instance.owner();
-            var otherOwnerUser = newFixtures.user({id: owner.get('id')});
-            expect(this.instance.isOwner(otherOwnerUser)).toBeTruthy();
-        })
-        it("returns false if id is different", function() {
-            var otherOwnerUser = newFixtures.user({id: 'notanowner'});
-            expect(this.instance.isOwner(otherOwnerUser)).toBeFalsy();
-        })
-        it("returns false if object is of different type", function() {
-            var owner = this.instance.owner();
-            var brokenParameter = newFixtures.greenplumInstance.greenplum({id: owner.get('id')});
-            expect(this.instance.isOwner(brokenParameter)).toBeFalsy();
-        })
     });
 
     describe("#accountForUser", function() {
@@ -226,45 +163,8 @@ describe("chorus.models.GreenplumInstance", function() {
     })
 
     describe("#isGreenplum", function() {
-        var instance;
-        beforeEach(function() {
-            instance = newFixtures.greenplumInstance.greenplum();
-        });
-
         it("returns true for greenplum instances", function() {
-            expect(instance.isGreenplum()).toBeTruthy();
-        });
-
-        it("returns false otherwise", function() {
-            instance.set({instanceProvider: "somethingElse"});
-            expect(instance.isGreenplum()).toBeFalsy();
-        });
-    });
-
-    describe("#isHadoop", function() {
-        var instance;
-        beforeEach(function() {
-            instance = newFixtures.hadoopInstance();
-        });
-
-        it("returns true for hadoop instances", function() {
-            expect(instance.isHadoop()).toBeTruthy();
-        });
-
-        it("returns false otherwise", function() {
-            instance.set({instanceProvider: "somethingElse"});
-            expect(instance.isHadoop()).toBeFalsy();
-        });
-    });
-
-    describe("#version", function() {
-        var instance;
-        beforeEach(function() {
-            instance = newFixtures.greenplumInstance.greenplum({ instanceVersion: "1234" });
-        });
-
-        it("returns the correct version number", function() {
-            expect(instance.version()).toBe("1234");
+            expect(this.instance.isGreenplum()).toBeTruthy();
         });
     });
 
@@ -452,4 +352,11 @@ describe("chorus.models.GreenplumInstance", function() {
         });
 
     });
+
+    describe("#providerIconUrl", function() {
+        it("returns the right url for greenplum instances", function() {
+            expect(this.instance.providerIconUrl()).toBe("/images/instances/greenplum_instance.png");
+        });
+    });
+
 });

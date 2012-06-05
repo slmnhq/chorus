@@ -51,6 +51,7 @@
 //= require dialogs/tabular_data/new_table_import_csv
 //= require models/tabular_data
 //= require models/dataset
+//= require models/instance
 //= require models/greenplum_instance
 //= require models/tasks/task
 //= require models/tasks/chart_task
