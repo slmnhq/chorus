@@ -1,4 +1,5 @@
 chorus.models.ChartTask = chorus.models.Task.extend({
+    constructorName: "ChartTask",
     taskType: "getChartData",
 
     name: function() {
@@ -12,12 +13,19 @@ chorus.models.ChartTask = chorus.models.Task.extend({
         }, {silent: true});
         if (this.tabularData.get("workspace")) {
             this.set({
-                workspaceId: this.tabularData.get("workspace").id,
+                workspaceId: this.tabularData.get("workspace").id
             }, {silent: true});
         }
         this.unset("tabularData");
         this._super("initialize", arguments);
         this.set({ "chart[type]": this.chartType });
+    },
+
+    workspace: function() {
+        if (this.get("workspaceId")) {
+            this._workspace || (this._workspace = new chorus.models.Workspace({ id: this.get("workspaceId") }));
+            return this._workspace;
+        }
     },
 
     beforeSave: function() {

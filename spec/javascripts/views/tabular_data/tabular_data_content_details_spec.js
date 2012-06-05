@@ -30,6 +30,12 @@ describe("chorus.views.TabularDataContentDetails", function() {
             expect(this.view.$(".column_count .preview").text().trim()).toMatchTranslation("dataset.data_preview");
         })
 
+        it("sets up the result console to show the dataset download dialog", function() {
+            var console = this.view.resultsConsole;
+            expect(console.tabularData).toBe(this.tabularData);
+            expect(console.options.showDownloadDialog).toBeTruthy();
+        });
+
         it("hides the filters div", function() {
             expect(this.view.$(".filters")).toHaveClass("hidden");
         });
@@ -119,6 +125,14 @@ describe("chorus.views.TabularDataContentDetails", function() {
                 describe("data preview bar", function() {
                     it("should display a close button", function() {
                         expect(this.view.$(".data_preview .close")).toExist();
+                    })
+
+                    it("should display an expander", function() {
+                        expect(this.view.$(".data_preview .expander_button")).toExist();
+                    })
+
+                    it("should display a resize area", function() {
+                        expect(this.view.$(".data_preview .minimize")).toExist();
                     })
 
                     context("when the close button is clicked", function() {
@@ -277,7 +291,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
                     });
 
                     it("broadcasts cancel:visualization", function() {
-                       expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("cancel:visualization");
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("cancel:visualization");
                     });
                 })
 
@@ -710,7 +724,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
             });
 
             it("cleans up the old chartConfig", function() {
-               expect(this.originalChartConfig.cleanup).toHaveBeenCalled();
+                expect(this.originalChartConfig.cleanup).toHaveBeenCalled();
             });
 
             it("renders a visualization configuration view for the given chart type", function() {

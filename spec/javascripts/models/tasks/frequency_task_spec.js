@@ -31,14 +31,14 @@ describe("chorus.models.FrequencyTask", function() {
             this.model.save();
         });
 
-        it("renames the 'yAxis' field to 'chart[yAxis]' as required by the api", function() {
+        it("renames the 'yAxis' field required by the api", function() {
             var request = this.server.lastCreate();
-            expect(request.params()['chart[y_axis]']).toBe("height");
+            expect(request.params()['chart_task[y_axis]']).toBe("height");
         });
 
-        it("renames the 'bins' field to 'chart[bins]' as required by the api", function() {
+        it("renames the 'bins' field as required by the api", function() {
             var request = this.server.lastCreate();
-            expect(request.params()['chart[bins]']).toBe("23");
+            expect(request.params()['chart_task[bins]']).toBe("23");
         })
     });
 })

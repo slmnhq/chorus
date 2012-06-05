@@ -3,7 +3,7 @@ module Jasmine
     def src_files
       Rails.application.assets["application"].dependencies.map do |asset|
         "assets/" + asset.logical_path
-      end.push("public/help/Chorus_Help.js")
+      end.push("public/help/Default.js")
     end
   end
 

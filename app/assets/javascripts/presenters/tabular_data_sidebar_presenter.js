@@ -124,8 +124,9 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
 
         if (!this.resource.hasCredentials()) {
             ctx.noCredentials = true;
-            var addCredentialsLink = chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'})
-            ctx.noCredentialsWarning = chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink})
+            var addCredentialsLink = chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'});
+            var instanceName = this.resource.instance().name();
+            ctx.noCredentialsWarning = chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink, instanceName: instanceName });
         }
 
         var workspaceArchived = (this.options.workspace && !this.options.workspace.isActive());

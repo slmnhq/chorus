@@ -338,14 +338,17 @@ describe("chorus.models.Activity", function() {
     });
 
     describe("#hdfs", function() {
-        beforeEach(function() {
-            this.activity = fixtures.activities.NOTE_ON_HDFS();
-            this.model = this.activity.hdfs();
-        });
-
         it("returns a HdfsEntry object", function() {
-            expect(this.model).toBeA(chorus.models.HdfsEntry);
+            this.activity = fixtures.activities.NOTE_ON_HDFS();
+            expect(this.activity.hdfs()).toBeA(chorus.models.HdfsEntry);
         })
+
+        context("when the activity is a WORKSPACE_ADD_HDFS_DIRECTORY_AS_EXT_TABLE", function() {
+            it("makes the hdfs entry a directory", function() {
+                this.activity = newFixtures.activity.addHdfsDirectoryAsExtTable();
+                expect(this.activity.hdfs().get("isDir")).toBeTruthy();
+            });
+        });
     });
 
     describe("#workfile", function() {

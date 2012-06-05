@@ -35,6 +35,28 @@ describe("chorus.models.ChartTask", function() {
         expect(this.model.get("relation")).toEqual('SELECT * FROM "ANIMALS"."DOG_BREEDs"');
     })
 
+    describe("#workspace", function() {
+        context("when the task has a workspace id", function() {
+            it("returns a workspace with the right id", function() {
+                var workspace = this.model.workspace();
+                expect(workspace).toBeA(chorus.models.Workspace);
+                expect(workspace.get("id")).toBe(this.model.get("workspaceId"));
+                expect(workspace.get("id")).toBeDefined();
+            });
+
+            it("memoizes", function() {
+                expect(this.model.workspace()).toBe(this.model.workspace());
+            });
+        });
+
+        context("when the task has no workspace id", function() {
+            it("returns undefined", function() {
+                this.model.unset("workspaceId");
+                expect(this.model.workspace()).toBeUndefined();
+            });
+        });
+    });
+
     describe("creating the task", function() {
         beforeEach(function() {
             this.model.save();
@@ -42,7 +64,7 @@ describe("chorus.models.ChartTask", function() {
 
         it("generates the 'relation' field based on the schema and object names", function() {
             var request = this.server.lastCreate();
-            expect(request.params().relation).toBe("SELECT * FROM animals.dog_breeds");
+            expect(request.params()['chart_task[relation]']).toBe("SELECT * FROM animals.dog_breeds");
         });
     });
 
@@ -58,7 +80,7 @@ describe("chorus.models.ChartTask", function() {
 
         it("constructs a correct API call", function() {
             var request = this.server.lastCreate();
-            expect(request.params().relation).toBe("SELECT * FROM (SELECT * FROM chorus_view WHERE 1 > 0) AS dog_breeds")
+            expect(request.params()['chart_task[relation]']).toBe("SELECT * FROM (SELECT * FROM chorus_view WHERE 1 > 0) AS dog_breeds")
         })
     })
 });

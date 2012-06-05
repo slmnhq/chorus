@@ -6,6 +6,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     title: t("dataset.import.table.title"),
     ok: t("dataset.import.table.submit"),
     loadingKey: "dataset.import.importing",
+    includeHeader: true,
 
     delimiter: ',',
 
@@ -20,7 +21,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.resource = this.csv = this.options.csv;
-        this.csv.set({hasHeader: true});
         this.csv.set({toTable : chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable"))});
         chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
 
@@ -108,6 +108,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
+            includeHeader: this.includeHeader,
             columns: this.csv.columnOrientedData(),
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: chorus.helpers.safeT("dataset.import.table.new.directions", {
@@ -123,7 +124,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.prepareCsv();
 
             this.$("button.submit").startLoading(this.loadingKey);
-
             this.csv.save();
         }
     },

@@ -1,0 +1,29 @@
+<% databases.each do |database| %>
+
+  DROP DATABASE IF EXISTS <%= database.name %>;
+  CREATE DATABASE <%= database.name %> OWNER <%= account.db_username %>;
+
+  \connect <%= database.name %>
+
+  <% database.schemas.each do |schema| %>
+
+    CREATE SCHEMA <%= schema.name %>;
+
+    <% schema.external_web_tables.each do |table| %>
+      CREATE EXTERNAL WEB TABLE <%= schema.name %>.<%= table.name %>
+        (name text, date date, amount float4, category text, description text)
+        LOCATION ('<%= table.url %>')
+        FORMAT '<%= table.format %>'
+        ( HEADER );
+    <% end %>
+
+    <% schema.master_tables.each do |table| %>
+      CREATE TABLE <%= schema.name %>.<%= table.name %>
+        ( id integer, some_int integer )
+        DISTRIBUTED BY (id)
+        PARTITION BY RANGE(some_int)
+        ( START (1::integer) END (<%= table.partitions + 1 %>::integer) EVERY (1::integer));
+    <% end %>
+
+  <% end %>
+<% end %>

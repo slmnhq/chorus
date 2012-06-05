@@ -18,16 +18,17 @@ describe("chorus.views.ResultsConsoleView", function() {
             expect(this.view.$("a.close")).not.toExist();
         });
 
+        it("does not display the resize area", function() {
+            expect(this.view.$("a.minimize")).not.toExist();
+            expect(this.view.$("a.maximize")).not.toExist();
+        });
+
         it("does not display the executing spinner", function() {
             expect(this.view.$(".right")).not.toHaveClass("executing");
         })
 
         it("displays save to csv file download link", function() {
             expect(this.view.$("a.download_csv")).toExist();
-        })
-        it("hides the minimize and maximize links", function() {
-            expect(this.view.$("a.minimize")).toHaveClass('hidden')
-            expect(this.view.$("a.maximize")).toHaveClass('hidden')
         })
 
         it("hides the bottom gutter", function() {
@@ -60,21 +61,34 @@ describe("chorus.views.ResultsConsoleView", function() {
             });
         });
 
+        context("when the resize area is enabled", function() {
+            beforeEach(function() {
+                this.view.options.enableResize = true;
+                this.view.render();
+            });
+
+            it("hides the minimize and maximize links", function() {
+                expect(this.view.$("a.minimize")).toHaveClass('hidden')
+                expect(this.view.$("a.maximize")).toHaveClass('hidden')
+            });
+        });
+
         context("when the expander arrow should be hidden", function() {
             beforeEach(function() {
-                this.view.options.hideExpander = true;
+                this.view.options.enableExpander = false;
                 this.view.render();
             });
 
             it("hides the expander", function() {
                 expect(this.view.$(".expander_button")).not.toExist();
             });
-
         })
     })
 
     describe("event handling", function() {
         beforeEach(function() {
+            this.view.options.enableResize = true;
+            this.view.options.enableExpander = true;
             this.view.render();
         });
 
@@ -152,7 +166,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     itRemovesExecutionUI(true);
                 })
 
-                context("when the23688221 spinner has been started", function() {
+                context("when the spinner has been started", function() {
                     beforeEach(function() {
                         delete this.view.elapsedTimer;
                         this.view.$(".cancel").click();
@@ -460,74 +474,45 @@ describe("chorus.views.ResultsConsoleView", function() {
                 });
 
                 describe("clicking the download link", function() {
-                    beforeEach(function() {
-                        this.submitSpy = jasmine.createSpy("submit");
-                        this.hideSpy = jasmine.createSpy("hide");
-
-                        this.fakeForm = {
-                            submit: this.submitSpy,
-                            hide: this.hideSpy
-                        }
-
-                        spyOn(this.view, "createDownloadForm").andReturn(this.fakeForm)
-                        this.view.$("a.download_csv").click();
-                    });
-
-                    it("constructs a form for download", function() {
-                        expect(this.view.createDownloadForm).toHaveBeenCalled();
-                    });
-
-                    it("hides the form", function() {
-                        expect(this.hideSpy).toHaveBeenCalled();
-                    });
-
-                    it("submits the form", function() {
-                        expect(this.submitSpy).toHaveBeenCalled();
-                    });
-                });
-
-                describe("constructing the download form", function() {
-                    context("with a sql execution task (executing a workfile)", function() {
+                    context("with the show download dialog option", function() {
                         beforeEach(function() {
-                            this.view.resource = new chorus.models.SqlExecutionTask({
-                                result: {
-                                    columns: [{name: "col1"}],
-                                    rows:    [{col1: "row1"}]
-                                }
-                            });
-                            spyOn(this.view.resource, "name").andReturn("john the resource");
-                            this.form = this.view.createDownloadForm();
+                            this.modalSpy = stubModals();
+                            spyOn($, "download");
+                            this.view.showDownloadDialog = true;
+                            this.view.tabularData = new chorus.models.TabularData();
+                            this.view.$("a.download_csv").click();
                         });
 
-                        itCreatesTheFormCorrectly();
-                        itCanExpandAndCollapseTheResults("minimized", "maximized");
-                    });
-
-                    context("with a data preview task (previewing a dataset)", function() {
-                        beforeEach(function() {
-                            this.view.resource = new chorus.models.DataPreviewTask({
-                                columns: [{name: "col1"}],
-                                rows:    [{col1: "row1"}]
-                            });
-                            spyOn(this.view.resource, "name").andReturn("john the resource");
-                            this.form = this.view.createDownloadForm();
+                        it("should launch the dialog", function() {
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetDownload);
                         });
 
-                        itCreatesTheFormCorrectly();
-                        itCanExpandAndCollapseTheResults("minimized", "maximized");
+                        it("should not have called $.download", function() {
+                            expect($.download).not.toHaveBeenCalled();
+                        });
+
+                        it("should have a page model for the dataset download dialog", function() {
+                            expect(this.modalSpy.lastModal().pageModel).toBeA(chorus.models.TabularData);
+                        });
                     });
-                });
-            }
 
-            function itCreatesTheFormCorrectly() {
-                it("has the correct action", function() {
-                    expect(this.form).toHaveAttr("action", "/generateCSV.jsp");
-                });
+                    context("without the show download dialog option", function() {
+                        beforeEach(function() {
+                            spyOn($, "download");
+                            this.view.showDownloadDialog = false;
+                            this.view.$("a.download_csv").click();
+                        });
 
-                it("has the correct form elements", function() {
-                    expect($("input[name=columnData]", this.form)).toHaveValue(JSON.stringify([{name: "col1"}]));
-                    expect($("input[name=rowsData]", this.form)).toHaveValue(JSON.stringify([{col1: "row1"}]));
-                    expect($("input[name=datasetName]", this.form)).toHaveValue("john the resource");
+                        it("starts the file download", function() {
+                            expect($.download).toHaveBeenCalledWith("/data/cvsResultDownload",
+                            {
+                                columnData: this.view.resource.getColumns(),
+                                rowsData: this.view.resource.getRows(),
+                                datasetName: this.view.resource.name()
+                            }
+                            , "post");
+                        });
+                    });
                 });
             }
 

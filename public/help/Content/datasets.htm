@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="10" MadCap:lastHeight="744" MadCap:lastWidth="584" MadCap:ignoredWords="datasets;dataset;Dataset;csv" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="Chorus_Help.xml" MadCap:SearchType="Stem">
-    <!-- saved from url=(0014)about:internet -->
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="10" MadCap:lastHeight="3205" MadCap:lastWidth="573" MadCap:ignoredWords="datasets;dataset;Dataset;csv" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link href="SkinSupport/MadCap.css" rel="stylesheet" type="text/css" /><title>Data</title>
@@ -11,34 +10,73 @@
     </head>
     <body>
         <h1>Data</h1>
-        <p>Data is the second tab in the workspace folder. The Data tab displays the list of datasets associated with the workspace that you have chosen to explore.</p>
+        <p>Data is the second tab in the workspace. The Data tab displays the list of datasets associated with the workspace that you have chosen to explore.</p>
+        <p>The Data tab is accessible even if you do not have a sandbox. If you have not created a sandbox, the Data tab will not be populated and the import file icon is disabled. See below for information about adding a sandbox.</p>
+        <p>If you do not have a sandbox, you can still associated datasets by browsing the instances that have been registered. To do this, drill down to a dataset from an instance, then associate a dataset to a workspace. See <a href="instances.htm">Instances</a> for more details.</p>
+        <p>Note: If you associate datasets from instances when there is no sandbox, you will not be able to import files into the sandbox or use any of the import schedule options.</p>
+        <p>To add a sandbox, <a href="#Adding" target="" title="" alt="" class="MCXref_0">See "Adding a Sandbox"</a> .</p>
         <h3>Features of the Data tab</h3>
         <ul>
-            <li value="1">Sorting and viewing datasets </li>
-            <li value="2">Exploring a particular data source</li>
+            <li value="1">Viewing datasets </li>
+            <li value="2">Exploring a particular dataset</li>
+            <li value="3">Importing data</li>
         </ul>
-        <h2>Sorting and viewing datasets </h2>
+        <h2>Viewing datasets </h2>
         <ul>
-            <li value="1">&#160;Browse the list of associated datasets in the left pane. The Data tab defaults to the <b>Show all datasets</b>: option. Selecting one of the other viewing options from the drop-down list determines how you can work with the files presented to you.These options are as follows:<ul style="list-style-type: circle;"><li value="1">source datasets: Presents source tables and views that can be added to a workspace by associating them from the instance.</li><li value="2">Chorus Views: Provides a dataset that Chorus recognizes. It is usually a SQL&#160;statement that Chorus can visualize and import. You can edit your Chorus view. Select the Edit button to bring up the code mirror interface. Edit the file, and select run. You can cancel your changes, or save and return to column view mode.</li><li value="3">sandbox datasets: Displays the tables and views present in the chosen database or schema.</li></ul></li>
+            <li value="1">&#160;Browse the list of associated datasets in the left pane. The Data tab defaults to the <b>Show all datasets</b>: option. Selecting one of the other viewing options from the drop-down list determines how you can work with the datasets available. These options are as follows:<ul style="list-style-type: circle;"><li value="1"><b>source datasets</b>: Source datasets are datasets that have been associated with the workspace but are not materialized in the workspace's sandbox. Source datasets can be imported into the workspace's schema.</li><li value="2"><b>Chorus Views</b>: A Chorus view is a select statement/dataset that has not materialized in the workspace's&#160;sandbox. Once you have selected a Chorus view, you can it edit by clicking the <b>Edit</b> button, which will open up the code mirror interface (editor). Once you have made your edits, select <b>run</b>. You can cancel your changes, or save and return to column view mode.</li><li value="3"><b>sandbox datasets</b>: The workspace's sandbox schema.</li></ul></li>
             <li value="2">Select a particular dataset to view details.           <a href="dataset.htm" target="" title="" alt="" class="MCXref_0">See "Working with your data sources"</a> for more information.</li>
         </ul>
         <h2>Exploring a particular data source</h2>
-        <p>Select the data source that you wish to explore. This brings you to the Data detail page.</p>
+        <p>Select the dataset that you wish to explore. This brings you to the details page of the dataset.</p>
         <ul>
             <li value="1"><b>Explore</b>: Select this option to search for columns within the dataset.</li>
-            <li value="2"><b>Derive</b>: Use this option to create a Chorus view. You can preview your SQL statement, add a join and select columns.</li>
-            <li value="3"> <![CDATA[ ]]><b>Visualize</b>: Select this option to create a visual representation based on your data. You can also add data filters. The types of charts you can use to visualize your data are as follows:</li>
+            <li value="2"><b>Derive</b>: Select this option to create a Chorus view. You can preview your SQL statement, add a join and select columns.<ul><li value="1">You can derive Chorus views from source datasets or sandbox datasets. Chorus views can only be created when viewing the dataset from a workspace, not from the instance browser.</li><li value="2">Click <b>duplicate this chorus view</b> link from an already opened Chorus view to make a copy of a Chorus view.</li><li value="3">Click <b>create as a database view</b> link from an already opened Chorus view to convert into a database view.</li><li value="4">Click the <b>Edit</b> button from an already opened Chorus view to edit the SQL of the Chorus view.</li></ul></li>
+            <li value="3"><b>Add a note</b>: Select this option to add a note to  a dataset in a schema. If you are working from the workspace, you can support your note with attachments from the desktop, datasets, or work files. If you are working from the instance browser you can only support your note with attachments from the desktop.</li>
+            <li value="4"><b>Preview data</b>: Select this option to preview a table's content and data. This queries the table and returns the first 100 rows in a table. You also have the option to download to your desktop a specific number of rows, or to download all the rows.</li>
+            <li value="5"><b>Run analyze</b> Select this option to collect statistics about the contents of a table. The results of this analyze are stored in the system table <code>pg_statisic</code>. The query planner will subsequently use these statistics to help determine the most efficient execution plans for queries. These statistics, including row count, common values, and so on, can be viewed from the <b>Information</b> sub-tab for the table. Note: Running analyze on large tables can significantly slow down queries, so should be used with caution.</li>
+            <li value="6"><b>Visualize</b>: Select this option to create a visual representation based on your data. You can also add data filters. The types of charts you can use to visualize your data are as follows:</li>
         </ul>
         <ul style="list-style-type: circle;">
-            <li class="bullet2" value="1">Frequency chart</li>
+            <li class="bullet2" value="1"> chart</li>
             <li class="bullet2" value="2">Histogram</li>
             <li class="bullet2" value="3">Heatmap</li>
             <li class="bullet2" value="4">Time Series</li>
             <li class="bullet2" value="5">Boxplot</li>
         </ul>
+        <h2>Importing Data</h2>
+        <p>You can only run imports  on workspaces that have sandboxes defined, and can only create imports from source views, source tables, Chorus views in a workspace, or .csv files from your local system.</p>
+        <p>Data can be imported as:</p>
         <ul>
-            <li value="1"><b>Data Preview</b>:You can preview the data in a particular dataset. The preview fetches one hundred rows of data.</li>
+            <li value="1">Into a new table: Creates a new table and imports the data into the new table. You can specify the number of rows that you want to import.</li>
+            <li value="2">Into an existing table: Import a dataset into an existing sandbox table. You can truncate the data if necessary. Note that the table name must be specified from the drop-down menu.</li>
+            <li value="3">From a .csv file from your local system as a table into the sandbox:<ul><li value="1">Click the <b>Import File</b> button, then select the file you want to import.</li><li value="2">Specify a name for the file, then click <b>Upload file</b>.</li><li value="3">Specify the type of your variables, a delimiter type, and the column names.</li></ul></li>
         </ul>
+        <p><b>Import Now</b>. The <b>Import Now</b> option in the right pane is only available for source table/views and Chorus views. Selecting <b>Import Now</b> will begin the import of the table immediately.</p>
+        <p><b>Scheduling an import</b>
+        </p>
+        <p>You can schedule an import of a table on a daily, weekly, or monthly basis. This automatically starts the process at the time you specified and imports the data in the destination file you also specified.</p>
+        <h3><a name="Adding"></a>Adding a Sandbox</h3>
+        <p>Create a sandbox so that you can access the full feature set associated with the Data tab.</p>
+        <p class="note">Only the workspace owner can add a sandbox. Workspace members should contact the workspace owner to request this action.</p>
+        <ol>
+            <li value="1">Hover over and then select the <b>?</b> icon that appears next to the Import&#160;file button at the top left of the Workspace Data tab. The <b>Add a Sandbox</b> dialog opens.</li>
+            <li value="2">Select either:</li>
+        </ol>
+        <blockquote>
+            <ul>
+                <li value="1"><b>within an instance</b>: Using the drop-down options, select an instance, database, and schema to associate with your sandbox. Each user can only be associated with a single sandbox.</li>
+                <li value="2"><b>as a standalone</b>: A self-contained Greenplum instance can be provisioned on the Chorus Virtualization Service within minutes. You need to specify an account and password to this instance that will be used as a shared account with super-user privileges. </li>
+            </ul>
+        </blockquote>
+        <blockquote>
+            <p>When you create a new instance on the Chorus Virtualization Service, you can specify the instance size and also select an appropriate resource allocation template (vCPU and memory to do it). </p>
+        </blockquote>
+        <p>You can also add a sandbox via the workspace&#160;Summary tab. See <a href="workspace_summary.htm">Summary</a> for details.</p>
+        <p>After you have added a sandbox, all the datasets in the database/schema are automatically associated with the workspace and are shown in the Data tab.</p>
+        <p>
+            <br />
+        </p>
+        <p>&#160;</p>
         <script type="text/javascript" src="SkinSupport/MadCapBodyEnd.js">
         </script>
     </body>

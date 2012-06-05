@@ -87,11 +87,10 @@ describe("chorus.models.Workspace", function() {
     });
 
     describe("#datasets", function() {
-        it("returns a memoized dataset set with the right workspace id", function() {
+        it("returns a dataset set with the right workspace id", function() {
             var datasets = this.model.datasets();
             expect(datasets).toBeA(chorus.collections.DatasetSet);
             expect(datasets.attributes.workspaceId).toBe(this.model.id);
-            expect(datasets).toBe(this.model.datasets());
         });
     });
 
@@ -120,11 +119,6 @@ describe("chorus.models.Workspace", function() {
                 this.model.owner();
                 expect(this.server.requests.length).toBe(numberOfServerRequests);
             });
-
-            it("memoizes", function() {
-                var owner = this.model.owner();
-                expect(owner).toBe(this.model.owner());
-            });
         });
 
         context('when owner data is nested', function() {
@@ -140,11 +134,6 @@ describe("chorus.models.Workspace", function() {
                 var numberOfServerRequests = this.server.requests.length;
                 this.model.owner();
                 expect(this.server.requests.length).toBe(numberOfServerRequests);
-            });
-
-            it("memoizes", function() {
-                var owner = this.model.owner();
-                expect(owner).toBe(this.model.owner());
             });
 
             it("stays up-to-date when the owner is updated", function() {

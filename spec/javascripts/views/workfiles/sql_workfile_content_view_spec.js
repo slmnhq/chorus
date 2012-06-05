@@ -28,7 +28,15 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
         it("has a ResultsConsole view", function() {
             expect(this.view.resultsConsole).toBeA(chorus.views.ResultsConsole);
-        })
+        });
+
+        it("enables the resize area of the results console", function() {
+            expect(this.view.resultsConsole.options.enableResize).toBeTruthy();
+        });
+
+        it("displays the expander of the results console", function() {
+            expect(this.view.resultsConsole.options.enableExpander).toBeTruthy();
+        });
 
         it("declares hotkeys", function() {
             expect(this.view.hotkeys.r).toBeDefined();

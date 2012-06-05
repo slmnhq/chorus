@@ -19,6 +19,12 @@
         font-weight: $semibold;
     }
 
+    .execution {
+        .right {
+            padding: 0;
+        }
+    }
+
     .headerbar {
         background: $body-background-color;
         border-bottom: 1px solid $list-border-color;

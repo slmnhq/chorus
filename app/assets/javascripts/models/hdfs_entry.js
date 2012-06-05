@@ -23,6 +23,10 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
         }, this)
     },
 
+    parent: function() {
+        return _.last(this.pathSegments());
+    },
+
     getHadoopInstance: function() {
         return new chorus.models.HadoopInstance(this.get('hadoopInstance')).set({ instanceProvider: "Hadoop" })
     }

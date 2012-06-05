@@ -35,10 +35,10 @@ describe("chorus.models.TimeseriesTask", function() {
 
         it("renames the 'xAxis', 'yAxis', 'aggregation', and 'timeInterval' as required by the api", function() {
             var request = this.server.lastCreate();
-            expect(request.params()['chart[x_axis]']).toBe("age");
-            expect(request.params()['chart[y_axis]']).toBe("height");
-            expect(request.params()['chart[aggregation]']).toBe("sum");
-            expect(request.params()['chart[time_interval]']).toBe("minute");
+            expect(request.params()['chart_task[x_axis]']).toBe("age");
+            expect(request.params()['chart_task[y_axis]']).toBe("height");
+            expect(request.params()['chart_task[aggregation]']).toBe("sum");
+            expect(request.params()['chart_task[time_interval]']).toBe("minute");
         });
     });
 })

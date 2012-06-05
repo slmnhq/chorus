@@ -13,6 +13,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     setup: function() {
+        this.showDownloadDialog = this.options.showDownloadDialog;
+        this.tabularData = this.options.tabularData;
         chorus.PageEvents.subscribe("file:executionStarted", this.executionStarted, this);
         chorus.PageEvents.subscribe("file:executionSucceeded", this.executionSucceeded, this);
         chorus.PageEvents.subscribe("file:executionFailed", this.executionFailed, this);
@@ -23,20 +25,20 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this._super("beforeNavigateAway", arguments);
     },
 
-    createDownloadForm: function() {
-        var form = $("<form action='/generateCSV.jsp' method='post'></form>");
-        form.append($("<input name='columnData' type='hidden'/>").val(JSON.stringify(this.resource.getColumns())));
-        form.append($("<input name='rowsData' type='hidden'>/").val(JSON.stringify(this.resource.getRows())));
-        form.append($("<input name='datasetName' type='hidden'>/").val(this.resource.name()));
-        return form;
-    },
-
     saveToDesktop: function(e) {
-        e && e.preventDefault();
-        var form = this.createDownloadForm()
-        form.hide();
-        $("body").append(form)
-        form.submit();
+        e.preventDefault();
+        if(this.showDownloadDialog) {
+            var dialog = new chorus.dialogs.DatasetDownload({ pageModel: this.tabularData });
+            dialog.launchModal();
+        } else {
+            var data = {
+                columnData: JSON.stringify(this.resource.getColumns()),
+                rowsData: JSON.stringify(this.resource.getRows()),
+                datasetName: this.resource.name()
+            };
+
+            $.download("/data/cvsResultDownload", data, "post");
+        }
     },
 
     execute: function(task) {
@@ -85,7 +87,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     showResultTable: function(task) {
-        this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, hideExpander: this.options.hideExpander, model: task});
+        this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, model: task});
         this.dataTable.render();
         this.$(".result_table").removeClass("hidden").html(this.dataTable.el);
         this.$(".controls").removeClass("hidden");
@@ -214,7 +216,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         return {
             titleKey: this.options.titleKey || "results_console_view.title",
             enableClose: this.options.enableClose,
-            expander: !(this.options.hideExpander)
+            enableResize: this.options.enableResize,
+            enableExpander: this.options.enableExpander
         }
     }
 });

@@ -217,6 +217,32 @@
             }
         },
 
+        WORKSPACE_ADD_HDFS_DIRECTORY_AS_EXT_TABLE: function(model) {
+            var datasetAdded = model.databaseObject().asDataset();
+            var hdfs = model.hdfs();
+            return {
+                objectName: datasetAdded.get("objectName"),
+                objectUrl: datasetAdded.showUrl(),
+                hdfsUrl: hdfs.showUrl(),
+                hdfsName: hdfs.name()
+            }
+        },
+
+        WORKSPACE_ADD_HDFS_PATTERN_AS_EXT_TABLE: function(model) {
+            var datasetAdded = model.databaseObject().asDataset();
+            var hdfs = model.hdfs();
+            var parentDir = hdfs.parent();
+            return {
+                objectName: datasetAdded.get("objectName"),
+                objectUrl: datasetAdded.showUrl(),
+                hdfsUrl: hdfs.showUrl(),
+                header: {
+                    pattern: hdfs.get("name"),
+                    directoryLink: chorus.helpers.linkTo(parentDir.showUrl(), parentDir.name())
+                }
+            }
+        },
+
         WORKSPACE_CHANGE_NAME: function(model) {
             return {
                 objectName: model.workspace().get("name"),

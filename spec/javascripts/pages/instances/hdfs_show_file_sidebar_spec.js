@@ -5,7 +5,7 @@
         this.file = fixtures.hdfsFile({
             path: "/folder/filename.txt",
             instanceId: 9876,
-            lastModificationTime: now
+            lastUpdatedStamp: now
         })
         this.view = new chorus.views.HdfsShowFileSidebar({ model: this.file })
     });
