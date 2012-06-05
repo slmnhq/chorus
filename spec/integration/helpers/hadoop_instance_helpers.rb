@@ -21,7 +21,7 @@ def create_valid_hadoop_instance(params = {})
     find(".submit").click
   end
   wait_until { current_route == "/instances" }
-  find('.instance_list').should have_content(name)
+  wait_until { find('.instance_list').has_content?(name) }
   sleep(3)
 end
 
