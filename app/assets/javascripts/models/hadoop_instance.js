@@ -43,5 +43,18 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
                 id: this.get("id")
             }
         });
+    },
+
+    accountForCurrentUser: function() {
+        return null;
+    },
+
+    accounts: function() {
+        return [];
+    },
+
+    usage: function() {
+        return false;
     }
+
 });
