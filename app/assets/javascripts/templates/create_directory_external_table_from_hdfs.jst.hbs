@@ -1,0 +1,28 @@
+<div class="directions">
+    <span class="select_file">{{t "hdfs_instance.create_external.select_file"}}</span>
+    <select>
+        {{#each models}}
+        <option value="{{name}}">{{name}}</option>
+        {{/each}}
+    </select>
+    <span class="name_label">{{t "hdfs.create_external.table_name"}}</span>
+    {{directions}}
+</div>
+
+<div class="path_types">
+    <input type="radio" id="directory" name="pathType" value="directory" checked="checked"/>
+    <label  for="directory">{{t "hdfs_instance.create_external.include_all_files"}}</label>
+
+    <input type="radio" id="pattern" name="pathType" value="pattern"/>
+    <label for="pattern">{{t "hdfs_instance.create_external.specify_expression"}}</label>
+
+    <input type='text' class='hdfs' name='expression' value="{{expression}}"></input>
+    <img class="help" src="/images/more-info.png" data-text='{{t "hdfs_instance.create_external.specify_expression_help_text"}}'/>
+</div>
+
+{{renderTemplate "csv_data_table" this}}
+
+<div class="modal_controls">
+    <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
+    <button type="submit" class="submit" tabindex="99">{{ok}}</button>
+</div>

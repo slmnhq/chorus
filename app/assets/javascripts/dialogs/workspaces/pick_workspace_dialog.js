@@ -25,11 +25,10 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
         this.pageModel = this.options.pageModel;
         this.collection = this.collection || this.defaultWorkspaces();
         this.collection.fetchAll();
-        this.bindings.add(this.collection, "reset", this.render);
     },
 
     defaultWorkspaces: function() {
-        if (this.options.activeOnly || (this.options.launchElement && this.options.launchElement.data("activeOnly"))) {
+        if (this.options.activeOnly || (this.options.launchElement && this.options.launchElement.data("activeonly"))) {
             return chorus.session.user().activeWorkspaces();
         }
         return chorus.session.user().workspaces();

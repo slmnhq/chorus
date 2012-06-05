@@ -613,7 +613,7 @@ describe("chorus global", function() {
             });
 
             it("calls into the help system with the helpId", function() {
-                expect(window.FMCOpenHelp).toHaveBeenCalledWith("foo");
+                expect(window.FMCOpenHelp).toHaveBeenCalledWith("foo", null, null, null, "/help");
             })
         })
 
@@ -626,7 +626,7 @@ describe("chorus global", function() {
             });
 
             it("calls into the help system with 'home'", function() {
-                expect(window.FMCOpenHelp).toHaveBeenCalledWith("home");
+                expect(window.FMCOpenHelp).toHaveBeenCalledWith("home", null, null, null, "/help");
             })
         })
     })

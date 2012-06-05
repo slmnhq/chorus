@@ -153,8 +153,21 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         expect(this.dialog.$(".directions input:text").val()).toBe("foo_quux_bar");
     });
 
-    it("checked the include header row checkbox by default", function() {
-        expect(this.dialog.$("#hasHeader")).toBeChecked();
+    context("when the 'includeHeader' property is not overridden", function() {
+        it("has the include header row checkbox checked by default", function() {
+            expect(this.dialog.$("#hasHeader")).toBeChecked();
+        });
+    });
+
+    context("when the 'includeHeader' property is false", function() {
+        it("has the header row checkbox unchecked and hidden", function() {
+            var Subclass = chorus.dialogs.NewTableImportCSV.extend({ includeHeader: false });
+            this.dialog = new Subclass({csv: this.csv});
+            this.dialog.render();
+
+            var checkbox = this.dialog.$("#hasHeader")
+            expect(checkbox).not.toExist();
+        });
     });
 
     describe("the data table", function() {

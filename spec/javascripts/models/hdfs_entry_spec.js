@@ -43,6 +43,23 @@ describe("chorus.models.HdfsEntry", function() {
         });
     });
 
+    describe("#parent", function() {
+        it("returns the entry's parent directory", function() {
+            this.model = fixtures.hdfsEntryFile({
+                path: '/imports/july/21',
+                name: 'injuries.csv',
+                instance: {
+                    id: 10000
+                }
+            });
+
+            var parent = this.model.parent();
+
+            expect(parent.name()).toBe("21");
+            expect(parent.get("path")).toBe("/imports/july");
+        });
+    });
+
     describe("pathSegments", function() {
         beforeEach(function() {
             this.model = fixtures.hdfsEntryFile({

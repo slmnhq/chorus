@@ -377,7 +377,7 @@ describe("chorus.models.TabularData", function() {
         context("when no number of rows is passed", function() {
             it("includes the number of rows", function() {
                 this.tabularData.download();
-                expect($.download).toHaveBeenCalledWith("/edc/data/csvDownload", {
+                expect($.download).toHaveBeenCalledWith("/data/csvDownload", {
                     datasetId: this.tabularData.id
                 }, "get");
             });
@@ -386,9 +386,9 @@ describe("chorus.models.TabularData", function() {
         context("when a number of rows is passed", function() {
             it("makes a request to the tabular data download api", function() {
                 this.tabularData.download({ rows: "345" });
-                expect($.download).toHaveBeenCalledWith("/edc/data/csvDownload", {
+                expect($.download).toHaveBeenCalledWith("/data/csvDownload", {
                     datasetId: this.tabularData.id,
-                    numOfRow: "345"
+                    numOfRows: "345"
                 }, "get");
             });
         });

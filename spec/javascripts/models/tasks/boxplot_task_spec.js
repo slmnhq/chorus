@@ -39,13 +39,13 @@ describe("chorus.models.BoxplotTask", function() {
 
         it("renames the 'xAxis' and 'yAxis' fields to 'chart[xAxis]' and 'chart[yAxis]' as required by the api", function() {
             var request = this.server.lastCreate();
-            expect(request.params()['chart[x_axis]']).toBe("age");
-            expect(request.params()['chart[y_axis]']).toBe("height");
+            expect(request.params()['chart_task[x_axis]']).toBe("age");
+            expect(request.params()['chart_task[y_axis]']).toBe("height");
         });
 
         it("renames the 'bins' field to 'chart[bins]' as required by the api", function() {
             var request = this.server.lastCreate();
-            expect(request.params()['chart[bins]']).toBe("56");
+            expect(request.params()['chart_task[bins]']).toBe("56");
         })
     });
 

@@ -5,7 +5,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     setup:function (hadoopInstanceId, path) {
         this.path = "/" + path;
 
-        this.model = new chorus.models.HdfsFile({ hadoopInstanceId: hadoopInstanceId, path: this.path });
+        this.model = new chorus.models.HdfsFile({ hadoopInstance: {id: hadoopInstanceId}, path: this.path });
         this.bindings.add(this.model, "change", this.render);
         this.model.fetch();
 

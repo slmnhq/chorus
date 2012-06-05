@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="6" MadCap:lastHeight="760" MadCap:lastWidth="636" MadCap:ignoredWords="M';workfile;max_file_size;250M;dataset" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="Chorus_Help.xml" MadCap:SearchType="Stem">
-    <!-- saved from url=(0014)about:internet -->
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="6" MadCap:lastHeight="1228" MadCap:lastWidth="681" MadCap:ignoredWords="M';workfile;max_file_size;250M;dataset" MadCap:disableMasterStylesheet="true" MadCap:tocPath="" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Work Files</title>
         <link href="Resources/Stylesheets/Styles.css" rel="stylesheet" type="text/css" />
@@ -10,11 +9,13 @@
     </head>
     <body>
         <h1>Work Files</h1>
-        <p>Work Files is the third tab in the workspace folder. The Work Files tab displays the work file list page.  Your work file draft is auto-saved every 30 seconds. </p>
+        <p>Work Files is the third tab in the workspace. The Work Files tab displays the work file list page.  Your work file draft is auto-saved every 30 seconds. </p>
         <h3>Features of the Work Files tab</h3>
-        <p>Viewing the list of work files.</p>
-        <p>Editing work files (only members of a workspace)</p>
-        <p>Editing work files (Administrators or owners only)</p>
+        <ul>
+            <li value="1">Viewing the list of work files.</li>
+            <li value="2">Editing work files (only members of a workspace)</li>
+            <li value="3">Editing work files (Administrators or owners only)</li>
+        </ul>
         <h2>Viewing the list of Work Files</h2>
         <ul>
             <li value="1">Displays a list of all the work files associated with a workspace,  the default view is <b>Show All File</b>. The other drop down options you can select are as follows:</li>
@@ -26,17 +27,20 @@
             <li class="bullet2" value="4">Other files</li>
         </ul>
         <ul>
-            <li value="1">The work files are sorted       <![CDATA[ ]]><b>Alphabetically</b>, by default. But you can also sort <b>By Date</b>.</li>
+            <li value="1">The work files are sorted        <![CDATA[ ]]><b>Alphabetically</b>, by default. But you can also sort <b>By Date</b>.</li>
         </ul>
-        <h2>Editing work files (only members of a workspace)</h2>
-        <p> The following is a  list of tasks that all users can  perform. </p>
+        <h2>Editing work files (workspace members)</h2>
+        <p> The following is a  list of tasks that all workspace members can  perform. </p>
+        <p class="note">* these tasks can be performed by non-workspace members.</p>
         <ul>
-            <li value="1"><b>Copy latest version to another workspace</b>: Brings up the <b>Copy File to Workspace</b> displaying a list of the workspaces that you own. Note that the configurable limit is 250 MB. When you set # Maximum upload work file size, you can use 'M', or 'G' as a short cut to specify megabyte and gigabyte in the chorus.properties file. For example: <span style="font-family: 'Courier New'; font-size: 10pt;">chorus.workfile.max_file_size=250M</span>.</li>
-            <li value="2"><b>Download</b>: Download any work files that you or another member of your workspace has uploaded.</li>
-            <li value="3"><b>Add a note</b>: Add a note to comment on a particular work file.You have the option to add a desktop file, work file, or dataset to add support your note. You can also remove any attachments and notify selected members on your project team about your activity. </li>
+            <li value="1"><b>*Copy latest version to another workspace</b>: Brings up the <b>Copy File to Workspace</b> displaying a list of the workspaces that you own. </li>
+            <li value="2"><b>*Download</b>: Download any work files that you or another member of your workspace has uploaded.</li>
+            <li value="3"><b>*Add a note</b>: Add a note to comment on a particular work file.You have the option to add a desktop file, work file, or dataset to add support your note. You can also remove any attachments and notify selected members on your project team about your activity. </li>
+            <li value="4">Save a new version of a work file. You can edit a work file and save as a new version, and also have the option to add version notes when save the new work file.</li>
+            <li value="5">Add Functions and Datasets. You can add functions (with their arguments) or datasets (table/view names and column names) to work files without having to navigate around to locate them. To add a function or dataset, open the work file, then select the function or dataset sub-tab in the right pane, and click on the appropriate option. </li>
+            <li value="6">Save as draft. You can save your SQL&#160;work file as a draft to be worked on later.</li>
+            <li value="7">Execute the SQL file. You can execute an SQL&#160;work file in any of the following ways:<ul><li value="1">Execute the whole work file. Click the Run button in the workspace sandbox. The shortcuts for this option are CRTL+r (Mac) and ALT+r (Windows).</li><li value="2">Execute selected SQL. You can execute part of your SQL&#160;statements in the sandbox. The shortcuts for this option are CRTL+e (Mac) and ALT+e (Windows).</li><li value="3">Run in another schema. You can execute the work file against a different schema.</li></ul></li>
         </ul>
-        <h2>Editing work files (Administrators or owners only)</h2>
-        <p>The following is an list of  additional tasks that you can perform if you own the workspace or are a Chorus Administrator. </p>
         <ul>
             <li value="1"><b>Upload File</b>: Allows you to upload a file to your workspace.</li>
             <li value="2"><b>Create SQL File</b>: Allows you to create a blank SQL file. You can also upload your own SQL&#160;file.</li>

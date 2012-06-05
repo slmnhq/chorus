@@ -1,6 +1,7 @@
 chorus.models.Task = chorus.models.Base.include(
     chorus.Mixins.SQLResults
 ).extend({
+    constructorName: "Task",
     urlTemplate: "task/sync/",
 
     initialize: function(attrs) {

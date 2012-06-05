@@ -134,6 +134,6 @@ page.open(url, function(status){
                 return failedCount;
             });
             phantom.exit(exitCode);
-        }, 1000 * 60 * 10 * 10); // wait 10 minutes (CI can be slow)
+        }, 1000 * 60 * 20); // wait 20 minutes (CI can be slow)
     }
 });
