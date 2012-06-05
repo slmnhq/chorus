@@ -2,7 +2,7 @@
     <div class="details">{{t "instances.list.type.greenplum"}}</div>
     <ul class="list selectable">
         {{#each greenplum}}
-            <li class="instance" data-type="greenplum" data-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
+            <li class="instance" data-type="greenplum" data-greenplum-instance-id="{{id}}">{{renderTemplate "instance" this}}</li>
         {{/each}}
     </ul>
     {{#unless hasGreenplum}}

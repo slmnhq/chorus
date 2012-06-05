@@ -49,7 +49,7 @@ describe("chorus.models.Sandbox", function() {
         });
 
         it("returns an instance with the right id and name", function() {
-            expect(this.instance).toBeA(chorus.models.Instance);
+            expect(this.instance).toBeA(chorus.models.GreenplumInstance);
             expect(this.instance.get("id")).toBe(this.model.get("instanceId"));
             expect(this.instance.get("name")).toBe(this.model.get("instanceName"));
         });

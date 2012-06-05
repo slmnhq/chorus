@@ -23,7 +23,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.bindings.add(this.instanceMode, "error", this.showErrors);
         this.bindings.add(this.instanceMode, "clearErrors", this.clearErrors);
 
-        this.aurora = chorus.models.Instance.aurora();
+        this.aurora = chorus.models.GreenplumInstance.aurora();
         this.bindings.add(this.aurora, "loaded", this.fetchTemplates, this);
         this.aurora.fetch();
 
@@ -36,7 +36,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     fetchTemplates: function() {
         if (this.aurora.isInstalled()) {
-            this.templates = chorus.models.Instance.auroraTemplates();
+            this.templates = chorus.models.GreenplumInstance.auroraTemplates();
             this.bindings.add(this.templates, "loaded", this.templatesLoaded, this);
             this.templates.fetch();
         }

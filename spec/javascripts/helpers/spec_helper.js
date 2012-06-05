@@ -340,7 +340,7 @@
         chorus.router.trigger("leaving")
 
         delete chorus.models.Config._instance;
-        delete chorus.models.Instance._aurora;
+        delete chorus.models.GreenplumInstance._aurora;
 
         // TODO - why is this causing problems?
         // this.server.restore();

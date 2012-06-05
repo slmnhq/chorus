@@ -11,16 +11,16 @@
         "Hadoop": "hadoop_instance.png"
     };
 
-    chorus.models.Instance = chorus.models.Base.extend({
-        constructorName: "Instance",
-        urlTemplate: "instances/{{id}}",
+    chorus.models.GreenplumInstance = chorus.models.Base.extend({
+        constructorName: "GreenplumInstance",
+        urlTemplate: "instances/{{id}}", // TODO change instance to greenplum instance in backend later
         nameAttribute: 'name',
 
         showUrlTemplate: "instances/{{id}}/databases",
 
         entityType: "instance",
 
-        dataBinding: 'data-instance-id',
+        dataBinding: 'data-greenplum-instance-id',
 
         declareValidations: function(newAttrs) {
             this.require("name", newAttrs);

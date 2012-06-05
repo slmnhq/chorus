@@ -13,7 +13,7 @@ describe "Editing instance details" do
       instance_1_id = Instance.find_by_name("Instance1").id
       visit("#/instances")
       within(".instance_provider") do
-        page.find("li[data-instance-id='#{instance_1_id}']").click
+        page.find("li[data-greenplum-instance-id='#{instance_1_id}']").click
       end
       click_link "Edit Instance"
 
@@ -23,8 +23,8 @@ describe "Editing instance details" do
         click_button "Save Configuration"
       end
 
-      page.find("li[data-instance-id='#{instance_1_id}']").should have_content("ChangeInstanceName")
-      page.find("li[data-instance-id='#{instance_1_id}']").should have_content("Change Description")
+      page.find("li[data-greenplum-instance-id='#{instance_1_id}']").should have_content("ChangeInstanceName")
+      page.find("li[data-greenplum-instance-id='#{instance_1_id}']").should have_content("Change Description")
     end
 
     it "should allow the editing of the instance host and port" do
@@ -32,7 +32,7 @@ describe "Editing instance details" do
       validinstance_id = Instance.find_by_name("validinstance").id
       visit("#/instances")
       within(".instance_provider") do
-            page.find("li[data-instance-id='#{validinstance_id}']").click
+            page.find("li[data-greenplum-instance-id='#{validinstance_id}']").click
           end
       click_link "Edit Instance"
       within("#facebox") do

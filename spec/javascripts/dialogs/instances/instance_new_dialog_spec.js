@@ -10,12 +10,12 @@ describe("chorus.dialogs.InstanceNew", function() {
     });
 
     it("fetches the aurora install status", function() {
-        expect(chorus.models.Instance.aurora()).toHaveBeenFetched();
+        expect(chorus.models.GreenplumInstance.aurora()).toHaveBeenFetched();
     });
 
     context("when aurora is installed", function() {
         beforeEach(function() {
-            chorus.models.Instance.aurora().set({ installationStatus: "install_succeed" });
+            chorus.models.GreenplumInstance.aurora().set({ installationStatus: "install_succeed" });
             this.dialog = new chorus.dialogs.InstancesNew();
             this.dialog.render();
         });
@@ -26,7 +26,7 @@ describe("chorus.dialogs.InstanceNew", function() {
 
         context("when the aurora status fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(chorus.models.Instance.aurora());
+                this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora());
             });
 
             it("shows the correct text", function() {
@@ -46,12 +46,12 @@ describe("chorus.dialogs.InstanceNew", function() {
             });
 
             it("fetches the aurora templates", function() {
-                expect(chorus.models.Instance.auroraTemplates()).toHaveBeenFetched();
+                expect(chorus.models.GreenplumInstance.auroraTemplates()).toHaveBeenFetched();
             });
 
             context("when the aurora template fetch completes", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(chorus.models.Instance.auroraTemplates(), [
+                    this.server.completeFetchFor(chorus.models.GreenplumInstance.auroraTemplates(), [
                         newFixtures.provisioningTemplate({name: "Small"}),
                         newFixtures.provisioningTemplate({name: "Medium"}),
                         newFixtures.provisioningTemplate({name: "Large"})
@@ -67,7 +67,7 @@ describe("chorus.dialogs.InstanceNew", function() {
 
     context("when aurora is not installed", function() {
         beforeEach(function() {
-            chorus.models.Instance.aurora().set({ installationStatus: "not_installed" });
+            chorus.models.GreenplumInstance.aurora().set({ installationStatus: "not_installed" });
             this.dialog = new chorus.dialogs.InstancesNew();
             this.dialog.render();
         });
@@ -78,7 +78,7 @@ describe("chorus.dialogs.InstanceNew", function() {
 
         describe("when the fetches complete", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(chorus.models.Instance.aurora());
+                this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora());
                 this.server.completeFetchFor(chorus.models.Config.instance());
             });
 
@@ -193,10 +193,10 @@ describe("chorus.dialogs.InstanceNew", function() {
     describe("submitting the form", function() {
         beforeEach(function() {
             this.dialog.render();
-            chorus.models.Instance.aurora().set({ installationStatus: "install_succeed" });
+            chorus.models.GreenplumInstance.aurora().set({ installationStatus: "install_succeed" });
             this.server.completeFetchFor(chorus.models.Config.instance());
-            this.server.completeFetchFor(chorus.models.Instance.aurora());
-            this.server.completeFetchFor(chorus.models.Instance.auroraTemplates(), [
+            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora());
+            this.server.completeFetchFor(chorus.models.GreenplumInstance.auroraTemplates(), [
                 newFixtures.provisioningTemplate({name: "small"}),
                 newFixtures.provisioningTemplate({name: "median"}),
                 newFixtures.provisioningTemplate({name: "large"})
@@ -245,7 +245,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                 section.find("input[name=maintenanceDb]").val("foo");
                 section.find("input[name=name]").trigger("change");
 
-                spyOn(chorus.models.Instance.prototype, "save").andCallThrough();
+                spyOn(chorus.models.GreenplumInstance.prototype, "save").andCallThrough();
             });
 
 
@@ -277,7 +277,7 @@ describe("chorus.dialogs.InstanceNew", function() {
                 this.dialog.$(".create_new_greenplum input[name=dbPassword]").val("supersecret");
                 this.dialog.$(".create_new_greenplum select").val("large");
 
-                spyOn(chorus.models.Instance.prototype, "save").andCallThrough();
+                spyOn(chorus.models.GreenplumInstance.prototype, "save").andCallThrough();
                 spyOn(chorus, "toast");
             });
 

@@ -1,6 +1,6 @@
 chorus.collections.InstanceSet = chorus.collections.Base.extend({
     constructorName: "InstanceSet",
-    model: chorus.models.Instance,
+    model: chorus.models.GreenplumInstance,
     urlTemplate: "instances/",
 
     urlParams: function() {

@@ -7,7 +7,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
     describe("#setup", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
-            this.instance = newFixtures.instance.sharedAccount({instanceId: "5"});
+            this.instance = newFixtures.greenplumInstance.sharedAccount({instanceId: "5"});
             var launchElement = $("<a/>").data("instance", this.instance);
             this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
         });
@@ -24,7 +24,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
     context("when the instance is a shared account", function() {
         beforeEach(function() {
-            this.instance = newFixtures.instance.sharedAccount();
+            this.instance = newFixtures.greenplumInstance.sharedAccount();
             var account = newFixtures.instanceAccount({
                 dbUsername: 'some_db_username',
                 instanceId: this.instance.id
@@ -221,7 +221,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll').andCallThrough();
             this.owner = newFixtures.user({firstName: 'EDC', lastName: 'Admin'});
-            this.instance = newFixtures.instance.greenplum({owner: {
+            this.instance = newFixtures.greenplumInstance.greenplum({owner: {
                 id: this.owner.get("id"),
                 username: this.owner.get("username"),
                 firstName: this.owner.get("firstName"),

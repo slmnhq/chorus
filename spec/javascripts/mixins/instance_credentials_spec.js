@@ -14,7 +14,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
                     };
 
                     var instance = this.collection.instanceRequiringCredentials();
-                    expect(instance).toBeA(chorus.models.Instance);
+                    expect(instance).toBeA(chorus.models.GreenplumInstance);
                     expect(instance.get("id")).toBe("101");
                 });
             });
@@ -46,7 +46,7 @@ describe("chorus.Mixins.InstanceCredentials", function() {
         describe("when a fetch fails for one of the page's required resources", function() {
             context("when credentials are missing", function() {
                 beforeEach(function() {
-                    this.instance = newFixtures.instance.greenplum();
+                    this.instance = newFixtures.greenplumInstance.greenplum();
                     spyOn(this.model, 'instanceRequiringCredentials').andReturn(this.instance);
                     this.server.lastFetchFor(this.model).failForbidden();
                 })

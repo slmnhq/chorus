@@ -1850,7 +1850,7 @@ beforeEach(function() {
 
         instanceAccount: function(overridesOrInstance) {
             var overrides;
-            if (overridesOrInstance instanceof chorus.models.Instance) {
+            if (overridesOrInstance instanceof chorus.models.GreenplumInstance) {
                 overrides = {
                     instanceId: overridesOrInstance.get("id")
                 };

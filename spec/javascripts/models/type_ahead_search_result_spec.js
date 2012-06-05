@@ -38,7 +38,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
             expect(this.searchResults.length).toBe(7);
             expect(this.searchResults[0]).toBeA(chorus.models.HdfsEntry);
             expect(this.searchResults[1]).toBeA(chorus.models.Workspace);
-            expect(this.searchResults[2]).toBeA(chorus.models.Instance);
+            expect(this.searchResults[2]).toBeA(chorus.models.GreenplumInstance);
             expect(this.searchResults[3]).toBeA(chorus.models.User);
             expect(this.searchResults[4]).toBeA(chorus.models.Workfile);
             expect(this.searchResults[5]).toBeA(chorus.models.DatabaseObject);

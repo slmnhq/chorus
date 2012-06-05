@@ -6,7 +6,7 @@ describe("chorus.models.Activity", function() {
     describe("#noteworthy", function() {
         it("should return the instance when note is on an instance", function() {
             this.model = fixtures.activities.NOTE_ON_INSTANCE();
-            expect(this.model.noteworthy()).toBeA(chorus.models.Instance);
+            expect(this.model.noteworthy()).toBeA(chorus.models.GreenplumInstance);
         })
 
         it("should return the workfile when note is on a workfile", function() {
@@ -213,7 +213,7 @@ describe("chorus.models.Activity", function() {
             })
 
             it("creates an instance", function() {
-                expect(this.model.instance()).toBeA(chorus.models.Instance);
+                expect(this.model.instance()).toBeA(chorus.models.GreenplumInstance);
             });
 
             it("returns the same instance when called multiple times", function() {

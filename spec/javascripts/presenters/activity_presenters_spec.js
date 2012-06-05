@@ -525,7 +525,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Instance({id: this.instance.get("id")}).showUrl();
+            var url = new chorus.models.GreenplumInstance({id: this.instance.get("id")}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
@@ -722,7 +722,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Instance({id: this.instance.id}).showUrl();
+            var url = new chorus.models.GreenplumInstance({id: this.instance.id}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
@@ -752,7 +752,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("does not have an objectUrl", function() {
-            var url = new chorus.models.Instance({id: this.instance.id}).showUrl();
+            var url = new chorus.models.GreenplumInstance({id: this.instance.id}).showUrl();
             expect(this.presenter.objectUrl).toBeNull();
         });
 
@@ -776,7 +776,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Instance({id: this.instance.id}).showUrl();
+            var url = new chorus.models.GreenplumInstance({id: this.instance.id}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 
@@ -812,7 +812,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the right objectUrl", function() {
-            var url = new chorus.models.Instance({id: this.instance.id}).showUrl();
+            var url = new chorus.models.GreenplumInstance({id: this.instance.id}).showUrl();
             expect(this.presenter.objectUrl).toBe(url);
         });
 

@@ -34,8 +34,8 @@ describe("chorus.pages.InstanceIndexPage", function() {
     describe("when the instances are fetched", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(this.instanceSet, [
-                newFixtures.instance.greenplum(),
-                newFixtures.instance.greenplum({id: 123456})
+                newFixtures.greenplumInstance.greenplum(),
+                newFixtures.greenplumInstance.greenplum({id: 123456})
             ]);
         });
 
@@ -48,7 +48,7 @@ describe("chorus.pages.InstanceIndexPage", function() {
             it("pre-selects the instance with ID specified in chorus.pageOptions, when available", function() {
                 this.page.pageOptions = {selectId: 123456};
                 this.page.render();
-                expect(this.page.mainContent.content.$(".greenplum_instance li.instance[data-instance-id='123456']")).toHaveClass("selected");
+                expect(this.page.mainContent.content.$(".greenplum_instance li.instance[data-greenplum-instance-id='123456']")).toHaveClass("selected");
             });
         });
 
@@ -65,7 +65,7 @@ describe("chorus.pages.InstanceIndexPage", function() {
             });
 
             it("sets the page model when a 'instance:selected' event is broadcast", function() {
-                var instance = newFixtures.instance.greenplum();
+                var instance = newFixtures.greenplumInstance.greenplum();
                 expect(this.page.model).not.toBe(instance);
                 chorus.PageEvents.broadcast('instance:selected', instance);
                 expect(this.page.model).toBe(instance);

@@ -63,7 +63,7 @@
 
         defaultHeader: function() {
             function objectType(object) {
-                if (object instanceof chorus.models.Instance) {
+                if (object instanceof chorus.models.GreenplumInstance) {
                     return t("instances.title_lower");
                 } else if (object instanceof chorus.models.Workfile) {
                     return t("workfiles.title_lower")

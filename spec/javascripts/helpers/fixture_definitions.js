@@ -31,13 +31,10 @@ window.fixtureDefinitions = {
 
     image: {},
 
-    instance: {
+    greenplumInstance: {
         unique: [ "id" ],
 
         children: {
-            hadoop: {
-                model: "HadoopInstance"
-            },
             greenplum:      {},
             sharedAccount:  {}
         }

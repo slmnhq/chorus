@@ -1,6 +1,6 @@
 describe("chorus.dialogs.InstanceAccount", function() {
     beforeEach(function() {
-        this.instance = newFixtures.instance.greenplum();
+        this.instance = newFixtures.greenplumInstance.greenplum();
         var launchElement = $("<a></a>")
             .data("title", t("instances.account.add.title"))
             .data("instance", this.instance);

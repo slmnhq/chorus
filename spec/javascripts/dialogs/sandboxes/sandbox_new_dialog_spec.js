@@ -10,12 +10,12 @@ describe("chorus.dialogs.SandboxNew", function() {
     });
 
     it("fetches the aurora provisioning status", function() {
-        expect(chorus.models.Instance.aurora()).toHaveBeenFetched();
+        expect(chorus.models.GreenplumInstance.aurora()).toHaveBeenFetched();
     });
 
     context("when the SchemaPicker triggers an error", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(chorus.models.Instance.aurora());
+            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora());
             var modelWithError = fixtures.schemaSet();
             modelWithError.serverErrors = { fields: { a: { BLANK: {} } } };
             this.dialog.instanceMode.trigger("error", modelWithError);
@@ -35,7 +35,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     context("when aurora is not configured", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(chorus.models.Instance.aurora(), { installationStatus: "no" });
+            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), { installationStatus: "no" });
         });
 
         it("does not display the radio buttons", function() {
@@ -157,7 +157,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     context("when aurora is configured", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(chorus.models.Instance.aurora(), { installationStatus: "install_succeed" });
+            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), { installationStatus: "install_succeed" });
             this.server.completeFetchFor(chorus.models.Config.instance(), { provisionMaxSizeInGB: 2000 });
         });
 
@@ -167,12 +167,12 @@ describe("chorus.dialogs.SandboxNew", function() {
         });
 
         it("fetches the aurora templates", function() {
-            expect(chorus.models.Instance.auroraTemplates()).toHaveBeenFetched();
+            expect(chorus.models.GreenplumInstance.auroraTemplates()).toHaveBeenFetched();
         });
 
         context("when the aurora template fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(chorus.models.Instance.auroraTemplates(), [
+                this.server.completeFetchFor(chorus.models.GreenplumInstance.auroraTemplates(), [
                     newFixtures.provisioningTemplate({name: "Small"}),
                     newFixtures.provisioningTemplate({name: "Medium"}),
                     newFixtures.provisioningTemplate({name: "Large"})

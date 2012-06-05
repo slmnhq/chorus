@@ -28,7 +28,7 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                     return new chorus.models.ChorusView(result);
                     break;
                 case "instance":
-                    return new chorus.models.Instance(result);
+                    return new chorus.models.GreenplumInstance(result);
                     break;
                 default:
                     break;

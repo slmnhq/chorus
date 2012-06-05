@@ -60,7 +60,7 @@ chorus.models.Artifact = chorus.models.Base.extend({
 
     instance: function() {
         if (!this._instance) {
-            this._instance = this.get('instance') && new chorus.models.Instance(this.get('instance'));
+            this._instance = this.get('instance') && new chorus.models.GreenplumInstance(this.get('instance'));
         }
         return this._instance;
     },

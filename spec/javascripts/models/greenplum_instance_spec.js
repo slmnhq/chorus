@@ -1,6 +1,6 @@
-describe("chorus.models.Instance", function() {
+describe("chorus.models.GreenplumInstance", function() {
     beforeEach(function() {
-        this.instance = newFixtures.instance.greenplum({id: 1});
+        this.instance = newFixtures.greenplumInstance.greenplum({id: 1});
     });
 
     it("has the right show url", function() {
@@ -50,7 +50,7 @@ describe("chorus.models.Instance", function() {
 
     describe(".aurora", function() {
         beforeEach(function() {
-            this.aurora = chorus.models.Instance.aurora();
+            this.aurora = chorus.models.GreenplumInstance.aurora();
         });
 
         it("returns a provisioning object", function() {
@@ -63,13 +63,13 @@ describe("chorus.models.Instance", function() {
         });
 
         it("memoizes", function() {
-            expect(this.aurora).toBe(chorus.models.Instance.aurora());
+            expect(this.aurora).toBe(chorus.models.GreenplumInstance.aurora());
         });
     });
 
     describe(".auroraTemplates", function() {
         beforeEach(function() {
-            this.templates = chorus.models.Instance.auroraTemplates();
+            this.templates = chorus.models.GreenplumInstance.auroraTemplates();
         });
 
         it("returns a template set object", function() {
@@ -77,7 +77,7 @@ describe("chorus.models.Instance", function() {
         });
 
         it("memoizes", function() {
-            expect(this.templates).toBe(chorus.models.Instance.auroraTemplates());
+            expect(this.templates).toBe(chorus.models.GreenplumInstance.auroraTemplates());
         });
     });
 
@@ -102,7 +102,7 @@ describe("chorus.models.Instance", function() {
         })
         it("returns false if object is of different type", function() {
             var owner = this.instance.owner();
-            var brokenParameter = newFixtures.instance.greenplum({id: owner.get('id')});
+            var brokenParameter = newFixtures.greenplumInstance.greenplum({id: owner.get('id')});
             expect(this.instance.isOwner(brokenParameter)).toBeFalsy();
         })
     });
@@ -228,7 +228,7 @@ describe("chorus.models.Instance", function() {
     describe("#isGreenplum", function() {
         var instance;
         beforeEach(function() {
-            instance = newFixtures.instance.greenplum();
+            instance = newFixtures.greenplumInstance.greenplum();
         });
 
         it("returns true for greenplum instances", function() {
@@ -260,7 +260,7 @@ describe("chorus.models.Instance", function() {
     describe("#version", function() {
         var instance;
         beforeEach(function() {
-            instance = newFixtures.instance.greenplum({ instanceVersion: "1234" });
+            instance = newFixtures.greenplumInstance.greenplum({ instanceVersion: "1234" });
         });
 
         it("returns the correct version number", function() {

@@ -182,7 +182,7 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("returns an instance with the right id and name", function() {
-            expect(this.instance).toBeA(chorus.models.Instance);
+            expect(this.instance).toBeA(chorus.models.GreenplumInstance);
 
             expect(this.instance.id).toBe(this.tabularData.get("schema").database.instance.id);
             expect(this.instance.name()).toBe(this.tabularData.get("schema").database.instance.name);

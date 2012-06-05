@@ -54,9 +54,8 @@ chorus.views.InstanceList = chorus.views.Base.extend({
         target.addClass("selected");
 
         var collection = (target.data("type") === "hadoop") ? this.hadoopInstances : this.greenplumInstances;
-
-        if(target.data("instanceId")) {
-            var instance = collection.get(target.data("instanceId"))
+        if(target.data("greenplumInstanceId")) {
+            var instance = collection.get(target.data("greenplumInstanceId"))
             this.selectedInstance = instance;
             chorus.PageEvents.broadcast("instance:selected", instance);
         } else {

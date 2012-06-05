@@ -12,7 +12,7 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
     },
 
     setup: function(instanceId) {
-        this.instance = new chorus.models.Instance({id: instanceId});
+        this.instance = new chorus.models.GreenplumInstance({id: instanceId});
         this.collection = this.instance.databases();
 
         this.instance.fetch();

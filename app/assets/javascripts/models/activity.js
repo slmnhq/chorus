@@ -21,7 +21,7 @@ chorus.models.Activity = chorus.models.Base.extend({
 
     instance: function() {
         if (this.get("instance")) {
-            this._instance || (this._instance = new chorus.models.Instance(this.get("instance")));
+            this._instance || (this._instance = new chorus.models.GreenplumInstance(this.get("instance")));
         }
 
         return this._instance;

@@ -52,7 +52,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var instance = this.result.get("typeAhead").docs[3];
             var result = this.view.$("li.result:eq(2)");
             expect(result.find(".name").html()).toBe(instance.highlightedAttributes.name[0]);
-            expect(result.find(".name").attr("href")).toBe((new chorus.models.Instance(instance)).showUrl());
+            expect(result.find(".name").attr("href")).toBe((new chorus.models.GreenplumInstance(instance)).showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.instance");
         });
 

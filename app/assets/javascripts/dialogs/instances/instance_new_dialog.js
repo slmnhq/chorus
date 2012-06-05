@@ -11,7 +11,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     setup:function () {
-        this.aurora = chorus.models.Instance.aurora();
+        this.aurora = chorus.models.GreenplumInstance.aurora();
         this.bindings.add(this.aurora, "loaded", this.fetchTemplates, this);
         this.aurora.fetch();
 
@@ -21,7 +21,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
 
     fetchTemplates: function() {
         if (this.aurora.isInstalled()) {
-            this.templates = chorus.models.Instance.auroraTemplates();
+            this.templates = chorus.models.GreenplumInstance.auroraTemplates();
             this.bindings.add(this.templates, "loaded", this.templatesLoaded, this);
             this.templates.fetch();
         }
@@ -39,12 +39,12 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
     },
 
     makeModel:function () {
-        this.model = this.model || new chorus.models.Instance();
+        this.model = this.model || new chorus.models.GreenplumInstance();
     },
 
     additionalContext: function() {
         return {
-            auroraInstalled: chorus.models.Instance.aurora().isInstalled(),
+            auroraInstalled: chorus.models.GreenplumInstance.aurora().isInstalled(),
             provisionMaxSizeInGB: chorus.models.Config.instance().get("provisionMaxSizeInGB")
         }
     },
@@ -74,7 +74,7 @@ chorus.dialogs.InstancesNew = chorus.dialogs.Base.extend({
         if (instanceType === "register_existing_hadoop") {
             return chorus.models.HadoopInstance;
         } else {
-            return chorus.models.Instance;
+            return chorus.models.GreenplumInstance;
         }
     },
 

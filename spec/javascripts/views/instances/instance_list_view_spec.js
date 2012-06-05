@@ -28,9 +28,9 @@ describe("chorus.views.InstanceList", function() {
     context("when the instances are fetched", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.greenplumInstances, [
-                newFixtures.instance.greenplum({name : "GP9", id:"g9"}),
-                newFixtures.instance.greenplum({name : "gP1", id: "g1"}),
-                newFixtures.instance.greenplum({name : "GP10", id: "g10"})
+                newFixtures.greenplumInstance.greenplum({name : "GP9", id:"g9"}),
+                newFixtures.greenplumInstance.greenplum({name : "gP1", id: "g1"}),
+                newFixtures.greenplumInstance.greenplum({name : "GP10", id: "g10"})
             ]);
 
             this.server.completeFetchFor(this.hadoopInstances, [
@@ -78,7 +78,7 @@ describe("chorus.views.InstanceList", function() {
                 this.oldLength = this.greenplumInstances.length;
                 var liToSelect = this.view.$("li").eq(2);
                 liToSelect.click();
-                this.selectedId = liToSelect.data("instanceId");
+                this.selectedId = liToSelect.data("greenplumInstanceId");
             });
 
             context("when it is currently selected", function() {
@@ -101,13 +101,13 @@ describe("chorus.views.InstanceList", function() {
             context("when a non-selected instance is destroyed", function() {
                 beforeEach(function() {
                     var nonSelectedLi = this.view.$("li").not(".selected").eq(0);
-                    var id = nonSelectedLi.data("instanceId");
+                    var id = nonSelectedLi.data("greenplumInstanceId");
                     this.greenplumInstances.get(id).destroy();
                     this.server.lastDestroy().succeed();
                 });
 
                 it("leaves the same instance selected", function() {
-                    expect(this.view.$("li.selected").data("instanceId")).toBe(this.selectedId);
+                    expect(this.view.$("li.selected").data("greenplumInstanceId")).toBe(this.selectedId);
                 });
             });
         });
@@ -115,7 +115,7 @@ describe("chorus.views.InstanceList", function() {
         describe("when an instance is provisioning", function() {
             beforeEach(function() {
                 this.greenplumInstances.reset([
-                    newFixtures.instance.greenplum({ name: "Greenplum", state: "provisioning" })
+                    newFixtures.greenplumInstance.greenplum({ name: "Greenplum", state: "provisioning" })
                 ]);
                 this.view.render();
             });
@@ -133,7 +133,7 @@ describe("chorus.views.InstanceList", function() {
         describe("when an instance is offline", function() {
             beforeEach(function() {
                 this.greenplumInstances.reset([
-                    newFixtures.instance.greenplum({ name: "Greenplum", state: "offline" })
+                    newFixtures.greenplumInstance.greenplum({ name: "Greenplum", state: "offline" })
                 ]);
                 this.view.render();
             });
@@ -150,7 +150,7 @@ describe("chorus.views.InstanceList", function() {
 
         describe("instance:added event", function() {
             beforeEach(function() {
-                this.newInstance = newFixtures.instance.greenplum({id: "1234567"});
+                this.newInstance = newFixtures.greenplumInstance.greenplum({id: "1234567"});
                 spyOn(this.view.greenplumInstances, "fetchAll");
                 spyOn(this.view.hadoopInstances, "fetchAll");
                 chorus.PageEvents.broadcast("instance:added", this.newInstance);
@@ -165,7 +165,7 @@ describe("chorus.views.InstanceList", function() {
                 this.greenplumInstances.add(this.newInstance);
                 this.view.render(); // re-renders when fetch completes
 
-                expect(this.view.$("li[data-instance-id=1234567]")).toHaveClass("selected");
+                expect(this.view.$("li[data-greenplum-instance-id=1234567]")).toHaveClass("selected");
                 expect(this.view.$("li.selected").length).toBe(1);
             });
         });

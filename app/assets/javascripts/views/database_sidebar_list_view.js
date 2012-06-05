@@ -164,7 +164,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     launchAddCredentialsDialog: function(e) {
         e && e.preventDefault();
-        var instance = new chorus.models.Instance({id: this.schema.get("instanceId")});
+        var instance = new chorus.models.GreenplumInstance({id: this.schema.get("instanceId")});
         new chorus.dialogs.InstanceAccount({ instance: instance, title: t("instances.sidebar.add_credentials"), reload: true }).launchModal();
     }
 });
