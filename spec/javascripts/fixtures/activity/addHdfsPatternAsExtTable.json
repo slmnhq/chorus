@@ -1,0 +1,37 @@
+{
+    "response": {
+        "timestamp": "2012-05-17 11:15:34",
+        "id": 10013,
+        "author": {
+            "id": "InitialUser",
+            "lastName": "Admin",
+            "isDeleted": false,
+            "firstName": "EDC"
+        },
+        "workspace": {
+            "id": "10000",
+            "name": "friends",
+            "owner": {
+                "id": "InitialUser",
+                "userName": "edcadmin"
+            },
+            "isDeleted": false
+        },
+        "hdfs": {
+            "name": "*2.csv",
+            "path": "/imports",
+            "instance": {
+                "id": "10010",
+                "name": "hadoop1"
+            }
+        },
+        "databaseObject": {
+            "id": "\"10001\"|\"a_ha_ha_ha_ha\"|\"public\"|\"HDFS_EXTERNAL_TABLE\"|\"imports\"",
+            "name": "imports",
+            "isDeleted": false
+        },
+        "isDeleted": false,
+        "type": "WORKSPACE_ADD_HDFS_PATTERN_AS_EXT_TABLE",
+        "comments": []
+    }
+}

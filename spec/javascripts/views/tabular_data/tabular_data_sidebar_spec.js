@@ -133,7 +133,10 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 it("shows a no-permissions message", function() {
                     this.view.render();
-                    expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {linkText: t("dataset.credentials.missing.linkText")});
+                    expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
+                        linkText: t("dataset.credentials.missing.linkText"),
+                        instanceName: this.dataset.instance().name()
+                    });
                 });
 
                 context("clicking on the link to add credentials", function() {

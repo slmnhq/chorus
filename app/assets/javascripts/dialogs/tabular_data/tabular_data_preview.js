@@ -14,7 +14,13 @@ chorus.dialogs.TabularDataPreview = chorus.dialogs.Base.extend({
 
     setup: function() {
         _.bindAll(this, 'title');
-        this.resultsConsole = new chorus.views.ResultsConsole({footerSize: _.bind(this.footerSize, this)});
+        this.resultsConsole = new chorus.views.ResultsConsole({
+            footerSize: _.bind(this.footerSize, this),
+            showDownloadDialog: true,
+            tabularData: this.model,
+            enableResize: true,
+            enableExpander: true
+        });
         this.closePreviewHandle = chorus.PageEvents.subscribe("action:closePreview", this.closeModal, this);
         this.modalClosedHandle = chorus.PageEvents.subscribe("modal:closed", this.cancelTask, this);
     },

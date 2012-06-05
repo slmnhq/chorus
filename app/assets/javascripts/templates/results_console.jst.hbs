@@ -15,9 +15,13 @@
             {{/if}}
 
             <a href="#" class="download_csv">{{t "actions.download"}}</a>
-            <span class="separator">|</span>
-            <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
-            <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
+
+            {{#if enableResize}}
+                <span class="separator">|</span>
+                <a href="#" class="minimize hidden">{{t "results_console_view.minimize"}}</a>
+                <a href="#" class="maximize hidden">{{t "results_console_view.maximize"}}</a>
+            {{/if}}
+            
             {{#if enableClose}}
                 <span class="separator">|</span>
                 <a class="close" href='#'>{{t "actions.close"}}</a>
@@ -36,7 +40,7 @@
 </div>
 <div class="result_table collapsed"/>
 <div class="bottom_gutter hidden">
-    {{#if expander}}
+    {{#if enableExpander}}
     <div class="expander_button">
         <div class="arrow down"></div>
     </div>

@@ -1,0 +1,22 @@
+@import "_common.scss";
+
+.dataset_download {
+    width: 350px;
+
+    .dialog_header h1 {
+        @include ellipsis;
+    }
+
+    input[name=numOfRows] {
+        display: inline-block;
+        width: 50px;
+    }
+
+    .specify {
+        margin-bottom: 10px;
+
+        input {
+            margin-right: 5px;
+        }
+    }
+}

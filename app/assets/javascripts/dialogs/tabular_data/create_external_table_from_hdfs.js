@@ -4,6 +4,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     ok: t("hdfs.create_external.ok"),
     useLoadingSection: true,
     loadingKey: "hdfs.create_external.creating",
+    includeHeader: false,
 
     events: {
         "change select": "selectWorkspace"

@@ -2,7 +2,6 @@ CMCXmlParser._FilePathToXmlStringMap.Add(
 	'Stylesheet',
 	'<?xml version=\"1.0\" encoding=\"utf-8\"?>' +
 	'<Stylesheet>' +
-	'    <!-- saved from url=(0014)about:internet -->' +
 	'    <Resources>' +
 	'    </Resources>' +
 	'    <Styles>' +
@@ -10,7 +9,7 @@ CMCXmlParser._FilePathToXmlStringMap.Add(
 	'            <Classes>' +
 	'                <StyleClass Name=\"Logo\">' +
 	'                    <Properties>' +
-	'                        <Property Name=\"Icon\">url(\'greenplum_logo_title_small.png\')</Property>' +
+	'                        <Property Name=\"Icon\">url(\'headertitle6.png\')</Property>' +
 	'                        <Property Name=\"OnClick\">window.open (\"http://www.greenplum.com\",\"mywindow\");</Property>' +
 	'                        <Property Name=\"ControlType\">Logo</Property>' +
 	'                    </Properties>' +
@@ -645,7 +644,7 @@ CMCXmlParser._FilePathToXmlStringMap.Add(
 	'        </Style>' +
 	'    </Styles>' +
 	'    <ResourcesInfo>' +
-	'        <Resource Name=\"greenplum_logo_title_small.png\" Width=\"82\" Height=\"30\" />' +
+	'        <Resource Name=\"headertitle6.png\" Width=\"220\" Height=\"29\" />' +
 	'        <Resource Name=\"QuickSearch.gif\" Width=\"23\" Height=\"22\" />' +
 	'        <Resource Name=\"QuickSearch_selected.gif\" Width=\"23\" Height=\"22\" />' +
 	'        <Resource Name=\"QuickSearch_over.gif\" Width=\"23\" Height=\"22\" />' +

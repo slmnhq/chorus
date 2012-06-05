@@ -5,7 +5,7 @@ chorus.collections.HdfsEntrySet = chorus.collections.Base.include(
     model: chorus.models.HdfsEntry,
 
     urlTemplate: function() {
-        return "hadoop_instances/{{hadoopInstance.id}}/files/{{encode path}}/";
+        return "hadoop_instances/{{hadoopInstance.id}}/files/{{encode path}}";
     },
 
     _add: function(model, options) {

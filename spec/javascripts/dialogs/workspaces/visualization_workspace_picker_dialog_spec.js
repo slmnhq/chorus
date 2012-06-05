@@ -17,9 +17,15 @@ describe("chorus.dialogs.VisualizationWorkspacePicker", function() {
         expect(this.dialog.submitButtonTranslationKey).toBe("visualization.workspace_picker.button");
     });
 
-    it("only displays the active workspaces", function() {
-        expect(this.dialog.options.activeOnly).toBeTruthy();
-    });
+    describe("it only fetches active workspaces", function() {
+        beforeEach(function() {
+            this.dialog = new chorus.dialogs.VisualizationWorkspacePicker();
+        });
+
+        it("only fetches the active workspaces", function() {
+            expect(this.dialog.collection.attributes.active).toBeTruthy();
+        });
+    })
 
     context("when the fetch completes", function() {
         beforeEach(function() {

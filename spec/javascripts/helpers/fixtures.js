@@ -2277,6 +2277,25 @@ beforeEach(function() {
             return result;
         },
 
+        csvHdfsFileSet: function(models, overrides) {
+            models = models || [
+                fixtures.hdfsEntryDirJson(),
+                fixtures.hdfsEntryFileJson(),
+                fixtures.hdfsEntryBinaryFileJson(),
+                fixtures.hdfsEntryUnknownIfBinaryFileJson()
+            ];
+            var attributes = _.extend({
+                path: '/data',
+                hadoopInstance: {
+                    id: this.nextId().toString(),
+                    name: 'hadoopInstanceName'
+                }
+            }, overrides);
+            var result = new chorus.collections.CsvHdfsFileSet(null, attributes);
+            result.reset(models);
+            return result;
+        },
+
         hdfsEntryDir: function(overrides) {
             return new chorus.models.HdfsEntry(this.hdfsEntryDirJson(overrides));
         },
@@ -2351,12 +2370,11 @@ beforeEach(function() {
 
         hdfsFileJson: function(overrides) {
             return _.extend({
-                lastModificationTime: "2012-03-05T15:23:44Z",
+                lastUpdatedStamp: "2012-03-05T15:23:44Z",
                 lines: [
                     "some content;",
                     "second line"
                 ],
-                hadoopInstanceId: "1234",
                 path: "%2Fdata%2FfixtureFile.sql"
             }, overrides)
         },

@@ -309,7 +309,7 @@ window.Chorus = function chorus$Global() {
 
     self.help = function() {
         var helpId = (chorus.page && chorus.page.helpId) || "home";
-        FMCOpenHelp(helpId);
+        FMCOpenHelp(helpId, null, null, null, "/help") ;
     }
 
     self.namedConstructor = function(ctor, name) {

@@ -59,6 +59,10 @@ describe("chorus.dialogs.SqlPreview", function() {
                         expect(this.dialog.$("button.preview")).toHaveClass("hidden");
                     });
 
+                    it("shows the expander", function() {
+                        expect(this.dialog.$(".expander_button")).toExist();
+                    });
+
                     describe("closing the Data Preview", function() {
                         beforeEach(function() {
                             this.dialog.$(".results_console .close").click()

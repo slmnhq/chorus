@@ -18,12 +18,6 @@
         overflow-y: auto;
     }
 
-    .results_console {
-        a.minimize, a.maximize, .separator {
-            display: none;
-        }
-    }
-
     .CodeMirror-scroll {
         height: auto;
         overflow: visible;

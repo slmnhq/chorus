@@ -39,5 +39,9 @@ chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
         var self = this;
         self.attributes.namePattern = term;
         self.fetch({silent: true, success: function() { self.trigger('searched'); }});
+    },
+
+    hasFilter: function() {
+        return !this.attributes.namePattern == "";
     }
 });

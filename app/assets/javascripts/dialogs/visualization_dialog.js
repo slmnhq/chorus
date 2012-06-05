@@ -21,12 +21,18 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     setup: function() {
         this.task = this.options.task;
+
+        var workspace = this.task.workspace();
+        if(workspace) {
+            this.requiredResources.add(workspace);
+            workspace.fetch();
+        }
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
         this.filters = this.options.filters.clone();
         this.lastSavedFilters = this.options.filters.clone();
         this.filterWizard = new chorus.views.DatasetFilterWizard({collection: this.filters, columnSet: this.options.columnSet});
-        this.tableData = new chorus.views.ResultsConsole({shuttle: false, hideExpander: true, model: this.task, footerSize: _.bind(this.footerSize, this)});
+        this.tableData = new chorus.views.ResultsConsole({shuttle: false, enableResize: true, enableExpander: false, model: this.task, footerSize: _.bind(this.footerSize, this)});
         this.bindings.add(this.filters, "add remove change", this.filtersChanged, this);
     },
 
@@ -39,25 +45,32 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.tableData.$('.expander_button').remove();
         this.$('.chart_icon.' + this.type).addClass("selected");
 
+        var menuItems = [
+            {
+                name: "save_as_note",
+                text: t("visualization.save_as_note"),
+                onSelect: _.bind(this.saveAsNoteAttachment, this)
+            },
+            {
+                name: "save_to_desktop",
+                text: t("visualization.save_to_desktop"),
+                onSelect: _.bind(this.saveToDesktop, this)
+            }
+        ];
+
+        var inArchivedWorkspace = this.task.workspace() && !this.task.workspace().isActive();
+        if (!inArchivedWorkspace) {
+            menuItems.unshift({
+                name: "save_as_workfile",
+                text: t("visualization.save_as_workfile"),
+                onSelect: _.bind(this.saveAsWorkfile, this)
+            });
+        }
+
         new chorus.views.Menu({
             launchElement: this.$('button.save'),
             orientation: "right",
-            items: [
-                {
-                    name: "save_as_workfile",
-                    text: t("visualization.save_as_workfile"),
-                    onSelect: _.bind(this.saveAsWorkfile, this)
-                },
-                {   name: "save_as_note",
-                    text: t("visualization.save_as_note"),
-                    onSelect: _.bind(this.saveAsNoteAttachment, this)
-                },
-                {
-                    name: "save_to_desktop",
-                    text: t("visualization.save_to_desktop"),
-                    onSelect: _.bind(this.saveToDesktop, this)
-                }
-            ]
+            items: menuItems
         });
     },
 
@@ -233,7 +246,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             entityId: this.model.get("id"),
             entityName: this.model.name(),
             entityType: "databaseObject",
-            workspaceId: this.model.get("workspace").id,
+            workspaceId: this.model.get("workspace") && this.model.get("workspace").id,
             allowWorkspaceAttachments: !!this.task.get("workspaceId"),
             attachVisualization: {
                 fileName: this.makeFilename(),

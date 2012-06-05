@@ -16,6 +16,11 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 expect(this.view.$("a.dialog.add_note")).not.toExist();
             });
 
+            it("has a link to create an external table", function() {
+                expect(this.view.$("a.directory_external_table")).toExist();
+                expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_instance.create_directory_external_table")
+            });
+
             it("calls the base implementation for postRender", function() {
                 spyOn(chorus.views.Sidebar.prototype, "postRender");
                 this.view.render();

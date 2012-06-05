@@ -32,9 +32,6 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     owner: function() {
-        if (this._owner) {
-            return this._owner
-        }
         var ownerAttrs;
         if (_.isObject(this.get("owner"))) {
             ownerAttrs = this.get("owner");
