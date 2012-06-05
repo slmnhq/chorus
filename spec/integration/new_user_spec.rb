@@ -5,8 +5,6 @@ describe "creating a user" do
     login('edcadmin', 'secret')
   end
 
-
-
   it "Creates a user and saves their information" do
     visit("/#/users/new")
     page.find("button[type=submit]").click
@@ -37,4 +35,7 @@ describe "creating a user" do
     field_errors.should be_empty
     wait_until { !server_errors.empty? }
   end
+
+
+
 end

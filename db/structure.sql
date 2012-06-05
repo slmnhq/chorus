@@ -4,16 +4,22 @@
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
-SET standard_conforming_strings = off;
+SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET escape_string_warning = off;
 
 --
--- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: -
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
-CREATE OR REPLACE PROCEDURAL LANGUAGE plpgsql;
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 SET search_path = public, pg_catalog;
@@ -581,91 +587,91 @@ ALTER SEQUENCE workspaces_id_seq OWNED BY workspaces.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE gpdb_database_objects ALTER COLUMN id SET DEFAULT nextval('gpdb_database_objects_id_seq'::regclass);
+ALTER TABLE ONLY gpdb_database_objects ALTER COLUMN id SET DEFAULT nextval('gpdb_database_objects_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE gpdb_databases ALTER COLUMN id SET DEFAULT nextval('gpdb_databases_id_seq'::regclass);
+ALTER TABLE ONLY gpdb_databases ALTER COLUMN id SET DEFAULT nextval('gpdb_databases_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE gpdb_schemas ALTER COLUMN id SET DEFAULT nextval('gpdb_schemas_id_seq'::regclass);
+ALTER TABLE ONLY gpdb_schemas ALTER COLUMN id SET DEFAULT nextval('gpdb_schemas_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE hadoop_instances ALTER COLUMN id SET DEFAULT nextval('hadoop_instances_id_seq'::regclass);
+ALTER TABLE ONLY hadoop_instances ALTER COLUMN id SET DEFAULT nextval('hadoop_instances_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE instance_accounts ALTER COLUMN id SET DEFAULT nextval('instance_credentials_id_seq'::regclass);
+ALTER TABLE ONLY instance_accounts ALTER COLUMN id SET DEFAULT nextval('instance_credentials_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE instances ALTER COLUMN id SET DEFAULT nextval('instances_id_seq'::regclass);
+ALTER TABLE ONLY instances ALTER COLUMN id SET DEFAULT nextval('instances_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE memberships ALTER COLUMN id SET DEFAULT nextval('memberships_id_seq'::regclass);
+ALTER TABLE ONLY memberships ALTER COLUMN id SET DEFAULT nextval('memberships_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE queue_classic_jobs ALTER COLUMN id SET DEFAULT nextval('queue_classic_jobs_id_seq'::regclass);
+ALTER TABLE ONLY queue_classic_jobs ALTER COLUMN id SET DEFAULT nextval('queue_classic_jobs_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE workfile_drafts ALTER COLUMN id SET DEFAULT nextval('workfile_drafts_id_seq'::regclass);
+ALTER TABLE ONLY workfile_drafts ALTER COLUMN id SET DEFAULT nextval('workfile_drafts_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE workfile_versions ALTER COLUMN id SET DEFAULT nextval('workfile_versions_id_seq'::regclass);
+ALTER TABLE ONLY workfile_versions ALTER COLUMN id SET DEFAULT nextval('workfile_versions_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE workfiles ALTER COLUMN id SET DEFAULT nextval('workfiles_id_seq'::regclass);
+ALTER TABLE ONLY workfiles ALTER COLUMN id SET DEFAULT nextval('workfiles_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::regclass);
+ALTER TABLE ONLY workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::regclass);
 
 
 --
