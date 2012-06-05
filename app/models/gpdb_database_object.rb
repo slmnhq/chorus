@@ -75,7 +75,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
   #        "                    LEFT JOIN pg_description d ON (c.oid=d.objoid) " +
   #        "WHERE n.nspname= :schemaName AND c.relname IN (:names)";
 
-
+  delegate :with_gpdb_connection, :to => :schema
 
   def self.refresh(account, schema)
     db_objects = schema.with_gpdb_connection(account) do |conn|

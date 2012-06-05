@@ -17,7 +17,7 @@ class Presenter
     class_name = PRESENTER_NAME_MAP[model_class] || model_class.name
 
     presenter_class = "#{class_name}Presenter".constantize
-    presenter_class.new(model, view_context)
+    presenter_class.new(model, view_context).to_hash
   end
 
   def self.present_collection(collection, view_context)
@@ -25,7 +25,7 @@ class Presenter
   end
 
   def present(model)
-    self.class.present(model, @view_context).to_hash
+    self.class.present(model, @view_context)
   end
 
   def initialize(model, view_context)
