@@ -47,10 +47,11 @@ describe("chorus.views.DatasetFilter", function() {
         it("populates the filter's select options with the names of the columns", function() {
             expect(this.view.$(".column_filter option").length).toBe(this.collection.length);
             var view = this.view;
+
             this.collection.each(function(model, index) {
                 var option = view.$(".column_filter option:eq(" + index + ")");
                 expect(option).toContainText(model.get("name"));
-                expect(option).toHaveAttr("value", chorus.Mixins.dbHelpers.safePGName(this.collection.at(index).get("parentName"), model.get("name")));
+                expect(option).toHaveAttr("value", chorus.Mixins.dbHelpers.safePGName(this.collection.at(index).get("tabularData").get("objectName"), model.get("name")));
             }, this);
         });
 

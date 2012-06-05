@@ -2499,7 +2499,7 @@ beforeEach(function() {
                 workspace: {
                 },
                 databaseObject: {
-                    id: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"2010_report_on_white_house"',
+                    id: '100',
                     schema: {
                         name: "ddemo",
                         database: {

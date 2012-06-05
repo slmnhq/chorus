@@ -26,7 +26,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             workspace: { id: this.workspace.get("id") }
         })
 
-        this.columnSet = this.dataset.columns({type: "meta"});
+        this.columnSet = this.dataset.columns();
 
         this.datasetId = this.dataset.get('id');
 
@@ -75,6 +75,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 describe("when the columnSet fetch completes", function() {
                     beforeEach(function() {
+                        console.log(this.columnSet)
                         this.server.lastFetchAllFor(this.columnSet).succeed([
                             fixtures.databaseColumn(),
                             fixtures.databaseColumn()

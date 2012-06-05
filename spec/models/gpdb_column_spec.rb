@@ -12,8 +12,8 @@ describe GpdbColumn do
     before do
       mock(Gpdb::ConnectionBuilder).connect!(instance, account, 'database_name') do
         [
-          ['email', 'varchar(255)', 'it must be present'],
-          ['age', 'integer', 'nothing awesome'],
+          ['email', 'varchar(255)', 'it must be present', 1],
+          ['age', 'integer', 'nothing awesome', 2],
         ]
       end
     end
@@ -27,6 +27,7 @@ describe GpdbColumn do
       first_column.name.should eq("email")
       first_column.data_type.should eq("varchar(255)")
       first_column.description.should eq("it must be present")
+      first_column.ordinal_position.should eq(1)
     end
   end
 

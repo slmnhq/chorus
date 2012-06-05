@@ -26,7 +26,7 @@ describe("chorus.views.SearchAttachment", function() {
                 "attachment.found_in.tabular_data_in_workspace",
                 {
                     workspaceLink: '<a href="#/workspaces/33333">ws</a>',
-                    tabularDataLink: '<a href="#/workspaces/33333/datasets/' + encoded_id + '">2010_report_on_white_house</a>'
+                    tabularDataLink: '<a href="#/workspaces/33333/datasets/' + this.result.tabularData().id + '">2010_report_on_white_house</a>'
                 }
             );
         });
@@ -44,7 +44,7 @@ describe("chorus.views.SearchAttachment", function() {
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.tabular_data_not_in_workspace",
                 {
-                    tabularDataLink: '<a href="#/instances/22222/databases/dca_demo/schemas/ddemo/TABLE/2010_report_on_white_house">2010_report_on_white_house</a>'
+                    tabularDataLink: '<a href="#/database_objects/' + this.result.tabularData().id  + '">2010_report_on_white_house</a>'
                 }
             );
         });

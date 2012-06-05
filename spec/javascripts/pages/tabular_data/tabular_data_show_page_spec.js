@@ -12,14 +12,10 @@ describe("chorus.pages.TabularDataShowPage", function() {
             objectName: "slashes/"
         });
         this.databaseObject.get('workspaceUsed').workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
-        this.columnSet = this.databaseObject.columns({type: "meta"});
+        this.columnSet = this.databaseObject.columns();
 
         this.page = new chorus.pages.TabularDataShowPage(
-            "123",
-            "Foo/",
-            "Bar%",
-            "TABLE",
-            "slashes/"
+            this.databaseObject.id
         );
     });
 
@@ -47,9 +43,6 @@ describe("chorus.pages.TabularDataShowPage", function() {
                 this.server.completeFetchFor(this.databaseObject);
             })
 
-            it("fetches the columns as 'meta'", function() {
-                expect(this.server.lastFetchAllFor(this.columnSet).params().type).toBe("meta");
-            })
 
             describe("when the columnSet fetch completes", function() {
                 context("with valid data", function() {

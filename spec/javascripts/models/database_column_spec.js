@@ -25,27 +25,15 @@ describe("chorus.models.DatabaseColumn", function() {
                 this.model.initialize();
             });
 
-            it("sets instanceId, databaseName, schemaName, parentName, and parentType", function() {
-                expect(this.model.get("instanceId")).toBe(this.tabularData.instance().id);
-                expect(this.model.get("databaseName")).toBe(this.tabularData.database().name());
-                expect(this.model.get("schemaName")).toBe(this.tabularData.schema().name());
-                expect(this.model.get("parentName")).toBe(this.tabularData.name());
-                expect(this.model.get("parentType")).toBe(this.tabularData.metaType());
-            });
-
             describe("#url", function() {
                 it("is correct", function() {
                     this.model.set({
-                        instanceId: 5,
-                        databaseName: "%foo%",
-                        schemaName: "b/a/r",
-                        parentName: "a space"
+                        id: '1'
                     });
                     var attr = this.model.attributes;
                     var url = this.model.url();
-                    expect(url).toContain("/data/5/database/%25foo%25/schema/b%2Fa%2Fr/"+attr.parentType+"/a%20space/column?");
+                    expect(url).toContain("/database_objects/1/columns?");
                     expect(url).toContain("filter=" + attr.name);
-                    expect(url).toContain("type=meta");
                 });
             });
 
@@ -89,15 +77,6 @@ describe("chorus.models.DatabaseColumn", function() {
                 })
             })
 
-            describe("#quotedName", function() {
-                beforeEach(function() {
-                    this.model.set({typeCategory: "STRING"});
-                });
-
-                it("uses the safePGName helper", function() {
-                    expect(this.model.quotedName()).toBe(chorus.Mixins.dbHelpers.safePGName(this.model.get("parentName"), this.model.get("name")));
-                });
-            });
         });
     });
 });

@@ -5,14 +5,14 @@ describe("chorus.views.DatabaseColumnList", function() {
                 name: "column_name_2",
                 ordinalPosition: "2",
                 typeCategory: "WHOLE_NUMBER",
-                type: "int4",
+                dataType: "int4",
                 comment: "column comment"
             });
             this.column2 = fixtures.databaseColumn({
                 name: "column_name_1",
                 ordinalPosition: "1",
                 typeCategory: "BOOLEAN",
-                type: "boolean",
+                dataType: "boolean",
                 comment: "column comment"
             });
             this.dataset = newFixtures.dataset.sandboxTable();

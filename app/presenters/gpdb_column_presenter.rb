@@ -4,6 +4,7 @@ class GpdbColumnPresenter < Presenter
   def to_hash
     {
       :name => h(name),
+      :data_type => h(data_type),
       :type_category => type_category,
       :description => h(description)
     }

@@ -37,7 +37,7 @@ describe("chorus.models.DatabaseObject", function() {
             });
 
             it("uses the table exploration api", function() {
-                expect(this.databaseObject.url()).toContain("/data/1/database/%25foo%25/schema/b%2Fa%2Fr/table/a%20space")
+                expect(this.databaseObject.url()).toContain("/database_objects/" + + this.databaseObject.id)
             });
         });
 
@@ -47,7 +47,7 @@ describe("chorus.models.DatabaseObject", function() {
             });
 
             it("uses the table exploration api", function() {
-                expect(this.databaseObject.url()).toContain("/data/1/database/%25foo%25/schema/b%2Fa%2Fr/view/a%20space")
+                expect(this.databaseObject.url()).toContain("/database_objects/" + this.databaseObject.id)
             });
         });
     });
@@ -59,12 +59,12 @@ describe("chorus.models.DatabaseObject", function() {
             });
 
             it("has the correct url", function() {
-                expect(this.databaseObject.showUrl()).toContain("instances/1/databases/%25foo%25/schemas/b%2Fa%2Fr/TABLE/a%20space")
+                expect(this.databaseObject.showUrl()).toContain("/database_objects/" + this.databaseObject.id)
             });
 
             it("works when there is markup in the name (e.g. result from type ahead search", function() {
                 this.databaseObject.set({objectName: "<em>a</em> space"})
-                expect(this.databaseObject.showUrl()).toContain("instances/1/databases/%25foo%25/schemas/b%2Fa%2Fr/TABLE/a%20space");
+                expect(this.databaseObject.showUrl()).toContain("/database_objects/" + this.databaseObject.id);
             })
         });
 
@@ -75,14 +75,9 @@ describe("chorus.models.DatabaseObject", function() {
 
             it("uses the view exploration api", function() {
                 var pieces = [
-                    "#/instances",
-                    this.databaseObject.instance().id,
-                    "databases",
-                    this.databaseObject.database().name(),
-                    "schemas",
-                    this.databaseObject.schema().name(),
-                    this.databaseObject.get('objectType'),
-                    this.databaseObject.name()
+                    "#/database_objects",
+                    this.databaseObject.id
+
                 ]
                 var url = encodeURI(pieces.join('/'));
                 expect(this.databaseObject.showUrl()).toMatchUrl(url);
@@ -92,7 +87,7 @@ describe("chorus.models.DatabaseObject", function() {
         context("when it contains html", function() {
             it("removes the html", function() {
                 this.databaseObject.set({ objectName: "<em>mmmm</em> good" });
-                expect(this.databaseObject.showUrl()).toMatchUrl("#/instances/12/databases/beers/schemas/ipa/TABLE/mmmm%20good");
+                expect(this.databaseObject.showUrl()).toMatchUrl("#/database_objects/" + this.databaseObject.id);
             })
         })
     })

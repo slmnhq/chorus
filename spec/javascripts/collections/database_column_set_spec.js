@@ -8,33 +8,15 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                 },
                 databaseName: 'db1',
                 schemaName: 'schema1',
-                objectName: 'table1'
+                objectName: 'table1',
+                id: '1'
             });
             this.columns = table.columns();
         });
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toContain("/data/2/database/db1/schema/schema1/table/table1/column");
+            expect(this.columns.url()).toContain("/database_objects/1/columns");
         })
-
-        context("when the names need to be url encoded", function() {
-            beforeEach(function() {
-                var table = newFixtures.dataset.sandboxTable({
-                    instance: {
-                        id: '2',
-                        name: '%foo%'
-                    },
-                    databaseName: 'b/a/r',
-                    schemaName: ' baz ',
-                    objectName: '!!!'
-                });
-                this.columns = table.columns();
-            });
-
-            it("should url encode the appropriate entities", function() {
-                expect(this.columns.url()).toContain("/data/2/database/b%2Fa%2Fr/schema/%20baz%20/table/!!!/column");
-            });
-        });
 
         describe("add", function() {
             it("sets tabularData on the added column", function() {
@@ -47,7 +29,6 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                 spyOn(column, 'initialize').andCallThrough();
                 this.columns.add(column);
                 expect(column.initialize).toHaveBeenCalled();
-                expect(column.get('schemaName')).toBe('schema1');
             })
         });
     });
@@ -61,13 +42,14 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                 },
                 databaseName: 'db1',
                 schemaName: 'schema1',
-                objectName: 'view1'
+                objectName: 'view1',
+                id: '3'
             })
             this.columns = view.columns();
         });
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toContain("/data/2/database/db1/schema/schema1/view/view1/column");
+            expect(this.columns.url()).toContain("/database_objects/3/columns");
         })
 
         context("when the names need to be url encoded", function() {
@@ -79,23 +61,17 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                     },
                     databaseName: 'b/a/r',
                     schemaName: ' baz ',
-                    objectName: '!!!'
+                    objectName: '!!!',
+                    id: '4'
                 });
                 this.columns = table.columns();
             });
 
             it("should url encode the appropriate entities", function() {
-                expect(this.columns.url()).toContain("/data/2/database/b%2Fa%2Fr/schema/%20baz%20/view/!!!/column");
+                expect(this.columns.url()).toContain("/database_objects/4/columns");
             });
         });
 
-        describe("add", function() {
-            it("sets the schemaName and viewName (as parentName) on the added column", function() {
-                this.columns.add(fixtures.databaseColumn());
-                expect(this.columns.models[0].get('schemaName')).toBe('schema1');
-                expect(this.columns.models[0].get('parentName')).toBe('view1');
-            })
-        });
     });
 
     describe("database chorus view column", function() {
@@ -104,13 +80,13 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                 workspace: {
                     id: '10'
                 },
-                id: '"10000"|"dca_demo"|"ddemo"|"QUERY"|"chorus_view"'
+                id: '5'
             })
             this.columns = chorusView.columns();
         })
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toMatchUrl('/workspace/10/dataset/"10000"|"dca_demo"|"ddemo"|"QUERY"|"chorus_view"/column', {paramsToIgnore: ['page', 'rows']});
+            expect(this.columns.url()).toMatchUrl('/database_objects/5/columns', {paramsToIgnore: ['page', 'rows']});
         })
     })
 

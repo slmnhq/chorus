@@ -16,7 +16,7 @@ describe ColumnController do
      let!(:table) { FactoryGirl.create(:gpdb_table, :name => 'table1', :schema => schema) }
 
      before do
-       mock(GpdbColumn).columns_for(instanceAccount, database.name, "#{schema.name}.#{table.name}") do
+       mock(GpdbColumn).columns_for(instanceAccount, database.name, "\"#{schema.name}\".\"#{table.name}\"") do
                [
                    GpdbColumn.new(:name =>'email', :data_type => 'varchar(255)', :description =>'it must be present'),
                    GpdbColumn.new(:name =>'age', :data_type => 'integer', :description =>'nothing'),

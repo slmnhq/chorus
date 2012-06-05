@@ -409,9 +409,7 @@ describe("chorus.models.TabularData", function() {
 
         it("should pass the correct parameters to the DatabaseColumnSet", function() {
             var columns = this.tabularData.columns();
-            expect(columns.attributes.instanceId).toBe(this.tabularData.instance().id);
-            expect(columns.attributes.databaseName).toBe(this.tabularData.database().name());
-            expect(columns.attributes.schemaName).toBe(this.tabularData.schema().name());
+            expect(columns.attributes.id).toBe(this.tabularData.id);
         });
 
         context("when the object has a metaType of 'query'", function() {

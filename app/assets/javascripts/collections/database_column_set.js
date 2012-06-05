@@ -2,13 +2,7 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
     model: chorus.models.DatabaseColumn,
 
     urlTemplate: function() {
-        if (this.attributes.tableName) {
-            return "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}/table/{{encode tableName}}/column";
-        } else if (this.attributes.viewName) {
-            return "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}/view/{{encode viewName}}/column";
-        } else if (this.attributes.queryName) {
-            return "workspace/{{workspaceId}}/dataset/{{queryName}}/column";
-        }
+        return "database_objects/{{id}}/columns"
     },
 
     urlParams: function() {

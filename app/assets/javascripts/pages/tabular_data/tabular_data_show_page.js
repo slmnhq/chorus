@@ -36,17 +36,10 @@ chorus.pages.TabularDataShowPage = chorus.pages.Base.include(
             ];
         },
 
-        makeModel: function(instanceId, databaseName, schemaName, objectType, objectName) {
+        makeModel: function(databaseObjectId) {
             this.model = this.tabularData = new chorus.models.DatabaseObject({
-                objectName: objectName,
-                objectType: objectType,
-                schema: {
-                    name: schemaName,
-                    database: {
-                        name: databaseName,
-                        instance: { id: instanceId }
-                    }
-                }
+
+                id: databaseObjectId
             });
         },
 
@@ -56,7 +49,7 @@ chorus.pages.TabularDataShowPage = chorus.pages.Base.include(
         },
 
         fetchColumnSet: function() {
-            this.columnSet = this.tabularData.columns({type: "meta"});
+            this.columnSet = this.tabularData.columns();
             this.columnSet.bind("loaded", this.drawColumns, this);
             this.columnSet.fetchAll();
         },
