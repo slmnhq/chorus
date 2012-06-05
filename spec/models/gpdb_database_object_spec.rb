@@ -3,8 +3,8 @@ require 'spec_helper'
 describe GpdbDatabaseObject do
   let(:account) { FactoryGirl.create(:instance_account) }
   let(:schema) { FactoryGirl.create(:gpdb_schema) }
-  let(:db_objects_sql) { GpdbDatabaseObject::database_objects(schema.name).to_sql }
-  let(:comments_sql) { GpdbDatabaseObject.comments_for_tables(schema.name, ["view1", "table1"]).to_sql }
+  let(:db_objects_sql) { GpdbDatabaseObject::Query.new(schema).tables_and_views_in_schema.to_sql }
+  let(:comments_sql) { GpdbDatabaseObject::Query.new(schema).comments_for_tables(["view1", "table1"]).to_sql }
 
   describe "associations" do
     it { should belong_to(:schema) }

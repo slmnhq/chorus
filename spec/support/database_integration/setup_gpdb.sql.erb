@@ -5,25 +5,47 @@
 
   \connect <%= database.name %>
 
-  <% database.schemas.each do |schema| %>
+  <% database.schemas.try(:each) do |schema| %>
 
     CREATE SCHEMA <%= schema.name %>;
 
-    <% schema.external_web_tables.each do |table| %>
-      CREATE EXTERNAL WEB TABLE <%= schema.name %>.<%= table.name %>
+    <% schema.base_tables.try(:each) do |table| %>
+      CREATE TABLE <%= "#{schema.name}.#{table.name}" %>
+        ( id integer, date date )
+        DISTRIBUTED BY (id);
+      COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
+        IS '<%= table.description %>';
+    <% end %>
+
+    <% schema.views.try(:each) do |view| %>
+      CREATE VIEW <%= "#{schema.name}.#{view.name}" %>
+        AS
+        SELECT * FROM <%= schema.name %>.<%= view.table %>;
+      COMMENT ON VIEW <%= "#{schema.name}.#{view.name}" %>
+        IS '<%= view.description %>';
+    <% end %>
+
+    <% schema.external_web_tables.try(:each) do |table| %>
+      CREATE EXTERNAL WEB TABLE <%= "#{schema.name}.#{table.name}" %>
         (name text, date date, amount float4, category text, description text)
         LOCATION ('<%= table.url %>')
         FORMAT '<%= table.format %>'
         ( HEADER );
+      COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
+        IS '<%= table.description %>';
     <% end %>
 
-    <% schema.master_tables.each do |table| %>
-      CREATE TABLE <%= schema.name %>.<%= table.name %>
+    <% schema.master_tables.try(:each) do |table| %>
+      CREATE TABLE <%= "#{schema.name}.#{table.name}" %>
         ( id integer, some_int integer )
         DISTRIBUTED BY (id)
         PARTITION BY RANGE(some_int)
         ( START (1::integer) END (<%= table.partitions + 1 %>::integer) EVERY (1::integer));
+      COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
+        IS '<%= table.description %>';
     <% end %>
+
+    \dtvs <%= schema.name %>.*
 
   <% end %>
 <% end %>

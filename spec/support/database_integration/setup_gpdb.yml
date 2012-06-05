@@ -12,13 +12,24 @@ databases:
     schemas:
 
     - name: "gpdb_test_schema"
-
+      base_tables:
+        - name: "base_table1"
+          description: "comment on base_table1"
+      views:
+        - name: "view1"
+          table: "base_table1"
+          description: "comment on view1"
       master_tables:
         - name: "master_table1"
           partitions: 7
-
+          description: "comment on master_table1"
       external_web_tables:
         - name: "external_web_table1"
           url: "http://intranet.company.com/expenses/sales/file.csv"
           format: 'CSV'
+
+    - name: "gpdb_test_schema2"
+      base_tables:
+        - name: "other_base_table"
+
 
