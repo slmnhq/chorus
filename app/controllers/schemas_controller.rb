@@ -7,7 +7,7 @@ class SchemasController < GpdbController
 
   def show
     schema = GpdbSchema.find(params[:id])
-    authorize_gpdb_account(schema)
+    authorize_instance_access(schema)
     present schema
   end
 end

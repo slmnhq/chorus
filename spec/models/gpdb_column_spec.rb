@@ -2,36 +2,6 @@ require 'spec_helper'
 
 describe GpdbColumn do
   describe ".columns_for" do
-    let(:instance) { stub(Object.new).subject }
-    let(:account) do
-      stub(Object.new).instance { instance }.subject
-    end
-
-    subject { GpdbColumn.columns_for(account, 'database_name', 'table_name') }
-
-    before do
-      mock(Gpdb::ConnectionBuilder).connect!(instance, account, 'database_name') do
-        [
-          ['email', 'varchar(255)', 'it must be present', 1],
-          ['age', 'integer', 'nothing awesome', 2],
-        ]
-      end
-    end
-
-    it "returns a collections of columns" do
-      subject.should have(2).columns
-    end
-
-    it "gets column name, column type and column comment" do
-      first_column = subject.first
-      first_column.name.should eq("email")
-      first_column.data_type.should eq("varchar(255)")
-      first_column.description.should eq("it must be present")
-      first_column.ordinal_position.should eq(1)
-    end
-  end
-
-  describe ".columns_for integration" do
     let(:db_config) do
       Rails.configuration.database_configuration['test']
     end
@@ -51,7 +21,11 @@ describe GpdbColumn do
       })
     end
 
-    subject { GpdbColumn.columns_for(account, db_config['database'], 'users') }
+    let(:database) { FactoryGirl.create(:gpdb_database, :name => "chorus_rails_test", :instance => instance)}
+    let(:schema) { FactoryGirl.create(:gpdb_schema, :name => "public", :database => database)}
+    let(:database_object) { FactoryGirl.create(:gpdb_table, :schema => schema, :name => "users") }
+
+    subject { GpdbColumn.columns_for(account, database_object) }
 
     # XXX Local databases usually don't have password so bypass validation
     before do
@@ -64,6 +38,27 @@ describe GpdbColumn do
       id.name.should eq('id')
       id.data_type.should eq('integer')
       id.description.should be_blank
+    end
+
+    describe "with fake data" do
+      before do
+        mock(Gpdb::ConnectionBuilder).connect!(instance, account, 'chorus_rails_test') do
+          [
+            ['email', 'varchar(255)', 'it must be present', 1],
+            ['age', 'integer', 'nothing awesome', 2],
+          ]
+        end
+      end
+
+      it "returns a collections of columns" do
+        subject.should have(2).columns
+      end
+
+      it "gets column comment and column position" do
+        first_column = subject.first
+        first_column.description.should eq("it must be present")
+        first_column.ordinal_position.should eq(1)
+      end
     end
   end
 end

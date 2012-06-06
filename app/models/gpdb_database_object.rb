@@ -7,6 +7,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
   attr_reader :column_count
 
   delegate :with_gpdb_connection, :to => :schema
+  delegate :instance, :to => :schema
 
   def self.refresh(account, schema)
     db_objects = schema.with_gpdb_connection(account) do |conn|
