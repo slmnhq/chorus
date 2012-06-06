@@ -3,7 +3,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         this.launchElement = $("<a data-workspace-id='4'></a>")
         this.model = fixtures.workfile({ workspaceId: 4 });
         var workfileSet = new chorus.collections.WorkfileSet([this.model], { workspaceId: 4 });
-        this.dialog = new chorus.dialogs.WorkfilesImport({ launchElement : this.launchElement, pageModel: this.model, pageCollection: workfileSet });
+        this.dialog = new chorus.dialogs.WorkfilesImport({ launchElement: this.launchElement, pageModel: this.model, pageCollection: workfileSet });
         this.successfulResponseTxt = {"result": '{"resource":[{"id":"9", "fileName" : "new_file.txt", "mimeType" : "text/plain", "workspaceId" : "4"}], "status": "ok"}'};
         this.successfulResponseOther = {"result": '{"resource":[{"id":"9", "fileName" : "new_file.sh", "mimeType" : "application/octet-stream", "workspaceId" : "4"}], "status": "ok"}'};
         this.errorResponse = {"result": '{"status": "fail", "message" :[{"message":"Workspace already has a workfile with this name. Specify a different name."}]}'};
@@ -60,6 +60,23 @@ describe("chorus.dialogs.WorkfilesImport", function() {
 
         it("navigates to the show page of the workfile", function() {
             expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl());
+        });
+    });
+
+    context("when clicking upload a file button", function() {
+        beforeEach(function() {
+            spyOn(this.dialog, 'chooseFile').andCallThrough();
+            this.dialog.render();
+
+            // Avoid changing the page if the test fails
+            this.dialog.$('form').submit(function(e) {
+                e.preventDefault();
+            });
+        });
+
+        it("calls the chooseFile method (to support FF13, which doesn't receive a click on the 'input' field)", function() {
+            this.dialog.$('button.choose').click();
+            expect(this.dialog.chooseFile).toHaveBeenCalled();
         });
     });
 
