@@ -131,6 +131,7 @@ chorus.models.TabularData = chorus.models.Base.include(
                 }));
             } else {
                 return new chorus.models.DataPreviewTask(_.extend(commonAttributes, {
+                    databaseObject: {id: this.id},
                     objectType: this.get("objectType")
                 }));
             }
