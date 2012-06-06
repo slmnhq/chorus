@@ -11,7 +11,8 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         "paste input[name=workfile[description]]": "descriptionChanged",
         "keyup input[name=workfile[description]]": "descriptionChanged",
         "click button.submit": "upload",
-        "submit form": "upload"
+        "submit form": "upload",
+        "click button.choose": "chooseFile"
     },
 
     makeModel: function() {

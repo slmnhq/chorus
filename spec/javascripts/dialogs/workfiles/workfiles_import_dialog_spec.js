@@ -64,6 +64,23 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
     });
 
+    context("when clicking upload a file button", function() {
+        beforeEach(function() {
+            spyOn(this.dialog, 'chooseFile').andCallThrough();
+            this.dialog.render();
+
+            // Avoid changing the page if the test fails
+            this.dialog.$('form').submit(function(e) {
+                e.preventDefault();
+            });
+        });
+
+        it("calls the chooseFile method (to support FF13, which doesn't receive a click on the 'input' field)", function() {
+            this.dialog.$('button.choose').click();
+            expect(this.dialog.chooseFile).toHaveBeenCalled();
+        });
+    });
+
     context("when a file has been chosen", function() {
         beforeEach(function() {
             this.fakeUpload = stubFileUpload();
