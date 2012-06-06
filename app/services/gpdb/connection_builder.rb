@@ -9,6 +9,9 @@ module Gpdb
         :password => account.db_password
       )
       yield connection if block_given?
+    rescue PG::Error => e
+      Rails.logger.error e
+      raise e
     ensure
       connection.try(:disconnect!)
     end

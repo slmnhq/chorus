@@ -20,6 +20,14 @@ describe GpdbDatabaseObject::Query, :type => :database_integration do
     schema.with_gpdb_connection(account) { |conn| conn.select_all(sql) }
   end
 
+  describe "queries" do
+    let(:sql) { "SELECT * FROM base_table1" }
+
+    it "work, even when table is not in 'public' schema" do
+      lambda { rows }.should_not raise_error
+    end
+  end
+
   describe "#tables_and_views_in_schema" do
     let(:sql) { subject.tables_and_views_in_schema.to_sql }
 
@@ -59,7 +67,7 @@ describe GpdbDatabaseObject::Query, :type => :database_integration do
         {
           "name" => "view1",
           "description" => "comment on view1",
-          "definition" => "SELECT base_table1.id, base_table1.column1, base_table1.column2 FROM gpdb_test_schema.base_table1;",
+          "definition" => "SELECT base_table1.id, base_table1.column1, base_table1.column2 FROM base_table1;",
           "column_count" => "3"
         },
         {

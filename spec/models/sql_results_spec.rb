@@ -7,9 +7,6 @@ describe SqlResults do
   let(:schema) { FactoryGirl::create :gpdb_schema, :name => "public", :database => database }
   let(:table) { FactoryGirl::create :gpdb_table, :name => "pg_all_types_2", :schema => schema }
 
-  describe "#preview_database_object" do
-  end
-
   describe "#rows" do
     subject { SqlResults.preview_database_object(table, account).rows }
 

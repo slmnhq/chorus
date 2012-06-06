@@ -31,4 +31,11 @@ class GpdbSchema < ActiveRecord::Base
       schema
     end
   end
+
+  def with_gpdb_connection(account)
+    database.with_gpdb_connection(account) do |conn|
+      conn.schema_search_path = "#{conn.quote_column_name(name)}, 'public'"
+      yield conn
+    end
+  end
 end

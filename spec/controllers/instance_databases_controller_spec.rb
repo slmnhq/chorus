@@ -3,7 +3,6 @@ require 'spec_helper'
 describe InstanceDatabasesController do
   ignore_authorization!
 
-  let!(:dbconfig) { YAML.load_file("config/database.yml")[Rails.env] }
   let!(:user) { FactoryGirl.create :user }
 
   before do

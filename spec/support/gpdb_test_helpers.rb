@@ -4,6 +4,8 @@ module GpdbTestHelpers
     query_values.each do |query, response|
       stub(fake_connection).query(query).times(any_times) { clone_response(response) }
       stub(fake_connection).select_all(query).times(any_times) { clone_response(response) }
+      stub(fake_connection).quote_column_name { |val| val }
+      stub(fake_connection).schema_search_path = anything
     end
     stub(Gpdb::ConnectionBuilder).connect!(account.instance, account) {|_, _, block| block.call(fake_connection) }
     stub(Gpdb::ConnectionBuilder).connect!(account.instance, account, anything) {|_, _, _, block| block.call(fake_connection) }

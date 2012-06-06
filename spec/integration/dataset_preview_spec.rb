@@ -5,7 +5,7 @@ describe "Viewing data inside GPDB instances" do
     login('edcadmin', 'secret')
   end
 
-  xit "can preview a dataset" do
+  it "can preview a dataset" do
     create_valid_instance(:name => "InstanceToPreviewData")
     click_link "InstanceToPreviewData"
     click_link "Analytics"
