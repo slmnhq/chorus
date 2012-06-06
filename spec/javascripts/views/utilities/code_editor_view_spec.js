@@ -77,5 +77,45 @@ describe("chorus.views.CodeEditorView", function() {
                 expect(this.view.editor.getLine(2)).toBe("this is the testthird line");
             });
         });
+
+        describe("#selection", function() {
+            beforeEach(function() {
+                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+            });
+
+            context("it has selected text", function() {
+                beforeEach(function() {
+                    spyOn(this.view.editor, "getSelection").andReturn(true);
+                    this.view.$(".text_editor").mouseup();
+                });
+
+                it("broadcasts a file:selection event", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:selection");
+                });
+            });
+
+            context("it has not selected any text" , function() {
+                beforeEach(function() {
+                    spyOn(this.view.editor, "getSelection").andReturn(false);
+                    this.view.$(".text_editor").mousedown();
+                });
+
+                it("broadcasts a file:unselection event", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:unselection");
+                });
+            });
+
+            context("the user selects text with the keyboard", function() {
+                beforeEach(function() {
+                    spyOn(this.view.editor, "getSelection").andReturn(true);
+                    this.view.$(".text_editor").keydown();
+                });
+
+                it("broadcasts a file:selection event", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:selection");
+                });
+            });
+        });
+
     });
 });

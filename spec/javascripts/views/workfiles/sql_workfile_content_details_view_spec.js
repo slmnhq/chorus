@@ -68,6 +68,23 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             });
         });
 
+        describe("changing the run button when text is selected", function() {
+            beforeEach(function() {
+                chorus.PageEvents.broadcast("file:selection");
+            });
+
+            it("Run file button text changes to Run Selected", function() {
+                expect(this.view.$(".run_file .run_description")).toContainTranslation("workfile.content_details.run_selected");
+            });
+
+            context("when the user de-selects text", function() {
+                it("changes Run Selected button text back to Run File", function() {
+                    chorus.PageEvents.broadcast("file:unselection");
+                    expect(this.view.$(".run_file .run_description")).toContainTranslation("workfile.content_details.run_file");
+                });
+            });
+        });
+
         context("when the user has selected some text", function() {
             beforeEach(function() {
                 this.contentView.getSelectedText = function() {

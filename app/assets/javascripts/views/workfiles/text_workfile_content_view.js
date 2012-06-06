@@ -6,7 +6,7 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
         this._super("setup");
         chorus.PageEvents.subscribe("file:saveCurrent", this.replaceCurrentVersion, this);
         chorus.PageEvents.subscribe("file:createWorkfileNewVersion", this.createWorkfileNewVersion, this);
-        this.bindings.add(this.model, "saveFailed", this.versionConflict)
+        this.bindings.add(this.model, "saveFailed", this.versionConflict);
     },
 
     versionConflict: function() {
@@ -43,7 +43,6 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
                 setTimeout(_.bind(editText, self), 100);
             }
         };
-
         this._super("postRender", [opts, preEditRefresh]);
     },
 
@@ -111,5 +110,5 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
             this.trigger("autosaved", "workfile.content_details.save");
         });
     }
-
 });
+

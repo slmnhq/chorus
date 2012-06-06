@@ -1,6 +1,12 @@
 chorus.views.CodeEditorView = chorus.views.Base.extend({
     templateName: "code_editor_view",
 
+    events: {
+        "mouseup ": "selection",
+        "mousedown": "selection",
+        "keydown": "selection"
+    },
+
     setup: function() {
         chorus.PageEvents.subscribe("file:insertText", this.insertText, this);
     },
@@ -12,6 +18,10 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
             if (textArea !== this.textArea) {
                 this.textArea = textArea;
                 this.editor = CodeMirror.fromTextArea(this.textArea, opts);
+
+                this.editor.onKeyEvent = _.bind(function() {
+                    this.selection();
+                }, this);
 
                 if (preEditRefreshFunction) {
                     preEditRefreshFunction();
@@ -41,5 +51,13 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
         this.editor.focus();
         this.editor.replaceSelection(text)
         this.editor.setCursor(this.editor.getCursor(false))
+    },
+
+    selection: function() {
+        if(this.editor.getSelection()) {
+            chorus.PageEvents.broadcast("file:selection");
+        } else {
+            chorus.PageEvents.broadcast("file:unselection");
+        }
     }
 });

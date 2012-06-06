@@ -3,6 +3,8 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
 
     setup: function() {
         chorus.PageEvents.subscribe("workfile:executed", this.workfileExecuted, this);
+        chorus.PageEvents.subscribe("file:selection", this.changeRunFileButtonText, this);
+        chorus.PageEvents.subscribe("file:unselection", this.changeRunSelectedButtonText, this);
         this.contentView = this.options.contentView;
     },
 
@@ -32,6 +34,14 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
 
     enableRunSelection: function() {
         return !!(this.contentView.getSelectedText() && this.model.executionSchema());
+    },
+
+    changeRunFileButtonText: function() {
+        this.$(".run_file .run_description").text(t("workfile.content_details.run_selected"));
+    },
+
+    changeRunSelectedButtonText: function() {
+        this.$(".run_file .run_description").text(t("workfile.content_details.run_file"));
     },
 
     getContentSelection: function() {
