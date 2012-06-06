@@ -11,7 +11,12 @@
 
     <% schema.base_tables.try(:each) do |table| %>
       CREATE TABLE <%= "#{schema.name}.#{table.name}" %>
-        ( id integer, date date )
+        (
+          id integer
+          <% ((table.column_count || 1) - 1).times do |i| %>
+            , <%= "column#{i+1}" %> integer
+          <% end %>
+        )
         DISTRIBUTED BY (id);
       COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
         IS '<%= table.description %>';
@@ -43,6 +48,12 @@
         ( START (1::integer) END (<%= table.partitions + 1 %>::integer) EVERY (1::integer));
       COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
         IS '<%= table.description %>';
+    <% end %>
+
+    <% schema.indexes.try(:each) do |index| %>
+      CREATE UNIQUE INDEX <%= index.name %>
+        ON <%= "#{schema.name}.#{index.table}" %>
+        ( id );
     <% end %>
 
     \dtvs <%= schema.name %>.*

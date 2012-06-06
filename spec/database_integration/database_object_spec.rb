@@ -24,7 +24,7 @@ describe GpdbDatabaseObject::Query, :type => :database_integration do
     let(:sql) { subject.tables_and_views_in_schema.to_sql }
 
     it "returns a query whose result includes the names of all tables and views in the schema," +
-       "but does not include sub-partition tables, indices, or relations in other schemas" do
+       "but does not include sub-partition tables, indexes, or relations in other schemas" do
       names = rows.map { |row| row["name"] }
       names.should =~ [ "base_table1", "view1", "external_web_table1", "master_table1" ]
     end
@@ -44,14 +44,30 @@ describe GpdbDatabaseObject::Query, :type => :database_integration do
     end
   end
 
-  describe "#comments_for_tables" do
-    let(:sql) { subject.comments_for_tables(["base_table1", "view1", "external_web_table1"]).to_sql }
+  describe "#metadata_for_tables" do
+    let(:sql) { subject.metadata_for_tables(["base_table1", "view1", "external_web_table1"]).to_sql }
 
-    it "returns a query whose result includes each table/view's name and comment" +
-       "and excludes tables that have no comment" do
+    it "returns a query whose result includes, for each of the given tables/views," +
+       "the name, comment (if present) and sql definition (for views)" do
       rows.should =~ [
-        { "object_name" => "base_table1", "comment" => "comment on base_table1" },
-        { "object_name" => "view1", "comment" => "comment on view1" }
+        {
+          "name" => "base_table1",
+          "description" => "comment on base_table1",
+          "definition" => nil,
+          "column_count" => "3"
+        },
+        {
+          "name" => "view1",
+          "description" => "comment on view1",
+          "definition" => "SELECT base_table1.id, base_table1.column1, base_table1.column2 FROM gpdb_test_schema.base_table1;",
+          "column_count" => "3"
+        },
+        {
+          "name" => "external_web_table1",
+          "description" => nil,
+          "definition" => nil,
+          "column_count" => "5"
+        }
       ]
     end
   end

@@ -51,13 +51,11 @@ FactoryGirl.define do
 
   factory :gpdb_table do
     sequence(:name) { |n| "table#{n}" }
-    comment "A helpful table"
     association :schema, :factory => :gpdb_schema
   end
 
   factory :gpdb_view do
     sequence(:name) { |n| "view#{n}" }
-    comment "A helpful view"
     association :schema, :factory => :gpdb_schema
   end
 

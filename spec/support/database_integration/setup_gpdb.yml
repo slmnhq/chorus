@@ -15,6 +15,7 @@ databases:
       base_tables:
         - name: "base_table1"
           description: "comment on base_table1"
+          column_count: 3
       views:
         - name: "view1"
           table: "base_table1"
@@ -27,6 +28,9 @@ databases:
         - name: "external_web_table1"
           url: "http://intranet.company.com/expenses/sales/file.csv"
           format: 'CSV'
+      indexes:
+        - table: "base_table1"
+          name: "index1"
 
     - name: "gpdb_test_schema2"
       base_tables:

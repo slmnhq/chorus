@@ -18,7 +18,7 @@ shared_examples "database object presenter" do |database_object_factory_name|
       :id => 321,
       :name => "object1",
       :schema => schema,
-      :comment => "This is a great table"
+      :description => "This is a great table"
     )
   end
 
@@ -29,7 +29,7 @@ shared_examples "database object presenter" do |database_object_factory_name|
     hash[:id].should == 321
     hash[:object_name].should == "object1"
     hash[:type].should == "SOURCE_TABLE"
-    hash[:comment].should == "This is a great table"
+    hash[:description].should == "This is a great table"
 
     schema = hash[:schema]
     schema[:id].should == 456

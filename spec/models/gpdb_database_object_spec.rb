@@ -4,7 +4,7 @@ describe GpdbDatabaseObject do
   let(:account) { FactoryGirl.create(:instance_account) }
   let(:schema) { FactoryGirl.create(:gpdb_schema) }
   let(:db_objects_sql) { GpdbDatabaseObject::Query.new(schema).tables_and_views_in_schema.to_sql }
-  let(:comments_sql) { GpdbDatabaseObject::Query.new(schema).comments_for_tables(["view1", "table1"]).to_sql }
+  let(:metadata_sql) { GpdbDatabaseObject::Query.new(schema).metadata_for_tables(["view1", "table1"]).to_sql }
 
   describe "associations" do
     it { should belong_to(:schema) }
@@ -64,7 +64,7 @@ describe GpdbDatabaseObject do
       GpdbDatabaseObject.refresh(account, schema)
 
       stub_gpdb(account, db_objects_sql => [
-        { 'type' => "r", "name" => "table1", "comment" => "Great new table" }
+        { 'type' => "r", "name" => "table1" }
       ])
 
       GpdbDatabaseObject.refresh(account, schema)
@@ -80,7 +80,7 @@ describe GpdbDatabaseObject do
       to_be_deleted = FactoryGirl.create(:gpdb_table, :schema => schema, :name => "matching")
 
       stub_gpdb(account, db_objects_sql => [
-          { 'type' => "r", 'name' => "new", 'comment' => "" }
+          { 'type' => "r", 'name' => "new" }
       ])
       GpdbDatabaseObject.refresh(account, schema)
 
@@ -98,19 +98,34 @@ describe GpdbDatabaseObject do
           { 'type' => "v", "name" => "view1",  "master_table" => 'f' }
         ],
 
-        comments_sql => [
-          { 'object_name' => 'view1',  'comment' => "view1 is cool" },
-          { 'object_name' => 'table1', 'comment' => "table1 is cool" }
+        metadata_sql => [
+          {
+            'name' => 'view1',
+            'description' => "view1 is cool",
+            "definition" => "select * from foo;",
+            "column_count" => "5"
+          },
+          {
+            'name' => 'table1',
+            'description' => "table1 is cool",
+            "definition" => nil,
+            "column_count" => "3"
+          }
         ]
       )
     end
 
-    it "fills in the 'comment' attribute of each db object in the relation" do
+    it "fills in the 'description' attribute of each db object in the relation" do
       GpdbDatabaseObject.refresh(account, schema)
       GpdbDatabaseObject.add_metadata!(db_objects, account)
 
-      db_objects[0].comment.should == "view1 is cool"
-      db_objects[1].comment.should == "table1 is cool"
+      db_objects[0].description.should == "view1 is cool"
+      db_objects[0].definition.should == "select * from foo;"
+      db_objects[0].column_count.should == 5
+
+      db_objects[1].description.should == "table1 is cool"
+      db_objects[1].definition.should be_nil
+      db_objects[1].column_count.should == 3
     end
   end
 end

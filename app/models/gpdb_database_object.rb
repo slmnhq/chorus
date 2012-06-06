@@ -3,7 +3,8 @@ class GpdbDatabaseObject < ActiveRecord::Base
   delegate :instance, :to => :schema
   validates_presence_of :name
 
-  attr_accessor :comment, :definition, :column_count
+  attr_accessor :description, :definition
+  attr_reader :column_count
 
   delegate :with_gpdb_connection, :to => :schema
 
@@ -19,7 +20,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
       type = attrs.delete('type')
       klass = type == 'r' ? GpdbTable : GpdbView
       db_object = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
-      db_object.update_attributes(aspec/database_integration/database_object_spec.rbttrs, :without_protection => true)
+      db_object.update_attributes(attrs, :without_protection => true)
     end
   end
 
@@ -30,11 +31,18 @@ class GpdbDatabaseObject < ActiveRecord::Base
     schema = db_objects.first.schema
     names  = db_objects.map(&:name)
     result = schema.with_gpdb_connection(account) do |conn|
-      conn.select_all(Query.new(schema).comments_for_tables(names).to_sql)
+      conn.select_all(Query.new(schema).metadata_for_tables(names).to_sql)
     end
-    result.each do |hsh|
-      db_objects.detect { |r| r.name == hsh["object_name"] }.comment = hsh["comment"]
+    result.each do |hash|
+      db_object = db_objects.detect { |r| r.name == hash["name"] }
+      db_object.definition   = hash["definition"]
+      db_object.description  = hash["description"]
+      db_object.column_count = hash["column_count"]
     end
+  end
+
+  def column_count=(value)
+    @column_count = value.to_i
   end
 
   def self.with_name_like(name)
@@ -52,6 +60,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
 
     attr_reader :schema
 
+    VIEWS = Arel::Table.new("pg_views")
     SCHEMAS = Arel::Table.new("pg_namespace")
     RELATIONS = Arel::Table.new("pg_catalog.pg_class")
     PARTITIONS = Arel::Table.new("pg_partitions")
@@ -79,15 +88,18 @@ class GpdbDatabaseObject < ActiveRecord::Base
         )
     end
 
-    def comments_for_tables(table_names)
+    def metadata_for_tables(table_names)
       relations_in_schema.
         where(RELATIONS[:relname].in(table_names)).
-        join(DESCRIPTIONS).
-        on(RELATIONS[:oid].
-        eq(DESCRIPTIONS[:objoid])).
+        join(DESCRIPTIONS, Arel::Nodes::OuterJoin).
+        on( RELATIONS[:oid].eq(DESCRIPTIONS[:objoid]) ).
+        join(VIEWS, Arel::Nodes::OuterJoin).
+        on( VIEWS[:viewname].eq(RELATIONS[:relname]) ).
         project(
-          RELATIONS[:relname].as('object_name'),
-          DESCRIPTIONS[:description].as('comment')
+          RELATIONS[:relname].as('name'),
+          DESCRIPTIONS[:description].as('description'),
+          VIEWS[:definition].as('definition'),
+          RELATIONS[:relnatts].as('column_count')
         )
     end
   end
