@@ -16,8 +16,9 @@ describe("chorus.views.DatasetEditChorusView", function() {
             this.codeMirrorOptions = opts;
             return originalFromTextArea(textarea, opts)
         }, this))
+
         stubDefer()
-    })
+    });
 
     context("#setup", function() {
         it("saves the initial query value", function() {
@@ -27,7 +28,6 @@ describe("chorus.views.DatasetEditChorusView", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            spyOn(this.view, "updateQueryInModel").andCallThrough();
             this.view.render();
         });
 
@@ -59,7 +59,6 @@ describe("chorus.views.DatasetEditChorusView", function() {
             });
 
             it("sets the query in the model", function() {
-                expect(this.view.updateQueryInModel).toHaveBeenCalled();
                 expect(this.view.model.get("query")).toBe("select * from hello;")
             });
 

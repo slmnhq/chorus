@@ -211,9 +211,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     beforeEach(function() {
                         this.view.model.unset("executionInfo");
                         this.schema = fixtures.schema({id: "77", databaseId: "88", instanceId: "99"});
-                        this.view.textContent.editor.getSelection = function() {
-                            return "select 1 from table";
-                        };
+                        spyOn(this.view.textContent.editor, "getSelection").andReturn("select 1 from table");
                         chorus.PageEvents.broadcast("file:runSelected");
                     });
 

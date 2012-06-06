@@ -1,36 +1,30 @@
 chorus.views.CodeEditorView = chorus.views.Base.extend({
     templateName: "code_editor_view",
 
-    events: {
-        "mouseup ": "selection",
-        "mousedown": "selection",
-        "keydown": "selection"
-    },
-
-    setup: function() {
+    setup: function(options) {
+        this.options = _.extend({
+            lineNumbers: true,
+            fixedGutter: true,
+            theme: "default",
+            lineWrapping: true,
+        }, options);
+        this.model = this.options.model;
         chorus.PageEvents.subscribe("file:insertText", this.insertText, this);
     },
 
-    postRender: function(editorOptions, preEditRefreshFunction) {
-        var opts = $.extend(editorOptions, { lineNumbers: true});
+    postRender: function() {
         _.defer(_.bind(function() {
             var textArea = this.$(".text_editor")[0];
             if (textArea !== this.textArea) {
                 this.textArea = textArea;
-                this.editor = CodeMirror.fromTextArea(this.textArea, opts);
+                this.editor = CodeMirror.fromTextArea(this.textArea, this.options);
 
-                this.editor.onKeyEvent = _.bind(function() {
-                    this.selection();
-                }, this);
-
-                if (preEditRefreshFunction) {
-                    preEditRefreshFunction();
+                if (this.options.beforeEdit) {
+                    this.options.beforeEdit.call(this);
                 }
 
                 var ed = this.editor;
                 _.defer(function() {
-                    ed.refresh();
-                    ed.refresh();
                     ed.refresh();
                 });
             }
@@ -39,6 +33,10 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
                drop: _.bind(this.acceptDrop, this)
             });
         }, this));
+    },
+
+    additionalContext: function() {
+        return { editorContent: this.model.content() };
     },
 
     acceptDrop: function(e, ui) {
@@ -51,13 +49,15 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
         this.editor.focus();
         this.editor.replaceSelection(text)
         this.editor.setCursor(this.editor.getCursor(false))
-    },
-
-    selection: function() {
-        if(this.editor.getSelection()) {
-            chorus.PageEvents.broadcast("file:selection");
-        } else {
-            chorus.PageEvents.broadcast("file:unselection");
-        }
     }
+});
+
+// delegate methods to the CodeMirror editor
+_.each([
+    'getValue', 'setValue', 'getOption', 'setOption', 'getSelection',
+    'focus', 'getCursor', 'setCursor', 'lineCount', 'getLine'
+], function(method) {
+    chorus.views.CodeEditorView.prototype[method] = function() {
+        return this.editor[method].apply(this.editor, arguments);
+    };
 });

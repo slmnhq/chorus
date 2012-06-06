@@ -1,9 +1,33 @@
-chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
+chorus.views.TextWorkfileContent = chorus.views.Base.extend({
     templateName: "text_workfile_content",
     saveInterval: 30000,
 
+    subviews: {
+        ".editor": "editor"
+    },
+
     setup: function() {
-        this._super("setup");
+        var self = this;
+
+        var extraKeys = _.reduce(this.options.hotkeys, function(acc, _value, key) {
+            var hotkeyString = _.str.capitalize(chorus.hotKeyMeta) + "-" + key.toUpperCase();
+            acc[hotkeyString] = function() { chorus.triggerHotKey(key); };
+            return acc;
+        }, {});
+
+        this.editor = new chorus.views.CodeEditorView({
+            model: this.model,
+            readOnly: this.model.canEdit() ? false : "nocursor",
+            mode: this.model.get("mimeType"),
+            onChange: _.bind(this.startTimer, this),
+            extraKeys: extraKeys,
+            beforeEdit: function() {
+                if (self.model.canEdit()) {
+                    setTimeout(_.bind(self.editText, self), 100);
+                }
+            }
+        });
+
         chorus.PageEvents.subscribe("file:saveCurrent", this.replaceCurrentVersion, this);
         chorus.PageEvents.subscribe("file:createWorkfileNewVersion", this.createWorkfileNewVersion, this);
         this.bindings.add(this.model, "saveFailed", this.versionConflict);
@@ -14,36 +38,6 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
             this.alert = new chorus.alerts.WorkfileConflict({ launchElement: this, model: this.model });
             this.alert.launchModal();
         }
-    },
-
-    postRender: function() {
-        var readOnlyMode = this.model.canEdit() ? false : "nocursor";
-        var self = this;
-        var model = this.model;
-        var editText = this.editText;
-        var opts = {
-            readOnly: readOnlyMode,
-            lineNumbers: true,
-            mode: this.model.get("mimeType"),
-            fixedGutter: true,
-            theme: "default",
-            lineWrapping: true,
-            onChange: _.bind(this.startTimer, this),
-            extraKeys: {}
-        };
-
-        _.each(this.options.hotkeys, function(_value, key) {
-            opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-" + key.toUpperCase()] = function() {
-                chorus.triggerHotKey(key);
-            };
-        });
-
-        var preEditRefresh = function() {
-            if (model.canEdit()) {
-                setTimeout(_.bind(editText, self), 100);
-            }
-        };
-        this._super("postRender", [opts, preEditRefresh]);
     },
 
     editText: function() {
@@ -92,15 +86,20 @@ chorus.views.TextWorkfileContent = chorus.views.CodeEditorView.extend({
 
     replaceCurrentVersion: function() {
         this.stopTimer();
-        this.cursor = this.editor.getCursor();
+        this.saveCursorPosition();
         this.model.content(this.editor.getValue(), {silent: true});
         this.model.save({}, {silent: true}); // Need to save silently because content details and content share the same models, and we don't want to render content details
         this.render();
     },
 
+    saveCursorPosition: function() {
+        this.cursor = this.editor.getCursor();
+    },
+
     createWorkfileNewVersion: function() {
         this.stopTimer();
-        this.cursor = this.editor.getCursor();
+        this.saveCursorPosition();
+
         this.model.content(this.editor.getValue(), {silent: true});
 
         this.dialog = new chorus.dialogs.WorkfileNewVersion({ launchElement: this, pageModel: this.model, pageCollection: this.collection });
