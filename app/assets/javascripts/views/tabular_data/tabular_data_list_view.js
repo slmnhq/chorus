@@ -41,8 +41,10 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
             var hintText;
             if (this.collection.hasFilter && this.collection.hasFilter()) {
                 hintText = t("dataset.filtered_empty")
+            } else if (this.collection.attributes.workspaceId) {
+                hintText = t("dataset.browse_more_workspace", {linkText: linkText})
             } else {
-                hintText = t("dataset.browse_more", {linkText: linkText})
+                hintText = t("dataset.browse_more_instance", {linkText: linkText})
             }
 
             noDatasetEl.append(hintText);

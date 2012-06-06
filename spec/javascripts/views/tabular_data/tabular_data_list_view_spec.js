@@ -137,7 +137,7 @@ describe("chorus.views.TabularDataList", function() {
         expect(this.view.$("> li").length).toBe(this.collection.length);
     });
 
-    describe("the no datasets message", function() {
+    describe("when there are no datasets", function() {
         beforeEach(function() {
             this.view.collection = new chorus.collections.DatabaseObjectSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
             this.view.render();
@@ -147,14 +147,15 @@ describe("chorus.views.TabularDataList", function() {
             expect(this.view.$(".browse_more")).not.toExist();
         });
 
-        context("after the collection is loaded", function() {
+        context("after the collection is loaded and there's a workspace'", function() {
             beforeEach(function() {
+                this.view.collection.attributes.workspaceId = "1";
                 this.view.collection.loaded = true;
                 this.view.render();
             });
 
-            it("renders the no datasets message if there are no datasets", function() {
-                expect($(this.view.el)).toContainTranslation("dataset.browse_more", {linkText: "browse your instances"});
+            it("renders the no datasets in this workspace message", function() {
+                expect($(this.view.el)).toContainTranslation("dataset.browse_more_workspace", {linkText: "browse your instances"});
                 expect(this.view.$(".browse_more a")).toHaveHref("#/instances");
             });
         });
@@ -169,6 +170,19 @@ describe("chorus.views.TabularDataList", function() {
 
             it("renders the no datasets message if there are no datasets", function() {
                 expect($(this.view.el)).toContainTranslation("dataset.filtered_empty");
+            });
+        });
+
+        context("when there is no workspace", function() {
+            beforeEach(function() {
+                this.view.collection = new chorus.collections.DatabaseObjectSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
+                this.view.collection.loaded = true;
+                this.view.render();
+            });
+
+            it("renders the no datasets in the this instance message", function() {
+                expect($(this.view.el)).toContainTranslation("dataset.browse_more_instance", {linkText: "browse your instances"});
+                expect(this.view.$(".browse_more a")).toHaveHref("#/instances");
             });
         });
     });
