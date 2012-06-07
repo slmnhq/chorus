@@ -2,6 +2,7 @@
 
 set -e
 
+rm .rspec
 eval "$(rbenv init -)"
 rbenv shell `cat .rbenv-version`
 ruby -v | grep 1.9.3
