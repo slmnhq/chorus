@@ -115,6 +115,11 @@ FactoryGirl.define do
     # even though it's a column in the events table
     ignore { action "INSTANCE_CREATED" }
     event { FactoryGirl.create(:event, :action => action) }
+
+    factory :global_activity do
+      entity_type "GLOBAL"
+      entity_id nil
+    end
   end
 end
 

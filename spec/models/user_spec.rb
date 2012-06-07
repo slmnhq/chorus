@@ -180,6 +180,7 @@ describe User do
     it { should have_many(:hadoop_instances) }
     it { should have_many(:workspaces) }
     it { should have_many(:owned_workspaces) }
+    it { should have_many(:activities) }
   end
 
   describe "#workspaces" do
