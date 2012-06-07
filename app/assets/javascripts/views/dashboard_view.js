@@ -36,10 +36,6 @@ chorus.views.Dashboard = chorus.views.Base.extend({
                 insightsTitle: t("dashboard.title.insights")
             })
         });
-
-        chorus.PageEvents.subscribe("instance:added", function() {
-            this.options.instanceSet.fetch();
-        }, this);
     }
 });
 

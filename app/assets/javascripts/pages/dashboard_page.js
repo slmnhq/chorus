@@ -15,32 +15,16 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.instanceSet = new chorus.collections.InstanceSet([], { hasCredentials: true });
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);
 
-        var mergeInstances = _.bind(function() {
-                if(this.instanceSet.loaded && this.hadoopInstanceSet.loaded) {
-                    var package = function(set) {
-                        return _.map(set, function(instance) {
-                            return new chorus.models.Base({ theInstance: instance })
-                        });
-                    }
+        chorus.PageEvents.subscribe("instance:added", function() { this.fetchInstances() }, this);
 
-                    var proxyInstances = package(this.instanceSet.models);
-                    var proxyHadoopInstances = package(this.hadoopInstanceSet.models);
-
-                    this.arraySet = new chorus.collections.Base();
-                    this.arraySet.add(proxyInstances);
-                    this.arraySet.add(proxyHadoopInstances);
-                    this.arraySet.loaded = true;
-
-                    this.mainContent = new chorus.views.Dashboard({ collection: this.workspaceSet, instanceSet: this.arraySet });
-                    this.render();
-                }
-        }, this);
-
-        this.instanceSet.fetch().success(mergeInstances);
-        this.hadoopInstanceSet.fetch().success(mergeInstances);
+        this.fetchInstances();
         this.model = chorus.session.user();
 
-        this.mainContent = new chorus.views.Dashboard({ collection: this.workspaceSet, instanceSet: this.arraySet });
+        this.mainContent = new chorus.views.Dashboard({
+            collection: this.workspaceSet,
+            greenplumInstanceSet: this.instanceSet,
+            hadoopInstanceSet: this.hadoopInstanceSet
+        });
 
         this.userSet = new chorus.collections.UserSet();
         this.userSet.bindOnce("loaded", function() {
@@ -48,6 +32,32 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
             this.showUserCount()
         }, this);
         this.userSet.fetch();
+    },
+
+    fetchInstances: function() {
+        this.instanceSet.fetch().success(_.bind(this.mergeInstances, this));
+        this.hadoopInstanceSet.fetch().success(_.bind(this.mergeInstances, this));
+    },
+
+    mergeInstances: function() {
+        if(this.instanceSet && this.instanceSet.loaded && this.hadoopInstanceSet && this.hadoopInstanceSet.loaded) {
+            var package = function(set) {
+                return _.map(set, function(instance) {
+                    return new chorus.models.Base({ theInstance: instance })
+                });
+            }
+
+            var proxyInstances = package(this.instanceSet.models);
+            var proxyHadoopInstances = package(this.hadoopInstanceSet.models);
+
+            this.arraySet = new chorus.collections.Base();
+            this.arraySet.add(proxyInstances);
+            this.arraySet.add(proxyHadoopInstances);
+            this.arraySet.loaded = true;
+
+            this.mainContent = new chorus.views.Dashboard({ collection: this.workspaceSet, instanceSet: this.arraySet });
+            this.render();
+        }
     },
 
     showUserCount: function() {
