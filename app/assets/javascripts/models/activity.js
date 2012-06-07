@@ -65,13 +65,24 @@ chorus.models.Activity = chorus.models.Base.extend({
         }
     },
 
-    sourceDataset: function() {
-        var sourceObject = this.get("sourceObject")
-        return new chorus.models.Dataset({
-            id: sourceObject.id,
-            objectName: sourceObject.name,
-            workspace: this.get('workspace')
-        })
+    sourceObject: function() {
+        var sourceObject = this.get("sourceObject");
+
+        if (isNaN(sourceObject.id)) {
+            return new chorus.models.Dataset({
+                id: sourceObject.id,
+                objectName: sourceObject.name,
+                workspace: this.get('workspace'),
+                type: "table"
+            });
+        } else {
+            return new chorus.models.Workfile({
+                id: sourceObject.id,
+                objectName: sourceObject.name,
+                workspace: this.get('workspace'),
+                type: "workfile"
+            });
+        }
     },
 
     databaseObject: function() {

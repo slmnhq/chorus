@@ -291,14 +291,28 @@ describe("chorus.models.Activity", function() {
         });
     });
 
-    describe("#sourceDataset", function() {
-        it("creates a dataset out of the sourceObject", function() {
-            var activity = fixtures.activities.CHORUS_VIEW_CREATED();
-            var dataset = activity.sourceDataset();
-            expect(dataset.get('id')).toBe(activity.get('sourceObject').id)
-            expect(dataset.get('objectName')).toBe(activity.get('sourceObject').name)
-            expect(dataset.get('workspace').id).toBe(activity.get('workspace').id)
-        })
+    describe("#sourceObject", function() {
+        context("source object is dataset", function() {
+            it("creates a dataset out of the sourceObject", function() {
+                var activity = fixtures.activities.CHORUS_VIEW_CREATED();
+                var dataset = activity.sourceObject();
+                expect(dataset.get('id')).toBe(activity.get('sourceObject').id);
+                expect(dataset.get('objectName')).toBe(activity.get('sourceObject').name);
+                expect(dataset.get('workspace').id).toBe(activity.get('workspace').id);
+                expect(dataset.get('type')).toBe('table');
+            });
+        });
+
+        context("source object is workfile", function() {
+            it("creates a workfile out of the sourceObject", function() {
+                var activity = fixtures.activities.CHORUS_VIEW_CREATED({sourceObject: {id: 1234, name: "workfile.sql"}});
+                var workfile = activity.sourceObject();
+                expect(workfile.get('id')).toBe(activity.get('sourceObject').id);
+                expect(workfile.get('objectName')).toBe(activity.get('sourceObject').name);
+                expect(workfile.get('workspace').id).toBe(activity.get('workspace').id);
+                expect(workfile.get('type')).toBe('workfile');
+            });
+        });
     })
 
     describe("#chorusViewDataset", function() {
@@ -486,7 +500,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("should retain the data", function() {
-           expect(this.parentComment.databaseObject().name()).toBe(this.model.get("parentComment").databaseObject.name);
+            expect(this.parentComment.databaseObject().name()).toBe(this.model.get("parentComment").databaseObject.name);
         });
 
         it("memoizes", function() {

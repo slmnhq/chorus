@@ -1399,44 +1399,87 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context(".CHORUS_VIEW_CREATED", function() {
-        beforeEach(function() {
-            this.model = fixtures.activities.CHORUS_VIEW_CREATED();
-            this.dataset = this.model.dataset();
-            this.workspace = this.model.workspace();
-            this.sourceObject = this.model.sourceDataset();
-            this.presenter = new chorus.presenters.Activity(this.model)
+        context("Chorus View source Object is a Dataset", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.CHORUS_VIEW_CREATED();
+                this.dataset = this.model.dataset();
+                this.workspace = this.model.workspace();
+                this.sourceObject = this.model.sourceObject();
+                this.presenter = new chorus.presenters.Activity(this.model)
+            });
+
+            it("should have the right workspaceName", function() {
+                expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+            });
+
+            it("should have the right workspaceUrl", function() {
+                var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+                expect(this.presenter.workspaceUrl).toBe(url);
+            });
+
+            it("should say 'table' in the header", function() {
+                expect(this.presenter.headerHtml.toString()).toContainTranslation("activity_stream.chorus_view.type.table");
+            });
+
+            it("should have the right objectName", function() {
+                expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
+            });
+
+            it("should have the right objectUrl", function() {
+                expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+            });
+
+            it("should have the right tableName it was derived from", function() {
+                expect(this.presenter.sourceName).toBe(this.sourceObject.get("objectName"));
+            });
+
+            it("should have the right tableUrl it was derived from", function() {
+                expect(this.presenter.sourceUrl).toBe(this.sourceObject.showUrl());
+            });
+
+            itShouldHaveTheAuthorsIconAndUrl();
         });
 
-        it("should have the right workspaceName", function() {
-            expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
-        });
+        context("Chorus View source Object is a workfile", function() {
+            beforeEach(function() {
+                this.model = fixtures.activities.CHORUS_VIEW_CREATED({sourceObject: {id: 1234, name: "workfile.sql"}});
+                this.dataset = this.model.dataset();
+                this.workspace = this.model.workspace();
+                this.sourceObject = this.model.sourceObject();
+                this.presenter = new chorus.presenters.Activity(this.model)
+            });
 
-        it("should have the right workspaceUrl", function() {
-            var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
-            expect(this.presenter.workspaceUrl).toBe(url);
-        });
+            it("should have the right workspaceName", function() {
+                expect(this.presenter.workspaceName).toBe(this.workspace.get("name"));
+            });
 
-        it("should say 'table' in the header", function() {
-            expect(this.presenter.headerHtml.toString()).toContainTranslation("dataset.types.table");
-        });
+            it("should have the right workspaceUrl", function() {
+                var url = new chorus.models.Workspace({id: this.workspace.get("id")}).showUrl();
+                expect(this.presenter.workspaceUrl).toBe(url);
+            });
 
-        it("should have the right objectName", function() {
-            expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
-        });
+            it("should say 'workfile' in the header", function() {
+                expect(this.presenter.headerHtml.toString()).toContainTranslation("activity_stream.chorus_view.type.workfile");
+            });
 
-        it("should have the right objectUrl", function() {
-            expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
-        });
+            it("should have the right objectName", function() {
+                expect(this.presenter.objectName).toBe(this.dataset.get("objectName"));
+            });
 
-        it("should have the right tableName it was derived from", function() {
-            expect(this.presenter.tableName).toBe(this.sourceObject.get('objectName'));
-        });
+            it("should have the right objectUrl", function() {
+                expect(this.presenter.objectUrl).toBe(this.dataset.showUrl());
+            });
 
-        it("should have the right tableUrl it was derived from", function() {
-            expect(this.presenter.tableUrl).toBe(this.sourceObject.showUrl());
-        });
+            it("should have the right tableName it was derived from", function() {
+                expect(this.presenter.sourceName).toBe(this.sourceObject.get("objectName"));
+            });
 
-        itShouldHaveTheAuthorsIconAndUrl();
+            it("should have the right tableUrl it was derived from", function() {
+                expect(this.presenter.sourceUrl).toBe(this.sourceObject.showUrl());
+            });
+
+            itShouldHaveTheAuthorsIconAndUrl();
+        });
     });
 
     context(".DATASET_CHANGED_QUERY", function() {

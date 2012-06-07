@@ -1428,8 +1428,8 @@ beforeEach(function() {
                 });
             },
 
-            CHORUS_VIEW_CREATED: function() {
-                return new chorus.models.Activity({
+            CHORUS_VIEW_CREATED: function(overrides) {
+                return new chorus.models.Activity(_.extend({
                     author: fixtures.authorJson(),
                     chorusView: {
                         id: '"10000"|"Analytics"|"analytics"|"QUERY"|"mythingy"',
@@ -1451,7 +1451,7 @@ beforeEach(function() {
                         id: '"10000"|"Something"|"SomethingElse"|"QUERY"|"firstTHing"',
                         name: 'my_source_object'
                     }
-                })
+                }, overrides))
             },
 
             DATASET_CHANGED_QUERY: function() {

@@ -126,6 +126,14 @@
                 header.objectName = this.presenter.objectName
             }
 
+            if (this.presenter.sourceType) {
+                header.sourceType = t('activity_stream.chorus_view.type.' + this.presenter.sourceType);
+            }
+
+            if (this.presenter.sourceName && this.presenter.sourceUrl) {
+                header.sourceLink = chorus.helpers.linkTo(this.presenter.sourceUrl, this.presenter.sourceName).toString();
+            }
+
             return header;
         },
 
@@ -370,8 +378,9 @@
             return {
                 objectName: this.noteObject.get('objectName'),
                 objectUrl: this.noteObject.showUrl(),
-                tableName: model.sourceDataset().get("objectName"),
-                tableUrl: model.sourceDataset().showUrl()
+                sourceName: model.sourceObject().get("objectName"),
+                sourceUrl: model.sourceObject().showUrl(),
+                sourceType: model.sourceObject().get("type")
             };
         },
 
