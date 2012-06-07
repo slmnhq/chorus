@@ -1,0 +1,9 @@
+instance:
+  host: "gillette"
+  port: 5432
+  maintenance_db: "postgres"
+
+account:
+  db_username: "gpadmin"
+  db_password: "secret"
+

@@ -2,7 +2,7 @@ require "hashie/mash"
 require "tempfile"
 require "erubis"
 
-config_file   = File.expand_path("../setup_gpdb.yml", __FILE__)
+config_file   = File.expand_path("../test_gpdb_connection_config.yml", __FILE__)
 template_file = File.expand_path("../setup_gpdb.sql.erb", __FILE__)
 
 CONFIG   = Hashie::Mash.new(YAML.load_file(config_file))

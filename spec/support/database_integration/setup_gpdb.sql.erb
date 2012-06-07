@@ -1,62 +1,45 @@
-<% databases.each do |database| %>
+DROP DATABASE IF EXISTS gpdb_test_database;
+CREATE DATABASE gpdb_test_database OWNER gpadmin;
 
-  DROP DATABASE IF EXISTS <%= database.name %>;
-  CREATE DATABASE <%= database.name %> OWNER <%= account.db_username %>;
+\connect gpdb_test_database
 
-  \connect <%= database.name %>
+  CREATE SCHEMA gpdb_test_schema;
+    SET search_path TO 'gpdb_test_schema';
 
-  <% database.schemas.try(:each) do |schema| %>
+    CREATE TABLE base_table1
+      (id integer, column1 integer, column2 integer)
+      DISTRIBUTED BY (id);
+    COMMENT ON TABLE base_table1 IS 'comment on base_table1';
 
-    CREATE SCHEMA <%= schema.name %>;
+    CREATE VIEW view1 AS
+      SELECT * FROM base_table1;
+    COMMENT ON VIEW view1 IS 'comment on view1';
 
-    <% schema.base_tables.try(:each) do |table| %>
-      CREATE TABLE <%= "#{schema.name}.#{table.name}" %>
-        (
-          id integer
-          <% ((table.column_count || 1) - 1).times do |i| %>
-            , <%= "column#{i+1}" %> integer
-          <% end %>
-        )
-        DISTRIBUTED BY (id);
-      COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
-        IS '<%= table.description %>';
-    <% end %>
+    CREATE EXTERNAL WEB TABLE external_web_table1
+      (name text, date date, amount float4, category text, description text)
+      LOCATION ('http://intranet.company.com/expenses/sales/file.csv')
+      FORMAT 'CSV'
+      ( HEADER );
+    COMMENT ON TABLE external_web_table1 IS '';
 
-    <% schema.views.try(:each) do |view| %>
-      CREATE VIEW <%= "#{schema.name}.#{view.name}" %>
-        AS
-        SELECT * FROM <%= schema.name %>.<%= view.table %>;
-      COMMENT ON VIEW <%= "#{schema.name}.#{view.name}" %>
-        IS '<%= view.description %>';
-    <% end %>
+    CREATE TABLE master_table1
+      ( id integer, some_int integer )
+      DISTRIBUTED BY (id)
+      PARTITION BY RANGE(some_int)
+      ( START (1::integer) END (8::integer) EVERY (1::integer));
+    COMMENT ON TABLE master_table1 IS 'comment on master_table1';
 
-    <% schema.external_web_tables.try(:each) do |table| %>
-      CREATE EXTERNAL WEB TABLE <%= "#{schema.name}.#{table.name}" %>
-        (name text, date date, amount float4, category text, description text)
-        LOCATION ('<%= table.url %>')
-        FORMAT '<%= table.format %>'
-        ( HEADER );
-      COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
-        IS '<%= table.description %>';
-    <% end %>
+    CREATE UNIQUE INDEX index1 ON base_table1 ( id );
 
-    <% schema.master_tables.try(:each) do |table| %>
-      CREATE TABLE <%= "#{schema.name}.#{table.name}" %>
-        ( id integer, some_int integer )
-        DISTRIBUTED BY (id)
-        PARTITION BY RANGE(some_int)
-        ( START (1::integer) END (<%= table.partitions + 1 %>::integer) EVERY (1::integer));
-      COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
-        IS '<%= table.description %>';
-    <% end %>
+  \dtvs gpdb_test_schema.*
 
-    <% schema.indexes.try(:each) do |index| %>
-      CREATE UNIQUE INDEX <%= index.name %>
-        ON <%= "#{schema.name}.#{index.table}" %>
-        ( id );
-    <% end %>
 
-    \dtvs <%= schema.name %>.*
+  CREATE SCHEMA gpdb_test_schema2;
+    SET search_path TO 'gpdb_test_schema2';
+    
+    CREATE TABLE other_base_table
+      (id integer)
+      DISTRIBUTED BY (id);
+    COMMENT ON TABLE other_base_table IS '';
 
-  <% end %>
-<% end %>
+  \dtvs gpdb_test_schema2.*
