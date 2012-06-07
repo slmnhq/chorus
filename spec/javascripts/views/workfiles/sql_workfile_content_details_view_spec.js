@@ -68,30 +68,35 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             });
         });
 
-        describe("changing the run button when text is selected", function() {
+        context("when the user has selected some text", function() {
             beforeEach(function() {
-                chorus.PageEvents.broadcast("file:selection");
+                spyOn(this.contentView, "getSelectedText").andReturn("Chuck and Lenny");
+                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+
+                chorus.PageEvents.broadcast("file:selectionPresent");
             });
 
-            it("Run file button text changes to Run Selected", function() {
+            it("Changes the 'Run file' button text to 'Run Selected'", function() {
                 expect(this.view.$(".run_file .run_description")).toContainTranslation("workfile.content_details.run_selected");
             });
 
+            it("Changes the 'Save File As' button to 'Save Selection As'", function() {
+                expect(this.view.$(".save_selection_as")).not.toHaveClass("hidden");
+                expect(this.view.$(".save_file_as")).toHaveClass("hidden");
+            });
+
             context("when the user de-selects text", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("file:selectionEmpty");
+                });
                 it("changes Run Selected button text back to Run File", function() {
-                    chorus.PageEvents.broadcast("file:unselection");
                     expect(this.view.$(".run_file .run_description")).toContainTranslation("workfile.content_details.run_file");
                 });
-            });
-        });
 
-        context("when the user has selected some text", function() {
-            beforeEach(function() {
-                this.contentView.getSelectedText = function() {
-                    return "Chuck and Lenny";
-                };
-
-                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                it("changes 'Save Selection As' button back to 'Save File As'", function() {
+                    expect(this.view.$(".save_selection_as")).toHaveClass("hidden");
+                    expect(this.view.$(".save_file_as")).not.toHaveClass("hidden");
+                });
             });
 
             context("and there is a schema to run in", function() {
@@ -129,6 +134,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     });
 
                     it("does nothing when the user clicks run selection", function() {
+                        chorus.PageEvents.broadcast.reset();
                         this.qtipElement.find(".run_selection").click();
                         expect(chorus.PageEvents.broadcast).not.toHaveBeenCalled();
                     });
