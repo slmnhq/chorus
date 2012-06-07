@@ -1,15 +1,11 @@
 describe("chorus.models.TabularDataAnalyze", function() {
     beforeEach(function() {
         this.analyze = new chorus.models.TabularDataAnalyze({
-            instanceId: "1",
-            databaseName: "foo",
-            schemaName: "bar",
-            objectName: "baz",
-            metaType: "table"
+            tableId: 2234
         });
     })
 
     it("should have the correct url template", function() {
-        expect(this.analyze.url()).toContain("/data/1/database/foo/schema/bar/table/baz/analyze");
+        expect(this.analyze.url()).toContain("/tables/2234/analyze");
     });
 });

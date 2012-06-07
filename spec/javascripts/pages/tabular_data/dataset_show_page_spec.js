@@ -75,7 +75,6 @@ describe("chorus.pages.DatasetShowPage", function() {
 
                 describe("when the columnSet fetch completes", function() {
                     beforeEach(function() {
-                        console.log(this.columnSet)
                         this.server.lastFetchAllFor(this.columnSet).succeed([
                             fixtures.databaseColumn(),
                             fixtures.databaseColumn()

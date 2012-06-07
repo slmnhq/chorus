@@ -30,14 +30,14 @@ describe("chorus.alerts.Analyze", function() {
         });
 
         it("should analyze the table", function() {
-            expect(this.server.lastFetchFor(this.model.analyze())).toBeDefined();
+            expect(this.server.lastCreateFor(this.model.analyze())).toBeDefined();
         });
 
         context("when the post completes", function() {
             beforeEach(function() {
                 spyOn(this.alert, "closeModal");
                 spyOn(chorus.PageEvents, "broadcast");
-                this.server.completeFetchFor(this.model.analyze());
+                this.server.lastCreateFor(this.model.analyze()).succeed();
             });
 
             it("should display a toast", function() {
@@ -53,10 +53,10 @@ describe("chorus.alerts.Analyze", function() {
             });
         });
 
-        context("when the fetch fails", function() {
+        context("when the post fails", function() {
             beforeEach(function() {
                 spyOn(this.alert, "closeModal");
-                this.server.lastFetchFor(this.model.analyze()).failUnprocessableEntity({
+                this.server.lastCreateFor(this.model.analyze()).failUnprocessableEntity({
                     fields: {
                         first: { PROBLEM: {}},
                         second: { PROBLEM: {}}

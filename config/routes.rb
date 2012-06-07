@@ -39,6 +39,7 @@ Chorus::Application.routes.draw do
     resources :columns, :only=> [:index], :controller => 'column'
     resources :previews, :only => [:create]
     resource :statistics, :only => :show
+    resource :analyze, :only => [:create], :controller => 'analyze'
   end
 
   resources :workspaces, :only => [:index, :create, :show, :update] do
