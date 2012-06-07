@@ -22,12 +22,12 @@ describe "Viewing data inside GPDB instances" do
   end
 
   it "can view a tables statistics and metadata" do
-    create_valid_instance(:name => "InstanceToPreviewData")
-    click_link "InstanceToPreviewData"
+    create_valid_instance(:name => "InstanceToViewStatistics")
+    click_link "InstanceToViewStatistics"
     click_link "Analytics"
     click_link "analytics"
 
-    dataset_id = Instance.find_by_name("InstanceToPreviewData").databases.find_by_name("Analytics").schemas.find_by_name("analytics").database_objects.find_by_name("a1000").id
+    dataset_id = Instance.find_by_name("InstanceToViewStatistics").databases.find_by_name("Analytics").schemas.find_by_name("analytics").database_objects.find_by_name("a1000").id
 
     page.find("li[data-database-object-id='#{dataset_id}']").click
     sleep(1)
