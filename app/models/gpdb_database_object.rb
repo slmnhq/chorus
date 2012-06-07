@@ -27,9 +27,9 @@ class GpdbDatabaseObject < ActiveRecord::Base
 
   def add_metadata!(account)
     result = schema.with_gpdb_connection(account) do |conn|
-      conn.select_all(Query.new(schema).metadata_for_table(name).to_sql)
+      conn.select_all(Query.new(schema).metadata_for_database_object(name).to_sql)
     end.first
-    @statistics = GpdbTableStatistics.new(result)
+    @statistics = GpdbDatabaseObjectStatistics.new(result)
   end
 
   def column_count=(value)
@@ -97,7 +97,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
         )
     end
 
-    def metadata_for_table(table_name)
+    def metadata_for_database_object(table_name)
       relations_in_schema.
         where(RELATIONS[:relname].eq(table_name)).
         join(DESCRIPTIONS, Arel::Nodes::OuterJoin).

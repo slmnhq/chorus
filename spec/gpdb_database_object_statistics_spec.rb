@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GpdbTableStatistics do
+describe GpdbDatabaseObjectStatistics do
   context "#initialize" do
     it "initialize the values" do
       statistics = GpdbTableStatistics.new(

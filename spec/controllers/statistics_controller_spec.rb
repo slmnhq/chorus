@@ -15,7 +15,7 @@ describe StatisticsController do
     let(:schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema1', :database => database) }
     let!(:table) { FactoryGirl.create(:gpdb_table, :name => 'table1', :schema => schema) }
 
-    let(:metadata_sql) { GpdbDatabaseObject::Query.new(schema).metadata_for_table("table1").to_sql }
+    let(:metadata_sql) { GpdbDatabaseObject::Query.new(schema).metadata_for_database_object("table1").to_sql }
     let(:db_objects_sql) { GpdbDatabaseObject::Query.new(schema).tables_and_views_in_schema.to_sql }
 
     it "should retrieve the db object for a schema" do

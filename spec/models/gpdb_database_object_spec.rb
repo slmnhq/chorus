@@ -90,7 +90,7 @@ describe GpdbDatabaseObject do
 
   describe ".add_metadata!(db_object, account)" do
     let(:db_object) { FactoryGirl.create(:gpdb_table, :schema => schema, :name => "table1") }
-    let(:metadata_sql) { GpdbDatabaseObject::Query.new(schema).metadata_for_table("table1").to_sql }
+    let(:metadata_sql) { GpdbDatabaseObject::Query.new(schema).metadata_for_database_object("table1").to_sql }
 
     before(:each) do
       stub_gpdb(account,
@@ -131,7 +131,7 @@ describe GpdbDatabaseObject do
 
   describe ".add_metadata! for a view" do
     let(:db_object) { FactoryGirl.create(:gpdb_view, :schema => schema, :name => "view1") }
-    let(:metadata_sql) { GpdbDatabaseObject::Query.new(schema).metadata_for_table("view1").to_sql }
+    let(:metadata_sql) { GpdbDatabaseObject::Query.new(schema).metadata_for_database_object("view1").to_sql }
 
     before(:each) do
       stub_gpdb(account,

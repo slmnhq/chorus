@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe GpdbTableStatisticsPresenter, :type => :view do
-  let(:statistics) { FactoryGirl.build(:gpdb_table_statistics) }
+describe GpdbDatabaseObjectStatisticsPresenter, :type => :view do
+  let(:statistics) { FactoryGirl.build(:gpdb_database_object_statistics) }
 
   describe "#to_hash" do
     subject { described_class.new(statistics, view) }
