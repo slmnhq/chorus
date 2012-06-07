@@ -116,24 +116,18 @@ chorus.models.TabularData = chorus.models.Base.include(
         },
 
         preview: function() {
-            var commonAttributes = {
-                instanceId: this.instance().id,
-                databaseName: this.database().name(),
-                schemaName: this.schema().name(),
-                objectName: this.name()
-            };
-
             if (this.isChorusView()) {
-                return new chorus.models.ChorusViewPreviewTask(_.extend(commonAttributes, {
+                return new chorus.models.ChorusViewPreviewTask({
                     taskType: "getDatasetPreview",
                     query: this.query(),
-                    workspaceId: this.get("workspace").id
-                }));
+                    workspaceId: this.get("workspace").id,
+                    instanceId: this.instance().id,
+                    databaseName: this.database().name(),
+                    schemaName: this.schema().name(),
+                    objectName: this.name()
+                });
             } else {
-                return new chorus.models.DataPreviewTask(_.extend(commonAttributes, {
-                    databaseObject: {id: this.id},
-                    objectType: this.get("objectType")
-                }));
+                return new chorus.models.DataPreviewTask({databaseObject: {id: this.id}});
             }
         },
 

@@ -284,11 +284,7 @@ describe("chorus.models.TabularData", function() {
 
             it("should return a database preview", function() {
                 expect(this.preview).toBeA(chorus.models.DataPreviewTask);
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.instance().id);
-                expect(this.preview.get("databaseName")).toBe(this.tabularData.database().name());
-                expect(this.preview.get("schemaName")).toBe(this.tabularData.schema().name());
-                expect(this.preview.get("objectName")).toBe(this.tabularData.name());
-                expect(this.preview.get("objectType")).toBe("TABLE");
+                expect(this.preview.get("databaseObject").id).toBe(this.tabularData.id);
             });
         });
 
@@ -302,12 +298,7 @@ describe("chorus.models.TabularData", function() {
 
             it("should return a database preview", function() {
                 expect(this.preview).toBeA(chorus.models.DataPreviewTask);
-                expect(this.preview.get("taskType")).toBe("previewTableOrView");
-                expect(this.preview.get("instanceId")).toBe(this.tabularData.instance().id);
-                expect(this.preview.get("databaseName")).toBe(this.tabularData.database().name());
-                expect(this.preview.get("schemaName")).toBe(this.tabularData.schema().name());
-                expect(this.preview.get("objectName")).toBe(this.tabularData.name());
-                expect(this.preview.get("objectType")).toBe("VIEW");
+                expect(this.preview.get("databaseObject").id).toBe(this.tabularData.id);
             });
         });
 
