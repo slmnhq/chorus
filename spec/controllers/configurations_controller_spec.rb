@@ -1,13 +1,10 @@
 require 'spec_helper'
 
 describe ConfigurationsController do
-  before do
-    @user = FactoryGirl.create(:user)
-    log_in @user
-  end
-
   describe "#show" do
-    before(:each) do
+    before do
+      @user = FactoryGirl.create(:user)
+      log_in @user
       mock(LdapClient).enabled? { true }
     end
 
@@ -15,6 +12,14 @@ describe ConfigurationsController do
       get :show
       response.code.should == "200"
       decoded_response.external_auth_enabled.should == true
+    end
+  end
+
+  describe "#version" do
+    it "shows the app's current version'" do
+      get :version
+      response.code.should == "200"
+      response.body.should == Chorus::VERSION::STRING
     end
   end
 end

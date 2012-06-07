@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :user, :aliases => [:owner, :modifier] do
+  factory :user, :aliases => [:owner, :modifier, :actor] do
     sequence(:username) { |n| "user#{n}" }
     password "secret"
     first_name "John"
@@ -100,6 +100,21 @@ FactoryGirl.define do
     owner
     commit_message "Factory commit message"
     modifier
+  end
+
+  factory :event do
+    action "INSTANCE_CREATED"
+    actor
+    association :object, :factory => :user
+  end
+
+  factory :activity do
+    association :entity, :factory => :user
+
+    # allow 'action' as an option to the :activity factory,
+    # even though it's a column in the events table
+    ignore { action "INSTANCE_CREATED" }
+    event { FactoryGirl.create(:event, :action => action) }
   end
 end
 

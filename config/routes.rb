@@ -18,6 +18,7 @@ Chorus::Application.routes.draw do
 
   resources :instances, :only => [:index, :show, :create, :update] do
     resources :databases, :only => [:index], :controller => 'instance_databases'
+    resources :activities, :only => [:index], :controller => 'activities'
 
     scope :module => 'instances' do
       resource :owner, :only => [:update], :controller => 'owner'
@@ -56,6 +57,7 @@ Chorus::Application.routes.draw do
   end
 
   match "/" => "root#index"
+  match "VERSION" => "configurations#version"
 
   # TODO: Remove this when it's no longer needed
   match '*not_found' => 'root#not_found'
