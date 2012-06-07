@@ -2,14 +2,9 @@ require 'spec_helper'
 
 describe 'dataset statistics on real databases', :type => :database_integration do
   let(:account) { real_gpdb_account }
-  let(:instance) { account.instance }
 
   before do
-    GpdbDatabase.refresh(account)
-    database = GpdbDatabase.find_by_name('gpdb_test_database')
-    GpdbSchema.refresh(account, database)
-    gpdb_schema = GpdbSchema.find_by_name('gpdb_test_schema')
-    GpdbDatabaseObject.refresh(account, gpdb_schema)
+    refresh_chorus
   end
 
   context "table that has partitions" do

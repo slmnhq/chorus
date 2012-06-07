@@ -2,14 +2,10 @@ require "spec_helper"
 
 describe GpdbDatabaseObject::Query, :type => :database_integration do
   let(:account) { real_gpdb_account }
-
-  attr_reader :schema
+  let(:schema) { GpdbSchema.find_by_name('gpdb_test_schema') }
 
   before do
-    GpdbDatabase.refresh(account)
-    database = GpdbDatabase.find_by_name('gpdb_test_database')
-    GpdbSchema.refresh(account, database)
-    @schema = GpdbSchema.find_by_name('gpdb_test_schema')
+    refresh_chorus
   end
 
   subject do
@@ -34,21 +30,21 @@ describe GpdbDatabaseObject::Query, :type => :database_integration do
     it "returns a query whose result includes the names of all tables and views in the schema," +
        "but does not include sub-partition tables, indexes, or relations in other schemas" do
       names = rows.map { |row| row["name"] }
-      names.should =~ [ "base_table1", "view1", "external_web_table1", "master_table1" ]
+      names.should =~ [ "base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types" ]
     end
 
     it "includes the relations' types ('r' for table, 'v' for view)" do
       view_row = rows.find { |row| row['name'] == "view1" }
       view_row["type"].should == "v"
 
-      rows.map { |row| row["type"] }.should =~ [ "v", "r", "r", "r" ]
+      rows.map { |row| row["type"] }.should =~ [ "v", "r", "r", "r", "r" ]
     end
 
     it "includes whether or not each relation is a master table" do
       master_row = rows.find { |row| row['name'] == "master_table1" }
       master_row["master_table"].should == "t"
 
-      rows.map { |row| row["master_table"] }.should =~ [ "t", "f", "f", "f" ]
+      rows.map { |row| row["master_table"] }.should =~ [ "t", "f", "f", "f", "f" ]
     end
   end
 
