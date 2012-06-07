@@ -16,28 +16,8 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         this.$("span.auto_save").text(t(text, {time:time}))
     },
 
-    postRender: function() {
-        var fileMenu = new chorus.views.Menu({
-            launchElement: this.$(".save_file_as"),
-            checkable: false,
-            orientation: "left",
-            items: [{
-                name: "new",
-                text: t("workfile.content_details.save_new_version"),
-                onSelect: _.bind(this.createNewVersion, this)
-            },
-            {
-                name: "replace",
-                text: t("workfile.content_details.replace_current"),
-                onSelect: _.bind(this.replaceCurrentVersion, this)
-            }]
-        });
-
-        var selectionMenu = new chorus.views.Menu({
-            launchElement: this.$(".save_selection_as"),
-            checkable: false,
-            orientation: "left",
-            items: [{
+    selectionMenuItems: function() {
+        return [{
                 name: "new",
                 text: t("workfile.content_details.save_selection_new_version"),
                 onSelect: _.bind(this.createNewVersionFromSelection, this)
@@ -46,12 +26,42 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
                 name: "replace",
                 text: t("workfile.content_details.replace_current_with_selection"),
                 onSelect: _.bind(this.replaceCurrentVersionWithSelection, this)
-            }]
+            }
+        ];
+    },
+
+    fileMenuItems: function() {
+        return [{
+                name: "new",
+                text: t("workfile.content_details.save_new_version"),
+                onSelect: _.bind(this.createNewVersion, this)
+            },
+            {
+                name: "replace",
+                text: t("workfile.content_details.replace_current"),
+                onSelect: _.bind(this.replaceCurrentVersion, this)
+            }
+        ];
+    },
+
+    postRender: function() {
+        this.fileMenu = new chorus.views.Menu({
+            launchElement: this.$(".save_file_as"),
+            checkable: false,
+            orientation: "left",
+            items: this.fileMenuItems()
+        });
+
+        this.selectionMenu = new chorus.views.Menu({
+            launchElement: this.$(".save_selection_as"),
+            checkable: false,
+            orientation: "left",
+            items: this.selectionMenuItems()
         });
 
         if (!this.model.isLatestVersion()) {
-            fileMenu.disableItem("replace");
-            selectionMenu.disableItem("replace");
+            this.fileMenu.disableItem("replace");
+            this.selectionMenu.disableItem("replace");
         }
 
         if (!this.model.workspace().isActive()) {
