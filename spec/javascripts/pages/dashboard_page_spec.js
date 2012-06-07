@@ -111,5 +111,16 @@ describe("chorus.pages.DashboardPage", function() {
                 expect(instance.get("theInstance").get("name")).toBe(packedUpInstanceSet.models[i].get("name"));
             });
         });
+
+        describe("when an instance is added", function() {
+            beforeEach(function() {
+                spyOn(this.page, "fetchInstances");
+                chorus.PageEvents.broadcast("instance:added");
+            });
+
+            it("re-fetches the instances", function() {
+                expect(this.page.fetchInstances).toHaveBeenCalled();
+            });
+        });
     })
 });

@@ -73,17 +73,6 @@ describe("chorus.views.Dashboard", function(){
                 expect(link.text().trim()).toMatchTranslation("dashboard.instances.add");
                 expect(link.data("dialog")).toBe("InstancesNew");
             });
-
-            describe("when an instance is added using the dialog", function() {
-                beforeEach(function() {
-                    chorus.PageEvents.broadcast("instance:added", '5');
-                });
-
-                it("re-fetches the instances", function() {
-                    var allInstances = new chorus.collections.InstanceSet();
-                    expect(allInstances).toHaveBeenFetched();
-                });
-            });
         });
 
         it("has an activity list", function() {
