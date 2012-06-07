@@ -12,7 +12,7 @@
     <% schema.base_tables.try(:each) do |table| %>
       CREATE TABLE <%= "#{schema.name}.#{table.name}" %>
         (
-          id integer
+          id integer PRIMARY KEY
           <% ((table.column_count || 1) - 1).times do |i| %>
             , <%= "column#{i+1}" %> integer
           <% end %>
@@ -20,6 +20,13 @@
         DISTRIBUTED BY (id);
       COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
         IS '<%= table.description %>';
+
+        <% (table.row_count || 0).times do |num| %>
+            INSERT INTO <%= "#{schema.name}.#{table.name}" %> VALUES (
+                <%= ([num] * table.column_count).join(',') %>
+            );
+        <% end %>
+      ANALYZE <%= "#{schema.name}.#{table.name}" %>;
     <% end %>
 
     <% schema.views.try(:each) do |view| %>
@@ -38,6 +45,7 @@
         ( HEADER );
       COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
         IS '<%= table.description %>';
+      ANALYZE <%= "#{schema.name}.#{table.name}" %>;
     <% end %>
 
     <% schema.master_tables.try(:each) do |table| %>
@@ -45,9 +53,10 @@
         ( id integer, some_int integer )
         DISTRIBUTED BY (id)
         PARTITION BY RANGE(some_int)
-        ( START (1::integer) END (<%= table.partitions + 1 %>::integer) EVERY (1::integer));
+        ( START (1::integer) END (<%= (table.partitions || 0) + 1 %>::integer) EVERY (1::integer));
       COMMENT ON TABLE <%= "#{schema.name}.#{table.name}" %>
         IS '<%= table.description %>';
+      ANALYZE <%= "#{schema.name}.#{table.name}" %>
     <% end %>
 
     <% schema.indexes.try(:each) do |index| %>

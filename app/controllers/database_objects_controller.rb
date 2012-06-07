@@ -8,9 +8,6 @@ class DatabaseObjectsController < GpdbController
         with_name_like(params[:filter]).
         order("lower(name)").
         paginate(params.slice(:page, :per_page))
-
-    GpdbDatabaseObject.add_metadata!(db_objects, account)
-
     present db_objects
   end
 

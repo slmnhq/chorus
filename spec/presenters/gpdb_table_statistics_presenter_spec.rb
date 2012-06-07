@@ -10,12 +10,11 @@ describe GpdbTableStatisticsPresenter, :type => :view do
       hash = subject.to_hash
 
       hash[:object_type].should == 'BASE_TABLE'
-      hash[:object_name].should == 'A1000'
       hash[:rows].should == 1000
       hash[:columns].should == 5
       hash[:description].should == 'This is a nice table.'
-      hash[:last_analyzed_time].should == Time.utc(2012, 10, 20, 10, 30, 00)
-      hash[:on_disk_size].should == 2048
+      hash[:last_analyzed_time].to_s.should == "2012-06-06 23:02:42 UTC"
+      hash[:on_disk_size].should == "2048 kB"
       hash[:partitions].should == 0
     end
   end

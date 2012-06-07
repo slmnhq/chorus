@@ -45,30 +45,77 @@ describe GpdbDatabaseObject::Query, :type => :database_integration do
   end
 
   describe "#metadata_for_tables" do
-    let(:sql) { subject.metadata_for_tables(["base_table1", "view1", "external_web_table1"]).to_sql }
 
-    it "returns a query whose result includes, for each of the given tables/views," +
-       "the name, comment (if present) and sql definition (for views)" do
-      rows.should =~ [
-        {
-          "name" => "base_table1",
-          "description" => "comment on base_table1",
-          "definition" => nil,
-          "column_count" => "3"
-        },
-        {
-          "name" => "view1",
-          "description" => "comment on view1",
-          "definition" => "SELECT base_table1.id, base_table1.column1, base_table1.column2 FROM gpdb_test_schema.base_table1;",
-          "column_count" => "3"
-        },
-        {
-          "name" => "external_web_table1",
-          "description" => nil,
-          "definition" => nil,
-          "column_count" => "5"
-        }
-      ]
+    context "Base table" do
+    let(:sql) { subject.metadata_for_table("base_table1").to_sql }
+
+    it "returns a query whose result for a base table is correct" do
+      row = rows.first
+
+      row['name'].should == "base_table1"
+      row['description'].should == "comment on base_table1"
+      row['definition'].should be_nil
+      row['column_count'].should == "3"
+      row['row_count'].should == "5"
+      row['table_type'].should == "BASE_TABLE"
+      row['last_analyzed'].should_not be_nil
+      row['disk_size'].should =~ /kB/
+      row['partition_count'].should == "0"
     end
+    end
+
+    context "Master table" do
+      let(:sql) { subject.metadata_for_table("master_table1").to_sql }
+
+      it "returns a query whose result for a master table is correct" do
+        row = rows.first
+
+        row['name'].should == 'master_table1'
+        row['description'].should == 'comment on master_table1'
+        row['definition'].should be_nil
+        row['column_count'].should == '2'
+        row['row_count'].should == '0' # will always be zero for a master table
+        row['table_type'].should == 'MASTER_TABLE'
+        row['last_analyzed'].should be_nil # will always be nil for a master table
+        row['disk_size'].should == '0 bytes' # will always be zero for a master table
+        row['partition_count'].should == '7'
+      end
+    end
+
+    context "External table" do
+      let(:sql) { subject.metadata_for_table("external_web_table1").to_sql }
+
+      it "returns a query whose result for an external table is correct" do
+        row = rows.first
+
+        row['name'].should == 'external_web_table1'
+        row['description'].should be_nil
+        row['definition'].should be_nil
+        row['column_count'].should == '5'
+        row['row_count'].should == '0' # will always be zero for an external table
+        row['table_type'].should == 'EXT_TABLE'
+        row['last_analyzed'].should_not be_nil
+        row['disk_size'].should == '0 bytes' # will always be zero for an external table
+        row['partition_count'].should == '0'
+      end
+    end
+
+
+    #    },
+    #    {
+    #      "name" => "view1",
+    #      "description" => "comment on view1",
+    #      "definition" => "SELECT base_table1.id, base_table1.column1, base_table1.column2 FROM gpdb_test_schema.base_table1;",
+    #      "column_count" => "3"
+    #    },
+    #    {
+    #    {
+    #      "name" => "external_web_table1",
+    #      "description" => nil,
+    #      "definition" => nil,
+    #      "column_count" => "5"
+    #    }
+    #  ]
+    #end
   end
 end

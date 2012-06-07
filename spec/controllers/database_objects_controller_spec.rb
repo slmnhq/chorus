@@ -18,7 +18,7 @@ describe DatabaseObjectsController do
 
     before do
       mock(GpdbDatabaseObject).refresh(instanceAccount, schema)
-      stub(GpdbDatabaseObject).add_metadata!(anything, instanceAccount)
+      stub(table).add_metadata!(instanceAccount)
     end
 
     it "should retrieve all db objects for a schema" do
