@@ -55,26 +55,11 @@ if (filter) {
     url += '?spec=' + encodeURIComponent(filter);
 }
 
-var loadedAnsi = false;
-var shouldColorize = fs.workingDirectory.indexOf(".cruise") < 0;
-
 page.open(url, function(status){
     if (status !== "success") {
         console.log("Unable to access network");
         phantom.exit(1);
     } else {
-        if (!loadedAnsi) {
-            loadedAnsi = true;
-            if (shouldColorize) {
-                page.injectJs("phantom/ansi_colors.js");
-            } else {
-                page.evaluate(function(){
-                    window.colorize = function(str) {
-                        return str;
-                    }
-                });
-            }
-        }
 
         page.evaluate(function() {
             if (window.phantomInitialized) {
@@ -90,14 +75,14 @@ page.open(url, function(status){
                     if (spec.results().skipped) {
                         // nothing for now!
                     } else if (spec.results().passed()) {
-                        console.log(colorize(".", "green"));
+                        console.log(".");
                     } else {
-                        console.log("\n" + colorize("F (" + spec.getFullName()  + ")", "red") + "\n");
+                        console.log("\nF (" + spec.getFullName()  + ")\n");
 
                         var resultItems = spec.results().getItems();
                         _.each(resultItems, function(result) {
                             if (result.type == 'expect' && result.passed && !result.passed()) {
-                                console.log(colorize(">>> " + result.message + "\n", "white+red_bg"));
+                                console.log(">>> " + result.message + "\n");
                             }
                         });
                     }
