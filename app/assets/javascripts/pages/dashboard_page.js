@@ -16,17 +16,17 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);
 
         var mergeInstances = _.bind(function() {
-                this.arraySet = new chorus.collections.Base();
                 if(this.instanceSet.loaded && this.hadoopInstanceSet.loaded) {
+                    var package = function(set) {
+                        return _.map(set, function(instance) {
+                            return new chorus.models.Base({ theInstance: instance })
+                        });
+                    }
 
-                    var proxyInstances = _.map(this.instanceSet.models, function(instance) {
-                        return new chorus.models.Base({ theInstance: instance })
-                    });
+                    var proxyInstances = package(this.instanceSet.models);
+                    var proxyHadoopInstances = package(this.hadoopInstanceSet.models);
 
-                    var proxyHadoopInstances = _.map(this.hadoopInstanceSet.models, function(instance) {
-                        return new chorus.models.Base({ theInstance: instance })
-                    });
-
+                    this.arraySet = new chorus.collections.Base();
                     this.arraySet.add(proxyInstances);
                     this.arraySet.add(proxyHadoopInstances);
                     this.arraySet.loaded = true;
