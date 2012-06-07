@@ -54,7 +54,7 @@ describe GpdbColumnPresenter, :type => :view do
     it_has_type_category("integer", "WHOLE_NUMBER")
     it_has_type_category("text", "LONG_STRING")
     it_has_type_category("time without time zone", "TIME")
-    it_has_type_category("time with time zone", "OTHER")
+    it_has_type_category("time with time zone", "TIME")
     it_has_type_category("timestamp without time zone", "DATETIME")
     it_has_type_category("timestamp with time zone", "DATETIME")
   end

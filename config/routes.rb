@@ -38,11 +38,11 @@ Chorus::Application.routes.draw do
   # TODO: Make it generally available for either views and tables
   resources :tables, :only => [] do
     resource :statistics, :only => :show
-    resources :previews, :only => [:create]
   end
   
   resources :database_objects, :only => [:show] do
     resources :columns, :only=> [:index], :controller => 'column'
+    resources :previews, :only => [:create]
   end
 
   resources :workspaces, :only => [:index, :create, :show, :update] do

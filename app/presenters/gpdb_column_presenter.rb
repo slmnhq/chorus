@@ -12,7 +12,7 @@ class GpdbColumnPresenter < Presenter
   
   def type_category
     case data_type
-    when /\[\]/, "time with time zone"
+    when /\[\]/
       "OTHER"
     when /integer/, "bigint", "smallint"
       "WHOLE_NUMBER"

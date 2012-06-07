@@ -7,9 +7,11 @@ chorus.views.DashboardInstanceList = chorus.views.Base.extend({
 
     collectionModelContext: function(model) {
         return {
-            imageUrl: model.providerIconUrl(),
-            isHadoop: model.isHadoop(),
-            showUrl: model.showUrl()
+            id: model.get("theInstance").get("id"),
+            name: model.get("theInstance").get("name"),
+            imageUrl: model.get("theInstance").providerIconUrl(),
+            isHadoop: model.get("theInstance").isHadoop(),
+            showUrl: model.get("theInstance").showUrl()
         }
     }
 });

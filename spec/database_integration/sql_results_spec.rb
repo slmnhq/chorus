@@ -1,13 +1,11 @@
 require 'spec_helper'
 
-describe SqlResults do
-  let(:instance) { FactoryGirl::create :instance, :host => "gillette", :port => 5432, :maintenance_db => "postgres", :shared => true }
-  let(:account) { FactoryGirl::create :instance_account, :db_username => "edcadmin", :db_password => "secret", :instance => instance }
-  let(:database) { FactoryGirl::create :gpdb_database, :name => "data_types", :instance => instance }
-  let(:schema) { FactoryGirl::create :gpdb_schema, :name => "public", :database => database }
-  let(:table) { FactoryGirl::create :gpdb_table, :name => "pg_all_types_2", :schema => schema }
+describe SqlResults, :type => :database_integration do
+  let(:account) { real_gpdb_account }
+  let(:table) { GpdbTable.find_by_name("pg_all_types") }
 
-  describe "#preview_database_object" do
+  before do
+    refresh_chorus
   end
 
   describe "#rows" do

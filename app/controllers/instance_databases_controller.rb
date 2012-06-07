@@ -7,7 +7,7 @@ class InstanceDatabasesController < GpdbController
 
   def show
     database = GpdbDatabase.find(params[:id])
-    authorize_gpdb_account(database)
+    authorize_instance_access(database)
     present database
   end
 end

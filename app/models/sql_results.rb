@@ -1,9 +1,9 @@
 class SqlResults
-  def self.preview_database_object(database_object, account)
-    query_string = "SELECT * FROM %s"
+  PREVIEW_SQL = "SELECT * FROM %s LIMIT 100"
 
+  def self.preview_database_object(database_object, account)
     database_object.with_gpdb_connection(account) do |conn|
-      sql = query_string % conn.quote_table_name(database_object.name)
+      sql = PREVIEW_SQL % conn.quote_table_name(database_object.name)
       from_sql(sql, conn)
     end
   end

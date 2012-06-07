@@ -2,7 +2,7 @@ require "hashie/mash"
 require "tempfile"
 require "erubis"
 
-config_file   = File.expand_path("../setup_gpdb.yml", __FILE__)
+config_file   = File.expand_path("../test_gpdb_connection_config.yml", __FILE__)
 template_file = File.expand_path("../setup_gpdb.sql.erb", __FILE__)
 
 CONFIG   = Hashie::Mash.new(YAML.load_file(config_file))
@@ -27,6 +27,15 @@ module GpdbIntegration
     f.close
     system "psql #{instance.maintenance_db} #{connection_params} < #{f.path}"
     f.unlink
+  end
+
+  def refresh_chorus
+    account = real_gpdb_account
+    GpdbDatabase.refresh(account)
+    database = GpdbDatabase.find_by_name('gpdb_test_database')
+    GpdbSchema.refresh(account, database)
+    gpdb_schema = GpdbSchema.find_by_name('gpdb_test_schema')
+    GpdbDatabaseObject.refresh(account, gpdb_schema)
   end
 
   def real_gpdb_account
