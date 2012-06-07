@@ -17,12 +17,13 @@ SHARED_DIR = "packaging/vagrant/shared"
 
 system("mkdir -p #{SHARED_DIR}")
 system "rake package"
-package = Dir.glob("packaging/packages/chorus*").first
+package = Dir.glob("packaging/packages/greenplum-chorus*").sort.last
 package_name = File.basename(package)
 
 exit unless package
 
 system "cp #{package} #{SHARED_DIR}"
+system "scp #{package} pivotal@chorus-fileserver:~/packages"
 
 def vagrant_ssh(cmds)
   system "vagrant ssh -c '#{cmds.join(' && ')}'"
