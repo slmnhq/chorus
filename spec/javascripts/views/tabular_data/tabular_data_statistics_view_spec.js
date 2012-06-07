@@ -17,7 +17,7 @@ describe("chorus.views.TabularDataStatistics", function() {
                 columns: 0,
                 lastAnalyzedTime: "2011-12-12 12:34:56",
                 onDiskSize: "1 GB",
-                desc: "foo",
+                description: "foo",
                 partitions: 2
             });
             this.server.completeFetchFor(this.stats);
