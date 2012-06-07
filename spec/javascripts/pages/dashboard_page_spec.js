@@ -53,6 +53,18 @@ describe("chorus.pages.DashboardPage", function() {
     });
 
     context("#setup", function() {
+        beforeEach(function() {
+            this.server.completeFetchFor(new chorus.collections.InstanceSet([], { hasCredentials: true }), [
+                                         newFixtures.greenplumInstance.greenplum(),
+                                         newFixtures.greenplumInstance.greenplum()
+            ], { accessible: true }, { accessible: true });
+
+            this.server.completeFetchFor(new chorus.collections.HadoopInstanceSet(), [
+                                         newFixtures.hadoopInstance(),
+                                         newFixtures.hadoopInstance()
+            ]);
+        });
+
         it("sets chorus.session.user as the model", function() {
             expect(this.page.model).toBe(chorus.session.user())
         });
@@ -79,8 +91,25 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.instanceSet).toHaveBeenFetched();
         });
 
+        it("fetches the hadoop instances", function() {
+            expect(this.page.hadoopInstanceSet).toBeA(chorus.collections.HadoopInstanceSet);
+            expect(this.page.hadoopInstanceSet).toHaveBeenFetched();
+        });
+
         it("passes the instance set through to the instance list view", function() {
-            expect(this.page.mainContent.instanceList.collection).toBe(this.page.instanceSet);
+            var packedUpGreenplumSet = _.map(this.page.instanceSet.models, function(instance) {
+                return new chorus.models.Base({ theInstance: instance });
+            });
+            var packedUpHadoopSet = _.map(this.page.instanceSet.models, function(instance) {
+                return new chorus.models.Base({ theInstance: instance });
+            });
+            var packedUpInstanceSet = new chorus.collections.Base();
+            packedUpInstanceSet.add(packedUpGreenplumSet)
+            packedUpInstanceSet.add(packedUpHadoopSet)
+
+            _.each(this.page.mainContent.instanceList.collection, function(instance, i) {
+                expect(instance.get("theInstance").get("name")).toBe(packedUpInstanceSet.models[i].get("name"));
+            });
         });
     })
 });

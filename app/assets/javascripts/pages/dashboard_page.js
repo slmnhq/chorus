@@ -12,12 +12,35 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.workspaceSet.sortAsc("name");
         this.workspaceSet.fetch();
 
-        this.instanceSet = new chorus.collections.InstanceSet([], {hasCredentials: true});
-        this.instanceSet.fetch();
+        this.instanceSet = new chorus.collections.InstanceSet([], { hasCredentials: true });
+        this.hadoopInstanceSet = new chorus.collections.HadoopInstanceSet([]);
 
+        var mergeInstances = _.bind(function() {
+                this.arraySet = new chorus.collections.Base();
+                if(this.instanceSet.loaded && this.hadoopInstanceSet.loaded) {
+
+                    var proxyInstances = _.map(this.instanceSet.models, function(instance) {
+                        return new chorus.models.Base({ theInstance: instance })
+                    });
+
+                    var proxyHadoopInstances = _.map(this.hadoopInstanceSet.models, function(instance) {
+                        return new chorus.models.Base({ theInstance: instance })
+                    });
+
+                    this.arraySet.add(proxyInstances);
+                    this.arraySet.add(proxyHadoopInstances);
+                    this.arraySet.loaded = true;
+
+                    this.mainContent = new chorus.views.Dashboard({ collection: this.workspaceSet, instanceSet: this.arraySet });
+                    this.render();
+                }
+        }, this);
+
+        this.instanceSet.fetch().success(mergeInstances);
+        this.hadoopInstanceSet.fetch().success(mergeInstances);
         this.model = chorus.session.user();
 
-        this.mainContent = new chorus.views.Dashboard({ collection: this.workspaceSet, instanceSet: this.instanceSet });
+        this.mainContent = new chorus.views.Dashboard({ collection: this.workspaceSet, instanceSet: this.arraySet });
 
         this.userSet = new chorus.collections.UserSet();
         this.userSet.bindOnce("loaded", function() {

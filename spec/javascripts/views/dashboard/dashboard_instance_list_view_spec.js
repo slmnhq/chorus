@@ -1,8 +1,8 @@
 describe("chorus.views.DashboardInstanceList", function() {
     beforeEach(function(){
         this.instance1 = newFixtures.greenplumInstance.greenplum({ name: "broccoli" });
-        this.instance2 = newFixtures.greenplumInstance.greenplum({ name: "Camels", instanceProvider: "Hadoop" });
-        this.instance3 = newFixtures.greenplumInstance.greenplum({ name: "doppler", instanceProvider: "Hadoop" });
+        this.instance2 = newFixtures.hadoopInstance({ name: "Camels" });
+        this.instance3 = newFixtures.hadoopInstance({ name: "doppler" });
         this.instance4 = newFixtures.greenplumInstance.greenplum({ name: "Ego" });
         this.instance5 = newFixtures.greenplumInstance.greenplum({ name: "fatoush" });
         this.collection = new chorus.collections.InstanceSet([
@@ -12,8 +12,16 @@ describe("chorus.views.DashboardInstanceList", function() {
             this.instance3,
             this.instance1
         ]);
+
+        var proxySet = new chorus.collections.Base(
+            _.map(this.collection.models, function(model) {
+                return new chorus.models.Base({ theInstance: model });
+            })
+        )
+
         this.collection.loaded = true;
-        this.view = new chorus.views.DashboardInstanceList({ collection : this.collection });
+        proxySet.loaded = true;
+        this.view = new chorus.views.DashboardInstanceList({ collection : proxySet });
     });
 
     describe("#render", function() {
