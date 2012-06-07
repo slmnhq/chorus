@@ -6,9 +6,8 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
             lineNumbers: true,
             fixedGutter: true,
             theme: "default",
-            lineWrapping: true,
+            lineWrapping: true
         }, options);
-        this.model = this.options.model;
         chorus.PageEvents.subscribe("file:insertText", this.insertText, this);
     },
 
@@ -17,16 +16,9 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
             var textArea = this.$(".text_editor")[0];
             if (textArea !== this.textArea) {
                 this.textArea = textArea;
-                this.editor = CodeMirror.fromTextArea(this.textArea, this.options);
-
-                if (this.options.beforeEdit) {
-                    this.options.beforeEdit.call(this);
-                }
-
-                var ed = this.editor;
-                _.defer(function() {
-                    ed.refresh();
-                });
+                var editor = this.editor = CodeMirror.fromTextArea(this.textArea, this.options);
+                _.defer(function() { editor.refresh(); });
+                if (this.options.beforeEdit) { this.options.beforeEdit.call(this); }
             }
 
             this.$(".CodeMirror").droppable({
@@ -55,7 +47,7 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
 // delegate methods to the CodeMirror editor
 _.each([
     'getValue', 'setValue', 'getOption', 'setOption', 'getSelection',
-    'focus', 'getCursor', 'setCursor', 'lineCount', 'getLine'
+    'setSelection', 'focus', 'getCursor', 'setCursor', 'lineCount', 'getLine'
 ], function(method) {
     chorus.views.CodeEditorView.prototype[method] = function() {
         return this.editor[method].apply(this.editor, arguments);

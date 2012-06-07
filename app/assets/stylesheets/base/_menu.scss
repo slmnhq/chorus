@@ -9,11 +9,11 @@
         }
 
         a {
-            &:hover {
+            &:not([disabled]):hover {
                 text-decoration: underline;
             }
 
-            &.disabled {
+            &[disabled] {
                 text-decoration: none;
                 cursor: default;
                 @include secondary-text-normal;

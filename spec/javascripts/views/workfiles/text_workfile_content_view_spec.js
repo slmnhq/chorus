@@ -199,71 +199,148 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
     });
 
-    describe("#saveChanges", function() {
+    describe("saving the workfile", function() {
         beforeEach(function() {
+            this.textfile.content("old content");
+            this.textfile.set({"latestVersionNum": 2});
+
             this.view.render();
-
-            spyOn(this.view.model, "save");
-
             this.view.editText();
+            this.view.editor.setValue('This should be a big enough text, okay?')
             this.view.editor.setCursor(0, 19);
-            this.view.replaceCurrentVersion();
-            this.clock.tick(1000);
+
+            this.modalSpy = stubModals();
+
+            spyOn(this.view, "stopTimer");
+            spyOn(this.textfile, "save").andCallThrough();
+            spyOn(this.textfile, "canEdit").andReturn(true);
         });
 
-        it("should still be in edit mode", function(){
-            expect(this.view.$(".CodeMirror")).toHaveClass("editable");
-        });
-
-        it("sets readonly to nocursor", function() {
-            expect(this.view.editor.getOption("readOnly")).toBe(false);
-        });
-
-        it("sets cursor at the correct position", function() {
-            expect(this.view.editor.getCursor().ch).toBe(19);
-            expect(this.view.editor.getCursor().line).toBe(0);
-        });
-
-        it("saves the model", function() {
-            expect(this.view.model.save).toHaveBeenCalled();
-        });
-    });
-
-    describe("event file:saveCurrent", function() {
-        beforeEach(function() {
-            // this.view.editor becomes set in view.render
-            this.view.render();
-
-            // Because view.saveChanges is bound in view.setup, it is difficult/impossible to spy on the proper function...
-            // so we'll spy on the side-effect of calling that function.
-            spyOn(this.view.model, "save").andCallThrough();
-            chorus.PageEvents.broadcast("file:saveCurrent");
-        });
-
-        it("calls saveChanges", function() {
-            expect(this.view.model.save).toHaveBeenCalled();
-        });
-
-        context("when there is a version conflict", function() {
+        describe("the 'file:replaceCurrentVersion' event", function() {
             beforeEach(function() {
-                this.modalSpy = stubModals();
-                message = {
-                    "message" : "Bad version, bro",
-                    "msgkey" : "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH"
-                }
-                var model = this.view.model
-                var url = "/edc/workspace/" + model.get("workspaceId") + "/workfile/" +
-                    model.get("id") + "/version/" + model.get("versionInfo").versionNum;
-                _.find(this.server.updates(), function(request){
-                    return request.url === url ;
-                }).fail([message]);
+                chorus.PageEvents.broadcast("file:replaceCurrentVersion");
+                this.clock.tick(10000);
             });
 
-            it("should show the version conflict alert", function() {
-                expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
+            it("calls save", function() {
+                expect(this.view.model.save).toHaveBeenCalled();
+            });
+
+            it("sets cursor at the correct position", function() {
+                expect(this.view.editor.getCursor().ch).toBe(19);
+                expect(this.view.editor.getCursor().line).toBe(0);
+            });
+
+            it("sets readonly to nocursor", function() {
+                expect(this.view.editor.getOption("readOnly")).toBe(false);
+            });
+
+            it("saves the selected content only", function() {
+                expect(this.view.model.content()).toBe('This should be a big enough text, okay?');
+            });
+
+            it("maintains the editor in edit mode", function(){
+                expect(this.view.$(".CodeMirror")).toHaveClass("editable");
+            });
+
+            context("when there is a version conflict", function() {
+                it("shows the version conflict alert", function() {
+                    this.server.lastUpdate().fail([{
+                        "message" : "Bad version, bro",
+                        "msgkey" : "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH"
+                    }]);
+
+                    expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
+                });
+            });
+        });
+
+        describe("event file:createNewVersion", function() {
+            beforeEach(function() {
+                chorus.PageEvents.broadcast("file:createNewVersion");
+            });
+
+            it("calls stops the auto save timer", function() {
+                expect(this.view.stopTimer).toHaveBeenCalled();
+            });
+
+            it("updates the model", function() {
+                expect(this.view.model.content()).toBe("This should be a big enough text, okay?");
+            });
+
+            it("launches the 'save workfile as new version' dialog with the correct model", function() {
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfileNewVersion);
+                expect(this.view.dialog.model).toBeA(chorus.models.Workfile);
+            });
+        });
+
+        context("with text selected", function() {
+            beforeEach(function() {
+                this.view.editor.setSelection({line: 0, ch:17}, {line: 0, ch: 20});
+            });
+
+            describe("the 'file:replaceCurrentVersionWithSelection' event", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("file:replaceCurrentVersionWithSelection");
+                    this.clock.tick(10000);
+                });
+
+                it("calls save", function() {
+                    expect(this.view.model.save).toHaveBeenCalled();
+                });
+
+                it("saves the selected content only", function() {
+                    expect(this.view.model.content()).toBe('big');
+                });
+
+                it("puts the cursor at the end of the file", function() {
+                    expect(this.view.editor.getCursor().ch).toBe("big".length);
+                });
+
+                it("sets readonly to nocursor", function() {
+                    expect(this.view.editor.getOption("readOnly")).toBe(false);
+                });
+
+                it("maintains the editor in edit mode", function(){
+                    expect(this.view.$(".CodeMirror")).toHaveClass("editable");
+                });
+
+                context("when there is a version conflict", function() {
+                    it("shows the version conflict alert", function() {
+                        this.server.lastUpdate().fail([{
+                            "message" : "Bad version, bro",
+                            "msgkey" : "WORKFILE.VERSION_TIMESTAMP_NOT_MATCH"
+                        }]);
+
+                        expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileConflict);
+                    });
+                });
+            });
+
+            describe("event file:createNewVersionFromSelection", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("file:createNewVersionFromSelection");
+                });
+
+                it("calls stops the auto save timer", function() {
+                    expect(this.view.stopTimer).toHaveBeenCalled();
+                });
+
+                it("updates the model", function() {
+                    expect(this.view.model.content()).toBe("big");
+                });
+
+                it("launches save workfile as new version dialog", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfileNewVersion);
+                });
+
+                it("launches the new dialog with the correct model", function() {
+                    expect(this.view.dialog.model).toBeA(chorus.models.Workfile);
+                });
             });
         });
     });
+
 
     describe("when navigating away", function() {
         beforeEach(function() {
@@ -292,34 +369,26 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
     });
 
-    describe("event file:createWorkfileNewVersion", function() {
+
+    describe("when the user changes the selection", function() {
         beforeEach(function() {
-            this.view.model.get("versionInfo").content = "old content";
-            this.view.model.set({"latestVersionNum": 2});
-
+            spyOn(chorus.PageEvents, "broadcast");
             this.view.render();
-
-            this.view.editor.setValue("new content");
-
-            spyOn(this.view, "stopTimer");
-            this.modalSpy = stubModals();
-            chorus.PageEvents.broadcast("file:createWorkfileNewVersion");
+            this.view.editor.setValue("content\n\nmore content");
         });
 
-        it("calls stops the auto save timer", function() {
-            expect(this.view.stopTimer).toHaveBeenCalled();
+        context("the selection range is empty", function() {
+            it("fires the selection empty event", function() {
+                this.view.editor.setSelection({line: 1, ch: 0}, {line: 1, ch: 0});
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('file:selectionEmpty');
+            });
         });
 
-        it("updates the model", function() {
-            expect(this.view.model.content()).toBe("new content");
-        });
-
-        it("launches save workfile as new version dialog", function() {
-            expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfileNewVersion);
-        });
-
-        it("launches the new dialog with the correct model", function() {
-            expect(this.view.dialog.model).toBeA(chorus.models.Workfile);
+        context("the selection range is not empty", function() {
+            it("fires the selection present event", function() {
+                this.view.editor.setSelection({line: 0, ch: 0}, {line: 2, ch: 0});
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('file:selectionPresent');
+            });
         });
     });
 });

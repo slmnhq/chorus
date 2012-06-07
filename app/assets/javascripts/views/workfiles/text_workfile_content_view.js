@@ -25,11 +25,20 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
                 if (self.model.canEdit()) {
                     setTimeout(_.bind(self.editText, self), 100);
                 }
+            },
+            onCursorActivity: function(editor) {
+                if (editor.getSelection().length > 0) {
+                    chorus.PageEvents.broadcast("file:selectionPresent");
+                } else {
+                    chorus.PageEvents.broadcast("file:selectionEmpty");
+                }
             }
         });
 
-        chorus.PageEvents.subscribe("file:saveCurrent", this.replaceCurrentVersion, this);
-        chorus.PageEvents.subscribe("file:createWorkfileNewVersion", this.createWorkfileNewVersion, this);
+        chorus.PageEvents.subscribe("file:replaceCurrentVersion", this.replaceCurrentVersion, this);
+        chorus.PageEvents.subscribe("file:createNewVersion", this.createNewVersion, this);
+        chorus.PageEvents.subscribe("file:replaceCurrentVersionWithSelection", this.replaceCurrentVersionWithSelection, this);
+        chorus.PageEvents.subscribe("file:createNewVersionFromSelection", this.createNewVersionFromSelection, this);
         this.bindings.add(this.model, "saveFailed", this.versionConflict);
     },
 
@@ -84,23 +93,39 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         if (this.saveTimer) this.saveDraft();
     },
 
-    replaceCurrentVersion: function() {
-        this.stopTimer();
-        this.saveCursorPosition();
-        this.model.content(this.editor.getValue(), {silent: true});
-        this.model.save({}, {silent: true}); // Need to save silently because content details and content share the same models, and we don't want to render content details
-        this.render();
-    },
-
     saveCursorPosition: function() {
         this.cursor = this.editor.getCursor();
     },
 
-    createWorkfileNewVersion: function() {
-        this.stopTimer();
+    replaceCurrentVersion: function() {
         this.saveCursorPosition();
+        this.replaceCurrentVersionWithContent(this.editor.getValue());
+    },
 
-        this.model.content(this.editor.getValue(), {silent: true});
+    createNewVersion: function() {
+        this.saveCursorPosition();
+        this.createNewVersionWithContent(this.editor.getValue());
+    },
+
+    replaceCurrentVersionWithSelection: function() {
+        this.replaceCurrentVersionWithContent(this.editor.getSelection());
+    },
+
+    createNewVersionFromSelection: function() {
+        this.createNewVersionWithContent(this.editor.getSelection());
+    },
+
+    replaceCurrentVersionWithContent: function(value) {
+        this.stopTimer();
+        this.model.content(value, {silent: true});
+
+        this.model.save({}, {silent: true}); // Need to save silently because content details and content share the same models, and we don't want to render content details
+        this.render();
+    },
+
+    createNewVersionWithContent: function(value) {
+        this.stopTimer();
+        this.model.content(value, {silent: true});
 
         this.dialog = new chorus.dialogs.WorkfileNewVersion({ launchElement: this, pageModel: this.model, pageCollection: this.collection });
         this.dialog.launchModal(); // we need to manually create the dialog instead of using data-dialog because qtip is not part of page

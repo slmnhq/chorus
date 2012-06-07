@@ -81,50 +81,48 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.qtipMenu = stubQtip();
+            this.saveFileMenu = stubQtip(".save_file_as");
+            this.saveSelectionMenu = stubQtip(".save_selection_as");
             this.view = new chorus.views.WorkfileContentDetails({model: this.model});
             this.view.render();
         });
 
-        it("has the save_as button in the details bar", function() {
-            expect(this.view.$("button.save_as").length).toBe(1);
-            expect(this.view.$("button.save_as")).toContainTranslation('workfile.content_details.save_as');
+        it("has the save_file_as button in the details bar", function() {
+            expect(this.view.$("button.save_file_as").length).toBe(1);
+            expect(this.view.$("button.save_file_as")).toContainTranslation('workfile.content_details.save_file_as');
         });
 
         it("should not have disabled class from the save as link", function() {
-            expect(this.view.$(".save_as")).not.toBeDisabled();
+            expect(this.view.$(".save_file_as")).not.toBeDisabled();
         });
 
         it("should not display the autosave text", function() {
             expect(this.view.$("span.auto_save")).toHaveClass("hidden");
         });
 
-        it("should not show the save_options", function() {
-            expect(this.view.$(".save_options")).toHaveClass("hidden");
-        });
-
         context("menus", function() {
-            it("when replacing the current version, it should broadcast the file:saveCurrent event", function() {
+            it("when replacing the current version, it should broadcast the file:replaceCurrentVersion event", function() {
                 spyOn(chorus.PageEvents, "broadcast");
                 this.view.replaceCurrentVersion();
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:replaceCurrentVersion");
             });
 
-            it("when creating a new version, it should broadcast the file:createWorkfileNewVersion event", function() {
+            it("when creating a new version, it should broadcast the file:createNewVersion event", function() {
                 spyOn(chorus.PageEvents, "broadcast");
-                this.view.workfileNewVersion();
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
+                this.view.createNewVersion();
+                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:createNewVersion");
             });
         });
 
-        context("when the workpsace is archived", function() {
+        context("when the workspace is archived", function() {
             beforeEach(function() {
                 this.model.workspace().set({ active: false });
                 this.view.render();
             });
 
             it("should disable the save button", function() {
-                expect(this.view.$(".save_as")).toBeDisabled();
+                expect(this.view.$(".save_file_as")).toBeDisabled();
+                expect(this.view.$(".save_selection_as")).toBeDisabled();
             });
         });
 
@@ -140,8 +138,8 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
                 context("and the save as current button is clicked", function() {
                     beforeEach(function() {
-                        this.view.$(".save_as").click();
-                        this.qtipMenu.find('.save_as_current').click();
+                        this.view.$(".save_file_as").click();
+                        this.saveFileMenu.find('a[data-menu-name="replace"]').click();
                     });
 
                     it("should display the 'Saved at' text", function() {
@@ -154,17 +152,18 @@ describe("chorus.views.WorkfileContentDetails", function() {
                 context("when the workfile is the most recent version", function() {
                     beforeEach(function() {
                         this.view.render();
-                        this.view.$(".save_as").click();
+                        this.view.$(".save_file_as").click();
                     });
 
                     it("displays the tooltip", function() {
-                        expect(this.qtipMenu).toHaveVisibleQtip();
+                        expect(this.saveFileMenu).toHaveVisibleQtip();
                     });
 
                     it("renders the menu links", function() {
-                        expect($("a.save_as_new", this.qtipMenu)).toExist();
-                        expect($("a.save_as_current", this.qtipMenu)).toExist();
-                        expect($("span.save_as_current.disabled", this.qtipMenu)).not.toExist();
+                        expect(this.saveFileMenu).toContainTranslation("workfile.content_details.replace_current")
+                        expect(this.saveFileMenu).toContainTranslation("workfile.content_details.save_new_version")
+                        expect(this.saveFileMenu.find("a")).not.toHaveAttr("disabled");
+                        // expect($("span.save_file_as_current.disabled", this.saveFileMenu)).not.toExist();
                     });
                 });
 
@@ -172,18 +171,78 @@ describe("chorus.views.WorkfileContentDetails", function() {
                     beforeEach(function() {
                         this.view.model.set({ latestVersionNum: 2 })
                         this.view.render();
-                        this.view.$(".save_as").click();
+                        this.view.$(".save_file_as").click();
                     });
 
                     it("displays the tooltip", function() {
-                        expect(this.qtipMenu).toHaveVisibleQtip();
+                        expect(this.saveFileMenu).toHaveVisibleQtip();
                     });
 
-                    it("renders the menu links", function() {
-                        expect($("a.save_as_new", this.qtipMenu)).toExist();
-                        expect($("a.save_as_current", this.qtipMenu)).not.toExist();
-                        expect($("span.save_as_current.disabled", this.qtipMenu)).toExist();
+                    it("disables the link to replace version", function() {
+                        expect(this.saveFileMenu.find("a[data-menu-name='replace']")).toHaveAttr("disabled");
                     });
+                });
+            });
+        });
+
+        describe("when the 'selectionPresent' page event is broadcasted", function() {
+            beforeEach(function() {
+                chorus.PageEvents.broadcast("file:selectionPresent");
+            });
+
+            it("switches the 'save' menu to display actions for the current selection", function() {
+                expect(this.view.$("button.save_file_as")).toHaveClass("hidden");
+                expect(this.view.$("button.save_selection_as")).not.toHaveClass("hidden");
+            });
+
+            describe("when the user clicks on the 'save selection as file' button", function() {
+                beforeEach(function() {
+                    spyOn(chorus.PageEvents, "broadcast");
+                    this.view.$(".save_selection_as").click();
+                });
+
+                it("renders the menu links", function() {
+                    expect(this.saveSelectionMenu).toContainTranslation("workfile.content_details.save_selection_new_version")
+                    expect(this.saveSelectionMenu).toContainTranslation("workfile.content_details.replace_current_with_selection")
+                });
+
+                context("when the workfile is not the most recent version", function() {
+                    it("disables the link to replace version", function() {
+                        this.view.model.set({ latestVersionNum: 2 })
+                        this.view.render();
+                        this.view.$(".save_selection_as").click();
+
+                        expect(this.saveSelectionMenu.find("a[data-menu-name='replace']")).toHaveAttr("disabled");
+                    });
+                });
+
+                describe("when the 'save selection as new version' link is clicked", function() {
+                    it("broadcasts the 'file:createNewVersionFromSelection'", function() {
+                        this.saveSelectionMenu.find("a[data-menu-name='new']").click();
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:createNewVersionFromSelection");
+                    });
+                });
+
+                describe("when the 'replace current version with selection' link is clicked", function() {
+                    it("broadcasts the 'file:createNewVersionFromSelection'", function() {
+                        this.saveSelectionMenu.find("a[data-menu-name='replace']").click();
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:replaceCurrentVersionWithSelection");
+                    });
+
+                    it("displays the saved at text", function() {
+                        this.saveSelectionMenu.find("a[data-menu-name='replace']").click();
+                        expect(this.view.$("span.auto_save").text()).toContain("Saved at");
+                    })
+                });
+            });
+
+            describe("when the 'selectionEmpty' page event is broadcasted", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.broadcast("file:selectionEmpty");
+                });
+
+                it("switches the 'save' menu back", function() {
+                    expect(this.view.$('.save_file_as')).not.toHaveClass("hidden");
                 });
             });
         });
