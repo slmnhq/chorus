@@ -18,6 +18,7 @@ Chorus::Application.routes.draw do
 
   resources :instances, :only => [:index, :show, :create, :update] do
     resources :databases, :only => [:index], :controller => 'instance_databases'
+    resources :activities, :only => [:index], :controller => 'activities'
 
     scope :module => 'instances' do
       resource :owner, :only => [:update], :controller => 'owner'

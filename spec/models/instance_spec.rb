@@ -12,6 +12,7 @@ describe Instance do
     it { should belong_to :owner }
     it { should have_many :accounts }
     it { should have_many :databases }
+    it { should have_many :activities }
   end
 
   it "should not allow changing inaccessible attributes" do
@@ -29,6 +30,17 @@ describe Instance do
       owner_account = FactoryGirl.create(:instance_account, :instance => instance, :owner => owner)
 
       instance.owner_account.should == owner_account
+    end
+  end
+
+  describe "when an instance is created" do
+    it "creates an INSTANCE_CREATED activity with the right 'object'" do
+      user = FactoryGirl.create :user
+      instance = FactoryGirl.create :instance, :owner => user
+
+      event = Event.find_by_action_and_object_id_and_object_type("INSTANCE_CREATED", instance.id, 'Instance')
+      event.should_not be_nil
+      event.actor.should == user
     end
   end
 

@@ -4,9 +4,12 @@ class Instance < ActiveRecord::Base
 
   validates_presence_of :name, :host, :port, :maintenance_db
 
+  has_many :activities, :as => :entity
   belongs_to :owner, :class_name => 'User'
   has_many :accounts, :class_name => 'InstanceAccount'
   has_many :databases, :class_name => 'GpdbDatabase'
+
+  after_create :create_event
 
   def self.unshared
     where("instances.shared = false OR instances.shared IS NULL")
@@ -37,6 +40,14 @@ class Instance < ActiveRecord::Base
     else
       account_owned_by!(user)
     end
+  end
+
+  def create_event
+    Event.create!(
+      :action => "INSTANCE_CREATED",
+      :object => self,
+      :actor => owner
+    )
   end
 
   def account_for_user(user)
