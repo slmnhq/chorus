@@ -35,11 +35,14 @@ Chorus::Application.routes.draw do
     resources :database_objects, :only => [:index]
   end
 
+  resources :tables, :only => [] do
+    resource :analyze, :only => [:create], :controller => 'analyze'
+  end
+
   resources :database_objects, :only => [:show] do
     resources :columns, :only=> [:index], :controller => 'column'
     resources :previews, :only => [:create]
     resource :statistics, :only => :show
-    resource :analyze, :only => [:create], :controller => 'analyze'
   end
 
   resources :workspaces, :only => [:index, :create, :show, :update] do

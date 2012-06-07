@@ -40,7 +40,7 @@ describe "Viewing data inside GPDB instances" do
       # TODO we can't make assertions about things that change such as last_analyzed and disk_size
       page.should have_content("Source Table")
       page.should have_content("Columns 5")
-      page.should have_content("Rows 1000")
+      page.text.should =~ /Rows \d+/
     end
   end
 
