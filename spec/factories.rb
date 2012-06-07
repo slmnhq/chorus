@@ -68,7 +68,8 @@ FactoryGirl.define do
         'description' => 'This is a nice table.',
         'last_analyzed' => '2012-06-06 23:02:42.40264+00',
         'disk_size' => '2048 kB',
-        'partition_count' =>  '0'
+        'partition_count' =>  '0',
+        'definition' => "SELECT * FROM foo"
       })
     end
   end

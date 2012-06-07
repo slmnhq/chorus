@@ -16,7 +16,6 @@ describe GpdbViewPresenter, :type => :view do
     subject { hash }
 
     its [:object_type] { should == "VIEW" }
-    #its [:definition] { should == "select * from everybody" }
   end
 
   it_behaves_like "database object presenter", :gpdb_view

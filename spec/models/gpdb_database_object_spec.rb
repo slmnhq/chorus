@@ -118,10 +118,6 @@ describe GpdbDatabaseObject do
       GpdbDatabaseObject.refresh(account, schema)
       db_object.add_metadata!(account)
 
-      #db_objects[0].description.should == "view1 is cool"
-      #db_objects[0].definition.should == "select * from foo;"
-      #db_objects[0].column_count.should == 5
-
       db_object.statistics.description.should == "table1 is cool"
       db_object.statistics.definition.should be_nil
       db_object.statistics.column_count.should == 3
@@ -131,5 +127,41 @@ describe GpdbDatabaseObject do
       db_object.statistics.disk_size == '500 kB'
       db_object.statistics.partition_count == 6
     end
+  end
+
+  describe ".add_metadata! for a view" do
+    let(:db_object) { FactoryGirl.create(:gpdb_view, :schema => schema, :name => "view1") }
+    let(:metadata_sql) { GpdbDatabaseObject::Query.new(schema).metadata_for_table("view1").to_sql }
+
+    before(:each) do
+      stub_gpdb(account,
+        db_objects_sql => [
+          { 'type' => "v", "name" => "view1",   }
+        ],
+
+        metadata_sql => [
+          {
+            'name' => 'view1',
+            'description' => 'view1 is super cool',
+            'definition' => 'SELECT * FROM users;',
+            'column_count' => '3',
+            'last_analyzed' => '2012-06-06 23:02:42.40264+00',
+            'disk_size' => '0 kB',
+          }
+        ]
+      )
+    end
+
+    it "fills in the 'description' attribute of each db object in the relation" do
+      GpdbDatabaseObject.refresh(account, schema)
+      db_object.add_metadata!(account)
+
+      db_object.statistics.description.should == "view1 is super cool"
+      db_object.statistics.definition.should == 'SELECT * FROM users;'
+      db_object.statistics.column_count.should == 3
+      db_object.statistics.last_analyzed.to_s.should == "2012-06-06 23:02:42 UTC"
+      db_object.statistics.disk_size == '0 kB'
+    end
+
   end
 end

@@ -104,22 +104,19 @@ describe GpdbDatabaseObject::Query, :type => :database_integration do
       end
     end
 
+    context "View" do
+      let(:sql) { subject.metadata_for_table("view1").to_sql }
 
-    #    },
-    #    {
-    #      "name" => "view1",
-    #      "description" => "comment on view1",
-    #      "definition" => "SELECT base_table1.id, base_table1.column1, base_table1.column2 FROM gpdb_test_schema.base_table1;",
-    #      "column_count" => "3"
-    #    },
-    #    {
-    #    {
-    #      "name" => "external_web_table1",
-    #      "description" => nil,
-    #      "definition" => nil,
-    #      "column_count" => "5"
-    #    }
-    #  ]
-    #end
+      it "returns a query whose result for a view is correct" do
+        row = rows.first
+        row['name'].should == 'view1'
+        row['description'].should == "comment on view1"
+        row['definition'].should == "SELECT base_table1.id, base_table1.column1, base_table1.column2 FROM base_table1;"
+        row['column_count'].should == '3'
+        row['row_count'].should == '0'
+        row['disk_size'].should == '0 bytes'
+        row['partition_count'].should == '0'
+      end
+    end
   end
 end

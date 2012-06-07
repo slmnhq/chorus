@@ -16,6 +16,7 @@ describe GpdbTableStatisticsPresenter, :type => :view do
       hash[:last_analyzed_time].to_s.should == "2012-06-06 23:02:42 UTC"
       hash[:on_disk_size].should == "2048 kB"
       hash[:partitions].should == 0
+      hash[:definition].should == "SELECT * FROM foo"
     end
   end
 end

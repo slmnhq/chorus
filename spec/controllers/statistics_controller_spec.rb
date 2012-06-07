@@ -37,7 +37,7 @@ describe StatisticsController do
           }
         ]
       )
-      get :show, :table_id => table.to_param
+      get :show, :database_object_id => table.to_param
 
       response.code.should == "200"
       decoded_response.columns.should == 3

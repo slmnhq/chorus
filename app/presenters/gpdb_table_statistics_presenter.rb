@@ -1,5 +1,6 @@
 class GpdbTableStatisticsPresenter < Presenter
-  delegate :table_type, :table_name, :row_count, :column_count, :description, :last_analyzed, :disk_size, :partition_count, :to => :model
+  delegate :table_type, :table_name, :row_count, :column_count, :description, :last_analyzed,
+           :disk_size, :partition_count, :definition, :to => :model
 
   def to_hash
     {
@@ -9,7 +10,8 @@ class GpdbTableStatisticsPresenter < Presenter
         :description => description,
         :last_analyzed_time => last_analyzed,
         :on_disk_size => disk_size,
-        :partitions => partition_count
+        :partitions => partition_count,
+        :definition => definition
     }
   end
 end
