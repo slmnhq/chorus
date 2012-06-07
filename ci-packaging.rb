@@ -7,60 +7,67 @@
 # centos6 http://dl.dropbox.com/u/9227672/CentOS-6.0-x86_64-netboot-4.1.6.box
 # Suse 10 ??
 
-# Putting Packaging CI on hold for now, report green so CI monitor is right
-exit(0)
+module CiPackaging
+  SHARED_DIR = "packaging/vagrant/shared"
+  extend self
 
-require "net/http"
-require "uri"
+  def package
+    system("mkdir -p #{SHARED_DIR}")
+    system "rake package"
+    package = Dir.glob("packaging/packages/greenplum-chorus*").sort.last
+    package_name = File.basename(package)
 
-SHARED_DIR = "packaging/vagrant/shared"
+    exit unless package
 
-system("mkdir -p #{SHARED_DIR}")
-system "rake package"
-package = Dir.glob("packaging/packages/greenplum-chorus*").sort.last
-package_name = File.basename(package)
+    system "cp #{package} #{SHARED_DIR}"
+    system "scp #{package} pivotal@chorus-fileserver:~/packages"
+  end
 
-exit unless package
+  def test
+    require "net/http"
+    require "uri"
 
-system "cp #{package} #{SHARED_DIR}"
-system "scp #{package} pivotal@chorus-fileserver:~/packages"
+    #install imagemagick and hadoop
+    #echo "Installing imagemagick into /home/vagrant/imagemagick..."
+    #make imagemagick
+    #cd /tmp/downloads
+    #tar zxf ImageMagick-6.7.1-10.tar.gz
+    #cd ImageMagick-6.7.1-10
+    #./configure --prefix=/home/vagrant/imagemagick > /dev/null 2>&1
+    #make > /dev/null 2>&1
+    #make install > /dev/null 2>&1
 
-def vagrant_ssh(cmds)
-  system "vagrant ssh -c '#{cmds.join(' && ')}'"
-end
+    Dir.chdir('packaging/vagrant/') do
+      begin
+        system('vagrant up')
+        vagrant_ssh [
+           "tar xzvf /shared/#{package_name}",
+           "ruby install.rb",
+           "export LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/:$LD_LIBRARY_PATH &&
+            export RAILS_ENV=production &&
+            export PATH=/home/vagrant/pgsql/bin:/home/vagrant/rubygems/bin:/home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:/home/vagrant/ruby/bin:$PATH &&
+            cd /home/vagrant/app && nohup bundle exec rails s -d &"
+        ]
+        @db_response = vagrant_ssh [ "~/pgsql/bin/psql -p8543 postgres -c \"select * from pg_tables limit 1;\"" ]
+        puts "Connecting to the db locally returned #{@db_response}"
+        uri = URI.parse("http://33.33.33.33:3000/")
+        response = Net::HTTP.get_response(uri)
+        @web_response = (response.code == "200" ? 0 : 1)
+        puts "Connecting to the web server returned #{@web_response}"
+      ensure
+        system('vagrant destroy --force')
+        system "rm ../packages/#{package_name}"
+        system "rm shared/#{package_name}"
+      end
+    end
 
-#install imagemagick and hadoop
-#echo "Installing imagemagick into /home/vagrant/imagemagick..."
-#make imagemagick
-#cd /tmp/downloads
-#tar zxf ImageMagick-6.7.1-10.tar.gz
-#cd ImageMagick-6.7.1-10
-#./configure --prefix=/home/vagrant/imagemagick > /dev/null 2>&1
-#make > /dev/null 2>&1
-#make install > /dev/null 2>&1
+    exit(@web_response)
+  end
 
-Dir.chdir('packaging/vagrant/') do
-  begin
-    system('vagrant up')
-    vagrant_ssh [
-       "tar xzvf /shared/#{package_name}",
-       "ruby install.rb",
-       "export LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/:$LD_LIBRARY_PATH &&
-        export RAILS_ENV=production &&
-        export PATH=/home/vagrant/pgsql/bin:/home/vagrant/rubygems/bin:/home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:/home/vagrant/ruby/bin:$PATH &&
-        cd /home/vagrant/app && nohup bundle exec rails s -d &"
-    ]
-    @db_response = vagrant_ssh [ "~/pgsql/bin/psql -p8543 postgres -c \"select * from pg_tables limit 1;\"" ]
-    puts "Connecting to the db locally returned #{@db_response}"
-    uri = URI.parse("http://33.33.33.33:3000/")
-    response = Net::HTTP.get_response(uri)
-    @web_response = (response.code == "200" ? 0 : 1)
-    puts "Connecting to the web server returned #{@web_response}"
-  ensure
-    system('vagrant destroy --force')
-    system "rm ../packages/#{package_name}"
-    system "rm shared/#{package_name}"
+  def vagrant_ssh(cmds)
+    system "vagrant ssh -c '#{cmds.join(' && ')}'"
   end
 end
 
-exit(@web_response)
+CiPackaging.package
+# CiPackaging.test # disable testing for now
