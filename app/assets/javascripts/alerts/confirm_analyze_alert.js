@@ -9,17 +9,17 @@ chorus.alerts.Analyze = chorus.alerts.Base.extend({
 
     confirmAlert: function() {
         this.$("button.submit").startLoading("analyze.alert.loading");
-        this.bindings.add(this.model.analyze(), "fetchFailed", this.fetchFailed);
-        this.bindings.add(this.model.analyze(), "loaded", this.fetchCompleted);
-        this.model.analyze().fetch();
+        this.bindings.add(this.model.analyze(), "saveFailed", this.saveFailed);
+        this.bindings.add(this.model.analyze(), "saved", this.saved);
+        this.model.analyze().save();
     },
 
-    fetchFailed: function() {
+    saveFailed: function() {
         this.$("button.submit").stopLoading();
         this.showErrors(this.model.analyze());
     },
 
-    fetchCompleted: function() {
+    saved: function() {
         chorus.PageEvents.broadcast("analyze:running");
         chorus.toast("analyze.alert.toast", {name: this.model.name()});
         this.closeModal();

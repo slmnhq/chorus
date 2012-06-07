@@ -227,11 +227,7 @@ chorus.models.TabularData = chorus.models.Base.include(
         analyze: function() {
             if (!this._analyze) {
                 this._analyze = new chorus.models.TabularDataAnalyze({
-                    instanceId: this.instance().id,
-                    databaseName: this.database().name(),
-                    schemaName: this.schema().name(),
-                    objectName: this.name(),
-                    metaType: this.metaType()
+                    tableId: this.get("id")
                 });
             }
 
