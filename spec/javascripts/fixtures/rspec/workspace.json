@@ -1,0 +1,33 @@
+{
+  "response": {
+    "id": 1,
+    "name": "workspace1",
+    "summary": null,
+    "owner": {
+      "id": 3,
+      "username": "user2",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person2@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "archiver": null,
+    "archived_at": null,
+    "public": true,
+    "image": {
+      "original": "",
+      "icon": ""
+    },
+    "permission": [
+      "read",
+      "commenting"
+    ]
+  }
+}

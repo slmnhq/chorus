@@ -1,12 +1,12 @@
 describe("chorus.views.UserList", function() {
     it("is a selectable list", function() {
-        expect(new chorus.views.UserList({collection: newFixtures.userSet()})).toBeA(chorus.views.SelectableList);
+        expect(new chorus.views.UserList({collection: rspecFixtures.userSet()})).toBeA(chorus.views.SelectableList);
     });
 
     describe("#render", function() {
         describe("when the collection has loaded", function() {
             beforeEach(function() {
-                this.collection = newFixtures.userSet([
+                this.collection = rspecFixtures.userSet([
                     {id: 10000, firstName: "a", lastName: "a", admin: false},
                     {id: 10001, firstName: "a", lastName: "b", admin: true},
                     {id: 10002, firstName: "a", lastName: "b", admin: false}

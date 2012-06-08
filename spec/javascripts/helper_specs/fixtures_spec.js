@@ -139,7 +139,7 @@ describe("newFixtures", function() {
         var userSet;
 
         beforeEach(function() {
-            userSet = newFixtures.userSet();
+            userSet = rspecFixtures.userSet();
         });
 
         it("should create a UserSet collection", function() {
@@ -154,18 +154,18 @@ describe("newFixtures", function() {
         });
 
         it("allows for overrides", function() {
-            userSet = newFixtures.userSet([ { username: "Foo Bar" } ]);
+            userSet = rspecFixtures.userSet([ { username: "Foo Bar" } ]);
             expect(userSet.at(0).get("username")).toBe("Foo Bar");
         });
 
         it("does not allow overrides for non-existant attributes", function() {
             expect(function() {
-                newFixtures.userSet([ { foo: "Bar" } ]);
+                rspecFixtures.userSet([ { foo: "Bar" } ]);
             }).toThrow();
         });
 
         it("gives each user a unique id", function() {
-            var userSet2 = newFixtures.userSet();
+            var userSet2 = rspecFixtures.userSet();
             var ids = [
                 userSet.at(0).id,
                 userSet.at(1).id,
@@ -176,7 +176,7 @@ describe("newFixtures", function() {
         });
 
         it("uses the override id, if one is specified", function() {
-            var userSet2 = newFixtures.userSet([ { id: '501' } ]);
+            var userSet2 = rspecFixtures.userSet([ { id: '501' } ]);
             expect(userSet2.at(0).get("id")).toBe("501");
         });
     });

@@ -118,10 +118,9 @@ describe WorkspacesController do
 
   describe "#show" do
     let(:joe) { FactoryGirl.create(:user) }
+    let(:workspace) { FactoryGirl.create(:workspace) }
 
     context "with a valid workspace id" do
-      let(:workspace) { FactoryGirl.create(:workspace) }
-
       it "uses authentication" do
         mock(subject).authorize!(:show, workspace)
         get :show, :id => workspace.to_param
@@ -145,10 +144,10 @@ describe WorkspacesController do
       end
     end
 
-    #it "generates a jasmine fixture", :fixture => true do
-    #  get :show, :id => @other_user.to_param
-    #  save_fixture "user.json"
-    #end
+    it "generates a JSON fixture", :fixture => true do
+      get :show, :id => workspace.to_param
+      save_fixture "workspace.json"
+    end
   end
 
   describe "#update" do

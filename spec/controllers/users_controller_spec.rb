@@ -63,6 +63,12 @@ describe UsersController do
         request.params[:per_page].should == 50
       end
     end
+
+    it "generates a jasmine fixture", :fixture => true do
+      get :index
+      save_fixture "userSet.json"
+    end
+
   end
 
   describe "#create" do
