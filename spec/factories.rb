@@ -110,11 +110,7 @@ FactoryGirl.define do
 
   factory :activity do
     association :entity, :factory => :user
-
-    # allow 'action' as an option to the :activity factory,
-    # even though it's a column in the events table
-    ignore { action "INSTANCE_CREATED" }
-    event { FactoryGirl.create(:event, :action => action) }
+    event
 
     factory :global_activity do
       entity_type "GLOBAL"

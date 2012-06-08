@@ -4,8 +4,8 @@ class Activity < ActiveRecord::Base
   belongs_to :entity, :polymorphic => true
   belongs_to :event, :class_name => 'Event'
 
-  delegate :actor, :action, :target, :to => :event
   default_scope includes(:event)
+  delegate :actor, :actor=, :action, :action=, :target, :target=, :to => :event
 
   def self.global
     where(:entity_type => "GLOBAL")
