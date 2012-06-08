@@ -1,9 +1,10 @@
 COMPONENTS_DIR = File.expand_path("../components", __FILE__)
 ROOT = ENV['HOME']
+USER = ENV['USER']
 APP_DIR = File.join(ROOT, "app")
 PG_DIR = File.join(ROOT, "pgsql")
 RUBY_DIR = File.join(ROOT, "ruby")
-PREFIX = "export LD_LIBRARY_PATH=/home/vagrant/pgsql/lib/:$LD_LIBRARY_PATH && export RAILS_ENV=production && export PATH=/home/vagrant/pgsql/bin:/home/vagrant/rubygems/bin:/home/vagrant/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:/home/vagrant/ruby/bin:$PATH &&"
+PREFIX = "export LD_LIBRARY_PATH=#{ROOT}/pgsql/lib/:$LD_LIBRARY_PATH && export RAILS_ENV=production && export PATH=#{ROOT}/pgsql/bin:#{ROOT}/rubygems/bin:#{ROOT}/ruby/lib/ruby/gems/1.9.1/gems/bundler-1.1.3/bin/:#{ROOT}/ruby/bin:$PATH &&"
 
 def install
   setup_directories
@@ -32,7 +33,7 @@ def install_postgres
 end
 
 def start_database
-  run "#{PG_DIR}/bin/pg_ctl init -D #{APP_DIR}/var/db -U vagrant"
+  run "#{PG_DIR}/bin/pg_ctl init -D #{APP_DIR}/var/db -U #{USER}"
   run "#{PG_DIR}/bin/pg_ctl start -D #{APP_DIR}/var/db -o '-h localhost -p8543 --bytea_output=escape'"
   sleep(5)
   run "#{PG_DIR}/bin/createuser -h localhost -p 8543 -sdr edcadmin"
@@ -66,7 +67,7 @@ def install_chorus
   end
 
   Dir.chdir(APP_DIR) do
-    run "bundle config build.pg --with-pg-config=/home/vagrant/pgsql/bin/pg_config --with-pg-dir=/home/vagrant/pgsql/"
+    run "bundle config build.pg --with-pg-config=#{ROOT}/pgsql/bin/pg_config --with-pg-dir=#{ROOT}/pgsql/"
     run "bundle install --local --deployment --without test development"
     run "bundle exec rake db:create"
     run "bundle exec rake db:migrate"
