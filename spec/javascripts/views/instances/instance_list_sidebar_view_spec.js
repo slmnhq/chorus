@@ -34,7 +34,7 @@ describe("chorus.views.InstanceListSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount({owner: {id: this.instance.owner().id}})]).models);
+                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([rspecFixtures.instanceAccount({owner: {id: this.instance.owner().id}})]).models);
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
             });
 
@@ -202,7 +202,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                             instance.loaded = true;
                             this.view.setInstance(instance);
                             this.server.completeFetchFor(instance.usage(), { workspaces: [] });
-                            this.server.completeFetchFor(instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount({owner: {id: instance.owner().id}})]).models);
+                            this.server.completeFetchFor(instance.accounts(), fixtures.instanceAccountSet([rspecFixtures.instanceAccount({owner: {id: instance.owner().id}})]).models);
                             this.server.completeFetchFor(instance.accountForCurrentUser());
                         });
 
@@ -242,7 +242,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     this.instance.set({
                         shared: true
                     });
-                    this.instance._accountForCurrentUser = newFixtures.instanceAccount();
+                    this.instance._accountForCurrentUser = rspecFixtures.instanceAccount();
                     this.view.render();
                 });
 
@@ -262,7 +262,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 it("displays edit instance link when user is owner", function() {
                     setLoggedInUser({ username: "benjamin", admin: false});
-                    this.instance.accounts().reset([newFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})])
+                    this.instance.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})])
                     this.instance.set({owner: {id: chorus.session.user().get('id')}});
                     this.view.render();
                     expect(this.view.$(".actions .edit_instance")).toExist();
@@ -307,7 +307,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                     context("when the user has set up an account for the instance", function() {
                         beforeEach(function() {
-                            var account = newFixtures.instanceAccount();
+                            var account = rspecFixtures.instanceAccount();
                             spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
                             this.view.render();
                         });
@@ -353,9 +353,9 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                 context("when the current user is an admin", function() {
                     beforeEach(function() {
-                        var account = newFixtures.instanceAccount();
+                        var account = rspecFixtures.instanceAccount();
                         spyOn(this.instance, 'accountForCurrentUser').andReturn(account);
-                        this.instance.accounts().add([newFixtures.instanceAccount(), newFixtures.instanceAccount()]);
+                        this.instance.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount()]);
                         setLoggedInUser({ username: "benjamin", admin: true});
                         this.view.render();
                     });
@@ -433,7 +433,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         context("when the user doesn't have permission to fetch the instances workspace usage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.instance.activities());
-                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([newFixtures.instanceAccount()]).models);
+                this.server.completeFetchFor(this.instance.accounts(), fixtures.instanceAccountSet([rspecFixtures.instanceAccount()]).models);
                 this.server.completeFetchFor(this.instance.accountForCurrentUser());
                 this.server.lastFetchFor(this.instance.usage()).failForbidden("Account map needed");
             });

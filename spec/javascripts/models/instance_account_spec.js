@@ -1,6 +1,6 @@
 describe("chorus.models.InstanceAccount", function() {
     beforeEach(function() {
-        this.model = newFixtures.instanceAccount({ id: '72', instanceId: '1045' });
+        this.model = rspecFixtures.instanceAccount({ id: '72', instanceId: '1045' });
     });
 
     it("wraps parameters in 'account'", function() {

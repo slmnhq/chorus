@@ -6,8 +6,8 @@ describe("chorus.collections.InstanceAccountSet", function() {
     describe("#users", function() {
         beforeEach(function() {
             this.accountSet.reset([
-                newFixtures.instanceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
-                newFixtures.instanceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
+                rspecFixtures.instanceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                rspecFixtures.instanceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
             ]);
             this.users = this.accountSet.users();
         });
@@ -48,9 +48,9 @@ describe("chorus.collections.InstanceAccountSet", function() {
     describe("sort", function() {
         beforeEach(function() {
             this.accountSet.reset([
-                newFixtures.instanceAccount({ owner: { firstName: 'fred', lastName: 'zzz' } }),
-                newFixtures.instanceAccount({ owner: { firstName: 'barnie', lastName: 'zzz' } }),
-                newFixtures.instanceAccount({ owner: { firstName: 'sammy', lastName: 'aaa' } })
+                rspecFixtures.instanceAccount({ owner: { firstName: 'fred', lastName: 'zzz' } }),
+                rspecFixtures.instanceAccount({ owner: { firstName: 'barnie', lastName: 'zzz' } }),
+                rspecFixtures.instanceAccount({ owner: { firstName: 'sammy', lastName: 'aaa' } })
             ]);
         })
         it("sorts by last name, and first name", function() {

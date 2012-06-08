@@ -297,7 +297,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
                 context("when the account loads and is valid", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.account, newFixtures.instanceAccount())
+                        this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount())
                     });
 
                     it("does not pop up the WorkspaceInstanceAccountDialog", function() {

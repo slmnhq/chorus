@@ -98,8 +98,8 @@ describe("chorus.models.GreenplumInstance", function() {
     describe("#accountForOwner", function() {
         beforeEach(function() {
             this.owner = this.instance.owner();
-            this.account1 = newFixtures.instanceAccount();
-            this.account2 = newFixtures.instanceAccount({
+            this.account1 = rspecFixtures.instanceAccount();
+            this.account2 = rspecFixtures.instanceAccount({
                 owner: this.owner.attributes
             })
             this.accounts = fixtures.instanceAccountSet([this.account1, this.account2]);
