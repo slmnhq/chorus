@@ -15,7 +15,7 @@ class GpdbDatabase < ActiveRecord::Base
       conn.query(DATABASE_NAMES_SQL)
     end.map { |row| row[0] }
 
-    instance.databases.where("gpdb_databases.name NOT IN (?)", db_names).tap {|scope| puts scope.to_sql }.destroy_all
+    instance.databases.where("gpdb_databases.name NOT IN (?)", db_names).destroy_all
 
     db_names.map do |name|
       instance.databases.find_or_create_by_name!(name)
