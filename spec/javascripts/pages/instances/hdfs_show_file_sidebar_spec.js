@@ -12,10 +12,9 @@
 
     describe("#setup", function() {
         it("fetches the ActivitySet for the hdfs file", function() {
-            expect(this.server.requests[0].url).toContain("/activitystream/hdfs/9876%7C%2Ffolder%2Ffilename.txt");
-            expect(this.server.requests[0].method).toBe("GET");
-        })
-    })
+            expect(this.file.activities()).toHaveBeenFetched();
+        });
+    });
 
     describe("#render", function() {
         beforeEach(function() {
@@ -67,8 +66,7 @@
         it("should re-render when csv_import:started is triggered", function() {
             this.server.reset();
             chorus.PageEvents.broadcast("csv_import:started");
-            expect(this.server.requests[0].url).toContain("/activitystream/hdfs/9876%7C%2Ffolder%2Ffilename.txt");
-            expect(this.server.requests[0].method).toBe("GET");
+            expect(this.file.activities()).toHaveBeenFetched();
         });
 
     });

@@ -4,8 +4,8 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     useLoadingSection:true,
 
     events:{
-        "click .morelinks a.more,.morelinks a.less":"toggleCommentList",
-        "click .more_activities a":"fetchMoreActivities"
+        "click .morelinks a.more, .morelinks a.less": "toggleCommentList",
+        "click .more_activities a": "fetchMoreActivities"
     },
 
     toggleCommentList:function (event) {

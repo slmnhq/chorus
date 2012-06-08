@@ -6,8 +6,8 @@ describe("chorus.views.Dashboard", function(){
     });
 
     describe("#setup", function() {
-        it("creates a 'home' activity list", function() {
-            expect(this.view.activityList.collection.attributes.entityType).toBe("home")
+        it("fetches the dashboard activities", function() {
+            expect(chorus.collections.ActivitySet.forDashboard()).toHaveBeenFetched();
         });
 
         it("sets page size information on the activity list", function() {
@@ -27,12 +27,6 @@ describe("chorus.views.Dashboard", function(){
 
             it("is an ActivityListHeader view", function() {
                 expect(this.headerView).toBeA(chorus.views.ActivityListHeader);
-            });
-
-            it("has the current user's activity set", function() {
-                expect(this.headerView.collection).toBeA(chorus.collections.ActivitySet);
-                expect(this.headerView.collection.attributes.entityType).toBe("home");
-                expect(this.headerView.collection.attributes.entityId).toBe(chorus.session.user().get("id"));
             });
 
             it("has the right titles for both 'all' and 'insights' modes", function() {
