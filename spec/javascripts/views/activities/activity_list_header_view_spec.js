@@ -1,8 +1,7 @@
 describe("chorus.views.ActivityListHeader", function() {
     beforeEach(function() {
         this.workspace = newFixtures.workspace();
-        this.collection = new chorus.collections.ActivitySet([], { entityType: "workspace" });
-        this.workspace._activities = this.collection;
+        this.collection = this.workspace.activities();
 
         this.view = new chorus.views.ActivityListHeader({
             model: this.workspace,

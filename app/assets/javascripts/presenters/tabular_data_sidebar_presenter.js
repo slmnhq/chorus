@@ -120,8 +120,6 @@ _.extend(chorus.presenters.TabularDataSidebar.prototype, {
         var ctx = {};
         if (!this.resource) { return ctx; }
 
-        ctx.entityType = this.resource.entityType;
-
         if (!this.resource.hasCredentials()) {
             ctx.noCredentials = true;
             var addCredentialsLink = chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'});

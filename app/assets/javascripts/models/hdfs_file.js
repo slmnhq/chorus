@@ -1,6 +1,5 @@
 chorus.models.HdfsFile = chorus.models.Base.extend({
     constructorName: "HdfsFile",
-    entityType: "hdfs",
 
     name: function() {
         splittedPath = this.attributes.path.split('/');

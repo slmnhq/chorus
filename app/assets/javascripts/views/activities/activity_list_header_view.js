@@ -10,7 +10,7 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
     setup: function() {
         var options = {}
-        if (this.model && this.model.entityType === "workspace") {
+        if (this.modelIsWorkspace()) {
             options.urlParams = { workspaceId: this.model.get("id") };
         }
         this.insightCount = chorus.models.CommentInsight.count(options);
@@ -30,10 +30,16 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         };
     },
 
+    modelIsWorkspace: function() {
+        return this.model && this.model instanceof chorus.models.Workspace;
+    },
+
     pickTitle: function() {
-        return this.model && this.model.entityType === "workspace" ?
-            this.model.get("name") :
-            this.collection.attributes.insights ? this.insightsTitle : this.allTitle;
+        if (this.modelIsWorkspace()) {
+            return this.model.get("name");
+        } else {
+            return this.collection.attributes.insights ? this.insightsTitle : this.allTitle;
+        }
     },
 
     postRender: function() {

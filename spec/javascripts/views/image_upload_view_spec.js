@@ -7,7 +7,7 @@ describe("chorus.views.ImageUpload", function() {
         });
         this.view = new chorus.views.ImageUpload({model : this.user});
         this.view.model.loaded = true;
-        this.imageJson = newFixtures.imageJson();
+        this.imageJson = rspecFixtures.imageJson();
         this.successfulResponse = {
             result: JSON.stringify({
                 response: this.imageJson

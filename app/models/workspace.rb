@@ -11,9 +11,20 @@ class Workspace < ActiveRecord::Base
   has_many :workfiles
 
   validates_presence_of :name
+  validate :uniqueness_of_workspace_name
   validate :owner_is_member, :on => :update
 
   scope :active, where(:archived_at => nil)
+
+  def uniqueness_of_workspace_name
+    if self.name
+      other_workspace = Workspace.where("lower(name) = ?", self.name.downcase)
+      other_workspace = other_workspace.where("id != ?", self.id) if self.id
+      if other_workspace.present?
+        errors.add(:name, :taken)
+      end
+    end
+  end
 
   def self.accessible_to(user)
     with_membership = user.memberships.pluck(:workspace_id)

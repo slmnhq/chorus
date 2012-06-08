@@ -39,6 +39,19 @@ describe WorkspaceAccess do
     end
   end
 
+  describe ".member_of_workspaces" do
+    let!(:member_workspace) { FactoryGirl.create(:workspace) }
+
+    it "returns the workspace that user is a member of" do
+      membership = Membership.new
+      membership.user = user
+      membership.workspace = member_workspace
+      membership.save!
+      WorkspaceAccess.member_of_workspaces(user).should == [member_workspace]
+    end
+
+  end
+
   describe ".members_for" do
     let(:workspace) { Object.new }
 

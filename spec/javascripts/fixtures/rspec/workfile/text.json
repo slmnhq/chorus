@@ -1,12 +1,12 @@
 {
   "response": {
-    "id": 26,
+    "id": 2,
     "workspace": {
-      "id": 26,
+      "id": 2,
       "name": "workspace2",
       "summary": null,
       "owner": {
-        "id": 186,
+        "id": 13,
         "username": "user11",
         "first_name": "John",
         "last_name": "Doe",
@@ -32,7 +32,7 @@
       ]
     },
     "owner": {
-      "id": 187,
+      "id": 14,
       "username": "user12",
       "first_name": "John",
       "last_name": "Doe",
@@ -47,11 +47,11 @@
       }
     },
     "version_info": {
-      "id": 26,
+      "id": 2,
       "version_num": 1,
       "commit_message": "Factory commit message",
       "owner": {
-        "id": 188,
+        "id": 15,
         "username": "user13",
         "first_name": "John",
         "last_name": "Doe",
@@ -66,7 +66,7 @@
         }
       },
       "modifier": {
-        "id": 189,
+        "id": 16,
         "username": "user14",
         "first_name": "John",
         "last_name": "Doe",
@@ -80,13 +80,13 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-06-07T23:20:10Z",
-      "updated_at": "2012-06-07T23:20:10Z",
-      "content_url": "/system/workfile_versions/contents/000/000/026/original/some.txt?1339111210",
+      "created_at": "2012-06-08T17:44:37Z",
+      "updated_at": "2012-06-08T17:44:37Z",
+      "content_url": "/system/workfile_versions/contents/000/000/002/original/some.txt?1339177477",
       "icon_url": null,
       "content": "<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\nhello\n</body>\n</html>\n\n"
     },
-    "file_name": "workfile.doc",
+    "file_name": "some.txt",
     "file_type": "text",
     "latest_version_num": 1
   }

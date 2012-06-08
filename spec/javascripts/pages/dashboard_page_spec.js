@@ -60,8 +60,8 @@ describe("chorus.pages.DashboardPage", function() {
             ], { accessible: true }, { accessible: true });
 
             this.server.completeFetchFor(new chorus.collections.HadoopInstanceSet(), [
-                                         newFixtures.hadoopInstance(),
-                                         newFixtures.hadoopInstance()
+                                         rspecFixtures.hadoopInstance(),
+                                         rspecFixtures.hadoopInstance()
             ]);
         });
 
@@ -83,6 +83,10 @@ describe("chorus.pages.DashboardPage", function() {
 
         it("should sort the workspaceSet by name ascending", function() {
             expect(this.page.workspaceSet.order).toBe("name");
+        })
+
+        it("passes the userId to workspaceSet", function() {
+            expect(this.page.workspaceSet.attributes.userId).toBe("foo");
         })
 
         it("fetches only the chorus instances where the user has permissions", function() {

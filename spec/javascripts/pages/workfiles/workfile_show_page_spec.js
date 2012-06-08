@@ -4,7 +4,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
         this.workspaceId = 4;
         this.workfileId = 5;
         this.workspace = newFixtures.workspace({id: this.workspaceId});
-        this.model = newFixtures.workfile.sql({id: this.workfileId, workspace: {id: this.workspaceId}});
+        this.model = rspecFixtures.workfile.sql({id: this.workfileId, workspace: {id: this.workspaceId}});
         stubDefer();
     });
 
@@ -145,7 +145,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
         it("displays the file icon in the content header", function() {
             spyOn(this.page.model, "isImage").andReturn(false);
             this.page.render();
-            expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('doc'));
+            expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('sql'));
         });
 
         context("when the content broadcasts file:autosaved", function() {

@@ -15,6 +15,10 @@ class WorkspaceAccess < DefaultAccess
     end
   end
 
+  def self.member_of_workspaces(user)
+    user.workspaces
+  end
+
   def show?(workspace)
     workspace.public || member_edit?(workspace)
   end

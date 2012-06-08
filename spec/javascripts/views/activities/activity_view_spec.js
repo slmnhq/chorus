@@ -282,10 +282,7 @@ describe("chorus.views.Activity", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.NOTE_ON_WORKSPACE();
                 this.view.model.loaded = true;
-                this.collection = new chorus.collections.ActivitySet([], {
-                    entityType: "instances",
-                    entityId: 12
-                });
+                this.collection = chorus.collections.ActivitySet.forDashboard();
                 this.collection.add(this.view.model);
 
                 this.presenter = new chorus.presenters.Activity(this.view.model)
@@ -365,8 +362,6 @@ describe("chorus.views.Activity", function() {
 
                 context("clicking delete note", function() {
                     beforeEach(function() {
-                        this.collection.attributes.entityType = "workspace";
-                        this.collection.attributes.entityId = 10000;
                         stubModals();
                         this.view.$(".activity_content .delete_link").click();
                     });
@@ -375,8 +370,6 @@ describe("chorus.views.Activity", function() {
                         expect(chorus.modal).toBeA(chorus.alerts.DeleteNoteConfirmAlert);
                         expect(chorus.modal.model).toBeA(chorus.models.Comment);
                         expect(chorus.modal.model.id).toBe(this.model.id)
-                        expect(chorus.modal.model.attributes.entityId).toBe(10000)
-                        expect(chorus.modal.model.attributes.entityType).toBe("workspace")
                     });
                 });
             });
@@ -396,7 +389,7 @@ describe("chorus.views.Activity", function() {
             });
 
             it("has a link to promote the note to an insight", function() {
-                expect(this.view.$(".links a.promote").text()).toMatchTranslation("activity_stream.promote");
+                expect(this.view.$(".links a.promote").text()).toMatchTranslation("activity.promote");
             });
 
             describe("clicking the 'promote to insight' link", function() {
@@ -428,10 +421,7 @@ describe("chorus.views.Activity", function() {
         context("type: INSIGHT_CREATED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.INSIGHT_CREATED();
-                this.collection = new chorus.collections.ActivitySet([], {
-                    entityType: "instances",
-                    entityId: 12
-                });
+                this.collection = chorus.collections.ActivitySet.forDashboard() 
                 this.collection.add(this.view.model);
 
                 this.presenter = new chorus.presenters.Activity(this.view.model)

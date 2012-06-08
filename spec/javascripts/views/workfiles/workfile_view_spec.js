@@ -1,6 +1,6 @@
 describe("chorus.views.Workfile", function() {
     beforeEach(function() {
-        this.model = newFixtures.workfile.sql({ id: "24" });
+        this.model = rspecFixtures.workfile.sql({ id: "24" });
         this.view = new chorus.views.Workfile({ model: this.model, activeWorkspace: true });
         this.view.render();
     });
@@ -15,7 +15,7 @@ describe("chorus.views.Workfile", function() {
     });
 
     it("includes the correct workfile icon (non-image)", function() {
-        expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/doc.png");
+        expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/sql.png");
     });
 
     // TODO: make these work with new api and fixtures

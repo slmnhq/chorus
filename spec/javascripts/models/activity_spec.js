@@ -83,8 +83,6 @@ describe("chorus.models.Activity", function() {
         it("returns a comment with the right attributes", function() {
             var comment = this.model.toComment();
             expect(comment).toBeA(chorus.models.Comment);
-            expect(comment.get("entityType")).toBe("instances");
-            expect(comment.get("entityId")).toBe("45");
             expect(comment.get("id")).toBe("101");
             expect(comment.get("body")).toBe(this.model.get("text"));
         });
@@ -103,7 +101,7 @@ describe("chorus.models.Activity", function() {
     describe("#promoteToInsight", function() {
         beforeEach(function() {
             this.success = jasmine.createSpy("success");
-            this.model.collection = new chorus.collections.ActivitySet();
+            this.model.collection = chorus.collections.ActivitySet.forDashboard();
             this.model.promoteToInsight({ success: this.success });
         });
 

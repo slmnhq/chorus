@@ -3,7 +3,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
         this.workspaceId = '4';
         this.workfileId = '10';
         this.launchElement = $("<a data-workspace-id='" + this.workspaceId + "' data-workfile-id='" + this.workfileId + "'></a>")
-        this.workfile = newFixtures.workfile.text({ id: this.workfileId, workspace: {id: this.workspaceId} });
+        this.workfile = rspecFixtures.workfile.text({ id: this.workfileId, workspace: {id: this.workspaceId} });
         this.workspace = newFixtures.workspace({ id: this.workspaceId });
         setLoggedInUser({id: 4003});
         chorus.session.trigger("saved")

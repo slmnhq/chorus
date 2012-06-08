@@ -51,9 +51,9 @@
         </div>
         {{#unless isReadOnly}}
             <div class="links">
-                <a class="comment dialog" data-dialog="Comment" data-entity-type="{{entityType}}" data-entity-id="{{id}}" data-entity-title="{{entityTitle}}" href="#">{{t "activity_stream.comment"}}</a>
+                <a class="comment dialog" data-dialog="Comment" data-entity-type="{{entityType}}" data-entity-id="{{id}}" data-entity-title="{{entityTitle}}" href="#">{{t "activity.comment"}}</a>
                 {{#if isNote}}
-                    <span class="separator">|</span> <a class="promote" href="#">{{t "activity_stream.promote"}}</a>
+                    <span class="separator">|</span> <a class="promote" href="#">{{t "activity.promote"}}</a>
                 {{/if}}
                 {{#if isInsight}}
                     {{#ifAdminOr isOwner}}

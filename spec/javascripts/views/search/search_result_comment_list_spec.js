@@ -37,9 +37,9 @@ describe("chorus.views.SearchResultCommentList", function() {
         expect(this.view.$('a.show_fewer_comments')).toContainTranslation("search.comments_less", {count: 2});
 
         var comments = this.view.$('.comments > .comment');
-        expect(comments.find('.comment_type').eq(0)).toContainTranslation("activity_stream.note");
-        expect(comments.find('.comment_type').eq(1)).toContainTranslation("activity_stream.comment");
-        expect(comments.find('.comment_type').eq(2)).toContainTranslation("activity_stream.insight");
+        expect(comments.find('.comment_type').eq(0)).toContainTranslation("activity.note");
+        expect(comments.find('.comment_type').eq(1)).toContainTranslation("activity.comment");
+        expect(comments.find('.comment_type').eq(2)).toContainTranslation("activity.insight");
 
         expect(comments.find('.comment_content').eq(0).html()).toContain("lots o <em>content</em>");
         expect(comments.find('.comment_content').eq(1).html()).toContain("even more <em>content</em>");

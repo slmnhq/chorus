@@ -2,7 +2,7 @@ describe("chorus.dialogs.EditNote", function() {
     beforeEach(function() {
         this.text = "Hi i'm a friendly text"
         this.note = fixtures.activities.NOTE_ON_CHORUS_VIEW({ text: this.text });
-        this.note.collection = new chorus.collections.ActivitySet();
+        this.note.collection = chorus.collections.ActivitySet.forDashboard();
         this.launchElement = $("<a/>").data("activity", this.note);
         this.dialog = new chorus.dialogs.EditNote({ launchElement: this.launchElement });
         $('#jasmine_content').append(this.dialog.el);

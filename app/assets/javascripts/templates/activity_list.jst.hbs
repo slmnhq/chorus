@@ -2,13 +2,13 @@
     <ul class="activities"/>
     {{#if showMoreLink}}
         <div class="more_activities">
-            <a href="#">{{t "activity_stream.more"}}</a>
+            <a href="#">{{t "activity.more"}}</a>
         </div>
     {{/if}}
 {{else}}
     {{#if activityType}}
-        <div class="no_activity">{{t "activity_stream.none" type=activityType}}</div>
+        <div class="no_activity">{{t "activity.none" type=activityType}}</div>
     {{else}}
-        <div class="no_activity">{{t "activity_stream.no_recent"}}</div>
+        <div class="no_activity">{{t "activity.no_recent"}}</div>
     {{/if}}
 {{/if}}

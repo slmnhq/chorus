@@ -145,7 +145,7 @@
         },
 
         headerTranslationKey: function() {
-            var prefix  = 'activity_stream.header.html';
+            var prefix  = 'activity.header';
             var type    = getType(this.model, prefix);
             var mainKey = [prefix, type].join(".");
             if (this.options.isNotification) mainKey += ".notification";
@@ -178,7 +178,7 @@
             ctx.iconSrc = "/images/med_red_alert.png";
             ctx.iconHref = "javascript:void()";
 
-            ctx.detailsLink = chorus.helpers.linkTo('#', t("activity_stream.view_error_details"), {
+            ctx.detailsLink = chorus.helpers.linkTo('#', t("activity.view_error_details"), {
                 "class": 'alert',
                 "data-alert": "ImportFailed",
                 "data-task-id": model.get("task").id
@@ -298,7 +298,7 @@
         PROVISIONING_FAIL: function(model){
             var instance = model.instance();
             var ctx = {};
-            ctx.detailsLink = chorus.helpers.linkTo('#', t("activity_stream.view_error_details"), {
+            ctx.detailsLink = chorus.helpers.linkTo('#', t("activity.view_error_details"), {
                 "class": 'alert',
                 "data-alert": "Error",
                 "data-title": t("provisioning.failed.alert.title"),

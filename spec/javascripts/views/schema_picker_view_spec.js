@@ -87,23 +87,10 @@ describe("chorus.views.SchemaPicker", function() {
 
                 itSortsTheSelectOptionsAlphabetically('instance');
 
-                it("does not add Hadoop instances to the instance list", function() {
-                    this.server.completeFetchAllFor(this.view.instances, [
-                        newFixtures.greenplumInstance.greenplum(),
-                        newFixtures.hadoopInstance(),
-                        newFixtures.greenplumInstance.greenplum()
-                    ]);
-                    var options = this.view.$(".instance select option");
-                    expect(options.length).toBe(3);
-                    expect(options.eq(0).val()).toBeFalsy();
-                    expect(options.eq(1).val()).toBe(this.view.instances.models[0].get("id"));
-                    expect(options.eq(2).val()).toBe(this.view.instances.models[2].get("id"));
-                });
-
                 context("when the instance list fetch completes", function() {
                     context("when the instance list fetch completes", function() {
                         beforeEach(function() {
-                            this.server.completeFetchAllFor(this.view.instances, [
+                             this.server.completeFetchAllFor(this.view.instances, [
                                 newFixtures.greenplumInstance.greenplum({ hasCredentials: true, id: 1 }),
                                 newFixtures.greenplumInstance.greenplum({ hasCredentials: true, id: 2 }),
                                 newFixtures.greenplumInstance.greenplum({ hasCredentials: false, id: 3 })

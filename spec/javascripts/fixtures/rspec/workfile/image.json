@@ -1,12 +1,12 @@
 {
   "response": {
-    "id": 27,
+    "id": 3,
     "workspace": {
-      "id": 27,
+      "id": 3,
       "name": "workspace3",
       "summary": null,
       "owner": {
-        "id": 191,
+        "id": 18,
         "username": "user16",
         "first_name": "John",
         "last_name": "Doe",
@@ -32,7 +32,7 @@
       ]
     },
     "owner": {
-      "id": 192,
+      "id": 19,
       "username": "user17",
       "first_name": "John",
       "last_name": "Doe",
@@ -47,11 +47,11 @@
       }
     },
     "version_info": {
-      "id": 27,
+      "id": 3,
       "version_num": 1,
       "commit_message": "Factory commit message",
       "owner": {
-        "id": 193,
+        "id": 20,
         "username": "user18",
         "first_name": "John",
         "last_name": "Doe",
@@ -66,7 +66,7 @@
         }
       },
       "modifier": {
-        "id": 194,
+        "id": 21,
         "username": "user19",
         "first_name": "John",
         "last_name": "Doe",
@@ -80,13 +80,13 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-06-07T23:20:11Z",
-      "updated_at": "2012-06-07T23:20:11Z",
-      "content_url": "/system/workfile_versions/contents/000/000/027/original/small1.gif?1339111210",
-      "icon_url": "/system/workfile_versions/contents/000/000/027/icon/small1.gif?1339111210",
+      "created_at": "2012-06-08T17:44:37Z",
+      "updated_at": "2012-06-08T17:44:37Z",
+      "content_url": "/system/workfile_versions/contents/000/000/003/original/small1.gif?1339177477",
+      "icon_url": "/system/workfile_versions/contents/000/000/003/icon/small1.gif?1339177477",
       "content": null
     },
-    "file_name": "workfile.doc",
+    "file_name": "small1.gif",
     "file_type": "image",
     "latest_version_num": 1
   }

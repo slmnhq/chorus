@@ -1,6 +1,6 @@
 describe("chorus.collections.UserSet", function() {
     beforeEach(function() {
-        this.collection = newFixtures.userSet();
+        this.collection = rspecFixtures.userSet();
     });
 
     it("has the correct urlTemplate", function() {

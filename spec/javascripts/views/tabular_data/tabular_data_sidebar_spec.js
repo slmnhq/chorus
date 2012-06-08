@@ -766,8 +766,6 @@ describe("chorus.views.TabularDataSidebar", function() {
                 it("has the 'add a note' link with the correct data", function() {
                     var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
 
-                    expect(notesNew.data("entity-id") + "").toBe(this.dataset.get("id"));
-                    expect(notesNew.data("entity-type")).toBe(this.dataset.entityType);
                     expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
                     expect(notesNew.attr("data-allow-workspace-attachments")).toBeDefined();
                 });
@@ -839,8 +837,6 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 it("has the 'add a note' link with the correct data", function() {
                     var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
-                    expect(notesNew.data("entity-id")).toBe(this.dataset.get("id"));
-                    expect(notesNew.data("entity-type")).toBe("databaseObject");
                     expect(notesNew.data("display-entity-type")).toBe(this.dataset.metaType());
                     expect(notesNew.attr("data-allow-workspace-attachments")).not.toBeDefined();
                 });

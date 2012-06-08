@@ -3,7 +3,7 @@ require 'spec_helper'
 describe GpdbDatabaseObjectStatistics do
   context "#initialize" do
     it "initialize the values" do
-      statistics = GpdbTableStatistics.new(
+      statistics = GpdbDatabaseObjectStatistics.new(
           {
            'description' => 'New Description',
            'column_count' => '4',

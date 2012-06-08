@@ -103,6 +103,15 @@ Application will be on http://localhost:3000
 
     script/test
 
+#### Re-creating the database:
+
+When the database has incoherent data (i.e. a suspicious amount of tests fails even though you didn't change much) you can re-create the database.
+
+1. Stop foreman by pressing Ctrl-C in the foreman terminal    
+2. Run script/reset_db.sh
+3. (If you get an error saying the database isn't online, run script/start_db.sh)
+4. Restart foreman by running 'foreman start' in the foreman window (chorusrails root)
+
 ### CI
 
 http://greenplum-ci:3333/builds/chorusrails

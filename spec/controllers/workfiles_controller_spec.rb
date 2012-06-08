@@ -149,8 +149,9 @@ describe WorkfilesController do
       def self.generate_fixture(json_filename, uploaded_filename, mime_type)
         self.it "generates a JSON fixture", :fixture => true do
           file = test_file(uploaded_filename, mime_type)
-          FactoryGirl.create(:workfile_version, :workfile => public_workfile, :contents => file)
-          get :show, :id => public_workfile
+          workfile = FactoryGirl.create(:workfile, :workspace => workspace, :file_name => uploaded_filename)
+          FactoryGirl.create(:workfile_version, :workfile => workfile, :contents => file)
+          get :show, :id => workfile
           save_fixture("workfile/#{json_filename}")
         end
       end

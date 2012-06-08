@@ -63,13 +63,19 @@ describe UsersController do
         request.params[:per_page].should == 50
       end
     end
+
+    it "generates a jasmine fixture", :fixture => true do
+      get :index
+      save_fixture "userSet.json"
+    end
+
   end
 
   describe "#create" do
     before do
       @values = {:username => "another_user", :password => "secret", :first_name => "joe",
                  :last_name => "user", :email => "joe@chorus.com", :title => "Data Scientist",
-                 :dept => "bureau of bureaucracy", :notes => "poor personal hygiene"}
+                 :dept => "bureau of bureaucracy", :notes => "poor personal hygiene", :admin => true}
     end
 
     it_behaves_like "an action that requires authentication", :post, :create
@@ -97,6 +103,10 @@ describe UsersController do
 
       it "should create a user" do
         User.find_by_username(@values[:username]).should be_present
+      end
+
+      it "should make a user an admin" do
+        User.find_by_username(@values[:username]).admin.should be_true
       end
 
       it "should return the user's fields except password" do

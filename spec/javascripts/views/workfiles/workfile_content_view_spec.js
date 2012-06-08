@@ -6,7 +6,7 @@ describe("chorus.views.WorkfileContent", function() {
     describe(".buildFor", function() {
         context("when the given workfile is an image", function() {
             beforeEach(function() {
-                this.model = newFixtures.workfile.image();
+                this.model = rspecFixtures.workfile.image();
                 spyOn(chorus.views, "ImageWorkfileContent");
                 chorus.views.WorkfileContent.buildFor(this.model);
             });
@@ -18,7 +18,7 @@ describe("chorus.views.WorkfileContent", function() {
 
         context("when the given workfile is a text file", function() {
             beforeEach(function() {
-                this.model = newFixtures.workfile.text();
+                this.model = rspecFixtures.workfile.text();
                 spyOn(chorus.views, "TextWorkfileContent");
                 chorus.views.WorkfileContent.buildFor(this.model);
             });
@@ -30,7 +30,7 @@ describe("chorus.views.WorkfileContent", function() {
 
         context("when the given workfile is a sql file", function() {
             beforeEach(function() {
-                this.model = newFixtures.workfile.sql();
+                this.model = rspecFixtures.workfile.sql();
                 spyOn(chorus.views, "SqlWorkfileContent");
                 chorus.views.WorkfileContent.buildFor(this.model);
             });
@@ -42,7 +42,7 @@ describe("chorus.views.WorkfileContent", function() {
 
         context("when the given workfile is an alpine file", function() {
             beforeEach(function() {
-                this.model = newFixtures.workfile.binary({ fileType: "alpine" });
+                this.model = rspecFixtures.workfile.binary({ fileType: "alpine" });
                 spyOn(chorus.views, "AlpineWorkfileContent");
                 chorus.views.WorkfileContent.buildFor(this.model);
             });
@@ -54,7 +54,7 @@ describe("chorus.views.WorkfileContent", function() {
 
         context("when the given workfile is nothing special", function() {
             beforeEach(function() {
-                this.model = newFixtures.workfile.binary();
+                this.model = rspecFixtures.workfile.binary();
                 spyOn(chorus.views, "WorkfileContent");
                 chorus.views.WorkfileContent.buildFor = chorus.views.WorkfileContent.originalValue.buildFor;
                 chorus.views.WorkfileContent.buildFor(this.model);

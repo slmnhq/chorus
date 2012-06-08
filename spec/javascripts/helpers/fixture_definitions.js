@@ -87,12 +87,12 @@ window.fixtureDefinitions = {
 
 window.rspecFixtureDefinitions = {
     user:    { unique: [ "id" ] },
-//    userSet: { unique: [ "id" ] },
+    userSet: { unique: [ "id" ] },
 
 //    schema:    { unique: [ "id", "instance.id" ] },
 //    schemaSet: { unique: [ "id" ] },
 //
-//    workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] },
+    workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] }, // cannot be used until missing fields are added (mainly sandboxInfo)
 //    workspaceSet: { unique: [ "id", "sandboxInfo.sandboxId" ] },
 
     workfile: {
@@ -114,7 +114,7 @@ window.rspecFixtureDefinitions = {
 //
 //    config: {},
 //
-//    hadoopInstance: {},
+    hadoopInstance: {},
 
     image: {},
 

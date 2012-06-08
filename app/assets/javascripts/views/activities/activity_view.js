@@ -48,7 +48,6 @@ chorus.views.Activity = chorus.views.Base.extend({
     },
 
     postRender:function () {
-        $(this.el).attr("data-activity-type", this.model.get("type"));
         $(this.el).attr("data-activity-id", this.model.get("id"));
         this.$("a.delete_link, a.edit_link").data("activity", this.model);
         if (this.model.get("isInsight")) {

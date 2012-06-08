@@ -1,24 +1,31 @@
-;(function() {
+chorus.collections.ActivitySet = chorus.collections.Base.extend({
+    constructorName: "ActivitySet",
+    model: chorus.models.Activity,
 
-    var DASHBOARD = "dashboard";
-
-    chorus.collections.ActivitySet = chorus.collections.Base.extend({
-        constructorName: "ActivitySet",
-        model: chorus.models.Activity,
-
-        urlTemplate: function() {
-            if (this.attributes.insights) {
-                return "commentinsight/"
-            } else if (this.attributes.entityType === DASHBOARD) {
-                return "activities"
-            } else {
-                return "{{entityType}}/{{entityId}}/activities"
-            }
+    url: function() {
+        if (this.attributes.insights) {
+            return "/commentinsight/";
+        } else {
+            return this.attributes.url;
         }
-    }, {
-        forDashboard: function() {
-            return new chorus.collections.ActivitySet([], { entityType: DASHBOARD });
-        }
-    });
+    }
+}, {
+    forDashboard: function() {
+        return new this([], { url: "/activities" });
+    },
 
-})();
+    forModel: function(model) {
+        return new this([], { url: this.urlForModel(model) });
+    },
+
+    urlForModel: function(model) {
+        // currently, HdfsEntry models don't have urls
+        // this hack is here for specs that expect
+        // HdfsEntries to have activities
+        if (model instanceof chorus.models.HdfsEntry) {
+            return "/not_yet_implemented";
+        } else {
+            return model.url() + "/activities";
+        }
+    }
+});

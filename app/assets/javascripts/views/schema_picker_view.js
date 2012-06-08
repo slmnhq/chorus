@@ -160,12 +160,9 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
     },
 
     updateInstances:function () {
-        this.updateFor('instance', function (instance) {
-                return instance.get("instanceProvider") != "Hadoop";
-            },
-            function(instance) {
-                return !instance.get("hasCredentials");
-            });
+        this.updateFor('instance', function(instance) {
+            return !instance.get("hasCredentials");
+        });
     },
 
     updateDatabases:function () {
@@ -207,18 +204,15 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         return attrs;
     },
 
-    updateFor:function (type, filter, disabledFunction) {
+    updateFor:function (type, disabledFunction) {
         var select = this.resetSelect(type);
         var collection = this[type + "s"];
 
-        filter || (filter = function () {
-            return true;
-        });
         disabledFunction || (disabledFunction = function() {
             return false;
         });
         // don't modify the original collection array object
-        var models = _(collection.models).chain().clone().filter(filter).value();
+        var models = _(collection.models).chain().clone().value();
         models.sort(function (a, b) {
             return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
         });

@@ -1,6 +1,6 @@
 describe("chorus.views.SqlWorkfileContentDetails", function() {
     beforeEach(function() {
-        this.model = newFixtures.workfile.sql({ fileName: 'test.sql', versionInfo: { content: "select * from foo" } });
+        this.model = rspecFixtures.workfile.sql({ fileName: 'test.sql', versionInfo: { content: "select * from foo" } });
         this.model.workspace().set({
             sandboxInfo: {
                 databaseId: '3',

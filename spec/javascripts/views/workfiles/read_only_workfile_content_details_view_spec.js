@@ -1,6 +1,6 @@
 describe("chorus.views.ReadOnlyWorkfileContentDetails", function() {
     beforeEach(function() {
-        this.model = newFixtures.workfile.binary();
+        this.model = rspecFixtures.workfile.binary();
         this.qtipMenu = stubQtip();
         this.view = new chorus.views.ReadOnlyWorkfileContentDetails({model: this.model});
         this.view.render();

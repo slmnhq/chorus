@@ -5,22 +5,12 @@ chorus.models.TabularData = chorus.models.Base.include(
         nameAttribute: 'objectName',
 
         initialize: function() {
-            this.resetEntityType();
-            this.bind("change:type", this.resetEntityType, this);
             this.bind('invalidated', this.refetchAfterInvalidated, this);
             this.bind("change:workspaceUsed", this.invalidateWorkspacesAssociated, this);
 
             if (!this.has("type")) {
                 this.set({type: this.get("datasetType") || "SOURCE_TABLE"}, { silent: true });
             }
-        },
-
-        getEntityType: function() {
-            return this.get("entityType") || this.constructor.entityTypeMap[this.get("type")] || "databaseObject"
-        },
-
-        resetEntityType: function() {
-            this.entityType = this.getEntityType();
         },
 
         metaType: function() {

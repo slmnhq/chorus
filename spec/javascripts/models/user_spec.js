@@ -11,10 +11,6 @@ describe("chorus.models.User", function() {
         expect(this.model.urlTemplate).toBe("users/{{id}}");
     });
 
-    it("has the right 'entityType' for the activities API", function() {
-        expect(this.model.entityType).toBe("users");
-    });
-
     describe("#currentUserCanEdit", function() {
         beforeEach(function() {
             this.model.set({ username: "chris" });

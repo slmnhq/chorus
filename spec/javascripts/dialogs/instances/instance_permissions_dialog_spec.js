@@ -25,7 +25,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
     context("when the instance is a shared account", function() {
         beforeEach(function() {
             this.instance = newFixtures.greenplumInstance.sharedAccount();
-            var account = newFixtures.instanceAccount({
+            var account = rspecFixtures.instanceAccount({
                 dbUsername: 'some_db_username',
                 instanceId: this.instance.id
             });
@@ -230,9 +230,9 @@ describe("chorus.dialogs.InstancePermissions", function() {
             });
             this.accounts = this.instance.accounts();
             this.accounts.add([
-                newFixtures.instanceAccount({ id: '1', owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
-                newFixtures.instanceAccount({ id: '2', owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
-                newFixtures.instanceAccount({ id: '3', owner: this.owner.attributes })
+                rspecFixtures.instanceAccount({ id: '1', owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
+                rspecFixtures.instanceAccount({ id: '2', owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
+                rspecFixtures.instanceAccount({ id: '3', owner: this.owner.attributes })
             ]);
             var launchElement = $("<a/>").data("instance", this.instance);
             this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
@@ -810,7 +810,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 describe("after re-fetching the accounts", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dialog.collection, [newFixtures.instanceAccount({owner: { id: this.newOwner.get("id")}})]);
+                        this.server.completeFetchFor(this.dialog.collection, [rspecFixtures.instanceAccount({owner: { id: this.newOwner.get("id")}})]);
                     });
 
                     it("closes the dialog", function() {
