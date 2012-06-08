@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe GpdbDatabase do
   context "#refresh" do
-    let(:instance) { FactoryGirl.build(:instance, :id => 123) }
-    let(:account) { FactoryGirl.build(:instance_account, :instance => instance) }
+    let(:instance) { FactoryGirl.create(:instance) }
+    let(:account) { FactoryGirl.create(:instance_account, :instance => instance) }
 
     before(:each) do
       stub_gpdb(account,
@@ -21,7 +21,7 @@ describe GpdbDatabase do
 
       databases.length.should == 4
       databases.map {|db| db.name }.should == ["db_a", "db_B", "db_C", "db_d"]
-      databases.map {|db| db.instance_id }.should == [123, 123, 123, 123]
+      databases.map {|db| db.instance_id }.uniq.should == [instance.id]
     end
 
     it "does not re-create databases that already exist in our database" do
@@ -45,7 +45,7 @@ describe GpdbDatabase do
 
       databases.length.should == 2
       databases.map {|db| db.name }.should == ["db_a", "db_B"]
-      databases.map {|db| db.instance_id }.should == [123, 123]
+      databases.map {|db| db.instance_id }.uniq.should == [instance.id]
     end
 
     it "does not destroy databases on other instances" do
