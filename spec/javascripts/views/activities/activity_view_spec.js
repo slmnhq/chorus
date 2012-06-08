@@ -389,7 +389,7 @@ describe("chorus.views.Activity", function() {
             });
 
             it("has a link to promote the note to an insight", function() {
-                expect(this.view.$(".links a.promote").text()).toMatchTranslation("activity_stream.promote");
+                expect(this.view.$(".links a.promote").text()).toMatchTranslation("activity.promote");
             });
 
             describe("clicking the 'promote to insight' link", function() {

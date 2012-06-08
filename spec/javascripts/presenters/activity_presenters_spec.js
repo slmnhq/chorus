@@ -228,7 +228,7 @@ describe("chorus.presenters.Activity", function() {
 
             itShouldHaveFailedIcon();
             itShouldHaveDestinationTableLink();
-            itShouldHaveDetailsLink(t("activity_stream.view_error_details"), {
+            itShouldHaveDetailsLink(t("activity.view_error_details"), {
                 href: '#',
                 class: "alert",
                 "data-alert": "ImportFailed",
@@ -264,7 +264,7 @@ describe("chorus.presenters.Activity", function() {
 
             itShouldHaveFailedIcon();
             itShouldHaveDestinationTableLink();
-            itShouldHaveDetailsLink(t("activity_stream.view_error_details"), {
+            itShouldHaveDetailsLink(t("activity.view_error_details"), {
                 href: '#',
                 class: "alert",
                 "data-alert": "ImportFailed",
@@ -300,7 +300,7 @@ describe("chorus.presenters.Activity", function() {
 
             itShouldHaveFailedIcon();
             itShouldHaveDestinationTableLink();
-            itShouldHaveDetailsLink(t("activity_stream.view_error_details"), {
+            itShouldHaveDetailsLink(t("activity.view_error_details"), {
                 href: '#',
                 class: "alert",
                 "data-alert": "ImportFailed",
@@ -333,7 +333,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("should have the right message", function() {
-                expect(this.presenter.headerHtml.toString()).toContainTranslation("activity_stream.header.html.IMPORT_UPDATED.default", this.presenter.header);
+                expect(this.presenter.headerHtml.toString()).toContainTranslation("activity.header.IMPORT_UPDATED.default", this.presenter.header);
             });
 
             it("should have an importSourceLink in the header", function() {
@@ -785,7 +785,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the correct html", function() {
-            expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity_stream.header.html.PROVISIONING_SUCCESS.without_workspace",
+            expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity.header.PROVISIONING_SUCCESS.without_workspace",
                 { objectLink: chorus.helpers.linkTo(this.instance.showUrl(), this.instance.name(), {'class': 'object_link'}).toString(),
                     instanceAddress: this.instance.get("host") + ":" + this.instance.get("port")
                 }
@@ -821,7 +821,7 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the correct html", function() {
-            expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity_stream.header.html.START_PROVISIONING.without_workspace",
+            expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity.header.START_PROVISIONING.without_workspace",
                 { objectLink: chorus.helpers.linkTo(this.instance.showUrl(), this.instance.name(), {'class': 'object_link'}).toString()}
             );
         });
@@ -849,13 +849,13 @@ describe("chorus.presenters.Activity", function() {
         });
 
         it("should have the correct header html", function() {
-            expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity_stream.header.html.PROVISIONING_FAIL.without_workspace",
+            expect(this.presenter.headerHtml.toString()).toMatchTranslation("activity.header.PROVISIONING_FAIL.without_workspace",
                 { objectName: this.instance.name()}
             );
         });
 
         it("should have the correct details link", function() {
-            var detailsLink = detailsLink = chorus.helpers.linkTo('#', t("activity_stream.view_error_details"), {
+            var detailsLink = detailsLink = chorus.helpers.linkTo('#', t("activity.view_error_details"), {
                 "class": 'alert',
                 "data-alert": "Error",
                 "data-title": t("provisioning.failed.alert.title"),
@@ -1510,7 +1510,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("headerHtml", function() {
         beforeEach(function() {
-            this.keyPrefix = 'activity_stream.header.html.';
+            this.keyPrefix = 'activity.header.';
         });
 
         describe("SUB_COMMENT", function() {
@@ -1573,7 +1573,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("returns the displayStyle when it exists", function() {
-                var expectedKey = 'activity_stream.header.html.WORKSPACE_ADD_SANDBOX.default';
+                var expectedKey = 'activity.header.WORKSPACE_ADD_SANDBOX.default';
                 expect(I18n.lookup(expectedKey)).toBeTruthy();
                 expect(this.presenter._impl.headerTranslationKey()).toBe(expectedKey);
             });
@@ -1588,7 +1588,7 @@ describe("chorus.presenters.Activity", function() {
 
             it("uses the notification message when the 'isNotification' option is passed", function() {
                 this.presenter = new chorus.presenters.Activity(this.model, {isNotification: true});
-                expect(this.presenter._impl.headerTranslationKey()).toEqual("activity_stream.header.html.NOTE.notification.without_workspace");
+                expect(this.presenter._impl.headerTranslationKey()).toEqual("activity.header.NOTE.notification.without_workspace");
             });
         });
 

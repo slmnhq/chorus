@@ -22,7 +22,7 @@ chorus.views.CommentList = chorus.views.Base.extend({
                 displayName: author.displayName(),
                 timestamp: comment.get("timestamp"),
                 id: comment.get("id"),
-                headerHtml: new Handlebars.SafeString(t('activity_stream.comments.commented_on_note', {authorLink:chorus.helpers.linkTo(author.showUrl(), author.displayName(), {'class':'author'}).toString()}))
+                headerHtml: new Handlebars.SafeString(t('activity.comments.commented_on_note', {authorLink:chorus.helpers.linkTo(author.showUrl(), author.displayName(), {'class':'author'}).toString()}))
             };
         }
     },

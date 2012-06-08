@@ -22,22 +22,6 @@ describe("chorus.views.ActivityList", function() {
             expect(this.view.$("li[data-activity-id]").length).toBe(this.collection.length);
         });
 
-        it("renders activity metadata on the li", function() {
-            expect(this.view.$("li[data-activity-id]:eq(0)")).toHaveData("activity-type", "NOTE");
-            expect(this.view.$("li[data-activity-id]:eq(1)")).toHaveData("activity-type", "NOTE");
-        })
-
-        it("displays a Comment link for each activity", function() {
-            var link = this.view.$("li[data-activity-id]:eq(0) .links a.comment.dialog");
-            expect(link.data("dialog")).toBe("Comment");
-            expect(link.data("entity-type")).toBe("comment");
-            expect(link.data("entity-id")).not.toBeNull();
-
-            link = this.view.$("li[data-activity-id]:eq(1) .links a.comment.dialog");
-            expect(link.data("dialog")).toBe("Comment");
-            expect(link.data("entity-type")).toBe("comment");
-            expect(link.data("entity-id")).not.toBeNull();
-        })
 
         describe("when there are no activity items", function() {
             context("and there is an type", function() {
@@ -49,7 +33,7 @@ describe("chorus.views.ActivityList", function() {
                 it("displays the 'no notes' message", function() {
                     expect(this.view.$("ul.activities li")).not.toExist();
 
-                    expect(this.view.$(".no_activity")).toContainTranslation("activity_stream.none", {type: "Foo"});
+                    expect(this.view.$(".no_activity")).toContainTranslation("activity.none", {type: "Foo"});
                 })
             });
 
@@ -62,19 +46,19 @@ describe("chorus.views.ActivityList", function() {
 
                 it("displays the 'no notes' message", function() {
                     expect(this.view.$("ul.activities li")).not.toExist();
-                    expect(this.view.$(".no_activity")).toContainTranslation("activity_stream.no_recent");
+                    expect(this.view.$(".no_activity")).toContainTranslation("activity.no_recent");
                 })
             });
         })
 
         describe("the isNotification option", function() {
-            beforeEach(function() {
+            it("passes the option through to the activity views", function() {
+                spyOn(chorus.views.Activity.prototype, "initialize").andCallThrough();
                 this.view.options.isNotification = true;
                 this.view.render();
-            });
 
-            it("passes the option through to the activity views so they don't render links", function() {
-                expect(this.view.$("li .activity_content > .links")).not.toExist();
+                var viewOptions = chorus.views.Activity.prototype.initialize.mostRecentCall.args[0];
+                expect(viewOptions.isNotification).toBeTruthy();
             });
         });
 
@@ -193,20 +177,6 @@ describe("chorus.views.ActivityList", function() {
                         })
                     })
                 })
-            })
-        })
-
-        describe("attachment rendering", function() {
-            it("displays info for each attached file", function() {
-                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li').length).toBe(2);
-
-                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(0) a')).toHaveAttr('href', '/file/10101')
-                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(0) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("SQL", "medium"))
-                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(0) .name').text().trim()).toBe("something.sql")
-
-                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(1) a')).toHaveAttr('href', '/file/10102')
-                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(1) img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("TXT", "medium"))
-                expect(this.view.$('li[data-activity-id]:eq(0) ul.attachments li:eq(1) .name').text().trim()).toBe("something.txt")
             })
         })
 
