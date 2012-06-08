@@ -13,7 +13,11 @@ class UsersController < ApplicationController
   end
 
   def create
-    present User.create!(params[:user]), :status => :created
+    user = User.new
+    user.attributes = params[:user]
+    user.admin = params[:user][:admin]
+    user.save!
+    present user, :status => :created
   end
 
   def update
