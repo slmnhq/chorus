@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/ryandotsmith/queue_classic.git
+  revision: 7b2698fe37f8f61f2525598a5048f4d97895e87a
+  specs:
+    queue_classic (2.0.0)
+      pg (~> 0.13.2)
+      scrolls (~> 0.0.8)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -118,9 +126,6 @@ GEM
       mime-types
     pg (0.13.2)
     polyglot (0.3.3)
-    queue_classic (2.0.0rc14)
-      pg (~> 0.13.2)
-      scrolls (~> 0.0.8)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -236,7 +241,7 @@ DEPENDENCIES
   net-ldap
   paperclip
   pg
-  queue_classic (= 2.0.0rc14)
+  queue_classic!
   rails (= 3.2.5)
   rr
   rspec-rails

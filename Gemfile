@@ -8,7 +8,7 @@ gem 'json'
 gem 'will_paginate'
 gem 'net-ldap'
 gem 'paperclip'
-gem 'queue_classic', "2.0.0rc14"
+gem 'queue_classic', :git => "https://github.com/ryandotsmith/queue_classic.git"
 gem 'clockwork'
 gem 'foreman'
 gem 'allowy'
