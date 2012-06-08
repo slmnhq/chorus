@@ -1,20 +1,24 @@
-chorus.collections.ActivitySet = chorus.collections.Base.extend({
-    constructorName: "ActivitySet",
-    model:chorus.models.Activity,
+;(function() {
 
-    urlTemplate: function() {
-        if (this.attributes.insights) {
-            return "commentinsight/"
-        } else {
-            return "activitystream/{{entityType}}/{{encode entityId}}"
-        }
-    },
+    var DASHBOARD = "dashboard";
 
-    urlParams: function() {
-        if (this.attributes.workspace) {
-            return { workspaceId: this.attributes.workspace.id }
-        } else {
-            return {};
+    chorus.collections.ActivitySet = chorus.collections.Base.extend({
+        constructorName: "ActivitySet",
+        model: chorus.models.Activity,
+
+        urlTemplate: function() {
+            if (this.attributes.insights) {
+                return "commentinsight/"
+            } else if (this.attributes.entityType === DASHBOARD) {
+                return "activities"
+            } else {
+                return "{{entityType}}/{{entityId}}/activities"
+            }
         }
-    }
-});
+    }, {
+        forDashboard: function() {
+            return new chorus.collections.ActivitySet([], { entityType: DASHBOARD });
+        }
+    });
+
+})();

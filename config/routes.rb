@@ -1,12 +1,14 @@
 Chorus::Application.routes.draw do
   resource :sessions, :only => [:create, :destroy, :show]
   resource :config, :only => [:show], :controller => 'configurations'
+  resources :activities, :only => [:index], :controller => 'activities'
 
   resources :users, :only => [:index, :show, :create, :update, :destroy] do
     collection do
       get :ldap
     end
     resource :image, :only => [:update], :controller => :user_images
+    resources :activities, :only => [:index], :controller => 'activities'
   end
 
   resources :hadoop_instances, :only => [:create, :index, :show, :update] do
@@ -50,6 +52,7 @@ Chorus::Application.routes.draw do
     resources :members, :only => [:index, :create]
     resource :image, :only => [:update], :controller => :workspace_images
     resources :workfiles, :only => [:create, :index]
+    resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
   end
 
   resources :workfiles, :only => [:show] do

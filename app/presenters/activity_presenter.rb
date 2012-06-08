@@ -3,7 +3,7 @@ class ActivityPresenter < Presenter
     {
       :actor => present(model.actor),
       :action => model.action,
-      :object => present(model.object)
+      :target => present(model.target)
     }
   end
 end

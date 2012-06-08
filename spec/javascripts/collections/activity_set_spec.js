@@ -1,7 +1,7 @@
 describe("chorus.collections.ActivitySet", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.ActivitySet([], {
-            entityType: "workspace",
+            entityType: "instances",
             entityId: "45"
         });
     });
@@ -19,18 +19,15 @@ describe("chorus.collections.ActivitySet", function() {
 
         context("when the collection does *not* have the 'insights' attribute", function() {
             it("returns the url for fetching all the activities for the entity", function() {
-                expect(this.collection.url()).toHaveUrlPath("/activitystream/workspace/45");
+                expect(this.collection.url()).toHaveUrlPath("/instances/45/activities");
             });
         });
+    });
 
-        context("when the workspace attribute is set", function() {
-            beforeEach(function() {
-                this.collection.attributes.workspace = newFixtures.workspace();
-            });
-
-            it("includes the workspace id in the url parameters", function() {
-                expect(this.collection.url()).toContainQueryParams({ workspaceId: this.collection.attributes.workspace.get("id") })
-            });
+    describe(".forDashboard", function() {
+        it("creates an activity set with the entity type for the dashboard", function() {
+            var activities = chorus.collections.ActivitySet.forDashboard();
+            expect(activities.url()).toHaveUrlPath("/activities");
         });
     });
 });

@@ -44,9 +44,9 @@ class Instance < ActiveRecord::Base
 
   def create_event
     Event.create!(
+      :actor => owner,
       :action => "INSTANCE_CREATED",
-      :object => self,
-      :actor => owner
+      :target => self
     )
   end
 

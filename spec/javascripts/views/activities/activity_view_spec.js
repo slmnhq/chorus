@@ -282,7 +282,10 @@ describe("chorus.views.Activity", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.NOTE_ON_WORKSPACE();
                 this.view.model.loaded = true;
-                this.collection = new chorus.collections.ActivitySet();
+                this.collection = new chorus.collections.ActivitySet([], {
+                    entityType: "instances",
+                    entityId: 12
+                });
                 this.collection.add(this.view.model);
 
                 this.presenter = new chorus.presenters.Activity(this.view.model)
@@ -425,7 +428,10 @@ describe("chorus.views.Activity", function() {
         context("type: INSIGHT_CREATED", function() {
             beforeEach(function() {
                 this.view.model = fixtures.activities.INSIGHT_CREATED();
-                this.collection = new chorus.collections.ActivitySet();
+                this.collection = new chorus.collections.ActivitySet([], {
+                    entityType: "instances",
+                    entityId: 12
+                });
                 this.collection.add(this.view.model);
 
                 this.presenter = new chorus.presenters.Activity(this.view.model)

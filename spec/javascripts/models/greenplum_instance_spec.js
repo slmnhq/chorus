@@ -11,6 +11,10 @@ describe("chorus.models.GreenplumInstance", function() {
         expect(this.instance.url()).toBe("/instances/" + this.instance.get('id'));
     });
 
+    it("has the right 'entityType' parameter for the activities API", function() {
+        expect(this.instance.entityType).toBe("instances");
+    });
+
     describe(".aurora", function() {
         beforeEach(function() {
             this.aurora = chorus.models.GreenplumInstance.aurora();
@@ -46,7 +50,7 @@ describe("chorus.models.GreenplumInstance", function() {
 
     describe("#accountForUser", function() {
         beforeEach(function() {
-            this.user = newFixtures.user();
+            this.user = rspecFixtures.user();
             this.account = this.instance.accountForUser(this.user);
         });
 
@@ -65,7 +69,7 @@ describe("chorus.models.GreenplumInstance", function() {
 
     describe("#accountForCurrentUser", function() {
         beforeEach(function() {
-            this.currentUser = newFixtures.user();
+            this.currentUser = rspecFixtures.user();
             setLoggedInUser(this.currentUser.attributes);
         });
 

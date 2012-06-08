@@ -51,20 +51,17 @@ describe GpdbDatabase do
     it "does not destroy databases on other instances" do
       other_account = FactoryGirl.create(:instance_account)
       stub_gpdb(other_account,
-        GpdbDatabase::DATABASE_NAMES_SQL => [
-          ["different"], ["matching"]
-        ]
+        GpdbDatabase::DATABASE_NAMES_SQL => [ ["different"], ["matching"] ]
       )
+      stub_gpdb(account,
+        GpdbDatabase::DATABASE_NAMES_SQL => [ ["matching"] ]
+      )
+
       GpdbDatabase.refresh(other_account)
 
-      stub_gpdb(account,
-        GpdbDatabase::DATABASE_NAMES_SQL => [
-          ["matching"]
-        ]
-      )
-      GpdbDatabase.refresh(account)
-
-      other_account.reload.instance.databases.count.should == 2
+      lambda {
+        GpdbDatabase.refresh(account)
+      }.should_not change { other_account.reload.instance.databases.count }
     end
   end
 

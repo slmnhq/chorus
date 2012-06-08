@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
   has_many :memberships
   has_many :workspaces, :through => :memberships
+  has_many :activities, :as => :entity
 
   has_many :instance_accounts, :foreign_key => :owner_id
   has_many :hadoop_instances, :foreign_key => :owner_id

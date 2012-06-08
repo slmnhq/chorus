@@ -77,13 +77,13 @@ describe("chorus.models.Activity", function() {
     describe("#toComment", function() {
         beforeEach(function() {
             this.model = fixtures.activities.NOTE_ON_INSTANCE({ id: "101", instance: { id: "45" } });
-            this.model.collection = new chorus.collections.ActivitySet();
+            this.model.collection = chorus.collections.ActivitySet.forDashboard();
         });
 
         it("returns a comment with the right attributes", function() {
             var comment = this.model.toComment();
             expect(comment).toBeA(chorus.models.Comment);
-            expect(comment.get("entityType")).toBe("instance");
+            expect(comment.get("entityType")).toBe("instances");
             expect(comment.get("entityId")).toBe("45");
             expect(comment.get("id")).toBe("101");
             expect(comment.get("body")).toBe(this.model.get("text"));

@@ -51,7 +51,7 @@ describe("chorus.models.Session", function() {
         context("when the model does not have errors", function() {
             beforeEach(function() {
                 this.model.set({ foo: "bar", bro: "baz" });
-                this.model._user = newFixtures.user();
+                this.model._user = rspecFixtures.user();
                 this.model.sandboxPermissionsCreated['4'] = true;
                 this.model.logout();
             });
@@ -93,7 +93,7 @@ describe("chorus.models.Session", function() {
             });
 
             it("returns true when the user has been fetched", function() {
-                this.model._user = newFixtures.user();
+                this.model._user = rspecFixtures.user();
                 expect(this.model._user.get('id')).toBeTruthy();
                 expect(this.model.loggedIn()).toBeTruthy();
             });
@@ -102,7 +102,7 @@ describe("chorus.models.Session", function() {
         context("when there is no authid cookie", function() {
             beforeEach(function() {
                 $.cookie("authid", null);
-                this.model._user = newFixtures.user();
+                this.model._user = rspecFixtures.user();
             })
 
             it("returns false", function() {
@@ -193,7 +193,7 @@ describe("chorus.models.Session", function() {
 
         context("when a user has been fetched", function() {
             beforeEach(function() {
-                this.session._user = newFixtures.user();
+                this.session._user = rspecFixtures.user();
             });
 
             it("returns a User", function() {
@@ -214,7 +214,7 @@ describe("chorus.models.Session", function() {
     describe("resuming", function() {
         beforeEach(function() {
             this.session = new models.Session();
-            this.session._user = newFixtures.user();
+            this.session._user = rspecFixtures.user();
         });
 
         describe("#rememberPathBeforeLoggedOut", function() {

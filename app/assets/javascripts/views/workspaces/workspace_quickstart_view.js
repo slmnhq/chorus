@@ -27,9 +27,26 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
         this.model.fetch();
     },
 
+    render: function() {
+
+        if (this.model.get("hasAddedMember") == true &&
+            this.model.get("hasAddedSandbox") == true &&
+            this.model.get("hasAddedWorkfile") == true &&
+            this.model.get("hasChangedSettings") == true) {
+
+            chorus.router.navigate("/workspaces/" + this.model.id);
+        }
+
+        this._super("render", arguments);
+    },
+
     visitShowPage: function(e) {
+        var quickstart = new chorus.models.WorkspaceQuickstart({
+            workspaceId: this.model.get("id")
+        });
+        quickstart.destroy();
+
         e && e.preventDefault();
-        // TODO: set all 4 has_.. to true?
         chorus.router.navigate($(e.currentTarget).attr("href"));
     }
 });

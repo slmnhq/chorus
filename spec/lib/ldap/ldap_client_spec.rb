@@ -70,34 +70,125 @@ uidnumber: 1026
 userpassword:: e0NSWVBUfSo=
 ENTRY
 
+LDAP_ENTRY3 = <<ENTRY
+dn: uid=testguycustom,cn=users,dc=bartol
+altsecurityidentities: Kerberos:untitled_1@BARTOL
+apple-company: Example Corporation
+apple-generateduid: 927107A3-92B4-4285-B153-A5C823369E24
+apple-mcxflags:: PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET0NU
+ WVBFIHBsaXN0IFBVQkxJQyAiLS8vQXBwbGUvL0RURCBQTElTVCAxLjAvL0VO
+ IiAiaHR0cDovL3d3dy5hcHBsZS5jb20vRFREcy9Qcm9wZXJ0eUxpc3QtMS4w
+ LmR0ZCI+CjxwbGlzdCB2ZXJzaW9uPSIxLjAiPgo8ZGljdD4KCTxrZXk+c2lt
+ dWx0YW5lb3VzX2xvZ2luX2VuYWJsZWQ8L2tleT4KCTx0cnVlLz4KPC9kaWN0
+ Pgo8L3BsaXN0Pgo=
+authauthority: ;ApplePasswordServer;0xa1a21c2c8d9411e1940d045453061d87,1024 65537 114574792543369925664970476099531574810470011447394859817353327283009252641939234027203454336596092547412893300748255582830246395307601051059741455985758726565576050698713027643598211823458461426996675470307157668087994612395127920329176467950738294806584152682809589286911571551061068009380246772002575640033 root@bartol.sf.pivotallabs.com:10.80.2.53
+authauthority: ;Kerberosv5;0xa1a21c2c8d9411e1940d045453061d87;testguy@BARTOL;BARTOL;1024 65537 114574792543369925664970476099531574810470011447394859817353327283009252641939234027203454336596092547412893300748255582830246395307601051059741455985758726565576050698713027643598211823458461426996675470307157668087994612395127920329176467950738294806584152682809589286911571551061068009380246772002575640033 root@bartol.sf.pivotallabs.com:10.80.2.53
+cn: Test Guy 2
+department: Greenery
+gidnumber: 21
+givenName: Test
+homedirectory: 100
+loginshell: /bin/bash
+mail: testguy2@example.com
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+objectclass: posixAccount
+objectclass: shadowAccount
+objectclass: top
+objectclass: extensibleObject
+objectclass: apple-user
+sn: Guy
+title: Big Kahuna
+uid: testguycustom
+uidnumber: 1026
+userpassword:: e0NSWVBUfSo=
+ENTRY
+
+
+CUSTOMIZED_LDAP_YAML = <<YAML
+ldap:
+  host: bartol.sf.pivotallabs.com
+  dc: bartol
+  cn: cn
+  dn:
+   template: goofy\\{0}
+  attribute_names:
+    uid: uid
+    ou: department
+    gn: givenName
+    sn: sn
+    mail: mail
+    title: title
+
+YAML
+
+DISABLED_LDAP_YAML = <<YAML
+ldap:
+  host:
+  dc: bartol
+  cn: users
+  dn:
+   template: goofy\\{0}
+  attribute_names:
+    uid: uid
+    ou: marina
+    gn: jackscoldsweat
+    sn: highnoon
+    mail: snail
+    title: shovel
+
+YAML
+
 describe LdapClient do
-  before do
-    stub(LdapClient).config_file_path { File.expand_path(config_file_path, Rails.root) }
+  before :each do
+    # RR doesn't like stubbing globals like this
+    # Chorus::Application.config.chorus = YAML.load_file("#{Rails.root}/config/chorus.yml")[Rails.env]
   end
 
-  after do
-    LdapClient.class_variable_set(:@@config, nil)
+  after :each do
+    RR.reset
   end
 
   let(:config_file_path) { "spec/fixtures/ldap.yml" }
+  let(:entries) do
+    [
+        Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY1),
+        Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY2)
+    ]
+  end
 
   describe ".search" do
-    before(:each) do
-      @entries = [
-          Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY1),
-          Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY2)
-      ]
-    end
 
     it "returns an array of user hashes" do
       any_instance_of(Net::LDAP) do |ldap|
-        mock(ldap).search.with_any_args { @entries }
+        mock(ldap).search.with_any_args { entries }
       end
 
       results = LdapClient.search("testguy")
       results.should be_a(Array)
       results.first.should be_a(Hash)
       results.first.should == { :first_name => "Test", :last_name => "Guy", :title => "Big Kahuna", :dept => "Greenery", :email => "testguy@example.com", :username => "testguy" }
+    end
+
+    context "with a customized LDAP schema" do
+      let(:entries) do
+        [
+            Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY3)
+        ]
+      end
+
+      it "maps the customized fields to our standardized fields" do
+        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_YAML)['ldap'] }
+        any_instance_of(Net::LDAP) do |ldap|
+          mock(ldap).search.with_any_args { entries }
+        end
+
+        results = LdapClient.search("testguycustom")
+        results.should be_a(Array)
+        results.first.should be_a(Hash)
+        results.first.should == { :first_name => "Test", :last_name => "Guy", :title => "Big Kahuna", :dept => "Greenery", :email => "testguy2@example.com", :username => "testguycustom" }
+      end
     end
   end
 
@@ -131,22 +222,33 @@ describe LdapClient do
     it "reads configuration from a YAML file" do
       any_instance_of(Net::LDAP) do |ldap|
         mock(ldap).search.with_any_args do |options|
-          options[:base].should == "dc=foo"
+          options[:base].should == "dc=bartol"
           options[:filter].to_s.should == "(uid=foo)"
           []
         end
-        mock(ldap).auth("username=foo,cn=users_cn,dc=foo", "secret") { true }
+        mock(ldap).auth("uid=foo,cn=users,dc=bartol", "secret") { true }
         mock(ldap).bind
       end
 
       LdapClient.search("foo")
       LdapClient.authenticate("foo", "secret")
     end
+
+    #context "has a configurable schema" do
+    #  let(:entries) do
+    #      [
+    #          Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY1),
+    #          Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY2)
+    #      ]
+    #  end
+    #end
   end
 
   describe "enabled?" do
     context "when the ldap host is blank" do
-      let(:config_file_path) { "spec/fixtures/no_ldap.yml" }
+      before do
+        stub(LdapClient).config { YAML.load(DISABLED_LDAP_YAML)['ldap'] }
+      end
 
       it "returns false" do
         LdapClient.should_not be_enabled
@@ -154,6 +256,10 @@ describe LdapClient do
     end
 
     context "when the ldap host is present" do
+      before do
+        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_YAML)['ldap'] }
+      end
+
       it "returns true" do
         LdapClient.should be_enabled
       end

@@ -119,7 +119,7 @@ describe("chorus.pages.Base", function() {
 
         context("when the page depends on resources", function() {
             beforeEach(function() {
-                this.resource = newFixtures.user();
+                this.resource = rspecFixtures.user();
                 this.view.dependOn(this.resource);
             });
 

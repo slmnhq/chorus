@@ -295,7 +295,7 @@ describe("chorus.models.Workfile", function() {
     describe("#extension", function() {
         it("returns the extension from the file's name", function() {
             var workfile = newFixtures.workfile.sql();
-            expect(workfile.extension()).toBe("sql");
+            expect(workfile.extension()).toBe("doc");
 
             workfile.set({ fileName: "foo.cpp" });
             expect(workfile.extension()).toBe("cpp");

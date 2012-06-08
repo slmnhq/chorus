@@ -10,7 +10,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
 
             var members = this.workspace.members();
             _.times(3, function() {
-                members.add(newFixtures.user());
+                members.add(rspecFixtures.user());
             });
 
             spyOn(this.members, "fetchAllIfNotLoaded");
@@ -56,7 +56,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
             this.members = this.workspace.members();
 
             _.times(25, function() {
-                members.add(newFixtures.user());
+                members.add(rspecFixtures.user());
             });
 
             spyOn(this.members, "fetchAllIfNotLoaded");

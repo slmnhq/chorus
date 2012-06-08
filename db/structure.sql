@@ -150,8 +150,8 @@ CREATE TABLE events (
     id integer NOT NULL,
     action character varying(255),
     actor_id integer,
-    object_id integer,
-    object_type character varying(255),
+    target_id integer,
+    target_type character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1104,3 +1104,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120601180858');
 INSERT INTO schema_migrations (version) VALUES ('20120607173919');
 
 INSERT INTO schema_migrations (version) VALUES ('20120607175331');
+
+INSERT INTO schema_migrations (version) VALUES ('20120608001550');

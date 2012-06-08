@@ -34,11 +34,11 @@ describe Instance do
   end
 
   describe "when an instance is created" do
-    it "creates an INSTANCE_CREATED activity with the right 'object'" do
+    it "creates an INSTANCE_CREATED activity with the right 'target'" do
       user = FactoryGirl.create :user
       instance = FactoryGirl.create :instance, :owner => user
 
-      event = Event.find_by_action_and_object_id_and_object_type("INSTANCE_CREATED", instance.id, 'Instance')
+      event = Event.find_by_action_and_target_id_and_target_type("INSTANCE_CREATED", instance.id, 'Instance')
       event.should_not be_nil
       event.actor.should == user
     end

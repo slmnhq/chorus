@@ -22,7 +22,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
             content: new chorus.views.DashboardInstanceList({ collection: this.options.instanceSet })
         });
 
-        var activities = chorus.session.user().activities('home');
+        var activities = chorus.collections.ActivitySet.forDashboard();
         activities.attributes.pageSize = 50;
 
         activities.fetch();

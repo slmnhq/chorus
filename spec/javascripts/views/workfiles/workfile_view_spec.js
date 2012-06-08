@@ -15,7 +15,7 @@ describe("chorus.views.Workfile", function() {
     });
 
     it("includes the correct workfile icon (non-image)", function() {
-        expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/sql.png");
+        expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/doc.png");
     });
 
     // TODO: make these work with new api and fixtures

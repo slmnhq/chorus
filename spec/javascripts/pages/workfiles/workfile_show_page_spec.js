@@ -145,7 +145,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
         it("displays the file icon in the content header", function() {
             spyOn(this.page.model, "isImage").andReturn(false);
             this.page.render();
-            expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('sql'));
+            expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('doc'));
         });
 
         context("when the content broadcasts file:autosaved", function() {

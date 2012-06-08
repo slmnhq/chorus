@@ -1,6 +1,12 @@
 describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
-        this.collection = fixtures.activitySet();
+        this.collection = new chorus.collections.ActivitySet([
+            fixtures.activities.NOTE_ON_CHORUS_VIEW(),
+            fixtures.activities.NOTE_ON_CHORUS_VIEW()
+        ], {
+            entityType: "instances",
+            entityId: 12
+        });
         this.collection.loaded = true;
         this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass: "foo_class", type: "Foo"});
     });
@@ -286,7 +292,7 @@ describe("chorus.views.ActivityList", function() {
                             fixtures.activity(),
                             fixtures.activity(),
                             fixtures.activity()
-                        ], {page: nextPage})
+                        ], { page: nextPage });
                     });
 
                     it("fetches the next page of the activity stream", function() {
@@ -295,8 +301,8 @@ describe("chorus.views.ActivityList", function() {
 
                     it("only re-renders the page once", function() {
                         expect(this.view.postRender.callCount).toBe(1);
-                    })
-                })
+                    });
+                });
             }
         })
 

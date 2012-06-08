@@ -39,7 +39,7 @@ describe("chorus.pages.DashboardPage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(
                     new chorus.collections.UserSet([], {page:1, rows:1}),
-                    [newFixtures.user()],
+                    [rspecFixtures.user()],
                     null,
                     {page:1, total: 1234, records: 1234}
                 );
