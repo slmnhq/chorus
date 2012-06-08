@@ -61,7 +61,11 @@ describe GpdbDatabase do
 
       lambda {
         GpdbDatabase.refresh(account)
-      }.should_not change { other_account.reload.instance.databases.count }
+      }.should_not change {
+        other_account.reload
+        other_account.instance.databases.each { |d| puts "name: #{d.name} instance_id: #{d.instance_id}" }
+        other_account.instance.databases.count
+      }
     end
   end
 
