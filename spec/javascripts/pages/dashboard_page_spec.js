@@ -85,6 +85,10 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.workspaceSet.order).toBe("name");
         })
 
+        it("passes the userId to workspaceSet", function() {
+            expect(this.page.workspaceSet.attributes.userId).toBe("foo");
+        })
+
         it("fetches only the chorus instances where the user has permissions", function() {
             expect(this.page.instanceSet).toBeA(chorus.collections.InstanceSet);
             expect(this.page.instanceSet.attributes.hasCredentials).toBe(true);

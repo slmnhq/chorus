@@ -50,10 +50,10 @@ describe WorkspacesController do
       decoded_response[1].name.should == "Work"
     end
 
-    it "scopes by owner" do
+    it "scopes by memberships" do
       get :index, :user_id => owner.id
-      decoded_response.size.should == 1
-      decoded_response[0].name.should == "Work"
+      decoded_response.size.should == 2
+      decoded_response[1].name.should == "secret1"
     end
 
     describe "pagination" do

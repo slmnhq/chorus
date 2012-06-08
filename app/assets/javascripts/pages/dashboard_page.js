@@ -8,6 +8,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
 
     setup:function () {
         this.collection = this.workspaceSet = new chorus.collections.WorkspaceSet();
+        this.workspaceSet.attributes.userId = chorus.session.user().id;
         this.workspaceSet.attributes.showLatestComments = true;
         this.workspaceSet.sortAsc("name");
         this.workspaceSet.fetch();
