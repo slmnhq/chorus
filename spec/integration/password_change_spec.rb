@@ -5,7 +5,7 @@ describe "creating a user" do
     login('edcadmin', 'secret')
   end
 
-  xit "allows a user to change the password" do
+  it "allows a user to change the password" do
     create_new_user_page
     first_name = "arianna"
     last_name = "huffington"
@@ -25,7 +25,9 @@ describe "creating a user" do
     login('arianna', 'secret')
     visit ("#/users")
     wait_until { current_route == '/users' }
-    click_link "arianna huffington"
+    within(".list")do
+      click_link "arianna huffington"
+    end
     click_link "Change password"
     page.should have_content("Change Password")
 
