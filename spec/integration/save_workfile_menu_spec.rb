@@ -26,28 +26,28 @@ describe "save as Menu" do
   end
 
   it "pops up the right menu" do
-    page.find(".save_options .save_as_new").should_not be_visible
-    page.find(".save_options .save_as_current").should_not be_visible
-    page.find(".save .save_as").click
+    page.should have_no_css(".components_menu a[data-menu-name='new']")
+    page.should have_no_css(".components_menu a[data-menu-name='replace']")
+    page.find(".save .save_file_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
-    page.find("a.save_as_new").should be_visible
-    page.find("a.save_as_current").should be_visible
+    page.find(".components_menu a[data-menu-name='new']").should be_visible
+    page.find(".components_menu a[data-menu-name='replace']").should be_visible
   end
 
   it "click the save as replace version" do
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood")')
-    page.find(".save .save_as").click
+    page.find(".save .save_file_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
-    page.find("a.save_as_current").click
+    page.find(".components_menu a[data-menu-name='replace']").click
     wait_until { page.find(".qtip[aria-hidden=true]") }
     page.find("textarea.text_editor").should have_content('new Blood')
   end
 
   it "click the save as new  version" do
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood -2")')
-    page.find(".save .save_as").click
+    page.find(".save .save_file_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
-    page.find("a.save_as_new").click
+    page.find(".components_menu a[data-menu-name='new']").click
     wait_until { page.find(".qtip[aria-hidden=true]") }
     fill_in 'commitMessage', :with => "commit Message -2"
     click_button "Save New Version"
