@@ -95,7 +95,7 @@ describe("chorus.views.UserNewLdap", function() {
                 context("when the username matches an LDAP user", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.ldapUsers, [
-                            newFixtures.user({
+                            rspecFixtures.user({
                                 username: "john_henry",
                                 firstName: "John",
                                 lastName: "Henry",
@@ -150,7 +150,7 @@ describe("chorus.views.UserNewLdap", function() {
                             spyOn(this.view, 'fieldValues').andCallThrough()
 
                             this.server.completeFetchFor(this.ldapUsers, [
-                                newFixtures.user({ username: "frankie2002" })
+                                rspecFixtures.user({ username: "frankie2002" })
                             ]);
                         });
 

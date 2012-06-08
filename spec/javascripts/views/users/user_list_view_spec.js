@@ -74,7 +74,7 @@ describe("chorus.views.UserList", function() {
 
             it("broadcasts user:selected when a user's entry is selected", function() {
                 spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
-                var user = newFixtures.user();
+                var user = rspecFixtures.user();
                 this.view.itemSelected(user);
                 expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:selected", user);
             });

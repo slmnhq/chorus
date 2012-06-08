@@ -40,7 +40,7 @@ describe("newFixtures", function() {
         var user;
 
         beforeEach(function() {
-            user = newFixtures.user();
+            user = rspecFixtures.user();
         });
 
         it("includes the user fixture data", function() {
@@ -50,26 +50,26 @@ describe("newFixtures", function() {
         });
 
         it("allows for overrides", function() {
-            user = newFixtures.user({username: "Foo Bar"});
+            user = rspecFixtures.user({username: "Foo Bar"});
             expect(user.get("username")).toBe("Foo Bar");
         });
 
         it("allows camel-case attribute names for overrides", function() {
-            user = newFixtures.user({ firstName: "Foo" });
+            user = rspecFixtures.user({ firstName: "Foo" });
             expect(user.get("firstName")).toBe("Foo");
         });
 
         it("does not allow overrides for non-existant attributes", function() {
-            expect(function() { newFixtures.user({ foo: "Bar" }) }).toThrow();
+            expect(function() { rspecFixtures.user({ foo: "Bar" }) }).toThrow();
         });
 
         it("gives each user a unique id", function() {
-            var user2 = newFixtures.user();
+            var user2 = rspecFixtures.user();
             expect(user2.get("id")).not.toEqual(user.get("id"));
         });
 
         it("uses the override id, if one is specified", function() {
-            var user2 = newFixtures.user({ id: '501' });
+            var user2 = rspecFixtures.user({ id: '501' });
             expect(user2.get("id")).toBe("501");
         });
     });
@@ -120,18 +120,18 @@ describe("newFixtures", function() {
 
         beforeEach(function() {
             fakeAttrs = { ping: "pong", paddle: "ball" };
-            spyOn(newFixtures, 'user').andReturn(new chorus.models.User(fakeAttrs));
+            spyOn(rspecFixtures, 'user').andReturn(new chorus.models.User(fakeAttrs));
         });
 
-        it("returns the attributes of the model returned by newFixtures.user", function() {
-            var json = newFixtures.userJson();
+        it("returns the attributes of the model returned by rspecFixtures.user", function() {
+            var json = rspecFixtures.userJson();
             expect(json).toEqual(fakeAttrs);
         });
 
         it("passes its overrides to #user", function() {
             var overrides = { foo: 1 };
-            newFixtures.userJson(overrides);
-            expect(newFixtures.user).toHaveBeenCalledWith(overrides);
+            rspecFixtures.userJson(overrides);
+            expect(rspecFixtures.user).toHaveBeenCalledWith(overrides);
         });
     });
 

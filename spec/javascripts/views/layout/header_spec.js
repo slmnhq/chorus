@@ -527,8 +527,8 @@ describe("chorus.views.Header", function() {
     context("when in dev mode", function() {
         beforeEach(function() {
             this.users = new chorus.collections.UserSet([
-                newFixtures.user({firstName: "user", lastName: "one", id: "1", admin: false}),
-                newFixtures.user({firstName: "user", lastName: "two", id: "2", admin: false})
+                rspecFixtures.user({firstName: "user", lastName: "one", id: "1", admin: false}),
+                rspecFixtures.user({firstName: "user", lastName: "two", id: "2", admin: false})
             ]);
             chorus.isDevMode.andReturn(true);
 

@@ -1,6 +1,6 @@
 describe("chorus.views.userEdit", function() {
     beforeEach(function() {
-        this.user = newFixtures.user({admin: true});
+        this.user = rspecFixtures.user({admin: true});
         setLoggedInUser({'username': this.user.get("username")})
         this.view = new chorus.views.UserEdit({model: this.user});
     })
@@ -37,9 +37,9 @@ describe("chorus.views.userEdit", function() {
                     expect(this.view.$("input[name=lastName]").val()).toBe(this.user.get("lastName"));
                     expect(this.view.$("span[name=username]").text()).toBe(this.user.get("username"));
                     expect(this.view.$("input[name=email]").val()).toBe(this.user.get("email"));
-                    expect(this.view.$("input[name=title]").val()).toBe('');
-                    expect(this.view.$("textarea[name=notes]").text()).toBe('');
-                    expect(this.view.$("input[name=dept]").val()).toBe('');
+                    expect(this.view.$("input[name=title]").val()).toBe("Grand Poo Bah");
+                    expect(this.view.$("textarea[name=notes]").text()).toBe("One of our top performers");
+                    expect(this.view.$("input[name=dept]").val()).toBe("Corporation Corp., Inc.");
                     expect(this.view.$("input[name=admin]").prop("checked")).toBe(this.user.get("admin"));
                 })
 
@@ -181,7 +181,7 @@ describe("chorus.views.userEdit", function() {
 
         context("editing a user that is not yourself", function() {
             beforeEach(function() {
-                this.user = newFixtures.user();
+                this.user = rspecFixtures.user();
                 this.view = new chorus.views.UserEdit({model: this.user});
 
                 setLoggedInUser({'username': 'a_different_user', 'admin': false})

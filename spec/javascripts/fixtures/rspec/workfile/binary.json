@@ -1,0 +1,93 @@
+{
+  "response": {
+    "id": 28,
+    "workspace": {
+      "id": 28,
+      "name": "workspace4",
+      "summary": null,
+      "owner": {
+        "id": 196,
+        "username": "user21",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person22@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "archiver": null,
+      "archived_at": null,
+      "public": true,
+      "image": {
+        "original": "",
+        "icon": ""
+      },
+      "permission": [
+        "admin"
+      ]
+    },
+    "owner": {
+      "id": 197,
+      "username": "user22",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person23@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "version_info": {
+      "id": 28,
+      "version_num": 1,
+      "commit_message": "Factory commit message",
+      "owner": {
+        "id": 198,
+        "username": "user23",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person24@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "modifier": {
+        "id": 199,
+        "username": "user24",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person25@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "created_at": "2012-06-07T23:20:11Z",
+      "updated_at": "2012-06-07T23:20:11Z",
+      "content_url": "/system/workfile_versions/contents/000/000/028/original/binary.tar.gz?1339111211",
+      "icon_url": null,
+      "content": null
+    },
+    "file_name": "workfile.doc",
+    "file_type": "other",
+    "latest_version_num": 1
+  }
+}
