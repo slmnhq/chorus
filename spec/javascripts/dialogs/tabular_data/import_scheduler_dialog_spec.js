@@ -5,7 +5,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             datasetId: this.dataset.get('id'),
             workspaceId: this.dataset.get('workspace').id
         });
-        this.workspace = newFixtures.workspace(this.dataset.get('workspace'));
+        this.workspace = rspecFixtures.workspace(this.dataset.get('workspace'));
         this.datasetImport.unset('sampleCount');
         this.launchElement = $("<a/>");
         this.launchElement.data("dataset", this.dataset);

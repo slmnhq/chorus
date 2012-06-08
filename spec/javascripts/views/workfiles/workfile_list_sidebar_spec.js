@@ -1,6 +1,6 @@
 describe("chorus.views.WorkfileListSidebar", function() {
     beforeEach(function() {
-        this.workspace = newFixtures.workspace();
+        this.workspace = rspecFixtures.workspace();
         this.view = new chorus.views.WorkfileListSidebar({ workspace: this.workspace });
     });
 

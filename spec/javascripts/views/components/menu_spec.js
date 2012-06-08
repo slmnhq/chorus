@@ -7,9 +7,9 @@ describe("chorus.views.Menu", function() {
         menuContainer = stubQtip();
 
         models = [
-            newFixtures.workspace(),
-            newFixtures.workspace(),
-            newFixtures.workspace(),
+            rspecFixtures.workspace(),
+            rspecFixtures.workspace(),
+            rspecFixtures.workspace()
         ];
 
         onSelectSpies = [

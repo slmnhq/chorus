@@ -1,6 +1,6 @@
 describe("chorus.views.ActivityListHeader", function() {
     beforeEach(function() {
-        this.workspace = newFixtures.workspace();
+        this.workspace = rspecFixtures.workspace();
         this.collection = this.workspace.activities();
 
         this.view = new chorus.views.ActivityListHeader({
@@ -17,7 +17,7 @@ describe("chorus.views.ActivityListHeader", function() {
     describe("#pickTitle", function() {
         context("with a workspace", function() {
             beforeEach(function() {
-                this.workspace = newFixtures.workspace({ name: "a cool workspace" })
+                this.workspace = rspecFixtures.workspace({ name: "a cool workspace" });
                 this.view.model = this.workspace;
             });
 

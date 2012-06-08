@@ -1,7 +1,7 @@
 describe("chorus.views.WorkfileShowSidebar", function() {
     beforeEach(function() {
         spyOn(chorus.views.Sidebar.prototype, "jumpToTop");
-        chorus.page = { workspace: newFixtures.workspace() };
+        chorus.page = { workspace: rspecFixtures.workspace() };
         this.workfile = rspecFixtures.workfile.text();
         spyOn(chorus.views.WorkfileShowSidebar.prototype, "recalculateScrolling").andCallThrough();
         this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
@@ -42,7 +42,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             this.view.model.workspace().fetch();
 
             this.server.completeFetchFor(this.workfile);
-            this.server.completeFetchFor(this.workfile.workspace(), newFixtures.workspace({
+            this.server.completeFetchFor(this.workfile.workspace(), rspecFixtures.workspace({
                 id: this.workfile.workspace().id,
                 sandboxInfo : {
                     databaseId: 4,
@@ -107,7 +107,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             this.view.model.workspace().fetch();
 
             this.server.completeFetchFor(this.workfile);
-            this.server.completeFetchFor(this.workfile.workspace(), newFixtures.workspace({
+            this.server.completeFetchFor(this.workfile.workspace(), rspecFixtures.workspace({
                 id: this.workfile.workspace().id,
                 sandboxInfo : {
                     databaseId: 4,
@@ -182,7 +182,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             this.model.workspace().fetch();
 
             this.server.completeFetchFor(this.model);
-            this.server.completeFetchFor(this.model.workspace(), newFixtures.workspace({ archivedAt: "2012-05-08T21:40:14Z" }));
+            this.server.completeFetchFor(this.model.workspace(), rspecFixtures.workspace({ archivedAt: "2012-05-08T21:40:14Z" }));
 
             this.view.render();
         });

@@ -1,6 +1,6 @@
 describe("chorus.views.DatasetEditChorusViewSidebar", function() {
     beforeEach(function() {
-        chorus.page = { workspace: newFixtures.workspace() };
+        chorus.page = { workspace: rspecFixtures.workspace() };
         this.dataset = newFixtures.dataset.chorusView();
         this.view = new chorus.views.DatasetEditChorusViewSidebar({model: this.dataset });
         this.server.completeAllFetches();

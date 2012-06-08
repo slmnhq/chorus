@@ -19,8 +19,8 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
     describe("when the workspaces are fetched and one is chosen", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(chorus.session.user().workspaces(), [
-                newFixtures.workspace({ name: "abra", id: "11" }),
-                newFixtures.workspace({ name: "cadabra", id: "12" })
+                rspecFixtures.workspace({ name: "abra", id: "11" }),
+                rspecFixtures.workspace({ name: "cadabra", id: "12" })
             ]);
 
             this.dialog.$("li:eq(1)").click();

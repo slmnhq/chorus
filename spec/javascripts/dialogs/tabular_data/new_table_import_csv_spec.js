@@ -6,7 +6,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             databaseName: "myDatabase",
             instanceName: "myInstance"
         })
-        chorus.page.workspace = newFixtures.workspace();
+        chorus.page.workspace = rspecFixtures.workspace();
         this.csv = fixtures.csvImport({lines: [
             "COL1,col2, col3 ,col 4,Col_5",
             "val1.1,val1.2,val1.3,val1.4,val1.5",

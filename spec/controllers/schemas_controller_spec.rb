@@ -13,6 +13,19 @@ describe SchemasController do
     let(:instance) { FactoryGirl.create(:instance, :owner_id => user.id) }
     let(:instanceAccount) { FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id) }
     let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance, :name => "test2") }
+    let(:schema1) { FactoryGirl.build(:gpdb_schema, :name => 'schema1', :database => database) }
+    let(:schema2) { FactoryGirl.build(:gpdb_schema, :name => 'schema2', :database => database) }
+
+    before do
+      FactoryGirl.create(:gpdb_table, :name => "table1", :schema => schema1)
+      FactoryGirl.create(:gpdb_view, :name => "view1", :schema => schema1)
+      schema1.reload
+
+      FactoryGirl.create(:gpdb_table, :name => "table2", :schema => schema2)
+      schema2.reload
+
+      stub(GpdbSchema).refresh(instanceAccount, database) { [schema1, schema2] }
+    end
 
     it "uses authorization" do
       mock(subject).authorize!(:show, instance)
@@ -20,18 +33,6 @@ describe SchemasController do
     end
 
     it "should retrieve all schemas for a database" do
-
-      schema1 = FactoryGirl.build(:gpdb_schema, :name => 'schema1', :database => database)
-      FactoryGirl.create(:gpdb_table, :name => "table1", :schema => schema1)
-      FactoryGirl.create(:gpdb_view, :name => "view1", :schema => schema1)
-      schema1.reload
-
-      schema2 = FactoryGirl.build(:gpdb_schema, :name => 'schema2', :database => database)
-      FactoryGirl.create(:gpdb_table, :name => "table2", :schema => schema2)
-      schema2.reload
-
-      stub(GpdbSchema).refresh(instanceAccount, database) { [schema1, schema2] }
-
       get :index, :database_id => database.to_param
 
       response.code.should == "200"
@@ -46,6 +47,11 @@ describe SchemasController do
       decoded_response[1].database.instance.id.should == instance.id
       decoded_response[1].database.name.should == "test2"
       decoded_response[1].dataset_count.should == 1
+    end
+
+    it "should generate JSON fixtures", :fixture => true do
+      get :index, :database_id => database.to_param
+      save_fixture "schemaSet.json"
     end
   end
 

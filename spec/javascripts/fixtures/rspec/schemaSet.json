@@ -1,0 +1,78 @@
+{
+  "response": [
+    {
+      "id": 1,
+      "name": "schema1",
+      "database": {
+        "id": 2,
+        "name": "test2",
+        "instance": {
+          "name": "instance1",
+          "host": "host1.emc.com",
+          "port": 5001,
+          "id": 2,
+          "owner": {
+            "id": 2,
+            "username": "user1",
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "person1@example.com",
+            "title": "Grand Poo Bah",
+            "dept": "Corporation Corp., Inc.",
+            "notes": "One of our top performers",
+            "admin": false,
+            "image": {
+              "original": "/images/default-user-icon.png",
+              "icon": "/images/default-user-icon.png"
+            }
+          },
+          "shared": false,
+          "state": "online",
+          "provision_type": null,
+          "maintenance_db": "postgres",
+          "description": null,
+          "instance_provider": null,
+          "version": "9.1.2 - FactoryVersion"
+        }
+      },
+      "dataset_count": 2
+    },
+    {
+      "id": 2,
+      "name": "schema2",
+      "database": {
+        "id": 2,
+        "name": "test2",
+        "instance": {
+          "name": "instance1",
+          "host": "host1.emc.com",
+          "port": 5001,
+          "id": 2,
+          "owner": {
+            "id": 2,
+            "username": "user1",
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "person1@example.com",
+            "title": "Grand Poo Bah",
+            "dept": "Corporation Corp., Inc.",
+            "notes": "One of our top performers",
+            "admin": false,
+            "image": {
+              "original": "/images/default-user-icon.png",
+              "icon": "/images/default-user-icon.png"
+            }
+          },
+          "shared": false,
+          "state": "online",
+          "provision_type": null,
+          "maintenance_db": "postgres",
+          "description": null,
+          "instance_provider": null,
+          "version": "9.1.2 - FactoryVersion"
+        }
+      },
+      "dataset_count": 1
+    }
+  ]
+}

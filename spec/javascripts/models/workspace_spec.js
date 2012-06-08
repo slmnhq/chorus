@@ -1,7 +1,7 @@
 describe("chorus.models.Workspace", function() {
     var models = chorus.models;
     beforeEach(function() {
-        this.model = newFixtures.workspace({
+        this.model = rspecFixtures.workspace({
             archivedAt: null,
             image: {
                 icon: "/system/workspaces/images/000/000/005/icon/workspaceimage.jpg",
@@ -217,7 +217,7 @@ describe("chorus.models.Workspace", function() {
 
         beforeEach(function() {
             spyOn(chorus, "cachebuster").andReturn(12345)
-            workspace = newFixtures.workspace({
+            workspace = rspecFixtures.workspace({
                 archivedAt: null,
                 image: {
                     icon: "/system/workspaces/images/000/000/005/icon/workspaceimage.jpg",
@@ -274,7 +274,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#displayName", function() {
         beforeEach(function() {
-            this.model = newFixtures.workspace();
+            this.model = rspecFixtures.workspace();
         })
 
         it("returns the name", function() {
@@ -285,7 +285,7 @@ describe("chorus.models.Workspace", function() {
     describe("#displayShortName", function() {
         context("with a short name", function() {
             beforeEach(function() {
-                this.model = newFixtures.workspace({name: "Short Name"});
+                this.model = rspecFixtures.workspace({name: "Short Name"});
             });
 
             it("returns the full name", function() {
@@ -295,7 +295,7 @@ describe("chorus.models.Workspace", function() {
 
         context("with a long name", function() {
             beforeEach(function() {
-                this.model = newFixtures.workspace({name: "A Much, Much Longer Name"});
+                this.model = rspecFixtures.workspace({name: "A Much, Much Longer Name"});
             });
 
             it("returns the shortened name", function() {
@@ -306,7 +306,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("#createImageUrl", function() {
         beforeEach(function() {
-            this.model = newFixtures.workspace({id: 10013});
+            this.model = rspecFixtures.workspace({id: 10013});
         })
 
         it("uses the right URL", function() {
@@ -339,7 +339,7 @@ describe("chorus.models.Workspace", function() {
     describe("#sandbox", function() {
         context("when the workspace has a sandbox", function() {
             beforeEach(function() {
-                this.model = newFixtures.workspace({
+                this.model = rspecFixtures.workspace({
                     sandboxInfo: {
                         databaseId: 4,
                         databaseName: "db",
@@ -368,7 +368,7 @@ describe("chorus.models.Workspace", function() {
 
         context("when the workspace does not have a sandbox", function() {
             beforeEach(function() {
-                this.model = newFixtures.workspace({
+                this.model = rspecFixtures.workspace({
                     sandboxInfo: {
                         databaseId: null,
                         databaseName: null,
@@ -390,7 +390,7 @@ describe("chorus.models.Workspace", function() {
 
     describe("permissions checking", function() {
         beforeEach(function() {
-            this.model.set({ownerFirstName: "John", ownerLastName: "Henry", ownerId: "47"})
+            this.model.set({owner: {firstName: "John", lastName: "Henry", id: "47"}});
         });
 
         describe("#currentUserIsOwner", function() {

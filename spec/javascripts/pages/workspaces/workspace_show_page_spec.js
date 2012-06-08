@@ -23,8 +23,8 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         describe("when we are in quickstart mode", function() {
             context("as the workspace owner", function(){
                 beforeEach(function() {
-                    this.model = newFixtures.workspace({
-                        ownerId: "4",
+                    this.model = rspecFixtures.workspace({
+                        owner: { id: "4" },
                         hasAddedMember: false,
                         hasAddedWorkfile: false,
                         hasAddedSandbox: false,
@@ -75,8 +75,8 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
         describe("when we are not in quickstart mode", function() {
             beforeEach(function() {
-                this.model = newFixtures.workspace({
-                    ownerId: "4",
+                this.model = rspecFixtures.workspace({
+                    owner: { id: "4" },
                     hasAddedMember: true,
                     hasAddedWorkfile: true,
                     hasAddedSandbox: true,
@@ -129,7 +129,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
         context("when the model has loaded", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.model, newFixtures.workspace({summary: "this is a summary", name: "Cool Workspace"}));
+                this.server.completeFetchFor(this.page.model, rspecFixtures.workspace({summary: "this is a summary", name: "Cool Workspace"}));
                 this.server.completeFetchFor(this.page.model.activities(), [fixtures.activities.NOTE_ON_WORKFILE(), fixtures.activities.INSIGHT_CREATED()]);
                 this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightCount, { numberOfInsight: 5 });
                 this.page.render();

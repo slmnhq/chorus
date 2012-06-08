@@ -1,6 +1,6 @@
 describe("chorus.pages.WorkfileIndexPage", function() {
     beforeEach(function() {
-        this.workspace = newFixtures.workspace();
+        this.workspace = rspecFixtures.workspace();
         this.model = rspecFixtures.workfile.sql({workspace: {id: this.workspace.id}});
         this.page = new chorus.pages.WorkfileIndexPage(this.workspace.id);
     });

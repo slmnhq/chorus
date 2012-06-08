@@ -2,13 +2,15 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
     beforeEach(function() {
         this.launchElement = $("<a></a>");
 
-        this.workspace = newFixtures.workspace({
+        this.workspace = rspecFixtures.workspace({
             name: "my name",
             summary: "my summary",
             id: "457",
-            ownerId: "12",
-            ownerFirstName: "Deborah",
-            ownerLastName: "D",
+            owner: {
+                id: 12,
+                firstName: "Deborah",
+                lastName: "D"
+            },
             archivedAt: null,
             archiver: null
         });
@@ -141,7 +143,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
             it("does not disable the 'Publicly available' checkbox", function() {
                 expect(this.dialog.$("input[name=public]")).not.toBeDisabled();
-            })
+            });
 
             itHasEditableNameAndSummmary();
 
@@ -210,6 +212,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             beforeEach(function() {
                 this.workspace.set({ permission: ["read", "commenting", "update"] });
                 setLoggedInUser({ id: 11 });
+                disableSpy.reset();
                 this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
                 this.dialog.render();
             });

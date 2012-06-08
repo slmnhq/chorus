@@ -1,6 +1,6 @@
 describe("chorus.collections.SchemaSet", function() {
     beforeEach(function() {
-        this.collection = fixtures.schemaSet({ databaseId: '41' });
+        this.collection = rspecFixtures.schemaSet({ database: {id: '41' }} );
     });
 
     it("has the right URL", function() {

@@ -1,6 +1,6 @@
 describe("chorus.views.SubNav", function() {
     beforeEach(function() {
-        this.model = newFixtures.workspace();
+        this.model = rspecFixtures.workspace();
         this.view = new chorus.views.SubNav({ tab : "workfiles", model : this.model });
     })
 

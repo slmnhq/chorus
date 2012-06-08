@@ -1,7 +1,7 @@
 describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
     beforeEach(function() {
         setLoggedInUser({id: 4003});
-        chorus.session.trigger("saved")
+        chorus.session.trigger("saved");
 
         stubModals();
 
@@ -15,8 +15,8 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
         });
         this.dialog.launchModal();
 
-        this.workspace1 = newFixtures.workspace({name: "Foo"});
-        this.workspace2 = newFixtures.workspace({name: "Bar"});
+        this.workspace1 = rspecFixtures.workspace({name: "Foo"});
+        this.workspace2 = rspecFixtures.workspace({name: "Bar"});
         this.workspaces = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2]);
     });
 

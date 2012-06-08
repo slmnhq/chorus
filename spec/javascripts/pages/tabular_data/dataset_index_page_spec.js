@@ -2,7 +2,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
         this.modalSpy = stubModals();
-        this.workspace = newFixtures.workspace({
+        this.workspace = rspecFixtures.workspace({
             id: 9999,
             permission: [
                 "update"
@@ -36,7 +36,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
         context("when the workspace fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.workspace, newFixtures.workspace());
+                this.server.completeFetchFor(this.workspace);
                 spyOn(this.page.mainContent.contentDetails, "postRender").andCallThrough();
             });
 
@@ -89,6 +89,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
         context("and the user is an admin", function() {
             beforeEach(function() {
+                this.workspace.set({permission: ['admin']});
                 setLoggedInUser({ id: 11, admin: true});
                 this.server.completeFetchFor(this.workspace);
             });
@@ -100,7 +101,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
         context("and the user is the workspace owner", function() {
             beforeEach(function() {
-                setLoggedInUser({ id: this.workspace.get("ownerId"), admin: false});
+                setLoggedInUser({ id: this.workspace.get("owner").id, admin: false});
                 this.server.completeFetchFor(this.workspace);
             });
 

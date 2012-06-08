@@ -1,21 +1,7 @@
 window.fixtureDefinitions = {
-    userSet: { unique: [ "id" ] },
-
     schema:    { unique: [ "id", "instance.id" ] },
-    schemaSet: { unique: [ "id" ] },
 
-    workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] },
     workspaceSet: { unique: [ "id", "sandboxInfo.sandboxId" ] },
-
-    workfile: {
-        unique: [ "id" ],
-        children: {
-            sql: {},
-            binary: {},
-            image: {},
-            text: {}
-        }
-    },
 
     sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
 
@@ -26,10 +12,6 @@ window.fixtureDefinitions = {
 
     config: {},
 
-    hadoopInstance: {},
-
-    image: {},
-
     greenplumInstance: {
         unique: [ "id" ],
 
@@ -38,8 +20,6 @@ window.fixtureDefinitions = {
             sharedAccount:  {}
         }
     },
-
-    instanceAccount: {},
 
     activity: {
         unique: [ "id" ],
@@ -90,9 +70,9 @@ window.rspecFixtureDefinitions = {
     userSet: { unique: [ "id" ] },
 
 //    schema:    { unique: [ "id", "instance.id" ] },
-//    schemaSet: { unique: [ "id" ] },
+    schemaSet: { unique: [ "id" ] },
 //
-    workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] }, // cannot be used until missing fields are added (mainly sandboxInfo)
+    workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] },
 //    workspaceSet: { unique: [ "id", "sandboxInfo.sandboxId" ] },
 
     workfile: {

@@ -1,6 +1,6 @@
 describe("chorus.dialogs.WorkspaceInstanceAccount", function() {
     beforeEach(function() {
-        this.workspace = newFixtures.workspace();
+        this.workspace = rspecFixtures.workspace();
         this.account = rspecFixtures.instanceAccount();
         this.dialog = new chorus.dialogs.WorkspaceInstanceAccount({ model: this.account, pageModel: this.workspace});
         this.dialog.render();

@@ -2,7 +2,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
     beforeEach(function() {
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
 
-        chorus.page = { workspace: newFixtures.workspace({name: "new_workspace"}) };
+        chorus.page = { workspace: rspecFixtures.workspace({name: "new_workspace"}) };
         this.schema = newFixtures.sandbox().schema();
         this.view = new chorus.views.DatabaseDatasetSidebarList({schema: this.schema});
 

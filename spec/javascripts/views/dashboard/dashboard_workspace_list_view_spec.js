@@ -1,7 +1,7 @@
 describe("chorus.views.DashboardWorkspaceList", function() {
     beforeEach(function() {
-        this.workspace1 = newFixtures.workspace({ name: "Broccoli", latestCommentList: [] });
-        this.workspace2 = newFixtures.workspace({ name: "Camels", latestCommentList: [] });
+        this.workspace1 = rspecFixtures.workspace({ name: "Broccoli", latestCommentList: [] });
+        this.workspace2 = rspecFixtures.workspace({ name: "Camels", latestCommentList: [] });
         this.collection = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2]);
         this.collection.loaded = true;
         this.view = new chorus.views.DashboardWorkspaceList({collection: this.collection});

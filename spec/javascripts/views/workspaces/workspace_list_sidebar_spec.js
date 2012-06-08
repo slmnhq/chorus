@@ -12,7 +12,7 @@ describe("chorus.views.WorkspaceListSidebar", function() {
 
     context("a workspace exists", function() {
         beforeEach(function() {
-            this.workspace = newFixtures.workspace();
+            this.workspace = rspecFixtures.workspace();
 
             chorus.PageEvents.broadcast("workspace:selected", this.workspace);
         });

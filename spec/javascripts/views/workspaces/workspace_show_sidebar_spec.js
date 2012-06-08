@@ -1,6 +1,6 @@
 describe("chorus.views.WorkspaceShowSidebar", function() {
     beforeEach(function() {
-            this.model = newFixtures.workspace({
+            this.model = rspecFixtures.workspace({
                 name: "A Cool Workspace",
                 id: '123',
                 image: {

@@ -15,7 +15,9 @@ class WorkspacePresenter < Presenter
         :has_added_member => has_added_member,
         :has_added_workfile => has_added_workfile,
         :has_added_sandbox => has_added_sandbox,
-        :has_changed_settings => has_changed_settings
+        :has_changed_settings => has_changed_settings,
+        :sandbox_info => nil,         # temporarily added for rspec fixture - needed by JS specs
+        :latest_comment_list => nil   # temporarily added for rspec fixture - needed by JS specs
     }
   end
 end

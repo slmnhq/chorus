@@ -4,7 +4,7 @@
     "name": "workspace1",
     "summary": null,
     "owner": {
-      "id": 3,
+      "id": 2,
       "username": "user2",
       "first_name": "John",
       "last_name": "Doe",
@@ -28,6 +28,12 @@
     "permission": [
       "read",
       "commenting"
-    ]
+    ],
+    "has_added_member": false,
+    "has_added_workfile": false,
+    "has_added_sandbox": false,
+    "has_changed_settings": false,
+    "sandbox_info": null,
+    "latest_comment_list": null
   }
 }

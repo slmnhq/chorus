@@ -1,6 +1,6 @@
 describe("chorus.dialogs.SandboxNew", function() {
     beforeEach(function() {
-        this.workspace = newFixtures.workspace();
+        this.workspace = rspecFixtures.workspace();
         spyOn(chorus, "toast");
         spyOn(chorus, 'styleSelect');
         spyOn(chorus.router, 'reload');
@@ -16,7 +16,7 @@ describe("chorus.dialogs.SandboxNew", function() {
     context("when the SchemaPicker triggers an error", function() {
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora());
-            var modelWithError = fixtures.schemaSet();
+            var modelWithError = rspecFixtures.schemaSet();
             modelWithError.serverErrors = { fields: { a: { BLANK: {} } } };
             this.dialog.instanceMode.trigger("error", modelWithError);
         });

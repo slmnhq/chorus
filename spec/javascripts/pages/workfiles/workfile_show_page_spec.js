@@ -1,9 +1,9 @@
 describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
-        chorus.page = { workspace: newFixtures.workspace() };
+        chorus.page = { workspace: rspecFixtures.workspace() };
         this.workspaceId = 4;
         this.workfileId = 5;
-        this.workspace = newFixtures.workspace({id: this.workspaceId});
+        this.workspace = rspecFixtures.workspace({id: this.workspaceId});
         this.model = rspecFixtures.workfile.sql({id: this.workfileId, workspace: {id: this.workspaceId}});
         stubDefer();
     });

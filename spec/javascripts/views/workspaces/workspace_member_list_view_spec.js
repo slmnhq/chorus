@@ -5,7 +5,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
 
     describe("when there are less than 24 members", function() {
         beforeEach(function() {
-            this.workspace = newFixtures.workspace();
+            this.workspace = rspecFixtures.workspace();
             this.members = this.workspace.members();
 
             var members = this.workspace.members();
@@ -51,7 +51,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
 
     describe("when there are more than 24 members", function() {
         beforeEach(function() {
-            this.workspace = newFixtures.workspace();
+            this.workspace = rspecFixtures.workspace();
             var members = this.workspace.members();
             this.members = this.workspace.members();
 

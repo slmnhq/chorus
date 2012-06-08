@@ -28,6 +28,8 @@ describe WorkspacePresenter, :type => :view do
       @hash.should have_key(:has_added_workfile)
       @hash.should have_key(:has_added_sandbox)
       @hash.should have_key(:has_changed_settings)
+      @hash.should have_key(:sandbox_info)
+      @hash.should have_key(:latest_comment_list)
     end
 
     it "uses the image presenter to serialize the image urls" do

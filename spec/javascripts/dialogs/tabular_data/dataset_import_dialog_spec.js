@@ -1,7 +1,7 @@
 describe("chorus.dialogs.DatasetImport", function() {
     beforeEach(function() {
         chorus.page = {};
-        chorus.page.workspace = newFixtures.workspace({id: 242});
+        chorus.page.workspace = rspecFixtures.workspace({id: 242});
         this.modalSpy = stubModals();
         spyOn($.fn, 'fileupload');
         this.launchElement = $('<button data-workspace-id="242">Import File</button>');

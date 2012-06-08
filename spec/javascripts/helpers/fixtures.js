@@ -14,7 +14,7 @@ beforeEach(function() {
                     id: "10000",
                     timestamp: "2012-02-28 11:51:42.14",
                     type: "BE_MEMBER",
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 }, overrides));
             }
         },
@@ -64,7 +64,7 @@ beforeEach(function() {
                             name: "Method Man"
                         }
                     ],
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 });
             },
 
@@ -91,7 +91,7 @@ beforeEach(function() {
                             name: "Method Man"
                         }
                     ],
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 });
             },
 
@@ -108,7 +108,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 });
             },
 
@@ -125,7 +125,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 });
             },
 
@@ -142,7 +142,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 });
             },
 
@@ -159,12 +159,12 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 });
             },
 
             "WORKSPACE_ADD_TABLE": function(overrides) {
-                var workspace = newFixtures.workspaceJson()
+                var workspace = rspecFixtures.workspaceJson()
                 var attrs = _.extend({
                     type: "WORKSPACE_ADD_TABLE",
                     author: fixtures.authorJson(),
@@ -205,7 +205,7 @@ beforeEach(function() {
                         path: '/data',
                         name: "import.csv"
                     },
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 }, overrides);
 
                 return new chorus.models.Activity(attrs);
@@ -224,7 +224,7 @@ beforeEach(function() {
                     id: fixtures.nextId().toString(),
                     isDeleted: false,
                     timestamp: "2012-03-15 17:27:52",
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 }, overrides));
             },
 
@@ -585,7 +585,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: newFixtures.workspaceJson(),
+                    workspace: rspecFixtures.workspaceJson(),
                     artifacts: [
                         {
                             entityId: "10101",
@@ -626,7 +626,7 @@ beforeEach(function() {
                                 timestamp: "2011-12-15 12:34:56"
                             }
                         ],
-                        workspace: newFixtures.workspaceJson(),
+                        workspace: rspecFixtures.workspaceJson(),
                         artifacts: [
                             {
                                 entityId: "10101",
@@ -664,7 +664,7 @@ beforeEach(function() {
                         }
                     ],
                     workfile: fixtures.nestedWorkfileJson(),
-                    workspace: newFixtures.workspaceJson(),
+                    workspace: rspecFixtures.workspaceJson(),
                     artifacts: [
                         {
                             entityId: fixtures.nextId().toString(),
@@ -1362,7 +1362,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 });
             },
 
@@ -1379,7 +1379,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 });
             },
 
@@ -1396,7 +1396,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    workspace: newFixtures.workspaceJson()
+                    workspace: rspecFixtures.workspaceJson()
                 });
             },
 
@@ -1728,7 +1728,7 @@ beforeEach(function() {
                 entityType: 'instance',
                 entityId: this.nextId().toString(),
                 type: "NOTE",
-                workspace: newFixtures.workspace()
+                workspace: rspecFixtures.workspace()
             }, overrides)
             return fixtures.comment(commentOverrides);
         },
@@ -1810,7 +1810,7 @@ beforeEach(function() {
         },
 
         workfileSet: function(models) {
-            models = models || [newFixtures.workfile.sql(), newFixtures.workfile.sql()];
+            models = models || [rspecFixtures.workfile.sql(), rspecFixtures.workfile.sql()];
             return new chorus.collections.WorkfileSet(models);
         },
 
@@ -1924,7 +1924,7 @@ beforeEach(function() {
                 workspace: {id: fixtures.nextId(), name: "some_workspace"},
                 workspaceUsed: {
                     workspaceCount: 1,
-                    workspaceList: [newFixtures.workspaceJson()]
+                    workspaceList: [rspecFixtures.workspaceJson()]
                 }
             }, overrides);
             attributes.instance = attributes.instance || {};

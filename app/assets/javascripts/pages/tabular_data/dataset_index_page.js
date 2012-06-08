@@ -112,7 +112,7 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
         } else {
             var loggedInUser = chorus.session.user();
 
-            if (loggedInUser.get("id") != this.workspace.get("ownerId") &&
+            if (loggedInUser.get("id") != this.workspace.get("owner").id &&
                 !loggedInUser.get("admin"))
             {
                 targetButton.helpText = t("dataset.import.need_sandbox_no_permissions");

@@ -1,6 +1,6 @@
 describe("chorus.pages.DatasetShowPage", function() {
     beforeEach(function() {
-        this.workspace = newFixtures.workspace({
+        this.workspace = rspecFixtures.workspace({
             id: '100',
             "sandboxInfo": {
                 databaseId: "4",
@@ -14,13 +14,13 @@ describe("chorus.pages.DatasetShowPage", function() {
         });
         chorus.page = {workspace: this.workspace};
 
-        var sanboxInfo = this.workspace.get("sandboxInfo")
+        var sandboxInfo = this.workspace.get("sandboxInfo")
 
         this.dataset = newFixtures.dataset.sourceTable({
             id: this.datasetId,
-            instance: { id: sanboxInfo.instanceId, name: sanboxInfo.instanceName},
-            databaseName: sanboxInfo.databaseName,
-            schemaName: sanboxInfo.schemaName,
+            instance: { id: sandboxInfo.instanceId, name: sandboxInfo.instanceName},
+            databaseName: sandboxInfo.databaseName,
+            schemaName: sandboxInfo.schemaName,
             importFrequency: null,
             objectName: 'tableName',
             workspace: { id: this.workspace.get("id") }

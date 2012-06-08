@@ -283,7 +283,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#setWorkspace", function() {
         beforeEach(function() {
-            this.newWorkspace = newFixtures.workspace();
+            this.newWorkspace = rspecFixtures.workspace();
             this.dataset.setWorkspace(this.newWorkspace);
         });
 

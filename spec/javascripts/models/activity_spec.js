@@ -312,7 +312,7 @@ describe("chorus.models.Activity", function() {
     describe("#workspace", function() {
         context("with an workspace", function() {
             beforeEach(function() {
-                this.model = fixtures.activity({workspace: newFixtures.workspaceJson()})
+                this.model = fixtures.activity({workspace: rspecFixtures.workspaceJson()})
             })
 
             it("creates a workspace", function() {
@@ -354,7 +354,7 @@ describe("chorus.models.Activity", function() {
             context("with a workspace", function() {
                 beforeEach(function() {
                     this.model = fixtures.activity({
-                        workspace: newFixtures.workspaceJson(),
+                        workspace: rspecFixtures.workspaceJson(),
                         workfile: {
                             id: 10001,
                             name: "my_workfile"

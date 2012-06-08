@@ -679,7 +679,7 @@ describe("handlebars", function() {
 
             context("when there is exactly 1 'found in' workspace", function() {
                 beforeEach(function() {
-                    this.workspaceList = new chorus.collections.WorkspaceSet([newFixtures.workspace()]);
+                    this.workspaceList = new chorus.collections.WorkspaceSet([rspecFixtures.workspace()]);
                     this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
                 itIncludesTheFoundInWorkspaceInformation();
@@ -695,7 +695,7 @@ describe("handlebars", function() {
 
             context("when there are exactly 2 'found in' workspaces", function() {
                 beforeEach(function() {
-                    this.workspaceList = new chorus.collections.WorkspaceSet([newFixtures.workspace(), newFixtures.workspace()]);
+                    this.workspaceList = new chorus.collections.WorkspaceSet([rspecFixtures.workspace(), rspecFixtures.workspace()]);
                     this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
 
@@ -708,7 +708,7 @@ describe("handlebars", function() {
 
             context("when there are exactly 3 'found in' workspaces", function() {
                 beforeEach(function() {
-                    this.workspaceList = new chorus.collections.WorkspaceSet([newFixtures.workspace(), newFixtures.workspace(), newFixtures.workspace()]);
+                    this.workspaceList = new chorus.collections.WorkspaceSet([rspecFixtures.workspace(), rspecFixtures.workspace(), rspecFixtures.workspace()]);
                     this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
                 });
 

@@ -119,7 +119,7 @@ describe("chorus.models.Workfile", function() {
     describe("#sandbox", function() {
         context("when the workfile's workspace has been fetched", function() {
             beforeEach(function() {
-                spyOn(this.model, "workspace").andReturn(newFixtures.workspace({
+                spyOn(this.model, "workspace").andReturn(rspecFixtures.workspace({
                     sandboxInfo: {
                         databaseId: 4,
                         databaseName: "db",
