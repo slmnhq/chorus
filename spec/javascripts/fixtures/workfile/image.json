@@ -29,7 +29,11 @@
       },
       "permission": [
         "admin"
-      ]
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false
     },
     "owner": {
       "id": 19,
@@ -80,13 +84,13 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-05-24T16:53:25-07:00",
-      "updated_at": "2012-05-24T16:53:25-07:00",
-      "content_url": "/system/workfile_versions/contents/000/000/003/original/small1.gif?1337903605",
-      "icon_url": "/system/workfile_versions/contents/000/000/003/icon/small1.gif?1337903605",
+      "created_at": "2012-06-07T23:56:00Z",
+      "updated_at": "2012-06-07T23:56:00Z",
+      "content_url": "/system/workfile_versions/contents/000/000/003/original/small1.gif?1339113360",
+      "icon_url": "/system/workfile_versions/contents/000/000/003/icon/small1.gif?1339113360",
       "content": null
     },
-    "file_name": "small1.gif",
+    "file_name": "workfile.doc",
     "file_type": "image",
     "latest_version_num": 1
   }

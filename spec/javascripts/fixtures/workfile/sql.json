@@ -29,7 +29,11 @@
       },
       "permission": [
         "admin"
-      ]
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false
     },
     "owner": {
       "id": 9,
@@ -80,13 +84,13 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-05-24T16:53:24-07:00",
-      "updated_at": "2012-05-24T16:53:24-07:00",
-      "content_url": "/system/workfile_versions/contents/000/000/001/original/workfile.sql?1337903604",
+      "created_at": "2012-06-07T23:56:00Z",
+      "updated_at": "2012-06-07T23:56:00Z",
+      "content_url": "/system/workfile_versions/contents/000/000/001/original/workfile.sql?1339113360",
       "icon_url": null,
       "content": "SELECT test FROM rspec WHERE lame = 'false';\n"
     },
-    "file_name": "workfile.sql",
+    "file_name": "workfile.doc",
     "file_type": "sql",
     "latest_version_num": 1
   }

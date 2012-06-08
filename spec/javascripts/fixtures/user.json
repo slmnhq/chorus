@@ -1,17 +1,17 @@
 {
-    "response": {
-        "id": 3766,
-        "username": "user130",
-        "first_name": "John",
-        "last_name": "Doe",
-        "email": "person157@example.com",
-        "title": "",
-        "dept": "",
-        "notes": "",
-        "admin": false,
-        "image": {
-            "original": "/images/original/missing.png",
-            "icon": "/images/icon/missing.png"
-        }
+  "response": {
+    "id": 6,
+    "username": "user4",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "person5@example.com",
+    "title": "Grand Poo Bah",
+    "dept": "Corporation Corp., Inc.",
+    "notes": "One of our top performers",
+    "admin": false,
+    "image": {
+      "original": "/images/default-user-icon.png",
+      "icon": "/images/default-user-icon.png"
     }
+  }
 }
