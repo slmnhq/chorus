@@ -45,7 +45,7 @@ describe HadoopInstancesController do
 
   describe "#update" do
     context "with valid attributes" do
-      let(:attributes) { {'name' => 'new_name'} }
+      let(:attributes) { { 'name' => 'new_name' } }
       let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
 
       before do
@@ -59,7 +59,7 @@ describe HadoopInstancesController do
     end
 
     context "with invalid attributes" do
-      let(:invalid_attributes) { {'name' => ''} }
+      let(:invalid_attributes) { { 'name' => '' } }
       let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
 
       before do
@@ -92,6 +92,12 @@ describe HadoopInstancesController do
       instance = FactoryGirl.create(:hadoop_instance, :name => "hadoop3")
       get :show, :id => instance.id
       decoded_response.name.should == "hadoop3"
+    end
+
+    it "generates a hadoop instance fixture", :fixture => true do
+      instance = FactoryGirl.create(:hadoop_instance, :name => "hadoop3")
+      get :show, :id => instance.id
+      save_fixture("hadoopInstance.json")
     end
   end
 end

@@ -3,7 +3,7 @@ describe("chorus.views.SearchInstance", function() {
         this.result = fixtures.searchResult();
 
         this.result.set({query: "foo"});
-        this.model = newFixtures.hadoopInstance();
+        this.model = rspecFixtures.hadoopInstance();
         this.view = new chorus.views.SearchInstance({ model: this.model });
         this.view.render()
     });

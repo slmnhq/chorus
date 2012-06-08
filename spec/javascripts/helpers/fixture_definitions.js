@@ -114,7 +114,7 @@ window.rspecFixtureDefinitions = {
 //
 //    config: {},
 //
-//    hadoopInstance: {},
+    hadoopInstance: {},
 
     image: {},
 

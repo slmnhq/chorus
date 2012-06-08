@@ -60,8 +60,8 @@ describe("chorus.pages.DashboardPage", function() {
             ], { accessible: true }, { accessible: true });
 
             this.server.completeFetchFor(new chorus.collections.HadoopInstanceSet(), [
-                                         newFixtures.hadoopInstance(),
-                                         newFixtures.hadoopInstance()
+                                         rspecFixtures.hadoopInstance(),
+                                         rspecFixtures.hadoopInstance()
             ]);
         });
 

@@ -34,9 +34,9 @@ describe("chorus.views.InstanceList", function() {
             ]);
 
             this.server.completeFetchFor(this.hadoopInstances, [
-                newFixtures.hadoopInstance({name : "Hadoop9", id: "h9"}),
-                newFixtures.hadoopInstance({name : "hadoop1", id: "h1"}),
-                newFixtures.hadoopInstance({name : "Hadoop10", id: "h10"})
+                rspecFixtures.hadoopInstance({name : "Hadoop9", id: "h9"}),
+                rspecFixtures.hadoopInstance({name : "hadoop1", id: "h1"}),
+                rspecFixtures.hadoopInstance({name : "Hadoop10", id: "h10"})
             ]);
         });
 

@@ -1,6 +1,6 @@
 describe("chorus.pages.HdfsEntryIndexPage", function() {
     beforeEach(function() {
-        this.instance = newFixtures.hadoopInstance({id: "1234", name: "instance Name"});
+        this.instance = rspecFixtures.hadoopInstance({id: "1234", name: "instance Name"});
         this.page = new chorus.pages.HdfsEntryIndexPage("1234", "foo");
     });
 

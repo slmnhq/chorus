@@ -89,9 +89,9 @@ describe("chorus.views.InstanceListSidebar", function() {
                 context("when the instance is a hadoop instance", function() {
                     beforeEach(function() {
                         setLoggedInUser({ username: "benjamin", admin: false});
-                        this.instance = newFixtures.hadoopInstance({
+                        this.instance = rspecFixtures.hadoopInstance({
                             name: "Harry's House of Glamour",
-                            instanceVersion: "99.999",
+                            version: "99.999",
                             owner: {id: chorus.session.user().get('id')}
                         });
                         chorus.PageEvents.broadcast("instance:selected", this.instance);
