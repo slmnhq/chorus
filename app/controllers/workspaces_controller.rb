@@ -1,9 +1,12 @@
 class WorkspacesController < ApplicationController
   def index
-    workspaces = WorkspaceAccess.workspaces_for(current_user).order("lower(name) ASC")
+    if params[:user_id]
+      workspaces = WorkspaceAccess.member_of_workspaces(current_user)
+    else
+      workspaces = WorkspaceAccess.workspaces_for(current_user)
+    end
     workspaces = workspaces.active if params[:active]
-    workspaces = WorkspaceAccess.member_of_workspaces(current_user) if params[:user_id]
-    present workspaces.paginate(params.slice(:page, :per_page))
+    present workspaces.order("lower(name) ASC").paginate(params.slice(:page, :per_page))
   end
 
   def create

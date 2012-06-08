@@ -46,14 +46,13 @@ describe WorkspacesController do
     it "scopes by active status" do
       get :index, :active => 1
       decoded_response.size.should == 2
-      decoded_response[0].name.should == "secret1"
-      decoded_response[1].name.should == "Work"
+      decoded_response.map(&:name).should =~ ["secret1", "Work"]
     end
 
     it "scopes by memberships" do
       get :index, :user_id => owner.id
       decoded_response.size.should == 2
-      decoded_response[1].name.should == "secret1"
+      decoded_response.map(&:name).should =~ ["secret1", "Work"]
     end
 
     describe "pagination" do
