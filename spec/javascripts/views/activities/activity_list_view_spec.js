@@ -1,12 +1,10 @@
 describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.ActivitySet([
+        this.collection = chorus.collections.ActivitySet.forDashboard();
+        this.collection.reset([
             fixtures.activities.NOTE_ON_CHORUS_VIEW(),
             fixtures.activities.NOTE_ON_CHORUS_VIEW()
-        ], {
-            entityType: "instances",
-            entityId: 12
-        });
+        ]);
         this.collection.loaded = true;
         this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass: "foo_class", type: "Foo"});
     });

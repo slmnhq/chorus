@@ -94,59 +94,22 @@ describe("chorus.models.Abstract", function() {
         });
 
         describe("activities", function() {
-            it("throws when the model does not have an entityType", function() {
-                try {
-                    this.models.activities();
-                    expect('never').toBe('here');
-                } catch (e) {
-                    // test passed
-                }
+            var model, activities;
+
+            beforeEach(function() {
+                model = new chorus.models.User({ id: 24 });
+                activities = model.activities();
             });
 
-            context("with an entityType", function() {
-                beforeEach(function() {
-                    this.model.entityType = "some_entity";
-                    this.model.set({id: "1"});
-                    this.activitySet = this.model.activities();
+            describe("when the model is invalidated", function() {
+                it("fetches the activities", function() {
+                    model.trigger("invalidated");
+                    expect(activities).toHaveBeenFetched();
                 });
+            });
 
-                it("has the right 'entityType' and 'entityId'", function() {
-                    expect(this.activitySet.attributes.entityType).toBe("some_entity");
-                    expect(this.activitySet.attributes.entityId).toBe("1");
-                });
-
-                it("returns the same activities object over each call", function() {
-                    expect(this.model.activities()).toBe(this.activitySet);
-                });
-
-                context("when a model specifies an entityId", function() {
-                    beforeEach(function() {
-                        delete this.model._activities;
-                        this.model.entityId = "100";
-                        this.activitySet = this.model.activities();
-                    });
-
-                    it("has the right 'entityType' and 'entityId'", function() {
-                        expect(this.activitySet.attributes.entityType).toBe("some_entity");
-                        expect(this.activitySet.attributes.entityId).toBe("100");
-                    });
-
-                    it("returns the same activities object over each call", function() {
-                        expect(this.model.activities()).toBe(this.activitySet);
-                    });
-
-                });
-
-                describe("when the model is invalidated", function() {
-                    beforeEach(function() {
-                        this.model.trigger("invalidated");
-                    });
-
-                    it("fetches the activities", function() {
-                        expect(_.last(this.server.requests).url).toBe(this.activitySet.url());
-                    });
-                });
-
+            it("memoizes", function() {
+                expect(model.activities()).toBe(activities);
             });
         });
 

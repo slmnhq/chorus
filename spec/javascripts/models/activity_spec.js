@@ -103,7 +103,7 @@ describe("chorus.models.Activity", function() {
     describe("#promoteToInsight", function() {
         beforeEach(function() {
             this.success = jasmine.createSpy("success");
-            this.model.collection = new chorus.collections.ActivitySet();
+            this.model.collection = chorus.collections.ActivitySet.forDashboard();
             this.model.promoteToInsight({ success: this.success });
         });
 
