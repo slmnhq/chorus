@@ -73,112 +73,54 @@ describe("chorus.views.ActivityList", function() {
                             fullName: "John Commenter"
                         },
                         text: 'I love you all'
+                    }),
+                    new chorus.models.Comment({
+                        author: {
+                            id: 10102
+                        },
+                        text: 'I love you all'
+                    }),
+                    new chorus.models.Comment({
+                        author: {
+                            id: 10103
+                        },
+                        text: 'I love you all'
                     })
                 ]);
 
-                // right now, activities and comments don't include their
-                // author's image urls
-                comments.at(0).author().set({ image: { icon: "foo" } });
-                comments.at(1).author().set({ image: { icon: "bar" } });
-
-                var otherComments = this.collection.at(1).comments();
-                otherComments.reset([]);
                 this.view.render();
-            })
-
-            it("displays comments for each activity, if any", function() {
-                expect(this.view.$("li[data-activity-id]:eq(0) .comments")).toExist();
-                expect(this.view.$("li[data-activity-id]:eq(0) .comments li").length).toBe(2);
-                expect(this.view.$("li[data-activity-id]:eq(1) .comments")).not.toExist();
-            })
-
-            it("displays information for each comment", function() {
-                var commentLis = this.view.$("li[data-activity-id]:eq(0) .comments li");
-                var comments = this.collection.at(0).comments();
-                expect(commentLis.length).toBe(comments.length);
-
-                expect(commentLis.eq(0).find(".icon a")).toHaveAttr("href", comments.at(0).author().showUrl());
-                expect(commentLis.eq(0).find(".icon a img")).toHaveAttr("src", comments.at(0).author().fetchImageUrl());
-                expect(commentLis.eq(0).find(".comment_header a")).toHaveText(comments.at(0).author().displayName());
-                expect(commentLis.eq(0).find(".comment_content .actions .timestamp")).toExist();
-
-                expect(commentLis.eq(1).find(".icon a")).toHaveAttr("href", comments.at(1).author().showUrl());
-                expect(commentLis.eq(1).find(".icon a img")).toHaveAttr("src", comments.at(1).author().fetchImageUrl());
-                expect(commentLis.eq(1).find(".comment_header a")).toHaveText(comments.at(1).author().displayName());
-                expect(commentLis.eq(1).find(".comment_content .timestamp")).toExist();
             });
 
-            context("when there are less than three comments", function() {
-                it("does not render a 'more comments' link", function() {
-                    expect(this.view.$("li[data-activity-id]:eq(0) .morelinks a.more")).not.toExist();
-                })
-
-                it("does not apply the 'more' class to any comments", function() {
-                    expect(this.view.$(".comments li.more")).not.toExist();
-                })
-            });
-
-            context("when there are three or more comments", function() {
+            describe("when the more link is clicked", function() {
                 beforeEach(function() {
-                    var comments = this.collection.at(0).comments();
-                    comments.add([
-                        new chorus.models.Comment({
-                            author: {
-                                id: 10102
-                            },
-                            text: 'I love you all'
-                        }),
-                        new chorus.models.Comment({
-                            author: {
-                                id: 10103
-                            },
-                            text: 'I love you all'
-                        })
-                    ]);
-                    this.view.render();
+                    spyOnEvent(this.view, "content:changed");
+                    this.view.$("li[data-activity-id]:eq(0) .comments a.more").click();
+                });
+
+                it("adds the 'more' class to the comments section", function() {
+                    expect(this.view.$("li[data-activity-id]:eq(0) .comments")).toHaveClass("more");
                 })
 
-                it("renders a 'more comments' link", function() {
-                    expect(this.view.$("li[data-activity-id]:eq(0) .comments a.more")).toExist();
+                it("triggers a content:changed event", function() {
+                    expect("content:changed").toHaveBeenTriggeredOn(this.view);
                 })
 
-                it("applies the 'more' class to trailing elements", function() {
-                    expect(this.view.$(".comments li:eq(0)")).not.toHaveClass("more");
-                    expect(this.view.$(".comments li:eq(1)")).not.toHaveClass("more");
-                    expect(this.view.$(".comments li:eq(2)")).toHaveClass("more");
-                })
-
-                describe("when the more link is clicked", function() {
+                describe("when the less link is clicked", function() {
                     beforeEach(function() {
-                        spyOnEvent(this.view, "content:changed");
-                        this.view.$("li[data-activity-id]:eq(0) .comments a.more").click();
+                        resetBackboneEventSpies(this.view);
+                        this.view.$("li[data-activity-id]:eq(0) .comments a.less").click();
                     });
 
-                    it("adds the 'more' class to the comments section", function() {
-                        expect(this.view.$("li[data-activity-id]:eq(0) .comments")).toHaveClass("more");
+                    it("removes the 'more' class to the comments section", function() {
+                        expect(this.view.$("li[data-activity-id]:eq(0) .comments")).not.toHaveClass("more");
                     })
 
                     it("triggers a content:changed event", function() {
                         expect("content:changed").toHaveBeenTriggeredOn(this.view);
-                    })
-
-                    describe("when the less link is clicked", function() {
-                        beforeEach(function() {
-                            resetBackboneEventSpies(this.view);
-                            this.view.$("li[data-activity-id]:eq(0) .comments a.less").click();
-                        });
-
-                        it("removes the 'more' class to the comments section", function() {
-                            expect(this.view.$("li[data-activity-id]:eq(0) .comments")).not.toHaveClass("more");
-                        })
-
-                        it("triggers a content:changed event", function() {
-                            expect("content:changed").toHaveBeenTriggeredOn(this.view);
-                        })
-                    })
-                })
-            })
-        })
+                    });
+                });
+            });
+        });
 
         describe("pagination", function() {
             context("with full pagination information in the response", function() {
