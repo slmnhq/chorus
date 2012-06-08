@@ -28,6 +28,9 @@
             &.collapsed {
                 .separator {
                     display: none;
+                    &.close {
+                        display: inline-block;
+                    }
                 }
             }
         }
