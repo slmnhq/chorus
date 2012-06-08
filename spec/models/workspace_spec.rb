@@ -1,7 +1,12 @@
 require "spec_helper"
 describe Workspace do
   describe "validations" do
+    before(:each) do
+      FactoryGirl.create(:workspace)
+    end
+
     it { should validate_presence_of :name }
+    it { should validate_uniqueness_of(:name).case_insensitive }
   end
 
   describe ".active" do
