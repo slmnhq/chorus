@@ -180,6 +180,18 @@ describe WorkspacesController do
         response.should be_success
       end
 
+      it "sets has_changed_settings on the workspace to true" do
+        member = FactoryGirl.create(:user)
+        member.workspaces << workspace
+
+        put :update, :id => workspace.id, :workspace => {
+            :owner_id => member.id.to_s,
+            :public => "false"
+        }
+
+        workspace.reload.has_changed_settings.should be_true
+      end
+
       it "allows archiving the workspace" do
         put :update, :id => workspace.id, :workspace => {
           :archived => "true"

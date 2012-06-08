@@ -21,7 +21,12 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
 
     decideIfQuickstart: function() {
         if (this.model.owner().get("id") === chorus.session.user().get("id")){
-            if (!this.quickstartNavigated && !chorus.views.WorkspaceQuickstart.quickstartFinishedFor(this.workspaceId)) {
+            if (!this.quickstartNavigated && (
+                this.model.get("hasAddedMember") == false ||
+                this.model.get("hasAddedWorkfile") == false ||
+                this.model.get("hasAddedSandbox") == false ||
+                this.model.get("hasChangedSettings") == false)) {
+
                 chorus.router.navigate("/workspaces/" + this.workspaceId + "/quickstart");
                 return;
             }

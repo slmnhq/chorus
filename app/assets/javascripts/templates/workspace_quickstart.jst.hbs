@@ -4,6 +4,7 @@
 <a class="dismiss" href="{{workspaceUrl}}">{{t "workspace.quickstart.dismiss"}}</a>
 
 <div class="boxes">
+    {{#if needsMember}}
     <div class="add_team_members info_box">
         <img src="images/workspaces/user_quick_start.png"/>
         <div class="details">
@@ -11,7 +12,9 @@
             <span class="text">{{t "workspace.quickstart.add_team_members.text"}}</span>
         </div>
     </div>
+    {{/if}}
 
+    {{#if needsSettings}}
     <div class="edit_workspace_settings info_box">
         <img src="images/workspaces/config_quick_start.png"/>
         <div class="details">
@@ -19,7 +22,9 @@
             <span class="text">{{t "workspace.quickstart.edit_workspace_settings.text"}}</span>
         </div>
     </div>
+    {{/if}}
 
+    {{#if needsSandbox}}
     <div class="add_sandbox info_box">
         <img src="images/workspaces/sandbox_quick_start.png"/>
         <div class="details">
@@ -27,7 +32,9 @@
             <span class="text">{{t "workspace.quickstart.add_sandbox.text"}}</span>
         </div>
     </div>
+    {{/if}}
 
+    {{#if needsWorkfile}}
     <div class="add_workfiles info_box">
         <img src="images/workspaces/work_files_quick_start.png"/>
         <div class="details">
@@ -35,4 +42,6 @@
             <span class="text">{{t "workspace.quickstart.add_workfiles.text"}}</span>
         </div>
     </div>
+    {{/if}}
+
 </div>

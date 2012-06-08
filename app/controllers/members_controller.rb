@@ -8,6 +8,7 @@ class MembersController < ApplicationController
     workspace = Workspace.find(params[:workspace_id])
     authorize! :administrative_edit, workspace
     workspace.member_ids = params[:member_ids]
+    workspace.has_added_member = true
     workspace.save!
     present workspace.reload.members
   end

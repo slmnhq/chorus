@@ -110,6 +110,11 @@ describe MembersController do
           post :create, parameters
         }.should change(Membership, :count).by(2)
       end
+
+      it "should set has_added_member to true" do
+        post :create, parameters
+        workspace.reload.has_added_member.should be_true
+      end
     end
 
     context "change some of the members for the workspace" do

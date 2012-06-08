@@ -40,6 +40,7 @@ class WorkspacesController < ApplicationController
     end
 
     authorize! :member_edit, workspace
+    workspace.has_changed_settings = true
     workspace.update_attributes!(params[:workspace])
     present workspace
   end

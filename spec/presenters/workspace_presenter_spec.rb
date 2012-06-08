@@ -24,6 +24,10 @@ describe WorkspacePresenter, :type => :view do
       @hash.should have_key(:public)
       @hash.should have_key(:image)
       @hash.should have_key(:permission)
+      @hash.should have_key(:has_added_member)
+      @hash.should have_key(:has_added_workfile)
+      @hash.should have_key(:has_added_sandbox)
+      @hash.should have_key(:has_changed_settings)
     end
 
     it "uses the image presenter to serialize the image urls" do

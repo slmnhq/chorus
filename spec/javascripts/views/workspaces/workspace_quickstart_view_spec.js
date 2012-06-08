@@ -1,6 +1,5 @@
 describe("chorus.views.WorkspaceQuickstart", function() {
     beforeEach(function() {
-        $.cookie("quickstart_999", null);
         this.model = newFixtures.workspace({id: "999"});
         this.model.loaded = true;
         spyOn(chorus.router, "navigate")
@@ -16,68 +15,58 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         expect(this.view.$(".body")).toContainTranslation("workspace.quickstart.body");
     });
 
-    context("when the quickstart cookie does not yet exist", function() {
-        beforeEach(function() {
-            $.cookie("quickstart_999", null);
-            this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
-        });
 
-        it("creates the corresponding quickstart cookie", function() {
-            var jsonString = $.cookie("quickstart_999");
-            var cookie = JSON.parse(jsonString);
-            expect(cookie).toEqual({
-                WorkspaceEditMembersDone: false,
-                WorkspaceSettingsDone: false,
-                SandboxNewDone: false,
-                WorkfilesImportDone: false
+    context("when the quickstart guide is shown", function() {
+        context("the tasks haven't been done", function() {
+            beforeEach(function() {
+                this.model.set({
+                    hasAddedMember: false,
+                    hasAddedWorkfile: false,
+                    hasAddedSandbox: false,
+                    hasChangedSettings: false
+                })
+                this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
             });
-        });
-    });
 
-    context("when the quickstart cookie already exists", function() {
-        beforeEach(function() {
-            var quickstartCookie = {
-                WorkspaceEditMembersDone: true,
-                WorkspaceSettingsDone: false,
-                SandboxNewDone: true,
-                WorkfilesImportDone: false
-            }
-            $.cookie("quickstart_999", JSON.stringify(quickstartCookie));
-            this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
-        });
-
-        it("keeps the original cookie values", function() {
-            var jsonString = $.cookie("quickstart_999");
-            var cookie = JSON.parse(jsonString);
-            expect(cookie).toEqual({
-                WorkspaceEditMembersDone: true,
-                WorkspaceSettingsDone: false,
-                SandboxNewDone: true,
-                WorkfilesImportDone: false
+            it("shows the correct boxes", function() {
+                this.view.render();
+                expect(this.view.$(".add_team_members")).toExist();
+                expect(this.view.$(".edit_workspace_settings")).toExist();
+                expect(this.view.$(".add_sandbox")).toExist();
+                expect(this.view.$(".add_workfiles")).toExist();
             });
         });
 
-        it("hides the correct boxes", function() {
-            this.view.render();
-            expect(this.view.$(".add_team_members")).toHaveClass("hidden");
-            expect(this.view.$(".edit_workspace_settings")).not.toHaveClass("hidden");
-            expect(this.view.$(".add_sandbox")).toHaveClass("hidden");
-            expect(this.view.$(".add_workfiles")).not.toHaveClass("hidden");
+        context("the tasks have mostly been done", function() {
+            beforeEach(function() {
+                this.model.set({
+                    hasAddedMember: false,
+                    hasAddedWorkfile: true,
+                    hasAddedSandbox: true,
+                    hasChangedSettings: true
+                });
+                this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
+            });
 
-            //make sure the other boxes are also hidden correctly
-            var quickstartCookie = {
-                WorkspaceEditMembersDone: false,
-                WorkspaceSettingsDone: true,
-                SandboxNewDone: false,
-                WorkfilesImportDone: true
-            }
-            $.cookie("quickstart_999", JSON.stringify(quickstartCookie));
-            this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
-            this.view.render();
-            expect(this.view.$(".add_team_members")).not.toHaveClass("hidden");
-            expect(this.view.$(".edit_workspace_settings")).toHaveClass("hidden");
-            expect(this.view.$(".add_sandbox")).not.toHaveClass("hidden");
-            expect(this.view.$(".add_workfiles")).toHaveClass("hidden");
+            it("hides the correct boxes", function() {
+                this.view.render();
+                expect(this.view.$(".add_team_members")).toExist();
+                expect(this.view.$(".edit_workspace_settings")).not.toExist();
+                expect(this.view.$(".add_sandbox")).not.toExist();
+                expect(this.view.$(".add_workfiles")).not.toExist();
+            });
+
+            context("when finishing the last item", function() {
+                beforeEach(function() {
+                    this.view.$(".add_team_members a").click();
+                    this.view.$("li .add").click();
+                    this.view.$("button.submit").click();
+                });
+
+                it("redirects to the regular workspace page", function() {
+                    expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/999");
+                });
+            });
         });
     });
 
@@ -101,8 +90,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
         it("hides the box when the link is clicked", function() {
             this.view.$(".add_team_members a").click();
-            expect(this.view.$(".add_team_members")).toHaveClass("hidden");
-            expect(JSON.parse($.cookie("quickstart_999")).WorkspaceEditMembersDone).toBeTruthy();
+            expect(this.view.$(".add_team_members")).not.toExist();
         })
     });
 
@@ -137,8 +125,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
         it("hides the box when the link is clicked", function() {
             link.click();
-            expect(this.view.$(".add_sandbox")).toHaveClass("hidden");
-            expect(JSON.parse($.cookie("quickstart_999")).SandboxNewDone).toBeTruthy();
+            expect(this.view.$(".add_sandbox")).not.toExist();
         })
     });
 
@@ -169,8 +156,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
         it("hides the box when the link is clicked", function() {
             link.click();
-            expect(this.view.$(".add_workfiles")).toHaveClass("hidden");
-            expect(JSON.parse($.cookie("quickstart_999")).WorkfilesImportDone).toBeTruthy();
+            expect(this.view.$(".add_workfiles")).not.toExist();
         })
     });
 
@@ -203,8 +189,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         });
 
         it("hides the edit workspace box", function() {
-            expect(this.view.$(".edit_workspace_settings")).toHaveClass("hidden");
-            expect(JSON.parse($.cookie("quickstart_999")).WorkspaceSettingsDone).toBeTruthy();
+            expect(this.view.$(".edit_workspace_settings")).not.toExist();
         });
 
         describe("when the page re-renders", function() {
@@ -239,7 +224,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         });
     })
 
-    describe("clicking the dismiss link", function() {
+    describe("clicking the dismiss link", function() { // TODO
         beforeEach(function() {
             chorus.router.navigate.reset();
             this.view.$("a.dismiss").click();
@@ -247,57 +232,6 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
         it("navigates to the normal workspace show page", function() {
             expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/999");
-        });
-
-        it("deletes the quickstart cookie", function() {
-            expect($.cookie("quickstart_999")).toBeNull();
-        });
-    });
-});
-
-describe("chorus.views.WorkspaceQuickstart class methods", function() {
-    describe("#quickstartFinishedFor", function() {
-        context("when all of the values are true", function() {
-            beforeEach(function() {
-                var cookie = JSON.stringify({
-                    WorkspaceEditMembersDone: true,
-                    WorkspaceSettingsDone: true,
-                    SandboxNewDone: true,
-                    WorkfilesImportDone: true
-                });
-
-                $.cookie("quickstart_5", cookie);
-            });
-
-            it("returns true", function() {
-                expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor(5)).toBeTruthy();
-            });
-        });
-
-        context("when not all of the values are true", function() {
-            beforeEach(function() {
-                var cookie = JSON.stringify({
-                    WorkspaceEditMembersDone: true,
-                    WorkspaceSettingsDone: true,
-                    SandboxNewDone: false,
-                    WorkfilesImportDone: true
-                });
-
-                $.cookie("quickstart_5", cookie);
-            });
-            it("returns false", function() {
-                expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor(5)).toBeFalsy();
-            });
-        });
-
-        context("when the cookie does not exist", function() {
-            beforeEach(function() {
-                $.cookie("quickstart_5", null);
-            });
-
-            it("returns true", function() {
-                expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor(5)).toBeTruthy();
-            });
         });
     });
 });

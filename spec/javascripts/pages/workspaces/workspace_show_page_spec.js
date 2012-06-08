@@ -1,8 +1,4 @@
 describe("chorus.pages.WorkspaceShowPage", function() {
-    beforeEach(function() {
-        spyOn($, 'cookie').andReturn(null)
-    });
-
     describe("#initialize", function() {
         beforeEach(function() {
             this.page = new chorus.pages.WorkspaceShowPage('4');
@@ -27,7 +23,13 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         describe("when we are in quickstart mode", function() {
             context("as the workspace owner", function(){
                 beforeEach(function() {
-                    spyOn(chorus.views.WorkspaceQuickstart, "quickstartFinishedFor").andReturn(false);
+                    this.model = newFixtures.workspace({
+                        ownerId: "4",
+                        hasAddedMember: false,
+                        hasAddedWorkfile: false,
+                        hasAddedSandbox: false,
+                        hasChangedSettings: false
+                    })
                     spyOn(chorus.router, "navigate");
 
                     this.page = new chorus.pages.WorkspaceShowPage('4');
@@ -37,11 +39,10 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
                 describe("the fetch completes", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.page.model, newFixtures.workspace({ "ownerId" : "4" }));
+                        this.server.completeFetchFor(this.page.model, this.model);
                     });
 
                     it("navigates to the quickstart page", function() {
-                        expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor).toHaveBeenCalledWith('4');
                         expect(chorus.router.navigate).toHaveBeenCalledWith("/workspaces/4/quickstart");
                     });
 
@@ -54,7 +55,12 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
             context("as somebody else", function() {
                 beforeEach(function() {
-                    spyOn(chorus.views.WorkspaceQuickstart, "quickstartFinishedFor").andReturn(false);
+                    this.page.model.set({
+                        hasAddedMember: false,
+                        hasAddedWorkfile: false,
+                        hasAddedSandbox: false,
+                        hasChangedSettings: false
+                    })
                     spyOn(chorus.router, "navigate");
                     this.page = new chorus.pages.WorkspaceShowPage('4');
                     this.page.model._owner = { id: 9877 };
@@ -69,7 +75,13 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
         describe("when we are not in quickstart mode", function() {
             beforeEach(function() {
-                spyOn(chorus.views.WorkspaceQuickstart, "quickstartFinishedFor").andReturn(true);
+                this.model = newFixtures.workspace({
+                    ownerId: "4",
+                    hasAddedMember: true,
+                    hasAddedWorkfile: true,
+                    hasAddedSandbox: true,
+                    hasChangedSettings: true
+                })
                 spyOn(chorus.router, "navigate");
                 this.page = new chorus.pages.WorkspaceShowPage('4');
                 this.page.model._owner = { id: 4 };
@@ -78,11 +90,10 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
             describe("the fetch completes", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.page.model, newFixtures.workspace({ "ownerId" : "4" }));
+                    this.server.completeFetchFor(this.page.model, this.model);
                 });
 
                 it("navigates to the quickstart page", function() {
-                    expect(chorus.views.WorkspaceQuickstart.quickstartFinishedFor).toHaveBeenCalledWith('4');
                     expect(chorus.router.navigate).not.toHaveBeenCalled();
                 });
             });

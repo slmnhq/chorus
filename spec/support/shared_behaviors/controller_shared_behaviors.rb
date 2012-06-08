@@ -73,5 +73,8 @@ shared_examples_for "uploading a new workfile" do
       WorkfileVersion.last.contents_file_name.should == "workfile.sql"
     end
 
+    it "sets has_added_workfile on the workspace to true" do
+      workspace.reload.has_added_workfile.should be_true
+    end
   end
 end

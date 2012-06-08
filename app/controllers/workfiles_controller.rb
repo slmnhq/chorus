@@ -57,6 +57,9 @@ class WorkfilesController < ApplicationController
 
     workfile.create_new_version(current_user, source_file, "")
 
+    workspace.has_added_workfile = true
+    workspace.save!
+
     workfile
   end
 end
