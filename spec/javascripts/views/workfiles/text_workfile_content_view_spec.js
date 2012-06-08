@@ -1,7 +1,7 @@
 describe("chorus.views.TextWorkfileContentView", function() {
     beforeEach(function() {
         chorus._navigated();
-        this.textfile = newFixtures.workfile.text();
+        this.textfile = rspecFixtures.workfile.text();
         spyOn(this.textfile.workspace(), 'isActive').andReturn(true);
         this.textfile.content("select * from foos where bar_id = 1;")
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile});

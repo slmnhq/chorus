@@ -1,7 +1,7 @@
 describe("chorus.pages.WorkfileIndexPage", function() {
     beforeEach(function() {
         this.workspace = newFixtures.workspace();
-        this.model = newFixtures.workfile.sql({workspace: {id: this.workspace.id}});
+        this.model = rspecFixtures.workfile.sql({workspace: {id: this.workspace.id}});
         this.page = new chorus.pages.WorkfileIndexPage(this.workspace.id);
     });
 
@@ -87,8 +87,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
             this.server.completeFetchAllFor(this.page.collection, [
-                newFixtures.workfile.sql({fileName: "bar"}),
-                newFixtures.workfile.sql({fileName: "foo"})
+                rspecFixtures.workfile.sql({fileName: "bar"}),
+                rspecFixtures.workfile.sql({fileName: "foo"})
             ]);
         });
 

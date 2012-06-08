@@ -162,9 +162,9 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
             describe("when workfiles are selected", function() {
                 beforeEach(function() {
-                    this.workfile1 = newFixtures.workfile.sql({ id: 1, fileName: "greed.sql", fileType: "sql" });
-                    this.workfile2 = newFixtures.workfile.text({ id: 2, fileName: "generosity.cpp", fileType: "cpp" });
-                    this.workfile3 = newFixtures.workfile.binary({ id: 3, fileName: "sloth", fileType: "N/A" });
+                    this.workfile1 = rspecFixtures.workfile.sql({ id: 1, fileName: "greed.sql", fileType: "sql" });
+                    this.workfile2 = rspecFixtures.workfile.text({ id: 2, fileName: "generosity.cpp", fileType: "cpp" });
+                    this.workfile3 = rspecFixtures.workfile.binary({ id: 3, fileName: "sloth", fileType: "N/A" });
 
                     this.modalSpy.lastModal().trigger("files:selected", [this.workfile1, this.workfile2, this.workfile3]);
                 });
@@ -200,8 +200,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                     context("when additional workfiles are selected", function() {
                         beforeEach(function() {
-                            this.newWorkfile1 = newFixtures.workfile.text({id: 4});
-                            this.newWorkfile2 = newFixtures.workfile.text({id: 1});
+                            this.newWorkfile1 = rspecFixtures.workfile.text({id: 4});
+                            this.newWorkfile2 = rspecFixtures.workfile.text({id: 1});
                             this.modalSpy.lastModal().trigger("files:selected", [this.newWorkfile1, this.newWorkfile2]);
                         });
 

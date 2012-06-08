@@ -24,7 +24,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
         context("when a workfile is selected", function() {
             context("when the workfile's workspace is active", function() {
                 beforeEach(function() {
-                    this.workfile = newFixtures.workfile.sql();
+                    this.workfile = rspecFixtures.workfile.sql();
 
                     // TODO: REMOVEME
                     this.workfile.set({ lastUpdatedStamp: "2011-11-22T10:46:03Z" });
@@ -120,7 +120,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
         context("when the workfile's workspace is archived", function() {
             beforeEach(function() {
                 this.workspace.set({ archivedAt: "2011-11-22T10:46:03Z" });
-                this.workfile = newFixtures.workfile.sql();
+                this.workfile = rspecFixtures.workfile.sql();
                 chorus.PageEvents.broadcast("workfile:selected", this.workfile);
             });
 

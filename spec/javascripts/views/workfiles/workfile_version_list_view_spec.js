@@ -1,7 +1,7 @@
 describe("chorus.views.WorkfileVersionList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.WorkfileVersionSet([
-            newFixtures.workfile.sql({
+            rspecFixtures.workfile.sql({
                 fileName: "Foo",
                 versionInfo: {
                     versionNum: 1,
@@ -14,7 +14,7 @@ describe("chorus.views.WorkfileVersionList", function() {
                 }
             }),
 
-            newFixtures.workfile.sql({
+            rspecFixtures.workfile.sql({
                 fileName: "Foo",
                 versionInfo: {
                     versionNum: 2,

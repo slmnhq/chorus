@@ -1,12 +1,12 @@
 describe("chorus.dialogs.WorkfilesAttach", function() {
     beforeEach(function() {
-        this.workfile1 = newFixtures.workfile.sql({
+        this.workfile1 = rspecFixtures.workfile.sql({
             workspace: { id: "33" },
             versionInfo: {
                 versionNum: "1"
             }
         });
-        this.workfile2 = newFixtures.workfile.text({
+        this.workfile2 = rspecFixtures.workfile.text({
             workspace: { id: "33" },
             versionInfo: {
                 versionNum: "5"

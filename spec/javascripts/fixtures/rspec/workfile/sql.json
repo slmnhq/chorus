@@ -1,12 +1,12 @@
 {
   "response": {
-    "id": 25,
+    "id": 1,
     "workspace": {
-      "id": 25,
+      "id": 1,
       "name": "workspace1",
       "summary": null,
       "owner": {
-        "id": 181,
+        "id": 8,
         "username": "user6",
         "first_name": "John",
         "last_name": "Doe",
@@ -32,7 +32,7 @@
       ]
     },
     "owner": {
-      "id": 182,
+      "id": 9,
       "username": "user7",
       "first_name": "John",
       "last_name": "Doe",
@@ -47,11 +47,11 @@
       }
     },
     "version_info": {
-      "id": 25,
+      "id": 1,
       "version_num": 1,
       "commit_message": "Factory commit message",
       "owner": {
-        "id": 183,
+        "id": 10,
         "username": "user8",
         "first_name": "John",
         "last_name": "Doe",
@@ -66,7 +66,7 @@
         }
       },
       "modifier": {
-        "id": 184,
+        "id": 11,
         "username": "user9",
         "first_name": "John",
         "last_name": "Doe",
@@ -80,13 +80,13 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-06-07T23:20:10Z",
-      "updated_at": "2012-06-07T23:20:10Z",
-      "content_url": "/system/workfile_versions/contents/000/000/025/original/workfile.sql?1339111210",
+      "created_at": "2012-06-08T17:44:37Z",
+      "updated_at": "2012-06-08T17:44:37Z",
+      "content_url": "/system/workfile_versions/contents/000/000/001/original/workfile.sql?1339177477",
       "icon_url": null,
       "content": "SELECT test FROM rspec WHERE lame = 'false';\n"
     },
-    "file_name": "workfile.doc",
+    "file_name": "workfile.sql",
     "file_type": "sql",
     "latest_version_num": 1
   }

@@ -1,6 +1,6 @@
 describe("chorus.views.SqlWorkfileContentView", function() {
     beforeEach(function() {
-        this.workfile = newFixtures.workfile.sql({ versionInfo: { content: "select * from foos where bar_id = 1;" } });
+        this.workfile = rspecFixtures.workfile.sql({ versionInfo: { content: "select * from foos where bar_id = 1;" } });
         this.schema = fixtures.schema({
             id: '4',
             name: "schema",
