@@ -3,6 +3,12 @@ class ActivitiesController < ApplicationController
     present activities
   end
 
+  def show
+    present activities.find(params[:id])
+  end
+
+  private
+
   def activities
     if (entity = parent_entity)
       entity.activities
@@ -21,4 +27,5 @@ class ActivitiesController < ApplicationController
       User.find(params[:user_id])
     end
   end
+
 end
