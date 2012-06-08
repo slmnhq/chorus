@@ -44,7 +44,7 @@
         <ul>
             {{#if workspace}}
                 {{#if activeWorkspace}}
-                    <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
+                    <li><a class="dialog" data-dialog="NotesNew" href="#" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
                     <li><a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a></li>
                     {{#if isChorusView}}
                         <li><a class="create_database_view dialog" href="#" data-dialog="CreateDatabaseView">{{t "actions.create_database_view"}}</a></li>

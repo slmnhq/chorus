@@ -247,32 +247,6 @@ describe("chorus.models.TabularData", function() {
         })
     });
 
-    describe("#getEntityType", function() {
-        var expectedEntityTypeMap = [
-            { entityType: "databaseObject", attrs: { type: "SOURCE_TABLE" } },
-            { entityType: "databaseObject", attrs: { type: "SANDBOX_TABLE" } },
-            { entityType: "chorusView", attrs: { type: "CHORUS_VIEW" } },
-            { entityType: "databaseObject", attrs: {} },
-            { entityType: "chorusView", attrs: { entityType: "chorusView" } }
-        ]
-
-        _.each(expectedEntityTypeMap, function(obj) {
-            it("works for " + obj.entityType, function() {
-                expect(fixtures.tabularData(obj.attrs).getEntityType()).toBe(obj.entityType);
-            });
-        })
-
-
-    })
-
-    describe("the entity_type object attribute", function() {
-        it("is recalculated when the 'type' attribute is changed", function() {
-            expect(this.tabularData.entityType).toBe("databaseObject");
-            this.tabularData.set({ type: "CHORUS_VIEW" })
-            expect(this.tabularData.entityType).toBe("chorusView");
-        })
-    })
-
     describe("#preview", function() {
         context("with a table", function() {
             beforeEach(function() {

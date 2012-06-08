@@ -11,10 +11,6 @@ describe("chorus.models.GreenplumInstance", function() {
         expect(this.instance.url()).toBe("/instances/" + this.instance.get('id'));
     });
 
-    it("has the right 'entityType' parameter for the activities API", function() {
-        expect(this.instance.entityType).toBe("instances");
-    });
-
     describe(".aurora", function() {
         beforeEach(function() {
             this.aurora = chorus.models.GreenplumInstance.aurora();
