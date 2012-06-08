@@ -969,7 +969,7 @@ describe("chorus.views.Base", function() {
 
                 context("when there are requiredResources", function() {
                     beforeEach(function() {
-                        this.resource = newFixtures.user();
+                        this.resource = rspecFixtures.user();
                         this.view.requiredResources.push(this.resource);
                         spyOn(this.view.requiredResources, 'allLoaded');
                     })

@@ -5,7 +5,7 @@ describe("chorus.dialogs.WorkspaceMembersMore", function() {
         dialog = new chorus.dialogs.WorkspaceMembersMore({ pageModel: workspace });
         members = workspace.members();
         _.times(25, function() {
-            members.add(newFixtures.user());
+            members.add(rspecFixtures.user());
         });
         var self = this
         self.choice = "lastName"

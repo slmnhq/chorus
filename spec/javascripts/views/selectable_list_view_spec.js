@@ -1,7 +1,7 @@
 describe("chorus.views.SelectableList", function() {
     beforeEach(function() {
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
-        this.collection = new chorus.collections.UserSet([newFixtures.user(), newFixtures.user()]);
+        this.collection = new chorus.collections.UserSet([rspecFixtures.user(), rspecFixtures.user()]);
         this.view = new chorus.views.SelectableList({
             collection: this.collection
         });

@@ -41,11 +41,11 @@ describe("chorus.models.Instance", function() {
     describe("#isOwner", function() {
         it("returns true if object has same id", function() {
             var owner = this.instance.owner();
-            var otherOwnerUser = newFixtures.user({id: owner.get('id')});
+            var otherOwnerUser = rspecFixtures.user({id: owner.get('id')});
             expect(this.instance.isOwner(otherOwnerUser)).toBeTruthy();
         })
         it("returns false if id is different", function() {
-            var otherOwnerUser = newFixtures.user({id: 'notanowner'});
+            var otherOwnerUser = rspecFixtures.user({id: 'notanowner'});
             expect(this.instance.isOwner(otherOwnerUser)).toBeFalsy();
         })
         it("returns false if object is of different type", function() {

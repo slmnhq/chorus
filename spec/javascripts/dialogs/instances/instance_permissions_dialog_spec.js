@@ -78,11 +78,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 describe("when the user fetch completes", function() {
                     beforeEach(function() {
                         this.dialog.users.reset([
-                            newFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
+                            rspecFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
                             this.instance.owner(),
-                            newFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
-                            newFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
-                            newFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
+                            rspecFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
+                            rspecFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                            rspecFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
                         ]);
                     });
 
@@ -220,7 +220,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
     context("when the instance has individual accounts", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll').andCallThrough();
-            this.owner = newFixtures.user({firstName: 'EDC', lastName: 'Admin'});
+            this.owner = rspecFixtures.user({firstName: 'EDC', lastName: 'Admin'});
             this.instance = newFixtures.greenplumInstance.greenplum({owner: {
                 id: this.owner.get("id"),
                 username: this.owner.get("username"),
@@ -466,11 +466,11 @@ describe("chorus.dialogs.InstancePermissions", function() {
         describe("when the chorus users are fetched", function() {
             beforeEach(function() {
                 this.dialog.users.reset([
-                    newFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
+                    rspecFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
                     this.instance.owner(),
-                    newFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
-                    newFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
-                    newFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
+                    rspecFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
+                    rspecFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                    rspecFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
                 ]);
             });
 
@@ -674,8 +674,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
             describe("when the fetch for all chorus users completes", function() {
                 beforeEach(function() {
                     this.dialog.users.reset([
-                        newFixtures.user({ firstName: "anna", lastName: "cannon" }),
-                        newFixtures.user({ firstName: "ben", lastName: "maulden" })
+                        rspecFixtures.user({ firstName: "anna", lastName: "cannon" }),
+                        rspecFixtures.user({ firstName: "ben", lastName: "maulden" })
                     ]);
                 });
 

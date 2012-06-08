@@ -1,9 +1,9 @@
 describe("chorus.views.NotificationRecipient", function() {
     beforeEach(function() {
-        this.user1 = newFixtures.user({ firstName: "Aaron", lastName: "Jenkins"});
-        this.user2 = newFixtures.user({ firstName: "Bob", lastName: "Jenkins"});
-        this.user3 = newFixtures.user({ firstName: "Matt", lastName: "Jenkins"});
-        this.loggedInUser = newFixtures.user({ firstName: "Xavier", lastName: "Jenkins"});
+        this.user1 = rspecFixtures.user({ firstName: "Aaron", lastName: "Jenkins"});
+        this.user2 = rspecFixtures.user({ firstName: "Bob", lastName: "Jenkins"});
+        this.user3 = rspecFixtures.user({ firstName: "Matt", lastName: "Jenkins"});
+        this.loggedInUser = rspecFixtures.user({ firstName: "Xavier", lastName: "Jenkins"});
         setLoggedInUser({ id: this.loggedInUser.get("id") });
 
         this.users = new chorus.collections.UserSet([

@@ -1,92 +1,98 @@
 ;(function() {
     window.newFixtures = {};
+    window.rspecFixtures = {};
     window.fixtureData = {};
     window.newFixtures.safeExtend = safeExtend;
     window.newFixtures.addUniqueDefaults = addUniqueDefaults;
 
-    _.each(window.fixtureDefinitions, function(definition, name) {
-        if (definition.children) {
-            window.newFixtures[name] = {};
-            initializeChildDefinitions(definition);
-            _.each(definition.children, function(innerDefinition, innerName) {
-                generateFixture(innerDefinition, innerName, name);
-            });
-        } else {
-            generateFixture(definition, name);
-        }
-    });
+    defineAllFixtures(window.fixtureDefinitions, window.newFixtures, "");
+    defineAllFixtures(window.rspecFixtureDefinitions, window.rspecFixtures, "rspec");
 
-    function initializeChildDefinitions(definition) {
-        _.each(definition.children, function(childDef) {
-            _.each(definition, function(value, property) {
-                if (property === "children") { return };
-                childDef[property] || (childDef[property] = definition[property]);
-            });
-        });
-    }
-
-    function generateFixture(definition, name, parentName) {
-        var module = parentName ? newFixtures[parentName] : newFixtures;
-        var klass = getClass(definition, parentName || name);
-        var jsonMethodName = name + "Json";
-
-        module[name] = function(overrides) {
-            var result = new klass();
-            var rawData = result.parse(getFixture(name, parentName));
-            overrides || (overrides = defaultOverridesFor(rawData));
-            addUniqueDefaults(overrides, definition.unique);
-            var attrs = safeExtend(rawData, overrides, name);
-            addDerivedAttributes(attrs, overrides, definition.derived);
-
-            var setMethod = (result instanceof chorus.collections.Base) ? "reset" : "set";
-            return result[setMethod](attrs, { silent: true });
-        };
-
-        module[jsonMethodName] = function() {
-            return module[name].apply(this, arguments).attributes;
-        };
-    }
-
-    function addDerivedAttributes(attrs, overrides, derivationMethods) {
-        _.each(derivationMethods, function(method, attrName) {
-            if (!overrides[attrName]) {
-                attrs[attrName] = method(attrs);
+    function defineAllFixtures(definitions, fixtureModule, pathPrefix) {
+        _.each(definitions, function(definition, name) {
+            if (definition.children) {
+                fixtureModule[name] = {};
+                initializeChildDefinitions(definition);
+                _.each(definition.children, function(innerDefinition, innerName) {
+                    generateFixture(innerDefinition, innerName, name);
+                });
+            } else {
+                generateFixture(definition, name);
             }
         });
-    }
 
-    function getClass(definition, name) {
-        if (definition.model) {
-            return chorus.models[definition.model];
-        } else if (definition.collection) {
-            return chorus.collections[definition.collection];
-        } else {
-            var isCollection = name.match(/Set/);
-            var className = _.titleize(name);
-            return (isCollection ? chorus.collections[className] : chorus.models[className]) || chorus.models.Base;
+        function initializeChildDefinitions(definition) {
+            _.each(definition.children, function(childDef) {
+                _.each(definition, function(value, property) {
+                    if (property === "children") { return };
+                    childDef[property] || (childDef[property] = definition[property]);
+                });
+            });
         }
-    }
 
-    function defaultOverridesFor(rawData) {
-        if (_.isArray(rawData)) {
-            return _.map(rawData, function() { return {}; });
-        } else {
-            return {};
-        }
-    }
+        function generateFixture(definition, name, parentName) {
+            var module = parentName ? fixtureModule[parentName] : fixtureModule;
+            var klass = getClass(definition, parentName || name);
+            var jsonMethodName = name + "Json";
 
-    function getFixture(name, parentName) {
-        var outerHash = window.fixtureData;
-        if (parentName) {
-            outerHash = window.fixtureData[parentName] || (window.fixtureData[parentName] = {});
+            module[name] = function(overrides) {
+                var result = new klass();
+                var rawData = result.parse(getFixture(name, parentName));
+                overrides || (overrides = defaultOverridesFor(rawData));
+                addUniqueDefaults(overrides, definition.unique);
+                var attrs = safeExtend(rawData, overrides, name);
+                addDerivedAttributes(attrs, overrides, definition.derived);
+
+                var setMethod = (result instanceof chorus.collections.Base) ? "reset" : "set";
+                return result[setMethod](attrs, { silent: true });
+            };
+
+            module[jsonMethodName] = function() {
+                return module[name].apply(this, arguments).attributes;
+            };
         }
-        if (!outerHash[name]) {
-            var path = _.compact([parentName, name]).join("/");
-            var $element = $("#fixtures [data-fixture-path='" + path + "']");
-            if (!$element.length) throw "No fixture for " + path;
-            outerHash[name] = JSON.parse($element.html());
+
+        function addDerivedAttributes(attrs, overrides, derivationMethods) {
+            _.each(derivationMethods, function(method, attrName) {
+                if (!overrides[attrName]) {
+                    attrs[attrName] = method(attrs);
+                }
+            });
         }
-        return outerHash[name];
+
+        function getClass(definition, name) {
+            if (definition.model) {
+                return chorus.models[definition.model];
+            } else if (definition.collection) {
+                return chorus.collections[definition.collection];
+            } else {
+                var isCollection = name.match(/Set/);
+                var className = _.titleize(name);
+                return (isCollection ? chorus.collections[className] : chorus.models[className]) || chorus.models.Base;
+            }
+        }
+
+        function defaultOverridesFor(rawData) {
+            if (_.isArray(rawData)) {
+                return _.map(rawData, function() { return {}; });
+            } else {
+                return {};
+            }
+        }
+
+        function getFixture(name, parentName) {
+            var outerHash = window.fixtureData;
+            if (parentName) {
+                outerHash = window.fixtureData[parentName] || (window.fixtureData[parentName] = {});
+            }
+            if (!outerHash[name]) {
+                var path = _.compact([pathPrefix, parentName, name]).join("/");
+                var $element = $("#fixtures [data-fixture-path='" + path + "']");
+                if (!$element.length) throw "No fixture for " + path;
+                outerHash[name] = JSON.parse($element.html());
+            }
+            return outerHash[name];
+        }
     }
 
     function addUniqueDefaults(attributeObjects, keyStrings) {
@@ -128,4 +134,5 @@
 
         return result;
     }
+
 })();

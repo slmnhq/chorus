@@ -1,0 +1,93 @@
+{
+  "response": {
+    "id": 25,
+    "workspace": {
+      "id": 25,
+      "name": "workspace1",
+      "summary": null,
+      "owner": {
+        "id": 181,
+        "username": "user6",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person7@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "archiver": null,
+      "archived_at": null,
+      "public": true,
+      "image": {
+        "original": "",
+        "icon": ""
+      },
+      "permission": [
+        "admin"
+      ]
+    },
+    "owner": {
+      "id": 182,
+      "username": "user7",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person8@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "version_info": {
+      "id": 25,
+      "version_num": 1,
+      "commit_message": "Factory commit message",
+      "owner": {
+        "id": 183,
+        "username": "user8",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person9@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "modifier": {
+        "id": 184,
+        "username": "user9",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person10@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "created_at": "2012-06-07T23:20:10Z",
+      "updated_at": "2012-06-07T23:20:10Z",
+      "content_url": "/system/workfile_versions/contents/000/000/025/original/workfile.sql?1339111210",
+      "icon_url": null,
+      "content": "SELECT test FROM rspec WHERE lame = 'false';\n"
+    },
+    "file_name": "workfile.doc",
+    "file_type": "sql",
+    "latest_version_num": 1
+  }
+}

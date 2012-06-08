@@ -77,8 +77,8 @@ describe("spec_helper", function() {
 
         context("when passed a function", function() {
             it("does an 'instanceof' check", function() {
-                expect(newFixtures.user()).toBeA(chorus.models.User);
-                expect(newFixtures.user()).not.toBeA(chorus.models.BoxplotTask);
+                expect(rspecFixtures.user()).toBeA(chorus.models.User);
+                expect(rspecFixtures.user()).not.toBeA(chorus.models.BoxplotTask);
             });
         });
     });
@@ -138,8 +138,8 @@ describe("spec_helper", function() {
 
     describe("#toHaveBeenCalledOn", function() {
         beforeEach(function() {
-            this.model1 = newFixtures.user()
-            this.model2 = newFixtures.user()
+            this.model1 = rspecFixtures.user()
+            this.model2 = rspecFixtures.user()
             spyOn(chorus.models.User.prototype, 'fetch')
             spyOn(chorus.models.User.prototype, 'save')
         });

@@ -1,6 +1,6 @@
 describe("chorus.views.ImageUpload", function() {
     beforeEach(function() {
-        this.user = newFixtures.user({
+        this.user = rspecFixtures.user({
             username: "franklin",
             id : 13,
             image: { original: "/foo", icon: "/icon" }

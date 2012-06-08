@@ -1662,8 +1662,9 @@ beforeEach(function() {
         workfileJson: function(overrides) {
             var id = this.nextId().toString();
             var name = 'Workfile ' + id;
-            var modifiedByUser = newFixtures.userJson();
-            var ownerUser = newFixtures.userJson();
+            // WTF: old fixtures reference new fixtures ???
+            var modifiedByUser = rspecFixtures.userJson();
+            var ownerUser = rspecFixtures.userJson();
             return _.extend({
                 id: id,
                 fileName: name,
@@ -1707,7 +1708,8 @@ beforeEach(function() {
                 artifacts: [],
                 timestamp: '2011-01-01 12:00:00'
             }, overrides);
-            attributes.author = _.extend(newFixtures.user().attributes, overrides && overrides.author);
+            // WTF: old fixtures reference new fixtures ???
+            attributes.author = _.extend(rspecFixtures.user().attributes, overrides && overrides.author);
             return new chorus.models.Comment(attributes);
         },
 
@@ -1862,7 +1864,8 @@ beforeEach(function() {
                 shared: "true",
                 expiration: null,
                 instanceId: this.nextId().toString(),
-                owner: _.extend(newFixtures.userJson(), overrides.owner),
+                // WTF: old fixtures reference new fixtures ???
+                owner: _.extend(rspecFixtures.userJson(), overrides.owner),
                 dbUsername: "gpadmin"
             }, overrides);
             return new chorus.models.InstanceAccount(attributes);
@@ -2610,7 +2613,8 @@ beforeEach(function() {
         },
 
         searchResultJson: function(overrides) {
-            var modifiedByUser = newFixtures.userJson();
+            // WTF: old fixtures reference new fixtures ???
+            var modifiedByUser = rspecFixtures.userJson();
             return _.extend({
                 "workfile": {
                     "docs": [

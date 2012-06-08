@@ -119,15 +119,6 @@ describe("chorus.models.Abstract", function() {
                     expect(this.model.activities()).toBe(this.activitySet);
                 });
 
-                it("accepts an override for the entityType", function() {
-                    this.activitySet = this.model.activities("myType");
-                    expect(this.activitySet.attributes.entityType).toBe("myType");
-                });
-
-                it("does not return the same activities if the effective entityType is different", function() {
-                    expect(this.model.activities("myType")).not.toBe(this.model.activities());
-                })
-
                 context("when a model specifies an entityId", function() {
                     beforeEach(function() {
                         delete this.model._activities;
@@ -1046,9 +1037,9 @@ describe("chorus.models.Abstract", function() {
 
         describe("#findWhere", function() {
             beforeEach(function() {
-                this.m1 = newFixtures.user({ firstName: "john", lastName: "coltrane", id: "5", admin: false });
-                this.m2 = newFixtures.user({ firstName: "ravi", lastName: "coltrane", id: "6", admin: true });
-                this.m3 = newFixtures.user({ firstName: "john", lastName: "medeski", id: "7", admin: true  });
+                this.m1 = rspecFixtures.user({ firstName: "john", lastName: "coltrane", id: "5", admin: false });
+                this.m2 = rspecFixtures.user({ firstName: "ravi", lastName: "coltrane", id: "6", admin: true });
+                this.m3 = rspecFixtures.user({ firstName: "john", lastName: "medeski", id: "7", admin: true  });
                 this.collection.reset([ this.m1, this.m2, this.m3 ]);
             });
 
