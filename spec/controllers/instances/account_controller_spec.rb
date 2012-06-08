@@ -17,9 +17,8 @@ describe Instances::AccountController do
       decoded_response.db_username.should == account.db_username
     end
 
-    it "generates a jasmine fixture", :fixture => true do
+    generate_fixture "instanceAccount.json" do
       get :show, :instance_id => instance.to_param
-      save_fixture "instanceAccount.json"
     end
   end
 
