@@ -292,20 +292,6 @@ li .activity_content,
             left: -5px;
         }
     }
-    li[data-activity-type=WORKSPACE_CREATED],
-    li[data-activity-type=WORKSPACE_DELETED],
-    li[data-activity-type=WORKFILE_CREATED],
-    li[data-activity-type=WORKSPACE_MAKE_PRIVATE],
-    li[data-activity-type=WORKSPACE_MAKE_PUBLIC],
-    li[data-activity-type=WORKSPACE_ARCHIVED],
-    li[data-activity-type=WORKSPACE_UNARCHIVED],
-    li[data-activity-type=INSTANCE_CREATED],
-    li[data-activity-type=USER_ADDED],
-    li[data-activity-type=USER_DELETED] {
-        .order {
-            display: inline;
-        }
-    }
 
 }
 
