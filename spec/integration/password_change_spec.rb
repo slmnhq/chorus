@@ -25,21 +25,20 @@ describe "creating a user" do
     login('arianna', 'secret')
     visit ("#/users")
     wait_until { current_route == '/users' }
-    within(".list")do
+    within(".list") do
       click_link "arianna huffington"
     end
     click_link "Change password"
     page.should have_content("Change Password")
 
-      within("#facebox")do
-        fill_in 'password', :with => "secret123"
-        fill_in 'passwordConfirmation', :with => "secret123"
-        click_button "Change Password"
-      end
-    login('arianna', 'secret123')
-    visit("#/users")
-    click_link "EDC Admin"
-    page.should have_content("EDC Admin")
+    within("#facebox") do
+      fill_in 'password', :with => "secret123"
+      fill_in 'passwordConfirmation', :with => "secret123"
+      click_button "Change Password"
+    end
+
     logout
+    login('arianna', 'secret123')
+    wait_until { current_route == "/" }
   end
 end
