@@ -79,7 +79,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
         }
 
         function uploadFinished(e, data) {
-            reEnableUpload()
+            reEnableUpload();
             var json = JSON.parse(data.result).response;
             delete self.resource.serverErrors;
             self.resource.trigger("validated");
