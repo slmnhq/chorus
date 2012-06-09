@@ -1,6 +1,6 @@
 describe("chorus.collections.WorkspaceSet", function() {
     beforeEach(function() {
-        this.collection = newFixtures.workspaceSet();
+        this.collection = rspecFixtures.workspaceSet();
     });
 
     describe("without filtering", function() {

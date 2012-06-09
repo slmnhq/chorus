@@ -1,0 +1,121 @@
+{
+  "response": [
+    {
+      "id": 2,
+      "name": "abacus",
+      "summary": null,
+      "owner": {
+        "id": 2,
+        "username": "user2",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person2@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "archiver": null,
+      "archived_at": "2012-06-06T23:59:05Z",
+      "public": true,
+      "image": {
+        "original": "",
+        "icon": ""
+      },
+      "permission": [
+        "read",
+        "commenting"
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false,
+      "sandbox_info": null,
+      "latest_comment_list": null
+    },
+    {
+      "id": 4,
+      "name": "secret1",
+      "summary": null,
+      "owner": {
+        "id": 4,
+        "username": "user4",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person4@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "archiver": null,
+      "archived_at": null,
+      "public": false,
+      "image": {
+        "original": "",
+        "icon": ""
+      },
+      "permission": [
+        "read",
+        "commenting",
+        "update"
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false,
+      "sandbox_info": null,
+      "latest_comment_list": null
+    },
+    {
+      "id": 1,
+      "name": "Work",
+      "summary": null,
+      "owner": {
+        "id": 1,
+        "username": "user1",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person1@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "archiver": null,
+      "archived_at": null,
+      "public": true,
+      "image": {
+        "original": "",
+        "icon": ""
+      },
+      "permission": [
+        "admin"
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false,
+      "sandbox_info": null,
+      "latest_comment_list": null
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 50,
+    "records": 3,
+    "total": 1
+  }
+}

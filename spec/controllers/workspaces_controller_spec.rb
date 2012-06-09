@@ -84,6 +84,12 @@ describe WorkspacesController do
         request.params[:per_page].should == 50
       end
     end
+
+    it "generates a JSON fixture", :fixture => true do
+      get :index
+      save_fixture "workspaceSet.json"
+    end
+
   end
 
   describe "#create" do
