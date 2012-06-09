@@ -1,12 +1,12 @@
 describe("chorus.collections.SchemaFunctionSet", function() {
     beforeEach(function() {
-        this.schema = fixtures.schema();
+        this.schema = rspecFixtures.schema();
         this.functionSet = this.schema.functions();
     });
 
     describe("#urlTemplate", function() {
         beforeEach(function() {
-            this.schema = fixtures.schema({name: "b/a/r", database: {name: "%foo%", instance: {id: 10000} }});
+            this.schema = rspecFixtures.schema({name: "b/a/r", database: {name: "%foo%", instance: {id: 10000} }});
             this.functionSet = this.schema.functions();
         });
 

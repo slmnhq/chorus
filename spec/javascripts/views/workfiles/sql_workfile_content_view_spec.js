@@ -1,7 +1,7 @@
 describe("chorus.views.SqlWorkfileContentView", function() {
     beforeEach(function() {
         this.workfile = rspecFixtures.workfile.sql({ versionInfo: { content: "select * from foos where bar_id = 1;" } });
-        this.schema = fixtures.schema({
+        this.schema = rspecFixtures.schema({
             id: '4',
             name: "schema",
             database: {
@@ -212,7 +212,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 context("when the workfile has an execution schema, and/or the workspace has a sandbox", function() {
                     beforeEach(function() {
                         this.view.model.unset("executionInfo");
-                        this.schema = fixtures.schema({id: "77", database: {id: "88", instance: {id: "99"}}});
+                        this.schema = rspecFixtures.schema({id: "77", database: {id: "88", instance: {id: "99"}}});
                         this.view.textContent.editor.getSelection = function() {
                             return "select 1 from table";
                         };

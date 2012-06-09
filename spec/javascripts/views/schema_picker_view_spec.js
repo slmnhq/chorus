@@ -50,7 +50,7 @@ describe("chorus.views.SchemaPicker", function() {
             context("when the schema fetch completes", function() {
                 beforeEach(function() {
                     spyOnEvent(this.view, 'change');
-                    this.server.completeFetchFor(this.database.schemas(), [fixtures.schema()]);
+                    this.server.completeFetchFor(this.database.schemas(), [rspecFixtures.schema()]);
                     this.view.$(".schema select").prop("selectedIndex", 1).change();
                     $('#jasmine_content').append(this.view.el);
                 })
@@ -267,7 +267,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                                     context("when the schema list fetch completes", function() {
                                         beforeEach(function() {
-                                            this.server.completeFetchFor(this.view.schemas, [fixtures.schema({name: 'SCHEMA!'})]);
+                                            this.server.completeFetchFor(this.view.schemas, [rspecFixtures.schema({name: 'SCHEMA!'})]);
                                         });
 
                                         itShowsSelect("schema");
@@ -494,7 +494,7 @@ describe("chorus.views.SchemaPicker", function() {
                     this.view.render();
                     this.server.completeFetchFor(this.view.databases, [ fixtures.database({ id: '5' }) ]);
                     this.view.$(".database select").val("5").change();
-                    this.server.completeFetchFor(this.view.schemas, [ fixtures.schema({ id: '6' }) ]);
+                    this.server.completeFetchFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
                     this.view.$(".schema select").val("6").change();
                 });
 
@@ -520,7 +520,7 @@ describe("chorus.views.SchemaPicker", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.view.databases, [ fixtures.database({ id: '5' }) ]);
                         this.view.$(".database select").val("5").change();
-                        this.server.completeFetchFor(this.view.schemas, [ fixtures.schema({ id: '6' }) ]);
+                        this.server.completeFetchFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
                         this.view.$(".schema select").val("6").change();
                     });
 
@@ -707,10 +707,16 @@ describe("chorus.views.SchemaPicker", function() {
             it("sorts the select options alphabetically for " + type, function() {
 
                 if (type == "instance") {
-                    this.server.completeFetchAllFor(this.view[type + "s"], [
+                    this.server.completeFetchAllFor(this.view.instances, [
                         newFixtures.greenplumInstance.greenplum({name: "Zoo"}),
                         newFixtures.greenplumInstance.greenplum({name: "Aardvark"}),
                         newFixtures.greenplumInstance.greenplum({name: "bear"})
+                    ]);
+                } else if(type == "schema") {
+                    this.server.completeFetchFor(this.view.schemas, [
+                        rspecFixtures.schema({name: "Zoo"}),
+                        rspecFixtures.schema({name: "Aardvark"}),
+                        rspecFixtures.schema({name: "bear"})
                     ]);
                 } else {
                     this.server.completeFetchFor(this.view[type + "s"], [fixtures[type]({name: "Zoo"}), fixtures[type]({name: "Aardvark"}), fixtures[type]({name: "bear"})]);

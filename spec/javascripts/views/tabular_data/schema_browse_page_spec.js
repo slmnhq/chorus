@@ -1,7 +1,7 @@
 describe("chorus.pages.SchemaBrowsePage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
-        this.schema = fixtures.schema({id: "789", name: "Bar/", database: {id: "456", name: "Foo%", instance: {id: "123", name: "AnInstance"}} });
+        this.schema = rspecFixtures.schema({id: "789", name: "Bar/", database: {id: "456", name: "Foo%", instance: {id: "123", name: "AnInstance"}} });
         this.instance = newFixtures.greenplumInstance.greenplum({ id: "123" });
         this.page = new chorus.pages.SchemaBrowsePage("789");
     });

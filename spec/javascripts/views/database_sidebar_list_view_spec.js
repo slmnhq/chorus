@@ -62,8 +62,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
                 this.server.completeFetchFor(this.schema.database().schemas(), [
                     this.schema,
-                    fixtures.schema({ name: "awesome_tables", id: "5" }),
-                    fixtures.schema({ name: "orphaned_tables", id: "6" })
+                    rspecFixtures.schema({ name: "awesome_tables", id: "5" }),
+                    rspecFixtures.schema({ name: "orphaned_tables", id: "6" })
                 ]);
             });
 
@@ -130,7 +130,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
                     context("when the execution schema is not the same as the view's schema", function() {
                         beforeEach(function() {
-                            this.executionSchema = fixtures.schema();
+                            this.executionSchema = rspecFixtures.schema();
                             chorus.PageEvents.broadcast("workfile:executed", rspecFixtures.workfile.sql(), this.executionSchema)
                         });
 
@@ -160,8 +160,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
             spyOn(this.view, "postRender").andCallThrough();
             this.server.completeFetchFor(this.schema.database().schemas(), [
                 this.schema,
-                fixtures.schema({ name: "awesome_tables", id: "5" }),
-                fixtures.schema({ name: "orphaned_tables", id: "6" })
+                rspecFixtures.schema({ name: "awesome_tables", id: "5" }),
+                rspecFixtures.schema({ name: "orphaned_tables", id: "6" })
             ]);
         })
 

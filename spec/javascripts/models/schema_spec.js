@@ -1,7 +1,7 @@
 describe("chorus.models.Schema", function() {
     describe("#showUrl", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({id: 1234, name: "b/a/r", database: {id: "42", instance: {id: 10000}}});
+            this.model = rspecFixtures.schema({id: 1234, name: "b/a/r", database: {id: "42", instance: {id: 10000}}});
         })
         it("should encode the url", function() {
             expect(this.model.showUrl()).toContain("schemas/1234");
@@ -49,7 +49,7 @@ describe("chorus.models.Schema", function() {
 
     describe("#canonicalName", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({name: "schema", database: {name: "database", instance: {name: "instance"}}});
+            this.model = rspecFixtures.schema({name: "schema", database: {name: "database", instance: {name: "instance"}}});
         })
 
         it("should create the canonical name", function() {
@@ -59,11 +59,11 @@ describe("chorus.models.Schema", function() {
 
     describe("#isEqual", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({ id: '3' });
+            this.model = rspecFixtures.schema({ id: '3' });
         });
 
         it("checks that the ids of the schemas are equal", function() {
-            var other = fixtures.schema({ id: '3' });
+            var other = rspecFixtures.schema({ id: '3' });
 
             expect(this.model.isEqual(other)).toBeTruthy();
 
@@ -75,7 +75,7 @@ describe("chorus.models.Schema", function() {
 
     describe("#database", function() {
         beforeEach(function() {
-            this.model = fixtures.schema({name: "schema", database: {name: "database", instance: {name: "instance"}}});
+            this.model = rspecFixtures.schema({name: "schema", database: {name: "database", instance: {name: "instance"}}});
             this.database = this.model.database();
         });
 

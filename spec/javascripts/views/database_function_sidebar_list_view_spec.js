@@ -53,8 +53,8 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                 beforeEach(function() {
                     this.server.completeFetchFor(this.schema.database().schemas(), [
                         this.schema,
-                        fixtures.schema({ name: "awesome_tables", id: "5" }),
-                        fixtures.schema({ name: "orphaned_tables", id: "6" })
+                        rspecFixtures.schema({ name: "awesome_tables", id: "5" }),
+                        rspecFixtures.schema({ name: "orphaned_tables", id: "6" })
                     ]);
 
                     this.server.completeFetchFor(this.view.collection, [
@@ -154,8 +154,8 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                 beforeEach(function() {
                     this.server.completeFetchFor(this.schema.database().schemas(), [
                         this.schema,
-                        fixtures.schema({ name: "awesome_tables", id: "5" }),
-                        fixtures.schema({ name: "orphaned_tables", id: "6" })
+                        rspecFixtures.schema({ name: "awesome_tables", id: "5" }),
+                        rspecFixtures.schema({ name: "orphaned_tables", id: "6" })
                     ]);
 
                     this.server.lastFetchFor(this.view.collection).failForbidden([

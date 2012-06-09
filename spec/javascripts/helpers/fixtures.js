@@ -1733,36 +1733,6 @@ beforeEach(function() {
             return fixtures.comment(commentOverrides);
         },
 
-        schemaSet: function(overrides) {
-            var attributes = _.extend({
-                databaseId: this.nextId().toString()
-            }, overrides);
-            return new chorus.collections.SchemaSet([], attributes);
-        },
-
-        schema: function(overrides) {
-            var id = this.nextId().toString();
-
-            var attributes = _.extend({
-                id: id,
-                name: "Schema_" + id,
-                lastUpdatedStamp: "2012-01-04 14:42:15.318",
-                lastUpdatedTxStamp: "2012-01-04 14:42:15.309",
-                createdStamp: "2012-01-04 14:42:15.318",
-                createdTxStamp: "2012-01-04 14:42:15.309",
-                database: {
-                    id: this.nextId().toString(),
-                    name: "My fixture database",
-                    instance: {
-                        id: this.nextId().toString(),
-                        name: "My fixture instance"
-                    }
-                },
-                datasetCount: 4
-            }, overrides);
-            return new chorus.models.Schema(attributes);
-        },
-
         databaseTable: function(overrides) {
             var attributes = _.extend(newFixtures.databaseObjectJson(), {
                 objectType: "TABLE",

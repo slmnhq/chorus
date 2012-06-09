@@ -29,8 +29,8 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 var datasets, schemas;
                 beforeEach(function() {
                     schemas = new chorus.collections.SchemaSet([
-                        newFixtures.schema({name: "Schema 1"}),
-                        newFixtures.schema({name: "Schema 2"})
+                        rspecFixtures.schema({name: "Schema 1"}),
+                        rspecFixtures.schema({name: "Schema 2"})
                     ]);
 
                     this.server.completeFetchFor(this.view.schemas, schemas.models);

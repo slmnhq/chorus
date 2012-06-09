@@ -32,7 +32,7 @@ describe("chorus.pages.SchemaIndexPage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.database);
             this.server.completeFetchFor(this.page.collection, [
-                fixtures.schema({name: "bar"}), fixtures.schema({name: "foo"})
+                rspecFixtures.schema({name: "bar"}), rspecFixtures.schema({name: "foo"})
             ]);
         });
 

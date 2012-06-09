@@ -4,15 +4,15 @@
       "id": 1,
       "name": "schema1",
       "database": {
-        "id": 2,
+        "id": 1,
         "name": "test2",
         "instance": {
           "name": "instance1",
           "host": "host1.emc.com",
           "port": 5001,
-          "id": 2,
+          "id": 1,
           "owner": {
-            "id": 2,
+            "id": 7,
             "username": "user1",
             "first_name": "John",
             "last_name": "Doe",
@@ -41,15 +41,15 @@
       "id": 2,
       "name": "schema2",
       "database": {
-        "id": 2,
+        "id": 1,
         "name": "test2",
         "instance": {
           "name": "instance1",
           "host": "host1.emc.com",
           "port": 5001,
-          "id": 2,
+          "id": 1,
           "owner": {
-            "id": 2,
+            "id": 7,
             "username": "user1",
             "first_name": "John",
             "last_name": "Doe",

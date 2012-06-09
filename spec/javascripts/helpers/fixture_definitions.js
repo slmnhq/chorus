@@ -69,7 +69,7 @@ window.rspecFixtureDefinitions = {
     user:    { unique: [ "id" ] },
     userSet: { unique: [ "id" ] },
 
-//    schema:    { unique: [ "id", "instance.id" ] },
+    schema:    { unique: [ "id", "database.id", "database.instance.id" ] },
     schemaSet: { unique: [ "id" ] },
 //
     workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] },

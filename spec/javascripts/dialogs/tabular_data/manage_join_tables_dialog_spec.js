@@ -46,8 +46,8 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
     describe("when the fetches complete", function() {
         beforeEach(function() {
-            this.schemaBob = fixtures.schema({name: "Bob", database: this.schema.get("database") });
-            this.schemaTed = fixtures.schema({name: "Ted", database: this.schema.get("database") });
+            this.schemaBob = rspecFixtures.schema({name: "Bob", database: this.schema.get("database") });
+            this.schemaTed = rspecFixtures.schema({name: "Ted", database: this.schema.get("database") });
             this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
 
             this.databaseObject1 = newFixtures.databaseObject({

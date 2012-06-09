@@ -75,5 +75,10 @@ describe SchemasController do
         response.code.should == "404"
       end
     end
+
+    it "should generate JSON fixtures", :fixture => true do
+      get :show, :id => schema.to_param
+      save_fixture "schema.json"
+    end
   end
 end

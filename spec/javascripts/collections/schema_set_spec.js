@@ -15,9 +15,9 @@ describe("chorus.collections.SchemaSet", function() {
     describe("#sort", function() {
         beforeEach(function() {
             this.collection.reset([
-                fixtures.schema({ name: 'z'}),
-                fixtures.schema({ name: 'G'}),
-                fixtures.schema({ name: 'a'})
+                rspecFixtures.schema({ name: 'z'}),
+                rspecFixtures.schema({ name: 'G'}),
+                rspecFixtures.schema({ name: 'a'})
             ]);
         });
 

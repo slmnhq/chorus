@@ -1,7 +1,7 @@
 describe("chorus.views.SchemaList", function() {
     beforeEach(function() {
-        this.schema1 = fixtures.schema();
-        this.schema2 = fixtures.schema({datasetCount: 1});
+        this.schema1 = rspecFixtures.schema({name: 'schema_first'});
+        this.schema2 = rspecFixtures.schema({name: 'schema_last', datasetCount: 1});
         this.collection = new chorus.collections.SchemaSet([], {databaseId: 456});
         this.collection.reset([this.schema1, this.schema2]);
 

@@ -1,7 +1,7 @@
 describe("chorus.dialogs.CreateDatabaseView", function() {
     beforeEach(function() {
         this.dataset = fixtures.chorusView({workspace: {id: "42"}});
-        this.schema = fixtures.schema();
+        this.schema = rspecFixtures.schema();
         spyOn(this.schema, "canonicalName").andReturn("I.D.S");
         spyOn(this.dataset, "schema").andReturn(this.schema);
         this.launchElement = $("<a data-dialog='CreateDatabaseView'></a>")
