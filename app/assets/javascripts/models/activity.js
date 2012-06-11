@@ -23,104 +23,6 @@ chorus.models.Activity = chorus.models.Base.extend({
         return this._comments;
     },
 
-    instance: function() {
-        if (this.get("instance")) {
-            this._instance || (this._instance = new chorus.models.GreenplumInstance(this.get("instance")));
-        }
-
-        return this._instance;
-    },
-
-    workspace: function() {
-        if (this.get("workspace")) {
-            this._workspace || (this._workspace = new chorus.models.Workspace(this.get("workspace")));
-        }
-
-        if (this.parentComment()) {
-            this._workspace || (this._workspace = this.parentComment().workspace());
-        }
-
-        return this._workspace;
-    },
-
-    dataset: function() {
-        var datasetField = this.get("table") || this.get("view") || this.get("chorusView") || this.get("databaseObject");
-        if (datasetField && this.get("workspace")) {
-            return new chorus.models.Dataset({
-                id: datasetField.id,
-                type: datasetField.type,
-                objectType: datasetField.objectType,
-                objectName: datasetField.name,
-                workspace: this.get("workspace")
-            });
-        }
-    },
-
-    chorusViewDataset: function() {
-        var chorusView = this.get("chorusView");
-        if (chorusView && this.get("workspace")) {
-            return new chorus.models.Dataset({
-                id: chorusView.id,
-                type: chorusView.type,
-                objectType: chorusView.objectType,
-                objectName: chorusView.name,
-                workspace: this.get("workspace")
-            });
-        }
-    },
-
-    sourceDataset: function() {
-        var sourceObject = this.get("sourceObject")
-        return new chorus.models.Dataset({
-            id: sourceObject.id,
-            objectName: sourceObject.name,
-            workspace: this.get('workspace')
-        })
-    },
-
-    databaseObject: function() {
-        var databaseObjectField = this.get("databaseObject");
-        if (databaseObjectField) {
-            var attrs = _.clone(databaseObjectField)
-            attrs.objectName = attrs.objectName || attrs.name;
-            attrs.workspace = this.get('workspace');
-            delete attrs.name;
-            return new chorus.models.DatabaseObject(attrs);
-        }
-    },
-
-    workfile: function() {
-        if (this.get("workfile")) {
-            if (!this._workfile) {
-                this._workfile = new chorus.models.Workfile(this.get("workfile"));
-                this._workfile.set({workfileId: this._workfile.get("id")})
-                if (this.get("version")) {
-                    this._workfile.set({versionNum: this.get("version")})
-                }
-
-                if (this.workspace() && this.workspace().get("id")) {
-                    this._workfile.set({ workspace: {id: this.workspace().get("id")} });
-                }
-            }
-        }
-
-
-        if (this.parentComment()) {
-            this._workfile || (this._workfile = this.parentComment().workfile());
-        }
-
-        return this._workfile;
-    },
-
-    hdfs: function() {
-        var hdfsJson = this.get("hdfs");
-        if (!hdfsJson) return;
-        if (this.get("type") === "WORKSPACE_ADD_HDFS_DIRECTORY_AS_EXT_TABLE") {
-            hdfsJson.isDir = true;
-        }
-        return new chorus.models.HdfsEntry(hdfsJson);
-    },
-
     parentComment: function() {
         if (this.get("parentComment")) {
             this._parentComment || (this._parentComment = new chorus.models.Activity(this.get("parentComment")));
@@ -171,7 +73,7 @@ chorus.models.Activity = chorus.models.Base.extend({
     },
 
     toComment: function(attrs, options) {
-        var commentEntity = this.noteworthy();
+        var commentEntity = this.target();
         var comment = new chorus.models.Comment({
             entityType: commentEntity.entityType,
             entityId: commentEntity.id,
@@ -227,17 +129,6 @@ chorus.models.Activity = chorus.models.Base.extend({
 
     isPublished: function() {
         return this.get("isPublished") === true;
-    },
-
-    noteworthy: function() {
-            return (this.parentComment() && this.parentComment().noteworthy()) ||
-            this.instance() ||
-            this.workfile() ||
-            this.dataset() ||
-            this.databaseObject() ||
-            (this.has("user") && new chorus.models.User(this.get("user")[0])) ||
-            this.workspace() ||
-            this.hdfs();
     },
 
     target: function() {
