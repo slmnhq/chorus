@@ -55,11 +55,8 @@ describe "Editing instance details" do
       end
       click_link "Edit Instance"
 
-      within("#facebox") do
-        fill_in 'name', :with => "HadoopInstanceNewName"
-        fill_in 'description', :with => "Change Description"
-        click_button "Save Configuration"
-      end
+      edit_hadoop_instance(:name => "hadoop_edit_name", :description => "Change Description")
+
       within(".instance_provider.hadoop_instance") do
         page.find("li[data-hadoop-instance-id='#{instance_1_id}']").should have_content("HadoopInstanceNewName")
         page.find("li[data-hadoop-instance-id='#{instance_1_id}']").should have_content("Change Description")

@@ -22,7 +22,7 @@ describe "add a workfile" do
     page.should have_content ("workfile_1")
   end
 
-  xit "creates and displays an image workfile" do
+  it "creates and displays an image workfile" do
     create_valid_workspace(:name => "FooWorkspace")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace"}
     click_link("Work Files")
@@ -39,14 +39,14 @@ describe "add a workfile" do
     end
   end
 
-  xit "creates and displays a text workfile" do
+  it "creates and displays a text workfile" do
     create_valid_workspace(:name => "FooWorkspace")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace"}
     click_link("Work Files")
     click_button("Upload File")
     sleep(2)
     within("#facebox") do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/small2.png'))
       click_button("Upload File")
     end
 
@@ -56,7 +56,7 @@ describe "add a workfile" do
     end
   end
 
-  xit "creates and displays an binary workfile" do
+  it "creates and displays an binary workfile" do
     create_valid_workspace(:name => "FooWorkspace")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
     click_link("Work Files")
@@ -73,7 +73,7 @@ describe "add a workfile" do
     end
   end
 
-  xit "creates and displays a text workfile and take care of name conflict" do
+  it "creates and displays a text workfile and take care of name conflict" do
     create_valid_workspace(:name => "WorkspaceForFileNameConflict")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
     click_link("Work Files")
