@@ -64,11 +64,9 @@ describe UsersController do
       end
     end
 
-    it "generates a jasmine fixture", :fixture => true do
+    generate_fixture "userSet.json" do
       get :index
-      save_fixture "userSet.json"
     end
-
   end
 
   describe "#create" do
@@ -235,9 +233,8 @@ describe UsersController do
       end
     end
 
-    it "generates a jasmine fixture", :fixture => true do
+    generate_fixture "user.json" do
       get :show, :id => @other_user.to_param
-      save_fixture "user.json"
     end
   end
 

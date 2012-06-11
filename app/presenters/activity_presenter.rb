@@ -3,7 +3,8 @@ class ActivityPresenter < Presenter
     {
       :actor => present(model.actor),
       :action => model.action,
-      :target => present(model.target)
+      :target => present(model.target),
+      :target_type => model.target.class.name
     }
   end
 end

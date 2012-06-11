@@ -31,9 +31,8 @@ describe UserImagesController do
         decoded_response.icon.should == @user.image.url(:icon)
       end
 
-      it "generates image jasmine fixtures", :fixture => true do
+      generate_fixture "image.json" do
         put :update, :user_id => @user.id, :files => files
-        save_fixture "image.json"
       end
     end
   end
