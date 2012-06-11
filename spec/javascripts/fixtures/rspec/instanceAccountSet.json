@@ -1,0 +1,52 @@
+{
+  "response": [
+    {
+      "id": 49,
+      "db_username": "instance_owner",
+      "owner_id": 76,
+      "instance_id": 48,
+      "owner": {
+        "id": 76,
+        "username": "user1",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person1@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      }
+    },
+    {
+      "id": 50,
+      "db_username": "joe",
+      "owner_id": 77,
+      "instance_id": 48,
+      "owner": {
+        "id": 77,
+        "username": "user2",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person2@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      }
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 50,
+    "records": 2,
+    "total": 1
+  }
+}

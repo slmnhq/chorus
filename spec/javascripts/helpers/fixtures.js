@@ -1812,40 +1812,6 @@ beforeEach(function() {
             }, overrides);
         },
 
-        emptyInstanceAccount: function(overrides) {
-            var attributes = _.extend({
-                instanceId: "10020",
-                userName: "u1"
-            }, overrides);
-            return new chorus.models.InstanceAccount(attributes);
-        },
-
-        instanceAccount: function(overridesOrInstance) {
-            var overrides;
-            if (overridesOrInstance instanceof chorus.models.GreenplumInstance) {
-                overrides = {
-                    instanceId: overridesOrInstance.get("id")
-                };
-            } else {
-                overrides = overridesOrInstance || {};
-            }
-            var attributes = _.extend({
-                id: this.nextId().toString(),
-                shared: "true",
-                expiration: null,
-                instanceId: this.nextId().toString(),
-                // WTF: old fixtures reference new fixtures ???
-                owner: _.extend(rspecFixtures.userJson(), overrides.owner),
-                dbUsername: "gpadmin"
-            }, overrides);
-            return new chorus.models.InstanceAccount(attributes);
-        },
-
-        instanceAccountSet: function(models) {
-            models = models || [this.instanceAccount(), this.instanceAccount()];
-            return new chorus.collections.InstanceAccountSet(models);
-        },
-
         instanceUsage: function() {
             return new chorus.models.InstanceUsage({
                 "sandboxesSize": "2.9GB",
