@@ -54,7 +54,7 @@ describe "Showing the workspace quickstart page" do
       end
 
       wait_until { current_route =~ /workspaces\/\d+\/quickstart/ }
-      page.should have_selector(".add_team_members.hidden")
+      page.should_not have_selector(".add_team_members")
     end
 
     it "dismisses Edit Workspace Settings" do
@@ -68,10 +68,11 @@ describe "Showing the workspace quickstart page" do
       end
 
       wait_until { current_route =~ /workspaces\/\d+\/quickstart/ }
-      page.should have_selector(".edit_workspace_settings.hidden")
+      page.should_not have_selector(".edit_workspace_settings")
     end
 
-    it "dismisses Add a Sandbox" do
+    # TODO: sandbox is not ready
+    xit "dismisses Add a Sandbox" do
       click_link "Add a Sandbox"
 
       wait_until { page.has_selector?("#facebox") && page.find("#facebox .dialog h1").text == "Add a Sandbox" }
@@ -82,10 +83,11 @@ describe "Showing the workspace quickstart page" do
       end
 
       wait_until { current_route =~ /workspaces\/\d+\/quickstart/ }
-      page.should have_selector(".add_sandbox.hidden")
+      page.should_not have_selector(".add_sandbox")
     end
 
-    it "dismisses Add Work Files" do
+    # TODO: depending on uploading workfile
+    xit "dismisses Add Work Files" do
       click_link "Add Work Files"
 
       wait_until { page.has_selector?("#facebox") && page.find("#facebox .dialog h1").text == "Upload File" }
@@ -96,7 +98,7 @@ describe "Showing the workspace quickstart page" do
       end
 
       wait_until { current_route =~ /workspaces\/\d+\/quickstart/ }
-      page.should have_selector(".add_workfiles.hidden")
+      page.should_not have_selector(".add_workfiles")
     end
 
     # TODO: Need to dismiss all the actions for this test to work
