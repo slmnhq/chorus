@@ -9,6 +9,10 @@ chorus.models.Activity = chorus.models.Base.extend({
         return this._author;
     },
 
+    actor: function() {
+        return new chorus.models.User(this.get("actor"));
+    },
+
     comments: function() {
         this._comments || (this._comments = new chorus.collections.CommentSet(
             this.get("comments"), {
@@ -234,5 +238,9 @@ chorus.models.Activity = chorus.models.Base.extend({
             (this.has("user") && new chorus.models.User(this.get("user")[0])) ||
             this.workspace() ||
             this.hdfs();
+    },
+
+    target: function() {
+        return new chorus.models.GreenplumInstance(this.get("target"));
     }
 });

@@ -55,6 +55,25 @@ describe("chorus.models.Activity", function() {
         })
     })
 
+    describe("#target", function() {
+        context("when target type is instance", function() {
+            it("returns the instance", function() {
+               this.model = rspecFixtures.activity.instanceCreated({target: {id: 2}});
+               expect(this.model.target()).toBeA(chorus.models.GreenplumInstance);
+               expect(this.model.target().id).toBe(2);
+            });
+        });
+    });
+
+    describe("#actor", function() {
+        it("returns a user model with the actor data", function() {
+           var model = rspecFixtures.activity.instanceCreated({ actor: { id: 5 } });
+           var actor = model.actor();
+           expect(actor).toBeA(chorus.models.User);
+           expect(actor.id).toBe(5);
+        });
+    });
+
     describe("#isUserGenerated", function() {
         it("returns true for notes", function() {
             expect(fixtures.activities.NOTE_ON_DATASET_TABLE().isUserGenerated()).toBeTruthy();

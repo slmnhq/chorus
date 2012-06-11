@@ -1,4 +1,6 @@
 chorus.presenters.Base = function (model, options) {
+    this.model = model;
+
     var presentation = {
         serverErrors:model.serverErrors,
         loaded:model.loaded

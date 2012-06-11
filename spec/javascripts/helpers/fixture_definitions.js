@@ -98,7 +98,13 @@ window.rspecFixtureDefinitions = {
 //    },
 
     instanceAccount: {},
-    instanceAccountSet: {}
+    instanceAccountSet: {},
+
+    activity: {
+        children :{
+            instanceCreated: {}
+        }
+    }
 
 //    activity: {
 //        unique: [ "id" ],

@@ -1,4 +1,4 @@
-describe("chorus.views.CommentList", function() {
+xdescribe("chorus.views.CommentList", function() {
     beforeEach(function() {
         stubDefer();
         this.comment1 = fixtures.noteComment({
