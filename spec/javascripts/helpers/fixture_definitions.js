@@ -107,7 +107,8 @@ window.rspecFixtureDefinitions = {
 //        }
 //    },
 
-    instanceAccount: {}
+    instanceAccount: {},
+    instanceAccountSet: {}
 
 //    activity: {
 //        unique: [ "id" ],

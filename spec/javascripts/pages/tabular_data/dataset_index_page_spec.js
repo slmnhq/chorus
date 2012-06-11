@@ -245,14 +245,16 @@ describe("chorus.pages.DatasetIndexPage", function() {
                     });
                 });
 
-                context("when the account loads and is empty and the instance account maps are indiviudal", function() {
+                context("when the account loads and is empty and the instance account maps are individual", function() {
+
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
-                        this.server.completeFetchFor(this.account, fixtures.emptyInstanceAccount())
-                        this.server.completeFetchFor(this.page.instance, newFixtures.greenplumInstance.greenplum())
+                        this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount({"id":null}));
+                        this.server.completeFetchFor(this.page.instance, newFixtures.greenplumInstance.greenplum());
                     });
 
                     it("pops up a WorkspaceInstanceAccount dialog", function() {
+
                         expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
                         expect(this.page.dialog.model).toBe(this.page.account);
                         expect(this.page.dialog.pageModel).toBe(this.page.workspace);
@@ -275,7 +277,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                             this.server.reset();
                             this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
                             this.server.completeFetchFor(this.workspace);
-                            this.server.completeFetchFor(this.page.account, fixtures.emptyInstanceAccount())
+                            this.server.completeFetchFor(this.page.account, rspecFixtures.instanceAccount({"id":null}));
                         });
 
                         it("should not pop up the WorkspaceInstanceAccountDialog", function() {
@@ -287,7 +289,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 context("when the account loads and is empty and the instance is shared", function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
-                        this.server.completeFetchFor(this.account, fixtures.emptyInstanceAccount());
+                        this.server.completeFetchFor(this.page.account, rspecFixtures.instanceAccount({"id":null}));
                         this.server.completeFetchFor(this.page.instance, newFixtures.greenplumInstance.sharedAccount());
                     });
 

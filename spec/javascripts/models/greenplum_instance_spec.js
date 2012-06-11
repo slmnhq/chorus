@@ -94,17 +94,14 @@ describe("chorus.models.GreenplumInstance", function() {
     describe("#accountForOwner", function() {
         beforeEach(function() {
             this.owner = this.instance.owner();
-            this.account1 = rspecFixtures.instanceAccount();
-            this.account2 = rspecFixtures.instanceAccount({
-                owner: this.owner.attributes
-            })
-            this.accounts = fixtures.instanceAccountSet([this.account1, this.account2]);
+            this.accounts = rspecFixtures.instanceAccountSet();
+            this.accounts.models[1].set({owner: this.owner.attributes});
             spyOn(this.instance, "accounts").andReturn(this.accounts);
         });
 
         it("returns the account for the owner", function() {
             expect(this.instance.accountForOwner()).toBeA(chorus.models.InstanceAccount);
-            expect(this.instance.accountForOwner()).toBe(this.account2);
+            expect(this.instance.accountForOwner()).toBe(this.accounts.models[1]);
         });
     });
 

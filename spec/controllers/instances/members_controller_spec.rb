@@ -54,6 +54,10 @@ describe Instances::MembersController do
         request.params[:per_page].should == 50
       end
     end
+
+    generate_fixture "instanceAccountSet.json" do
+      get :index, :instance_id => instance.to_param
+    end
   end
 
   describe "#create" do
