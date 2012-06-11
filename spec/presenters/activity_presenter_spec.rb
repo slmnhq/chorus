@@ -10,13 +10,16 @@ describe ActivityPresenter, :type => :view do
   end
 
   describe "#to_hash" do
-    let(:hash) { ActivityPresenter.new(activity, view).to_hash }
+    subject { ActivityPresenter.new(activity, view).to_hash }
 
     it "includes the 'actor', 'action' and 'target'" do
-      hash[:action].should == "SOME_ACTION"
-      hash[:actor].should  == Presenter.present(activity.actor, view)
-      hash[:target].should == Presenter.present(activity.target, view)
-      hash[:target_type].should == "Instance"
+      subject[:action].should == "SOME_ACTION"
+      subject[:actor].should  == Presenter.present(activity.actor, view)
+      subject[:target].should == Presenter.present(activity.target, view)
+      subject[:target_type].should == "Instance"
+      subject[:id].should == activity.id
     end
+
+    its([:timestamp]) { should == activity.created_at }
   end
 end

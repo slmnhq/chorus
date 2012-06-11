@@ -1,11 +1,12 @@
 {
   "response": {
+    "id": 77,
     "actor": {
-      "id": 8,
-      "username": "user7",
+      "id": 77,
+      "username": "user14",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person7@example.com",
+      "email": "person14@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -17,20 +18,34 @@
     },
     "action": "INSTANCE_CREATED",
     "target": {
-      "id": 9,
-      "username": "user8",
-      "first_name": "John",
-      "last_name": "Doe",
-      "email": "person8@example.com",
-      "title": "Grand Poo Bah",
-      "dept": "Corporation Corp., Inc.",
-      "notes": "One of our top performers",
-      "admin": false,
-      "image": {
-        "original": "/images/default-user-icon.png",
-        "icon": "/images/default-user-icon.png"
-      }
+      "name": "instance1",
+      "host": "host1.emc.com",
+      "port": 5001,
+      "id": 7,
+      "owner": {
+        "id": 78,
+        "username": "user15",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person15@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "shared": false,
+      "state": "online",
+      "provision_type": null,
+      "maintenance_db": "postgres",
+      "description": null,
+      "instance_provider": null,
+      "version": "9.1.2 - FactoryVersion"
     },
-    "target_type": "User"
+    "target_type": "Instance",
+    "timestamp": "2012-06-11T17:53:23Z"
   }
 }

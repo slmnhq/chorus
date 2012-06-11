@@ -103,9 +103,14 @@ FactoryGirl.define do
   end
 
   factory :event do
-    action "INSTANCE_CREATED"
+    action "FOO"
     actor
     association :target, :factory => :user
+
+    factory :instance_created_event do
+      action "INSTANCE_CREATED"
+      association :target, :factory => :instance
+    end
   end
 
   factory :activity do
@@ -115,6 +120,10 @@ FactoryGirl.define do
     factory :global_activity do
       entity_type "GLOBAL"
       entity_id nil
+
+      factory :instance_created_activity do
+        association :event, :factory => :instance_created_event
+      end
     end
   end
 end
