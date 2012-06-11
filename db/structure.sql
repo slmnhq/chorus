@@ -621,7 +621,11 @@ CREATE TABLE workspaces (
     image_content_type character varying(256),
     image_file_size integer,
     image_updated_at timestamp without time zone,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    has_added_member boolean DEFAULT false,
+    has_added_workfile boolean DEFAULT false,
+    has_added_sandbox boolean DEFAULT false,
+    has_changed_settings boolean DEFAULT false
 );
 
 
@@ -1087,8 +1091,6 @@ INSERT INTO schema_migrations (version) VALUES ('20120519000854');
 
 INSERT INTO schema_migrations (version) VALUES ('20120522000542');
 
-INSERT INTO schema_migrations (version) VALUES ('20120522015308');
-
 INSERT INTO schema_migrations (version) VALUES ('20120522020546');
 
 INSERT INTO schema_migrations (version) VALUES ('20120523174942');
@@ -1106,5 +1108,7 @@ INSERT INTO schema_migrations (version) VALUES ('20120601180858');
 INSERT INTO schema_migrations (version) VALUES ('20120607173919');
 
 INSERT INTO schema_migrations (version) VALUES ('20120607175331');
+
+INSERT INTO schema_migrations (version) VALUES ('20120607223025');
 
 INSERT INTO schema_migrations (version) VALUES ('20120608001550');
