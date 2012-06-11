@@ -52,7 +52,7 @@ def edit_hadoop_instance(params={})
       fill_in 'port', :with => "8020"
       fill_in 'username', :with => "hadoop"
       fill_in 'groupList', :with => "hadoop"
-      find(".submit").click
+      click_button "Save Configuration"
     end
     wait_until { current_route == "/instances" }
     wait_until { find('.instance_list').has_content?(name) }

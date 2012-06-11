@@ -12,4 +12,14 @@ describe " add an instance " do
     click_link("analytics")
   end
 
+
+  it "runs analyze on a table from instance browsing view" do
+      create_valid_instance(:name => "RunAnalyze")
+      click_link("RunAnalyze")
+      click_link("Analytics")
+      click_link("public")
+      click_link ("Run Analyze")
+      click_button "Run Analyze"
+      page.should have_content("Analyze is running")
+    end
 end
