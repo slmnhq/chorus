@@ -14,8 +14,8 @@ chorus.views.Activity = chorus.views.Base.extend({
         ".activity_content > .truncated_text": "htmlContent"
     },
 
-    context:function () {
-        return new chorus.presenters.Activity(this.model, this.options)
+    context: function () {
+        return new chorus.presenters.Activity(this.model, this.options);
     },
 
     setupSubviews:function () {

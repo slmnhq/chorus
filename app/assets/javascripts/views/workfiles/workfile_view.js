@@ -19,7 +19,7 @@ chorus.views.Workfile = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
-        var ctx = new chorus.presenters.Artifact(this.model, {iconSize:'large'});
+        var ctx = new chorus.presenters.Artifact(this.model, { iconSize:'large' });
 
         ctx.activeWorkspace = this.options.activeWorkspace;
 

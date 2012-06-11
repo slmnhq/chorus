@@ -4,7 +4,6 @@ describe("chorus.presenters.Activity", function() {
     context("instance created", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.instanceCreated({
-                timestamp: "June 11, 2012",
                 actor: { firstName: "bomb", lastName: "cherry"},
                 target: { name: "kaboom" }
             });
@@ -12,15 +11,16 @@ describe("chorus.presenters.Activity", function() {
             presenter = new chorus.presenters.Activity(model);
         });
 
-        it("includes the model's timestamp", function() {
-            expect(presenter.timestamp).toBe("June 11, 2012");
+        it("includes the relative timestamp", function() {
+            var relativeTime = chorus.helpers.relativeTimestamp(model.get("timestamp"));
+            expect(presenter.timestamp()).toBe(relativeTime);
         });
 
         describe("#headerHtml", function() {
             var headerHtml;
 
             beforeEach(function() {
-                headerHtml = presenter.headerHtml;
+                headerHtml = presenter.headerHtml();
             });
 
             it("returns a handlebars safe-string (so that html won't be stripped)", function() {

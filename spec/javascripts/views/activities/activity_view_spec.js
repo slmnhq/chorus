@@ -72,7 +72,8 @@ describe("chorus.views.Activity", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            spyOn(chorus.presenters.Activity.prototype, "headerHtml").andReturn("A nice header.")
+            spyOn(chorus.presenters.Activity.prototype, "headerHtml").andReturn("A nice header.");
+            spyOn(chorus.presenters.Activity.prototype, "timestamp").andReturn("A nice timestamp.");
             this.view.render();
         });
 
@@ -80,13 +81,9 @@ describe("chorus.views.Activity", function() {
             expect($(this.view.el)).toHaveData("activityId", this.model.get("id"));
         });
 
-        it("renders the header correctly", function() {
+        it("renders the header and timestamp from the presenter", function() {
             expect(this.view.$(".activity_header")).toContainText("A nice header.");
-        });
-
-        it("renders the relative timestamp", function() {
-            var relativeTime = chorus.helpers.relativeTimestamp(this.model.get("timestamp"));
-            expect(this.view.$(".timestamp")).toContainText(relativeTime);
+            expect(this.view.$(".timestamp")).toContainText("A nice timestamp.");
         });
 
         xcontext("isNotification", function() {
