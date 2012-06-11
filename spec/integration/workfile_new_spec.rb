@@ -46,7 +46,7 @@ describe "add a workfile" do
     click_button("Upload File")
     sleep(2)
     within("#facebox") do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/small2.png'))
+      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
     end
 
