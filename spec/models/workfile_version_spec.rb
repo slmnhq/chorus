@@ -1,7 +1,10 @@
 require "spec_helper" 
 
 describe WorkfileVersion do
-  let(:version) { version = FactoryGirl.build(:workfile_version) }
+  let!(:workfile) { workfile = FactoryGirl.create(:workfile)}
+  let!(:version) { version = FactoryGirl.create(:workfile_version, :workfile => workfile) }
+  let!(:version2) { version = FactoryGirl.create(:workfile_version, :workfile => workfile, :version_num => "2") }
+
   subject { version }
 
   describe "methods relating to file type" do
@@ -53,16 +56,30 @@ describe WorkfileVersion do
   end
 
   describe "#Update_content" do
+    context "when the version is the latest version" do
+      before do
+        version2.contents = test_file("workfile.sql")
+        version2.save
+      end
 
-    before do
-      version.contents = test_file("workfile.sql")
-      version.save
+      context "Updating the content of workfile" do
+        it "changes the content " do
+          version2.update_content("this is new content")
+          File.read(version2.contents.path).should == "this is new content"
+        end
+      end
     end
 
-    context "Updating the content of workfile" do
-      it "changes the content " do
-        version.update_content("this is new content")
-        File.read(version.contents.path).should == "this is new content"
+    context "when the version is not the latest version" do
+      before do
+        version.contents = test_file("workfile.sql")
+        version.save
+      end
+
+      context "Updating the content of workfile" do
+        it "raise an error " do
+          expect { version.update_content("this is new content") }.to raise_error(ActiveRecord::RecordInvalid)
+        end
       end
     end
   end

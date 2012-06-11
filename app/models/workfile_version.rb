@@ -52,8 +52,19 @@ class WorkfileVersion < ActiveRecord::Base
   end
 
   def update_content(new_content)
-    File.open(contents.path, "w") do |file|
-      file.write new_content
+    if latest_version?
+      File.open(contents.path, "w") do |file|
+        file.write new_content
+      end
+    else
+      errors.add(:version, :invalid)
+      raise ActiveRecord::RecordInvalid.new(self)
     end
+  end
+
+  private
+
+  def latest_version?
+    version_num == workfile.last_version.version_num
   end
 end
