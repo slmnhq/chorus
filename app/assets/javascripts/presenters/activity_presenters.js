@@ -6,6 +6,18 @@
 
         headerHtml: function() {
             return new Handlebars.SafeString(t(headerTranslationKey.call(this), headerParams.call(this)));
+        },
+
+        iconSrc: function() {
+            return this.model.actor().fetchImageUrl({ size: "icon" });
+        },
+
+        iconHref: function() {
+            return this.model.actor().showUrl();
+        },
+
+        iconClass: function() {
+            return "profile";
         }
     });
 
@@ -18,8 +30,8 @@
         var target = this.model.target();
 
         return {
-            authorLink: chorus.helpers.linkTo(actor.url(), actor.name()),
-            objectLink: chorus.helpers.linkTo(target.url(), target.name())
+            authorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
+            objectLink: chorus.helpers.linkTo(target.showUrl(), target.name())
         };
     }
 })();
