@@ -12,15 +12,6 @@ window.fixtureDefinitions = {
 
     config: {},
 
-    greenplumInstance: {
-        unique: [ "id" ],
-
-        children: {
-            greenplum:      {},
-            sharedAccount:  {}
-        }
-    },
-
     activity: {
         unique: [ "id" ],
 
@@ -98,8 +89,7 @@ window.rspecFixtureDefinitions = {
 
     image: {},
 
-//    greenplumInstance: {
-//        unique: [ "id" ],
+    greenplumInstance: { unique: [ "id" ] },
 //
 //        children: {
 //            greenplum:      {},

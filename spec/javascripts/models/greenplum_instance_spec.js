@@ -1,6 +1,6 @@
 describe("chorus.models.GreenplumInstance", function() {
     beforeEach(function() {
-        this.instance = newFixtures.greenplumInstance.greenplum({id: 1});
+        this.instance = rspecFixtures.greenplumInstance({id: 1});
     });
 
     it("has the right show url", function() {

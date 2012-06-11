@@ -3,8 +3,8 @@ describe("chorus.presenters.InstanceList", function() {
 
     beforeEach(function() {
         greenplumInstances = new chorus.collections.InstanceSet([
-            newFixtures.greenplumInstance.greenplum({ name: "joe_instance", state: "online" }),
-            newFixtures.greenplumInstance.greenplum({ state: "offline" })
+            rspecFixtures.greenplumInstance({ name: "joe_instance", state: "online" }),
+            rspecFixtures.greenplumInstance({ state: "offline" })
         ]);
 
         hadoopInstances = new chorus.collections.HadoopInstanceSet([

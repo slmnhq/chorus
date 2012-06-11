@@ -47,6 +47,10 @@ describe InstancesController do
         mock.proxy(controller).present(instance)
         get :show, :id => instance.to_param
       end
+
+      generate_fixture "greenplumInstance.json" do
+        get :show, :id => instance.to_param
+      end
     end
 
     context "with an invalid instance id" do

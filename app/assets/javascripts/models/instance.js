@@ -23,7 +23,7 @@ chorus.models.Instance = chorus.models.Base.extend({
     },
 
     version: function() {
-        return this.get("instanceVersion");
+        return this.get("version");
     },
 
     stateIconUrl: function() {

@@ -55,8 +55,8 @@ describe("chorus.pages.DashboardPage", function() {
     context("#setup", function() {
         beforeEach(function() {
             this.server.completeFetchFor(new chorus.collections.InstanceSet([], { hasCredentials: true }), [
-                                         newFixtures.greenplumInstance.greenplum(),
-                                         newFixtures.greenplumInstance.greenplum()
+                                         rspecFixtures.greenplumInstance(),
+                                         rspecFixtures.greenplumInstance()
             ], { accessible: true }, { accessible: true });
 
             this.server.completeFetchFor(new chorus.collections.HadoopInstanceSet(), [

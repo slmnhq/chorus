@@ -1,6 +1,6 @@
 describe("chorus.pages.DatabaseIndexPage", function() {
     beforeEach(function() {
-        this.instance = newFixtures.greenplumInstance.greenplum({id: "1234", name: "instance Name"});
+        this.instance = rspecFixtures.greenplumInstance({id: "1234", name: "instance Name"});
         this.page = new chorus.pages.DatabaseIndexPage("1234");
         this.page.render();
     });

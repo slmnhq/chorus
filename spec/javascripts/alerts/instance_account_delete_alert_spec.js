@@ -1,6 +1,6 @@
 describe("chorus.alerts.InstanceAccountDelete", function() {
     beforeEach(function() {
-        this.instance = newFixtures.greenplumInstance.greenplum({ id: '456' });
+        this.instance = rspecFixtures.greenplumInstance({ id: '456' });
         setLoggedInUser({ id: "1011" });
         this.alert = new chorus.alerts.InstanceAccountDelete({ pageModel: this.instance });
     });
