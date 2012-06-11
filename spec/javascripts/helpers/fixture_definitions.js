@@ -41,10 +41,6 @@ window.fixtureDefinitions = {
         }
     },
 
-    databaseObject: {
-        unique: [ "id" ]
-    },
-
     test: {
         model:   "User",
         unique:  [ "id" ],
@@ -104,7 +100,8 @@ window.rspecFixtureDefinitions = {
         children :{
             instanceCreated: {}
         }
-    }
+    },
+
 
 //    activity: {
 //        unique: [ "id" ],
@@ -135,9 +132,7 @@ window.rspecFixtureDefinitions = {
 //        }
 //    },
 //
-//    databaseObject: {
-//        unique: [ "id" ]
-//    },
+    databaseObject: { unique: [ "id" ] }
 //
 //    test: {
 //        model:   "User",

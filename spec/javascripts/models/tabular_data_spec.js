@@ -134,7 +134,7 @@ describe("chorus.models.TabularData", function() {
 
     describe("#canBeImportSource", function() {
         it("returns true if the object is a Dataset (with a workspace id) but not a Sandbox Dataset", function() {
-            var table = newFixtures.databaseObject();
+            var table = rspecFixtures.databaseObject();
             expect(table.canBeImportSource()).toBeFalsy();
 
             var dataset = newFixtures.dataset.sandboxTable();
@@ -156,7 +156,7 @@ describe("chorus.models.TabularData", function() {
 
     describe("#canBeImportDestination", function() {
         it("returns true if the object is a Dataset (with a workspace id)", function() {
-            var table = newFixtures.databaseObject();
+            var table = rspecFixtures.databaseObject();
             expect(table.canBeImportDestination()).toBeFalsy();
 
             var dataset = newFixtures.dataset.sandboxTable();

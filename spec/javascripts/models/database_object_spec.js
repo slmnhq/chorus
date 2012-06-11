@@ -15,7 +15,7 @@ describe("chorus.models.DatabaseObject", function() {
     };
 
     beforeEach(function() {
-        this.databaseObject = newFixtures.databaseObject({
+        this.databaseObject = rspecFixtures.databaseObject({
             schema: {
                 id: 1,
                 name: "ipa",

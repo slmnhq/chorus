@@ -1734,7 +1734,7 @@ beforeEach(function() {
         },
 
         databaseTable: function(overrides) {
-            var attributes = _.extend(newFixtures.databaseObjectJson(), {
+            var attributes = _.extend(rspecFixtures.databaseObjectJson(), {
                 objectType: "TABLE",
                 type: "SOURCE_TABLE"
             }, overrides);
@@ -1742,7 +1742,7 @@ beforeEach(function() {
         },
 
         databaseView: function(overrides) {
-            var attributes = _.extend(newFixtures.databaseObjectJson(), {
+            var attributes = _.extend(rspecFixtures.databaseObjectJson(), {
                 objectType: "VIEW",
                 type: "SOURCE_TABLE",
                 definition: "SELECT chorus_test_table.customer_id FROM ddemo.chorus_test_table;"

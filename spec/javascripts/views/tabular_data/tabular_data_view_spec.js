@@ -36,19 +36,9 @@ describe("chorus.views.TabularData", function() {
         expect(this.view.$(".database").data("instance")).toEqual(this.dataset.get("instance"));
     });
 
-    describe("found in workspaces tooltip (when rendered from the schema browse page)", function() {
+    xdescribe("found in workspaces tooltip (when rendered from the schema browse page)", function() {
         beforeEach(function() {
-            this.databaseObject = newFixtures.databaseObject({
-                objectName: "john_the_table",
-                workspaceUsed: {
-                    workspaceCount: 3,
-                    workspaceList: [
-                        { id: '1', name: "Hoge" },
-                        { id: '2', name: "Fuga" },
-                        { id: '3', name: "Piyo" }
-                    ]
-                }
-            });
+            this.databaseObject = rspecFixtures.databaseObject();
 
             this.view = new chorus.views.TabularData({ model: this.databaseObject, activeWorkspace: true });
             this.view.render();
@@ -78,7 +68,7 @@ describe("chorus.views.TabularData", function() {
         });
     })
 
-    describe("when the workspace is archived", function() {
+    xdescribe("when the workspace is archived", function() {
         beforeEach(function() {
             this.view.options.activeWorkspace = false;
             this.view.render();
@@ -168,8 +158,6 @@ describe("chorus.views.TabularData", function() {
 
     it("works with database objects as well as datasets", function() {
         var table = fixtures.databaseTable({objectName: 'yyy'});
-        table.get("workspaceUsed").workspaceCount = 3;
-        table.get("workspaceUsed").workspaceList = [fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson(), fixtures.nestedWorkspaceJson()];
         var view = new chorus.views.TabularData({ model: table });
         view.render();
         expect(view.$(".name")).toHaveHref(table.showUrl());

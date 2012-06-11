@@ -190,10 +190,10 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     spyOn(this.view, 'closeQtip');
 
                     this.server.completeFetchFor(this.schema.databaseObjects(), [
-                        newFixtures.databaseObject({ objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
-                        newFixtures.databaseObject({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" }),
-                        newFixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "TABLE" }),
-                        newFixtures.databaseObject({ objectName: "1234",  type: "SANDBOX_TABLE", objectType: "TABLE" })
+                        rspecFixtures.databaseObject({ objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
+                        rspecFixtures.databaseObject({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" }),
+                        rspecFixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "TABLE" }),
+                        rspecFixtures.databaseObject({ objectName: "1234",  type: "SANDBOX_TABLE", objectType: "TABLE" })
                     ]);
 
                     this.server.completeFetchFor(this.schema.database().schemas());
