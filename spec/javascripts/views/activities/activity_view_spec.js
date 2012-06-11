@@ -72,13 +72,32 @@ describe("chorus.views.Activity", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            spyOn(chorus.presenters.Activity.prototype, "headerHtml").andReturn("A nice header.");
-            spyOn(chorus.presenters.Activity.prototype, "timestamp").andReturn("A nice timestamp.");
+            this.presenter = new chorus.presenters.Activity(this.model);
+            spyOn(chorus.presenters, "Activity").andReturn(this.presenter);
+
+            spyOn(this.presenter, "headerHtml").andReturn("A nice header.");
+            spyOn(this.presenter, "timestamp").andReturn("A nice timestamp.");
+            spyOn(this.presenter, "iconSrc").andReturn("a/nice/icon/src");
+            spyOn(this.presenter, "iconHref").andReturn("a/nice/icon/href");
+            spyOn(this.presenter, "iconClass").andReturn("a-nice-icon-class");
+
             this.view.render();
+        });
+
+        it("uses the activity presenter", function() {
+            expect(chorus.presenters.Activity).toHaveBeenCalledWith(this.model, jasmine.any(Object));
         });
 
         it("it puts the ID on the view element", function() {
             expect($(this.view.el)).toHaveData("activityId", this.model.get("id"));
+        });
+
+        it("renders the icon based on the presenter", function() {
+            var link = this.view.$(".icon a");
+            var icon = link.find("img");
+            expect(link).toHaveAttr("href", "a/nice/icon/href");
+            expect(icon).toHaveAttr("src", "a/nice/icon/src");
+            expect(icon).toHaveClass("a-nice-icon-class");
         });
 
         it("renders the header and timestamp from the presenter", function() {
