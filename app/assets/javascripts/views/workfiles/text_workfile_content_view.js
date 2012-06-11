@@ -39,6 +39,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         chorus.PageEvents.subscribe("file:createNewVersion", this.createNewVersion, this);
         chorus.PageEvents.subscribe("file:replaceCurrentVersionWithSelection", this.replaceCurrentVersionWithSelection, this);
         chorus.PageEvents.subscribe("file:createNewVersionFromSelection", this.createNewVersionFromSelection, this);
+        chorus.PageEvents.subscribe("file:editorSelectionStatus", this.editorSelectionStatus, this);
         this.bindings.add(this.model, "saveFailed", this.versionConflict);
     },
 
@@ -113,6 +114,14 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
 
     createNewVersionFromSelection: function() {
         this.createNewVersionWithContent(this.editor.getSelection());
+    },
+
+    editorSelectionStatus: function() {
+        if (this.editor.getSelection() && this.editor.getSelection().length > 0) {
+            chorus.PageEvents.broadcast("file:selectionPresent");
+        } else {
+            chorus.PageEvents.broadcast("file:selectionEmpty");
+        }
     },
 
     replaceCurrentVersionWithContent: function(value) {

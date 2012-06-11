@@ -37,6 +37,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
             this.fileMenu.disableItem("newChorusView");
             this.selectionMenu.disableItem("newSelectionChorusView");
         }
+        chorus.PageEvents.broadcast("file:editorSelectionStatus");
     },
 
     selectionMenuItems: function() {

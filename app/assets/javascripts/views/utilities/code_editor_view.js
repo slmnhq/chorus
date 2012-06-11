@@ -50,6 +50,6 @@ _.each([
     'setSelection', 'focus', 'getCursor', 'setCursor', 'lineCount', 'getLine'
 ], function(method) {
     chorus.views.CodeEditorView.prototype[method] = function() {
-        return this.editor[method].apply(this.editor, arguments);
+        return this.editor && this.editor[method].apply(this.editor, arguments);
     };
 });

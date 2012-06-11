@@ -338,6 +338,28 @@ describe("chorus.views.TextWorkfileContentView", function() {
                     expect(this.view.dialog.model).toBeA(chorus.models.Workfile);
                 });
             });
+
+            describe("event file:editorSelectionStatus", function() {
+                beforeEach(function() {
+                    spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                });
+
+                it("calls file:selectionPresent when there is some text selected", function() {
+                    this.view.editor.setSelection({line: 0, ch:17}, {line: 0, ch: 20});
+
+                    chorus.PageEvents.broadcast("file:editorSelectionStatus");
+
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:selectionPresent");
+                });
+
+                it("calls file:selectionEmpty when there is No text selected", function() {
+                    this.view.editor.setSelection({line: 0, ch:17}, {line: 0, ch: 17});
+
+                    chorus.PageEvents.broadcast("file:editorSelectionStatus");
+
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:selectionEmpty");
+                });
+            });
         });
     });
 

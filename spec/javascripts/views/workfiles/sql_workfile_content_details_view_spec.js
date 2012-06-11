@@ -251,6 +251,20 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     expect(modalSpy).toHaveModal(chorus.dialogs.RunFileInSchema);
                 })
             });
+
+            context("it fires an event - editorSelectionStatus", function() {
+                beforeEach(function() {
+                    spyOn(this.contentView, "getSelectedText").andReturn("Chuck and Lenny");
+                    spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                    this.qtipElement.find('.run_default').click();
+                    this.view.render();
+                });
+
+                it("broadcast the event", function() {
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:editorSelectionStatus")
+                });
+
+            });
         })
     });
 
