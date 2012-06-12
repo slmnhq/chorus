@@ -93,10 +93,10 @@ describe HadoopInstancesController do
       get :show, :id => instance.id
       decoded_response.name.should == "hadoop3"
     end
+
     generate_fixture "hadoopInstance.json" do
       instance = FactoryGirl.create(:hadoop_instance, :name => "hadoop3")
       get :show, :id => instance.id
-      save_fixture("hadoopInstance.json")
     end
   end
 end

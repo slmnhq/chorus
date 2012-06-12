@@ -3,10 +3,10 @@ describe("chorus.dialogs.WorkfilesAttach", function() {
         this.workfiles = rspecFixtures.workfileSet();
 
         this.workfile1 = this.workfiles.models[0];
-        this.workfile1.get("versionInfo").updatedAt = "2012-06-13T17:39:11Z";
+        this.workfile1.get("versionInfo").updatedAt = "2020-06-12T17:39:11Z";
 
         this.workfile2 = this.workfiles.models[1];
-        this.workfile2.get("versionInfo").updatedAt = "2012-06-14T17:39:11Z";
+        this.workfile2.get("versionInfo").updatedAt = "2021-06-12T17:39:11Z";
 
         this.dialog = new chorus.dialogs.WorkfilesAttach({ workspaceId : "33" });
         this.server.completeFetchAllFor(this.dialog.collection, this.workfiles.models);

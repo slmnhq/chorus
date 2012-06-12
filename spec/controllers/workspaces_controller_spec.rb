@@ -85,9 +85,8 @@ describe WorkspacesController do
       end
     end
 
-    it "generates a JSON fixture", :fixture => true do
+    generate_fixture "workspaceSet.json" do
       get :index
-      save_fixture "workspaceSet.json"
     end
 
   end
