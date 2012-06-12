@@ -16,12 +16,7 @@ describe " add an instance " do
       click_button "Add instance"
       within("#facebox") do
         choose("register_existing_hadoop")
-        wait_until { find("input[name=name]").visible? }
-        wait_until { find("textarea[name=description]").visible? }
-        wait_until { find("input[name=host]").visible? }
-        wait_until { find("input[name=port]").visible? }
-        wait_until { find("input[name=username]").visible? }
-        wait_until { find("input[name=groupList]").visible? }
+        find_hadoop_instance_dialog
 
         fill_in 'name', :with => "hadoop invalid instance name"
         fill_in 'description', :with => "hadoop instance"
@@ -47,12 +42,7 @@ describe " add an instance " do
     click_button "Add instance"
     within("#facebox") do
       choose("register_existing_hadoop")
-      wait_until { find("input[name=name]").visible? }
-      wait_until { find("textarea[name=description]").visible? }
-      wait_until { find("input[name=host]").visible? }
-      wait_until { find("input[name=port]").visible? }
-      wait_until { find("input[name=username]").visible? }
-      wait_until { find("input[name=groupList]").visible? }
+      find_hadoop_instance_dialog
 
       fill_in 'name', :with => "hadoop_host_port"
       fill_in 'description', :with => "hadoop instance"
@@ -95,12 +85,7 @@ describe " add an instance " do
     click_button "Add instance"
     within("#facebox") do
       choose("register_existing_hadoop")
-      wait_until { find("input[name=name]").visible? }
-      wait_until { find("textarea[name=description]").visible? }
-      wait_until { find("input[name=host]").visible? }
-      wait_until { find("input[name=port]").visible? }
-      wait_until { find("input[name=username]").visible? }
-      wait_until { find("input[name=groupList]").visible? }
+      find_hadoop_instance_dialog
 
       fill_in 'name', :with => "hadoop_host_port"
       fill_in 'description', :with => "hadoop instance"
