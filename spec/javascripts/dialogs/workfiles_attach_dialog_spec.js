@@ -1,23 +1,13 @@
 describe("chorus.dialogs.WorkfilesAttach", function() {
     beforeEach(function() {
-        this.workfile1 = rspecFixtures.workfile.sql({
-            workspace: { id: "33" },
-            versionInfo: {
-                versionNum: "1"
-            }
-        });
-        this.workfile2 = rspecFixtures.workfile.text({
-            workspace: { id: "33" },
-            versionInfo: {
-                versionNum: "5"
-            }
-        });
+        this.workfiles = rspecFixtures.workfileSet();
 
-        // TODO: REMOVEME (this view needs to use 'versionInfo.updatedAt'
-        this.workfile1.set({ lastUpdatedStamp: "2011-11-29T10:46:03Z" });
-        this.workfile2.set({ lastUpdatedStamp: "2012-11-29T10:46:03Z" });
+        this.workfile1 = this.workfiles.models[0];
+        this.workfile1.get("versionInfo").updatedAt = "2012-06-13T17:39:11Z";
 
-        this.workfiles = fixtures.workfileSet([this.workfile1, this.workfile2]);
+        this.workfile2 = this.workfiles.models[1];
+        this.workfile2.get("versionInfo").updatedAt = "2012-06-14T17:39:11Z";
+
         this.dialog = new chorus.dialogs.WorkfilesAttach({ workspaceId : "33" });
         this.server.completeFetchAllFor(this.dialog.collection, this.workfiles.models);
         this.dialog.render();

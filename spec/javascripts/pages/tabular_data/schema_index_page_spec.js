@@ -1,6 +1,6 @@
 describe("chorus.pages.SchemaIndexPage", function() {
     beforeEach(function() {
-        this.database = fixtures.database({id: "5678", name: "Foo", instance: {id: "1234", name: "Foo"}})
+        this.database = rspecFixtures.database({id: "5678", name: "Foo", instance: {id: "1234", name: "Foo"}})
         this.page = new chorus.pages.SchemaIndexPage("5678");
         this.page.render();
     });

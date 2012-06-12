@@ -7,7 +7,7 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
 
         this.dialog = new chorus.dialogs.HdfsInstanceWorkspacePicker({
             model: fixtures.hdfsEntryDir({
-                hadoopInstance : fixtures.hadoopInstance(),
+                hadoopInstance : rspecFixtures.hadoopInstance({ id: 1234 }),
                 path: '/data',
                 name: 'foo'
             }),

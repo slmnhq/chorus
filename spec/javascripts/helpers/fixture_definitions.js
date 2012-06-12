@@ -1,8 +1,4 @@
 window.fixtureDefinitions = {
-    schema:    { unique: [ "id", "instance.id" ] },
-
-    workspaceSet: { unique: [ "id", "sandboxInfo.sandboxId" ] },
-
     sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
 
     csvImport: { model: "CSVImport" },
@@ -58,7 +54,7 @@ window.rspecFixtureDefinitions = {
 
     schema:    { unique: [ "id", "database.id", "database.instance.id" ] },
     schemaSet: { unique: [ "id" ] },
-//
+
     workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] },
     workspaceSet: { unique: [ "id", "sandboxInfo.sandboxId" ] },
 
@@ -71,6 +67,7 @@ window.rspecFixtureDefinitions = {
             text: {}
         }
     },
+    workfileSet: {},
 
 //    sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
 //
@@ -86,12 +83,7 @@ window.rspecFixtureDefinitions = {
     image: {},
 
     greenplumInstance: { unique: [ "id" ] },
-//
-//        children: {
-//            greenplum:      {},
-//            sharedAccount:  {}
-//        }
-//    },
+    database: {},
 
     instanceAccount: {},
     instanceAccountSet: {},

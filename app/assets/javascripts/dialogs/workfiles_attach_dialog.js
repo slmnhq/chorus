@@ -23,6 +23,6 @@ chorus.dialogs.WorkfilesAttach = chorus.dialogs.PickItems.extend({
     },
 
     collectionComparator: function(model) {
-        return -(Date.parseFromApi(model.get("lastUpdatedStamp")).getTime());
+        return -(Date.parseFromApi(model.get("versionInfo").updatedAt).getTime());
     }
 })

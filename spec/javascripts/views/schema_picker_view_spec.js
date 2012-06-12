@@ -27,7 +27,7 @@ describe("chorus.views.SchemaPicker", function() {
         context("when an instance and a database are provided", function() {
             beforeEach(function() {
                 this.instance = rspecFixtures.greenplumInstance();
-                this.database = fixtures.database({instanceId: this.instance.get("id")});
+                this.database = rspecFixtures.database({instance: { id: this.instance.get("id") } });
                 this.database.unset('id');
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance, database: this.database });
                 this.view.render();
@@ -156,7 +156,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                             context("when the database list fetch completes", function() {
                                 beforeEach(function() {
-                                    this.server.completeFetchFor(this.view.databases, [fixtures.database(), fixtures.database()]);
+                                    this.server.completeFetchFor(this.view.databases, [rspecFixtures.database(), rspecFixtures.database()]);
                                 });
 
                                 itShowsSelect('database');
@@ -492,7 +492,7 @@ describe("chorus.views.SchemaPicker", function() {
                     this.instance = rspecFixtures.greenplumInstance();
                     this.view = new chorus.views.SchemaPicker({ instance: this.instance });
                     this.view.render();
-                    this.server.completeFetchFor(this.view.databases, [ fixtures.database({ id: '5' }) ]);
+                    this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
                     this.view.$(".database select").val("5").change();
                     this.server.completeFetchFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
                     this.view.$(".schema select").val("6").change();
@@ -518,7 +518,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                 context("when an instance, database, and schema are selected from the dropdowns", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.view.databases, [ fixtures.database({ id: '5' }) ]);
+                        this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
                         this.view.$(".database select").val("5").change();
                         this.server.completeFetchFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
                         this.view.$(".schema select").val("6").change();
@@ -718,8 +718,11 @@ describe("chorus.views.SchemaPicker", function() {
                         rspecFixtures.schema({name: "Aardvark"}),
                         rspecFixtures.schema({name: "bear"})
                     ]);
-                } else {
-                    this.server.completeFetchFor(this.view[type + "s"], [fixtures[type]({name: "Zoo"}), fixtures[type]({name: "Aardvark"}), fixtures[type]({name: "bear"})]);
+                } else { // type == 'database'
+                    this.server.completeFetchFor(this.view.databases, [
+                        rspecFixtures.database({name: "Zoo"}),
+                        rspecFixtures.database({name: "Aardvark"}),
+                        rspecFixtures.database({name: "bear"})]);
                 }
 
                 expect(this.view.$("." + type + " select option:eq(1)").text()).toBe("Aardvark");

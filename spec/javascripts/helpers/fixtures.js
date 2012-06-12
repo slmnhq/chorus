@@ -1554,33 +1554,11 @@ beforeEach(function() {
             }, overrides);
         },
 
-        databaseJson: function(overrides) {
-            var id = this.nextId().toString();
-
-            return _.extend({
-                id: id,
-                connectable: true,
-                name: "Database_" + id,
-                creatable: true
-            }, overrides);
-        },
-
         instanceJson: function(overrides) {
             var id = this.nextId();
             return _.extend({
                 id: id.toString(),
                 name: 'Instance_' + id
-            }, overrides);
-        },
-
-        hadoopInstance: function(overrides) {
-            return new chorus.models.HadoopInstance(this.hadoopInstanceJson(overrides));
-        },
-
-        hadoopInstanceJson: function(overrides) {
-            return _.extend({
-                id: "1234",
-                name: "hadoop_1"
             }, overrides);
         },
 
@@ -1713,10 +1691,6 @@ beforeEach(function() {
             return new chorus.models.Comment(attributes);
         },
 
-        database: function(overrides) {
-            return new chorus.models.Database(this.databaseJson(overrides));
-        },
-
         activity: function(overrides) {
             return new chorus.models.Activity(this.activityJson(overrides));
         },
@@ -1760,11 +1734,6 @@ beforeEach(function() {
             var workfileJson = this.workfileJson(attributes)
             workfileJson.workspaceId = overrides.workspaceId || workfileJson.workspace.id;
             return new chorus.models.Draft(workfileJson);
-        },
-
-        workfileSet: function(models) {
-            models = models || [rspecFixtures.workfile.sql(), rspecFixtures.workfile.sql()];
-            return new chorus.collections.WorkfileSet(models);
         },
 
         artifact: function(overrides) {

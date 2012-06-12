@@ -69,7 +69,7 @@ describe("chorus.views.SelectableList", function() {
 
     describe("when eventName:search is triggered", function() {
         beforeEach(function() {
-            this.collection = new chorus.collections.DatabaseSet([fixtures.database({name: "1" }), fixtures.database({name: "2"})]);
+            this.collection = new chorus.collections.DatabaseSet([rspecFixtures.database({name: "1" }), rspecFixtures.database({name: "2"})]);
             this.collection.loaded = true;
             this.view = new chorus.views.DatabaseList({collection: this.collection});
             $("#jasmine_content").append(this.view.el);
