@@ -43,24 +43,4 @@ describe "Editing instance details" do
 
     end
   end
-
-  context "Hadoop instances" do
-    it "should allow editing of the instance name and description" do
-      create_valid_hadoop_instance(:name => "HadoopInstanceOriginalName")
-
-      instance_1_id = HadoopInstance.find_by_name("HadoopInstanceOriginalName").id
-      visit("#/instances")
-      within(".instance_provider.hadoop_instance") do
-        page.find("li[data-hadoop-instance-id='#{instance_1_id}']").click
-      end
-      click_link "Edit Instance"
-
-      edit_hadoop_instance(:name => "hadoop_edit_name", :description => "Change Description")
-
-      within(".instance_provider.hadoop_instance") do
-        page.find("li[data-hadoop-instance-id='#{instance_1_id}']").should have_content("HadoopInstanceNewName")
-        page.find("li[data-hadoop-instance-id='#{instance_1_id}']").should have_content("Change Description")
-      end
-    end
-  end
 end
