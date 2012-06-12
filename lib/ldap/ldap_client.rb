@@ -38,7 +38,7 @@ class LdapClient
   end
 
   def self.config
-    @@config ||= YAML.load_file(config_file_path())['ldap']
+    @@config ||= YAML.load_file(config_file_path)['ldap']
   end
 
   def self.enabled?

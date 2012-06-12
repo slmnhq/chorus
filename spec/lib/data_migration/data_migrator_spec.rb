@@ -7,7 +7,7 @@ describe DataMigrator, :type => :data_migration do
 
   it "has the correct order of migrations" do
     i = -1
-    @data_migrator.migrators[i+=1].should be_instance_of LdapConfigMigrator
+    @data_migrator.migrators[i+=1].should be_instance_of ConfigMigrator
     @data_migrator.migrators[i+=1].should be_instance_of UserMigrator
     @data_migrator.migrators[i+=1].should be_instance_of InstanceMigrator
     @data_migrator.migrators[i+=1].should be_instance_of InstanceAccountMigrator
