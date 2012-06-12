@@ -105,38 +105,57 @@ uidnumber: 1026
 userpassword:: e0NSWVBUfSo=
 ENTRY
 
-
-CUSTOMIZED_LDAP_YAML = <<YAML
+CUSTOMIZED_LDAP_CHORUS_YML = <<YAML
+session_timeout_minutes: 120
+instance_poll_interval_minutes: 1
 ldap:
   host: bartol.sf.pivotallabs.com
-  dc: bartol
-  cn: cn
-  dn:
-   template: goofy\\{0}
-  attribute_names:
-    uid: uid
+  enable: true 
+  port: 389
+  connect_timeout: 10000
+  bind_timeout: 10000
+  search:
+    timeout: 20000
+    size_limit: 200
+  base: DC=bartol,DC=com
+  user_dn: greenplum\\chorus
+  password: secret
+  dn_template: goofy\\{0}
+  attribute:
+    uid: uid 
     ou: department
     gn: givenName
     sn: sn
+    cn: cn
     mail: mail
     title: title
 
 YAML
 
-DISABLED_LDAP_YAML = <<YAML
+DISABLED_LDAP_CHORUS_YML = <<YAML
+session_timeout_minutes: 120
+instance_poll_interval_minutes: 1
 ldap:
-  host:
-  dc: bartol
-  cn: users
-  dn:
-   template: goofy\\{0}
-  attribute_names:
-    uid: uid
-    ou: marina
-    gn: jackscoldsweat
-    sn: highnoon
-    mail: snail
-    title: shovel
+  host: disabled.sf.pivotallabs.com
+  enable: false 
+  port: 389
+  connect_timeout: 10000
+  bind_timeout: 10000
+  search:
+    timeout: 20000
+    size_limit: 200
+  base: DC=bartol,DC=com
+  user_dn: greenplum\\chorus
+  password: secret
+  dn_template: goofy\\{0}
+  attribute:
+    uid: uid 
+    ou: department
+    gn: givenName
+    sn: sn
+    cn: cn
+    mail: mail
+    title: title30573325
 
 YAML
 
@@ -150,7 +169,7 @@ describe LdapClient do
     RR.reset
   end
 
-  let(:config_file_path) { "spec/fixtures/ldap.yml" }
+  let(:config_file_path) { "spec/fixtures/chorus.yml" }
   let(:entries) do
     [
         Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY1),
@@ -159,36 +178,22 @@ describe LdapClient do
   end
 
   describe ".search" do
+    let(:entries) do
+      [
+          Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY3)
+      ]
+    end
 
-    it "returns an array of user hashes" do
+    it "maps the customized fields to our standardized fields" do
+      stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
       any_instance_of(Net::LDAP) do |ldap|
         mock(ldap).search.with_any_args { entries }
       end
 
-      results = LdapClient.search("testguy")
+      results = LdapClient.search("testguycustom")
       results.should be_a(Array)
       results.first.should be_a(Hash)
-      results.first.should == { :first_name => "Test", :last_name => "Guy", :title => "Big Kahuna", :dept => "Greenery", :email => "testguy@example.com", :username => "testguy" }
-    end
-
-    context "with a customized LDAP schema" do
-      let(:entries) do
-        [
-            Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY3)
-        ]
-      end
-
-      it "maps the customized fields to our standardized fields" do
-        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_YAML)['ldap'] }
-        any_instance_of(Net::LDAP) do |ldap|
-          mock(ldap).search.with_any_args { entries }
-        end
-
-        results = LdapClient.search("testguycustom")
-        results.should be_a(Array)
-        results.first.should be_a(Hash)
-        results.first.should == { :first_name => "Test", :last_name => "Guy", :title => "Big Kahuna", :dept => "Greenery", :email => "testguy2@example.com", :username => "testguycustom" }
-      end
+      results.first.should == { :first_name => "Test", :last_name => "Guy", :title => "Big Kahuna", :dept => "Greenery", :email => "testguy2@example.com", :username => "testguycustom" }
     end
   end
 
@@ -212,7 +217,7 @@ describe LdapClient do
         end
       end
 
-      it "returns true" do
+      it "returns false" do
         LdapClient.authenticate("testguy", "secret").should be_false
       end
     end
@@ -220,34 +225,26 @@ describe LdapClient do
 
   describe "configuration" do
     it "reads configuration from a YAML file" do
+      stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
       any_instance_of(Net::LDAP) do |ldap|
         mock(ldap).search.with_any_args do |options|
-          options[:base].should == "dc=bartol"
+          options[:base].should == "DC=bartol,DC=com"
           options[:filter].to_s.should == "(uid=foo)"
           []
         end
-        mock(ldap).auth("uid=foo,cn=users,dc=bartol", "secret") { true }
+        mock(ldap).auth("uid=foo,DC=bartol,DC=com", "secret") { true }
         mock(ldap).bind
       end
 
       LdapClient.search("foo")
       LdapClient.authenticate("foo", "secret")
     end
-
-    #context "has a configurable schema" do
-    #  let(:entries) do
-    #      [
-    #          Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY1),
-    #          Net::LDAP::Entry.from_single_ldif_string(LDAP_ENTRY2)
-    #      ]
-    #  end
-    #end
   end
 
   describe "enabled?" do
     context "when the ldap host is blank" do
       before do
-        stub(LdapClient).config { YAML.load(DISABLED_LDAP_YAML)['ldap'] }
+        stub(LdapClient).config { YAML.load(DISABLED_LDAP_CHORUS_YML)['ldap'] }
       end
 
       it "returns false" do
@@ -257,7 +254,7 @@ describe LdapClient do
 
     context "when the ldap host is present" do
       before do
-        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_YAML)['ldap'] }
+        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
       end
 
       it "returns true" do

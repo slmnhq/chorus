@@ -1,47 +1,50 @@
 require 'net/ldap'
 
-class LdapClient
+module LdapClient
+  extend self
 
   # entered from UsersController#ldap
-  def self.search(username)
+  def search(username)
     ldap = client
-    filter = Net::LDAP::Filter.eq(self.config['attribute_names']['uid'], "#{username}")
-    results = ldap.search :base => "dc=#{self.config['dc']}", :filter => filter
+    filter = Net::LDAP::Filter.eq(config['attribute']['uid'], "#{username}")
+    results = ldap.search :base => config['base'], :filter => filter
 
     results.map do |result|
       {
-        :username =>   result[self.config['attribute_names']['uid']].first,
-        :first_name => result[self.config['attribute_names']['gn']].first,
-        :last_name =>  result[self.config['attribute_names']['sn']].first,
-        :title =>      result[self.config['attribute_names']['title']].first,
-        :dept =>       result[self.config['attribute_names']['ou']].first,
-        :email =>      result[self.config['attribute_names']['mail']].first
+        :username =>   result[config['attribute']['uid']].first,
+        :first_name => result[config['attribute']['gn']].first,
+        :last_name =>  result[config['attribute']['sn']].first,
+        :title =>      result[config['attribute']['title']].first,
+        :dept =>       result[config['attribute']['ou']].first,
+        :email =>      result[config['attribute']['mail']].first
       }
     end
   end
 
   # entered from CredentialsValidator
-  def self.authenticate(username, password)
+  def authenticate(username, password)
     ldap = client
-    ldap.auth "#{self.config['attribute_names']['uid']}=#{username},cn=#{self.config['cn']},dc=#{self.config['dc']}", password
+    ldap.auth make_dn(username), password
     ldap.bind
   end
 
-  def self.config_file_path
-    File.join(Rails.root, 'config', 'ldap.yml')
+  def make_dn(username)
+    "#{config['attribute']['uid']}=#{username},#{config['base']}"
   end
 
-  private
-
-  def self.client
-    Net::LDAP.new :host => self.config['host'], :base => "dc=#{self.config['dc']}"
+  def config_file_path
+    File.join(Rails.root, 'config', 'chorus.yml')
   end
 
-  def self.config
+  def client
+    Net::LDAP.new :host => config['host'], :base => "dc=#{config['dc']}"
+  end
+
+  def config
     @@config ||= YAML.load_file(config_file_path)['ldap']
   end
 
-  def self.enabled?
-    self.config['host'].present?
+  def enabled?
+    config['enable']
   end
 end
