@@ -149,6 +149,38 @@ ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
 
 
 --
+-- Name: async_query_tasks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE async_query_tasks (
+    id integer NOT NULL,
+    process_id integer,
+    check_id character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: async_query_tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE async_query_tasks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: async_query_tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE async_query_tasks_id_seq OWNED BY async_query_tasks.id;
+
+
+--
 -- Name: events; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -665,7 +697,14 @@ ALTER TABLE ONLY activities ALTER COLUMN id SET DEFAULT nextval('activities_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass);
+ALTER TABLE async_query_tasks ALTER COLUMN id SET DEFAULT nextval('async_query_tasks_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass);
 
 
 --
@@ -765,6 +804,14 @@ ALTER TABLE ONLY workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_s
 
 ALTER TABLE ONLY activities
     ADD CONSTRAINT activities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: async_query_tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY async_query_tasks
+    ADD CONSTRAINT async_query_tasks_pkey PRIMARY KEY (id);
 
 
 --
@@ -884,6 +931,13 @@ ALTER TABLE ONLY workspaces
 --
 
 CREATE INDEX idx_qc_on_name_only_unlocked ON queue_classic_jobs USING btree (q_name, id) WHERE (locked_at IS NULL);
+
+
+--
+-- Name: index_async_query_tasks_on_check_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_async_query_tasks_on_check_id ON async_query_tasks USING btree (check_id);
 
 
 --
@@ -1117,4 +1171,8 @@ INSERT INTO schema_migrations (version) VALUES ('20120607175331');
 
 INSERT INTO schema_migrations (version) VALUES ('20120607223025');
 
+INSERT INTO schema_migrations (version) VALUES ('20120607223025');
+
 INSERT INTO schema_migrations (version) VALUES ('20120608001550');
+
+INSERT INTO schema_migrations (version) VALUES ('20120611222458');

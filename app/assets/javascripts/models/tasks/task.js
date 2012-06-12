@@ -14,11 +14,10 @@ chorus.models.Task = chorus.models.Base.include(
     cancel : function() {
         if (this.cancelled || this.loaded) return;
         this.cancelled = true;
-        Backbone.sync('update', this, {
+        Backbone.sync('delete', this, {
             data: {
                 taskType: this.get('taskType'),
-                checkId: this.get('checkId'),
-                action: 'cancel'
+                checkId: this.get('checkId')
             },
             success: _.bind(function() {
                 this.trigger("canceled");

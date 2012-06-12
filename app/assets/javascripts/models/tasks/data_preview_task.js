@@ -1,6 +1,12 @@
 chorus.models.DataPreviewTask = chorus.models.Task.extend({
     nameAttribute: "objectName",
-    urlTemplate: "database_objects/{{databaseObject.id}}/previews",
+
+    urlTemplate: function() {
+        if(this.cancelled) {
+            return "database_objects/{{databaseObject.id}}/previews/{{checkId}}";
+        }
+        return  "database_objects/{{databaseObject.id}}/previews";
+    },
 
     getRows: function() {
         var rows = this.get("rows"),

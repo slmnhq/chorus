@@ -3,13 +3,14 @@ require 'spec_helper'
 describe SqlResults, :type => :database_integration do
   let(:account) { real_gpdb_account }
   let(:table) { GpdbTable.find_by_name("pg_all_types") }
+  let(:check_id) { "0.1234" }
 
   before do
     refresh_chorus
   end
 
   describe "#rows" do
-    subject { SqlResults.preview_database_object(table, account).rows }
+    subject { SqlResults.preview_database_object(table, account, check_id).rows }
 
     it "includes one item for each row in the table" do
       subject.size.should == 1
@@ -50,13 +51,13 @@ describe SqlResults, :type => :database_integration do
           "04:05:06",
           "01:02:03-08",
           "1999-01-08 04:05:06",
-          "1999-01-08 12:05:06+00"
+          "1999-01-08 04:05:06-08"
       ]
     end
   end
 
   describe "#columns" do
-    subject { SqlResults.preview_database_object(table, account).columns }
+    subject { SqlResults.preview_database_object(table, account, check_id).columns }
 
     it "gives each column the right 'name' attribute" do
       subject.map(&:name).should == [
@@ -135,6 +136,5 @@ describe SqlResults, :type => :database_integration do
         "timestamp with time zone"
       ]
     end
-
   end
 end
