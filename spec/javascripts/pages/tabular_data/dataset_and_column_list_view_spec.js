@@ -24,7 +24,7 @@ describe("chorus.views.DatasetAndColumnList", function() {
 
     context("when a table is selected in the dataset list", function() {
         beforeEach(function() {
-            this.table = fixtures.databaseTable();
+            this.table = rspecFixtures.databaseObject();
             chorus.PageEvents.broadcast("datasetSelected", this.table);
             this.server.completeAllFetches();
             this.view.$(".database_column_list input.search").val("searching for a column...");

@@ -1,12 +1,12 @@
 describe("chorus.models.Instance", function() {
     beforeEach(function() {
-        this.instance = newFixtures.greenplumInstance.greenplum({id: 1, instanceVersion: "1234"});
+        this.instance = rspecFixtures.greenplumInstance({id: 1, version: "1234"});
     });
 
     describe("#stateIconUrl and #stateText", function() {
         it("works for 'offline' instances", function() {
             this.instance.set({ state: "offline" });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/unknown.png");
+            expect(this.instance.stateIconUrl()).toBe("/images/instances/yellow.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.offline");
         });
 
@@ -18,7 +18,7 @@ describe("chorus.models.Instance", function() {
 
         it("works for other instances", function() {
             this.instance.set({ state: null });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/unknown.png");
+            expect(this.instance.stateIconUrl()).toBe("/images/instances/yellow.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.unknown");
         });
     });
@@ -33,8 +33,8 @@ describe("chorus.models.Instance", function() {
         it("returns a user", function() {
             var owner = this.instance.owner();
             expect(owner.get("id")).toBe(this.instance.get("owner").id);
-            expect(owner.get("username")).toBe("edcadmin");
-            expect(owner.displayName()).toBe("EDC Admin");
+            expect(owner.get("username")).toBe("user2");
+            expect(owner.displayName()).toBe("John Doe");
         })
     });
 
@@ -50,7 +50,7 @@ describe("chorus.models.Instance", function() {
         })
         it("returns false if object is of different type", function() {
             var owner = this.instance.owner();
-            var brokenParameter = newFixtures.greenplumInstance.greenplum({id: owner.get('id')});
+            var brokenParameter = rspecFixtures.greenplumInstance({id: owner.get('id')});
             expect(this.instance.isOwner(brokenParameter)).toBeFalsy();
         })
     });

@@ -1,0 +1,30 @@
+{
+  "response": {
+    "name": "instance1",
+    "host": "host1.emc.com",
+    "port": 5001,
+    "id": 283,
+    "owner": {
+      "id": 1671,
+      "username": "user2",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person2@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "shared": false,
+    "state": "online",
+    "provision_type": null,
+    "maintenance_db": "postgres",
+    "description": null,
+    "instance_provider": null,
+    "version": "9.1.2 - FactoryVersion"
+  }
+}

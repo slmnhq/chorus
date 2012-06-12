@@ -69,6 +69,10 @@ describe InstanceDatabasesController do
       decoded_response.name.should == database.name
     end
 
+    generate_fixture "database.json" do
+      get :show, :id => database.to_param
+    end
+
     context "when the db can't be found" do
       it "returns 404" do
         get :show, :id => "-1"

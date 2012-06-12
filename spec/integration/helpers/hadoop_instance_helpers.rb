@@ -26,15 +26,9 @@ def create_valid_hadoop_instance(params = {})
 end
 
 def edit_hadoop_instance(params={})
-
   # assigning parameters to the different fields
   name = params[:name] || "hadoop_instance#{Time.now.to_i}"
   description = params[:description] || "Hadoop edit instance change description"
-  host = params[:host] || "gillette.sf.pivotallabs.com"
-  host = params[:port] || "8020"
-  port = params[:username] || "hadoop"
-  group = params[:group] || "hadoop"
-
   click_link "Edit Instance"
 
   wait_until { find("input[name=name]").visible? }
@@ -44,10 +38,10 @@ def edit_hadoop_instance(params={})
   wait_until { find("input.username").visible? }
   wait_until { find("input.group_list").visible? }
 
-
   within("#facebox") do
-      fill_in 'name', :with => name
-      fill_in 'description', :with => ""
+      fill_in 'name', :with => name if name
+      fill_in 'description', :with => description if description
+      #find(".submit").click
       fill_in 'host', :with => "gillette.sf.pivotallabs.com"
       fill_in 'port', :with => "8020"
       fill_in 'username', :with => "hadoop"

@@ -16,6 +16,11 @@ describe("chorus.alerts.WorkfileConflict", function() {
             expect(this.alert.title).toBe(this.message)
         });
 
+        it("should not displays the error div", function() {
+            expect(this.alert.$(".errors")).toBeEmpty();
+        });
+
+
         it("should show the last workfile save time", function() {
             expect(this.alert.text).toMatchTranslation("workfile.conflict.alert.text");
         });
@@ -37,6 +42,10 @@ describe("chorus.alerts.WorkfileConflict", function() {
 
         it("should show the workfile new version dialog", function() {
             expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfileNewVersion);
+        });
+
+        it("should close the dialog", function() {
+            expect(this.alert.closeModal).toHaveBeenCalled();
         });
     });
 

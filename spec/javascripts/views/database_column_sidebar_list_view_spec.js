@@ -23,7 +23,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
 
         describe("when rendered with a databaseView", function() {
             beforeEach(function() {
-                this.databaseView = fixtures.databaseView({ objectName: "brian_the_view", schema: {name: "john_the_schema"} });
+                this.databaseView = rspecFixtures.databaseObject({ objectName: "brian_the_view", schema: {name: "john_the_schema"}, objectType: "VIEW" });
                 chorus.PageEvents.broadcast("datasetSelected", this.databaseView);
                 this.server.completeFetchAllFor(this.databaseView.columns(), [fixtures.databaseColumn()]);
             });
@@ -48,7 +48,7 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
 
         describe("when the 'datasetSelected' event is broadcast", function() {
             beforeEach(function() {
-                this.table = fixtures.databaseTable({ objectName: "brian_the_table", schema: {name: "john_the_schema"} });
+                this.table = rspecFixtures.databaseObject({ objectName: "brian_the_table", schema: {name: "john_the_schema"} });
                 chorus.PageEvents.broadcast("datasetSelected", this.table);
             });
 
@@ -108,9 +108,9 @@ describe("chorus.views.DatabaseColumnSidebarList", function() {
 
                     describe("when switching to another dataset", function() {
                         beforeEach(function() {
-                            this.newTable = fixtures.databaseTable({
+                            this.newTable = rspecFixtures.databaseObject({
                                 objectName: "jack_the_table",
-                                schemaName: "harry_the_schema"
+                                schema: { name: "harry_the_schema" }
                             });
 
                             chorus.PageEvents.broadcast("datasetSelected", this.newTable);

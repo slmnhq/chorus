@@ -121,7 +121,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
             describe("the comments tooltip", function() {
                 beforeEach(function() {
                     spyOn($.fn, 'qtip');
-                    spyOn(chorus.views.ActivityList.prototype, 'render').andCallThrough();
+                    spyOn(chorus.views.ActivityList.prototype, 'initialize').andCallThrough();
                     this.view.render();
                     this.qtipCall = $.fn.qtip.calls[0];
                 });
@@ -133,9 +133,10 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
                 it("renders an activity list view for each workspace", function() {
                     var $target = this.qtipCall.args[0].content;
-                    expect(chorus.views.ActivityList.prototype.render).toHaveBeenCalled();
-                    expect($target[0]).toBe(chorus.views.ActivityList.prototype.render.calls[0].object.el);
-                    expect($target).toContainText("I prefer my lemonade with whiskey");
+                    expect(chorus.views.ActivityList.prototype.initialize).toHaveBeenCalled();
+                    var activityList = chorus.views.ActivityList.prototype.initialize.calls[0].object;
+                    expect($target[0]).toBe(activityList.el);
+                    expect(activityList.collection).toBe(this.workspace1.comments());
                 });
 
                 it("renders the activity lists in read-only mode", function() {

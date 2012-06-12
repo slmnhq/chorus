@@ -14,3 +14,6 @@ def create_new_user_page
   visit("/#/users/new")
 end
 
+def go_to_home_page
+  visit("#/")
+end

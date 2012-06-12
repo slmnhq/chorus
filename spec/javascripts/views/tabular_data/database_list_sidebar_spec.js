@@ -2,7 +2,7 @@ describe("chorus.views.DatabaseListSidebar", function() {
     beforeEach(function() {
         this.view = new chorus.views.DatabaseListSidebar();
 
-        this.database = fixtures.database();
+        this.database = rspecFixtures.database();
         chorus.PageEvents.broadcast("database:selected", this.database);
     });
 
@@ -11,7 +11,7 @@ describe("chorus.views.DatabaseListSidebar", function() {
     });
 
     it("displays the new name when a new database is selected", function() {
-        var db = fixtures.database();
+        var db = rspecFixtures.database();
         chorus.PageEvents.broadcast("database:selected", db);
         expect(this.view.$(".name")).toContainText(db.get("name"));
     });

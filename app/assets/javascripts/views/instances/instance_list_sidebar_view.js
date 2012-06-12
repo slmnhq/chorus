@@ -28,7 +28,8 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             deleteable: this.instance.isFault() && this.instance.get("provision_type") == "create",
             isProvisioning: this.instance.isProvisioning(),
             isFault: this.instance.isFault(),
-            isOnline: this.instance.isOnline()
+            isOnline: this.instance.isOnline(),
+            instanceProvider: this.instance.isGreenplum() ? "Greenplum Database" : "Hadoop"
         };
     },
 

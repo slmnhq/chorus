@@ -94,6 +94,10 @@ describe WorkfilesController do
         decoded_response.last.id.should == @wf4.id
       end
     end
+
+    generate_fixture "workfileSet.json" do
+      get :index, :workspace_id => workspace.id
+    end
   end
 
   describe "#show" do

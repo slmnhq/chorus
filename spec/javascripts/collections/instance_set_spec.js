@@ -1,11 +1,11 @@
 describe("chorus.collections.InstanceSet", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.InstanceSet([
-            newFixtures.greenplumInstance.greenplum({ name: "Gun_instance" }),
-            newFixtures.greenplumInstance.greenplum({ name: "cat_instance" }),
-            newFixtures.greenplumInstance.greenplum({ name: "Fat_instance" }),
-            newFixtures.greenplumInstance.greenplum({ name: "egg_instance" }),
-            newFixtures.greenplumInstance.greenplum({ name: "Dog_instance" })
+            rspecFixtures.greenplumInstance({ name: "Gun_instance" }),
+            rspecFixtures.greenplumInstance({ name: "cat_instance" }),
+            rspecFixtures.greenplumInstance({ name: "Fat_instance" }),
+            rspecFixtures.greenplumInstance({ name: "egg_instance" }),
+            rspecFixtures.greenplumInstance({ name: "Dog_instance" })
         ]);
     });
 

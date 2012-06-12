@@ -1,6 +1,6 @@
 describe("chorus.pages.DatabaseIndexPage", function() {
     beforeEach(function() {
-        this.instance = newFixtures.greenplumInstance.greenplum({id: "1234", name: "instance Name"});
+        this.instance = rspecFixtures.greenplumInstance({id: "1234", name: "instance Name"});
         this.page = new chorus.pages.DatabaseIndexPage("1234");
         this.page.render();
     });
@@ -36,7 +36,7 @@ describe("chorus.pages.DatabaseIndexPage", function() {
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.instance);
-            this.server.completeFetchFor(this.page.collection, [fixtures.database({name: "bar"}), fixtures.database({name: "foo"})]);
+            this.server.completeFetchFor(this.page.collection, [rspecFixtures.database({name: "bar"}), rspecFixtures.database({name: "foo"})]);
         });
 
         it("should have title in the mainContentList", function() {

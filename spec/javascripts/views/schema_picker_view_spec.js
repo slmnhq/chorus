@@ -6,7 +6,7 @@ describe("chorus.views.SchemaPicker", function() {
 
         context("when instance is provided", function() {
             beforeEach(function() {
-                this.instance = newFixtures.greenplumInstance.greenplum();
+                this.instance = rspecFixtures.greenplumInstance();
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance });
                 this.view.render();
             });
@@ -26,8 +26,8 @@ describe("chorus.views.SchemaPicker", function() {
 
         context("when an instance and a database are provided", function() {
             beforeEach(function() {
-                this.instance = newFixtures.greenplumInstance.greenplum();
-                this.database = fixtures.database({instanceId: this.instance.get("id")});
+                this.instance = rspecFixtures.greenplumInstance();
+                this.database = rspecFixtures.database({instance: { id: this.instance.get("id") } });
                 this.database.unset('id');
                 this.view = new chorus.views.SchemaPicker({ instance: this.instance, database: this.database });
                 this.view.render();
@@ -91,13 +91,13 @@ describe("chorus.views.SchemaPicker", function() {
                     context("when the instance list fetch completes", function() {
                         beforeEach(function() {
                              this.server.completeFetchAllFor(this.view.instances, [
-                                newFixtures.greenplumInstance.greenplum({ hasCredentials: true, id: 1 }),
-                                newFixtures.greenplumInstance.greenplum({ hasCredentials: true, id: 2 }),
-                                newFixtures.greenplumInstance.greenplum({ hasCredentials: false, id: 3 })
+                                rspecFixtures.greenplumInstance({ shared: true, id: 1 }),
+                                rspecFixtures.greenplumInstance({ shared: true, id: 2 }),
+                                rspecFixtures.greenplumInstance({ shared: false, id: 3 })
                             ]);
                         });
 
-                        it("disables only inacessible instances", function() {
+                        it("disables only inaccessible instances", function() {
                             expect(this.view.$("select[name=instance] option[value=1]")).not.toBeDisabled();
                             expect(this.view.$("select[name=instance] option[value=2]")).not.toBeDisabled();
                             expect(this.view.$("select[name=instance] option[value=3]")).toBeDisabled();
@@ -156,7 +156,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                             context("when the database list fetch completes", function() {
                                 beforeEach(function() {
-                                    this.server.completeFetchFor(this.view.databases, [fixtures.database(), fixtures.database()]);
+                                    this.server.completeFetchFor(this.view.databases, [rspecFixtures.database(), rspecFixtures.database()]);
                                 });
 
                                 itShowsSelect('database');
@@ -489,10 +489,10 @@ describe("chorus.views.SchemaPicker", function() {
         describe("#fieldValues", function() {
             context("with an instance provided", function() {
                 beforeEach(function() {
-                    this.instance = newFixtures.greenplumInstance.greenplum();
+                    this.instance = rspecFixtures.greenplumInstance();
                     this.view = new chorus.views.SchemaPicker({ instance: this.instance });
                     this.view.render();
-                    this.server.completeFetchFor(this.view.databases, [ fixtures.database({ id: '5' }) ]);
+                    this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
                     this.view.$(".database select").val("5").change();
                     this.server.completeFetchFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
                     this.view.$(".schema select").val("6").change();
@@ -512,13 +512,13 @@ describe("chorus.views.SchemaPicker", function() {
                     this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                     $('#jasmine_content').append(this.view.el);
                     this.view.render();
-                    this.server.completeFetchAllFor(this.view.instances, [ newFixtures.greenplumInstance.greenplum({ id: '4' }) ]);
+                    this.server.completeFetchAllFor(this.view.instances, [ rspecFixtures.greenplumInstance({ id: '4' }) ]);
                     this.view.$(".instance select").val("4").change();
                 });
 
                 context("when an instance, database, and schema are selected from the dropdowns", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.view.databases, [ fixtures.database({ id: '5' }) ]);
+                        this.server.completeFetchFor(this.view.databases, [ rspecFixtures.database({ id: '5' }) ]);
                         this.view.$(".database select").val("5").change();
                         this.server.completeFetchFor(this.view.schemas, [ rspecFixtures.schema({ id: '6' }) ]);
                         this.view.$(".schema select").val("6").change();
@@ -708,9 +708,9 @@ describe("chorus.views.SchemaPicker", function() {
 
                 if (type == "instance") {
                     this.server.completeFetchAllFor(this.view.instances, [
-                        newFixtures.greenplumInstance.greenplum({name: "Zoo"}),
-                        newFixtures.greenplumInstance.greenplum({name: "Aardvark"}),
-                        newFixtures.greenplumInstance.greenplum({name: "bear"})
+                        rspecFixtures.greenplumInstance({name: "Zoo"}),
+                        rspecFixtures.greenplumInstance({name: "Aardvark"}),
+                        rspecFixtures.greenplumInstance({name: "bear"})
                     ]);
                 } else if(type == "schema") {
                     this.server.completeFetchFor(this.view.schemas, [
@@ -718,8 +718,11 @@ describe("chorus.views.SchemaPicker", function() {
                         rspecFixtures.schema({name: "Aardvark"}),
                         rspecFixtures.schema({name: "bear"})
                     ]);
-                } else {
-                    this.server.completeFetchFor(this.view[type + "s"], [fixtures[type]({name: "Zoo"}), fixtures[type]({name: "Aardvark"}), fixtures[type]({name: "bear"})]);
+                } else { // type == 'database'
+                    this.server.completeFetchFor(this.view.databases, [
+                        rspecFixtures.database({name: "Zoo"}),
+                        rspecFixtures.database({name: "Aardvark"}),
+                        rspecFixtures.database({name: "bear"})]);
                 }
 
                 expect(this.view.$("." + type + " select option:eq(1)").text()).toBe("Aardvark");

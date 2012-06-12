@@ -4,7 +4,7 @@ describe("chorus.presenters.Artifact", function() {
             var model = rspecFixtures.workfile.text();
             expect(model.hasOwnPage()).toBeTruthy();
             var presenter = new chorus.presenters.Artifact(model);
-            expect(presenter.url).toBe(model.showUrl());
+            expect(presenter.url()).toBe(model.showUrl());
         });
     });
 
@@ -13,7 +13,7 @@ describe("chorus.presenters.Artifact", function() {
             var model = fixtures.artifact();
             spyOn(model, "hasOwnPage").andReturn(false);
             var presenter = new chorus.presenters.Artifact(model);
-            expect(presenter.url).toBe(model.downloadUrl());
+            expect(presenter.url()).toBe(model.downloadUrl());
         });
     });
 
@@ -21,13 +21,13 @@ describe("chorus.presenters.Artifact", function() {
         it("uses objectName if available", function() {
             var model = newFixtures.dataset.sandboxTable();
             var presenter = new chorus.presenters.Artifact(model);
-            expect(presenter.name).toBe(model.get('objectName'));
+            expect(presenter.name()).toBe(model.get('objectName'));
         })
 
         it("uses nothing otherwise", function() {
             var model = rspecFixtures.workfile.text();
             var presenter = new chorus.presenters.Artifact(model);
-            expect(presenter.name).toBeUndefined();
+            expect(presenter.name()).toBeUndefined();
         })
     })
 
@@ -39,7 +39,7 @@ describe("chorus.presenters.Artifact", function() {
 
             it("uses the thumbnail url", function() {
                 var presenter = new chorus.presenters.Artifact(this.model);
-                expect(presenter.iconSrc).toBe(this.model.iconUrl({size: "medium"}));
+                expect(presenter.iconSrc()).toBe(this.model.iconUrl({size: "medium"}));
             });
         });
 
@@ -50,7 +50,7 @@ describe("chorus.presenters.Artifact", function() {
 
             it("uses the icon url", function() {
                 var presenter = new chorus.presenters.Artifact(this.model);
-                expect(presenter.iconSrc).toBe(this.model.iconUrl({size: "medium"}));
+                expect(presenter.iconSrc()).toBe(this.model.iconUrl({size: "medium"}));
             });
         });
     });

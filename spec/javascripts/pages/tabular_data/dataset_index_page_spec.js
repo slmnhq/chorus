@@ -42,7 +42,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
             context("when the instance is provisioning", function() {
                 beforeEach(function() {
-                    this.instance = newFixtures.greenplumInstance.greenplum({ state: "provisioning" });
+                    this.instance = rspecFixtures.greenplumInstance({ state: "provisioning" });
                     this.server.completeFetchFor(this.page.instance, this.instance);
                 });
 
@@ -54,7 +54,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
 
             context("when the instance failed provisioning", function() {
                 beforeEach(function() {
-                    this.instance = newFixtures.greenplumInstance.greenplum({ state: "fault" });
+                    this.instance = rspecFixtures.greenplumInstance({ state: "fault" });
                     this.server.completeFetchFor(this.page.instance, this.instance);
                 });
 
@@ -250,7 +250,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
                         this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount({"id":null}));
-                        this.server.completeFetchFor(this.page.instance, newFixtures.greenplumInstance.greenplum());
+                        this.server.completeFetchFor(this.page.instance, rspecFixtures.greenplumInstance());
                     });
 
                     it("pops up a WorkspaceInstanceAccount dialog", function() {
@@ -290,7 +290,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                     beforeEach(function() {
                         spyOnEvent(this.page.collection, 'reset');
                         this.server.completeFetchFor(this.page.account, rspecFixtures.instanceAccount({"id":null}));
-                        this.server.completeFetchFor(this.page.instance, newFixtures.greenplumInstance.sharedAccount());
+                        this.server.completeFetchFor(this.page.instance, rspecFixtures.greenplumInstance({"shared":true}));
                     });
 
                     it("does not pop up a WorkspaceInstanceAccount dialog", function() {

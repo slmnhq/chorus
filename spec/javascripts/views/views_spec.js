@@ -656,7 +656,7 @@ describe("chorus.views.Base", function() {
 
     describe("MainContentList", function() {
         beforeEach(function() {
-            this.collection = fixtures.workfileSet();
+            this.collection = rspecFixtures.workfileSet();
         })
 
         describe("#setup", function() {

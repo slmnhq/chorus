@@ -14,7 +14,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context("when an instance is selected", function() {
         beforeEach(function() {
-            this.instance = newFixtures.greenplumInstance.greenplum({name: "Harry's House of Glamour", instanceVersion: "99.999" });
+            this.instance = rspecFixtures.greenplumInstance({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub)
 
@@ -200,7 +200,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 describe("for existing greenplum instance", function() {
                     context("and the instance has a shared account", function() {
                         beforeEach(function() {
-                            var instance = newFixtures.greenplumInstance.sharedAccount();
+                            var instance = rspecFixtures.greenplumInstance({"shared":true});
                             instance.loaded = true;
                             this.view.setInstance(instance);
                             this.server.completeFetchFor(instance.usage(), { workspaces: [] });

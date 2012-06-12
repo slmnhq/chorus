@@ -1,8 +1,4 @@
 window.fixtureDefinitions = {
-    schema:    { unique: [ "id", "instance.id" ] },
-
-    workspaceSet: { unique: [ "id", "sandboxInfo.sandboxId" ] },
-
     sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
 
     csvImport: { model: "CSVImport" },
@@ -11,15 +7,6 @@ window.fixtureDefinitions = {
     provisioningTemplateSet: {},
 
     config: {},
-
-    greenplumInstance: {
-        unique: [ "id" ],
-
-        children: {
-            greenplum:      {},
-            sharedAccount:  {}
-        }
-    },
 
     activity: {
         unique: [ "id" ],
@@ -50,10 +37,6 @@ window.fixtureDefinitions = {
         }
     },
 
-    databaseObject: {
-        unique: [ "id" ]
-    },
-
     test: {
         model:   "User",
         unique:  [ "id" ],
@@ -71,7 +54,7 @@ window.rspecFixtureDefinitions = {
 
     schema:    { unique: [ "id", "database.id", "database.instance.id" ] },
     schemaSet: { unique: [ "id" ] },
-//
+
     workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] },
     workspaceSet: { unique: [ "id", "sandboxInfo.sandboxId" ] },
 
@@ -84,6 +67,7 @@ window.rspecFixtureDefinitions = {
             text: {}
         }
     },
+    workfileSet: {},
 
 //    sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
 //
@@ -98,17 +82,18 @@ window.rspecFixtureDefinitions = {
 
     image: {},
 
-//    greenplumInstance: {
-//        unique: [ "id" ],
-//
-//        children: {
-//            greenplum:      {},
-//            sharedAccount:  {}
-//        }
-//    },
+    greenplumInstance: { unique: [ "id" ] },
+    database: {},
 
     instanceAccount: {},
-    instanceAccountSet: {}
+    instanceAccountSet: {},
+
+    activity: {
+        children :{
+            instanceCreated: {}
+        }
+    },
+
 
 //    activity: {
 //        unique: [ "id" ],
@@ -139,9 +124,7 @@ window.rspecFixtureDefinitions = {
 //        }
 //    },
 //
-//    databaseObject: {
-//        unique: [ "id" ]
-//    },
+    databaseObject: { unique: [ "id" ] }
 //
 //    test: {
 //        model:   "User",

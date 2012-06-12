@@ -2,7 +2,7 @@ describe("chorus.views.ColumnSelect", function() {
     beforeEach(function() {
         stubDefer();
         this.selectMenuStub = stubSelectMenu();
-        this.tabularData = fixtures.databaseTable();
+        this.tabularData = rspecFixtures.databaseObject();
         this.columns = this.tabularData.columns().reset([
             fixtures.databaseColumn({ name: "source_column_1" }),
             fixtures.databaseColumn({ name: "source_column_2" }),

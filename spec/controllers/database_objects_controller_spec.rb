@@ -54,6 +54,7 @@ describe DatabaseObjectsController do
       decoded_response.first.object_name.should == 'view1'
     end
   end
+
   context "#show" do
     let(:instance) { FactoryGirl.create(:instance, :owner_id => user.id) }
     let(:instanceAccount) { FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id) }
@@ -68,6 +69,10 @@ describe DatabaseObjectsController do
       response.code.should == "200"
       decoded_response.object_name.should == table.name
       decoded_response.object_type.should == "TABLE"
+    end
+
+    generate_fixture "databaseObject.json" do
+      get :show, :id => table.to_param
     end
   end
 end

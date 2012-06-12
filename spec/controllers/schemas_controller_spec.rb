@@ -49,9 +49,8 @@ describe SchemasController do
       decoded_response[1].dataset_count.should == 1
     end
 
-    it "should generate JSON fixtures", :fixture => true do
+    generate_fixture "schemaSet.json" do
       get :index, :database_id => database.to_param
-      save_fixture "schemaSet.json"
     end
   end
 
@@ -76,9 +75,8 @@ describe SchemasController do
       end
     end
 
-    it "should generate JSON fixtures", :fixture => true do
+    generate_fixture "schema.json" do
       get :show, :id => schema.to_param
-      save_fixture "schema.json"
     end
   end
 end

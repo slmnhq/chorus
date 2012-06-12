@@ -6,4 +6,4 @@ then
     exit 1
 fi
 
-java -Ddw.http.port=5000 -jar vendor/hadoop/hdfs-query-service-*.jar server config/hdfs_service.yml
+java -Ddw.http.port=5000 -Ddw.http.adminPort=8090  -jar vendor/hadoop/hdfs-query-service-*.jar server config/hdfs_service.yml

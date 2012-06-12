@@ -23,7 +23,7 @@ describe "add a workfile" do
   end
 
   it "creates and displays an image workfile" do
-    create_valid_workspace(:name => "FooWorkspace")
+    create_valid_workspace(:name => "FooWorkspaceWithImage")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace"}
     click_link("Work Files")
     click_button("Upload File")
@@ -40,13 +40,13 @@ describe "add a workfile" do
   end
 
   it "creates and displays a text workfile" do
-    create_valid_workspace(:name => "FooWorkspace")
+    create_valid_workspace(:name => "FooWorkspaceWithText")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace"}
     click_link("Work Files")
     click_button("Upload File")
     sleep(2)
     within("#facebox") do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/small2.png'))
+      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
     end
 
@@ -57,7 +57,7 @@ describe "add a workfile" do
   end
 
   it "creates and displays an binary workfile" do
-    create_valid_workspace(:name => "FooWorkspace")
+    create_valid_workspace(:name => "FooWorkspaceWithBinary")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
     click_link("Work Files")
     click_button("Upload File")
@@ -69,7 +69,7 @@ describe "add a workfile" do
 
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
     within(".main_content") do
-      page.should have_content("This work file cannot be previewed")
+      page.should have_content("Cannot preview this work file")
     end
   end
 

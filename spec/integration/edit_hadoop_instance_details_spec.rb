@@ -6,14 +6,19 @@ describe " add an instance " do
     page.find("a.add.dialog").click
   end
 
-  create_valid_hadoop_instance(:name => "edit_hadoop_instance")
-  hadoop_instance_id = Instance.find_by_name("edit_hadoop_instance").id
-
   it "edits the hadoop instance name"do
-    go_to_instance_page
-    fill_in 'name', :with => "HadoopInstanceNewName"
-        fill_in 'description', :with => "Change Description"
-        click_button "Save Configuration"
+    create_valid_hadoop_instance(:name => "edit_hadoop_instance")
+    instance_1_id = HadoopInstance.find_by_name("edit_hadoop_instance").id
+    visit("#/instances")
+    within(".instance_provider.hadoop_instance") do
+      page.find("li[data-hadoop-instance-id='#{instance_1_id}']").click
+    end
 
+    # instance will be selected
+    edit_hadoop_instance(:name => "HadoopInstanceNewName", :description => "Change Description")
+    within(".instance_provider.hadoop_instance") do
+      page.find("li[data-hadoop-instance-id='#{instance_1_id}']").should have_content("HadoopInstanceNewName")
+      page.find("li[data-hadoop-instance-id='#{instance_1_id}']").should have_content("Change Description")
+    end
   end
 end

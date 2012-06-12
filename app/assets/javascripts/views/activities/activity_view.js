@@ -14,12 +14,12 @@ chorus.views.Activity = chorus.views.Base.extend({
         ".activity_content > .truncated_text": "htmlContent"
     },
 
-    context:function () {
-        return new chorus.presenters.Activity(this.model, this.options)
+    context: function () {
+        return new chorus.presenters.Activity(this.model, this.options);
     },
 
     setupSubviews:function () {
-        this.commentList = new chorus.views.CommentList({ collection: this.model.comments(), currentUserOwnsWorkspace: this.model.workspace() && this.model.workspace().currentUserIsOwner() });
+        this.commentList = new chorus.views.CommentList({ collection: this.model.comments() });
         if (this.model.isUserGenerated()) {
             this.model.loaded = true;
             this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "text", attributeIsHtmlSafe: true});

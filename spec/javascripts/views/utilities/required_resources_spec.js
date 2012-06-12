@@ -2,7 +2,7 @@ describe("chorus.RequiredResources", function() {
     beforeEach(function() {
         this.requiredResources = new chorus.RequiredResources();
         this.model = rspecFixtures.user();
-        this.collection = fixtures.workfileSet();
+        this.collection = rspecFixtures.workfileSet();
     });
 
     it('allows you to add Model objects', function() {

@@ -53,7 +53,8 @@ describe ActivitiesController do
     end
 
     generate_fixture "activity/instanceCreated.json" do
-      get :show, :id => global_activity1.to_param
+      activity = FactoryGirl.create(:instance_created_activity)
+      get :show, :id => activity.to_param
     end
   end
 end

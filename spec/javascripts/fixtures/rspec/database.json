@@ -1,33 +1,18 @@
 {
   "response": {
-    "id": 77,
-    "actor": {
-      "id": 77,
-      "username": "user14",
-      "first_name": "John",
-      "last_name": "Doe",
-      "email": "person14@example.com",
-      "title": "Grand Poo Bah",
-      "dept": "Corporation Corp., Inc.",
-      "notes": "One of our top performers",
-      "admin": false,
-      "image": {
-        "original": "/images/default-user-icon.png",
-        "icon": "/images/default-user-icon.png"
-      }
-    },
-    "action": "INSTANCE_CREATED",
-    "target": {
+    "id": 2,
+    "name": "database1",
+    "instance": {
       "name": "instance1",
       "host": "host1.emc.com",
       "port": 5001,
-      "id": 7,
+      "id": 2,
       "owner": {
-        "id": 78,
-        "username": "user15",
+        "id": 6,
+        "username": "user2",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person15@example.com",
+        "email": "person2@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -44,8 +29,6 @@
       "description": null,
       "instance_provider": null,
       "version": "9.1.2 - FactoryVersion"
-    },
-    "target_type": "Instance",
-    "timestamp": "2012-06-11T17:53:23Z"
+    }
   }
 }

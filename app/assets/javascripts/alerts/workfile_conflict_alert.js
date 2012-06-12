@@ -8,7 +8,7 @@ chorus.alerts.WorkfileConflict = chorus.alerts.Base.extend({
 
     setup:function () {
         this.title = this.model.serverErrorMessage();
-        this.model.serverErrors = {};
+        delete this.model.serverErrors;
     },
 
     postRender:function () {
@@ -22,6 +22,7 @@ chorus.alerts.WorkfileConflict = chorus.alerts.Base.extend({
     },
 
     confirmAlert:function () {
+        this.closeModal();
         this.dialog = new chorus.dialogs.WorkfileNewVersion({ launchElement:this, pageModel:this.model });
         this.dialog.launchModal();
     },

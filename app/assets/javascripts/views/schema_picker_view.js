@@ -161,7 +161,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
 
     updateInstances:function () {
         this.updateFor('instance', function(instance) {
-            return !instance.get("hasCredentials");
+            return !instance.get("shared");
         });
     },
 

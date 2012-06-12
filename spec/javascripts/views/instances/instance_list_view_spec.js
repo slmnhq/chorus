@@ -28,9 +28,9 @@ describe("chorus.views.InstanceList", function() {
     context("when the instances are fetched", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.greenplumInstances, [
-                newFixtures.greenplumInstance.greenplum({name : "GP9", id:"g9"}),
-                newFixtures.greenplumInstance.greenplum({name : "gP1", id: "g1"}),
-                newFixtures.greenplumInstance.greenplum({name : "GP10", id: "g10"})
+                rspecFixtures.greenplumInstance({name : "GP9", id:"g9"}),
+                rspecFixtures.greenplumInstance({name : "gP1", id: "g1"}),
+                rspecFixtures.greenplumInstance({name : "GP10", id: "g10"})
             ]);
 
             this.server.completeFetchFor(this.hadoopInstances, [
@@ -115,13 +115,13 @@ describe("chorus.views.InstanceList", function() {
         describe("when an instance is provisioning", function() {
             beforeEach(function() {
                 this.greenplumInstances.reset([
-                    newFixtures.greenplumInstance.greenplum({ name: "Greenplum", state: "provisioning" })
+                    rspecFixtures.greenplumInstance({ name: "Greenplum", state: "provisioning" })
                 ]);
                 this.view.render();
             });
 
-            it("should display the grey state icon", function() {
-                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/unknown.png");
+            it("should display the offline/unknown state icon", function() {
+                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
             });
 
             it("should not display the name should as a link", function() {
@@ -133,13 +133,13 @@ describe("chorus.views.InstanceList", function() {
         describe("when an instance is offline", function() {
             beforeEach(function() {
                 this.greenplumInstances.reset([
-                    newFixtures.greenplumInstance.greenplum({ name: "Greenplum", state: "offline" })
+                    rspecFixtures.greenplumInstance({ name: "Greenplum", state: "offline" })
                 ]);
                 this.view.render();
             });
 
             it("should display the unknown state icon", function() {
-                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/unknown.png");
+                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
             });
 
             it("should not display the name as a link", function() {
@@ -150,7 +150,7 @@ describe("chorus.views.InstanceList", function() {
 
         describe("instance:added event", function() {
             beforeEach(function() {
-                this.newInstance = newFixtures.greenplumInstance.greenplum({id: "1234567"});
+                this.newInstance = rspecFixtures.greenplumInstance({id: "1234567"});
                 spyOn(this.view.greenplumInstances, "fetchAll");
                 spyOn(this.view.hadoopInstances, "fetchAll");
                 chorus.PageEvents.broadcast("instance:added", this.newInstance);
