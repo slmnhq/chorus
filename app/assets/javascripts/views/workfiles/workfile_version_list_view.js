@@ -5,8 +5,10 @@ chorus.views.WorkfileVersionList = chorus.views.Base.extend({
 
     collectionModelContext: function(workfileVersion) {
         var author = workfileVersion.modifier();
-        var date = Date.parseFromApi(workfileVersion.get("versionInfo").updatedAt);
-        var formattedDate = date.toString("MMMM dd, yyyy");
+
+        var versionInfo = workfileVersion.get("versionInfo");
+        var date = Date.parseFromApi(versionInfo && versionInfo.updatedAt);
+        var formattedDate = date && date.toString("MMMM dd, yyyy");
         return {
             authorName: author.displayName(),
             formattedDate: formattedDate,

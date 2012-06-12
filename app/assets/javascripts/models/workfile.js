@@ -77,7 +77,7 @@
         },
 
         modifier: function() {
-            return new chorus.models.User(this.get("versionInfo").modifier);
+            return new chorus.models.User(this.get("versionInfo") && this.get("versionInfo").modifier);
         },
 
         content: function(newContent, options) {
