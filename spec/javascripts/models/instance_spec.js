@@ -6,7 +6,7 @@ describe("chorus.models.Instance", function() {
     describe("#stateIconUrl and #stateText", function() {
         it("works for 'offline' instances", function() {
             this.instance.set({ state: "offline" });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/unknown.png");
+            expect(this.instance.stateIconUrl()).toBe("/images/instances/yellow.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.offline");
         });
 
@@ -18,7 +18,7 @@ describe("chorus.models.Instance", function() {
 
         it("works for other instances", function() {
             this.instance.set({ state: null });
-            expect(this.instance.stateIconUrl()).toBe("/images/instances/unknown.png");
+            expect(this.instance.stateIconUrl()).toBe("/images/instances/yellow.png");
             expect(this.instance.stateText()).toMatchTranslation("instances.state.unknown");
         });
     });

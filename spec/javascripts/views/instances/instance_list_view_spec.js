@@ -120,8 +120,8 @@ describe("chorus.views.InstanceList", function() {
                 this.view.render();
             });
 
-            it("should display the grey state icon", function() {
-                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/unknown.png");
+            it("should display the offline/unknown state icon", function() {
+                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
             });
 
             it("should not display the name should as a link", function() {
@@ -139,7 +139,7 @@ describe("chorus.views.InstanceList", function() {
             });
 
             it("should display the unknown state icon", function() {
-                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/unknown.png");
+                expect(this.view.$(".greenplum_instance li:eq(0) img.state")).toHaveAttr("src", "/images/instances/yellow.png");
             });
 
             it("should not display the name as a link", function() {

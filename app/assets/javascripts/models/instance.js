@@ -3,7 +3,7 @@ chorus.models.Instance = chorus.models.Base.extend({
 
     _stateIconMap: {
         "online": "green.png",
-        "offline": "unknown.png"
+        "offline": "yellow.png"
     },
 
     isProvisioning: function() {
@@ -27,7 +27,7 @@ chorus.models.Instance = chorus.models.Base.extend({
     },
 
     stateIconUrl: function() {
-        var filename = this._stateIconMap[this.get("state")] || "unknown.png";
+        var filename = this._stateIconMap[this.get("state")] || "yellow.png";
         return this._imagePrefix + filename;
     },
 
