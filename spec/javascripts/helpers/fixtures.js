@@ -1733,23 +1733,6 @@ beforeEach(function() {
             return fixtures.comment(commentOverrides);
         },
 
-        databaseTable: function(overrides) {
-            var attributes = _.extend(rspecFixtures.databaseObjectJson(), {
-                objectType: "TABLE",
-                type: "SOURCE_TABLE"
-            }, overrides);
-            return new chorus.models.DatabaseObject(attributes);
-        },
-
-        databaseView: function(overrides) {
-            var attributes = _.extend(rspecFixtures.databaseObjectJson(), {
-                objectType: "VIEW",
-                type: "SOURCE_TABLE",
-                definition: "SELECT chorus_test_table.customer_id FROM ddemo.chorus_test_table;"
-            }, overrides);
-            return new chorus.models.DatabaseObject(attributes);
-        },
-
         databaseColumn: function(overrides) {
             var id = this.nextId().toString();
             var attributes = _.extend({

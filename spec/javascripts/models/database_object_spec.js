@@ -33,7 +33,7 @@ describe("chorus.models.DatabaseObject", function() {
     describe("url", function() {
         context("when it is a table", function() {
             beforeEach(function() {
-                this.databaseObject = fixtures.databaseTable(objectWithEncodingIssues);
+                this.databaseObject = rspecFixtures.databaseObject(objectWithEncodingIssues);
             });
 
             it("uses the table exploration api", function() {
@@ -43,7 +43,9 @@ describe("chorus.models.DatabaseObject", function() {
 
         context("when it is a view", function() {
             beforeEach(function() {
-                this.databaseObject = fixtures.databaseView(objectWithEncodingIssues);
+                var viewWithEncodingIssues = objectWithEncodingIssues;
+                viewWithEncodingIssues.objectType = "VIEW";
+                this.databaseObject = rspecFixtures.databaseObject(viewWithEncodingIssues);
             });
 
             it("uses the table exploration api", function() {
@@ -55,7 +57,7 @@ describe("chorus.models.DatabaseObject", function() {
     describe("showUrl", function() {
         context("when it is a table", function() {
             beforeEach(function() {
-                this.databaseObject = fixtures.databaseTable(objectWithEncodingIssues);
+                this.databaseObject = rspecFixtures.databaseObject(objectWithEncodingIssues);
             });
 
             it("has the correct url", function() {
@@ -70,7 +72,7 @@ describe("chorus.models.DatabaseObject", function() {
 
         context("when it is a view", function() {
             beforeEach(function() {
-                this.databaseObject = fixtures.databaseView();
+                this.databaseObject = rspecFixtures.databaseObject({objectType: "VIEW"});
             });
 
             it("uses the view exploration api", function() {

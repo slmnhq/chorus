@@ -762,7 +762,7 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("returns true for a source table", function() {
-            this.tabularData = fixtures.databaseTable();
+            this.tabularData = rspecFixtures.databaseObject();
             expect(this.tabularData.canAnalyze()).toBeTruthy();
         });
 

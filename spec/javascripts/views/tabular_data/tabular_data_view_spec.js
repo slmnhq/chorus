@@ -157,7 +157,7 @@ describe("chorus.views.TabularData", function() {
     });
 
     it("works with database objects as well as datasets", function() {
-        var table = fixtures.databaseTable({objectName: 'yyy'});
+        var table = rspecFixtures.databaseObject({objectName: 'yyy'});
         var view = new chorus.views.TabularData({ model: table });
         view.render();
         expect(view.$(".name")).toHaveHref(table.showUrl());

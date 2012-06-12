@@ -1,7 +1,7 @@
 describe("chorus.alerts.Analyze", function() {
     beforeEach(function() {
         stubModals();
-        this.model = fixtures.databaseTable({objectName: "Foo"});
+        this.model = rspecFixtures.databaseObject({objectName: "Foo"});
         this.alert = new chorus.alerts.Analyze({model: this.model});
         this.alert.launchModal();
     });

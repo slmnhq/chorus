@@ -48,8 +48,8 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.schema);
             this.server.completeFetchFor(this.page.collection, [
-                fixtures.databaseTable({ objectName: "bar" }),
-                fixtures.databaseView({ objectName: "foo" })
+                rspecFixtures.databaseObject({ objectName: "bar" }),
+                rspecFixtures.databaseObject({ objectName: "foo", objectType: "VIEW" })
             ]);
         });
 
