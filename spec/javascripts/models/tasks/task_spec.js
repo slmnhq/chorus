@@ -31,7 +31,7 @@ describe("chorus.models.Task", function() {
         describe("when the request completes", function() {
             beforeEach(function() {
                 spyOnEvent(this.model, 'canceled');
-                this.server.lastUpdate().succeed();
+                this.server.lastDestroy().succeed();
                 this.server.reset();
 
             });
@@ -53,11 +53,10 @@ describe("chorus.models.Task", function() {
 
         function itCreatesCancelRequestAndIgnoreSubsequent() {
             it("creates a cancel request", function() {
-                var cancelRequest = this.server.lastUpdate();
+                var cancelRequest = this.server.lastDestroy();
                 expect(cancelRequest.url).toMatchUrl(this.model.url());
                 expect(cancelRequest.params()['taskType']).toBe(this.model.get('taskType'));
                 expect(cancelRequest.params()['checkId']).toBe(this.model.get('checkId'));
-                expect(cancelRequest.params()['action']).toBe('cancel');
                 expect(this.model.has('action')).toBeFalsy();
             });
 

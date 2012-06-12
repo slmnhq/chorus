@@ -720,7 +720,7 @@ describe("chorus.dialogs.Visualization", function() {
 
                 describe("when the cancel completes", function() {
                     beforeEach(function() {
-                        this.server.lastUpdate().succeed();
+                        this.server.lastDestroy().succeed();
                     });
 
                     itShowsThatOptionsHaveChanged();

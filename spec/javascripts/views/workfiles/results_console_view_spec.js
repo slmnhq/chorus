@@ -158,9 +158,8 @@ describe("chorus.views.ResultsConsoleView", function() {
                     })
 
                     it("cancels the execution", function() {
-                        var update = this.server.lastUpdate();
-                        expect(update).toBeDefined();
-                        expect(update.requestBody).toContain("action=cancel")
+                        var destroy = this.server.lastDestroy();
+                        expect(destroy).toBeDefined();
                     })
 
                     itRemovesExecutionUI(true);
@@ -174,9 +173,8 @@ describe("chorus.views.ResultsConsoleView", function() {
                     })
 
                     it("cancels the execution", function() {
-                        var update = this.server.lastUpdate();
-                        expect(update).toBeDefined();
-                        expect(update.requestBody).toContain("action=cancel")
+                        var destroy = this.server.lastDestroy();
+                        expect(destroy).toBeDefined();
                     })
 
                     itRemovesExecutionUI(false);
