@@ -17,6 +17,7 @@ app/assets/javascripts/environment.js
 # Ignore the directory where hadoop versions are installed
 /vendor/hadoop
 /vendor/cache
+script/vendor/hadoop
 
 # Ignore vagrant shared dir
 /packaging/vagrant/shared
@@ -42,4 +43,3 @@ tags
 
 # Ignore test coverage report
 /coverage
-
