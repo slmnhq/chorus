@@ -16,6 +16,8 @@ Chorus::Application.routes.draw do
       resources :files, :only => [:show, :index], :constraints => {:id => /.*/}
       resources :contents, :only => :show, :constraints => {:id => /.*/}
     end
+
+    resources :activities, :only => [:index], :controller => 'activities'
   end
 
   resources :instances, :only => [:index, :show, :create, :update] do

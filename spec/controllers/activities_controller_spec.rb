@@ -24,6 +24,15 @@ describe ActivitiesController do
       end
     end
 
+    context "when getting the activities for a hadoop instance" do
+      let(:object) { FactoryGirl.build(:hadoop_instance) }
+
+      it "presents the hadoop instance's activities" do
+        mock_present { |models| models.should include(activity1, activity2) }
+        get :index, :hadoop_instance_id => object.id
+      end
+    end
+
     context "when getting the activities for a user" do
       let(:object) { FactoryGirl.build(:user) }
 

@@ -25,7 +25,8 @@ class ActivitiesController < ApplicationController
       Instance.find(params[:instance_id])
     when "user_id"
       User.find(params[:user_id])
+    when "hadoop_instance_id"
+      HadoopInstance.find(params[:hadoop_instance_id])
     end
   end
-
 end

@@ -38,7 +38,7 @@ describe Instance do
       user = FactoryGirl.create :user
       instance = FactoryGirl.create :instance, :owner => user
 
-      event = Event.find_by_action_and_target_id_and_target_type("INSTANCE_CREATED", instance.id, 'Instance')
+      event = Event.for_target(instance).find_by_action("INSTANCE_CREATED")
       event.should_not be_nil
       event.actor.should == user
     end

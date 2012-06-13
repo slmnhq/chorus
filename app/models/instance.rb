@@ -43,11 +43,7 @@ class Instance < ActiveRecord::Base
   end
 
   def create_event
-    Event.create!(
-      :actor => owner,
-      :action => "INSTANCE_CREATED",
-      :target => self
-    )
+    Event.add(owner, "INSTANCE_CREATED", self)
   end
 
   def account_for_user(user)
