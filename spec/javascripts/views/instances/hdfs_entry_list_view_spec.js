@@ -1,6 +1,7 @@
 describe("chorus.views.HdfsEntryList", function() {
     beforeEach(function() {
         this.collection = fixtures.hdfsEntrySet(null, {hadoopInstance: {id: "1234"}, path: "/abc"});
+        this.collection.add(fixtures.hdfsEntryDirJson({count: -1}))
         this.view = new chorus.views.HdfsEntryList({ collection : this.collection});
     });
 
@@ -45,6 +46,10 @@ describe("chorus.views.HdfsEntryList", function() {
 
         it("shows 'Directory - x files' in the subtitle line for the directory", function() {
             expect(this.view.$("li:eq(0) .dir")).toContainTranslation("hdfs.directory_files", {count: this.collection.at(0).get("count")})
+        })
+
+        it("shows 'Directory - x files' in the subtitle line for the directory", function() {
+            expect(this.view.$("li:eq(4) .dir")).toContainTranslation("hdfs.directory_files.no_permission")
         })
 
         describe("when browsing the root directory", function() {
