@@ -15,14 +15,4 @@ describe HadoopInstance do
     it { should validate_presence_of :port }
   end
 
-  describe "when a hadoop instance is created" do
-    it "creates an INSTANCE_CREATED activity with the right 'target'" do
-      user = FactoryGirl.create :user
-      hadoop_instance = FactoryGirl.create :hadoop_instance, :owner => user
-
-      event = Event.for_target(hadoop_instance).find_by_action("INSTANCE_CREATED")
-      event.should_not be_nil
-      event.actor.should == user
-    end
-  end
 end

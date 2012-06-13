@@ -9,8 +9,6 @@ class Instance < ActiveRecord::Base
   has_many :accounts, :class_name => 'InstanceAccount'
   has_many :databases, :class_name => 'GpdbDatabase'
 
-  after_create :create_event
-
   def self.unshared
     where("instances.shared = false OR instances.shared IS NULL")
   end
@@ -40,10 +38,6 @@ class Instance < ActiveRecord::Base
     else
       account_owned_by!(user)
     end
-  end
-
-  def create_event
-    Event.add(owner, "INSTANCE_CREATED", self)
   end
 
   def account_for_user(user)

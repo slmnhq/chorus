@@ -31,8 +31,8 @@ describe Event do
   end
 
   describe ".for_target(target)" do
-    let(:target1) { FactoryGirl.create(:instance_without_event, :id => 1234)}
-    let(:target2) { FactoryGirl.create(:instance_without_event) }
+    let(:target1) { FactoryGirl.create(:instance, :id => 1234)}
+    let(:target2) { FactoryGirl.create(:instance) }
     let(:target3) { FactoryGirl.create(:user, :id => 1234) }
 
     let!(:target1_event1) { Event.create(:action => "Foo1", :actor => user, :target => target1 ) }
@@ -47,7 +47,7 @@ describe Event do
 
   describe ".add(actor, action, target)" do
     it "creates an event with the given actor, action and target" do
-      target = FactoryGirl.create(:instance_without_event)
+      target = FactoryGirl.create(:instance)
       Event.add(user, "DID_SOMETHING", target)
 
       event = Event.for_target(target).find_by_action("DID_SOMETHING")

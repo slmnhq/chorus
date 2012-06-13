@@ -47,6 +47,14 @@ describe Hdfs::InstanceRegistrar do
         cached_instance.username.should == instance_attributes[:username]
         cached_instance.group_list.should == instance_attributes[:group_list]
       end
+
+      it "makes an INSTANCE_CREATED event" do
+        instance = Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
+
+        event = Event.for_target(instance).find_by_action("INSTANCE_CREATED")
+        event.should_not be_nil
+        event.actor.should == owner
+      end
     end
   end
 
