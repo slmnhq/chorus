@@ -4,11 +4,26 @@ describe("chorus.models.Activity", function() {
     });
 
     describe("#target", function() {
-        context("when target type is instance", function() {
+        context("when target type is 'Instance'", function() {
             it("returns the instance", function() {
-               this.model = rspecFixtures.activity.instanceCreated({target: {id: 2}});
-               expect(this.model.target()).toBeA(chorus.models.GreenplumInstance);
-               expect(this.model.target().id).toBe(2);
+               var model = rspecFixtures.activity.instanceCreated({target: {id: 2}});
+               expect(model.target()).toBeA(chorus.models.GreenplumInstance);
+               expect(model.target().id).toBe(2);
+            });
+        });
+
+        context("when target type is 'HadoopInstance'", function() {
+            it("returns the hadoop instance", function() {
+               var model = rspecFixtures.activity.instanceCreated({ target: {id: 2}, targetType: "HadoopInstance" });
+               expect(model.target()).toBeA(chorus.models.HadoopInstance);
+               expect(model.target().id).toBe(2);
+            });
+        });
+
+        context("when there is no target type", function() {
+            it("returns undefined", function() {
+               var model = rspecFixtures.activity.instanceCreated({ target: {id: 2}, targetType: null });
+               expect(model.target()).toBeUndefined();
             });
         });
     });

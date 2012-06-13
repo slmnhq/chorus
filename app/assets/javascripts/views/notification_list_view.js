@@ -32,21 +32,22 @@ chorus.views.NotificationList = chorus.views.Base.extend({
         return ctx;
     },
 
+    // notifications aren't implemented.
     postRender: function() {
-        var $list = this.$("ul");
+        // var $list = this.$("ul");
 
-        this.activities = [];
-        this.collection.each(function(model) {
-            var view = new chorus.views.Activity({ model: model.activity(), isNotification: true });
-            view.render();
-            this.activities.push(view);
+        // this.activities = [];
+        // this.collection.each(function(model) {
+        //     var view = new chorus.views.Activity({ model: model.activity(), isNotification: true });
+        //     view.render();
+        //     this.activities.push(view);
 
-            if (model.get("unread")) {
-                $(view.el).addClass("unread");
-            }
+        //     if (model.get("unread")) {
+        //         $(view.el).addClass("unread");
+        //     }
 
-            $list.append(view.el);
-        }, this);
+        //     $list.append(view.el);
+        // }, this);
     },
 
     show: function() {

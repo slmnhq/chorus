@@ -48,7 +48,7 @@ describe("chorus.views.Header", function() {
         });
     });
 
-    describe("the notifications", function() {
+    xdescribe("the notifications", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.view.notifications, [
                 fixtures.notification({ id: '1' }),
@@ -319,7 +319,7 @@ describe("chorus.views.Header", function() {
             })
         });
 
-        describe("notifications", function() {
+        xdescribe("notifications", function() {
             it("displays the notification link", function() {
                 expect(this.view.$("a.notifications")).toExist();
             });

@@ -2,8 +2,8 @@ describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
         this.collection = chorus.collections.ActivitySet.forDashboard();
         this.collection.reset([
-            fixtures.activities.NOTE_ON_CHORUS_VIEW(),
-            fixtures.activities.NOTE_ON_CHORUS_VIEW()
+            rspecFixtures.activity.instanceCreated(),
+            rspecFixtures.activity.instanceCreated()
         ]);
         this.collection.loaded = true;
         this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass: "foo_class", type: "Foo"});
@@ -149,11 +149,11 @@ describe("chorus.views.ActivityList", function() {
             context("with partial pagination information in the response", function() {
                 beforeEach(function() {
                     this.collection.reset([
-                        fixtures.activities.NOTE_ON_CHORUS_VIEW(),
-                        fixtures.activities.NOTE_ON_CHORUS_VIEW(),
-                        fixtures.activities.NOTE_ON_CHORUS_VIEW(),
-                        fixtures.activities.NOTE_ON_CHORUS_VIEW()
-                    ])
+                        rspecFixtures.activity.instanceCreated(),
+                        rspecFixtures.activity.instanceCreated(),
+                        rspecFixtures.activity.instanceCreated(),
+                        rspecFixtures.activity.instanceCreated()
+                    ]);
 
                     this.collection.pagination = {};
                     this.collection.pagination.total = "-1";
@@ -199,9 +199,9 @@ describe("chorus.views.ActivityList", function() {
                         this.view.$(".more_activities a").click();
 
                         this.server.completeFetchFor(this.collection, [
-                            fixtures.activity(),
-                            fixtures.activity(),
-                            fixtures.activity()
+                            rspecFixtures.activity.instanceCreated(),
+                            rspecFixtures.activity.instanceCreated(),
+                            rspecFixtures.activity.instanceCreated()
                         ], { page: nextPage });
                     });
 

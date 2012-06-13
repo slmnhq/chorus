@@ -1,4 +1,4 @@
-describe("chorus.views.NotificationList", function() {
+xdescribe("chorus.views.NotificationList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.NotificationSet([
             fixtures.notification({ unread: true }),
