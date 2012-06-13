@@ -16,9 +16,9 @@ chorus.alerts.WorkfileDraft = chorus.alerts.Base.extend({
     confirmAlert:function () {
         var draft = new chorus.models.Draft({workspaceId:this.model.workspace().id, workfileId:this.model.get("id")});
         this.bindings.add(draft, "change", function (draft) {
-            this.model.isDraft = true;
-            this.model.content(draft.get("draftInfo").content);
             this.closeModal();
+            this.model.isDraft = true;
+            this.model.content(draft.get("content"));
         });
 
         draft.fetch();
@@ -32,8 +32,9 @@ chorus.alerts.WorkfileDraft = chorus.alerts.Base.extend({
         });
 
         this.bindings.add(draft, "destroy", function () {
-            this.model.set({ hasDraft:false })
             this.closeModal();
+            this.model.set({ hasDraft:false })
+
         });
 
         draft.fetch();

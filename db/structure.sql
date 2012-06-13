@@ -4,22 +4,16 @@
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
+SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET escape_string_warning = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+-- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: -
 --
 
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+CREATE OR REPLACE PROCEDURAL LANGUAGE plpgsql;
 
 
 SET search_path = public, pg_catalog;
@@ -542,10 +536,7 @@ CREATE TABLE workfile_drafts (
     owner_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    contents_file_name character varying(256),
-    contents_content_type character varying(256),
-    contents_file_size integer,
-    contents_updated_at timestamp without time zone
+    content text
 );
 
 
@@ -690,7 +681,7 @@ ALTER SEQUENCE workspaces_id_seq OWNED BY workspaces.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY activities ALTER COLUMN id SET DEFAULT nextval('activities_id_seq'::regclass);
+ALTER TABLE activities ALTER COLUMN id SET DEFAULT nextval('activities_id_seq'::regclass);
 
 
 --
@@ -711,91 +702,91 @@ ALTER TABLE events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY gpdb_database_objects ALTER COLUMN id SET DEFAULT nextval('gpdb_database_objects_id_seq'::regclass);
+ALTER TABLE gpdb_database_objects ALTER COLUMN id SET DEFAULT nextval('gpdb_database_objects_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY gpdb_databases ALTER COLUMN id SET DEFAULT nextval('gpdb_databases_id_seq'::regclass);
+ALTER TABLE gpdb_databases ALTER COLUMN id SET DEFAULT nextval('gpdb_databases_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY gpdb_schemas ALTER COLUMN id SET DEFAULT nextval('gpdb_schemas_id_seq'::regclass);
+ALTER TABLE gpdb_schemas ALTER COLUMN id SET DEFAULT nextval('gpdb_schemas_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY hadoop_instances ALTER COLUMN id SET DEFAULT nextval('hadoop_instances_id_seq'::regclass);
+ALTER TABLE hadoop_instances ALTER COLUMN id SET DEFAULT nextval('hadoop_instances_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY instance_accounts ALTER COLUMN id SET DEFAULT nextval('instance_credentials_id_seq'::regclass);
+ALTER TABLE instance_accounts ALTER COLUMN id SET DEFAULT nextval('instance_credentials_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY instances ALTER COLUMN id SET DEFAULT nextval('instances_id_seq'::regclass);
+ALTER TABLE instances ALTER COLUMN id SET DEFAULT nextval('instances_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY memberships ALTER COLUMN id SET DEFAULT nextval('memberships_id_seq'::regclass);
+ALTER TABLE memberships ALTER COLUMN id SET DEFAULT nextval('memberships_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY queue_classic_jobs ALTER COLUMN id SET DEFAULT nextval('queue_classic_jobs_id_seq'::regclass);
+ALTER TABLE queue_classic_jobs ALTER COLUMN id SET DEFAULT nextval('queue_classic_jobs_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+ALTER TABLE users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY workfile_drafts ALTER COLUMN id SET DEFAULT nextval('workfile_drafts_id_seq'::regclass);
+ALTER TABLE workfile_drafts ALTER COLUMN id SET DEFAULT nextval('workfile_drafts_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY workfile_versions ALTER COLUMN id SET DEFAULT nextval('workfile_versions_id_seq'::regclass);
+ALTER TABLE workfile_versions ALTER COLUMN id SET DEFAULT nextval('workfile_versions_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY workfiles ALTER COLUMN id SET DEFAULT nextval('workfiles_id_seq'::regclass);
+ALTER TABLE workfiles ALTER COLUMN id SET DEFAULT nextval('workfiles_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::regclass);
+ALTER TABLE workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::regclass);
 
 
 --
@@ -1018,6 +1009,13 @@ CREATE INDEX index_workfile_drafts_on_workfile_id ON workfile_drafts USING btree
 
 
 --
+-- Name: index_workfile_drafts_on_workfile_id_and_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_workfile_drafts_on_workfile_id_and_owner_id ON workfile_drafts USING btree (workfile_id, owner_id);
+
+
+--
 -- Name: index_workfile_versions_on_modifier_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1171,8 +1169,10 @@ INSERT INTO schema_migrations (version) VALUES ('20120607175331');
 
 INSERT INTO schema_migrations (version) VALUES ('20120607223025');
 
-INSERT INTO schema_migrations (version) VALUES ('20120607223025');
-
 INSERT INTO schema_migrations (version) VALUES ('20120608001550');
 
 INSERT INTO schema_migrations (version) VALUES ('20120611222458');
+
+INSERT INTO schema_migrations (version) VALUES ('20120612173206');
+
+INSERT INTO schema_migrations (version) VALUES ('20120612184705');

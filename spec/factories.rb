@@ -126,5 +126,11 @@ FactoryGirl.define do
       end
     end
   end
+
+  factory :workfile_draft do
+    owner
+    workfile
+    content "A nice content"
+  end
 end
 

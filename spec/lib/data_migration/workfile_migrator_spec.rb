@@ -154,7 +154,7 @@ describe WorkfileMigrator, :type => :data_migration do
         it "attaches the legacy workfile draft content to the new workfile draft model" do
           @legacy_drafts.each do |legacy_draft|
             new_draft = WorkfileDraft.find(legacy_draft["chorus_rails_workfile_draft_id"])
-            new_draft.contents_file_name.should be_present
+            new_draft.content.should be_present
           end
         end
       end

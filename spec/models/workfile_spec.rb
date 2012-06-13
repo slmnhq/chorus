@@ -106,4 +106,21 @@ describe Workfile do
       workfiles[0].file_name.should == "binary.tar.gz"
     end
   end
+
+  describe "#has_draft" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
+    let!(:workfile1) { FactoryGirl.create(:workfile, :file_name => "some.txt", :workspace => workspace) }
+    let!(:workfile2) { FactoryGirl.create(:workfile, :file_name => "workfile.sql", :workspace => workspace) }
+    let!(:draft) { FactoryGirl.create(:workfile_draft, :workfile_id => workfile1.id, :owner_id => user.id) }
+
+    it "has_draft return true for workfile1" do
+      workfile1.has_draft(user).should == true
+    end
+
+    it "has_draft return false for workfile2" do
+      workfile2.has_draft(user).should == false
+    end
+
+  end
 end

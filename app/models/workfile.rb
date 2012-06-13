@@ -27,6 +27,10 @@ class Workfile < ActiveRecord::Base
     versions.order("version_num").last
   end
 
+  def has_draft(current_user)
+    !!WorkfileDraft.find_by_owner_id_and_workfile_id(current_user.id, id)
+  end
+
   private
   def last_version_number
     last_version.try(:version_num) || 0

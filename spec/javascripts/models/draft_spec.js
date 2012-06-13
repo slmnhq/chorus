@@ -5,7 +5,7 @@ describe("chorus.models.Draft", function() {
         });
 
         it("has the right URL", function() {
-            expect(this.model.url()).toBe("/workspace/10/workfile/5/draft");
+            expect(this.model.url()).toBe("/workfiles/5/draft");
         });
     });
 });

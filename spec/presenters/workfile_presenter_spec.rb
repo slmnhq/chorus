@@ -24,6 +24,7 @@ describe WorkfilePresenter, :type => :view do
       @hash.should have_key(:file_name)
       @hash.should have_key(:file_type)
       @hash.should have_key(:latest_version_num)
+      @hash.should have_key(:has_draft)
     end
 
     it "uses the workspace presenter to serialize the workspace" do
@@ -40,6 +41,20 @@ describe WorkfilePresenter, :type => :view do
 
     it "uses the workfile file name" do
       @hash[:file_name].should == "work (space).sql"
+    end
+
+    context "workfile has a draft for that user" do
+      it "has_draft value is true" do
+        FactoryGirl.create(:workfile_draft, :workfile_id => @workfile.id, :owner_id => @user.id)
+        @hash = @presenter.to_hash
+        @hash[:has_draft].should == true
+      end
+    end
+
+    context "No workfile draft for that user" do
+      it "has_draft value is false" do
+        @hash[:has_draft].should == false
+      end
     end
 
     it "sanitizes file name" do

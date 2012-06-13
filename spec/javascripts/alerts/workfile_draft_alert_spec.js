@@ -21,7 +21,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
                 this.changeSpy = jasmine.createSpy();
                 this.alert.model.bind('change', this.changeSpy);
                 var draft = fixtures.draft({workfileId: this.workfile.get("id"), workspaceId: this.workfile.workspace().id})
-                this.expectedContent = draft.get("draftInfo").content;
+                this.expectedContent = draft.get("content");
                 this.server.completeFetchFor(draft);
             })
 
@@ -50,7 +50,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
         })
 
         it("fetches the draft", function() {
-            expect(this.server.lastFetch().url).toBe("/workspace/" + this.workfile.workspace().id + "/workfile/" + this.workfile.get('id') + "/draft");
+            expect(this.server.lastFetch().url).toBe("/workfiles/" + this.workfile.get('id') + "/draft");
             expect(this.server.lastFetch().method).toBe("GET");
         });
 
@@ -60,7 +60,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
             })
 
             it("deletes the draft", function() {
-                expect(this.server.lastDestroy().url).toBe("/workspace/" + this.workfile.workspace().id + "/workfile/" + this.workfile.get('id') + "/draft");
+                expect(this.server.lastDestroy().url).toBe("/workfiles/" + this.workfile.get('id') + "/draft");
             })
 
             context("when the delete succeeds", function() {

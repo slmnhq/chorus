@@ -56,6 +56,7 @@ Chorus::Application.routes.draw do
   end
 
   resources :workfiles, :only => [:show] do
+    resource :draft, :only => [:show, :update, :create, :destroy], :controller => :workfile_draft
     resources :versions, :only => [:update, :create], :controller => 'workfile_versions'
   end
 

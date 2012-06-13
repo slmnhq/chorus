@@ -62,7 +62,7 @@ class WorkfileMigrator
         new_draft.updated_at = legacy_draft["last_updated_stamp"]
 
         path = File.join(Chorus::Application.config.legacy_chorus_root_path, "ofbiz", "runtime", "data", "workfile", legacy_workfile["workspace_id"], legacy_draft["draft_file_id"])
-        new_draft.contents = StringIO.new(File.read(path))
+        new_draft.content = StringIO.new(File.read(path))
 
         new_draft.save!
 
