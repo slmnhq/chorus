@@ -15,6 +15,11 @@
             jasmine.getEnv().updateInterval = 12000;
         });
 
+        var productVersion = $('<span class="product_version">Greenplum Chorus 2.1</span>');
+        productVersion.css({marginLeft: '5px'});
+
+        $('.jasmine_reporter .title').after(productVersion);
+
         runs(loadAllTemplates);
         runs(loadAllFixtures);
         waitsFor(function() {
