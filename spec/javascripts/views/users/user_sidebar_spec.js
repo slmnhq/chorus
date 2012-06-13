@@ -15,7 +15,7 @@ describe("chorus.views.UserSidebar", function() {
     context("when the fetch completes", function() {
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.Config.instance());
-            this.server.completeFetchFor(this.view.collection, [fixtures.activitySet()]);
+            this.server.completeFetchFor(this.view.collection, [ rspecFixtures.activity.instanceCreated() ]);
         });
 
         it("has an activity list", function() {

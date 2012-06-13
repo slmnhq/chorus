@@ -39,7 +39,6 @@ describe("chorus.models.Activity", function() {
 
     describe("#isUserGenerated", function() {
         it("returns true for notes", function() {
-            expect(fixtures.activities.NOTE_ON_DATASET_TABLE().isUserGenerated()).toBeTruthy();
             expect(fixtures.activities.NOTE_ON_WORKFILE().isUserGenerated()).toBeTruthy();
         });
 
