@@ -14,7 +14,7 @@
             jasmine.getEnv().updateInterval = 12000;
         });
 
-        $('.jasmine_reporter .title').after('<span class="product_version">Greenplum Chorus 3.0</span>')
+        $('.jasmine_reporter .title').after('<span class="product_version">Greenplum Chorus 3.0</span>');
 
         runs(loadAllFixtures);
         waitsFor(function() {

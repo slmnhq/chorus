@@ -6,6 +6,8 @@ class WorkfileVersion < ActiveRecord::Base
   belongs_to :modifier, :class_name => 'User'
   before_post_process :check_file_type
 
+  after_validation :clean_content_errors
+
   def check_file_type
     image?
   end
@@ -66,5 +68,12 @@ class WorkfileVersion < ActiveRecord::Base
 
   def latest_version?
     version_num == workfile.last_version.version_num
+  end
+
+  def clean_content_errors
+    if errors[:contents].present?
+      errors.delete(:contents)
+      errors.add(:contents, :invalid)
+    end
   end
 end

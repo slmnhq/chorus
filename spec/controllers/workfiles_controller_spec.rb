@@ -250,6 +250,27 @@ describe WorkfilesController do
       end
     end
 
+    context "create workfile that has image extension but it is not an image" do
+      before do
+        log_in user
+      end
+
+      it "shows an error to the user" do
+        post :create, {
+          :workspace_id => workspace.to_param,
+          :workfile => {
+            :file_name => 'not_an_image.jpg',
+            :source => 'empty'
+          }
+        }
+
+        errors = JSON.parse(response.body)['errors']
+
+        response.code.should == "422"
+        errors['fields']['contents'].should include('INVALID')
+      end
+    end
+
     context "creating a blank file" do
       let(:current_user) { user }
 
