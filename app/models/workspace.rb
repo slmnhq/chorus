@@ -10,6 +10,9 @@ class Workspace < ActiveRecord::Base
   has_many :members, :through => :memberships, :source => :user
   has_many :workfiles
 
+  has_many :gpdb_database_object_workspace_associations
+  has_many :gpdb_database_objects, :through => :gpdb_database_object_workspace_associations
+
   validates_presence_of :name
   validate :uniqueness_of_workspace_name
   validate :owner_is_member, :on => :update

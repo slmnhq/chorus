@@ -209,6 +209,38 @@ ALTER SEQUENCE events_id_seq OWNED BY events.id;
 
 
 --
+-- Name: gpdb_database_object_workspace_associations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE gpdb_database_object_workspace_associations (
+    id integer NOT NULL,
+    gpdb_database_object_id integer,
+    workspace_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: gpdb_database_object_workspace_associations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE gpdb_database_object_workspace_associations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: gpdb_database_object_workspace_associations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE gpdb_database_object_workspace_associations_id_seq OWNED BY gpdb_database_object_workspace_associations.id;
+
+
+--
 -- Name: gpdb_database_objects; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -609,7 +641,8 @@ CREATE TABLE workfiles (
     description text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    file_name character varying(255)
+    file_name character varying(255),
+    deleted_at timestamp without time zone
 );
 
 
@@ -696,6 +729,13 @@ ALTER TABLE async_query_tasks ALTER COLUMN id SET DEFAULT nextval('async_query_t
 --
 
 ALTER TABLE events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE gpdb_database_object_workspace_associations ALTER COLUMN id SET DEFAULT nextval('gpdb_database_object_workspace_associations_id_seq'::regclass);
 
 
 --
@@ -814,6 +854,14 @@ ALTER TABLE ONLY events
 
 
 --
+-- Name: gpdb_database_object_workspace_associations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY gpdb_database_object_workspace_associations
+    ADD CONSTRAINT gpdb_database_object_workspace_associations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: gpdb_database_objects_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -915,6 +963,13 @@ ALTER TABLE ONLY workfiles
 
 ALTER TABLE ONLY workspaces
     ADD CONSTRAINT workspaces_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gpdb_db_object_workspace_unique; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX gpdb_db_object_workspace_unique ON gpdb_database_object_workspace_associations USING btree (gpdb_database_object_id, workspace_id);
 
 
 --
@@ -1149,8 +1204,6 @@ INSERT INTO schema_migrations (version) VALUES ('20120519000854');
 
 INSERT INTO schema_migrations (version) VALUES ('20120522000542');
 
-INSERT INTO schema_migrations (version) VALUES ('20120522015308');
-
 INSERT INTO schema_migrations (version) VALUES ('20120522020546');
 
 INSERT INTO schema_migrations (version) VALUES ('20120523174942');
@@ -1178,3 +1231,7 @@ INSERT INTO schema_migrations (version) VALUES ('20120611222458');
 INSERT INTO schema_migrations (version) VALUES ('20120612173206');
 
 INSERT INTO schema_migrations (version) VALUES ('20120612184705');
+
+INSERT INTO schema_migrations (version) VALUES ('20120612225020');
+
+INSERT INTO schema_migrations (version) VALUES ('20120613231928');
