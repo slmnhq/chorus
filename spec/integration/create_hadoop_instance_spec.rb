@@ -114,7 +114,7 @@ describe " add an instance " do
     within("#facebox") do
       fill_in 'username', :with => "hadoop"
       fill_in 'groupList', :with => "hadoop"
-      find(".submit").click
+      click_button "Add Instance"
     end
     wait_until { current_route == "/instances" }
     find('.instance_list').should have_content("hadoop_host_port")

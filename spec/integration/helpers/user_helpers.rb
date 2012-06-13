@@ -1,7 +1,3 @@
-def click_submit_button
-  page.find("button[type=submit]").click
-end
-
 def current_user_id
   evaluate_script "chorus.session.user().id"
 end
