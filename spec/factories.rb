@@ -23,11 +23,6 @@ FactoryGirl.define do
     maintenance_db "postgres"
     owner
     version "9.1.2 - FactoryVersion"
-
-    factory :instance_without_event do
-      before(:create) { Instance.skip_callback(:create, :after, :create_event) }
-      after(:create)  { Instance.set_callback(:create, :after, :create_event) }
-    end
   end
 
   factory :hadoop_instance do

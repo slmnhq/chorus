@@ -96,6 +96,13 @@ describe Gpdb::InstanceRegistrar do
       instance = Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
       instance[:instance_provider].should == "Greenplum Database"
     end
+
+    it "makes an INSTANCE_CREATED event" do
+      instance = Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
+      event = Event.for_target(instance).find_by_action("INSTANCE_CREATED")
+      event.should_not be_nil
+      event.actor.should == owner
+    end
   end
 
   describe ".update!" do

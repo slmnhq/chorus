@@ -33,17 +33,6 @@ describe Instance do
     end
   end
 
-  describe "when an instance is created" do
-    it "creates an INSTANCE_CREATED activity with the right 'target'" do
-      user = FactoryGirl.create :user
-      instance = FactoryGirl.create :instance, :owner => user
-
-      event = Event.for_target(instance).find_by_action("INSTANCE_CREATED")
-      event.should_not be_nil
-      event.actor.should == user
-    end
-  end
-
   describe ".accessible_to" do
     before(:each) do
       @user = FactoryGirl.create :user
