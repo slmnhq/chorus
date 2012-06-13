@@ -36,10 +36,6 @@ class Workspace < ActiveRecord::Base
          )
   end
 
-  def self.owner_is(user_id)
-    where(:owner_id => user_id)
-  end
-
   def members_accessible_to(user)
     if public? || members.include?(user)
       members

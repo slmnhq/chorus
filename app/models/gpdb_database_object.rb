@@ -32,10 +32,6 @@ class GpdbDatabaseObject < ActiveRecord::Base
     @statistics = GpdbDatabaseObjectStatistics.new(result)
   end
 
-  def column_count=(value)
-    @column_count = value.to_i
-  end
-
   def self.with_name_like(name)
     if name.present?
       where("name ILIKE ?", "%#{name}%")
