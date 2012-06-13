@@ -14,12 +14,7 @@ describe " add an instance " do
       choose("register_existing_greenplum")
       wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
       within(".register_existing_greenplum") do
-        wait_until { find("input[name=name]").visible? }
-        wait_until { find("textarea[name=description]").visible? }
-        wait_until { find("input[name=host]").visible? }
-        wait_until { find("input[name=port]").visible? }
-        wait_until { find("input[name=dbUsername]").visible? }
-        wait_until { find("input[name=dbPassword]").visible? }
+        find_gpdb_instance_dialog
 
         fill_in 'name', :with => new_instance_name
         fill_in 'description', :with => "GPDB instance creation"
@@ -46,12 +41,7 @@ describe " add an instance " do
         choose("register_existing_greenplum")
         wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
         within(".register_existing_greenplum") do
-          wait_until { find("input[name=name]").visible? }
-          wait_until { find("textarea[name=description]").visible? }
-          wait_until { find("input[name=host]").visible? }
-          wait_until { find("input[name=port]").visible? }
-          wait_until { find("input[name=dbUsername]").visible? }
-          wait_until { find("input[name=dbPassword]").visible? }
+          find_gpdb_instance_dialog
 
           fill_in 'name', :with => "instance name"
           fill_in 'description', :with => "GPDB instance creation"
@@ -83,12 +73,7 @@ describe " add an instance " do
       choose("register_existing_greenplum")
       wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
       within(".register_existing_greenplum") do
-        wait_until { find("input[name=name]").visible? }
-        wait_until { find("textarea[name=description]").visible? }
-        wait_until { find("input[name=host]").visible? }
-        wait_until { find("input[name=port]").visible? }
-        wait_until { find("input[name=dbUsername]").visible? }
-        wait_until { find("input[name=dbPassword]").visible? }
+        find_gpdb_instance_dialog
 
         fill_in 'name', :with => "invalid_instance"
         fill_in 'description', :with => "GPDB instance creation"
@@ -132,12 +117,7 @@ describe " add an instance " do
         choose("register_existing_greenplum")
         wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
         within(".register_existing_greenplum") do
-          wait_until { find("input[name=name]").visible? }
-          wait_until { find("textarea[name=description]").visible? }
-          wait_until { find("input[name=host]").visible? }
-          wait_until { find("input[name=port]").visible? }
-          wait_until { find("input[name=dbUsername]").visible? }
-          wait_until { find("input[name=dbPassword]").visible? }
+          find_gpdb_instance_dialog
 
           fill_in 'name', :with => "dbpass_dbuser"
           fill_in 'description', :with => "GPDB instance creation"

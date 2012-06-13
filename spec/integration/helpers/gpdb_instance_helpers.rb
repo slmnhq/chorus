@@ -1,3 +1,12 @@
+def find_gpdb_instance_dialog
+  wait_until { find("input[name=name]").visible? }
+  wait_until { find("textarea[name=description]").visible? }
+  wait_until { find("input[name=host]").visible? }
+  wait_until { find("input[name=port]").visible? }
+  wait_until { find("input[name=dbUsername]").visible? }
+  wait_until { find("input[name=dbPassword]").visible? }
+end
+
 def create_valid_instance(params = {})
   name = params[:name] || "GPDB_instance#{Time.now.to_i}"
   visit("#/instances")
@@ -5,12 +14,7 @@ def create_valid_instance(params = {})
   click_button "Add instance"
   within("#facebox") do
     choose("register_existing_greenplum")
-    wait_until { find("input[name=name]").visible? }
-    wait_until { find("textarea[name=description]").visible? }
-    wait_until { find("input[name=host]").visible? }
-    wait_until { find("input[name=port]").visible? }
-    wait_until { find("input[name=dbUsername]").visible? }
-    wait_until { find("input[name=dbPassword]").visible? }
+    find_gpdb_instance_dialog
 
     fill_in 'name', :with => name
     fill_in 'description', :with => "sandbox creation"
