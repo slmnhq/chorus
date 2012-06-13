@@ -670,7 +670,17 @@ describe("chorus.views.Base", function() {
                 it("sets the title of the content header to the plural of the model class", function() {
                     expect(this.view.contentHeader.options.title).toBe("Workfiles")
                 })
-            })
+
+                context("emptyTitleBeforeFetch option set", function() {
+                    beforeEach(function() {
+                        this.view = new chorus.views.MainContentList({ collection: this.collection, modelClass: "Workfile", emptyTitleBeforeFetch: true });
+                    })
+
+                    it("should not display the title", function() {
+                        expect(this.view.contentHeader.options.title).toBe(false);
+                    });
+                });
+            });
 
             context("when a title override is provided", function() {
                 beforeEach(function() {

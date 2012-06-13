@@ -465,7 +465,7 @@ chorus.views.MainContentList = chorus.views.MainContentView.extend({
         var collection = this.collection;
         this.content = new chorus.views[modelClass + "List"](_.extend({collection: collection}, options.contentOptions));
 
-        this.contentHeader = options.contentHeader || new chorus.views.ListHeaderView({title: options.title || (modelClass + "s"), linkMenus: options.linkMenus, imageUrl: options.imageUrl})
+        this.contentHeader = options.contentHeader || new chorus.views.ListHeaderView({title: options.title || (!options.emptyTitleBeforeFetch && (modelClass + "s")), linkMenus: options.linkMenus, imageUrl: options.imageUrl})
 
         if (options.hasOwnProperty('persistent')) {
             this.persistent = options.persistent;

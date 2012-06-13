@@ -22,6 +22,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         this.sidebar = new chorus.views.TabularDataSidebar({listMode: true});
 
         this.mainContent = new chorus.views.MainContentList({
+            emptyTitleBeforeFetch: true,
             modelClass: "TabularData",
             collection: this.collection
         });

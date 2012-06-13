@@ -9,6 +9,10 @@ describe("chorus.pages.DatabaseIndexPage", function() {
         expect(this.page.helpId).toBe("instances")
     });
 
+    it("does not show a title before the fetch completes", function() {
+        expect(this.page.$(".content_header h1").text()).toBe("");
+    });
+
     it("fetches the instance", function() {
         expect(this.page.instance).toHaveBeenFetched();
     });
