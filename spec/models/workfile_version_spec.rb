@@ -55,6 +55,28 @@ describe WorkfileVersion do
     end
   end
 
+  describe "validations" do
+    # Workaround for paperclip's lack of proper I18n in error messages
+    context "when content has error message with exception message" do
+      let(:user) { FactoryGirl.create(:user) }
+
+      it "cleans the message" do
+        workfile_version = described_class.new({
+          :contents => test_file('not_an_image.jpg'),
+          :owner => user,
+          :modifier => user
+        })
+
+        workfile_version.should_not be_valid
+
+        flattened_messages = workfile_version.errors[:contents].flatten
+
+        flattened_messages.should include(:invalid)
+        flattened_messages.join.should_not match(/not recognized by the 'identify' command/)
+      end
+    end
+  end
+
   describe "#Update_content" do
     context "when the version is the latest version" do
       before do
