@@ -38,9 +38,9 @@ describe "creating a user" do
 
   end
 
-  it "should let the admin create a user with a wrong email address" do
+  it "should not let the admin create a user with a wrong email address" do
 
-    visit("/#/users/new")
+    create_new_user_page
     first_name = Forgery::Name.first_name
     last_name = Forgery::Name.last_name
     fill_in 'firstName', :with =>first_name
@@ -66,6 +66,14 @@ describe "creating a user" do
     page.find("div.department").should have_content("Greenplum")
     page.find("div.title").should have_content("QA")
     page.find("h1").should have_content("#{first_name} #{last_name}")
+
+  end
+
+  it "should not let the admin create a user without the required fields filled up" do
+
+    create_new_user_page
+    click_submit_button
+    field_errors.should_not be_empty
 
   end
 
