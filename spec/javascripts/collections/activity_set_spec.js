@@ -22,14 +22,22 @@ describe("chorus.collections.ActivitySet", function() {
             expect(function() { model.activities(); }).toThrow();
         });
 
-        it("the Url for activities is model's url + /activities", function() {
-            var user = new chorus.models.User({id: 2});
-            var instance = new chorus.models.GreenplumInstance({id: 45});
-            var userActivities = chorus.collections.ActivitySet.forModel(user);
-            var instanceActivities = chorus.collections.ActivitySet.forModel(instance);
+        describe("the url of the activity set", function() {
+            var activities;
 
-            expect(userActivities.url()).toHaveUrlPath("/users/2/activities")
-            expect(instanceActivities.url()).toHaveUrlPath("/instances/45/activities");
+            beforeEach(function() {
+                var model = new chorus.models.Base();
+                spyOn(model, "url").andReturn("/dudes/1?isCool=true");
+                activities = chorus.collections.ActivitySet.forModel(model);
+            });
+
+            it("is the model's url, with '/activities' appended to the path", function() {
+                expect(activities.url()).toHaveUrlPath("/dudes/1/activities");
+            });
+
+            it("does not include the query parameters from the model's url", function() {
+                expect(activities.url()).not.toContainQueryParams({ isCool: true });
+            });
         });
 
         context("with a HdfsEntry", function() {

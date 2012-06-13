@@ -25,7 +25,8 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
         if (model instanceof chorus.models.HdfsEntry) {
             return "/not_yet_implemented";
         } else {
-            return model.url() + "/activities";
+            var modelUriPath = new URI(model.url()).path();
+            return modelUriPath + "/activities";
         }
     }
 });
