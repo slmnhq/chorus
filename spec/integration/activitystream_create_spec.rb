@@ -46,4 +46,4 @@ describe " add an instance " do
     page.should have_content "EDC Admin added a new instance hadoop_instance"
   end
 
-end 
+end

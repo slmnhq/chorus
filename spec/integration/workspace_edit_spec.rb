@@ -91,9 +91,10 @@ describe "creating a note on a workspace" do
 
     visit('/#/workspaces')
     within(".workspace_list") { page.should_not have_content(workspace_name) }
-
+    sleep(2)
     page.execute_script("$('.popup').click()")
     wait_until { page.has_content? "All Workspaces" }
+    sleep (2)
     click_link("All Workspaces")
     within(".workspace_list") do
       page.should have_content(workspace_name)
