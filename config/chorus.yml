@@ -10,8 +10,8 @@ ldap:
     timeout: 20000
     size_limit: 200
   base: DC=greenplum,DC=com
-  user_dn: greenplum\chorus
-  password: secret
+  user_dn:
+  password:
   dn_template: greenplum\{0}
   attribute:
     uid: sAMAccountName
@@ -19,6 +19,6 @@ ldap:
     gn: givenName
     sn: sn
     cn: cn
-    mail: mail
+    mail: userprincipalname
     title: title
 

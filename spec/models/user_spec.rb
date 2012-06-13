@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe User do
+  before do
+    stub(LdapClient).enabled? { false }
+  end
+
   describe ".authenticate" do
     before do
       @user = FactoryGirl.create :user #, :username => 'aDmin'
