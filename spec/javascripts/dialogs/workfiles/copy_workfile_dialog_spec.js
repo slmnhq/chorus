@@ -54,7 +54,7 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             });
 
             it("calls the API", function() {
-                expect(_.last(this.server.requests).url).toBe("/workspace/" + this.workspace.get("id") + "/workfile");
+                expect(_.last(this.server.requests).url).toBe("/workfiles/" + this.workfile.get("id") + "/copy");
                 expect(_.last(this.server.requests).method).toBe("POST");
             })
 

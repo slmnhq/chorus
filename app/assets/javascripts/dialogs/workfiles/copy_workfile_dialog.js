@@ -23,21 +23,17 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
         var workfile = this.workfile;
 
         var params = {
-            source: "chorus",
-            fileName: workfile.get("fileName"),
-            workfileId: workfile.get("id")
+            workspace_id: this.selectedItem().get("id")
         }
 
         var description = workfile.get("description");
         if (description) {
             params.description = description;
         }
-
         $.ajax({
-            url: "/workspace/" + this.selectedItem().get("id") + "/workfile",
+            url: "/workfiles/" + this.workfile.get("id") + "/copy",
             type: "POST",
             dataType: "json",
-
             data: params,
             success: function(data) {
                 self.closeModal();

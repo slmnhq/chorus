@@ -14,7 +14,7 @@ class Workfile < ActiveRecord::Base
   def self.by_type(file_type)
     scoped.find_all { |workfile| workfile.versions.last.file_type == file_type.downcase }
   end
-  
+
   def create_new_version(user, source_file, message)
     versions.create!(
       :owner => user,
@@ -31,6 +31,16 @@ class Workfile < ActiveRecord::Base
 
   def has_draft(current_user)
     !!WorkfileDraft.find_by_owner_id_and_workfile_id(current_user.id, id)
+  end
+
+  def copy(user, workspace)
+    workfile = Workfile.new
+    workfile.file_name = file_name
+    workfile.description = description
+    workfile.workspace = workspace
+    workfile.owner = user
+
+    workfile
   end
 
   private

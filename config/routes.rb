@@ -45,7 +45,7 @@ Chorus::Application.routes.draw do
   end
 
   resources :database_objects, :only => [:show] do
-    resources :columns, :only=> [:index], :controller => 'column'
+    resources :columns, :only => [:index], :controller => 'column'
     resources :previews, :only => [:create, :destroy], :constraints => {:id => /.*/}
     resource :statistics, :only => :show
   end
@@ -60,6 +60,7 @@ Chorus::Application.routes.draw do
   resources :workfiles, :only => [:show, :destroy] do
     resource :draft, :only => [:show, :update, :create, :destroy], :controller => :workfile_draft
     resources :versions, :only => [:update, :create], :controller => 'workfile_versions'
+    resource :copy, :only => [:create], :controller => 'workfile_copy'
   end
 
   match "/" => "root#index"
