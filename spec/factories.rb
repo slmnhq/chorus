@@ -102,28 +102,11 @@ FactoryGirl.define do
     modifier
   end
 
-  factory :event do
-    action "FOO"
+  factory :event, :class => Events::Base do
     actor
-    association :target1, :factory => :user
 
-    factory :instance_created_event do
-      action "INSTANCE_CREATED"
-      association :target1, :factory => :instance
-    end
-  end
-
-  factory :activity do
-    association :entity, :factory => :user
-    event
-
-    factory :global_activity do
-      entity_type "GLOBAL"
-      entity_id nil
-
-      factory :instance_created_activity do
-        association :event, :factory => :instance_created_event
-      end
+    factory :instance_created_event, :class => Events::INSTANCE_CREATED do
+      instance
     end
   end
 

@@ -2,20 +2,16 @@ require "spec_helper"
 
 describe ActivityPresenter, :type => :view do
   let(:instance) { FactoryGirl.create(:instance) }
-  let(:activity) do
-    FactoryGirl.create(:activity,
-      :action => "SOME_ACTION",
-      :target1 => instance
-    )
-  end
+  let(:event) { FactoryGirl.create(:instance_created_event, :instance => instance) }
+  let(:activity) { Activity.find_by_event_id(event.id) }
 
   describe "#to_hash" do
     subject { ActivityPresenter.new(activity, view).to_hash }
 
     it "includes the 'actor', 'action' and 'target'" do
-      subject[:action].should == "SOME_ACTION"
-      subject[:actor].should  == Presenter.present(activity.actor, view)
-      subject[:target].should == Presenter.present(activity.target1, view)
+      subject[:action].should == "INSTANCE_CREATED"
+      subject[:actor].should  == Presenter.present(activity.event.actor, view)
+      subject[:target].should == Presenter.present(activity.event.instance, view)
       subject[:target_type].should == "Instance"
       subject[:id].should == activity.id
     end

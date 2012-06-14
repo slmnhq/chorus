@@ -5,7 +5,7 @@ module Hdfs
       instance.owner = owner
       instance.version = Hdfs::QueryService.instance_version(instance)
       instance.save!
-      Event::INSTANCE_CREATED.add(owner, instance)
+      Events::INSTANCE_CREATED.by(owner).add(:instance => instance)
       instance
     end
 

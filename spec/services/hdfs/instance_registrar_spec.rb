@@ -51,8 +51,8 @@ describe Hdfs::InstanceRegistrar do
       it "makes an INSTANCE_CREATED event" do
         instance = Hdfs::InstanceRegistrar.create!(instance_attributes, owner)
 
-        event = Event::INSTANCE_CREATED.first
-        event.target1.should == instance
+        event = Events::INSTANCE_CREATED.first
+        event.instance.should == instance
         event.actor.should == owner
       end
     end
