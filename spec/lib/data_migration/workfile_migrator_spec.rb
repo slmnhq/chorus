@@ -8,27 +8,27 @@ describe WorkfileMigrator, :type => :data_migration do
         WorkspaceMigrator.new.migrate
         MembershipMigrator.new.migrate
         WorkfileMigrator.new.migrate
-        @legacy_workfiles = Legacy.connection.select_all("select * from edc_work_file WHERE is_deleted = 'f'")
-        @legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version WHERE is_deleted = 'f'")
+        @legacy_workfiles = Legacy.connection.select_all("select * from edc_work_file")
+        @legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version")
         @legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE is_deleted = 'f'")
       end
 
-      it "creates a workfile for every non-deleted legacy workfile" do
-        @legacy_workfiles.select { |w| w["is_deleted"] == 'f' }.length.should == Workfile.count
+      it "creates a workfile for every legacy workfile, including deleted ones" do
+        @legacy_workfiles.length.should == Workfile.unscoped.count
       end
 
       it "saves the id of the new workfile on the legacy workfile" do
         @legacy_workfiles.each do |legacy_workfile|
           id = legacy_workfile["chorus_rails_workfile_id"]
           id.should be_present
-          Workfile.find_by_id(id).should be_present
+          Workfile.find_with_destroyed(id).should be_present
         end
       end
 
       it "associates new workfiles with the appropriate workspace" do
         @legacy_workfiles.each do |legacy_workfile|
           legacy_workspace = Legacy.connection.select_one("select * from edc_workspace where id = '#{legacy_workfile["workspace_id"]}'")
-          new_workfile = Workfile.find(legacy_workfile["chorus_rails_workfile_id"])
+          new_workfile = Workfile.find_with_destroyed(legacy_workfile["chorus_rails_workfile_id"])
           new_workfile.workspace.id.should == legacy_workspace["chorus_rails_workspace_id"].to_i
         end
       end
@@ -36,14 +36,14 @@ describe WorkfileMigrator, :type => :data_migration do
       it "associates new workfiles with the appropriate owner" do
         @legacy_workfiles.each do |legacy_workfile|
           legacy_owner = Legacy.connection.select_one("select * from edc_user where user_name = '#{legacy_workfile["owner"]}'")
-          new_workfile = Workfile.find(legacy_workfile["chorus_rails_workfile_id"])
+          new_workfile = Workfile.find_with_destroyed(legacy_workfile["chorus_rails_workfile_id"])
           new_workfile.owner.id.should == legacy_owner["chorus_rails_user_id"].to_i
         end
       end
 
       it "copies the interesting fields" do
         @legacy_workfiles.each do |legacy_workfile|
-          new_workfile = Workfile.find(legacy_workfile["chorus_rails_workfile_id"])
+          new_workfile = Workfile.find_with_destroyed(legacy_workfile["chorus_rails_workfile_id"])
           new_workfile.description.should == legacy_workfile["description"]
           new_workfile.file_name.should == legacy_workfile["file_name"]
           new_workfile.created_at.should == DateTime.parse(legacy_workfile["created_stamp"])
@@ -51,11 +51,24 @@ describe WorkfileMigrator, :type => :data_migration do
         end
       end
 
+      it "copies the deleted flag" do
+        @legacy_workfiles.each do |legacy_workfile|
+          new_workfile = Workfile.find_with_destroyed(legacy_workfile["chorus_rails_workfile_id"])
+          if legacy_workfile["is_deleted"] == 't'
+            new_workfile.deleted_at.should == legacy_workfile["last_updated_stamp"]
+          elsif legacy_workfile["is_deleted"] == 'f'
+            new_workfile.deleted_at.should be_nil
+          else
+            fail "Unrecognized workfile state"
+          end
+        end
+      end
+
       describe "versions" do
-        it "migrates non-deleted versions" do
+        it "migrates all versions from the legacy database" do
           @legacy_workfiles.each do |legacy_workfile|
-            new_workfile = Workfile.find(legacy_workfile["chorus_rails_workfile_id"])
-            legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version WHERE workfile_id = '#{legacy_workfile["id"]}' AND is_deleted = 'f'")
+            new_workfile = Workfile.find_with_destroyed(legacy_workfile["chorus_rails_workfile_id"])
+            legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version WHERE workfile_id = '#{legacy_workfile["id"]}'")
             new_workfile.versions.count.should == legacy_versions.length
           end
         end
@@ -70,7 +83,7 @@ describe WorkfileMigrator, :type => :data_migration do
         it "associates new versions with the appropriate workfile" do
           @legacy_versions.each do |legacy_version|
             legacy_workfile = Legacy.connection.select_one("select * from edc_work_file where id = '#{legacy_version["workfile_id"]}'")
-            new_workfile = Workfile.find(legacy_workfile["chorus_rails_workfile_id"])
+            new_workfile = Workfile.find_with_destroyed(legacy_workfile["chorus_rails_workfile_id"])
             new_version = WorkfileVersion.find(legacy_version["chorus_rails_workfile_version_id"])
             new_version.workfile.id.should == legacy_workfile["chorus_rails_workfile_id"].to_i
           end
@@ -112,7 +125,7 @@ describe WorkfileMigrator, :type => :data_migration do
       describe "draft" do
         it "migrates non-deleted drafts" do
           @legacy_workfiles.each do |legacy_workfile|
-            new_workfile = Workfile.find(legacy_workfile["chorus_rails_workfile_id"])
+            new_workfile = Workfile.find_with_destroyed(legacy_workfile["chorus_rails_workfile_id"])
             legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE workfile_id = '#{legacy_workfile["id"]}' AND is_deleted = 'f'")
             new_workfile.drafts.count.should == legacy_drafts.length
           end
