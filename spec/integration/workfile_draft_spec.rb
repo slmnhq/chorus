@@ -1,6 +1,12 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "workfile show page" do
+  def wait_for_text_element
+    wait_until do
+        !!evaluate_script('chorus.page.mainContent && chorus.page.mainContent.content && chorus.page.mainContent.content.textContent && chorus.page.mainContent.content.textContent.editor && !!chorus.page.mainContent.content.textContent.editor.setValue')
+    end
+  end
+
   before do
     login('edcadmin', 'secret')
     visit("#/workspaces")
@@ -21,9 +27,7 @@ describe "workfile show page" do
     fill_in 'fileName', :with => @file_name
     click_button "Add SQL File"
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
-    wait_until {
-        !!evaluate_script('chorus.page.mainContent && chorus.page.mainContent.content && chorus.page.mainContent.content.textContent && chorus.page.mainContent.content.textContent.editor && !!chorus.page.mainContent.content.textContent.editor.setValue')
-    }
+    wait_for_text_element
   end
 
   it "pop up the open draft option" do
@@ -47,6 +51,7 @@ describe "workfile show page" do
   end
 
   it "content should be of last version" do
+    wait_for_text_element
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood")')
     page.find(".save .save_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
@@ -56,6 +61,7 @@ describe "workfile show page" do
     click_link "Work Files"
     click_link @file_name
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
+    wait_for_text_element
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood -1")')
     click_link "Work Files"
     wait_until { current_route =~ /workspaces\/\d+\/workfiles/ }
