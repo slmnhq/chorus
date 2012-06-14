@@ -68,56 +68,58 @@
                 <div class="value" title="{{column.dataType}}">{{column.dataType}}</div>
             </div>
             {{#if statistics.lastAnalyzedTime}}
-            {{#if column.min}}
+            {{#with column.statistics}}
+            {{#if min}}
             <div class="pair min">
                 <div class="key">{{t "dataset.column_statistics.min"}}</div>
-                <div class="value" title="{{column.min}}">{{round column.min}}</div>
+                <div class="value" title="{{min}}">{{round min}}</div>
             </div>
             {{/if}}
-            {{#if column.median}}
+            {{#if median}}
             <div class="pair median">
                 <div class="key">{{t "dataset.column_statistics.median"}}</div>
-                <div class="value" title="{{column.median}}">{{round column.median}}</div>
+                <div class="value" title="{{median}}">{{round median}}</div>
             </div>
             {{/if}}
-            {{#if column.avg}}
+            {{#if avg}}
             <div class="pair avg">
                 <div class="key">{{t "dataset.column_statistics.avg"}}</div>
-                <div class="value" title="{{column.avg}}">{{round column.avg}}</div>
+                <div class="value" title="{{avg}}">{{round avg}}</div>
             </div>
             {{/if}}
-            {{#if column.max}}
+            {{#if max}}
             <div class="pair max">
                 <div class="key">{{t "dataset.column_statistics.max"}}</div>
-                <div class="value" title="{{column.max}}">{{round column.max}}</div>
+                <div class="value" title="{{max}}">{{round max}}</div>
             </div>
             {{/if}}
-            {{#if column.stdDeviation}}
+            {{#if stdDeviation}}
             <div class="pair stddev">
                 <div class="key">{{t "dataset.column_statistics.stddev"}}</div>
-                <div class="value" title="{{column.stdDeviation}}">{{round column.stdDeviation}}</div>
+                <div class="value" title="{{stdDeviation}}">{{round stdDeviation}}</div>
             </div>
             {{/if}}
-            {{#if column.distinctValue}}
+            {{#if distinctValue}}
             <div class="pair distinct">
                 <div class="key">{{t "dataset.column_statistics.distinct"}}</div>
-                <div class="value" title="{{column.distinctValue}}">{{round column.distinctValue}}</div>
+                <div class="value" title="{{distinctValue}}">{{round distinctValue}}</div>
             </div>
             {{/if}}
-            {{#if column.commonValues.length}}
+            {{#if commonValues.length}}
             <div class="multiline common">
                 <div class="key">{{t "dataset.column_statistics.common"}}</div>
-                {{#each column.commonValues}}
+                {{#each commonValues}}
                 <div class="value" title="{{this}}">{{round this}}</div>
                 {{/each}}
             </div>
             {{/if}}
-            {{#if column.nullFraction}}
+            {{#if nullFraction}}
             <div class="pair pctnull">
                 <div class="key">{{t "dataset.column_statistics.pctnull"}}</div>
-                <div class="value" title="{{column.nullFraction}}">{{percentage column.nullFraction}}</div>
+                <div class="value" title="{{nullFraction}}">{{percentage nullFraction}}</div>
             </div>
             {{/if}}
+            {{/with}}
             {{/if}}
         </div>
     {{/if}}

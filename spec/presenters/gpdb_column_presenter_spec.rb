@@ -2,16 +2,18 @@ require "spec_helper"
 
 describe GpdbColumnPresenter, :type => :view do
   let(:gpdb_column) { GpdbColumn.new(:name => "column1", :data_type => type_string, :description => 'nothing') }
+  let(:type_string) { "smallint" }
+
   subject { GpdbColumnPresenter.new(gpdb_column, view) }
 
   describe "#to_hash" do
-    let(:type_string) { "smallint" }
-
-    it "includes the column's name and type category" do
+    it "includes the column's basic information" do
       hash = subject.to_hash
       hash[:name].should == "column1"
       hash[:type_category].should == "WHOLE_NUMBER"
       hash[:description].should == "nothing"
+      hash[:data_type].should == "smallint"
+      hash[:statistics].should == {}
     end
   end
 
@@ -57,5 +59,21 @@ describe GpdbColumnPresenter, :type => :view do
     it_has_type_category("time with time zone", "TIME")
     it_has_type_category("timestamp without time zone", "DATETIME")
     it_has_type_category("timestamp with time zone", "DATETIME")
+  end
+
+  describe "statistics" do
+    context "when the model does not have statistics" do
+      its(:statistics) { should == { } }
+    end
+
+    context "when the model has statistics" do
+      let(:statistics) { GpdbColumnStatistics.new(nil, nil, nil, nil, nil, nil) }
+
+      before do
+        gpdb_column.statistics = statistics
+      end
+
+      its(:statistics) { should == GpdbColumnStatisticsPresenter.new(statistics, view).to_hash }
+    end
   end
 end

@@ -6,7 +6,8 @@ class GpdbColumnPresenter < Presenter
       :name => h(name),
       :data_type => h(data_type),
       :type_category => type_category,
-      :description => h(description)
+      :description => h(description),
+      :statistics => statistics
     }
   end
   
@@ -35,5 +36,10 @@ class GpdbColumnPresenter < Presenter
     else
       "OTHER"
     end
+  end
+
+  def statistics
+    return {} unless model.statistics.present?
+    present(model.statistics)
   end
 end

@@ -946,16 +946,18 @@ describe("chorus.views.TabularDataSidebar", function() {
             beforeEach(function() {
                 this.dataset = newFixtures.dataset.sourceTable();
                 this.column = fixtures.databaseColumn({
-                    avg: 719719.111,
-                    commonValues: [46, 38],
-                    distinctValue: 998710,
-                    max: "1199961.0",
-                    median: "725197.0",
-                    min: "200075.0",
-                    nullFraction: 10.3678,
-                    stdDeviation: 309104.997,
-                    type: "int8",
-                    typeCategory: "WHOLE_NUMBER"
+                    dataType: "int8",
+                    typeCategory: "WHOLE_NUMBER",
+                    statistics: {
+                        avg: 719719.111,
+                        commonValues: [46, 38],
+                        distinctValue: 998710,
+                        max: "1199961.0",
+                        median: "725197.0",
+                        min: "200075.0",
+                        nullFraction: 10.3678,
+                        stdDeviation: 309104.997
+                    }
                 });
 
                 chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
@@ -993,10 +995,12 @@ describe("chorus.views.TabularDataSidebar", function() {
                         });
                         this.column.set({
                             typeCategory: "WHOLE_NUMBER",
-                            type: "int8",
-                            max: "1199961.0",
-                            median: "725197.0",
-                            min: "200075.0"
+                            dataType: "int8",
+                            statistics: {
+                                max: "1199961.0",
+                                median: "725197.0",
+                                min: "200075.0"
+                            }
                         });
                         this.view.render();
                     });
@@ -1027,7 +1031,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the min is not available", function() {
                     it("should not display the min", function() {
-                        this.column.set({min: null});
+                        this.column.set({statistics: {min: null}});
                         this.view.render();
                         expect(this.view.$(".column_statistics .min")).not.toExist();
                     });
@@ -1035,7 +1039,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the median is not available", function() {
                     it("should not display the median", function() {
-                        this.column.set({median: null});
+                        this.column.set({statistics: {median: null}});
                         this.view.render();
                         expect(this.view.$(".column_statistics .median")).not.toExist();
                     });
@@ -1043,7 +1047,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the avg is not available", function() {
                     it("should not display the avg", function() {
-                        this.column.set({avg: null});
+                        this.column.set({statistics: {avg: null}});
                         this.view.render();
                         expect(this.view.$(".column_statistics .avg")).not.toExist();
                     });
@@ -1051,7 +1055,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the max is not available", function() {
                     it("should not display the max", function() {
-                        this.column.set({max: null});
+                        this.column.set({statistics: {max: null}});
                         this.view.render();
                         expect(this.view.$(".column_statistics .max")).not.toExist();
                     });
@@ -1059,7 +1063,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the stdDeviation is not available", function() {
                     it("should not display the stdDeviation", function() {
-                        this.column.set({stdDeviation: null});
+                        this.column.set({statistics: {stdDeviation: null}});
                         this.view.render();
                         expect(this.view.$(".column_statistics .stdDeviation")).not.toExist();
                     });
@@ -1067,7 +1071,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the distinctValue is not available", function() {
                     it("should not display the distinctValue", function() {
-                        this.column.set({distinctValue: null});
+                        this.column.set({statistics: {distinctValue: null}});
                         this.view.render();
                         expect(this.view.$(".column_statistics .distinctValue")).not.toExist();
                     });
@@ -1075,7 +1079,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the commonValues is not available", function() {
                     it("should not display the commonValues", function() {
-                        this.column.set({commonValues: []});
+                        this.column.set({statistics: {commonValues: []}});
                         this.view.render();
                         expect(this.view.$(".column_statistics .commonValues")).not.toExist();
                     });
@@ -1083,7 +1087,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the nullFraction is not available", function() {
                     it("should not display the nullFraction", function() {
-                        this.column.set({nullFraction: null});
+                        this.column.set({statistics: {nullFraction: null}});
                         this.view.render();
                         expect(this.view.$(".column_statistics .nullFraction")).not.toExist();
                     });
