@@ -7,7 +7,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                     name: 'instance2'
                 },
                 databaseName: 'db1',
-                schemaName: 'schema1',
+                schema: {name: 'schema1'},
                 objectName: 'table1',
                 id: '1'
             });
@@ -41,7 +41,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                     name: 'instance2'
                 },
                 databaseName: 'db1',
-                schemaName: 'schema1',
+                schema: {name: 'schema1'},
                 objectName: 'view1',
                 id: '3'
             })
@@ -60,7 +60,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                         name: '%foo%'
                     },
                     databaseName: 'b/a/r',
-                    schemaName: ' baz ',
+                    schema: {name: 'baz'},
                     objectName: '!!!',
                     id: '4'
                 });

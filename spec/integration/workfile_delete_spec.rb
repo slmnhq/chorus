@@ -5,26 +5,43 @@ describe " add an instance " do
     login('edcadmin', 'secret')
   end
 
-  xit "deletes a SQL workfile" do
-    visit("#/workspaces")
-    wait_until { current_route == '/workspaces' && page.has_selector?("button[data-dialog=WorkspacesNew]") }
-    click_button "Create Workspace"
-    within("#facebox") do
-      fill_in 'name', :with => "new_sql_wf_ws#{Time.now.to_i}"
-      click_button "Create Workspace"
-    end
-    wait_until { current_route =~ /workspaces\/\d+/ }
-    click_link "Work Files"
-    wait_until { current_route =~ /workspaces\/\d+\/workfiles/ }
+  xit "deletes a SQL workfile from the workfile show page" do
 
-    click_button "Create SQL File"
-    fill_in 'fileName', :with => "new_sql_wf#{Time.now.to_i}"
-    click_button "Add SQL File"
-    wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
+    create_valid_workspace(:name => "delete_workfile")
+    create_valid_workfile(:name => "sample")
+    click_link "Work Files"
+    page.should have_content("sample.sql")
+    click_link "sample.sql"
     click_link "Delete"
-    within("#facebox") do
-     find(".submit").click
+    within ("#facebox") do
+      click_submit_button
     end
+    page.should_not have_content("sample.sql")
+  end
+
+  xit "deletes an uploaded file from the show page" do
+
+    create_valid_workspace(:name => "workfile_delete")
+    wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
+    click_link("Work Files")
+    click_button("Upload File")
+    within("#facebox") do
+      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+      click_button("Upload File")
+      sleep(2)
+    end
+    click_link("Work Files")
+    page.should have_content("some.txt")
+    click_link "some.txt"
+    click_link "Delete"
+    within ("#facebox") do
+      click_submit_button
+    end
+    page.should_not have_content("some.txt")
+
   end
 
 end
+
+
+

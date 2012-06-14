@@ -3,9 +3,9 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
 
     urlTemplate: function() {
         var components = [
-            "workspace",
+            "workspaces",
             this.get("workspace").id,
-            "dataset"
+            "datasets"
         ]
 
         if (this.get("id")) {
@@ -25,19 +25,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
     },
 
     schema: function() {
-        // TODO: Convert this to new chorus.models.Schema(this.get("schema")) when we rebuild the dataset API.
-        return new chorus.models.Schema({
-            id: this.get("schemaId"),
-            name: this.get("schemaName"),
-            database: {
-                id: this.get("databaseId"),
-                name: this.get("databaseName"),
-                instance: {
-                    id: this.get("instance").id,
-                    name: this.get("instance").name
-                }
-            }
-        });
+        return new chorus.models.Schema(this.get("schema"));
     },
 
     iconUrl: function() {
@@ -63,11 +51,11 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
     deriveChorusView: function() {
         var chorusView = new chorus.models.ChorusView({
             sourceObjectId: this.id,
-            instanceId: this.get("instance").id,
-            databaseName: this.get("databaseName"),
-            schemaName: this.get("schemaName"),
+            instanceId: this.schema().database().instance().id,
+            databaseName: this.schema().database().name(),
+            schemaName: this.schema().name(),
             workspace: this.get("workspace"),
-            instance: this.get("instance"),
+            instance: this.schema().database().get("instance"),
             objectName: this.get("objectName")
         });
         chorusView.sourceObject = this;

@@ -2,24 +2,27 @@ describe("chorus.dialogs.ManageJoinTables", function() {
     beforeEach(function() {
         this.qtip = stubQtip();
         stubModals();
-        this.originalDatabaseObject = rspecFixtures.databaseObject({
+        this.originalDatabaseObject = rspecFixtures.dataset({
             objectName: "original",
             type: "SOURCE_TABLE",
             objectType: "TABLE",
             id: "abc"
         });
         this.instanceName = "john";
-        var dataset = newFixtures.dataset.sourceTable({
+        var dataset = rspecFixtures.dataset({
             objectName: "original",
-            instance: {
-                name: this.instanceName,
-                id: 11
+            schema: {
+                database: {
+                    instance: {
+                        name: this.instanceName,
+                        id: 11
+                    }
+                }
             },
             type: "SOURCE_TABLE",
             objectType: "TABLE",
             id: "abc"
         });
-
         this.schema = dataset.schema();
         this.chorusView = dataset.deriveChorusView();
 
@@ -45,25 +48,25 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
     describe("when the fetches complete", function() {
         beforeEach(function() {
-            this.schemaBob = rspecFixtures.schema({name: "Bob", database: this.schema.get("database") });
-            this.schemaTed = rspecFixtures.schema({name: "Ted", database: this.schema.get("database") });
+            this.schemaBob = rspecFixtures.schema({name: "Bob", database: this.schema.database().attributes });
+            this.schemaTed = rspecFixtures.schema({name: "Ted", database: this.schema.database().attributes });
             this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
 
-            this.databaseObject1 = rspecFixtures.databaseObject({
+            this.databaseObject1 = newFixtures.dataset.sourceTable({
                 objectName: "cats",
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
                 id: '"10000"|"dca_demo"|"ddemo"|"VIEW"|"cats"'
             });
 
-            this.databaseObject2 = rspecFixtures.databaseObject({
+            this.databaseObject2 = newFixtures.dataset.sourceTable({
                 objectName: "dogs",
                 type: "SOURCE_TABLE",
                 objectType: "TABLE",
                 id: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"dogs"'
             });
 
-            this.databaseObject3 = rspecFixtures.databaseObject({
+            this.databaseObject3 = newFixtures.dataset.sourceTable({
                 objectName: "lions",
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
@@ -117,7 +120,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             it("fetches filtered database objects", function() {
                 expect(this.server.lastFetch().url).toMatchUrl(
-                   "/schemas/2/database_objects?type=meta&filter=a+query&page=1&rows=9",
+                    "/schemas/" + this.schema.id + "/database_objects?type=meta&filter=a+query&page=1&rows=9",
                     { paramsToIgnore: ["page", "rows", "type"] }
                 );
             });
@@ -166,7 +169,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                     it("has an item for each schema in the database", function() {
                         var lis = this.schemaMenu.find("li");
                         this.dialog.schemas.each(function(schema, i) {
-                            expect(lis.eq(i+1)).toContainText(schema.get("name"));
+                            expect(lis.eq(i + 1)).toContainText(schema.get("name"));
                         });
                     });
 
@@ -217,9 +220,9 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                         describe("when the datasets are fetched", function() {
                             beforeEach(function() {
                                 this.server.completeFetchFor(this.schemaBob.databaseObjects(), [
-                                    rspecFixtures.databaseObject({ objectName: "fred" }),
-                                    rspecFixtures.databaseObject({ objectName: "lou" }),
-                                    rspecFixtures.databaseObject({ objectName: "bryan" })
+                                    newFixtures.dataset.sourceTable({ objectName: "fred" }),
+                                    newFixtures.dataset.sourceTable({ objectName: "lou" }),
+                                    newFixtures.dataset.sourceTable({ objectName: "bryan" })
                                 ]);
                             });
 

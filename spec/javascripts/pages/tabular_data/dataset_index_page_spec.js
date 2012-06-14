@@ -331,21 +331,21 @@ describe("chorus.pages.DatasetIndexPage", function() {
                             this.page.$("li[data-type=SOURCE_TABLE] a").click();
                             expect(this.page.collection.attributes.type).toBe("SOURCE_TABLE");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
-                            expect(this.server.lastFetch().url).toContain("/workspace/" + this.workspace.get("id") + "/dataset?type=SOURCE_TABLE");
+                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?type=SOURCE_TABLE");
                         });
 
                         it("has can filter the list by 'SANBOX_TABLE'", function() {
                             this.page.$("li[data-type=SANDBOX_TABLE] a").click();
                             expect(this.page.collection.attributes.type).toBe("SANDBOX_TABLE");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
-                            expect(this.server.lastFetch().url).toContain("/workspace/" + this.workspace.get("id") + "/dataset?type=SANDBOX_TABLE");
+                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?type=SANDBOX_TABLE");
                         });
 
                         it("has can filter the list by 'CHORUS_VIEW'", function() {
                             this.page.$("li[data-type=CHORUS_VIEW] a").click();
                             expect(this.page.collection.attributes.type).toBe("CHORUS_VIEW");
                             expect(this.page.collection.fetch).toHaveBeenCalled();
-                            expect(this.server.lastFetch().url).toContain("/workspace/" + this.workspace.get("id") + "/dataset?type=CHORUS_VIEW");
+                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?type=CHORUS_VIEW");
                         });
                     });
 

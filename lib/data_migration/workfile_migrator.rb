@@ -14,7 +14,7 @@ class WorkfileMigrator
       Legacy.connection.add_column :edc_workfile_draft, :chorus_rails_workfile_draft_id, :integer
     end
 
-    legacy_workfiles = Legacy.connection.select_all("SELECT * from edc_work_file WHERE is_deleted = 'f'")
+    legacy_workfiles = Legacy.connection.select_all("SELECT * from edc_work_file")
     legacy_workfiles.each do |legacy_workfile|
       legacy_workspace = Legacy.connection.select_one("SELECT * from edc_workspace WHERE id = '#{legacy_workfile["workspace_id"]}'")
       legacy_owner = Legacy.connection.select_one("SELECT * from edc_user WHERE user_name = '#{legacy_workfile["owner"]}'")
@@ -24,10 +24,11 @@ class WorkfileMigrator
       new_workfile.description = legacy_workfile["description"]
       new_workfile.created_at = legacy_workfile["created_stamp"]
       new_workfile.file_name  = legacy_workfile["file_name"]
-
+      new_workfile.updated_at = legacy_workfile["last_updated_stamp"]
+      new_workfile.deleted_at = legacy_workfile["last_updated_stamp"] if legacy_workfile["is_deleted"] == "t"
       new_workfile.save!
 
-      legacy_versions = Legacy.connection.select_all("SELECT * from edc_workfile_version WHERE workfile_id = '#{legacy_workfile["id"]}' AND is_deleted = 'f'")
+      legacy_versions = Legacy.connection.select_all("SELECT * from edc_workfile_version WHERE workfile_id = '#{legacy_workfile["id"]}'")
       legacy_versions.each do |legacy_version|
         legacy_owner = Legacy.connection.select_one("SELECT * from edc_user WHERE user_name = '#{legacy_version["version_owner"]}'")
         legacy_modifier = Legacy.connection.select_one("SELECT * from edc_user WHERE user_name = '#{legacy_version["modified_by"]}'")
@@ -73,7 +74,6 @@ class WorkfileMigrator
       id = legacy_workfile["id"]
       Legacy.connection.update("Update edc_work_file SET chorus_rails_workfile_id = #{new_workfile.id} WHERE id = '#{id}'")
     end
-
   end
 end
 

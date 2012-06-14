@@ -1,6 +1,7 @@
 describe("chorus.views.WorkfileListSidebar", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace();
+        this.workfile = rspecFixtures.workfile.sql();
+        this.workspace = this.workfile.workspace();
         this.view = new chorus.views.WorkfileListSidebar({ workspace: this.workspace });
     });
 
@@ -24,11 +25,8 @@ describe("chorus.views.WorkfileListSidebar", function() {
         context("when a workfile is selected", function() {
             context("when the workfile's workspace is active", function() {
                 beforeEach(function() {
-                    this.workfile = rspecFixtures.workfile.sql();
-
                     // TODO: REMOVEME
                     this.workfile.set({ lastUpdatedStamp: "2011-11-22T10:46:03Z" });
-
                     chorus.PageEvents.broadcast("workfile:selected", this.workfile);
                 })
 
@@ -48,13 +46,32 @@ describe("chorus.views.WorkfileListSidebar", function() {
                     expect(this.view.$("a.updated_by").attr("href")).toBe(this.workfile.modifier().showUrl());
                 })
 
-                it("displays a link to delete the workfile", function() {
-                    var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
-                    expect(deleteLink).toExist();
-                    expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
-                    expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
-                    expect(deleteLink).toHaveAttr("data-workfile-name", this.workfile.get("fileName"))
-                })
+                context("when the user is a workspace member", function() {
+                    beforeEach(function() {
+                        this.workspace.set({ permission: ["admin", "update"] });
+                        this.view.render();
+                    });
+
+                    it("displays a link to delete the workfile", function() {
+                        var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
+                        expect(deleteLink).toExist();
+                        expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id)
+                        expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"))
+                        expect(deleteLink).toHaveAttr("data-workfile-name", this.workfile.get("fileName"))
+                    });
+                });
+
+                context("when the user is not a workspace member", function() {
+                    beforeEach(function() {
+                        this.workspace.set({ permission: ["read", "commenting"] });
+                        this.view.render();
+                    });
+
+                    it("hides the link to delete the workfile", function() {
+                        var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
+                        expect(deleteLink).not.toExist();
+                    });
+                });
 
                 it("displays a link to copy the workfile to another workspace", function() {
                     var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
@@ -119,8 +136,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
 
         context("when the workfile's workspace is archived", function() {
             beforeEach(function() {
-                this.workspace.set({ archivedAt: "2011-11-22T10:46:03Z" });
-                this.workfile = rspecFixtures.workfile.sql();
+                this.workfile.workspace().set({ archivedAt: "2011-11-22T10:46:03Z" });
                 chorus.PageEvents.broadcast("workfile:selected", this.workfile);
             });
 

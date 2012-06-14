@@ -1,6 +1,9 @@
 {
     "response": {
         "schemaName": "ddemo",
+        "schema": {
+            "name": "ddemo"
+        },
         "importFrequency": null,
         "workspace": {
             "id": "10022",

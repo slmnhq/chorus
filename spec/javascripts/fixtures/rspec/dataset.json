@@ -1,0 +1,82 @@
+{
+  "response": {
+    "id": 66,
+    "workspace": {
+      "id": 2221,
+      "name": "workspace1",
+      "summary": null,
+      "owner": {
+        "id": 1720,
+        "username": "user4",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person4@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "archiver": null,
+      "archived_at": null,
+      "public": true,
+      "image": {
+        "original": "",
+        "icon": ""
+      },
+      "permission": [
+        "read",
+        "commenting"
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false,
+      "sandbox_info": null,
+      "latest_comment_list": null
+    },
+    "type": "SOURCE_TABLE",
+    "object_name": "table1",
+    "schema": {
+      "id": 66,
+      "name": "schema2",
+      "database": {
+        "id": 78,
+        "name": "database2",
+        "instance": {
+          "name": "instance2",
+          "host": "host2.emc.com",
+          "port": 5002,
+          "id": 284,
+          "owner": {
+            "id": 1718,
+            "username": "user2",
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "person2@example.com",
+            "title": "Grand Poo Bah",
+            "dept": "Corporation Corp., Inc.",
+            "notes": "One of our top performers",
+            "admin": false,
+            "image": {
+              "original": "/images/default-user-icon.png",
+              "icon": "/images/default-user-icon.png"
+            }
+          },
+          "shared": false,
+          "state": "online",
+          "provision_type": null,
+          "maintenance_db": "postgres",
+          "description": null,
+          "instance_provider": null,
+          "version": "9.1.2 - FactoryVersion"
+        }
+      },
+      "dataset_count": 1
+    },
+    "object_type": "TABLE"
+  }
+}
