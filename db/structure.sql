@@ -182,10 +182,12 @@ CREATE TABLE events (
     id integer NOT NULL,
     action character varying(255),
     actor_id integer,
-    target_id integer,
-    target_type character varying(255),
+    target1_id integer,
+    target1_type character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    target2_type character varying(255),
+    target2_id integer
 );
 
 
@@ -1149,8 +1151,6 @@ INSERT INTO schema_migrations (version) VALUES ('20120519000854');
 
 INSERT INTO schema_migrations (version) VALUES ('20120522000542');
 
-INSERT INTO schema_migrations (version) VALUES ('20120522015308');
-
 INSERT INTO schema_migrations (version) VALUES ('20120522020546');
 
 INSERT INTO schema_migrations (version) VALUES ('20120523174942');
@@ -1178,3 +1178,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120611222458');
 INSERT INTO schema_migrations (version) VALUES ('20120612173206');
 
 INSERT INTO schema_migrations (version) VALUES ('20120612184705');
+
+INSERT INTO schema_migrations (version) VALUES ('20120614002526');

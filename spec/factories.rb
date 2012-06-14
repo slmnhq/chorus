@@ -105,11 +105,11 @@ FactoryGirl.define do
   factory :event do
     action "FOO"
     actor
-    association :target, :factory => :user
+    association :target1, :factory => :user
 
     factory :instance_created_event do
       action "INSTANCE_CREATED"
-      association :target, :factory => :instance
+      association :target1, :factory => :instance
     end
   end
 

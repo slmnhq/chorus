@@ -99,8 +99,8 @@ describe Gpdb::InstanceRegistrar do
 
     it "makes an INSTANCE_CREATED event" do
       instance = Gpdb::InstanceRegistrar.create!(valid_input_attributes, owner)
-      event = Event.for_target(instance).find_by_action("INSTANCE_CREATED")
-      event.should_not be_nil
+      event = Event.find_by_action("INSTANCE_CREATED")
+      event.target1.should == instance
       event.actor.should == owner
     end
   end

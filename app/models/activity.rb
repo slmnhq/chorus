@@ -5,7 +5,7 @@ class Activity < ActiveRecord::Base
   belongs_to :event, :class_name => 'Event'
 
   default_scope includes(:event)
-  delegate :actor, :actor=, :action, :action=, :target, :target=, :to => :event
+  delegate :actor, :actor=, :action, :action=, :target1, :target1=, :to => :event
 
   def self.global
     where(:entity_type => "GLOBAL")

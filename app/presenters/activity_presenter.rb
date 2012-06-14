@@ -4,8 +4,8 @@ class ActivityPresenter < Presenter
       :id => model.id,
       :actor => present(model.actor),
       :action => model.action,
-      :target => present(model.target),
-      :target_type => model.target.class.name,
+      :target => present(model.target1),
+      :target_type => model.target1.class.name,
       :timestamp => model.created_at
     }
   end
