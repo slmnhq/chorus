@@ -4,7 +4,7 @@ class GpdbDatabaseObjectWorkspaceAssociationPresenter < Presenter
   def to_hash
     {
       :id => id,
-      :gpdb_database_object => present(gpdb_database_object)
-    }
+      :workspace => present(workspace),
+    }.merge(present(gpdb_database_object))
   end
 end
