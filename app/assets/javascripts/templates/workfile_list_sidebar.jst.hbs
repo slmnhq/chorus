@@ -12,9 +12,9 @@
             {{/unless}}
             <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspace.id}}" data-active-only="true">{{t "actions.copy_to_another_workspace"}}</a></li>
             <li><a href="{{workfile.downloadUrl}}" class="download">{{t "actions.download"}}</a></li>
-            {{#if activeWorkspace}}
+            {{#ifAll activeWorkspace canUpdate}}
                 <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{workfile.id}}" data-workspace-id="{{workfile.workspace.id}}" data-workfile-name="{{workfile.fileName}}">{{t "actions.delete"}}</a></li>
-            {{/if}}
+            {{/ifAll}}
         </ul>
     </div>
 
