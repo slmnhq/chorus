@@ -2,7 +2,7 @@ module Instances
   class OwnerController < ApplicationController
     def update
       authorize! :edit, instance
-      Gpdb::InstanceOwnership.change(instance, new_owner)
+      Gpdb::InstanceOwnership.change(current_user, instance, new_owner)
       present instance
     end
 

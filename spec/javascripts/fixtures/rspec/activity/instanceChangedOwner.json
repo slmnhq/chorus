@@ -1,12 +1,12 @@
 {
   "response": {
-    "id": 1763,
+    "id": 1770,
     "actor": {
-      "id": 13417,
-      "username": "user3",
+      "id": 13421,
+      "username": "user7",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person3@example.com",
+      "email": "person7@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -16,19 +16,19 @@
         "icon": "/images/default-user-icon.png"
       }
     },
-    "action": "INSTANCE_CREATED",
-    "timestamp": "2012-06-14T22:06:28Z",
+    "action": "INSTANCE_CHANGED_OWNER",
+    "timestamp": "2012-06-14T22:06:29Z",
     "instance": {
-      "name": "instance1",
-      "host": "host1.emc.com",
-      "port": 5001,
-      "id": 2356,
+      "name": "instance2",
+      "host": "host2.emc.com",
+      "port": 5002,
+      "id": 2357,
       "owner": {
-        "id": 13418,
-        "username": "user4",
+        "id": 13422,
+        "username": "user8",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person4@example.com",
+        "email": "person8@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -45,6 +45,21 @@
       "description": null,
       "instance_provider": null,
       "version": "9.1.2 - FactoryVersion"
+    },
+    "new_owner": {
+      "id": 13423,
+      "username": "user9",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person9@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
     }
   }
 }

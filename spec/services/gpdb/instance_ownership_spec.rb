@@ -6,9 +6,16 @@ describe Gpdb::InstanceOwnership do
   let!(:new_owner) { FactoryGirl.create(:user) }
 
   describe ".change_owner(instance, new_owner)" do
-    context "with a shared instance" do
-      let(:instance) { FactoryGirl.create(:instance, :shared => true) }
+    let(:instance) { FactoryGirl.create(:instance, :shared => true) }
 
+    it "creates an INSTANCE_CHANGED_OWNER event" do
+      request_ownership_update
+      event = Events::INSTANCE_CHANGED_OWNER.by(old_owner).first
+      event.instance.should == instance
+      event.new_owner.should == new_owner
+    end
+
+    context "with a shared instance" do
       it "switches ownership of instance and account" do
         request_ownership_update
         instance.owner.should == new_owner
@@ -46,7 +53,7 @@ describe Gpdb::InstanceOwnership do
   end
 
   def request_ownership_update
-    Gpdb::InstanceOwnership.change(instance, new_owner)
+    Gpdb::InstanceOwnership.change(old_owner, instance, new_owner)
     instance.reload
     owner_account.reload
   end

@@ -9,6 +9,7 @@ require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
 require File.expand_path("lib/paperclip_extensions", Rails.root)
+require File.expand_path("app/models/events/types", Rails.root)
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line

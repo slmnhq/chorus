@@ -1,18 +1,11 @@
 describe("chorus.presenters.Activity", function() {
     var model, actor, presenter;
 
-    context("instance created", function() {
-        var instance;
-
+    context("common aspects", function() {
         beforeEach(function() {
-            model = rspecFixtures.activity.instanceCreated({
-                actor: { firstName: "bomb", lastName: "cherry"},
-                target: { name: "kaboom" }
-            });
-
+            model = rspecFixtures.activity.instanceCreated();
             presenter = new chorus.presenters.Activity(model);
-            instance = model.target();
-            actor = model.actor();
+            actor = model.getModel("actor");
         });
 
         it("includes the relative timestamp", function() {
@@ -20,7 +13,65 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.timestamp()).toBe(relativeTime);
         });
 
-        describe("data for the icon", function() {
+        describe("#headerHtml", function() {
+            it("returns a handlebars safe-string (so that html won't be stripped)", function() {
+                expect(presenter.headerHtml()).toBeA(Handlebars.SafeString);
+            });
+        });
+    });
+
+    context("instance created", function() {
+        var instance;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.instanceCreated();
+            presenter = new chorus.presenters.Activity(model);
+            instance = model.getModel("instance");
+            actor = model.getModel("actor");
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toContainTranslation(
+                "activity.header.INSTANCE_CREATED.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    instanceLink: linkTo(instance.showUrl(), instance.name())
+                }
+            );
+        });
+    });
+
+    context("instance changed owner", function() {
+        var instance, newOwner;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.instanceChangedOwner();
+            presenter = new chorus.presenters.Activity(model);
+            instance = model.getModel("instance");
+            newOwner = model.getModel("newOwner");
+            actor = model.getModel("actor");
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toContainTranslation(
+                "activity.header.INSTANCE_CHANGED_OWNER.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    instanceLink: linkTo(instance.showUrl(), instance.name()),
+                    newOwnerLink: linkTo(newOwner.showUrl(), newOwner.name())
+                }
+            );
+        });
+    });
+
+    function linkTo(url, text) {
+        return chorus.helpers.linkTo(url, text);
+    }
+
+    function itHasTheActorIcon() {
+        describe("the icon", function() {
             it("shows the user's icon", function() {
                 expect(presenter.iconSrc()).toBe(actor.fetchImageUrl({ size: "icon" }));
             });
@@ -33,26 +84,7 @@ describe("chorus.presenters.Activity", function() {
                 expect(presenter.iconClass()).toBe("profile");
             });
         });
-
-        describe("#headerHtml", function() {
-            var headerHtml;
-
-            beforeEach(function() {
-                headerHtml = presenter.headerHtml();
-            });
-
-            it("returns a handlebars safe-string (so that html won't be stripped)", function() {
-                expect(headerHtml).toBeA(Handlebars.SafeString);
-            });
-
-            it("has the right content", function() {
-                expect(headerHtml.toString()).toContainTranslation("activity.header.INSTANCE_CREATED.without_workspace", {
-                    authorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
-                    objectLink: chorus.helpers.linkTo(instance.showUrl(), instance.name())
-                });
-            });
-        });
-    });
+    }
 });
 
 

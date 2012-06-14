@@ -2,24 +2,34 @@ require "spec_helper"
 
 describe ActivityPresenter, :type => :view do
   let(:instance) { FactoryGirl.create(:instance) }
-  let(:activity) do
-    FactoryGirl.create(:activity,
-      :action => "SOME_ACTION",
-      :target => instance
-    )
-  end
+  let(:event) { FactoryGirl.create(:instance_created_event, :instance => instance) }
+  let(:activity) { Activity.find_by_event_id(event.id) }
 
   describe "#to_hash" do
-    subject { ActivityPresenter.new(activity, view).to_hash }
+    subject { ActivityPresenter.new(activity, view) }
 
-    it "includes the 'actor', 'action' and 'target'" do
-      subject[:action].should == "SOME_ACTION"
-      subject[:actor].should  == Presenter.present(activity.actor, view)
-      subject[:target].should == Presenter.present(activity.target, view)
-      subject[:target_type].should == "Instance"
-      subject[:id].should == activity.id
+    it "includes the 'id', 'timestamp', 'actor', 'action'" do
+      hash = subject.to_hash
+      hash[:id].should == activity.id
+      hash[:timestamp].should == activity.created_at
+      hash[:action].should == "INSTANCE_CREATED"
+      hash[:actor].should  == Presenter.present(activity.event.actor, view)
     end
 
-    its([:timestamp]) { should == activity.created_at }
+    it "presents all of the event's 'targets', using the same names" do
+      special_instance = FactoryGirl.build(:instance)
+      special_user = FactoryGirl.build(:user)
+
+      stub(activity.event).targets do
+        {
+          :special_instance => special_instance,
+          :special_user => special_user
+        }
+      end
+
+      hash = subject.to_hash
+      hash[:special_instance].should == Presenter.present(special_instance, view)
+      hash[:special_user].should == Presenter.present(special_user, view)
+    end
   end
 end

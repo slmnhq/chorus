@@ -4,12 +4,17 @@ module Gpdb
   module InstanceOwnership
     class << self
 
-      def change(instance, new_owner)
+      def change(updater, instance, new_owner)
         if instance.shared?
           change_owner_of_shared(instance, new_owner)
         else
           change_owner_of_unshared(instance, new_owner)
         end
+
+        Events::INSTANCE_CHANGED_OWNER.by(updater).add(
+          :instance => instance,
+          :new_owner => new_owner
+        )
       end
 
       private

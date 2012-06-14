@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe Instances::OwnerController do
-  let(:old_owner) { instance.owner }
+  let(:user) { instance.owner }
   let(:instance) { FactoryGirl.create(:instance, :shared => true) }
   let(:new_owner) { FactoryGirl.create(:user) }
 
   ignore_authorization!
 
   before do
-    log_in old_owner
+    log_in user
   end
 
   describe "#update" do
@@ -22,12 +22,12 @@ describe Instances::OwnerController do
     end
 
     it "switches ownership of instance and account" do
-      mock(Gpdb::InstanceOwnership).change(instance, new_owner)
+      mock(Gpdb::InstanceOwnership).change(user, instance, new_owner)
       request_ownership_update
     end
 
     it "presents the instance" do
-      stub(Gpdb::InstanceOwnership).change(instance, new_owner)
+      stub(Gpdb::InstanceOwnership).change(user, instance, new_owner)
       mock_present { |instance_presented| instance_presented.should == instance }
       request_ownership_update
     end

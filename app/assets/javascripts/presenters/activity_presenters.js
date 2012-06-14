@@ -5,15 +5,15 @@
         },
 
         headerHtml: function() {
-            return new Handlebars.SafeString(t(headerTranslationKey.call(this), headerParams.call(this)));
+            return new Handlebars.SafeString(t(headerTranslationKey(this), headerParams(this)));
         },
 
         iconSrc: function() {
-            return this.model.actor().fetchImageUrl({ size: "icon" });
+            return getActor(this).fetchImageUrl({ size: "icon" });
         },
 
         iconHref: function() {
-            return this.model.actor().showUrl();
+            return getActor(this).showUrl();
         },
 
         iconClass: function() {
@@ -21,17 +21,37 @@
         }
     });
 
-    function headerTranslationKey() {
-        return "activity.header." + this.model.get("action") + ".without_workspace";
+    function getActor(self) {
+        return self.model.getModel("actor");
     }
 
-    function headerParams() {
-        var actor = this.model.actor();
-        var target = this.model.target();
+    function headerTranslationKey(self) {
+        return "activity.header." + self.model.get("action") + ".without_workspace";
+    }
 
-        return {
-            authorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
-            objectLink: chorus.helpers.linkTo(target.showUrl(), target.name())
-        };
+    function headerParams(self) {
+        var model = self.model;
+        var action = model.get("action");
+        var actor = getActor(self);
+
+        switch (action) {
+            case "INSTANCE_CREATED":
+                var instance = model.getModel("instance");
+                return {
+                    actorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
+                    instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.name())
+                };
+                break;
+
+            case "INSTANCE_CHANGED_OWNER":
+                var instance = model.getModel("instance");
+                var newOwner = model.getModel("newOwner");
+                return {
+                    actorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
+                    instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.name()),
+                    newOwnerLink: chorus.helpers.linkTo(newOwner.showUrl(), newOwner.name())
+                };
+                break;
+        }
     }
 })();
