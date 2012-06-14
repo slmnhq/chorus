@@ -3,7 +3,7 @@ module Events
     self.table_name = :events
     self.inheritance_column = :action
 
-    class_attribute :entities_that_get_activities
+    class_attribute :entities_that_get_activities, :target_names
     attr_accessible :action, :target1, :target2, :actor
 
     belongs_to :actor, :class_name => 'User'
@@ -24,6 +24,16 @@ module Events
       read_attribute(:action).split("::").last
     end
 
+    def targets
+      result = {}
+
+      self.class.target_names.each do |target_name|
+        result[target_name] = send(target_name)
+      end
+
+      result
+    end
+
     private
 
     def create_activities
@@ -41,7 +51,8 @@ module Events
       end
     end
 
-    def self.targets(target1_name, target2_name = nil)
+    def self.has_targets(target1_name, target2_name = nil)
+      self.target_names = [target1_name, target2_name].compact
       self.attr_accessible target1_name
       alias_method(target1_name, :target1)
       alias_method("#{target1_name}=", :target1=)
@@ -52,10 +63,8 @@ module Events
       end
     end
 
-    def self.activities(*entity_names)
+    def self.has_activities(*entity_names)
       self.entities_that_get_activities = entity_names
     end
-
-    activities :actor, :global
   end
 end

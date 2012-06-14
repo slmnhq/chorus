@@ -22,6 +22,7 @@ describe Events do
       let(:target1) { instance }
 
       its(:instance) { should == instance }
+      its(:targets) { should == { :instance => instance } }
 
       it "creates activities for the instance and for the actor, and one global activity (with no entity)" do
         activities.map(&:entity).should =~ [ user, instance, nil ]
@@ -36,6 +37,7 @@ describe Events do
 
       its(:instance) { should == instance }
       its(:new_owner) { should == user }
+      its(:targets) { should == { :instance => instance, :new_owner => user } }
 
       it "creates activities for the instance and for the actor, and one global activity (with no entity)" do
         activities.map(&:entity).should =~ [ instance, user, nil ]
