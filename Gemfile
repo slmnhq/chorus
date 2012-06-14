@@ -14,6 +14,7 @@ gem 'foreman'
 gem 'allowy'
 gem 'httparty', :require => false
 gem 'thin'
+gem 'wasabi', :git => "https://github.com/bdon/wasabi.git"
 gem 'savon'
 
 group :assets do
