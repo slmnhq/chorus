@@ -9,7 +9,7 @@ describe("chorus.collections.DatasetSet", function() {
 
     describe("#url", function() {
         it("is correct", function() {
-            expect(this.collection.url({rows: 10, page: 1})).toMatchUrl("/workspace/10000/dataset?rows=10&page=1");
+            expect(this.collection.url({rows: 10, page: 1})).toMatchUrl("/workspaces/10000/datasets?rows=10&page=1");
         });
 
         context("with filter type", function() {

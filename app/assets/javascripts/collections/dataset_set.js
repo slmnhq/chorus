@@ -11,7 +11,7 @@ chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
 
     urlTemplate:function() {
         if (this.attributes.workspaceId) {
-            return "workspace/{{workspaceId}}/dataset";
+            return "workspaces/{{workspaceId}}/datasets";
         } else {
             return "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}";
         }

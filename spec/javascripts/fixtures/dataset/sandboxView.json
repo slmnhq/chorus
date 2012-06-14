@@ -1,6 +1,10 @@
 {
     "response": {
-        "schemaName":"analytics",
+        "schemaName": "analytics",
+        "schema": {
+            "name": "analytics",
+            "id": "1000"
+        },
         "importFrequency":null,
         "workspace":{
             "id":"10000",

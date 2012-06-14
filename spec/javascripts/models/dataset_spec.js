@@ -1,21 +1,22 @@
 describe("chorus.models.Dataset", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.dataset.sourceView({
+        this.dataset = rspecFixtures.dataset({
+            id: '"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"',
             workspace: {
                 id: "44"
             },
-            instance: {
-                id: "45"
+            schema: {
+                database: {
+                    instance: {id: "45" }
+                }
             },
-            databaseName: "whirling_tops",
-            schemaName: "diamonds",
             objectType: "foo",
             objectName: "japanese_teas"
         });
     })
 
     it("creates the correct showUrl", function() {
-        expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/'+(encodeURIComponent(this.dataset.id)));
+        expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/' + (encodeURIComponent(this.dataset.id)));
     });
 
     it("creates the correct showUrl with an ugly ID", function() {
@@ -25,13 +26,13 @@ describe("chorus.models.Dataset", function() {
 
     context("when the object has an id", function() {
         it("has the right url", function() {
-            var url = encodeURI('/workspace/44/dataset/"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"');
+            var url = encodeURI('/workspaces/44/datasets/"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"');
             expect(this.dataset.url()).toMatchUrl(url);
         });
 
         it("has the right url with an ugly ID", function() {
             this.dataset.set({id: "foo#bar"});
-            expect(this.dataset.url()).toBe("/workspace/44/dataset/foo%23bar");
+            expect(this.dataset.url()).toBe("/workspaces/44/datasets/foo%23bar");
         });
     });
 
@@ -41,7 +42,7 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("has the right url", function() {
-            expect(this.dataset.url()).toMatchUrl("/workspace/44/dataset");
+            expect(this.dataset.url()).toMatchUrl("/workspaces/44/datasets");
         });
     })
 
@@ -202,11 +203,11 @@ describe("chorus.models.Dataset", function() {
 
         it("has the right data from the dataset", function() {
             expect(this.chorusView).toHaveAttrs({
-                instanceId: this.dataset.get("instance").id,
-                databaseName: this.dataset.get("databaseName"),
-                schemaName: this.dataset.get("schemaName"),
+                instanceId: this.dataset.schema().database().instance().id,
+                databaseName: this.dataset.schema().database().name(),
+                schemaName: this.dataset.schema().name(),
                 workspace: this.dataset.get("workspace"),
-                instance: this.dataset.get("instance")
+                instance: this.dataset.schema().database().get("instance")
             });
         });
     });
@@ -265,18 +266,18 @@ describe("chorus.models.Dataset", function() {
                 this.server.completeFetchFor(this.dataset.getImport(), { scheduleInfo: { frequency: "DAILY" }});
             });
 
-            context("and its schedule is active", function(){
+            context("and its schedule is active", function() {
                 it("returns the frequency of the import", function() {
                     spyOn(this.dataset.getImport(), "hasActiveSchedule").andReturn(true);
                     expect(this.dataset.importFrequency()).toBe("DAILY");
                 });
             });
 
-            context("and its schedule is inactive", function(){
-                 it("returns undefined for the frequency", function(){
-                     spyOn(this.dataset.getImport(), "hasActiveSchedule").andReturn(false);
-                     expect(this.dataset.importFrequency()).toBeUndefined();
-                 });
+            context("and its schedule is inactive", function() {
+                it("returns undefined for the frequency", function() {
+                    spyOn(this.dataset.getImport(), "hasActiveSchedule").andReturn(false);
+                    expect(this.dataset.importFrequency()).toBeUndefined();
+                });
             });
         });
     });

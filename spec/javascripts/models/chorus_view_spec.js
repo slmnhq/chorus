@@ -245,7 +245,7 @@ describe("chorus.models.ChorusView", function() {
     describe("generateFromClause", function() {
         context("with only the base table", function() {
             it("has the proper from clause", function() {
-                expect(this.model.generateFromClause()).toBe('FROM ' + this.sourceDataset.get("schemaName") + '."' + this.sourceDataset.get('objectName') + '"');
+                expect(this.model.generateFromClause()).toBe('FROM ' + this.sourceDataset.get("schema").name + '."' + this.sourceDataset.get('objectName') + '"');
             });
         });
 
@@ -257,7 +257,7 @@ describe("chorus.models.ChorusView", function() {
 
             it("has the second table joined in", function() {
                 var lines = this.model.generateFromClause().split('\n');
-                expect(lines[0]).toBe('FROM ' + this.sourceDataset.get("schemaName") + '.' + this.sourceDataset.quotedName());
+                expect(lines[0]).toBe('FROM ' + this.sourceDataset.get("schema").name + '.' + this.sourceDataset.quotedName());
                 expect(lines[1]).toBe('\tINNER JOIN ' + this.firstJoinedColumn.tabularData.fromClause() + ' ON '
                     + this.sourceColumn.quotedName() + " = " + this.firstJoinedColumn.quotedName());
             })

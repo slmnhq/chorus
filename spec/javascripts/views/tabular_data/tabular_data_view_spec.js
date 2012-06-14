@@ -1,6 +1,6 @@
 describe("chorus.views.TabularData", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.dataset.sourceTable({
+        this.dataset = rspecFixtures.dataset({
             objectName: "john_the_table"
         });
         this.qtipSpy = stubQtip();
@@ -27,13 +27,13 @@ describe("chorus.views.TabularData", function() {
 
     it("renders breadcrumbs for the table's instance, database and schema", function() {
         expect(this.view.$(".instance")).toContainText(this.dataset.instance().get("name"));
-        expect(this.view.$(".database")).toContainText(this.dataset.schema().database().get("name"));
+        expect(this.view.$(".database")).toContainText(this.dataset.database().get("name"));
         expect(this.view.$(".schema")).toContainText(this.dataset.schema().get("name"));
     });
 
     it("attaches the instance model to the instance and database breadcrumbs", function() {
-        expect(this.view.$(".instance").data("instance")).toEqual(this.dataset.get("instance"));
-        expect(this.view.$(".database").data("instance")).toEqual(this.dataset.get("instance"));
+        expect(this.view.$(".instance").data("instance")).toEqual(this.dataset.instance().attributes);
+        expect(this.view.$(".database").data("instance")).toEqual(this.dataset.instance().attributes);
     });
 
     xdescribe("found in workspaces tooltip (when rendered from the schema browse page)", function() {

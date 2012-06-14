@@ -1,15 +1,22 @@
 ;(function() {
-    window.newFixtures = {};
-    window.rspecFixtures = {};
-    window.fixtureData = {};
+    window.newFixtures = {
+        definitions: window.fixtureDefinitions,
+        parsedJson: {},
+        rawJsonPathPrefix: ""
+    };
+    window.rspecFixtures = {
+        definitions: window.rspecFixtureDefinitions,
+        parsedJson: {},
+        rawJsonPathPrefix: "rspec"
+    };
     window.newFixtures.safeExtend = safeExtend;
     window.newFixtures.addUniqueDefaults = addUniqueDefaults;
 
-    defineAllFixtures(window.fixtureDefinitions, window.newFixtures, "");
-    defineAllFixtures(window.rspecFixtureDefinitions, window.rspecFixtures, "rspec");
+    defineAllFixtures(window.newFixtures);
+    defineAllFixtures(window.rspecFixtures);
 
-    function defineAllFixtures(definitions, fixtureModule, pathPrefix) {
-        _.each(definitions, function(definition, name) {
+    function defineAllFixtures(fixtureModule) {
+        _.each(fixtureModule.definitions, function(definition, name) {
             if (definition.children) {
                 fixtureModule[name] = {};
                 initializeChildDefinitions(definition);
@@ -36,15 +43,16 @@
             var jsonMethodName = name + "Json";
 
             module[name] = function(overrides) {
-                var result = new klass();
-                var rawData = result.parse(getFixture(name, parentName));
-                overrides || (overrides = defaultOverridesFor(rawData));
+                var model = new klass();
+                var populatedModel = model.parse(saveParsedJson(name, parentName));
+                overrides || (overrides = defaultOverridesFor(populatedModel));
                 addUniqueDefaults(overrides, definition.unique);
-                var attrs = safeExtend(rawData, overrides, name);
+
+                var attrs = safeExtend(populatedModel, overrides, name);
                 addDerivedAttributes(attrs, overrides, definition.derived);
 
-                var setMethod = (result instanceof chorus.collections.Base) ? "reset" : "set";
-                return result[setMethod](attrs, { silent: true });
+                var setMethod = (model instanceof chorus.collections.Base) ? "reset" : "set";
+                return model[setMethod](attrs, { silent: true });
             };
 
             module[jsonMethodName] = function() {
@@ -80,18 +88,18 @@
             }
         }
 
-        function getFixture(name, parentName) {
-            var outerHash = window.fixtureData;
+        function saveParsedJson(name, parentName) {
+            var parsedJson = fixtureModule.parsedJson;
             if (parentName) {
-                outerHash = window.fixtureData[parentName] || (window.fixtureData[parentName] = {});
+                parsedJson = parsedJson[parentName] || (parsedJson[parentName] = {});
             }
-            if (!outerHash[name]) {
-                var path = _.compact([pathPrefix, parentName, name]).join("/");
+            if (!parsedJson[name]) {
+                var path = _.compact([fixtureModule.rawJsonPathPrefix, parentName, name]).join("/");
                 var $element = $("#fixtures [data-fixture-path='" + path + "']");
                 if (!$element.length) throw "No fixture for " + path;
-                outerHash[name] = JSON.parse($element.html());
+                parsedJson[name] = JSON.parse($element.html());
             }
-            return outerHash[name];
+            return parsedJson[name];
         }
     }
 

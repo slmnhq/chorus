@@ -2,9 +2,12 @@
     "response": {
         "lastUpdatedStamp": "2012-03-06 09:38:47.013",
         "importFrequency": "DAILY",
-        "schemaId": 2,
         "schemaName": "public",
-
+        "schemaId": 2,
+        "schema": {
+            "name": "public",
+            "id": 2
+        },
         "workspace": {
             "id": "10000",
             "name": "danny"

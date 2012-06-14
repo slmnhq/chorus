@@ -16,7 +16,7 @@ describe("newFixtures", function() {
 
         it("caches the json data in a nested structure", function() {
             model = newFixtures.test.withOverrides();
-            expect(window.fixtureData.test.withOverrides).toBeDefined();
+            expect(window.newFixtures.parsedJson.test.withOverrides).toBeDefined();
         });
 
         context("when the nested definition overrides the parent definition", function() {
@@ -44,9 +44,9 @@ describe("newFixtures", function() {
         });
 
         it("includes the user fixture data", function() {
-            expect(window.fixtureData.user).toBeDefined();
-            expect(window.fixtureData.user.response.username).toBeDefined();
-            expect(user.get("username")).toBe(window.fixtureData.user.response.username);
+            expect(window.rspecFixtures.parsedJson.user).toBeDefined();
+            expect(window.rspecFixtures.parsedJson.user.response.username).toBeDefined();
+            expect(user.get("username")).toBe(window.rspecFixtures.parsedJson.user.response.username);
         });
 
         it("allows for overrides", function() {
@@ -147,7 +147,7 @@ describe("newFixtures", function() {
         });
 
         it("sets attributes of the models based on the fixture data", function() {
-            var data = window.fixtureData.userSet.response[0];
+            var data = window.rspecFixtures.parsedJson.userSet.response[0];
             expect(data).toBeDefined();
             expect(data.username).toBeDefined();
             expect(userSet.at(0).get("username")).toBe(data.username);
@@ -275,7 +275,7 @@ describe("newFixtures", function() {
             beforeEach(function() {
                 attrArray1 = [
                     {
-                        name: "roger",
+                        name: "roger"
                     },
                     {
                         name: "anton",

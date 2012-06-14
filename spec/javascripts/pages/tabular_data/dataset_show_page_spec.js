@@ -16,12 +16,17 @@ describe("chorus.pages.DatasetShowPage", function() {
 
         var sandboxInfo = this.workspace.get("sandboxInfo")
 
-        this.dataset = newFixtures.dataset.sourceTable({
-            id: this.datasetId,
-            instance: { id: sandboxInfo.instanceId, name: sandboxInfo.instanceName},
-            databaseName: sandboxInfo.databaseName,
-            schemaName: sandboxInfo.schemaName,
-            importFrequency: null,
+        this.dataset = rspecFixtures.dataset({
+            schema: {
+                name: sandboxInfo.schemaName,
+                database: {
+                    name: sandboxInfo.databaseName,
+                    instance: {
+                        id: sandboxInfo.instanceId,
+                        name: sandboxInfo.instanceName
+                    }
+                }
+            },
             objectName: 'tableName',
             workspace: { id: this.workspace.get("id") }
         })

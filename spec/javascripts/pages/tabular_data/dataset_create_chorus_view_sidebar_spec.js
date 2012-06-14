@@ -265,9 +265,9 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(this.launchModalSpy).toHaveBeenCalled();
                 expect(this.chorusView.get("type")).toBe("CHORUS_VIEW")
                 expect(this.chorusView.get("query")).toBe("SELECT * FROM FOO");
-                expect(this.chorusView.get("instanceId")).toBe(this.dataset.get("instance").id);
-                expect(this.chorusView.get("databaseName")).toBe(this.dataset.get("databaseName"));
-                expect(this.chorusView.get("schemaName")).toBe(this.dataset.get("schemaName"));
+                expect(this.chorusView.get("instanceId")).toBe(this.dataset.schema().database().instance().id);
+                expect(this.chorusView.get("databaseName")).toBe(this.dataset.schema().database().name());
+                expect(this.chorusView.get("schemaName")).toBe(this.dataset.get("schema").name);
                 expect(this.chorusView.get("objectType")).toBe("QUERY");
                 expect(this.chorusView.get("objectName")).toBe("My_table")
             })

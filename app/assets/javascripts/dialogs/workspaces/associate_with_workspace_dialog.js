@@ -26,13 +26,13 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         var url, params;
 
         if(this.model.get("type") == "CHORUS_VIEW") {
-            url = "/workspace/" + this.model.get("workspace").id + "/dataset/" + this.model.get("id");
+            url = "/workspaces/" + this.model.get("workspace").id + "/datasets/" + this.model.get("id");
             params = {
                 targetWorkspaceId: this.selectedItem().get("id"),
                 objectName: this.model.get("objectName")
             };
         } else {
-            url = "/workspace/" + this.selectedItem().get("id") + "/dataset";
+            url = "/workspaces/" + this.selectedItem().get("id") + "/datasets";
             params = {
                 type: "SOURCE_TABLE",
                 datasetIds: this.model.id
