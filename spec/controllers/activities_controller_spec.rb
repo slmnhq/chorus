@@ -65,5 +65,11 @@ describe ActivitiesController do
       activity = Activity.global.find_by_event_id(event.id)
       get :show, :id => activity.to_param
     end
+
+    generate_fixture "activity/instanceChangedOwner.json" do
+      event = FactoryGirl.create(:instance_changed_owner_event)
+      activity = Activity.global.find_by_event_id(event.id)
+      get :show, :id => activity.to_param
+    end
   end
 end

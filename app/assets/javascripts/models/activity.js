@@ -1,7 +1,8 @@
 ;(function() {
-    var TYPE_MAP = {
-        "Instance": "GreenplumInstance",
-        "HadoopInstance": "HadoopInstance"
+    var CLASS_MAP = {
+        "actor": "User",
+        "instance": "GreenplumInstance",
+        "newOwner": "User"
     };
 
     chorus.models.Activity = chorus.models.Base.extend({
@@ -15,12 +16,10 @@
             return this._author;
         },
 
-        actor: function() {
-            return new chorus.models.User(this.get("actor"));
-        },
-
-        greenplumInstance: function() {
-            return new chorus.models.GreenplumInstance(this.get("instance")) ;
+        getModel: function(name) {
+            var className = CLASS_MAP[name];
+            var modelClass = chorus.models[className];
+            return new modelClass(this.get(name));
         },
 
         comments: function() {

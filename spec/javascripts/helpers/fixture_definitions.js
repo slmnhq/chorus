@@ -90,7 +90,8 @@ window.rspecFixtureDefinitions = {
 
     activity: {
         children :{
-            instanceCreated: {}
+            instanceCreated: {},
+            instanceChangedOwner: {}
         }
     },
 

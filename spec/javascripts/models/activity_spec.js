@@ -3,12 +3,25 @@ describe("chorus.models.Activity", function() {
         this.model = fixtures.activity();
     });
 
-    describe("#actor", function() {
-        it("returns a user model with the actor data", function() {
-           var model = rspecFixtures.activity.instanceCreated({ actor: { id: 5 } });
-           var actor = model.actor();
+    describe("#getModel", function() {
+        it("returns a model with the right class and the right data", function() {
+           var model = rspecFixtures.activity.instanceChangedOwner({
+               actor: { id: 5 },
+               instance: { id: 6 },
+               newOwner: { id: 7 },
+           });
+
+           var actor = model.getModel("actor");
            expect(actor).toBeA(chorus.models.User);
            expect(actor.id).toBe(5);
+
+           var instance = model.getModel("instance");
+           expect(instance).toBeA(chorus.models.GreenplumInstance);
+           expect(instance.id).toBe(6);
+
+           var newOwner = model.getModel("newOwner");
+           expect(newOwner).toBeA(chorus.models.User);
+           expect(newOwner.id).toBe(7);
         });
     });
 
@@ -157,15 +170,6 @@ describe("chorus.models.Activity", function() {
             it("returns undefined", function() {
                 expect(this.model.author()).toBeUndefined();
             });
-        });
-    });
-
-    describe("#greenplumInstance", function() {
-        it("returns a GreenplumInstance model with the instance data", function() {
-           var model = rspecFixtures.activity.instanceCreated({ instance: { id: 5 } });
-           var instance = model.greenplumInstance();
-           expect(instance).toBeA(chorus.models.GreenplumInstance);
-           expect(instance.id).toBe(5);
         });
     });
 

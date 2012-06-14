@@ -108,6 +108,11 @@ FactoryGirl.define do
     factory :instance_created_event, :class => Events::INSTANCE_CREATED do
       instance
     end
+
+    factory :instance_changed_owner_event, :class => Events::INSTANCE_CHANGED_OWNER do
+      instance
+      new_owner :factory => :user
+    end
   end
 
   factory :workfile_draft do
