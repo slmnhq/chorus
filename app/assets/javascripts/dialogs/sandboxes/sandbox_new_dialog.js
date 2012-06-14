@@ -39,6 +39,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
             this.templates = chorus.models.Instance.auroraTemplates();
             this.bindings.add(this.templates, "loaded", this.templatesLoaded, this);
             this.templates.fetch();
+            this.render();
         }
     },
 
