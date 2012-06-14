@@ -44,7 +44,7 @@ describe DatasetsController do
   end
 
   describe "#show" do
-    let!(:association) { GpdbDatabaseObjectWorkspaceAssociation.create(:workspace_id => workspace.id, :gpdb_database_object_id => gpdb_table.id) }
+    let!(:association) { AssociatedDataset.create(:workspace_id => workspace.id, :gpdb_database_object_id => gpdb_table.id) }
 
     generate_fixture "dataset.json" do
       get :show, :id => association.to_param

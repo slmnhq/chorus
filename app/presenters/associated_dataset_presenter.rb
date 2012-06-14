@@ -1,4 +1,4 @@
-class GpdbDatabaseObjectWorkspaceAssociationPresenter < Presenter
+class AssociatedDatasetPresenter < Presenter
   delegate :id, :workspace, :gpdb_database_object, :to => :model
 
   def to_hash

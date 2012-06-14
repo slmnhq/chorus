@@ -143,6 +143,19 @@ ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
 
 
 --
+-- Name: associated_datasets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE associated_datasets (
+    id integer NOT NULL,
+    gpdb_database_object_id integer,
+    workspace_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: async_query_tasks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -211,19 +224,6 @@ ALTER SEQUENCE events_id_seq OWNED BY events.id;
 
 
 --
--- Name: gpdb_database_object_workspace_associations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE gpdb_database_object_workspace_associations (
-    id integer NOT NULL,
-    gpdb_database_object_id integer,
-    workspace_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: gpdb_database_object_workspace_associations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -239,7 +239,7 @@ CREATE SEQUENCE gpdb_database_object_workspace_associations_id_seq
 -- Name: gpdb_database_object_workspace_associations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE gpdb_database_object_workspace_associations_id_seq OWNED BY gpdb_database_object_workspace_associations.id;
+ALTER SEQUENCE gpdb_database_object_workspace_associations_id_seq OWNED BY associated_datasets.id;
 
 
 --
@@ -723,6 +723,13 @@ ALTER TABLE activities ALTER COLUMN id SET DEFAULT nextval('activities_id_seq'::
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE associated_datasets ALTER COLUMN id SET DEFAULT nextval('gpdb_database_object_workspace_associations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE async_query_tasks ALTER COLUMN id SET DEFAULT nextval('async_query_tasks_id_seq'::regclass);
 
 
@@ -731,13 +738,6 @@ ALTER TABLE async_query_tasks ALTER COLUMN id SET DEFAULT nextval('async_query_t
 --
 
 ALTER TABLE events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE gpdb_database_object_workspace_associations ALTER COLUMN id SET DEFAULT nextval('gpdb_database_object_workspace_associations_id_seq'::regclass);
 
 
 --
@@ -859,7 +859,7 @@ ALTER TABLE ONLY events
 -- Name: gpdb_database_object_workspace_associations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY gpdb_database_object_workspace_associations
+ALTER TABLE ONLY associated_datasets
     ADD CONSTRAINT gpdb_database_object_workspace_associations_pkey PRIMARY KEY (id);
 
 
@@ -971,7 +971,7 @@ ALTER TABLE ONLY workspaces
 -- Name: gpdb_db_object_workspace_unique; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE UNIQUE INDEX gpdb_db_object_workspace_unique ON gpdb_database_object_workspace_associations USING btree (gpdb_database_object_id, workspace_id);
+CREATE UNIQUE INDEX gpdb_db_object_workspace_unique ON associated_datasets USING btree (gpdb_database_object_id, workspace_id);
 
 
 --
@@ -1240,4 +1240,4 @@ INSERT INTO schema_migrations (version) VALUES ('20120613231928');
 
 INSERT INTO schema_migrations (version) VALUES ('20120614002526');
 
-INSERT INTO schema_migrations (version) VALUES ('20120613231928');
+INSERT INTO schema_migrations (version) VALUES ('20120614211513');

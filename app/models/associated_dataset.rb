@@ -1,4 +1,4 @@
-class GpdbDatabaseObjectWorkspaceAssociation < ActiveRecord::Base
+class AssociatedDataset < ActiveRecord::Base
   validates_uniqueness_of :gpdb_database_object_id, :scope => :workspace_id
   validates_presence_of :workspace, :gpdb_database_object
 
