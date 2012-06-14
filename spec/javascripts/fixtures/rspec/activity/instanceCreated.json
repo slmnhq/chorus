@@ -1,12 +1,12 @@
 {
   "response": {
-    "id": 77,
+    "id": 1763,
     "actor": {
-      "id": 77,
-      "username": "user14",
+      "id": 13417,
+      "username": "user3",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person14@example.com",
+      "email": "person3@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -17,17 +17,18 @@
       }
     },
     "action": "INSTANCE_CREATED",
-    "target": {
+    "timestamp": "2012-06-14T22:06:28Z",
+    "instance": {
       "name": "instance1",
       "host": "host1.emc.com",
       "port": 5001,
-      "id": 7,
+      "id": 2356,
       "owner": {
-        "id": 78,
-        "username": "user15",
+        "id": 13418,
+        "username": "user4",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person15@example.com",
+        "email": "person4@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -44,8 +45,6 @@
       "description": null,
       "instance_provider": null,
       "version": "9.1.2 - FactoryVersion"
-    },
-    "target_type": "Instance",
-    "timestamp": "2012-06-11T17:53:23Z"
+    }
   }
 }

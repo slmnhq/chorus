@@ -27,11 +27,11 @@
 
     function headerParams() {
         var actor = this.model.actor();
-        var target = this.model.target();
+        var instance = this.model.greenplumInstance();
 
         return {
             authorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
-            objectLink: chorus.helpers.linkTo(target.showUrl(), target.name())
+            objectLink: chorus.helpers.linkTo(instance.showUrl(), instance.name())
         };
     }
 })();

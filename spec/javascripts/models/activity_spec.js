@@ -3,31 +3,6 @@ describe("chorus.models.Activity", function() {
         this.model = fixtures.activity();
     });
 
-    describe("#target", function() {
-        context("when target type is 'Instance'", function() {
-            it("returns the instance", function() {
-               var model = rspecFixtures.activity.instanceCreated({target: {id: 2}});
-               expect(model.target()).toBeA(chorus.models.GreenplumInstance);
-               expect(model.target().id).toBe(2);
-            });
-        });
-
-        context("when target type is 'HadoopInstance'", function() {
-            it("returns the hadoop instance", function() {
-               var model = rspecFixtures.activity.instanceCreated({ target: {id: 2}, targetType: "HadoopInstance" });
-               expect(model.target()).toBeA(chorus.models.HadoopInstance);
-               expect(model.target().id).toBe(2);
-            });
-        });
-
-        context("when there is no target type", function() {
-            it("returns undefined", function() {
-               var model = rspecFixtures.activity.instanceCreated({ target: {id: 2}, targetType: null });
-               expect(model.target()).toBeUndefined();
-            });
-        });
-    });
-
     describe("#actor", function() {
         it("returns a user model with the actor data", function() {
            var model = rspecFixtures.activity.instanceCreated({ actor: { id: 5 } });
@@ -182,6 +157,15 @@ describe("chorus.models.Activity", function() {
             it("returns undefined", function() {
                 expect(this.model.author()).toBeUndefined();
             });
+        });
+    });
+
+    describe("#greenplumInstance", function() {
+        it("returns a GreenplumInstance model with the instance data", function() {
+           var model = rspecFixtures.activity.instanceCreated({ instance: { id: 5 } });
+           var instance = model.greenplumInstance();
+           expect(instance).toBeA(chorus.models.GreenplumInstance);
+           expect(instance.id).toBe(5);
         });
     });
 

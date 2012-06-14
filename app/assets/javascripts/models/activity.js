@@ -19,6 +19,10 @@
             return new chorus.models.User(this.get("actor"));
         },
 
+        greenplumInstance: function() {
+            return new chorus.models.GreenplumInstance(this.get("instance")) ;
+        },
+
         comments: function() {
             this._comments || (this._comments = new chorus.collections.CommentSet(
                 this.get("comments"), {
@@ -132,13 +136,6 @@
 
         isPublished: function() {
             return this.get("isPublished") === true;
-        },
-
-        target: function() {
-            var className = TYPE_MAP[this.get("targetType")];
-            if (className) {
-                return new chorus.models[className](this.get("target"));
-            }
         }
     });
 })();

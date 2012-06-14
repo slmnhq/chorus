@@ -4,10 +4,18 @@ class ActivityPresenter < Presenter
       :id => model.id,
       :actor => present(event.actor),
       :action => event.action,
-      :target => present(event.target1),
-      :target_type => event.target1.class.name,
       :timestamp => model.created_at
-    }
+    }.merge(targets_hash)
+  end
+
+  private
+
+  def targets_hash
+    hash = {}
+    event.targets.each do |name, object|
+      hash[name] = present(object)
+    end
+    hash
   end
 
   def event

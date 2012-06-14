@@ -7,11 +7,11 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.instanceCreated({
                 actor: { firstName: "bomb", lastName: "cherry"},
-                target: { name: "kaboom" }
+                instance: { name: "kaboom" }
             });
 
             presenter = new chorus.presenters.Activity(model);
-            instance = model.target();
+            instance = model.greenplumInstance();
             actor = model.actor();
         });
 
