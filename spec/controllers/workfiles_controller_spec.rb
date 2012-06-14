@@ -368,4 +368,31 @@ describe WorkfilesController do
 
     end
   end
+
+  describe "#destroy" do
+    before do
+      workspace.members << member
+      log_in member
+    end
+
+    it "uses authorization" do
+      mock(subject).authorize! :workfile_change, workspace
+      delete :destroy, :id => public_workfile.id
+    end
+
+    describe "deleting" do
+      before do
+        delete :destroy, :id => public_workfile.id
+      end
+
+      it "should soft delete the workfile" do
+        workfile = Workfile.find_with_destroyed(public_workfile.id)
+        workfile.deleted_at.should_not be_nil
+      end
+
+      it "should respond with success" do
+        response.should be_success
+      end
+    end
+  end
 end

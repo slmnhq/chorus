@@ -1,4 +1,6 @@
 class Workfile < ActiveRecord::Base
+  include SoftDelete
+
   attr_accessible :description, :file_name
 
   belongs_to :workspace

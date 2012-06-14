@@ -24,6 +24,14 @@ class WorkfilesController < ApplicationController
     present workfiles.paginate(params.slice(:page, :per_page))
   end
 
+  def destroy
+    workfile = Workfile.find(params[:id])
+    authorize! :workfile_change,  workfile.workspace
+
+    workfile.destroy
+    render :json => {}
+  end
+
   private
 
   def workfile_sort(column_name)

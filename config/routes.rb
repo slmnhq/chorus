@@ -57,7 +57,7 @@ Chorus::Application.routes.draw do
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
   end
 
-  resources :workfiles, :only => [:show] do
+  resources :workfiles, :only => [:show, :destroy] do
     resource :draft, :only => [:show, :update, :create, :destroy], :controller => :workfile_draft
     resources :versions, :only => [:update, :create], :controller => 'workfile_versions'
   end
