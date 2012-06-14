@@ -18,7 +18,7 @@ module Gpdb
         account.save!
       end
 
-      Event.add(owner, "INSTANCE_CREATED", instance)
+      Event::INSTANCE_CREATED.add(owner, instance)
 
       instance
     end
