@@ -73,4 +73,27 @@ describe "Viewing data inside GPDB instances" do
         page.should have_content("SELECT a.artist, a.title FROM top_1_000_songs_to_hear_before_you_die a;")
       end
   end
+
+  it "should let the user preview the data on the table from the instance browser" do
+
+     create_valid_instance(:name => "data_preview")
+     go_to_instance_page
+     click_link "data_preview"
+     sleep (1)
+     click_link "Analytics"
+     sleep(1)
+     click_link "public"
+     sleep(1)
+     click_link "1000_songs_test_1"
+     sleep(1)
+     click_button "Data Preview"
+     within (".execution") do
+       page.should have_content ("Data Preview")
+       find(".close").visible?
+       find(".download_csv").visible?
+       click_link "Close"
+     end
+
+  end
+
 end
