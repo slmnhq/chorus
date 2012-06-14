@@ -38,14 +38,21 @@ describe GpdbColumn do
       id.name.should eq('id')
       id.data_type.should eq('integer')
       id.description.should be_blank
+      id.ordinal_position.should eq("1")
+    end
+
+    it "gets the column stats for table users" do
+      id = subject.first
+
+      id.statistics.should be_a GpdbColumnStatistics
     end
 
     describe "with fake data" do
       before do
         mock(Gpdb::ConnectionBuilder).connect!(instance, account, 'chorus_rails_test') do
           [
-            ['email', 'varchar(255)', 'it must be present', 1],
-            ['age', 'integer', 'nothing awesome', 2],
+            ['email', 'varchar(255)', 'it must be present', 1, '1stats1', '1stats2', '1stats3', '1stats4', '1stats5', '1rows1'],
+            ['age', 'integer', 'nothing awesome', 2, '2stats1', '2stats2', '2stats3', '2stats4', '2stats5', '2rows1'],
           ]
         end
       end
@@ -58,6 +65,13 @@ describe GpdbColumn do
         first_column = subject.first
         first_column.description.should eq("it must be present")
         first_column.ordinal_position.should eq(1)
+      end
+
+      it "creates an associated column stats object" do
+        fake_stats = Object.new
+        stub(GpdbColumnStatistics).new('1stats1', '1stats2', '1stats3', '1stats4', '1stats5', '1rows1') { fake_stats }
+        stub(GpdbColumnStatistics).new('2stats1', '2stats2', '2stats3', '2stats4', '2stats5', '2rows1') { }
+        subject.first.statistics.should be fake_stats
       end
     end
   end
