@@ -74,25 +74,18 @@ describe WorkspaceAccess do
 
   describe "#show?" do
     context "in a public workspace" do
-
       it "always allows access" do
         workspace_access.can?(:show, workspace).should be_true
       end
     end
 
     context "in a private workspace" do
-
       it "forbids access when the user is not a member nor admin" do
         workspace_access.can?(:show, private_workspace).should be_false
       end
 
       it "allows access when the user is a member of the workspace" do
         private_workspace.members << user
-        workspace_access.can?(:show, private_workspace).should be_true
-      end
-
-      it "allows access when the user is an admin" do
-        user.admin = true
         workspace_access.can?(:show, private_workspace).should be_true
       end
     end
@@ -105,11 +98,6 @@ describe WorkspaceAccess do
 
     it "allows members to change workfiles" do
       private_workspace.members << user
-      workspace_access.can?(:workfile_change, private_workspace).should be_true
-    end
-
-    it "allows admin to change workfiles" do
-      user.admin = true
       workspace_access.can?(:workfile_change, private_workspace).should be_true
     end
 
@@ -130,11 +118,6 @@ describe WorkspaceAccess do
         workspace.members << user
         workspace_access.can?(:member_edit, workspace).should be_true
       end
-
-      it "allows admin to edit" do
-        user.admin = true
-        workspace_access.can?(:member_edit, workspace).should be_true
-      end
     end
 
     context "in a private workspace" do
@@ -144,11 +127,6 @@ describe WorkspaceAccess do
 
       it "allows members to edit" do
         private_workspace.members << user
-        workspace_access.can?(:member_edit, private_workspace).should be_true
-      end
-
-      it "allows admin to edit" do
-        user.admin = true
         workspace_access.can?(:member_edit, private_workspace).should be_true
       end
     end
@@ -169,11 +147,6 @@ describe WorkspaceAccess do
         workspace.owner = user
         workspace_access.can?(:administrative_edit, workspace).should be_true
       end
-
-      it "allows admin to edit" do
-        user.admin = true
-        workspace_access.can?(:administrative_edit, workspace).should be_true
-      end
     end
 
     context "in a private workspace" do
@@ -188,11 +161,6 @@ describe WorkspaceAccess do
 
       it "allows the owner to edit" do
         private_workspace.owner = user
-        workspace_access.can?(:administrative_edit, private_workspace).should be_true
-      end
-
-      it "allows admin to edit" do
-        user.admin = true
         workspace_access.can?(:administrative_edit, private_workspace).should be_true
       end
     end

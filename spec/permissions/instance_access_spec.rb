@@ -48,11 +48,6 @@ describe InstanceAccess do
       instance.owner = user
       instance_access.can?(:edit, instance).should be_true
     end
-
-    it "allows admins to edit" do
-      user.admin = true
-      instance_access.can?(:edit, instance).should be_true
-    end
   end
 
   describe "show?" do
@@ -66,11 +61,6 @@ describe InstanceAccess do
     context "for private instances" do
       before do
         instance.shared = false
-      end
-
-      it "allows admin to show" do
-        user.admin = true
-        instance_access.can?(:show, instance).should be_true
       end
 
       it "allows members to show (which includes owner)" do

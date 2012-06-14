@@ -18,14 +18,6 @@ describe HadoopInstanceAccess do
       end
     end
 
-    context "admin" do
-      let(:current_user) { FactoryGirl.create(:admin) }
-
-      it "allows access" do
-        subject.can?(:edit, hadoop_instance).should be_true
-      end
-    end
-
     context "regular user" do
       let(:current_user) { FactoryGirl.create(:user) }
 
