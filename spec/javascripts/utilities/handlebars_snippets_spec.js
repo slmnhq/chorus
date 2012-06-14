@@ -593,6 +593,18 @@ describe("handlebars", function() {
             });
         });
 
+        describe("percentageFromFraction", function() {
+            beforeEach(function() {
+                this.template = "{{percentageFromFraction value}}";
+            });
+
+            it("should convert the value to a percentage rounded to two decimal places", function() {
+                var context = {value: 0.10494727};
+                var string = Handlebars.compile(this.template)(context);
+                expect(string).toBe("10.49%");
+            });
+        });
+
         describe("round", function() {
             beforeEach(function() {
                 this.template = "{{round value}}";
