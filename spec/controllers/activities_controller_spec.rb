@@ -61,7 +61,8 @@ describe ActivitiesController do
     end
 
     generate_fixture "activity/instanceCreated.json" do
-      activity = FactoryGirl.create(:instance_created_activity)
+      event = FactoryGirl.create(:instance_created_event)
+      activity = Activity.global.find_by_event_id(event.id)
       get :show, :id => activity.to_param
     end
   end
