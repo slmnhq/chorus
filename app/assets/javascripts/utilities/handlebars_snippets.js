@@ -238,6 +238,10 @@
             return result + "%";
         },
 
+        percentageFromFraction: function(fraction) {
+            return chorus.helpers.percentage(fraction * 100);
+        },
+
         round: function(value) {
             if (value > .1) {
                 var number = Math.pow(10, 2);

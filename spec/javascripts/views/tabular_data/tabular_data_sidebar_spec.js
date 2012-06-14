@@ -956,7 +956,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                     max: "1199961.0",
                     median: "725197.0",
                     min: "200075.0",
-                    nullFraction: 10.3678,
+                    nullFraction: 0.103678,
                     stdDeviation: 309104.997,
                     type: "int8",
                     typeCategory: "WHOLE_NUMBER"

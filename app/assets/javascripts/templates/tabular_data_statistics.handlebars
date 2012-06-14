@@ -115,7 +115,7 @@
             {{#if column.nullFraction}}
             <div class="pair pctnull">
                 <div class="key">{{t "dataset.column_statistics.pctnull"}}</div>
-                <div class="value" title="{{column.nullFraction}}">{{percentage column.nullFraction}}</div>
+                <div class="value" title="{{column.nullFraction}}">{{percentageFromFraction column.nullFraction}}</div>
             </div>
             {{/if}}
             {{/if}}
