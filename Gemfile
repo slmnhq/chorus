@@ -14,6 +14,7 @@ gem 'foreman'
 gem 'allowy'
 gem 'httparty', :require => false
 gem 'thin'
+gem 'savon'
 
 group :assets do
   gem 'sass-rails'
