@@ -39,7 +39,7 @@ describe "copy a workfile" do
     visit("#/workspaces/#{@target_workspace_id}/quickstart")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
     click_link "Work Files"
-    wait_until { current_route =~ /workspaces\/\d+\/workfiles/ }
+    wait_until { page.find('button[data-dialog="WorkfilesImport"]').text == "Upload File" }
     workfiles = page.all("li.workfile")
     workfiles.first.text.should == "workfile.sql"
   end
