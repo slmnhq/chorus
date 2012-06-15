@@ -12,11 +12,15 @@ p response.to_hash
 p "TRYING LISTING TEMPLATES"
 
 
+s.request "ins0:UserLoginRequest" do
+  s.http.headers["SOAPAction"] = "userLogin"
+  soap.version = 1
+  soap.body = {"ins0:username" => "chorusrails@pivotallabs.com", "ins0:password" => "secret"}
+end
+
 
 s.request "ins0:GetDatabaseConfigTemplatesByOrgIdRequest" do
   s.http.headers["SOAPAction"] = "getDatabaseConfigTemplatesByOrgId"
   soap.version = 1
-  soap.body = {"ins0:orgId" => 1}
+  soap.body = {"ins0:orgId" => 13}
 end
-
-
