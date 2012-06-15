@@ -30,12 +30,12 @@ describe("chorus.collections.MemberSet", function() {
         });
 
         it("passes a list of user names as data", function() {
-            expect(this.server.requests[0].requestBody).toBe($.param({ member_ids : _.pluck(this.memberSet.models, "id")}));
+            expect(this.server.requests[0].url).toContain($.param({ member_ids : _.pluck(this.memberSet.models, "id")}));
         });
 
         context("when the request succeeds", function() {
             beforeEach(function() {
-                this.server.completeSaveFor(this.memberSet);
+                this.server.lastCreate().succeed();
             });
 
             it("triggers the 'saved' event on the member set", function() {
@@ -45,7 +45,7 @@ describe("chorus.collections.MemberSet", function() {
 
         context("when the request fails", function() {
             beforeEach(function() {
-                this.server.lastCreateFor(this.memberSet).failUnprocessableEntity();
+                this.server.lastCreate().failUnprocessableEntity();
             });
 
             it("triggers the 'saveFailed' event on the member set", function() {

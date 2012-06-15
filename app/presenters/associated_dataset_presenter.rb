@@ -3,8 +3,7 @@ class AssociatedDatasetPresenter < Presenter
 
   def to_hash
     {
-      :id => id,
-      :workspace => present(workspace),
+      :workspace => present(workspace)
     }.merge(present(gpdb_database_object))
   end
 end

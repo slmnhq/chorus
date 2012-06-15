@@ -1,12 +1,13 @@
 describe("chorus.dialogs.ImportDatasetsPicker", function() {
-    var dialog, datasets;
+    var dialog, datasets, datasetModels;
     beforeEach(function() {
         stubModals();
         dialog = new chorus.dialogs.ImportDatasetsPicker({ workspaceId : "33" });
-        datasets = new chorus.collections.DatasetSet([
-            newFixtures.dataset.sandboxTable({ objectName: "A", columns: 42, id: "REAL_ID" }),
-            newFixtures.dataset.sandboxTable({ objectName: "B", columns: 666, id: "AGENT_SMITH" })
-        ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
+        datasets = new chorus.collections.DatasetSet([], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
+        datasetModels = [
+                            newFixtures.dataset.sandboxTable({ objectName: "A", columns: 42, id: "REAL_ID" }),
+                            newFixtures.dataset.sandboxTable({ objectName: "B", columns: 666, id: "AGENT_SMITH" })
+                        ];
     });
 
     describe("#render", function() {
@@ -26,7 +27,7 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
 
         describe("when the fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(datasets, datasets.models, options);
+                this.server.completeFetchFor(datasets, datasetModels, options);
                 spyOn(chorus.dialogs.PreviewColumns.prototype, 'render').andCallThrough();
             });
 
@@ -75,7 +76,7 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
                 expect(chorus.dialogs.PreviewColumns.prototype.render).toHaveBeenCalled();
                 var previewColumnsDialog = chorus.dialogs.PreviewColumns.prototype.render.mostRecentCall.object;
                 expect(previewColumnsDialog.title).toBe(dialog.title);
-                expect(previewColumnsDialog.model.get("id")).toEqual(datasets.at(0).get("id"));
+                expect(previewColumnsDialog.model.get("id")).toEqual(datasetModels[0].get("id"));
             });
 
             it("shows the number of columns in each dataset", function() {
@@ -86,11 +87,12 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
 
         context("when a dataset has no column count (or is undefined)", function() {
             beforeEach(function() {
-                datasets = new chorus.collections.DatasetSet([
-                    newFixtures.dataset.sandboxTable({ objectName: "A", columns: null, id: "NOBODY" }),
-                    newFixtures.dataset.sandboxTable({ objectName: "B", columns: undefined, id: "NONE" })
-                ], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
-                this.server.completeFetchFor(datasets, datasets.models, options);
+                datasetModels = [
+                                    newFixtures.dataset.sandboxTable({ objectName: "A", columns: null, id: "NOBODY" }),
+                                    newFixtures.dataset.sandboxTable({ objectName: "B", columns: undefined, id: "NONE" })
+                                ];
+                datasets = new chorus.collections.DatasetSet([], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
+                this.server.completeFetchFor(datasets, datasetModels, options);
             });
 
             it("doesn't show column count", function() {

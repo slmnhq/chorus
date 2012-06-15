@@ -1,9 +1,10 @@
 describe("chorus.dialogs.DatasetsAttach", function() {
+    var datasetModels;
+
     beforeEach(function() {
-        this.datasets = new chorus.collections.DatasetSet([
-            newFixtures.dataset.sandboxTable(),
-            newFixtures.dataset.sandboxTable()
-        ], {workspaceId: "33"});
+        datasetModels = [rspecFixtures.dataset(), rspecFixtures.dataset()];
+
+        this.datasets = new chorus.collections.DatasetSet([], {workspaceId: "33"});
 
         this.dialog = new chorus.dialogs.DatasetsAttach({ workspaceId : "33" });
         this.dialog.render();
@@ -26,7 +27,7 @@ describe("chorus.dialogs.DatasetsAttach", function() {
 
     describe("when the fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.datasets, this.datasets.models, { order: "objectName" });
+            this.server.completeFetchFor(this.datasets, datasetModels, { order: "objectName" });
         });
 
         it("only fetches one page initially", function() {
@@ -41,12 +42,12 @@ describe("chorus.dialogs.DatasetsAttach", function() {
             expect(this.dialog.$('button.submit')).toContainTranslation("actions.dataset_attach")
         });
 
-        it("has the correct iconUlr", function() {
-            expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', this.datasets.at(0).iconUrl({size: 'medium'}));
+        it("has the correct iconUrl", function() {
+            expect(this.dialog.$('li:eq(0) img')).toHaveAttr('src', datasetModels[0].iconUrl({size: 'medium'}));
         });
 
         it("has the correct name", function() {
-            expect(this.dialog.$('li:eq(0) .name')).toContainText(this.datasets.at(0).get("objectName"));
+            expect(this.dialog.$('li:eq(0) .name')).toContainText(datasetModels[0].get("objectName"));
         });
 
         it("has the correct search placeholder text", function() {

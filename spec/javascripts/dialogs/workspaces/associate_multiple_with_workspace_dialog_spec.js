@@ -1,9 +1,9 @@
 describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
     beforeEach(function() {
         this.databaseObjects = new chorus.collections.DatabaseObjectSet([
-            rspecFixtures.databaseObject({ objectName: "one" }),
-            rspecFixtures.databaseObject({ objectName: "two" }),
-            rspecFixtures.databaseObject({ objectName: "three" })
+            rspecFixtures.databaseObject({ id: '123' }),
+            rspecFixtures.databaseObject({ id: '456' }),
+            rspecFixtures.databaseObject({ id: '789' })
         ]);
 
         this.dialog = new chorus.dialogs.AssociateMultipleWithWorkspace({
@@ -29,12 +29,14 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
 
         it("sends a request to the 'associate dataset' API", function() {
             expect(this.server.lastCreate().url).toContain("/workspaces/12/datasets");
-            expect(this.server.lastCreate().params().type).toBe("SOURCE_TABLE");
+
         });
 
-        it("sends all of the datasets' ids, separated by commas", function() {
-            var expectedDatasetIds = this.databaseObjects.pluck("id").join(",");
-            expect(this.server.lastCreate().params().datasetIds).toBe(expectedDatasetIds);
+        it("sends all of the datasets' ids", function() {
+            var datasetIdParams = this.server.lastCreate().params()['dataset_ids[]']
+            expect(datasetIdParams).toContain('123');
+            expect(datasetIdParams).toContain('456');
+            expect(datasetIdParams).toContain('789');
         });
 
         it("display loading message on the button", function() {

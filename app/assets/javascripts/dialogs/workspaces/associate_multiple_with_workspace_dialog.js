@@ -15,19 +15,19 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
         this.$("button.submit").startLoading("actions.associating");
 
         var workspace = this.selectedItem();
-        var url = workspace.datasets().url();
-        var params = {
-            type: "SOURCE_TABLE",
-            datasetIds: this.databaseObjects.pluck("id").join(",")
-        };
+        var datasetSet = workspace.datasets();
+        datasetSet.reset(this.databaseObjects.models);
 
-        var self = this;
-        $.post(url, params, function(data) {
-            self.closeModal();
-            chorus.toast("dataset.associate.toast.other", {
-                workspaceNameTarget: self.selectedItem().get("name"),
-                count: self.databaseObjects.length
-            });
+        this.bindings.add(datasetSet, "saved", this.saved);
+
+        datasetSet.save();
+    },
+
+    saved: function() {
+        this.closeModal();
+        chorus.toast("dataset.associate.toast.other", {
+            workspaceNameTarget: this.selectedItem().get("name"),
+            count: this.databaseObjects.length
         });
     }
 });

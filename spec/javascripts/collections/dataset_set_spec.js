@@ -57,18 +57,6 @@ describe("chorus.collections.DatasetSet", function() {
                 });
             });
         });
-
-        context("when the url needs to be encoded", function() {
-            beforeEach(function() {
-                this.collection = new chorus.collections.DatasetSet([], {
-                    instanceId: 10000, databaseName: "%foo%", schemaName: " bar "
-                });
-            });
-
-            it("should encode the url", function() {
-                expect(this.collection.url()).toContain("/data/10000/database/%25foo%25/schema/%20bar%20");
-            });
-        });
     });
 
     describe("sorting", function() {
