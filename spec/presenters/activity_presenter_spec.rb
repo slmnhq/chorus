@@ -31,5 +31,18 @@ describe ActivityPresenter, :type => :view do
       hash[:special_instance].should == Presenter.present(special_instance, view)
       hash[:special_user].should == Presenter.present(special_user, view)
     end
+
+    it "includes all of the event's 'additional data'" do
+      stub(activity.event).additional_data do
+        {
+          :some_key => "foo",
+          :some_other_key => "bar"
+        }
+      end
+
+      hash = subject.to_hash
+      hash[:some_key].should == "foo"
+      hash[:some_other_key].should == "bar"
+    end
   end
 end

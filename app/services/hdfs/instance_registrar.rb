@@ -9,10 +9,19 @@ module Hdfs
       instance
     end
 
-    def self.update!(instance_id, connection_config)
+    def self.update!(instance_id, connection_config, updater)
       instance = HadoopInstance.find(instance_id)
       instance.version = Hdfs::QueryService.instance_version(instance)
-      instance.update_attributes(connection_config.except(:version))
+      instance.attributes = connection_config.except(:version)
+
+      if instance.name_changed?
+        Events::HADOOP_INSTANCE_CHANGED_NAME.by(updater).add(
+          :hadoop_instance => instance,
+          :old_name => instance.name_was,
+          :new_name => instance.name
+        )
+      end
+
       instance.save!
       instance
     end

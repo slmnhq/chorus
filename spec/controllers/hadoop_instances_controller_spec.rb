@@ -49,7 +49,7 @@ describe HadoopInstancesController do
       let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
 
       before do
-        mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, attributes)
+        mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, attributes, @user)
       end
 
       it "responds with validation error" do
@@ -63,7 +63,7 @@ describe HadoopInstancesController do
       let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
 
       before do
-        mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, invalid_attributes) do
+        mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, invalid_attributes, @user) do
           raise(ActiveRecord::RecordInvalid.new(hadoop_instance))
         end
       end

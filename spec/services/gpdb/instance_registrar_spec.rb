@@ -4,7 +4,7 @@ describe Gpdb::InstanceRegistrar do
   let(:owner) { FactoryGirl.create(:user) }
   let(:valid_instance_attributes) do
     {
-      :name => "new",
+      :name => old_name,
       :port => 12345,
       :host => "server.emc.com",
       :maintenance_db => "postgres",
@@ -12,6 +12,7 @@ describe Gpdb::InstanceRegistrar do
       :description => "old description"
     }
   end
+  let(:old_name) { "old_name" }
 
   let(:valid_account_attributes) do
     {
@@ -109,21 +110,22 @@ describe Gpdb::InstanceRegistrar do
     let(:admin) { FactoryGirl.create(:user, :admin => true) }
     let(:cached_instance) { FactoryGirl.create(:instance, valid_instance_attributes.merge(:owner => owner)) }
     let!(:cached_instance_account) { FactoryGirl.create(:instance_account, :db_username => "bob", :owner => owner, :instance => cached_instance) }
-    let(:updated_attributes) { valid_input_attributes.merge(:name => "new name") }
+    let(:updated_attributes) { valid_input_attributes.merge(:name => new_name) }
+    let(:new_name) { "new_name" }
 
     it "allows admin to update" do
       updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, admin)
-      updated_instance.name.should == "new name"
+      updated_instance.name.should == new_name
     end
 
     it "allows instance owners to update" do
       updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, owner)
-      updated_instance.name.should == "new name"
+      updated_instance.name.should == new_name
     end
 
     it "saves the changes to the instance" do
       updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, owner)
-      updated_instance.reload.name.should == "new name"
+      updated_instance.reload.name.should == new_name
     end
 
     it "saves the change of description to the instance" do
@@ -154,6 +156,25 @@ describe Gpdb::InstanceRegistrar do
         rescue
         end
       }.not_to change { cached_instance.reload.name }
+    end
+
+    context "when the name is being changed" do
+      it "generates a GREENPLUM_INSTANCE_CHANGED_NAME event" do
+        updated_instance = Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, admin)
+        event = Events::GREENPLUM_INSTANCE_CHANGED_NAME.find_by_actor_id(admin)
+        event.greenplum_instance.should == updated_instance
+        event.old_name.should == old_name
+        event.new_name.should == new_name
+      end
+    end
+
+    context "when the name is not being changed" do
+      let(:updated_attributes) { valid_input_attributes.merge(:description => "new description") }
+
+      it "does not generate an event" do
+        Gpdb::InstanceRegistrar.update!(cached_instance, updated_attributes, admin)
+        Events::GREENPLUM_INSTANCE_CHANGED_NAME.find_by_actor_id(admin).should be_nil
+      end
     end
   end
 end

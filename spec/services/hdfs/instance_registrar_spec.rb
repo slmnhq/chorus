@@ -59,36 +59,60 @@ describe Hdfs::InstanceRegistrar do
   end
 
   describe ".update!" do
+    let(:user) { FactoryGirl.create(:user) }
     let(:hadoop_instance) { HadoopInstance.new(instance_attributes) }
+
+    before do
+      hadoop_instance.owner = owner
+      hadoop_instance.save
+    end
 
     context "invalid changes to the instance are made" do
       before do
-        hadoop_instance.owner = owner
-        hadoop_instance.save
-
         instance_attributes[:name] = ''
       end
 
       it "raises an exception" do
         expect do
-          described_class.update!(hadoop_instance.id, instance_attributes)
+          described_class.update!(hadoop_instance.id, instance_attributes, user)
         end.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 
     context "valid changes to the instance are made" do
       before do
-        hadoop_instance.owner = owner
-        hadoop_instance.save
-
         instance_attributes[:username] = "another_username"
       end
 
-      it "raises an exception" do
-        described_class.update!(hadoop_instance.id, instance_attributes)
+      it "updates the instance" do
+        described_class.update!(hadoop_instance.id, instance_attributes, user)
         hadoop_instance.reload
 
         hadoop_instance.username.should == 'another_username'
+      end
+
+      context "when the name is being changed" do
+        before do
+          instance_attributes[:name] = "new_instance_name"
+        end
+
+        it "generates a HADOOP_INSTANCE_CHANGED_NAME event" do
+          old_name = hadoop_instance.name
+
+          updated_instance = Hdfs::InstanceRegistrar.update!(hadoop_instance.id, instance_attributes, user)
+
+          event = Events::HADOOP_INSTANCE_CHANGED_NAME.find_by_actor_id(user.id)
+          event.hadoop_instance.should == updated_instance
+          event.old_name.should == old_name
+          event.new_name.should == "new_instance_name"
+        end
+      end
+
+      context "when the name is not being changed" do
+        it "does not generate an event" do
+          Hdfs::InstanceRegistrar.update!(hadoop_instance.id, instance_attributes, user)
+          Events::HADOOP_INSTANCE_CHANGED_NAME.find_by_actor_id(owner).should be_nil
+        end
       end
     end
   end

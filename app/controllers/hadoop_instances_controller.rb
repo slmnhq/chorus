@@ -16,7 +16,7 @@ class HadoopInstancesController < ApplicationController
     hadoop_instance = HadoopInstance.find(params[:id])
     authorize! :update, hadoop_instance
 
-    hadoop_instance = Hdfs::InstanceRegistrar.update!(hadoop_instance.id, params[:hadoop_instance])
+    hadoop_instance = Hdfs::InstanceRegistrar.update!(hadoop_instance.id, params[:hadoop_instance], current_user)
     present hadoop_instance
   end
 end
