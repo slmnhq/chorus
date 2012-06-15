@@ -25,7 +25,7 @@ describe DatasetsController do
 
   describe "#create" do
     it "should associate one table to the workspace" do
-      post :create, :workspace_id => workspace.to_param, :datasetIds => gpdb_table.to_param
+      post :create, :workspace_id => workspace.to_param, :dataset_ids => gpdb_table.to_param
       response.code.should == "200"
       workspace.gpdb_database_objects.should include(gpdb_table)
     end
@@ -35,7 +35,7 @@ describe DatasetsController do
       table_ids << gpdb_table.to_param
       table_ids << gpdb_view.to_param
 
-      post :create, :workspace_id => workspace.to_param, :datasetIds => table_ids
+      post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
       response.code.should == "200"
 
       workspace.gpdb_database_objects.should include(gpdb_table)
