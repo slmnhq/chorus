@@ -42,6 +42,11 @@ class WorkspacesController < ApplicationController
       update_archived_status(workspace)
     end
 
+    if w.has_key?(:sandbox_id) && (workspace.sandbox_id.to_s != w[:sandbox_id])
+      authorize! :administrative_edit, workspace
+      workspace.sandbox = GpdbSchema.find(w[:sandbox_id])
+    end
+
     authorize! :member_edit, workspace
     workspace.has_changed_settings = true
     workspace.update_attributes!(params[:workspace])

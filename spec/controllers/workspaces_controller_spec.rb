@@ -155,6 +155,7 @@ describe WorkspacesController do
 
   describe "#update" do
     let(:workspace) { FactoryGirl.create :workspace, :owner => owner }
+    let(:sandbox) { FactoryGirl.create :gpdb_schema }
     let(:admin) { FactoryGirl.create :admin }
     let(:non_owner) { FactoryGirl.create :user }
 
@@ -214,6 +215,15 @@ describe WorkspacesController do
         workspace.reload
         workspace.archived_at.should be_nil
         workspace.archiver.should be_nil
+      end
+
+      it "allows changing the sandbox" do
+        put :update, :id => workspace.id, :workspace => {
+            :sandbox_id => sandbox.to_param
+        }
+
+        workspace.reload
+        workspace.sandbox_id.should == sandbox.id
       end
     end
 

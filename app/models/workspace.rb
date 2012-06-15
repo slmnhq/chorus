@@ -1,6 +1,6 @@
 class Workspace < ActiveRecord::Base
   include SoftDelete
-  attr_accessible :name, :public, :summary
+  attr_accessible :name, :public, :summary, :sandbox_id
 
   has_attached_file :image, :default_url => "", :styles => {:original => "", :icon => "50x50>"}
 
@@ -9,6 +9,7 @@ class Workspace < ActiveRecord::Base
   has_many :memberships
   has_many :members, :through => :memberships, :source => :user
   has_many :workfiles
+  has_one :sandbox, :class_name => 'GpdbSchema'
 
   has_many :associated_datasets
   has_many :gpdb_database_objects, :through => :associated_datasets

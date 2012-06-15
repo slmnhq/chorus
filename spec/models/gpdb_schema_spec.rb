@@ -13,6 +13,10 @@ describe GpdbSchema do
       stub(GpdbDatabaseObject).refresh
     end
 
+    describe "associations" do
+      it { should belong_to(:workspace) }
+    end
+
     it "creates new copies of the schemas in our db" do
       schemas = GpdbSchema.refresh(account, database)
 
