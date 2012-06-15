@@ -4,21 +4,11 @@ chorus.collections.MemberSet = chorus.collections.Base.extend({
     urlTemplate:"workspaces/{{workspaceId}}/members",
 
     save: function() {
-        var self = this;
-
-        Backbone.sync('create', this, {
-            data: this.toUrlParams(),
-            success: function(resp, status, xhr) {
-                self.trigger("saved");
-            },
-            error: function() {
-                self.trigger("saveFailed");
-            }
-        });
+        new chorus.models.BulkSaver({collection: this}).save();
     },
 
-    toUrlParams:function () {
+    urlParams: function() {
         var ids = _.pluck(this.models, 'id');
-        return $.param({ member_ids : ids});
+        return { 'memberIds[]': ids };
     }
 });

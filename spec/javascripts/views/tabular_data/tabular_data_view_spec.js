@@ -1,6 +1,6 @@
 describe("chorus.views.TabularData", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.dataset({
+        this.dataset = rspecFixtures.dataset.datasetTable({
             objectName: "john_the_table"
         });
         this.qtipSpy = stubQtip();

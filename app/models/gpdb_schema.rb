@@ -1,4 +1,6 @@
 class GpdbSchema < ActiveRecord::Base
+  belongs_to :workspace
+
   SCHEMAS_SQL = <<-SQL
   SELECT
     schemas.nspname as schema_name

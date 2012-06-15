@@ -4,7 +4,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
     title: t("dataset.associate.title.one"),
     submitButtonTranslationKey: "dataset.associate.button.one",
 
-    setup: function () {
+    setup: function() {
         this.requiredResources.add(this.collection);
         this._super('setup', arguments);
     },
@@ -25,39 +25,49 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         var self = this;
         var url, params;
 
-        if(this.model.get("type") == "CHORUS_VIEW") {
+        if (this.model.get("type") == "CHORUS_VIEW") {
             url = "/workspaces/" + this.model.get("workspace").id + "/datasets/" + this.model.get("id");
             params = {
                 targetWorkspaceId: this.selectedItem().get("id"),
                 objectName: this.model.get("objectName")
             };
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+
+                data: params,
+
+                success: this.saved,
+                error: this.saveFailed
+            });
         } else {
-            url = "/workspaces/" + this.selectedItem().get("id") + "/datasets";
-            params = {
-                type: "SOURCE_TABLE",
-                datasetIds: this.model.id
-            };
+            var datasetSet = this.selectedItem().datasets();
+            datasetSet.reset([this.model]);
+            this.bindings.add(datasetSet, "saved", this.saved);
+            this.bindings.add(datasetSet, "saveFailed", this.bulkSaveFailed);
+
+            datasetSet.save();
         }
         this.$("button.submit").startLoading("actions.associating");
+    },
 
-        $.ajax({
-            url: url,
-            type: "POST",
-            dataType: "json",
+    saved: function() {
+        this.model.activities().fetch();
+        this.closeModal();
+        chorus.toast("dataset.associate.toast.one", {datasetTitle: this.model.get("objectName"), workspaceNameTarget: this.selectedItem().get("name")});
+        chorus.PageEvents.broadcast("workspace:associated");
+    },
 
-            data: params,
-            success : function(data) {
-                self.model.activities().fetch();
-                self.closeModal();
-                chorus.toast("dataset.associate.toast.one", {datasetTitle: self.model.get("objectName"), workspaceNameTarget: self.selectedItem().get("name")});
-                chorus.PageEvents.broadcast("workspace:associated");
-            },
+    saveFailed: function(xhr) {
+        var data = JSON.parse(xhr.responseText);
+        this.serverErrors = data.errors;
+        this.render();
+    },
 
-            error : function(xhr) {
-                var data = JSON.parse(xhr.responseText);
-                self.serverErrors = data.errors;
-                self.render();
-            }
-        });
+    bulkSaveFailed: function(model) {
+        this.serverErrors = model.serverErrors;
+        this.render();
     }
 });

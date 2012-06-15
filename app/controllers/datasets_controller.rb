@@ -2,17 +2,17 @@ class DatasetsController < ApplicationController
 
   def index
     workspace = WorkspaceAccess.workspaces_for(current_user).find(params[:workspace_id])
-    present workspace.gpdb_database_object_workspace_associations
+    present workspace.associated_datasets
   end
 
   def create
     workspace = WorkspaceAccess.workspaces_for(current_user).find(params[:workspace_id])
-    workspace.gpdb_database_objects << GpdbDatabaseObject.where(:id => params[:datasetIds])
+    workspace.gpdb_database_objects << GpdbDatabaseObject.where(:id => params[:dataset_ids])
 
-    present workspace.gpdb_database_object_workspace_associations
+    present workspace.associated_datasets
   end
 
   def show
-    present GpdbDatabaseObjectWorkspaceAssociation.find(params[:id])
+    present AssociatedDataset.find(params[:id])
   end
 end

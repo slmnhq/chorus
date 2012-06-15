@@ -62,7 +62,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     describe("clicking Associate Dataset", function() {
         context("for anything except a Chorus View", function() {
             beforeEach(function() {
-                this.model = newFixtures.dataset.sandboxTable();
+                this.model = rspecFixtures.databaseObject();
                 this.workspace = rspecFixtures.workspace({ name: "im_not_the_current_one" });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
@@ -83,12 +83,14 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             });
 
             it("calls the API for associating new source tables with a workspace", function() {
-                expect(_.last(this.server.requests).url).toMatchUrl("/workspaces/" + this.workspace.get("id") + "/datasets");
-                expect(_.last(this.server.requests).params()).toEqual({
-                    type: "SOURCE_TABLE",
-                    datasetIds: this.model.id
+                var uri = new URI(this.server.lastCreate().url);
+
+                expect(uri.path()).toEqual("/workspaces/" + this.workspace.get("id") + "/datasets");
+                expect(uri.query(true)).toEqual({
+                    'dataset_ids[]': this.model.id,
+                    page: '1',
+                    rows: '50'
                 });
-                expect(_.last(this.server.requests).method).toBe("POST");
             });
 
             it("starts loading", function() {

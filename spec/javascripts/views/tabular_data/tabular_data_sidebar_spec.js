@@ -703,7 +703,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
                 context("when the dataset is a source view", function() {
                     beforeEach(function() {
-                        this.dataset = newFixtures.dataset.sourceView();
+                        this.dataset = rspecFixtures.dataset.datasetView();
                         chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     });
 

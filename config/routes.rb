@@ -57,6 +57,7 @@ Chorus::Application.routes.draw do
     resources :workfiles, :only => [:create, :index]
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
     resources :datasets, :only => [:index, :create, :show]
+    resource :sandbox, :only => [:create]
   end
 
   resources :workfiles, :only => [:show, :destroy] do

@@ -1,5 +1,7 @@
 chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
+    // TODO: Split this class into DatasetSetSearch and DatasetSet (for saving and fetching only)
     model:chorus.models.Dataset,
+    constructorName: "DatasetSet",
 
     setup: function() {
         if(this.attributes.unsorted) {
@@ -8,26 +10,22 @@ chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
     },
 
     showUrlTemplate: "workspaces/{{workspaceId}}/datasets",
+    urlTemplate: "workspaces/{{workspaceId}}/datasets",
 
-    urlTemplate:function() {
-        if (this.attributes.workspaceId) {
-            return "workspaces/{{workspaceId}}/datasets";
-        } else {
-            return "data/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}";
-        }
+    save: function() {
+        new chorus.models.BulkSaver({collection: this}).save();
     },
 
     urlParams: function() {
+        var ids = _.pluck(this.models, 'id');
         var params = {
             namePattern: this.attributes.namePattern,
             databaseName: this.attributes.databaseName,
             type: this.attributes.type,
-            objectType: this.attributes.objectType
+            objectType: this.attributes.objectType,
+            'datasetIds[]': ids
         };
 
-        if (!this.attributes.workspaceId) {
-            params.type = "meta";
-        }
         return params;
     },
 

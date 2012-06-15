@@ -1,18 +1,18 @@
 require 'spec_helper'
 
-describe GpdbDatabaseObjectWorkspaceAssociation do
+describe AssociatedDataset do
   let(:workspace) { FactoryGirl.create(:workspace) }
   let(:gpdb_table) { FactoryGirl.create(:gpdb_table) }
 
   describe "validations" do
     it "should have uniq workspace_id + gpdb_database_object_id" do
-      association = GpdbDatabaseObjectWorkspaceAssociation.new
+      association = described_class.new
       association.workspace = workspace
       association.gpdb_database_object = gpdb_table
       association.save!
 
       expect {
-        association = GpdbDatabaseObjectWorkspaceAssociation.new
+        association = described_class.new
         association.workspace = workspace
         association.gpdb_database_object = gpdb_table
         association.save!

@@ -146,7 +146,7 @@ describe("chorus.models.TabularData", function() {
             dataset = newFixtures.dataset.sourceTable();
             expect(dataset.canBeImportSource()).toBeTruthy();
 
-            dataset = newFixtures.dataset.sourceView();
+            dataset = rspecFixtures.dataset.datasetTable();
             expect(dataset.canBeImportSource()).toBeTruthy();
 
             dataset = newFixtures.dataset.chorusView();
@@ -168,7 +168,7 @@ describe("chorus.models.TabularData", function() {
             dataset = newFixtures.dataset.sourceTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = newFixtures.dataset.sourceView();
+            dataset = rspecFixtures.dataset.datasetTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
             dataset = newFixtures.dataset.chorusView();
@@ -614,7 +614,7 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("is true when the tabular data is a source view", function() {
-            expect(newFixtures.dataset.sourceView().isDeleteable()).toBeTruthy();
+            expect(rspecFixtures.dataset.datasetTable().isDeleteable()).toBeTruthy();
         });
 
         it("is true when the tabular data is a chorus view", function() {

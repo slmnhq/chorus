@@ -101,6 +101,17 @@ FactoryGirl.define do
     commit_message "Factory commit message"
     modifier
   end
+  
+  factory :workfile_draft do
+    owner
+    workfile
+    content "A nice content"
+  end
+
+  factory :associated_dataset do
+    association :gpdb_database_object, :factory => :gpdb_table
+    workspace
+  end
 
   factory :event, :class => Events::Base do
     actor
@@ -113,12 +124,6 @@ FactoryGirl.define do
       instance
       new_owner :factory => :user
     end
-  end
-
-  factory :workfile_draft do
-    owner
-    workfile
-    content "A nice content"
   end
 end
 
