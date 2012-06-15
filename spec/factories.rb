@@ -108,6 +108,11 @@ FactoryGirl.define do
     content "A nice content"
   end
 
+  factory :associated_dataset do
+    association :gpdb_database_object, :factory => :gpdb_table
+    workspace
+  end
+
   factory :event, :class => Events::Base do
     actor
 
