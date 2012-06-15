@@ -18,8 +18,13 @@ user_menu:
   profile: 
   signout: '.menu.popup_username a[href="#/logout"]'
 
+instance:
+  route: '#/instances'
+  new_btn: 'button[data-dialog=InstancesNew]'
+  list: '.instance_list'
+
 gpdb_instance:
-  route: #/instances
+  route: '#/instances'
   #Gillette
   gillette_host: gillette.sf.pivotallabs.com
   gillette_port: 5432

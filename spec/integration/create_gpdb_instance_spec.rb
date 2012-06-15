@@ -9,9 +9,7 @@ describe " add an instance " do
   it "creates an instance" do
     new_instance_name = "GPDB_inst_sel_test#{Time.now.to_i}"
     create_gpdb_gillette_instance(:name => new_instance_name)
-    find('.instance_list').should have_content(new_instance_name)
-    visit("/#/instances")
-    find('.instance_list').should have_content(new_instance_name)
+    verify_instance_name(new_instance_name)
   end
 
   it "tries to create an instance with an invalid name" do

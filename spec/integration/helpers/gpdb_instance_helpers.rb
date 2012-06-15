@@ -1,3 +1,4 @@
+# Find widgets in gpdb instance dialog
 def find_gpdb_instance_dialog
   wait_until { find("input[name=name]").visible? }
   wait_until { find("textarea[name=description]").visible? }
@@ -7,9 +8,9 @@ def find_gpdb_instance_dialog
   wait_until { find("input[name=dbPassword]").visible? }
 end
 
+# Register a new GPDB instance, parameters: name, desc, host, port, dbuser, dbpass, shared.
 def create_gpdb_instance(params={})
   name = params[:name] || "GPDB_instance#{Time.now.to_i}"
-
   visit("#/instances")
   wait_until { current_route == "/instances" && page.has_selector?("button[data-dialog=InstancesNew]") }
   click_button "Add instance"
@@ -24,12 +25,21 @@ def create_gpdb_instance(params={})
     fill_in 'dbPassword', :with => params[:dbpass]
     check("register_greenplum_shared") if params[:shared] == true
     click_submit_button
+    sleep(3)
   end
-  wait_until { current_route == "/instances" }
-  find('.instance_list').should have_content(name)
+end
+
+# Make sure that instance name is listed on the instance list page.
+def verify_instance_name(name)
+  inst_route = WEBPATH['instance']['route']
+  visit(inst_route)
+  wait_until { inst_route == inst_route && page.has_selector?(WEBPATH['instance']['new_btn']) }
+  find(WEBPATH['instance']['list']).should have_content(name)
   sleep(3)
 end
 
+# Register a new instance on Gillette, the only params available: name, desc, shared. Other parameters
+# read from webpath.yaml
 def create_gpdb_gillette_instance(params={})
   name = params[:name] || "GPDB_GilletteInstance#{Time.now.to_i}"
   desc = params[:desc] || "Creating Gillette GPDB Instance"
@@ -40,4 +50,5 @@ def create_gpdb_gillette_instance(params={})
                        :dbuser => WEBPATH['gpdb_instance']['gillette_user'],
                        :dbpass => WEBPATH['gpdb_instance']['gillette_pass'],
                        :shared => params[:shared])
+  verify_instance_name(name)
 end
