@@ -6,7 +6,7 @@ describe " add an instance " do
   end
 
   it "creates an instance" do
-    create_valid_instance(:name => "InstanceWithSchemas")
+    create_gpdb_gillette_instance(:name => "InstanceWithSchemas")
     click_link("InstanceWithSchemas")
     click_link("Analytics")
     click_link("analytics")
@@ -14,7 +14,7 @@ describe " add an instance " do
 
 
   it "runs analyze on a table from instance browsing view" do
-      create_valid_instance(:name => "RunAnalyze")
+      create_gpdb_gillette_instance(:name => "RunAnalyze")
       click_link("RunAnalyze")
       click_link("Analytics")
       click_link("public")

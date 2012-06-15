@@ -7,7 +7,7 @@ describe " add an instance " do
   end
 
   it "creates an activity stream when a gpdb instance is created" do
-    create_valid_instance(:name => "gpdb_instance")
+    create_gpdb_gillette_instance(:name => "gpdb_instance")
     gpdb_instance_id = Instance.find_by_name("gpdb_instance").id
     go_to_home_page
     page.should have_content "EDC Admin added a new instance gpdb_instance"

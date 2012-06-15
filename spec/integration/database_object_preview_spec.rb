@@ -6,7 +6,7 @@ describe "Viewing data inside GPDB instances" do
   end
 
   it "can preview a table" do
-    create_valid_instance(:name => "InstanceToPreviewData")
+    create_gpdb_gillette_instance(:name => "InstanceToPreviewData")
     click_link "InstanceToPreviewData"
     click_link "Analytics"
     click_link "analytics"
@@ -22,7 +22,7 @@ describe "Viewing data inside GPDB instances" do
   end
 
   it "can view a tables statistics and metadata" do
-    create_valid_instance(:name => "InstanceToViewStatistics1")
+    create_gpdb_gillette_instance(:name => "InstanceToViewStatistics1")
     click_link "InstanceToViewStatistics1"
     click_link "Analytics"
     click_link "analytics"
@@ -45,7 +45,7 @@ describe "Viewing data inside GPDB instances" do
   end
 
   it "can view a views statistics, metadata and definition" do
-    create_valid_instance(:name => "InstanceToViewStatistics2")
+    create_gpdb_gillette_instance(:name => "InstanceToViewStatistics2")
       click_link "InstanceToViewStatistics2"
       click_link "Analytics"
       click_link "analytics"
@@ -76,7 +76,7 @@ describe "Viewing data inside GPDB instances" do
 
   it "should let the user preview the data on the table from the instance browser" do
 
-     create_valid_instance(:name => "data_preview")
+     create_gpdb_gillette_instance(:name => "data_preview")
      go_to_instance_page
      click_link "data_preview"
      sleep (1)

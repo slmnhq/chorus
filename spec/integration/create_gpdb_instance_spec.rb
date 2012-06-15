@@ -8,27 +8,7 @@ describe " add an instance " do
 
   it "creates an instance" do
     new_instance_name = "GPDB_inst_sel_test#{Time.now.to_i}"
-
-    within("#facebox") do
-      wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
-      choose("register_existing_greenplum")
-      wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
-      within(".register_existing_greenplum") do
-        find_gpdb_instance_dialog
-
-        fill_in 'name', :with => new_instance_name
-        fill_in 'description', :with => "GPDB instance creation"
-        fill_in 'host', :with => "gillette.sf.pivotallabs.com"
-        fill_in 'port', :with => "5432"
-        fill_in 'dbUsername', :with => "gpadmin"
-        fill_in 'dbPassword', :with => "secret"
-
-        check("register_greenplum_shared")
-      end
-
-      find(".submit").click
-    end
-
+    create_gpdb_gillette_instance(:name => new_instance_name)
     find('.instance_list').should have_content(new_instance_name)
     visit("/#/instances")
     find('.instance_list').should have_content(new_instance_name)

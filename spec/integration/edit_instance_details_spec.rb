@@ -7,8 +7,8 @@ describe "Editing instance details" do
 
   context "greenplum instances" do
     it "should allow editing of the instance name and description" do
-      create_valid_instance(:name => "Instance1")
-      create_valid_instance(:name => "Instance2")
+      create_gpdb_gillette_instance(:name => "Instance1")
+      create_gpdb_gillette_instance(:name => "Instance2")
 
       instance_1_id = Instance.find_by_name("Instance1").id
       visit("#/instances")
@@ -28,7 +28,7 @@ describe "Editing instance details" do
     end
 
     it "should allow the editing of the instance host and port" do
-      create_valid_instance(:name => "validinstance")
+      create_gpdb_gillette_instance(:name => "validinstance")
       validinstance_id = Instance.find_by_name("validinstance").id
       visit("#/instances")
       within(".instance_provider") do

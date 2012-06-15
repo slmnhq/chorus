@@ -16,4 +16,12 @@ user:
 user_menu:
   menu: '.header .username a'
   profile: 
-  signout: '.menu.popup_username a[href="#/logout"]' 
+  signout: '.menu.popup_username a[href="#/logout"]'
+
+gpdb_instance:
+  route: #/instances
+  #Gillette
+  gillette_host: gillette.sf.pivotallabs.com
+  gillette_port: 5432
+  gillette_user: gpadmin
+  gillette_pass: secret

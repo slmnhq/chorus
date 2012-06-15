@@ -6,7 +6,7 @@ describe "creating an instance credential" do
   end
 
   it "creates a new instance account" do
-    create_valid_instance(:name => "NewInstanceAccountNameInstance")
+    create_gpdb_gillette_instance(:name => "NewInstanceAccountNameInstance")
     sleep(1)
     instance_id = Instance.find_by_name("NewInstanceAccountNameInstance").id
     create_valid_user(:username => "EddyNice", :first_name => "Eddy", :last_name => "Nice")
@@ -34,7 +34,7 @@ describe "creating an instance credential" do
   end
 
   it "switches from individual to shared accounts and back" do
-    create_valid_instance
+    create_gpdb_gillette_instance
     visit("/#/instances")
     wait_until { current_route == "/instances" && page.has_selector?("a[data-dialog=InstancePermissions]") }
     click_link "Edit"
@@ -49,7 +49,7 @@ describe "creating an instance credential" do
   end
 
   it "changes the shared password on a shared instance" do
-    create_valid_instance(:shared => true)
+    create_gpdb_gillette_instance(:shared => true)
     click_link "Edit"
     within("#facebox") do
       click_link "Edit"
