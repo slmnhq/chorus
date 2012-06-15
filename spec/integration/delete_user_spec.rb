@@ -21,12 +21,12 @@ describe "deleting a workspace" do
     create_valid_user(:first_name => "Alex", :last_name =>"Reed", :username => "AlexReed")
 
     as_user("AlexReed") do
-      visit("#/workspaces/")
+      go_to_workspace_page
       create_valid_workspace()
     end
 
     as_user("edcadmin") do
-      visit ("#/users")
+      go_to_user_list_page
       wait_until { current_route == '/users' }
       click_link "Alex Reed"
       wait_until { page.find("h1").text == "Alex Reed" }
@@ -37,4 +37,15 @@ describe "deleting a workspace" do
       page.find(".error").should have_content("Can't delete user that still has workspaces associated")
     end
   end
+
+  it "doesnot let an admin delete himself" do
+
+    go_to_user_list_page
+    within(".list") do
+      click_link "EDC Admin"
+    end
+    page.should have_no_link("Delete User")
+
+  end
+
 end
