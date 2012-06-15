@@ -65,6 +65,35 @@ describe GpdbSchema do
     end
   end
 
+  describe "#functions" do
+    let(:account) { FactoryGirl.create(:instance_account) }
+    let(:database) { FactoryGirl.create(:gpdb_database, :name => "Analytics") }
+    let(:schema) { FactoryGirl.create(:gpdb_schema, :database => database)}
+    before do
+      stub_gpdb(account,
+                GpdbSchema::SCHEMA_FUNCTION_QUERY % schema.name=> [
+                    ["1091843", "add", "sql", "int4", "{num1, num2}", "{int4,int4}"],
+                    ["1091842", "foo", "sql", "text", nil, "{text}"]
+                ]
+      )
+    end
+
+
+    it "returns the GpdbSchemaFunctions" do
+      functions = schema.stored_functions(account)
+
+      functions.count.should == 2
+
+      first_function = functions.first
+      first_function.should be_a GpdbSchemaFunction
+      first_function.function_name.should == "add"
+      first_function.language.should == "sql"
+      first_function.return_type.should == "int4"
+      first_function.arg_names.should == "{num1, num2}"
+      first_function.arg_types.should == "{int4,int4}"
+    end
+  end
+
   context "associations" do
     it { should belong_to(:database) }
     it { should have_many(:database_objects) }
