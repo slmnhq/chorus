@@ -67,7 +67,7 @@ describe GpdbColumnPresenter, :type => :view do
     end
 
     context "when the model has statistics" do
-      let(:statistics) { GpdbColumnStatistics.new(nil, nil, nil, nil, nil, nil) }
+      let(:statistics) { GpdbColumnStatistics.new(nil, nil, nil, nil, nil, nil, false) }
 
       before do
         gpdb_column.statistics = statistics

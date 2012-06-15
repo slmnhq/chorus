@@ -1,18 +1,21 @@
 require 'spec_helper'
 
 describe GpdbColumnStatistics do
-  subject { GpdbColumnStatistics.new(null_frac, n_distinct, most_common_vals, most_common_freqs, histogram_bounds, row_count) }
+  subject { GpdbColumnStatistics.new(null_frac, n_distinct, most_common_vals, most_common_freqs, histogram_bounds, row_count, treat_as_enumerable) }
   let(:null_frac) { nil }
   let(:n_distinct) { nil }
   let(:most_common_vals) { nil }
   let(:most_common_freqs) { nil }
   let(:histogram_bounds) { nil }
   let(:row_count) { nil }
+  let(:treat_as_enumerable) { false }
 
   context "if we have no data" do
     its(:null_fraction) { should be_nil }
     its(:common_values) { should be_nil }
     its(:number_distinct) { should be_nil }
+    its(:min) { should be_nil }
+    its(:max) { should be_nil }
   end
 
   describe "#null_fraction" do
@@ -59,6 +62,42 @@ describe GpdbColumnStatistics do
 
       it "interprets the raw value as a percentage of the number of rows in the table" do
         subject.number_distinct.should == (525 * 0.33).round
+      end
+    end
+  end
+
+  describe "#min" do
+    let(:histogram_bounds) { '{1,2,3,4,5,6}' }
+    let(:treat_as_enumerable) { true }
+
+    it "is the first element of the histogram" do
+      subject.min.should == "1"
+    end
+
+    context "when the column is neither a date nor a number" do
+      let(:histogram_bounds) { '{a,b,c}' }
+      let(:treat_as_enumerable) { false }
+
+      it "should be nil" do
+        subject.min.should be_nil
+      end
+    end
+  end
+
+  describe "#max" do
+    let(:histogram_bounds) { '{1,2,3,4,5,6}' }
+    let(:treat_as_enumerable) { true }
+
+    it "is the last element of the histogram" do
+      subject.max.should == "6"
+    end
+
+    context "when the column is neither a date nor a number" do
+      let(:histogram_bounds) { '{a,b,c}' }
+      let(:treat_as_enumerable) { false }
+
+      it "should be nil" do
+        subject.max.should be_nil
       end
     end
   end

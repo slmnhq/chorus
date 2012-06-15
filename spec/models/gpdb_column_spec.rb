@@ -6,7 +6,7 @@ describe GpdbColumn do
       Rails.configuration.database_configuration['test']
     end
 
-    let(:account) do 
+    let(:account) do
       FactoryGirl.create(:instance_account, {
         :db_username => db_config['username'],
         :db_password => 'something',
@@ -21,8 +21,8 @@ describe GpdbColumn do
       })
     end
 
-    let(:database) { FactoryGirl.create(:gpdb_database, :name => "chorus_rails_test", :instance => instance)}
-    let(:schema) { FactoryGirl.create(:gpdb_schema, :name => "public", :database => database)}
+    let(:database) { FactoryGirl.create(:gpdb_database, :name => "chorus_rails_test", :instance => instance) }
+    let(:schema) { FactoryGirl.create(:gpdb_schema, :name => "public", :database => database) }
     let(:database_object) { FactoryGirl.create(:gpdb_table, :schema => schema, :name => "users") }
 
     subject { GpdbColumn.columns_for(account, database_object) }
@@ -31,7 +31,7 @@ describe GpdbColumn do
     before do
       account.update_attribute :db_password, db_config['password']
     end
-    
+
     it "gets the column information for table users" do
       id = subject.first
 
@@ -67,12 +67,35 @@ describe GpdbColumn do
         first_column.ordinal_position.should eq(1)
       end
 
-      it "creates an associated column stats object" do
+      it "initializes column stats with correct parameters" do
+        mock(GpdbColumnStatistics).new('1stats1', '1stats2', '1stats3', '1stats4', '1stats5', '1rows1', false) { }
+        mock(GpdbColumnStatistics).new('2stats1', '2stats2', '2stats3', '2stats4', '2stats5', '2rows1', true) { }
+        subject
+      end
+
+      it "associates column stats objects with their column" do
         fake_stats = Object.new
-        stub(GpdbColumnStatistics).new('1stats1', '1stats2', '1stats3', '1stats4', '1stats5', '1rows1') { fake_stats }
-        stub(GpdbColumnStatistics).new('2stats1', '2stats2', '2stats3', '2stats4', '2stats5', '2rows1') { }
+        stub(GpdbColumnStatistics).new { fake_stats }
         subject.first.statistics.should be fake_stats
       end
+    end
+  end
+
+  describe "#number_or_time?" do
+    it "is true if it is a numeric column" do
+      GpdbColumn.new(:data_type => "integer").should be_number_or_time
+      GpdbColumn.new(:data_type => "numeric").should be_number_or_time
+      GpdbColumn.new(:data_type => "double precision").should be_number_or_time
+    end
+
+    it "is true if it is a time column" do
+      GpdbColumn.new(:data_type => "date").should be_number_or_time
+      GpdbColumn.new(:data_type => "time with time zone").should be_number_or_time
+      GpdbColumn.new(:data_type => "timestamp with time zone").should be_number_or_time
+    end
+
+    it "is false otherwise" do
+      GpdbColumn.new(:data_type => "text").should_not be_number_or_time
     end
   end
 

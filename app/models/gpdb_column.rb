@@ -23,21 +23,23 @@ class GpdbColumn
   SQL
 
   attr_reader :name, :data_type, :description, :ordinal_position, :statistics
+  attr_accessor :statistics
 
   def self.columns_for(account, table)
-    columns = table.with_gpdb_connection(account) do |conn|
+    columns_with_stats = table.with_gpdb_connection(account) do |conn|
       conn.query(COLUMN_METADATA_QUERY % [table.schema.name, table.name, table.name])
     end
 
-    columns.map do |column|
-      column_stats = GpdbColumnStatistics.new(*column[4..-1])
+    columns_with_stats.map do |raw_column_data|
       column = GpdbColumn.new({
-        :name => column[0],
-        :data_type => column[1],
-        :description => column[2],
-        :ordinal_position => column[3]
+        :name => raw_column_data[0],
+        :data_type => raw_column_data[1],
+        :description => raw_column_data[2],
+        :ordinal_position => raw_column_data[3]
       })
-      column.statistics = column_stats
+      params = raw_column_data[4..-1]
+      params << column.number_or_time?
+      column.statistics = GpdbColumnStatistics.new(*params)
       column
     end
   end
@@ -49,10 +51,12 @@ class GpdbColumn
     @ordinal_position = attributes[:ordinal_position]
   end
 
-  attr_accessor :statistics
-
   def simplified_type
     ActiveRecord::ConnectionAdapters::PostgreSQLColumn.new(name, nil, data_type, nil).type
   end
   memoize :simplified_type
+
+  def number_or_time?
+    [:decimal, :integer, :float, :date, :time, :datetime].include? simplified_type
+  end
 end
