@@ -41,6 +41,23 @@ describe " add an instance " do
 
   end
 
+  xit "hides the delete link when am not a member of the workspace"do
+
+    create_valid_workspace(:name => "not a member delete")
+    wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
+    create_valid_workfile(:name => "invalid_member")
+    create_valid_user(:username => "notamember")
+
+    login('notamember','secret')
+    go_to_workspace_page
+    page.should have_content ("not a member delete")
+    click_link "not a member delete"
+    click_link "Work Files"
+    page.should have_content ("invalid_member.sql")
+    click_link ("invalid_member.sql")
+    page.should have_no_link("Delete")
+  end
+
 end
 
 

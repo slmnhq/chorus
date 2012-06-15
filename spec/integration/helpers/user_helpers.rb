@@ -19,7 +19,7 @@ def fill_user_form(params = {})
 end
 
 def create_valid_user(params = {})
-  visit("/#/users/new")
+  create_new_user_page
   fill_user_form(params)
   page.find("button[type=submit]").click
   wait_until { current_route == "/users" }
