@@ -52,7 +52,11 @@ window.rspecFixtureDefinitions = {
     user:    { unique: [ "id" ] },
     userSet: { unique: [ "id" ] },
 
-    dataset: { unique: ["id"] },
+    dataset: { unique: ["id"],
+               children: {
+                   datasetTable: { },
+                   datasetView: { }}},
+
 
     schema:    { unique: [ "id", "database.id", "database.instance.id" ] },
     schemaSet: { unique: [ "id" ] },

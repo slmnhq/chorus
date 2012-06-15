@@ -2,14 +2,14 @@ describe("chorus.dialogs.ManageJoinTables", function() {
     beforeEach(function() {
         this.qtip = stubQtip();
         stubModals();
-        this.originalDatabaseObject = rspecFixtures.dataset({
+        this.originalDatabaseObject = rspecFixtures.dataset.datasetTable({
             objectName: "original",
             type: "SOURCE_TABLE",
             objectType: "TABLE",
             id: "abc"
         });
         this.instanceName = "john";
-        var dataset = rspecFixtures.dataset({
+        var dataset = rspecFixtures.dataset.datasetTable({
             objectName: "original",
             schema: {
                 database: {

@@ -1,6 +1,6 @@
 describe("chorus.models.Dataset", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.dataset({
+        this.dataset = rspecFixtures.dataset.datasetTable({
             id: '"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"',
             workspace: {
                 id: "44"
@@ -151,7 +151,7 @@ describe("chorus.models.Dataset", function() {
     describe("#iconUrl", function() {
         context("when the user does not have credentials", function() {
             beforeEach(function() {
-                this.dataset = newFixtures.dataset.sourceView()
+                this.dataset = rspecFixtures.dataset.datasetTable();
                 this.unlockedIconUrl = this.dataset.iconUrl();
                 this.dataset.set({hasCredentials: false});
             });

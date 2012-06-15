@@ -1,16 +1,15 @@
 {
   "response": {
-    "id": 66,
     "workspace": {
-      "id": 2221,
-      "name": "workspace1",
+      "id": 5928,
+      "name": "workspace2",
       "summary": null,
       "owner": {
-        "id": 1720,
-        "username": "user4",
+        "id": 3674,
+        "username": "user10",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person4@example.com",
+        "email": "person10@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -38,25 +37,26 @@
       "sandbox_info": null,
       "latest_comment_list": null
     },
+    "id": 132,
     "type": "SOURCE_TABLE",
-    "object_name": "table1",
+    "object_name": "view3",
     "schema": {
-      "id": 66,
-      "name": "schema2",
+      "id": 140,
+      "name": "schema6",
       "database": {
-        "id": 78,
-        "name": "database2",
+        "id": 164,
+        "name": "database6",
         "instance": {
-          "name": "instance2",
-          "host": "host2.emc.com",
-          "port": 5002,
-          "id": 284,
+          "name": "instance6",
+          "host": "host6.emc.com",
+          "port": 5006,
+          "id": 596,
           "owner": {
-            "id": 1718,
-            "username": "user2",
+            "id": 3673,
+            "username": "user9",
             "first_name": "John",
             "last_name": "Doe",
-            "email": "person2@example.com",
+            "email": "person9@example.com",
             "title": "Grand Poo Bah",
             "dept": "Corporation Corp., Inc.",
             "notes": "One of our top performers",
@@ -77,6 +77,6 @@
       },
       "dataset_count": 1
     },
-    "object_type": "TABLE"
+    "object_type": "VIEW"
   }
 }

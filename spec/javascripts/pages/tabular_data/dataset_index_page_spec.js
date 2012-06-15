@@ -141,7 +141,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 beforeEach(function() {
                     this.datasets = [
                         newFixtures.dataset.sourceTable(),
-                        newFixtures.dataset.sourceView()
+                        rspecFixtures.dataset.datasetTable()
                     ];
                     this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
                 })
