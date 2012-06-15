@@ -1,4 +1,6 @@
 class GpdbColumn
+  extend ActiveSupport::Memoizable
+
   COLUMN_METADATA_QUERY = <<-SQL
     SELECT a.attname, format_type(a.atttypid, a.atttypmod), des.description, a.attnum,
            s.null_frac, s.n_distinct, s.most_common_vals, s.most_common_freqs, s.histogram_bounds,
@@ -48,4 +50,9 @@ class GpdbColumn
   end
 
   attr_accessor :statistics
+
+  def simplified_type
+    ActiveRecord::ConnectionAdapters::PostgreSQLColumn.new(name, nil, data_type, nil).type
+  end
+  memoize :simplified_type
 end
