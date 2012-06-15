@@ -3,8 +3,10 @@ module Events
     self.table_name = :events
     self.inheritance_column = :action
 
+    serialize :additional_data, Hash
+
     class_attribute :entities_that_get_activities, :target_names
-    attr_accessible :action, :target1, :target2, :actor
+    attr_accessible :action, :target1, :target2, :actor, :additional_data
 
     belongs_to :actor, :class_name => 'User'
     belongs_to :target1, :polymorphic => true
@@ -25,13 +27,10 @@ module Events
     end
 
     def targets
-      result = {}
-
-      self.class.target_names.each do |target_name|
-        result[target_name] = send(target_name)
+      self.class.target_names.reduce({}) do |hash, target_name|
+        hash[target_name] = send(target_name)
+        hash
       end
-
-      result
     end
 
     private
@@ -53,11 +52,12 @@ module Events
 
     def self.has_targets(target1_name, target2_name = nil)
       self.target_names = [target1_name, target2_name].compact
-      self.attr_accessible target1_name
+      self.attr_accessible target1_name, target2_name
+
       alias_method(target1_name, :target1)
       alias_method("#{target1_name}=", :target1=)
+
       if target2_name
-        self.attr_accessible target2_name
         alias_method(target2_name, :target2)
         alias_method("#{target2_name}=", :target2=)
       end
@@ -66,5 +66,14 @@ module Events
     def self.has_activities(*entity_names)
       self.entities_that_get_activities = entity_names
     end
+
+    def self.has_additional_data(*names)
+      attr_accessible(*names)
+      names.each do |name|
+        define_method(name) { additional_data[name] }
+        define_method("#{name}=") { |value| additional_data[name] = value }
+      end
+    end
   end
 end
+

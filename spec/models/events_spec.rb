@@ -69,7 +69,49 @@ describe Events do
       its(:new_owner) { should == user }
       its(:targets) { should == { :greenplum_instance => greenplum_instance, :new_owner => user } }
 
+      it_creates_activities_for { [user, greenplum_instance] }
+      it_creates_a_global_activity
+    end
+
+    describe "GREENPLUM_INSTANCE_CHANGED_NAME" do
+      subject do
+        Events::GREENPLUM_INSTANCE_CHANGED_NAME.create!(
+          :actor => actor,
+          :greenplum_instance => greenplum_instance,
+          :old_name => "brent",
+          :new_name => "brenda"
+        )
+      end
+
+      its(:greenplum_instance) { should == greenplum_instance }
+      its(:old_name) { should == "brent" }
+      its(:new_name) { should == "brenda" }
+
+      its(:targets) { should == { :greenplum_instance => greenplum_instance } }
+      its(:additional_data) { should == { :old_name => "brent", :new_name => "brenda" } }
+
       it_creates_activities_for { [actor, greenplum_instance] }
+      it_creates_a_global_activity
+    end
+
+    describe "HADOOP_INSTANCE_CHANGED_NAME" do
+      subject do
+        Events::HADOOP_INSTANCE_CHANGED_NAME.create!(
+          :actor => actor,
+          :hadoop_instance => hadoop_instance,
+          :old_name => "brent",
+          :new_name => "brenda"
+        )
+      end
+
+      its(:hadoop_instance) { should == hadoop_instance }
+      its(:old_name) { should == "brent" }
+      its(:new_name) { should == "brenda" }
+
+      its(:targets) { should == { :hadoop_instance => hadoop_instance } }
+      its(:additional_data) { should == { :old_name => "brent", :new_name => "brenda" } }
+
+      it_creates_activities_for { [actor, hadoop_instance] }
       it_creates_a_global_activity
     end
   end
