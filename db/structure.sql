@@ -319,7 +319,8 @@ CREATE TABLE gpdb_schemas (
     database_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    database_objects_count integer DEFAULT 0
+    database_objects_count integer DEFAULT 0,
+    workspace_id integer
 );
 
 
@@ -690,7 +691,8 @@ CREATE TABLE workspaces (
     has_added_member boolean DEFAULT false,
     has_added_workfile boolean DEFAULT false,
     has_added_sandbox boolean DEFAULT false,
-    has_changed_settings boolean DEFAULT false
+    has_changed_settings boolean DEFAULT false,
+    sandbox_id integer
 );
 
 
@@ -1241,8 +1243,8 @@ INSERT INTO schema_migrations (version) VALUES ('20120613231928');
 
 INSERT INTO schema_migrations (version) VALUES ('20120614002526');
 
-<<<<<<< HEAD
 INSERT INTO schema_migrations (version) VALUES ('20120614211513');
-=======
+
 INSERT INTO schema_migrations (version) VALUES ('20120615184353');
->>>>>>> Add events for instance name changes
+
+INSERT INTO schema_migrations (version) VALUES ('20120615192737');
