@@ -5,7 +5,13 @@ class GpdbSchemaFunction
      @function_name = func_name
      @language = lang
      @return_type = return_type
-     @arg_names = arg_names
-     @arg_types = arg_type
+     @arg_names = convert_to_array(arg_names)
+     @arg_types = convert_to_array(arg_type)
+  end
+
+  private
+
+  def convert_to_array(s)
+    s && s.gsub(/[{} ]/, "").split(",")
   end
 end

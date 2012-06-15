@@ -37,14 +37,13 @@ describe FunctionsController do
       decoded_response[0].name.should == "foo"
       decoded_response[0].language.should == "sql"
       decoded_response[0].return_type.should == "text"
-      decoded_response[0].arg_names.should == ""
-      decoded_response[0].arg_types.should == "{text}"
+      decoded_response[0].arg_names.should be_nil
+      decoded_response[0].arg_types.should == ["text"]
     end
 
     it "should check for permissions" do
       mock(subject).authorize! :show, schema.instance
       get :index, :schema_id => schema.to_param
     end
-
   end
 end

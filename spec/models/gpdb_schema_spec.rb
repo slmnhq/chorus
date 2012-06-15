@@ -89,8 +89,8 @@ describe GpdbSchema do
       first_function.function_name.should == "add"
       first_function.language.should == "sql"
       first_function.return_type.should == "int4"
-      first_function.arg_names.should == "{num1, num2}"
-      first_function.arg_types.should == "{int4,int4}"
+      first_function.arg_names.should == ["num1", "num2"]
+      first_function.arg_types.should == ["int4","int4"]
     end
   end
 

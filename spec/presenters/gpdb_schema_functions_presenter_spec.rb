@@ -11,8 +11,8 @@ describe GpdbSchemaFunctionPresenter, :type => :view do
       hash[:name].should == "hello"
       hash[:language].should == "sql"
       hash[:return_type].should == "int4"
-      hash[:arg_names].should == "{int4}"
-      hash[:arg_types].should == "{text}"
+      hash[:arg_names].should == ["int4"]
+      hash[:arg_types].should == ["text"]
     end
   end
 end
