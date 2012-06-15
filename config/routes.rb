@@ -38,6 +38,7 @@ Chorus::Application.routes.draw do
 
   resources :schemas, :only => [:show] do
     resources :database_objects, :only => [:index]
+    resources :functions, :only => [:index]
   end
 
   resources :tables, :only => [] do
