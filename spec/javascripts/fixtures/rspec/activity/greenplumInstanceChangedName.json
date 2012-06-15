@@ -1,0 +1,52 @@
+{
+  "response": {
+    "id": 2157,
+    "actor": {
+      "id": 6809,
+      "username": "user18",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person18@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "action": "GREENPLUM_INSTANCE_CHANGED_NAME",
+    "timestamp": "2012-06-15T21:34:50Z",
+    "greenplum_instance": {
+      "name": "instance3",
+      "host": "host3.emc.com",
+      "port": 5003,
+      "id": 1411,
+      "owner": {
+        "id": 6810,
+        "username": "user19",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person19@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "shared": false,
+      "state": "online",
+      "provision_type": null,
+      "maintenance_db": "postgres",
+      "description": null,
+      "instance_provider": null,
+      "version": "9.1.2 - FactoryVersion"
+    },
+    "new_name": "new_instance_name",
+    "old_name": "old_instance_name"
+  }
+}

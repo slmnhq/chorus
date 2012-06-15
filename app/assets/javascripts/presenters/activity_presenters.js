@@ -1,27 +1,48 @@
 ;(function() {
+    var TYPE_OPTIONS = {
+        GREENPLUM_INSTANCE_CHANGED_NAME: {
+            links: [ "actor", "greenplumInstance" ],
+            strings: [ "newName", "oldName" ]
+        },
+
+        HADOOP_INSTANCE_CHANGED_NAME: {
+            links: [ "actor", "hadoopInstance" ],
+            strings: [ "newName", "oldName" ]
+        },
+
+        GREENPLUM_INSTANCE_CREATED: {
+            links: [ "actor", "greenplumInstance" ]
+        },
+
+        HADOOP_INSTANCE_CREATED: {
+            links: [ "actor", "hadoopInstance" ]
+        },
+
+        GREENPLUM_INSTANCE_CHANGED_OWNER: {
+            links: [ "actor", "greenplumInstance", "newOwner" ]
+        }
+    };
+
     chorus.presenters.Activity = chorus.presenters.Base.extend({
         timestamp: function() {
             return chorus.helpers.relativeTimestamp(this.model.get("timestamp"));
         },
 
         headerHtml: function() {
-            return new Handlebars.SafeString(t(headerTranslationKey(this), headerParams(this)));
+            var string = t(headerTranslationKey(this), headerParams(this));
+            return new Handlebars.SafeString(string);
         },
 
         iconSrc: function() {
-            return getActor(this).fetchImageUrl({ size: "icon" });
+            return actor(this).fetchImageUrl({ size: "icon" });
         },
 
         iconHref: function() {
-            return getActor(this).showUrl();
+            return actor(this).showUrl();
         },
 
         iconClass: "profile"
     });
-
-    function getActor(self) {
-        return self.model.getModel("actor");
-    }
 
     function headerTranslationKey(self) {
         return "activity.header." + self.model.get("action") + ".without_workspace";
@@ -30,35 +51,24 @@
     function headerParams(self) {
         var model = self.model;
         var action = model.get("action");
-        var actor = getActor(self);
 
-        switch (action) {
-            case "GREENPLUM_INSTANCE_CREATED":
-                var instance = model.getModel("greenplumInstance");
-                return {
-                    actorLink:    modelLink(actor),
-                    instanceLink: modelLink(instance)
-                };
-                break;
+        var params = {};
+        var options = TYPE_OPTIONS[action];
 
-            case "HADOOP_INSTANCE_CREATED":
-                var instance = model.getModel("hadoopInstance");
-                return {
-                    actorLink:    modelLink(actor),
-                    instanceLink: modelLink(instance)
-                };
-                break;
+        _.each(options.links, function(name) {
+            var associatedModel = model.getModel(name);
+            params[name + "Link"] = modelLink(associatedModel);
+        });
 
-            case "GREENPLUM_INSTANCE_CHANGED_OWNER":
-                var instance = model.getModel("greenplumInstance");
-                var newOwner = model.getModel("newOwner");
-                return {
-                    actorLink:    modelLink(actor),
-                    instanceLink: modelLink(instance),
-                    newOwnerLink: modelLink(newOwner)
-                };
-                break;
-        }
+        _.each(options.strings, function(name) {
+            params[name] = model.get(name);
+        });
+
+        return params;
+    }
+
+    function actor(self) {
+        return self.model.getModel("actor");
     }
 
     function modelLink(model) {

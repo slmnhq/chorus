@@ -95,10 +95,14 @@ window.rspecFixtureDefinitions = {
     instanceAccountSet: {},
 
     activity: {
+        unique: [ "id" ],
+
         children :{
             greenplumInstanceCreated: {},
             greenplumInstanceChangedOwner: {},
-            hadoopInstanceCreated: {}
+            hadoopInstanceCreated: {},
+            greenplumInstanceChangedName: {},
+            hadoopInstanceChangedName: {}
         }
     },
 

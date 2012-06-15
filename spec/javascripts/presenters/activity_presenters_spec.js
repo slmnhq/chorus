@@ -36,7 +36,7 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.GREENPLUM_INSTANCE_CREATED.without_workspace", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    instanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name())
+                    greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name())
                 }
             );
         });
@@ -58,7 +58,7 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.HADOOP_INSTANCE_CREATED.without_workspace", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    instanceLink: linkTo(hadoopInstance.showUrl(), hadoopInstance.name())
+                    hadoopInstanceLink: linkTo(hadoopInstance.showUrl(), hadoopInstance.name())
                 }
             );
         });
@@ -81,8 +81,62 @@ describe("chorus.presenters.Activity", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
                 "activity.header.GREENPLUM_INSTANCE_CHANGED_OWNER.without_workspace", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    instanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
+                    greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
                     newOwnerLink: linkTo(newOwner.showUrl(), newOwner.name())
+                }
+            );
+        });
+    });
+
+    context("greenplum instance changed name", function() {
+        var greenplumInstance;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.greenplumInstanceChangedName({
+                newName: "jane",
+                oldName: "john"
+            });
+            presenter = new chorus.presenters.Activity(model);
+            greenplumInstance = model.getModel("greenplumInstance");
+            actor = model.getModel("actor");
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toContainTranslation(
+                "activity.header.GREENPLUM_INSTANCE_CHANGED_NAME.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
+                    newName: "jane",
+                    oldName: "john"
+                }
+            );
+        });
+    });
+
+    context("hadoop instance changed name", function() {
+        var instance;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.hadoopInstanceChangedName({
+                newName: "jane",
+                oldName: "john"
+            });
+            presenter = new chorus.presenters.Activity(model);
+            instance = model.getModel("hadoopInstance");
+            actor = model.getModel("actor");
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toContainTranslation(
+                "activity.header.HADOOP_INSTANCE_CHANGED_NAME.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    hadoopInstanceLink: linkTo(instance.showUrl(), instance.name()),
+                    newName: "jane",
+                    oldName: "john"
                 }
             );
         });

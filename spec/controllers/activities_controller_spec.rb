@@ -55,27 +55,27 @@ describe ActivitiesController do
   end
 
   describe "#show" do
-    it "show the particular activity " do
+    it "show the particular activity ", :fixture => true do
       mock_present { |model| model.should == global_activity1 }
       get :show, :id => global_activity1.to_param
     end
 
-    generate_fixture "activity/greenplumInstanceCreated.json" do
-      event = FactoryGirl.create(:greenplum_instance_created_event)
-      activity = Activity.global.find_by_event_id(event.id)
-      get :show, :id => activity.to_param
-    end
+    FIXTURE_FILES = {
+      "greenplumInstanceCreated" => :greenplum_instance_created_event,
+      "hadoopInstanceCreated" => :hadoop_instance_created_event,
+      "greenplumInstanceChangedOwner" => :greenplum_instance_changed_owner_event,
+      "greenplumInstanceChangedName" => :greenplum_instance_changed_name_event,
+      "hadoopInstanceChangedName" => :hadoop_instance_changed_name_event,
+    }
 
-    generate_fixture "activity/hadoopInstanceCreated.json" do
-      event = FactoryGirl.create(:hadoop_instance_created_event)
-      activity = Activity.global.find_by_event_id(event.id)
-      get :show, :id => activity.to_param
-    end
+    FIXTURE_FILES.each do |filename, event_factory_name|
 
-    generate_fixture "activity/greenplumInstanceChangedOwner.json" do
-      event = FactoryGirl.create(:greenplum_instance_changed_owner_event)
-      activity = Activity.global.find_by_event_id(event.id)
-      get :show, :id => activity.to_param
+      generate_fixture "activity/#{filename}.json" do
+        event = FactoryGirl.create(event_factory_name)
+        activity = Activity.global.find_by_event_id(event.id)
+        get :show, :id => activity.to_param
+      end
+
     end
   end
 end
