@@ -103,7 +103,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("has the class 'profile'", function() {
-                expect(presenter.iconClass()).toBe("profile");
+                expect(presenter.iconClass).toBe("profile");
             });
         });
     }

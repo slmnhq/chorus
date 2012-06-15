@@ -16,9 +16,7 @@
             return getActor(this).showUrl();
         },
 
-        iconClass: function() {
-            return "profile";
-        }
+        iconClass: "profile"
     });
 
     function getActor(self) {
@@ -38,16 +36,16 @@
             case "GREENPLUM_INSTANCE_CREATED":
                 var instance = model.getModel("greenplumInstance");
                 return {
-                    actorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
-                    instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.name())
+                    actorLink:    modelLink(actor),
+                    instanceLink: modelLink(instance)
                 };
                 break;
 
             case "HADOOP_INSTANCE_CREATED":
                 var instance = model.getModel("hadoopInstance");
                 return {
-                    actorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
-                    instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.name())
+                    actorLink:    modelLink(actor),
+                    instanceLink: modelLink(instance)
                 };
                 break;
 
@@ -55,11 +53,15 @@
                 var instance = model.getModel("greenplumInstance");
                 var newOwner = model.getModel("newOwner");
                 return {
-                    actorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
-                    instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.name()),
-                    newOwnerLink: chorus.helpers.linkTo(newOwner.showUrl(), newOwner.name())
+                    actorLink:    modelLink(actor),
+                    instanceLink: modelLink(instance),
+                    newOwnerLink: modelLink(newOwner)
                 };
                 break;
         }
+    }
+
+    function modelLink(model) {
+        return chorus.helpers.linkTo(model.showUrl(), model.name());
     }
 })();
