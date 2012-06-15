@@ -5,7 +5,7 @@ describe " add an instance " do
     login('edcadmin', 'secret')
   end
 
-  xit "deletes a SQL workfile from the workfile show page" do
+  it "deletes a SQL workfile from the workfile show page" do
 
     create_valid_workspace(:name => "delete_workfile")
     create_valid_workfile(:name => "sample")
@@ -19,7 +19,7 @@ describe " add an instance " do
     page.should_not have_content("sample.sql")
   end
 
-  xit "deletes an uploaded file from the show page" do
+  it "deletes an uploaded file from the show page" do
 
     create_valid_workspace(:name => "workfile_delete")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
