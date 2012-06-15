@@ -2,8 +2,8 @@ describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
         this.collection = chorus.collections.ActivitySet.forDashboard();
         this.collection.reset([
-            rspecFixtures.activity.instanceCreated(),
-            rspecFixtures.activity.instanceCreated()
+            rspecFixtures.activity.greenplumInstanceCreated(),
+            rspecFixtures.activity.greenplumInstanceCreated()
         ]);
         this.collection.loaded = true;
         this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass: "foo_class", type: "Foo"});
@@ -149,10 +149,10 @@ describe("chorus.views.ActivityList", function() {
             context("with partial pagination information in the response", function() {
                 beforeEach(function() {
                     this.collection.reset([
-                        rspecFixtures.activity.instanceCreated(),
-                        rspecFixtures.activity.instanceCreated(),
-                        rspecFixtures.activity.instanceCreated(),
-                        rspecFixtures.activity.instanceCreated()
+                        rspecFixtures.activity.greenplumInstanceCreated(),
+                        rspecFixtures.activity.greenplumInstanceCreated(),
+                        rspecFixtures.activity.greenplumInstanceCreated(),
+                        rspecFixtures.activity.greenplumInstanceCreated()
                     ]);
 
                     this.collection.pagination = {};
@@ -199,9 +199,9 @@ describe("chorus.views.ActivityList", function() {
                         this.view.$(".more_activities a").click();
 
                         this.server.completeFetchFor(this.collection, [
-                            rspecFixtures.activity.instanceCreated(),
-                            rspecFixtures.activity.instanceCreated(),
-                            rspecFixtures.activity.instanceCreated()
+                            rspecFixtures.activity.greenplumInstanceCreated(),
+                            rspecFixtures.activity.greenplumInstanceCreated(),
+                            rspecFixtures.activity.greenplumInstanceCreated()
                         ], { page: nextPage });
                     });
 

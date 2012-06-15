@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ActivityPresenter, :type => :view do
   let(:instance) { FactoryGirl.create(:instance) }
-  let(:event) { FactoryGirl.create(:instance_created_event, :instance => instance) }
+  let(:event) { FactoryGirl.create(:greenplum_instance_created_event, :greenplum_instance => instance) }
   let(:activity) { Activity.find_by_event_id(event.id) }
 
   describe "#to_hash" do
@@ -12,7 +12,7 @@ describe ActivityPresenter, :type => :view do
       hash = subject.to_hash
       hash[:id].should == activity.id
       hash[:timestamp].should == activity.created_at
-      hash[:action].should == "INSTANCE_CREATED"
+      hash[:action].should == "GREENPLUM_INSTANCE_CREATED"
       hash[:actor].should  == Presenter.present(activity.event.actor, view)
     end
 

@@ -60,14 +60,20 @@ describe ActivitiesController do
       get :show, :id => global_activity1.to_param
     end
 
-    generate_fixture "activity/instanceCreated.json" do
-      event = FactoryGirl.create(:instance_created_event)
+    generate_fixture "activity/greenplumInstanceCreated.json" do
+      event = FactoryGirl.create(:greenplum_instance_created_event)
       activity = Activity.global.find_by_event_id(event.id)
       get :show, :id => activity.to_param
     end
 
-    generate_fixture "activity/instanceChangedOwner.json" do
-      event = FactoryGirl.create(:instance_changed_owner_event)
+    generate_fixture "activity/hadoopInstanceCreated.json" do
+      event = FactoryGirl.create(:hadoop_instance_created_event)
+      activity = Activity.global.find_by_event_id(event.id)
+      get :show, :id => activity.to_param
+    end
+
+    generate_fixture "activity/greenplumInstanceChangedOwner.json" do
+      event = FactoryGirl.create(:greenplum_instance_changed_owner_event)
       activity = Activity.global.find_by_event_id(event.id)
       get :show, :id => activity.to_param
     end

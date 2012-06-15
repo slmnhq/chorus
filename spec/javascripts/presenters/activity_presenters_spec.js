@@ -3,7 +3,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("common aspects", function() {
         beforeEach(function() {
-            model = rspecFixtures.activity.instanceCreated();
+            model = rspecFixtures.activity.greenplumInstanceCreated();
             presenter = new chorus.presenters.Activity(model);
             actor = model.getModel("actor");
         });
@@ -20,13 +20,13 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("instance created", function() {
-        var instance;
+    context("greenplum instance created", function() {
+        var greenplumInstance;
 
         beforeEach(function() {
-            model = rspecFixtures.activity.instanceCreated();
+            model = rspecFixtures.activity.greenplumInstanceCreated();
             presenter = new chorus.presenters.Activity(model);
-            instance = model.getModel("instance");
+            greenplumInstance = model.getModel("greenplumInstance");
             actor = model.getModel("actor");
         });
 
@@ -34,21 +34,43 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.INSTANCE_CREATED.without_workspace", {
+                "activity.header.GREENPLUM_INSTANCE_CREATED.without_workspace", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    instanceLink: linkTo(instance.showUrl(), instance.name())
+                    instanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name())
                 }
             );
         });
     });
 
-    context("instance changed owner", function() {
-        var instance, newOwner;
+    context("hadoop instance created", function() {
+        var hadoopInstance
 
         beforeEach(function() {
-            model = rspecFixtures.activity.instanceChangedOwner();
+            model = rspecFixtures.activity.hadoopInstanceCreated();
             presenter = new chorus.presenters.Activity(model);
-            instance = model.getModel("instance");
+            hadoopInstance = model.getModel("hadoopInstance");
+            actor = model.getModel("actor");
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toContainTranslation(
+                "activity.header.HADOOP_INSTANCE_CREATED.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    instanceLink: linkTo(hadoopInstance.showUrl(), hadoopInstance.name())
+                }
+            );
+        });
+    });
+
+    context("greenplum instance changed owner", function() {
+        var greenplumInstance, newOwner;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.greenplumInstanceChangedOwner();
+            presenter = new chorus.presenters.Activity(model);
+            greenplumInstance = model.getModel("greenplumInstance");
             newOwner = model.getModel("newOwner");
             actor = model.getModel("actor");
         });
@@ -57,9 +79,9 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.INSTANCE_CHANGED_OWNER.without_workspace", {
+                "activity.header.GREENPLUM_INSTANCE_CHANGED_OWNER.without_workspace", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    instanceLink: linkTo(instance.showUrl(), instance.name()),
+                    instanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
                     newOwnerLink: linkTo(newOwner.showUrl(), newOwner.name())
                 }
             );

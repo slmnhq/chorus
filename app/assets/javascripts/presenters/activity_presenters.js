@@ -35,16 +35,24 @@
         var actor = getActor(self);
 
         switch (action) {
-            case "INSTANCE_CREATED":
-                var instance = model.getModel("instance");
+            case "GREENPLUM_INSTANCE_CREATED":
+                var instance = model.getModel("greenplumInstance");
                 return {
                     actorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
                     instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.name())
                 };
                 break;
 
-            case "INSTANCE_CHANGED_OWNER":
-                var instance = model.getModel("instance");
+            case "HADOOP_INSTANCE_CREATED":
+                var instance = model.getModel("hadoopInstance");
+                return {
+                    actorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),
+                    instanceLink: chorus.helpers.linkTo(instance.showUrl(), instance.name())
+                };
+                break;
+
+            case "GREENPLUM_INSTANCE_CHANGED_OWNER":
+                var instance = model.getModel("greenplumInstance");
                 var newOwner = model.getModel("newOwner");
                 return {
                     actorLink: chorus.helpers.linkTo(actor.showUrl(), actor.name()),

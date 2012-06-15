@@ -96,8 +96,9 @@ window.rspecFixtureDefinitions = {
 
     activity: {
         children :{
-            instanceCreated: {},
-            instanceChangedOwner: {}
+            greenplumInstanceCreated: {},
+            greenplumInstanceChangedOwner: {},
+            hadoopInstanceCreated: {}
         }
     },
 

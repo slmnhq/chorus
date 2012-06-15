@@ -16,7 +16,7 @@ FactoryGirl.define do
     admin true
   end
 
-  factory :instance do
+  factory :instance, :aliases => [:greenplum_instance] do
     sequence(:name) { |n| "instance#{n}" }
     sequence(:host) { |n| "host#{n}.emc.com" }
     sequence(:port) { |n| 5000+n }
@@ -116,12 +116,16 @@ FactoryGirl.define do
   factory :event, :class => Events::Base do
     actor
 
-    factory :instance_created_event, :class => Events::INSTANCE_CREATED do
-      instance
+    factory :greenplum_instance_created_event, :class => Events::GREENPLUM_INSTANCE_CREATED do
+      greenplum_instance
     end
 
-    factory :instance_changed_owner_event, :class => Events::INSTANCE_CHANGED_OWNER do
-      instance
+    factory :hadoop_instance_created_event, :class => Events::HADOOP_INSTANCE_CREATED do
+      hadoop_instance
+    end
+
+    factory :greenplum_instance_changed_owner_event, :class => Events::GREENPLUM_INSTANCE_CHANGED_OWNER do
+      greenplum_instance
       new_owner :factory => :user
     end
   end

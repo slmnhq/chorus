@@ -1,8 +1,9 @@
 ;(function() {
     var CLASS_MAP = {
         "actor": "User",
-        "instance": "GreenplumInstance",
-        "newOwner": "User"
+        "greenplumInstance": "GreenplumInstance",
+        "newOwner": "User",
+        "hadoopInstance": "HadoopInstance"
     };
 
     chorus.models.Activity = chorus.models.Base.extend({

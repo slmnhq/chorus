@@ -1,7 +1,7 @@
 describe("chorus.views.Activity", function() {
     beforeEach(function() {
         stubDefer();
-        this.model = rspecFixtures.activity.instanceCreated();
+        this.model = rspecFixtures.activity.greenplumInstanceCreated();
         this.view = new chorus.views.Activity({ model: this.model });
     });
 
