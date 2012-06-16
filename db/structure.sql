@@ -215,7 +215,8 @@ CREATE TABLE events (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     target2_type character varying(255),
-    target2_id integer
+    target2_id integer,
+    additional_data text
 );
 
 
@@ -1243,6 +1244,8 @@ INSERT INTO schema_migrations (version) VALUES ('20120613231928');
 INSERT INTO schema_migrations (version) VALUES ('20120614002526');
 
 INSERT INTO schema_migrations (version) VALUES ('20120614211513');
+
+INSERT INTO schema_migrations (version) VALUES ('20120615184353');
 
 INSERT INTO schema_migrations (version) VALUES ('20120615192737');
 
