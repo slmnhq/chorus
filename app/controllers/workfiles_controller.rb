@@ -65,6 +65,11 @@ class WorkfilesController < ApplicationController
 
     workfile.create_new_version(current_user, source_file, "")
 
+    Events::WORKFILE_CREATED.by(current_user).add(
+      :workfile => workfile,
+      :workspace => workspace
+    )
+
     workspace.has_added_workfile = true
     workspace.save!
 
