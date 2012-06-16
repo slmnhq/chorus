@@ -1,8 +1,8 @@
 {
   "response": {
-    "id": 2157,
+    "id": 32,
     "actor": {
-      "id": 6809,
+      "id": 19,
       "username": "user18",
       "first_name": "John",
       "last_name": "Doe",
@@ -17,14 +17,14 @@
       }
     },
     "action": "GREENPLUM_INSTANCE_CHANGED_NAME",
-    "timestamp": "2012-06-15T21:34:50Z",
+    "timestamp": "2012-06-16T00:28:38Z",
     "greenplum_instance": {
       "name": "instance3",
       "host": "host3.emc.com",
       "port": 5003,
-      "id": 1411,
+      "id": 3,
       "owner": {
-        "id": 6810,
+        "id": 20,
         "username": "user19",
         "first_name": "John",
         "last_name": "Doe",

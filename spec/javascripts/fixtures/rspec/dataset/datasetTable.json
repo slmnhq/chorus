@@ -1,15 +1,15 @@
 {
   "response": {
     "workspace": {
-      "id": 5927,
+      "id": 1,
       "name": "workspace1",
       "summary": null,
       "owner": {
-        "id": 3669,
-        "username": "user5",
+        "id": 30,
+        "username": "user29",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person5@example.com",
+        "email": "person29@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -37,26 +37,26 @@
       "sandbox_info": null,
       "latest_comment_list": null
     },
-    "id": 129,
+    "id": 4,
     "type": "SOURCE_TABLE",
     "object_name": "table2",
     "schema": {
-      "id": 137,
+      "id": 4,
       "name": "schema3",
       "database": {
-        "id": 161,
+        "id": 4,
         "name": "database3",
         "instance": {
-          "name": "instance3",
-          "host": "host3.emc.com",
-          "port": 5003,
-          "id": 593,
+          "name": "instance7",
+          "host": "host7.emc.com",
+          "port": 5007,
+          "id": 7,
           "owner": {
-            "id": 3668,
-            "username": "user4",
+            "id": 29,
+            "username": "user28",
             "first_name": "John",
             "last_name": "Doe",
-            "email": "person4@example.com",
+            "email": "person28@example.com",
             "title": "Grand Poo Bah",
             "dept": "Corporation Corp., Inc.",
             "notes": "One of our top performers",

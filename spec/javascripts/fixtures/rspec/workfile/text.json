@@ -1,16 +1,16 @@
 {
   "response": {
-    "id": 269,
+    "id": 6,
     "workspace": {
-      "id": 2349,
-      "name": "workspace3",
+      "id": 5,
+      "name": "workspace5",
       "summary": null,
       "owner": {
-        "id": 2003,
-        "username": "user20",
+        "id": 73,
+        "username": "user69",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person20@example.com",
+        "email": "person72@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -38,11 +38,11 @@
       "latest_comment_list": null
     },
     "owner": {
-      "id": 2004,
-      "username": "user21",
+      "id": 74,
+      "username": "user70",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person21@example.com",
+      "email": "person73@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -52,20 +52,16 @@
         "icon": "/images/default-user-icon.png"
       }
     },
-    "file_name": "some.txt",
-    "file_type": "text",
-    "latest_version_id": 309,
-    "has_draft": false,
     "version_info": {
-      "id": 309,
+      "id": 6,
       "version_num": 1,
       "commit_message": "Factory commit message",
       "owner": {
-        "id": 2005,
-        "username": "user22",
+        "id": 75,
+        "username": "user71",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person22@example.com",
+        "email": "person74@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -76,11 +72,11 @@
         }
       },
       "modifier": {
-        "id": 2006,
-        "username": "user23",
+        "id": 76,
+        "username": "user72",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person23@example.com",
+        "email": "person75@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -90,11 +86,15 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-06-18T19:19:48Z",
-      "updated_at": "2012-06-18T19:19:48Z",
-      "content_url": "/system/workfile_versions/contents/000/000/309/original/some.txt?1340047188",
+      "created_at": "2012-06-16T00:28:40Z",
+      "updated_at": "2012-06-16T00:28:40Z",
+      "content_url": "/system/workfile_versions/contents/000/000/006/original/some.txt?1339806520",
       "icon_url": null,
       "content": "<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\nhello\n</body>\n</html>\n\n"
-    }
+    },
+    "file_name": "some.txt",
+    "file_type": "text",
+    "latest_version_num": 1,
+    "has_draft": false
   }
 }

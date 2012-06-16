@@ -1,15 +1,15 @@
 {
   "response": {
     "name": "hadoop3",
-    "host": "host1.emc.com",
-    "port": 5001,
-    "id": 5,
+    "host": "host3.emc.com",
+    "port": 5003,
+    "id": 3,
     "owner": {
-      "id": 61,
-      "username": "user2",
+      "id": 37,
+      "username": "user36",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person2@example.com",
+      "email": "person36@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",

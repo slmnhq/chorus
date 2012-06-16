@@ -1,11 +1,11 @@
 {
   "response": [
     {
-      "id": 5,
+      "id": 51,
       "username": "other_user",
       "first_name": "andy",
       "last_name": "bravo",
-      "email": "person2@example.com",
+      "email": "person50@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -16,11 +16,26 @@
       }
     },
     {
-      "id": 4,
+      "id": 1,
+      "username": "edcadmin",
+      "first_name": "EDC",
+      "last_name": "Admin",
+      "email": "edcadmin@example.com",
+      "title": "",
+      "dept": "",
+      "notes": "",
+      "admin": true,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    {
+      "id": 50,
       "username": "some_user",
       "first_name": "marty",
       "last_name": "alpha",
-      "email": "person1@example.com",
+      "email": "person49@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -34,7 +49,7 @@
   "pagination": {
     "page": 1,
     "per_page": 50,
-    "records": 2,
+    "records": 3,
     "total": 1
   }
 }
