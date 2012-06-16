@@ -1,16 +1,16 @@
 {
   "response": {
-    "id": 6,
+    "id": 2,
     "workspace": {
-      "id": 5,
-      "name": "workspace5",
+      "id": 2,
+      "name": "workspace2",
       "summary": null,
       "owner": {
-        "id": 73,
-        "username": "user69",
+        "id": 13,
+        "username": "user11",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person72@example.com",
+        "email": "person12@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -29,20 +29,14 @@
       },
       "permission": [
         "admin"
-      ],
-      "has_added_member": false,
-      "has_added_workfile": false,
-      "has_added_sandbox": false,
-      "has_changed_settings": false,
-      "sandbox_info": null,
-      "latest_comment_list": null
+      ]
     },
     "owner": {
-      "id": 74,
-      "username": "user70",
+      "id": 14,
+      "username": "user12",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person73@example.com",
+      "email": "person13@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -53,15 +47,15 @@
       }
     },
     "version_info": {
-      "id": 6,
+      "id": 2,
       "version_num": 1,
       "commit_message": "Factory commit message",
       "owner": {
-        "id": 75,
-        "username": "user71",
+        "id": 15,
+        "username": "user13",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person74@example.com",
+        "email": "person14@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -72,11 +66,11 @@
         }
       },
       "modifier": {
-        "id": 76,
-        "username": "user72",
+        "id": 16,
+        "username": "user14",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person75@example.com",
+        "email": "person15@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -86,15 +80,14 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-06-16T00:28:40Z",
-      "updated_at": "2012-06-16T00:28:40Z",
-      "content_url": "/system/workfile_versions/contents/000/000/006/original/some.txt?1339806520",
+      "created_at": "2012-06-08T17:44:37Z",
+      "updated_at": "2012-06-08T17:44:37Z",
+      "content_url": "/system/workfile_versions/contents/000/000/002/original/some.txt?1339177477",
       "icon_url": null,
       "content": "<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\nhello\n</body>\n</html>\n\n"
     },
     "file_name": "some.txt",
     "file_type": "text",
-    "latest_version_num": 1,
-    "has_draft": false
+    "latest_version_num": 1
   }
 }
