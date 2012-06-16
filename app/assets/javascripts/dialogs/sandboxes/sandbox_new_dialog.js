@@ -25,7 +25,10 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
         this.aurora = chorus.models.GreenplumInstance.aurora();
         this.bindings.add(this.aurora, "loaded", this.fetchTemplates, this);
-        this.aurora.fetch();
+
+//      TODO: when Aurora is done on the backend, comment this back in and un-xit all the specs in sandbox_new_dialog_spec.js (and fix them)
+//      this.aurora.fetch();
+        this.aurora.loaded = true;
 
         this.requiredResources.add(this.aurora);
         this.requiredResources.add(chorus.models.Config.instance());
@@ -56,10 +59,11 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     makeModel: function() {
         this._super("makeModel", arguments);
         var workspaceId = this.options.launchElement.data("workspaceId");
+        this.workspace = this.pageModel;
         this.model = new chorus.models.Sandbox({ workspaceId: workspaceId });
-        this.bindings.add(this.model, "saved", this.saved);
-        this.bindings.add(this.model, "saveFailed", this.saveFailed);
-        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+        this.bindings.add(this.workspace, "saved", this.saved);
+        this.bindings.add(this.workspace, "saveFailed", this.saveFailed);
+        this.bindings.add(this.workspace, "validationFailed", this.saveFailed);
     },
 
     resourcesLoaded: function() {
@@ -72,9 +76,16 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     save: function(e) {
         this.$("button.submit").startLoading("sandbox.adding_sandbox");
-        if (this.model.save(this.activeForm.fieldValues()) !== false && this.activeForm == this.standaloneMode) {
-            chorus.toast("instances.new_dialog.provisioning")
+        var sandboxId  = this.activeForm.fieldValues().schema;
+        if(sandboxId) {
+            this.workspace.set({ sandboxId: sandboxId }, {silent : true});
+            this.workspace.save();
         }
+
+        // TODO: possibly put back in for more sandbox stories, i.e. provisioning new sandbox or creating sandbox for new schema?
+//        if (this.model.save(this.activeForm.fieldValues()) !== false && this.activeForm == this.standaloneMode) {
+//            chorus.toast("instances.new_dialog.provisioning")
+//        }
     },
 
     saved: function() {
