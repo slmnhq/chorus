@@ -148,7 +148,7 @@ ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
 
 CREATE TABLE associated_datasets (
     id integer NOT NULL,
-    gpdb_database_object_id integer,
+    dataset_id integer,
     workspace_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -188,6 +188,21 @@ ALTER SEQUENCE async_query_tasks_id_seq OWNED BY async_query_tasks.id;
 
 
 --
+-- Name: datasets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE datasets (
+    id integer NOT NULL,
+    type character varying(256),
+    name character varying(256),
+    schema_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    master_table boolean DEFAULT false
+);
+
+
+--
 -- Name: events; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -200,8 +215,7 @@ CREATE TABLE events (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     target2_type character varying(255),
-    target2_id integer,
-    additional_data text
+    target2_id integer
 );
 
 
@@ -244,21 +258,6 @@ ALTER SEQUENCE gpdb_database_object_workspace_associations_id_seq OWNED BY assoc
 
 
 --
--- Name: gpdb_database_objects; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE gpdb_database_objects (
-    id integer NOT NULL,
-    type character varying(256),
-    name character varying(256),
-    schema_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    master_table boolean DEFAULT false
-);
-
-
---
 -- Name: gpdb_database_objects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -274,7 +273,7 @@ CREATE SEQUENCE gpdb_database_objects_id_seq
 -- Name: gpdb_database_objects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE gpdb_database_objects_id_seq OWNED BY gpdb_database_objects.id;
+ALTER SEQUENCE gpdb_database_objects_id_seq OWNED BY datasets.id;
 
 
 --
@@ -319,7 +318,7 @@ CREATE TABLE gpdb_schemas (
     database_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    database_objects_count integer DEFAULT 0,
+    datasets_count integer DEFAULT 0,
     workspace_id integer
 );
 
@@ -740,14 +739,14 @@ ALTER TABLE async_query_tasks ALTER COLUMN id SET DEFAULT nextval('async_query_t
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass);
+ALTER TABLE datasets ALTER COLUMN id SET DEFAULT nextval('gpdb_database_objects_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE gpdb_database_objects ALTER COLUMN id SET DEFAULT nextval('gpdb_database_objects_id_seq'::regclass);
+ALTER TABLE events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::regclass);
 
 
 --
@@ -870,7 +869,7 @@ ALTER TABLE ONLY associated_datasets
 -- Name: gpdb_database_objects_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY gpdb_database_objects
+ALTER TABLE ONLY datasets
     ADD CONSTRAINT gpdb_database_objects_pkey PRIMARY KEY (id);
 
 
@@ -974,7 +973,7 @@ ALTER TABLE ONLY workspaces
 -- Name: gpdb_db_object_workspace_unique; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE UNIQUE INDEX gpdb_db_object_workspace_unique ON associated_datasets USING btree (gpdb_database_object_id, workspace_id);
+CREATE UNIQUE INDEX gpdb_db_object_workspace_unique ON associated_datasets USING btree (dataset_id, workspace_id);
 
 
 --
@@ -995,7 +994,7 @@ CREATE INDEX index_async_query_tasks_on_check_id ON async_query_tasks USING btre
 -- Name: index_gpdb_database_objects_on_schema_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_gpdb_database_objects_on_schema_id ON gpdb_database_objects USING btree (schema_id);
+CREATE INDEX index_gpdb_database_objects_on_schema_id ON datasets USING btree (schema_id);
 
 
 --
@@ -1245,6 +1244,6 @@ INSERT INTO schema_migrations (version) VALUES ('20120614002526');
 
 INSERT INTO schema_migrations (version) VALUES ('20120614211513');
 
-INSERT INTO schema_migrations (version) VALUES ('20120615184353');
-
 INSERT INTO schema_migrations (version) VALUES ('20120615192737');
+
+INSERT INTO schema_migrations (version) VALUES ('20120615231854');

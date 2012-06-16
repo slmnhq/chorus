@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe GpdbDatabaseObject::Query, :type => :database_integration do
+describe Dataset::Query, :type => :database_integration do
   let(:account) { real_gpdb_account }
   let(:schema) { GpdbSchema.find_by_name('gpdb_test_schema') }
 
@@ -9,7 +9,7 @@ describe GpdbDatabaseObject::Query, :type => :database_integration do
   end
 
   subject do
-    GpdbDatabaseObject::Query.new(schema)
+    Dataset::Query.new(schema)
   end
 
   let(:rows) do

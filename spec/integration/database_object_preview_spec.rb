@@ -11,7 +11,7 @@ describe "Viewing data inside GPDB instances" do
     click_link "Analytics"
     click_link "analytics"
 
-    table_id = Instance.find_by_name("InstanceToPreviewData").databases.find_by_name("Analytics").schemas.find_by_name("analytics").database_objects.find_by_name("a1000").id
+    table_id = Instance.find_by_name("InstanceToPreviewData").databases.find_by_name("Analytics").schemas.find_by_name("analytics").datasets.find_by_name("a1000").id
 
     page.find("li[data-database-object-id='#{table_id}']").click
     sleep(1)
@@ -27,7 +27,7 @@ describe "Viewing data inside GPDB instances" do
     click_link "Analytics"
     click_link "analytics"
 
-    dataset_id = Instance.find_by_name("InstanceToViewStatistics1").databases.find_by_name("Analytics").schemas.find_by_name("analytics").database_objects.find_by_name("a1000").id
+    dataset_id = Instance.find_by_name("InstanceToViewStatistics1").databases.find_by_name("Analytics").schemas.find_by_name("analytics").datasets.find_by_name("a1000").id
 
     page.find("li[data-database-object-id='#{dataset_id}']").click
     sleep(1)
@@ -50,7 +50,7 @@ describe "Viewing data inside GPDB instances" do
       click_link "Analytics"
       click_link "analytics"
 
-      dataset_id = Instance.find_by_name("InstanceToViewStatistics2").databases.find_by_name("Analytics").schemas.find_by_name("analytics").database_objects.find_by_name("___lenny").id
+      dataset_id = Instance.find_by_name("InstanceToViewStatistics2").databases.find_by_name("Analytics").schemas.find_by_name("analytics").datasets.find_by_name("___lenny").id
 
       page.find("li[data-database-object-id='#{dataset_id}']").click
       sleep(1)

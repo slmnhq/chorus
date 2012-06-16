@@ -1,2 +1,2 @@
-class GpdbView < GpdbDatabaseObject
+class GpdbView < Dataset
 end

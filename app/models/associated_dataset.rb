@@ -1,9 +1,9 @@
 class AssociatedDataset < ActiveRecord::Base
-  validates_uniqueness_of :gpdb_database_object_id, :scope => :workspace_id
-  validates_presence_of :workspace, :gpdb_database_object
+  validates_uniqueness_of :dataset_id, :scope => :workspace_id
+  validates_presence_of :workspace, :dataset
 
-  attr_accessible :gpdb_database_object_id, :workspace_id
+  attr_accessible :dataset_id, :workspace_id
 
   belongs_to :workspace
-  belongs_to :gpdb_database_object
+  belongs_to :dataset
 end

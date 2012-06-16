@@ -17,7 +17,7 @@ describe DatabaseObjectsController do
     let!(:view) { FactoryGirl.create(:gpdb_view, :name => 'view1', :schema => schema) }
 
     before do
-      mock(GpdbDatabaseObject).refresh(instanceAccount, schema)
+      mock(Dataset).refresh(instanceAccount, schema)
       stub(table).add_metadata!(instanceAccount)
     end
 

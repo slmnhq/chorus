@@ -1,4 +1,4 @@
-class GpdbViewPresenter < GpdbDatabaseObjectPresenter
+class GpdbViewPresenter < DatasetPresenter
 
   def to_hash
     super.merge(

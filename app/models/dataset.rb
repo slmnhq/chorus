@@ -1,5 +1,5 @@
-class GpdbDatabaseObject < ActiveRecord::Base
-  belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :database_objects_count
+class Dataset < ActiveRecord::Base
+  belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
   delegate :instance, :to => :schema
   delegate :definition, :to => :statistics
   validates_presence_of :name
@@ -15,7 +15,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
     end
 
     db_object_names = db_objects.map {|attrs| attrs['name']}
-    schema.database_objects.where("gpdb_database_objects.name NOT IN (?)", db_object_names).destroy_all
+    schema.datasets.where("datasets.name NOT IN (?)", db_object_names).destroy_all
 
     db_objects.each do |attrs|
       type = attrs.delete('type')
@@ -29,7 +29,7 @@ class GpdbDatabaseObject < ActiveRecord::Base
     result = schema.with_gpdb_connection(account) do |conn|
       conn.select_all(Query.new(schema).metadata_for_database_object(name).to_sql)
     end.first
-    @statistics = GpdbDatabaseObjectStatistics.new(result)
+    @statistics = DatasetStatistics.new(result)
   end
 
   def self.with_name_like(name)

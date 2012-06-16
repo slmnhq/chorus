@@ -1,4 +1,4 @@
-class GpdbTable < GpdbDatabaseObject
+class GpdbTable < Dataset
 
   def analyze(account)
     table_name = '"' + schema.name + '"."'  + name + '"';

@@ -10,7 +10,7 @@ describe AssociatedDatasetPresenter, :type => :view do
   describe "#to_hash" do
     let(:workspace) { FactoryGirl.build(:workspace)}
     let(:gpdb_table) { FactoryGirl.build(:gpdb_table)}
-    let(:association) { FactoryGirl.build(:associated_dataset, :workspace => workspace, :gpdb_database_object => gpdb_table) }
+    let(:association) { FactoryGirl.build(:associated_dataset, :workspace => workspace, :dataset => gpdb_table) }
 
     subject { described_class.new(association, view) }
 

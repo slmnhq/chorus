@@ -1,9 +1,9 @@
 class AssociatedDatasetPresenter < Presenter
-  delegate :id, :workspace, :gpdb_database_object, :to => :model
+  delegate :id, :workspace, :dataset, :to => :model
 
   def to_hash
     {
       :workspace => present(workspace)
-    }.merge(present(gpdb_database_object))
+    }.merge(present(dataset))
   end
 end

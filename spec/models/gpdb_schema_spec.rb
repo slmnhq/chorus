@@ -10,7 +10,7 @@ describe GpdbSchema do
           ["schema1"],
           ["schema2"]
       ])
-      stub(GpdbDatabaseObject).refresh
+      stub(Dataset).refresh
     end
 
     describe "associations" do
@@ -25,12 +25,12 @@ describe GpdbSchema do
     end
 
     it "populates new schemas with their tables and views" do
-      stub(GpdbDatabaseObject).refresh(account, anything) { |account, schema|
+      stub(Dataset).refresh(account, anything) { |account, schema|
         FactoryGirl.create(:gpdb_table, :schema => schema)
       }
 
       GpdbSchema.refresh(account, database)
-      GpdbSchema.find_by_name("schema1").database_objects.count.should == 1
+      GpdbSchema.find_by_name("schema1").datasets.count.should == 1
     end
 
     it "does not re-create schemas that already exist in our database" do
@@ -100,6 +100,6 @@ describe GpdbSchema do
 
   context "associations" do
     it { should belong_to(:database) }
-    it { should have_many(:database_objects) }
+    it { should have_many(:datasets) }
   end
 end

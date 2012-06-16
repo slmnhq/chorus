@@ -15,8 +15,8 @@ resource "Greenplum DB schemas" do
   before do
     log_in owner
     stub(GpdbSchema).refresh(owner_account, database) { [db_schema] }
-    stub(GpdbDatabaseObject).refresh(owner_account, db_schema) { [table, view] }
-    stub(GpdbDatabaseObject).add_metadata!(anything, owner_account)
+    stub(Dataset).refresh(owner_account, db_schema) { [table, view] }
+    stub(Dataset).add_metadata!(anything, owner_account)
   end
 
   get "/schemas/:id" do

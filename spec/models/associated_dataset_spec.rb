@@ -5,18 +5,17 @@ describe AssociatedDataset do
   let(:gpdb_table) { FactoryGirl.create(:gpdb_table) }
 
   describe "validations" do
-    it "should have uniq workspace_id + gpdb_database_object_id" do
+    it "should have uniq workspace_id + dataset_id" do
       association = described_class.new
       association.workspace = workspace
-      association.gpdb_database_object = gpdb_table
+      association.dataset = gpdb_table
       association.save!
 
-      expect {
-        association = described_class.new
-        association.workspace = workspace
-        association.gpdb_database_object = gpdb_table
-        association.save!
-      }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Gpdb database object [:taken, {:value=>#{gpdb_table.id}}]")
+      association = described_class.new
+      association.workspace = workspace
+      association.dataset = gpdb_table
+      association.should_not be_valid
+      association.errors[:dataset_id].should include [:taken, {:value => gpdb_table.id}]
     end
   end
 end

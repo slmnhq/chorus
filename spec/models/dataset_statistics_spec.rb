@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe GpdbDatabaseObjectStatistics do
+describe DatasetStatistics do
   context "#initialize" do
     it "initialize the values" do
-      statistics = GpdbDatabaseObjectStatistics.new(
+      statistics = DatasetStatistics.new(
           {
            'description' => 'New Description',
            'column_count' => '4',

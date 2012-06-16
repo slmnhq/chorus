@@ -59,7 +59,7 @@ FactoryGirl.define do
     association :schema, :factory => :gpdb_schema
   end
 
-  factory :gpdb_database_object_statistics do
+  factory :dataset_statistics do
     initialize_with do
       new({
         'table_type' => 'BASE_TABLE',
@@ -109,7 +109,7 @@ FactoryGirl.define do
   end
 
   factory :associated_dataset do
-    association :gpdb_database_object, :factory => :gpdb_table
+    association :dataset, :factory => :gpdb_table
     workspace
   end
 

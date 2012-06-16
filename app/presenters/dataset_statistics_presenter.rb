@@ -1,4 +1,4 @@
-class GpdbDatabaseObjectStatisticsPresenter < Presenter
+class DatasetStatisticsPresenter < Presenter
   delegate :table_type, :table_name, :row_count, :column_count, :description, :last_analyzed,
            :disk_size, :partition_count, :definition, :to => :model
 

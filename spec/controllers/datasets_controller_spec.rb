@@ -12,7 +12,7 @@ describe DatasetsController do
 
   describe "#index" do
     before do
-      workspace.gpdb_database_objects << gpdb_table
+      workspace.bound_datasets << gpdb_table
     end
 
     it "retrieves all gpdb objects associated with the workspace" do
@@ -27,7 +27,7 @@ describe DatasetsController do
     it "should associate one table to the workspace" do
       post :create, :workspace_id => workspace.to_param, :dataset_ids => gpdb_table.to_param
       response.code.should == "200"
-      workspace.gpdb_database_objects.should include(gpdb_table)
+      workspace.bound_datasets.should include(gpdb_table)
     end
 
     it "should associate multiple tables/views to the workspace for one table" do
@@ -38,16 +38,16 @@ describe DatasetsController do
       post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
       response.code.should == "200"
 
-      workspace.gpdb_database_objects.should include(gpdb_table)
-      workspace.gpdb_database_objects.should include(gpdb_view)
+      workspace.bound_datasets.should include(gpdb_table)
+      workspace.bound_datasets.should include(gpdb_view)
     end
   end
 
   describe "#show" do
-    let(:association) { FactoryGirl.create(:associated_dataset, :gpdb_database_object => gpdb_database_object) }
+    let(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset) }
 
     context "the associated database object is a table" do
-      let(:gpdb_database_object) { FactoryGirl.create(:gpdb_table) }
+      let(:dataset) { FactoryGirl.create(:gpdb_table) }
 
       generate_fixture "dataset/datasetTable.json" do
         get :show, :id => association.to_param
@@ -55,7 +55,7 @@ describe DatasetsController do
     end
 
     context "the associated database object is a view" do
-      let(:gpdb_database_object) { FactoryGirl.create(:gpdb_view) }
+      let(:dataset) { FactoryGirl.create(:gpdb_view) }
 
       generate_fixture "dataset/datasetView.json" do
         get :show, :id => association.to_param

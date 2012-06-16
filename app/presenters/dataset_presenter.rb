@@ -1,4 +1,4 @@
-class GpdbDatabaseObjectPresenter < Presenter
+class DatasetPresenter < Presenter
   delegate :id, :name, :schema, :to => :model
 
   def to_hash

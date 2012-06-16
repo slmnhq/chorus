@@ -1,6 +1,4 @@
 class GpdbSchema < ActiveRecord::Base
-  belongs_to :workspace
-
   SCHEMAS_SQL = <<-SQL
   SELECT
     schemas.nspname as schema_name
@@ -29,8 +27,9 @@ class GpdbSchema < ActiveRecord::Base
       ORDER BY t1.proname
     SQL
 
+  belongs_to :workspace
   belongs_to :database, :class_name => 'GpdbDatabase'
-  has_many :database_objects, :class_name => 'GpdbDatabaseObject', :foreign_key => :schema_id
+  has_many :datasets, :foreign_key => :schema_id
   delegate :with_gpdb_connection, :to => :database
   delegate :instance, :to => :database
 
@@ -46,7 +45,7 @@ class GpdbSchema < ActiveRecord::Base
       schema = database.schemas.find_or_initialize_by_name(row[0])
       unless schema.persisted?
         schema.save!
-        GpdbDatabaseObject.refresh(account, schema)
+        Dataset.refresh(account, schema)
       end
       schema
     end

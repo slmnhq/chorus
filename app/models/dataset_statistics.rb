@@ -1,4 +1,4 @@
-class GpdbDatabaseObjectStatistics
+class DatasetStatistics
   attr_reader :description, :definition, :row_count, :column_count, :table_type,
               :last_analyzed, :disk_size, :partition_count
 

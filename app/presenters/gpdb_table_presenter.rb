@@ -1,4 +1,4 @@
-class GpdbTablePresenter < GpdbDatabaseObjectPresenter
+class GpdbTablePresenter < DatasetPresenter
   def to_hash
     super.merge(:object_type => "TABLE")
   end

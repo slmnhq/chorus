@@ -12,7 +12,7 @@ class Workspace < ActiveRecord::Base
   has_one :sandbox, :class_name => 'GpdbSchema'
 
   has_many :associated_datasets
-  has_many :gpdb_database_objects, :through => :associated_datasets
+  has_many :bound_datasets, :through => :associated_datasets, :source => :dataset
 
   validates_presence_of :name
   validate :uniqueness_of_workspace_name
