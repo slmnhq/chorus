@@ -6,6 +6,8 @@ describe Events do
     let(:greenplum_instance) { FactoryGirl.create(:instance) }
     let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
     let(:user) { FactoryGirl.create(:user) }
+    let(:workfile) { FactoryGirl.create(:workfile) }
+    let(:workspace) { workfile.workspace }
 
     class << self
 
@@ -21,6 +23,13 @@ describe Events do
         it "creates a global activity" do
           global_activity = Activity.global.find_by_event_id(subject.id)
           global_activity.should_not be_nil
+        end
+      end
+
+      def it_does_not_create_a_global_activity
+        it "does not create a global activity" do
+          global_activity = Activity.global.find_by_event_id(subject.id)
+          global_activity.should be_nil
         end
       end
 
@@ -113,6 +122,24 @@ describe Events do
 
       it_creates_activities_for { [actor, hadoop_instance] }
       it_creates_a_global_activity
+    end
+
+    describe "WORKFILE_CREATED" do
+      subject do
+        Events::WORKFILE_CREATED.create!(
+          :actor => actor,
+          :workfile => workfile,
+          :workspace => workspace
+        )
+      end
+
+      its(:workfile) { should == workfile }
+      its(:workspace) { should == workspace }
+
+      its(:targets) { should == { :workfile => workfile } }
+
+      it_creates_activities_for { [actor, workfile, workspace] }
+      it_does_not_create_a_global_activity
     end
   end
 

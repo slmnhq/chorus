@@ -27,4 +27,9 @@ module Events
     has_additional_data :old_name, :new_name
     has_activities :actor, :hadoop_instance, :global
   end
+
+  class WORKFILE_CREATED < Base
+    has_targets :workfile
+    has_activities :actor, :workfile, :workspace
+  end
 end
