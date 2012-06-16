@@ -1,7 +1,7 @@
 class AnalyzeController < GpdbController
   def create
-    database_object = Dataset.find(params[:table_id])
-    results = database_object.analyze(authorized_gpdb_account(database_object))
+    dataset = Dataset.find(params[:table_id])
+    results = dataset.analyze(authorized_gpdb_account(dataset))
     present(results, :status => :created)
   end
 end

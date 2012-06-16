@@ -23,9 +23,9 @@ describe GpdbColumn do
 
     let(:database) { FactoryGirl.create(:gpdb_database, :name => "chorus_rails_test", :instance => instance) }
     let(:schema) { FactoryGirl.create(:gpdb_schema, :name => "public", :database => database) }
-    let(:database_object) { FactoryGirl.create(:gpdb_table, :schema => schema, :name => "users") }
+    let(:dataset) { FactoryGirl.create(:gpdb_table, :schema => schema, :name => "users") }
 
-    subject { GpdbColumn.columns_for(account, database_object) }
+    subject { GpdbColumn.columns_for(account, dataset) }
 
     # XXX Local databases usually don't have password so bypass validation
     before do

@@ -10,7 +10,7 @@ describe SqlResults, :type => :database_integration do
   end
 
   describe "#rows" do
-    subject { SqlResults.preview_database_object(table, account, check_id).rows }
+    subject { SqlResults.preview_dataset(table, account, check_id).rows }
 
     it "includes one item for each row in the table" do
       subject.size.should == 1
@@ -57,7 +57,7 @@ describe SqlResults, :type => :database_integration do
   end
 
   describe "#columns" do
-    subject { SqlResults.preview_database_object(table, account, check_id).columns }
+    subject { SqlResults.preview_dataset(table, account, check_id).columns }
 
     it "gives each column the right 'name' attribute" do
       subject.map(&:name).should == [

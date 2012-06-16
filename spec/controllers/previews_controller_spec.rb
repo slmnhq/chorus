@@ -15,7 +15,7 @@ describe PreviewsController do
   describe "#create" do
     before do
       fake_results = SqlResults.new([], [])
-      mock(SqlResults).preview_database_object(gpdb_table, account, '0.43214321') { fake_results }
+      mock(SqlResults).preview_dataset(gpdb_table, account, '0.43214321') { fake_results }
     end
 
     it "uses authentication" do

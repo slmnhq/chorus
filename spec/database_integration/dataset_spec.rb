@@ -51,7 +51,7 @@ describe Dataset::Query, :type => :database_integration do
   describe "#metadata_for_tables" do
 
     context "Base table" do
-      let(:sql) { subject.metadata_for_database_object("base_table1").to_sql }
+      let(:sql) { subject.metadata_for_dataset("base_table1").to_sql }
   
       it "returns a query whose result for a base table is correct" do
         row = rows.first
@@ -69,7 +69,7 @@ describe Dataset::Query, :type => :database_integration do
     end
 
     context "Master table" do
-      let(:sql) { subject.metadata_for_database_object("master_table1").to_sql }
+      let(:sql) { subject.metadata_for_dataset("master_table1").to_sql }
 
       it "returns a query whose result for a master table is correct" do
         row = rows.first
@@ -87,7 +87,7 @@ describe Dataset::Query, :type => :database_integration do
     end
 
     context "External table" do
-      let(:sql) { subject.metadata_for_database_object("external_web_table1").to_sql }
+      let(:sql) { subject.metadata_for_dataset("external_web_table1").to_sql }
 
       it "returns a query whose result for an external table is correct" do
         row = rows.first
@@ -105,7 +105,7 @@ describe Dataset::Query, :type => :database_integration do
     end
 
     context "View" do
-      let(:sql) { subject.metadata_for_database_object("view1").to_sql }
+      let(:sql) { subject.metadata_for_dataset("view1").to_sql }
 
       it "returns a query whose result for a view is correct" do
         row = rows.first

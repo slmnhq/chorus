@@ -10,24 +10,24 @@ class Dataset < ActiveRecord::Base
   delegate :instance, :to => :schema
 
   def self.refresh(account, schema)
-    db_objects = schema.with_gpdb_connection(account) do |conn|
+    datasets = schema.with_gpdb_connection(account) do |conn|
       conn.select_all(Query.new(schema).tables_and_views_in_schema.to_sql)
     end
 
-    db_object_names = db_objects.map {|attrs| attrs['name']}
-    schema.datasets.where("datasets.name NOT IN (?)", db_object_names).destroy_all
+    dataset_names = datasets.map {|attrs| attrs['name']}
+    schema.datasets.where("datasets.name NOT IN (?)", dataset_names).destroy_all
 
-    db_objects.each do |attrs|
+    datasets.each do |attrs|
       type = attrs.delete('type')
       klass = type == 'r' ? GpdbTable : GpdbView
-      db_object = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
-      db_object.update_attributes(attrs, :without_protection => true)
+      dataset = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
+      dataset.update_attributes(attrs, :without_protection => true)
     end
   end
 
   def add_metadata!(account)
     result = schema.with_gpdb_connection(account) do |conn|
-      conn.select_all(Query.new(schema).metadata_for_database_object(name).to_sql)
+      conn.select_all(Query.new(schema).metadata_for_dataset(name).to_sql)
     end.first
     @statistics = DatasetStatistics.new(result)
   end
@@ -93,7 +93,7 @@ class Dataset < ActiveRecord::Base
         )
     end
 
-    def metadata_for_database_object(table_name)
+    def metadata_for_dataset(table_name)
       relations_in_schema.
         where(RELATIONS[:relname].eq(table_name)).
         join(DESCRIPTIONS, Arel::Nodes::OuterJoin).

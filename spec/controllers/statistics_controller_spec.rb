@@ -15,12 +15,12 @@ describe StatisticsController do
     let(:schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema1', :database => database) }
     let!(:table) { FactoryGirl.create(:gpdb_table, :name => 'table1', :schema => schema) }
 
-    let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_database_object("table1").to_sql }
-    let(:db_objects_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
+    let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset("table1").to_sql }
+    let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
 
     it "should retrieve the db object for a schema" do
       stub_gpdb(instanceAccount,
-        db_objects_sql => [
+        datasets_sql => [
                   { 'type' => "r", "name" => "table1", "master_table" => 't' }
                 ],
         metadata_sql => [

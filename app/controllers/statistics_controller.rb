@@ -1,7 +1,7 @@
 class StatisticsController < GpdbController
   def show
-    gpdb_table = Dataset.find(params[:database_object_id])
-    gpdb_table.add_metadata!(authorized_gpdb_account(gpdb_table))
-    present gpdb_table.statistics
+    dataset = Dataset.find(params[:database_object_id])
+    dataset.add_metadata!(authorized_gpdb_account(dataset))
+    present dataset.statistics
   end
 end

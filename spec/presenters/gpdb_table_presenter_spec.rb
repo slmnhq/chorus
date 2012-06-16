@@ -20,5 +20,5 @@ describe GpdbTablePresenter, :type => :view do
     end
   end
 
-  it_behaves_like "database object presenter", :gpdb_table
+  it_behaves_like "dataset presenter", :gpdb_table
 end

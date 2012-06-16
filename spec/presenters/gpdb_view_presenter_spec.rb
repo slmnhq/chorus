@@ -18,5 +18,5 @@ describe GpdbViewPresenter, :type => :view do
     its [:object_type] { should == "VIEW" }
   end
 
-  it_behaves_like "database object presenter", :gpdb_view
+  it_behaves_like "dataset presenter", :gpdb_view
 end

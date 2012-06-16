@@ -4,11 +4,11 @@ class DatabaseObjectsController < GpdbController
     account = authorized_gpdb_account(schema)
     Dataset.refresh(account, schema)
 
-    db_objects = schema.datasets.
+    datasets = schema.datasets.
         with_name_like(params[:filter]).
         order("lower(name)").
         paginate(params.slice(:page, :per_page))
-    present db_objects
+    present datasets
   end
 
   def show
