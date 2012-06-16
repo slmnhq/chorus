@@ -140,6 +140,11 @@ FactoryGirl.define do
       new_name "new_instance_name"
       old_name "old_instance_name"
     end
+
+    factory :workfile_created_event, :class => Events::WORKFILE_CREATED do
+      workfile { FactoryGirl.create(:workfile_version).workfile }
+      workspace
+    end
   end
 end
 

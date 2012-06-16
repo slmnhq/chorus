@@ -20,6 +20,10 @@
 
         GREENPLUM_INSTANCE_CHANGED_OWNER: {
             links: [ "actor", "greenplumInstance", "newOwner" ]
+        },
+
+        WORKFILE_CREATED: {
+            links: [ "actor", "workfile", "workspace" ]
         }
     };
 
