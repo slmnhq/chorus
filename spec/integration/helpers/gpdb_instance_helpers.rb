@@ -8,6 +8,18 @@ def find_gpdb_instance_dialog
   wait_until { find("input[name=dbPassword]").visible? }
 end
 
+# Update fields in open gpdb instance dialog.
+=begin
+def update_gpdb_instance_dialog(params={})
+  within(".register_existing_greenplum") do
+
+    fill_in 'dbUsername', :with => "gpadmi"
+    fill_in 'dbPassword', :with => "secre"
+  end
+    click_button "Add Instance"
+end
+=end
+
 # Register a new GPDB instance, parameters: name, desc, host, port, dbuser, dbpass, shared.
 def create_gpdb_instance(params={})
   name = params[:name] || "GPDB_instance#{Time.now.to_i}"
@@ -41,14 +53,11 @@ end
 # Register a new instance on Gillette, the only params available: name, desc, shared. Other parameters
 # read from webpath.yaml
 def create_gpdb_gillette_instance(params={})
-  name = params[:name] || "GPDB_GilletteInstance#{Time.now.to_i}"
-  desc = params[:desc] || "Creating Gillette GPDB Instance"
-  create_gpdb_instance(:name => name,
-                       :desc => desc,
-                       :host => WEBPATH['gpdb_instance']['gillette_host'],
-                       :port => WEBPATH['gpdb_instance']['gillette_port'],
-                       :dbuser => WEBPATH['gpdb_instance']['gillette_user'],
-                       :dbpass => WEBPATH['gpdb_instance']['gillette_pass'],
+  create_gpdb_instance(:name => params[:name] || "GPDB_GilletteInstance#{Time.now.to_i}",
+                       :desc => params[:desc] || "Creating Gillette GPDB Instance",
+                       :host => params[:host] || WEBPATH['gpdb_instance']['gillette_host'],
+                       :port => params[:port] || WEBPATH['gpdb_instance']['gillette_port'],
+                       :dbuser => params[:dbuser] || WEBPATH['gpdb_instance']['gillette_user'],
+                       :dbpass => params[:dbpass] || WEBPATH['gpdb_instance']['gillette_pass'],
                        :shared => params[:shared])
-  verify_instance_name(name)
 end

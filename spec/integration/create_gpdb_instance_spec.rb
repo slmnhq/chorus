@@ -13,84 +13,37 @@ describe " add an instance " do
   end
 
   it "tries to create an instance with an invalid name" do
-
-      within("#facebox") do
-        wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
-        choose("register_existing_greenplum")
-        wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
-        within(".register_existing_greenplum") do
-          find_gpdb_instance_dialog
-
-          fill_in 'name', :with => "instance name"
-          fill_in 'description', :with => "GPDB instance creation"
-          fill_in 'host', :with => "gillette.sf.pivotallabs.com"
-          fill_in 'port', :with => "5432"
-          fill_in 'dbUsername', :with => "gpadmin"
-          fill_in 'dbPassword', :with => "secret"
-
-          check("register_greenplum_shared")
-        end
-
-        find(".submit").click
-        field_errors.should_not be_empty
-
-        within(".register_existing_greenplum") do
-        fill_in 'name', :with => "instance_name"
-        end
-      find(".submit").click
-      end
-
-      find('.instance_list').should have_content("instance_name")
-      visit("/#/instances")
-      find('.instance_list').should have_content("instance_name")
-    end
+    create_gpdb_gillette_instance(:name => "instance name")
+    field_errors.should_not be_empty
+    create_gpdb_gillette_instance(:name => "instance_name")
+    verify_instance_name("instance_name")
+  end
 
   it "tries to create an instance with an invalid host and port" do
-    within("#facebox") do
-      wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
-      choose("register_existing_greenplum")
-      wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
-      within(".register_existing_greenplum") do
-        find_gpdb_instance_dialog
-
-        fill_in 'name', :with => "invalid_instance"
-        fill_in 'description', :with => "GPDB instance creation"
-        fill_in 'host', :with => "gillette.sf.pivotallabs.com"
-        fill_in 'port', :with => "2344"
-        fill_in 'dbUsername', :with => "gpadmin"
-        fill_in 'dbPassword', :with => "secret"
-        check("register_greenplum_shared")
-      end
-      click_button "Add Instance"
-      page.find('.errors').should have_content("could not connect to server")
-
-      within(".register_existing_greenplum") do
-        fill_in 'host', :with => "gillett.sf.pivotallabs.com"
-        fill_in 'port', :with => "5432"
-      end
-      click_button "Add Instance"
-      page.find('.errors').should have_content("could not translate host name")
-
-      within(".register_existing_greenplum") do
-        fill_in 'host', :with => "gillett.sf.pivotallabs.com"
-        fill_in 'port', :with => "2344"
-      end
-      click_button "Add Instance"
-      page.find('.errors').should have_content("could not translate host name")
-
-      within(".register_existing_greenplum")do
-        fill_in 'host', :with => "gillette.sf.pivotallabs.com"
-        fill_in 'port', :with => "5432"
-      end
-      click_button "Add Instance"
-    end
-    find('.instance_list').should have_content("invalid_instance")
-    visit("/#/instances")
-    find('.instance_list').should have_content("invalid_instance")
+    # Incorrect port
+    create_gpdb_gillette_instance(:name => "invalid_instance", :port => 2344)
+    page.find('.errors').should have_content("could not connect to server")
+    # Incorrect host
+    create_gpdb_gillette_instance(:name => "invalid_instance", :host => "gillett.sf.pivotallabs.com")
+    page.find('.errors').should have_content("could not translate host name")
+    # Incorrect host and port
+    create_gpdb_gillette_instance(:name => "invalid_instance", :host => "gillett.sf.pivotallabs.com", :port => 2344)
+    page.find('.errors').should have_content("could not translate host name")
+    # Still can register an instance
+    create_gpdb_gillette_instance(:name => "valid_instance")
+    verify_instance_name("valid_instance")
   end
 
   it "tries to create an instance with an invalid db username and password" do
-      within("#facebox") do
+=begin
+    create_gpdb_gillette_instance(:dbpass => "secre")
+    page.find('.errors').should have_content("FATAL: password authentication failed for user")
+    create_gpdb_gillette_instance(:dbuser => "gpadmi" :dbpass => "secre")
+    page.find('.errors').should have_content("FATAL: password authentication failed for user")
+
+  end
+=end
+     within("#facebox") do
         wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
         choose("register_existing_greenplum")
         wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
@@ -114,14 +67,12 @@ describe " add an instance " do
         end
         click_button "Add Instance"
         page.find('.errors').should have_content("FATAL: password authentication failed for user")
-
         within(".register_existing_greenplum") do
           fill_in 'dbUsername', :with => "gpadmi"
           fill_in 'dbPassword', :with => "secret"
         end
         click_button "Add Instance"
         page.find('.errors').should have_content("FATAL: password authentication failed for user")
-
         within(".register_existing_greenplum")do
           fill_in 'dbUsername', :with => "gpadmin"
           fill_in 'dbPassword', :with => "secret"
