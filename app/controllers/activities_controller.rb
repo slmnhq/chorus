@@ -10,23 +10,20 @@ class ActivitiesController < ApplicationController
   private
 
   def activities
-    if (entity = parent_entity)
+    if (entity = get_parent_entity)
       entity.activities
     else
       Activity.global
     end
   end
 
-  def parent_entity
+  def get_parent_entity
     id_key = params.keys.find { |key| key =~ /\w+_id/ }
 
-    case id_key
-    when "instance_id"
-      Instance.find(params[:instance_id])
-    when "user_id"
-      User.find(params[:user_id])
-    when "hadoop_instance_id"
-      HadoopInstance.find(params[:hadoop_instance_id])
+    if id_key
+      id = params[id_key]
+      klass = id_key.gsub(/_id$/, '').classify.constantize
+      klass.find(id)
     end
   end
 end
