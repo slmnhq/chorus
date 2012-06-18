@@ -18,4 +18,4 @@ alias ll='ls -la'
 
 alias st='script/test'
 alias rage='rake db:migrate db:test:prepare db:test:prepare:legacy'
-alias smash='st && rake phantom && rspec spec/integration'
+alias run_all_tests='st && rake phantom && rspec spec/integration'
