@@ -1,16 +1,16 @@
 {
   "response": {
-    "id": 1,
+    "id": 268,
     "workspace": {
-      "id": 1,
-      "name": "workspace1",
+      "id": 2348,
+      "name": "workspace2",
       "summary": null,
       "owner": {
-        "id": 8,
-        "username": "user6",
+        "id": 1998,
+        "username": "user15",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person7@example.com",
+        "email": "person15@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -29,14 +29,20 @@
       },
       "permission": [
         "admin"
-      ]
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false,
+      "sandbox_info": null,
+      "latest_comment_list": null
     },
     "owner": {
-      "id": 9,
-      "username": "user7",
+      "id": 1999,
+      "username": "user16",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person8@example.com",
+      "email": "person16@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -46,16 +52,20 @@
         "icon": "/images/default-user-icon.png"
       }
     },
+    "file_name": "workfile.sql",
+    "file_type": "sql",
+    "latest_version_id": 308,
+    "has_draft": false,
     "version_info": {
-      "id": 1,
+      "id": 308,
       "version_num": 1,
       "commit_message": "Factory commit message",
       "owner": {
-        "id": 10,
-        "username": "user8",
+        "id": 2000,
+        "username": "user17",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person9@example.com",
+        "email": "person17@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -66,11 +76,11 @@
         }
       },
       "modifier": {
-        "id": 11,
-        "username": "user9",
+        "id": 2001,
+        "username": "user18",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person10@example.com",
+        "email": "person18@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -80,14 +90,11 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-06-08T17:44:37Z",
-      "updated_at": "2012-06-08T17:44:37Z",
-      "content_url": "/system/workfile_versions/contents/000/000/001/original/workfile.sql?1339177477",
+      "created_at": "2012-06-18T19:19:48Z",
+      "updated_at": "2012-06-18T19:19:48Z",
+      "content_url": "/system/workfile_versions/contents/000/000/308/original/workfile.sql?1340047188",
       "icon_url": null,
       "content": "SELECT test FROM rspec WHERE lame = 'false';\n"
-    },
-    "file_name": "workfile.sql",
-    "file_type": "sql",
-    "latest_version_num": 1
+    }
   }
 }

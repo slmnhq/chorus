@@ -3,18 +3,20 @@ require 'spec_helper'
 describe WorkfileVersionPresenter, :type => :view do
   before(:each) do
     @owner = FactoryGirl.create :user
-    workfile = FactoryGirl.create :workfile, :owner => @owner
+    @workfile = FactoryGirl.create :workfile, :owner => @owner
 
-    @version = FactoryGirl.build(:workfile_version, :workfile => workfile, :owner => @owner, :modifier => @owner)
+    @version = FactoryGirl.build(:workfile_version, :workfile => @workfile, :owner => @owner, :modifier => @owner)
     @version.contents = test_file(file_name, mime_type)
     @version.save!
     @presenter = WorkfileVersionPresenter.new(@version, view)
+
+    stub(view).current_user { @owner }
   end
 
 
   describe "#to_hash" do
     before do
-      @hash = @presenter.to_hash
+      @hash = @presenter.to_hash[:version_info]
     end
 
     let(:file_name) { "small1.gif" }
@@ -40,8 +42,9 @@ describe WorkfileVersionPresenter, :type => :view do
 
       workfile_version = FactoryGirl.build :workfile_version, :commit_message => bad_value
       workfile_version.contents = test_file('small1.gif')
+      workfile_version.workfile = @workfile
 
-      json = WorkfileVersionPresenter.new(workfile_version, view).to_hash
+      json = WorkfileVersionPresenter.new(workfile_version, view).to_hash[:version_info]
 
       json[:commit_message].should_not match "<"
     end

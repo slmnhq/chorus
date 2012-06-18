@@ -1,8 +1,8 @@
 chorus.collections.WorkfileVersionSet = chorus.collections.Base.extend({
     constructorName: "WorkfileVersionSet",
-    urlTemplate:"workspace/{{workspaceId}}/workfile/{{workfileId}}/version",
+    urlTemplate:"workfiles/{{workfileId}}/versions",
     model:chorus.models.Workfile,
     comparator:function (model) {
-        return -model.get("versionNum");
+        return -model.get("versionInfo").versionNum;
     }
 });

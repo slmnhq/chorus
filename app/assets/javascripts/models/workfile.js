@@ -32,7 +32,7 @@
             if (this.isLatestVersion() && !options.version) {
                 return "workspaces/{{workspace.id}}/workfiles/{{id}}"
             } else {
-                var version = options.version || this.get('versionInfo').versionNum;
+                var version = options.version || this.get('versionInfo').id;
                 return "workspaces/{{workspace.id}}/workfiles/{{id}}/versions/" + version;
             }
         },
@@ -166,8 +166,8 @@
         },
 
         isLatestVersion: function() {
-            var versionNum = this.get('versionInfo') && this.get('versionInfo').versionNum;
-            return (!versionNum || versionNum === this.get("latestVersionNum"))
+            var versionNum = this.get('versionInfo') && this.get('versionInfo').id;
+            return (!versionNum || versionNum === this.get("latestVersionId"))
         },
 
         save: function(attrs, options) {

@@ -20,10 +20,9 @@ describe WorkfilePresenter, :type => :view do
       @hash.should have_key(:workspace)
       @hash.should have_key(:owner)
 
-      @hash.should have_key(:version_info)
       @hash.should have_key(:file_name)
       @hash.should have_key(:file_type)
-      @hash.should have_key(:latest_version_num)
+      @hash.should have_key(:latest_version_id)
       @hash.should have_key(:has_draft)
     end
 
@@ -33,10 +32,6 @@ describe WorkfilePresenter, :type => :view do
 
     it "uses the user presenter to serialize the owner" do
       @hash[:owner].to_hash.should == (UserPresenter.new(@user, view).to_hash)
-    end
-
-    it "uses the version presenter to serialize the last version" do
-      @hash[:version_info].to_hash.should == (WorkfileVersionPresenter.new(@workfile.versions.last, view).to_hash)
     end
 
     it "uses the workfile file name" do

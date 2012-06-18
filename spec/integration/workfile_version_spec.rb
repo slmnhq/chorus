@@ -60,4 +60,28 @@ describe "save as Menu" do
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
     page.find("textarea.text_editor").should have_content('new Blood -2')
   end
+
+  it "open the specific version" do
+    page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood")')
+    page.find(".save .save_as").click
+    wait_until { page.find(".qtip[aria-hidden=false]") }
+    page.find("a.save_as_current").click
+    wait_until { page.find(".qtip[aria-hidden=true]") }
+    wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
+
+    page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood -2")')
+    page.find(".save .save_as").click
+    wait_until { page.find(".qtip[aria-hidden=false]") }
+    page.find("a.save_as_new").click
+    wait_until { page.find(".qtip[aria-hidden=true]") }
+    fill_in 'commitMessage', :with => "commit Message -2"
+    click_button "Save New Version"
+    wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
+
+    page.find("a.version_list").click
+    wait_until { page.find(".qtip[aria-hidden=false]") }
+    page.find(".workfile_version_list li:last-child a").click
+    wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+\/versions\/\d+/ }
+    page.find("textarea.text_editor").should have_content('new Blood')
+  end
 end

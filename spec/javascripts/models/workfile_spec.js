@@ -203,16 +203,16 @@ describe("chorus.models.Workfile", function() {
         describe("#showUrl", function() {
             context("when the workfile is the most recent version", function() {
                 it("does not include a version", function() {
-                    this.model.get('versionInfo').versionNum = 1;
-                    this.model.set({ latestVersionNum: 1 })
+                    this.model.get('versionInfo').id = 1;
+                    this.model.set({ latestVersionId: 1 })
                     expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5")
                 });
             });
 
             context("when the workfile is not the most recent version", function() {
                 it("includes its version number", function() {
-                    this.model.get("versionInfo").versionNum = 6
-                    this.model.set({latestVersionNum: 9 })
+                    this.model.get("versionInfo").id = 6
+                    this.model.set({latestVersionId: 9 })
                     expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5/versions/6")
                 });
             });
@@ -364,21 +364,21 @@ describe("chorus.models.Workfile", function() {
         });
 
         it("returns false when its version is not the current version", function() {
-            this.model.set({latestVersionNum: 6});
-            this.model.get('versionInfo').versionNum = 3
+            this.model.set({latestVersionId: 6});
+            this.model.get('versionInfo').id = 3
             expect(this.model.canEdit()).toBeFalsy();
         });
 
         it("returns true when its version is the current version", function() {
-            this.model.set({latestVersionNum: 6});
-            this.model.get('versionInfo').versionNum = 6
+            this.model.set({latestVersionId: 6});
+            this.model.get('versionInfo').id = 6
             expect(this.model.canEdit()).toBeTruthy();
         });
 
         it("returns false when its workspace is archived", function() {
             this.model.workspace().isActive.andReturn(false);
-            this.model.set({latestVersionNum: 6});
-            this.model.get('versionInfo').versionNum = 6
+            this.model.set({latestVersionId: 6});
+            this.model.get('versionInfo').id = 6
             expect(this.model.canEdit()).toBeFalsy();
         });
     });
@@ -406,7 +406,7 @@ describe("chorus.models.Workfile", function() {
         });
 
         it("sets the workspaceId attribute on the model", function() {
-            this.collection.add({versionInfo: {versionNum: 5}});
+            this.collection.add({versionInfo: {id: 5}});
 
             expect(this.collection.models[0]).toBeA(chorus.models.Workfile);
             expect(this.collection.models[0].workspace().id).toBe(this.collection.attributes.workspaceId);
@@ -416,8 +416,8 @@ describe("chorus.models.Workfile", function() {
     describe("#fetch", function() {
         context("when the versionNum equals the latestVersionNum", function() {
             beforeEach(function() {
-                this.model.get('versionInfo').versionNum = 99
-                this.model.set({ latestVersionNum: 99 });
+                this.model.get('versionInfo').id = 99
+                this.model.set({ latestVersionId: 99 });
                 this.model.fetch();
             })
 
@@ -428,9 +428,8 @@ describe("chorus.models.Workfile", function() {
 
         context("when the versionNum is not equal to the latestVersionNum", function() {
             beforeEach(function() {
-                this.model.get('versionInfo').versionNum = 88;
                 this.model.get('versionInfo').id = 123;
-                this.model.set({ latestVersionNum: 99 });
+                this.model.set({ latestVersionId: 99 });
                 this.model.fetch();
             })
 
@@ -447,8 +446,8 @@ describe("chorus.models.Workfile", function() {
 
         context("with an old version", function() {
             beforeEach(function() {
-                this.model.get('versionInfo').versionNum = 88
-                this.model.set({ latestVersionNum: 99 });
+                this.model.get('versionInfo').id = 88
+                this.model.set({ latestVersionId: 99 });
                 this.model.save();
             })
 
@@ -459,10 +458,10 @@ describe("chorus.models.Workfile", function() {
 
         context("with the latest version", function() {
             beforeEach(function() {
-                this.model.get('versionInfo').versionNum = 99
-                this.model.get('versionInfo').id = 213
+                this.model.get('versionInfo').id = 99
+//                this.model.get('versionInfo').id = 213
                 this.model.get('versionInfo').lastUpdatedStamp = "THEVERSIONSTAMP"
-                this.model.set({ latestVersionNum: 99, lastUpdatedStamp: "THEWORKFILESTAMP"});
+                this.model.set({ latestVersionId: 99, lastUpdatedStamp: "THEWORKFILESTAMP"});
             })
 
             context("replacing the current version", function() {
@@ -471,7 +470,7 @@ describe("chorus.models.Workfile", function() {
                 })
 
                 it("saves to the correct url", function() {
-                    expect(this.server.lastUpdate().url).toBe("/workfiles/10020/versions/213")
+                    expect(this.server.lastUpdate().url).toBe("/workfiles/10020/versions/99")
                 });
 
                 it("saves with the versionInfo lastUpdatedStamp", function() {

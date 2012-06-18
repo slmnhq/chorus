@@ -6,12 +6,11 @@ class WorkfilePresenter < Presenter
         :id => id,
         :workspace => present(workspace),
         :owner => present(owner),
-        :version_info => present(last_version),
         :file_name => h(file_name),
 
         # TODO: Should these go in version_info?
         :file_type => h(last_version.file_type),
-        :latest_version_num => last_version.version_num,
+        :latest_version_id => last_version.id,
         :has_draft => has_draft(@view_context.current_user)
     }
   end

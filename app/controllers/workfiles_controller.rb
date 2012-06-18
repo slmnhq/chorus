@@ -4,14 +4,14 @@ class WorkfilesController < ApplicationController
   def show
     workfile = Workfile.find(params[:id])
     authorize! :show, workfile.workspace
-    present workfile
+    present workfile.last_version
   end
 
   def create
     workspace = Workspace.find(params[:workspace_id])
     authorize! :workfile_change, workspace
 
-    present create_workfile(workspace, uploaded_file)
+    present create_workfile(workspace, uploaded_file).last_version
   end
 
   def index
@@ -21,7 +21,9 @@ class WorkfilesController < ApplicationController
     workfiles = workspace.workfiles.order(workfile_sort(params[:order]))
     workfiles = workfiles.by_type(params[:file_type]) if params.has_key?(:file_type)
 
-    present workfiles.paginate(params.slice(:page, :per_page))
+    workfile_versions = workfiles.map(&:last_version)
+
+    present workfile_versions.paginate(params.slice(:page, :per_page))
   end
 
   def destroy

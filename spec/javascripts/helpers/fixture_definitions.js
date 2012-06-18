@@ -75,6 +75,8 @@ window.rspecFixtureDefinitions = {
     },
     workfileSet: {},
 
+    workfileVersion: {},
+
 //    sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
 //
 //    csvImport: { model: "CSVImport" },

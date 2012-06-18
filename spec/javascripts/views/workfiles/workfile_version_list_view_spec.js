@@ -1,33 +1,22 @@
 describe("chorus.views.WorkfileVersionList", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.WorkfileVersionSet([
-            rspecFixtures.workfile.sql({
-                fileName: "Foo",
-                versionInfo: {
-                    versionNum: 1,
-                    modifier: {
-                        id: "1",
-                        firstName: "Bob",
-                        lastName: "Smith"
-                    },
-                    updatedAt: "2011-11-29T10:46:03Z"
-                }
-            }),
+        var version2attributes = rspecFixtures.workfileVersion({
+            versionInfo: {
+                modifier: {firstName: 'Bob'},
+                versionNum: 2,
+                updatedAt: '2012-11-29T10:00:00Z'
+            }
+        }).attributes;
 
-            rspecFixtures.workfile.sql({
-                fileName: "Foo",
-                versionInfo: {
-                    versionNum: 2,
-                    modifier: {
-                        id: "1",
-                        firstName: "Jim",
-                        lastName: "Jones"
-                    },
-                    updatedAt: "2012-11-29T10:46:03Z"
-                }
-            })
-        ]);
+        var version1attributes = rspecFixtures.workfileVersion({
+            versionInfo: {
+                modifier: {firstName: 'Rob'},
+                versionNum: 1,
+                updatedAt: '2011-11-29T10:00:00Z'
+            }
+        }).attributes;
 
+        this.collection = new chorus.collections.WorkfileVersionSet([version1attributes, version2attributes]);
         this.view = new chorus.views.WorkfileVersionList({ collection: this.collection });
         this.view.render();
     });
@@ -43,11 +32,11 @@ describe("chorus.views.WorkfileVersionList", function() {
 
     it("displays the author and date for each item", function() {
         expect(this.view.$("li:eq(0) .version_details")).toContainTranslation("workfile.version_saved_by", {
-            authorName: "Jim Jones", formattedDate: "November 29, 2012"
+            authorName: "Bob Doe", formattedDate: "November 29, 2012"
         });
 
         expect(this.view.$("li:eq(1) .version_details")).toContainTranslation("workfile.version_saved_by", {
-            authorName: "Bob Smith", formattedDate: "November 29, 2011"
+            authorName: "Rob Doe", formattedDate: "November 29, 2011"
         });
     });
 });

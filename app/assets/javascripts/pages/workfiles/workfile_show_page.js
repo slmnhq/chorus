@@ -2,11 +2,11 @@
     chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         helpId: "workfile",
 
-        setup: function(workspaceId, workfileId, versionNum) {
+        setup: function(workspaceId, workfileId, versionId) {
             this.workspaceId = workspaceId;
             this.model = new chorus.models.Workfile({id:workfileId, workspace: {id: workspaceId}});
-            if (versionNum) {
-                this.model.set({ versionInfo : { versionNum: versionNum } }, { silent:true })
+            if (versionId) {
+                this.model.set({ versionInfo : { id: versionId } }, { silent:true })
             }
 
             this.model.fetch();

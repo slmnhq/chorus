@@ -3,8 +3,8 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
         this.workfile = rspecFixtures.workfile.sql({
             id: 55,
             workspace: { id: 44 },
-            versionInfo: { versionNum: 4 },
-            latestVersionNum: 4
+            versionInfo: { id: 4 },
+            latestVersionId: 4
         });
         var launchElement = $("<a></a>");
         this.dialog = new chorus.dialogs.WorkfileNewVersion({ pageModel: this.workfile, launchElement: launchElement });

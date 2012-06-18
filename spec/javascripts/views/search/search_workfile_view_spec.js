@@ -6,6 +6,7 @@ describe("chorus.views.SearchWorkfile", function() {
                 workspace: {id: "2", name: "Test"},
                 fileName: "analysis.sql",
                 fileType: "sql",
+                latestVersionId: 1,
                 comments: [
                     {highlightedAttributes: { "content": "nice <em>cool<\/em> file"   }, "content": "nice cool file", "lastUpdatedStamp": "2012-02-28 14:07:34", "isPublished": false, "id": "10000", "workspaceId": "10000", "isComment": false, "isInsight": false, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
                     {highlightedAttributes: { "content": "nice <em>cool<\/em> comment"}, "content": "nice cool comment", "lastUpdatedStamp": "2012-02-28 14:07:46", "isPublished": false, "id": "10001", "workspaceId": "10000", "isComment": true, "isInsight": false, "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}},
@@ -16,7 +17,7 @@ describe("chorus.views.SearchWorkfile", function() {
                     lastUpdatedStamp: "2012-04-02 14:56:19.34",
                     modifiedBy: {id:"InitialUser", lastName:"Admin", firstName:"EDC"},
                     versionFileId: "1333403779156_199",
-                    versionNum: 1,
+                    id: 1,
                     versionOwner: "edcadmin"
                 }
             }
@@ -33,7 +34,7 @@ describe("chorus.views.SearchWorkfile", function() {
     });
 
     it("has a link to the workfile for each workfile in the collection", function() {
-        expect(this.view.$('a.name').attr('href')).toBe("#/workspaces/2/workfiles/1/versions/1");
+        expect(this.view.$('a.name').attr('href')).toBe("#/workspaces/2/workfiles/1");
     });
 
     it("shows which workspace each result was found in", function() {

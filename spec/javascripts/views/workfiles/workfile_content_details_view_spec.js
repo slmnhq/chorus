@@ -170,7 +170,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
                 context("when the workfile is not the most recent version", function() {
                     beforeEach(function() {
-                        this.view.model.set({ versionInfo: { versionNum: 1 }, latestVersionNum: 2 });
+                        this.view.model.set({ versionInfo: { id: 1 }, latestVersionId: 2 });
                         this.view.render();
                         this.view.$(".save_as").click();
                     });

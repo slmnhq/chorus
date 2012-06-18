@@ -6,7 +6,7 @@ class WorkfileVersionsController < ApplicationController
     workfile_version.update_content(params[:workfile][:content])
     remove_draft(workfile)
 
-    present workfile
+    present workfile.last_version
   end
 
   def create
@@ -17,9 +17,23 @@ class WorkfileVersionsController < ApplicationController
     workfile.create_new_version(current_user, file, params[:workfile][:commit_message])
     remove_draft(workfile)
 
-    present workfile
+    present workfile.last_version
   end
 
+  def show
+    workfile = Workfile.find(params[:workfile_id])
+    authorize! :show,  workfile.workspace
+
+    workfile_version = WorkfileVersion.find(params[:id])
+    present workfile_version
+  end
+
+  def index
+    workfile = Workfile.find(params[:workfile_id])
+    authorize! :show,  workfile.workspace
+
+    present workfile.versions
+  end
   private
 
   def remove_draft(workfile)
