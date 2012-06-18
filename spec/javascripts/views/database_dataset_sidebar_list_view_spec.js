@@ -3,7 +3,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
 
         chorus.page = { workspace: rspecFixtures.workspace({name: "new_workspace"}) };
-        this.schema = newFixtures.sandbox().schema();
+        this.schema = chorus.page.workspace.sandbox().schema();
         this.view = new chorus.views.DatabaseDatasetSidebarList({schema: this.schema});
 
         stubDefer();
@@ -282,7 +282,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
 
     describe("after workfile execution", function() {
         beforeEach(function() {
-            this.executionSchema = newFixtures.sandbox().schema();
+            this.executionSchema = rspecFixtures.workspace().sandbox().schema();
             chorus.PageEvents.broadcast("workfile:executed", rspecFixtures.workfile.text(), this.executionSchema.attributes)
         });
 

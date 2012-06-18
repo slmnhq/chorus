@@ -43,16 +43,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
             this.server.completeFetchFor(this.workfile);
             this.server.completeFetchFor(this.workfile.workspace(), rspecFixtures.workspace({
-                id: this.workfile.workspace().id,
-                sandboxInfo : {
-                    databaseId: 4,
-                    databaseName: "db",
-                    instanceId: 5,
-                    instanceName: "instance",
-                    sandboxId: "10001",
-                    schemaId: 6,
-                    schemaName: "schema"
-                }
+                id: this.workfile.workspace().id
             }));
 
             this.view.render();
@@ -108,16 +99,7 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
             this.server.completeFetchFor(this.workfile);
             this.server.completeFetchFor(this.workfile.workspace(), rspecFixtures.workspace({
-                id: this.workfile.workspace().id,
-                sandboxInfo : {
-                    databaseId: 4,
-                    databaseName: "db",
-                    instanceId: 5,
-                    instanceName: "instance",
-                    sandboxId: "10001",
-                    schemaId: 6,
-                    schemaName: "schema"
-                }
+                id: this.workfile.workspace().id
             }));
 
             this.view.render();

@@ -1,6 +1,6 @@
 describe("chorus.views.DatabaseFunctionSidebarList", function() {
     beforeEach(function() {
-        this.schema = newFixtures.sandbox({ schemaName: "righteous_tables" }).schema();
+        this.schema = rspecFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
         this.modalSpy = stubModals();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
         this.view = new chorus.views.DatabaseFunctionSidebarList({schema: this.schema});

@@ -341,20 +341,15 @@ describe("chorus.models.Workspace", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.workspace({
                     sandboxInfo: {
-                        databaseId: 4,
-                        databaseName: "db",
-                        instanceId: 5,
-                        instanceName: "instance",
-                        sandboxId: "10001",
-                        schemaId: 6,
-                        schemaName: "schema"
+                        id: 6, name: "schema",
+                        database: { id: 4, name: "db", instance: { id: 5, name: "instance" } }
                     }
                 })
             });
 
             it("returns a Sandbox model", function() {
                 expect(this.model.sandbox()).toBeA(chorus.models.Sandbox);
-                expect(this.model.sandbox().get("id")).toBe("10001")
+                expect(this.model.sandbox().get("id")).toBe(6);
             });
 
             it("populates the workspaceId", function() {
@@ -368,17 +363,8 @@ describe("chorus.models.Workspace", function() {
 
         context("when the workspace does not have a sandbox", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workspace({
-                    sandboxInfo: {
-                        databaseId: null,
-                        databaseName: null,
-                        instanceId: null,
-                        instanceName: null,
-                        sandboxId: null,
-                        schemaId: null,
-                        schemaName: null
-                    }
-                })
+                this.model = rspecFixtures.workspace();
+                this.model.unset("sandboxInfo");
             });
 
             it("returns undefined", function() {

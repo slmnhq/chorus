@@ -122,7 +122,8 @@ describe WorkspacesController do
 
   describe "#show" do
     let(:joe) { FactoryGirl.create(:user) }
-    let(:workspace) { FactoryGirl.create(:workspace) }
+    let(:sandbox) { FactoryGirl.create(:gpdb_schema)}
+    let(:workspace) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
 
     context "with a valid workspace id" do
       it "uses authentication" do

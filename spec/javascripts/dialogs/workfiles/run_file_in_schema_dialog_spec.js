@@ -77,15 +77,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
         context("after the workspace fetch completes", function () {
             context("when the workspace has a sandbox", function () {
                 beforeEach(function () {
-                    this.server.completeFetchFor(rspecFixtures.workspace({id:999, sandboxInfo:{
-                        instanceId:44,
-                        instanceName:"instance",
-                        databaseId:55,
-                        databaseName:"database",
-                        schemaId:66,
-                        schemaName:"schema",
-                        sandboxId:"10001"
-                    }}));
+                    this.server.completeFetchFor(rspecFixtures.workspace({ id: 999 }));
                 });
 
                 it("displays the canonical name for the sandbox schema", function () {
@@ -120,16 +112,11 @@ describe("chorus.dialogs.RunFileInSchema", function () {
 
             context("when the workspace does not have a sandbox", function () {
                 beforeEach(function () {
-                    this.server.completeFetchFor(rspecFixtures.workspace({id:999, sandboxInfo:{
-                        instanceId:null,
-                        instanceName:null,
-                        databaseId:null,
-                        databaseName:null,
-                        schemaId:null,
-                        schemaName:null,
-                        sandboxId:null
-                    }}));
+                    var workspace = rspecFixtures.workspace({id:999 })
+                    workspace.unset("sandboxInfo");
+                    this.server.completeFetchFor(workspace);
                 });
+
                 it("disables the 'within the workspace sandbox' radio button", function () {
                     expect(this.dialog.$("input#sandbox_schema")).toBeDisabled();
                     expect(this.dialog.$("label[for=sandbox_schema]")).toHaveClass('disabled');
@@ -138,15 +125,9 @@ describe("chorus.dialogs.RunFileInSchema", function () {
 
             describe("button handling", function () {
                 beforeEach(function () {
-                    this.server.completeFetchFor(rspecFixtures.workspace({id:999, sandboxInfo:{
-                        instanceId:44,
-                        instanceName:"instance",
-                        databaseId:55,
-                        databaseName:"database",
-                        schemaId:66,
-                        schemaName:"schema",
-                        sandboxId:"10001"
-                    }}));
+                    this.server.completeFetchFor(rspecFixtures.workspace({ id:999, sandboxInfo:{ id: 66, name: "schema",
+                                                 database: { id: 55, name: "database", instance: { id: 44, name: "instance" } } }
+                    }));
 
                     spyOn(this.dialog.schemaPicker, "fieldValues").andReturn({
                         instance:5,
@@ -255,15 +236,7 @@ describe("chorus.dialogs.RunFileInSchema", function () {
                 });
                 context("and then selecting 'within the workspace sandbox'", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(rspecFixtures.workspace({id: 999, sandboxInfo: {
-                            instanceId: 44,
-                            instanceName: "instance",
-                            databaseId: 55,
-                            databaseName: "database",
-                            schemaId: 66,
-                            schemaName: "schema",
-                            sandboxId: "10001"
-                        }}));
+                        this.server.completeFetchFor(rspecFixtures.workspace({ id: 999 }));
                         this.dialog.$("input#sandbox_schema").click();
                     });
                     it("clears the errors", function() {

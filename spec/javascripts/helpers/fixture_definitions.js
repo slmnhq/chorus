@@ -61,8 +61,8 @@ window.rspecFixtureDefinitions = {
     schema:    { unique: [ "id", "database.id", "database.instance.id" ] },
     schemaSet: { unique: [ "id" ] },
 
-    workspace:    { unique: [ "id", "sandboxInfo.sandboxId" ] },
-    workspaceSet: { unique: [ "id", "sandboxInfo.sandboxId" ] },
+    workspace:    { unique: [ "id" ] },
+    workspaceSet: { unique: [ "id" ] },
 
     workfile: {
         unique: [ "id" ],

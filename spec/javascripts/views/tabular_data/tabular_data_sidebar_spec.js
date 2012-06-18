@@ -370,15 +370,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                                     beforeEach(function() {
                                         delete this.view.options.workspace._sandbox;
                                         this.view.options.workspace.set({
-                                            "sandboxInfo": {
-                                                databaseId: null,
-                                                databaseName: null,
-                                                instanceId: null,
-                                                instanceName: null,
-                                                sandboxId: null,
-                                                schemaId: null,
-                                                schemaName: null
-                                            }
+                                            "sandboxInfo": null
                                         })
                                         this.view.render();
                                     });

@@ -70,18 +70,7 @@ chorus.models.Sandbox = chorus.models.Base.extend({
     },
 
     schema: function() {
-        this._schema = this._schema || new chorus.models.Schema({
-            id: this.get("schemaId"),
-            name: this.get("schemaName"),
-            database: {
-                id: this.get("databaseId"),
-                name: this.get("databaseName"),
-                instance: {
-                    id: this.get("instanceId"),
-                    name: this.get("instanceName")
-                }
-            }
-        });
+        this._schema = this._schema || new chorus.models.Schema(this.attributes);
 
         return this._schema;
     },

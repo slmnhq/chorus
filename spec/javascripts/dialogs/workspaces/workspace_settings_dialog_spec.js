@@ -12,9 +12,12 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 lastName: "D"
             },
             archivedAt: null,
-            archiver: null
+            archiver: null,
+            sandboxInfo: {
+                name: "analytics",
+                database: { name: "Analytics", instance: { name: "Gillette" } }
+            }
         });
-        this.workspace.unset("sandboxInfo");
 
         this.workspace.members().add([
             new chorus.models.User({ id: 11, firstName: "Mikey", lastName: "B" }),
@@ -82,18 +85,6 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
         describe("sandbox location", function() {
             context("with a sandbox", function() {
-                beforeEach(function() {
-                    this.workspace.set({
-                        sandboxInfo: {
-                            databaseName: "Analytics",
-                            instanceName: "Gillette",
-                            sandboxId: "10070",
-                            schemaName: "analytics"
-                        }
-                    })
-                    this.dialog.render();
-                });
-
                 it("shows sandbox info", function() {
                     expect(this.dialog.$(".sandboxLocation").text()).toBe("Gillette.Analytics.analytics");
                 });
@@ -101,6 +92,10 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
             context("without a sandbox", function() {
                 it("shows sandbox info", function() {
+                    var workspace = rspecFixtures.workspace();
+                    workspace.unset("sandboxInfo")
+                    this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: workspace });
+                    this.dialog.render();
                     expect(this.dialog.$(".sandboxLocation").text()).toMatchTranslation("workspace.settings.sandbox.none");
                 });
             });

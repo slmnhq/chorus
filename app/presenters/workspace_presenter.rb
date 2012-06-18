@@ -1,5 +1,5 @@
 class WorkspacePresenter < Presenter
-  delegate :id, :name, :summary, :owner, :archiver, :archived_at, :public, :image, :permissions_for, :has_added_member, :has_added_workfile, :has_added_sandbox, :has_changed_settings, to: :model
+  delegate :id, :name, :summary, :owner, :archiver, :archived_at, :public, :image, :sandbox, :permissions_for, :has_added_member, :has_added_workfile, :has_added_sandbox, :has_changed_settings, to: :model
 
   def to_hash
     {
@@ -16,7 +16,7 @@ class WorkspacePresenter < Presenter
         :has_added_workfile => has_added_workfile,
         :has_added_sandbox => has_added_sandbox,
         :has_changed_settings => has_changed_settings,
-        :sandbox_info => nil,         # temporarily added for rspec fixture - needed by JS specs
+        :sandbox_info => present(sandbox),
         :latest_comment_list => nil   # temporarily added for rspec fixture - needed by JS specs
     }
   end

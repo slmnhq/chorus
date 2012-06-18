@@ -111,7 +111,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
 
             context("and the workspace has a sandbox", function() {
                 beforeEach(function() {
-                    spyOn(this.model, "sandbox").andReturn(newFixtures.sandbox())
+                    spyOn(this.model, "sandbox").andReturn(rspecFixtures.workspace().sandbox())
                     this.view.render();
                 });
 
