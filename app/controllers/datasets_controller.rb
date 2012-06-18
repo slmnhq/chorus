@@ -1,18 +1,18 @@
-class DatasetsController < ApplicationController
-
+class DatasetsController < GpdbController
   def index
-    workspace = WorkspaceAccess.workspaces_for(current_user).find(params[:workspace_id])
-    present workspace.associated_datasets
-  end
+    schema = GpdbSchema.find(params[:schema_id])
+    account = authorized_gpdb_account(schema)
+    Dataset.refresh(account, schema)
 
-  def create
-    workspace = WorkspaceAccess.workspaces_for(current_user).find(params[:workspace_id])
-    workspace.bound_datasets << Dataset.where(:id => params[:dataset_ids])
-
-    present workspace.associated_datasets
+    datasets = schema.datasets.
+        with_name_like(params[:filter]).
+        order("lower(name)").
+        paginate(params.slice(:page, :per_page))
+    present datasets
   end
 
   def show
-    present AssociatedDataset.find(params[:id])
+    table = Dataset.find(params[:id])
+    present table
   end
 end

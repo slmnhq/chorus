@@ -3,9 +3,9 @@ chorus.models.DataPreviewTask = chorus.models.Task.extend({
 
     urlTemplate: function() {
         if(this.cancelled) {
-            return "database_objects/{{databaseObject.id}}/previews/{{checkId}}";
+            return "datasets/{{databaseObject.id}}/previews/{{checkId}}";
         }
-        return  "database_objects/{{databaseObject.id}}/previews";
+        return  "datasets/{{databaseObject.id}}/previews";
     },
 
     getRows: function() {

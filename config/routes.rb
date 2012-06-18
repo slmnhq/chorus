@@ -37,7 +37,7 @@ Chorus::Application.routes.draw do
   end
 
   resources :schemas, :only => [:show] do
-    resources :database_objects, :only => [:index]
+    resources :datasets, :only => [:index]
     resources :functions, :only => [:index]
   end
 
@@ -45,7 +45,7 @@ Chorus::Application.routes.draw do
     resource :analyze, :only => [:create], :controller => 'analyze'
   end
 
-  resources :database_objects, :only => [:show] do
+  resources :datasets, :only => [:show] do
     resources :columns, :only => [:index], :controller => 'column'
     resources :previews, :only => [:create, :destroy], :constraints => {:id => /.*/}
     resource :statistics, :only => :show
@@ -56,7 +56,7 @@ Chorus::Application.routes.draw do
     resource :image, :only => [:update], :controller => :workspace_images
     resources :workfiles, :only => [:create, :index]
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
-    resources :datasets, :only => [:index, :create, :show]
+    resources :datasets, :only => [:index, :create, :show], :controller => "workspace_datasets"
     resource :sandbox, :only => [:create]
   end
 

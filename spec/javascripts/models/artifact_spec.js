@@ -64,7 +64,7 @@ describe("chorus.models.Artifact", function() {
 
         it("shows the URL for a tabularData with no workspace", function() {
             var model = fixtures.attachmentOnDatasetNotInWorkspaceSearchResult();
-            expect(model.showUrl()).toBe("#/database_objects/100");
+            expect(model.showUrl()).toBe("#/datasets/100");
         });
 
         it("shows the URL for a workfile in a workspace", function() {

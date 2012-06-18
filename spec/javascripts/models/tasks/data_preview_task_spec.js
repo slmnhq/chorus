@@ -24,12 +24,12 @@ describe("chorus.models.DataPreviewTask", function() {
     });
 
     it("has the right url", function() {
-       expect(this.model.url()).toBe("/database_objects/1234/previews");
+       expect(this.model.url()).toBe("/datasets/1234/previews");
     });
 
     it("has the right url when cancelling", function() {
         this.model.cancelled = true;
-        expect(this.model.url()).toBe("/database_objects/1234/previews/" + this.model.get("checkId"));
+        expect(this.model.url()).toBe("/datasets/1234/previews/" + this.model.get("checkId"));
     });
 
     it("uses the objectName as its 'name'", function() {

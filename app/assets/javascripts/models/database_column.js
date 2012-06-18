@@ -1,6 +1,6 @@
 chorus.models.DatabaseColumn = chorus.models.Base.extend({
     constructorName: "DatabaseColumn",
-    urlTemplate: "database_objects/{{id}}/columns",
+    urlTemplate: "datasets/{{id}}/columns",
 
     urlParams: function() {
         return {

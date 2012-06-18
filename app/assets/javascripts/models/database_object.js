@@ -2,11 +2,11 @@ chorus.models.DatabaseObject = chorus.models.TabularData.extend({
     constructorName: "DatabaseObject",
 
     urlTemplate: function() {
-        return "database_objects/" + this.id
+        return "datasets/" + this.id
     },
 
     showUrlTemplate: function() {
-        return "database_objects/" + this.id
+        return "datasets/" + this.id
     },
 
     urlTemplateAttributes: function() {

@@ -2,7 +2,7 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
     model: chorus.models.DatabaseColumn,
 
     urlTemplate: function() {
-        return "database_objects/{{id}}/columns"
+        return "datasets/{{id}}/columns"
     },
 
     urlParams: function() {

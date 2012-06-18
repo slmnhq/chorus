@@ -32,7 +32,7 @@ describe("chorus.models.DatabaseColumn", function() {
                     });
                     var attr = this.model.attributes;
                     var url = this.model.url();
-                    expect(url).toContain("/database_objects/1/columns?");
+                    expect(url).toContain("/datasets/1/columns?");
                     expect(url).toContain("filter=" + attr.name);
                 });
             });

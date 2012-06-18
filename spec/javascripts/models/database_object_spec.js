@@ -37,7 +37,7 @@ describe("chorus.models.DatabaseObject", function() {
             });
 
             it("uses the table exploration api", function() {
-                expect(this.databaseObject.url()).toContain("/database_objects/" + + this.databaseObject.id)
+                expect(this.databaseObject.url()).toContain("/datasets/" + + this.databaseObject.id)
             });
         });
 
@@ -49,7 +49,7 @@ describe("chorus.models.DatabaseObject", function() {
             });
 
             it("uses the table exploration api", function() {
-                expect(this.databaseObject.url()).toContain("/database_objects/" + this.databaseObject.id)
+                expect(this.databaseObject.url()).toContain("/datasets/" + this.databaseObject.id)
             });
         });
     });
@@ -61,12 +61,12 @@ describe("chorus.models.DatabaseObject", function() {
             });
 
             it("has the correct url", function() {
-                expect(this.databaseObject.showUrl()).toContain("/database_objects/" + this.databaseObject.id)
+                expect(this.databaseObject.showUrl()).toContain("/datasets/" + this.databaseObject.id)
             });
 
             it("works when there is markup in the name (e.g. result from type ahead search", function() {
                 this.databaseObject.set({objectName: "<em>a</em> space"})
-                expect(this.databaseObject.showUrl()).toContain("/database_objects/" + this.databaseObject.id);
+                expect(this.databaseObject.showUrl()).toContain("/datasets/" + this.databaseObject.id);
             })
         });
 
@@ -77,9 +77,8 @@ describe("chorus.models.DatabaseObject", function() {
 
             it("uses the view exploration api", function() {
                 var pieces = [
-                    "#/database_objects",
+                    "#/datasets",
                     this.databaseObject.id
-
                 ]
                 var url = encodeURI(pieces.join('/'));
                 expect(this.databaseObject.showUrl()).toMatchUrl(url);
@@ -89,7 +88,7 @@ describe("chorus.models.DatabaseObject", function() {
         context("when it contains html", function() {
             it("removes the html", function() {
                 this.databaseObject.set({ objectName: "<em>mmmm</em> good" });
-                expect(this.databaseObject.showUrl()).toMatchUrl("#/database_objects/" + this.databaseObject.id);
+                expect(this.databaseObject.showUrl()).toMatchUrl("#/datasets/" + this.databaseObject.id);
             })
         })
     })

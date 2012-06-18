@@ -10,7 +10,7 @@ describe("chorus.models.DatabaseObjectStatistics", function() {
                     databaseObjectId: 1
                 })
 
-                expect(this.databaseObjectStatistics.url()).toContain("/database_objects/1/statistics")
+                expect(this.databaseObjectStatistics.url()).toContain("/datasets/1/statistics")
             })
 
             // TODO: update this when view statistics are implemented

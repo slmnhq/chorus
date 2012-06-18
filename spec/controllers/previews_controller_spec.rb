@@ -20,16 +20,16 @@ describe PreviewsController do
 
     it "uses authentication" do
       mock(subject).authorize! :show, gpdb_table.instance
-      post :create, :database_object_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
+      post :create, :dataset_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
     end
 
     it "reports that the preview was created" do
-      post :create, :database_object_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
+      post :create, :dataset_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
       response.code.should == "201"
     end
 
     it "renders the preview" do
-      post :create, :database_object_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
+      post :create, :dataset_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
       decoded_response.columns.should_not be_nil
       decoded_response.rows.should_not be_nil
     end
@@ -38,7 +38,7 @@ describe PreviewsController do
   describe "#destroy" do
     it "cancels the data preview command" do
       mock(SqlResults).cancel_preview(gpdb_table, account, '0.12341234')
-      delete :destroy, :database_object_id => gpdb_table.to_param, :id => '0.12341234'
+      delete :destroy, :dataset_id => gpdb_table.to_param, :id => '0.12341234'
 
       response.code.should == '200'
     end

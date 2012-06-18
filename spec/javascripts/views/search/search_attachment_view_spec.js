@@ -44,7 +44,7 @@ describe("chorus.views.SearchAttachment", function() {
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.tabular_data_not_in_workspace",
                 {
-                    tabularDataLink: '<a href="#/database_objects/' + this.result.tabularData().id  + '">2010_report_on_white_house</a>'
+                    tabularDataLink: '<a href="#/datasets/' + this.result.tabularData().id  + '">2010_report_on_white_house</a>'
                 }
             );
         });

@@ -21,7 +21,7 @@ resource "Greenplum DB members" do
         For a Greenplum instance owner to manage which users can access their
         instances.  When the instance is shared this list will only
         return the instance owner's credentials.  When the instance
-        is not shared, this list includes people who added by the owner
+        is not shared, this list includes people who were added by the owner
         or who have manually added their own credentials.
       DESC
 

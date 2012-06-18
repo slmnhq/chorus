@@ -25,11 +25,11 @@ describe ColumnController do
 
     it "should check for permissions" do
       mock(subject).authorize! :show, table.instance
-      get :index, :database_object_id => table.to_param
+      get :index, :dataset_id => table.to_param
     end
 
     it "should retrieve column for a table" do
-      get :index, :database_object_id => table.to_param
+      get :index, :dataset_id => table.to_param
 
       response.code.should == "200"
       decoded_response.length.should == 2

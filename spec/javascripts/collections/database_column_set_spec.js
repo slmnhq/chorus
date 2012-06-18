@@ -15,7 +15,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         });
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toContain("/database_objects/1/columns");
+            expect(this.columns.url()).toContain("/datasets/1/columns");
         })
 
         describe("add", function() {
@@ -49,7 +49,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         });
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toContain("/database_objects/3/columns");
+            expect(this.columns.url()).toContain("/datasets/3/columns");
         })
 
         context("when the names need to be url encoded", function() {
@@ -68,7 +68,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
             });
 
             it("should url encode the appropriate entities", function() {
-                expect(this.columns.url()).toContain("/database_objects/4/columns");
+                expect(this.columns.url()).toContain("/datasets/4/columns");
             });
         });
 
@@ -86,7 +86,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         })
 
         it("has the correct urlTemplate", function() {
-            expect(this.columns.url()).toMatchUrl('/database_objects/5/columns', {paramsToIgnore: ['page', 'rows']});
+            expect(this.columns.url()).toMatchUrl('/datasets/5/columns', {paramsToIgnore: ['page', 'rows']});
         })
     })
 

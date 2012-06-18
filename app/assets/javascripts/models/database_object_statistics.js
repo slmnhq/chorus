@@ -4,7 +4,7 @@ chorus.models.DatabaseObjectStatistics = chorus.models.Base.extend({
         if (this.datasetId) {
             return "workspace/{{workspace.id}}/dataset/" + encodeURIComponent(this.datasetId);
         } else {
-            return "database_objects/{{databaseObjectId}}/statistics"
+            return "datasets/{{databaseObjectId}}/statistics"
         }
     }
 });
