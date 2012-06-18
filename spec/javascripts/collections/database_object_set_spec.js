@@ -17,7 +17,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
         it("is correct", function() {
             var url = this.collection.url({ rows: 10, page: 1});
             expect(url).toContainQueryParams({ rows: 10, page: 1, type: "meta" });
-            expect(url).toHaveUrlPath("/schemas/987/database_objects");
+            expect(url).toHaveUrlPath("/schemas/987/datasets");
         });
 
         context("filtering", function() {
@@ -27,7 +27,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
 
             it("should include the filter in the url", function() {
                 var url = this.collection.url({rows: 10, page: 1});
-                expect(url).toHaveUrlPath("/schemas/987/database_objects");
+                expect(url).toHaveUrlPath("/schemas/987/datasets");
                 expect(url).toContainQueryParams({ rows: 10, page: 1, filter: "foo" });
             });
         });
@@ -37,7 +37,7 @@ describe("chorus.collections.DatabaseObjectSet", function() {
         it("triggers an API query for the given term", function() {
             this.collection.search("search term");
             expect(this.server.lastFetch().url).toMatchUrl(
-                "/schemas/987/database_objects?filter=search+term",
+                "/schemas/987/datasets?filter=search+term",
                 {paramsToIgnore: ["type", "page", "rows"]}
             );
         });

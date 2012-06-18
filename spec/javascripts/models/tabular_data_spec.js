@@ -27,27 +27,20 @@ describe("chorus.models.TabularData", function() {
     describe("#statistics", function() {
         beforeEach(function() {
             this.statistics = this.tabularData.statistics()
-        })
+        });
 
         it("returns an instance of DatabaseObjectStatistics", function() {
             expect(this.statistics).toBeA(chorus.models.DatabaseObjectStatistics)
-        })
+        });
 
         it("should memoize the result", function() {
             expect(this.statistics).toBe(this.tabularData.statistics());
-        })
+        });
 
         it("sets the properties correctly", function() {
-            expect(this.statistics.get('instanceId')).toBe(this.tabularData.instance().id)
-            expect(this.statistics.get('databaseName')).toBe(this.tabularData.database().name())
-            expect(this.statistics.get('schemaName')).toBe(this.tabularData.schema().name())
-            expect(this.statistics.get('type')).toBe(this.tabularData.get("type"))
-            expect(this.statistics.get('objectType')).toBe(this.tabularData.get("objectType"))
-            expect(this.statistics.get('objectName')).toBe(this.tabularData.name())
-            expect(this.statistics.get("metaType")).toBe(this.tabularData.metaType())
-            expect(this.statistics.get("databaseObjectId")).toBe(this.tabularData.id)
-        })
-    })
+            expect(this.statistics.get("datasetId")).toBe(this.tabularData.id)
+        });
+    });
 
     describe("iconFor", function() {
         var largeIconMap = {

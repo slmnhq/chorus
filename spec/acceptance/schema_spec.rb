@@ -25,7 +25,7 @@ resource "Greenplum DB schemas" do
     end
   end
 
-  get "/schemas/:schema_id/database_objects" do
+  get "/schemas/:schema_id/datasets" do
     example_request "Get the list of database objects for a specific schema" do
       status.should == 200
     end

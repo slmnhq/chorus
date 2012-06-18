@@ -120,7 +120,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             it("fetches filtered database objects", function() {
                 expect(this.server.lastFetch().url).toMatchUrl(
-                    "/schemas/" + this.schema.id + "/database_objects?type=meta&filter=a+query&page=1&rows=9",
+                    "/schemas/" + this.schema.id + "/datasets?type=meta&filter=a+query&page=1&rows=9",
                     { paramsToIgnore: ["page", "rows", "type"] }
                 );
             });
