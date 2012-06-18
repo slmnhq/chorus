@@ -244,6 +244,11 @@ describe WorkspacesController do
         workspace.summary.should == "new summary"
         response.should be_success
       end
+
+      it "uses schema authentication" do
+        mock(subject).authorize!(:show, sandbox.instance)
+        put :update, :id => workspace.to_param, :workspace => { :sandbox_id => sandbox.to_param }
+      end
     end
   end
 end
