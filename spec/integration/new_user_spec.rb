@@ -38,5 +38,25 @@ describe "creating a user" do
   end
 
 
+  it "should let an admin create a user with a user image" do
+
+    first_name = Forgery::Name.first_name
+    last_name = Forgery::Name.last_name
+    username = "#{first_name}#{last_name}"
+    department = Forgery::Name.industry
+    title = Forgery::Name.title
+
+    create_valid_user(:username => username, :first_name => first_name, :last_name => last_name,
+                           :department => department, :title => title)
+    wait_until { current_route == "/users" }
+    click_link("#{first_name} #{last_name}")
+    page.find("h1").should have_content("#{first_name} #{last_name}")
+
+    click_link "Edit Profile"
+    attach_file("image_upload_input", File.join(File.dirname(__FILE__), '../fixtures/user.png'))
+    click_submit_button                                                                                                                                                                                                
+
+  end
+
 
 end

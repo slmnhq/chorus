@@ -5,7 +5,7 @@
     {{#if editable}}
         <a class="action">{{#if hasImage}}{{t changeImageKey}}{{else}}{{t addImageKey}}{{/if}}</a>
     {{/if}}
-    <input type="file"
+    <input id="image_upload_input" type="file"
            {{#unless editable}}
                 disabled="disabled"
            {{/unless}}
