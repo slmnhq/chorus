@@ -44,5 +44,28 @@ describe ActivityPresenter, :type => :view do
       hash[:some_key].should == "foo"
       hash[:some_other_key].should == "bar"
     end
+
+    context "when the event has a workspace" do
+      before do
+        stub(view).current_user { FactoryGirl.build(:user) }
+      end
+
+      it "presents the workspace" do
+        workspace = FactoryGirl.build(:workspace)
+        stub(activity.event).workspace { workspace }
+
+        hash = subject.to_hash
+        hash[:workspace].should == Presenter.present(activity.event.workspace, view)
+      end
+    end
+
+    context "when the event does not have a workspace" do
+      it "doesn't include the 'workspace' key" do
+        stub(activity.event).workspace { nil }
+
+        hash = subject.to_hash
+        hash.should_not have_key(:workspace)
+      end
+    end
   end
 end

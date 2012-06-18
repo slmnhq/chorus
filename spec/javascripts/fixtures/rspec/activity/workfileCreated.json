@@ -1,0 +1,156 @@
+{
+  "response": {
+    "id": 1005,
+    "actor": {
+      "id": 940,
+      "username": "user26",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person26@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "action": "WORKFILE_CREATED",
+    "timestamp": "2012-06-16T00:28:51Z",
+    "workfile": {
+      "id": 211,
+      "workspace": {
+        "id": 157,
+        "name": "workspace1",
+        "summary": null,
+        "owner": {
+          "id": 942,
+          "username": "user28",
+          "first_name": "John",
+          "last_name": "Doe",
+          "email": "person28@example.com",
+          "title": "Grand Poo Bah",
+          "dept": "Corporation Corp., Inc.",
+          "notes": "One of our top performers",
+          "admin": false,
+          "image": {
+            "original": "/images/default-user-icon.png",
+            "icon": "/images/default-user-icon.png"
+          }
+        },
+        "archiver": null,
+        "archived_at": null,
+        "public": true,
+        "image": {
+          "original": "",
+          "icon": ""
+        },
+        "permission": [
+          "admin"
+        ],
+        "has_added_member": false,
+        "has_added_workfile": false,
+        "has_added_sandbox": false,
+        "has_changed_settings": false,
+        "sandbox_info": null,
+        "latest_comment_list": null
+      },
+      "owner": {
+        "id": 941,
+        "username": "user27",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person27@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "version_info": {
+        "id": 184,
+        "version_num": 1,
+        "commit_message": "Factory commit message",
+        "owner": {
+          "id": 943,
+          "username": "user29",
+          "first_name": "John",
+          "last_name": "Doe",
+          "email": "person29@example.com",
+          "title": "Grand Poo Bah",
+          "dept": "Corporation Corp., Inc.",
+          "notes": "One of our top performers",
+          "admin": false,
+          "image": {
+            "original": "/images/default-user-icon.png",
+            "icon": "/images/default-user-icon.png"
+          }
+        },
+        "modifier": {
+          "id": 944,
+          "username": "user30",
+          "first_name": "John",
+          "last_name": "Doe",
+          "email": "person30@example.com",
+          "title": "Grand Poo Bah",
+          "dept": "Corporation Corp., Inc.",
+          "notes": "One of our top performers",
+          "admin": false,
+          "image": {
+            "original": "/images/default-user-icon.png",
+            "icon": "/images/default-user-icon.png"
+          }
+        },
+        "created_at": "2012-06-16T00:28:51Z",
+        "updated_at": "2012-06-16T00:28:51Z",
+        "content_url": "/contents/original/missing.png",
+        "icon_url": null,
+        "content": null
+      },
+      "file_name": "workfile.doc",
+      "file_type": "other",
+      "latest_version_num": 1,
+      "has_draft": false
+    },
+    "workspace": {
+      "id": 158,
+      "name": "workspace2",
+      "summary": null,
+      "owner": {
+        "id": 945,
+        "username": "user31",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person31@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "archiver": null,
+      "archived_at": null,
+      "public": true,
+      "image": {
+        "original": "",
+        "icon": ""
+      },
+      "permission": [
+        "admin"
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false,
+      "sandbox_info": null,
+      "latest_comment_list": null
+    }
+  }
+}

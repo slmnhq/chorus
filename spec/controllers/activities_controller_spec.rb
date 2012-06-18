@@ -41,6 +41,15 @@ describe ActivitiesController do
       end
     end
 
+    context "when getting the activities for a workfile" do
+      let(:object) { FactoryGirl.create(:workfile) }
+
+      it "presents the workfile's activities" do
+        mock_present { |models| models.should =~ [activity1, activity2] }
+        get :index, :workfile_id => object.id
+      end
+    end
+
     context "when getting the activities for the current user's home page" do
       it "presents the user's activities" do
         mock_present { |models| models.should =~ [global_activity1, global_activity2] }
@@ -66,13 +75,14 @@ describe ActivitiesController do
       "greenplumInstanceChangedOwner" => :greenplum_instance_changed_owner_event,
       "greenplumInstanceChangedName" => :greenplum_instance_changed_name_event,
       "hadoopInstanceChangedName" => :hadoop_instance_changed_name_event,
+      "workfileCreated" => :workfile_created_event
     }
 
     FIXTURE_FILES.each do |filename, event_factory_name|
 
       generate_fixture "activity/#{filename}.json" do
         event = FactoryGirl.create(event_factory_name)
-        activity = Activity.global.find_by_event_id(event.id)
+        activity = Activity.global.create!(:event => event)
         get :show, :id => activity.to_param
       end
 

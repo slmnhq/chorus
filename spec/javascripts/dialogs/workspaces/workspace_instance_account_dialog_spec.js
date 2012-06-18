@@ -1,6 +1,10 @@
 describe("chorus.dialogs.WorkspaceInstanceAccount", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace();
+
+        // TODO - remove me once we have sandboxes
+        this.workspace.get("sandboxInfo").instanceName = "backfill";
+
         this.account = rspecFixtures.instanceAccount();
         this.dialog = new chorus.dialogs.WorkspaceInstanceAccount({ model: this.account, pageModel: this.workspace});
         this.dialog.render();

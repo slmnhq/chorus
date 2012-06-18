@@ -146,6 +146,10 @@ describe("chorus.views.DatabaseSidebarList", function() {
     context("when there are no valid credentials", function() {
         beforeEach(function() {
             this.schema = newFixtures.sandbox({ schemaName: "righteous_tables" }).schema();
+
+            // TODO - remove me once we add sandboxes
+            this.schema.set({ instanceName: "monkey-patch" });
+
             this.collection = new chorus.collections.Base([]);
             this.collection.serverErrors = [
                 {message: "Account map needed"}

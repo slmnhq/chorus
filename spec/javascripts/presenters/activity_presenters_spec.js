@@ -142,6 +142,27 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("workfile created", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.workfileCreated();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.getModel("actor");
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            var workfile = model.getModel("workfile");
+
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.WORKFILE_CREATED.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workfileLink: linkTo(workfile.showUrl(), workfile.name())
+                }
+            );
+        });
+    });
+
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
     }

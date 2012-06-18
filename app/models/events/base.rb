@@ -2,15 +2,15 @@ module Events
   class Base < ActiveRecord::Base
     self.table_name = :events
     self.inheritance_column = :action
-
     serialize :additional_data, Hash
 
     class_attribute :entities_that_get_activities, :target_names
-    attr_accessible :action, :target1, :target2, :actor, :additional_data
+    attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data
 
     belongs_to :actor, :class_name => 'User'
     belongs_to :target1, :polymorphic => true
     belongs_to :target2, :polymorphic => true
+    belongs_to :workspace
 
     after_create :create_activities
 

@@ -3,7 +3,9 @@
         "actor": "User",
         "greenplumInstance": "GreenplumInstance",
         "newOwner": "User",
-        "hadoopInstance": "HadoopInstance"
+        "hadoopInstance": "HadoopInstance",
+        "workfile": "Workfile",
+        "workspace": "Workspace"
     };
 
     chorus.models.Activity = chorus.models.Base.extend({

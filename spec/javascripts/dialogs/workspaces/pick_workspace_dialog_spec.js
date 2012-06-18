@@ -54,7 +54,7 @@ describe("chorus.dialogs.PickWorkspace", function() {
             });
 
             it("has the correct submit button text", function() {
-                expect(this.dialog.$("button.submit")).toContainTranslation("dataset.associate.button");
+                expect(this.dialog.$("button.submit")).toContainTranslation("dataset.associate.button.one");
             });
 
             it("renders the name of the workspace", function() {

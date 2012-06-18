@@ -187,6 +187,13 @@ describe WorkfilesController do
       end
 
       it_behaves_like "uploading a new workfile"
+
+      it "makes a WORKFILE_CREATED event" do
+        post :create, @params
+        event = Events::WORKFILE_CREATED.by(user).first
+        event.workfile.description.should == @params[:workfile][:description]
+        event.workspace.to_param.should == @params[:workspace_id]
+      end
     end
 
     context "as an admin" do

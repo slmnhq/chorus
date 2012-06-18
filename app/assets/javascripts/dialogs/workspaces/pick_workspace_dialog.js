@@ -3,7 +3,7 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
 
     title: t("dataset.associate.title.one"),
     constructorName: "PickWorkspaceDialog",
-    submitButtonTranslationKey: "dataset.associate.button",
+    submitButtonTranslationKey: "dataset.associate.button.one",
     emptyListTranslationKey: "dataset.associate.empty.placeholder",
     searchPlaceholderKey: "dataset.associate.search",
     selectedEvent: 'files:selected',

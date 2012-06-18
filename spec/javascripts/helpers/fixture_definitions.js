@@ -102,7 +102,8 @@ window.rspecFixtureDefinitions = {
             greenplumInstanceChangedOwner: {},
             hadoopInstanceCreated: {},
             greenplumInstanceChangedName: {},
-            hadoopInstanceChangedName: {}
+            hadoopInstanceChangedName: {},
+            workfileCreated: {}
         }
     },
 
