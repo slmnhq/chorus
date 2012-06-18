@@ -15,6 +15,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
     context("when aurora is installed", function() {
         beforeEach(function() {
+            chorus.models.Config.instance().set({ provisionMaxSizeInGB: "101GB" });
             chorus.models.GreenplumInstance.aurora().set({ installationStatus: "install_succeed" });
             this.dialog = new chorus.dialogs.InstancesNew();
             this.dialog.render();
@@ -42,7 +43,7 @@ describe("chorus.dialogs.InstancesNew", function() {
             });
 
             it("displays the maximum allowable size", function() {
-                expect(this.dialog.$(".create_new_greenplum ")).toContainTranslation("instances.new_dialog.max_size");
+                expect(this.dialog.$(".create_new_greenplum ")).toContainTranslation("instances.new_dialog.max_size", { max: "101GB" });
             });
 
             it("fetches the aurora templates", function() {

@@ -88,32 +88,28 @@
                 },
 
                 toMatchTranslation: function(translationKey) {
-                    var translatedText = t.apply(this, arguments);
+                    var translatedText = checkTranslation(arguments);
+
                     this.message = function() {
                         return [
                             "Expected text '" + this.actual + "' to match the translation for '" + translationKey + "' (" + translatedText + ")",
                             "Expected text '" + this.actual + "' not to match the translation for '" + translationKey + "' (" + translatedText + ")"
                         ];
                     };
-                    if (!I18n.lookup(translationKey)) {
-                        throw("No entry in messages.properties for " + translationKey);
-                    }
 
                     return this.actual === translatedText;
                 },
 
                 toContainTranslation: function(translationKey) {
                     var actual = _.isString(this.actual) ? this.actual : this.actual.text();
-                    var translatedText = t.apply(this, arguments);
+                    var translatedText = checkTranslation(arguments);
+
                     this.message = function() {
                         return [
                             "Expected text '" + actual + "' to contain the translation for '" + translationKey + "' (" + translatedText + ")",
                             "Expected text '" + actual + "' not to contain the translation for '" + translationKey + "' (" + translatedText + ")"
                         ];
                     };
-                    if (!I18n.lookup(translationKey)) {
-                        throw("No entry in messages.properties for " + translationKey);
-                    }
 
                     return this.env.contains_(actual, translatedText);
                 },
@@ -560,6 +556,21 @@
 
     function clearRenderedDOM() {
         $('#jasmine_content').empty();
+    }
+
+    function checkTranslation(args) {
+        var translationKey = args[0];
+        var translatedText = t.apply(this, args);
+        var missingParams = translatedText.match(/missing ({{\w+}}) value/);
+
+        if (!I18n.lookup(translationKey)) {
+            throw("Test error - Missing translation key '" + translationKey + "'");
+        }
+        if (missingParams) {
+            throw("Test error - Missing parameter for translation key '" + translationKey + "':  " + missingParams[1]);
+        }
+
+        return translatedText;
     }
 
     if (window.location.search.indexOf("profile=") != -1) {

@@ -37,7 +37,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 noCredentials: errorMessage && errorMessage.match(/Account.*map.*needed/),
                 noCredentialsWarning: chorus.helpers.safeT("dataset.credentials.missing.body", {
                     linkText: chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'}),
-                    instanceName: this.schema.database().get("instanceName")
+                    instanceName: this.schema.get("instanceName")
                 })
             };
         }
