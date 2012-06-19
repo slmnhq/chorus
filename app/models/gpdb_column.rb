@@ -25,7 +25,7 @@ class GpdbColumn
 
   def self.columns_for(account, table)
     columns_with_stats = table.with_gpdb_connection(account) do |conn|
-      conn.query(COLUMN_METADATA_QUERY % [table.schema.name, table.name, table.name])
+      conn.query(COLUMN_METADATA_QUERY % [conn.quote_column_name(table.schema.name), conn.quote_column_name(table.name), conn.quote_column_name(table.name)])
     end
 
     columns_with_stats.map do |raw_column_data|

@@ -13,6 +13,6 @@ class WorkspaceDatasetsController < ApplicationController
   end
 
   def show
-    present AssociatedDataset.find(params[:id])
+    present AssociatedDataset.where(:dataset_id => params[:id], :workspace_id => params[:workspace_id]).first
   end
 end

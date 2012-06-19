@@ -44,21 +44,37 @@ describe WorkspaceDatasetsController do
   end
 
   describe "#show" do
-    let(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset) }
+    let!(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
 
     context "the associated database object is a table" do
-      let(:dataset) { FactoryGirl.create(:gpdb_table) }
+      let!(:dataset) { FactoryGirl.create(:gpdb_table) }
 
       generate_fixture "dataset/datasetTable.json" do
-        get :show, :id => association.to_param
+        get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+      end
+
+      it "returns the associated dataset" do
+        get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+        response.code.should == "200"
+
+        decoded_response.object_name.should == dataset.name
+        decoded_response.type.should == "SOURCE_TABLE"
       end
     end
 
     context "the associated database object is a view" do
-      let(:dataset) { FactoryGirl.create(:gpdb_view) }
+      let!(:dataset) { FactoryGirl.create(:gpdb_view) }
 
       generate_fixture "dataset/datasetView.json" do
-        get :show, :id => association.to_param
+        get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+      end
+
+      it "returns the associated dataset" do
+        get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+        response.code.should == "200"
+
+        decoded_response.object_name.should == dataset.name
+        decoded_response.type.should == "SOURCE_TABLE"
       end
     end
   end
