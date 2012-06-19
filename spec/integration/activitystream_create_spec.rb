@@ -25,6 +25,29 @@ describe " add an instance " do
     p Instance.all
   end
 
+  it "System generates events for gpdb name change (INSTANCE_CHANGED_NAME)" do
+    name = "initial_instance_name"
+    modified_name = "edit_instance_name"
+
+    create_gpdb_gillette_instance(:name => name)
+    gpdb_instance_id = Instance.find_by_name(name).id
+    go_to_home_page
+    page.should have_content "EDC Admin added a new instance #{name}"
+    sleep(3)
+    go_to_instance_page
+    within(".instance_provider") do
+      page.find("li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
+    end
+    page.should have_content "EDC Admin added a new instance #{name}"
+    go_to_user_list_page
+    within(".list") do
+          click_link "EDC Admin"
+    end
+    page.should have_content "EDC Admin added a new instance #{name}"
+    p Instance.all
+
+  end
+
 
   xit "creates an activity stream when a hadoop instance is created" do
     create_valid_hadoop_instance(:name => "hadoop_instance")

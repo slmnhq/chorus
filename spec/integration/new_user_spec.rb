@@ -54,7 +54,7 @@ describe "creating a user" do
 
     click_link "Edit Profile"
     attach_file("image_upload_input", File.join(File.dirname(__FILE__), '../fixtures/user.png'))
-    click_submit_button                                                                                                                                                                                                
+    click_submit_button
 
   end
 

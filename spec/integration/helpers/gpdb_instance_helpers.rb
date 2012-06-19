@@ -61,3 +61,17 @@ def create_gpdb_gillette_instance(params={})
                        :dbpass => params[:dbpass] || WEBPATH['gpdb_instance']['gillette_pass'],
                        :shared => params[:shared])
 end
+
+# Register a new instance on Gillette
+def create_gpdb_gillette_instance_no_ui(params={})
+  Gpdb::InstanceRegistrar.create!({
+      :name => params[:name] || "GPDB_GilletteInstance#{Time.now.to_i}",
+      :port => params[:port] || WEBPATH['gpdb_instance']['gillette_port'],
+      :host => params[:host] || WEBPATH['gpdb_instance']['gillette_host'],
+      :maintenance_db => "postgres",
+      :provision_type => "register",
+      :description => "old description",
+      :db_username => params[:dbuser] || WEBPATH['gpdb_instance']['gillette_user'],
+      :db_password => params[:dbpass] || WEBPATH['gpdb_instance']['gillette_pass']
+    }.merge(params), current_user)
+end
