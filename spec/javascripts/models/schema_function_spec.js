@@ -1,6 +1,12 @@
 describe("chorus.models.SchemaFunction", function() {
     beforeEach(function() {
-        this.model = fixtures.schemaFunction({schemaName: "aa", name: "fun", argNames: ["elephant", ""], argTypes: ["Int", "Bool"]});
+        this.model = new chorus.models.SchemaFunction({
+            schemaName: "aa",
+            name: "fun",
+            returnType: "void",
+            language: "sql",
+            argNames: ["elephant", ""],
+            argTypes: ["Int", "Bool"]})
     })
     describe("#toText", function() {
         context("with lowercase names", function() {

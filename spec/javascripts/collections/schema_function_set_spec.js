@@ -17,24 +17,12 @@ describe("chorus.collections.SchemaFunctionSet", function() {
 
     describe("sort", function() {
         beforeEach(function() {
-            this.functionSet.reset([
-                fixtures.schemaFunction({ name: 'z'}),
-                fixtures.schemaFunction({ name: 'G'}),
-                fixtures.schemaFunction({ name: 'a'})
-            ]);
+            this.functionSet = rspecFixtures.schemaFunctionSet();
         });
 
         it("sorts by functionName, case insensitive", function() {
             var functionNames = this.functionSet.pluck('name')
-            expect(functionNames).toEqual(['a', 'G', 'z']);
-        })
-    });
-
-    describe("add", function() {
-        it("sets the schemaName on the added function", function() {
-            this.functionSet.add(fixtures.schemaFunction());
-            expect(this.functionSet.models[0].get('schemaName')).not.toBeFalsy();
-            expect(this.functionSet.models[0].get('schemaName')).toBe(this.schema.get('name'));
+            expect(functionNames).toEqual(['foo', 'hello', 'ZOO']);
         })
     });
 });

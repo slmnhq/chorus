@@ -56,11 +56,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                         rspecFixtures.schema({ name: "awesome_tables", id: "5" }),
                         rspecFixtures.schema({ name: "orphaned_tables", id: "6" })
                     ]);
-
-                    this.server.completeFetchFor(this.view.collection, [
-                        fixtures.schemaFunction({ name: "laplace_transform" }),
-                        fixtures.schemaFunction({ name: "inc" })
-                    ]);
+                    this.server.completeFetchFor(this.view.collection, rspecFixtures.schemaFunctionSet().models);
                 });
 
                 itBehavesLike.DatabaseSidebarList();
@@ -74,8 +70,9 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                 })
 
                 it("should render the functions", function() {
-                    expect(this.view.$("ul li")).toContainText("laplace_transform");
-                    expect(this.view.$("ul li")).toContainText("inc");
+                    expect(this.view.$("ul li")).toContainText(this.view.collection.at(0).name());
+                    expect(this.view.$("ul li")).toContainText(this.view.collection.at(1).name());
+                    expect(this.view.$("ul li")).toContainText(this.view.collection.at(2).name());
                 });
 
                 it("should not show the 'no functions found' text", function() {
@@ -123,10 +120,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
 
                         describe("when the function fetch completes", function() {
                             beforeEach(function() {
-                                this.server.completeFetchFor(this.view.collection, [
-                                    fixtures.schemaFunction({ name: "fourier_transform" }),
-                                    fixtures.schemaFunction({ name: "obnoxious_transform" })
-                                ]);
+                                this.server.completeFetchFor(this.view.collection, rspecFixtures.schemaFunctionSet().models);
                             });
 
                             it("removes the loading spinner", function() {
@@ -141,8 +135,9 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                             it("shows the new functions in the sidebar", function() {
                                 expect(this.view.$("ul")).toExist()
 
-                                expect(this.view.$("ul li")).toContainText("fourier_transform");
-                                expect(this.view.$("ul li")).toContainText("obnoxious_transform");
+                                expect(this.view.$("ul li")).toContainText(this.view.collection.at(0).name());
+                                expect(this.view.$("ul li")).toContainText(this.view.collection.at(1).name());
+                                expect(this.view.$("ul li")).toContainText(this.view.collection.at(2).name());
                                 expect(this.view.$('ul li:eq(0) .name').attr('title')).toBe(this.view.collection.models[0].toHintText())
                             });
                         })

@@ -21,8 +21,9 @@ describe FunctionsController do
       any_instance_of(GpdbSchema) do |schema|
             mock(schema).stored_functions.with_any_args do
               [
-                  GpdbSchemaFunction.new("foo", "sql", "text", nil, "{text}"),
-                  GpdbSchemaFunction.new("hello", "sql", "int4", "{int4}", "{text}")
+                  GpdbSchemaFunction.new("a_schema", "ZOO", "sql", "text", nil, "{text}"),
+                  GpdbSchemaFunction.new("a_schema", "hello", "sql", "int4", "{arg1, arg2}", "{text, int4}"),
+                  GpdbSchemaFunction.new("a_schema", "foo", "sql", "text", "{arg1}", "{text}")
               ]
             end
           end
@@ -32,9 +33,10 @@ describe FunctionsController do
       get :index, :schema_id => schema.to_param
 
       response.code.should == "200"
-      decoded_response.length.should == 2
+      decoded_response.length.should == 3
 
-      decoded_response[0].name.should == "foo"
+      decoded_response[0].schema_name.should == "a_schema"
+      decoded_response[0].name.should == "ZOO"
       decoded_response[0].language.should == "sql"
       decoded_response[0].return_type.should == "text"
       decoded_response[0].arg_names.should == []
@@ -45,5 +47,10 @@ describe FunctionsController do
       mock(subject).authorize! :show_contents, schema.instance
       get :index, :schema_id => schema.to_param
     end
+
+    generate_fixture "schemaFunctionSet.json" do
+      get :index, :schema_id => schema.to_param
+    end
+
   end
 end

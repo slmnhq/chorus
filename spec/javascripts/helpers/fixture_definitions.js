@@ -141,7 +141,10 @@ window.rspecFixtureDefinitions = {
 //        }
 //    },
 //
-    databaseObject: { unique: [ "id" ] }
+    databaseObject: { unique: [ "id" ] },
+
+    schemaFunctionSet: {}
+
 //
 //    test: {
 //        model:   "User",

@@ -828,18 +828,6 @@ beforeEach(function() {
             return new chorus.models.Dataset(attributes);
         },
 
-        schemaFunction: function(overrides) {
-            var attributes = _.extend({
-                argTypes: ['text', 'text', 'text'],
-                argNames: ['firstName', 'lastName', ''],
-                language: "plpgsql",
-                functionName: "function" + this.nextId().toString(),
-                schemaName: 'mmmmySchema',
-                returnType: "void"
-            }, overrides);
-            return new chorus.models.SchemaFunction(attributes);
-        },
-
         tabularData: function(overrides) {
             return new chorus.models.TabularData(this.tabularDataJson(_.extend({
                 objectType: "TABLE",

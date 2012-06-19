@@ -90,6 +90,7 @@ describe GpdbSchema do
 
       first_function = functions.first
       first_function.should be_a GpdbSchemaFunction
+      first_function.schema_name.should == schema.name
       first_function.function_name.should == "add"
       first_function.language.should == "sql"
       first_function.return_type.should == "int4"

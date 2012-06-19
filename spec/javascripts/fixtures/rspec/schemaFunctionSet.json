@@ -1,0 +1,42 @@
+{
+  "response": [
+    {
+      "schema_name": "a_schema",
+      "name": "ZOO",
+      "language": "sql",
+      "return_type": "text",
+      "arg_names": [
+
+      ],
+      "arg_types": [
+        "text"
+      ]
+    },
+    {
+      "schema_name": "a_schema",
+      "name": "hello",
+      "language": "sql",
+      "return_type": "int4",
+      "arg_names": [
+        "arg1",
+        "arg2"
+      ],
+      "arg_types": [
+        "text",
+        "int4"
+      ]
+    },
+    {
+      "schema_name": "a_schema",
+      "name": "foo",
+      "language": "sql",
+      "return_type": "text",
+      "arg_names": [
+        "arg1"
+      ],
+      "arg_types": [
+        "text"
+      ]
+    }
+  ]
+}
