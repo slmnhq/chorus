@@ -1,6 +1,6 @@
 describe("chorus.models.Sandbox", function() {
     beforeEach(function() {
-        this.model = newFixtures.sandbox();
+        this.model = rspecFixtures.workspace().sandbox();
     });
 
     describe("#url", function() {
@@ -18,8 +18,8 @@ describe("chorus.models.Sandbox", function() {
         });
 
         it("should be created with instance, database, and schema names and ids", function() {
-            expect(this.schema.get('id')).toBe(this.model.get('schemaId'));
-            expect(this.schema.get('name')).toBe(this.model.get('schemaName'));
+            expect(this.schema.get('id')).toBe(this.model.get('id'));
+            expect(this.schema.get('name')).toBe(this.model.get('name'));
         });
 
         it("should memoize the schema", function() {
@@ -34,8 +34,8 @@ describe("chorus.models.Sandbox", function() {
 
         it("returns a database with the right id and instanceId", function() {
             expect(this.database).toBeA(chorus.models.Database);
-            expect(this.database.get("id")).toBe(this.model.get("databaseId"));
-            expect(this.database.get("name")).toBe(this.model.get("databaseName"));
+            expect(this.database.get("id")).toBe(this.model.get("database").id);
+            expect(this.database.get("name")).toBe(this.model.get("database").name);
         });
 
         it("memoizes", function() {
@@ -50,8 +50,8 @@ describe("chorus.models.Sandbox", function() {
 
         it("returns an instance with the right id and name", function() {
             expect(this.instance).toBeA(chorus.models.GreenplumInstance);
-            expect(this.instance.get("id")).toBe(this.model.get("instanceId"));
-            expect(this.instance.get("name")).toBe(this.model.get("instanceName"));
+            expect(this.instance.get("id")).toBe(this.model.get("database").instance.id);
+            expect(this.instance.get("name")).toBe(this.model.get("database").instance.name);
         });
 
         it("memoizes", function() {

@@ -5,7 +5,8 @@ describe WorkspacePresenter, :type => :view do
     @user = FactoryGirl.create :user
     stub(view).current_user { @user }
     @archiver = FactoryGirl.create :user
-    @workspace = FactoryGirl.build :workspace, :owner => @user, :archiver => @archiver
+    @schema = FactoryGirl.create :gpdb_schema
+    @workspace = FactoryGirl.build :workspace, :owner => @user, :archiver => @archiver, :sandbox => @schema
     @presenter = WorkspacePresenter.new(@workspace, view)
   end
 
@@ -48,6 +49,11 @@ describe WorkspacePresenter, :type => :view do
     it "should use ownerPresenter Hash method for owner" do
       archiver = @hash[:archiver]
       archiver.to_hash.should == (UserPresenter.new(@archiver, view).to_hash)
+    end
+
+    it "should use gpdbSchemaPresenter Hash method for sandbox_info" do
+      sandbox = @hash[:sandbox_info]
+      sandbox.to_hash.should == (GpdbSchemaPresenter.new(@schema, view).to_hash)
     end
 
     it_behaves_like "sanitized presenter", :workspace, :summary

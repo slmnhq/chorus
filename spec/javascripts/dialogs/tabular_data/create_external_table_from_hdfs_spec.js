@@ -2,12 +2,13 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
     beforeEach(function() {
         setLoggedInUser({id: '54321'});
         chorus.page = {};
-        this.sandbox = newFixtures.sandbox({
-            schemaName: "mySchema",
-            databaseName: "myDatabase",
-            instanceName: "myInstance"
-        })
-        chorus.page.workspace = rspecFixtures.workspace();
+        chorus.page.workspace = rspecFixtures.workspace({
+            sandboxInfo: {
+                name: "mySchema",
+                database: { name: "myDatabase", instance: { name: "myInstance" } }
+            }
+        });
+        this.sandbox = chorus.page.workspace.sandbox();
         this.csv = new chorus.models.CsvHdfs({lines: [
             "COL1,col2, col3 ,col 4,Col_5",
             "val1.1,val1.2,val1.3,val1.4,val1.5",

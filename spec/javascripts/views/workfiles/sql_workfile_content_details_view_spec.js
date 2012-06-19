@@ -3,13 +3,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         this.model = rspecFixtures.workfile.sql({ fileName: 'test.sql', versionInfo: { content: "select * from foo" } });
         this.model.workspace().set({
             sandboxInfo: {
-                databaseId: '3',
-                databaseName: "db",
-                instanceId: '2',
-                instanceName: "instance",
-                sandboxId: "10001",
-                schemaId: '4',
-                schemaName: "schema"
+                id: 4, name: "schema",
+                database: { id: 3, name: "db", instance: { id: 2, name: "instance" } }
             }});
         this.contentView = new chorus.views.SqlWorkfileContent({ model: this.model });
         spyOn(this.contentView, 'run');

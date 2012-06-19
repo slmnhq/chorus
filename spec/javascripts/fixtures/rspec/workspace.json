@@ -1,14 +1,14 @@
 {
   "response": {
-    "id": 5,
+    "id": 2316,
     "name": "workspace2",
     "summary": null,
     "owner": {
-      "id": 6,
-      "username": "user6",
+      "id": 1841,
+      "username": "user7",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person6@example.com",
+      "email": "person7@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -33,7 +33,43 @@
     "has_added_workfile": false,
     "has_added_sandbox": false,
     "has_changed_settings": false,
-    "sandbox_info": null,
+    "sandbox_info": {
+      "id": 75,
+      "name": "schema1",
+      "database": {
+        "id": 87,
+        "name": "database1",
+        "instance": {
+          "name": "instance1",
+          "host": "host1.emc.com",
+          "port": 5001,
+          "id": 316,
+          "owner": {
+            "id": 1840,
+            "username": "user6",
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "person6@example.com",
+            "title": "Grand Poo Bah",
+            "dept": "Corporation Corp., Inc.",
+            "notes": "One of our top performers",
+            "admin": false,
+            "image": {
+              "original": "/images/default-user-icon.png",
+              "icon": "/images/default-user-icon.png"
+            }
+          },
+          "shared": false,
+          "state": "online",
+          "provision_type": null,
+          "maintenance_db": "postgres",
+          "description": null,
+          "instance_provider": null,
+          "version": "9.1.2 - FactoryVersion"
+        }
+      },
+      "dataset_count": 0
+    },
     "latest_comment_list": null
   }
 }

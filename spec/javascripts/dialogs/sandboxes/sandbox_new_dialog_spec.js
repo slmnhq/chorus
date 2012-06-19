@@ -15,6 +15,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     context("when the SchemaPicker triggers an error", function() {
         beforeEach(function() {
+//            TODO: Uncomment this when the aurora provisioning is done
 //            this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora());
             var modelWithError = rspecFixtures.schemaSet();
             modelWithError.serverErrors = { fields: { a: { BLANK: {} } } };

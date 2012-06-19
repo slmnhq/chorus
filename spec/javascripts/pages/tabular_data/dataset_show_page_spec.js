@@ -3,27 +3,22 @@ describe("chorus.pages.DatasetShowPage", function() {
         this.workspace = rspecFixtures.workspace({
             id: '100',
             "sandboxInfo": {
-                databaseId: "4",
-                databaseName: "db",
-                instanceId: "5",
-                instanceName: "instance",
-                schemaId: "6",
-                schemaName: "schema",
-                sandboxId: "99"
+                id: 6, name: "schema",
+                database: { id: 4, name: "db", instance: { id: 5, name: "instance" } }
             }
         });
         chorus.page = {workspace: this.workspace};
 
-        var sandboxInfo = this.workspace.get("sandboxInfo")
+        var sandboxInfo = this.workspace.sandbox();
 
         this.dataset = rspecFixtures.dataset.datasetTable({
             schema: {
-                name: sandboxInfo.schemaName,
+                name: sandboxInfo.get("name"),
                 database: {
-                    name: sandboxInfo.databaseName,
+                    name: sandboxInfo.database().name(),
                     instance: {
-                        id: sandboxInfo.instanceId,
-                        name: sandboxInfo.instanceName
+                        id: sandboxInfo.instance().id,
+                        name: sandboxInfo.instance().name()
                     }
                 }
             },

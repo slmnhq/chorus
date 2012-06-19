@@ -30,7 +30,7 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
 
     additionalContext : function(ctx) {
         return {
-            hasSandbox : this.workspace.sandbox() && !!this.workspace.sandbox()
+            hasSandbox : !!this.workspace.sandbox()
         }
     },
 
@@ -54,9 +54,9 @@ chorus.dialogs.RunFileInSchema = chorus.dialogs.Base.extend({
         var options = {};
         if (this.$("#sandbox_schema").is(":checked")) {
             options = {
-                instance:this.workspace.sandbox().get("instanceId"),
-                database:this.workspace.sandbox().get("databaseId"),
-                schema:this.workspace.sandbox().get("schemaId")
+                instance:this.workspace.sandbox().instance().id,
+                database:this.workspace.sandbox().database().id,
+                schema:this.workspace.sandbox().schema().id
             };
         } else {
             options = this.schemaPicker.fieldValues();

@@ -38,13 +38,8 @@ describe("chorus.models.Workfile", function() {
             beforeEach(function() {
                 this.model.workspace().set({
                     sandboxInfo: {
-                        databaseId: "4",
-                        databaseName: "db",
-                        instanceId: "5",
-                        instanceName: "instance",
-                        sandboxId: "10001",
-                        schemaId: "6",
-                        schemaName: "schema"
+                        id: 6, name: "schema",
+                        database: { id: 4, name: "db", instance: { id: 5, name: "instance" } }
                     }
                 });
             })
@@ -52,11 +47,11 @@ describe("chorus.models.Workfile", function() {
             context("when the workfile has never been executed", function() {
                 it("returns the sandbox's schema", function() {
                     var schema = this.model.executionSchema();
-                    expect(schema.database().instance().id).toBe('5');
+                    expect(schema.database().instance().id).toBe(5);
                     expect(schema.database().instance().name()).toBe('instance');
-                    expect(schema.database().id).toBe('4');
+                    expect(schema.database().id).toBe(4);
                     expect(schema.database().name()).toBe('db');
-                    expect(schema.get("id")).toBe('6');
+                    expect(schema.get("id")).toBe(6);
                     expect(schema.get("name")).toBe('schema');
                 });
             })
@@ -119,17 +114,7 @@ describe("chorus.models.Workfile", function() {
     describe("#sandbox", function() {
         context("when the workfile's workspace has been fetched", function() {
             beforeEach(function() {
-                spyOn(this.model, "workspace").andReturn(rspecFixtures.workspace({
-                    sandboxInfo: {
-                        databaseId: 4,
-                        databaseName: "db",
-                        instanceId: 5,
-                        instanceName: "instance",
-                        sandboxId: "10001",
-                        schemaId: 6,
-                        schemaName: "schema"
-                    }
-                }))
+                spyOn(this.model, "workspace").andReturn(rspecFixtures.workspace());
             });
 
             it("returns the sandbox from the workspace", function() {

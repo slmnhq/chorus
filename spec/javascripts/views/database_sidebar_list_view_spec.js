@@ -32,7 +32,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             object0.cid = 'c44';
             object1.cid = 'c55';
 
-            this.schema = newFixtures.sandbox({ schemaName: "righteous_tables" }).schema();
+            this.schema = rspecFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
             this.collection = new chorus.collections.Base([object0, object1]);
 
             spyOn(this.collection.models[0], 'toText').andReturn('object1');
@@ -145,11 +145,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
     context("when there are no valid credentials", function() {
         beforeEach(function() {
-            this.schema = newFixtures.sandbox({ schemaName: "righteous_tables" }).schema();
-
-            // TODO - remove me once we add sandboxes
-            this.schema.set({ instanceName: "monkey-patch" });
-
+            this.schema = rspecFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
             this.collection = new chorus.collections.Base([]);
             this.collection.serverErrors = [
                 {message: "Account map needed"}
@@ -172,7 +168,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
         it("should show the missing credentials error messages", function() {
             expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
                 linkText: t("dataset.credentials.missing.linkText"),
-                instanceName: this.schema.get("instanceName")
+                instanceName: this.schema.database().instance().name()
             });
         })
     });
