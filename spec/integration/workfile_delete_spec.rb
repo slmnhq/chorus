@@ -41,8 +41,7 @@ describe " add an instance " do
 
   end
 
-  xit "hides the delete link when am not a member of the workspace"do
-
+  it "hides the delete link when am not a member of the workspace"do
     create_valid_workspace(:name => "not a member delete")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
     create_valid_workfile(:name => "invalid_member")

@@ -99,7 +99,8 @@ describe("chorus.views.WorkfileShowSidebar", function() {
 
             this.server.completeFetchFor(this.workfile);
             this.server.completeFetchFor(this.workfile.workspace(), rspecFixtures.workspace({
-                id: this.workfile.workspace().id
+                id: this.workfile.workspace().id,
+                permission: ["read", "commenting", "update"]
             }));
 
             this.view.render();
@@ -213,4 +214,27 @@ describe("chorus.views.WorkfileShowSidebar", function() {
             expect(this.view.postRender).toHaveBeenCalled();
         })
     })
+
+    describe("when the user is not a workspace member", function() {
+        beforeEach(function() {
+            this.workfile = rspecFixtures.workfile.text({ versionInfo: { updatedAt: "2011-11-22T10:46:03Z" }});
+            this.view = new chorus.views.WorkfileShowSidebar({ model : this.workfile });
+
+            this.view.model.fetch();
+            this.view.model.workspace().fetch();
+
+            this.server.completeFetchFor(this.workfile);
+            this.server.completeFetchFor(this.workfile.workspace(), rspecFixtures.workspace({
+                id: this.workfile.workspace().id,
+                permission: ["read", "commenting"]
+            }));
+
+            this.view.render();
+        });
+
+        it("hides the link to delete the workfile", function() {
+            var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
+            expect(deleteLink).not.toExist();
+        });
+    });
 });

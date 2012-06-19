@@ -10,11 +10,11 @@
 <div class="actions">
     <ul>
         <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-active-only="true">{{t "actions.copy_to_another_workspace"}}</a></li>
-        {{#if isActiveWorkspace}}
+        {{#ifAll activeWorkspace canUpdate}}
             <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-workfile-name="{{fileName}}">{{t "actions.delete"}}</a></li>
-        {{/if}}
+        {{/ifAll}}
         <li><a class="download" href="{{downloadUrl}}">{{t "actions.download"}}</a></li>
-        {{#if isActiveWorkspace}}
+        {{#if activeWorkspace}}
             <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workfile" data-workspace-id="{{workspace.id}}" data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
         {{/if}}
     </ul>

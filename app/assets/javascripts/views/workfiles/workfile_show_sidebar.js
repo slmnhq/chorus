@@ -66,7 +66,8 @@ chorus.views.WorkfileShowSidebar = chorus.views.Sidebar.extend({
             updatedBy: modifier.displayShortName(),
             modifierUrl: modifier.showUrl(),
             downloadUrl: this.model.downloadUrl(),
-            isActiveWorkspace: this.model.workspace().isActive()
+            activeWorkspace: this.model.workspace().isActive(),
+            canUpdate: this.model.workspace().canUpdate()
         }
     }
 });
