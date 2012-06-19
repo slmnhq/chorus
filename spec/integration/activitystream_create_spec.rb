@@ -22,7 +22,6 @@ describe " add an instance " do
       click_link "EDC Admin"
     end
     page.should have_content "EDC Admin added a new instance gpdb_instance"
-    p Instance.all
   end
 
   it "System generates events for gpdb name change (INSTANCE_CHANGED_NAME)" do
