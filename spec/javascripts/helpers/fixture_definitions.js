@@ -96,6 +96,8 @@ window.rspecFixtureDefinitions = {
     instanceAccount: {},
     instanceAccountSet: {},
 
+    forbiddenInstance: {},
+
     activity: {
         unique: [ "id" ],
 

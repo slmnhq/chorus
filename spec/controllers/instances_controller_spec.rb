@@ -53,6 +53,16 @@ describe InstancesController do
       end
     end
 
+    context "when the current user does not have credentials for the instance" do
+      subject { described_class.new }
+
+      generate_fixture "forbiddenInstance.json" do
+        stub(subject).can? { false }
+        get :show, :id => instance.to_param
+        response.should be_forbidden
+      end
+    end
+
     context "with an invalid instance id" do
       it "returns not found" do
         get :show, :id => 'invalid'

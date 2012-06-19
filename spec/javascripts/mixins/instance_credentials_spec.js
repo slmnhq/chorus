@@ -2,16 +2,17 @@ describe("chorus.Mixins.InstanceCredentials", function() {
     describe("model", function() {
         beforeEach(function() {
             this.collection = new chorus.collections.Base();
+            spyOn(this.collection, "url").andReturn("some/url");
             _.extend(this.collection, chorus.Mixins.InstanceCredentials.model);
         });
 
         describe("#instanceRequiringCredentials", function() {
             context("when a fetch failed because of missing instance credentials", function() {
                 it("returns an instance model with the right id", function() {
-                    this.collection.errorData = {
-                        id: "101",
-                        name: "Ron Instance"
-                    };
+                    var json = rspecFixtures.forbiddenInstanceJson({ response: { instance: { id: '101' } } });
+
+                    this.collection.fetch();
+                    this.server.lastFetchFor(this.collection).respondJson(403, json);
 
                     var instance = this.collection.instanceRequiringCredentials();
                     expect(instance).toBeA(chorus.models.GreenplumInstance);

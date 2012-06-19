@@ -5,6 +5,12 @@ describe("chorus.pages.DatabaseIndexPage", function() {
         this.page.render();
     });
 
+    it("includes the instance credentials mixin", function() {
+        expect(this.page.dependentResourceForbidden).toBe(
+            chorus.Mixins.InstanceCredentials.page.dependentResourceForbidden
+        );
+    });
+
     it("has a helpId", function() {
         expect(this.page.helpId).toBe("instances")
     });
