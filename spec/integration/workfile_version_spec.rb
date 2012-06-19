@@ -71,7 +71,8 @@ describe "save as Menu" do
 
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood -2")')
     page.find(".save .save_as").click
-    wait_until { page.find(".qtip[aria-hidden=false]") }
+    wait_until { page.find(".save_as_new") }
+    sleep 0.5
     page.find("a.save_as_new").click
     wait_until { page.find(".qtip[aria-hidden=true]") }
     fill_in 'commitMessage', :with => "commit Message -2"
