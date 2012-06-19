@@ -1,31 +1,25 @@
 require 'spec_helper'
 
 describe ApplicationController do
-  class ApplicationController
-    def any_action
-    end
 
-    def action_that_presents
-      present object_to_present
-    end
-
-    def action_requiring_session
-      head :ok
-    end
-  end
-
-  it "should have a uuid for every web request" do
+  it "has a uuid for every web request" do
     Chorus::Application.config.log_tags.should == [:uuid]
   end
 
   describe "rescuing from errors" do
+    controller do
+      def index
+        head :ok
+      end
+    end
+
     before do
       log_in FactoryGirl.create :user
     end
 
     it "renders 'not found' JSON when record not found" do
-      stub(controller).any_action { raise ActiveRecord::RecordNotFound }
-      get :any_action
+      stub(controller).index { raise ActiveRecord::RecordNotFound }
+      get :index
 
       response.code.should == "404"
       decoded_errors.record.should == "NOT_FOUND"
@@ -35,9 +29,8 @@ describe ApplicationController do
       invalid_record = User.new
       invalid_record.password = "1"
       invalid_record.valid?
-      stub(controller).any_action { raise ActiveRecord::RecordInvalid.new(invalid_record) }
-      get :any_action
-
+      stub(controller).index { raise ActiveRecord::RecordInvalid.new(invalid_record) }
+      get :index
       response.code.should == "422"
       decoded_errors.fields.username.BLANK.should == {}
     end
@@ -45,23 +38,81 @@ describe ApplicationController do
     it "renders string-based validation messages, when provided" do
       invalid_record = User.new
       invalid_record.errors.add(:username, :generic, :message => "some error")
-      stub(controller).any_action { raise ActiveRecord::RecordInvalid.new(invalid_record) }
-      get :any_action
+      stub(controller).index { raise ActiveRecord::RecordInvalid.new(invalid_record) }
+      get :index
 
       response.code.should == "422"
       decoded_errors.fields.username.GENERIC.message.should == "some error"
     end
 
     it "returns error 422 when a Postgres error occurs" do
-      stub(controller).any_action { raise PG::Error.new }
+      stub(controller).index { raise PG::Error.new }
 
-      get :any_action
+      get :index
 
       response.code.should == "422"
+    end
+
+    describe "when an access denied error is raised" do
+      let(:object_to_present) { FactoryGirl.build(:instance, :id => -54) }
+      let(:exception) { Allowy::AccessDenied.new('', 'action', object_to_present) }
+
+      before do
+        log_in FactoryGirl.create(:user)
+        stub(controller).index { raise exception }
+      end
+
+      it "returns a status of 403" do
+        get :index
+        response.should be_forbidden
+      end
+
+      it "includes the given model's id" do
+        get :index
+        decoded_response.instance.id.should == object_to_present.id
+      end
+    end
+  end
+
+  describe "#require_admin" do
+    controller do
+      before_filter :require_admin
+
+      def index
+        head :ok
+      end
+    end
+
+    before do
+      log_in user
+    end
+
+    context "when user has no admin rights" do
+      let(:user) { FactoryGirl.create(:user) }
+
+      it "returns error 403" do
+        get :index
+        response.should be_forbidden
+      end
+    end
+
+    context "when user has admin rights" do
+      let(:user) { FactoryGirl.create(:admin) }
+
+      it "returns success" do
+        get :index
+        response.should be_ok
+      end
     end
   end
 
   describe "#current_user" do
+    controller do
+      def index
+        head :ok
+      end
+    end
+
     before do
       @user = FactoryGirl.create(:user)
     end
@@ -83,6 +134,12 @@ describe ApplicationController do
   end
 
   describe "#present" do
+    controller do
+      def index
+        present object_to_present
+      end
+    end
+
     before do
       stub(controller).object_to_present { object_to_present }
       log_in FactoryGirl.create :user
@@ -92,7 +149,7 @@ describe ApplicationController do
       let(:object_to_present) { FactoryGirl.build(:user) }
 
       it "sets the response to a hash of the model" do
-        get :action_that_presents
+        get :index
         decoded_response.username.should == object_to_present.username
       end
     end
@@ -109,13 +166,13 @@ describe ApplicationController do
       end
 
       it "sets the response to an array with a hash for each model in current page" do
-        get :action_that_presents
+        get :index
         decoded_response.length.should == 2
         decoded_response[0].username.should == object_to_present[0].username
       end
 
       it "adds pagination" do
-        get :action_that_presents
+        get :index
         decoded_pagination.page.should == 1
         decoded_pagination.per_page.should == 2
         decoded_pagination.total.should == 2
@@ -125,6 +182,12 @@ describe ApplicationController do
   end
 
   describe "session expiration" do
+    controller do
+      def index
+        head :ok
+      end
+    end
+
     before do
       log_in FactoryGirl.create :user
       session[:expires_at] = 1.hour.from_now
@@ -132,19 +195,19 @@ describe ApplicationController do
 
     context "with and unexpired session" do
       it "allows API requests" do
-        get :action_requiring_session
+        get :index
         response.should be_success
       end
 
       it "resets the expires_at" do
-        get :action_requiring_session
+        get :index
         session[:expires_at].should > 1.hour.from_now
       end
 
       it "uses the configured session timeout" do
         Chorus::Application.config.chorus['session_timeout_minutes'] = 60 * 4
         Timecop.freeze(2012, 4, 17, 10, 30) do
-          get :action_requiring_session
+          get :index
           session[:expires_at].should == 4.hours.from_now
         end
       end
@@ -156,7 +219,7 @@ describe ApplicationController do
       end
 
       it "returns 'unauthorized'" do
-        get :action_requiring_session
+        get :index
         response.code.should == "401"
       end
     end
@@ -164,7 +227,7 @@ describe ApplicationController do
     context "without session expiration" do
       it "returns 'unauthorized'" do
         session.delete(:expires_at)
-        get :action_requiring_session
+        get :index
         response.code.should == "401"
       end
     end

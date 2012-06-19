@@ -11,7 +11,6 @@ class InstancesController < GpdbController
 
   def show
     instance = Instance.find(params[:id])
-    authorize_instance_access instance
     present instance
   end
 

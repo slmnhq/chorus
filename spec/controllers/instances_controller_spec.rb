@@ -30,11 +30,11 @@ describe InstancesController do
   end
 
   describe "#show" do
-    context "with a valid instance id" do
-      let(:instance) { FactoryGirl.create(:instance) }
+    let(:instance) { FactoryGirl.create(:instance) }
 
-      it "uses authorization" do
-        mock(subject).authorize!(:show, instance)
+    context "with a valid instance id" do
+      it "does not require authorization" do
+        dont_allow(subject).authorize!.with_any_args
         get :show, :id => instance.to_param
       end
 

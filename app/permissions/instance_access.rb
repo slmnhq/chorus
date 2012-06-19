@@ -11,7 +11,7 @@ class InstanceAccess < DefaultAccess
     instance.owner == current_user
   end
 
-  def show?(instance)
+  def show_contents?(instance)
     instance.shared? || current_user.instance_accounts.exists?(:instance_id => instance.id)
   end
 end

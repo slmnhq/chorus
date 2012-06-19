@@ -246,7 +246,7 @@ describe WorkspacesController do
       end
 
       it "uses schema authentication" do
-        mock(subject).authorize!(:show, sandbox.instance)
+        mock(subject).authorize!(:show_contents, sandbox.instance)
         put :update, :id => workspace.to_param, :workspace => { :sandbox_id => sandbox.to_param }
       end
     end

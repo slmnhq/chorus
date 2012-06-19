@@ -45,7 +45,7 @@ class WorkspacesController < ApplicationController
     if w.has_key?(:sandbox_id) && (workspace.sandbox_id.to_s != w[:sandbox_id])
       authorize! :administrative_edit, workspace
       sandbox_schema =  GpdbSchema.find(w[:sandbox_id])
-      authorize! :show, sandbox_schema.instance
+      authorize! :show_contents, sandbox_schema.instance
       workspace.sandbox = sandbox_schema
     end
 

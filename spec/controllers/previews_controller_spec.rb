@@ -19,7 +19,7 @@ describe PreviewsController do
     end
 
     it "uses authentication" do
-      mock(subject).authorize! :show, gpdb_table.instance
+      mock(subject).authorize! :show_contents, gpdb_table.instance
       post :create, :dataset_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
     end
 

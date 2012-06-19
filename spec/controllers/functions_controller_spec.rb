@@ -42,7 +42,7 @@ describe FunctionsController do
     end
 
     it "should check for permissions" do
-      mock(subject).authorize! :show, schema.instance
+      mock(subject).authorize! :show_contents, schema.instance
       get :index, :schema_id => schema.to_param
     end
   end

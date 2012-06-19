@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_forbidden(e = nil)
-    head(:forbidden)
+    present_forbidden(e.try(:subject))
   end
 
   def logged_in?
@@ -75,6 +75,18 @@ class ApplicationController < ActionController::Base
     end
 
     render options.merge({:json => json})
+  end
+
+  def present_forbidden(model)
+    response_json = {}
+
+    if model
+      response_json[:response] = {
+        model.class.name.underscore => { :id => model.id }
+      }
+    end
+
+    render :json => response_json, :status => :forbidden
   end
 
   def present_errors(errors, options={})

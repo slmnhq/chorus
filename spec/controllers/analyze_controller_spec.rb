@@ -22,7 +22,7 @@ describe AnalyzeController do
     end
 
     it "uses authentication" do
-      mock(subject).authorize! :show, gpdb_table.instance
+      mock(subject).authorize! :show_contents, gpdb_table.instance
       post :create, :table_id => gpdb_table.to_param
     end
 

@@ -2,7 +2,7 @@ class GpdbController < ApplicationController
   private
 
   def authorize_instance_access(resource)
-    authorize! :show, resource.instance
+    authorize! :show_contents, resource.instance
   end
 
   def authorized_gpdb_account(resource)

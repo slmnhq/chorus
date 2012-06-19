@@ -20,7 +20,7 @@ describe InstanceDatabasesController do
       let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner => instance.owner }
 
       it "checks authorization" do
-        mock(subject).authorize!(:show, instance)
+        mock(subject).authorize!(:show_contents, instance)
         get :index, :instance_id => instance.id
       end
 
@@ -56,7 +56,7 @@ describe InstanceDatabasesController do
     let(:database) { FactoryGirl.create(:gpdb_database) }
 
     it "uses authorization" do
-      mock(subject).authorize!(:show, database.instance)
+      mock(subject).authorize!(:show_contents, database.instance)
       get :show, :id => database.to_param
     end
 

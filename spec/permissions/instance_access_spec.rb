@@ -50,11 +50,11 @@ describe InstanceAccess do
     end
   end
 
-  describe "show?" do
+  describe "show_contents?" do
     context "for public instances" do
       it "shows for everybody, including non-owner, non-admin users" do
         instance.update_attribute :shared, true
-        instance_access.can?(:show, instance).should be_true
+        instance_access.can?(:show_contents, instance).should be_true
       end
     end
 
@@ -65,11 +65,11 @@ describe InstanceAccess do
 
       it "allows members to show (which includes owner)" do
         instance_account = FactoryGirl.create(:instance_account, :owner => user, :instance => instance)
-        instance_access.can?(:show, instance).should be_true
+        instance_access.can?(:show_contents, instance).should be_true
       end
 
       it "prevents non-members from showing" do
-        instance_access.can?(:show, instance).should be_false
+        instance_access.can?(:show_contents, instance).should be_false
       end
     end
   end
