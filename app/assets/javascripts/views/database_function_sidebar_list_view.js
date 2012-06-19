@@ -16,7 +16,7 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
         return {
             hintText: model.toHintText(),
             cid: model.cid,
-            name: model.get("functionName"),
+            name: model.get("name"),
             fullName: model.toText()
         }
     },

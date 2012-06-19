@@ -12,6 +12,6 @@ class GpdbSchemaFunction
   private
 
   def convert_to_array(s)
-    s && s.gsub(/[{} ]/, "").split(",")
+    s ? s.gsub(/[{} ]/, "").split(",") : []
   end
 end

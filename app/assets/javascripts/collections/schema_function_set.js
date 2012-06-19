@@ -1,9 +1,9 @@
 chorus.collections.SchemaFunctionSet = chorus.collections.Base.extend({
     model:chorus.models.SchemaFunction,
-    urlTemplate:"instance/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}/function",
+    urlTemplate:"schemas/{{id}}/functions",
 
     comparator:function (schemaFunction) {
-        return schemaFunction.get('functionName').toLowerCase();
+        return schemaFunction.get('name').toLowerCase();
     },
 
     _add:function (model, options) {

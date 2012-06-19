@@ -11,21 +11,21 @@ describe("chorus.collections.SchemaFunctionSet", function() {
         });
 
         it("encodes the url", function() {
-            expect(this.functionSet.url()).toContain("/instance/10000/database/%25foo%25/schema/b%2Fa%2Fr/function");
+            expect(this.functionSet.url()).toContain("/schemas/"+ this.schema.id +"/functions");
         });
     });
 
     describe("sort", function() {
         beforeEach(function() {
             this.functionSet.reset([
-                fixtures.schemaFunction({ functionName: 'z'}),
-                fixtures.schemaFunction({ functionName: 'G'}),
-                fixtures.schemaFunction({ functionName: 'a'})
+                fixtures.schemaFunction({ name: 'z'}),
+                fixtures.schemaFunction({ name: 'G'}),
+                fixtures.schemaFunction({ name: 'a'})
             ]);
         });
 
         it("sorts by functionName, case insensitive", function() {
-            var functionNames = this.functionSet.pluck('functionName')
+            var functionNames = this.functionSet.pluck('name')
             expect(functionNames).toEqual(['a', 'G', 'z']);
         })
     });

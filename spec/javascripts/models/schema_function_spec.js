@@ -1,6 +1,6 @@
 describe("chorus.models.SchemaFunction", function() {
     beforeEach(function() {
-        this.model = fixtures.schemaFunction({schemaName: "aa", functionName: "fun", argNames: ["elephant", ""], argTypes: ["Int", "Bool"]});
+        this.model = fixtures.schemaFunction({schemaName: "aa", name: "fun", argNames: ["elephant", ""], argTypes: ["Int", "Bool"]});
     })
     describe("#toText", function() {
         context("with lowercase names", function() {
@@ -10,7 +10,7 @@ describe("chorus.models.SchemaFunction", function() {
         });
         context("with uppercase letters in the names", function() {
             beforeEach(function() {
-                this.model.set({schemaName: "Aa", functionName: "fuN"});
+                this.model.set({schemaName: "Aa", name: "fuN"});
             })
             it("puts quotes around the uppercase names", function() {
                 expect(this.model.toText()).toBe('"Aa"."fuN"(Int elephant, Bool arg2)');

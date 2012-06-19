@@ -40,9 +40,7 @@ describe("chorus.models.Schema", function() {
             });
 
             it("should pass the instanceId, databaseId, and schemaId", function() {
-                expect(this.model.functions().attributes.instanceId).toBe(this.model.database().instance().id);
-                expect(this.model.functions().attributes.databaseId).toBe(this.model.database().id);
-                expect(this.model.functions().attributes.schemaId).toBe(this.model.get('id'));
+                expect(this.model.functions().attributes.id).toBe(this.model.get('id'));
             });
         });
     });

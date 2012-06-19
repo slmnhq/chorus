@@ -8,7 +8,7 @@ chorus.models.SchemaFunction = chorus.models.Base.extend({
         });
 
         var schemaName = this.safePGName(this.get("schemaName"));
-        var functionName = this.safePGName(this.get("functionName"));
+        var functionName = this.safePGName(this.get("name"));
 
         var result = schemaName + "." + functionName + '(';
         result = result + functionArguments.join(', ');
@@ -23,7 +23,7 @@ chorus.models.SchemaFunction = chorus.models.Base.extend({
             return argType + ' ' + argName;
         });
 
-        var result = this.get("returnType") + " " + this.get('functionName') + '(';
+        var result = this.get("returnType") + " " + this.get('name') + '(';
         result = result + functionArguments.join(', ');
         result = result + ')';
         return result;

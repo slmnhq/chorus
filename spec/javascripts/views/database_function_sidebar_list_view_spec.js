@@ -58,8 +58,8 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                     ]);
 
                     this.server.completeFetchFor(this.view.collection, [
-                        fixtures.schemaFunction({ functionName: "laplace_transform" }),
-                        fixtures.schemaFunction({ functionName: "inc" })
+                        fixtures.schemaFunction({ name: "laplace_transform" }),
+                        fixtures.schemaFunction({ name: "inc" })
                     ]);
                 });
 
@@ -124,8 +124,8 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                         describe("when the function fetch completes", function() {
                             beforeEach(function() {
                                 this.server.completeFetchFor(this.view.collection, [
-                                    fixtures.schemaFunction({ functionName: "fourier_transform" }),
-                                    fixtures.schemaFunction({ functionName: "obnoxious_transform" })
+                                    fixtures.schemaFunction({ name: "fourier_transform" }),
+                                    fixtures.schemaFunction({ name: "obnoxious_transform" })
                                 ]);
                             });
 

@@ -5,12 +5,8 @@ chorus.models.Schema = chorus.models.Base.extend({
 
     functions: function() {
         this._schemaFunctions = this._schemaFunctions || new chorus.collections.SchemaFunctionSet([], {
-            instanceId: this.database().instance().id,
-            databaseId: this.database().id,
-            // TODO Is databaseName used?
-            databaseName: this.database().name(),
-            schemaId: this.get("id"),
-            schemaName: this.get('name')
+            id: this.get("id"),
+            schemaName: this.get("name")
         });
         return this._schemaFunctions;
     },
