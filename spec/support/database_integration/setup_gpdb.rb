@@ -40,6 +40,7 @@ module GpdbIntegration
     GpdbSchema.refresh(account, database)
     gpdb_schema = GpdbSchema.find_by_name('gpdb_test_schema_in_db_without_public_schema')
     Dataset.refresh(account, gpdb_schema)
+    account
   end
 
   def real_gpdb_account

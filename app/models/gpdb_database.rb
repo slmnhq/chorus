@@ -7,6 +7,8 @@ class GpdbDatabase < ActiveRecord::Base
     datname
   FROM
     pg_database
+  WHERE
+    datallowconn IS TRUE
   SQL
 
   def self.refresh(account)
