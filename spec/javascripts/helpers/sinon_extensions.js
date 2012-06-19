@@ -147,6 +147,13 @@ _.extend(sinon.fakeServer, {
 
 
 _.extend(sinon.FakeXMLHttpRequest.prototype, {
+    respondJson: function(responseCode, json) {
+        return this.respond(
+            responseCode,
+            { 'Content-Type': 'application/json' },
+            JSON.stringify(json));
+    },
+
     succeed: function(models, pagination) {
         var isArray = _.isArray(models);
         if (!isArray) models = [models];
@@ -160,82 +167,53 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
 
         if (!isArray) { resource = resource[0]; }
 
-        return this.respond(
-            200,
-            { 'Content-Type': 'application/json' },
-            JSON.stringify({
-                response: resource,
-                pagination: pagination
-            })
-        );
+        return this.respondJson(200, {
+            response: resource,
+            pagination: pagination
+        });
     },
 
     fail: function fail(message, resource) {
-        resource || (resource = [])
-        return this.respond(
-            200,
-            { 'Content-Type': 'application/json' },
-            JSON.stringify({
-                status: "fail",
-                resource: resource,
-                message: message || "something went wrong!"
-            })
-        );
+        return this.respondJson(200, {
+            status: "fail",
+            resource: resource || [],
+            message: message || "something went wrong!"
+        });
     },
 
     failNotFound: function(errors, response) {
-        return this.respond(
-            404,
-            { 'Content-Type': 'application/json' },
-            JSON.stringify({
-                response: response,
-                errors: errors || {}
-            })
-        );
+        return this.respondJson(404, {
+            response: response,
+            errors: errors || {}
+        });
     },
 
     failForbidden: function(errors, response) {
-        return this.respond(
-            403,
-            { 'Content-Type': 'application/json' },
-            JSON.stringify({
-                response: response,
-                errors: errors || {}
-            })
-        );
+        return this.respondJson(403, {
+            response: response,
+            errors: errors || {}
+        });
     },
 
     failUnprocessableEntity: function(errors, response) {
-        return this.respond(
-            422,
-            { 'Content-Type': 'application/json' },
-            JSON.stringify({
-                response: response,
-                errors: errors || {}
-            })
-        );
+        return this.respondJson(422, {
+            response: response,
+            errors: errors || {}
+        });
     },
 
     failUnauthorized: function(errors, response) {
-        return this.respond(
-            401,
-            { 'Content-Type': 'application/json' },
-            JSON.stringify({
-                response: response || [],
-                errors: errors || {}
-            })
-        );
+        return this.respondJson(401, {
+            response: response || [],
+            errors: errors || {}
+        });
     },
 
     failServerError: function(errors, response) {
-        return this.respond(
-            500,
-            { 'Content-Type': 'application/json' },
-            JSON.stringify({
-                response: response || [],
-                errors: errors || {}
-            })
-        );
+        return this.respondJson(500, {
+            response: response || [],
+            errors: errors || {}
+        });
     },
 
     params: function() {

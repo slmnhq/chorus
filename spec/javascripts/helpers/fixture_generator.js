@@ -55,8 +55,8 @@
                 return model[setMethod](attrs, { silent: true });
             };
 
-            module[jsonMethodName] = function() {
-                return module[name].apply(this, arguments).attributes;
+            module[jsonMethodName] = function(overrides) {
+                return safeExtend(deepClone(saveParsedJson(name, parentName)), overrides, name);
             };
         }
 
@@ -118,6 +118,10 @@
                 if (nested[lastKey] === undefined) nested[lastKey] = _.uniqueId() + "";
             });
         });
+    }
+
+    function deepClone(original) {
+        return JSON.parse(JSON.stringify(original));
     }
 
     function safeExtend(original, overrides, name) {

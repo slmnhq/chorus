@@ -157,6 +157,24 @@ describe("sinon extensions", function() {
         });
     });
 
+    describe("#respondJson", function() {
+        beforeEach(function() {
+            this.fakeRequest.respondJson(403, { response: { foo: "bar" } })
+        });
+
+        itReturnsStatus(403);
+
+        it("sets the content-type to 'application/json'", function() {
+            expect(this.fakeRequest.responseHeaders["Content-Type"]).toBe("application/json");
+        });
+
+        it("returns the given json as the body", function() {
+            expect(JSON.parse(this.fakeRequest.responseText)).toEqual({
+                response: { foo: "bar" }
+            });
+        });
+    });
+
     describe("#fail", function() {
         beforeEach(function() {
             this.fakeRequest.fail()

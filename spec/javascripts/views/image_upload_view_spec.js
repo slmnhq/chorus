@@ -8,11 +8,7 @@ describe("chorus.views.ImageUpload", function() {
         this.view = new chorus.views.ImageUpload({model : this.user});
         this.view.model.loaded = true;
         this.imageJson = rspecFixtures.imageJson();
-        this.successfulResponse = {
-            result: JSON.stringify({
-                response: this.imageJson
-            })
-        };
+        this.successfulResponse = { result: JSON.stringify(this.imageJson) };
         this.errorResponse = {
             result: JSON.stringify({
                 errors : { fields: { a: { BLANK: {} } } }
@@ -155,10 +151,10 @@ describe("chorus.views.ImageUpload", function() {
                 });
 
                 it("sets the image urls in the model", function() {
-                    expect(this.user.fetchImageUrl({ size: "original" })).toMatchUrl(this.imageJson.original, {
+                    expect(this.user.fetchImageUrl({ size: "original" })).toMatchUrl(this.imageJson.response.original, {
                         paramsToIgnore: "iebuster"
                     });
-                    expect(this.user.fetchImageUrl({ size: "icon" })).toMatchUrl(this.imageJson.icon, {
+                    expect(this.user.fetchImageUrl({ size: "icon" })).toMatchUrl(this.imageJson.response.icon, {
                         paramsToIgnore: "iebuster"
                     });
                 });

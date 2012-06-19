@@ -76,7 +76,7 @@ describe("newFixtures", function() {
 
     describe("#datasetJson", function() {
         it("generates its id based on the instance, database, schema, type and table name", function() {
-            var datasetJson = newFixtures.dataset.sourceTableJson({
+            var dataset = newFixtures.dataset.sourceTable({
                 instance: { id: "45" },
                 databaseName: "chorus_events",
                 schemaName: "plague",
@@ -84,54 +84,64 @@ describe("newFixtures", function() {
                 objectName: "outbreaks"
             });
 
-            expect(datasetJson.id).toBe('"45"|"chorus_events"|"plague"|"TABLE"|"outbreaks"');
+            expect(dataset.id).toBe('"45"|"chorus_events"|"plague"|"TABLE"|"outbreaks"');
         });
 
         context("when the id is overridden manually", function() {
             it("uses the override", function() {
-                var datasetJson = newFixtures.dataset.sourceTableJson({
+                var dataset = newFixtures.dataset.sourceTable({
                     id: "foo",
                     instance: { id: "45" },
                     databaseName: "chorus_events",
                     schemaName: "plague",
                     objectName: "outbreaks"
                 });
-                expect(datasetJson.id).toBe("foo");
+                expect(dataset.id).toBe("foo");
             });
         });
 
         context("when some of the id parameters are not overridden", function() {
             it("uses the default parameter to generate the id", function() {
-                var datasetJson = newFixtures.dataset.sourceTableJson({
+                var dataset = newFixtures.dataset.sourceTable({
                     databaseName: "chorus_events",
                     schemaName: "plague",
                     objectName: "outbreaks"
                 });
 
-                var instanceId = '"' + datasetJson.instance.id + '"';
+                var instanceId = '"' + dataset.get("instance").id + '"';
 
-                expect(datasetJson.id).toBe(instanceId + '|"chorus_events"|"plague"|"TABLE"|"outbreaks"');
+                expect(dataset.id).toBe(instanceId + '|"chorus_events"|"plague"|"TABLE"|"outbreaks"');
             });
         });
     });
 
     describe("#userJson", function() {
-        var fakeAttrs;
+        var userJson;
 
-        beforeEach(function() {
-            fakeAttrs = { ping: "pong", paddle: "ball" };
-            spyOn(rspecFixtures, 'user').andReturn(new chorus.models.User(fakeAttrs));
+        context("when no overrides are passed", function() {
+            beforeEach(function() {
+                userJson = rspecFixtures.userJson();
+            });
+
+            it("returns the user fixture data", function() {
+                expect(window.rspecFixtures.parsedJson.user).toBeDefined();
+                expect(window.rspecFixtures.parsedJson.user.response.first_name).toBeDefined();
+                expect(userJson.response.first_name).toBe(window.rspecFixtures.parsedJson.user.response.first_name);
+            });
+
+            it("clones the user fixture data", function() {
+                expect(userJson.response).not.toBe(window.rspecFixtures.parsedJson.user.response);
+            });
         });
 
-        it("returns the attributes of the model returned by rspecFixtures.user", function() {
-            var json = rspecFixtures.userJson();
-            expect(json).toEqual(fakeAttrs);
-        });
+        context("when overrides are passed", function() {
+            beforeEach(function() {
+                userJson = rspecFixtures.userJson({ response: { first_name: "vini" } });
+            });
 
-        it("passes its overrides to #user", function() {
-            var overrides = { foo: 1 };
-            rspecFixtures.userJson(overrides);
-            expect(rspecFixtures.user).toHaveBeenCalledWith(overrides);
+            it("uses the overridden parameters", function() {
+                expect(userJson.response.first_name).toBe("vini");
+            });
         });
     });
 

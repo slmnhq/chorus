@@ -139,9 +139,9 @@ describe("chorus.models.User", function() {
         });
 
         it("should return a truthy value for a valid user", function() {
-            this.model.set(rspecFixtures.userJson());
-            this.model.set({ password: "foo", passwordConfirmation: "foo" });
-            expect(this.model.performValidation()).toBeTruthy();
+            var model = rspecFixtures.user();
+            model.set({ password: "foo", passwordConfirmation: "foo" });
+            expect(model.performValidation()).toBeTruthy();
         });
 
         _.each(["firstName", "lastName", "username", "password"], function(attr) {
