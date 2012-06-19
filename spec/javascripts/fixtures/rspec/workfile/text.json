@@ -1,16 +1,16 @@
 {
   "response": {
-    "id": 2,
+    "id": 6,
     "workspace": {
-      "id": 2,
-      "name": "workspace2",
+      "id": 3,
+      "name": "workspace3",
       "summary": null,
       "owner": {
-        "id": 13,
-        "username": "user11",
+        "id": 115,
+        "username": "user20",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person12@example.com",
+        "email": "person20@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -29,14 +29,20 @@
       },
       "permission": [
         "admin"
-      ]
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false,
+      "sandbox_info": null,
+      "latest_comment_list": null
     },
     "owner": {
-      "id": 14,
-      "username": "user12",
+      "id": 116,
+      "username": "user21",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person13@example.com",
+      "email": "person21@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -46,16 +52,20 @@
         "icon": "/images/default-user-icon.png"
       }
     },
+    "file_name": "some.txt",
+    "file_type": "text",
+    "latest_version_id": 6,
+    "has_draft": false,
     "version_info": {
-      "id": 2,
+      "id": 6,
       "version_num": 1,
       "commit_message": "Factory commit message",
       "owner": {
-        "id": 15,
-        "username": "user13",
+        "id": 117,
+        "username": "user22",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person14@example.com",
+        "email": "person22@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -66,11 +76,11 @@
         }
       },
       "modifier": {
-        "id": 16,
-        "username": "user14",
+        "id": 118,
+        "username": "user23",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person15@example.com",
+        "email": "person23@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -80,14 +90,11 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-06-08T17:44:37Z",
-      "updated_at": "2012-06-08T17:44:37Z",
-      "content_url": "/system/workfile_versions/contents/000/000/002/original/some.txt?1339177477",
+      "created_at": "2012-06-19T17:48:05Z",
+      "updated_at": "2012-06-19T17:48:05Z",
+      "content_url": "/system/workfile_versions/contents/000/000/006/original/some.txt?1340128085",
       "icon_url": null,
       "content": "<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\nhello\n</body>\n</html>\n\n"
-    },
-    "file_name": "some.txt",
-    "file_type": "text",
-    "latest_version_num": 1
+    }
   }
 }
