@@ -32,4 +32,9 @@ module Events
     has_targets :workfile
     has_activities :actor, :workfile, :workspace
   end
+
+  class SOURCE_TABLE_CREATED < Base
+    has_targets :dataset
+    has_activities :actor, :dataset, :global
+  end
 end

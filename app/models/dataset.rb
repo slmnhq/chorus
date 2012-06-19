@@ -6,6 +6,8 @@ class Dataset < ActiveRecord::Base
 
   attr_accessor :statistics
 
+  has_many :activities, :as => :entity
+
   delegate :with_gpdb_connection, :to => :schema
   delegate :instance, :to => :schema
 
