@@ -65,7 +65,9 @@ Chorus::Application.routes.draw do
     resource :draft, :only => [:show, :update, :create, :destroy], :controller => :workfile_draft
     resources :versions, :only => [:update, :create, :show, :index], :controller => 'workfile_versions'
     resource :copy, :only => [:create], :controller => 'workfile_copy'
+    resource :download, :only => [:show], :controller => 'download'
   end
+
 
   match "/" => "root#index"
   match "VERSION" => "configurations#version"

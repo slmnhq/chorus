@@ -1,6 +1,9 @@
 class WorkfileVersion < ActiveRecord::Base
   attr_accessible :commit_message, :owner, :modifier, :contents, :version_num
-  has_attached_file :contents, :styles => {:original => "", :icon => "50x50>"}
+  has_attached_file :contents,
+                    :styles => {:original => "", :icon => "50x50>"},
+                    :path => ":rails_root/system/:class/:id/:style/:basename.:extension"
+
   belongs_to :workfile, :touch => true
   belongs_to :owner, :class_name => 'User'
   belongs_to :modifier, :class_name => 'User'

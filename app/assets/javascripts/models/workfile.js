@@ -154,7 +154,11 @@
         },
 
         downloadUrl: function() {
-            return this.get("versionInfo").contentUrl;
+            if(this.isLatestVersion()) {
+                return "workfiles/" + this.get("id") + "/download";
+            } else {
+                return "workfiles/" + this.get("id") + "/download?version_id=" + this.get("versionInfo").id;
+            }
         },
 
         workfilesUrl: function() {

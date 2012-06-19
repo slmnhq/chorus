@@ -192,13 +192,24 @@ describe("chorus.models.Workfile", function() {
                     this.model.set({ latestVersionId: 1 })
                     expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5")
                 });
+
+                it("has the right download URL", function() {
+                    expect(this.model.downloadUrl()).toBe("workfiles/5/download");
+                });
             });
 
             context("when the workfile is not the most recent version", function() {
+                beforeEach(function() {
+                    this.model.get("versionInfo").id = 6;
+                    this.model.set({latestVersionId: 9 });
+                });
+
                 it("includes its version number", function() {
-                    this.model.get("versionInfo").id = 6
-                    this.model.set({latestVersionId: 9 })
                     expect(this.model.showUrl()).toBe("#/workspaces/10/workfiles/5/versions/6")
+                });
+
+                it("has the right download URL", function() {
+                    expect(this.model.downloadUrl()).toBe("workfiles/5/download?version_id=6");
                 });
             });
 
@@ -209,18 +220,14 @@ describe("chorus.models.Workfile", function() {
             });
         });
 
-        it("has the right download URL", function() {
-            expect(this.model.downloadUrl()).toBe("this/is/content/url");
-        });
-
-        xcontext("when the workfile is a draft", function() {
+        context("when the workfile is a draft", function() {
             beforeEach(function() {
                 this.model.set({ hasDraft: true })
                 spyOn(chorus, "cachebuster").andReturn(12345);
             });
 
             it("has the right download URL", function() {
-                expect(this.model.downloadUrl()).toBe("/workfiles/5/file/99999?download=true&iebuster=12345");
+                expect(this.model.downloadUrl()).toBe("workfiles/5/download");
             });
         })
     });

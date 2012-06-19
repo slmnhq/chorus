@@ -14,6 +14,9 @@ app/assets/javascripts/environment.js
 # Ignore API doc directory
 /public/api
 
+# Ignore workfile attachments outside of public folder
+/system/workfile_versions/*
+
 # Ignore the directory where hadoop versions are installed
 /vendor/hadoop
 /vendor/cache
