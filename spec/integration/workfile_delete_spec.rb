@@ -54,6 +54,7 @@ describe " add an instance " do
     click_link "Work Files"
     page.should have_content ("invalid_member.sql")
     click_link ("invalid_member.sql")
+    sleep(1)
     page.should have_no_link("Delete")
   end
 
