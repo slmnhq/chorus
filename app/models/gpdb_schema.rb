@@ -25,7 +25,7 @@ class GpdbSchema < ActiveRecord::Base
       ON t1.inputtype=t2.oid
       GROUP BY t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames
       ORDER BY t1.proname
-    SQL
+  SQL
 
   belongs_to :workspace
   belongs_to :database, :class_name => 'GpdbDatabase'
@@ -41,7 +41,7 @@ class GpdbSchema < ActiveRecord::Base
     schema_names = schema_rows.map { |row| row[0] }
     database.schemas.where("gpdb_schemas.name NOT IN (?)", schema_names).destroy_all
 
-    schema_rows.map do |row| 
+    schema_rows.map do |row|
       schema = database.schemas.find_or_initialize_by_name(row[0])
       unless schema.persisted?
         schema.save!
@@ -64,8 +64,16 @@ class GpdbSchema < ActiveRecord::Base
 
   def with_gpdb_connection(account)
     database.with_gpdb_connection(account) do |conn|
-      conn.schema_search_path = "#{conn.quote_column_name(name)}, 'public'"
+      add_schema_to_search_path(conn)
       yield conn
     end
+  end
+
+  private
+
+  def add_schema_to_search_path(conn)
+    conn.schema_search_path = "#{conn.quote_column_name(name)}, 'public'"
+  rescue ActiveRecord::StatementInvalid
+    conn.schema_search_path = "#{conn.quote_column_name(name)}"
   end
 end
