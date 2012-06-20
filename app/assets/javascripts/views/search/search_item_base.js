@@ -14,7 +14,11 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
     },
 
     makeCommentList: function() {
-        return new chorus.views.SearchResultCommentList({comments: this.model.get("comments")});
+        return new chorus.views.SearchResultCommentList({comments: this.getComments()});
+    },
+
+    getComments: function() {
+        return this.model.get("comments");
     },
 
     showMoreComments: function(evt) {

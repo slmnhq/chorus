@@ -97,7 +97,7 @@
             }
         }
 
-        .comments, .more_comments, .supporting_message, .more_supporting_message {
+        .comments, .more_comments, .supporting_message, .more_supporting_message, .column_description, .table_description{
             @include font-content-details;
             margin: 0;
 
