@@ -18,7 +18,7 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
     },
 
     getComments: function() {
-        return this.model.get("comments");
+        return this.model.get("comments") || [];
     },
 
     showMoreComments: function(evt) {
