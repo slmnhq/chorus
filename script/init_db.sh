@@ -20,7 +20,5 @@ then
     createuser -h localhost -p 8543 -sdr edcadmin;
 fi
 
-bundle exec rake db:reset
-bundle exec rake db:test:prepare
-bundle exec rake legacy:setup
+script/reset_db.sh
 pg_ctl stop -D ~/workspace/chorusrails/var/db
