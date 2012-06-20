@@ -11,11 +11,8 @@ describe " add an instance " do
     gpdb_instance_id = Instance.find_by_name("gpdb_instance").id
     go_to_home_page
     page.should have_content "EDC Admin added a new instance gpdb_instance"
-    sleep(3)
     go_to_instance_page
-    within(".instance_provider") do
-      page.find("li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
-    end
+    page.find(".instance_provider li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
     page.should have_content "EDC Admin added a new instance gpdb_instance"
     go_to_user_list_page
     within(".list") do
@@ -32,30 +29,24 @@ describe " add an instance " do
     gpdb_instance_id = Instance.find_by_name(name).id
     go_to_home_page
     page.should have_content "EDC Admin added a new instance #{name}"
-    sleep(3)
     go_to_instance_page
-    within(".instance_provider") do
-      page.find("li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
-    end
+    page.find(".instance_provider li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
     page.should have_content "EDC Admin added a new instance #{name}"
     go_to_user_list_page
     within(".list") do
-          click_link "EDC Admin"
+      click_link "EDC Admin"
     end
     page.should have_content "EDC Admin added a new instance #{name}"
   end
 
-  xit "creates an activity stream when a hadoop instance is created" do
+  it "creates an activity stream when a hadoop instance is created" do
     create_valid_hadoop_instance(:name => "hadoop_instance")
-    variable = Instance.find_by_name("hadoop_instance")
-    hadoop_instance_id = variable.id
+    hadoop_instance_id = HadoopInstance.find_by_name("hadoop_instance").id
     go_to_home_page
     page.should have_content "EDC Admin added a new instance hadoop_instance"
-    sleep(3)
     go_to_instance_page
-    within(".instance_provider") do
-      page.find("li[data-hadoop-instance-id='#{hadoop_instance_id}']").click
-    end
+    wait_for_ajax
+    page.find(".instance_provider li[data-hadoop-instance-id='#{hadoop_instance_id}']").click
     page.should have_content "EDC Admin added a new instance hadoop_instance"
     go_to_user_list_page
     within(".list") do
