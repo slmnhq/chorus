@@ -13,7 +13,7 @@ class ActivitiesController < ApplicationController
     if (entity = get_parent_entity)
       entity.activities
     else
-      Activity.global
+      Activity.for_dashboard_of(current_user)
     end
   end
 

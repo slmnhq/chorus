@@ -9,8 +9,10 @@ describe ActivitiesController do
   let!(:global_activity1) { Activity.global.create! }
   let!(:global_activity2) { Activity.global.create! }
 
+  let(:current_user) { FactoryGirl.create(:admin) }
+
   before do
-    log_in FactoryGirl.create(:admin)
+    log_in current_user
   end
 
   describe "#index" do
@@ -52,14 +54,10 @@ describe ActivitiesController do
 
     context "when getting the activities for the current user's home page" do
       it "presents the user's activities" do
+        mock(Activity).for_dashboard_of(current_user) { [global_activity1, global_activity2] }
         mock_present { |models| models.should =~ [global_activity1, global_activity2] }
         get :index
       end
-    end
-
-    it "generates a JSON fixture " do
-      mock_present { |models| models.should =~ [global_activity1, global_activity2] }
-      get :index
     end
   end
 

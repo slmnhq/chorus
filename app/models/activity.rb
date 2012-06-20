@@ -9,5 +9,23 @@ class Activity < ActiveRecord::Base
   def self.global
     where(:entity_type => "GLOBAL")
   end
+
+  def self.for_dashboard_of(user)
+    memberships = Arel::Table.new("memberships")
+    activities  = Arel::Table.new("activities")
+
+    sql = activities.
+      join(memberships, Arel::Nodes::OuterJoin).
+      on(
+        memberships[:user_id].eq(user.id).
+        and(memberships[:workspace_id].eq(activities[:entity_id])).
+        and(activities[:entity_type].eq("Workspace"))
+      ).where(
+        activities[:entity_type].eq("GLOBAL").
+        or(memberships[:workspace_id].not_eq(nil))
+      ).project(activities['*'])
+
+    connection.select_all(sql).map { |row| allocate.init_with("attributes" => row) }
+  end
 end
 
