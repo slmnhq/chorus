@@ -213,9 +213,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     beforeEach(function() {
                         this.view.model.unset("executionInfo");
                         this.schema = rspecFixtures.schema({id: "77", database: {id: "88", instance: {id: "99"}}});
-                        this.view.textContent.editor.getSelection = function() {
-                            return "select 1 from table";
-                        };
+                        spyOn(this.view.textContent.editor, "getSelection").andReturn("select 1 from table");
                         chorus.PageEvents.broadcast("file:runSelected");
                     });
 
@@ -246,6 +244,62 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 it('does not start a new execution', function() {
                     expect(this.startedSpy).not.toHaveBeenCalled();
                 })
+            });
+        });
+    });
+
+    describe("saving as Chorus View", function() {
+        beforeEach(function() {
+            this.modalSpy = stubModals();
+            this.view.render();
+            this.view.textContent.editor.setValue("select * from table;");
+
+            this.schema.set({
+                instanceId: '51',
+                instanceName: "bob_the_instance",
+                databaseId: '52',
+                databaseName: "bar",
+                name: "wow"
+            });
+        });
+
+        it("displays the modal", function() {
+            chorus.PageEvents.broadcast("file:newChorusView");
+
+            expect(this.modalSpy).toHaveModal(chorus.dialogs.VerifyChorusView);
+        });
+
+        context("when there is no selection", function() {
+            it("sets the Chorus View with while sql content", function() {
+                chorus.PageEvents.broadcast("file:newChorusView");
+
+                expect(this.view.chorusView.get("instanceId")).toBe('51');
+                expect(this.view.chorusView.get("instanceName")).toBe('bob_the_instance');
+                expect(this.view.chorusView.get("instance").id).toBe('51');
+                expect(this.view.chorusView.get("instance").name).toBe('bob_the_instance');
+                expect(this.view.chorusView.get("databaseName")).toBe('bar');
+                expect(this.view.chorusView.get("schemaName")).toBe('wow');
+                expect(this.view.chorusView.get("query")).toBe('select * from table;');
+                expect(this.view.chorusView.get("sourceObjectId")).toBe(this.view.model.id);
+                expect(this.view.chorusView.get("objectType")).toBe("QUERY");
+            });
+        });
+
+        context("when there is a selection", function() {
+            it("sets the Chorus View with workspace's sandbox data", function() {
+                this.view.textContent.editor.setSelection({line: 0, ch: 0}, {line: 0, ch: 6});
+
+                chorus.PageEvents.broadcast("file:newSelectionChorusView");
+
+                expect(this.view.chorusView.get("instanceId")).toBe('51');
+                expect(this.view.chorusView.get("instanceName")).toBe('bob_the_instance');
+                expect(this.view.chorusView.get("instance").id).toBe('51');
+                expect(this.view.chorusView.get("instance").name).toBe('bob_the_instance');
+                expect(this.view.chorusView.get("databaseName")).toBe('bar');
+                expect(this.view.chorusView.get("schemaName")).toBe('wow');
+                expect(this.view.chorusView.get("query")).toBe('select');
+                expect(this.view.chorusView.get("sourceObjectId")).toBe(this.view.model.id);
+                expect(this.view.chorusView.get("objectType")).toBe("QUERY");
             });
         });
     });

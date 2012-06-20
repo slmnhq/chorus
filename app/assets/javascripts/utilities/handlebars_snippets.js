@@ -389,6 +389,12 @@
             if (comment.isColumn) {
                 return t("search.supporting_message_types.column");
             }
+            if(comment.isColumnDescription) {
+                return t("search.supporting_message_types.column_description");
+            }
+            if(comment.isTableDescription) {
+                return t("search.supporting_message_types.table_description");
+            }
             return t("search.supporting_message_types.note");
         },
 

@@ -28,6 +28,8 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         chorus.PageEvents.subscribe("file:runCurrent", this.runInDefault, this);
         chorus.PageEvents.subscribe("file:runSelected", this.runSelected, this);
         chorus.PageEvents.subscribe("file:runInSchema", this.runInSchema, this);
+        chorus.PageEvents.subscribe("file:newChorusView", this.newChorusView, this);
+        chorus.PageEvents.subscribe("file:newSelectionChorusView", this.newSelectionChorusView, this);
     },
 
     runInSchema: function(options) {
@@ -76,6 +78,37 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
             this.task.save({}, { method: "create" });
             chorus.PageEvents.broadcast("file:executionStarted", this.task);
         }
+    },
+
+    newChorusView: function() {
+        return this.newChorusViewWithContent(this.textContent.editor.getValue());
+    },
+
+    newSelectionChorusView: function() {
+        return this.newChorusViewWithContent(this.getSelectedText());
+    },
+
+    newChorusViewWithContent: function(content) {
+        var executionSchema = this.model.executionSchema();
+
+        this.chorusView = new chorus.models.ChorusView();
+        this.chorusView.set({
+            workspace: this.model.workspace(),
+            instance: {
+                id: executionSchema.get("instanceId"),
+                name: executionSchema.get("instanceName")
+            },
+            schemaName: executionSchema.get("name"),
+            databaseId: executionSchema.get("databaseId"),
+            databaseName: executionSchema.get("databaseName"),
+            instanceId: executionSchema.get("instanceId"),
+            instanceName: executionSchema.get("instanceName"),
+            query: content,
+            sourceObjectId: this.model.id
+        });
+
+        var dialog = new chorus.dialogs.VerifyChorusView({model: this.chorusView});
+        dialog.launchModal();
     },
 
     getSelectedText: function() {

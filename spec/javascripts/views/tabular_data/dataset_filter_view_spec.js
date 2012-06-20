@@ -19,7 +19,6 @@ describe("chorus.views.DatasetFilter", function() {
             spyOn(chorus, 'datePicker').andCallThrough();
 
             this.view.render();
-            $("#jasmine_content").append(this.view.el);
         });
 
         context("when the model is filled with valid data", function() {
@@ -371,8 +370,10 @@ describe("chorus.views.DatasetFilter", function() {
                 _.each(_.keys(chorus.models.DatasetFilterMaps.String.prototype.comparators), function(key) {
                     if (chorus.models.DatasetFilterMaps.String.prototype.comparators[key].usesInput) {
                         it("correctly shows the input for " + key, function() {
+                            this.view.$(".comparator").val("null").change();
+                            expect(this.view.$(".filter.default")).toHaveClass('hidden');
                             this.view.$(".comparator").val(key).change();
-                            expect(this.view.$(".filter.default input")).toBeVisible();
+                            expect(this.view.$(".filter.default")).not.toHaveClass('hidden');
                         });
                     } else {
                         it("correctly hides the input for " + key, function() {
@@ -440,8 +441,10 @@ describe("chorus.views.DatasetFilter", function() {
                 _.each(_.keys(chorus.models.DatasetFilterMaps.Numeric.prototype.comparators), function(key) {
                     if (chorus.models.DatasetFilterMaps.Numeric.prototype.comparators[key].usesInput) {
                         it("correctly shows the input for " + key, function() {
+                            this.view.$(".comparator").val("null").change();
+                            expect(this.view.$(".filter.default")).toHaveClass('hidden');
                             this.view.$(".comparator").val(key).change();
-                            expect(this.view.$(".filter.default input")).toBeVisible();
+                            expect(this.view.$(".filter.default")).not.toHaveClass('hidden');
                         });
                     } else {
                         it("correctly hides the input for " + key, function() {
@@ -496,8 +499,9 @@ describe("chorus.views.DatasetFilter", function() {
                 });
 
                 it("shows the date picker icon next to the input field", function() {
+                    expect(this.view.$(".filter.date")).toHaveClass('hidden');
                     this.view.$(".comparator").val("on").change();
-                    expect(this.view.$("a.date-picker-control")).toBeVisible();
+                    expect(this.view.$(".filter.date")).not.toHaveClass('hidden');
                 });
             });
 
@@ -510,8 +514,10 @@ describe("chorus.views.DatasetFilter", function() {
                 });
 
                 it("hides the date picker icon", function() {
+                    this.view.$(".comparator").val("on").change();
+                    expect(this.view.$(".filter.date")).not.toHaveClass('hidden');
                     this.view.$(".comparator").val("not_null").change();
-                    expect(this.view.$("a.date-picker-control")).toBeHidden();
+                    expect(this.view.$(".filter.date")).toHaveClass('hidden');
                 });
             });
         });

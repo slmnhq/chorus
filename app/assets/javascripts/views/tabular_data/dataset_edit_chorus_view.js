@@ -1,27 +1,24 @@
-chorus.views.DatasetEditChorusView = chorus.views.CodeEditorView.extend({
+chorus.views.DatasetEditChorusView = chorus.views.Base.extend({
     templateName: "dataset_edit_chorus_view",
 
+    subviews: {
+        ".editor": "editor"
+    },
+
     setup: function() {
-        this._super("setup");
+        this.adaptModelForCodeEditor();
+        this.editor = new chorus.views.CodeEditorView({
+            model: this.model,
+            readOnly: false,
+            mode: "text/x-sql",
+            extraKeys: {},
+            onBlur: _.bind(this.updateQueryInModel, this)
+        });
+
         chorus.PageEvents.subscribe("dataset:saveEdit", this.saveModel, this);
         chorus.PageEvents.subscribe("dataset:cancelEdit", this.cancelEdit, this);
         this.model.initialQuery = this.model.get("query");
         this.bindings.add(this.model, "saved", this.navigateToChorusViewShowPage);
-    },
-
-    postRender:function () {
-            var self = this;
-            var opts = {
-                readOnly: false,
-                mode: "text/x-sql",
-                fixedGutter:true,
-                theme:"default",
-                lineWrapping:true,
-                extraKeys:{},
-                onBlur: _.bind(this.updateQueryInModel, self)
-            };
-
-        this._super("postRender", [opts]);
     },
 
     updateQueryInModel: function() {
@@ -41,5 +38,9 @@ chorus.views.DatasetEditChorusView = chorus.views.CodeEditorView.extend({
 
     navigateToChorusViewShowPage: function() {
         chorus.router.navigate( this.model.showUrl());
+    },
+
+    adaptModelForCodeEditor: function () {
+        this.model.content = function() { return this.get("query"); };
     }
 });

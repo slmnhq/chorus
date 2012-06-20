@@ -944,6 +944,26 @@ describe("handlebars", function() {
                 });
             });
 
+            context("when the comment is a column description", function() {
+                beforeEach(function() {
+                    this.comment = fixtures.searchResultCommentJson({isColumnDescription: true});
+                });
+
+                it("returns the column description string", function() {
+                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.column_description");
+                });
+            });
+
+            context("when the comment is a table description", function() {
+                beforeEach(function() {
+                    this.comment = fixtures.searchResultCommentJson({isTableDescription: true});
+                });
+
+                it("returns the table description string", function() {
+                    expect(Handlebars.helpers.searchResultCommentTitle(this.comment)).toMatchTranslation("search.supporting_message_types.table_description");
+                });
+            });
+
             context("when the comment nothing special", function() {
                 beforeEach(function() {
                     this.comment = fixtures.searchResultCommentJson();

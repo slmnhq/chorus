@@ -7,7 +7,7 @@ describe("chorus.models.Config", function() {
 
     describe(".instance", function() {
         beforeEach(function() {
-            spyOn(chorus.models.Config.prototype, 'fetch');
+            spyOn(chorus.models.Config.prototype, 'fetch').andCallThrough();
         });
 
         it("returns an instance", function() {
@@ -19,6 +19,8 @@ describe("chorus.models.Config", function() {
         });
 
         it("fetches itself once", function() {
+            this.server.completeFetchFor(chorus.models.Config.instance());
+
             expect(chorus.models.Config.instance().fetch).toHaveBeenCalled();
             expect(chorus.models.Config.instance().fetch.callCount).toBe(1);
         });

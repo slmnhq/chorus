@@ -53,9 +53,9 @@ describe "workfile show page" do
   it "content should be of last version" do
     wait_for_text_element
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood")')
-    page.find(".save .save_as").click
+    page.find(".save .save_file_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
-    page.find("a.save_as_current").click
+    page.find("a[data-menu-name=replace]").click
     wait_until { page.find(".qtip[aria-hidden=true]") }
     page.find("textarea.text_editor").should have_content('new Blood')
     click_link "Work Files"

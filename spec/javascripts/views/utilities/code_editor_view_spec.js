@@ -1,7 +1,12 @@
 describe("chorus.views.CodeEditorView", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.dataset.chorusView();
-        this.view = new chorus.views.CodeEditorView();
+        this.workfile = new chorus.models.Workfile();
+        spyOn(this.workfile, "content").andReturn("");
+
+        this.view = new chorus.views.CodeEditorView({
+            model: this.workfile,
+            lineWrapping: false
+        });
         $("#jasmine_content").append(this.view.el);
         this.clock = this.useFakeTimers();
 
@@ -12,13 +17,11 @@ describe("chorus.views.CodeEditorView", function() {
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
     })
 
-    context("without defer stubbed out", function() {
-        it("defers call to CodeMirror", function() {
-            this.view.render();
-            expect(CodeMirror.fromTextArea).not.toHaveBeenCalled();
-            this.clock.tick(1000);
-            expect(CodeMirror.fromTextArea).toHaveBeenCalled();
-        });
+    it("defers call to CodeMirror", function() {
+        this.view.render();
+        expect(CodeMirror.fromTextArea).not.toHaveBeenCalled();
+        this.clock.tick(1000);
+        expect(CodeMirror.fromTextArea).toHaveBeenCalled();
     });
 
     describe("#render", function() {
@@ -67,7 +70,8 @@ describe("chorus.views.CodeEditorView", function() {
 
             it("inserts text at the beginning of a line", function() {
                 var pos = this.view.editor.charCoords({line: 1, ch: 0});
-                this.view.acceptDrop({pageX: pos.x, pageY: pos.y}, this.drag);
+                var fakeEvent = { pageX: pos.x, pageY: pos.y };
+                this.view.acceptDrop(fakeEvent, this.drag);
                 expect(this.view.editor.getLine(1)).toBe("test");
             });
 
@@ -76,6 +80,18 @@ describe("chorus.views.CodeEditorView", function() {
                 this.view.acceptDrop({pageX: pos.x, pageY: pos.y}, this.drag);
                 expect(this.view.editor.getLine(2)).toBe("this is the testthird line");
             });
+        });
+    });
+
+    describe("delegation", function() {
+        beforeEach(function() {
+            stubDefer();
+            this.view.render();
+        });
+
+        it("delegates a method to editor", function() {
+            spyOn(this.view.editor, 'getValue').andReturn("Some value");
+            expect(this.view.getValue()).toBe("Some value");
         });
     });
 });

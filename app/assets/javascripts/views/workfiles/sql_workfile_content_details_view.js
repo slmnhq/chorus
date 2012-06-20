@@ -2,7 +2,11 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     templateName: "sql_workfile_content_details",
 
     setup: function() {
+        this._super("setup", arguments);
+
         chorus.PageEvents.subscribe("workfile:executed", this.workfileExecuted, this);
+        chorus.PageEvents.subscribe("file:selectionPresent", this.changeRunFileButtonText, this);
+        chorus.PageEvents.subscribe("file:selectionEmpty", this.changeRunSelectedButtonText, this);
         this.contentView = this.options.contentView;
     },
 
@@ -28,14 +32,48 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         if (!this.model.workspace().isActive()) {
             this.$(".run_file").attr("disabled", "disabled");
         }
+
+        if (!this.hasValidExecutionSchema()) {
+            this.fileMenu.disableItem("newChorusView");
+            this.selectionMenu.disableItem("newSelectionChorusView");
+        }
+        chorus.PageEvents.broadcast("file:editorSelectionStatus");
+    },
+
+    selectionMenuItems: function() {
+        var items = this._super("selectionMenuItems", arguments);
+        items.push({
+                name: "newSelectionChorusView",
+                text: t("workfile.content_details.save_selection_as_chorus_view"),
+                onSelect: _.bind(this.createChorusViewFromSelection, this)
+            })
+        return items;
+    },
+
+    fileMenuItems: function() {
+        var items = this._super("fileMenuItems", arguments);
+        items.push({
+            name: "newChorusView",
+            text: t("workfile.content_details.save_file_as_chorus_view"),
+            onSelect: _.bind(this.createChorusViewFromFile, this)
+        })
+        return items;
     },
 
     enableRunSelection: function() {
-        return !!(this.contentView.getSelectedText() && this.model.executionSchema());
+        return !!(this.contentView.getSelectedText() && this.hasValidExecutionSchema());
     },
 
-    getContentSelection: function() {
-        return this.contentView.getSelectedText();
+    hasValidExecutionSchema: function() {
+        return !!(this.model.executionSchema());
+    },
+
+    changeRunFileButtonText: function() {
+        this.$(".run_file .run_description").text(t("workfile.content_details.run_selected"));
+    },
+
+    changeRunSelectedButtonText: function() {
+        this.$(".run_file .run_description").text(t("workfile.content_details.run_file"));
     },
 
     additionalContext: function() {
@@ -47,6 +85,14 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
             schemaName: executionSchema && executionSchema.canonicalName(),
             executionSchemaIsSandbox: (executionSchema && sandboxSchema && executionSchema.isEqual(sandboxSchema))
         });
+    },
+
+    createChorusViewFromFile: function() {
+        chorus.PageEvents.broadcast("file:newChorusView");
+    },
+
+    createChorusViewFromSelection: function() {
+        chorus.PageEvents.broadcast("file:newSelectionChorusView");
     },
 
     runInExecutionSchema: function() {

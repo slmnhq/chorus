@@ -10,6 +10,11 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         expect(this.page.helpId).toBe("schema")
     });
 
+    it("does not show a title before the fetch completes", function() {
+        this.page.render();
+        expect(this.page.$(".content_header h1").text()).toBe("");
+    });
+
     it("includes the InstanceCredentials mixin", function() {
         expect(this.page.dependentResourceForbidden).toBe(chorus.Mixins.InstanceCredentials.page.dependentResourceForbidden);
     });

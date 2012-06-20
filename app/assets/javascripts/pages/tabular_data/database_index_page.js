@@ -22,6 +22,7 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
         this.dependOn(this.collection);
 
         this.mainContent = new chorus.views.MainContentList({
+            emptyTitleBeforeFetch: true,
             modelClass: "Database",
             collection: this.collection
         });

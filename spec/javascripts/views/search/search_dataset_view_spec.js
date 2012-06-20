@@ -57,6 +57,29 @@ describe("chorus.views.SearchDataset", function() {
         })
     });
 
+    context("when there are column comments", function() {
+        beforeEach(function() {
+            this.model.get('highlightedAttributes').columnDescription = ['comment 1', 'comment 2'];
+            this.view.render();
+        });
+
+        it("displays the column comments", function() {
+            expect(this.view.$('.comment .comment_content')).toContainText('comment 1');
+            expect(this.view.$('.comment .comment_content')).toContainText('comment 2');
+        });
+    });
+
+    context("when there is a table comment", function() {
+        beforeEach(function() {
+            this.model.get('highlightedAttributes').description = ['comment 1'];
+            this.view.render();
+        });
+
+        it("displays the table comment", function() {
+            expect(this.view.$('.comment .comment_content')).toContainText('comment 1');
+        });
+    });
+
     it("displays the items name", function() {
         expect(this.view.$(".name")).toContainText(this.model.get("objectName"));
     });

@@ -162,8 +162,10 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     xcontext("when aurora is configured", function() {
         beforeEach(function() {
+            spyOn(this.dialog, "render").andCallThrough();
             this.server.completeFetchFor(chorus.models.GreenplumInstance.aurora(), { installationStatus: "install_succeed" });
             this.server.completeFetchFor(chorus.models.Config.instance(), { provisionMaxSizeInGB: 2000 });
+
         });
 
         it("enables the 'as a standalone' radio button (not checked)", function() {
@@ -173,6 +175,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
         it("fetches the aurora templates", function() {
             expect(chorus.models.GreenplumInstance.auroraTemplates()).toHaveBeenFetched();
+            expect(this.dialog.render).toHaveBeenCalled();
         });
 
         context("when the aurora template fetch completes", function() {

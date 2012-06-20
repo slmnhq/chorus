@@ -2,11 +2,13 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
     templateName:"workfile_content_details",
     additionalClass: "workfile_content_details",
 
-    setup:function () {
+    setup: function() {
         chorus.PageEvents.subscribe("file:autosaved", this.updateAutosaveText, this);
+        chorus.PageEvents.subscribe("file:selectionEmpty", this.showSaveFileMenu, this);
+        chorus.PageEvents.subscribe("file:selectionPresent", this.showSaveSelectionMenu, this);
     },
 
-    updateAutosaveText:function (args) {
+    updateAutosaveText: function(args) {
         var text = args ? args : "workfile.content_details.auto_save";
 
         var time = this.formatTime(new Date());
@@ -19,33 +21,89 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
             isLatestVersion: this.model.isLatestVersion()
         };
     },
-
-    postRender:function () {
-        var self = this;
-        chorus.menu(this.$('.save_as'), {
-            content:this.$(".save_options").html(),
-            orientation:"left",
-            contentEvents:{
-                '.save_as_current':_.bind(this.replaceCurrentVersion, this),
-                '.save_as_new':_.bind(this.workfileNewVersion, this)
+        
+    selectionMenuItems: function() {
+        return [{
+                name: "new",
+                text: t("workfile.content_details.save_selection_new_version"),
+                onSelect: _.bind(this.createNewVersionFromSelection, this)
+            },
+            {
+                name: "replace",
+                text: t("workfile.content_details.replace_current_with_selection"),
+                onSelect: _.bind(this.replaceCurrentVersionWithSelection, this)
             }
+        ];
+    },
+
+    fileMenuItems: function() {
+        return [{
+                name: "new",
+                text: t("workfile.content_details.save_new_version"),
+                onSelect: _.bind(this.createNewVersion, this)
+            },
+            {
+                name: "replace",
+                text: t("workfile.content_details.replace_current"),
+                onSelect: _.bind(this.replaceCurrentVersion, this)
+            }
+        ];
+    },
+
+    postRender: function() {
+        this.fileMenu = new chorus.views.Menu({
+            launchElement: this.$(".save_file_as"),
+            checkable: false,
+            orientation: "left",
+            items: this.fileMenuItems()
         });
 
+        this.selectionMenu = new chorus.views.Menu({
+            launchElement: this.$(".save_selection_as"),
+            checkable: false,
+            orientation: "left",
+            items: this.selectionMenuItems()
+        });
+
+        if (!this.model.isLatestVersion()) {
+            this.fileMenu.disableItem("replace");
+            this.selectionMenu.disableItem("replace");
+        }
+
         if (!this.model.workspace().isActive()) {
-            this.$(".save_as").attr("disabled", "disabled");
+            this.$(".save_file_as, .save_selection_as").attr("disabled", true);
         }
     },
 
-    replaceCurrentVersion:function () {
-        chorus.PageEvents.broadcast("file:saveCurrent");
+    replaceCurrentVersion: function() {
         this.updateAutosaveText("workfile.content_details.save");
+        chorus.PageEvents.broadcast("file:replaceCurrentVersion");
     },
 
-    workfileNewVersion:function () {
-        chorus.PageEvents.broadcast("file:createWorkfileNewVersion");
+    replaceCurrentVersionWithSelection: function() {
+        this.updateAutosaveText("workfile.content_details.save");
+        chorus.PageEvents.broadcast("file:replaceCurrentVersionWithSelection");
     },
 
-    formatTime:function (time) {
+    createNewVersion: function() {
+        chorus.PageEvents.broadcast("file:createNewVersion");
+    },
+
+    createNewVersionFromSelection: function() {
+        chorus.PageEvents.broadcast("file:createNewVersionFromSelection");
+    },
+
+    showSaveFileMenu: function() {
+        this.$('.save_file_as').removeClass('hidden');
+        this.$('.save_selection_as').addClass('hidden');
+    },
+
+    showSaveSelectionMenu: function() {
+        this.$('.save_file_as').addClass('hidden');
+        this.$('.save_selection_as').removeClass('hidden');
+    },
+
+    formatTime: function(time) {
         var hours = time.getHours();
         var minutes = time.getMinutes();
 
@@ -64,7 +122,7 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
     }
 },
 {
-    buildFor:function (model, contentView) {
+    buildFor: function(model, contentView) {
         if (model.isImage()) {
             return new chorus.views.ImageWorkfileContentDetails({ model:model });
         }
