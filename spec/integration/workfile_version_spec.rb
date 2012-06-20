@@ -77,8 +77,9 @@ describe "save as Menu" do
     wait_until { page.find(".qtip[aria-hidden=true]") }
     fill_in 'commitMessage', :with => "commit Message -2"
     click_button "Save New Version"
+    wait_for_ajax
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
-
+    wait_for_ajax
     page.find("a.version_list").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
     page.find(".workfile_version_list li:last-child a").click
