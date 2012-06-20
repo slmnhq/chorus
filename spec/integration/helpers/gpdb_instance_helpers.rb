@@ -26,6 +26,7 @@ def create_gpdb_instance(params={})
   visit("#/instances")
   wait_until { current_route == "/instances" && page.has_selector?("button[data-dialog=InstancesNew]") }
   click_button "Add instance"
+  wait_for_ajax
   within("#facebox") do
     choose("register_existing_greenplum")
     find_gpdb_instance_dialog
@@ -37,7 +38,7 @@ def create_gpdb_instance(params={})
     fill_in 'dbPassword', :with => params[:dbpass]
     check("register_greenplum_shared") if params[:shared] == true
     click_submit_button
-    sleep(3)
+    wait_for_ajax(10)
   end
 end
 
@@ -47,7 +48,6 @@ def verify_instance_name(name)
   visit(inst_route)
   wait_until { inst_route == inst_route && page.has_selector?(WEBPATH['instance']['new_btn']) }
   find(WEBPATH['instance']['list']).should have_content(name)
-  sleep(3)
 end
 
 # Register a new instance on Gillette, the only params available: name, desc, shared. Other parameters

@@ -34,6 +34,7 @@ describe "creating a note on a workspace" do
         click_link "Add"
       end
       click_button "Save Changes"
+      wait_for_ajax
     end
 
     click_link "Edit Workspace"
@@ -108,6 +109,7 @@ describe "creating a note on a workspace" do
     within("#facebox") do
       choose("workspace_active")
       find(".submit").click
+      wait_for_ajax
     end
 
     within(".actions") do

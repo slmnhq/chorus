@@ -78,16 +78,21 @@ describe "add a workfile" do
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
     click_link("Work Files")
     click_button("Upload File")
+    wait_for_ajax
+
     within("#facebox") do
       attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
-      sleep(2)
+      wait_for_ajax
     end
     click_link("Work Files")
     click_button("Upload File")
+    wait_for_ajax
+
     within("#facebox") do
       attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
+      wait_for_ajax
     end
 
     click_link("Work Files")

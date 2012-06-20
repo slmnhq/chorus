@@ -45,7 +45,9 @@ describe " add an instance " do
 =end
      within("#facebox") do
         wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
+        sleep(1)
         choose("register_existing_greenplum")
+        sleep(1)
         wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
         within(".register_existing_greenplum") do
           find_gpdb_instance_dialog
@@ -59,6 +61,7 @@ describe " add an instance " do
           check("register_greenplum_shared")
         end
         click_button "Add Instance"
+        sleep(5)
         page.find('.errors').should have_content("FATAL: password authentication failed for user")
 
         within(".register_existing_greenplum") do

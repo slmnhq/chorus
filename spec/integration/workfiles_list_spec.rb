@@ -17,8 +17,7 @@ describe "workfiles list page" do
       login('edcadmin', 'secret')
       @workspace_id = Workspace.find_by_name("WorkfileListWorkspace").id
       visit("#/workspaces/#{@workspace_id}/workfiles")
-
-      wait_until { page.find('button[data-dialog="WorkfilesImport"]').text == "Upload File" }
+      wait_for_ajax
     end
 
 

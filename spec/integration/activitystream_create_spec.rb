@@ -43,15 +43,11 @@ describe " add an instance " do
           click_link "EDC Admin"
     end
     page.should have_content "EDC Admin added a new instance #{name}"
-    p Instance.all
-
   end
-
 
   xit "creates an activity stream when a hadoop instance is created" do
     create_valid_hadoop_instance(:name => "hadoop_instance")
     variable = Instance.find_by_name("hadoop_instance")
-    p Instance.all
     hadoop_instance_id = variable.id
     go_to_home_page
     page.should have_content "EDC Admin added a new instance hadoop_instance"

@@ -23,7 +23,7 @@ describe "copy a workfile" do
     create_valid_workspace(:name => "targetworkspace")
     @target_workspace_id = Workspace.find_by_name("targetworkspace").id
     visit("#/workspaces/#{@source_workspace_id}/quickstart")
-
+    wait_for_ajax
     click_link "Work Files"
     wait_until { current_route =~ /workspaces\/\d+\/workfiles/ }
     within(".workfile_list") do
@@ -36,6 +36,7 @@ describe "copy a workfile" do
     end
 
     click_button "Copy File"
+    wait_for_ajax
     visit("#/workspaces/#{@target_workspace_id}/quickstart")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
     click_link "Work Files"
@@ -51,6 +52,7 @@ describe "copy a workfile" do
     @workfile_id = Workfile.find_by_file_name("workfile.sql").id
     visit("#/workspaces/#{@source_workspace_id}/quickstart")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
+    wait_for_ajax
     click_link "Work Files"
     wait_until { current_route =~ /workspaces\/\d+\/workfiles/ }
     within(".workfile_list") do
@@ -61,6 +63,7 @@ describe "copy a workfile" do
       page.find("li[data-id='#{@target_workspace_id}']").click
     end
     click_button "Copy File"
+    wait_for_ajax
     visit("#/workspaces/#{@target_workspace_id}/quickstart")
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
     click_link "Work Files"

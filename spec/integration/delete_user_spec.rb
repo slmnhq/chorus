@@ -19,7 +19,7 @@ describe "deleting a workspace" do
 
   it "doesnot delete a user who owns a workspace" do
     create_valid_user(:first_name => "Alex", :last_name =>"Reed", :username => "AlexReed")
-
+    wait_for_ajax
     as_user("AlexReed") do
       go_to_workspace_page
       create_valid_workspace()

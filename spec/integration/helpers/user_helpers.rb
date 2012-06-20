@@ -23,6 +23,7 @@ end
 
 def create_valid_user(params = {})
   create_new_user_page
+  wait_for_ajax
   fill_user_form(params)
   page.find("button[type=submit]").click
   wait_until { current_route == "/users" }
