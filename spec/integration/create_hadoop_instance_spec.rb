@@ -14,6 +14,8 @@ describe " add an instance " do
     visit("#/instances")
       wait_until { current_route == "/instances" && page.has_selector?("button[data-dialog=InstancesNew]") }
       click_button "Add instance"
+      wait_for_ajax
+
       within("#facebox") do
         choose("register_existing_hadoop")
         find_hadoop_instance_dialog
@@ -25,12 +27,14 @@ describe " add an instance " do
         fill_in 'username', :with => "hadoop"
         fill_in 'groupList', :with => "hadoop"
         find(".submit").click
+        wait_for_ajax
       end
     field_errors.should_not be_empty
 
     within("#facebox") do
       fill_in 'name', :with => "hadoop_invalid_instance_name"
       find(".submit").click
+      wait_for_ajax
     end
     wait_until { current_route == "/instances" }
     find('.instance_list').should have_content("hadoop_invalid_instance_name")
@@ -40,6 +44,8 @@ describe " add an instance " do
     visit("#/instances")
     wait_until { current_route == "/instances" && page.has_selector?("button[data-dialog=InstancesNew]") }
     click_button "Add instance"
+    wait_for_ajax
+
     within("#facebox") do
       choose("register_existing_hadoop")
       find_hadoop_instance_dialog
@@ -51,6 +57,7 @@ describe " add an instance " do
       fill_in 'username', :with => "hadoop"
       fill_in 'groupList', :with => "hadoop"
       find(".submit").click
+      wait_for_ajax
     end
     page.should have_content"Unable to determine HDFS server version. Check connection parameters"
 
@@ -58,6 +65,7 @@ describe " add an instance " do
       fill_in 'host', :with => "gillett.sf.pivotallabs.com"
       fill_in 'port', :with => "802"
       find(".submit").click
+      wait_for_ajax
     end
     page.should have_content"Unable to determine HDFS server version. Check connection parameters"
 
@@ -65,7 +73,7 @@ describe " add an instance " do
       fill_in 'host', :with => "gillette.sf.pivotallabs.com"
       fill_in 'port', :with => "802"
       find(".submit").click
-      sleep(2)
+      wait_for_ajax
     end
     page.should have_content"Timeout while connecting "
 
@@ -73,6 +81,7 @@ describe " add an instance " do
       fill_in 'host', :with => "gillette.sf.pivotallabs.com"
       fill_in 'port', :with => "8020"
       find(".submit").click
+      wait_for_ajax
     end
     wait_until { current_route == "/instances" }
     find('.instance_list').should have_content("hadoop_host_port")
@@ -83,6 +92,8 @@ describe " add an instance " do
     visit("#/instances")
     wait_until { current_route == "/instances" && page.has_selector?("button[data-dialog=InstancesNew]") }
     click_button "Add instance"
+    wait_for_ajax
+
     within("#facebox") do
       choose("register_existing_hadoop")
       find_hadoop_instance_dialog
@@ -94,6 +105,7 @@ describe " add an instance " do
       fill_in 'username', :with => "hadoo"
       fill_in 'groupList', :with => "hadoop"
       find(".submit").click
+      wait_for_ajax
     end
     page.should have_content"Unable to determine HDFS server version. Check connection parameters"
 
@@ -101,6 +113,7 @@ describe " add an instance " do
       fill_in 'username', :with => "hadoop"
       fill_in 'groupList', :with => "hadoo"
       find(".submit").click
+      wait_for_ajax
     end
     page.should have_content"Unable to determine HDFS server version. Check connection parameters"
 
@@ -108,6 +121,7 @@ describe " add an instance " do
       fill_in 'username', :with => "hadoo"
       fill_in 'groupList', :with => "hadoo"
       find(".submit").click
+      wait_for_ajax
     end
     page.should have_content"Unable to determine HDFS server version. Check connection parameters"
 
@@ -115,6 +129,7 @@ describe " add an instance " do
       fill_in 'username', :with => "hadoop"
       fill_in 'groupList', :with => "hadoop"
       click_button "Add Instance"
+      wait_for_ajax
     end
     wait_until { current_route == "/instances" }
     find('.instance_list').should have_content("hadoop_host_port")

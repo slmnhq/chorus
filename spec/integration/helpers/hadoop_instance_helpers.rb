@@ -1,5 +1,5 @@
 def find_hadoop_instance_dialog
-  wait_until { find("input[name=name]").visible? }
+  wait_until(15) { find("input[name=name]").visible? }
   wait_until { find("textarea[name=description]").visible? }
   wait_until { find("input[name=host]").visible? }
   wait_until { find("input[name=port]").visible? }
@@ -12,6 +12,7 @@ def create_valid_hadoop_instance(params = {})
   visit("#/instances")
   wait_until { current_route == "/instances" && page.has_selector?("button[data-dialog=InstancesNew]") }
   click_button "Add instance"
+  wait_for_ajax
   within("#facebox") do
     choose("register_existing_hadoop")
     find_hadoop_instance_dialog

@@ -20,6 +20,7 @@ describe " add an instance " do
       click_link("public")
       click_link ("Run Analyze")
       click_button "Run Analyze"
+      wait_for_ajax(10)
       page.should have_content("Analyze is running")
     end
 end

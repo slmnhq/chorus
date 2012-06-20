@@ -7,8 +7,9 @@ describe "creating a note on a workspace" do
   end
 
   it "clicks on the insights link on the home page" do
-
+    wait_for_ajax
     click_link "Insights"
+    wait_for_ajax
     wait_until {page.find(".title h1").text == "Insights"}
 
   end

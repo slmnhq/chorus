@@ -10,6 +10,7 @@ describe "creating a user" do
     create_new_user_page
     first_name = Forgery::Name.first_name
     last_name = Forgery::Name.last_name
+    wait_for_ajax
     fill_in 'firstName', :with =>first_name
     fill_in 'lastName', :with => last_name
     username = "#{first_name}#{last_name}"
@@ -20,10 +21,11 @@ describe "creating a user" do
     fill_in 'dept', :with => "Greenplum"
     fill_in 'title', :with => "QA"
     click_submit_button
-
+    wait_for_ajax
     page.should have_content ("Username is invalid")
     fill_in 'username', :with => username
     click_submit_button
+    wait_for_ajax
     wait_until { current_route == "/users" }
     click_link("#{first_name} #{last_name}")
     page.find("div.department").should have_content("Greenplum")
@@ -33,8 +35,8 @@ describe "creating a user" do
   end
 
   it "should not let the admin create user without a username" do
-
     create_new_user_page
+    wait_for_ajax
     first_name = Forgery::Name.first_name
     last_name = Forgery::Name.last_name
     fill_in 'firstName', :with =>first_name
@@ -47,10 +49,12 @@ describe "creating a user" do
     fill_in 'dept', :with => "Greenplum"
     fill_in 'title', :with => "QA"
     click_submit_button
+    wait_for_ajax
     field_errors.should_not be_empty
 
     fill_in 'username', :with => username
     click_submit_button
+    wait_for_ajax
     wait_until { current_route == "/users" }
     click_link("#{first_name} #{last_name}")
     page.find("div.department").should have_content("Greenplum")
@@ -62,6 +66,7 @@ describe "creating a user" do
   it "should create a user with max length for username field" do
 
       create_new_user_page
+      wait_for_ajax
       first_name = Forgery::Name.first_name
       last_name = Forgery::Name.last_name
       fill_in 'firstName', :with =>first_name
@@ -74,6 +79,7 @@ describe "creating a user" do
       fill_in 'dept', :with => "Greenplum"
       fill_in 'title', :with => "QA"
       click_submit_button
+      wait_for_ajax
       wait_until { current_route == "/users" }
       click_link("#{first_name} #{last_name}")
       page.find("div.department").should have_content("Greenplum")
@@ -85,6 +91,7 @@ describe "creating a user" do
   it "should not allow an admin to create a user without a first name" do
 
       create_new_user_page
+      wait_for_ajax
       first_name = Forgery::Name.first_name
       last_name = Forgery::Name.last_name
       fill_in 'firstName', :with => ""
@@ -97,11 +104,13 @@ describe "creating a user" do
       fill_in 'dept', :with => "Greenplum"
       fill_in 'title', :with => "QA"
       click_submit_button
+      wait_for_ajax
       field_errors.should_not be_empty
 
       fill_in 'firstName', :with => first_name
       fill_in 'lastName', :with =>last_name
       click_submit_button
+      wait_for_ajax
 
       wait_until { current_route == "/users" }
       click_link("#{first_name} #{last_name}")
@@ -114,6 +123,7 @@ describe "creating a user" do
   it "should not allow to create a user with no matching password or password less than 5 characters" do
 
     visit("/#/users/new")
+    wait_for_ajax
     first_name = Forgery::Name.first_name
     last_name = Forgery::Name.last_name
     fill_in 'firstName', :with =>first_name
@@ -147,6 +157,7 @@ describe "creating a user" do
   it "should not let the admin create a user with a wrong email address" do
 
     create_new_user_page
+    wait_for_ajax
     first_name = Forgery::Name.first_name
     last_name = Forgery::Name.last_name
     fill_in 'firstName', :with =>first_name
@@ -178,7 +189,9 @@ describe "creating a user" do
   it "should not let the admin create a user without the required fields filled up" do
 
     create_new_user_page
+    wait_for_ajax
     click_submit_button
+    wait_for_ajax
     field_errors.should_not be_empty
 
   end

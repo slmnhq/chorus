@@ -7,7 +7,9 @@ describe "creating a user" do
 
   it "Creates a user and saves their information" do
     visit("/#/users/new")
+    wait_for_ajax
     page.find("button[type=submit]").click
+    wait_for_ajax
     wait_until { !field_errors.empty? }
     field_errors.should_not be_empty
 

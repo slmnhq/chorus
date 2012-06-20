@@ -14,7 +14,6 @@ describe "Viewing data inside GPDB instances" do
     table_id = Instance.find_by_name("InstanceToPreviewData").databases.find_by_name("Analytics").schemas.find_by_name("analytics").datasets.find_by_name("a1000").id
 
     page.find("li[data-database-object-id='#{table_id}']").click
-    sleep(1)
     click_link "Preview Data"
     within(".data_table") do
       page.should have_selector(".th")
@@ -30,7 +29,6 @@ describe "Viewing data inside GPDB instances" do
     dataset_id = Instance.find_by_name("InstanceToViewStatistics1").databases.find_by_name("Analytics").schemas.find_by_name("analytics").datasets.find_by_name("a1000").id
 
     page.find("li[data-database-object-id='#{dataset_id}']").click
-    sleep(1)
 
     within "#sidebar" do
       page.find("li[data-name='statistics']").click
@@ -46,32 +44,31 @@ describe "Viewing data inside GPDB instances" do
 
   it "can view a views statistics, metadata and definition" do
     create_gpdb_gillette_instance(:name => "InstanceToViewStatistics2")
-      click_link "InstanceToViewStatistics2"
-      click_link "Analytics"
-      click_link "analytics"
+    click_link "InstanceToViewStatistics2"
+    click_link "Analytics"
+    click_link "analytics"
 
-      dataset_id = Instance.find_by_name("InstanceToViewStatistics2").databases.find_by_name("Analytics").schemas.find_by_name("analytics").datasets.find_by_name("___lenny").id
+    dataset_id = Instance.find_by_name("InstanceToViewStatistics2").databases.find_by_name("Analytics").schemas.find_by_name("analytics").datasets.find_by_name("___lenny").id
 
-      page.find("li[data-database-object-id='#{dataset_id}']").click
-      sleep(1)
+    page.find("li[data-database-object-id='#{dataset_id}']").click
 
-      within "#sidebar" do
-        page.find("li[data-name='statistics']").click
-      end
+    within "#sidebar" do
+      page.find("li[data-name='statistics']").click
+    end
 
-      within ".statistics_detail" do
-        page.should have_content("Source View")
-        page.should have_content("Columns 2")
-        page.should have_content("Description This is the comment on view - __lenny")
-      end
+    within ".statistics_detail" do
+      page.should have_content("Source View")
+      page.should have_content("Columns 2")
+      page.should have_content("Description This is the comment on view - __lenny")
+    end
 
-      within(".content") do
-        click_link("___lenny")
-      end
+    within(".content") do
+      click_link("___lenny")
+    end
 
-      within ".definition" do
-        page.should have_content("SELECT a.artist, a.title FROM top_1_000_songs_to_hear_before_you_die a;")
-      end
+    within ".definition" do
+      page.should have_content("SELECT a.artist, a.title FROM top_1_000_songs_to_hear_before_you_die a;")
+    end
   end
 
   it "should let the user preview the data on the table from the instance browser" do
@@ -79,13 +76,9 @@ describe "Viewing data inside GPDB instances" do
      create_gpdb_gillette_instance(:name => "data_preview")
      go_to_instance_page
      click_link "data_preview"
-     sleep (1)
      click_link "Analytics"
-     sleep(1)
      click_link "public"
-     sleep(1)
      click_link "1000_songs_test_1"
-     sleep(1)
      click_button "Data Preview"
      within (".execution") do
        page.should have_content ("Data Preview")
