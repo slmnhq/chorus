@@ -47,10 +47,12 @@ class WorkspacesController < ApplicationController
       sandbox_schema =  GpdbSchema.find(w[:sandbox_id])
       authorize! :show_contents, sandbox_schema.instance
       workspace.sandbox = sandbox_schema
+      workspace.has_added_sandbox = true
+      add_sandbox = true
     end
 
     authorize! :member_edit, workspace
-    workspace.has_changed_settings = true
+    workspace.has_changed_settings = true if !add_sandbox
     workspace.update_attributes!(params[:workspace])
     present workspace
   end

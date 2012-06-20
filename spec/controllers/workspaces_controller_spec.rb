@@ -225,6 +225,8 @@ describe WorkspacesController do
 
         workspace.reload
         workspace.sandbox_id.should == sandbox.id
+        workspace.has_added_sandbox.should == true
+        workspace.has_changed_settings.should == false
       end
     end
 
