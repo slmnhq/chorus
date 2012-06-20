@@ -17,10 +17,21 @@ describe Dataset::Query, :type => :database_integration do
   end
 
   describe "queries" do
-    let(:sql) { "SELECT * FROM base_table1" }
+    context "when table is not in 'public' schema" do
+      let(:sql) { "SELECT * FROM base_table1" }
 
-    it "work, even when table is not in 'public' schema" do
-      lambda { rows }.should_not raise_error
+      it "works" do
+        lambda { rows }.should_not raise_error
+      end
+    end
+
+    context "when 'public' schema does not exist" do
+      let(:schema) { GpdbSchema.find_by_name('gpdb_test_schema_in_db_without_public_schema') }
+      let(:sql) { "SELECT * FROM base_table1" }
+
+      it "works" do
+        lambda { rows }.should_not raise_error
+      end
     end
   end
 

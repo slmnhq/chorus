@@ -25,7 +25,7 @@ class GpdbSchema < ActiveRecord::Base
       ON t1.inputtype=t2.oid
       GROUP BY t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames
       ORDER BY t1.proname
-    SQL
+  SQL
 
   belongs_to :workspace
   belongs_to :database, :class_name => 'GpdbDatabase'
@@ -34,20 +34,31 @@ class GpdbSchema < ActiveRecord::Base
   delegate :instance, :to => :database
 
   def self.refresh(account, database)
-    schema_rows = database.with_gpdb_connection(account) do |conn|
-      conn.query(SCHEMAS_SQL)
+    begin
+      schema_rows = database.with_gpdb_connection(account) do |conn|
+        conn.query(SCHEMAS_SQL)
+      end
+    rescue Exception => e
+      p e
+      puts "failed to query the database for schemas: #{database.name}"
+      return
     end
 
     schema_names = schema_rows.map { |row| row[0] }
     database.schemas.where("gpdb_schemas.name NOT IN (?)", schema_names).destroy_all
 
-    schema_rows.map do |row| 
-      schema = database.schemas.find_or_initialize_by_name(row[0])
-      unless schema.persisted?
-        schema.save!
-        Dataset.refresh(account, schema)
+    schema_rows.map do |row|
+      begin
+        schema = database.schemas.find_or_initialize_by_name(row[0])
+        unless schema.persisted?
+          schema.save!
+          Dataset.refresh(account, schema)
+        end
+        schema
+      rescue Exception => e
+        p e
+        puts "failed to refresh schema's datasets: #{schema.name}"
       end
-      schema
     end
   end
 
@@ -62,10 +73,20 @@ class GpdbSchema < ActiveRecord::Base
     end
   end
 
-  def with_gpdb_connection(account)
+  def with_gpdb_connection(account, set_search=true)
     database.with_gpdb_connection(account) do |conn|
-      conn.schema_search_path = "#{conn.quote_column_name(name)}, 'public'"
+      if set_search
+        add_schema_to_search_path(conn)
+      end
       yield conn
     end
+  end
+
+  private
+
+  def add_schema_to_search_path(conn)
+    conn.schema_search_path = "#{conn.quote_column_name(name)}, 'public'"
+  rescue ActiveRecord::StatementInvalid
+    conn.schema_search_path = "#{conn.quote_column_name(name)}"
   end
 end

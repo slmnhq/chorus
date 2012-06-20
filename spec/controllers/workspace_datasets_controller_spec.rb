@@ -31,15 +31,21 @@ describe WorkspaceDatasetsController do
     end
 
     it "should associate multiple tables/views to the workspace for one table" do
-      table_ids = []
-      table_ids << gpdb_table.to_param
-      table_ids << gpdb_view.to_param
+      table_ids = [gpdb_table.to_param, gpdb_view.to_param]
 
       post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
       response.code.should == "200"
 
       workspace.bound_datasets.should include(gpdb_table)
       workspace.bound_datasets.should include(gpdb_view)
+    end
+
+    it "should create event and activity" do
+      table_ids = [gpdb_table.to_param, gpdb_view.to_param]
+      post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
+
+      events = Events::SOURCE_TABLE_CREATED.by(user)
+      events.count.should == 2
     end
   end
 

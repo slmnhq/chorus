@@ -8,6 +8,7 @@ describe Events do
     let(:user) { FactoryGirl.create(:user) }
     let(:workfile) { FactoryGirl.create(:workfile) }
     let(:workspace) { workfile.workspace }
+    let(:dataset) { FactoryGirl.create(:gpdb_table) }
 
     class << self
 
@@ -140,6 +141,22 @@ describe Events do
 
       it_creates_activities_for { [actor, workfile, workspace] }
       it_does_not_create_a_global_activity
+    end
+
+    describe "SOURCE_TABLE_CREATED" do
+      subject do
+        Events::SOURCE_TABLE_CREATED.create!(
+          :actor => actor,
+          :dataset => dataset,
+          :workspace => workspace
+        )
+      end
+
+      its(:dataset) { should == dataset }
+      its(:targets) { should == { :dataset => dataset } }
+
+      it_creates_activities_for { [actor, dataset] }
+      it_creates_a_global_activity
     end
   end
 
