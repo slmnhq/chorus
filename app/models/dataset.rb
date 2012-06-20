@@ -59,7 +59,7 @@ class Dataset < ActiveRecord::Base
 
     DISK_SIZE = <<-SQL
     CASE WHEN position('''' in pg_catalog.pg_class.relname) > 0 THEN 'unknown'
-         WHEN position('\\' in pg_catalog.pg_class.relname) > 0 THEN 'unknown'
+         WHEN position('\\\\' in pg_catalog.pg_class.relname) > 0 THEN 'unknown'
          ELSE pg_size_pretty(pg_total_relation_size(pg_catalog.pg_class.oid))
     END
     SQL

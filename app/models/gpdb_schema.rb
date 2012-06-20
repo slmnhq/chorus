@@ -36,7 +36,7 @@ class GpdbSchema < ActiveRecord::Base
   def self.refresh(account, database)
     begin
       schema_rows = database.with_gpdb_connection(account) do |conn|
-        conn.query(SCHEMAS_SQL)
+        conn.exec_query(SCHEMAS_SQL)
       end
     rescue Exception => e
       #p e
@@ -44,12 +44,12 @@ class GpdbSchema < ActiveRecord::Base
       return
     end
 
-    schema_names = schema_rows.map { |row| row[0] }
+    schema_names = schema_rows.map { |row| row["schema_name"] }
     database.schemas.where("gpdb_schemas.name NOT IN (?)", schema_names).destroy_all
 
     schema_rows.map do |row|
       begin
-        schema = database.schemas.find_or_initialize_by_name(row[0])
+        schema = database.schemas.find_or_initialize_by_name(row["schema_name"])
         unless schema.persisted?
           schema.save!
           Dataset.refresh(account, schema)
@@ -65,7 +65,7 @@ class GpdbSchema < ActiveRecord::Base
 
   def stored_functions(account)
     results = database.with_gpdb_connection(account) do |conn|
-      conn.query(SCHEMA_FUNCTION_QUERY % [name])
+      conn.exec_query(SCHEMA_FUNCTION_QUERY % [name])
     end
 
     results.map do |result|

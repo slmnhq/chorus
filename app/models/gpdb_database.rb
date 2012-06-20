@@ -14,8 +14,8 @@ class GpdbDatabase < ActiveRecord::Base
   def self.refresh(account)
     instance = account.instance
     db_names = Gpdb::ConnectionBuilder.connect!(instance, account) do |conn|
-      conn.query(DATABASE_NAMES_SQL)
-    end.map { |row| row[0] }
+      conn.exec_query(DATABASE_NAMES_SQL)
+    end.map { |row| row["datname"] }
 
     instance.databases.where("gpdb_databases.name NOT IN (?)", db_names).destroy_all
 

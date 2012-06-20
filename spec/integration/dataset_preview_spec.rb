@@ -84,6 +84,7 @@ describe "Viewing data inside GPDB instances" do
        page.should have_content ("Data Preview")
        find(".close").visible?
        find(".download_csv").visible?
+       wait_for_ajax
        click_link "Close"
      end
 

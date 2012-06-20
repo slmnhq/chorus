@@ -5,8 +5,7 @@ module Gpdb
         instance.online = false
         Gpdb::ConnectionBuilder.connect(instance, instance.owner_account) do |conn|
           instance.online = true
-          version_string = conn.query("select version()")[0][0]
-
+          version_string = conn.exec_query("select version()")[0]["version"]
           # if the version string looks like this:
           # PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0 ...
           # then we just want "4.1.1.2"

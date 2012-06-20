@@ -1,5 +1,5 @@
 default: &default
-  adapter: postgresql
+  adapter: jdbcpostgresql
   encoding: unicode
   username: edcadmin
   password:

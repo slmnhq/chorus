@@ -8,7 +8,7 @@ describe GpdbDatabase do
     before(:each) do
       stub_gpdb(account,
         GpdbDatabase::DATABASE_NAMES_SQL => [
-          ["db_a"], ["db_B"], ["db_C"], ["db_d"]
+          {"datname" => "db_a"}, {"datname" => "db_B"}, {"datname" => "db_C"}, {"datname" => "db_d"}
         ]
       )
     end
@@ -36,7 +36,7 @@ describe GpdbDatabase do
 
       stub_gpdb(account,
         GpdbDatabase::DATABASE_NAMES_SQL => [
-          ["db_a"], ["db_B"]
+          {"datname" => "db_a"}, {"datname" => "db_B"}
         ]
       )
 
@@ -51,10 +51,10 @@ describe GpdbDatabase do
     it "does not destroy databases on other instances" do
       other_account = FactoryGirl.create(:instance_account)
       stub_gpdb(other_account,
-        GpdbDatabase::DATABASE_NAMES_SQL => [ ["different"], ["matching"] ]
+        GpdbDatabase::DATABASE_NAMES_SQL => [ {"datname" => "different"}, {"datname" => "matching"} ]
       )
       stub_gpdb(account,
-        GpdbDatabase::DATABASE_NAMES_SQL => [ ["matching"] ]
+        GpdbDatabase::DATABASE_NAMES_SQL => [ {"datname" => "matching"} ]
       )
 
       GpdbDatabase.refresh(other_account)

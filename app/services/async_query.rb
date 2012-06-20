@@ -3,40 +3,24 @@ class AsyncQuery
 
   def initialize(connection, check_id)
     @check_id = check_id
-    @driver = get_pg_driver(connection)
+    @connection = connection
   end
 
-  def start_query(sql)
-    @driver.setnonblocking(true)
-    @driver.send_query(sql)
-    @async_query_task = AsyncQueryTask.create!({
-      :process_id => @driver.backend_pid,
-      :check_id => @check_id
-    })
-    @driver.setnonblocking(false)
-  end
-
-  def results
-    result = @driver.get_result
-    @async_query_task.destroy
-
-    # Check http://deveiate.org/code/pg/PG/Result.html for error codes
-    if result.result_status < PG::PGRES_BAD_RESPONSE
-      # No errors
-      result
-    else
-      raise QueryError, "PG driver did not respond with success. Error: #{result.error_message}"
+  def execute(sql)
+    begin
+      driver.exec_sql_query("/*#{@check_id}*/#{sql}")
+    rescue Exception => e
+      raise QueryError, "The query could not be completed. Error: #{e.message}"
     end
   end
 
   def cancel
-    async_query_task = AsyncQueryTask.find_by_check_id!(@check_id)
-    @driver.exec("SELECT pg_cancel_backend(#{async_query_task.process_id})")
+    @connection.exec_query("SELECT pg_cancel_backend(activity.procpid) from (select procpid from pg_stat_activity where current_query LIKE '/*#{@check_id}*/') AS activity")
   end
 
   private
 
-  def get_pg_driver(connection)
-    connection.instance_variable_get(:"@connection")
+  def driver
+    @connection.instance_variable_get(:"@connection").connection
   end
 end

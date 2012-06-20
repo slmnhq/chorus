@@ -22,13 +22,16 @@ describe " add an instance " do
   it "tries to create an instance with an invalid host and port" do
     # Incorrect port
     create_gpdb_gillette_instance(:name => "invalid_instance", :port => 2344)
-    page.find('.errors').should have_content("could not connect to server")
+    sleep(1)
+    page.find('.errors').should have_content("The driver encountered an unknown error")
     # Incorrect host
     create_gpdb_gillette_instance(:name => "invalid_instance", :host => "gillett.sf.pivotallabs.com")
-    page.find('.errors').should have_content("could not translate host name")
+    #page.find('.errors').should have_content("could not translate host name")
+    page.find('.errors').should have_content("The connection attempt failed")
     # Incorrect host and port
     create_gpdb_gillette_instance(:name => "invalid_instance", :host => "gillett.sf.pivotallabs.com", :port => 2344)
-    page.find('.errors').should have_content("could not translate host name")
+    #page.find('.errors').should have_content("could not translate host name")
+    page.find('.errors').should have_content("The connection attempt failed")
     # Still can register an instance
     create_gpdb_gillette_instance(:name => "valid_instance")
     verify_instance_name("valid_instance")

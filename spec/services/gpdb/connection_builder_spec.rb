@@ -11,7 +11,8 @@ describe Gpdb::ConnectionBuilder do
       port: instance.port,
       database: expected_database,
       username: instance_account.db_username,
-      password: instance_account.db_password
+      password: instance_account.db_password,
+      adapter: "jdbcpostgresql"
     }
   end
 

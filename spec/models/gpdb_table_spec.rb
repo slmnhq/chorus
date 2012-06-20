@@ -7,7 +7,7 @@ describe GpdbTable do
   describe "#analyze" do
     it "generates the correct sql" do
       fake_connection = Object.new
-      mock(fake_connection).select_all("analyze \"#{table.schema.name}\".\"#{table.name}\"")
+      mock(fake_connection).exec_query("analyze \"#{table.schema.name}\".\"#{table.name}\"")
       stub(table.schema).with_gpdb_connection(account) { |_, block| block.call(fake_connection) }
 
       table.analyze(account)

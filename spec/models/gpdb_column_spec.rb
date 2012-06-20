@@ -25,7 +25,10 @@ describe GpdbColumn do
     let(:schema) { FactoryGirl.create(:gpdb_schema, :name => "public", :database => database) }
     let(:dataset) { FactoryGirl.create(:gpdb_table, :schema => schema, :name => "users") }
 
-    subject { GpdbColumn.columns_for(account, dataset) }
+    subject do
+
+      GpdbColumn.columns_for(account, dataset)
+    end
 
     # XXX Local databases usually don't have password so bypass validation
     before do
@@ -38,7 +41,7 @@ describe GpdbColumn do
       id.name.should eq('id')
       id.data_type.should eq('integer')
       id.description.should be_blank
-      id.ordinal_position.should eq("1")
+      id.ordinal_position.should eq(1)
     end
 
     it "gets the column stats for table users" do
@@ -49,10 +52,16 @@ describe GpdbColumn do
 
     describe "with fake data" do
       before do
+        #{"attname"=>"notes", "format_type"=>"text", "description"=>nil, "attnum"=>11, "null_frac"=>nil, "n_distinct"=>nil,
+        #"most_common_vals"=>nil, "most_common_freqs"=>nil, "histogram_bounds"=>nil, "reltuples"=>0.0}
         mock(Gpdb::ConnectionBuilder).connect!(instance, account, 'chorus_rails_test') do
           [
-            ['email', 'varchar(255)', 'it must be present', 1, '1stats1', '1stats2', '1stats3', '1stats4', '1stats5', '1rows1'],
-            ['age', 'integer', 'nothing awesome', 2, '2stats1', '2stats2', '2stats3', '2stats4', '2stats5', '2rows1'],
+            {"attname" => 'email', "format_type" => 'varchar(255)', "description" => 'it must be present',
+             "attnum" => 1, "null_frac" => '1stats1', "n_distinct" => '1stats2', "most_common_vals" => '1stats3',
+             "most_common_freqs" => '1stats4', "histogram_bounds" => '1stats5', "reltuples" => '1rows1'},
+            {"attname" => 'age', "format_type" => 'integer', "description" => 'nothing awesome',
+             "attnum" => 2, "null_frac" => '2stats1', "n_distinct" => '2stats2', "most_common_vals" => '2stats3',
+             "most_common_freqs" => '2stats4', "histogram_bounds" => '2stats5', "reltuples" => '2rows1'}
           ]
         end
       end

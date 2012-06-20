@@ -1,0 +1,2 @@
+JRUBY_OPTS=--1.9 --server -J-Xmx512m -J-Xms512m -J-Xmn128m
+

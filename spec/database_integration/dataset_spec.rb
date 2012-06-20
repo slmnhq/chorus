@@ -70,12 +70,12 @@ describe Dataset::Query, :type => :database_integration do
         row['name'].should == "base_table1"
         row['description'].should == "comment on base_table1"
         row['definition'].should be_nil
-        row['column_count'].should == "3"
-        row['row_count'].should == "5"
+        row['column_count'].should == 3
+        row['row_count'].should == 5
         row['table_type'].should == "BASE_TABLE"
         row['last_analyzed'].should_not be_nil
         row['disk_size'].should =~ /kB/
-        row['partition_count'].should == "0"
+        row['partition_count'].should == 0
       end
     end
 
@@ -88,12 +88,12 @@ describe Dataset::Query, :type => :database_integration do
         row['name'].should == 'master_table1'
         row['description'].should == 'comment on master_table1'
         row['definition'].should be_nil
-        row['column_count'].should == '2'
-        row['row_count'].should == '0' # will always be zero for a master table
+        row['column_count'].should == 2
+        row['row_count'].should == 0 # will always be zero for a master table
         row['table_type'].should == 'MASTER_TABLE'
         row['last_analyzed'].should_not be_nil
         row['disk_size'].should == '0 bytes' # will always be zero for a master table
-        row['partition_count'].should == '7'
+        row['partition_count'].should == 7
       end
     end
 
@@ -106,12 +106,12 @@ describe Dataset::Query, :type => :database_integration do
         row['name'].should == 'external_web_table1'
         row['description'].should be_nil
         row['definition'].should be_nil
-        row['column_count'].should == '5'
-        row['row_count'].should == '0' # will always be zero for an external table
+        row['column_count'].should == 5
+        row['row_count'].should == 0 # will always be zero for an external table
         row['table_type'].should == 'EXT_TABLE'
         row['last_analyzed'].should_not be_nil
         row['disk_size'].should == '0 bytes' # will always be zero for an external table
-        row['partition_count'].should == '0'
+        row['partition_count'].should == 0
       end
     end
 
@@ -123,10 +123,10 @@ describe Dataset::Query, :type => :database_integration do
         row['name'].should == 'view1'
         row['description'].should == "comment on view1"
         row['definition'].should == "SELECT base_table1.id, base_table1.column1, base_table1.column2 FROM base_table1;"
-        row['column_count'].should == '3'
-        row['row_count'].should == '0'
+        row['column_count'].should == 3
+        row['row_count'].should == 0
         row['disk_size'].should == '0 bytes'
-        row['partition_count'].should == '0'
+        row['partition_count'].should == 0
       end
     end
   end

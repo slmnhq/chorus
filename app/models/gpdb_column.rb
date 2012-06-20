@@ -25,17 +25,23 @@ class GpdbColumn
 
   def self.columns_for(account, table)
     columns_with_stats = table.with_gpdb_connection(account) do |conn|
-      conn.query(COLUMN_METADATA_QUERY % [conn.quote_column_name(table.schema.name), conn.quote_column_name(table.name), conn.quote_column_name(table.name)])
+      conn.exec_query(COLUMN_METADATA_QUERY % [conn.quote_column_name(table.schema.name), conn.quote_column_name(table.name), conn.quote_column_name(table.name)])
     end
 
-    columns_with_stats.map do |raw_column_data|
+    columns_with_stats.map.with_index do |raw_row_data, i|
       column = GpdbColumn.new({
-        :name => raw_column_data[0],
-        :data_type => raw_column_data[1],
-        :description => raw_column_data[2],
-        :ordinal_position => raw_column_data[3]
+        :name => raw_row_data["attname"],
+        :data_type => raw_row_data["format_type"],
+        :description => raw_row_data["description"],
+        :ordinal_position => i + 1
       })
-      params = raw_column_data[4..-1]
+      params = []
+      params << raw_row_data["null_frac"]
+      params << raw_row_data["n_distinct"]
+      params << raw_row_data["most_common_vals"]
+      params << raw_row_data["most_common_freqs"]
+      params << raw_row_data["histogram_bounds"]
+      params << raw_row_data["reltuples"]
       params << column.number_or_time?
       column.statistics = GpdbColumnStatistics.new(*params)
       column

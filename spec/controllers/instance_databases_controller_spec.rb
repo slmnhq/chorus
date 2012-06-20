@@ -18,8 +18,10 @@ describe InstanceDatabasesController do
     context "when instance accessible" do
       let(:instance) { FactoryGirl.create :instance, :shared => true }
       let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner => instance.owner }
+      let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance) }
 
       it "checks authorization" do
+        stub(GpdbDatabase).refresh { [database] }
         mock(subject).authorize!(:show_contents, instance)
         get :index, :instance_id => instance.id
       end
@@ -36,8 +38,6 @@ describe InstanceDatabasesController do
       end
 
       context "when refresh of the db succeeds" do
-        let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance) }
-
         before do
           stub(GpdbDatabase).refresh { [database] }
         end

@@ -9,6 +9,12 @@ describe SqlResults, :type => :database_integration do
     refresh_chorus
   end
 
+  describe "analyze" do
+    it "can run analyze" do
+      table.analyze(account).should == []
+    end
+  end
+
   describe "#rows" do
     subject { SqlResults.preview_dataset(table, account, check_id).rows }
 
@@ -100,40 +106,40 @@ describe SqlResults, :type => :database_integration do
 
     it "gives each column the right 'data_type' attribute" do
       subject.map(&:data_type).should == [
-        "complex",
-        "numeric",
-        "integer[]",
-        "bigint",
-        "bigint",
-        "bit(5)",
-        "bit varying(10)",
-        "boolean",
-        "box",
-        "bytea",
-        "character varying(10)",
-        "character(10)",
-        "cidr",
-        "circle",
-        "date",
-        "double precision",
-        "inet",
-        "integer",
-        "interval",
-        "lseg",
-        "macaddr",
-        "money",
-        "numeric(5,5)",
-        "path",
-        "point",
-        "polygon",
-        "real",
-        "smallint",
-        "integer",
-        "text",
-        "time without time zone",
-        "time with time zone",
-        "timestamp without time zone",
-        "timestamp with time zone"
+          "complex",
+          "numeric",
+          "_int4",
+          "int8",
+          "bigserial",
+          "bit",
+          "varbit",
+          "bool",
+          "box",
+          "bytea",
+          "varchar",
+          "bpchar",
+          "cidr",
+          "circle",
+          "date",
+          "float8",
+          "inet",
+          "int4",
+          "interval",
+          "lseg",
+          "macaddr",
+          "money",
+          "numeric",
+          "path",
+          "point",
+          "polygon",
+          "float4",
+          "int2",
+          "serial",
+          "text",
+          "time",
+          "timetz",
+          "timestamp",
+          "timestamptz"
       ]
     end
   end

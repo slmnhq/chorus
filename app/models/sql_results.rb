@@ -19,18 +19,24 @@ class SqlResults
   end
 
   def self.from_sql(connection, async_query, sql)
-    async_query.start_query(sql)
-    pg_results = async_query.results
-
-    columns = Array.new(pg_results.nfields) do |i|
-      data_type = connection.query("select format_type(#{pg_results.ftype(i)}, #{pg_results.fmod(i)})")[0][0]
+    pg_results = async_query.execute(sql)
+    meta_data = pg_results.getMetaData()
+    columns = Array.new(meta_data.getColumnCount()) do |i|
       {
-        :name => pg_results.fname(i),
-        :data_type => data_type
+        :name => meta_data.getColumnName(i+1),
+        :data_type => meta_data.getColumnTypeName(i+1)
       }
     end
 
-    rows = pg_results.values
+    rows = []
+    while pg_results.next
+      row = []
+      (1..meta_data.column_count).each do |i|
+        row << pg_results.get_string(i).to_s
+      end
+      rows << row
+    end
+
     new(columns, rows)
   end
 

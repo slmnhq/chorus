@@ -7,8 +7,8 @@ describe GpdbSchema do
 
     before(:each) do
       stub_gpdb(account, GpdbSchema::SCHEMAS_SQL => [
-          ["schema1"],
-          ["schema2"]
+          {"schema_name" => "schema1"},
+          {"schema_name" => "schema2"}
       ])
       stub(Dataset).refresh
     end
@@ -44,7 +44,7 @@ describe GpdbSchema do
       GpdbSchema.refresh(account, database)
 
       stub_gpdb(account, GpdbSchema::SCHEMAS_SQL => [
-          ["schema1"]
+          {"schema_name" => "schema1"}
       ])
 
       GpdbSchema.refresh(account, database)
@@ -60,7 +60,7 @@ describe GpdbSchema do
       to_be_deleted = FactoryGirl.create(:gpdb_schema, :database => database, :name => "matching")
 
       stub_gpdb(account, GpdbSchema::SCHEMAS_SQL => [
-          ["new"]
+          {"schema_name" => "new"}
           #["matching", "50"] # deleting
       ])
       GpdbSchema.refresh(account, database)
