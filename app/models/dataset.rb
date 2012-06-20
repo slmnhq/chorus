@@ -12,7 +12,7 @@ class Dataset < ActiveRecord::Base
   delegate :instance, :to => :schema
 
   def self.refresh(account, schema)
-    datasets = schema.with_gpdb_connection(account) do |conn|
+    datasets = schema.with_gpdb_connection(account, false) do |conn|
       conn.select_all(Query.new(schema).tables_and_views_in_schema.to_sql)
     end
 

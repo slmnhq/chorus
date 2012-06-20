@@ -6,6 +6,7 @@ class DataMigrator
                   UserMigrator.new,
                   InstanceMigrator.new,
                   InstanceAccountMigrator.new,
+                  DatabaseMigrator.new,
                   WorkspaceMigrator.new,
                   MembershipMigrator.new,
                   ImageMigrator.new,
