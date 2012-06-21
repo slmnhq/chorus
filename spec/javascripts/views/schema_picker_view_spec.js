@@ -442,6 +442,18 @@ describe("chorus.views.SchemaPicker", function() {
                                             });
                                         });
 
+                                        context("changing the instance", function() {
+                                            beforeEach(function() {
+                                                this.view.$(".instance select")
+                                                    .prop("selectedIndex", 2)
+                                                    .change();
+                                            });
+
+                                            itHidesSection("schema");
+                                            itShouldResetSelect('database', false);
+                                            itShouldResetSelect('schema', false);
+                                        });
+
                                         context("unselecting the database", function() {
                                             beforeEach(function() {
                                                 var select = this.view.$(".database select");

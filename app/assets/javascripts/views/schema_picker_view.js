@@ -30,17 +30,15 @@
             this.sectionStates = {};
 
             if (this.options.instance) {
-                this.setState({ instance: STATIC, database: LOADING });
+                this.setState({ instance: STATIC, database: LOADING, schema: HIDDEN });
             } else {
-                this.setState({ instance: LOADING, database: HIDDEN });
+                this.setState({ instance: LOADING, database: HIDDEN, schema: HIDDEN });
 
                 this.instances = new chorus.collections.InstanceSet();
                 this.instances.onLoaded(this.instancesLoaded, this);
                 this.bindings.add(this.instances, "fetchFailed", this.instanceFetchFailed);
                 this.instances.fetchAll();
             }
-
-            this.setState({ schema: HIDDEN });
         },
 
         setState: function(params) {
@@ -55,7 +53,6 @@
         postRender:function () {
             if (this.options.instance) {
                 if (this.options.database) {
-                    this.selectedInstance = this.options.instance;
                     this.databaseSelected();
                 } else {
                     this.instanceSelected();
@@ -111,32 +108,36 @@
         instanceSelected:function () {
             this.resetSelect('database');
             this.resetSelect('schema');
-            this.selectedInstance = this.getSelectedInstance();
+            var selectedInstance = this.getSelectedInstance();
 
-            if (this.selectedInstance) {
-                this.setState({ database: LOADING });
+            if (selectedInstance) {
+                this.setState({ database: LOADING, schema: HIDDEN });
 
-                this.databases = this.selectedInstance.databases();
+                this.databases = selectedInstance.databases();
                 this.databases.fetchAllIfNotLoaded();
                 this.bindings.add(this.databases, "fetchFailed", this.databaseFetchFailed);
                 this.databases.onLoaded(this.databasesLoaded, this);
             } else {
-                this.setState({ database: HIDDEN });
+                this.setState({ database: HIDDEN, schema: HIDDEN });
             }
         },
 
         getSelectedInstance: function() {
-            return this.options.instance || this.instances.get(this.$('.instance select option:selected').val());
+            if (this.options.instance) {
+                return this.options.instance;
+            } else {
+                return this.instances && this.instances.get(this.$('.instance select option:selected').val());
+            }
         },
 
-        databaseSelected:function () {
+        databaseSelected: function () {
             this.resetSelect('schema');
-            this.selectedDatabase = this.getSelectedDatabase();
+            var selectedDatabase = this.getSelectedDatabase();
 
-            if (this.selectedDatabase) {
+            if (selectedDatabase) {
                 this.setState({ schema: LOADING });
 
-                this.schemas = this.selectedDatabase.schemas();
+                this.schemas = selectedDatabase.schemas();
                 this.schemas.fetchAllIfNotLoaded();
                 this.bindings.add(this.schemas, "fetchFailed", this.schemaFetchFailed);
                 this.schemas.onLoaded(this.schemasLoaded, this);
@@ -146,37 +147,35 @@
         },
 
         fetchFailed: function(type, collection) {
-            if(type) {
-                this.resetSelect(type);
-            }
+            if (type) { this.resetSelect(type); }
             this.trigger("error", collection);
         },
 
         getSelectedDatabase : function() {
-            return this.options.database || this.databases.get(this.$('.database select option:selected').val());
+            if (this.options.database) {
+                return this.options.database;
+            } else {
+                return this.databases && this.databases.get(this.$('.database select option:selected').val());
+            }
+        },
+
+        getSelectedSchema: function() {
+            return this.schemas && this.schemas.get(this.$('.schema select option:selected').val());
         },
 
         schemaSelected:function () {
-            this.selectedSchema = this.schemas.get(this.$('.schema select option:selected').val());
             this.triggerSchemaSelected();
         },
 
         createNewDatabase:function (e) {
             e.preventDefault();
-
-            delete this.selectedDatabase;
-
-            this.setState({
-                database: CREATE_NEW,
-                schema: CREATE_NESTED
-            });
+            this.resetSelect("schema");
+            this.setState({ database: CREATE_NEW, schema: CREATE_NESTED });
             this.$(".schema input.name").val(chorus.models.Schema.DEFAULT_NAME);
         },
 
         createNewSchema:function (e) {
             e.preventDefault();
-
-            delete this.selectedSchema;
             this.setState({ schema: CREATE_NEW });
             this.$(".schema input.name").val("");
         },
@@ -192,7 +191,6 @@
         },
 
         resetSelect: function (type) {
-            delete this["selected" + _.capitalize(type)];
             this.triggerSchemaSelected();
             this.trigger("clearErrors");
 
@@ -238,20 +236,24 @@
         },
 
         fieldValues: function () {
+            var selectedInstance = this.getSelectedInstance();
+            var selectedDatabase = this.getSelectedDatabase();
+            var selectedSchema   = this.getSelectedSchema();
+
             var attrs = {
-                instance:this.selectedInstance && this.selectedInstance.get("id")
+                instance: selectedInstance && selectedInstance.get("id")
             };
 
-            if (this.selectedDatabase && this.selectedDatabase.get('id')) {
-                attrs.database = this.selectedDatabase.get("id");
-            } else if(this.selectedDatabase && this.selectedDatabase.get("name")) {
-                attrs.databaseName = this.selectedDatabase.get('name');
+            if (selectedDatabase && selectedDatabase.get('id')) {
+                attrs.database = selectedDatabase.get("id");
+            } else if (selectedDatabase && selectedDatabase.get("name")) {
+                attrs.databaseName = selectedDatabase.get('name');
             } else {
                 attrs.databaseName = this.$(".database input.name:visible").val();
             }
 
-            if (this.selectedSchema) {
-                attrs.schema = this.selectedSchema.get("id");
+            if (selectedSchema) {
+                attrs.schema = selectedSchema.get("id");
             } else {
                 attrs.schemaName = this.$(".schema input.name:visible").val();
             }
@@ -279,11 +281,8 @@
             });
         },
 
-        additionalContext:function () {
-            return {
-                "allowCreate":this.options.allowCreate,
-                options: this.options
-            }
+        additionalContext: function () {
+            return { options: this.options };
         }
     });
 })();
