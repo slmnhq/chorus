@@ -3,6 +3,7 @@ require 'spec_helper'
 resource "Workspaces" do
   let!(:user) { FactoryGirl.create :admin }
   let!(:workspace) { FactoryGirl.create :workspace, :owner => user }
+  let!(:schema) { FactoryGirl.create :gpdb_schema, :id => 12 }
 
   before do
     log_in user
@@ -30,14 +31,16 @@ resource "Workspaces" do
 
     parameter :name, "Workspace name"
     parameter :public, "1 if the workspace should be public, 0 if it should be private. Defaults to public if the parameter is not provided."
+    parameter :sandbox_id, "Id of the schema to be used as the workspace's sandbox"
     parameter :summary, "Notes about the workspace"
 
     required_parameters :name
     scope_parameters :workspace, :all
 
-    let(:name) { "Bwesome Workspace" }
+    let(:name) { "Awesome Workspace" }
     let(:public) { "1" }
     let(:summary) { "I like big data and I cannot lie, all the other coders can't deny" }
+    let(:sandbox_id) { "12" }
 
     example_request "Update workspace details" do
       status.should == 200
