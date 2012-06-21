@@ -82,6 +82,46 @@ describe Workspace do
     end
   end
 
+  describe "#datasets" do
+    let!(:schema) { FactoryGirl.create(:gpdb_schema) }
+    let!(:other_schema) { FactoryGirl.create(:gpdb_schema) }
+    let!(:sandbox_table) { FactoryGirl.create(:gpdb_table, :schema => schema) }
+    let!(:source_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
+    let!(:other_table) { FactoryGirl.create(:gpdb_table, :schema => other_schema) }
+
+    before do
+      workspace.bound_datasets << source_table
+    end
+
+    context "when the workspace has a sandbox" do
+      let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
+
+      it "includes datasets in the workspace's sandbox and all of its bound datasets" do
+        workspace.datasets.should =~ [sandbox_table, source_table]
+      end
+    end
+
+    context "when the workspace does not have a sandbox" do
+      let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => nil) }
+
+      it "includes the workspace's bound datasets" do
+        workspace.datasets.should =~ [source_table]
+      end
+    end
+
+    context "when the workspace has no sandbox and no associated datasets" do
+      let!(:workspace) { FactoryGirl.create(:workspace, :sandbox => nil) }
+
+      before do
+        workspace.associated_datasets.destroy_all
+      end
+
+      it "returns an empty relation" do
+        workspace.datasets.should == []
+      end
+    end
+  end
+
   describe "#image" do
     it "should have a nil image instead of a default missing image" do
       workspace = FactoryGirl.create(:workspace, :image => nil)
