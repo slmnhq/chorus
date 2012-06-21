@@ -84,5 +84,6 @@ RSpec.configure do |config|
   config.include GpdbTestHelpers
   config.include AllowyRSpecHelpers
   config.include GpdbIntegration, :type => :database_integration
+  config.include DataMigrationHelper, :type => :data_migration
 end
 

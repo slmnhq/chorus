@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DataMigrator, :data_migration => true do
+describe DataMigrator, :data_migration => true, :type => :data_migration do
   before do
     @data_migrator = DataMigrator.new
   end

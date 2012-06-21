@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe WorkfileMigrator, :data_migration => true do
+describe WorkfileMigrator, :data_migration => true, :type => :data_migration do
   describe ".migrate" do
     describe "copying the data" do
       before do

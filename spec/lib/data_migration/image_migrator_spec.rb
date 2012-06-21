@@ -19,7 +19,7 @@ TYPE_MAP = {
   "image/gif" => "GIF"
 }
 
-describe ImageMigrator, :data_migration => true do
+describe ImageMigrator, :data_migration => true, :type => :data_migration do
   describe ".migrate" do
     describe "copying the data" do
       before do

@@ -1,8 +1,9 @@
 require 'spec_helper'
 
-describe SandboxMigrator, :data_migration => true do
+describe SandboxMigrator, :data_migration => true, :type => :data_migration do
   describe ".migrate" do
     before do
+      mock_dataset_refresh
       UserMigrator.new.migrate
       InstanceMigrator.new.migrate
       InstanceAccountMigrator.new.migrate

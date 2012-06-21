@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe WorkspaceMigrator, :data_migration => true do
+describe WorkspaceMigrator, :data_migration => true, :type => :data_migration do
   describe ".migrate" do
     describe "the new foreign key column" do
       before(:each) do

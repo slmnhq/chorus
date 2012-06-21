@@ -52,7 +52,6 @@ end
 
 group :test, :development do
   gem 'awesome_print'
-  gem 'debugger', :platform => :mri
   gem 'jasmine'
   gem 'rspec_api_documentation'
   gem 'forgery'
