@@ -79,6 +79,10 @@ class ApplicationController < ActionController::Base
     render options.merge({:json => json})
   end
 
+  def paginate(collection)
+    collection.paginate(params.slice(:page, :per_page))
+  end
+
   def present_forbidden(model)
     response_json = {}
 

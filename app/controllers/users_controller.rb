@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_filter :require_admin_or_referenced_user, :only => :update
 
   def index
-    present User.order(params[:order]).paginate(params.slice(:page, :per_page))
+    present paginate(User.order(params[:order]))
   end
 
   def show

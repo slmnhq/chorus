@@ -6,7 +6,7 @@ class WorkspacesController < ApplicationController
       workspaces = WorkspaceAccess.workspaces_for(current_user)
     end
     workspaces = workspaces.active if params[:active]
-    present workspaces.order("lower(name) ASC").paginate(params.slice(:page, :per_page))
+    present paginate(workspaces.order("lower(name) ASC"))
   end
 
   def create
