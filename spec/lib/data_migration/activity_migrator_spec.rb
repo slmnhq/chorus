@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ActivityMigrator, :type => :data_migration do
+describe ActivityMigrator, :data_migration => true do
   describe ".migrate" do
     before do
       UserMigrator.new.migrate

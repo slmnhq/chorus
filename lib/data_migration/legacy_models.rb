@@ -1,8 +1,10 @@
 class Legacy::User < Legacy
+  self.primary_key = :id
   self.table_name = 'edc_user'
 end
 
 class Legacy::Instance < Legacy
+  self.primary_key = :id
   self.table_name = 'edc_instance'
 
   def hadoop?
@@ -15,14 +17,17 @@ class Legacy::Instance < Legacy
 end
 
 class Legacy::Workfile < Legacy
+  self.primary_key = :id
   self.table_name = 'edc_work_file'
 end
 
 class Legacy::Workspace < Legacy
+  self.primary_key = :id
   self.table_name = 'edc_workspace'
 end
 
 class Legacy::ActivityStreamObject < Legacy
+  self.primary_key = :id
   self.table_name = 'edc_activity_stream_object'
 
   belongs_to :object
@@ -43,9 +48,8 @@ class Legacy::ActivityStreamObject < Legacy
 end
 
 class Legacy::ActivityStream < Legacy
-  def self.table_name
-    'edc_activity_stream'
-  end
+  self.primary_key = :id
+  self.table_name = 'edc_activity_stream'
 
   belongs_to :workspace, :class_name => 'Legacy::Workspace', :foreign_key => 'workspace_id'
 
