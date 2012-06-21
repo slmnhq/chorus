@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UserMigrator, :type => :data_migration do
+describe UserMigrator, :data_migration => true do
   describe ".migrate" do
     describe "the new foreign key column" do
       before(:each) do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DataMigrator, :type => :data_migration do
+describe DataMigrator, :data_migration => true do
   before do
     @data_migrator = DataMigrator.new
   end
@@ -16,6 +16,7 @@ describe DataMigrator, :type => :data_migration do
     @data_migrator.migrators[i+=1].should be_instance_of MembershipMigrator
     @data_migrator.migrators[i+=1].should be_instance_of ImageMigrator
     @data_migrator.migrators[i+=1].should be_instance_of WorkfileMigrator
+    @data_migrator.migrators[i+=1].should be_instance_of SandboxMigrator
   end
 
   describe ".migrate" do

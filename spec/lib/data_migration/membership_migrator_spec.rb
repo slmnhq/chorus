@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MembershipMigrator, :type => :data_migration do
+describe MembershipMigrator, :data_migration => true do
   describe ".migrate" do
     describe "the new foreign key column" do
       before(:each) do

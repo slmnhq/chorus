@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DatabaseMigrator, :type => :data_migration do
+describe DatabaseMigrator, :data_migration => true do
   describe ".migrate" do
     before(:each) do
       UserMigrator.new.migrate

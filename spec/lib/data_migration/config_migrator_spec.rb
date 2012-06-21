@@ -32,7 +32,7 @@ EXAMPLE = <<EOF
 some_key_not_present_in_properties_file: baz
 EOF
 
-describe ConfigMigrator, :type => :data_migration do
+describe ConfigMigrator, :data_migration => true do
   before do
     example_file = Tempfile.open('chorus.yaml.example')
     properties_file = Tempfile.open('chorus.properties')

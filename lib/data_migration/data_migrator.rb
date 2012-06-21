@@ -10,7 +10,8 @@ class DataMigrator
                   WorkspaceMigrator.new,
                   MembershipMigrator.new,
                   ImageMigrator.new,
-                  WorkfileMigrator.new
+                  WorkfileMigrator.new,
+                  SandboxMigrator.new
                  ]
   end
 

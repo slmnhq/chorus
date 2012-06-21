@@ -49,6 +49,7 @@ RSpec.configure do |config|
   config.mock_with :rr
 
   config.filter_run_excluding :fixture => true
+  config.filter_run_excluding :data_migration => true
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -63,7 +64,7 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = true
 
-  config.before(:each, :type => :data_migration) do
+  config.before(:each, :data_migration => true) do
     # stub file reads of legacy workfiles
     #
     stub(File).read(/.+\/\d{5}\/[\d_]+$/) { "123" }

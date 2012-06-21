@@ -39,8 +39,8 @@ class GpdbSchema < ActiveRecord::Base
         conn.query(SCHEMAS_SQL)
       end
     rescue Exception => e
-      p e
-      puts "failed to query the database for schemas: #{database.name}"
+      #p e
+      #puts "failed to query the database for schemas: #{database.name}"
       return
     end
 
@@ -56,8 +56,8 @@ class GpdbSchema < ActiveRecord::Base
         end
         schema
       rescue Exception => e
-        p e
-        puts "failed to refresh schema's datasets: #{schema.name}"
+        #p e
+        #puts "failed to refresh schema's datasets: #{schema.name}"
       end
     end
   end
