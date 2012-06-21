@@ -1,5 +1,5 @@
 def find_hadoop_instance_dialog
-  wait_until(15) { find("input[name=name]").visible? }
+  wait_until { find("input[name=name]").visible? }
   wait_until { find("textarea[name=description]").visible? }
   wait_until { find("input[name=host]").visible? }
   wait_until { find("input[name=port]").visible? }
@@ -16,7 +16,7 @@ def create_valid_hadoop_instance(params = {})
   within("#facebox") do
     choose("register_existing_hadoop")
     find_hadoop_instance_dialog
-
+    wait_for_ajax
     fill_in 'name', :with => name
     fill_in 'description', :with => "hadoop instance"
     fill_in 'host', :with => "gillette.sf.pivotallabs.com"
@@ -24,6 +24,7 @@ def create_valid_hadoop_instance(params = {})
     fill_in 'username', :with => "hadoop"
     fill_in 'groupList', :with => "hadoop"
     find(".submit").click
+    wait_for_ajax
   end
   wait_until { current_route == "/instances" }
   wait_until { find('.instance_list').has_content?(name) }
