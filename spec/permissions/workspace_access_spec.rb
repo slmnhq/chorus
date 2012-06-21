@@ -91,20 +91,20 @@ describe WorkspaceAccess do
     end
   end
 
-  describe "#workfile_change?" do
-    it "doesn't allow non-members to change workfiles'" do
-      workspace_access.can?(:workfile_change, private_workspace).should be_false
+  describe "#can_edit_sub_objects?" do
+    it "doesn't allow non-members to edit workspace sub objects'" do
+      workspace_access.can?(:can_edit_sub_objects, private_workspace).should be_false
     end
 
-    it "allows members to change workfiles" do
+    it "allows members to edit workspace sub objects" do
       private_workspace.members << user
-      workspace_access.can?(:workfile_change, private_workspace).should be_true
+      workspace_access.can?(:can_edit_sub_objects, private_workspace).should be_true
     end
 
-    it "does not allow archived workspace to have its workfiles changed" do
+    it "does not allow archived workspace to have its sub objects edited" do
       private_workspace.archived_at = Time.current
       private_workspace.members << user
-      workspace_access.can?(:workfile_change, private_workspace).should be_false
+      workspace_access.can?(:can_edit_sub_objects, private_workspace).should be_false
     end
   end
 

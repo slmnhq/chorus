@@ -18,6 +18,15 @@ class WorkspaceDatasetsController < ApplicationController
     present AssociatedDataset.where(:dataset_id => params[:id], :workspace_id => params[:workspace_id]).first
   end
 
+  def destroy
+    workspace = Workspace.find(params[:workspace_id])
+    authorize! :can_edit_sub_objects, workspace
+
+    dataset = AssociatedDataset.find_by_dataset_id_and_workspace_id(params[:id], params[:workspace_id])
+    dataset.destroy
+    render :json => {}
+  end
+
   private
 
   def create_event_for_dataset(dataset, workspace)

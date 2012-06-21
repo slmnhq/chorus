@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe WorkspaceDatasetsController do
+  ignore_authorization!
+
   let(:user) { FactoryGirl.create(:user) }
   let(:workspace) { FactoryGirl.create(:workspace) }
   let!(:gpdb_view) { FactoryGirl.create(:gpdb_view) }
@@ -82,6 +84,22 @@ describe WorkspaceDatasetsController do
         decoded_response.object_name.should == dataset.name
         decoded_response.type.should == "SOURCE_TABLE"
       end
+    end
+  end
+
+  describe "#destroy" do
+    let!(:association) { FactoryGirl.create(:associated_dataset, :dataset=> gpdb_table, :workspace => workspace)}
+
+    it "deletes the association" do
+      delete :destroy, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
+
+      response.should be_success
+      AssociatedDataset.find_by_dataset_id_and_workspace_id(gpdb_table.to_param, workspace.to_param).should be_nil
+    end
+
+    it "uses authorization" do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      delete :destroy, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
     end
   end
 end

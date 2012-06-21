@@ -23,7 +23,7 @@ class WorkspaceAccess < DefaultAccess
     workspace.public || member_edit?(workspace)
   end
 
-  def workfile_change?(workspace)
+  def can_edit_sub_objects?(workspace)
     !workspace.archived? && (member_edit?(workspace) || administrative_edit?(workspace))
   end
 

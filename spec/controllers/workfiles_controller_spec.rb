@@ -383,7 +383,7 @@ describe WorkfilesController do
     end
 
     it "uses authorization" do
-      mock(subject).authorize! :workfile_change, workspace
+      mock(subject).authorize! :can_edit_sub_objects, workspace
       delete :destroy, :id => public_workfile.id
     end
 

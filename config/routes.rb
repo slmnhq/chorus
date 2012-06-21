@@ -57,7 +57,7 @@ Chorus::Application.routes.draw do
     resource :image, :only => [:update], :controller => :workspace_images
     resources :workfiles, :only => [:create, :index]
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
-    resources :datasets, :only => [:index, :create, :show], :controller => "workspace_datasets"
+    resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets"
   end
 
   resources :workfiles, :only => [:show, :destroy] do
