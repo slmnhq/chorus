@@ -21,7 +21,6 @@ platform :mri do
 end
 
 platform :jruby do
-  gem 'ruby-debug', :require => 'ruby-debug'
   gem 'jruby-openssl'
   gem 'activerecord-jdbcpostgresql-adapter', :git => "git://github.com/bdon/activerecord-jdbc-adapter.git"
 end
