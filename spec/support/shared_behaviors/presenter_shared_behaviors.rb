@@ -42,5 +42,24 @@ shared_examples "dataset presenter" do |dataset_factory_name|
     instance[:name].should == "instance1"
   end
 
+  context "when the 'workspace' option is not passed" do
+    it "does not include the 'workspace' key" do
+      hash.should_not have_key(:workspace)
+    end
+  end
+
+  context "when the 'workspace' option is passed" do
+    let(:workspace) { FactoryGirl.build(:workspace) }
+    let(:presenter) { described_class.new(@dataset, view, :workspace => workspace) }
+
+    before do
+      stub(view).current_user { FactoryGirl.build(:user) }
+    end
+
+    it "includes the given workspace" do
+      hash[:workspace].should == Presenter.present(workspace, view)
+    end
+  end
+
   it_behaves_like "sanitized presenter", dataset_factory_name, :name, :object_name
 end
