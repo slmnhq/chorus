@@ -64,7 +64,8 @@ class ApplicationController < ActionController::Base
   end
 
   def present(model_or_collection, options={})
-    json = {:response => Presenter.present(model_or_collection, view_context)}
+    presenter_options = options.delete(:presenter_options) || {}
+    json = {:response => Presenter.present(model_or_collection, view_context, presenter_options) }
 
     if model_or_collection.respond_to? :current_page
       json[:pagination] = {

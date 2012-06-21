@@ -14,7 +14,7 @@ describe Presenter, :type => :view do
 
   describe ".present_collection" do
     it "serializes an array" do
-      Presenter.present_collection([@user], view).should be_a(Array)
+      Presenter.present_collection([@user], view, {}).should be_a(Array)
     end
   end
 
@@ -31,7 +31,7 @@ describe Presenter, :type => :view do
 
     context "with a paperclip attachment" do
       it "creates an ImagePresenter" do
-        mock.proxy(ImagePresenter).new(@user.image, view)
+        mock.proxy(ImagePresenter).new(@user.image, view, {})
         Presenter.present(@user.image, view)
       end
     end
