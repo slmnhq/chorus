@@ -21,7 +21,7 @@ describe " add an instance " do
     page.should have_content "EDC Admin added a new instance gpdb_instance"
   end
 
-  it "System generates events for gpdb name change (INSTANCE_CHANGED_NAME)" do
+  xit "System generates activity stream for gpdb instance name change (29788347)" do
     name = "initial_instance_name"
     modified_name = "edit_instance_name"
 
@@ -39,7 +39,11 @@ describe " add an instance " do
     page.should have_content "EDC Admin added a new instance #{name}"
   end
 
-  it "creates an activity stream when a hadoop instance is created" do
+  xit "System generates activity stream for hadoop instance name change (29788347)" do
+
+  end
+
+  xit "Creates an activity stream when a hadoop instance is created" do
     create_valid_hadoop_instance(:name => "hadoop_instance")
     hadoop_instance_id = HadoopInstance.find_by_name("hadoop_instance").id
     go_to_home_page
@@ -55,4 +59,17 @@ describe " add an instance " do
     page.should have_content "EDC Admin added a new instance hadoop_instance"
   end
 
+  xit "System generates activity stream for instance owner change (29788349)" do
+
+  end
+
+  xit "System generates activity stream for WORKFILE_CREATED (29788327)" do
+=begin
+  DO To:
+  1. Add Personal Activity stream
+  2. Workspace Activity stream
+  3. Home page activity stream (for all members))
+
+=end
+  end
 end

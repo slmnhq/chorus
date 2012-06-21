@@ -86,4 +86,14 @@ describe "save as Menu" do
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+\/versions\/\d+/ }
     page.find("textarea.text_editor").should have_content('new Blood')
   end
+
+  xit "Checking version conflict dialog" do
+=begin
+    To DO:
+      1. Open two sessions of the same file(as two users)
+      2. As one user in file make changes and save as a new version
+      3. As another user name changes to the same file and save as current verion
+      5. Error dialog who come up
+=end
+  end
 end

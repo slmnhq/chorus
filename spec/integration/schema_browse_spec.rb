@@ -22,5 +22,9 @@ describe " add an instance " do
       click_button "Run Analyze"
       wait_for_ajax(10)
       page.should have_content("Analyze is running")
-    end
+  end
+
+  xit "Associate a table/view with workspace (27928559)" do
+
+  end
 end

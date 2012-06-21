@@ -42,5 +42,10 @@ describe "Editing instance details" do
       end
 
     end
+
+    xit "CLicking on Non-shared instances should request user credentials (30231141)" do
+
+    end
+
   end
 end

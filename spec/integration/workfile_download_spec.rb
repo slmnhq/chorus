@@ -35,4 +35,7 @@ describe "save as Menu" do
     click_link 'Download'
     page.response_headers['Content-Disposition'].should_not be_blank
   end
+
+  xit "non-owners can't download workfiles (31406337)" do
+  end
 end

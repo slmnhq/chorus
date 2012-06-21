@@ -72,7 +72,7 @@ describe "Showing the workspace quickstart page" do
     end
 
     # TODO: sandbox is not ready
-    xit "dismisses Add a Sandbox" do
+    xit "dismisses Add a Sandbox (30940889)" do
       click_link "Add a Sandbox"
 
       wait_until { page.has_selector?("#facebox") && page.find("#facebox .dialog h1").text == "Add a Sandbox" }

@@ -102,4 +102,8 @@ describe "add a workfile" do
     workfiles.first.text.should == "some.txt"
     workfiles.last.text.should == "some_1.txt"
   end
+
+  xit "Edit a workfile, member sees list of available db functions" do
+
+  end
 end
