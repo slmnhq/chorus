@@ -4,7 +4,7 @@ set -e
 
 eval "$(rbenv init -)"
 rbenv shell `cat .rbenv-version`
-ruby -v | grep jruby-1.6.7
+ruby -v | grep "jruby 1.6.7"
 gem list bundler | grep bundler || gem install bundler
 bundle install
 rake legacy:setup db:migrate db:test:prepare db:test:prepare:legacy
