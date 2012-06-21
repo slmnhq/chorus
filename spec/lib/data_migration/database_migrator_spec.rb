@@ -8,16 +8,14 @@ describe DatabaseMigrator, :data_migration => true, :type => :data_migration do
       InstanceAccountMigrator.new.migrate
     end
 
-    it "populates the gpdb_database table" do
-      GpdbDatabase.all.count() == 0
-      DatabaseMigrator.new.migrate
-      GpdbDatabase.all.count().should > 0
-    end
+    it "populates the gpdb_database and gpdb_schema table" do
+      GpdbDatabase.count.should == 0
+      GpdbSchema.count.should == 0
 
-    it "populates the gpdb_schema table" do
-      GpdbSchema.all.count() == 0
       DatabaseMigrator.new.migrate
-      GpdbSchema.all.count().should > 0
+
+      GpdbDatabase.count.should > 0
+      GpdbSchema.count.should > 0
     end
   end
 end

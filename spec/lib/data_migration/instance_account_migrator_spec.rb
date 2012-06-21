@@ -18,7 +18,7 @@ describe InstanceAccountMigrator, :data_migration => true, :type => :data_migrat
       end
 
       it "copies the necessary fields" do
-        InstanceAccount.all.each do |account|
+        InstanceAccount.find_each do |account|
           legacy = Legacy.connection.select_one("SELECT edc_account_map.*, edc_instance.chorus_rails_instance_id, edc_user.chorus_rails_user_id
                 FROM edc_account_map
                 JOIN edc_instance ON edc_account_map.instance_id = edc_instance.id
