@@ -119,9 +119,12 @@ describe("chorus.views.SchemaPicker", function() {
                     });
 
                     it("disables only inacessible instances", function() {
-                        expect(this.view.$("select[name=instance] option[value=1]")).not.toBeDisabled();
-                        expect(this.view.$("select[name=instance] option[value=2]")).not.toBeDisabled();
-                        expect(this.view.$("select[name=instance] option[value=3]")).toBeDisabled();
+                        var select = this.view.$("select[name=instance]");
+
+                        expect(select.find("option").length).toBe(4);
+                        expect(select.find("option[value=1]")).not.toBeDisabled();
+                        expect(select.find("option[value=2]")).not.toBeDisabled();
+                        expect(select.find("option[value=3]")).toBeDisabled();
                     });
 
                     itShowsSelect('instance');
@@ -142,6 +145,15 @@ describe("chorus.views.SchemaPicker", function() {
 
                         it("still hides the loading placeholder", function() {
                             expect(this.view.$(".instance .loading_text")).toHaveClass("hidden")
+                        });
+
+                        it("keeps the same options in the instance select", function() {
+                            var select = this.view.$("select[name=instance]");
+
+                            expect(select.find("option").length).toBe(4);
+                            expect(select.find("option[value=1]")).not.toBeDisabled();
+                            expect(select.find("option[value=2]")).not.toBeDisabled();
+                            expect(select.find("option[value=3]")).toBeDisabled();
                         });
                     });
 

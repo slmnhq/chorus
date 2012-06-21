@@ -88,6 +88,7 @@
                     break;
                 case SELECT:
                     section.find(".select_container").removeClass("hidden");
+                    this.populateSelect(type);
                     break;
                 case CREATE_NEW:
                     section.find(".create_container").removeClass("hidden");
@@ -201,30 +202,29 @@
             return select;
         },
 
-        instancesLoaded: function () {
-            var numModels = this.updateFor('instance', function (instance) {
-                    return instance.get("instanceProvider") != "Hadoop";
-                },
-                function(instance) {
-                    return !instance.get("hasCredentials");
-                });
+        greenplumInstances: function() {
+            return this.instances.filter(function(instance) {
+                return instance.get("instanceProvider") != "Hadoop";
+            });
+        },
 
-            var state = (numModels === 0) ? UNAVAILABLE : SELECT;
+        instancesLoaded: function () {
+            var state = (this.greenplumInstances().length === 0) ? UNAVAILABLE : SELECT;
             this.setState({ instance: state });
         },
 
         databasesLoaded: function () {
             this.resetSelect("schema");
-            var numModels = this.updateFor('database');
 
-            var state = (numModels === 0) ? UNAVAILABLE : SELECT;
-            this.setState({ database: state });
-            this.setState({ schema: HIDDEN });
+            var state = (this.databases.length === 0) ? UNAVAILABLE : SELECT;
+            this.setState({
+                database: state,
+                schema: HIDDEN
+            });
         },
 
         schemasLoaded: function () {
-            var numModels = this.updateFor('schema');
-            var state = (numModels === 0) ? UNAVAILABLE : SELECT;
+            var state = (this.schemas.length === 0) ? UNAVAILABLE : SELECT;
             this.setState({ schema: state });
         },
 
@@ -232,12 +232,12 @@
             this.trigger("change", this.ready());
         },
 
-        ready:function () {
+        ready: function () {
             var attrs = this.fieldValues();
             return !!(attrs.instance && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName));
         },
 
-        fieldValues:function () {
+        fieldValues: function () {
             var attrs = {
                 instance:this.selectedInstance && this.selectedInstance.get("id")
             };
@@ -258,28 +258,25 @@
             return attrs;
         },
 
-        updateFor: function(type, filter, disabledFunction) {
+        populateSelect: function(type) {
+            var models = (type === "instance") ? this.greenplumInstances() : this[type + "s"].models;
             var select = this.resetSelect(type);
-            var collection = this[type + "s"];
 
-            filter || (filter = function () {
-                return true;
+            _.each(this.sortModels(models), function(model) {
+                var option = $("<option/>")
+                    .prop("value", model.get("id"))
+                    .text(model.get("name"))
+                    .prop("disabled", (type === "instance") && !model.get("hasCredentials"));
+                select.append(option);
             });
-            disabledFunction || (disabledFunction = function() {
-                return false;
-            });
-            // don't modify the original collection array object
-            var models = _(collection.models).chain().clone().filter(filter).value();
-            models.sort(function (a, b) {
+
+            chorus.styleSelect(select);
+        },
+
+        sortModels: function(models) {
+            return _.clone(models).sort(function(a, b) {
                 return naturalSort(a.get("name").toLowerCase(), b.get("name").toLowerCase());
             });
-            _.each(models, function (model) {
-                select.append(
-                    $("<option/>").prop("value", model.get("id")).prop("disabled", disabledFunction(model)).text(model.get("name"))
-                );
-            });
-
-            return models.length;
         },
 
         additionalContext:function () {
