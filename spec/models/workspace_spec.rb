@@ -155,6 +155,7 @@ describe Workspace do
 
   describe "associations" do
     it { should have_many(:members) }
+    it { should have_many(:activities) }
   end
 
   describe "permissions_for" do

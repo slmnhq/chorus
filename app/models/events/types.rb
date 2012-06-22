@@ -35,7 +35,7 @@ module Events
 
   class SOURCE_TABLE_CREATED < Base
     has_targets :dataset
-    has_activities :actor, :dataset, :global
+    has_activities :actor, :dataset, :workspace, :global
   end
 
   class WORKSPACE_ADD_SANDBOX < Base

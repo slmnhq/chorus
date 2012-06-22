@@ -13,7 +13,6 @@ describe ActivitiesController do
 
   before do
     log_in current_user
-    stub(Activity).for_dashboard_of(current_user) { fake_relation [dashboard_activity1, dashboard_activity2] }
   end
 
   describe "#index" do
@@ -53,6 +52,15 @@ describe ActivitiesController do
       end
     end
 
+    context "when getting the activities for a workspace" do
+      let(:object) { FactoryGirl.create(:workspace) }
+
+      it "presents the workspace's activities" do
+        mock_present { |models| models.should =~ [activity1, activity2] }
+        get :index, :workspace_id => object.id
+      end
+    end
+
     context "when getting the activities for the current user's home page" do
       it "presents the user's activities" do
         mock(Activity).for_dashboard_of(current_user) { fake_relation [dashboard_activity1, dashboard_activity2] }
@@ -63,7 +71,8 @@ describe ActivitiesController do
   end
 
   describe "#show" do
-    it "show the particular activity ", :fixture => true do
+    it "shows the particular activity " do
+      stub(Activity).for_dashboard_of(current_user) { fake_relation [dashboard_activity1, dashboard_activity2] }
       mock_present { |model| model.should == dashboard_activity1 }
       get :show, :id => dashboard_activity1.to_param
     end
@@ -74,7 +83,8 @@ describe ActivitiesController do
       "greenplumInstanceChangedOwner" => :greenplum_instance_changed_owner_event,
       "greenplumInstanceChangedName" => :greenplum_instance_changed_name_event,
       "hadoopInstanceChangedName" => :hadoop_instance_changed_name_event,
-      "workfileCreated" => :workfile_created_event
+      "workfileCreated" => :workfile_created_event,
+      "sourceTableCreated" => :source_table_created_event
     }
 
     FIXTURE_FILES.each do |filename, event_factory_name|

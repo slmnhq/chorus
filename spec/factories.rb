@@ -145,6 +145,11 @@ FactoryGirl.define do
       workfile { FactoryGirl.create(:workfile_version).workfile }
       workspace
     end
+
+    factory :source_table_created_event, :class => Events::SOURCE_TABLE_CREATED do
+      association :dataset, :factory => :gpdb_table
+      workspace
+    end
   end
 end
 

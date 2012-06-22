@@ -1,0 +1,104 @@
+{
+  "response": {
+    "id": 1764,
+    "actor": {
+      "id": 4114,
+      "username": "user32",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person32@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "action": "SOURCE_TABLE_CREATED",
+    "timestamp": "2012-06-22T20:28:12Z",
+    "dataset": {
+      "id": 216,
+      "type": "SOURCE_TABLE",
+      "object_name": "table1",
+      "schema": {
+        "id": 228,
+        "name": "schema1",
+        "database": {
+          "id": 254,
+          "name": "database1",
+          "instance": {
+            "name": "instance4",
+            "host": "host4.emc.com",
+            "port": 5004,
+            "id": 839,
+            "owner": {
+              "id": 4115,
+              "username": "user33",
+              "first_name": "John",
+              "last_name": "Doe",
+              "email": "person33@example.com",
+              "title": "Grand Poo Bah",
+              "dept": "Corporation Corp., Inc.",
+              "notes": "One of our top performers",
+              "admin": false,
+              "image": {
+                "original": "/images/default-user-icon.png",
+                "icon": "/images/default-user-icon.png"
+              }
+            },
+            "shared": false,
+            "state": "online",
+            "provision_type": null,
+            "maintenance_db": "postgres",
+            "description": null,
+            "instance_provider": null,
+            "version": "9.1.2 - FactoryVersion"
+          }
+        },
+        "dataset_count": 1
+      },
+      "associated_workspaces": [
+
+      ],
+      "object_type": "TABLE"
+    },
+    "workspace": {
+      "id": 794,
+      "name": "workspace3",
+      "summary": null,
+      "owner": {
+        "id": 4116,
+        "username": "user34",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person34@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "archiver": null,
+      "archived_at": null,
+      "public": true,
+      "image": {
+        "original": "",
+        "icon": ""
+      },
+      "permission": [
+        "admin"
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false,
+      "sandbox_info": null,
+      "latest_comment_list": null
+    }
+  }
+}
