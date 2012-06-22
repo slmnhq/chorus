@@ -10,25 +10,38 @@ describe WorkspaceDatasetsController do
 
   before do
     log_in user
+
+    mock(WorkspaceAccess).
+      workspaces_for(user).mock!.
+      find(workspace.to_param) { workspace }
   end
 
   describe "#index" do
+    let(:datasets) { [gpdb_table, gpdb_view] }
+
     before do
-      workspace.bound_datasets << gpdb_table
+      mock(workspace).
+        datasets.mock!.
+        order("lower(name)").mock!.
+        paginate("page" => "2", "per_page" => "25") { datasets }
     end
 
-    it "retrieves all gpdb objects associated with the workspace" do
-      get :index, :workspace_id => workspace.to_param
+    it "presents the workspace's datasets, ordered by name and paginated" do
+      mock_present { |collection| collection.should == datasets }
+      get :index, :workspace_id => workspace.to_param, :page => "2", :per_page => "25"
+      response.should be_success
+    end
 
-      decoded_response.map(&:id).should include(gpdb_table.id)
-      decoded_response.map(&:id).should_not include(gpdb_view.id)
+    it "passes the workspace to the presenter" do
+      mock_present { |collection, _, options| options[:workspace].should be_true }
+      get :index, :workspace_id => workspace.to_param, :page => "2", :per_page => "25"
     end
   end
 
   describe "#create" do
     it "should associate one table to the workspace" do
       post :create, :workspace_id => workspace.to_param, :dataset_ids => gpdb_table.to_param
-      response.code.should == "200"
+      response.code.should == "201"
       workspace.bound_datasets.should include(gpdb_table)
     end
 
@@ -36,7 +49,7 @@ describe WorkspaceDatasetsController do
       table_ids = [gpdb_table.to_param, gpdb_view.to_param]
 
       post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
-      response.code.should == "200"
+      response.code.should == "201"
 
       workspace.bound_datasets.should include(gpdb_table)
       workspace.bound_datasets.should include(gpdb_view)
@@ -52,37 +65,42 @@ describe WorkspaceDatasetsController do
   end
 
   describe "#show" do
-    let!(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
-
-    context "the associated database object is a table" do
-      let!(:dataset) { FactoryGirl.create(:gpdb_table) }
-
-      generate_fixture "dataset/datasetTable.json" do
-        get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
-      end
-
-      it "returns the associated dataset" do
-        get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
-        response.code.should == "200"
-
-        decoded_response.object_name.should == dataset.name
-        decoded_response.type.should == "SOURCE_TABLE"
-      end
+    it "does not present datasets not associated with the workspace" do
+      other_table = FactoryGirl.create(:gpdb_table)
+      get :show, :id => other_table.to_param, :workspace_id => workspace.to_param
+      response.should be_not_found
     end
 
-    context "the associated database object is a view" do
-      let!(:dataset) { FactoryGirl.create(:gpdb_view) }
-
-      generate_fixture "dataset/datasetView.json" do
-        get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+    context "when the specified dataset is associated with the workspace" do
+      before do
+        mock(workspace).
+          datasets.mock!.
+          find(dataset.to_param) { dataset }
       end
 
-      it "returns the associated dataset" do
-        get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
-        response.code.should == "200"
+      context "when the dataset is a table" do
+        let(:dataset) { gpdb_table }
 
-        decoded_response.object_name.should == dataset.name
-        decoded_response.type.should == "SOURCE_TABLE"
+        it "presents the specified dataset, including the workspace" do
+          mock_present do |model, _, options|
+            model.should == gpdb_table
+            options[:workspace].should == workspace
+          end
+
+          get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+        end
+
+        generate_fixture "dataset/datasetTable.json" do
+          get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+        end
+      end
+
+      context "when the dataset is a view" do
+        let(:dataset) { gpdb_view }
+
+        generate_fixture "dataset/datasetView.json" do
+          get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+        end
       end
     end
   end

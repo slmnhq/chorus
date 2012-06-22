@@ -156,38 +156,6 @@ CREATE TABLE associated_datasets (
 
 
 --
--- Name: async_query_tasks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE async_query_tasks (
-    id integer NOT NULL,
-    process_id integer,
-    check_id character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: async_query_tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE async_query_tasks_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: async_query_tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE async_query_tasks_id_seq OWNED BY async_query_tasks.id;
-
-
---
 -- Name: datasets; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -390,7 +358,7 @@ ALTER SEQUENCE hadoop_instances_id_seq OWNED BY hadoop_instances.id;
 CREATE TABLE instance_accounts (
     id integer NOT NULL,
     db_username character varying(256),
-    db_password bytea,
+    db_password character varying(255),
     instance_id integer NOT NULL,
     owner_id integer NOT NULL,
     created_at timestamp without time zone,
@@ -734,13 +702,6 @@ ALTER TABLE associated_datasets ALTER COLUMN id SET DEFAULT nextval('gpdb_databa
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE async_query_tasks ALTER COLUMN id SET DEFAULT nextval('async_query_tasks_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE datasets ALTER COLUMN id SET DEFAULT nextval('gpdb_database_objects_id_seq'::regclass);
 
 
@@ -841,14 +802,6 @@ ALTER TABLE workspaces ALTER COLUMN id SET DEFAULT nextval('workspaces_id_seq'::
 
 ALTER TABLE ONLY activities
     ADD CONSTRAINT activities_pkey PRIMARY KEY (id);
-
-
---
--- Name: async_query_tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY async_query_tasks
-    ADD CONSTRAINT async_query_tasks_pkey PRIMARY KEY (id);
 
 
 --
@@ -983,13 +936,6 @@ CREATE UNIQUE INDEX gpdb_db_object_workspace_unique ON associated_datasets USING
 --
 
 CREATE INDEX idx_qc_on_name_only_unlocked ON queue_classic_jobs USING btree (q_name, id) WHERE (locked_at IS NULL);
-
-
---
--- Name: index_async_query_tasks_on_check_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_async_query_tasks_on_check_id ON async_query_tasks USING btree (check_id);
 
 
 --
@@ -1253,3 +1199,7 @@ INSERT INTO schema_migrations (version) VALUES ('20120615192737');
 INSERT INTO schema_migrations (version) VALUES ('20120615231854');
 
 INSERT INTO schema_migrations (version) VALUES ('20120615232712');
+
+INSERT INTO schema_migrations (version) VALUES ('20120620183115');
+
+INSERT INTO schema_migrations (version) VALUES ('20120621182920');

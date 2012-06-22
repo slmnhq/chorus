@@ -30,6 +30,15 @@ class Workspace < ActiveRecord::Base
     end
   end
 
+  def datasets
+    associated_dataset_ids = associated_datasets.pluck(:dataset_id)
+    if sandbox
+      Dataset.where("schema_id = ? OR id IN (?)", sandbox.id, associated_dataset_ids)
+    else
+      Dataset.where("id IN (?)", associated_dataset_ids)
+    end
+  end
+
   def self.accessible_to(user)
     with_membership = user.memberships.pluck(:workspace_id)
     where('workspaces.public OR

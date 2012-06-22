@@ -6,9 +6,9 @@ class DatasetsController < GpdbController
 
     datasets = schema.datasets.
         with_name_like(params[:filter]).
-        order("lower(name)").
-        paginate(params.slice(:page, :per_page))
-    present datasets
+        order("lower(name)")
+
+    present paginate(datasets)
   end
 
   def show

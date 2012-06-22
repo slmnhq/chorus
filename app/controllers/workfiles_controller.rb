@@ -23,7 +23,7 @@ class WorkfilesController < ApplicationController
 
     workfile_versions = workfiles.map(&:last_version)
 
-    present workfile_versions.paginate(params.slice(:page, :per_page))
+    present paginate(workfile_versions)
   end
 
   def destroy
