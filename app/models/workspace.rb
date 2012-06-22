@@ -9,6 +9,7 @@ class Workspace < ActiveRecord::Base
   has_many :memberships
   has_many :members, :through => :memberships, :source => :user
   has_many :workfiles
+  has_many :activities, :as => :entity
   has_one :sandbox, :class_name => 'GpdbSchema'
 
   has_many :associated_datasets
@@ -81,18 +82,6 @@ class Workspace < ActiveRecord::Base
   def unarchive
     self.archived_at = nil
     self.archiver = nil
-  end
-
-  def activities
-    activities = Arel::Table.new("activities")
-
-    sql = activities.where(activities[:entity_type].eq("Workspace")
-                           .and(activities[:entity_id].eq(id)))
-    .project(activities['*'])
-
-    connection.select_all(sql).map { |row|
-      Activity.allocate.init_with("attributes" => row)
-    }
   end
 
   private
