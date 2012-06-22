@@ -227,6 +227,9 @@ describe WorkspacesController do
         workspace.sandbox_id.should == sandbox.id
         workspace.has_added_sandbox.should == true
         workspace.has_changed_settings.should == false
+
+        events = Events::WORKSPACE_ADD_SANDBOX.by(owner)
+        events.count.should == 1
       end
     end
 

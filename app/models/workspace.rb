@@ -83,6 +83,18 @@ class Workspace < ActiveRecord::Base
     self.archiver = nil
   end
 
+  def activities
+    activities = Arel::Table.new("activities")
+
+    sql = activities.where(activities[:entity_type].eq("Workspace")
+                           .and(activities[:entity_id].eq(id)))
+    .project(activities['*'])
+
+    connection.select_all(sql).map { |row|
+      Activity.allocate.init_with("attributes" => row)
+    }
+  end
+
   private
 
   def owner_is_member

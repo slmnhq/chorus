@@ -37,4 +37,9 @@ module Events
     has_targets :dataset
     has_activities :actor, :dataset, :global
   end
+
+  class WORKSPACE_ADD_SANDBOX < Base
+    has_targets :sandbox_schema
+    has_activities :actor, :sandbox_schema, :workspace, :global
+  end
 end

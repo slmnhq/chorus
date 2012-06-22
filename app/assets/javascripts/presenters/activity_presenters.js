@@ -24,6 +24,10 @@
 
         WORKFILE_CREATED: {
             links: [ "actor", "workfile", "workspace" ]
+        },
+
+        WORKSPACE_ADD_SANDBOX: {
+            links: [ "actor", "sandbox_schema", "workspace" ]
         }
     };
 

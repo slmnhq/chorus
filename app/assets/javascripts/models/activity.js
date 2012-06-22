@@ -5,7 +5,8 @@
         "newOwner": "User",
         "hadoopInstance": "HadoopInstance",
         "workfile": "Workfile",
-        "workspace": "Workspace"
+        "workspace": "Workspace",
+        "sandbox_schema": "Schema"
     };
 
     chorus.models.Activity = chorus.models.Base.extend({

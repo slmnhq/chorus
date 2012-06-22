@@ -47,6 +47,8 @@ class WorkspacesController < ApplicationController
       sandbox_schema =  GpdbSchema.find(w[:sandbox_id])
       authorize! :show_contents, sandbox_schema.instance
       workspace.sandbox = sandbox_schema
+      create_event_for_sandbox(sandbox_schema, workspace)
+
       workspace.has_added_sandbox = true
       add_sandbox = true
     end
@@ -65,5 +67,12 @@ class WorkspacesController < ApplicationController
     else
       workspace.unarchive
     end
+  end
+
+  def create_event_for_sandbox(sandbox_schema, workspace)
+    Events::WORKSPACE_ADD_SANDBOX.by(current_user).add(
+      :sandbox_schema => sandbox_schema,
+      :workspace => workspace
+    )
   end
 end
