@@ -24,7 +24,7 @@ describe "logging in" do
       current_route.should == "/login"
       login(adminlogin, adminpassword)
       click_link("FooWorkspace")
-      wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace"}
+      wait_for_ajax
       Timecop.travel(Time.current + 6.hours) do
         click_link("Home")
         wait_until { page.find("input#username").present? }

@@ -31,7 +31,7 @@ describe "workfiles list page" do
     it "Lists the work files by updated date when selected" do
       click_link("Alphabetically")
       click_link("By Date")
-      sleep(1)
+      wait_for_ajax
       workfiles = page.all("li.workfile")
 
       workfiles.first.text.should == "wf4.sql"

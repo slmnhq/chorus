@@ -38,9 +38,9 @@ describe "copy a workfile" do
     click_button "Copy File"
     wait_for_ajax
     visit("#/workspaces/#{@target_workspace_id}/quickstart")
-    wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
+    wait_for_ajax
     click_link "Work Files"
-    wait_until { page.find('button[data-dialog="WorkfilesImport"]').text == "Upload File" }
+    wait_for_ajax
     workfiles = page.all("li.workfile")
     workfiles.first.text.should == "workfile.sql"
   end
@@ -65,9 +65,9 @@ describe "copy a workfile" do
     click_button "Copy File"
     wait_for_ajax
     visit("#/workspaces/#{@target_workspace_id}/quickstart")
-    wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
+    wait_for_ajax
     click_link "Work Files"
-    wait_until { page.find('button[data-dialog="WorkfilesImport"]').text == "Upload File" }
+    wait_for_ajax
     workfiles = page.all("li.workfile")
     workfiles.first.text.should == "workfile.sql"
     workfiles.last.text.should == "workfile_1.sql"
