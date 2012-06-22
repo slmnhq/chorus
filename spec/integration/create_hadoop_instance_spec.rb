@@ -36,7 +36,6 @@ describe " add an instance " do
       find(".submit").click
       wait_for_ajax
     end
-    wait_until { current_route == "/instances" }
     find('.instance_list').should have_content("hadoop_invalid_instance_name")
   end
 
@@ -83,9 +82,7 @@ describe " add an instance " do
       find(".submit").click
       wait_for_ajax
     end
-    wait_until { current_route == "/instances" }
     find('.instance_list').should have_content("hadoop_host_port")
-
   end
 
   it "tries to register a hadoop instance with wrong grouplist and username" do
@@ -131,9 +128,7 @@ describe " add an instance " do
       click_button "Add Instance"
       wait_for_ajax
     end
-    wait_until { current_route == "/instances" }
     find('.instance_list').should have_content("hadoop_host_port")
-
   end
 
 

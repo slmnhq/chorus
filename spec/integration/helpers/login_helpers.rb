@@ -1,6 +1,7 @@
 module LoginHelpers
   def login(username, password)
     visit(WEBPATH['login_route'])
+    wait_for_ajax
     fill_in 'username', :with => username
     fill_in 'password', :with => password
     click_button "Login"
