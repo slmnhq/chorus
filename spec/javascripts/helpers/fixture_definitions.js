@@ -20,6 +20,8 @@ window.fixtureDefinitions = {
     },
 
     dataset: {
+        model: "WorkspaceDataset",
+
         derived: {
             id: function(a) {
                 return '"' + [ a.instance.id, a.databaseName, a.schemaName, a.objectType, a.objectName ].join('"|"') + '"';
@@ -52,11 +54,14 @@ window.rspecFixtureDefinitions = {
     user:    { unique: [ "id" ] },
     userSet: { unique: [ "id" ] },
 
-    dataset: { unique: ["id"],
-               children: {
-                   datasetTable: { },
-                   datasetView: { }}},
-
+    dataset: {
+        model: "WorkspaceDataset",
+        unique: ["id"],
+        children: {
+            datasetTable: {},
+            datasetView: {}
+        }
+    },
 
     schema:    { unique: [ "id", "database.id", "database.instance.id" ] },
     schemaSet: { unique: [ "id" ] },

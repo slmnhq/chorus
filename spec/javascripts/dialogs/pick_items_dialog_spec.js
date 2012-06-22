@@ -297,13 +297,13 @@ describe("chorus.dialogs.PickItems", function() {
             dataset2 = newFixtures.dataset.sandboxTable();
             dataset3 = newFixtures.dataset.sandboxTable();
 
-            this.datasets = new chorus.collections.DatasetSet([
+            this.datasets = new chorus.collections.WorkspaceDatasetSet([
                 dataset1,
                 dataset2,
                 dataset3
             ], {workspaceId: '1'});
             this.datasets.loaded = true;
-            var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "Dataset" });
+            var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "WorkspaceDataset" });
             this.dialog = new Subclass({ collection: this.datasets });
             this.dialog.render();
 
@@ -348,7 +348,7 @@ describe("chorus.dialogs.PickItems", function() {
 
         describe("server side", function() {
             beforeEach(function() {
-                var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "Dataset", serverSideSearch: true });
+                var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "WorkspaceDataset", serverSideSearch: true });
                 this.dialog = new Subclass({ collection: this.datasets });
                 this.dialog.render();
 

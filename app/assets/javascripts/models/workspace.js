@@ -60,14 +60,14 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     datasetsInDatabase: function(database) {
-        return new chorus.collections.DatasetSet([], {
+        return new chorus.collections.WorkspaceDatasetSet([], {
             workspaceId: this.id,
             databaseName: database.get("name")
         });
     },
 
     datasets: function() {
-        this._datasets || (this._datasets = new chorus.collections.DatasetSet([], { workspaceId: this.id }));
+        this._datasets || (this._datasets = new chorus.collections.WorkspaceDatasetSet([], { workspaceId: this.id }));
         return this._datasets;
     },
 

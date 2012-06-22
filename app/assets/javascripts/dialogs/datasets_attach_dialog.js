@@ -5,14 +5,14 @@ chorus.dialogs.DatasetsAttach = chorus.dialogs.PickItems.extend({
     emptyListTranslationKey: "dataset.none",
     searchPlaceholderKey: "dataset.dialog.search",
     selectedEvent: 'datasets:selected',
-    modelClass: "Dataset",
+    modelClass: "WorkspaceDataset",
     serverSideSearch: true,
     pagination: true,
     multiSelection: true,
 
     makeModel: function() {
         this._super("makeModel", arguments);
-        this.collection = new chorus.collections.DatasetSet([], {
+        this.collection = new chorus.collections.WorkspaceDatasetSet([], {
             workspaceId: this.options.workspaceId
         });
         this.collection.sortAsc("objectName");

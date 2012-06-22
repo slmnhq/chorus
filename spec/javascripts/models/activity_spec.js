@@ -40,7 +40,7 @@ describe("chorus.models.Activity", function() {
            });
 
            var dataset = activity3.getModel("dataset");
-           expect(dataset).toBeA(chorus.models.Dataset);
+           expect(dataset).toBeA(chorus.models.WorkspaceDataset);
            expect(dataset.id).toBe(9);
         });
     });
@@ -262,11 +262,11 @@ describe("chorus.models.Activity", function() {
             this.attachments = this.model.attachments();
         });
 
-        it("returns an array of file models (Workfiles, Artifacts, and Datasets)", function() {
+        it("returns an array of file models (Workfiles, ArtifaWorkspaceDatasetd Datasets)", function() {
             expect(this.attachments[0]).toBeA(chorus.models.Workfile)
             expect(this.attachments[1]).toBeA(chorus.models.Artifact)
-            expect(this.attachments[2]).toBeA(chorus.models.Dataset)
-            expect(this.attachments[3]).toBeA(chorus.models.Dataset)
+            expect(this.attachments[2]).toBeA(chorus.models.WorkspaceDataset)
+            expect(this.attachments[3]).toBeA(chorus.models.WorkspaceDataset)
         });
 
         it("memoizes", function() {

@@ -33,7 +33,7 @@ describe("chorus.models.Workspace", function() {
         });
 
         it("returns a dataset set with the right workspace and database", function() {
-            expect(this.datasets).toBeA(chorus.collections.DatasetSet);
+            expect(this.datasets).toBeA(chorus.collections.WorkspaceDatasetSet);
             expect(this.datasets.attributes.workspaceId).toBe(this.model.id);
             expect(this.datasets.attributes.databaseName).toBe("foo");
         });
@@ -89,7 +89,7 @@ describe("chorus.models.Workspace", function() {
     describe("#datasets", function() {
         it("returns a dataset set with the right workspace id", function() {
             var datasets = this.model.datasets();
-            expect(datasets).toBeA(chorus.collections.DatasetSet);
+            expect(datasets).toBeA(chorus.collections.WorkspaceDatasetSet);
             expect(datasets.attributes.workspaceId).toBe(this.model.id);
         });
     });

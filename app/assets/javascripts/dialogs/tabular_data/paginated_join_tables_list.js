@@ -10,7 +10,7 @@ chorus.views.PaginatedJoinTablesList = chorus.views.Base.extend({
     setup: function() {
         this.joinTablePaginator = new chorus.views.ListContentDetails({
             collection: this.collection,
-            modelClass: "Dataset",
+            modelClass: "WorkspaceDataset",
             hideIfNoPagination: true
         });
 

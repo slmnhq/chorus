@@ -36,7 +36,7 @@ chorus.views.TabularData = chorus.views.Base.extend({
 
 
         var ctx = {
-            dataset: this.model.asDataset(),
+            dataset: this.model.asWorkspaceDataset(),
             showUrl: this.model.showUrl(),
             hasCredentials: this.model.hasCredentials(),
             iconImgUrl: this.model.iconUrl(),

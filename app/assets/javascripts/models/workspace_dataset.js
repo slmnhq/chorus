@@ -1,5 +1,5 @@
-chorus.models.Dataset = chorus.models.TabularData.extend({
-    constructorName: "Dataset",
+chorus.models.WorkspaceDataset = chorus.models.TabularData.extend({
+    constructorName: "WorkspaceDataset",
 
     urlTemplate: function() {
         var components = [
@@ -118,7 +118,7 @@ chorus.models.Dataset = chorus.models.TabularData.extend({
     lastImportSource: function() {
         var importInfo = this.get("importInfo");
         if (importInfo && importInfo.sourceId) {
-            return new chorus.models.Dataset({
+            return new chorus.models.WorkspaceDataset({
                 id: importInfo.sourceId,
                 objectName: importInfo.sourceTable,
                 workspaceId: this.get("workspace").id

@@ -21,7 +21,7 @@ chorus.dialogs.ImportDatasetsPicker = chorus.dialogs.PickItems.extend({
 
     makeModel: function() {
         this._super("makeModel", arguments);
-        this.collection = new chorus.collections.DatasetSet([], {
+        this.collection = new chorus.collections.WorkspaceDatasetSet([], {
             workspaceId: this.options.workspaceId,
             type: "SANDBOX_TABLE",
             objectType: "TABLE"

@@ -1,4 +1,4 @@
-describe("chorus.models.Dataset", function() {
+describe("chorus.models.WorkspaceDataset", function() {
     beforeEach(function() {
         this.dataset = rspecFixtures.dataset.datasetTable({
             id: '"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"',
@@ -49,7 +49,7 @@ describe("chorus.models.Dataset", function() {
     describe("when the 'invalidated' event is triggered", function() {
         describe("when the dataset belongs to a collection", function() {
             beforeEach(function() {
-                this.collection = new chorus.collections.DatasetSet();
+                this.collection = new chorus.collections.WorkspaceDatasetSet();
                 this.collection.add(this.dataset);
             });
 
@@ -230,7 +230,7 @@ describe("chorus.models.Dataset", function() {
             });
 
             it("returns a dataset", function() {
-                expect(this.source).toBeA(chorus.models.Dataset);
+                expect(this.source).toBeA(chorus.models.WorkspaceDataset);
             });
 
             it("has the right name, id and workspace id", function() {

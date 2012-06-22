@@ -193,8 +193,8 @@ chorus.models.TabularData = chorus.models.Base.include(
             return this.canBeImportSource() || this.canBeImportDestination();
         },
 
-        asDataset: function() {
-            return new chorus.models.Dataset(this);
+        asWorkspaceDataset: function() {
+            return new chorus.models.WorkspaceDataset(this);
         },
 
         hasCredentials: function() {

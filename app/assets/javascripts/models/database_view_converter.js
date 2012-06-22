@@ -7,7 +7,7 @@ chorus.models.DatabaseViewConverter = chorus.models.Base.extend({
     databaseView: function(){
         // server response to the 'convert' call is the created db view,
         // so this model's attributes suffice to build a dataset
-        return new chorus.models.Dataset(this.attributes);
+        return new chorus.models.WorkspaceDataset(this.attributes);
     },
 
     url: function() {

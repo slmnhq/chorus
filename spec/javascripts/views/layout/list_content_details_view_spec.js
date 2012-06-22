@@ -357,10 +357,10 @@ describe("chorus.views.ListContentDetails", function() {
     context("when it's a dataset list content details view", function() {
         beforeEach(function() {
             this.modalSpy = stubModals();
-            this.collection = new chorus.collections.DatasetSet();
+            this.collection = new chorus.collections.WorkspaceDatasetSet();
             this.collection.attributes.workspaceId = 44;
             this.collection.loaded = true;
-            this.view = new chorus.views.ListContentDetails({ collection: this.collection, modelClass: "Dataset" });
+            this.view = new chorus.views.ListContentDetails({ collection: this.collection, modelClass: "WorkspaceDataset" });
             $("#jasmine_content").append(this.view.el);
         });
 

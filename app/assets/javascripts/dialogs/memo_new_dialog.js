@@ -65,7 +65,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.bindings.add(this.model, "fileUploadDone", this.uploadDone);
 
         this.workspaceId = this.model.get("workspaceId");
-        this.model.datasets = new chorus.collections.DatasetSet();
+        this.model.datasets = new chorus.collections.WorkspaceDatasetSet();
         this.model.workfiles = new chorus.collections.WorkfileSet();
     },
 

@@ -5,7 +5,7 @@ chorus.views.SearchDataset = chorus.views.SearchItemBase.extend({
 
     additionalContext: function() {
         var context = {
-            dataset: this.model.asDataset(),
+            dataset: this.model.asWorkspaceDataset(),
             showUrl: this.model.showUrl(),
             iconUrl: this.model.iconUrl()
         };

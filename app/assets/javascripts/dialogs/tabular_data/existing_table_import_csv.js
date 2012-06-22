@@ -19,7 +19,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     setup: function() {
         this.resource = this.csv = this.options.csv;
         this.tableName = this.csv.get("toTable");
-        this.dataset = new chorus.models.Dataset({ workspace: {id: this.csv.get("workspaceId")}, id: this.options.datasetId })
+        this.dataset = new chorus.models.WorkspaceDataset({ workspace: {id: this.csv.get("workspaceId")}, id: this.options.datasetId })
 
         this.requiredResources.add(this.dataset);
         this.dataset.fetch();

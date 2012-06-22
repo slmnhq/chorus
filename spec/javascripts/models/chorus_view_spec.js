@@ -20,8 +20,8 @@ describe("chorus.models.ChorusView", function() {
         });
     });
 
-    it("extends Dataset", function() {
-        expect(this.model).toBeA(chorus.models.Dataset);
+    it("extends WorkspaceDataset", function() {
+        expect(this.model).toBeA(chorus.models.WorkspaceDataset);
     });
 
     describe("validation", function() {

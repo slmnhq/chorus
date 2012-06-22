@@ -1,7 +1,7 @@
-chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
-    // TODO: Split this class into DatasetSetSearch and DatasetSet (for saving and fetching only)
-    model:chorus.models.Dataset,
-    constructorName: "DatasetSet",
+chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend({
+    // TODO: Split this class into WorkspaceDatasetSetSearch and WorkspaceDatasetSet (for saving and fetching only)
+    model:chorus.models.WorkspaceDataset,
+    constructorName: "WorkspaceDatasetSet",
 
     setup: function() {
         if(this.attributes.unsorted) {

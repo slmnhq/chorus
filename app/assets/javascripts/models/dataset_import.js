@@ -78,7 +78,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     nextDestination: function() {
-        return new chorus.models.Dataset({
+        return new chorus.models.WorkspaceDataset({
             id: this.get("destinationTable"),
             objectName: this.get("toTable"),
             workspaceId: this.get("workspaceId")
@@ -86,7 +86,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     lastDestination: function() {
-        return new chorus.models.Dataset({
+        return new chorus.models.WorkspaceDataset({
             id: this.get("executionInfo").toTableId,
             objectName: this.get("executionInfo").toTable,
             workspaceId: this.get("workspaceId")
@@ -94,7 +94,7 @@ chorus.models.DatasetImport = chorus.models.Base.extend({
     },
 
     importSource: function() {
-        return new chorus.models.Dataset({
+        return new chorus.models.WorkspaceDataset({
             id: this.get("sourceId"),
             objectName: this.get("sourceTable"),
             workspaceId: this.get("workspaceId")

@@ -32,7 +32,7 @@ chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
         this.workspace = new chorus.models.Workspace({id: workspaceId});
         this.requiredResources.add(this.workspace);
         this.workspace.fetch();
-        this.model = this.tabularData = new chorus.models.Dataset({ workspace: { id: workspaceId }, id: datasetId })
+        this.model = this.tabularData = new chorus.models.WorkspaceDataset({ workspace: { id: workspaceId }, id: datasetId })
     },
 
     bindCallbacks: function() {

@@ -162,7 +162,7 @@ describe("chorus.views.TabularDataList", function() {
 
         context("when it is a DatasetSet and a name filter is applied", function() {
             beforeEach(function() {
-                this.view.collection = new chorus.collections.DatasetSet();
+                this.view.collection = new chorus.collections.WorkspaceDatasetSet();
                 this.view.collection.loaded = true;
                 this.view.collection.attributes.namePattern = "Liger";
                 this.view.render();

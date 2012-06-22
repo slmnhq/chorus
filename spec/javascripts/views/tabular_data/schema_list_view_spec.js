@@ -26,8 +26,8 @@ describe("chorus.views.SchemaList", function() {
     })
 
     it("displays the dataset count for each schema", function() {
-        expect(this.view.$("li.schema .description").eq(0)).toContainTranslation("entity.name.Dataset", {count: this.schema1.get("datasetCount")});
-        expect(this.view.$("li.schema .description").eq(1)).toContainTranslation("entity.name.Dataset", {count: 1});
+        expect(this.view.$("li.schema .description").eq(0)).toContainTranslation("entity.name.WorkspaceDataset", { count: this.schema1.get("datasetCount") });
+        expect(this.view.$("li.schema .description").eq(1)).toContainTranslation("entity.name.WorkspaceDataset", { count: 1 });
     })
 
     it("should broadcast a schema:selected event when itemSelected is called", function() {

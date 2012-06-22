@@ -1,6 +1,6 @@
 describe("chorus.collections.DatasetSet", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.DatasetSet([], {workspaceId: 10000});
+        this.collection = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: 10000});
     });
 
     it("extends chorus.collections.LastFetchWins", function() {
@@ -74,7 +74,7 @@ describe("chorus.collections.DatasetSet", function() {
 
         context("with a sorting override", function() {
             beforeEach(function() {
-                this.collection = new chorus.collections.DatasetSet([], {workspaceId: 10000, unsorted: true});
+                this.collection = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: 10000, unsorted: true});
                 this.collection.add(newFixtures.dataset.sandboxTable({objectName: 'zTable'}));
                 this.collection.add(newFixtures.dataset.sandboxTable({objectName: 'aTable'}));
             });

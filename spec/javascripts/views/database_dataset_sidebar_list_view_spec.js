@@ -125,7 +125,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 });
 
                 it("fetches all the datasets in the workspace, scoped to the database of the focus schema", function() {
-                    var datasetSet = new chorus.collections.DatasetSet([], { workspaceId: chorus.page.workspace.get("id") })
+                    var datasetSet = new chorus.collections.WorkspaceDatasetSet([], { workspaceId: chorus.page.workspace.get("id") })
                     datasetSet.sortAsc("objectName");
                     datasetSet.urlParams = {
                         databaseName: this.view.focusSchema.database().name()
@@ -147,7 +147,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                 });
 
                 it("fetches all the datasets in the workspace", function() {
-                    var datasetSet = new chorus.collections.DatasetSet([], { workspaceId: chorus.page.workspace.get("id") })
+                    var datasetSet = new chorus.collections.WorkspaceDatasetSet([], { workspaceId: chorus.page.workspace.get("id") })
                     datasetSet.sortAsc("objectName")
                     expect(this.server.lastFetchFor(datasetSet)).toBeDefined();
                 });

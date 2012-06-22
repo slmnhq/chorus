@@ -735,7 +735,7 @@ beforeEach(function() {
                 type: "SANDBOX_TABLE"
             }, overrides)
             var attributes = _.extend(fixtures.datasetCommonJson(datasetCommonAttributes), overrides);
-            return new chorus.models.Dataset(attributes);
+            return new chorus.models.WorkspaceDataset(attributes);
         },
 
         datasetImportSuccessful: function(overrides) {
@@ -822,7 +822,7 @@ beforeEach(function() {
                 owner: {},
                 type: "SANDBOX_TABLE"
             }, overrides);
-            return new chorus.models.Dataset(attributes);
+            return new chorus.models.WorkspaceDataset(attributes);
         },
 
         tabularData: function(overrides) {
@@ -1933,7 +1933,7 @@ beforeEach(function() {
 
         searchResultChorusView: function(overrides) {
             var attributes = this.searchResultChorusViewJson(overrides);
-            return new chorus.models.Dataset(attributes);
+            return new chorus.models.WorkspaceDataset(attributes);
         },
 
         searchResultWorkfileJson: function(overrides) {

@@ -180,7 +180,7 @@ describe("chorus.models.Artifact", function() {
 
             it("returns a dataset", function() {
                 this.tabularData = this.model.tabularData();
-                expect(this.tabularData).toBeA(chorus.models.Dataset);
+                expect(this.tabularData).toBeA(chorus.models.WorkspaceDataset);
                 expect(this.tabularData.get("workspace")).toBe(this.model.get('workspace'));
                 expect(this.tabularData.get('objectName')).toBe(this.model.get('databaseObject').objectName);
                 expect(this.tabularData.get('id')).toBe(this.model.get('databaseObject').id);

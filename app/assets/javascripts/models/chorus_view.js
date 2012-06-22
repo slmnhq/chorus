@@ -1,4 +1,4 @@
-chorus.models.ChorusView = chorus.models.Dataset.extend({
+chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
     constructorName: "ChorusView",
     initialize: function() {
         this._super('initialize');

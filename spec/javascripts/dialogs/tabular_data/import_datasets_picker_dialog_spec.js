@@ -3,7 +3,7 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
     beforeEach(function() {
         stubModals();
         dialog = new chorus.dialogs.ImportDatasetsPicker({ workspaceId : "33" });
-        datasets = new chorus.collections.DatasetSet([], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
+        datasets = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
         datasetModels = [
                             newFixtures.dataset.sandboxTable({ objectName: "A", columns: 42, id: "REAL_ID" }),
                             newFixtures.dataset.sandboxTable({ objectName: "B", columns: 666, id: "AGENT_SMITH" })
@@ -91,7 +91,7 @@ describe("chorus.dialogs.ImportDatasetsPicker", function() {
                                     newFixtures.dataset.sandboxTable({ objectName: "A", columns: null, id: "NOBODY" }),
                                     newFixtures.dataset.sandboxTable({ objectName: "B", columns: undefined, id: "NONE" })
                                 ];
-                datasets = new chorus.collections.DatasetSet([], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
+                datasets = new chorus.collections.WorkspaceDatasetSet([], { workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
                 this.server.completeFetchFor(datasets, datasetModels, options);
             });
 

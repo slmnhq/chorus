@@ -64,7 +64,7 @@ describe("chorus.pages.DatasetShowPage", function() {
             })
 
             it("constructs a dataset with the right id", function() {
-                expect(this.page.model).toBeA(chorus.models.Dataset);
+                expect(this.page.model).toBeA(chorus.models.WorkspaceDataset);
                 expect(this.page.model.get("id")).toBe(this.datasetId);
             });
 

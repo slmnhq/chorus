@@ -1,7 +1,7 @@
 ;(function() {
     var CLASS_MAP = {
         "actor": "User",
-        "dataset": "Dataset",
+        "dataset": "WorkspaceDataset",
         "greenplumInstance": "GreenplumInstance",
         "newOwner": "User",
         "hadoopInstance": "HadoopInstance",
@@ -110,7 +110,7 @@
                             break;
                         case 'chorusView':
                         case 'databaseObject':
-                            klass = chorus.models.Dataset;
+                            klass = chorus.models.WorkspaceDataset;
                             break;
                         default:
                             klass = chorus.models.Artifact;

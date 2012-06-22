@@ -8,7 +8,7 @@ chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
         this.workspace.fetch();
         this.dependOn(this.workspace, this.workspaceLoaded);
 
-        this.collection = new chorus.collections.DatasetSet([], {workspaceId: workspaceId});
+        this.collection = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: workspaceId});
         this.collection.sortAsc("objectName");
         this.collection.fetch();
         this.dependOn(this.collection);

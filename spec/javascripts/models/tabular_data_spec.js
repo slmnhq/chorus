@@ -740,8 +740,8 @@ describe("chorus.models.TabularData", function() {
 
     describe("#asDataset", function() {
         it("converts the object to a dataset", function() {
-            var dataset = this.tabularData.asDataset();
-            expect(dataset).toBeA(chorus.models.Dataset);
+            var dataset = this.tabularData.asWorkspaceDataset();
+            expect(dataset).toBeA(chorus.models.WorkspaceDataset);
             expect(dataset.attributes).toEqual(this.tabularData.attributes);
         });
     });
