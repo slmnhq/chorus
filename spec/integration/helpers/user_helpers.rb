@@ -7,7 +7,7 @@ def current_user
 end
 
 def fill_user_form(params = {})
-
+  wait_for_ajax
   first_name = Forgery::Name.first_name
   last_name = Forgery::Name.last_name
   fill_in 'firstName', :with => params[:first_name] || first_name

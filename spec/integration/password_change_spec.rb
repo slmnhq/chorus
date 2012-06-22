@@ -35,6 +35,7 @@ describe "creating a user" do
       fill_in 'password', :with => "secret123"
       fill_in 'passwordConfirmation', :with => "secret123"
       click_button "Change Password"
+      wait_for_ajax
     end
 
     logout
