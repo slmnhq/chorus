@@ -518,13 +518,12 @@ describe("chorus.models.TabularData", function() {
     describe("#workspacesAssociated", function() {
         context("when there are workspaces associated", function() {
             beforeEach(function() {
-                this.tabularData = fixtures.tabularData({workspaceUsed: {
-                    count: 2,
-                    workspaceList: [
+                this.tabularData = fixtures.tabularData({associatedWorkspaces:
+                    [
                         {id: "43", name: "working_hard"},
                         {id: "54", name: "hardly_working"}
                     ]
-                }});
+                });
 
             });
             it("returns a workspace set with the right data", function() {
@@ -540,7 +539,7 @@ describe("chorus.models.TabularData", function() {
 
         context("when there are NOT workspaces associated", function() {
             beforeEach(function() {
-                this.tabularData.unset("workspaceUsed");
+                this.tabularData.unset("associatedWorkspaces");
                 delete this.tabularData._workspaceAssociated;
             });
             it("returns an empty workspaceSet", function() {
@@ -549,20 +548,19 @@ describe("chorus.models.TabularData", function() {
             });
         });
 
-        describe("when the workspaceUsed attribute is changed", function() {
+        describe("when the associatedWorkspaces attribute is changed", function() {
             beforeEach(function() {
-                this.tabularData.unset("workspaceUsed");
+                this.tabularData.unset("associatedWorkspaces");
                 delete this.tabularData._workspaceAssociated;
                 this.oldWorkspaces = this.tabularData.workspacesAssociated();
                 expect(this.oldWorkspaces.length).toBe(0);
 
-                this.tabularData.set({workspaceUsed: {
-                    count: 2,
-                    workspaceList: [
+                this.tabularData.set({associatedWorkspaces:
+                    [
                         {id: "43", name: "working_hard"},
                         {id: "54", name: "hardly_working"}
                     ]
-                }});
+                });
             });
 
             it("is invalidated", function() {

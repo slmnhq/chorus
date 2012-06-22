@@ -6,7 +6,7 @@ chorus.models.TabularData = chorus.models.Base.include(
 
         initialize: function() {
             this.bind('invalidated', this.refetchAfterInvalidated, this);
-            this.bind("change:workspaceUsed", this.invalidateWorkspacesAssociated, this);
+            this.bind("change:associatedWorkspaces", this.invalidateWorkspacesAssociated, this);
 
             if (!this.has("type")) {
                 this.set({type: this.get("datasetType") || "SOURCE_TABLE"}, { silent: true });
@@ -58,7 +58,7 @@ chorus.models.TabularData = chorus.models.Base.include(
 
         workspacesAssociated: function() {
             if (!this._workspaceAssociated) {
-                var workspaceList = this.get("workspaceUsed") && this.get("workspaceUsed").workspaceList
+                var workspaceList = this.get("associatedWorkspaces")
                 this._workspaceAssociated = new chorus.collections.WorkspaceSet(workspaceList);
             }
             return this._workspaceAssociated;

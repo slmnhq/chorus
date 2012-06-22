@@ -10,6 +10,18 @@ describe Dataset do
     it { should belong_to(:schema) }
   end
 
+  describe "workspace association" do
+    let!(:dataset) { FactoryGirl.create :gpdb_table }
+    let!(:workspace) { FactoryGirl.create :workspace }
+    let!(:workspace2) { FactoryGirl.create :workspace }
+    let!(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace)}
+    let!(:association2) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace2)}
+
+    it "belongs to multiple workspaces" do
+      dataset.bound_workspaces.should == [workspace, workspace2]
+    end
+  end
+
   describe "validations" do
     it { should validate_presence_of :name }
   end

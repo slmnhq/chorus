@@ -679,10 +679,7 @@ beforeEach(function() {
                 owner: {id: "InitialUser", username: "edcadmin"},
                 modifiedBy: {id: "InitialUser", username: "edcadmin"},
                 workspace: {id: fixtures.nextId(), name: "some_workspace"},
-                workspaceUsed: {
-                    workspaceCount: 1,
-                    workspaceList: [rspecFixtures.workspaceJson()]
-                }
+                associatedWorkspaces: [rspecFixtures.workspaceJson()]
             }, overrides);
             attributes.instance = attributes.instance || {};
             attributes.instance.id = attributes.schema.database.instance.id;

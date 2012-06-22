@@ -114,7 +114,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
 
                 context("when the tabular data is not used in any workspace", function() {
                     beforeEach(function() {
-                        this.databaseObject.unset("workspaceUsed");
+                        this.databaseObject.unset("associatedWorkspaces");
                     });
 
                     it("renders successfully, without the workspace usage section", function() {

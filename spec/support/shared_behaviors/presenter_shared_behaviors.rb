@@ -28,6 +28,7 @@ shared_examples "dataset presenter" do |dataset_factory_name|
     hash[:id].should == 321
     hash[:object_name].should == "object1"
     hash[:type].should == "SOURCE_TABLE"
+    hash[:associated_workspaces].should_not be_nil
 
     schema = hash[:schema]
     schema[:id].should == 456

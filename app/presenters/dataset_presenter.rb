@@ -1,5 +1,5 @@
 class DatasetPresenter < Presenter
-  delegate :id, :name, :schema, :to => :model
+  delegate :id, :name, :schema, :bound_workspaces, :to => :model
 
   def to_hash
     {
@@ -7,6 +7,14 @@ class DatasetPresenter < Presenter
       :type => "SOURCE_TABLE",
       :object_name => h(name),
       :schema => present(schema)
-    }
+    }.merge(associated_workspaces_hash)
+  end
+
+  def associated_workspaces_hash
+    workspaces = bound_workspaces.map do |workspace|
+      {:id => workspace.id, :name => workspace.name}
+    end
+
+    {:associated_workspaces => workspaces}
   end
 end
