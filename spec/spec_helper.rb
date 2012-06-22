@@ -72,6 +72,7 @@ RSpec.configure do |config|
   end
 
   config.include FileHelper
+  config.include FakeRelations
   config.include AuthHelper, :type => :controller
   config.include AcceptanceAuthHelper, :api_doc_dsl => :resource
   config.include RocketPants::TestHelper, :type => :controller

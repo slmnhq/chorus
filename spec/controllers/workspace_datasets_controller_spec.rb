@@ -5,8 +5,9 @@ describe WorkspaceDatasetsController do
 
   let(:user) { FactoryGirl.create(:user) }
   let(:workspace) { FactoryGirl.create(:workspace) }
-  let!(:gpdb_view) { FactoryGirl.create(:gpdb_view) }
-  let!(:gpdb_table) { FactoryGirl.create(:gpdb_table) }
+  let(:gpdb_view) { FactoryGirl.create(:gpdb_view) }
+  let(:gpdb_table) { FactoryGirl.create(:gpdb_table) }
+  let(:datasets) { fake_relation [gpdb_table, gpdb_view] }
 
   before do
     log_in user
@@ -14,27 +15,26 @@ describe WorkspaceDatasetsController do
     mock(WorkspaceAccess).
       workspaces_for(user).mock!.
       find(workspace.to_param) { workspace }
+
+    stub(workspace).datasets { datasets }
   end
 
   describe "#index" do
-    let(:datasets) { [gpdb_table, gpdb_view] }
-
-    before do
-      mock(workspace).
-        datasets.mock!.
-        order("lower(name)").mock!.
-        paginate("page" => "2", "per_page" => "25") { datasets }
+    it "presents the workspace's datasets, ordered by name and paginated" do
+      mock_present { |collection| collection.should =~ datasets.to_a }
+      get :index, :workspace_id => workspace.to_param
+      response.should be_success
     end
 
-    it "presents the workspace's datasets, ordered by name and paginated" do
-      mock_present { |collection| collection.should == datasets }
+    it "orders and paginates the datasets" do
+      mock(datasets).order("lower(name)") { datasets }
+      mock(datasets).paginate("page" => "2", "per_page" => "25") { datasets }
       get :index, :workspace_id => workspace.to_param, :page => "2", :per_page => "25"
-      response.should be_success
     end
 
     it "passes the workspace to the presenter" do
       mock_present { |collection, _, options| options[:workspace].should be_true }
-      get :index, :workspace_id => workspace.to_param, :page => "2", :per_page => "25"
+      get :index, :workspace_id => workspace.to_param
     end
   end
 
@@ -72,12 +72,6 @@ describe WorkspaceDatasetsController do
     end
 
     context "when the specified dataset is associated with the workspace" do
-      before do
-        mock(workspace).
-          datasets.mock!.
-          find(dataset.to_param) { dataset }
-      end
-
       context "when the dataset is a table" do
         let(:dataset) { gpdb_table }
 

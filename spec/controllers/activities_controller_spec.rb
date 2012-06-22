@@ -6,13 +6,14 @@ describe ActivitiesController do
 
   let!(:activity1) { Activity.create!(:entity => object) }
   let!(:activity2) { Activity.create!(:entity => object) }
-  let!(:global_activity1) { Activity.global.create! }
-  let!(:global_activity2) { Activity.global.create! }
+  let!(:dashboard_activity1) { Activity.create! }
+  let!(:dashboard_activity2) { Activity.create! }
 
   let(:current_user) { FactoryGirl.create(:admin) }
 
   before do
     log_in current_user
+    stub(Activity).for_dashboard_of(current_user) { fake_relation [dashboard_activity1, dashboard_activity2] }
   end
 
   describe "#index" do
@@ -54,8 +55,8 @@ describe ActivitiesController do
 
     context "when getting the activities for the current user's home page" do
       it "presents the user's activities" do
-        mock(Activity).for_dashboard_of(current_user) { [global_activity1, global_activity2] }
-        mock_present { |models| models.should =~ [global_activity1, global_activity2] }
+        mock(Activity).for_dashboard_of(current_user) { fake_relation [dashboard_activity1, dashboard_activity2] }
+        mock_present { |models| models.should =~ [dashboard_activity1, dashboard_activity2] }
         get :index
       end
     end
@@ -63,8 +64,8 @@ describe ActivitiesController do
 
   describe "#show" do
     it "show the particular activity ", :fixture => true do
-      mock_present { |model| model.should == global_activity1 }
-      get :show, :id => global_activity1.to_param
+      mock_present { |model| model.should == dashboard_activity1 }
+      get :show, :id => dashboard_activity1.to_param
     end
 
     FIXTURE_FILES = {
