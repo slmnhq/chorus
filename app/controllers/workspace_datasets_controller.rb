@@ -8,7 +8,7 @@ class WorkspaceDatasetsController < ApplicationController
     datasets = Dataset.where(:id => params[:dataset_ids])
     workspace.bound_datasets << datasets
     datasets.each { |dataset| create_event_for_dataset(dataset, workspace) }
-    head :created
+    render :json => {}, :status => :created
   end
 
   def show

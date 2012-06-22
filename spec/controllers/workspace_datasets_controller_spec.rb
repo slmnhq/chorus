@@ -42,6 +42,7 @@ describe WorkspaceDatasetsController do
     it "should associate one table to the workspace" do
       post :create, :workspace_id => workspace.to_param, :dataset_ids => gpdb_table.to_param
       response.code.should == "201"
+      response.decoded_body.should_not be_nil
       workspace.bound_datasets.should include(gpdb_table)
     end
 
