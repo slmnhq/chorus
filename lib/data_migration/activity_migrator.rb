@@ -1,8 +1,8 @@
-require 'data_migration/legacy_models'
+require 'data_migration/legacy_activity_stream'
 
 class ActivityMigrator
   def migrate
-     unless Legacy.connection.column_exists?(:edc_activity_stream, :chorus_rails_event_id)
+    unless Legacy.connection.column_exists?(:edc_activity_stream, :chorus_rails_event_id)
       Legacy.connection.add_column :edc_activity_stream, :chorus_rails_event_id, :integer
     end
 
@@ -17,25 +17,19 @@ class ActivityMigrator
 
       event.save!
 
-      # We can't save activity_stream directly for unknown reasons
-      Legacy.connection.update("UPDATE edc_activity_stream SET chorus_rails_event_id = #{event.id} WHERE id = '#{activity_stream.id}'")
+      activity_stream.update_event_id(event.id)
     end
   end
 
   private
 
   def find_workspace(activity_stream)
-    legacy_workspace = activity_stream.workspace
-
-    if legacy_workspace.present?
-      Workspace.find_with_destroyed(legacy_workspace.chorus_rails_workspace_id)
-    else
-      nil
-    end
+    workspace_id = activity_stream.chorus_rails_workspace_id
+    workspace_id.present? ? Workspace.find_with_destroyed(workspace_id) : nil
   end
 
   def find_actor(activity_stream)
-    legacy_user = activity_stream.actor
-    User.find_with_destroyed(legacy_user.chorus_rails_user_id)
+    user_id = activity_stream.user_id
+    user_id.present? ? User.find_with_destroyed(user_id) : nil
   end
 end
