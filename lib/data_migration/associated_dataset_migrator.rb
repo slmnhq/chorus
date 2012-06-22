@@ -10,9 +10,12 @@ class AssociatedDatasetMigrator
       database = instance.databases.find_by_name(legacy_associated_dataset['database_name'])
       schema = database.schemas.find_by_name(legacy_associated_dataset['schema_name'])
       dataset = schema.datasets.find_by_name(legacy_associated_dataset['object_name'])
-      new_associated_dataset = AssociatedDataset.new(
+      new_associated_dataset = AssociatedDataset.new({
           :workspace_id => legacy_associated_dataset['chorus_rails_workspace_id'],
           :dataset_id => dataset.id
+      }, {
+          :without_protection => true
+      }
       )
       new_associated_dataset.save!
 
