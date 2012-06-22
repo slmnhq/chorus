@@ -55,6 +55,7 @@ class Dataset < ActiveRecord::Base
     SCHEMAS = Arel::Table.new("pg_namespace")
     RELATIONS = Arel::Table.new("pg_catalog.pg_class")
     PARTITIONS = Arel::Table.new("pg_partitions")
+    PARTITION_RULE = Arel::Table.new("pg_partition_rule")
     DESCRIPTIONS = Arel::Table.new("pg_description")
     EXT_TABLES = Arel::Table.new("pg_exttable")
     LAST_OPERATION = Arel::Table.new("pg_stat_last_operation")
@@ -82,14 +83,13 @@ class Dataset < ActiveRecord::Base
 
     def tables_and_views_in_schema
       relations_in_schema.where(RELATIONS[:relkind].in(['r', 'v'])).
-        join(PARTITIONS, Arel::Nodes::OuterJoin).
+        join(PARTITION_RULE, Arel::Nodes::OuterJoin).
         on(
-          RELATIONS[:relname].eq(PARTITIONS[:partitiontablename]).
-          and(RELATIONS[:relhassubclass].eq('f')).
-          and(PARTITIONS[:schemaname].eq(schema.name))
+          RELATIONS[:oid].eq(PARTITION_RULE[:parchildrelid]).
+          and(RELATIONS[:relhassubclass].eq('f'))
         ).
         where(
-          RELATIONS[:relhassubclass].eq('t').or(PARTITIONS[:partitiontablename].eq(nil))
+          RELATIONS[:relhassubclass].eq('t').or(PARTITION_RULE[:parchildrelid].eq(nil))
         ).project(
           RELATIONS[:relkind].as('type'),
           RELATIONS[:relname].as('name'),
@@ -128,19 +128,6 @@ class Dataset < ActiveRecord::Base
     end
   end
 end
-
-# From PostgresDBAccess.TableAndViewNamesQuery
-#     	sb.append("SELECT c.relname AS tableName, 'storage' AS storage, 'protocol' AS protocol, c.relkind AS type, c.relhassubclass AS masterTable , c.relnatts as columns ")
-#                .append(" FROM pg_catalog.pg_class c WHERE ")
-#                .append(" (c.relkind = 'r' OR c.relkind = 'v' )");
-#
-#    	if (schema != null) {
-#    		sb.append("AND c.relnamespace IN (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = :schemaName) ");
-#    	}
-#
-#    	if (tableNamePattern != null) {
-#    		sb.append("AND c.relname ILIKE " + escapeSpecialCharacter(tableNamePattern));
-#    	}
 
 # From PostgresDBAccess.getViewMetaList
 #
