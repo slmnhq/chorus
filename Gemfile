@@ -12,11 +12,8 @@ gem 'clockwork'
 gem 'foreman'
 gem 'allowy'
 gem 'httparty', :require => false
-gem 'wasabi', :git => "https://github.com/bdon/wasabi.git"
-gem 'savon'
 
 platform :mri do
-  gem 'thin'
   gem 'pg'
 end
 
