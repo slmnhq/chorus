@@ -48,9 +48,9 @@ describe " add an instance " do
 =end
      within("#facebox") do
         wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
-        sleep(1)
+        wait_for_ajax
         choose("register_existing_greenplum")
-        sleep(1)
+        wait_for_ajax
         wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
         within(".register_existing_greenplum") do
           find_gpdb_instance_dialog

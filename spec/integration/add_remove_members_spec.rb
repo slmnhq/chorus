@@ -21,6 +21,7 @@ describe "The workspace add/remove members dialog" do
     end
 
     click_link "Add or Edit Members"
+    wait_for_ajax
 
     within("#facebox") do
       within(".shuttle_body") do

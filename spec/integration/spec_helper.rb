@@ -39,7 +39,7 @@ RSpec.configure do |c|
   c.include LoginHelpers
   c.include CleditorHelpers
 
-  Capybara.default_wait_time = 5
+  Capybara.default_wait_time = 10
 
   c.before(:each) do
     DatabaseCleaner.start
