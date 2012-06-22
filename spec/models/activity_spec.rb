@@ -46,6 +46,10 @@ describe Activity do
       Activity.for_dashboard_of(user).should_not include(workspace2_activity, workspace3_activity)
       Activity.for_dashboard_of(user).should have(3).activities
     end
+
+    it "can be filtered further (like any activerecord relation)" do
+      Activity.for_dashboard_of(user).find(activity3.to_param).should == activity3
+    end
   end
 
   it "is ordered with the most recent items first, by default" do
