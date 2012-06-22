@@ -4,15 +4,11 @@ describe("chorus.models.Activity", function() {
     });
 
     describe("#getModel", function() {
-        it("returns a model with the right class and the right data", function() {
+        it("returns a model with the right class and the right data for greenplumInstanceChangedOwner", function() {
            var activity1 = rspecFixtures.activity.greenplumInstanceChangedOwner({
                actor: { id: 5 },
                greenplumInstance: { id: 6 },
                newOwner: { id: 7 },
-           });
-
-           var activity2 = rspecFixtures.activity.hadoopInstanceCreated({
-               hadoopInstance: { id: 8 }
            });
 
            var actor = activity1.getModel("actor");
@@ -26,10 +22,26 @@ describe("chorus.models.Activity", function() {
            var newOwner = activity1.getModel("newOwner");
            expect(newOwner).toBeA(chorus.models.User);
            expect(newOwner.id).toBe(7);
+        });
+
+        it("returns a model with the right class and the right data for hadoopInstanceCreated", function() {
+           var activity2 = rspecFixtures.activity.hadoopInstanceCreated({
+               hadoopInstance: { id: 8 }
+           });
 
            var hadoopInstance = activity2.getModel("hadoopInstance");
            expect(hadoopInstance).toBeA(chorus.models.HadoopInstance);
            expect(hadoopInstance.id).toBe(8);
+        });
+
+        it("returns a model with the right class and the right data for sourceTableCreated", function() {
+           var activity3 = rspecFixtures.activity.sourceTableCreated({
+               dataset: { id: 9 }
+           });
+
+           var dataset = activity3.getModel("dataset");
+           expect(dataset).toBeA(chorus.models.Dataset);
+           expect(dataset.id).toBe(9);
         });
     });
 

@@ -1,6 +1,7 @@
 ;(function() {
     var CLASS_MAP = {
         "actor": "User",
+        "dataset": "Dataset",
         "greenplumInstance": "GreenplumInstance",
         "newOwner": "User",
         "hadoopInstance": "HadoopInstance",
