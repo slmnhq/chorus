@@ -13,7 +13,7 @@ chorus.models.Schema = chorus.models.Base.extend({
 
     databaseObjects: function() {
         if (!this._databaseObjects) {
-            this._databaseObjects = new chorus.collections.DatabaseObjectSet([], { schemaId: this.id });
+            this._databaseObjects = new chorus.collections.DatasetSet([], { schemaId: this.id });
         }
         return this._databaseObjects;
     },

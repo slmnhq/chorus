@@ -1,6 +1,6 @@
 describe("chorus.views.TabularDataList", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.DatabaseObjectSet([
+        this.collection = new chorus.collections.DatasetSet([
             newFixtures.workspaceDataset.chorusView({ hasCredentials: true, objectName: "foo" }),
             newFixtures.workspaceDataset.sandboxTable({ hasCredentials: true, objectName: "bar" }),
             newFixtures.workspaceDataset.sourceTable({ hasCredentials: true, objectName: "baz" })
@@ -122,7 +122,7 @@ describe("chorus.views.TabularDataList", function() {
             expect(eventName).toBe("tabularData:checked");
 
             var collection = chorus.PageEvents.broadcast.mostRecentCall.args[1];
-            expect(collection).toBeA(chorus.collections.DatabaseObjectSet);
+            expect(collection).toBeA(chorus.collections.DatasetSet);
             expect(collection.pluck("id")).toEqual(_.pluck(expectedModels, "id"));
         }
     });
@@ -139,7 +139,7 @@ describe("chorus.views.TabularDataList", function() {
 
     describe("when there are no datasets", function() {
         beforeEach(function() {
-            this.view.collection = new chorus.collections.DatabaseObjectSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
+            this.view.collection = new chorus.collections.DatasetSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
             this.view.render();
         });
 
@@ -175,7 +175,7 @@ describe("chorus.views.TabularDataList", function() {
 
         context("when there is no workspace", function() {
             beforeEach(function() {
-                this.view.collection = new chorus.collections.DatabaseObjectSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
+                this.view.collection = new chorus.collections.DatasetSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
                 this.view.collection.loaded = true;
                 this.view.render();
             });

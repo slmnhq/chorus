@@ -1,6 +1,6 @@
 describe("chorus.pages.TabularDataShowPage", function() {
     beforeEach(function() {
-        this.databaseObject = rspecFixtures.databaseObject();
+        this.databaseObject = rspecFixtures.dataset();
         this.columnSet = this.databaseObject.columns();
         this.page = new chorus.pages.TabularDataShowPage(
             this.databaseObject.id

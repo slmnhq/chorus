@@ -1,4 +1,4 @@
-describe("chorus.models.DatabaseObject", function() {
+describe("chorus.models.Dataset", function() {
     var objectWithEncodingIssues = {
         schema : {
             name: "b/a/r",
@@ -15,7 +15,7 @@ describe("chorus.models.DatabaseObject", function() {
     };
 
     beforeEach(function() {
-        this.databaseObject = rspecFixtures.databaseObject({
+        this.databaseObject = rspecFixtures.dataset({
             schema: {
                 id: 1,
                 name: "ipa",
@@ -33,7 +33,7 @@ describe("chorus.models.DatabaseObject", function() {
     describe("url", function() {
         context("when it is a table", function() {
             beforeEach(function() {
-                this.databaseObject = rspecFixtures.databaseObject(objectWithEncodingIssues);
+                this.databaseObject = rspecFixtures.dataset(objectWithEncodingIssues);
             });
 
             it("uses the table exploration api", function() {
@@ -45,7 +45,7 @@ describe("chorus.models.DatabaseObject", function() {
             beforeEach(function() {
                 var viewWithEncodingIssues = objectWithEncodingIssues;
                 viewWithEncodingIssues.objectType = "VIEW";
-                this.databaseObject = rspecFixtures.databaseObject(viewWithEncodingIssues);
+                this.databaseObject = rspecFixtures.dataset(viewWithEncodingIssues);
             });
 
             it("uses the table exploration api", function() {
@@ -57,7 +57,7 @@ describe("chorus.models.DatabaseObject", function() {
     describe("showUrl", function() {
         context("when it is a table", function() {
             beforeEach(function() {
-                this.databaseObject = rspecFixtures.databaseObject(objectWithEncodingIssues);
+                this.databaseObject = rspecFixtures.dataset(objectWithEncodingIssues);
             });
 
             it("has the correct url", function() {
@@ -72,7 +72,7 @@ describe("chorus.models.DatabaseObject", function() {
 
         context("when it is a view", function() {
             beforeEach(function() {
-                this.databaseObject = rspecFixtures.databaseObject({objectType: "VIEW"});
+                this.databaseObject = rspecFixtures.dataset({objectType: "VIEW"});
             });
 
             it("uses the view exploration api", function() {
@@ -96,7 +96,7 @@ describe("chorus.models.DatabaseObject", function() {
     describe("when the 'invalidated' event is triggered", function() {
         describe("when the databaseObject belongs to a collection", function() {
             beforeEach(function() {
-                this.collection = new chorus.collections.DatabaseObjectSet();
+                this.collection = new chorus.collections.DatasetSet();
                 this.collection.add(this.databaseObject);
             });
 

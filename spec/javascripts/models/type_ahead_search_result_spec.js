@@ -41,7 +41,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
             expect(this.searchResults[2]).toBeA(chorus.models.GreenplumInstance);
             expect(this.searchResults[3]).toBeA(chorus.models.User);
             expect(this.searchResults[4]).toBeA(chorus.models.Workfile);
-            expect(this.searchResults[5]).toBeA(chorus.models.DatabaseObject);
+            expect(this.searchResults[5]).toBeA(chorus.models.Dataset);
             expect(this.searchResults[6]).toBeA(chorus.models.ChorusView);
         });
 

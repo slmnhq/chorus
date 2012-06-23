@@ -203,7 +203,7 @@ describe("chorus.models.Artifact", function() {
 
             it("returns a Database Object", function() {
                 this.tabularData = this.model.tabularData();
-                expect(this.tabularData).toBeA(chorus.models.DatabaseObject);
+                expect(this.tabularData).toBeA(chorus.models.Dataset);
                 expect(this.tabularData.get('objectName')).toBe(this.model.get('databaseObject').objectName);
                 expect(this.tabularData.get('id')).toBe(this.model.get('databaseObject').id);
             });

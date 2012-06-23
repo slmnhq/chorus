@@ -254,7 +254,7 @@ describe("chorus.models.SearchResult", function() {
 
                 it("instantiates the right type of model for each entry in the collection", function() {
                     expect(this.workspaceItems.at(0)).toBeA(chorus.models.Workfile);
-                    expect(this.workspaceItems.at(1)).toBeA(chorus.models.DatabaseObject);
+                    expect(this.workspaceItems.at(1)).toBeA(chorus.models.Dataset);
                     expect(this.workspaceItems.at(2)).toBeA(chorus.models.WorkspaceDataset);
                     expect(this.workspaceItems.at(3)).toBeA(chorus.models.Workspace);
                 });

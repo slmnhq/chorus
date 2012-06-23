@@ -37,7 +37,7 @@ chorus.pages.TabularDataShowPage = chorus.pages.Base.include(
         },
 
         makeModel: function(databaseObjectId) {
-            this.model = this.tabularData = new chorus.models.DatabaseObject({
+            this.model = this.tabularData = new chorus.models.Dataset({
 
                 id: databaseObjectId
             });

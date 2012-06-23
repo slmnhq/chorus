@@ -76,7 +76,7 @@ chorus.models.Artifact = chorus.models.Base.extend({
         if(!this._tabularData) {
             if(this.get("databaseObject")) {
                 if(_.isEmpty(this.get("workspace"))) {
-                    this._tabularData = new chorus.models.DatabaseObject(this.get('databaseObject'));
+                    this._tabularData = new chorus.models.Dataset(this.get('databaseObject'));
                 } else {
                     this._tabularData = new chorus.models.WorkspaceDataset(this.get('databaseObject'));
                     this._tabularData.set({ workspace: this.get('workspace') });

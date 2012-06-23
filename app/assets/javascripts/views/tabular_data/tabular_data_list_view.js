@@ -10,7 +10,7 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
 
     setup: function() {
         this._super("setup", arguments);
-        this.selectedDatasets = new chorus.collections.DatabaseObjectSet();
+        this.selectedDatasets = new chorus.collections.DatasetSet();
         this.selectedDatasets.attributes = this.collection.attributes;
         chorus.PageEvents.subscribe("selectAll", this.selectAll, this);
         chorus.PageEvents.subscribe("selectNone", this.selectNone, this);

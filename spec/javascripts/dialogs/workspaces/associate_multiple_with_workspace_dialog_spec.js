@@ -1,9 +1,9 @@
 describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
     beforeEach(function() {
-        this.databaseObjects = new chorus.collections.DatabaseObjectSet([
-            rspecFixtures.databaseObject({ id: '123' }),
-            rspecFixtures.databaseObject({ id: '456' }),
-            rspecFixtures.databaseObject({ id: '789' })
+        this.databaseObjects = new chorus.collections.DatasetSet([
+            rspecFixtures.dataset({ id: '123' }),
+            rspecFixtures.dataset({ id: '456' }),
+            rspecFixtures.dataset({ id: '789' })
         ]);
 
         this.dialog = new chorus.dialogs.AssociateMultipleWithWorkspace({

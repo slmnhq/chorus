@@ -76,7 +76,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var databaseObject = this.result.get("typeAhead").docs[6];
             var result = this.view.$("li.result:eq(5)");
             expect(result.find(".name").html()).toBe(databaseObject.highlightedAttributes.objectName[0]);
-            expect(result.find(".name").attr("href")).toBe((new chorus.models.DatabaseObject(databaseObject)).showUrl());
+            expect(result.find(".name").attr("href")).toBe((new chorus.models.Dataset(databaseObject)).showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.databaseObject");
         });
 

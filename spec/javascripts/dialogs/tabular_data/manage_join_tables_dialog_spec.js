@@ -269,7 +269,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             it("passes the right table or view to the 'preview columns' sub-dialog", function() {
                 var previewColumnsDialog = chorus.dialogs.PreviewColumns.prototype.render.mostRecentCall.object;
-                expect(previewColumnsDialog.model).toBeA(chorus.models.DatabaseObject);
+                expect(previewColumnsDialog.model).toBeA(chorus.models.Dataset);
                 expect(previewColumnsDialog.model.get("id")).toBe(this.databaseObject2.get("id"));
             });
         });
@@ -292,7 +292,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
                 expect(joinConfigurationDialog.model).toBe(this.chorusView);
 
-                expect(joinConfigurationDialog.destinationObject).toBeA(chorus.models.DatabaseObject);
+                expect(joinConfigurationDialog.destinationObject).toBeA(chorus.models.Dataset);
                 expect(joinConfigurationDialog.destinationObject.get("id")).toBe(this.databaseObject3.get("id"));
                 expect(joinConfigurationDialog.destinationObject).not.toBe(this.selectedDataset);
             });

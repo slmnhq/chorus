@@ -73,7 +73,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                 });
 
                 it("does not display for a view", function() {
-                    this.dataset = rspecFixtures.databaseObject({objectType: "VIEW"});
+                    this.dataset = rspecFixtures.dataset({objectType: "VIEW"});
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                     expect(this.view.$(".actions a.analyze")).not.toExist();
                 });
@@ -823,7 +823,7 @@ describe("chorus.views.TabularDataSidebar", function() {
 
             context("when there is not a workspace", function() {
                 beforeEach(function() {
-                    this.dataset = rspecFixtures.databaseObject({id: "XYZ"});
+                    this.dataset = rspecFixtures.dataset({id: "XYZ"});
                     chorus.PageEvents.broadcast("tabularData:selected", this.dataset);
                 });
 

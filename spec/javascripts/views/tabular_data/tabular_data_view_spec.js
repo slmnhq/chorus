@@ -38,7 +38,7 @@ describe("chorus.views.TabularData", function() {
 
     xdescribe("found in workspaces tooltip (when rendered from the schema browse page)", function() {
         beforeEach(function() {
-            this.databaseObject = rspecFixtures.databaseObject();
+            this.databaseObject = rspecFixtures.dataset();
 
             this.view = new chorus.views.TabularData({ model: this.databaseObject, activeWorkspace: true });
             this.view.render();
@@ -157,7 +157,7 @@ describe("chorus.views.TabularData", function() {
     });
 
     it("works with database objects as well as datasets", function() {
-        var table = rspecFixtures.databaseObject({objectName: 'yyy'});
+        var table = rspecFixtures.dataset({objectName: 'yyy'});
         var view = new chorus.views.TabularData({ model: table });
         view.render();
         expect(view.$(".name")).toHaveHref(table.showUrl());
