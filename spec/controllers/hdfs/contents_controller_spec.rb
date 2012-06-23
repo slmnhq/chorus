@@ -5,21 +5,27 @@ describe Hdfs::ContentsController do
 
   before do
     log_in FactoryGirl.create :user
+
+    service = Object.new
+    mock(Hdfs::QueryService).new(hadoop_instance) { service }
+    mock(service).show('/file') { ["column1,column2,column3", "item1,item2,item3"] }
+
+    entry_stub = Object.new
+    stub(entry_stub).modified_at { Time.current }
+    mock(HdfsEntry).list('/file', hadoop_instance) { [entry_stub] }
   end
 
   describe "#show" do
-    before do
-      service = Object.new
-      mock(Hdfs::QueryService).new(hadoop_instance) { service }
-      mock(service).show('/file') { ["content"] }
-    end
-
     it "show file content" do
       get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/file'
-      parsed_response = JSON.parse(response.body)
 
       response.code.should == '200'
-      parsed_response['response']['contents'].should include('content')
+      decoded_response[:contents].should include("column1,column2,column3")
+      decoded_response[:contents].should include("item1,item2,item3")
+    end
+
+    generate_fixture "hdfsFile.json" do
+      get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/file'
     end
   end
 end
