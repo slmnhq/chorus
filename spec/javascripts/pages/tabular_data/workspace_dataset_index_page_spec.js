@@ -1,4 +1,4 @@
-describe("chorus.pages.DatasetIndexPage", function() {
+describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
         this.modalSpy = stubModals();
@@ -8,7 +8,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                 "update"
             ]
         });
-        chorus.page = this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
+        chorus.page = this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
         chorus.bindModalLaunchingClicks(this.page);
     })
 
@@ -275,7 +275,7 @@ describe("chorus.pages.DatasetIndexPage", function() {
                         beforeEach(function() {
                             this.modalSpy.reset();
                             this.server.reset();
-                            this.page = new chorus.pages.DatasetIndexPage(this.workspace.get("id"));
+                            this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
                             this.server.completeFetchFor(this.workspace);
                             this.server.completeFetchFor(this.page.account, rspecFixtures.instanceAccount({"id":null}));
                         });

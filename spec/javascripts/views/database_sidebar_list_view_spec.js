@@ -15,7 +15,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
         describe("render", function() {
             beforeEach(function() {
-                chorus.page = new chorus.pages.DatasetShowPage(1, 2);
+                chorus.page = new chorus.pages.WorkspaceDatasetShowPage(1, 2);
                 this.view.render();
             })
 

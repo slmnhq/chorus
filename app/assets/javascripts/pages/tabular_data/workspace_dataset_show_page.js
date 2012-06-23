@@ -1,5 +1,5 @@
-chorus.pages.DatasetShowPage = chorus.pages.TabularDataShowPage.extend({
-    constructorName: "DatasetShowPage",
+chorus.pages.WorkspaceDatasetShowPage = chorus.pages.TabularDataShowPage.extend({
+    constructorName: "WorkspaceDatasetShowPage",
     helpId: "dataset",
     hideDeriveChorusView: false,
 

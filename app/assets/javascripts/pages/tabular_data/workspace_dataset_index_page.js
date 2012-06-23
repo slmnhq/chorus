@@ -1,5 +1,5 @@
-chorus.pages.DatasetIndexPage = chorus.pages.Base.extend({
-    constructorName: "DatasetIndexPage",
+chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
+    constructorName: "WorkspaceDatasetIndexPage",
     helpId: "datasets",
 
     setup: function(workspaceId) {

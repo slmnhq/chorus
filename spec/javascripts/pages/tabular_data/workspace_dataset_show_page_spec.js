@@ -1,4 +1,4 @@
-describe("chorus.pages.DatasetShowPage", function() {
+describe("chorus.pages.WorkspaceDatasetShowPage", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace({
             id: '100',
@@ -30,7 +30,7 @@ describe("chorus.pages.DatasetShowPage", function() {
 
         this.datasetId = this.dataset.get('id');
 
-        this.page = new chorus.pages.DatasetShowPage(this.workspace.get("id"), this.datasetId);
+        this.page = new chorus.pages.WorkspaceDatasetShowPage(this.workspace.get("id"), this.datasetId);
         spyOn(this.page, "drawColumns").andCallThrough();
     })
 
