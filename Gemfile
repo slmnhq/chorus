@@ -7,15 +7,11 @@ gem 'json'
 gem 'will_paginate'
 gem 'net-ldap'
 gem 'paperclip'
-gem 'queue_classic', "2.0.0rc14"
+gem 'queue_classic', :git => "git://github.com/pivotal-leopold/queue_classic.git"
 gem 'clockwork'
 gem 'foreman'
 gem 'allowy'
 gem 'httparty', :require => false
-
-platform :mri do
-  gem 'pg'
-end
 
 platform :jruby do
   gem 'jruby-openssl'
@@ -55,6 +51,7 @@ end
 
 group :development do
   #gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
+  gem 'jetpack'
 end
 
 # To use ActiveModel has_secure_password
