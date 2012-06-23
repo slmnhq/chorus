@@ -1,15 +1,15 @@
 describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
     beforeEach(function() {
 
-        this.collection = fixtures.csvHdfsFileSet(null, {hadoopInstance: {id : "234"}}).filesOnly();
-        this.csv = new chorus.models.CsvHdfs({lines: [
+        this.collection = fixtures.csvHdfsFileSet(null, {hadoopInstance: {id: "234"}}).filesOnly();
+        this.csv = new chorus.models.CsvHdfs({contents: [
             "COL1,col2, col3 ,col 4,Col_5",
             "val1.1,val1.2,val1.3,val1.4,val1.5",
             "val2.1,val2.2,val2.3,val2.4,val2.5",
             "val3.1,val3.2,val3.3,val3.4,val3.5"
         ],
-//            hadoopInstance: {id : "234"},
-//            path: "/foo/bar.txt",
+            hadoopInstance: {id : "234"},
+            path: "/foo/bar.txt",
             name: "bar.csv"
         });
 
@@ -44,9 +44,9 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
         });
 
-        it("sets the toTable, instanceId and file path to the model", function() {
+        it("sets the toTable, hadoopInstanceId and file path to the model", function() {
             expect(this.dialog.csv.get("toTable")).toBe("test");
-            expect(this.dialog.csv.get("instanceId")).toBe("234");
+            expect(this.dialog.csv.get("hadoopInstanceId")).toBe("234");
             expect(this.dialog.csv.get("path")).toBe("/data/bar.csv");
         });
     });
@@ -81,8 +81,8 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 selElement.change();
             });
             it("should fetch the new sample", function() {
-                expect(this.server.lastFetch().url).toBe("/data/"+this.collection.attributes.hadoopInstance.id+"/hdfs/"+
-                    encodeURIComponent(this.collection.at(1).get("path")) + "/sample")
+                expect(this.server.lastFetch().url).toBe("/hadoop_instances/"+this.collection.attributes.hadoopInstance.id+"/contents/"+
+                    encodeURIComponent(this.collection.at(1).get("path")))
             });
             it("display spinner", function() {
                 expect(this.dialog.$(".data_table").isLoading()).toBeTruthy();
@@ -165,7 +165,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     expect(request.url).toMatchUrl("/workspace/22/externaltable");
 
                     expect(request.params()['csv_hdfs[path]']).toBe("/data");
-                    expect(request.params()['csv_hdfs[instance_id]']).toBe("234");
+                    expect(request.params()['csv_hdfs[hadoop_instance_id]']).toBe("234");
                     expect(request.params()['csv_hdfs[statement]']).toBe(statement);
                     expect(request.params()['csv_hdfs[path_type]']).toBe('directory');
                 });

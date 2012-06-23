@@ -1,57 +1,18 @@
-describe("chorus.models.CSVImport", function() {
-
-    describe("validation", function() {
-        var badNames;
-        beforeEach(function() {
-            this.model = newFixtures.csvImport();
-
-            badNames = [
-                "6",
-                "a table name",
-                new Array(100).join("a"),
-                ""
-            ];
-        });
-
-        it("is valid with a valid toTable", function() {
-            this.model.set({toTable: "a_happyTable123"});
-            expect(this.model.performValidation()).toBeTruthy();
-        });
-
-        context("for a new table", function() {
-            it("is invalid for funny names", function() {
-                _.each(badNames, function(name) {
-                    this.model.set({toTable: name});
-                    expect(this.model.performValidation()).toBeFalsy();
-                }, this);
-            });
-        });
-
-        context("for an existing table", function() {
-            it("is valid for funny names", function() {
-                _.each(badNames, function(name) {
-                    this.model.set({toTable: name, type: "existingTable"});
-                    expect(this.model.performValidation()).toBeTruthy();
-                }, this);
-            });
-        });
+describe("chorus.utilities.CsvParser", function() {
+    beforeEach(function() {
+        this.options = {};
     });
 
-    it("has the right url", function() {
-        this.model = newFixtures.csvImport();
-        this.model.set({"workspaceId": "23"})
-        expect(this.model.url()).toBe("/workspace/23/csv/import");
-
-    })
     context("with comma delimiters", function() {
         beforeEach(function() {
-            this.model = newFixtures.csvImport({
+            this.model = rspecFixtures.hdfsFile({
                 contents: [
                     "col1,col2,col3",
                     "row1val1,row1val2,row1val3",
                     "row2val1,row2val2,row2val3"
                 ]
             });
+
             this.expectedColumns = [
                 {name: 'col1', values: ['row1val1', 'row2val1'], type: 'text'},
                 {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
@@ -64,7 +25,7 @@ describe("chorus.models.CSVImport", function() {
 
     context("with space delimiters", function() {
         beforeEach(function() {
-            this.model = newFixtures.csvImport({
+            this.model = rspecFixtures.hdfsFile({
                 contents: [
                     'col1 col2 col3',
                     '"row1 val1" row1val2 row1val3',
@@ -76,7 +37,7 @@ describe("chorus.models.CSVImport", function() {
                 {name: 'col2', values: ['row1val2', 'row2 val2'], type: 'text'},
                 {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
             ]
-            this.model.set({'delimiter': ' '});
+            this.options.delimiter = ' ';
         })
 
         itParsesCorrectly();
@@ -84,7 +45,7 @@ describe("chorus.models.CSVImport", function() {
 
     context("with tab delimiters", function() {
         beforeEach(function() {
-            this.model = newFixtures.csvImport({
+            this.model = rspecFixtures.hdfsFile({
                 contents: [
                     "col1\tcol2\tcol3",
                     "row1val1\trow1val2\trow1val3",
@@ -96,7 +57,7 @@ describe("chorus.models.CSVImport", function() {
                 {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
                 {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
             ]
-            this.model.set({'delimiter': '\t'});
+            this.options.delimiter = '\t';
         })
 
         itParsesCorrectly();
@@ -104,7 +65,7 @@ describe("chorus.models.CSVImport", function() {
 
     context("with quoted comma", function() {
         beforeEach(function() {
-            this.model = newFixtures.csvImport({
+            this.model = rspecFixtures.hdfsFile({
                 contents: [
                     'col1,col2,col3',
                     '"row1,val1",row1val2,row1val3',
@@ -123,7 +84,7 @@ describe("chorus.models.CSVImport", function() {
 
     context("with escaped quote", function() {
         beforeEach(function() {
-            this.model = newFixtures.csvImport({
+            this.model = rspecFixtures.hdfsFile({
                 contents: [
                     'col1,col2,col3',
                     '"row1""val1",row1val2,""""',
@@ -142,7 +103,7 @@ describe("chorus.models.CSVImport", function() {
 
     context("with empty values", function() {
         beforeEach(function() {
-            this.model = newFixtures.csvImport({
+            this.model = rspecFixtures.hdfsFile({
                 contents: [
                     'col1,col2,col3',
                     '"row1""val1",row1val2,',
@@ -162,35 +123,28 @@ describe("chorus.models.CSVImport", function() {
 
     context("with unparseable values (for current delimiter)", function() {
         beforeEach(function() {
-            this.model = newFixtures.csvImport({
+            this.model = rspecFixtures.hdfsFile({
                 contents: [
                     '"col1 ""colly"" column",col2,col3',
                     '"row1""val1",row1val2,',
                     'row2val1,,row2val3'
                 ]
             });
-            this.model.set({'delimiter': ' '});
+            this.options.delimiter = ' ';
+
+            this.csvParser = new chorus.utilities.CsvParser(this.model, this.options);
         });
 
         it("returns an empty array and sets serverErrors", function() {
-            var columns = this.model.columnOrientedData();
+            var columns = this.csvParser.columnOrientedData();
             expect(columns).toEqual([]);
-            expect(_.keys(this.model.serverErrors).length).toBe(1);
+            expect(_.keys(this.csvParser.serverErrors).length).toBe(1);
         });
-
-        it("clears server errors when it parses correctly", function() {
-            this.model.columnOrientedData();
-            expect(_.keys(this.model.serverErrors).length).toBe(1);
-            this.model.set({'delimiter': ','});
-            var columns = this.model.columnOrientedData();
-            expect(columns.length).toBe(3);
-            expect(this.model.serverErrors).toBeUndefined();
-        })
     });
 
     context("datatypes", function() {
         beforeEach(function() {
-            this.model = newFixtures.csvImport({
+            this.model = rspecFixtures.hdfsFile({
                 contents: [
                     'col1,col2,col3,col4',
                     'foo,2,3,1/2/3',
@@ -210,8 +164,7 @@ describe("chorus.models.CSVImport", function() {
 
     context("no header row", function() {
         beforeEach(function() {
-            this.model = newFixtures.csvImport({
-                hasHeader: false,
+            this.model = rspecFixtures.hdfsFile({
                 contents: [
                     'foo,2,3,1/2/3',
                     'bar,2.1,sna,456'
@@ -223,6 +176,8 @@ describe("chorus.models.CSVImport", function() {
                 {name: 'column_3', values: ['3', 'sna'], type: 'text'},
                 {name: 'column_4', values: ['1/2/3', '456'], type: 'text'}
             ]
+
+            this.options.hasHeader = false;
         });
 
         itParsesCorrectly();
@@ -230,7 +185,7 @@ describe("chorus.models.CSVImport", function() {
 
     describe("it retains values the user has entered", function() {
         beforeEach(function() {
-            this.model = newFixtures.csvImport({
+            this.model = rspecFixtures.hdfsFile({
                 contents: [
                     'col1,col2,col3,col4',
                     'foo,2,3,1/2/3',
@@ -240,14 +195,22 @@ describe("chorus.models.CSVImport", function() {
         })
 
         it("stores changes to the generated column names", function() {
-            this.model.set({ generatedColumnNames: ["ggg", "ttt", "rrr", "eee"], hasHeader: false })
-            var result = _.pluck(this.model.columnOrientedData(), "name")
-            expect(result).toEqual(["ggg", "ttt", "rrr", "eee"])
+            this.options.hasHeader = false;
+            this.options.generatedColumnNames = ["ggg", "ttt", "rrr", "eee"];
+
+            var csvParser = new chorus.utilities.CsvParser(this.model, this.options);
+            var result = _.pluck(csvParser.columnOrientedData(), "name");
+
+            expect(result).toEqual(["ggg", "ttt", "rrr", "eee"]);
         })
 
         it("stores changes to the header column names from the file", function() {
-            this.model.set({ headerColumnNames: ["f", "d", "s", "a"], hasHeader: true })
-            var result = _.pluck(this.model.columnOrientedData(), "name")
+            this.options.hasHeader = true;
+            this.options.headerColumnNames = ["f", "d", "s", "a"];
+
+            var csvParser = new chorus.utilities.CsvParser(this.model, this.options);
+            var result = _.pluck(csvParser.columnOrientedData(), "name");
+
             expect(result).toEqual(["f", "d", "s", "a"])
         })
     })
@@ -255,11 +218,14 @@ describe("chorus.models.CSVImport", function() {
     function itParsesCorrectly() {
         describe("columnOrientedData", function() {
             beforeEach(function() {
-                this.columns = this.model.columnOrientedData();
+                this.csvParser = new chorus.utilities.CsvParser(this.model, this.options);
+
+                this.columns = this.csvParser.columnOrientedData();
                 this.types = _.pluck(this.columns, "type")
             })
 
             it("has the correct number of columns", function() {
+                debugger
                 expect(this.columns.length).toBe(this.expectedColumns.length);
             })
 
@@ -282,27 +248,27 @@ describe("chorus.models.CSVImport", function() {
 
     describe("#normalizeForDatabase", function() {
         it("converts to lower case", function() {
-            expect(chorus.models.CSVImport.normalizeForDatabase("FILENAME")).toBe("filename")
+            expect(chorus.utilities.CsvParser.normalizeForDatabase("FILENAME")).toBe("filename")
         });
 
         it("converts spaces to underscores", function() {
-            expect(chorus.models.CSVImport.normalizeForDatabase("file name")).toBe("file_name")
+            expect(chorus.utilities.CsvParser.normalizeForDatabase("file name")).toBe("file_name")
         });
 
         it("converts periods to underscores", function() {
-            expect(chorus.models.CSVImport.normalizeForDatabase("file.name")).toBe("file_name")
+            expect(chorus.utilities.CsvParser.normalizeForDatabase("file.name")).toBe("file_name")
         });
 
         it("discards invalid characters", function() {
-            expect(chorus.models.CSVImport.normalizeForDatabase("file^$name*&22_+33")).toBe("filename22_33")
+            expect(chorus.utilities.CsvParser.normalizeForDatabase("file^$name*&22_+33")).toBe("filename22_33")
         });
 
         it("trims the white spaces", function() {
-            expect(chorus.models.CSVImport.normalizeForDatabase(" file^$name* &22_+33 ")).toBe("filename_22_33")
+            expect(chorus.utilities.CsvParser.normalizeForDatabase(" file^$name* &22_+33 ")).toBe("filename_22_33")
         });
 
         it("truncates at 64 characters", function() {
-            expect(chorus.models.CSVImport.normalizeForDatabase("0123456789012345678901234567890123456789012345678901234567890123456789")).toBe("0123456789012345678901234567890123456789012345678901234567890123")
+            expect(chorus.utilities.CsvParser.normalizeForDatabase("0123456789012345678901234567890123456789012345678901234567890123456789")).toBe("0123456789012345678901234567890123456789012345678901234567890123")
         });
     })
-})
+});

@@ -9,7 +9,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
         this.sandbox = chorus.page.workspace.sandbox();
         this.csv = newFixtures.csvImport({
-            lines: [
+            contents: [
                 "COL1,col2, col3 ,col 4,Col_5",
                 "val1.1,val1.2,val1.3,val1.4,val1.5",
                 "val2.1,val2.2,val2.3,val2.4,val2.5",
@@ -61,7 +61,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     });
 
     it("shows an error when the CSV doesn't parse correctly", function() {
-        this.csv.get("lines").push('"Has Spaces",2,3,4,5');
+        this.csv.get("contents").push('"Has Spaces",2,3,4,5');
         this.dialog.$("input.delimiter[value=' ']").click();
 
         expect(this.csv.serverErrors).toBeDefined();
@@ -101,7 +101,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         return function() {
             beforeEach(function() {
                 this.csv = newFixtures.csvImport({
-                    lines: [
+                    contents: [
                         "COL1" + separator + "col2" + separator + "col3" + separator + "col_4" + separator + "Col_5",
                         "val1.1" + separator + "val1.2" + separator + "val1.3" + separator + "val1.4" + separator + "val1.5",
                         "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
@@ -169,7 +169,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             describe("entering 'z' as a separator", function() {
                 beforeEach(function() {
                     this.csv = newFixtures.csvImport({
-                        lines: [
+                        contents: [
                             "COL1zcol2zcol3zcol_4zCol_5",
                             "val1.1zval1.2zval1.3zval1.4zval1.5",
                             "val2.1zval2.2zval2.3zval2.4zval2.5",
@@ -236,7 +236,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     describe("clicking the 'automap' link when the csv has fewer columns than the table", function() {
         beforeEach(function() {
             this.csv = newFixtures.csvImport({
-                lines: [
+                contents: [
                     "COL1, col2, col3",
                     "val1.1, val1.2, val1.3",
                     "val2.1, val2.2, val2.3",

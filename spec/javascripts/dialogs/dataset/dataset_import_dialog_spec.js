@@ -351,7 +351,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         beforeEach(function() {
                             this.data = {
                                 result: {
-                                    response: fixtures.csvImport({lines: ["col1,col2,col3", "val1,val2,val3"]}).attributes,
+                                    response: newFixtures.csvImport({contents: ["col1,col2,col3", "val1,val2,val3"]}).attributes,
                                     status: "ok"
                                 }
                             };
@@ -363,14 +363,14 @@ describe("chorus.dialogs.DatasetImport", function() {
                         });
 
                         it("does not modify the existing CSV (so that if someone cancels back to this modal, old data doesn't bleed through to future versions of import)", function() {
-                            expect(this.dialog.csv.has('lines')).toBeFalsy();
+                            expect(this.dialog.csv.has('contents')).toBeFalsy();
                         });
 
                         it("launches the import new table dialog", function() {
                             expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalled();
 
                             var dialogArgs = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.args[0]
-                            expect(dialogArgs.csv.get("lines").length).toBe(2);
+                            expect(dialogArgs.csv.get("contents").length).toBe(2);
 
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
                         });
@@ -392,7 +392,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         beforeEach(function() {
                             this.data = {
                                 result: {
-                                    response: fixtures.csvImport({lines: []}).attributes,
+                                    response: newFixtures.csvImport({contents: []}).attributes,
                                     status: "ok"
                                 }
                             };
@@ -404,7 +404,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         });
 
                         it("does not modify the dialog's CSV (to avoid weirdness when cancelling)", function() {
-                            expect(this.dialog.csv.has('lines')).toBeFalsy();
+                            expect(this.dialog.csv.has('contents')).toBeFalsy();
                         });
 
                         it("does not launch the import new table dialog", function() {
@@ -422,7 +422,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         beforeEach(function() {
                             this.data = {
                                 result: {
-                                    response: fixtures.csvImport({lines: ['"foo,"bar"']}).attributes,
+                                    response: newFixtures.csvImport({contents: ['"foo,"bar"']}).attributes,
                                     status: "ok"
                                 }
                             };

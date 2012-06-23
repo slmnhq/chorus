@@ -9,13 +9,13 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             }
         });
         this.sandbox = chorus.page.workspace.sandbox();
-        this.csv = new chorus.models.CsvHdfs({lines: [
+        this.csv = new chorus.models.CsvHdfs({contents: [
             "COL1,col2, col3 ,col 4,Col_5",
             "val1.1,val1.2,val1.3,val1.4,val1.5",
             "val2.1,val2.2,val2.3,val2.4,val2.5",
             "val3.1,val3.2,val3.3,val3.4,val3.5"
         ],
-            instanceId: "234",
+            hadoopInstanceId: "234",
             path: "/foo/bar.txt",
             toTable: "bar_txt"
         });
@@ -111,7 +111,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
                     expect(request.url).toMatchUrl("/workspace/" + workspaceId + "/externaltable");
                     expect(request.params()["csv_hdfs[path]"]).toBe("/foo/bar.txt");
-                    expect(request.params()["csv_hdfs[instance_id]"]).toBe("234");
+                    expect(request.params()["csv_hdfs[hadoop_instance_id]"]).toBe("234");
                     expect(request.params()["csv_hdfs[statement]"]).toBe(statement);
                 });
 

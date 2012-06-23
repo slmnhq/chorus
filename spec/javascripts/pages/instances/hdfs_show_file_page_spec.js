@@ -1,7 +1,7 @@
 describe("chorus.pages.HdfsShowFilePage", function() {
     beforeEach(function() {
         this.hadoopInstance = rspecFixtures.hadoopInstance({id: 1234, name: "MyInstance"});
-        this.file = fixtures.hdfsFile({ path: "/my/path/my file.txt" });
+        this.file = rspecFixtures.hdfsFile({ path: "/my/path/my file.txt" });
         this.page = new chorus.pages.HdfsShowFilePage("1234", "my/path/my file.txt");
     });
 
@@ -60,14 +60,14 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
         it("has a header file", function() {
             expect(this.page.mainContent.contentHeader).toBeA(chorus.views.HdfsShowFileHeader);
-            expect(this.page.mainContent.contentHeader.model.get('lines').length).toBe(2);
+            expect(this.page.mainContent.contentHeader.model.get('contents').length).toBe(2);
         })
 
         it("shows the hdfs file", function() {
             expect(this.page.mainContent.content).toBeA(chorus.views.HdfsShowFileView);
             expect(this.page.mainContent.content.model.get('content')).toBe(this.file.get('content'));
             expect(this.page.mainContent.content.model.get('path')).toBe(this.file.get('path'));            
-            expect(this.page.mainContent.content.model.get('lines').length).toBe(2);
+            expect(this.page.mainContent.content.model.get('contents').length).toBe(2);
         })
     });
 

@@ -16,7 +16,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         this.workspaces = new chorus.collections.WorkspaceSet([], {userId: chorus.session.user().id});
         this.workspaces.fetchAll();
         this.requiredResources.push(this.workspaces);
-        this.csv.set({toTable: chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable"))});
+        this.csv.set({toTable: chorus.utilities.CsvParser.normalizeForDatabase(this.csv.get("toTable"))});
     },
 
     postRender: function() {
@@ -57,7 +57,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         this.csv.set({
             workspaceId: this.$("option:selected").val(),
             statement: statement,
-            toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val())
+            toTable: chorus.utilities.CsvParser.normalizeForDatabase(this.$(".directions input:text").val())
         });
     },
 

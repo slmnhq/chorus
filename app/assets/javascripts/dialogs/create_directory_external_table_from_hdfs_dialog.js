@@ -18,7 +18,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
 
     setupCsv: function(){
         this.csv.set({toTable: chorus.models.CSVImport.normalizeForDatabase(this.options.directoryName)});
-        this.csv.set({instanceId : this.collection.attributes.hadoopInstance.id}, {silent: true});
+        this.csv.set({hadoopInstanceId : this.collection.attributes.hadoopInstance.id}, {silent: true});
         this.csv.set({path: this.pathWithSlash() + this.csv.get("name")}, {silent: true});
 
         $(document).one('reveal.facebox', _.bind(this.setupSelects, this));

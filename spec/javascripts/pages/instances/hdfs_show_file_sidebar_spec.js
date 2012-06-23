@@ -2,11 +2,12 @@
     beforeEach(function() {
         var now = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ")
 
-        this.file = fixtures.hdfsFile({
+        this.file = rspecFixtures.hdfsFile({
             path: "/folder/filename.txt",
-            instanceId: 9876,
+            hadoopInstance: {id: 9876},
             lastUpdatedStamp: now
-        })
+        });
+
         this.view = new chorus.views.HdfsShowFileSidebar({ model: this.file })
     });
 
@@ -53,7 +54,9 @@
                 var $linkExternalTable = this.view.$("a.external_table");
                 expect($linkExternalTable).toExist();
                 $linkExternalTable.click();
-                this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instanceId: "9876", path: "/folder/filename.txt", content: "hello\nworld"}).attributes);
+                this.csv = new chorus.models.CsvHdfs(newFixtures.csvImport({fileName: "/folder/filename.txt"}).attributes);
+                this.csv.set({hadoopInstanceId: "9876"});
+                this.csv.set({path: "/folder/filename.txt"})
                 this.server.completeFetchFor(this.csv);
             });
 

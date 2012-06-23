@@ -12,7 +12,7 @@ chorus.models.CSVImport = chorus.models.Base.extend({
         var parser = new CSV();
 
         try {
-            parser.from(this.get("lines"), {delimiter: this.get("delimiter")});
+            parser.from(this.get("contents"), {delimiter: this.get("delimiter")});
             delete this.serverErrors;
         } catch (e) {
             if (e instanceof CSV.ParseError) {

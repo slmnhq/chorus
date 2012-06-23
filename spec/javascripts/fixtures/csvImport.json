@@ -1,6 +1,6 @@
 {
     "response": {
-        "lines":[
+        "contents":[
             "sumlev,STATE,COUNTY,place,COUSUB,name,STATENAME,POPCENSUS_2000,POPBASE_2000,POP_2000,POP_2001,POP_2002,POP_2003,POP_2004,POP_2005,POP_2006,POP_2007,POP_2008,POP_2009",
             "040,01,000,00000,00000,Alabama,Alabama,4447100,4447382,4451849,4464034,4472420,4490591,4512190,4545049,4597688,4637904,4677464,4708708",
             "162,01,000,00124,00000,Abbeville city,Alabama,2987,2987,2987,2951,2939,2931,2936,2925,2926,2939,2931,2930",
@@ -102,6 +102,8 @@
             "162,01,000,18304,00000,Creola city,Alabama,2002,1995,1998,2021,2021,2024,2031,2036,2055,2073,2082,2073",
             "162,01,000,18856,00000,Crossville town,Alabama,1431,1431,1432,1436,1427,1428,1431,1439,1444,1461,1507,1513"
         ],
-        "fileName":"census_2009_all_states.csv_1334083938925_2573"
+        "fileName":"census_2009_all_states.csv_1334083938925_2573",
+        "hasHeader":true,
+        "hadoopInstance": {"id": "1234"}
     }
 }

@@ -8,14 +8,15 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             }
         });
         this.sandbox = chorus.page.workspace.sandbox();
-        this.csv = fixtures.csvImport({lines: [
+        this.csv = newFixtures.csvImport({contents: [
             "COL1,col2, col3 ,col 4,Col_5",
             "val1.1,val1.2,val1.3,val1.4,val1.5",
             "val2.1,val2.2,val2.3,val2.4,val2.5",
             "val3.1,val3.2,val3.3,val3.4,val3.5"
-        ],
-            toTable: "foo_quux_bar"
-        });
+        ]});
+        // TODO: actual csv model doesn't have toTable. Maybe create a new model
+        // for imports?
+        this.csv.set({toTable: "foo_quux_bar", hasHeader: true});
         this.dialog = new chorus.dialogs.NewTableImportCSV({csv: this.csv});
         this.dialog.render();
     });
@@ -33,7 +34,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
     });
 
     it("shows an error when the CSV doesn't parse correctly", function() {
-        this.csv.get("lines").push('"Has Spaces",2,3,4,5');
+        this.csv.get("contents").push('"Has Spaces",2,3,4,5');
         this.dialog.$("input.delimiter[value=' ']").click();
 
         expect(this.csv.serverErrors).toBeDefined();
@@ -59,14 +60,14 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
     function hasRightSeparator(separator) {
         return function() {
             beforeEach(function() {
-                this.csv = fixtures.csvImport({lines: [
+                this.csv = newFixtures.csvImport({contents: [
                     "COL1" + separator + "col2" + separator + "col3" + separator + "col_4" + separator + "Col_5",
                     "val1.1" + separator + "val1.2" + separator + "val1.3" + separator + "val1.4" + separator + "val1.5",
                     "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
                     "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
-                ],
-                    toTable: "foo_quux_bar"
-                });
+                ]});
+                this.csv.set({toTable: "foo_quux_bar"})
+
                 this.dialog = new chorus.dialogs.NewTableImportCSV({csv: this.csv});
                 this.dialog.render();
 
@@ -117,14 +118,14 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
             describe("entering 'z' as a separator", function() {
                 beforeEach(function() {
-                    this.csv = fixtures.csvImport({lines: [
+                    this.csv = newFixtures.csvImport({contents: [
                         "COL1zcol2zcol3zcol_4zCol_5",
                         "val1.1zval1.2zval1.3zval1.4zval1.5",
                         "val2.1zval2.2zval2.3zval2.4zval2.5",
                         "val3.1zval3.2zval3.3zval3.4zval3.5"
-                    ],
-                        toTable: "foo_quux_bar"
-                    });
+                    ]});
+                    this.csv.set({toTable: "foo_quux_bar"})
+
                     this.dialog = new chorus.dialogs.NewTableImportCSV({csv: this.csv});
                     this.dialog.render();
 

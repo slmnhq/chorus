@@ -147,7 +147,9 @@ window.rspecFixtureDefinitions = {
 //
     dataset: { unique: [ "id" ] },
 
-    schemaFunctionSet: {}
+    schemaFunctionSet: {},
+
+    hdfsFile: { model: "HdfsFile"}
 
 //
 //    test: {

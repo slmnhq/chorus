@@ -1,0 +1,36 @@
+{
+  "response": {
+    "contents": [
+      "column1,column2,column3",
+      "item1,item2,item3"
+    ],
+    "hadoop_instance": {
+      "name": "instance1",
+      "host": "host1.emc.com",
+      "port": 5001,
+      "id": 64,
+      "owner": {
+        "id": 1874,
+        "username": "user2",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person2@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "state": "online",
+      "description": null,
+      "version": null,
+      "username": null,
+      "group_list": null
+    },
+    "last_updated_stamp": "2012-06-23 00:39:20",
+    "path": "/file"
+  }
+}
