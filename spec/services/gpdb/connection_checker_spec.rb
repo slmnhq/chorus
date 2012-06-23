@@ -5,7 +5,7 @@ describe Gpdb::ConnectionChecker do
   let(:account) { FactoryGirl.build(:instance_account) }
 
   it "requires that a real connection to GPDB can be established" do
-    stub(Gpdb::ConnectionBuilder).connect! { raise(PG::Error.new("connection error")) }
+    stub(Gpdb::ConnectionBuilder).connect! { raise(ActiveRecord::JDBCError.new("connection error")) }
 
     begin
       Gpdb::ConnectionChecker.check!(instance, account)

@@ -10,7 +10,7 @@ module Gpdb
         :adapter => "jdbcpostgresql"
       )
       yield connection if block_given?
-    rescue ActiveRecord::JDBCError, PG::Error => e
+    rescue ActiveRecord::JDBCError => e
       Rails.logger.error e
       raise e
     ensure
@@ -19,7 +19,7 @@ module Gpdb
 
     def self.connect(instance, account, database_name=nil, &block)
       connect!(instance, account, database_name, &block)
-    rescue ActiveRecord::JDBCError, PG::Error
+    rescue ActiveRecord::JDBCError
       nil
     end
   end

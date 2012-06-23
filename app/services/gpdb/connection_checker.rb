@@ -6,7 +6,7 @@ module Gpdb
 
       ConnectionBuilder.connect!(instance, account)
       true
-    rescue ActiveRecord::JDBCError, PG::Error => e
+    rescue ActiveRecord::JDBCError => e
       raise ApiValidationError.new(:connection, :generic, {:message => e.message})
     end
 

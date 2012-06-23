@@ -12,8 +12,8 @@ module GpdbTestHelpers
   end
 
   def stub_gpdb_fail(account)
-    stub(Gpdb::ConnectionBuilder).connect!(account.instance, account) { raise PG::Error }
-    stub(Gpdb::ConnectionBuilder).connect!(account.instance, account, anything) { raise PG::Error }
+    stub(Gpdb::ConnectionBuilder).connect!(account.instance, account) { raise ActiveRecord::JDBCError }
+    stub(Gpdb::ConnectionBuilder).connect!(account.instance, account, anything) { raise ActiveRecord::JDBCError }
   end
 
   def clone_response(response)

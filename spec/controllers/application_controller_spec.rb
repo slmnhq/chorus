@@ -46,7 +46,7 @@ describe ApplicationController do
     end
 
     it "returns error 422 when a Postgres error occurs" do
-      stub(controller).index { raise PG::Error.new }
+      stub(controller).index { raise ActiveRecord::JDBCError.new }
 
       get :index
 

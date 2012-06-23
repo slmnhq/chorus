@@ -28,7 +28,7 @@ describe InstanceDatabasesController do
 
       context "when the refresh of the db fails" do
         before do
-          stub(GpdbDatabase).refresh { raise PG::Error.new }
+          stub(GpdbDatabase).refresh { raise ActiveRecord::JDBCError.new }
         end
 
         it "should fail" do

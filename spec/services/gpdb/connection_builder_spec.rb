@@ -59,12 +59,12 @@ describe Gpdb::ConnectionBuilder do
     end
 
     context "when the connection fails" do
-      let(:fake_connection_adapter) { raise PG::Error }
+      let(:fake_connection_adapter) { raise ActiveRecord::JDBCError }
 
       it "does not catch the error" do
         expect {
           Gpdb::ConnectionBuilder.connect!(instance, instance_account)
-        }.to raise_error(PG::Error)
+        }.to raise_error(ActiveRecord::JDBCError)
       end
     end
   end
@@ -77,7 +77,7 @@ describe Gpdb::ConnectionBuilder do
     end
 
     context "when the connection fails" do
-      let(:fake_connection_adapter) { raise PG::Error }
+      let(:fake_connection_adapter) { raise ActiveRecord::JDBCError }
 
       it "returns nil, and does not execute the given block" do
         result = Gpdb::ConnectionBuilder.connect(instance, instance_account) do |conn|

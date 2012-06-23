@@ -1,6 +1,5 @@
-require 'queue_classic'
 require './config/environment.rb'
-
+require 'queue_classic'
 require 'clockwork'
 include Clockwork
 
