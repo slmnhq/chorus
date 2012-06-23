@@ -881,7 +881,7 @@ beforeEach(function() {
 
         timeseriesTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: newFixtures.dataset.sandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
                 yAxis: "num_hands",
                 xAxis: "per_year",
 
@@ -899,7 +899,7 @@ beforeEach(function() {
 
         frequencyTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: newFixtures.dataset.sandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
                 yAxis: "num_hands",
 
                 columns: [
@@ -916,7 +916,7 @@ beforeEach(function() {
 
         boxplotTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: newFixtures.dataset.sandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
                 xAxis: "gender",
                 yAxis: "age",
                 columns: [
@@ -938,7 +938,7 @@ beforeEach(function() {
 
         heatmapTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: newFixtures.dataset.sandboxTable({objectName: 'pirates'}),
+                tabularData: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
                 xAxis: "hair_length",
                 yAxis: "kill_count",
                 xBins: "4",

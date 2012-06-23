@@ -7,12 +7,12 @@ describe("chorus.dialogs.DatasetImport", function() {
         this.launchElement = $('<button data-workspace-id="242">Import File</button>');
         this.launchElement.data("canonicalName", "FooBar");
         this.validDatasets = [
-            newFixtures.dataset.sandboxTable({objectName: "table_a", workspace: {id: 242}}),
-            newFixtures.dataset.sandboxTable({objectName: "table_b", workspace: {id: 243}})
+            newFixtures.workspaceDataset.sandboxTable({objectName: "table_a", workspace: {id: 242}}),
+            newFixtures.workspaceDataset.sandboxTable({objectName: "table_b", workspace: {id: 243}})
         ];
         this.invalidDatasets = [
-            newFixtures.dataset.externalTable(),
-            newFixtures.dataset.sandboxView(),
+            newFixtures.workspaceDataset.externalTable(),
+            newFixtures.workspaceDataset.sandboxView(),
             fixtures.datasetHadoopExternalTable()
         ];
         this.datasets = this.validDatasets.concat(this.invalidDatasets);
@@ -204,7 +204,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                     context("when a dataset is selected", function() {
                         beforeEach(function() {
-                            this.datasets = [newFixtures.dataset.sourceTable({ objectName: "myDataset" })];
+                            this.datasets = [newFixtures.workspaceDataset.sourceTable({ objectName: "myDataset" })];
                             chorus.modal.trigger("datasets:selected", this.datasets);
                         });
 

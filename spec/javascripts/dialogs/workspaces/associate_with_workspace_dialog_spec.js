@@ -23,7 +23,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
         context("when the model is a source table/view with no workspaces", function() {
             beforeEach(function() {
-                this.model = newFixtures.dataset.sourceTable();
+                this.model = newFixtures.workspaceDataset.sourceTable();
                 this.model.unset("associatedWorkspaces");
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
@@ -42,7 +42,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
         });
         context("when the model is a sandbox table/view or a chorus view (in a workspace)", function() {
             beforeEach(function() {
-                this.model = newFixtures.dataset.sandboxTable({workspace: {id: "645"}});
+                this.model = newFixtures.workspaceDataset.sandboxTable({workspace: {id: "645"}});
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     rspecFixtures.workspace({ name: "im_not_the_current_one'" }),
@@ -153,7 +153,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             beforeEach(function() {
                 this.currentWorkspace = rspecFixtures.workspace({ name: "im_also_the_current_one'", id: "987" });
                 this.workspace = rspecFixtures.workspace({ name: "im_not_the_current_one", id: "123"});
-                this.model = newFixtures.dataset.chorusView({ workspace: { id: "987" } });
+                this.model = newFixtures.workspaceDataset.chorusView({ workspace: { id: "987" } });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.dialog.render();

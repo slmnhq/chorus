@@ -2,14 +2,14 @@ describe("chorus.dialogs.ManageJoinTables", function() {
     beforeEach(function() {
         this.qtip = stubQtip();
         stubModals();
-        this.originalDatabaseObject = rspecFixtures.dataset.datasetTable({
+        this.originalDatabaseObject = rspecFixtures.workspaceDataset.datasetTable({
             objectName: "original",
             type: "SOURCE_TABLE",
             objectType: "TABLE",
             id: "abc"
         });
         this.instanceName = "john";
-        var dataset = rspecFixtures.dataset.datasetTable({
+        var dataset = rspecFixtures.workspaceDataset.datasetTable({
             objectName: "original",
             schema: {
                 database: {
@@ -52,21 +52,21 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             this.schemaTed = rspecFixtures.schema({name: "Ted", database: this.schema.database().attributes });
             this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
 
-            this.databaseObject1 = newFixtures.dataset.sourceTable({
+            this.databaseObject1 = newFixtures.workspaceDataset.sourceTable({
                 objectName: "cats",
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
                 id: '"10000"|"dca_demo"|"ddemo"|"VIEW"|"cats"'
             });
 
-            this.databaseObject2 = newFixtures.dataset.sourceTable({
+            this.databaseObject2 = newFixtures.workspaceDataset.sourceTable({
                 objectName: "dogs",
                 type: "SOURCE_TABLE",
                 objectType: "TABLE",
                 id: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"dogs"'
             });
 
-            this.databaseObject3 = newFixtures.dataset.sourceTable({
+            this.databaseObject3 = newFixtures.workspaceDataset.sourceTable({
                 objectName: "lions",
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
@@ -220,9 +220,9 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                         describe("when the datasets are fetched", function() {
                             beforeEach(function() {
                                 this.server.completeFetchFor(this.schemaBob.databaseObjects(), [
-                                    newFixtures.dataset.sourceTable({ objectName: "fred" }),
-                                    newFixtures.dataset.sourceTable({ objectName: "lou" }),
-                                    newFixtures.dataset.sourceTable({ objectName: "bryan" })
+                                    newFixtures.workspaceDataset.sourceTable({ objectName: "fred" }),
+                                    newFixtures.workspaceDataset.sourceTable({ objectName: "lou" }),
+                                    newFixtures.workspaceDataset.sourceTable({ objectName: "bryan" })
                                 ]);
                             });
 

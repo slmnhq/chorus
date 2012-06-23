@@ -3,7 +3,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
         beforeEach(function() {
             this.$columnList = $("<ul/>");
             this.qtipMenu = stubQtip();
-            this.tabularData = newFixtures.dataset.sourceTable();
+            this.tabularData = newFixtures.workspaceDataset.sourceTable();
             this.collection = this.tabularData.columns([fixtures.databaseColumn(), fixtures.databaseColumn()]);
 
             this.view = new chorus.views.TabularDataContentDetails({
@@ -81,7 +81,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
                 context("when there is no sql", function() {
                     beforeEach(function() {
-                        var tabularData = newFixtures.dataset.sourceTable()
+                        var tabularData = newFixtures.workspaceDataset.sourceTable()
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection});
                         this.server.completeFetchFor(tabularData.statistics(), fixtures.datasetStatisticsTable());
                         this.view.render();
@@ -95,7 +95,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
             context("when the object is a CHORUS VIEW", function() {
                 beforeEach(function() {
-                    var tabularData = newFixtures.dataset.chorusView();
+                    var tabularData = newFixtures.workspaceDataset.chorusView();
                     this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection});
                     this.server.completeFetchFor(tabularData.statistics());
                     this.view.render();
@@ -492,7 +492,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
                 context("when the workspace is archived", function() {
                     beforeEach(function() {
-                        var tabularData = newFixtures.dataset.sourceTable();
+                        var tabularData = newFixtures.workspaceDataset.sourceTable();
                         var workspace = rspecFixtures.workspace({ archivedAt: "2012-05-08 21:40:14"});
                         tabularData.initialQuery = "select * from abc";
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
@@ -506,7 +506,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
                 context("when the workspace is active", function() {
                     beforeEach(function() {
-                        var tabularData = newFixtures.dataset.sourceTable();
+                        var tabularData = newFixtures.workspaceDataset.sourceTable();
                         var workspace = rspecFixtures.workspace({archivedAt: null});
                         tabularData.initialQuery = "select * from abc";
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
@@ -523,7 +523,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
                 context("when the workspace is archived", function() {
                     beforeEach(function() {
-                        var tabularData = newFixtures.dataset.chorusView();
+                        var tabularData = newFixtures.workspaceDataset.chorusView();
                         var workspace = rspecFixtures.workspace({ archivedAt: "2012-05-08 21:40:14" });
                         tabularData.initialQuery = "select * from abc";
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});
@@ -542,7 +542,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
 
                 context("when the workspace is not archived", function() {
                     beforeEach(function() {
-                        var tabularData = newFixtures.dataset.chorusView();
+                        var tabularData = newFixtures.workspaceDataset.chorusView();
                         tabularData.initialQuery = "select * from abc";
                         var workspace = rspecFixtures.workspace({archivedAt: null})
                         this.view = new chorus.views.TabularDataContentDetails({tabularData: tabularData, collection: this.collection, workspace: workspace});

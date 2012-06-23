@@ -33,7 +33,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             {name: "col4", typeCategory: "WHOLE_NUMBER", ordinalPosition: "2"},
             {name: "col5", typeCategory: "WHOLE_NUMBER", ordinalPosition: "5"}
         ]
-        this.dataset = newFixtures.dataset.sandboxTable({
+        this.dataset = newFixtures.workspaceDataset.sandboxTable({
             id: "dat-id",
             workspace: {id: this.csv.get("workspaceId")},
             columnNames: this.columns

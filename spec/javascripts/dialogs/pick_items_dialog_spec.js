@@ -293,9 +293,9 @@ describe("chorus.dialogs.PickItems", function() {
         var dataset1, dataset2, dataset3;
 
         beforeEach(function() {
-            dataset1 = newFixtures.dataset.sandboxTable();
-            dataset2 = newFixtures.dataset.sandboxTable();
-            dataset3 = newFixtures.dataset.sandboxTable();
+            dataset1 = newFixtures.workspaceDataset.sandboxTable();
+            dataset2 = newFixtures.workspaceDataset.sandboxTable();
+            dataset3 = newFixtures.workspaceDataset.sandboxTable();
 
             this.datasets = new chorus.collections.WorkspaceDatasetSet([
                 dataset1,

@@ -1,6 +1,6 @@
 describe("chorus.models.WorkspaceDataset", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.dataset.datasetTable({
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable({
             id: '"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"',
             workspace: {
                 id: "44"
@@ -88,7 +88,7 @@ describe("chorus.models.WorkspaceDataset", function() {
 
     describe("#createDuplicateChorusView", function() {
         beforeEach(function() {
-            this.model = newFixtures.dataset.chorusView();
+            this.model = newFixtures.workspaceDataset.chorusView();
             this.copy = this.model.createDuplicateChorusView();
         });
 
@@ -151,7 +151,7 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#iconUrl", function() {
         context("when the user does not have credentials", function() {
             beforeEach(function() {
-                this.dataset = rspecFixtures.dataset.datasetTable();
+                this.dataset = rspecFixtures.workspaceDataset.datasetTable();
                 this.unlockedIconUrl = this.dataset.iconUrl();
                 this.dataset.set({hasCredentials: false});
             });

@@ -1,7 +1,7 @@
 describe("chorus.collections.DatabaseColumnSet", function() {
     describe("database table column", function() {
         beforeEach(function() {
-            var table = newFixtures.dataset.sandboxTable({
+            var table = newFixtures.workspaceDataset.sandboxTable({
                 instance: {
                     id: '2',
                     name: 'instance2'
@@ -35,7 +35,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
     describe("database view column", function() {
         beforeEach(function() {
-            var view = newFixtures.dataset.sandboxView({
+            var view = newFixtures.workspaceDataset.sandboxView({
                 instance: {
                     id: '2',
                     name: 'instance2'
@@ -54,7 +54,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("when the names need to be url encoded", function() {
             beforeEach(function() {
-                var table = newFixtures.dataset.sandboxView({
+                var table = newFixtures.workspaceDataset.sandboxView({
                     instance: {
                         id: '2',
                         name: '%foo%'
@@ -76,7 +76,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
     describe("database chorus view column", function() {
         beforeEach(function() {
-            var chorusView = newFixtures.dataset.chorusView({
+            var chorusView = newFixtures.workspaceDataset.chorusView({
                 workspace: {
                     id: '10'
                 },
@@ -93,7 +93,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
     describe("#urlParams", function() {
         context("when type attribute is meta", function() {
             beforeEach(function() {
-                this.columns = newFixtures.dataset.sandboxView().columns({type: "meta"});
+                this.columns = newFixtures.workspaceDataset.sandboxView().columns({type: "meta"});
             });
 
             it("should include the 'type' parameter in the url", function() {
@@ -103,7 +103,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("when type attribute is unspecified", function() {
             beforeEach(function() {
-                this.columns = newFixtures.dataset.sandboxView().columns();
+                this.columns = newFixtures.workspaceDataset.sandboxView().columns();
             });
 
             it("should not include the 'type' parameter in the url", function() {
@@ -129,11 +129,11 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         context("with multiple dataset", function() {
             beforeEach(function() {
                 this.columns = new chorus.collections.DatabaseColumnSet();
-                this.dataset1 = newFixtures.dataset.sandboxTable();
+                this.dataset1 = newFixtures.workspaceDataset.sandboxTable();
                 this.dataset1.datasetNumber = 1;
                 this.dataset1Columns = this.dataset1.columns();
                 this.dataset1Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2}), fixtures.databaseColumn({ordinalPosition: 3})]);
-                this.dataset2 = newFixtures.dataset.sandboxTable();
+                this.dataset2 = newFixtures.workspaceDataset.sandboxTable();
                 this.dataset2.datasetNumber = 2;
                 this.dataset2Columns = this.dataset2.columns()
                 this.dataset2Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2})]);

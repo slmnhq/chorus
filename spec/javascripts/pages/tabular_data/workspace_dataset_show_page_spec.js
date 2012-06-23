@@ -11,7 +11,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
         var sandboxInfo = this.workspace.sandbox();
 
-        this.dataset = rspecFixtures.dataset.datasetTable({
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable({
             schema: {
                 name: sandboxInfo.get("name"),
                 database: {

@@ -3,7 +3,7 @@ describe("chorus.dialogs.NameChorusView", function() {
         stubModals();
         stubDefer();
         this.launchElement = $("<a></a>");
-        this.chorusView = newFixtures.dataset.chorusView({ query: "select name, quantity from shipments;" });
+        this.chorusView = newFixtures.workspaceDataset.chorusView({ query: "select name, quantity from shipments;" });
         this.dialog = new chorus.dialogs.NameChorusView({
             model: this.chorusView,
             launchElement: this.launchElement

@@ -2,7 +2,7 @@ describe("chorus.dialogs.PreviewColumns", function() {
     beforeEach(function() {
         stubModals();
         spyOn(chorus, "search");
-        this.databaseObject = newFixtures.dataset.sourceTable();
+        this.databaseObject = newFixtures.workspaceDataset.sourceTable();
         this.dialog = new chorus.dialogs.PreviewColumns({model: this.databaseObject});
         this.dialog.render();
     });

@@ -1,6 +1,6 @@
 describe("chorus.views.TabularDataStatistics", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.dataset.sourceTable();
+        this.dataset = newFixtures.workspaceDataset.sourceTable();
         this.view = new chorus.views.TabularDataStatistics({ model: this.dataset });
         this.view.render();
     });

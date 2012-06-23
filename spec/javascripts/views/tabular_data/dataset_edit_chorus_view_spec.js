@@ -1,7 +1,7 @@
 describe("chorus.views.DatasetEditChorusView", function() {
     beforeEach(function() {
 
-        this.dataset = newFixtures.dataset.chorusView();
+        this.dataset = newFixtures.workspaceDataset.chorusView();
         this.view = new chorus.views.DatasetEditChorusView({ model: this.dataset });
         $("#jasmine_content").append(this.view.el);
         this.clock = this.useFakeTimers();

@@ -130,19 +130,19 @@ describe("chorus.models.TabularData", function() {
             var table = rspecFixtures.databaseObject();
             expect(table.canBeImportSource()).toBeFalsy();
 
-            var dataset = newFixtures.dataset.sandboxTable();
+            var dataset = newFixtures.workspaceDataset.sandboxTable();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
-            dataset = newFixtures.dataset.sandboxView();
+            dataset = newFixtures.workspaceDataset.sandboxView();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
-            dataset = newFixtures.dataset.sourceTable();
+            dataset = newFixtures.workspaceDataset.sourceTable();
             expect(dataset.canBeImportSource()).toBeTruthy();
 
-            dataset = rspecFixtures.dataset.datasetTable();
+            dataset = rspecFixtures.workspaceDataset.datasetTable();
             expect(dataset.canBeImportSource()).toBeTruthy();
 
-            dataset = newFixtures.dataset.chorusView();
+            dataset = newFixtures.workspaceDataset.chorusView();
             expect(dataset.canBeImportSource()).toBeTruthy();
         });
     });
@@ -152,19 +152,19 @@ describe("chorus.models.TabularData", function() {
             var table = rspecFixtures.databaseObject();
             expect(table.canBeImportDestination()).toBeFalsy();
 
-            var dataset = newFixtures.dataset.sandboxTable();
+            var dataset = newFixtures.workspaceDataset.sandboxTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = newFixtures.dataset.sandboxView();
+            dataset = newFixtures.workspaceDataset.sandboxView();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = newFixtures.dataset.sourceTable();
+            dataset = newFixtures.workspaceDataset.sourceTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = rspecFixtures.dataset.datasetTable();
+            dataset = rspecFixtures.workspaceDataset.datasetTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = newFixtures.dataset.chorusView();
+            dataset = newFixtures.workspaceDataset.chorusView();
             expect(dataset.canBeImportDestination()).toBeTruthy();
         });
     });
@@ -271,7 +271,7 @@ describe("chorus.models.TabularData", function() {
 
         context("with a chorus view", function() {
             beforeEach(function() {
-                this.tabularData = newFixtures.dataset.chorusView({
+                this.tabularData = newFixtures.workspaceDataset.chorusView({
                     query: "select * from hello_world",
                     objectName: "my_chorusview",
                     workspace: {id: "234", name: "abc"}
@@ -293,7 +293,7 @@ describe("chorus.models.TabularData", function() {
 
         context("with a chorus view (from search API)", function() {
             beforeEach(function() {
-                this.tabularData = newFixtures.dataset.chorusViewSearchResult({
+                this.tabularData = newFixtures.workspaceDataset.chorusViewSearchResult({
                     content: "select * from hello_world",
                     objectName: "my_chorusview",
                     workspace: {id: "234", name: "abc"}
@@ -486,7 +486,7 @@ describe("chorus.models.TabularData", function() {
 
         context("when the model has a 'query'", function() {
             beforeEach(function() {
-                this.tabularData = newFixtures.dataset.chorusView();
+                this.tabularData = newFixtures.workspaceDataset.chorusView();
             })
 
             context("when a datasetNumber is not set", function() {
@@ -601,19 +601,19 @@ describe("chorus.models.TabularData", function() {
 
     describe("#isDeleteable", function() {
         it("is true when the tabular data is a source table", function() {
-            expect(newFixtures.dataset.sourceTable().isDeleteable()).toBeTruthy();
+            expect(newFixtures.workspaceDataset.sourceTable().isDeleteable()).toBeTruthy();
         });
 
         it("is true when the tabular data is a source view", function() {
-            expect(rspecFixtures.dataset.datasetTable().isDeleteable()).toBeTruthy();
+            expect(rspecFixtures.workspaceDataset.datasetTable().isDeleteable()).toBeTruthy();
         });
 
         it("is true when the tabular data is a chorus view", function() {
-            expect(newFixtures.dataset.chorusView().isDeleteable()).toBeTruthy();
+            expect(newFixtures.workspaceDataset.chorusView().isDeleteable()).toBeTruthy();
         });
 
         it("is false otherwise", function() {
-            expect(newFixtures.dataset.sandboxTable().isDeleteable()).toBeFalsy();
+            expect(newFixtures.workspaceDataset.sandboxTable().isDeleteable()).toBeFalsy();
         });
     });
 
@@ -748,7 +748,7 @@ describe("chorus.models.TabularData", function() {
 
     describe("#canAnalyze", function() {
         it("returns true for a sandbox table", function() {
-            this.tabularData = newFixtures.dataset.sandboxTable();
+            this.tabularData = newFixtures.workspaceDataset.sandboxTable();
             expect(this.tabularData.canAnalyze()).toBeTruthy();
         });
 
@@ -758,7 +758,7 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("returns false for views", function() {
-            this.tabularData = newFixtures.dataset.sandboxView();
+            this.tabularData = newFixtures.workspaceDataset.sandboxView();
             expect(this.tabularData.canAnalyze()).toBeFalsy();
         });
 
@@ -768,7 +768,7 @@ describe("chorus.models.TabularData", function() {
         });
 
         it("returns false for external tables", function() {
-            this.tabularData = newFixtures.dataset.externalTable();
+            this.tabularData = newFixtures.workspaceDataset.externalTable();
             expect(this.tabularData.canAnalyze()).toBeFalsy();
         });
     });

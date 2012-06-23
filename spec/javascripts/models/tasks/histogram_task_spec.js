@@ -3,7 +3,7 @@ describe("chorus.models.HistogramTask", function() {
         this.model = new chorus.models.HistogramTask({
             bins: 5,
             xAxis: "height",
-            tabularData: newFixtures.dataset.sandboxTable({objectName: "users"})
+            tabularData: newFixtures.workspaceDataset.sandboxTable({objectName: "users"})
         });
     });
 

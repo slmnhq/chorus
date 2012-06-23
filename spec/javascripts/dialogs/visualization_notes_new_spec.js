@@ -10,7 +10,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
                 workspaceId: "22",
                 entityType: "databaseObject",
                 allowWorkspaceAttachments: "true",
-                pageModel: newFixtures.dataset.sandboxTable(),
+                pageModel: newFixtures.workspaceDataset.sandboxTable(),
                 attachVisualization: {
                     fileName: "hello-frequency.png",
                     svgData: "<svg/>"

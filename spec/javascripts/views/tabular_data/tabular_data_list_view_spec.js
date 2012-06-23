@@ -1,9 +1,9 @@
 describe("chorus.views.TabularDataList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatabaseObjectSet([
-            newFixtures.dataset.chorusView({ hasCredentials: true, objectName: "foo" }),
-            newFixtures.dataset.sandboxTable({ hasCredentials: true, objectName: "bar" }),
-            newFixtures.dataset.sourceTable({ hasCredentials: true, objectName: "baz" })
+            newFixtures.workspaceDataset.chorusView({ hasCredentials: true, objectName: "foo" }),
+            newFixtures.workspaceDataset.sandboxTable({ hasCredentials: true, objectName: "bar" }),
+            newFixtures.workspaceDataset.sourceTable({ hasCredentials: true, objectName: "baz" })
         ], { instanceId: "1", databaseName: "two", schemaName: "three" });
         this.collection.loaded = true;
 
@@ -84,9 +84,9 @@ describe("chorus.views.TabularDataList", function() {
                 describe("when the fetch completes", function() {
                     beforeEach(function() {
                         this.allDatasets = this.collection.models.concat([
-                            newFixtures.dataset.sandboxTable(),
-                            newFixtures.dataset.sandboxTable(),
-                            newFixtures.dataset.sandboxTable()
+                            newFixtures.workspaceDataset.sandboxTable(),
+                            newFixtures.workspaceDataset.sandboxTable(),
+                            newFixtures.workspaceDataset.sandboxTable()
                         ]);
                         this.server.completeFetchAllFor(this.collection, this.allDatasets);
                     });
