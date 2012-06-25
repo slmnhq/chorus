@@ -477,7 +477,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                             this.modalSpy = stubModals();
                             spyOn($, "download");
                             this.view.showDownloadDialog = true;
-                            this.view.tabularData = rspecFixtures.dataset();
+                            this.view.dataset = rspecFixtures.dataset();
                             this.view.$("a.download_csv").click();
                         });
 

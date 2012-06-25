@@ -7,16 +7,16 @@ chorus.models.ChartTask = chorus.models.Task.extend({
     },
 
     initialize: function(attrs) {
-        this.tabularData = attrs.tabularData;
+        this.dataset = attrs.dataset;
         this.set({
-            datasetId: this.tabularData.get("id")
+            datasetId: this.dataset.get("id")
         }, {silent: true});
-        if (this.tabularData.get("workspace")) {
+        if (this.dataset.get("workspace")) {
             this.set({
-                workspaceId: this.tabularData.get("workspace").id
+                workspaceId: this.dataset.get("workspace").id
             }, {silent: true});
         }
-        this.unset("tabularData");
+        this.unset("dataset");
         this._super("initialize", arguments);
         this.set({ "chart[type]": this.chartType });
     },
@@ -31,7 +31,7 @@ chorus.models.ChartTask = chorus.models.Task.extend({
     beforeSave: function() {
         var relation = "SELECT * FROM ";
 
-        relation += this.tabularData.fromClause();
+        relation += this.dataset.fromClause();
 
         if (this.get("filters")) {
             relation += " " + this.get("filters");

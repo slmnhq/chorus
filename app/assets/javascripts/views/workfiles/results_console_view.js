@@ -14,7 +14,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     setup: function() {
         this.showDownloadDialog = this.options.showDownloadDialog;
-        this.tabularData = this.options.tabularData;
+        this.dataset = this.options.dataset;
         chorus.PageEvents.subscribe("file:executionStarted", this.executionStarted, this);
         chorus.PageEvents.subscribe("file:executionSucceeded", this.executionSucceeded, this);
         chorus.PageEvents.subscribe("file:executionFailed", this.executionFailed, this);
@@ -28,7 +28,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     saveToDesktop: function(e) {
         e.preventDefault();
         if(this.showDownloadDialog) {
-            var dialog = new chorus.dialogs.DatasetDownload({ pageModel: this.tabularData });
+            var dialog = new chorus.dialogs.DatasetDownload({ pageModel: this.dataset });
             dialog.launchModal();
         } else {
             var data = {

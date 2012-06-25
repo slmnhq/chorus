@@ -8,8 +8,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     events: {
-        "click a.show": "showTabularData",
-        "click a.hide": "hideTabularData",
+        "click a.show": "showDataset",
+        "click a.hide": "hideDataset",
         "click a.show_options": "showFilterOptions",
         "click a.hide_options": "hideFilterOptions",
         "click button.close_dialog": "closeModal",
@@ -217,7 +217,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.chartUpToDate();
     },
 
-    showTabularData: function(e) {
+    showDataset: function(e) {
         e && e.preventDefault();
         this.$('.results_console').removeClass("hidden");
         this.$(".modal_controls a.hide").removeClass("hidden");
@@ -225,7 +225,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.recalculateScrolling();
     },
 
-    hideTabularData: function(e) {
+    hideDataset: function(e) {
         e && e.preventDefault();
         this.$('.results_console').addClass("hidden")
         this.$(".modal_controls a.show").removeClass("hidden");

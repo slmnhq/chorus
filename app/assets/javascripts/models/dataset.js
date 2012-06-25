@@ -35,7 +35,7 @@ chorus.models.Dataset = chorus.models.Base.include(
             this._columns = new chorus.collections.DatabaseColumnSet([], {
 
                     id: this.get("id"),
-                tabularData: this,
+                dataset: this,
                 type: options && options.type
             });
 
@@ -215,7 +215,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     analyze: function() {
         if (!this._analyze) {
-            this._analyze = new chorus.models.TabularDataAnalyze({
+            this._analyze = new chorus.models.DatasetAnalyze({
                 tableId: this.get("id")
             });
         }
@@ -227,7 +227,7 @@ chorus.models.Dataset = chorus.models.Base.include(
         return new chorus.models.BoxplotTask({
             xAxis: taskAttrs.xAxis,
             yAxis: taskAttrs.yAxis,
-            tabularData: this,
+            dataset: this,
             bins: taskAttrs.bins
         });
     },
@@ -235,7 +235,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     makeFrequencyTask: function(taskAttrs) {
         return new chorus.models.FrequencyTask({
             yAxis: taskAttrs.yAxis,
-            tabularData: this,
+            dataset: this,
             bins: taskAttrs.bins
         });
     },
@@ -244,7 +244,7 @@ chorus.models.Dataset = chorus.models.Base.include(
         return new chorus.models.HistogramTask({
             bins: taskAttrs.bins,
             xAxis: taskAttrs.xAxis,
-            tabularData: this
+            dataset: this
         });
     },
 
@@ -254,7 +254,7 @@ chorus.models.Dataset = chorus.models.Base.include(
             yBins: taskAttrs.yBins,
             xAxis: taskAttrs.xAxis,
             yAxis: taskAttrs.yAxis,
-            tabularData: this
+            dataset: this
         });
     },
 
@@ -264,7 +264,7 @@ chorus.models.Dataset = chorus.models.Base.include(
             yAxis: taskAttrs.yAxis,
             aggregation: taskAttrs.aggregation,
             timeInterval: taskAttrs.timeInterval,
-            tabularData: this,
+            dataset: this,
             timeType: taskAttrs.timeType
         });
     },

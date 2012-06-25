@@ -9,9 +9,9 @@ chorus.models.DatabaseColumn = chorus.models.Base.extend({
     },
 
     initialize: function() {
-        if (this.tabularData) {
+        if (this.dataset) {
             this.set({
-                id: this.tabularData.id
+                id: this.dataset.id
             });
         }
 
@@ -25,9 +25,9 @@ chorus.models.DatabaseColumn = chorus.models.Base.extend({
     },
 
     quotedName: function() {
-        return this.tabularData &&
+        return this.dataset &&
             this.get("name") &&
-            this.safePGName(this.tabularData.selectName(), this.get("name"));
+            this.safePGName(this.dataset.selectName(), this.get("name"));
     }
 }, {
     humanTypeMap: {

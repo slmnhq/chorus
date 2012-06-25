@@ -57,12 +57,12 @@ describe("chorus.models.Artifact", function() {
             expect(model.showUrl()).toBe("#/workspaces/10000");
         });
 
-        it("shows the URL for a tabularData set in a workspace", function() {
+        it("shows the URL for a dataset set in a workspace", function() {
             var model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
             expect(model.showUrl()).toBe("#/workspaces/33333/datasets/" + 100);
         });
 
-        it("shows the URL for a tabularData with no workspace", function() {
+        it("shows the URL for a dataset with no workspace", function() {
             var model = fixtures.attachmentOnDatasetNotInWorkspaceSearchResult();
             expect(model.showUrl()).toBe("#/datasets/100");
         });
@@ -172,27 +172,27 @@ describe("chorus.models.Artifact", function() {
         })
     });
 
-    describe("tabularData", function() {
+    describe("dataset", function() {
         context("when there is a workspace", function() {
             beforeEach(function() {
                 this.model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
             });
 
             it("returns a dataset", function() {
-                this.tabularData = this.model.tabularData();
-                expect(this.tabularData).toBeA(chorus.models.WorkspaceDataset);
-                expect(this.tabularData.get("workspace")).toBe(this.model.get('workspace'));
-                expect(this.tabularData.get('objectName')).toBe(this.model.get('dataset').objectName);
-                expect(this.tabularData.get('id')).toBe(this.model.get('dataset').id);
+                this.dataset = this.model.dataset();
+                expect(this.dataset).toBeA(chorus.models.WorkspaceDataset);
+                expect(this.dataset.get("workspace")).toBe(this.model.get('workspace'));
+                expect(this.dataset.get('objectName')).toBe(this.model.get('dataset').objectName);
+                expect(this.dataset.get('id')).toBe(this.model.get('dataset').id);
             });
 
             it("returns falsy when there is no dataset", function() {
                 this.model.unset('dataset');
-                expect(this.model.tabularData()).toBeFalsy();
+                expect(this.model.dataset()).toBeFalsy();
             });
 
             it("memoizes", function() {
-                expect(this.model.tabularData()).toBe(this.model.tabularData());
+                expect(this.model.dataset()).toBe(this.model.dataset());
             })
         });
 
@@ -202,19 +202,19 @@ describe("chorus.models.Artifact", function() {
             });
 
             it("returns a Database Object", function() {
-                this.tabularData = this.model.tabularData();
-                expect(this.tabularData).toBeA(chorus.models.Dataset);
-                expect(this.tabularData.get('objectName')).toBe(this.model.get('dataset').objectName);
-                expect(this.tabularData.get('id')).toBe(this.model.get('dataset').id);
+                this.dataset = this.model.dataset();
+                expect(this.dataset).toBeA(chorus.models.Dataset);
+                expect(this.dataset.get('objectName')).toBe(this.model.get('dataset').objectName);
+                expect(this.dataset.get('id')).toBe(this.model.get('dataset').id);
             });
 
             it("returns falsy when there is no dataset", function() {
                 this.model.unset('dataset');
-                expect(this.model.tabularData()).toBeFalsy();
+                expect(this.model.dataset()).toBeFalsy();
             });
 
             it("memoizes", function() {
-                expect(this.model.tabularData()).toBe(this.model.tabularData());
+                expect(this.model.dataset()).toBe(this.model.dataset());
             })
         });
     });

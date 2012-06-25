@@ -750,38 +750,38 @@ describe("handlebars", function() {
         });
 
         describe("attachmentFoundIn", function() {
-            context("on a tabularData in a workspace", function() {
+            context("on a dataset in a workspace", function() {
                 beforeEach(function() {
                     this.model = fixtures.attachmentOnDatasetInWorkspaceSearchResult();
                     this.result = Handlebars.helpers.attachmentFoundIn(this.model).toString();
                 });
 
                 it("displays the correct text", function() {
-                    expect(this.result).toMatchTranslation('attachment.found_in.tabular_data_in_workspace', {
+                    expect(this.result).toMatchTranslation('attachment.found_in.dataset_in_workspace', {
                         workspaceLink: Handlebars.helpers.linkTo(this.model.workspace().showUrl(), this.model.workspace().name()),
-                        tabularDataLink: Handlebars.helpers.linkTo(this.model.tabularData().showUrl(), this.model.tabularData().name())
+                        datasetLink: Handlebars.helpers.linkTo(this.model.dataset().showUrl(), this.model.dataset().name())
                     });
                 });
             });
 
-            context("on a tabularData not in a workspace", function() {
+            context("on a dataset not in a workspace", function() {
                 beforeEach(function() {
                     this.model = fixtures.attachmentOnDatasetNotInWorkspaceSearchResult();
                     this.result = Handlebars.helpers.attachmentFoundIn(this.model).toString();
                 });
 
                 it("displays the correct text", function() {
-                    expect(this.result).toMatchTranslation('attachment.found_in.tabular_data_not_in_workspace', {
-                        tabularDataLink: Handlebars.helpers.linkTo(this.model.tabularData().showUrl(), this.model.tabularData().name())
+                    expect(this.result).toMatchTranslation('attachment.found_in.dataset_not_in_workspace', {
+                        datasetLink: Handlebars.helpers.linkTo(this.model.dataset().showUrl(), this.model.dataset().name())
                     });
                 });
             });
         });
 
-        describe("tabularDataLocation", function() {
+        describe("datasetLocation", function() {
             beforeEach(function() {
-                this.model = fixtures.tabularData();
-                this.result = Handlebars.helpers.tabularDataLocation(this.model).toString();
+                this.model = fixtures.dataset();
+                this.result = Handlebars.helpers.datasetLocation(this.model).toString();
             });
 
             it("includes the from text", function() {
@@ -802,7 +802,7 @@ describe("handlebars", function() {
             });
 
             it("includes the highlighted database and schema name", function() {
-                this.model = fixtures.tabularData({
+                this.model = fixtures.dataset({
                     schema: {
                         highlightedAttributes: { name: 'schema_<em>name</em>' },
                         database: {
@@ -810,15 +810,15 @@ describe("handlebars", function() {
                         }
                     }
                 });
-                this.result = Handlebars.helpers.tabularDataLocation(this.model).toString();
+                this.result = Handlebars.helpers.datasetLocation(this.model).toString();
                 expect($(this.result).find('em').length).toBe(2);
             });
 
 
             context("when credentials are not present", function() {
                 beforeEach(function() {
-                    this.model = fixtures.tabularData({hasCredentials: false})
-                    this.result = Handlebars.helpers.tabularDataLocation(this.model).toString();
+                    this.model = fixtures.dataset({hasCredentials: false})
+                    this.result = Handlebars.helpers.datasetLocation(this.model).toString();
                 });
 
                 it("includes the instance name, database name, and schema name", function() {
@@ -830,13 +830,13 @@ describe("handlebars", function() {
             });
         });
 
-        describe("humanizedTabularDataType", function() {
+        describe("humanizedDatasetType", function() {
             beforeEach(function() {
                 spyOn(window, "t");
             });
 
             it("loads the correct message key", function() {
-                Handlebars.helpers.humanizedTabularDataType({ type: "type", objectType: "objectType"})
+                Handlebars.helpers.humanizedDatasetType({ type: "type", objectType: "objectType"})
                 expect(window.t).toHaveBeenCalledWith("dataset.types.type.objectType")
             });
         });

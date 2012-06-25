@@ -648,7 +648,7 @@ beforeEach(function() {
             });
         },
 
-        tabularDataJson: function(overrides) {
+        datasetJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({
                 objectName: "Dataset" + id,
@@ -671,7 +671,7 @@ beforeEach(function() {
 
         datasetCommonJson: function(overrides) {
             var id = fixtures.nextId();
-            var attributes = _.extend(this.tabularDataJson(), {
+            var attributes = _.extend(this.datasetJson(), {
                 isDeleted: false,
                 importInfo: {},
                 hasCredentials: true,
@@ -825,8 +825,8 @@ beforeEach(function() {
             return new chorus.models.WorkspaceDataset(attributes);
         },
 
-        tabularData: function(overrides) {
-            return new chorus.models.Dataset(this.tabularDataJson(_.extend({
+        dataset: function(overrides) {
+            return new chorus.models.Dataset(this.datasetJson(_.extend({
                 objectType: "TABLE",
                 type: "SANDBOX_TABLE"
             }, overrides)));
@@ -881,7 +881,7 @@ beforeEach(function() {
 
         timeseriesTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
+                dataset: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
                 yAxis: "num_hands",
                 xAxis: "per_year",
 
@@ -899,7 +899,7 @@ beforeEach(function() {
 
         frequencyTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
+                dataset: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
                 yAxis: "num_hands",
 
                 columns: [
@@ -916,7 +916,7 @@ beforeEach(function() {
 
         boxplotTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
+                dataset: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
                 xAxis: "gender",
                 yAxis: "age",
                 columns: [
@@ -938,7 +938,7 @@ beforeEach(function() {
 
         heatmapTaskWithResult: function(overrides) {
             var attributes = _.extend({
-                tabularData: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
+                dataset: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
                 xAxis: "hair_length",
                 yAxis: "kill_count",
                 xBins: "4",

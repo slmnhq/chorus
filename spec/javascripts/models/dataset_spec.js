@@ -479,7 +479,7 @@ describe("chorus.models.Dataset", function() {
         })
 
         it("should have a reference back to the dataset", function() {
-            expect(this.dataset.columns().attributes.tabularData).toBe(this.dataset);
+            expect(this.dataset.columns().attributes.dataset).toBe(this.dataset);
         })
 
         it("should pass the correct parameters to the DatabaseColumnSet", function() {
@@ -746,8 +746,8 @@ describe("chorus.models.Dataset", function() {
             expect(this.task).toBeA(chorus.models.BoxplotTask);
         });
 
-        it("has the tabularData", function() {
-            expect(this.task.tabularData).toBe(this.dataset);
+        it("has the dataset", function() {
+            expect(this.task.dataset).toBe(this.dataset);
         });
     });
 
@@ -768,8 +768,8 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("xAxis")).toBe("blindness_rate");
         });
 
-        it("has the tabularData", function() {
-            expect(this.task.tabularData).toBe(this.dataset);
+        it("has the dataset", function() {
+            expect(this.task.dataset).toBe(this.dataset);
         });
     });
 
@@ -794,8 +794,8 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("yAxis")).toBe("blindness_rate");
         });
 
-        it("has the tabularData", function() {
-            expect(this.task.tabularData).toBe(this.dataset);
+        it("has the dataset", function() {
+            expect(this.task.dataset).toBe(this.dataset);
         });
     });
 
@@ -815,8 +815,8 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("yAxis")).toBe("blindness_rate");
         });
 
-        it("has the tabularData and bins", function() {
-            expect(this.task.tabularData).toBe(this.dataset);
+        it("has the dataset and bins", function() {
+            expect(this.task.dataset).toBe(this.dataset);
             expect(this.task.get("bins")).toBe("12")
         });
     })
@@ -846,8 +846,8 @@ describe("chorus.models.Dataset", function() {
             expect(this.task.get("yAxis")).toBe("height_in_inches");
         });
 
-        it("has the tabularData", function() {
-            expect(this.task.tabularData).toBe(this.dataset);
+        it("has the dataset", function() {
+            expect(this.task.dataset).toBe(this.dataset);
         });
 
         it("has the right timeType", function() {
@@ -897,8 +897,8 @@ describe("chorus.models.Dataset", function() {
             });
         });
 
-        it("returns a TabularDataAnalyze model", function() {
-            expect(this.dataset.analyze()).toBeA(chorus.models.TabularDataAnalyze);
+        it("returns a DatasetAnalyze model", function() {
+            expect(this.dataset.analyze()).toBeA(chorus.models.DatasetAnalyze);
         });
 
         it("memoizes", function() {

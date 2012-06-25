@@ -11,16 +11,16 @@ describe("chorus.dialogs.Visualization", function() {
             fixtures.databaseColumn(),
             fixtures.databaseColumn(),
             fixtures.databaseColumn()
-        ], {tabularData: this.dataset});
+        ], {dataset: this.dataset});
 
         this.chartOptions = {type: "boxplot", name: "Foo"};
 
-        var filter1 = new chorus.models.TabularDataFilter({column: this.columns.at(0), comparator: "equal", input: {value: "original_filter_value_a"}});
-        var filter2 = new chorus.models.TabularDataFilter({column: this.columns.at(1), comparator: "not_equal", input: {value: "original_filter_value_b"}});
-        var incompleteFilter1 = new chorus.models.TabularDataFilter({column: this.columns.at(2), comparator: "not_equal" });
-        var incompleteFilter2 = new chorus.models.TabularDataFilter({column: this.columns.at(2), comparator: "not_equal", input: {} });
+        var filter1 = new chorus.models.DatasetFilter({column: this.columns.at(0), comparator: "equal", input: {value: "original_filter_value_a"}});
+        var filter2 = new chorus.models.DatasetFilter({column: this.columns.at(1), comparator: "not_equal", input: {value: "original_filter_value_b"}});
+        var incompleteFilter1 = new chorus.models.DatasetFilter({column: this.columns.at(2), comparator: "not_equal" });
+        var incompleteFilter2 = new chorus.models.DatasetFilter({column: this.columns.at(2), comparator: "not_equal", input: {} });
 
-        this.filters = new chorus.collections.TabularDataFilterSet([filter1, filter2, incompleteFilter1, incompleteFilter2]);
+        this.filters = new chorus.collections.DatasetFilterSet([filter1, filter2, incompleteFilter1, incompleteFilter2]);
 
         spyOn(this.filters, "clone").andCallThrough();
         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, task: fixtures.boxplotTaskWithResult(), chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
@@ -59,7 +59,7 @@ describe("chorus.dialogs.Visualization", function() {
                 context("when task doesn't have workspace ( from instance browser page)", function() {
                     beforeEach(function() {
                         this.server.reset();
-                        var task = fixtures.boxplotTaskWithResult({tabularData : rspecFixtures.dataset()})
+                        var task = fixtures.boxplotTaskWithResult({dataset : rspecFixtures.dataset()})
                         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, task: task, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
                     });
                     it("doesn't add workspace as a requiredResources", function() {
@@ -80,8 +80,8 @@ describe("chorus.dialogs.Visualization", function() {
 
                 describe("there's only 1 filter", function() {
                     beforeEach(function() {
-                        var filter1 = new chorus.models.TabularDataFilter({column: this.columns.at(0), comparator: "equal", input: {value: "original_filter_value_a"}});
-                        var filters = new chorus.collections.TabularDataFilterSet([filter1]);
+                        var filter1 = new chorus.models.DatasetFilter({column: this.columns.at(0), comparator: "equal", input: {value: "original_filter_value_a"}});
+                        var filters = new chorus.collections.DatasetFilterSet([filter1]);
                         this.dialog.filters = filters;
                         this.dialog.launchModal();
                         this.dialog.drawChart();

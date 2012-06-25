@@ -13,16 +13,16 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
 
     _prepareModel: function(model, options) {
         model = this._super("_prepareModel", arguments);
-        if (this.attributes && this.attributes.tabularData) {
-            model.tabularData = this.attributes.tabularData;
+        if (this.attributes && this.attributes.dataset) {
+            model.dataset = this.attributes.dataset;
             model.initialize();
         }
         return model;
     },
 
     comparator: function(column) {
-        if (column.tabularData && column.tabularData.datasetNumber) {
-            return (column.tabularData.datasetNumber * 10000) + column.get('ordinalPosition');
+        if (column.dataset && column.dataset.datasetNumber) {
+            return (column.dataset.datasetNumber * 10000) + column.get('ordinalPosition');
         }
         return column.get('ordinalPosition');
     }

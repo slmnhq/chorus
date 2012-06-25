@@ -142,10 +142,10 @@ describe("chorus.views.SearchResults", function() {
                 });
 
                 context("and it is for a dataset", function() {
-                    it("triggers the 'tabularData:selected' event on itself, with the clicked model", function() {
+                    it("triggers the 'dataset:selected' event on itself, with the clicked model", function() {
                         var modelToClick = this.model.workspaceItems().at(1);
                         this.view.$(".this_workspace li").eq(1).click();
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", modelToClick);
+                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", modelToClick);
                     });
                 });
             });
@@ -175,10 +175,10 @@ describe("chorus.views.SearchResults", function() {
             });
 
             context("when the li is for a tabular data", function() {
-                it("broadcasts the 'tabularData:selected' page event, with the clicked tabular data", function() {
-                    var modelToClick = this.model.tabularData().at(0);
+                it("broadcasts the 'dataset:selected' page event, with the clicked tabular data", function() {
+                    var modelToClick = this.model.dataset().at(0);
                     this.view.$(".dataset_list li").eq(0).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("tabularData:selected", modelToClick);
+                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", modelToClick);
                 });
             });
 

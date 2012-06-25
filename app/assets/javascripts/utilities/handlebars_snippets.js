@@ -282,18 +282,18 @@
         attachmentFoundIn: function(model) {
             if (model.workspace()) {
                 var workspaceLink = model.workspace().showLink();
-                var datasetLink = model.tabularData().showLink();
-                return t("attachment.found_in.tabular_data_in_workspace", { workspaceLink: workspaceLink, tabularDataLink: datasetLink })
+                var datasetLink = model.dataset().showLink();
+                return t("attachment.found_in.dataset_in_workspace", { workspaceLink: workspaceLink, datasetLink: datasetLink })
             } else {
-                var datasetLink = model.tabularData().showLink();
-                return t("attachment.found_in.tabular_data_not_in_workspace", { tabularDataLink: datasetLink })
+                var datasetLink = model.dataset().showLink();
+                return t("attachment.found_in.dataset_not_in_workspace", { datasetLink: datasetLink })
             }
         },
 
-        tabularDataLocation: function(tabularData) {
-            var highlightedTabularData = chorus.helpers.withSearchResults(tabularData)
-            var instance = tabularData.instance();
-            var schema = tabularData.schema();
+        datasetLocation: function(dataset) {
+            var highlightedDataset = chorus.helpers.withSearchResults(dataset)
+            var instance = dataset.instance();
+            var schema = dataset.schema();
             var database = schema.database();
 
             var schemaPieces = [];
@@ -301,7 +301,7 @@
             var databaseName = chorus.helpers.withSearchResults(database).name()
             var schemaName = chorus.helpers.withSearchResults(schema).name()
 
-            if (tabularData.get('hasCredentials') === false) {
+            if (dataset.get('hasCredentials') === false) {
                 schemaPieces.push(instanceName);
                 schemaPieces.push(databaseName);
                 schemaPieces.push(schemaName);
@@ -349,11 +349,11 @@
             return modelOrAttributes;
         },
 
-        humanizedTabularDataType: function(tabularData) {
-            if (!tabularData) { return ""; }
+        humanizedDatasetType: function(dataset) {
+            if (!dataset) { return ""; }
 
-            var keys = ["dataset.types", tabularData.type];
-            if (tabularData.objectType) { keys.push(tabularData.objectType); }
+            var keys = ["dataset.types", dataset.type];
+            if (dataset.objectType) { keys.push(dataset.objectType); }
             var key = keys.join(".");
             return t(key);
         },

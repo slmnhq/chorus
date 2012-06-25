@@ -7,13 +7,13 @@ chorus.models.Artifact = chorus.models.Base.extend({
 
     showUrl: function(){
         var workspaceUrl = this.workspace() && this.workspace().get('id') && this.workspace().showUrl();
-        var tabularDataUrl = this.tabularData() && this.tabularData().showUrl();
+        var datasetUrl = this.dataset() && this.dataset().showUrl();
         var workfileUrl = this.workfile() && this.workfile().showUrl();
         var hdfsFileUrl = this.hdfsFile() && this.hdfsFile().showUrl();
         var instanceUrl = this.instance() && this.instance().showUrl();
         var hadoopInstanceUrl = this.hadoopInstance() && this.hadoopInstance().showUrl();
 
-        return tabularDataUrl ||
+        return datasetUrl ||
             (workspaceUrl && workfileUrl) ||
             hdfsFileUrl ||
             workspaceUrl ||
@@ -72,17 +72,17 @@ chorus.models.Artifact = chorus.models.Base.extend({
         return this._instance;
     },
 
-    tabularData: function() {
-        if(!this._tabularData) {
+    dataset: function() {
+        if(!this._dataset) {
             if(this.get("dataset")) {
                 if(_.isEmpty(this.get("workspace"))) {
-                    this._tabularData = new chorus.models.Dataset(this.get('dataset'));
+                    this._dataset = new chorus.models.Dataset(this.get('dataset'));
                 } else {
-                    this._tabularData = new chorus.models.WorkspaceDataset(this.get('dataset'));
-                    this._tabularData.set({ workspace: this.get('workspace') });
+                    this._dataset = new chorus.models.WorkspaceDataset(this.get('dataset'));
+                    this._dataset.set({ workspace: this.get('workspace') });
                 }
             }
         }
-        return this._tabularData;
+        return this._dataset;
     }
 });

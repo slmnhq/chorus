@@ -2,7 +2,7 @@ describe("chorus.views.SearchDataset", function() {
     beforeEach(function() {
         this.result = fixtures.searchResult();
         this.result.set({query: "foo"});
-        this.model = this.result.tabularData().models[0];
+        this.model = this.result.dataset().models[0];
         this.view = new chorus.views.SearchDataset({model: this.model});
         this.view.render();
     });
@@ -92,6 +92,6 @@ describe("chorus.views.SearchDataset", function() {
         var img = this.view.$(".icon");
         expect(img).toExist();
         expect(img).toHaveAttr("src", this.model.iconUrl())
-        expect(img).toHaveAttr("title", Handlebars.helpers.humanizedTabularDataType(this.model.attributes))
+        expect(img).toHaveAttr("title", Handlebars.helpers.humanizedDatasetType(this.model.attributes))
     });
 });

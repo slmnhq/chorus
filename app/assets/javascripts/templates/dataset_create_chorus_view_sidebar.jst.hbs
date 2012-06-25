@@ -12,9 +12,9 @@
             <div class="joins">
                 <span class="title">{{t "dataset.chorusview.sidebar.joins"}}</span>
                 {{#each joins}}
-                    <div class="join" data-cid={{destinationColumn.tabularData.cid}}>
-                        <span class="aliased_name"><span class="letter">{{sourceColumn.tabularData.aliasedName}}</span></span><span class="column" title="{{sourceColumn.attributes.name}}">{{sourceColumn.attributes.name}}</span> =
-                        <span class="aliased_name"><span class="letter">{{destinationColumn.tabularData.aliasedName}}</span></span><span class="column" title="{{destinationColumn.attributes.name}}">{{destinationColumn.attributes.name}}</span>
+                    <div class="join" data-cid={{destinationColumn.dataset.cid}}>
+                        <span class="aliased_name"><span class="letter">{{sourceColumn.dataset.aliasedName}}</span></span><span class="column" title="{{sourceColumn.attributes.name}}">{{sourceColumn.attributes.name}}</span> =
+                        <span class="aliased_name"><span class="letter">{{destinationColumn.dataset.aliasedName}}</span></span><span class="column" title="{{destinationColumn.attributes.name}}">{{destinationColumn.attributes.name}}</span>
                         <img class="delete" src="images/trashcan.png" />
                     </div>
                 {{/each}}
@@ -43,8 +43,8 @@
 
         {{#each joins}}
             <div class="dataset">
-                <span class="aliased_name"><span class="letter">{{destinationColumn.tabularData.aliasedName}}</span></span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
-                <span class="name" title="{{destinationColumn.tabularData.attributes.objectName}}">{{destinationColumn.tabularData.attributes.objectName}}</span>
+                <span class="aliased_name"><span class="letter">{{destinationColumn.dataset.aliasedName}}</span></span><span class="label">{{t "dataset.statistics.dataset"}}:</span>
+                <span class="name" title="{{destinationColumn.dataset.attributes.objectName}}">{{destinationColumn.dataset.attributes.objectName}}</span>
             </div>
             {{#if columns.length}}
                 <ul class="columns">

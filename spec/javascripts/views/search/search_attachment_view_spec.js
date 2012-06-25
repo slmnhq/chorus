@@ -23,10 +23,10 @@ describe("chorus.views.SearchAttachment", function() {
             var encoded_id = encodeURIComponent('"10000"|"dca_demo"|"ddemo"|"TABLE"|"2010_report_on_white_house"');
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
-                "attachment.found_in.tabular_data_in_workspace",
+                "attachment.found_in.dataset_in_workspace",
                 {
                     workspaceLink: '<a href="#/workspaces/33333">ws</a>',
-                    tabularDataLink: '<a href="#/workspaces/33333/datasets/' + this.result.tabularData().id + '">2010_report_on_white_house</a>'
+                    datasetLink: '<a href="#/workspaces/33333/datasets/' + this.result.dataset().id + '">2010_report_on_white_house</a>'
                 }
             );
         });
@@ -42,9 +42,9 @@ describe("chorus.views.SearchAttachment", function() {
         it("shows the tabular data set", function() {
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
-                "attachment.found_in.tabular_data_not_in_workspace",
+                "attachment.found_in.dataset_not_in_workspace",
                 {
-                    tabularDataLink: '<a href="#/datasets/' + this.result.tabularData().id  + '">2010_report_on_white_house</a>'
+                    datasetLink: '<a href="#/datasets/' + this.result.dataset().id  + '">2010_report_on_white_house</a>'
                 }
             );
         });

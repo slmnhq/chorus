@@ -3,7 +3,7 @@
 
     var collectionMap = {
         hdfs: "HdfsEntrySet",
-        tabularData: "TabularDataSet",
+        dataset: "DynamicDatasetSet",
         workfiles: "WorkfileSet",
         workspaces: "WorkspaceSet",
         workspaceItems: "WorkspaceItemSet",
@@ -124,7 +124,7 @@
         },
 
         workfiles: makeCollectionMethod("workfiles"),
-        tabularData: makeCollectionMethod("tabularData"),
+        dataset: makeCollectionMethod("dataset"),
         workspaces: makeCollectionMethod("workspaces"),
         instances: makeCollectionMethod("instances"),
         users: makeCollectionMethod("users"),
@@ -144,7 +144,7 @@
                     return this.workfiles()
                     break;
                 case "dataset":
-                    return this.tabularData();
+                    return this.dataset();
                     break;
                 case "instance":
                     return this.instances();

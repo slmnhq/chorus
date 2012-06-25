@@ -1,7 +1,7 @@
-describe("chorus.models.TabularDataDownloadConfiguration", function() {
+describe("chorus.models.DatasetDownloadConfiguration", function() {
     var model;
     beforeEach(function() {
-        model = new chorus.models.TabularDataDownloadConfiguration();
+        model = new chorus.models.DatasetDownloadConfiguration();
     });
 
     context("entering a valid positive number", function() {

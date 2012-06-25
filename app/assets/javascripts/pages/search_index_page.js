@@ -78,7 +78,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             user: new chorus.views.UserSidebar({listMode: true}),
             workfile: new chorus.views.WorkfileListSidebar(),
             workspace: new chorus.views.WorkspaceListSidebar(),
-            tabularData: new chorus.views.TabularDataSidebar({listMode: true}),
+            dataset: new chorus.views.DatasetSidebar({listMode: true}),
             instance: new chorus.views.InstanceListSidebar(),
             attachment: new chorus.views.ArtifactListSidebar()
         };
@@ -86,7 +86,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         // explicitly set up bindings after initializing sidebar collection
         chorus.PageEvents.subscribe("hdfs_entry:selected", this.hdfsSelected, this);
         chorus.PageEvents.subscribe("workspace:selected", this.workspaceSelected, this);
-        chorus.PageEvents.subscribe("tabularData:selected", this.tabularDataSelected, this);
+        chorus.PageEvents.subscribe("dataset:selected", this.datasetSelected, this);
         chorus.PageEvents.subscribe("workfile:selected", this.workfileSelected, this);
         chorus.PageEvents.subscribe("user:selected", this.userSelected, this);
         chorus.PageEvents.subscribe("instance:selected", this.instanceSelected, this);
@@ -104,8 +104,8 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.renderSidebar(this.sidebars.workspace);
     },
 
-    tabularDataSelected: function() {
-        this.renderSidebar(this.sidebars.tabularData);
+    datasetSelected: function() {
+        this.renderSidebar(this.sidebars.dataset);
     },
 
     workfileSelected: function() {

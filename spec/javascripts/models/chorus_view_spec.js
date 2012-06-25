@@ -48,7 +48,7 @@ describe("chorus.models.ChorusView", function() {
             spyOnEvent(this.model.aggregateColumnSet, 'join:added');
             this.sourceColumn = this.sourceDataset.columns().models[0];
             this.destinationColumn = addJoin(this, this.sourceColumn);
-            this.destinationDataset = this.destinationColumn.tabularData;
+            this.destinationDataset = this.destinationColumn.dataset;
         });
 
         it("saves the table", function() {
@@ -64,9 +64,9 @@ describe("chorus.models.ChorusView", function() {
         });
 
         it("assigns the join the next datasetNumber", function() {
-            expect(this.destinationColumn.tabularData.datasetNumber).toBe(2);
+            expect(this.destinationColumn.dataset.datasetNumber).toBe(2);
             var thirdDestinationColumn = addJoin(this);
-            expect(thirdDestinationColumn.tabularData.datasetNumber).toBe(3);
+            expect(thirdDestinationColumn.dataset.datasetNumber).toBe(3);
         });
 
         it("triggers change and join:added on the aggregate column set (so that column list views re-render)", function() {
@@ -90,7 +90,7 @@ describe("chorus.models.ChorusView", function() {
 
             it("reorders existing joins", function() {
                 _.each(this.model.joins, function(join, index) {
-                    expect(join.destinationColumn.tabularData.datasetNumber).toBe(index + 2);
+                    expect(join.destinationColumn.dataset.datasetNumber).toBe(index + 2);
                 })
             })
 
@@ -258,7 +258,7 @@ describe("chorus.models.ChorusView", function() {
             it("has the second table joined in", function() {
                 var lines = this.model.generateFromClause().split('\n');
                 expect(lines[0]).toBe('FROM ' + this.sourceDataset.get("schema").name + '.' + this.sourceDataset.quotedName());
-                expect(lines[1]).toBe('\tINNER JOIN ' + this.firstJoinedColumn.tabularData.fromClause() + ' ON '
+                expect(lines[1]).toBe('\tINNER JOIN ' + this.firstJoinedColumn.dataset.fromClause() + ' ON '
                     + this.sourceColumn.quotedName() + " = " + this.firstJoinedColumn.quotedName());
             })
         })
@@ -318,7 +318,7 @@ describe("chorus.models.ChorusView", function() {
                 beforeEach(function() {
                     var joinedColumn = addJoin(this);
                     joinedColumn.set({name: 'baz'});
-                    this.joinedDataset = joinedColumn.tabularData;
+                    this.joinedDataset = joinedColumn.dataset;
                     this.model.addColumn(joinedColumn);
                 });
 

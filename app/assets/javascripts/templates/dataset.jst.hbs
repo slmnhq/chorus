@@ -6,11 +6,11 @@
 
 {{#ifAll hasCredentials viewable}}
     <a class="image" href="{{showUrl}}">
-        <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
+        <img src="{{iconImgUrl}}" title="{{humanizedDatasetType this}}"/>
     </a>
 {{else}}
     <span class="image">
-        <img src="{{iconImgUrl}}" title="{{humanizedTabularDataType this}}"/>
+        <img src="{{iconImgUrl}}" title="{{humanizedDatasetType this}}"/>
     </span>
 {{/ifAll}}
 
@@ -25,7 +25,7 @@
     {{/ifAll}}
 
     <div class="location">
-        {{tabularDataLocation resource}}
+        {{datasetLocation resource}}
     </div>
 
     {{usedInWorkspaces workspaces dataset}}

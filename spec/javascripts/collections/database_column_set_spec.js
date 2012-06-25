@@ -19,9 +19,9 @@ describe("chorus.collections.DatabaseColumnSet", function() {
         })
 
         describe("add", function() {
-            it("sets tabularData on the added column", function() {
+            it("sets dataset on the added column", function() {
                 this.columns.add(fixtures.databaseColumn());
-                expect(this.columns.models[0].tabularData).toBe(this.columns.attributes.tabularData);
+                expect(this.columns.models[0].dataset).toBe(this.columns.attributes.dataset);
             })
 
             it("calls initialize on the column", function() {

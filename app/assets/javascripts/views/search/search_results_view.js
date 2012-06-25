@@ -8,7 +8,7 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         ".user_list":          "userList",
         ".workfile_list":      "workfileList",
         ".workspace_list":     "workspaceList",
-        ".dataset_list":       "tabularDataList",
+        ".dataset_list":       "datasetList",
         ".instance_list":      "instanceList",
         ".attachment_list":    "attachmentList"
     },
@@ -30,8 +30,8 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         if (this.model.workspaces().length) {
             this.workspaceList = this.buildListView('workspace', this.model.workspaces());
         }
-        if (this.model.tabularData().length) {
-            this.tabularDataList = this.buildListView('dataset', this.model.tabularData());
+        if (this.model.dataset().length) {
+            this.datasetList = this.buildListView('dataset', this.model.dataset());
         }
         if (this.model.instances().length) {
             this.instanceList = this.buildListView('instance', this.model.instances());

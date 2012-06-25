@@ -37,7 +37,7 @@
 //= require alerts
 //= require views/sidebar_view
 //= require views/selectable_list_view
-//= require views/tabular_data/chart_configuration_view
+//= require views/dataset/chart_configuration_view
 //= require views/database_sidebar_list_view
 //= require views/utilities/code_editor_view
 //= require views/workfiles/workfile_content_details_view
@@ -48,7 +48,8 @@
 //= require dialogs/pick_items_dialog
 //= require dialogs/workspaces/pick_workspace_dialog
 //= require dialogs/memo_new_dialog
-//= require dialogs/tabular_data/new_table_import_csv
+//= require dialogs/dataset/new_table_import_csv
+//= require dialogs/sql_preview_dialog
 //= require models/dataset
 //= require models/workspace_dataset
 //= require models/instance
@@ -59,11 +60,11 @@
 //= require_tree ./models
 //= require collections/instance_set
 //= require collections/hdfs_entry_set
-//= require collections/tabular_data_set
+//= require collections/dataset_set
 //= require collections/user_set
 //= require collections/workfile_set
 //= require collections/workspace_set
-//= require pages/tabular_data/tabular_data_show_page
+//= require pages/dataset/dataset_show_page
 //= require pages/search_index_page
 //= require pages/workspaces/workspace_show_page
 //= require_tree .

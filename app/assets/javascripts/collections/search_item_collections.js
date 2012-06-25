@@ -25,8 +25,8 @@
 
     var constructorMap = {
         workfile: chorus.models.Workfile,
-        dataset: chorus.models.DynamicTabularData,
-        chorusView: chorus.models.DynamicTabularData,
+        dataset: chorus.models.DynamicDataset,
+        chorusView: chorus.models.DynamicDataset,
         workspace: chorus.models.Workspace,
         attachment: chorus.models.Artifact
     };
@@ -54,7 +54,7 @@
         searchKey: "instance"
     });
 
-    chorus.collections.Search.TabularDataSet = chorus.collections.TabularDataSet.include(
+    chorus.collections.Search.DynamicDatasetSet = chorus.collections.DynamicDatasetSet.include(
         searchCollectionMixins
     ).extend({
         searchKey: "dataset"

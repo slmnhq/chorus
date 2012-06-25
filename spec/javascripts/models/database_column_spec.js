@@ -4,7 +4,7 @@ describe("chorus.models.DatabaseColumn", function() {
     });
 
     describe("#initialize", function() {
-        context("when there is not tabularData", function() {
+        context("when there is not dataset", function() {
             beforeEach(function() {
                 this.model.initialize();
             });
@@ -18,10 +18,10 @@ describe("chorus.models.DatabaseColumn", function() {
             })
         });
 
-        context("when there is tabularData", function() {
+        context("when there is dataset", function() {
             beforeEach(function() {
-                this.tabularData = newFixtures.workspaceDataset.sandboxTable({objectName: 'taaab', schemaName: 'partyman'});
-                this.model.tabularData = this.tabularData;
+                this.dataset = newFixtures.workspaceDataset.sandboxTable({objectName: 'taaab', schemaName: 'partyman'});
+                this.model.dataset = this.dataset;
                 this.model.initialize();
             });
 

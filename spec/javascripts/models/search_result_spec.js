@@ -277,10 +277,10 @@ describe("chorus.models.SearchResult", function() {
             });
         });
 
-        describe("#tabularData", function() {
+        describe("#dataset", function() {
             it("returns a collection of tabular data", function() {
                 this.model = fixtures.searchResult();
-                expect(this.model.tabularData()).toBeA(chorus.collections.Search.TabularDataSet);
+                expect(this.model.dataset()).toBeA(chorus.collections.Search.DynamicDatasetSet);
             });
         });
 
@@ -320,7 +320,7 @@ describe("chorus.models.SearchResult", function() {
 
                 var methodCollectionPairs = {
                     hdfs: "HdfsEntrySet",
-                    tabularData: "TabularDataSet",
+                    dataset: "DynamicDatasetSet",
                     workfiles: "WorkfileSet",
                     workspaces: "WorkspaceSet",
                     workspaceItems: "WorkspaceItemSet",
@@ -489,7 +489,7 @@ describe("chorus.models.SearchResult", function() {
                 }
             });
 
-            this.model.selectedItem = searchResult.tabularData().at(0);
+            this.model.selectedItem = searchResult.dataset().at(0);
             spyOn(this.model.selectedItem, "download");
             this.model.download({ "theOption": "isTrue" });
         });
@@ -504,7 +504,7 @@ describe("chorus.models.SearchResult", function() {
         beforeEach(function() {
             searchResult = fixtures.searchResult();
 
-            this.model.selectedItem = searchResult.tabularData().at(0);
+            this.model.selectedItem = searchResult.dataset().at(0);
             this.model.selectedItem.set({"objectName": "the_name"})
         });
 

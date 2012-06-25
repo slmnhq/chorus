@@ -3,7 +3,7 @@ describe("chorus.models.ChartTask", function() {
         this.dataset = newFixtures.workspaceDataset.sandboxTable({schema: {name: 'animals'}, objectName: 'dog_breeds'});
         var chartSubclass = chorus.models.ChartTask.extend({});
         chartSubclass.prototype.chartType = "fantastic";
-        this.model = new chartSubclass({ tabularData: this.dataset });
+        this.model = new chartSubclass({ dataset: this.dataset });
     });
 
     it("has the right name", function() {
