@@ -71,7 +71,7 @@ describe DatasetsController do
       decoded_response.object_type.should == "TABLE"
     end
 
-    generate_fixture "databaseObject.json" do
+    generate_fixture "dataset.json" do
       get :show, :id => table.to_param
     end
   end

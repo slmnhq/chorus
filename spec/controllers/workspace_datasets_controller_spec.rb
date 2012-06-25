@@ -85,7 +85,7 @@ describe WorkspaceDatasetsController do
           get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
         end
 
-        generate_fixture "dataset/datasetTable.json" do
+        generate_fixture "workspaceDataset/datasetTable.json" do
           get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
         end
       end
@@ -93,7 +93,7 @@ describe WorkspaceDatasetsController do
       context "when the dataset is a view" do
         let(:dataset) { gpdb_view }
 
-        generate_fixture "dataset/datasetView.json" do
+        generate_fixture "workspaceDataset/datasetView.json" do
           get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
         end
       end
