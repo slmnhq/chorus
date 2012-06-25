@@ -51,7 +51,7 @@ end
 
 group :development do
   #gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
-  gem 'jetpack'
+  gem 'jetpack', :git => "git://github.com/bdon/jetpack.git", :branch => 'old'
 end
 
 # To use ActiveModel has_secure_password
