@@ -77,10 +77,12 @@ describe "creating a note on a workspace" do
     workspace_name = "#{Forgery::Name.first_name}'s Workspace'"
     create_valid_workspace(:name => workspace_name)
     click_link "Edit Workspace"
-    wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
+    wait_for_ajax
+
     within("#facebox") do
       choose("workspace_archived")
       find(".submit").click
+      wait_for_ajax
     end
 
     within(".actions") do
@@ -103,9 +105,11 @@ describe "creating a note on a workspace" do
     end
 
     click_link(workspace_name)
+    wait_for_ajax
 
     click_link "Edit Workspace"
-    wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
+    wait_for_ajax
+
     within("#facebox") do
       choose("workspace_active")
       find(".submit").click
