@@ -7,7 +7,10 @@ rbenv shell `cat .rbenv-version`
 ruby -v | grep "jruby 1.6.7"
 gem list bundler | grep bundler || gem install bundler
 bundle install
-rake legacy:setup db:migrate db:test:prepare db:test:prepare:legacy
+rake legacy:setup
+rake db:migrate
+rake db:test:prepare
+rake db:test:prepare:legacy
 
 # Run rspec unit tests
 script/test 2>&1
