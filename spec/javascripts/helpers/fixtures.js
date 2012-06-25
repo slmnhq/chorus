@@ -711,7 +711,7 @@ beforeEach(function() {
                 type: "SOURCE_TABLE",
                 definition: "DROP TABLE users"
             }, overrides);
-            return new chorus.models.DatabaseObjectStatistics(attributes);
+            return new chorus.models.DatasetStatistics(attributes);
         },
 
         datasetStatisticsTable: function(overrides) {
@@ -724,7 +724,7 @@ beforeEach(function() {
                 objectType: "TABLE",
                 type: "SOURCE_TABLE"
             }, overrides);
-            return new chorus.models.DatabaseObjectStatistics(attributes);
+            return new chorus.models.DatasetStatistics(attributes);
         },
 
         datasetExternalTable: function(overrides) {

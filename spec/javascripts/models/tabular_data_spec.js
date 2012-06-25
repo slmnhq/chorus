@@ -29,8 +29,8 @@ describe("chorus.models.TabularData", function() {
             this.statistics = this.tabularData.statistics()
         });
 
-        it("returns an instance of DatabaseObjectStatistics", function() {
-            expect(this.statistics).toBeA(chorus.models.DatabaseObjectStatistics)
+        it("returns an instance of DatasetStatistics", function() {
+            expect(this.statistics).toBeA(chorus.models.DatasetStatistics)
         });
 
         it("should memoize the result", function() {

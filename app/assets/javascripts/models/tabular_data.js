@@ -71,7 +71,7 @@ chorus.models.TabularData = chorus.models.Base.include(
 
         statistics: function() {
             if (!this._statistics) {
-                this._statistics = new chorus.models.DatabaseObjectStatistics({ datasetId: this.id });
+                this._statistics = new chorus.models.DatasetStatistics({ datasetId: this.id });
             }
 
             return this._statistics;
