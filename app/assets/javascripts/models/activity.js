@@ -109,7 +109,7 @@
                             klass = chorus.models.Workfile;
                             break;
                         case 'chorusView':
-                        case 'databaseObject':
+                        case 'dataset':
                             klass = chorus.models.WorkspaceDataset;
                             break;
                         default:

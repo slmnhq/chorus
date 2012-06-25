@@ -42,9 +42,9 @@ chorus.dialogs.ImportDatasetsPicker = chorus.dialogs.PickItems.extend({
         e && e.preventDefault();
 
         var clickedId = $(e.target).closest("li").data("id");
-        var databaseObject = this.collection.get(clickedId);
+        var dataset = this.collection.get(clickedId);
 
-        var previewColumnsDialog = new chorus.dialogs.PreviewColumns({model: databaseObject});
+        var previewColumnsDialog = new chorus.dialogs.PreviewColumns({model: dataset});
         previewColumnsDialog.title = this.title;
         this.launchSubModal(previewColumnsDialog);
     }

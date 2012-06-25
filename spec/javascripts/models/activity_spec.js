@@ -241,7 +241,7 @@ describe("chorus.models.Activity", function() {
         });
 
         xit("should retain the data", function() {
-           expect(this.parentComment.databaseObject().name()).toBe(this.model.get("parentComment").databaseObject.name);
+           expect(this.parentComment.dataset().name()).toBe(this.model.get("parentComment").dataset.name);
         });
 
         it("memoizes", function() {
@@ -255,7 +255,7 @@ describe("chorus.models.Activity", function() {
                 artifacts: [
                     { entityType: "workfile", id: 1 },
                     { entityType: "artifact", id: 2 },
-                    { entityType: "databaseObject", id: 3 },
+                    { entityType: "dataset", id: 3 },
                     { entityType: "chorusView", id: 4 }
                 ]
             });

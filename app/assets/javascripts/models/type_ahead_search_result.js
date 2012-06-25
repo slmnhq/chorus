@@ -21,7 +21,7 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                 case "hdfs":
                     return new chorus.models.HdfsEntry(result);
                     break;
-                case "databaseObject":
+                case "dataset":
                     return new chorus.models.Dataset(result);
                     break;
                 case "chorusView":

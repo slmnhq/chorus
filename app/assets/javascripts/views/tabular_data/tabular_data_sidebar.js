@@ -125,7 +125,7 @@ chorus.views.TabularDataSidebar = chorus.views.Sidebar.extend({
     launchAssociateMultipleWithWorkspaceDialog: function(e) {
         e.preventDefault();
 
-        new chorus.dialogs.AssociateMultipleWithWorkspace({databaseObjects: this.checkedDatasets, activeOnly: true}).launchModal();
+        new chorus.dialogs.AssociateMultipleWithWorkspace({datasets: this.checkedDatasets, activeOnly: true}).launchModal();
     },
 
     launchTabularDataPreviewDialog: function(e) {

@@ -72,12 +72,12 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workfile");
         });
 
-        it("should display the correct name and type for databaseObject", function() {
-            var databaseObject = this.result.get("typeAhead").docs[6];
+        it("should display the correct name and type for dataset", function() {
+            var dataset = this.result.get("typeAhead").docs[6];
             var result = this.view.$("li.result:eq(5)");
-            expect(result.find(".name").html()).toBe(databaseObject.highlightedAttributes.objectName[0]);
-            expect(result.find(".name").attr("href")).toBe((new chorus.models.Dataset(databaseObject)).showUrl());
-            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.databaseObject");
+            expect(result.find(".name").html()).toBe(dataset.highlightedAttributes.objectName[0]);
+            expect(result.find(".name").attr("href")).toBe((new chorus.models.Dataset(dataset)).showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.dataset");
         });
 
         it("should display the correct name and type for chorusView", function() {

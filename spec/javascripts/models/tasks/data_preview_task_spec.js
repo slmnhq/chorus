@@ -1,7 +1,7 @@
 describe("chorus.models.DataPreviewTask", function() {
     beforeEach(function() {
         this.model = new chorus.models.DataPreviewTask({
-            databaseObject: {id: 1234},
+            dataset: {id: 1234},
             rows: [
                 ["1", "2"],
                 ["3", "4"]

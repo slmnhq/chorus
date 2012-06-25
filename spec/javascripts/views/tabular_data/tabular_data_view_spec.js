@@ -38,9 +38,9 @@ describe("chorus.views.TabularData", function() {
 
     xdescribe("found in workspaces tooltip (when rendered from the schema browse page)", function() {
         beforeEach(function() {
-            this.databaseObject = rspecFixtures.dataset();
+            this.dataset = rspecFixtures.dataset();
 
-            this.view = new chorus.views.TabularData({ model: this.databaseObject, activeWorkspace: true });
+            this.view = new chorus.views.TabularData({ model: this.dataset, activeWorkspace: true });
             this.view.render();
         });
 
@@ -57,8 +57,8 @@ describe("chorus.views.TabularData", function() {
 
         context("when the dataset is not used in any workspace", function() {
             beforeEach(function() {
-                this.databaseObject.unset("workspaceUsed");
-                delete this.databaseObject._workspaceAssociated;
+                this.dataset.unset("workspaceUsed");
+                delete this.dataset._workspaceAssociated;
                 this.view.render();
             });
 

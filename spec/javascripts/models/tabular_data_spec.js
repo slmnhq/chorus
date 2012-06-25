@@ -251,7 +251,7 @@ describe("chorus.models.TabularData", function() {
 
             it("should return a database preview", function() {
                 expect(this.preview).toBeA(chorus.models.DataPreviewTask);
-                expect(this.preview.get("databaseObject").id).toBe(this.tabularData.id);
+                expect(this.preview.get("dataset").id).toBe(this.tabularData.id);
             });
         });
 
@@ -265,7 +265,7 @@ describe("chorus.models.TabularData", function() {
 
             it("should return a database preview", function() {
                 expect(this.preview).toBeA(chorus.models.DataPreviewTask);
-                expect(this.preview.get("databaseObject").id).toBe(this.tabularData.id);
+                expect(this.preview.get("dataset").id).toBe(this.tabularData.id);
             });
         });
 

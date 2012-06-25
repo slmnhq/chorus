@@ -25,7 +25,7 @@
 
     var constructorMap = {
         workfile: chorus.models.Workfile,
-        databaseObject: chorus.models.DynamicTabularData,
+        dataset: chorus.models.DynamicTabularData,
         chorusView: chorus.models.DynamicTabularData,
         workspace: chorus.models.Workspace,
         attachment: chorus.models.Artifact

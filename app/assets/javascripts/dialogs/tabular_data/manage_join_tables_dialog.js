@@ -24,10 +24,10 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         this.schemas = schema.database().schemas();
         this.requiredResources.add(this.schemas);
         this.schemas.fetch();
-        this.fetchDatabaseObjects(schema.databaseObjects());
+        this.fetchDatasets(schema.datasets());
     },
 
-    fetchDatabaseObjects: function(dbObjects) {
+    fetchDatasets: function(dbObjects) {
         this.resource = this.collection = dbObjects;
         this.paginatedJoinTables = new chorus.views.PaginatedJoinTablesList({collection: dbObjects });
         this.renderSubviews();
@@ -35,15 +35,15 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     },
 
     schemaSelected: function(schema) {
-        var dbObjects = schema.databaseObjects();
-        this.fetchDatabaseObjects(dbObjects);
+        var dbObjects = schema.datasets();
+        this.fetchDatasets(dbObjects);
         this.displaySchemaName(schema.get("name"));
     },
 
     joinableDatasetsSelected: function() {
         var workspace = this.pageModel.workspace();
         var datasets = workspace.datasetsInDatabase(this.pageModel.schema().database());
-        this.fetchDatabaseObjects(datasets);
+        this.fetchDatasets(datasets);
         this.displaySchemaName(t("dataset.manage_join_tables.this_workspace"));
     },
 
@@ -91,11 +91,11 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
     joinLinkClicked: function(e) {
         e.preventDefault();
         var clickedId = $(e.target).closest("li").data("cid")
-        var databaseObject = this.collection.getByCid(clickedId);
+        var dataset = this.collection.getByCid(clickedId);
 
         var joinConfigurationDialog = new chorus.dialogs.JoinConfiguration({
             model: this.model,
-            destinationObject: databaseObject.clone()
+            destinationObject: dataset.clone()
         });
         this.launchSubModal(joinConfigurationDialog);
     },
@@ -104,9 +104,9 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
         e.preventDefault();
 
         var clickedId = $(e.target).closest("li").data("cid")
-        var databaseObject = this.collection.getByCid(clickedId);
+        var dataset = this.collection.getByCid(clickedId);
 
-        var previewColumnsDialog = new chorus.dialogs.PreviewColumns({model: databaseObject});
+        var previewColumnsDialog = new chorus.dialogs.PreviewColumns({model: dataset});
         this.launchSubModal(previewColumnsDialog);
     },
 

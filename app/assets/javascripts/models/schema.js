@@ -11,11 +11,11 @@ chorus.models.Schema = chorus.models.Base.extend({
         return this._schemaFunctions;
     },
 
-    databaseObjects: function() {
-        if (!this._databaseObjects) {
-            this._databaseObjects = new chorus.collections.DatasetSet([], { schemaId: this.id });
+    datasets: function() {
+        if (!this._datasets) {
+            this._datasets = new chorus.collections.DatasetSet([], { schemaId: this.id });
         }
-        return this._databaseObjects;
+        return this._datasets;
     },
 
     database: function() {

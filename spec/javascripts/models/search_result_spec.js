@@ -234,7 +234,7 @@ describe("chorus.models.SearchResult", function() {
                     numFound: 171,
                     docs: [
                         fixtures.searchResultWorkfileJson(),
-                        fixtures.searchResultDatabaseObjectJson(),
+                        fixtures.searchResultDatasetJson(),
                         fixtures.searchResultChorusViewJson(),
                         fixtures.searchResultWorkspaceJson()
                     ]
@@ -484,7 +484,7 @@ describe("chorus.models.SearchResult", function() {
                 thisWorkspace: {
                     numFound: 171,
                     docs: [
-                        fixtures.searchResultDatabaseObjectJson()
+                        fixtures.searchResultDatasetJson()
                     ]
                 }
             });

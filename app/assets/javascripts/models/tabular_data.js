@@ -108,7 +108,7 @@ chorus.models.TabularData = chorus.models.Base.include(
                     objectName: this.name()
                 });
             } else {
-                return new chorus.models.DataPreviewTask({databaseObject: {id: this.id}});
+                return new chorus.models.DataPreviewTask({dataset: {id: this.id}});
             }
         },
 
@@ -275,8 +275,8 @@ chorus.models.TabularData = chorus.models.Base.include(
         },
 
         entityTypeMap: {
-            "SOURCE_TABLE": "databaseObject",
-            "SANDBOX_TABLE": "databaseObject",
+            "SOURCE_TABLE": "dataset",
+            "SANDBOX_TABLE": "dataset",
             "CHORUS_VIEW": "chorusView"
         },
 

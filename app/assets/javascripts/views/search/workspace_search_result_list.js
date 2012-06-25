@@ -1,7 +1,7 @@
 (function() {
     var viewConstructorMap = {
         workfile:       chorus.views.SearchWorkfile,
-        databaseObject: chorus.views.SearchDataset,
+        dataset: chorus.views.SearchDataset,
         chorusView:     chorus.views.SearchDataset,
         workspace:      chorus.views.SearchWorkspace,
         attachment:     chorus.views.SearchAttachment

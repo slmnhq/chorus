@@ -38,7 +38,7 @@ chorus.views.DatabaseDatasetSidebarList = chorus.views.DatabaseSidebarList.exten
 
             this.collection.fetch();
         } else {
-            this.collection = this.schema.databaseObjects();
+            this.collection = this.schema.datasets();
             this.collection.fetchIfNotLoaded();
         }
 

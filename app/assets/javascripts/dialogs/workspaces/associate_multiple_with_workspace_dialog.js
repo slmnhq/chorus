@@ -5,7 +5,7 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
     submitButtonTranslationKey: "dataset.associate.button.other",
 
     setup: function(options) {
-        this.databaseObjects = options.databaseObjects;
+        this.datasets = options.datasets;
         this.requiredResources.add(this.collection);
         this._super('setup', arguments);
     },
@@ -16,7 +16,7 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
 
         var workspace = this.selectedItem();
         var datasetSet = workspace.datasets();
-        datasetSet.reset(this.databaseObjects.models);
+        datasetSet.reset(this.datasets.models);
 
         this.bindings.add(datasetSet, "saved", this.saved);
 
@@ -27,7 +27,7 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
         this.closeModal();
         chorus.toast("dataset.associate.toast.other", {
             workspaceNameTarget: this.selectedItem().get("name"),
-            count: this.databaseObjects.length
+            count: this.datasets.length
         });
     }
 });

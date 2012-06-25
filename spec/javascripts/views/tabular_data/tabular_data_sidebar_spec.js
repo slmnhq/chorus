@@ -914,7 +914,7 @@ describe("chorus.views.TabularDataSidebar", function() {
                     it("launches the dialog for associating multiple datasets with a workspace", function() {
                         var dialog = this.modalSpy.lastModal();
                         expect(dialog).toBeA(chorus.dialogs.AssociateMultipleWithWorkspace);
-                        expect(dialog.databaseObjects).toBe(this.checkedDatasets);
+                        expect(dialog.datasets).toBe(this.checkedDatasets);
                     });
                 });
 

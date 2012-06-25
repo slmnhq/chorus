@@ -2,8 +2,8 @@ describe("chorus.dialogs.PreviewColumns", function() {
     beforeEach(function() {
         stubModals();
         spyOn(chorus, "search");
-        this.databaseObject = newFixtures.workspaceDataset.sourceTable();
-        this.dialog = new chorus.dialogs.PreviewColumns({model: this.databaseObject});
+        this.dataset = newFixtures.workspaceDataset.sourceTable();
+        this.dialog = new chorus.dialogs.PreviewColumns({model: this.dataset});
         this.dialog.render();
     });
 
@@ -12,12 +12,12 @@ describe("chorus.dialogs.PreviewColumns", function() {
     });
 
     it("fetches the table or view's columns", function() {
-        expect(this.databaseObject.columns()).toHaveBeenFetched();
+        expect(this.dataset.columns()).toHaveBeenFetched();
     });
 
     describe("when the fetch completes successfully", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.databaseObject.columns(), [
+            this.server.completeFetchFor(this.dataset.columns(), [
                 fixtures.databaseColumn({name: "Rhino", recentComment: "awesome", type: "text" }),
                 fixtures.databaseColumn({name: "Giraffe", recentComment: "tall", type: "float8" }),
                 fixtures.databaseColumn({name: "Sloth", recentComment: "lazy", type: "int4" }),
@@ -43,7 +43,7 @@ describe("chorus.dialogs.PreviewColumns", function() {
         });
 
         it("displays the table's name and column count in the sub-header", function() {
-            expect(this.dialog.$(".sub_header .name").text()).toBe(this.databaseObject.get("objectName"));
+            expect(this.dialog.$(".sub_header .name").text()).toBe(this.dataset.get("objectName"));
             expect(this.dialog.$(".sub_header .column_count").text()).toBe("(4)");
         });
 
@@ -88,7 +88,7 @@ describe("chorus.dialogs.PreviewColumns", function() {
         });
 
         it("copies the serverErrors to the dialog model", function() {
-            expect(this.dialog.model.serverErrors).toEqual(this.databaseObject.columns().serverErrors)
+            expect(this.dialog.model.serverErrors).toEqual(this.dataset.columns().serverErrors)
         });
 
         it("closes itself", function() {

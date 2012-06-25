@@ -1,9 +1,9 @@
 describe("chorus.pages.TabularDataShowPage", function() {
     beforeEach(function() {
-        this.databaseObject = rspecFixtures.dataset();
-        this.columnSet = this.databaseObject.columns();
+        this.dataset = rspecFixtures.dataset();
+        this.columnSet = this.dataset.columns();
         this.page = new chorus.pages.TabularDataShowPage(
-            this.databaseObject.id
+            this.dataset.id
         );
     });
 
@@ -12,7 +12,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
     });
 
     it("has a helpId", function() {
-        expect(this.page.helpId).toBe("databaseObject")
+        expect(this.page.helpId).toBe("dataset")
     });
 
     it("has the right #failurePageOptions (for populating the content of a 404 page)", function() {
@@ -26,9 +26,9 @@ describe("chorus.pages.TabularDataShowPage", function() {
     });
 
     describe("#initialize", function() {
-        context("when the databaseObject fetch completes", function() {
+        context("when the dataset fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.databaseObject);
+                this.server.completeFetchFor(this.dataset);
             })
 
 
@@ -81,9 +81,9 @@ describe("chorus.pages.TabularDataShowPage", function() {
                 spyOn(chorus, "search");
                 this.qtipSpy = stubQtip();
                 this.resizedSpy = spyOnEvent(this.page, 'resized');
-                this.server.completeFetchFor(this.databaseObject);
+                this.server.completeFetchFor(this.dataset);
                 this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
-                this.server.completeFetchFor(this.databaseObject.statistics());
+                this.server.completeFetchFor(this.dataset.statistics());
             });
 
             it("hides the loading spinner", function() {
@@ -114,7 +114,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
 
                 context("when the tabular data is not used in any workspace", function() {
                     beforeEach(function() {
-                        this.databaseObject.unset("associatedWorkspaces");
+                        this.dataset.unset("associatedWorkspaces");
                     });
 
                     it("renders successfully, without the workspace usage section", function() {
@@ -125,7 +125,7 @@ describe("chorus.pages.TabularDataShowPage", function() {
                             "TABLE",
                             "slashes%2F"
                         );
-                        this.server.completeFetchFor(this.databaseObject);
+                        this.server.completeFetchFor(this.dataset);
                         this.server.completeFetchAllFor(this.columnSet, [fixtures.databaseColumn(), fixtures.databaseColumn()]);
                         expect(this.page.$('.content_header .found_in')).not.toExist();
                     });
@@ -152,16 +152,16 @@ describe("chorus.pages.TabularDataShowPage", function() {
                     expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe("#/instances");
                     expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.instances"));
 
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveHref(this.databaseObject.instance().databases().showUrl());
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toContainText(this.databaseObject.instance().name());
+                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toHaveHref(this.dataset.instance().databases().showUrl());
+                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2)).toContainText(this.dataset.instance().name());
 
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toHaveHref(this.databaseObject.database().showUrl());
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toContainText(this.databaseObject.database().name());
+                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toHaveHref(this.dataset.database().showUrl());
+                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3)).toContainText(this.dataset.database().name());
 
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4).attr("href")).toBe(this.databaseObject.schema().showUrl());
-                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4)).toContainText(this.databaseObject.schema().name())
+                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4).attr("href")).toBe(this.dataset.schema().showUrl());
+                    expect(this.page.$("#breadcrumbs .breadcrumb a").eq(4)).toContainText(this.dataset.schema().name())
 
-                    expect(this.page.$("#breadcrumbs .breadcrumb .slug")).toContainText(this.databaseObject.name());
+                    expect(this.page.$("#breadcrumbs .breadcrumb .slug")).toContainText(this.dataset.name());
                 });
             });
 

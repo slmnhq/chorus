@@ -13,7 +13,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
                 'instance',
                 'user',
                 'workfile',
-                'databaseObject',
+                'dataset',
                 'chorusView'
             ]);
         });

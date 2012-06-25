@@ -1,7 +1,7 @@
 chorus.pages.TabularDataShowPage = chorus.pages.Base.include(
     chorus.Mixins.InstanceCredentials.page).extend({
         constructorName: "TabularDataShowPage",
-        helpId: "databaseObject",
+        helpId: "dataset",
         hideDeriveChorusView: true,
         additionalClass: 'tabular_data_show',
         sidebarOptions: {},
@@ -36,10 +36,10 @@ chorus.pages.TabularDataShowPage = chorus.pages.Base.include(
             ];
         },
 
-        makeModel: function(databaseObjectId) {
+        makeModel: function(datasetId) {
             this.model = this.tabularData = new chorus.models.Dataset({
 
-                id: databaseObjectId
+                id: datasetId
             });
         },
 
