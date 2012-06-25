@@ -33,8 +33,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     columns: function(options) {
         if (!this._columns) {
             this._columns = new chorus.collections.DatabaseColumnSet([], {
-
-                    id: this.get("id"),
+                id: this.get("id"),
                 dataset: this,
                 type: options && options.type
             });
