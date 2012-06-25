@@ -43,7 +43,7 @@ chorus.views.DatabaseColumnSidebarList = chorus.views.DatabaseSidebarList.extend
 
     additionalContext:function () {
         var tableOrViewName = this.collection.attributes.tableName || this.collection.attributes.viewName || this.collection.attributes.queryName;
-        var schemaName = this.collection.attributes.dataset.schema.name;
+        var schemaName = this.collection.dataset.schema.name;
 
         return {
             schemaSpan:chorus.helpers.spanFor(schemaName, { 'class':"schema", title:schemaName }),

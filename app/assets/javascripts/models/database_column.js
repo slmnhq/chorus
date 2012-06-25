@@ -1,6 +1,8 @@
 chorus.models.DatabaseColumn = chorus.models.Base.extend({
     constructorName: "DatabaseColumn",
-    urlTemplate: "datasets/{{id}}/columns",
+    urlTemplate: function() {
+        return ["datasets", this.dataset.id, "columns"].join("/");
+    },
 
     urlParams: function() {
         return {
@@ -9,12 +11,6 @@ chorus.models.DatabaseColumn = chorus.models.Base.extend({
     },
 
     initialize: function() {
-        if (this.dataset) {
-            this.set({
-                id: this.dataset.id
-            });
-        }
-
         this.set({
             typeClass: chorus.models.DatabaseColumn.humanTypeMap[this.get("typeCategory")]
         });

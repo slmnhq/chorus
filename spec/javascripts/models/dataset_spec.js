@@ -478,13 +478,14 @@ describe("chorus.models.Dataset", function() {
             expect(this.dataset.columns()).toBeA(chorus.collections.DatabaseColumnSet);
         })
 
-        it("should have a reference back to the dataset", function() {
-            expect(this.dataset.columns().attributes.dataset).toBe(this.dataset);
-        })
-
         it("should pass the correct parameters to the DatabaseColumnSet", function() {
             var columns = this.dataset.columns();
             expect(columns.attributes.id).toBe(this.dataset.id);
+        });
+
+        it("has a reference back to the dataset", function() {
+            var columns = this.dataset.columns();
+            expect(columns.dataset).toBe(this.dataset);
         });
 
         context("when the object has a metaType of 'query'", function() {

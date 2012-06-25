@@ -34,10 +34,10 @@ chorus.models.Dataset = chorus.models.Base.include(
         if (!this._columns) {
             this._columns = new chorus.collections.DatabaseColumnSet([], {
                 id: this.get("id"),
-                dataset: this,
                 type: options && options.type
             });
 
+            this._columns.dataset = this;
             var objectNameField = this.metaType() + "Name";
             this._columns.attributes[objectNameField] = (this.metaType() == "query") ? this.get("id") : this.name();
         }

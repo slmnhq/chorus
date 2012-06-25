@@ -8,16 +8,9 @@ chorus.collections.HdfsEntrySet = chorus.collections.Base.include(
         return "hadoop_instances/{{hadoopInstance.id}}/files/{{encode path}}";
     },
 
-    _add: function(model, options) {
-        model = this._super("_add", arguments);
-        this.attributes || (this.attributes = {});
-        if (this.attributes.hadoopInstance) {
-            model.set({ "hadoopInstance": this.attributes.hadoopInstance }, { silent: true });
-        }
-        if (this.attributes.path) {
-            model.set({"path": this.attributes.path}, {silent: true});
-        }
-        return model;
+    modelAdded: function(model) {
+        if (this.attributes.hadoopInstance) model.set({ hadoopInstance: this.attributes.hadoopInstance}, { silent: true });
+        if (this.attributes.path) model.set({ path: this.attributes.path}, { silent: true });
     },
 
     hdfsEntry: function() {

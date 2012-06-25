@@ -33,21 +33,21 @@ describe("chorus.collections.HdfsEntrySet", function() {
         beforeEach(function() {
             this.hdfsEntrySet = fixtures.hdfsEntrySet([], {
                 path: null,
-                instance: null
+                hadoopInstance: null
             });
         });
 
         describe("add", function() {
             it("keeps the path and instance already set on the entry", function() {
                 var entry = fixtures.hdfsEntryFileJson({
-                    instance: {
+                    hadoopInstance: {
                         id: '10000'
                     },
                     path: '/data/foo'
                 });
                 this.hdfsEntrySet.add(entry);
                 expect(this.hdfsEntrySet.at(0).get('path')).toBe('/data/foo');
-                expect(this.hdfsEntrySet.at(0).get('instance').id).toBe('10000');
+                expect(this.hdfsEntrySet.at(0).get('hadoopInstance').id).toBe('10000');
             })
         });
     });

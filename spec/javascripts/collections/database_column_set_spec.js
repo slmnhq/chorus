@@ -18,17 +18,10 @@ describe("chorus.collections.DatabaseColumnSet", function() {
             expect(this.columns.url()).toContain("/datasets/1/columns");
         })
 
-        describe("add", function() {
-            it("sets dataset on the added column", function() {
+        describe("when a model is added", function() {
+            it("sets the dataset on the added column", function() {
                 this.columns.add(fixtures.databaseColumn());
-                expect(this.columns.models[0].dataset).toBe(this.columns.attributes.dataset);
-            })
-
-            it("calls initialize on the column", function() {
-                var column = fixtures.databaseColumn()
-                spyOn(column, 'initialize').andCallThrough();
-                this.columns.add(column);
-                expect(column.initialize).toHaveBeenCalled();
+                expect(this.columns.models[0].dataset).toBe(this.columns.dataset);
             })
         });
     });
@@ -128,7 +121,6 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("with multiple dataset", function() {
             beforeEach(function() {
-                this.columns = new chorus.collections.DatabaseColumnSet();
                 this.dataset1 = newFixtures.workspaceDataset.sandboxTable();
                 this.dataset1.datasetNumber = 1;
                 this.dataset1Columns = this.dataset1.columns();
@@ -137,6 +129,8 @@ describe("chorus.collections.DatabaseColumnSet", function() {
                 this.dataset2.datasetNumber = 2;
                 this.dataset2Columns = this.dataset2.columns()
                 this.dataset2Columns.reset([fixtures.databaseColumn({ordinalPosition: 1}), fixtures.databaseColumn({ordinalPosition: 2})]);
+
+                this.columns = new chorus.collections.DatabaseColumnSet();
                 this.columns.add(this.dataset1Columns.models);
                 this.columns.add(this.dataset2Columns.models);
             });

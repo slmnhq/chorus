@@ -1,6 +1,10 @@
 chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
     model: chorus.models.DatabaseColumn,
 
+    modelAdded: function(model) {
+        if (this.dataset) model.dataset = this.dataset;
+    },
+
     urlTemplate: function() {
         return "datasets/{{id}}/columns"
     },
@@ -8,16 +12,7 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
     urlParams: function() {
         return {
             type: this.attributes.type
-        }
-    },
-
-    _prepareModel: function(model, options) {
-        model = this._super("_prepareModel", arguments);
-        if (this.attributes && this.attributes.dataset) {
-            model.dataset = this.attributes.dataset;
-            model.initialize();
-        }
-        return model;
+        };
     },
 
     comparator: function(column) {

@@ -20,20 +20,14 @@ describe("chorus.models.DatabaseColumn", function() {
 
         context("when there is dataset", function() {
             beforeEach(function() {
-                this.dataset = newFixtures.workspaceDataset.sandboxTable({objectName: 'taaab', schemaName: 'partyman'});
+                this.dataset = newFixtures.workspaceDataset.sandboxTable({ id: 45, objectName: 'taaab', schemaName: 'partyman'});
                 this.model.dataset = this.dataset;
                 this.model.initialize();
             });
 
             describe("#url", function() {
                 it("is correct", function() {
-                    this.model.set({
-                        id: '1'
-                    });
-                    var attr = this.model.attributes;
-                    var url = this.model.url();
-                    expect(url).toContain("/datasets/1/columns?");
-                    expect(url).toContain("filter=" + attr.name);
+                    expect(this.model.url()).toMatchUrl("/datasets/45/columns?filter=Col");
                 });
             });
 

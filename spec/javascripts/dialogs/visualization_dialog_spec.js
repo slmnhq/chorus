@@ -7,11 +7,12 @@ describe("chorus.dialogs.Visualization", function() {
         spyOn(chorus.Modal.prototype, "closeModal");
 
         this.dataset = newFixtures.workspaceDataset.sourceTable();
-        this.columns = fixtures.databaseColumnSet([
+        this.columns = this.dataset.columns();
+        this.columns.reset([
             fixtures.databaseColumn(),
             fixtures.databaseColumn(),
             fixtures.databaseColumn()
-        ], {dataset: this.dataset});
+        ]);
 
         this.chartOptions = {type: "boxplot", name: "Foo"};
 

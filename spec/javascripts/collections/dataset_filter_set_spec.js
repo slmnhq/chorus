@@ -2,11 +2,12 @@ describe("chorus.collections.DatasetFilterSet", function() {
     beforeEach(function() {
 
         this.dataset = newFixtures.workspaceDataset.sourceTable();
-        this.columns = fixtures.databaseColumnSet([
+        this.columns = this.dataset.columns();
+        this.columns.reset([
             fixtures.databaseColumn(),
             fixtures.databaseColumn(),
             fixtures.databaseColumn()
-        ], {dataset: this.dataset});
+        ]);
 
         var filter1 = new chorus.models.DatasetFilter({column: this.columns.at(0), comparator: "equal", input: {value: "A"}});
         var filter2 = new chorus.models.DatasetFilter({column: this.columns.at(1), comparator: "not_equal", input: {value: "B"}});

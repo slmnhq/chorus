@@ -321,6 +321,13 @@ chorus.collections = {
             this._sort(idx, "asc")
         },
 
+        _prepareModel: function(model, options) {
+            var model = this._super("_prepareModel", arguments);
+            this.attributes || (this.attributes = {});
+            if (_.isFunction(this.modelAdded)) this.modelAdded(model);
+            return model;
+        },
+
         _sort: function(idx, order) {
             // order argument not used at this time. We only support ascending sort for now.
             this.order = idx

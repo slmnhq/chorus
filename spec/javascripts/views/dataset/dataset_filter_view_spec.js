@@ -1,7 +1,8 @@
 describe("chorus.views.DatasetFilter", function() {
     beforeEach(function() {
         this.dataset = newFixtures.workspaceDataset.sourceTable();
-        this.collection = fixtures.databaseColumnSet(null, {dataset: this.dataset});
+        this.collection = this.dataset.columns();
+        this.collection.reset([ fixtures.databaseColumn(), fixtures.databaseColumn() ]);
 
         this.model = new chorus.models.DatasetFilter();
         this.view = new chorus.views.DatasetFilter({ model: this.model, collection: this.collection });
@@ -23,6 +24,7 @@ describe("chorus.views.DatasetFilter", function() {
 
         context("when the model is filled with valid data", function() {
             var selectedColumn;
+
             beforeEach(function() {
                 spyOn(this.view.columnFilter, "selectColumn").andCallThrough();
                 selectedColumn = this.collection.at(1)
@@ -50,7 +52,7 @@ describe("chorus.views.DatasetFilter", function() {
             this.collection.each(function(model, index) {
                 var option = view.$(".column_filter option:eq(" + index + ")");
                 expect(option).toContainText(model.get("name"));
-                expect(option).toHaveAttr("value", chorus.Mixins.dbHelpers.safePGName(this.collection.at(index).get("dataset").get("objectName"), model.get("name")));
+                expect(option).toHaveAttr("value", chorus.Mixins.dbHelpers.safePGName(model.dataset.get("objectName"), model.get("name")));
             }, this);
         });
 
@@ -94,6 +96,7 @@ describe("chorus.views.DatasetFilter", function() {
                         this.model.set({comparator: "not_equal"});
                         this.view.selectComparator();
                     });
+
                     it("selects that comparator", function() {
                         expect(this.view.$("select.comparator option:selected").val()).toBe("not_equal");
                     });
@@ -116,6 +119,7 @@ describe("chorus.views.DatasetFilter", function() {
                     this.view.model.unset("comparator");
                     this.view.$("select.comparator option[value=not_equal]").prop('selected', true).change();
                 });
+
                 it("should update the model", function() {
                     expect(this.view.model.get("comparator")).toBe("not_equal");
                 });
@@ -125,6 +129,7 @@ describe("chorus.views.DatasetFilter", function() {
                         this.view.$("select.comparator option[value=null]").prop('selected', true).change();
                     });
                 });
+
                 context("and it has default inputs", function() {
                     beforeEach(function() {
                         this.model.set({input: {value: "jellyfish"}});
@@ -146,21 +151,23 @@ describe("chorus.views.DatasetFilter", function() {
                         });
                     });
                 });
+
                 context("and it has date inputs", function() {
                     var inputs;
+
                     beforeEach(function() {
                         this.collection.at(0).set({typeCategory: "DATE"});
                         this.view.columnFilter.selectColumn(this.collection.at(0));
                         inputs = {day: "1", month: "02", year: "3333", value: "in the future"}
                         this.model.set({input: inputs});
                     });
+
                     it("fills in the values", function() {
                         this.view.$("select.comparator option[value=before]").prop('selected', true).change();
                         expect(this.view.$(".filter.date input[name='day']").val()).toBe("1")
                         expect(this.view.$(".filter.date input[name='month']").val()).toBe("02")
                         expect(this.view.$(".filter.date input[name='year']").val()).toBe("3333")
                     });
-
 
                     context("when a user types in the input field", function() {
                         beforeEach(function() {
@@ -178,6 +185,7 @@ describe("chorus.views.DatasetFilter", function() {
                         });
                     });
                 });
+
                 context("and it has time inputs", function() {
                     beforeEach(function() {
                         this.collection.at(0).set({typeCategory: "TIME"});
