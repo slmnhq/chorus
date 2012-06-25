@@ -28,6 +28,8 @@
 
         formSubmitted: function(e) {
             e.preventDefault();
+            if(this.saving) {return;}
+            this.saving = true;
             this.checkUsername(this.submitNewUser);
         },
 
@@ -79,7 +81,12 @@
         },
 
         goBack: function() {
-             window.history.back();
+            window.history.back();
+        },
+
+        showErrors: function() {
+            this._super("showErrors", arguments);
+            this.saving = false;
         }
     });
 
