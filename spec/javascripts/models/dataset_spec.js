@@ -1,4 +1,4 @@
-describe("chorus.models.DatabaseObject", function() {
+describe("chorus.models.Dataset", function() {
     var objectWithEncodingIssues = {
         schema : {
             name: "b/a/r",
@@ -15,7 +15,7 @@ describe("chorus.models.DatabaseObject", function() {
     };
 
     beforeEach(function() {
-        this.databaseObject = rspecFixtures.databaseObject({
+        this.dataset = rspecFixtures.dataset({
             schema: {
                 id: 1,
                 name: "ipa",
@@ -33,11 +33,11 @@ describe("chorus.models.DatabaseObject", function() {
     describe("url", function() {
         context("when it is a table", function() {
             beforeEach(function() {
-                this.databaseObject = rspecFixtures.databaseObject(objectWithEncodingIssues);
+                this.dataset = rspecFixtures.dataset(objectWithEncodingIssues);
             });
 
             it("uses the table exploration api", function() {
-                expect(this.databaseObject.url()).toContain("/datasets/" + + this.databaseObject.id)
+                expect(this.dataset.url()).toContain("/datasets/" + + this.dataset.id)
             });
         });
 
@@ -45,11 +45,11 @@ describe("chorus.models.DatabaseObject", function() {
             beforeEach(function() {
                 var viewWithEncodingIssues = objectWithEncodingIssues;
                 viewWithEncodingIssues.objectType = "VIEW";
-                this.databaseObject = rspecFixtures.databaseObject(viewWithEncodingIssues);
+                this.dataset = rspecFixtures.dataset(viewWithEncodingIssues);
             });
 
             it("uses the table exploration api", function() {
-                expect(this.databaseObject.url()).toContain("/datasets/" + this.databaseObject.id)
+                expect(this.dataset.url()).toContain("/datasets/" + this.dataset.id)
             });
         });
     });
@@ -57,59 +57,59 @@ describe("chorus.models.DatabaseObject", function() {
     describe("showUrl", function() {
         context("when it is a table", function() {
             beforeEach(function() {
-                this.databaseObject = rspecFixtures.databaseObject(objectWithEncodingIssues);
+                this.dataset = rspecFixtures.dataset(objectWithEncodingIssues);
             });
 
             it("has the correct url", function() {
-                expect(this.databaseObject.showUrl()).toContain("/datasets/" + this.databaseObject.id)
+                expect(this.dataset.showUrl()).toContain("/datasets/" + this.dataset.id)
             });
 
             it("works when there is markup in the name (e.g. result from type ahead search", function() {
-                this.databaseObject.set({objectName: "<em>a</em> space"})
-                expect(this.databaseObject.showUrl()).toContain("/datasets/" + this.databaseObject.id);
+                this.dataset.set({objectName: "<em>a</em> space"})
+                expect(this.dataset.showUrl()).toContain("/datasets/" + this.dataset.id);
             })
         });
 
         context("when it is a view", function() {
             beforeEach(function() {
-                this.databaseObject = rspecFixtures.databaseObject({objectType: "VIEW"});
+                this.dataset = rspecFixtures.dataset({objectType: "VIEW"});
             });
 
             it("uses the view exploration api", function() {
                 var pieces = [
                     "#/datasets",
-                    this.databaseObject.id
+                    this.dataset.id
                 ]
                 var url = encodeURI(pieces.join('/'));
-                expect(this.databaseObject.showUrl()).toMatchUrl(url);
+                expect(this.dataset.showUrl()).toMatchUrl(url);
             });
         });
 
         context("when it contains html", function() {
             it("removes the html", function() {
-                this.databaseObject.set({ objectName: "<em>mmmm</em> good" });
-                expect(this.databaseObject.showUrl()).toMatchUrl("#/datasets/" + this.databaseObject.id);
+                this.dataset.set({ objectName: "<em>mmmm</em> good" });
+                expect(this.dataset.showUrl()).toMatchUrl("#/datasets/" + this.dataset.id);
             })
         })
     })
 
     describe("when the 'invalidated' event is triggered", function() {
-        describe("when the databaseObject belongs to a collection", function() {
+        describe("when the dataset belongs to a collection", function() {
             beforeEach(function() {
-                this.collection = new chorus.collections.DatabaseObjectSet();
-                this.collection.add(this.databaseObject);
+                this.collection = new chorus.collections.DatasetSet();
+                this.collection.add(this.dataset);
             });
 
             it("re-fetches itself, because the last comment might have changed", function() {
-                this.databaseObject.trigger("invalidated");
-                expect(this.databaseObject).toHaveBeenFetched();
+                this.dataset.trigger("invalidated");
+                expect(this.dataset).toHaveBeenFetched();
             });
         });
 
-        describe("when the databaseObject has no collection", function() {
+        describe("when the dataset has no collection", function() {
             it("does not fetch anything", function() {
-                this.databaseObject.trigger("invalidated");
-                expect(this.databaseObject).not.toHaveBeenFetched();
+                this.dataset.trigger("invalidated");
+                expect(this.dataset).not.toHaveBeenFetched();
             });
         });
     });
@@ -117,7 +117,7 @@ describe("chorus.models.DatabaseObject", function() {
 
     describe("#isChorusView", function() {
         it("is always false", function() {
-            expect(this.databaseObject.isChorusView()).toBeFalsy();
+            expect(this.dataset.isChorusView()).toBeFalsy();
         });
     });
 });

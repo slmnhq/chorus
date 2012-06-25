@@ -1,6 +1,6 @@
-describe("chorus.collections.DatabaseObjectSet", function() {
+describe("chorus.collections.DatasetSet", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.DatabaseObjectSet([], {
+        this.collection = new chorus.collections.DatasetSet([], {
             schemaId: 987
         });
     });

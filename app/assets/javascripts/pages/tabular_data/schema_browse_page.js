@@ -5,7 +5,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 
     setup: function(schema_id) {
         this.schema = new chorus.models.Schema({ id: schema_id });
-        this.collection = this.schema.databaseObjects();
+        this.collection = this.schema.datasets();
 
         this.dependOn(this.schema, this.schemaLoaded);
         this.dependOn(this.collection);

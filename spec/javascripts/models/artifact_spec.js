@@ -182,12 +182,12 @@ describe("chorus.models.Artifact", function() {
                 this.tabularData = this.model.tabularData();
                 expect(this.tabularData).toBeA(chorus.models.WorkspaceDataset);
                 expect(this.tabularData.get("workspace")).toBe(this.model.get('workspace'));
-                expect(this.tabularData.get('objectName')).toBe(this.model.get('databaseObject').objectName);
-                expect(this.tabularData.get('id')).toBe(this.model.get('databaseObject').id);
+                expect(this.tabularData.get('objectName')).toBe(this.model.get('dataset').objectName);
+                expect(this.tabularData.get('id')).toBe(this.model.get('dataset').id);
             });
 
-            it("returns falsy when there is no databaseObject", function() {
-                this.model.unset('databaseObject');
+            it("returns falsy when there is no dataset", function() {
+                this.model.unset('dataset');
                 expect(this.model.tabularData()).toBeFalsy();
             });
 
@@ -203,13 +203,13 @@ describe("chorus.models.Artifact", function() {
 
             it("returns a Database Object", function() {
                 this.tabularData = this.model.tabularData();
-                expect(this.tabularData).toBeA(chorus.models.DatabaseObject);
-                expect(this.tabularData.get('objectName')).toBe(this.model.get('databaseObject').objectName);
-                expect(this.tabularData.get('id')).toBe(this.model.get('databaseObject').id);
+                expect(this.tabularData).toBeA(chorus.models.Dataset);
+                expect(this.tabularData.get('objectName')).toBe(this.model.get('dataset').objectName);
+                expect(this.tabularData.get('id')).toBe(this.model.get('dataset').id);
             });
 
-            it("returns falsy when there is no databaseObject", function() {
-                this.model.unset('databaseObject');
+            it("returns falsy when there is no dataset", function() {
+                this.model.unset('dataset');
                 expect(this.model.tabularData()).toBeFalsy();
             });
 

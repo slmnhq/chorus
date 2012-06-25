@@ -6,7 +6,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     describe("after workspaces are fetched", function() {
         context("when the model is a source table/view with multiple workspaces", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.databaseObject();
+                this.model = rspecFixtures.dataset();
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     rspecFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
@@ -62,7 +62,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     describe("clicking Associate Dataset", function() {
         context("for anything except a Chorus View", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.databaseObject();
+                this.model = rspecFixtures.dataset();
                 this.workspace = rspecFixtures.workspace({ name: "im_not_the_current_one" });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });

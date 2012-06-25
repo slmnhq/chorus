@@ -1,5 +1,5 @@
-chorus.models.DatabaseObject = chorus.models.TabularData.extend({
-    constructorName: "DatabaseObject",
+chorus.models.Dataset = chorus.models.TabularData.extend({
+    constructorName: "Dataset",
 
     urlTemplate: function() {
         return "datasets/" + this.id

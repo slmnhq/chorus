@@ -73,7 +73,7 @@ describe("chorus.views.TabularDataContentDetails", function() {
         });
 
         describe("sql definition", function() {
-            context("when the object is a databaseObject", function() {
+            context("when the object is a dataset", function() {
                 it("shows the SQL definition in the header", function() {
                     expect(this.view.$(".sql_content")).toExist();
                     expect(this.view.$(".definition")).toContainText(this.tabularData.statistics().get("definition"));

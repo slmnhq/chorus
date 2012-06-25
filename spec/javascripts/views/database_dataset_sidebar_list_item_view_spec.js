@@ -1,11 +1,11 @@
 describe("chorus.views.DatabaseDatasetSidebarListItem", function() {
     beforeEach(function() {
         spyOn(chorus.PageEvents, "broadcast").andCallThrough();
-        this.collection = new chorus.collections.DatabaseObjectSet([
-            rspecFixtures.databaseObject({ schema: { name: "schema_name"}, objectName: "1234",  type: "SANDBOX_TABLE", objectType: "TABLE" }),
-            rspecFixtures.databaseObject({ schema: { name: "schema_name"}, objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
-            rspecFixtures.databaseObject({ schema: { name: "schema_name"}, objectName: "Data2", type: "SANDBOX_TABLE", objectType: "TABLE" }),
-            rspecFixtures.databaseObject({ schema: { name: "schema_name"}, objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" })
+        this.collection = new chorus.collections.DatasetSet([
+            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "1234",  type: "SANDBOX_TABLE", objectType: "TABLE" }),
+            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
+            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data2", type: "SANDBOX_TABLE", objectType: "TABLE" }),
+            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" })
         ]);
         this.view = new chorus.views.DatabaseDatasetSidebarListItem({collection: this.collection});
         this.view.render();
@@ -55,8 +55,8 @@ describe("chorus.views.DatabaseDatasetSidebarListItem", function() {
         describe("pagination", function() {
             beforeEach(function() {
                 this.collection.reset([
-                    rspecFixtures.databaseObject({objectName: "Table 1"}),
-                    rspecFixtures.databaseObject({objectName: "Table 2"})
+                    rspecFixtures.dataset({objectName: "Table 1"}),
+                    rspecFixtures.dataset({objectName: "Table 2"})
                 ]);
             });
 

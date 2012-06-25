@@ -8,7 +8,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
                 entityId: "1",
                 entityName: "my dataset",
                 workspaceId: "22",
-                entityType: "databaseObject",
+                entityType: "dataset",
                 allowWorkspaceAttachments: "true",
                 pageModel: newFixtures.workspaceDataset.sandboxTable(),
                 attachVisualization: {
@@ -27,7 +27,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
 
             it("sets the correct properties on the model", function() {
                 expect(this.dialog.model.get("entityId")).toBe("1")
-                expect(this.dialog.model.get("entityType")).toBe("databaseObject");
+                expect(this.dialog.model.get("entityType")).toBe("dataset");
             });
         });
 
@@ -37,7 +37,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
 
         describe("#render", function() {
             it("has the right placeholder", function() {
-                expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", {noteSubject: "databaseObject"}));
+                expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", {noteSubject: "dataset"}));
             });
 
             it("display the chart image and chart fileName", function() {
@@ -60,7 +60,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
             });
 
             it("saves the visualization chart as an attachment to the note", function() {
-                expect(this.server.lastCreate().url).toEqual("/comment/databaseObject/1/2/file")
+                expect(this.server.lastCreate().url).toEqual("/comment/dataset/1/2/file")
                 expect(this.server.lastCreate().params()).toEqual({ file_name : 'hello-frequency.png', svg_data : '<svg/>' });
             });
 

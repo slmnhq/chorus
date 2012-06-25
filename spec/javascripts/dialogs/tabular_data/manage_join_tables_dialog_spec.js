@@ -2,7 +2,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
     beforeEach(function() {
         this.qtip = stubQtip();
         stubModals();
-        this.originalDatabaseObject = rspecFixtures.workspaceDataset.datasetTable({
+        this.originalDataset = rspecFixtures.workspaceDataset.datasetTable({
             objectName: "original",
             type: "SOURCE_TABLE",
             objectType: "TABLE",
@@ -41,7 +41,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
     });
 
     it("fetches the schema's tables and views", function() {
-        var datasetFetch = this.server.lastFetchFor(this.schema.databaseObjects());
+        var datasetFetch = this.server.lastFetchFor(this.schema.datasets());
         expect(datasetFetch.params().rows).toBe('7');
         expect(datasetFetch.params().page).toBe('1');
     });
@@ -52,32 +52,32 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             this.schemaTed = rspecFixtures.schema({name: "Ted", database: this.schema.database().attributes });
             this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
 
-            this.databaseObject1 = newFixtures.workspaceDataset.sourceTable({
+            this.dataset1 = newFixtures.workspaceDataset.sourceTable({
                 objectName: "cats",
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
                 id: '"10000"|"dca_demo"|"ddemo"|"VIEW"|"cats"'
             });
 
-            this.databaseObject2 = newFixtures.workspaceDataset.sourceTable({
+            this.dataset2 = newFixtures.workspaceDataset.sourceTable({
                 objectName: "dogs",
                 type: "SOURCE_TABLE",
                 objectType: "TABLE",
                 id: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"dogs"'
             });
 
-            this.databaseObject3 = newFixtures.workspaceDataset.sourceTable({
+            this.dataset3 = newFixtures.workspaceDataset.sourceTable({
                 objectName: "lions",
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
                 id: '"10000"|"dca_demo"|"ddemo"|"VIEW"|"lions"'
             });
 
-            this.server.completeFetchFor(this.schema.databaseObjects(), [
-                this.databaseObject1,
-                this.databaseObject2,
-                this.originalDatabaseObject,
-                this.databaseObject3
+            this.server.completeFetchFor(this.schema.datasets(), [
+                this.dataset1,
+                this.dataset2,
+                this.originalDataset,
+                this.dataset3
             ]);
         });
 
@@ -104,8 +104,8 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
         it("shows the medium dataset icon for each table/view", function() {
             var icons = this.dialog.$("img.image");
-            expect(icons.eq(0)).toHaveAttr("src", this.databaseObject1.iconUrl({ size: "medium" }));
-            expect(icons.eq(1)).toHaveAttr("src", this.databaseObject2.iconUrl({ size: "medium" }));
+            expect(icons.eq(0)).toHaveAttr("src", this.dataset1.iconUrl({ size: "medium" }));
+            expect(icons.eq(1)).toHaveAttr("src", this.dataset2.iconUrl({ size: "medium" }));
         });
 
         it("renders a search input", function() {
@@ -127,7 +127,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             context("after the results come back", function() {
                 beforeEach(function() {
-                    this.server.lastFetch().succeed([ this.databaseObject1 ]);
+                    this.server.lastFetch().succeed([ this.dataset1 ]);
                 });
 
                 it("updates the list items", function() {
@@ -210,7 +210,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                         });
 
                         it("loads the schema's datasets", function() {
-                            expect(this.schemaBob.databaseObjects()).toHaveBeenFetched();
+                            expect(this.schemaBob.datasets()).toHaveBeenFetched();
                         });
 
                         it("updates the instance, database and schema names in the sub header", function() {
@@ -219,7 +219,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
                         describe("when the datasets are fetched", function() {
                             beforeEach(function() {
-                                this.server.completeFetchFor(this.schemaBob.databaseObjects(), [
+                                this.server.completeFetchFor(this.schemaBob.datasets(), [
                                     newFixtures.workspaceDataset.sourceTable({ objectName: "fred" }),
                                     newFixtures.workspaceDataset.sourceTable({ objectName: "lou" }),
                                     newFixtures.workspaceDataset.sourceTable({ objectName: "bryan" })
@@ -269,8 +269,8 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
             it("passes the right table or view to the 'preview columns' sub-dialog", function() {
                 var previewColumnsDialog = chorus.dialogs.PreviewColumns.prototype.render.mostRecentCall.object;
-                expect(previewColumnsDialog.model).toBeA(chorus.models.DatabaseObject);
-                expect(previewColumnsDialog.model.get("id")).toBe(this.databaseObject2.get("id"));
+                expect(previewColumnsDialog.model).toBeA(chorus.models.Dataset);
+                expect(previewColumnsDialog.model.get("id")).toBe(this.dataset2.get("id"));
             });
         });
 
@@ -292,8 +292,8 @@ describe("chorus.dialogs.ManageJoinTables", function() {
 
                 expect(joinConfigurationDialog.model).toBe(this.chorusView);
 
-                expect(joinConfigurationDialog.destinationObject).toBeA(chorus.models.DatabaseObject);
-                expect(joinConfigurationDialog.destinationObject.get("id")).toBe(this.databaseObject3.get("id"));
+                expect(joinConfigurationDialog.destinationObject).toBeA(chorus.models.Dataset);
+                expect(joinConfigurationDialog.destinationObject.get("id")).toBe(this.dataset3.get("id"));
                 expect(joinConfigurationDialog.destinationObject).not.toBe(this.selectedDataset);
             });
         });
@@ -302,7 +302,7 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             it("shows pagination controls", function() {
                 expect(this.dialog.$(".list_content_details")).toBeHidden();
                 expect(this.dialog.$(".list_content_details .count")).toContainText("4");
-                expect(this.server.lastFetchFor(this.schema.databaseObjects()).url).toContain("rows=7")
+                expect(this.server.lastFetchFor(this.schema.datasets()).url).toContain("rows=7")
             })
         });
     });

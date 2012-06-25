@@ -53,8 +53,8 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.schema);
             this.server.completeFetchFor(this.page.collection, [
-                rspecFixtures.databaseObject({ objectName: "bar" }),
-                rspecFixtures.databaseObject({ objectName: "foo", objectType: "VIEW" })
+                rspecFixtures.dataset({ objectName: "bar" }),
+                rspecFixtures.dataset({ objectName: "foo", objectType: "VIEW" })
             ]);
         });
 
@@ -103,7 +103,7 @@ describe("chorus.pages.SchemaBrowsePage", function() {
         it("constructs the main content list correctly", function() {
             expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
             expect(this.page.mainContent.collection).toBe(this.page.collection);
-            expect(this.page.mainContent.collection).toBeA(chorus.collections.DatabaseObjectSet);
+            expect(this.page.mainContent.collection).toBeA(chorus.collections.DatasetSet);
 
             expect(this.page.$(this.page.mainContent.el).length).toBe(1);
         });

@@ -6,7 +6,7 @@ describe("chorus.views.SearchResults", function() {
             thisWorkspace: {
                 docs: [
                     fixtures.searchResultWorkfileJson(),
-                    fixtures.searchResultDatabaseObjectJson(),
+                    fixtures.searchResultDatasetJson(),
                     fixtures.searchResultChorusViewJson()
                 ],
                 numFound: 3

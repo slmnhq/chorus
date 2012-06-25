@@ -14,17 +14,17 @@ describe("chorus.models.Schema", function() {
             this.model = this.sandbox.schema();
         });
 
-        describe("#databaseObjects", function() {
+        describe("#datasets", function() {
             it("should return a DataaseObjectSet", function() {
-                expect(this.model.databaseObjects()).toBeA(chorus.collections.DatabaseObjectSet);
+                expect(this.model.datasets()).toBeA(chorus.collections.DatasetSet);
             });
 
             it("should memoize the result", function() {
-                expect(this.model.databaseObjects()).toBe(this.model.databaseObjects());
+                expect(this.model.datasets()).toBe(this.model.datasets());
             });
 
             it("should pass its id", function() {
-                var objects = this.model.databaseObjects();
+                var objects = this.model.datasets();
                 expect(objects.attributes.schemaId).toBe(this.model.id);
             });
         });

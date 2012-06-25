@@ -59,7 +59,7 @@ describe("chorus.dialogs.Visualization", function() {
                 context("when task doesn't have workspace ( from instance browser page)", function() {
                     beforeEach(function() {
                         this.server.reset();
-                        var task = fixtures.boxplotTaskWithResult({tabularData : rspecFixtures.databaseObject()})
+                        var task = fixtures.boxplotTaskWithResult({tabularData : rspecFixtures.dataset()})
                         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, task: task, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
                     });
                     it("doesn't add workspace as a requiredResources", function() {

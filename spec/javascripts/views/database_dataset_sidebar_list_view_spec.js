@@ -22,7 +22,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
             });
 
             it("should fetch the schema's tables and views", function() {
-                expect(this.schema.databaseObjects()).toHaveBeenFetched();
+                expect(this.schema.datasets()).toHaveBeenFetched();
             });
 
             context("when the schema fetches complete", function() {
@@ -34,7 +34,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     ]);
 
                     this.server.completeFetchFor(this.view.schemas, schemas.models);
-                    this.schema.databaseObjects().loaded = true;
+                    this.schema.datasets().loaded = true;
                     this.view.render();
 
                     // Just to get the qtip to exist in the dom
@@ -177,7 +177,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
     context("when there's sandbox/default schema associated", function() {
         context("after the tables and views are loaded", function() {
             beforeEach(function() {
-                this.schema.databaseObjects().loaded = true;
+                this.schema.datasets().loaded = true;
             });
 
             it("doesn't display a loading spinner", function() {
@@ -189,11 +189,11 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
                     this.qtip = stubQtip("li");
                     spyOn(this.view, 'closeQtip');
 
-                    this.server.completeFetchFor(this.schema.databaseObjects(), [
-                        rspecFixtures.databaseObject({ objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
-                        rspecFixtures.databaseObject({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" }),
-                        rspecFixtures.databaseObject({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "TABLE" }),
-                        rspecFixtures.databaseObject({ objectName: "1234",  type: "SANDBOX_TABLE", objectType: "TABLE" })
+                    this.server.completeFetchFor(this.schema.datasets(), [
+                        rspecFixtures.dataset({ objectName: "Data1", type: "SANDBOX_TABLE", objectType: "VIEW" }),
+                        rspecFixtures.dataset({ objectName: "zebra", type: "SANDBOX_TABLE", objectType: "VIEW" }),
+                        rspecFixtures.dataset({ objectName: "Data2", type: "SANDBOX_TABLE", objectType: "TABLE" }),
+                        rspecFixtures.dataset({ objectName: "1234",  type: "SANDBOX_TABLE", objectType: "TABLE" })
                     ]);
 
                     this.server.completeFetchFor(this.schema.database().schemas());
@@ -263,7 +263,7 @@ describe("chorus.views.DatabaseDatasetSidebarList", function() {
         context("if the tables and views fetch fails", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.schema.database().schemas());
-                this.server.lastFetchFor(this.schema.databaseObjects()).failForbidden([
+                this.server.lastFetchFor(this.schema.datasets()).failForbidden([
                     {message: "Account map needed"}
                 ]);
                 this.view.render();

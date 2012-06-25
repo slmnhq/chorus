@@ -159,11 +159,11 @@ beforeEach(function() {
                                 timestamp: "2011-12-15 12:34:56"
                             }
                         ],
-                        databaseObject: {
+                        dataset: {
                             id: '"' + instanceId + '"|"dca_demo"|"public"|"__a_table_name"',
                             name: '__a_table_name',
                             objectType: "TABLE",
-                            type: "databaseObject",
+                            type: "dataset",
                             databaseName: "dca_demo",
                             schemaName: "public",
                             instance: fixtures.instanceJson()
@@ -337,7 +337,7 @@ beforeEach(function() {
                         lastName: "Admin"
                     },
                     comments: [],
-                    databaseObject: {
+                    dataset: {
                         id: '"10010"|"Analytics"|"analytics"|"TABLE"|"clv_data"',
                         name: "clv_data",
                         objectName: "clv_data",
@@ -626,7 +626,7 @@ beforeEach(function() {
         datasetArtifactJson: function(overrides) {
             return _.extend({
                 id: this.nextId().toString(),
-                entityType: "databaseObject",
+                entityType: "dataset",
                 objectType: "TABLE",
                 type: "SANDBOX_TABLE",
                 workspaceId: this.nextId().toString()
@@ -711,7 +711,7 @@ beforeEach(function() {
                 type: "SOURCE_TABLE",
                 definition: "DROP TABLE users"
             }, overrides);
-            return new chorus.models.DatabaseObjectStatistics(attributes);
+            return new chorus.models.DatasetStatistics(attributes);
         },
 
         datasetStatisticsTable: function(overrides) {
@@ -724,7 +724,7 @@ beforeEach(function() {
                 objectType: "TABLE",
                 type: "SOURCE_TABLE"
             }, overrides);
-            return new chorus.models.DatabaseObjectStatistics(attributes);
+            return new chorus.models.DatasetStatistics(attributes);
         },
 
         datasetExternalTable: function(overrides) {
@@ -1225,7 +1225,7 @@ beforeEach(function() {
                 id: "33333",
                 name: "ws"
             }});
-            model.get('databaseObject').workspaces = [
+            model.get('dataset').workspaces = [
                 {
                     id: "15555",
                     datasetType: "SANDBOX_TABLE",
@@ -1261,7 +1261,7 @@ beforeEach(function() {
                 },
                 workspace: {
                 },
-                databaseObject: {
+                dataset: {
                     id: '100',
                     schema: {
                         name: "ddemo",
@@ -1275,7 +1275,7 @@ beforeEach(function() {
                     },
                     objectName: "2010_report_on_white_house",
                     workspaces: [],
-                    entityType: "databaseObject",
+                    entityType: "dataset",
                     objectType: "TABLE"
                 },
                 comments: []
@@ -1457,7 +1457,7 @@ beforeEach(function() {
                             objectName: "a",
                             isDeleted: false,
                             description: "This is a test of table description.",
-                            entityType: "databaseObject",
+                            entityType: "dataset",
                             instance: {
                                 id: "10000",
                                 name: "gillette"
@@ -1500,7 +1500,7 @@ beforeEach(function() {
                             databaseName: "Analytics",
                             objectName: "test1",
                             isDeleted: false,
-                            entityType: "databaseObject",
+                            entityType: "dataset",
                             instance: {
                                 id: "10000",
                                 name: "gillette"
@@ -1522,7 +1522,7 @@ beforeEach(function() {
                             "databaseName": "Analytics",
                             "objectName": "test2",
                             "isDeleted": false,
-                            "entityType": "databaseObject",
+                            "entityType": "dataset",
                             "instance": {
                                 "id": "10000",
                                 "name": "gillette"
@@ -1544,7 +1544,7 @@ beforeEach(function() {
                             "databaseName": "Analytics",
                             "objectName": "test3",
                             "isDeleted": false,
-                            "entityType": "databaseObject",
+                            "entityType": "dataset",
                             "instance": {
                                 "id": "10000",
                                 "name": "gillette"
@@ -1566,7 +1566,7 @@ beforeEach(function() {
                             "databaseName": "Analytics",
                             "objectName": "test4",
                             "isDeleted": false,
-                            "entityType": "databaseObject",
+                            "entityType": "dataset",
                             "instance": {
                                 "id": "10000",
                                 "name": "gillette"
@@ -1588,7 +1588,7 @@ beforeEach(function() {
                             "databaseName": "Analytics",
                             "objectName": "test5",
                             "isDeleted": false,
-                            "entityType": "databaseObject",
+                            "entityType": "dataset",
                             "instance": {
                                 "id": "10000",
                                 "name": "gillette"
@@ -1610,7 +1610,7 @@ beforeEach(function() {
                             "databaseName": "Analytics",
                             "objectName": "test6",
                             "issearch_result_list.js:65Deleted": false,
-                            "entityType": "databaseObject",
+                            "entityType": "dataset",
                             "instance": {
                                 "id": "10000",
                                 "name": "gillette"
@@ -1632,7 +1632,7 @@ beforeEach(function() {
                             "databaseName": "Analytics",
                             "objectName": "test",
                             "isDeleted": false,
-                            "entityType": "databaseObject",
+                            "entityType": "dataset",
                             "instance": {
                                 "id": "10000",
                                 "name": "gillette"
@@ -1654,7 +1654,7 @@ beforeEach(function() {
                             "databaseName": "Analytics",
                             "objectName": "test7",
                             "isDeleted": false,
-                            "entityType": "databaseObject",
+                            "entityType": "dataset",
                             "instance": {
                                 "id": "10000",
                                 "name": "gillette"
@@ -1863,7 +1863,7 @@ beforeEach(function() {
             }, overrides)
         },
 
-        searchResultDatabaseObjectJson: function(overrides) {
+        searchResultDatasetJson: function(overrides) {
             return _.extend({
                 schemaName: "public",
                 parentType: "gpdb_10000_data_types",
@@ -1873,7 +1873,7 @@ beforeEach(function() {
                 objectName: "a",
                 isDeleted: false,
                 description: "This is a test of table description.",
-                entityType: "databaseObject",
+                entityType: "dataset",
                 instance: {
                     id: "10000",
                     name: "gillette"
@@ -2213,7 +2213,7 @@ beforeEach(function() {
 
                         {
                             "schemaName": "ddemo",
-                            "entityType": "databaseObject",
+                            "entityType": "dataset",
                             "id": '10000\"|"dca_demo"|"ddemo"|"TABLE"|"_uspresident"',
                             "objectType": "TABLE",
                             "databaseName": "dca_demo",

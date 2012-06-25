@@ -1,8 +1,8 @@
-chorus.collections.DatabaseObjectSet = chorus.collections.LastFetchWins.include(
+chorus.collections.DatasetSet = chorus.collections.LastFetchWins.include(
     chorus.Mixins.InstanceCredentials.model
 ).extend({
-    constructorName: 'DatabaseObjectSet',
-    model: chorus.models.DatabaseObject,
+    constructorName: 'DatasetSet',
+    model: chorus.models.Dataset,
     urlTemplate: "schemas/{{schemaId}}/datasets",
 
     urlParams: function() {
