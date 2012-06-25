@@ -19,6 +19,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
         this.schemaFetchFailed = _.bind(this.fetchFailed, this, 'schema');
         if (!this.options.instance) {
             this.instances = new chorus.collections.InstanceSet();
+            this.instances.attributes = {accessible: true};
             this.instances.onLoaded(this.updateInstances, this);
             this.bindings.add(this.instances, "fetchFailed", this.instanceFetchFailed);
             this.instances.fetchAll();
@@ -160,9 +161,7 @@ chorus.views.SchemaPicker = chorus.views.Base.extend({
     },
 
     updateInstances:function () {
-        this.updateFor('instance', function(instance) {
-            return !instance.get("shared");
-        });
+        this.updateFor('instance');
     },
 
     updateDatabases:function () {

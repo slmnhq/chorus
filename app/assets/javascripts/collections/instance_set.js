@@ -4,7 +4,7 @@ chorus.collections.InstanceSet = chorus.collections.Base.extend({
     urlTemplate: "instances/",
 
     urlParams: function() {
-        return _.extend(this._super('urlParams') || {}, {accessible: this.attributes.hasCredentials});
+        return _.extend(this._super('urlParams') || {}, {accessible: this.attributes.accessible});
     },
 
     comparator: function(instance) {

@@ -77,6 +77,10 @@ describe("chorus.views.SchemaPicker", function() {
                     expect(this.view.$(".schema .create_container")).toExist();
                 });
 
+                it("includes accessible=true by default", function() {
+                    expect(this.server.lastFetch().url).toContainQueryParams({accessible: true});
+                });
+
                 it("fetches the list of instances", function() {
                     expect(this.server.requests[0].url).toMatch("/instances/");
                 });
@@ -95,12 +99,6 @@ describe("chorus.views.SchemaPicker", function() {
                                 rspecFixtures.greenplumInstance({ shared: true, id: 2 }),
                                 rspecFixtures.greenplumInstance({ shared: false, id: 3 })
                             ]);
-                        });
-
-                        it("disables only inaccessible instances", function() {
-                            expect(this.view.$("select[name=instance] option[value=1]")).not.toBeDisabled();
-                            expect(this.view.$("select[name=instance] option[value=2]")).not.toBeDisabled();
-                            expect(this.view.$("select[name=instance] option[value=3]")).toBeDisabled();
                         });
 
                         itShowsSelect('instance');
