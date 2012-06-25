@@ -1,5 +1,5 @@
-chorus.views.TabularDataList = chorus.views.SelectableList.extend({
-    templateName: "tabular_data_list",
+chorus.views.DatasetList = chorus.views.SelectableList.extend({
+    templateName: "dataset_list",
     useLoadingSection: true,
     eventName: "tabularData",
 
@@ -52,7 +52,7 @@ chorus.views.TabularDataList = chorus.views.SelectableList.extend({
         }
 
         this.collection.each(function(model) {
-            var view = new chorus.views.TabularData({ model: model, activeWorkspace: this.options.activeWorkspace, checkable: this.options.checkable });
+            var view = new chorus.views.Dataset({ model: model, activeWorkspace: this.options.activeWorkspace, checkable: this.options.checkable });
             $list.append(view.render().el);
         }, this);
         this._super("postRender", arguments);

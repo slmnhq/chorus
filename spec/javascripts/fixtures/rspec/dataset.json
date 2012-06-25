@@ -40,6 +40,9 @@
       },
       "dataset_count": 1
     },
+    "associated_workspaces": [
+
+    ],
     "object_type": "TABLE"
   }
 }

@@ -826,7 +826,7 @@ beforeEach(function() {
         },
 
         tabularData: function(overrides) {
-            return new chorus.models.TabularData(this.tabularDataJson(_.extend({
+            return new chorus.models.Dataset(this.tabularDataJson(_.extend({
                 objectType: "TABLE",
                 type: "SANDBOX_TABLE"
             }, overrides)));

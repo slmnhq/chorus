@@ -18,7 +18,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
 
         this.mainContent = new chorus.views.MainContentList({
             emptyTitleBeforeFetch: true,
-            modelClass: "TabularData",
+            modelClass: "Dataset",
             collection: this.collection
         });
 
@@ -50,7 +50,7 @@ chorus.pages.SchemaBrowsePage = chorus.pages.Base.include(
         }, this), 300);
 
         this.mainContent = new chorus.views.MainContentList({
-            modelClass: "TabularData",
+            modelClass: "Dataset",
             collection: this.collection,
             title: this.schema.canonicalName(),
             search: {

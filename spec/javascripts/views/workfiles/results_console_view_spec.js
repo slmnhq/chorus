@@ -477,7 +477,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                             this.modalSpy = stubModals();
                             spyOn($, "download");
                             this.view.showDownloadDialog = true;
-                            this.view.tabularData = new chorus.models.TabularData();
+                            this.view.tabularData = rspecFixtures.dataset();
                             this.view.$("a.download_csv").click();
                         });
 
@@ -490,7 +490,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                         });
 
                         it("should have a page model for the dataset download dialog", function() {
-                            expect(this.modalSpy.lastModal().pageModel).toBeA(chorus.models.TabularData);
+                            expect(this.modalSpy.lastModal().pageModel).toBeA(chorus.models.Dataset);
                         });
                     });
 

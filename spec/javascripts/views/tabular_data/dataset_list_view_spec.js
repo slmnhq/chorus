@@ -1,4 +1,4 @@
-describe("chorus.views.TabularDataList", function() {
+describe("chorus.views.DatasetList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatasetSet([
             newFixtures.workspaceDataset.chorusView({ hasCredentials: true, objectName: "foo" }),
@@ -7,7 +7,7 @@ describe("chorus.views.TabularDataList", function() {
         ], { instanceId: "1", databaseName: "two", schemaName: "three" });
         this.collection.loaded = true;
 
-        this.view = new chorus.views.TabularDataList({ collection: this.collection, activeWorkspace: true });
+        this.view = new chorus.views.DatasetList({ collection: this.collection, activeWorkspace: true });
         this.view.render();
     });
 
@@ -202,7 +202,7 @@ describe("chorus.views.TabularDataList", function() {
         expect(this.view.$("li a.image").length).toBe(this.collection.length);
         expect(this.view.$("li a.name").length).toBe(this.collection.length);
 
-        this.view = new chorus.views.TabularDataList({ collection: this.collection, activeWorkspace: false });
+        this.view = new chorus.views.DatasetList({ collection: this.collection, activeWorkspace: false });
         this.view.render();
 
         expect(this.view.$("li a.image").length).toBe(0);

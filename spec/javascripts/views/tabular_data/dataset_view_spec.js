@@ -1,16 +1,16 @@
-describe("chorus.views.TabularData", function() {
+describe("chorus.views.Dataset", function() {
     beforeEach(function() {
         this.dataset = rspecFixtures.workspaceDataset.datasetTable({
             objectName: "john_the_table"
         });
         this.qtipSpy = stubQtip();
-        this.view = new chorus.views.TabularData({ model: this.dataset, activeWorkspace: true });
+        this.view = new chorus.views.Dataset({ model: this.dataset, activeWorkspace: true });
         this.view.render();
     });
 
     context("when the checkable flag is enabled", function() {
         beforeEach(function() {
-            this.view = new chorus.views.TabularData({ model: this.dataset, activeWorkspace: true, checkable: true });
+            this.view = new chorus.views.Dataset({ model: this.dataset, activeWorkspace: true, checkable: true });
             this.view.render();
         });
 
@@ -40,7 +40,7 @@ describe("chorus.views.TabularData", function() {
         beforeEach(function() {
             this.dataset = rspecFixtures.dataset();
 
-            this.view = new chorus.views.TabularData({ model: this.dataset, activeWorkspace: true });
+            this.view = new chorus.views.Dataset({ model: this.dataset, activeWorkspace: true });
             this.view.render();
         });
 
@@ -158,7 +158,7 @@ describe("chorus.views.TabularData", function() {
 
     it("works with database objects as well as datasets", function() {
         var table = rspecFixtures.dataset({objectName: 'yyy'});
-        var view = new chorus.views.TabularData({ model: table });
+        var view = new chorus.views.Dataset({ model: table });
         view.render();
         expect(view.$(".name")).toHaveHref(table.showUrl());
         expect(view.$(".image")).toHaveHref(table.showUrl());

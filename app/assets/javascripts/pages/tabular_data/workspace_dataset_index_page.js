@@ -34,7 +34,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
 
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
         this.mainContent = new chorus.views.MainContentList({
-            modelClass: "TabularData",
+            modelClass: "Dataset",
             collection: this.collection,
             model: this.workspace,
             title: t("dataset.title"),

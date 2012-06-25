@@ -1,4 +1,4 @@
-chorus.models.WorkspaceDataset = chorus.models.TabularData.extend({
+chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     constructorName: "WorkspaceDataset",
 
     urlTemplate: function() {
@@ -24,8 +24,8 @@ chorus.models.WorkspaceDataset = chorus.models.TabularData.extend({
         ].join("/");
     },
 
-    schema: function() {
-        return new chorus.models.Schema(this.get("schema"));
+    isChorusView: function() {
+        return this.get("type") === "CHORUS_VIEW";
     },
 
     iconUrl: function() {
