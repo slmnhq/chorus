@@ -40,22 +40,6 @@ describe("chorus.models.Abstract", function() {
                 expect(this.model.url()).toBe("/data/%2B");
             });
 
-            context("when the model has a urlTemplateAttributes function", function() {
-                beforeEach(function() {
-                    this.model.urlTemplate = "data/{{param1}}/{{param2}}/baz"
-                    this.model.urlTemplateAttributes = function() {
-                        return {
-                            param1: "foo",
-                            param2: "bar"
-                        }
-                    }
-                });
-
-                it("should use the urlTemplateAttributes to construct the url", function() {
-                    expect(this.model.url()).toBe("/data/foo/bar/baz");
-                });
-            });
-
             context("when the model has additional url params", function() {
                 context("when the urlParams is a function", function() {
                     beforeEach(function() {
