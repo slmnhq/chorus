@@ -155,7 +155,7 @@ describe Events do
       its(:dataset) { should == dataset }
       its(:targets) { should == { :dataset => dataset } }
 
-      it_creates_activities_for { [actor, dataset] }
+      it_creates_activities_for { [actor, dataset, workspace] }
       it_creates_a_global_activity
     end
   end
