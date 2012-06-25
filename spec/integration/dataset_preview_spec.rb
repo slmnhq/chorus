@@ -90,4 +90,8 @@ describe "Viewing data inside GPDB instances" do
 
   end
 
+  xit "DataSet includes list of workspaces with it is associated" do
+
+  end
+
 end
