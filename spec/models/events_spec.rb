@@ -163,9 +163,9 @@ describe Events do
 
     describe "USER_ADDED" do
       subject do
-        Events::USER_ADDED.create!(
-            :actor => actor,
-            :new_user => user
+        Events::USER_ADDED.add(
+          :actor => actor,
+          :new_user => user
         )
       end
 
