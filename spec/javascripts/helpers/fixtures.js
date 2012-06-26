@@ -1671,7 +1671,7 @@ beforeEach(function() {
                     ],
                     "numFound": 39
                 },
-                "instance": {
+                "instances": {
                     "results": [
                         {
                             "port": 8020,

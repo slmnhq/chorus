@@ -8,29 +8,29 @@ describe Search do
   end
 
   describe "results" do
-    it "searches for Users with query" do
+    it "searches for Users and Instances with query" do
       search = Search.new(:query => 'bob')
-      search.results
+      search.search
       Sunspot.session.should be_a_search_for(User)
+      Sunspot.session.should be_a_search_for(Instance)
       Sunspot.session.should have_search_params(:fulltext, 'bob')
-    end
-  end
-
-  describe "num_found" do
-    it "returns a hash with the number found of each type" do
-      search = Search.new(:query => 'bob')
-      search.num_found[:users].should == 0
     end
   end
 
   context "with solr enabled" do
     before do
-      VCR.use_cassette('search_solr_index') do
-        Sunspot.remove_all
-        Sunspot.session = Sunspot.session.original_session
-        FactoryGirl.create(:user, :id => 1, :username => 'some_user', :first_name => "marty", :last_name => "alpha")
-        @bob = FactoryGirl.create(:user, :id => 2, :username => 'some_other_user', :first_name => "bob", :last_name => "alpha")
-        Sunspot.commit
+      create_solr_fixtures
+      @instance = Instance.first
+      @bob = User.find_by_first_name('bob')
+    end
+
+    describe "num_found" do
+      it "returns a hash with the number found of each type" do
+        VCR.use_cassette('search_solr_query') do
+          search = Search.new(:query => 'bob')
+          search.num_found[:users].should == 1
+          search.num_found[:instances].should == 1
+        end
       end
     end
 
@@ -49,6 +49,25 @@ describe Search do
           search = Search.new(:query => 'bob')
           search.users.length.should == 1
           search.users.first.should == @bob
+        end
+      end
+    end
+
+    describe "instances" do
+      it "includes the highlighted attributes" do
+        VCR.use_cassette('search_solr_query') do
+          search = Search.new(:query => 'bob')
+          instance = search.instances.first
+          instance.highlighted_attributes.length.should == 1
+          instance.highlighted_attributes[:name][0].should == "<em>bob's</em> great greenplum instance"
+        end
+      end
+
+      it "returns the Instance objects found" do
+        VCR.use_cassette('search_solr_query') do
+          search = Search.new(:query => 'bob')
+          search.instances.length.should == 1
+          search.instances.first.should == @instance
         end
       end
     end
