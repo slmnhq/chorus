@@ -17,17 +17,17 @@ http_interactions:
       Content-Type:
       - text/plain; charset=utf-8
       Content-Length:
-      - '619'
+      - '617'
       Server:
       - Jetty(6.1.3)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1,''params''=>{''fl''=>''*
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''fl''=>''*
         score'',''start''=>''0'',''q''=>''bob'',''qf''=>''first_name_texts last_name_texts
-        username_texts email_texts'',''hl.simple.pre''=>''@@@hl@@@'',''hl.simple.post''=>''@@@endhl@@@'',''wt''=>''ruby'',''fq''=>''type:User'',''hl''=>''on'',''defType''=>''dismax'',''rows''=>''30''}},''response''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.69115376,''docs''=>[{''id''=>''User
-        2'',''first_name_texts''=>[''bob''],''username_texts''=>[''some_other_user''],''email_texts''=>[''person2@example.com''],''last_name_texts''=>[''alpha''],''score''=>0.69115376}]},''highlighting''=>{''User
+        username_texts email_texts'',''hl.simple.pre''=>''@@@hl@@@'',''hl.simple.post''=>''@@@endhl@@@'',''wt''=>''ruby'',''fq''=>''type:User'',''hl''=>''on'',''defType''=>''dismax'',''rows''=>''30''}},''response''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.0704521,''docs''=>[{''id''=>''User
+        2'',''first_name_texts''=>[''bob''],''username_texts''=>[''some_other_user''],''email_texts''=>[''person2@example.com''],''last_name_texts''=>[''alpha''],''score''=>1.0704521}]},''highlighting''=>{''User
         2''=>{''first_name_texts''=>[''@@@hl@@@bob@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Tue, 26 Jun 2012 17:11:46 GMT
+  recorded_at: Tue, 26 Jun 2012 18:37:12 GMT
 recorded_with: VCR 2.1.1
 ...
