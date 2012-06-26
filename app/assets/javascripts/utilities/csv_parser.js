@@ -1,15 +1,16 @@
-chorus.utilities.CsvParser = function(model, options) {
-    this.model = model;
+chorus.utilities.CsvParser = function(contents, options) {
+    this.contents = contents;
     this.options = _.extend({
         hasHeader: true,
         delimiter: ","
     }, options);
+    this.rows = [];
 
-    this.columnOrientedData = function() {
+    this.parse = function() {
         var parser = new CSV();
 
         try {
-            parser.from(this.model.get("contents"), {delimiter: this.options.delimiter});
+            parser.from(this.contents, {delimiter: this.options.delimiter});
             delete this.serverErrors;
         } catch (e) {
             if (e instanceof CSV.ParseError) {
@@ -20,46 +21,57 @@ chorus.utilities.CsvParser = function(model, options) {
             }
         }
 
-        var rows = parser.lines;
+        this.rows = parser.lines;
+    };
 
-        var column_names;
-        if (this.options.hasHeader) {
-            column_names = this.options.headerColumnNames;
-            var header = rows.shift();
-            if (!column_names) {
-                column_names = _.map(header, chorus.utilities.CsvParser.normalizeForDatabase);
-            }
+    this.parse();
+
+    this.generateHeaderNames = function() {
+        return _.map(this.rows[0], function(column, i) {
+            return "column_" + (i + 1);
+        });
+    };
+
+    this.parseHeaderNames = function() {
+        return _.map(this.rows.shift(), chorus.utilities.CsvParser.normalizeForDatabase);
+    };
+
+    this.overrideHeaderNames = function() {
+        return this.options.columnNameOverrides;
+    };
+
+    this.getColumnOrientedData = function() {
+        var columnNames;
+        if(this.options.hasHeader) {
+            columnNames = this.parseHeaderNames();
         } else {
-            column_names = this.options.generatedColumnNames;
-            if (!column_names) {
-                column_names = _.map(rows[0], function(column, i) {
-                    return "column_" + (i + 1);
-                });
-            }
+            columnNames = this.generateHeaderNames();
+        }
+        if (this.options.columnNameOverrides) {
+            columnNames = this.overrideHeaderNames();
         }
 
         var types = this.options.types;
         if (!types) {
-            types = _.map(column_names, function(column_name, i) {
+            types = _.map(columnNames, function(columnName, i) {
                 var type = "float";
-                _.each(rows, function(row) {
+                _.each(this.rows, function(row) {
                     if (type == "float" && isNaN(+row[i])) {
                         type = "text";
                     }
-                })
+                }, this);
                 return type;
-            });
+            }, this);
         }
 
-        return _.map(column_names, function(column_name, i) {
-            var column_values = [];
-            _.each(rows, function(row) {
-                column_values.push(row[i] || "")
+        return _.map(columnNames, function(columnName, i) {
+            var columnValues = [];
+            _.each(this.rows, function(row) {
+                columnValues.push(row[i] || "")
             });
-            return {values: column_values, name: column_name, type: types[i]};
+            return {values: columnValues, name: columnName, type: types[i]};
         }, this);
     }
-
 
     return this;
 }
