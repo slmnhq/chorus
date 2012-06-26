@@ -43,5 +43,11 @@ tags
 # Ignore postgres database
 /var
 
-# Ignore test coverage report
-/coverage
+# Ignore jetpack artifacts
+/vendor/jetty
+/vendor/bundle
+/vendor/bundler_gem
+/vendor/jruby-rack.jar
+/vendor/jruby.jar
+/WEB-INF
+/bin
