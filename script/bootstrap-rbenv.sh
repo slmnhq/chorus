@@ -8,6 +8,7 @@ install_ruby_build() {
       mkdir -p $plugins_dir
       cd $plugins_dir
       git clone git://github.com/sstephenson/ruby-build.git
+      git clone https://github.com/sstephenson/rbenv-vars.git
     )
   fi
 }
@@ -38,3 +39,4 @@ install_ruby_build
 
 echo "***** checking for rbenv in bash"
 add_rbenv_to_bash
+rbenv shims

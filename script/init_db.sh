@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh +x
 
 CHORUSDIR=${HOME}/workspace/chorusrails
 
@@ -16,14 +16,14 @@ else
     CREATED_DB=1
 fi
 
-pg_ctl start -D $CHORUSDIR/var/db -o "-h localhost -p8543 --bytea_output=escape"
+pg_ctl start -D ${CHORUSDIR}/var/db -o "-h localhost -p8543 --bytea_output=escape"
 sleep 5
 
-if [ $CREATED_DB ];
+if [ ${CREATED_DB} ];
 then
     dropuser -h localhost -p 8543 edcadmin
     createuser -h localhost -p 8543 -sdr edcadmin;
 fi
 
-$CHORUSDIR/script/reset_db.sh
-pg_ctl stop -D $CHORUSDIR/var/db
+${CHORUSDIR}/script/reset_db.sh
+pg_ctl stop -D ${CHORUSDIR}/var/db
