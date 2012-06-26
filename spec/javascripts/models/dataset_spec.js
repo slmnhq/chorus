@@ -16,6 +16,7 @@ describe("chorus.models.Dataset", function() {
 
     beforeEach(function() {
         this.dataset = rspecFixtures.dataset({
+            id: 45,
             schema: {
                 id: 1,
                 name: "ipa",
@@ -30,68 +31,10 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
-    describe("url", function() {
-        context("when it is a table", function() {
-            beforeEach(function() {
-                this.dataset = rspecFixtures.dataset(objectWithEncodingIssues);
-            });
-
-            it("uses the table exploration api", function() {
-                expect(this.dataset.url()).toContain("/datasets/" + + this.dataset.id)
-            });
-        });
-
-        context("when it is a view", function() {
-            beforeEach(function() {
-                var viewWithEncodingIssues = objectWithEncodingIssues;
-                viewWithEncodingIssues.objectType = "VIEW";
-                this.dataset = rspecFixtures.dataset(viewWithEncodingIssues);
-            });
-
-            it("uses the table exploration api", function() {
-                expect(this.dataset.url()).toContain("/datasets/" + this.dataset.id)
-            });
-        });
+    it("has the right urls", function() {
+        expect(this.dataset.url()).toMatchUrl("/datasets/45");
+        expect(this.dataset.showUrl()).toMatchUrl("#/datasets/45");
     });
-
-    describe("showUrl", function() {
-        context("when it is a table", function() {
-            beforeEach(function() {
-                this.dataset = rspecFixtures.dataset(objectWithEncodingIssues);
-            });
-
-            it("has the correct url", function() {
-                expect(this.dataset.showUrl()).toContain("/datasets/" + this.dataset.id)
-            });
-
-            it("works when there is markup in the name (e.g. result from type ahead search", function() {
-                this.dataset.set({objectName: "<em>a</em> space"})
-                expect(this.dataset.showUrl()).toContain("/datasets/" + this.dataset.id);
-            })
-        });
-
-        context("when it is a view", function() {
-            beforeEach(function() {
-                this.dataset = rspecFixtures.dataset({objectType: "VIEW"});
-            });
-
-            it("uses the view exploration api", function() {
-                var pieces = [
-                    "#/datasets",
-                    this.dataset.id
-                ]
-                var url = encodeURI(pieces.join('/'));
-                expect(this.dataset.showUrl()).toMatchUrl(url);
-            });
-        });
-
-        context("when it contains html", function() {
-            it("removes the html", function() {
-                this.dataset.set({ objectName: "<em>mmmm</em> good" });
-                expect(this.dataset.showUrl()).toMatchUrl("#/datasets/" + this.dataset.id);
-            })
-        })
-    })
 
     describe("when the 'invalidated' event is triggered", function() {
         describe("when the dataset belongs to a collection", function() {

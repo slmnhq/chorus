@@ -1,28 +1,8 @@
 chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
     constructorName: "WorkspaceDataset",
 
-    urlTemplate: function() {
-        var components = [
-            "workspaces",
-            this.get("workspace").id,
-            "datasets"
-        ]
-
-        if (this.get("id")) {
-            components.push("{{encode id}}");
-        }
-
-        return components.join("/");
-    },
-
-    showUrlTemplate: function() {
-        return [
-            "workspaces",
-            this.get("workspaceId") || this.get("workspace").id,
-            "datasets",
-            encodeURIComponent(this.get("compositeId") || this.get("id"))
-        ].join("/");
-    },
+    urlTemplate: "workspaces/{{workspace.id}}/datasets/{{id}}",
+    showUrlTemplate: "workspaces/{{workspace.id}}/datasets/{{id}}",
 
     isChorusView: function() {
         return this.get("type") === "CHORUS_VIEW";
@@ -34,10 +14,6 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
             result = result.replace(".png", "_locked.png");
         }
         return result;
-    },
-
-    tableOrViewTranslationKey: function() {
-        return "dataset.types." + this.metaType();
     },
 
     query: function() {

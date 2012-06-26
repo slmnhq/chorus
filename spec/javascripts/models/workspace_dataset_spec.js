@@ -1,7 +1,7 @@
 describe("chorus.models.WorkspaceDataset", function() {
     beforeEach(function() {
         this.dataset = rspecFixtures.workspaceDataset.datasetTable({
-            id: '"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"',
+            id: '1011',
             workspace: {
                 id: "44"
             },
@@ -15,36 +15,13 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
     })
 
-    it("creates the correct showUrl", function() {
-        expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/' + (encodeURIComponent(this.dataset.id)));
+    it("has the right showUrl", function() {
+        expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/1011');
     });
 
-    it("creates the correct showUrl with an ugly ID", function() {
-        this.dataset.set({id: "foo#bar"});
-        expect(this.dataset.showUrl()).toBe('#/workspaces/44/datasets/foo%23bar');
+    it("has the right url", function() {
+        expect(this.dataset.url()).toMatchUrl('/workspaces/44/datasets/1011');
     });
-
-    context("when the object has an id", function() {
-        it("has the right url", function() {
-            var url = encodeURI('/workspaces/44/datasets/"45"|"whirling_tops"|"diamonds"|"foo"|"japanese_teas"');
-            expect(this.dataset.url()).toMatchUrl(url);
-        });
-
-        it("has the right url with an ugly ID", function() {
-            this.dataset.set({id: "foo#bar"});
-            expect(this.dataset.url()).toBe("/workspaces/44/datasets/foo%23bar");
-        });
-    });
-
-    context("when the object does not have an id", function() {
-        beforeEach(function() {
-            this.dataset.unset("id");
-        });
-
-        it("has the right url", function() {
-            expect(this.dataset.url()).toMatchUrl("/workspaces/44/datasets");
-        });
-    })
 
     describe("when the 'invalidated' event is triggered", function() {
         describe("when the dataset belongs to a collection", function() {

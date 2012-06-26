@@ -4,13 +4,8 @@ chorus.models.Dataset = chorus.models.Base.include(
     nameAttribute: 'objectName',
     constructorName: "Dataset",
 
-    urlTemplate: function() {
-        return "datasets/" + this.id
-    },
-
-    showUrlTemplate: function() {
-        return "datasets/" + this.id
-    },
+    urlTemplate: "datasets/{{id}}",
+    showUrlTemplate: "datasets/{{id}}",
 
     initialize: function() {
         this.bind('invalidated', this.refetchAfterInvalidated, this);
