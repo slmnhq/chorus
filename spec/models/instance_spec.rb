@@ -154,4 +154,11 @@ describe Instance do
       end
     end
   end
+
+  describe "search fields" do
+    it "indexes text fields" do
+      Instance.should have_searchable_field :name
+      Instance.should have_searchable_field :description
+    end
+  end
 end

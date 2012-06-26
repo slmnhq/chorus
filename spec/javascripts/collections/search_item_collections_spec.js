@@ -1,7 +1,7 @@
 describe("chorus.collections.Search", function() {
     beforeEach(function() {
         this.search = fixtures.searchResult({
-            instance: {
+            instances: {
                 numFound: 131,
                 results: [
                     fixtures.instanceJson({ id: '101' }),
@@ -54,7 +54,7 @@ describe("chorus.collections.Search", function() {
 
         it("refreshes the collection on success", function() {
             this.server.completeFetchFor(this.search, new chorus.models.SearchResult({
-                instance: {
+                instances: {
                     numFound: 51,
                     results: [
                         fixtures.instanceJson({ id: '121' }),

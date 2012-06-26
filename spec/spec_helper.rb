@@ -91,5 +91,6 @@ RSpec.configure do |config|
   config.include GpdbIntegration, :type => :database_integration
   config.include DataMigrationHelper, :type => :data_migration
   config.include SunspotMatchers
+  config.include SolrHelpers
 end
 

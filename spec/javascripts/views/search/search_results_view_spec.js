@@ -82,7 +82,7 @@ describe("chorus.views.SearchResults", function() {
                 this.model.unset("users");
                 this.model.unset("hdfs");
                 this.model.unset("dataset");
-                this.model.unset("instance");
+                this.model.unset("instances");
                 this.view = new chorus.views.SearchResults({ model: this.model });
                 this.view.render();
             });
@@ -99,7 +99,7 @@ describe("chorus.views.SearchResults", function() {
 
                     attachment: null,
                     workspace: null,
-                    instance: null,
+                    instances: null,
                     dataset: null,
                     hdfs: null,
                     users: null

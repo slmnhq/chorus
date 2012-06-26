@@ -9,6 +9,12 @@ class Instance < ActiveRecord::Base
   has_many :accounts, :class_name => 'InstanceAccount'
   has_many :databases, :class_name => 'GpdbDatabase'
 
+  attr_accessor :highlighted_attributes
+  searchable do
+    text :name, :stored => true
+    text :description, :stored => true
+  end
+
   def self.unshared
     where("instances.shared = false OR instances.shared IS NULL")
   end

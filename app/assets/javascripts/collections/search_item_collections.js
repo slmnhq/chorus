@@ -51,7 +51,7 @@
     chorus.collections.Search.InstanceSet = chorus.collections.InstanceSet.include(
         searchCollectionMixins
     ).extend({
-        searchKey: "instance"
+        searchKey: "instances"
     });
 
     chorus.collections.Search.DynamicDatasetSet = chorus.collections.DynamicDatasetSet.include(
