@@ -46,6 +46,7 @@ describe Search do
           search.users.length.should == 1
           search.users.first.should == @bob
         end
+      end
     end
   end
 end
