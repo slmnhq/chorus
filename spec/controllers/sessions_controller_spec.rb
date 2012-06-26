@@ -20,7 +20,7 @@ describe SessionsController do
       end
 
       it "sets session expiration" do
-        Chorus::Application.config.session_timeout = 4.hours
+        Chorus::Application.config.chorus['session_timeout_minutes'] = 240
         Timecop.freeze(2012, 4, 17, 10, 30) do
           post :create, :session => {:username => 'admin', :password => 'secret'}
           response.should be_success
