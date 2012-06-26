@@ -4,7 +4,7 @@ describe("chorus.models.Activity", function() {
     });
 
     describe("model associations", function() {
-        var activity1, activity2, activity3, activity4;
+        var activity1, activity2, activity3, activity4, activity5;
 
         beforeEach(function() {
             activity1 = rspecFixtures.activity.greenplumInstanceChangedOwner({
@@ -23,6 +23,10 @@ describe("chorus.models.Activity", function() {
             });
             activity4 = rspecFixtures.activity.workfileCreated({
                 workfile: {id: 11}
+            });
+
+            activity5 = rspecFixtures.activity.userCreated({
+                newUser: {id: 12}
             });
 
         });
@@ -89,6 +93,14 @@ describe("chorus.models.Activity", function() {
 
             it("adds the workspace data to the dataset", function() {
                 expect(dataset.get("workspace").id).toBe(10);
+            });
+        });
+
+        describe("#newUser", function() {
+            it("returns a new user with the right data", function() {
+                var user = activity5.newUser();
+                expect(user).toBeA(chorus.models.User);
+                expect(user.id).toBe(12);
             });
         });
     });

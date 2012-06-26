@@ -110,7 +110,8 @@ window.rspecFixtureDefinitions = {
             greenplumInstanceChangedName: {},
             hadoopInstanceChangedName: {},
             workfileCreated: {},
-            sourceTableCreated: {}
+            sourceTableCreated: {},
+            userCreated: {}
         }
     },
 

@@ -84,7 +84,8 @@ describe ActivitiesController do
       "greenplumInstanceChangedName" => :greenplum_instance_changed_name_event,
       "hadoopInstanceChangedName" => :hadoop_instance_changed_name_event,
       "workfileCreated" => :workfile_created_event,
-      "sourceTableCreated" => :source_table_created_event
+      "sourceTableCreated" => :source_table_created_event,
+      "userCreated" => :user_created_event
     }
 
     FIXTURE_FILES.each do |filename, event_factory_name|

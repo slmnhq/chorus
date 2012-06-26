@@ -56,6 +56,10 @@
             SOURCE_TABLE_CREATED: {
                 links: [ "actor", "dataset", "workspace" ],
                 computed: [ "datasetType" ]
+            },
+
+            USER_ADDED: {
+                links: [ "newUser"]
             }
         },
 

@@ -1,0 +1,37 @@
+{
+  "response": {
+    "id": 556,
+    "actor": {
+      "id": 1786,
+      "username": "user37",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person37@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "action": "USER_ADDED",
+    "timestamp": "2012-06-26T21:34:02Z",
+    "new_user": {
+      "id": 1787,
+      "username": "user38",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person38@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    }
+  }
+}

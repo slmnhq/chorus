@@ -90,8 +90,10 @@ describe UsersController do
     end
 
     context "admin" do
+      let(:admin) {FactoryGirl.create(:admin, :username => 'some_user')}
+
       before do
-        log_in FactoryGirl.create(:admin, :username => 'some_user')
+        log_in admin
         post :create, {:user => @values}
       end
 
@@ -117,6 +119,12 @@ describe UsersController do
       it "should refuse invalid data" do
         post :create, {:user => {}}
         response.code.should == "422"
+      end
+
+      it "makes a USER_ADDED event" do
+        event = Events::USER_ADDED.last
+        event.new_user.should == User.find_by_username(@values[:username])
+        event.actor.should == admin
       end
     end
   end

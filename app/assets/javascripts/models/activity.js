@@ -7,7 +7,8 @@
         "hadoopInstance": "HadoopInstance",
         "workfile": "Workfile",
         "workspace": "Workspace",
-        "sandbox_schema": "Schema"
+        "sandbox_schema": "Schema",
+        "newUser" : "User"
     };
 
     chorus.models.Activity = chorus.models.Base.extend({
@@ -27,6 +28,7 @@
         greenplumInstance: makeAssociationMethod("greenplumInstance"),
         hadoopInstance: makeAssociationMethod("hadoopInstance"),
         workfile: makeAssociationMethod("workfile"),
+        newUser: makeAssociationMethod("newUser"),
 
         dataset: makeAssociationMethod("dataset", function(model) {
            model.set({workspace: this.get("workspace")}, {silent: true});

@@ -150,6 +150,10 @@ FactoryGirl.define do
       association :dataset, :factory => :gpdb_table
       workspace
     end
+
+    factory :user_created_event, :class => Events::USER_ADDED do
+      association :new_user, :factory => :user
+    end
   end
 end
 

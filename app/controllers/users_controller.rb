@@ -17,6 +17,9 @@ class UsersController < ApplicationController
     user.attributes = params[:user]
     user.admin = params[:user][:admin]
     user.save!
+
+    Events::USER_ADDED.by(current_user).add(:new_user => user)
+
     present user, :status => :created
   end
 

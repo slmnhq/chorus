@@ -42,4 +42,9 @@ module Events
     has_targets :sandbox_schema, :workspace
     has_activities :actor, :sandbox_schema, :workspace, :global
   end
+
+  class USER_ADDED < Base
+    has_targets :new_user
+    has_activities :actor, :new_user, :global
+  end
 end

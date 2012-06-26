@@ -160,6 +160,21 @@ describe Events do
       it_creates_activities_for { [actor, dataset, workspace] }
       it_creates_a_global_activity
     end
+
+    describe "USER_ADDED" do
+      subject do
+        Events::USER_ADDED.create!(
+            :actor => actor,
+            :new_user => user
+        )
+      end
+
+      its(:new_user) { should == user }
+      its(:targets) { should == { :new_user => user } }
+
+      it_creates_activities_for { [actor, user] }
+      it_creates_a_global_activity
+    end
   end
 
   describe ".add(params)" do
