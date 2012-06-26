@@ -21,11 +21,16 @@
             return this._author;
         },
 
-        getModel: function(name) {
-            var className = CLASS_MAP[name];
-            var modelClass = chorus.models[className];
-            return new modelClass(this.get(name));
-        },
+        newOwner: makeAssociationMethod("newOwner"),
+        workspace: makeAssociationMethod("workspace"),
+        actor: makeAssociationMethod("actor"),
+        greenplumInstance: makeAssociationMethod("greenplumInstance"),
+        hadoopInstance: makeAssociationMethod("hadoopInstance"),
+        workfile: makeAssociationMethod("workfile"),
+
+        dataset: makeAssociationMethod("dataset", function(model) {
+           model.set({workspace: this.get("workspace")}, {silent: true});
+        }),
 
         comments: function() {
             this._comments || (this._comments = new chorus.collections.CommentSet(
@@ -142,4 +147,14 @@
             return this.get("isPublished") === true;
         }
     });
+
+    function makeAssociationMethod(name, setupFunction) {
+        return function() {
+            var className = CLASS_MAP[name];
+            var modelClass = chorus.models[className];
+            var model = new modelClass(this.get(name));
+            if (setupFunction) setupFunction.call(this, model);
+            return model;
+        };
+    }
 })();

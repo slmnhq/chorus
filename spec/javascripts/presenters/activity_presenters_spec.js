@@ -1,11 +1,11 @@
 describe("chorus.presenters.Activity", function() {
     var model, actor, presenter;
 
-    context("common aspects", function() {
+    describe("common aspects", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.greenplumInstanceCreated();
             presenter = new chorus.presenters.Activity(model);
-            actor = model.getModel("actor");
+            actor = model.actor();
         });
 
         it("includes the relative timestamp", function() {
@@ -26,15 +26,15 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.greenplumInstanceCreated();
             presenter = new chorus.presenters.Activity(model);
-            greenplumInstance = model.getModel("greenplumInstance");
-            actor = model.getModel("actor");
+            greenplumInstance = model.greenplumInstance();
+            actor = model.actor();
         });
 
         itHasTheActorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GREENPLUM_INSTANCE_CREATED.without_workspace", {
+                "activity.header.GREENPLUM_INSTANCE_CREATED.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name())
                 }
@@ -48,15 +48,15 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.hadoopInstanceCreated();
             presenter = new chorus.presenters.Activity(model);
-            hadoopInstance = model.getModel("hadoopInstance");
-            actor = model.getModel("actor");
+            hadoopInstance = model.hadoopInstance();
+            actor = model.actor();
         });
 
         itHasTheActorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.HADOOP_INSTANCE_CREATED.without_workspace", {
+                "activity.header.HADOOP_INSTANCE_CREATED.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     hadoopInstanceLink: linkTo(hadoopInstance.showUrl(), hadoopInstance.name())
                 }
@@ -70,16 +70,16 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.greenplumInstanceChangedOwner();
             presenter = new chorus.presenters.Activity(model);
-            greenplumInstance = model.getModel("greenplumInstance");
-            newOwner = model.getModel("newOwner");
-            actor = model.getModel("actor");
+            greenplumInstance = model.greenplumInstance();
+            newOwner = model.newOwner();
+            actor = model.actor();
         });
 
         itHasTheActorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GREENPLUM_INSTANCE_CHANGED_OWNER.without_workspace", {
+                "activity.header.GREENPLUM_INSTANCE_CHANGED_OWNER.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
                     newOwnerLink: linkTo(newOwner.showUrl(), newOwner.name())
@@ -97,15 +97,15 @@ describe("chorus.presenters.Activity", function() {
                 oldName: "john"
             });
             presenter = new chorus.presenters.Activity(model);
-            greenplumInstance = model.getModel("greenplumInstance");
-            actor = model.getModel("actor");
+            greenplumInstance = model.greenplumInstance();
+            actor = model.actor();
         });
 
         itHasTheActorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.GREENPLUM_INSTANCE_CHANGED_NAME.without_workspace", {
+                "activity.header.GREENPLUM_INSTANCE_CHANGED_NAME.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     greenplumInstanceLink: linkTo(greenplumInstance.showUrl(), greenplumInstance.name()),
                     newName: "jane",
@@ -124,15 +124,15 @@ describe("chorus.presenters.Activity", function() {
                 oldName: "john"
             });
             presenter = new chorus.presenters.Activity(model);
-            instance = model.getModel("hadoopInstance");
-            actor = model.getModel("actor");
+            instance = model.hadoopInstance();
+            actor = model.actor();
         });
 
         itHasTheActorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.HADOOP_INSTANCE_CHANGED_NAME.without_workspace", {
+                "activity.header.HADOOP_INSTANCE_CHANGED_NAME.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
                     hadoopInstanceLink: linkTo(instance.showUrl(), instance.name()),
                     newName: "jane",
@@ -146,18 +146,44 @@ describe("chorus.presenters.Activity", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.workfileCreated();
             presenter = new chorus.presenters.Activity(model);
-            actor = model.getModel("actor");
+            actor = model.actor();
         });
 
         itHasTheActorIcon();
 
         it("has the right header html", function() {
-            var workfile = model.getModel("workfile");
+            var workfile = model.workfile();
+            var workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.WORKFILE_CREATED.without_workspace", {
+                "activity.header.WORKFILE_CREATED.default", {
                     actorLink: linkTo(actor.showUrl(), actor.name()),
-                    workfileLink: linkTo(workfile.showUrl(), workfile.name())
+                    workfileLink: linkTo(workfile.showUrl(), workfile.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            );
+        });
+    });
+
+    context("source table created", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.sourceTableCreated({ dataset: { objectType: "VIEW" } });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            var dataset = model.dataset();
+            var workspace = model.workspace();
+
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.SOURCE_TABLE_CREATED.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                    datasetLink: linkTo(dataset.showUrl(), dataset.name()),
+                    datasetType: t("dataset.types.view")
                 }
             );
         });

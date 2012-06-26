@@ -3,45 +3,93 @@ describe("chorus.models.Activity", function() {
         this.model = fixtures.activity();
     });
 
-    describe("#getModel", function() {
-        it("returns a model with the right class and the right data for greenplumInstanceChangedOwner", function() {
-           var activity1 = rspecFixtures.activity.greenplumInstanceChangedOwner({
-               actor: { id: 5 },
-               greenplumInstance: { id: 6 },
-               newOwner: { id: 7 },
-           });
+    describe("model associations", function() {
+        var activity1, activity2, activity3, activity4;
 
-           var actor = activity1.getModel("actor");
-           expect(actor).toBeA(chorus.models.User);
-           expect(actor.id).toBe(5);
+        beforeEach(function() {
+            activity1 = rspecFixtures.activity.greenplumInstanceChangedOwner({
+                actor: { id: 5 },
+                greenplumInstance: { id: 6 },
+                newOwner: { id: 7 },
+            });
 
-           var greenplumInstance = activity1.getModel("greenplumInstance");
-           expect(greenplumInstance).toBeA(chorus.models.GreenplumInstance);
-           expect(greenplumInstance.id).toBe(6);
+            activity2 = rspecFixtures.activity.hadoopInstanceCreated({
+                hadoopInstance: { id: 8 }
+            });
 
-           var newOwner = activity1.getModel("newOwner");
-           expect(newOwner).toBeA(chorus.models.User);
-           expect(newOwner.id).toBe(7);
+            activity3 = rspecFixtures.activity.sourceTableCreated({
+                dataset: { id: 9 }, workspace: {id: 10}
+
+            });
+            activity4 = rspecFixtures.activity.workfileCreated({
+                workfile: {id: 11}
+            });
+
         });
 
-        it("returns a model with the right class and the right data for hadoopInstanceCreated", function() {
-           var activity2 = rspecFixtures.activity.hadoopInstanceCreated({
-               hadoopInstance: { id: 8 }
-           });
-
-           var hadoopInstance = activity2.getModel("hadoopInstance");
-           expect(hadoopInstance).toBeA(chorus.models.HadoopInstance);
-           expect(hadoopInstance.id).toBe(8);
+        describe("#newOwner", function() {
+            it("returns a user with the newOwner data", function() {
+                var newOwner = activity1.newOwner();
+                expect(newOwner).toBeA(chorus.models.User);
+                expect(newOwner.id).toBe(7);
+            });
         });
 
-        it("returns a model with the right class and the right data for sourceTableCreated", function() {
-           var activity3 = rspecFixtures.activity.sourceTableCreated({
-               dataset: { id: 9 }
-           });
+        describe("#actor", function() {
+            it("returns a user with the right data", function() {
+                var actor = activity1.actor();
+                expect(actor).toBeA(chorus.models.User);
+                expect(actor.id).toBe(5);
+            });
+        });
 
-           var dataset = activity3.getModel("dataset");
-           expect(dataset).toBeA(chorus.models.WorkspaceDataset);
-           expect(dataset.id).toBe(9);
+        describe("#hadoopInstance", function() {
+            it("returns a hadoop instance with the right data", function() {
+                var hadoopInstance = activity2.hadoopInstance();
+                expect(hadoopInstance).toBeA(chorus.models.HadoopInstance);
+                expect(hadoopInstance.id).toBe(8);
+            });
+        });
+
+        describe("#greenplumInstance", function() {
+            it("returns a greenplum instance with the right data", function() {
+                var greenplumInstance = activity1.greenplumInstance();
+                expect(greenplumInstance).toBeA(chorus.models.GreenplumInstance);
+                expect(greenplumInstance.id).toBe(6);
+            });
+        });
+
+         describe("#workspace", function() {
+            it("returns a Workspace with the right data", function() {
+                var workspace = activity3.workspace();
+                expect(workspace).toBeA(chorus.models.Workspace);
+                expect(workspace.id).toBe(10);
+            });
+        });
+
+        describe("#workfile", function() {
+            it("returns a workfile with the right data", function() {
+                var workfile = activity4.workfile();
+                expect(workfile).toBeA(chorus.models.Workfile);
+                expect(workfile.id).toBe(11);
+            });
+        });
+
+        describe("#dataset", function() {
+            var dataset;
+
+            beforeEach(function() {
+                dataset = activity3.dataset();
+            });
+
+            it("returns a WorkspaceDataset with the right data", function() {
+                expect(dataset).toBeA(chorus.models.WorkspaceDataset);
+                expect(dataset.id).toBe(9);
+            });
+
+            it("adds the workspace data to the dataset", function() {
+                expect(dataset.get("workspace").id).toBe(10);
+            });
         });
     });
 

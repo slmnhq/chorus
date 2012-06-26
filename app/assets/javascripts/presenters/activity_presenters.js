@@ -1,13 +1,13 @@
 ;(function() {
-    var TYPE_OPTIONS = {
+    var private, TYPE_OPTIONS = {
         GREENPLUM_INSTANCE_CHANGED_NAME: {
             links: [ "actor", "greenplumInstance" ],
-            strings: [ "newName", "oldName" ]
+            attrs: [ "newName", "oldName" ]
         },
 
         HADOOP_INSTANCE_CHANGED_NAME: {
             links: [ "actor", "hadoopInstance" ],
-            strings: [ "newName", "oldName" ]
+            attrs: [ "newName", "oldName" ]
         },
 
         GREENPLUM_INSTANCE_CREATED: {
@@ -28,6 +28,11 @@
 
         WORKSPACE_ADD_SANDBOX: {
             links: [ "actor", "sandbox_schema", "workspace" ]
+        },
+
+        SOURCE_TABLE_CREATED: {
+            links: [ "actor", "dataset", "workspace" ],
+            computed: [ "datasetType" ]
         }
     };
 
@@ -52,8 +57,16 @@
         iconClass: "profile"
     });
 
+    private = {
+        datasetType: function(self) {
+            var type = self.model.dataset().metaType();
+            return t("dataset.types." + type);
+        }
+    };
+
+
     function headerTranslationKey(self) {
-        return "activity.header." + self.model.get("action") + ".without_workspace";
+        return "activity.header." + self.model.get("action") + ".default";
     }
 
     function headerParams(self) {
@@ -64,19 +77,23 @@
         var options = TYPE_OPTIONS[action];
 
         _.each(options.links, function(name) {
-            var associatedModel = model.getModel(name);
+            var associatedModel = model[name]();
             params[name + "Link"] = modelLink(associatedModel);
         });
 
-        _.each(options.strings, function(name) {
+        _.each(options.attrs, function(name) {
             params[name] = model.get(name);
+        });
+
+        _.each(options.computed, function(name) {
+            params[name] = private[name](self);
         });
 
         return params;
     }
 
     function actor(self) {
-        return self.model.getModel("actor");
+        return self.model.actor();
     }
 
     function modelLink(model) {
