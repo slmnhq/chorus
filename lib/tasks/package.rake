@@ -13,20 +13,9 @@ module PackageMaker
   PACKAGES_DIR   = File.join(PACKAGING_DIR, "packages")
   COMPONENTS_DIR = File.join(PACKAGING_DIR, "components")
 
-  EXTERNAL_DEPENDENCIES = {
-    'ruby' => "http://greenplum-ci.sf.pivotallabs.com/~ci/chorus_packaging_mirror/ruby-1.9.3-p125.tar.gz",
-    'rubygems' => "http://greenplum-ci.sf.pivotallabs.com/~ci/chorus_packaging_mirror/rubygems-1.8.24.tgz",
-    # 'hadoop' => "http://www.reverse.net/pub/apache/hadoop/common/hadoop-1.0.0/hadoop-1.0.0.tar.gz",
-    'postgres' => "http://greenplum-ci.sf.pivotallabs.com/~ci/chorus_packaging_mirror/postgresql-9.0.4.tar.gz",
-    'imagemagick' => "http://greenplum-ci.sf.pivotallabs.com/~ci/chorus_packaging_mirror/ImageMagick-6.7.1-10.tar.gz"
-  }
-
   def make
     setup_directories
-    download_external_dependencies
-    download_bundler
     archive_app
-    create_package
   end
 
   def setup_directories
@@ -41,46 +30,36 @@ module PackageMaker
     end
   end
 
-  def download_external_dependencies
-    EXTERNAL_DEPENDENCIES.each do |name, url|
-      run "curl #{url} > #{COMPONENTS_DIR}/#{name}"
-    end
-  end
-
-  def download_bundler
-    Dir.chdir(COMPONENTS_DIR) do
-      run "gem fetch bundler -v 1.1.3"
-    end
-  end
-
   def archive_app
-    copy_name = "app"
+    run "rake assets:precompile"
+    run "bundle exec jetpack ."
+    current_sha = head_sha
+    filename = "greenplum-chorus-#{Chorus::VERSION::STRING}-#{timestamp}-#{current_sha}.tar.gz"
+    files_to_tar = [
+      "bin/",
+      "app/",
+      "config/",
+      "db/",
+      "doc/",
+      "lib/",
+      "public/",
+      "script/",
+      "vendor/",
+      "WEB-INF/",
+      "Gemfile",
+      "Gemfile.lock",
+      "README.md",
+      "Rakefile",
+      "config.ru",
+      "version.rb",
+      ".bundle/config"
+    ]
 
-    Dir.chdir(COMPONENTS_DIR) do
-      compiled_assets_path = "public/assets"
-      run "rm -rf #{copy_name}" if Dir.exist?(copy_name)
-      run "git clone --depth 1 file://#{ROOT_DIR} #{copy_name}"
-
-      Dir.chdir(File.join(COMPONENTS_DIR, copy_name)) do
-        run "rake assets:clean assets:precompile"
-        run "bundle package"
-        # TODO why doesn't it copy it in the right place
-        run "cp -r #{ROOT_DIR}/vendor/cache vendor/cache"
-      end
-
-      run "tar -czf #{COMPONENTS_DIR}/app.tar.gz #{copy_name}"
-      run "rm -rf #{copy_name}"
+    Dir.chdir("..") do
+      run "tar czf #{filename} --exclude='chorusrails/public/system/' --exclude='javadoc' --exclude='.git' #{files_to_tar.map{|path| "chorusrails/#{path}" }.join(" ")}"
+      `mv #{filename} chorusrails/`
     end
-  end
 
-  def create_package
-    Dir.chdir(PACKAGING_DIR) do
-      run "tar -czf #{PACKAGES_DIR}/#{package_name} #{relative(COMPONENTS_DIR)} install.rb"
-    end
-  end
-
-  def package_name
-    "greenplum-chorus-#{Chorus::VERSION::STRING}-#{timestamp}-#{head_sha}.tar.gz"
   end
 
   def timestamp
