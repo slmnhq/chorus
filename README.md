@@ -115,3 +115,6 @@ When the database has incoherent data (i.e. a suspicious amount of tests fails e
 ### CI
 
 http://greenplum-ci:3333/builds/chorusrails
+
+Delete all gems
+'gem list | cut -d" " -f1 | xargs gem uninstall -aIx'

@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: git://github.com/pivotal-leopold/queue_classic.git
-  revision: 11a479fe25e6886124ed72a7162c4116fe7158cd
+  revision: 373b8fd466d1348378422ba4461336c9cc83b89c
   specs:
     queue_classic (2.0.0)
       scrolls (~> 0.0.8)

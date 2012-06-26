@@ -25,9 +25,13 @@ describe Search do
 
   context "with solr enabled" do
     before do
-      Sunspot.session = Sunspot.session.original_session
-      FactoryGirl.create(:user, :id => 1, :username => 'some_user', :first_name => "marty", :last_name => "alpha")
-      @bob = FactoryGirl.create(:user, :id => 2, :username => 'some_other_user', :first_name => "bob", :last_name => "alpha")
+      VCR.use_cassette('search_solr_index') do
+        Sunspot.remove_all
+        Sunspot.session = Sunspot.session.original_session
+        FactoryGirl.create(:user, :id => 1, :username => 'some_user', :first_name => "marty", :last_name => "alpha")
+        @bob = FactoryGirl.create(:user, :id => 2, :username => 'some_other_user', :first_name => "bob", :last_name => "alpha")
+        Sunspot.commit
+      end
     end
 
     describe "users" do

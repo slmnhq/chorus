@@ -1,0 +1,79 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="first_name_texts">marty</field><field name="last_name_texts">alpha</field><field name="username_texts">some_user</field><field name="email_texts">person1@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Content-Length:
+      - '44'
+      Server:
+      - Jetty(6.1.3)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Tue, 26 Jun 2012 18:37:12 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 2</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="first_name_texts">bob</field><field name="last_name_texts">alpha</field><field name="username_texts">some_other_user</field><field name="email_texts">person2@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Content-Length:
+      - '44'
+      Server:
+      - Jetty(6.1.3)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Tue, 26 Jun 2012 18:37:12 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Content-Length:
+      - '45'
+      Server:
+      - Jetty(6.1.3)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>21}}'
+    http_version:
+  recorded_at: Tue, 26 Jun 2012 18:37:12 GMT
+recorded_with: VCR 2.1.1
+...
