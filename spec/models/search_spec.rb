@@ -7,13 +7,32 @@ describe Search do
     end
   end
 
-  describe "results" do
+  describe "search" do
     it "searches for Users and Instances with query" do
       search = Search.new(:query => 'bob')
       search.search
       Sunspot.session.should be_a_search_for(User)
       Sunspot.session.should be_a_search_for(Instance)
       Sunspot.session.should have_search_params(:fulltext, 'bob')
+      Sunspot.session.should have_search_params(:facet, :class)
+    end
+
+    it "uses the page and per_page parameters" do
+      search = Search.new(:query => 'bob', :page => 4, :per_page => 42)
+      search.search
+      Sunspot.session.should have_search_params(:paginate, :page => 4, :per_page => 42)
+    end
+  end
+
+  describe "search with a specific model" do
+    it "only searches for that model" do
+      search = Search.new(:query => 'bob')
+      search.models_to_search = [User]
+      search.search
+      Sunspot.session.should be_a_search_for(User)
+      Sunspot.session.should_not be_a_search_for(Instance)
+      Sunspot.session.should have_search_params(:fulltext, 'bob')
+      Sunspot.session.should_not have_search_params(:facet, :class)
     end
   end
 

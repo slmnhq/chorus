@@ -1,16 +1,21 @@
 class Search
-  attr_reader :query
+  attr_accessor :models_to_search, :query, :page, :per_page
 
   def initialize(params = {})
-    @query = params[:query]
+    self.models_to_search = [User, Instance]
+    self.query = params[:query]
+    self.page = params[:page] || 1
+    self.per_page = params[:per_page] || 100
   end
 
   def search
-    @search ||= Sunspot.search(User, Instance) do
-      fulltext query do
-        highlight
+    @search ||= Sunspot.search(*models_to_search) do
+      fulltext query, :highlight => true
+      paginate :page => page, :per_page => per_page
+
+      if(models_to_search.length > 1)
+        facet :class
       end
-      facet :class
     end
   end
 
