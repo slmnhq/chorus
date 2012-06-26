@@ -42,6 +42,13 @@ describe ActivityMigrator, :data_migration => true do
         event.actor.should be_instance_of(User)
         event.hadoop_instance.should be_instance_of(HadoopInstance)
       end
+
+      it "copies USER ADDED data fields from the legacy activity" do
+        event = Events::USER_ADDED.find(event_id_for('10195'))
+
+        event.actor.should be_instance_of(User)
+        event.new_user.should be_instance_of(User)
+      end
     end
 
     context "foreign key" do

@@ -59,6 +59,15 @@ class Legacy::ActivityStream
     extract_result("chorus_rails_workfile_id", Legacy.connection.exec_query(sql))
   end
 
+  def rails_object_user_id
+    sql = "SELECT eu.chorus_rails_user_id FROM edc_user eu, edc_activity_stream_object aso
+                                           WHERE aso.activity_stream_id = '#{id}'
+                                           AND aso.object_type = 'object'
+                                           AND aso.entity_type = 'user'
+                                           AND eu.id = aso.object_id"
+    extract_result("chorus_rails_user_id", Legacy.connection.exec_query(sql))
+  end
+
   def chorus_rails_workspace_id
     sql = "SELECT ew.chorus_rails_workspace_id FROM edc_workspace ew, edc_activity_stream eas
                                            WHERE eas.workspace_id = ew.id

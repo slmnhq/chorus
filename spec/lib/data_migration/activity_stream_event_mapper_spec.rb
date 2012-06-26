@@ -98,6 +98,37 @@ describe ActivityStreamEventMapper do
     end
   end
 
+  describe "user added event" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:activity_stream) do
+      Object.new.tap do |activity|
+        mock(activity).type.twice { 'USER_ADDED' }
+      end
+    end
+
+    context "#build_event" do
+      before do
+        mock(activity_stream).rails_object_user_id { user.id }
+      end
+
+      it "builds a valid USER_ADDED event" do
+        event = mapper.build_event
+        event.should be_a_kind_of(Events::USER_ADDED)
+      end
+
+      it "sets the user target" do
+        event = mapper.build_event
+        event.new_user.should == user
+      end
+    end
+
+    context "#can_build?" do
+      it "returns true" do
+        mapper.can_build?.should be_true
+      end
+    end
+  end
+
   describe "instance change owner event" do
     let(:activity_stream) do
       Object.new.tap do |activity|

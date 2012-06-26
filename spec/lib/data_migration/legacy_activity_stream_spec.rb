@@ -6,19 +6,23 @@ describe Legacy::ActivityStream, :type => :data_migration do
   let(:greenplum_activity_stream) { Legacy::ActivityStream.new('10000', nil) }
   let(:hadoop_activity_stream) { Legacy::ActivityStream.new('10006', nil) }
   let(:workfile_activity_stream) { Legacy::ActivityStream.new('10010', nil) }
+  let(:user_activity_stream) { Legacy::ActivityStream.new('10004', nil) }
 
   before do
     Legacy.connection.add_column :edc_instance, :chorus_rails_instance_id, :integer
     Legacy.connection.add_column :edc_work_file, :chorus_rails_workfile_id, :integer
     Legacy.connection.add_column :edc_activity_stream, :chorus_rails_event_id, :integer
+    Legacy.connection.add_column :edc_user, :chorus_rails_user_id, :integer
 
     Legacy.connection.update("UPDATE edc_instance SET chorus_rails_instance_id = 123")
     Legacy.connection.update("UPDATE edc_work_file SET chorus_rails_workfile_id = 123")
+    Legacy.connection.update("UPDATE edc_user SET chorus_rails_user_id = 123")
   end
 
   after do
     Legacy.connection.remove_column :edc_instance, :chorus_rails_instance_id
     Legacy.connection.remove_column :edc_work_file, :chorus_rails_workfile_id
+    Legacy.connection.remove_column :edc_user, :chorus_rails_user_id
     Legacy.connection.remove_column :edc_activity_stream, :chorus_rails_event_id
   end
 
@@ -125,4 +129,18 @@ describe Legacy::ActivityStream, :type => :data_migration do
       end
     end
   end
+
+  describe "#rails_object_user_id" do
+      context "when it has a user" do
+        it "returns the user id" do
+          user_activity_stream.rails_object_user_id.should be_present
+        end
+      end
+
+      context "when it doesn't have a user'" do
+        it "returns false" do
+          greenplum_activity_stream.rails_object_user_id.should_not be_present
+        end
+      end
+    end
 end

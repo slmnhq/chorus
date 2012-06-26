@@ -50,6 +50,8 @@ class ActivityStreamEventMapper
       HadoopInstance.find_by_id(@activity_stream.rails_hadoop_instance_id)
     when :workfile
       Workfile.find_by_id(@activity_stream.rails_workfile_id)
+    when :new_user
+      User.find_by_id(@activity_stream.rails_object_user_id)
     end
   end
 end
