@@ -44,6 +44,7 @@ group :test do
 end
 
 group :test, :development do
+  gem 'rake'
   gem 'ruby-debug'
   gem 'awesome_print'
   gem 'jasmine'
