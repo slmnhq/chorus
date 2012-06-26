@@ -1,17 +1,22 @@
+#!/bin/sh
+
+CHORUSDIR=${HOME}/workspace/chorusrails
+
 ps aux | grep -- '-p8543' | grep -v grep | awk '{print $2}' | xargs kill -9
 
-if [ -f ~/workspace/chorusrails/var/db/postmaster.pid ];
+if [ -f ${CHORUSDIR}/var/db/postmaster.pid ];
 then
-    rm ~/workspace/chorusrails/var/db/postmaster.pid
+    rm ${CHORUSDIR}/var/db/postmaster.pid
 fi
 
-if [ ! -d ~/workspace/chorusrails/var/db ];
+if [ ! -d ${CHORUSDIR}/var/db ];
 then
-    pg_ctl init -D ~/workspace/chorusrails/var/db
+    pg_ctl init -D ${CHORUSDIR}/var/db
+else
     CREATED_DB=1
 fi
 
-pg_ctl start -D ~/workspace/chorusrails/var/db -o "-h localhost -p8543 --bytea_output=escape"
+pg_ctl start -D $CHORUSDIR/var/db -o "-h localhost -p8543 --bytea_output=escape"
 sleep 5
 
 if [ $CREATED_DB ];
@@ -20,5 +25,5 @@ then
     createuser -h localhost -p 8543 -sdr edcadmin;
 fi
 
-script/reset_db.sh
-pg_ctl stop -D ~/workspace/chorusrails/var/db
+$CHORUSDIR/script/reset_db.sh
+pg_ctl stop -D $CHORUSDIR/var/db
