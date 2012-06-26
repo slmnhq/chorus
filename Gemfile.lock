@@ -76,6 +76,7 @@ GEM
     clockwork (0.4.0)
       tzinfo
     cocaine (0.2.1)
+    columnize (0.3.6)
     compass (0.12.1)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -188,6 +189,10 @@ GEM
       mustache (>= 0.99.4)
       rspec (>= 2.6.0)
       webmock (>= 1.7.0)
+    ruby-debug (0.10.4)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.4.0)
+    ruby-debug-base (0.10.4-java)
     rubyzip (0.9.8)
     sass (3.1.18)
     sass-rails (3.2.5)
@@ -257,6 +262,7 @@ DEPENDENCIES
   rr
   rspec-rails
   rspec_api_documentation
+  ruby-debug
   sass-rails
   shoulda-matchers
   therubyrhino
