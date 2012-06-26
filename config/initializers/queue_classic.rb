@@ -4,4 +4,4 @@ password = config["password"]
 port = config["port"]
 database = config["database"]
 
-ENV["QC_DATABASE_URL"] = "postgresql://localhost:#{port}/#{database}?username=#{username}#{password.nil? ? '' : "&password=#{password}"}"
+ENV["QC_DATABASE_URL"] = "postgresql://localhost:#{port}/#{database}?user=#{username}#{password.nil? ? '' : "&password=#{password}"}"
