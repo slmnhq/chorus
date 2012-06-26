@@ -28,6 +28,9 @@ end
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   c.hook_into :webmock # or :fakeweb
+  c.ignore_request do |request|
+    request.uri.match /solr\/update/
+  end
 end
 
 
@@ -61,6 +64,10 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = true
 
+  config.before do
+    Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session) unless Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
+  end
+
   config.before(:each, :data_migration => true) do
     # stub file reads of legacy workfiles
     #
@@ -86,5 +93,6 @@ RSpec.configure do |config|
   config.include AllowyRSpecHelpers
   config.include GpdbIntegration, :type => :database_integration
   config.include DataMigrationHelper, :type => :data_migration
+  config.include SunspotMatchers
 end
 

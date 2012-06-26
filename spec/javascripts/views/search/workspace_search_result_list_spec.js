@@ -3,7 +3,7 @@ describe("chorus.views.WorkspaceSearchResultList", function() {
         this.search = fixtures.searchResult({
             thisWorkspace: {
                 numFound: 9,
-                docs: [
+                results: [
                     fixtures.searchResultWorkfileJson(),
                     fixtures.searchResultDatasetJson(),
                     fixtures.searchResultChorusViewJson(),

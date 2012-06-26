@@ -4,7 +4,7 @@ describe("chorus.views.SearchResults", function() {
             entityType: "all",
             workspaceId: '10001',
             thisWorkspace: {
-                docs: [
+                results: [
                     fixtures.searchResultWorkfileJson(),
                     fixtures.searchResultDatasetJson(),
                     fixtures.searchResultChorusViewJson()
@@ -79,7 +79,7 @@ describe("chorus.views.SearchResults", function() {
                 this.model.set({ entityType: "workfile" });
                 this.model.unset("workspace");
                 this.model.unset("attachment");
-                this.model.unset("user");
+                this.model.unset("users");
                 this.model.unset("hdfs");
                 this.model.unset("dataset");
                 this.model.unset("instance");
@@ -102,7 +102,7 @@ describe("chorus.views.SearchResults", function() {
                     instance: null,
                     dataset: null,
                     hdfs: null,
-                    user: null
+                    users: null
                 });
                 this.view = new chorus.views.SearchResults({ model: this.model });
                 this.view.render();

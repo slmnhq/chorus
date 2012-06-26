@@ -3,7 +3,7 @@ describe("chorus.collections.Search", function() {
         this.search = fixtures.searchResult({
             instance: {
                 numFound: 131,
-                docs: [
+                results: [
                     fixtures.instanceJson({ id: '101' }),
                     fixtures.instanceJson({ id: '102' }),
                     fixtures.instanceJson({ id: '103' }),
@@ -56,7 +56,7 @@ describe("chorus.collections.Search", function() {
             this.server.completeFetchFor(this.search, new chorus.models.SearchResult({
                 instance: {
                     numFound: 51,
-                    docs: [
+                    results: [
                         fixtures.instanceJson({ id: '121' }),
                         fixtures.instanceJson({ id: '122' }),
                         fixtures.instanceJson({ id: '123' })

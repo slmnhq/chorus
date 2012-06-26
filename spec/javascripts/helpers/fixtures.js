@@ -1359,7 +1359,7 @@ beforeEach(function() {
             var modifiedByUser = rspecFixtures.userJson();
             return _.extend({
                 "workfile": {
-                    "docs": [
+                    "results": [
                         {
                             "id": "10020",
                             "isDeleted": false,
@@ -1408,7 +1408,7 @@ beforeEach(function() {
                     "numFound": 2
                 },
                 "workspace": {
-                    "docs": [
+                    "results": [
                         {
                             comments: [],
                             entityType: "workspace",
@@ -1447,7 +1447,7 @@ beforeEach(function() {
                     "numFound": 3
                 },
                 "dataset": {
-                    "docs": [
+                    "results": [
                         {
                             schemaName: "public",
                             parentType: "gpdb_10000_data_types",
@@ -1672,7 +1672,7 @@ beforeEach(function() {
                     "numFound": 39
                 },
                 "instance": {
-                    "docs": [
+                    "results": [
                         {
                             "port": 8020,
                             "id": "10040",
@@ -1716,8 +1716,8 @@ beforeEach(function() {
                     ],
                     "numFound": 2
                 },
-                "user": {
-                    "docs": [
+                "users": {
+                    "results": [
                         {
                             "admin": "false",
                             "comments": [],
@@ -1780,7 +1780,7 @@ beforeEach(function() {
                     "numFound": 4
                 },
                 hdfs: {
-                    docs: [
+                    results: [
                         {
                             comments: [],
                             entityType: "hdfs",
@@ -1800,7 +1800,7 @@ beforeEach(function() {
                     numFound: 1
                 },
                 attachment: {
-                    docs: [
+                    results: [
                         {
                             entityType: "hdfs",
                             id: "10000",
@@ -2045,8 +2045,8 @@ beforeEach(function() {
             var model = new chorus.models.SearchResult(this.searchResultJson(overrides));
             _.each(_.keys(model.attributes), function(key) {
                 var results = model.get(key);
-                if (results.docs) {
-                    results.docs = [];
+                if (results.results) {
+                    results.results = [];
                     results.numFound = 0;
                 }
             });

@@ -70,6 +70,10 @@ Chorus::Application.routes.draw do
     resource :download, :only => [:show], :controller => 'download'
   end
 
+  resource :search do
+    resource :global, :only => [:show], :controller => 'search'
+  end
+
 
   match "/" => "root#index"
   match "VERSION" => "configurations#version"

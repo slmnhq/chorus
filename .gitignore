@@ -26,6 +26,7 @@ script/vendor/hadoop
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
+/log/*.lck
 /tmp
 .idea/
 .DS_Store
@@ -36,6 +37,9 @@ tags
 
 # Ignore postgres database
 /var
+
+# Ignore solr data
+/solr/data
 
 # Ignore jetpack artifacts
 /vendor/jetty

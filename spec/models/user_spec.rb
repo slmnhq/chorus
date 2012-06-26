@@ -277,5 +277,14 @@ describe User do
 
   end
 
+  describe "search fields" do
+    it "indexes text fields" do
+      User.should have_searchable_field :first_name
+      User.should have_searchable_field :last_name
+      User.should have_searchable_field :username
+      User.should have_searchable_field :email
+    end
+  end
+
   it { should have_attached_file(:image) }
 end

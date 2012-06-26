@@ -14,7 +14,7 @@
                 total: this.search.numPages(entityJson.numFound),
                 records: entityJson.numFound
             };
-            this.reset(entityJson.docs);
+            this.reset(entityJson.results);
         },
 
         fetchPage: function(pageNumber, options) {
@@ -63,7 +63,7 @@
     chorus.collections.Search.UserSet = chorus.collections.UserSet.include(
         searchCollectionMixins
     ).extend({
-        searchKey: "user"
+        searchKey: "users"
     });
 
     chorus.collections.Search.WorkspaceSet = chorus.collections.WorkspaceSet.include(

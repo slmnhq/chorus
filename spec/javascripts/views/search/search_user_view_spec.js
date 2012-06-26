@@ -9,7 +9,7 @@ describe("chorus.views.SearchUser", function() {
                 firstName: "<em>John</em>",
                 ou: "<em>John</em>",
                 content: "<em>Here is some content</em>",
-                name: "<em>foo</em>"
+                username: "<em>foo</em>"
             },
             image: { icon: "bar" }
         })
@@ -62,13 +62,13 @@ describe("chorus.views.SearchUser", function() {
                     "isDeleted": "false",
                     "lastName": "Doe",
                     "lastUpdatedStamp": "2012-03-01 11:07:13",
-                    "name": "test",
+                    "username": "test",
                     "title": "affd",
                     "ou": "Test",
                     "content": "Hello",
                     "owner": {},
                     highlightedAttributes: {
-                        "name": "<em>test</em>",
+                        "username": "<em>test</em>",
                         "ou": "<em>Test</em>",
                         "title": "<em>affd</em>",
                         "firstName": "<em>affd</em>",
@@ -127,13 +127,13 @@ describe("chorus.views.SearchUser", function() {
                     "isDeleted": "false",
                     "lastName": "Doe",
                     "lastUpdatedStamp": "2012-03-01 11:07:13",
-                    "name": "test",
+                    "username": "test",
                     "content": "",
                     "title": "",
                     "ou": "",
                     "owner": {},
                     "highlightedAttributes" : {
-                        name: "<em>test</em>"
+                        username: "<em>test</em>"
                     }
                 });
                 this.view.render();

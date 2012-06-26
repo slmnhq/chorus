@@ -1,6 +1,6 @@
 describe("chorus.views.SearchWorkfile", function() {
     beforeEach(function() {
-        this.result = fixtures.searchResult({workfile: {docs: [
+        this.result = fixtures.searchResult({workfile: {results: [
             {
                 id: "1",
                 workspace: {id: "2", name: "Test"},

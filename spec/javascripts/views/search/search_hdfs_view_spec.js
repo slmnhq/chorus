@@ -3,7 +3,7 @@ describe("chorus.views.SearchHdfs", function() {
         context("when there are no search results", function() {
             beforeEach(function() {
                 this.result = fixtures.searchResult({hdfs: {
-                    docs: [
+                    results: [
                         fixtures.searchResultHdfsJson({
                             path: "/aaa/bbb",
                             isDir: false,
@@ -26,7 +26,7 @@ describe("chorus.views.SearchHdfs", function() {
         context("when there are multiple search results", function() {
             beforeEach(function() {
                 this.result = fixtures.searchResult({hdfs: {
-                    docs: [
+                    results: [
                         fixtures.searchResultHdfsJson({
                             name: "bar",
                             path: "/aaa/bbb/ccc",
@@ -54,7 +54,7 @@ describe("chorus.views.SearchHdfs", function() {
     describe("when the file is not a binary file", function() {
         beforeEach(function() {
             this.result = fixtures.searchResult({hdfs: {
-                docs: [
+                results: [
                     fixtures.searchResultHdfsJson({
                         path: "/aaa/bbb",
                         isDir: false,
@@ -102,7 +102,7 @@ describe("chorus.views.SearchHdfs", function() {
     describe("when the file is a binary file", function() {
         beforeEach(function() {
             this.result = fixtures.searchResult({hdfs: {
-                docs: [
+                results: [
                     fixtures.searchResultHdfsJson({
                         path: "/aaa/bbb",
                         isDir: false,

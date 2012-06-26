@@ -1,6 +1,6 @@
 describe("chorus.views.SearchWorkspace", function() {
     beforeEach(function() {
-        this.result = fixtures.searchResult({workspace: {docs: [
+        this.result = fixtures.searchResult({workspace: {results: [
             {
                 entityType: "workspace",
                 id: "10000",
@@ -61,7 +61,7 @@ describe("chorus.views.SearchWorkspace", function() {
 
     context("the description does not contain the search string", function() {
         beforeEach(function() {
-            this.result = fixtures.searchResult({workspace: {docs: [
+            this.result = fixtures.searchResult({workspace: {results: [
                 {
                     entityType: "workspace",
                     id: "10000",

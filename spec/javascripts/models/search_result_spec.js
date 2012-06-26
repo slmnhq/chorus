@@ -189,7 +189,7 @@ describe("chorus.models.SearchResult", function() {
             this.model = fixtures.searchResult({
                 thisWorkspace: {
                     numFound: 3,
-                    docs: [ fixtures.searchResultWorkfileJson() ]
+                    results: [ fixtures.searchResultWorkfileJson() ]
                 }
             });
         });
@@ -232,7 +232,7 @@ describe("chorus.models.SearchResult", function() {
                 workspaceId: "123",
                 thisWorkspace: {
                     numFound: 171,
-                    docs: [
+                    results: [
                         fixtures.searchResultWorkfileJson(),
                         fixtures.searchResultDatasetJson(),
                         fixtures.searchResultChorusViewJson(),
@@ -483,7 +483,7 @@ describe("chorus.models.SearchResult", function() {
                 workspaceId: "123",
                 thisWorkspace: {
                     numFound: 171,
-                    docs: [
+                    results: [
                         fixtures.searchResultDatasetJson()
                     ]
                 }
