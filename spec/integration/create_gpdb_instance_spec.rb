@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe " add an instance " do
   before(:each) do
     login('edcadmin', 'secret')
-    page.find("a.add.dialog").click
+    #page.find("a.add.dialog").click
   end
 
   it "creates an instance" do
@@ -38,56 +38,37 @@ describe " add an instance " do
   end
 
   it "tries to create an instance with an invalid db username and password" do
-=begin
-    create_gpdb_gillette_instance(:dbpass => "secre")
+    open_gpdb_instance_dialog
+    fill_in 'name', :with => "dbpass_dbuser"
+    fill_in 'description', :with => "GPDB instance creation"
+    fill_in 'host', :with => "gillette.sf.pivotallabs.com"
+    fill_in 'port', :with => "5432"
+    fill_in 'dbUsername', :with => "gpadmin"
+    fill_in 'dbPassword', :with => "secre"
+    check("register_greenplum_shared")
+    click_submit_button
+    sleep(5)
     page.find('.errors').should have_content("FATAL: password authentication failed for user")
-    create_gpdb_gillette_instance(:dbuser => "gpadmi" :dbpass => "secre")
-    page.find('.errors').should have_content("FATAL: password authentication failed for user")
 
-  end
-=end
-     within("#facebox") do
-        wait_until { page.has_selector?(".register_existing_greenplum input[name=name]")}
-        wait_for_ajax
-        choose("register_existing_greenplum")
-        wait_for_ajax
-        wait_until { !page.has_selector?(".register_existing_greenplum.collapsed")}
-        within(".register_existing_greenplum") do
-          find_gpdb_instance_dialog
-
-          fill_in 'name', :with => "dbpass_dbuser"
-          fill_in 'description', :with => "GPDB instance creation"
-          fill_in 'host', :with => "gillette.sf.pivotallabs.com"
-          fill_in 'port', :with => "5432"
-          fill_in 'dbUsername', :with => "gpadmin"
-          fill_in 'dbPassword', :with => "secre"
-          check("register_greenplum_shared")
-        end
-        click_button "Add Instance"
-        sleep(5)
-        page.find('.errors').should have_content("FATAL: password authentication failed for user")
-
-        within(".register_existing_greenplum") do
-          fill_in 'dbUsername', :with => "gpadmi"
-          fill_in 'dbPassword', :with => "secre"
-        end
-        click_button "Add Instance"
-        page.find('.errors').should have_content("FATAL: password authentication failed for user")
-        within(".register_existing_greenplum") do
-          fill_in 'dbUsername', :with => "gpadmi"
-          fill_in 'dbPassword', :with => "secret"
-        end
-        click_button "Add Instance"
-        page.find('.errors').should have_content("FATAL: password authentication failed for user")
-        within(".register_existing_greenplum")do
-          fill_in 'dbUsername', :with => "gpadmin"
-          fill_in 'dbPassword', :with => "secret"
-        end
-        click_button "Add Instance"
-      end
-      find('.instance_list').should have_content("dbpass_dbuser")
-      visit("/#/instances")
-      find('.instance_list').should have_content("dbpass_dbuser")
+    within(".register_existing_greenplum") do
+      fill_in 'dbUsername', :with => "gpadmi"
+      fill_in 'dbPassword', :with => "secre"
     end
-
+    click_submit_button
+    page.find('.errors').should have_content("FATAL: password authentication failed for user")
+    within(".register_existing_greenplum") do
+      fill_in 'dbUsername', :with => "gpadmi"
+      fill_in 'dbPassword', :with => "secret"
+    end
+    click_submit_button
+    page.find('.errors').should have_content("FATAL: password authentication failed for user")
+    within(".register_existing_greenplum")do
+      fill_in 'dbUsername', :with => "gpadmin"
+      fill_in 'dbPassword', :with => "secret"
+    end
+    click_submit_button
+    find('.instance_list').should have_content("dbpass_dbuser")
+    visit("/#/instances")
+    find('.instance_list').should have_content("dbpass_dbuser")
+  end
 end

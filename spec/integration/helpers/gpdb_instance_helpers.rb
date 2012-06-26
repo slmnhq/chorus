@@ -1,45 +1,40 @@
-# Find widgets in gpdb instance dialog
-def find_gpdb_instance_dialog
-  wait_until { find("input[name=name]").visible? }
-  wait_until { find("textarea[name=description]").visible? }
-  wait_until { find("input[name=host]").visible? }
-  wait_until { find("input[name=port]").visible? }
-  wait_until { find("input[name=dbUsername]").visible? }
-  wait_until { find("input[name=dbPassword]").visible? }
-end
-
-# Update fields in open gpdb instance dialog.
-=begin
-def update_gpdb_instance_dialog(params={})
-  within(".register_existing_greenplum") do
-
-    fill_in 'dbUsername', :with => "gpadmi"
-    fill_in 'dbPassword', :with => "secre"
-  end
-    click_button "Add Instance"
-end
-=end
-
-# Register a new GPDB instance, parameters: name, desc, host, port, dbuser, dbpass, shared.
-def create_gpdb_instance(params={})
-  name = params[:name] || "GPDB_instance#{Time.now.to_i}"
+# Opens gpdb dialog and verifies fields
+def open_gpdb_instance_dialog
   visit("#/instances")
   wait_until { current_route == "/instances" && page.has_selector?("button[data-dialog=InstancesNew]") }
   click_button "Add instance"
   wait_for_ajax
   within("#facebox") do
     choose("register_existing_greenplum")
-    find_gpdb_instance_dialog
-    fill_in 'name', :with => name
-    fill_in 'description', :with => params[:desc]
-    fill_in 'host', :with => params[:host]
-    fill_in 'port', :with => params[:port]
-    fill_in 'dbUsername', :with => params[:dbuser]
-    fill_in 'dbPassword', :with => params[:dbpass]
-    check("register_greenplum_shared") if params[:shared] == true
-    click_submit_button
-    wait_for_ajax(10)
-  end
+    wait_until { find("input[name=name]").visible? }
+    wait_until { find("textarea[name=description]").visible? }
+    wait_until { find("input[name=host]").visible? }
+    wait_until { find("input[name=port]").visible? }
+    wait_until { find("input[name=dbUsername]").visible? }
+    wait_until { find("input[name=dbPassword]").visible? }
+    end
+end
+
+# Fills up instance dialog
+def fill_up_instance_dialog(params={})
+
+      open_gpdb_instance_dialog
+      fill_in 'name', :with => params[:name]
+      fill_in 'description', :with => params[:desc]
+      fill_in 'host', :with => params[:host]
+      fill_in 'port', :with => params[:port]
+      fill_in 'dbUsername', :with => params[:dbuser]
+      fill_in 'dbPassword', :with => params[:dbpass]
+      check("register_greenplum_shared") if params[:shared] == true
+end
+
+# Registers a new GPDB instance, parameters: name, desc, host, port, dbuser, dbpass, shared.
+def create_gpdb_instance(params={})
+  params[:name] ||= "GPDB_instance#{Time.now.to_i}"
+  visit("#/instances")
+  fill_up_instance_dialog(params)
+  click_submit_button
+  wait_for_ajax(10)
 end
 
 # Make sure that instance name is listed on the instance list page.

@@ -72,4 +72,8 @@ describe " add an instance " do
 
 =end
   end
+
+  xit "System generates activity stream for WORKSPACE_ADD_SANDBOX (29788309)" do
+
+  end
 end

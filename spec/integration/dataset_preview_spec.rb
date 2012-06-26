@@ -90,7 +90,15 @@ describe "Viewing data inside GPDB instances" do
 
   end
 
-  xit "DataSet includes list of workspaces with it is associated" do
+  xit "Dataset includes list of workspaces which it is associated" do
+
+  end
+
+  xit "Memeber can disassociate a data set from workspace" do
+
+  end
+
+  xit "Several datasets can bev associated with workspace" do
 
   end
 
