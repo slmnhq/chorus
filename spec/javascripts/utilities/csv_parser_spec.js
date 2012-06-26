@@ -9,17 +9,17 @@ describe("chorus.utilities.CsvParser", function() {
         ];
     });
 
-    context("#generateHeaderNames", function() {
+    context("#generateColumnNames", function() {
         it("generates column_1, column_2, ...", function() {
             var csvParser = new chorus.utilities.CsvParser(this.contents, this.options);
-            expect(csvParser.generateHeaderNames()).toEqual(['column_1', 'column_2', 'column_3']);
+            expect(csvParser.generateColumnNames()).toEqual(['column_1', 'column_2', 'column_3']);
         });
     });
 
-    context("#parseHeaderNames", function() {
+    context("#parseColumnNames", function() {
         it("gets the first row as the header", function() {
             var csvParser = new chorus.utilities.CsvParser(this.contents, this.options);
-            expect(csvParser.parseHeaderNames()).toEqual(['col1', 'col2', 'col3']);
+            expect(csvParser.parseColumnNames()).toEqual(['col1', 'col2', 'col3']);
         });
     });
 

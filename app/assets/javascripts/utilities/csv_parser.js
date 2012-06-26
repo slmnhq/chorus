@@ -26,29 +26,29 @@ chorus.utilities.CsvParser = function(contents, options) {
 
     this.parse();
 
-    this.generateHeaderNames = function() {
+    this.generateColumnNames = function() {
         return _.map(this.rows[0], function(column, i) {
             return "column_" + (i + 1);
         });
     };
 
-    this.parseHeaderNames = function() {
+    this.parseColumnNames = function() {
         return _.map(this.rows.shift(), chorus.utilities.CsvParser.normalizeForDatabase);
     };
 
-    this.overrideHeaderNames = function() {
+    this.overrideColumnNames = function() {
         return this.options.columnNameOverrides;
     };
 
     this.getColumnOrientedData = function() {
         var columnNames;
         if(this.options.hasHeader) {
-            columnNames = this.parseHeaderNames();
+            columnNames = this.parseColumnNames();
         } else {
-            columnNames = this.generateHeaderNames();
+            columnNames = this.generateColumnNames();
         }
         if (this.options.columnNameOverrides) {
-            columnNames = this.overrideHeaderNames();
+            columnNames = this.overrideColumnNames();
         }
 
         var types = this.options.types;
