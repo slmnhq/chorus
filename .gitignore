@@ -21,12 +21,6 @@ app/assets/javascripts/environment.js
 /vendor/hadoop
 script/vendor/hadoop
 
-# Ignore vagrant shared dir
-/packaging/vagrant/shared
-/packaging/vagrant/.vagrant
-/packaging/components
-/packaging/packages
-
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
