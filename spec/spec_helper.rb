@@ -62,7 +62,11 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = true
 
   config.before do
-    Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session) unless Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
+    Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
+  end
+
+  config.after do
+    Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
   end
 
   config.before(:each, :data_migration => true) do

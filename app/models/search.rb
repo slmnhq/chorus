@@ -1,5 +1,5 @@
 class Search
-  attr_accessor :models_to_search, :query, :page, :per_page
+  attr_accessor :models_to_search, :minimum_results_for_each_type, :query, :page, :per_page
 
   def initialize(params = {})
     self.models_to_search = [User, Instance]
@@ -21,7 +21,7 @@ class Search
 
   def models
     return @models if @models
-    @models = {}
+    @models = Hash.new() {|hsh, key| hsh[key] = [] }
     search.each_hit_with_result do |hit, result|
       result.highlighted_attributes = hit.highlights.inject({}) do |hsh, highlight|
         hsh[highlight.field_name] ||= []
@@ -29,9 +29,11 @@ class Search
         hsh
       end
       model_key = class_name_to_key(result.class.name)
-      @models[model_key] ||= []
       @models[model_key] << result
     end
+
+    populate_missing_records
+
     @models
   end
 
@@ -46,7 +48,7 @@ class Search
   def num_found
     return @num_found if @num_found
 
-    @num_found = {}
+    @num_found = Hash.new(0)
     search.facet(:class).rows.each do |facet|
       @num_found[class_name_to_key(facet.value.name)] = facet.count
     end
@@ -57,6 +59,19 @@ class Search
 
   def class_name_to_key(name)
     name.downcase.pluralize.to_sym
+  end
+
+  def populate_missing_records
+    return unless minimum_results_for_each_type
+    models_to_search.each do |model|
+      model_key = class_name_to_key(model.name)
+      found_count = models[:model_key].length
+      if(found_count < minimum_results_for_each_type && found_count < num_found[model_key])
+        model_search = Search.new(:query => query, :per_page => minimum_results_for_each_type)
+        model_search.models_to_search = [model]
+        models[model_key] = model_search.models[model_key]
+      end
+    end
   end
 
 end

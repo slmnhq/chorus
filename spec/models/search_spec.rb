@@ -22,6 +22,30 @@ describe Search do
       search.search
       Sunspot.session.should have_search_params(:paginate, :page => 4, :per_page => 42)
     end
+
+    describe "minimum_results_for_each_type" do
+      it "performs secondary searches to pull back needed records" do
+        search = Search.new(:query => 'bob')
+        stub(search).num_found do
+          {:users => 100, :instances => 100}
+        end
+        stub(search.search).each_hit_with_result { [] }
+        search.minimum_results_for_each_type = 3
+        search.models
+
+        Sunspot.session.searches.length.should == search.models_to_search.length + 1
+        search.models_to_search.each_with_index do |model, index|
+          sunspot_search = Sunspot.session.searches[index+1]
+          sunspot_search.should be_a_search_for(model)
+          (search.models_to_search - [model]).each do |other_model|
+            sunspot_search.should_not be_a_search_for(other_model)
+          end
+          sunspot_search.should have_search_params(:fulltext, 'bob')
+          sunspot_search.should have_search_params(:paginate, :page => 1, :per_page => 3)
+          sunspot_search.should_not have_search_params(:facet, :class)
+        end
+      end
+    end
   end
 
   describe "search with a specific model" do
