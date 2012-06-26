@@ -31,7 +31,7 @@ module PackageMaker
   end
 
   def archive_app
-    run "rake assets:precompile"
+    run "RAILS_ENV=development rake assets:precompile"
     run "bundle exec jetpack ."
     current_sha = head_sha
     filename = "greenplum-chorus-#{Chorus::VERSION::STRING}-#{timestamp}-#{current_sha}.tar.gz"
