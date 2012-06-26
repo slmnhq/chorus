@@ -29,17 +29,17 @@ module Events
   end
 
   class WORKFILE_CREATED < Base
-    has_targets :workfile
+    has_targets :workfile, :workspace
     has_activities :actor, :workfile, :workspace
   end
 
   class SOURCE_TABLE_CREATED < Base
-    has_targets :dataset
+    has_targets :dataset, :workspace
     has_activities :actor, :dataset, :workspace, :global
   end
 
   class WORKSPACE_ADD_SANDBOX < Base
-    has_targets :sandbox_schema
+    has_targets :sandbox_schema, :workspace
     has_activities :actor, :sandbox_schema, :workspace, :global
   end
 end

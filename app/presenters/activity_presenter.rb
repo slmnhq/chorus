@@ -2,8 +2,7 @@ class ActivityPresenter < Presenter
   def to_hash
     basic_hash.
       merge(targets_hash).
-      merge(additional_data_hash).
-      merge(workspace_hash)
+      merge(additional_data_hash)
   end
 
   private
@@ -17,24 +16,16 @@ class ActivityPresenter < Presenter
     }
   end
 
-  def workspace_hash
-    if event.workspace
-      { :workspace => present(event.workspace) }
-    else
-      {}
-    end
-  end
-
   def additional_data_hash
     event.additional_data
   end
 
   def targets_hash
-    hash = {}
-    event.targets.each do |name, object|
-      hash[name] = present(object)
+    event.targets.reduce({}) do |hash, entry|
+      name, model = entry
+      hash[name] = present(model)
+      hash
     end
-    hash
   end
 
   def event

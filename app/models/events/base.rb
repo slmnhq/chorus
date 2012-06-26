@@ -12,18 +12,16 @@ module Events
     belongs_to :target2, :polymorphic => true
     belongs_to :workspace
 
-    after_create :create_activities
-
     def self.by(actor)
       where(:actor_id => actor.id)
     end
 
     def self.add(params)
-      create!(params)
+      create!(params).tap { |event| event.create_activities }
     end
 
     def action
-      read_attribute(:action).split("::").last
+      self.class.name.demodulize
     end
 
     def targets
@@ -33,13 +31,13 @@ module Events
       end
     end
 
-    private
-
     def create_activities
       self.class.entities_that_get_activities.each do |entity_name|
         create_activity(entity_name)
       end
     end
+
+    private
 
     def create_activity(entity_name)
       if entity_name == :global
@@ -54,13 +52,22 @@ module Events
       self.target_names = [target1_name, target2_name].compact
       self.attr_accessible target1_name, target2_name
 
-      alias_method(target1_name, :target1)
-      alias_method("#{target1_name}=", :target1=)
+      alias_getter_and_setter(:target1, target1_name)
+      alias_getter_and_setter(:target2, target2_name)
+    end
 
-      if target2_name
-        alias_method(target2_name, :target2)
-        alias_method("#{target2_name}=", :target2=)
-      end
+    def self.alias_getter_and_setter(existing_name, new_name)
+      return unless new_name
+
+      # The events table has a dedicated 'workspace_id' column,
+      # so we don't alias :workspace to :target1 or :target2.
+      # Subclasses should still specify the workspace as
+      # a target if they need the workspace to be included
+      # in their JSON representation.
+      return if new_name == :workspace
+
+      alias_method(new_name, existing_name)
+      alias_method("#{new_name}=", "#{existing_name}=")
     end
 
     def self.has_activities(*entity_names)

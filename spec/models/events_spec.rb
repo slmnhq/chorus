@@ -38,12 +38,13 @@ describe Events do
 
     describe "GREENPLUM_INSTANCE_CREATED" do
       subject do
-        Events::GREENPLUM_INSTANCE_CREATED.create!(
+        Events::GREENPLUM_INSTANCE_CREATED.add(
           :actor => actor,
           :greenplum_instance => greenplum_instance,
         )
       end
 
+      its(:action)  { should == "GREENPLUM_INSTANCE_CREATED" }
       its(:greenplum_instance) { should == greenplum_instance }
       its(:targets) { should == { :greenplum_instance => greenplum_instance } }
 
@@ -53,12 +54,13 @@ describe Events do
 
     describe "HADOOP_INSTANCE_CREATED" do
       subject do
-        Events::HADOOP_INSTANCE_CREATED.create!(
+        Events::HADOOP_INSTANCE_CREATED.add(
           :actor => actor,
           :hadoop_instance => hadoop_instance,
         )
       end
 
+      its(:action)  { should == "HADOOP_INSTANCE_CREATED" }
       its(:hadoop_instance) { should == hadoop_instance }
       its(:targets) { should == { :hadoop_instance => hadoop_instance } }
 
@@ -68,7 +70,7 @@ describe Events do
 
     describe "GREENPLUM_INSTANCE_CHANGED_OWNER" do
       subject do
-        Events::GREENPLUM_INSTANCE_CHANGED_OWNER.create!(
+        Events::GREENPLUM_INSTANCE_CHANGED_OWNER.add(
           :actor => actor,
           :greenplum_instance => greenplum_instance,
           :new_owner => user
@@ -85,7 +87,7 @@ describe Events do
 
     describe "GREENPLUM_INSTANCE_CHANGED_NAME" do
       subject do
-        Events::GREENPLUM_INSTANCE_CHANGED_NAME.create!(
+        Events::GREENPLUM_INSTANCE_CHANGED_NAME.add(
           :actor => actor,
           :greenplum_instance => greenplum_instance,
           :old_name => "brent",
@@ -106,7 +108,7 @@ describe Events do
 
     describe "HADOOP_INSTANCE_CHANGED_NAME" do
       subject do
-        Events::HADOOP_INSTANCE_CHANGED_NAME.create!(
+        Events::HADOOP_INSTANCE_CHANGED_NAME.add(
           :actor => actor,
           :hadoop_instance => hadoop_instance,
           :old_name => "brent",
@@ -127,7 +129,7 @@ describe Events do
 
     describe "WORKFILE_CREATED" do
       subject do
-        Events::WORKFILE_CREATED.create!(
+        Events::WORKFILE_CREATED.add(
           :actor => actor,
           :workfile => workfile,
           :workspace => workspace
@@ -137,7 +139,7 @@ describe Events do
       its(:workfile) { should == workfile }
       its(:workspace) { should == workspace }
 
-      its(:targets) { should == { :workfile => workfile } }
+      its(:targets) { should == { :workfile => workfile, :workspace => workspace } }
 
       it_creates_activities_for { [actor, workfile, workspace] }
       it_does_not_create_a_global_activity
@@ -145,7 +147,7 @@ describe Events do
 
     describe "SOURCE_TABLE_CREATED" do
       subject do
-        Events::SOURCE_TABLE_CREATED.create!(
+        Events::SOURCE_TABLE_CREATED.add(
           :actor => actor,
           :dataset => dataset,
           :workspace => workspace
@@ -153,7 +155,7 @@ describe Events do
       end
 
       its(:dataset) { should == dataset }
-      its(:targets) { should == { :dataset => dataset } }
+      its(:targets) { should == { :dataset => dataset, :workspace => workspace } }
 
       it_creates_activities_for { [actor, dataset, workspace] }
       it_creates_a_global_activity
