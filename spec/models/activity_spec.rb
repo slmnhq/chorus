@@ -1,58 +1,62 @@
 require "spec_helper"
 
 describe Activity do
-  let(:user) { FactoryGirl.create(:user) }
+  it "is ordered with the most recent items first, by default" do
+    activity1 = Activity.global.create!(:created_at => Time.now)
+    activity2 = Activity.global.create!(:created_at => Time.now + 25)
+    activity3 = Activity.global.create!(:created_at => Time.now + 50)
+    activity4 = Activity.global.create!(:created_at => Time.now + 75)
 
-  let!(:instance1) { FactoryGirl.create(:instance) }
-  let!(:instance2) { FactoryGirl.create(:instance) }
-
-  let!(:activity1) { Activity.create!(:entity => instance1, :created_at => Time.now) }
-  let!(:activity2) { Activity.create!(:entity => instance2, :created_at => Time.now + 25) }
-
-  let!(:activity3) { Activity.create!(:entity_type => "GLOBAL", :created_at => Time.now + 50) }
-  let!(:activity4) { Activity.create!(:entity_type => "GLOBAL", :created_at => Time.now + 100) }
+    Activity.all.should == [activity4, activity3, activity2, activity1]
+  end
 
   describe ".global" do
     it "returns the activities whose 'entity_type' has the special value 'GLOBAL'" do
-      Activity.global.all.should =~ [ activity3, activity4 ]
+      activity = Activity.global.create!(:created_at => Time.now + 25)
+      activity.entity_type.should == "GLOBAL"
+      activity.entity_id.should be_nil
     end
   end
 
   describe ".for_dashboard_of(user)" do
-    let(:workspace1) { FactoryGirl.create(:workspace, :public => false) }
-    let(:workspace2) { FactoryGirl.create(:workspace, :public => false) }
-    let(:workspace3) { FactoryGirl.create(:workspace, :public => true) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:events) { (1..4).map { FactoryGirl.create(:workfile_created_event) } }
 
-    let!(:workspace1_activity) { Activity.create!(:entity => workspace1) }
-    let!(:workspace2_activity) { Activity.create!(:entity => workspace2) }
-    let!(:workspace3_activity) { Activity.create!(:entity => workspace3) }
-
-    before do
-      workspace1.memberships.build.tap do |membership|
-        membership.user = user
-        membership.save!
+    let(:other_workspace1) { FactoryGirl.create(:workspace, :public => true) }
+    let(:other_workspace2) { FactoryGirl.create(:workspace, :public => false) }
+    let(:user_workspace) do
+      FactoryGirl.create(:workspace).tap do |workspace|
+        workspace.memberships.build.tap do |m|
+          m.user = user
+          m.save!
+        end
       end
     end
 
-    it "includes all global activities" do
-      Activity.for_dashboard_of(user).should include activity3, activity4
+    let!(:workspace_activity) { Activity.create!(:entity => user_workspace, :event => events[0] ) }
+    let!(:other_workspace1_activity) { Activity.create!(:entity => other_workspace1, :event => events[1]) }
+    let!(:other_workspace2_activity) { Activity.create!(:entity => other_workspace2, :event => events[2]) }
+
+    let!(:global_activity) { Activity.global.create!(:event => events[3]) }
+    let!(:duplicate_global_activity) { Activity.global.create!(:event => events[0]) }
+
+    let(:returned_events) { Activity.for_dashboard_of(user).map(&:event) }
+
+    it "includes global activities" do
+      returned_events.should include(global_activity.event)
     end
 
-    it "includes all activities for the user's workspaces" do
-      Activity.for_dashboard_of(user).should include(workspace1_activity)
+    it "includes activities for the user's workspaces" do
+      returned_events.should include(workspace_activity.event)
     end
 
     it "does not include activities for other public workspaces" do
-      Activity.for_dashboard_of(user).should_not include(workspace2_activity, workspace3_activity)
-      Activity.for_dashboard_of(user).should have(3).activities
+      returned_events.should_not include(other_workspace1_activity.event)
+      returned_events.should_not include(other_workspace2_activity.event)
     end
 
     it "can be filtered further (like any activerecord relation)" do
-      Activity.for_dashboard_of(user).find(activity3.to_param).should == activity3
+      Activity.for_dashboard_of(user).find(global_activity.to_param).should == global_activity
     end
-  end
-
-  it "is ordered with the most recent items first, by default" do
-    Activity.all.should == [ activity4, activity3, activity2, activity1 ]
   end
 end
