@@ -5,3 +5,6 @@ app_user: "pivotal"
 app_root: "/home/pivotal/chorusrails"
 ruby_version: 1.9
 app_type: rack
+http_port: 8080
+https_port: 8443
+
