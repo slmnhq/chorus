@@ -5,6 +5,10 @@ task :package do
   PackageMaker.make
 end
 
+task :stage do
+  PackageMaker.make(:stage => true)
+end
+
 module PackageMaker
   extend self
 
@@ -13,9 +17,21 @@ module PackageMaker
   PACKAGES_DIR   = File.join(PACKAGING_DIR, "packages")
   COMPONENTS_DIR = File.join(PACKAGING_DIR, "components")
 
-  def make
+  def stage(filename)
+    run 'ssh chorus-staging -C "~/chorusrails/vendor/jetty/jetty-init stop"'
+    run "scp #{filename} chorus-staging:~/"
+    run "ssh chorus-staging 'cd ~/ tar --overwrite -xvf #{filename}'"
+    run "ssh chorus-staging 'RAILS_ENV=production ~/chorusrails/vendor/jetty/jetty-init start >/dev/null 2>/dev/null &'"
+  end
+
+  def make(options)
+    current_sha = head_sha
+    filename = "greenplum-chorus-#{Chorus::VERSION::STRING}-#{timestamp}-#{current_sha}.tar.gz"
     setup_directories
-    archive_app
+    archive_app(filename)
+    if options[:stage]
+      stage(filename)
+    end
   end
 
   def setup_directories
@@ -30,11 +46,10 @@ module PackageMaker
     end
   end
 
-  def archive_app
+  def archive_app(filename)
     run "RAILS_ENV=development rake assets:precompile"
     run "bundle exec jetpack ."
-    current_sha = head_sha
-    filename = "greenplum-chorus-#{Chorus::VERSION::STRING}-#{timestamp}-#{current_sha}.tar.gz"
+
     files_to_tar = [
       "bin/",
       "app/",
