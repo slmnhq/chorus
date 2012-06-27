@@ -37,7 +37,7 @@ describe("chorus.models.SearchResult", function() {
                         this.model.set({ entityType: "all" });
                     });
 
-                    expectUrl("/search/workspaces/?query=jackson5&workspace_id=5&rows=50&page=1");
+                    expectUrl("/search/workspaces/?query=jackson5&workspace_id=5&per_page=50&page=1");
                     expectShowUrl("#/workspaces/5/search/my_workspaces/all/jackson5");
                 });
             });
@@ -132,9 +132,19 @@ describe("chorus.models.SearchResult", function() {
             expectShowUrl("#/search/%25%25%25");
         });
 
+        context("when performing a global search", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.SearchResult({ query: "sandwich"});
+            });
+
+            it("has the right url", function() {
+                expect(this.model.url()).toContain("per_type=3");
+            });
+        });
+
         function expectUrl(url, paramsToIgnore) {
             it("has the right url", function() {
-                if (!paramsToIgnore) paramsToIgnore = [ "rows", "page" ];
+                if (!paramsToIgnore) paramsToIgnore = [ "per_page", "page", "per_type" ];
                 expect(this.model.url()).toMatchUrl(url, { paramsToIgnore: paramsToIgnore });
             });
         }
@@ -142,7 +152,7 @@ describe("chorus.models.SearchResult", function() {
         function expectPaginatedUrl(url) {
             it("respects page numbers", function() {
                 this.model.set({ page: 3 });
-                expect(this.model.url()).toMatchUrl(url + "&rows=50&page=3");
+                expect(this.model.url()).toMatchUrl(url + "&per_page=50&page=3");
             });
         }
 

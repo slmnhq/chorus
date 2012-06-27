@@ -1,5 +1,6 @@
 class Search
-  attr_accessor :models_to_search, :per_type, :query, :page, :per_page
+  attr_accessor :models_to_search, :query, :page, :per_page
+  attr_reader :per_type
 
   def initialize(params = {})
     self.models_to_search = [User, Instance]
@@ -58,6 +59,13 @@ class Search
       @num_found[class_name_to_key(facet.value.name)] = facet.count
     end
     @num_found
+  end
+
+  def per_type=(new_type)
+    new_type_as_int = new_type.to_i
+    if new_type_as_int > 0
+      @per_type = new_type_as_int
+    end
   end
 
   private

@@ -99,11 +99,10 @@
                 params.workspaceId = this.get("workspaceId");
             }
             if (this.isPaginated()) {
-                params.rows = NUM_RESULTS_PER_PAGE;
+                params.per_page = NUM_RESULTS_PER_PAGE;
                 params.page = this.currentPageNumber();
             } else {
-                params.rows = 3;
-                params.page = 1;
+                params.per_type = 3;
             }
             return params;
         },
