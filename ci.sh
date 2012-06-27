@@ -14,7 +14,7 @@ bundle exec rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
 jasmine_pid=$!
 echo "Jasmine process id is : $jasmine_pid"
 # start solr
-bundle exec rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
+RAILS_ENV=test bundle exec rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
 solr_pid=$!
 echo "Solr process id is : $solr_pid"
 
