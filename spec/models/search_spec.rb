@@ -45,6 +45,15 @@ describe Search do
         end
       end
 
+      describe "entity_type" do
+        it "searches for the provided models" do
+          search = Search.new(:query => 'bob', :entity_type => 'instance')
+          search.search
+          Sunspot.session.should_not be_a_search_for(User)
+          Sunspot.session.should be_a_search_for(Instance)
+        end
+      end
+
       it "overrides page and per_page" do
         search = Search.new(:query => 'bob', :per_type => 3, :page => 2, :per_page => 5)
         search.search
@@ -74,17 +83,25 @@ describe Search do
 
     describe "num_found" do
       it "returns a hash with the number found of each type" do
-        VCR.use_cassette('search_solr_query') do
+        VCR.use_cassette('search_solr_query_all_types_bob') do
           search = Search.new(:query => 'bob')
           search.num_found[:users].should == 1
           search.num_found[:instances].should == 1
+        end
+      end
+
+      it "returns a hash with the total count for the given type" do
+        VCR.use_cassette('search_solr_query_user_bob') do
+          search = Search.new(:query => 'bob', :entity_type => 'user')
+          search.num_found[:users].should == 1
+          search.num_found[:instances].should == 0
         end
       end
     end
 
     describe "users" do
       it "includes the highlighted attributes" do
-        VCR.use_cassette('search_solr_query') do
+        VCR.use_cassette('search_solr_query_all_types_bob') do
           search = Search.new(:query => 'bob')
           user = search.users.first
           user.highlighted_attributes.length.should == 1
@@ -93,7 +110,7 @@ describe Search do
       end
 
       it "returns the User objects found" do
-        VCR.use_cassette('search_solr_query') do
+        VCR.use_cassette('search_solr_query_all_types_bob') do
           search = Search.new(:query => 'bob')
           search.users.length.should == 1
           search.users.first.should == @bob
@@ -103,7 +120,7 @@ describe Search do
 
     describe "instances" do
       it "includes the highlighted attributes" do
-        VCR.use_cassette('search_solr_query') do
+        VCR.use_cassette('search_solr_query_all_types_bob') do
           search = Search.new(:query => 'bob')
           instance = search.instances.first
           instance.highlighted_attributes.length.should == 1
@@ -112,10 +129,20 @@ describe Search do
       end
 
       it "returns the Instance objects found" do
-        VCR.use_cassette('search_solr_query') do
+        VCR.use_cassette('search_solr_query_all_types_bob') do
           search = Search.new(:query => 'bob')
           search.instances.length.should == 1
           search.instances.first.should == @instance
+        end
+      end
+    end
+
+    describe "per_type" do
+      it "does not return more than per_type of any model" do
+        VCR.use_cassette('search_solr_query_all_per_type_1') do
+          search = Search.new(:query => 'alpha', :per_type => 1)
+          search.users.length.should == 1
+          search.num_found[:users].should == 2
         end
       end
     end

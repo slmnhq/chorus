@@ -7,7 +7,7 @@ describe SearchPresenter, :type => :view do
     @user = User.find_by_first_name('bob')
     @instance = Instance.first
     @search = Search.new(:query => 'bob')
-    VCR.use_cassette('search_solr_query') do
+    VCR.use_cassette('search_solr_query_all_types_bob') do
       @search.search
     end
     @presenter = SearchPresenter.new(@search, view)

@@ -12,6 +12,7 @@ class Search
       self.page = params[:page] || 1
       self.per_page = params[:per_page] || 50
     end
+    self.entity_type = params[:entity_type]
   end
 
   def search
@@ -19,7 +20,7 @@ class Search
       fulltext query, :highlight => true
       paginate :page => page, :per_page => per_page
 
-      if(models_to_search.length > 1)
+      if models_to_search.length > 1
         facet :class
       end
     end
@@ -35,7 +36,7 @@ class Search
         hsh
       end
       model_key = class_name_to_key(result.class.name)
-      @models[model_key] << result
+      @models[model_key] << result unless per_type && @models[model_key].length >= per_type
     end
 
     populate_missing_records
@@ -55,9 +56,14 @@ class Search
     return @num_found if @num_found
 
     @num_found = Hash.new(0)
-    search.facet(:class).rows.each do |facet|
-      @num_found[class_name_to_key(facet.value.name)] = facet.count
+    if models_to_search.length > 1
+      search.facet(:class).rows.each do |facet|
+        @num_found[class_name_to_key(facet.value.name)] = facet.count
+      end
+    else
+      @num_found[class_name_to_key(models_to_search.first.name)] = search.total
     end
+
     @num_found
   end
 
@@ -65,6 +71,13 @@ class Search
     new_type_as_int = new_type.to_i
     if new_type_as_int > 0
       @per_type = new_type_as_int
+    end
+  end
+
+  def entity_type=(new_type)
+    return unless new_type
+    models_to_search.select! do |model|
+      class_name_to_key(model.name) == class_name_to_key(new_type)
     end
   end
 
@@ -78,7 +91,7 @@ class Search
     return unless per_type
     models_to_search.each do |model|
       model_key = class_name_to_key(model.name)
-      found_count = models[:model_key].length
+      found_count = models[model_key].length
       if(found_count < per_type && found_count < num_found[model_key])
         model_search = Search.new(:query => query, :per_page => per_type)
         model_search.models_to_search = [model]

@@ -1,0 +1,33 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8981/solr/select?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: fq=type%3AUser&q=bob&fl=%2A+score&qf=first_name_texts+last_name_texts+username_texts+email_texts&defType=dismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=50
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Content-Length:
+      - '617'
+      Server:
+      - Jetty(6.1.3)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2,''params''=>{''fl''=>''*
+        score'',''start''=>''0'',''q''=>''bob'',''qf''=>''first_name_texts last_name_texts
+        username_texts email_texts'',''hl.simple.pre''=>''@@@hl@@@'',''hl.simple.post''=>''@@@endhl@@@'',''wt''=>''ruby'',''fq''=>''type:User'',''hl''=>''on'',''defType''=>''dismax'',''rows''=>''50''}},''response''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.2013385,''docs''=>[{''id''=>''User
+        2'',''first_name_texts''=>[''bob''],''username_texts''=>[''some_other_user''],''email_texts''=>[''person2@example.com''],''last_name_texts''=>[''alpha''],''score''=>1.2013385}]},''highlighting''=>{''User
+        2''=>{''first_name_texts''=>[''@@@hl@@@bob@@@endhl@@@'']}}}'
+    http_version:
+  recorded_at: Wed, 27 Jun 2012 16:41:38 GMT
+recorded_with: VCR 2.1.1
+...

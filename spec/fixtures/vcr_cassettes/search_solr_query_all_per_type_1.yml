@@ -1,0 +1,35 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:8981/solr/select?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: fq=type%3A%28User+OR+Instance%29&q=alpha&fl=%2A+score&qf=first_name_texts+last_name_texts+username_texts+email_texts+name_texts+description_texts&defType=dismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=100&facet=true&f.class_name.facet.mincount=1&facet.field=class_name
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=UTF-8
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Content-Length:
+      - '1071'
+      Server:
+      - Jetty(6.1.3)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''facet''=>''true'',''qf''=>''first_name_texts
+        last_name_texts username_texts email_texts name_texts description_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''100'',''defType''=>''dismax'',''fl''=>''*
+        score'',''start''=>''0'',''q''=>''alpha'',''f.class_name.facet.mincount''=>''1'',''hl.simple.post''=>''@@@endhl@@@'',''facet.field''=>''class_name'',''fq''=>''type:(User
+        OR Instance)''}},''response''=>{''numFound''=>2,''start''=>0,''maxScore''=>0.69485354,''docs''=>[{''id''=>''User
+        1'',''first_name_texts''=>[''marty''],''username_texts''=>[''some_user''],''email_texts''=>[''person1@example.com''],''last_name_texts''=>[''alpha''],''score''=>0.69485354},{''id''=>''User
+        2'',''first_name_texts''=>[''bob''],''username_texts''=>[''some_other_user''],''email_texts''=>[''person2@example.com''],''last_name_texts''=>[''alpha''],''score''=>0.69485354}]},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''class_name''=>[''User'',2]},''facet_dates''=>{}},''highlighting''=>{''User
+        1''=>{''last_name_texts''=>[''@@@hl@@@alpha@@@endhl@@@'']},''User 2''=>{''last_name_texts''=>[''@@@hl@@@alpha@@@endhl@@@'']}}}'
+    http_version:
+  recorded_at: Wed, 27 Jun 2012 18:01:00 GMT
+recorded_with: VCR 2.1.1
+...
