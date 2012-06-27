@@ -39,4 +39,6 @@ install_ruby_build
 
 echo "***** checking for rbenv in bash"
 add_rbenv_to_bash
+echo "***** Installing JRuby"
+rbenv install jruby-1.6.7
 rbenv shims

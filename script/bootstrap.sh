@@ -19,7 +19,6 @@ echo "***** installing hadoop"
 ${HOME}/workspace/chorusrails/script/install_hdfs_service.sh
 
 echo "***** setting up project"
-bundle install
 bundle
 pg_ctl start -D ${CHORUSDIR}/var/db -o "-h localhost -p8543 --bytea_output=escape"
 sleep 5
