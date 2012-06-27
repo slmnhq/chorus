@@ -1,11 +1,16 @@
 class Search
-  attr_accessor :models_to_search, :minimum_results_for_each_type, :query, :page, :per_page
+  attr_accessor :models_to_search, :per_type, :query, :page, :per_page
 
   def initialize(params = {})
     self.models_to_search = [User, Instance]
     self.query = params[:query]
-    self.page = params[:page] || 1
-    self.per_page = params[:per_page] || 100
+    self.per_type = params[:per_type]
+    if per_type
+      self.per_page = 100
+    else
+      self.page = params[:page] || 1
+      self.per_page = params[:per_page] || 50
+    end
   end
 
   def search
@@ -62,12 +67,12 @@ class Search
   end
 
   def populate_missing_records
-    return unless minimum_results_for_each_type
+    return unless per_type
     models_to_search.each do |model|
       model_key = class_name_to_key(model.name)
       found_count = models[:model_key].length
-      if(found_count < minimum_results_for_each_type && found_count < num_found[model_key])
-        model_search = Search.new(:query => query, :per_page => minimum_results_for_each_type)
+      if(found_count < per_type && found_count < num_found[model_key])
+        model_search = Search.new(:query => query, :per_page => per_type)
         model_search.models_to_search = [model]
         models[model_key] = model_search.models[model_key]
       end
