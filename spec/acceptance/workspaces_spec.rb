@@ -3,7 +3,7 @@ require 'spec_helper'
 resource "Workspaces" do
   let!(:user) { FactoryGirl.create :admin }
   let!(:workspace) { FactoryGirl.create :workspace, :owner => user }
-  let!(:schema) { FactoryGirl.create :gpdb_schema, :id => 12 }
+  let!(:schema) { FactoryGirl.create :gpdb_schema }
 
   before do
     log_in user
@@ -40,7 +40,7 @@ resource "Workspaces" do
     let(:name) { "Awesome Workspace" }
     let(:public) { "1" }
     let(:summary) { "I like big data and I cannot lie, all the other coders can't deny" }
-    let(:sandbox_id) { "12" }
+    let(:sandbox_id) { schema.id }
 
     example_request "Update workspace details" do
       status.should == 200
