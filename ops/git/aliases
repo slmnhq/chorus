@@ -11,6 +11,7 @@ alias gc='git checkout'
 alias grm='git rm'
 alias gs='git status'
 alias gb='git branch'
+alias gap='git add --patch --interactive'
 
 alias vim='mvim -p'
 alias l='ls'
