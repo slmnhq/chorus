@@ -54,15 +54,11 @@
                 var $linkExternalTable = this.view.$("a.external_table");
                 expect($linkExternalTable).toExist();
                 $linkExternalTable.click();
-                this.csv = new chorus.models.CsvHdfs(newFixtures.csvImport({fileName: "/folder/filename.txt"}).attributes);
-                this.csv.set({hadoopInstanceId: "9876"});
-                this.csv.set({path: "/folder/filename.txt"})
-                this.server.completeFetchFor(this.csv);
             });
 
             it("launches the right dialog", function() {
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
-                expect(chorus.modal.csv.get("path")).toBe("/folder/filename.txt");
+                expect(chorus.modal.model.get("path")).toBe("/folder/filename.txt");
             });
         });
 

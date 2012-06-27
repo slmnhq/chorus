@@ -77,16 +77,17 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     makeModel: function() {
         this.resource = this.model = this.csv = new chorus.models.CSVImport({
-            workspaceId: this.options.launchElement.data("workspaceId"),
-            hasHeader: true
+            workspaceId: this.options.launchElement.data("workspaceId")
         });
+
+        this.csvOptions = {hasHeader: true};
     },
 
     importDestination: function() {
         if (this.importTarget === "existing") {
             return (this.selectedDataset && this.selectedDataset.name()) || "";
         } else if (this.importTarget === "new") {
-            return chorus.models.CSVImport.normalizeForDatabase(this.$('.new_table input:text').val());
+            return chorus.utilities.CsvParser.normalizeForDatabase(this.$('.new_table input:text').val());
         }
     },
 
@@ -100,15 +101,16 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             this.request = this.uploadObj.submit();
 
         } else {
-            this.csv.set({
-                toTable: this.importDestination(),
+            this.csvOptions.tableName = this.importDestination();
+
+            this.model.set({
                 truncate: this.$(".existing_table input#truncate").is(':checked')
             }, {silent: true});
 
             this.$("button.submit").startLoading("actions.uploading");
             this.uploadObj.url = "/workspace/" + this.options.launchElement.data("workspaceId") + "/csv/sample";
 
-            if (this.csv.performValidation()) {
+            if (this.model.performValidation()) {
                 this.request = this.uploadObj.submit();
             } else {
                 this.showErrors(this.model);
@@ -175,16 +177,19 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                     chorus.router.navigate(workfile.hasOwnPage() ? workfile.showUrl() : workfile.workfilesUrl());
                 }
             } else {
-                var workingCsv = self.csv.clone();
+                var workingCsv = self.model.clone();
                 workingCsv.set(workingCsv.parse(data.result), {silent: true});
                 workingCsv.parseErrors(data.result);
+
+                self.csvOptions.contents = workingCsv.get('contents')
 
                 if (workingCsv.serverErrors) {
                     self.csv.serverErrors = workingCsv.serverErrors;
                     self.csv.trigger("saveFailed");
                     fileChosen(e, data);
                 } else {
-                    if ((workingCsv.columnOrientedData().length === 0) && !workingCsv.serverErrors) {
+                    var csvParser = new chorus.utilities.CsvParser(workingCsv.get('contents'), self.csvOptions);
+                    if ((csvParser.getColumnOrientedData().length === 0) && !csvParser.serverErrors) {
                         var alert = new chorus.alerts.EmptyCSV();
                         alert.launchModal();
                     } else {
@@ -192,7 +197,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                         if (self.importTarget === "existing") {
                             dialog = new chorus.dialogs.ExistingTableImportCSV({csv: workingCsv, datasetId: self.selectedDataset.get("id")});
                         } else {
-                            dialog = new chorus.dialogs.NewTableImportCSV({csv: workingCsv});
+                            dialog = new chorus.dialogs.NewTableImportCSV({model: workingCsv, csvOptions: self.csvOptions});
                         }
                         chorus.PageEvents.subscribe("csv_import:started", self.closeModal, self);
                         dialog.launchModal();

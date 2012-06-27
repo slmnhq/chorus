@@ -46,16 +46,12 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
     createExternalTable: function(e) {
         e && e.preventDefault();
 
-        var csv = new chorus.models.CsvHdfs({
-            hadoopInstanceId: this.model.get("hadoopInstance").id,
-            toTable: this.model.fileNameFromPath(),
-            path: this.model.get("path")
-        });
-        csv.fetch();
+        var csvOptions = {
+            tableName: this.model.fileNameFromPath(),
+            contents: this.model.get('contents')
+        }
 
-        csv.onLoaded(function(){
-            var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({csv: csv});
-            dialog.launchModal();
-        });
+        var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({model: this.model, csvOptions: csvOptions});
+        dialog.launchModal();
     }
 })

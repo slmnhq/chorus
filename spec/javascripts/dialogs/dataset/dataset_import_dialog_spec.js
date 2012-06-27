@@ -370,7 +370,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                             expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalled();
 
                             var dialogArgs = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.args[0]
-                            expect(dialogArgs.csv.get("contents").length).toBe(2);
+                            expect(dialogArgs.model.get("contents").length).toBe(2);
 
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
                         });
@@ -487,8 +487,8 @@ describe("chorus.dialogs.DatasetImport", function() {
                 });
 
                 it("sets the destination table and truncate options in the csv", function() {
-                    expect(this.dialog.csv.get("toTable")).toBe(this.validDatasets[1].name());
-                    expect(this.dialog.csv.get("truncate")).toBeFalsy();
+                    expect(this.dialog.csvOptions.tableName).toBe(this.validDatasets[1].name());
+                    expect(this.dialog.model.get("truncate")).toBeFalsy();
                 });
             });
         });

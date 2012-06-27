@@ -11,17 +11,28 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
     },
 
     setup: function() {
-        this.csv = this.options.csv = this.collection && this.collection.at(0);
-        this.setupCsv();
+        this.options.model = this.collection && this.collection.at(0);
+        this.options.csvOptions = this.options.csvOptions || {};
+
+        this.model = this.options.model;
+        this.csvOptions = this.options.csvOptions;
+
+        this.setupCsvOptions();
+        this.setupModel();
+
+        $(document).one('reveal.facebox', _.bind(this.setupSelects, this));
+
         this._super("setup", arguments);
     },
 
-    setupCsv: function(){
-        this.csv.set({toTable: chorus.models.CSVImport.normalizeForDatabase(this.options.directoryName)});
-        this.csv.set({hadoopInstanceId : this.collection.attributes.hadoopInstance.id}, {silent: true});
-        this.csv.set({path: this.pathWithSlash() + this.csv.get("name")}, {silent: true});
+    setupCsvOptions: function(){
+        this.csvOptions.hasHeader = false;
+        this.csvOptions.tableName = chorus.utilities.CsvParser.normalizeForDatabase(this.options.directoryName);
+    },
 
-        $(document).one('reveal.facebox', _.bind(this.setupSelects, this));
+    setupModel: function() {
+        this.model.set({hadoopInstanceId : this.collection.attributes.hadoopInstance.id}, {silent: true});
+        this.model.set({path: this.pathWithSlash() + this.model.get("name")}, {silent: true});
     },
 
     setupSelects: function() {
@@ -30,15 +41,14 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
 
     postRender: function() {
         this._super("postRender", arguments);
-        this.$("select").val(this.csv.get("name"));
+        this.$("select").val(this.model.get("name"));
         this.$("input#" + this.pathType).prop("checked", true);
     },
 
     additionalContext: function() {
         var parentCtx = this._super("additionalContext", arguments);
         parentCtx.expression = this.pattern;
-        parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='toTable' value='" + Handlebars.Utils.escapeExpression(this.csv.get("toTable")) + "'/>");
-        parentCtx.hasHeader = this.csv.get("hasHeader");
+        parentCtx.directions = new Handlebars.SafeString("<input type='text' class='hdfs' name='tableName' value='" + Handlebars.Utils.escapeExpression(this.model.get('tableName')) + "'/>");
         return parentCtx;
     },
 
@@ -55,7 +65,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
 
             regexp_s = regexp_s.replace(/\*/g, ".*");
             var regexp = new RegExp(regexp_s, "i");
-            var result = regexp.test(this.csv.get("name"));
+            var result = regexp.test(this.model.get("name"));
 
             if (!result) {
                 this.markInputAsInvalid(this.$("input[name='expression']"), t("hdfs_instance.create_external.validation.expression"), true);
@@ -68,28 +78,26 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
 
     saved: function() {
         this.closeModal();
-        chorus.toast("hdfs.create_external.success", {tableName: this.csv.get("toTable"), workspaceName: this.csv.get("workspaceName")});
+        chorus.toast("hdfs.create_external.success", {tableName: this.model.get('tableName'), workspaceName: this.model.get("workspaceName")});
         chorus.PageEvents.broadcast("csv_import:started");
     },
 
     saveFailed: function() {
-        if(this.csv.serverErrors) {
-            this.showErrors();
-        }
+        this.showErrors();
         this.$("button.submit").stopLoading();
     },
 
-    prepareCsv: function() {
+    updateModel: function() {
         var $names = this.$(".column_names input:text");
         var $types = this.$(".data_types .chosen");
-        var toTable = this.$(".directions input:text").val();
+        var tableName = this.$(".directions input:text").val();
         var columns = _.map($names, function(name, i) {
             var $name = $names.eq(i);
             var $type = $types.eq(i);
             return chorus.Mixins.dbHelpers.safePGName($name.val()) + " " + $type.text();
         })
 
-        var statement = toTable + " (" + columns.join(", ") + ")";
+        var statement = tableName + " (" + columns.join(", ") + ")";
 
 
         this.tableName = this.$(".directions input:text").val();
@@ -97,13 +105,13 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         var pathType = this.$("input[name='pathType']:checked").val();
         var path = (pathType === "pattern") ? this.pathWithSlash() + this.$("input[name='expression']").val() : this.collection.attributes.path;
 
-        this.csv.set({
+        this.model.set({
             fileType: "TEXT",
             pathType : pathType,
             workspaceId: this.options.workspaceId,
             workspaceName: this.options.workspaceName,
             statement: statement,
-            toTable: chorus.models.CSVImport.normalizeForDatabase(toTable),
+            tableName: chorus.utilities.CsvParser.normalizeForDatabase(tableName),
             path: path,
             delimiter: this.delimiter
         }, {silent : true});
@@ -113,22 +121,23 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         e && e.preventDefault();
         this.pathType = this.$("input[name='pathType']:checked").val();
         this.pattern = this.$("input[name='expression']").val();
-        this.resource = this.csv = this.collection.find(function(csvSet) {
-            return csvSet.get('name') == $(e.target).val()
+        this.resource = this.model = this.collection.find(function(modelSet) {
+            return modelSet.get('name') == $(e.target).val()
         });
 
-        this.setupCsv();
+        this.setupCsvOptions();
+        this.setupModel();
 
-        this.bindings.add(this.csv, "saved", this.saved);
-        this.bindings.add(this.csv, "saveFailed", this.saveFailed);
-        this.bindings.add(this.csv, "validationFailed", this.saveFailed);
+        this.bindings.add(this.model, "saved", this.saved);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
 
-        this.csv.fetch();
-        this.csv.set({hasHeader: !!(this.$("#hasHeader").prop("checked"))}, {silent: true});
+        this.model.fetch();
+        this.model.set({hasHeader: !!(this.$("#hasHeader").prop("checked"))}, {silent: true});
 
         this.$(".data_table").startLoading();
 
-        this.csv.onLoaded(function() {
+        this.model.onLoaded(function() {
             this.$(".data_table").stopLoading();
             this.render();
             this.setupSelects();

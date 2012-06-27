@@ -20,13 +20,20 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.resource = this.csv = this.options.csv;
-        this.csv.set({toTable : chorus.models.CSVImport.normalizeForDatabase(this.csv.get("toTable"))});
+        this.csvOptions = this.options.csvOptions;
+        this.model = this.options.model;
+        this.contents = this.csvOptions.contents;
+
+        this.model.set({
+            hasHeader: this.csvOptions.hasHeader,
+            tableName: chorus.utilities.CsvParser.normalizeForDatabase(this.csvOptions.tableName)
+        });
+
         chorus.PageEvents.subscribe("choice:setType", this.onSelectType, this);
 
-        this.bindings.add(this.csv, "saved", this.saved);
-        this.bindings.add(this.csv, "saveFailed", this.saveFailed);
-        this.bindings.add(this.csv, "validationFailed", this.saveFailed);
+        this.bindings.add(this.model, "saved", this.saved);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
     },
 
     saved: function() {
@@ -44,7 +51,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         $typeDiv.removeClass("integer float text date time timestamp").addClass(data);
     },
 
-    storeColumnInfo: function() {
+    storeColumnNames: function() {
         var $names = this.$(".column_names input:text");
 
         var columnNames;
@@ -53,18 +60,22 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
                 return $names.eq(i).val();
             });
 
-            if (this.csv.get("hasHeader")) {
-                this.csv.set({headerColumnNames: columnNames}, {silent: true})
+            if (this.model.get("hasHeader")) {
+                this.headerColumnNames = columnNames;
             } else {
-                this.csv.set({generatedColumnNames: columnNames}, {silent: true})
+                this.generatedColumnNames = columnNames;
             }
         }
+    },
+
+    storeColumnInfo: function() {
+        this.storeColumnNames();
 
         var $types = this.$(".data_types .chosen");
-        var types = _.map($types, function($type, i){
+        var types = _.map($types, function($type, i) {
             return $types.eq(i).text();
         })
-        this.csv.set({types: types}, {silent: true});
+        this.model.set({types: types}, {silent: true});
     },
 
     postRender: function() {
@@ -74,8 +85,15 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
         var $dataTypes = this.$(".data_types");
 
-        var columns = this.csv.columnOrientedData();
-        if (this.csv.serverErrors) {
+        var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
+        var columns = csvParser.getColumnOrientedData();
+        this.model.serverErrors = csvParser.serverErrors;
+
+        this.model.set({
+            types: _.pluck(columns, "type")
+        }, {silent: true});
+
+        if (this.model.serverErrors) {
             this.showErrors();
         }
 
@@ -106,13 +124,19 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         }
     },
 
+    getColumnNames: function() {
+        return this.model.attributes.hasHeader ? this.headerColumnNames : this.generatedColumnNames
+    },
+
     additionalContext: function() {
+        var options = _.clone(this.model.attributes);
+        options.columnNameOverrides = this.getColumnNames();
         return {
             includeHeader: this.includeHeader,
-            columns: this.csv.columnOrientedData(),
+            columns: new chorus.utilities.CsvParser(this.contents, options).getColumnOrientedData(),
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: chorus.helpers.safeT("dataset.import.table.new.directions", {
-                tablename_input_field: "<input type='text' name='toTable' value='" + this.csv.get("toTable") + "'/>"
+                tablename_input_field: "<input type='text' name='tableName' value='" + this.model.get('tableName') + "'/>"
             }),
             ok: this.ok
         }
@@ -121,29 +145,11 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     startImport: function() {
         if (this.performValidation()) {
             this.storeColumnInfo();
-            this.prepareCsv();
+            this.updateModel();
 
             this.$("button.submit").startLoading(this.loadingKey);
-            this.csv.save();
+            this.model.save();
         }
-    },
-
-    prepareCsv: function() {
-        var $names = this.$(".column_names input:text");
-        var $types = this.$(".data_types .chosen");
-
-        var columnData = _.map($names, function(name, i) {
-            return {
-                columnName: chorus.Mixins.dbHelpers.safePGName($(name).val()),
-                columnType: $types.eq(i).text(),
-                columnOrder: i + 1
-            }
-        })
-        this.csv.set({
-            toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val()),
-            delimiter: this.delimiter,
-            columnsDef: JSON.stringify(columnData)
-        })
     },
 
     performValidation: function() {
@@ -151,7 +157,15 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         var pattern = chorus.ValidationRegexes.ChorusIdentifier64();
         var allValid = true;
 
+        var $tableName = this.$(".directions input:text");
+
         this.clearErrors();
+
+        if(!$tableName.val().match(pattern)) {
+            allValid = false;
+            this.markInputAsInvalid($tableName, t("import.validation.toTable.required"), true);
+        }
+
         _.each($names, function(name, i) {
             var $name = $names.eq(i);
             if (!$name.val().match(pattern)) {
@@ -163,15 +177,13 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         return allValid;
     },
 
-    refreshCSV: function() {
-        this.csv.set({
+    updateModel: function() {
+        this.model.set({
             hasHeader: !!(this.$("#hasHeader").prop("checked")),
             delimiter: this.delimiter,
-            toTable: chorus.models.CSVImport.normalizeForDatabase(this.$(".directions input:text").val())
+            tableName: chorus.utilities.CsvParser.normalizeForDatabase(this.$(".directions input:text").val()),
+            columnNames: this.getColumnNames()
         });
-        this.csv.unset("types")
-        this.render();
-        this.recalculateScrolling();
     },
 
     adjustHeaderPosition: function() {
@@ -191,14 +203,15 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.delimiter = e.target.value;
             this.other_delimiter = false;
         }
-        this.csv.unset("headerColumnNames", {silent: true});
-        this.csv.unset("generatedColumnNames", {silent: true});
-        this.refreshCSV();
+        this.updateModel();
     },
 
     setHeader: function() {
         this.storeColumnInfo();
-        this.refreshCSV();
+        this.updateModel();
+
+        this.render();
+        this.recalculateScrolling();
     },
 
     focusOtherInputField: function(e) {

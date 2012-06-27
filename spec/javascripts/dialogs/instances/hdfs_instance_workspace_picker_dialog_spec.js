@@ -112,12 +112,12 @@ describe("chorus.dialogs.HdfsInstanceWorkspacePicker", function() {
                        });
 
                        it("fetches the first item in the collection", function() {
-                           expect(this.dialog.externalTableDialog.csv).toHaveBeenFetched();
+                           expect(this.dialog.externalTableDialog.model).toHaveBeenFetched();
                        })
 
                        context("when the fetch for hdfs file sample completes", function () {
                            beforeEach(function() {
-                               this.server.completeFetchFor(this.dialog.externalTableDialog.csv);
+                               this.server.completeFetchFor(this.dialog.externalTableDialog.model);
                            });
                            it("opens the Create External Table dialog, passing the workspace information", function() {
                                expect(this.dialog.launchSubModal).toHaveBeenCalledWith(this.dialog.externalTableDialog);

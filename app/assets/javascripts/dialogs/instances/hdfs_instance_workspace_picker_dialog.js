@@ -11,7 +11,7 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
     },
 
     resourcesLoaded: function() {
-        this.render();    
+        this.render();
     },
 
     closeDialog: function() {
@@ -69,8 +69,8 @@ chorus.dialogs.HdfsInstanceWorkspacePicker = chorus.dialogs.PickWorkspace.extend
             workspaceName: this.selectedItem().get("name")
         });
 
-        this.externalTableDialog.csv.fetch();
-        this.externalTableDialog.csv.onLoaded(function() {
+        this.externalTableDialog.model.fetch();
+        this.externalTableDialog.model.onLoaded(function() {
             this.launchSubModal(this.externalTableDialog);
         }, this);
 

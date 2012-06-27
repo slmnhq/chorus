@@ -80,18 +80,24 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
     createExternalTable: function(e) {
         e && e.preventDefault();
-        var csv = new chorus.models.CsvHdfs({
-            hadoopInstanceId: this.options.hadoopInstanceId,
-            toTable: this.resource.get("name"),
-            path: this.options.rootPath+"/"+this.resource.get("name")
-        });
-        csv.fetch();
+        var hadoopInstance = new chorus.models.HadoopInstance({id: this.options.hadoopInstanceId});
 
-        csv.onLoaded(function(){
-            var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({csv: csv});
+        var hdfsFile = new chorus.models.HdfsFile({
+            hadoopInstance: hadoopInstance,
+            path: this.options.rootPath + "/" + this.resource.get("name")
+        });
+
+        hdfsFile.fetch();
+
+        hdfsFile.onLoaded(function(){
+            var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({
+                model: hdfsFile,
+                csvOptions: {tableName: hdfsFile.name()}
+            });
             dialog.launchModal();
         });
     },
+
     openDirectoryExternalTable: function(e) {
         e.preventDefault();
 
