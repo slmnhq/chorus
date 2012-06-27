@@ -17,7 +17,7 @@ class Route < Struct.new(:method, :path)
   end
 end
 
-routes = `rake routes`.split("\n").map { |line|
+routes = `bundle exec rake routes`.split("\n").map { |line|
   match = line.match(/(\w+) +(\/[^( ]+)/)
   match && Route.new(match[1].downcase, match[2])
 }.compact
