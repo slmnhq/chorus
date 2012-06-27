@@ -11,10 +11,15 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
             ]
         };
 
-        this.model = new chorus.models.CsvHdfs({
-            hadoopInstance: {id : "234"},
-            path: "/foo/bar.txt",
-            name: "bar.csv"
+        this.model = new (chorus.models.Base.extend({
+            constructorName: 'FakeModel',
+            urlTemplate: "workspaces/{{workspaceId}}/external_tables"
+        }))();
+
+        this.model.set({
+            hadoopInstanceId: '234',
+            path: '/file/bar.csv',
+            name: 'bar.csv'
         });
 
         this.collection.at(0).set(this.model);
