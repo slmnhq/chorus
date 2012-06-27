@@ -17,6 +17,8 @@ describe DataMigrator, :data_migration => true, :type => :data_migration do
     @data_migrator.migrators[i+=1].should be_instance_of ImageMigrator
     @data_migrator.migrators[i+=1].should be_instance_of WorkfileMigrator
     @data_migrator.migrators[i+=1].should be_instance_of SandboxMigrator
+    @data_migrator.migrators[i+=1].should be_instance_of HadoopInstanceMigrator
+    @data_migrator.migrators[i+=1].should be_instance_of ActivityMigrator
   end
 
   describe ".migrate" do
@@ -31,7 +33,7 @@ describe DataMigrator, :data_migration => true, :type => :data_migration do
       end
 
       @data_migrator.migrators = []
-      10.times do
+      12.times do
         stub_migrator = PseudoMigrator.new
         mock(stub_migrator).migrate
         @data_migrator.migrators << stub_migrator

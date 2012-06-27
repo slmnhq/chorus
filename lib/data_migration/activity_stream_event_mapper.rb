@@ -52,6 +52,8 @@ class ActivityStreamEventMapper
       Workfile.find_by_id(@activity_stream.rails_workfile_id)
     when :new_user
       User.find_by_id(@activity_stream.rails_object_user_id)
+    when :dataset
+      Dataset.find_by_id(@activity_stream.rails_dataset_id)
     end
   end
 end

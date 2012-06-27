@@ -11,7 +11,9 @@ class DataMigrator
                   MembershipMigrator.new,
                   ImageMigrator.new,
                   WorkfileMigrator.new,
-                  SandboxMigrator.new
+                  SandboxMigrator.new,
+                  HadoopInstanceMigrator.new,
+                  ActivityMigrator.new
                  ]
   end
 

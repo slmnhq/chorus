@@ -129,6 +129,38 @@ describe ActivityStreamEventMapper do
     end
   end
 
+  describe "source table created event" do
+    let(:table) { FactoryGirl.create(:gpdb_table) }
+    let(:workspace) { FactoryGirl.create(:workspace) }
+    let(:activity_stream) do
+      Object.new.tap do |activity|
+        mock(activity).type.twice { 'SOURCE_TABLE_CREATED' }
+      end
+    end
+
+    context "#build_event" do
+      before do
+        mock(activity_stream).rails_dataset_id { table.id }
+      end
+
+      it "builds a valid SOURCE_TABLE_CREATED event" do
+        event = mapper.build_event
+        event.should be_a_kind_of(Events::SOURCE_TABLE_CREATED)
+      end
+
+      it "sets the dataset target" do
+        event = mapper.build_event
+        event.dataset.should == table
+      end
+    end
+
+    context "#can_build?" do
+      it "returns true" do
+        mapper.can_build?.should be_true
+      end
+    end
+  end
+
   describe "instance change owner event" do
     let(:activity_stream) do
       Object.new.tap do |activity|
@@ -137,7 +169,27 @@ describe ActivityStreamEventMapper do
     end
 
     context "#build_event" do
-      it "fails to build an event" do
+      it "fails to build an event because it is an unexpected type" do
+        mapper.build_event.should be_nil
+      end
+    end
+
+    context "#can_build" do
+      it "returns false" do
+        mapper.can_build?.should be_false
+      end
+    end
+  end
+
+  describe "instance change name event" do
+    let(:activity_stream) do
+      Object.new.tap do |activity|
+        mock(activity).type.twice { 'INSTANCE_CHANGED_NAME' }
+      end
+    end
+
+    context "#build_event" do
+      it "fails to build an event because it is an unexpected type" do
         mapper.build_event.should be_nil
       end
     end

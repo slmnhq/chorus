@@ -69,12 +69,12 @@ class Legacy::ActivityStream
   end
 
   def chorus_rails_workspace_id
-    sql = "SELECT ew.chorus_rails_workspace_id FROM edc_workspace ew, edc_activity_stream eas
-                                           WHERE eas.workspace_id = ew.id
-                                           AND eas.id = '#{id}'"
+      sql = "SELECT ew.chorus_rails_workspace_id FROM edc_workspace ew, edc_activity_stream eas
+                                             WHERE eas.workspace_id = ew.id
+                                             AND eas.id = '#{id}'"
 
-    extract_result("chorus_rails_workspace_id", Legacy.connection.exec_query(sql))
-  end
+      extract_result("chorus_rails_workspace_id", Legacy.connection.exec_query(sql))
+    end
 
   def user_id
     sql = "SELECT eu.chorus_rails_user_id FROM edc_user eu, edc_activity_stream_object aso
@@ -83,6 +83,28 @@ class Legacy::ActivityStream
                                            AND eu.id = aso.object_id"
 
     extract_result("chorus_rails_user_id", Legacy.connection.exec_query(sql))
+  end
+
+  def rails_dataset_id
+    sql = "SELECT aso.object_id FROM edc_activity_stream_object aso
+                                     WHERE aso.activity_stream_id = '#{id}'
+                                     AND aso.object_type = 'object'"
+
+    object_id = extract_result("object_id", Legacy.connection.exec_query(sql))
+    ids = object_id.delete("\"").split("|")
+    legacy_instance_id = ids[0]
+    database_name = ids[1]
+    schema_name = ids[2]
+    dataset_name = ids[4]
+
+    sql = "SELECT ei.chorus_rails_instance_id FROM edc_instance ei WHERE ei.id = '#{legacy_instance_id}'"
+    rails_instance_id = extract_result("chorus_rails_instance_id", Legacy.connection.exec_query(sql))
+    instance = Instance.find_by_id(rails_instance_id)
+
+    database = instance.databases.find_by_name(database_name)
+    schema = database.schemas.find_by_name(schema_name)
+    dataset = schema.datasets.find_by_name(dataset_name)
+    dataset.id
   end
 
   def extract_result(result_key, sql)

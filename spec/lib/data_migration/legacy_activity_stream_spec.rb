@@ -7,6 +7,7 @@ describe Legacy::ActivityStream, :type => :data_migration do
   let(:hadoop_activity_stream) { Legacy::ActivityStream.new('10006', nil) }
   let(:workfile_activity_stream) { Legacy::ActivityStream.new('10010', nil) }
   let(:user_activity_stream) { Legacy::ActivityStream.new('10004', nil) }
+  let(:dataset_activity_stream) { Legacy::ActivityStream.new('10097', nil) }
 
   before do
     Legacy.connection.add_column :edc_instance, :chorus_rails_instance_id, :integer
@@ -142,5 +143,23 @@ describe Legacy::ActivityStream, :type => :data_migration do
           greenplum_activity_stream.rails_object_user_id.should_not be_present
         end
       end
+  end
+
+  describe "#rails_dataset_id" do
+    context "when it has a dataset" do
+      it "returns the dataset id" do
+        instance = FactoryGirl.create(:instance, :id => 123)
+        database = FactoryGirl.create(:gpdb_database, :instance => instance, :name => 'dca_demo ')
+        schema = FactoryGirl.create(:gpdb_schema, :database => database, :name => 'ddemo')
+        FactoryGirl.create(:gpdb_table, :schema => schema, :name => 'a_songs_imp')
+        dataset_activity_stream.rails_dataset_id.should be_present
+      end
     end
+
+    context "when it doesn't have a dataset'" do
+      it "returns false" do
+        greenplum_activity_stream.rails_dataset_id.should_not be_present
+      end
+    end
+  end
 end
