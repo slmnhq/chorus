@@ -13,6 +13,8 @@ alias gs='git status'
 alias gb='git branch'
 alias gap='git add --patch --interactive'
 
+alias rs='bundle exec rspec'
+
 alias vim='mvim -p'
 alias l='ls'
 alias ll='ls -la'
