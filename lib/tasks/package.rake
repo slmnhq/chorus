@@ -20,7 +20,9 @@ module PackageMaker
   def stage(filename)
     run 'ssh chorus-staging -C "~/chorusrails/vendor/jetty/jetty-init stop"'
     run "scp #{filename} chorus-staging:~/"
-    run "ssh chorus-staging 'cd ~/ tar --overwrite -xvf #{filename}'"
+    run "ssh chorus-staging 'cd ~/; tar --overwrite -xvf #{filename}'"
+    # Run the migrations
+    run "ssh chorus-staging 'cd ~/chorusrails; RAILS_ENV=production bin/rake db:migrate'"
     run "ssh chorus-staging 'RAILS_ENV=production ~/chorusrails/vendor/jetty/jetty-init start >/dev/null 2>/dev/null &'"
   end
 
