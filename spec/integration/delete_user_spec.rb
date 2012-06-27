@@ -39,13 +39,10 @@ describe "deleting a workspace" do
   end
 
   it "doesnot let an admin delete himself" do
-
     go_to_user_list_page
     within(".list") do
       click_link "EDC Admin"
     end
     page.should have_no_link("Delete User")
-
   end
-
 end
