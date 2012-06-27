@@ -1,16 +1,14 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "deleting a workspace" do
-  before(:each) do
-    login('edcadmin', 'secret')
-  end
+describe "deleting a user" do
+  before(:each) { login('edcadmin', 'secret') }
 
   it "deletes a user" do
     create_valid_user(:first_name => "Alex", :last_name =>"Reed", :username => "AlexReed")
     click_link "Alex Reed"
-    wait_until { page.find("h1").text == "Alex Reed" }
+    wait_for_ajax
     click_link "Edit Profile"
-    wait_until { page.find("h1").text == "Alex Reed" }
+    wait_for_ajax
     click_link "Delete User"
     click_button "Delete User"
     wait_until { current_route == '/users' }
@@ -18,31 +16,23 @@ describe "deleting a workspace" do
   end
 
   it "doesnot delete a user who owns a workspace" do
-    create_valid_user(:first_name => "Alex", :last_name =>"Reed", :username => "AlexReed")
-    wait_for_ajax
-    as_user("AlexReed") do
+    create_valid_user(:first_name => "Alex", :last_name =>"Reedy", :username => "AlexReedy")
+    as_user("AlexReedy") do
       go_to_workspace_page
       create_valid_workspace()
     end
 
     as_user("edcadmin") do
-      go_to_user_list_page
+      visit("#/users")
       wait_until { current_route == '/users' }
-      click_link "Alex Reed"
-      wait_until { page.find("h1").text == "Alex Reed" }
+      click_link "Alex Reedy"
+      wait_for_ajax
       click_link "Edit Profile"
-      wait_until { page.find("h1").text == "Alex Reed" }
+      wait_for_ajax
       click_link "Delete User"
       click_button "Delete User"
       page.find(".error").should have_content("Can't delete user that still has workspaces associated")
     end
   end
-
-  it "doesnot let an admin delete himself" do
-    go_to_user_list_page
-    within(".list") do
-      click_link "EDC Admin"
-    end
-    page.should have_no_link("Delete User")
-  end
 end
+

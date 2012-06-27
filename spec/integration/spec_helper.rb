@@ -7,7 +7,8 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../../config/environment", __FILE__)
 
 Capybara.app = Rails.application
-Capybara.default_driver = :selenium
+Capybara.default_driver = :webkit
+Capybara.javascript_driver = :webkit
 Capybara.run_server = true #Whether start server when testing
 Capybara.server_port = 8200
 Capybara.server_boot_timeout = 100
@@ -25,7 +26,7 @@ def current_route
 end
 
 def wait_for_ajax(timeout = Capybara.default_wait_time)
-  timeout = 60 #Increase timeout from 10 to 60 to allow more time for logins to complete
+  timeout = 5 #Increase timeout from 10 to 60 to allow more time for logins to complete
 
   page.wait_until(timeout) do
     page.evaluate_script 'jQuery.active == 0'
