@@ -96,6 +96,7 @@ describe "add a workfile" do
     end
 
     click_link("Work Files")
+    wait_for_ajax
     wait_until { page.find('button[data-dialog="WorkfilesImport"]').text == "Upload File" }
     workfiles = page.all("li.workfile")
 
