@@ -49,3 +49,6 @@ tags
 /vendor/jruby.jar
 /WEB-INF
 /bin
+
+# Ignore file with build sha
+/version_build

@@ -30,7 +30,7 @@ module PackageMaker
     current_sha = head_sha
     filename = "greenplum-chorus-#{Chorus::VERSION::STRING}-#{timestamp}-#{current_sha}.tar.gz"
     setup_directories
-    archive_app(filename)
+    archive_app(filename, current_sha)
     if options[:stage]
       stage(filename)
     end
@@ -48,9 +48,12 @@ module PackageMaker
     end
   end
 
-  def archive_app(filename)
+  def archive_app(filename, sha)
     run "RAILS_ENV=development rake assets:precompile"
     run "bundle exec jetpack ."
+    File.open('version_build', 'w') do |f|
+      f.puts sha
+    end
 
     files_to_tar = [
       "bin/",
@@ -69,6 +72,7 @@ module PackageMaker
       "Rakefile",
       "config.ru",
       "version.rb",
+      "version_build",
       ".bundle/config"
     ]
 
