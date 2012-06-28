@@ -95,7 +95,7 @@ describe EventsController do
       generate_fixture "activity/#{filename}.json" do
         event = FactoryGirl.create(event_factory_name)
         activity = Activity.global.create!(:event => event)
-        get :show, :id => activity.to_param
+        get :show, :id => event.to_param
       end
 
     end
