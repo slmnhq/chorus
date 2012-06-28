@@ -90,9 +90,17 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         hdfsFile.fetch();
 
         hdfsFile.onLoaded(function(){
+            var externalTable = new chorus.models.HdfsExternalTable({
+                path: hdfsFile.get('path'),
+                hadoopInstanceId: hadoopInstance.get('id')
+            });
+
             var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({
-                model: hdfsFile,
-                csvOptions: {tableName: hdfsFile.name()}
+                model: externalTable,
+                csvOptions: {
+                    tableName: hdfsFile.name(),
+                    contents: hdfsFile.get('contents')
+                }
             });
             dialog.launchModal();
         });

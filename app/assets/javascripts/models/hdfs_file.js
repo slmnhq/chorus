@@ -11,7 +11,7 @@ chorus.models.HdfsFile = chorus.models.Base.extend({
     },
 
     urlTemplate: function() {
-        return "hadoop_instances/{{hadoopInstanceId}}/contents/" + encodeURIComponent(this.get("path"));
+        return "hadoop_instances/" + this.get('hadoopInstance').id + "/contents/" + encodeURIComponent(this.get("path"));
     },
 
     fileNameFromPath: function() {

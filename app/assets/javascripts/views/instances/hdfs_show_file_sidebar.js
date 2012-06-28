@@ -50,8 +50,13 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
             tableName: this.model.fileNameFromPath(),
             contents: this.model.get('contents')
         }
+        
+        var hdfsExternalTable = new chorus.models.HdfsExternalTable({
+            path: this.model.get('path'),
+            hadoopInstanceId: this.model.get('hadoopInstance').id
+        });
 
-        var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({model: this.model, csvOptions: csvOptions});
+        var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({model: hdfsExternalTable, csvOptions: csvOptions});
         dialog.launchModal();
     }
 })
