@@ -1,8 +1,16 @@
 require 'spec_helper'
 
 describe HdfsEntryPresenter, :type => :view do
+  let(:hadoop_instance) { FactoryGirl.build_stubbed(:hadoop_instance) }
   before(:each) do
-    entry = HdfsEntry.new('path' => "/data", 'modifiedAt' => "2010-10-20 10:11:12", 'size' => '10', 'directory' => 'true', 'contentCount' => 1)
+    entry = HdfsEntry.new({
+      'path' => "/data",
+      'modifiedAt' => "2010-10-20 10:11:12",
+      'size' => '10',
+      'directory' => 'true',
+      'contentCount' => 1
+    }, hadoop_instance)
+
     @presenter = HdfsEntryPresenter.new(entry, view)
   end
 

@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 describe HdfsFile do
+  let(:time) { Time.current }
   let(:hadoop_instance) { FactoryGirl.build_stubbed(:hadoop_instance) }
-  subject { described_class.new('/file', hadoop_instance) }
+
+  subject { described_class.new('/file', hadoop_instance, {:modified_at => time}) }
 
   describe "#contents" do
     before do
@@ -29,14 +31,6 @@ describe HdfsFile do
   end
 
   describe "#modified_at" do
-    let(:time) { Time.current }
-
-    before do
-      entry_stub = Object.new
-      stub(entry_stub).modified_at { time }
-      mock(HdfsEntry).list('/file', hadoop_instance) { [entry_stub] }
-    end
-
     it "returns the date of modification" do
       subject.modified_at.should == time
     end
