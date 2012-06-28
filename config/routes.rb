@@ -71,6 +71,8 @@ Chorus::Application.routes.draw do
     resource :download, :only => [:show], :controller => 'download'
   end
 
+  resources :notes, :only => [:create]
+
   resource :search do
     resource :global, :only => [:show], :controller => 'search'
   end

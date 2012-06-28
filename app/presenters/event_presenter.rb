@@ -11,9 +11,15 @@ class EventPresenter < Presenter
     {
       :id => model.id,
       :actor => present(model.actor),
-      :action => model.action,
+      :action => action,
       :timestamp => model.created_at
     }
+  end
+
+  def action
+    return "NOTE" if model.is_a?(Events::Note)
+
+    model.action
   end
 
   def additional_data_hash

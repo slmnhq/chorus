@@ -161,6 +161,10 @@ FactoryGirl.define do
     factory :user_created_event, :class => Events::USER_ADDED do
       association :new_user, :factory => :user
     end
+
+    factory :note_on_greenplum_instance_event, :class => Events::NOTE_ON_GREENPLUM_INSTANCE do
+      greenplum_instance
+    end
   end
 end
 
