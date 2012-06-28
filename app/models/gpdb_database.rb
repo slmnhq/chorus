@@ -8,7 +8,7 @@ class GpdbDatabase < ActiveRecord::Base
   FROM
     pg_database
   WHERE
-    datallowconn IS TRUE
+    datallowconn IS TRUE AND datname NOT IN ('postgres', 'template1')
   SQL
 
   def self.refresh(account)
