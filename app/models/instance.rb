@@ -7,6 +7,7 @@ class Instance < ActiveRecord::Base
   validates_format_of :name, :with => /^[a-zA-Z][a-zA-Z0-9_]{0,43}$/
 
   has_many :activities, :as => :entity
+  has_many :events, :through => :activities
   belongs_to :owner, :class_name => 'User'
   has_many :accounts, :class_name => 'InstanceAccount'
   has_many :databases, :class_name => 'GpdbDatabase'

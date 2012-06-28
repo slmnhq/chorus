@@ -7,6 +7,7 @@ describe HadoopInstance do
     it { should belong_to :owner }
     its(:owner) { should be_a User }
     it { should have_many :activities }
+    it { should have_many :events }
   end
 
   describe "validations" do

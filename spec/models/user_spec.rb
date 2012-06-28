@@ -185,6 +185,7 @@ describe User do
     it { should have_many(:workspaces) }
     it { should have_many(:owned_workspaces) }
     it { should have_many(:activities) }
+    it { should have_many(:events) }
   end
 
   describe "#workspaces" do

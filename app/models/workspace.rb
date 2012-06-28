@@ -10,6 +10,7 @@ class Workspace < ActiveRecord::Base
   has_many :members, :through => :memberships, :source => :user
   has_many :workfiles
   has_many :activities, :as => :entity
+  has_many :events, :through => :activities
   has_one :sandbox, :class_name => 'GpdbSchema'
 
   has_many :associated_datasets

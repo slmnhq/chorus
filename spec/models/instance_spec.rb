@@ -45,6 +45,7 @@ describe Instance do
     it { should have_many :accounts }
     it { should have_many :databases }
     it { should have_many :activities }
+    it { should have_many :events }
   end
 
   it "should not allow changing inaccessible attributes" do

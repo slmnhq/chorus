@@ -121,6 +121,11 @@ describe Workfile do
     it "has_draft return false for workfile2" do
       workfile2.has_draft(user).should == false
     end
+  end
 
+  describe "associations" do
+    it { should belong_to :owner }
+    it { should have_many :activities }
+    it { should have_many :events }
   end
 end
