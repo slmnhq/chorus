@@ -1,19 +1,19 @@
-class ActivitiesController < ApplicationController
+class EventsController < ApplicationController
   def index
-    present activities
+    present events
   end
 
   def show
-    present activities.find(params[:id])
+    present events.find(params[:id])
   end
 
   private
 
-  def activities
+  def events
     if (entity = get_parent_entity)
-      entity.activities
+      entity.events
     else
-      Activity.for_dashboard_of(current_user)
+      Events::Base.for_dashboard_of(current_user)
     end
   end
 

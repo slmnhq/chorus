@@ -31,6 +31,27 @@ module Events
       end
     end
 
+    def self.for_dashboard_of(user)
+      memberships = Membership.arel_table
+      activities  = Activity.arel_table
+
+      workspace_ids =
+        memberships.
+        where(memberships[:user_id].eq(user.id)).
+        project(memberships[:workspace_id])
+
+      entity_is_global =
+        activities[:entity_type].eq(Activity::GLOBAL)
+
+      entity_in_user_workspaces =
+        activities[:entity_type].eq("Workspace").
+        and(activities[:entity_id].in(workspace_ids))
+
+      dashboard_activities = activities.where(entity_is_global.or(entity_in_user_workspaces))
+
+      where(:id => dashboard_activities.project(:event_id))
+    end
+
     def create_activities
       self.class.entities_that_get_activities.each do |entity_name|
         create_activity(entity_name)

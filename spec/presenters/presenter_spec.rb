@@ -36,6 +36,14 @@ describe Presenter, :type => :view do
       end
     end
 
+    context "with a subclass of Events::Base" do
+      it "creates an EventPresenter" do
+        event = FactoryGirl.build(:greenplum_instance_created_event)
+        mock.proxy(EventPresenter).new(event, view, {})
+        Presenter.present(event, view)
+      end
+    end
+
     context "with an active record relation" do
       before do
         FactoryGirl.create(:admin)

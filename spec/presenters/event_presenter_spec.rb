@@ -1,26 +1,25 @@
 require "spec_helper"
 
-describe ActivityPresenter, :type => :view do
+describe EventPresenter, :type => :view do
   let(:instance) { FactoryGirl.create(:instance) }
   let(:event) { FactoryGirl.create(:greenplum_instance_created_event, :greenplum_instance => instance) }
-  let(:activity) { Activity.global.create(:event => event) }
 
   describe "#to_hash" do
-    subject { ActivityPresenter.new(activity, view) }
+    subject { EventPresenter.new(event, view) }
 
     it "includes the 'id', 'timestamp', 'actor', 'action'" do
       hash = subject.to_hash
-      hash[:id].should == activity.id
-      hash[:timestamp].should == activity.created_at
+      hash[:id].should == event.id
+      hash[:timestamp].should == event.created_at
       hash[:action].should == "GREENPLUM_INSTANCE_CREATED"
-      hash[:actor].should  == Presenter.present(activity.event.actor, view)
+      hash[:actor].should  == Presenter.present(event.actor, view)
     end
 
     it "presents all of the event's 'targets', using the same names" do
       special_instance = FactoryGirl.build(:instance)
       special_user = FactoryGirl.build(:user)
 
-      stub(activity.event).targets do
+      stub(event).targets do
         {
           :special_instance => special_instance,
           :special_user => special_user
@@ -33,7 +32,7 @@ describe ActivityPresenter, :type => :view do
     end
 
     it "includes all of the event's 'additional data'" do
-      stub(activity.event).additional_data do
+      stub(event).additional_data do
         {
           :some_key => "foo",
           :some_other_key => "bar"
