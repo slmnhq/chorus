@@ -17,14 +17,14 @@ http_interactions:
       Content-Type:
       - text/plain; charset=utf-8
       Content-Length:
-      - '45'
+      - '44'
       Server:
       - Jetty(6.1.3)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>54}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version:
-  recorded_at: Tue, 26 Jun 2012 22:57:35 GMT
+  recorded_at: Thu, 28 Jun 2012 20:49:10 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -47,9 +47,9 @@ http_interactions:
       - Jetty(6.1.3)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version:
-  recorded_at: Tue, 26 Jun 2012 22:57:36 GMT
+  recorded_at: Thu, 28 Jun 2012 20:49:10 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -74,13 +74,13 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version:
-  recorded_at: Tue, 26 Jun 2012 22:57:36 GMT
+  recorded_at: Thu, 28 Jun 2012 20:49:11 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 52</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="first_name_texts">John</field><field name="last_name_texts">Doe</field><field name="username_texts">user1</field><field name="email_texts">person3@example.com</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1735</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="first_name_texts">John</field><field name="last_name_texts">Doe</field><field name="username_texts">user1</field><field name="email_texts">person3@example.com</field></doc></add>
     headers:
       Content-Type:
       - text/xml
@@ -99,13 +99,13 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
     http_version:
-  recorded_at: Tue, 26 Jun 2012 22:57:36 GMT
+  recorded_at: Thu, 28 Jun 2012 20:49:11 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Instance 1</field><field name="type">Instance</field><field name="type">ActiveRecord::Base</field><field name="class_name">Instance</field><field name="name_texts">bob's great greenplum instance</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Instance 1</field><field name="type">Instance</field><field name="type">ActiveRecord::Base</field><field name="class_name">Instance</field><field name="name_texts">bob_great_greenplum_instance</field></doc></add>
     headers:
       Content-Type:
       - text/xml
@@ -124,7 +124,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version:
-  recorded_at: Tue, 26 Jun 2012 22:57:36 GMT
+  recorded_at: Thu, 28 Jun 2012 20:49:11 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -142,13 +142,13 @@ http_interactions:
       Content-Type:
       - text/plain; charset=utf-8
       Content-Length:
-      - '45'
+      - '44'
       Server:
       - Jetty(6.1.3)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>16}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version:
-  recorded_at: Tue, 26 Jun 2012 22:57:36 GMT
+  recorded_at: Thu, 28 Jun 2012 20:49:11 GMT
 recorded_with: VCR 2.1.1
 ...

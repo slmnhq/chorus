@@ -6,6 +6,38 @@ describe Instance do
     it { should validate_presence_of :host }
     it { should validate_presence_of :port }
     it { should validate_presence_of :maintenance_db }
+
+    describe "name" do
+      context "when instance name is invalid format" do
+        it "fails validation when not a valid format" do
+          FactoryGirl.build(:instance, :name => "1aaa1").should_not be_valid
+        end
+
+        it "fails validation due to field length" do
+          FactoryGirl.build(:instance, :name => 'a'*45).should_not be_valid
+        end
+      end
+
+      context "when instance name is valid" do
+        it "validates" do
+          FactoryGirl.build(:instance, :name => "aaa1").should be_valid
+        end
+      end
+    end
+
+    describe "port" do
+      context "when port is not a number " do
+        it "fails validation" do
+          FactoryGirl.build(:instance, :port => "1aaa1").should_not be_valid
+        end
+      end
+
+      context "when port is number" do
+        it "validates" do
+          FactoryGirl.build(:instance, :port => "1111").should be_valid
+        end
+      end
+    end
   end
 
   describe "associations" do

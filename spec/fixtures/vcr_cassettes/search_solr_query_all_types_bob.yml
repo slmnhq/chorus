@@ -17,7 +17,7 @@ http_interactions:
       Content-Type:
       - text/plain; charset=utf-8
       Content-Length:
-      - '1027'
+      - '1021'
       Server:
       - Jetty(6.1.3)
     body:
@@ -27,10 +27,9 @@ http_interactions:
         score'',''start''=>''0'',''q''=>''bob'',''f.class_name.facet.mincount''=>''1'',''hl.simple.post''=>''@@@endhl@@@'',''facet.field''=>''class_name'',''fq''=>''type:(User
         OR Instance)''}},''response''=>{''numFound''=>2,''start''=>0,''maxScore''=>1.2013385,''docs''=>[{''id''=>''User
         2'',''first_name_texts''=>[''bob''],''username_texts''=>[''some_other_user''],''email_texts''=>[''person2@example.com''],''last_name_texts''=>[''alpha''],''score''=>1.2013385},{''id''=>''Instance
-        1'',''name_texts''=>[''bob\''s great greenplum instance''],''score''=>0.60066926}]},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''class_name''=>[''Instance'',1,''User'',1]},''facet_dates''=>{}},''highlighting''=>{''User
-        2''=>{''first_name_texts''=>[''@@@hl@@@bob@@@endhl@@@'']},''Instance 1''=>{''name_texts''=>[''@@@hl@@@bob\''s@@@endhl@@@
-        great greenplum instance'']}}}'
+        1'',''name_texts''=>[''bob_great_greenplum_instance''],''score''=>0.60066926}]},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''class_name''=>[''Instance'',1,''User'',1]},''facet_dates''=>{}},''highlighting''=>{''User
+        2''=>{''first_name_texts''=>[''@@@hl@@@bob@@@endhl@@@'']},''Instance 1''=>{''name_texts''=>[''@@@hl@@@bob@@@endhl@@@_great_greenplum_instance'']}}}'
     http_version:
-  recorded_at: Wed, 27 Jun 2012 16:41:37 GMT
+  recorded_at: Thu, 28 Jun 2012 20:49:11 GMT
 recorded_with: VCR 2.1.1
 ...

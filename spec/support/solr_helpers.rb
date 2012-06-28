@@ -6,7 +6,7 @@ module SolrHelpers
       Sunspot.remove_all
       FactoryGirl.create(:user, :id => 1, :username => 'some_user', :first_name => "marty", :last_name => "alpha")
       FactoryGirl.create(:user, :id => 2, :username => 'some_other_user', :first_name => "bob", :last_name => "alpha")
-      FactoryGirl.create(:instance, :id => 1, :name => "bob's great greenplum instance")
+      FactoryGirl.create(:instance, :id => 1, :name => "bob_great_greenplum_instance")
       Sunspot.commit
     end
   end

@@ -124,7 +124,7 @@ describe Search do
           search = Search.new(:query => 'bob')
           instance = search.instances.first
           instance.highlighted_attributes.length.should == 1
-          instance.highlighted_attributes[:name][0].should == "<em>bob's</em> great greenplum instance"
+          instance.highlighted_attributes[:name][0].should == "<em>bob</em>_great_greenplum_instance"
         end
       end
 

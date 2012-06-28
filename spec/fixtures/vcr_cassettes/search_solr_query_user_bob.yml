@@ -28,6 +28,6 @@ http_interactions:
         2'',''first_name_texts''=>[''bob''],''username_texts''=>[''some_other_user''],''email_texts''=>[''person2@example.com''],''last_name_texts''=>[''alpha''],''score''=>1.2013385}]},''highlighting''=>{''User
         2''=>{''first_name_texts''=>[''@@@hl@@@bob@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Wed, 27 Jun 2012 16:41:38 GMT
+  recorded_at: Thu, 28 Jun 2012 20:49:11 GMT
 recorded_with: VCR 2.1.1
 ...
