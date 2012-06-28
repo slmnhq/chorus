@@ -1,4 +1,5 @@
 require "paperclip"
+require_relative '../vendor/imgscalr-lib-4.2.jar'
 
 # These methods are taken from the class Paperclip::FileAdapter
 # Rather than trusting the browser's content-type, we want to
@@ -32,6 +33,43 @@ module Paperclip
       mime_type = (Paperclip.run("file", "-b --mime :file", :file => self.path).split(/[:;\s]+/)[0] rescue "application/x-#{type}")
       mime_type = "application/x-#{type}" if mime_type.match(/\(.*?\)/)
       mime_type
+    end
+  end
+
+  class Geometry
+    def self.from_file file
+      file_path = file.respond_to?(:path) ? file.path : file
+      raise(Errors::NotIdentifiedByImageMagickError.new("Cannot find the geometry of a file with a blank name")) if file_path.blank?
+
+      img = javax.imageio.ImageIO.read(java.io.File.new(file_path))
+      raise(Errors::NotIdentifiedByImageMagickError.new("#{file_path} is not recognized by ImageIO.read")) unless img
+
+      parse("#{img.getWidth}x#{img.getHeight}")
+    end
+  end
+
+  class Processor
+    def convert(arguments = "", local_options = {})
+      # Remove the [0] for the first frame - no animations supported (ImageMagick will use this for GIFs)
+      img = javax.imageio.ImageIO.read(java.io.File.new(local_options[:source].gsub("[0]","")))
+
+      output_file = java.io.File.new(local_options[:dest])
+
+      m = arguments.match /-resize \\"(\d+)x(\d+)>\\"/
+      if m && m[0] && m[1]
+        img = Java::OrgImgscalr::Scalr.resize(img, m[0].to_i, m[1].to_i, nil)
+      end
+      javax.imageio.ImageIO.write(img, "png", output_file)
+    end
+
+    def identify(arguments = "", local_options = {})
+      raise NotImplementedError, "Processor#identify is unimplemented since we don't use ImageMagick."
+    end
+  end
+
+  class Thumbnail
+    def identified_as_animated?
+      raise NotImplementedError, "identified_as_animated is unimplemented since we don't use ImageMagick."
     end
   end
 end
