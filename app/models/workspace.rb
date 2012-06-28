@@ -84,6 +84,10 @@ class Workspace < ActiveRecord::Base
     self.archiver = nil
   end
 
+  def has_dataset?(dataset)
+    dataset.schema == sandbox || bound_datasets.include?(dataset)
+  end
+
   private
 
   def owner_is_member

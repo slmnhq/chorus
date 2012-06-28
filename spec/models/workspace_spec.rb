@@ -212,4 +212,23 @@ describe Workspace do
       Workspace.find_by_id(workspace.id).should be_nil
     end
   end
+
+  describe "#has_dataset" do
+    let(:workspace) { FactoryGirl.create(:workspace) }
+    let(:dataset) { FactoryGirl.create(:gpdb_table) }
+
+    it "returns true if the dataset is in the workspace's sandbox" do
+      workspace.sandbox = dataset.schema
+      workspace.has_dataset?(dataset).should be_true
+    end
+
+    it "returns true if the dataset has already been associated with the workspace" do
+      workspace.bound_datasets << dataset
+      workspace.has_dataset?(dataset).should be_true
+    end
+
+    it "returns false otherwise" do
+      workspace.has_dataset?(dataset).should be_false
+    end
+  end
 end

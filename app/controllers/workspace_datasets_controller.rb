@@ -6,9 +6,14 @@ class WorkspaceDatasetsController < ApplicationController
 
   def create
     datasets = Dataset.where(:id => params[:dataset_ids])
-    workspace.bound_datasets << datasets
-    datasets.each { |dataset| create_event_for_dataset(dataset, workspace) }
-    render :json => {}, :status => :created
+
+    if datasets.any? { |dataset| workspace.has_dataset?(dataset) }
+      present_errors({:fields => {:dataset => {:ALREADY_ASSOCIATED => {}}}}, :status => :bad_request)
+    else
+      workspace.bound_datasets << datasets
+      datasets.each { |dataset| create_event_for_dataset(dataset, workspace) }
+      render :json => {}, :status => :created
+    end
   end
 
   def show

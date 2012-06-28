@@ -63,6 +63,13 @@ describe WorkspaceDatasetsController do
       events = Events::SOURCE_TABLE_CREATED.by(user)
       events.count.should == 2
     end
+
+    it "should not associate if the table/view is already in workspace sandbox" do
+      workspace.sandbox = gpdb_table.schema
+      post :create, :workspace_id => workspace.to_param, :dataset_ids => gpdb_table.to_param
+      response.code.should == "400"
+      decoded_errors.fields.dataset.ALREADY_ASSOCIATED.should_not be_nil
+    end
   end
 
   describe "#show" do
