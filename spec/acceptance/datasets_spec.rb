@@ -7,6 +7,7 @@ resource "Greenplum Tables / Views" do
   let(:dataset_id) { dataset.id }
   let!(:event) { FactoryGirl.create(:source_table_created_event, :dataset => dataset) }
   let!(:activity) { Activity.create!(:entity => dataset, :event => event) }
+  let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
 
   let(:result) do
     SqlResults.new(
@@ -22,6 +23,10 @@ resource "Greenplum Tables / Views" do
     log_in owner
     stub(SqlResults).preview_dataset { result }
     stub(GpdbColumn).columns_for.with_any_args { [FactoryGirl.build(:gpdb_column), FactoryGirl.build(:gpdb_column)] }
+    any_instance_of(Dataset) do |u| 
+      stub(u).add_metadata!.with_any_args { statistics }
+      stub(u).statistics.with_any_args { statistics }
+    end
   end
 
   post "/datasets/:dataset_id/previews" do
@@ -46,6 +51,12 @@ resource "Greenplum Tables / Views" do
 
   get "/datasets/:dataset_id/columns" do
     example_request "Get all columns for specified dataset" do
+      status.should == 200
+    end
+  end
+
+  get "/datasets/:dataset_id/statistics" do
+    example_request "Get statistics for specified dataset" do
       status.should == 200
     end
   end
