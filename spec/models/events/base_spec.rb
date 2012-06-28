@@ -24,6 +24,15 @@ describe Events::Base do
     end
   end
 
+  it "is ordered with the most recent items first, by default" do
+    event1 = FactoryGirl.create(:workfile_created_event, :created_at => Time.now)
+    event2 = FactoryGirl.create(:workfile_created_event, :created_at => Time.now + 25)
+    event3 = FactoryGirl.create(:workfile_created_event, :created_at => Time.now + 50)
+    event4 = FactoryGirl.create(:workfile_created_event, :created_at => Time.now + 75)
+
+    Events::Base.all.should == [event4, event3, event2, event1]
+  end
+
   describe ".for_dashboard_of(user)" do
     let(:user) { FactoryGirl.create(:user) }
     let(:events) { (1..4).map { FactoryGirl.create(:workfile_created_event) } }

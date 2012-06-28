@@ -117,9 +117,7 @@ CREATE TABLE activities (
     id integer NOT NULL,
     entity_id integer,
     entity_type character varying(255),
-    event_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    event_id integer
 );
 
 
@@ -1203,3 +1201,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120615232712');
 INSERT INTO schema_migrations (version) VALUES ('20120620183115');
 
 INSERT INTO schema_migrations (version) VALUES ('20120621182920');
+
+INSERT INTO schema_migrations (version) VALUES ('20120628230223');
