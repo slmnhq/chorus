@@ -55,9 +55,9 @@ module Paperclip
 
       output_file = java.io.File.new(local_options[:dest])
 
-      m = arguments.match /-resize \\"(\d+)x(\d+)>\\"/
-      if m && m[0] && m[1]
-        img = Java::OrgImgscalr::Scalr.resize(img, m[0].to_i, m[1].to_i, nil)
+      m = arguments.match /-resize \"(\d+)x(\d+)>\"/
+      if m && m[1] && m[2]
+        img = Java::OrgImgscalr::Scalr.resize(img, m[1].to_i, m[2].to_i, nil)
       end
       javax.imageio.ImageIO.write(img, "png", output_file)
     end
