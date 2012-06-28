@@ -60,6 +60,10 @@
 
             USER_ADDED: {
                 links: [ "newUser"]
+            },
+
+            NOTE: {
+                links: [ "actor" ]
             }
         },
 
@@ -87,7 +91,14 @@
         },
 
         headerTranslationKey: function(self) {
-            return "activity.header." + self.model.get("action") + ".default";
+            var mainKey = ["activity.header", self.model.get("action")].join(".")
+            var possibleStyles = _.compact(_.flatten([self.options.displayStyle, "default"]))
+
+            var key, n = possibleStyles.length;
+                 for (var i = 0; i < n; i++) {
+                     key = [mainKey, possibleStyles[i]].join(".");
+                     if (I18n.lookup(key)) return key;
+                 }
         },
 
         datasetType: function(self) {

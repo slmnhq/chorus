@@ -1,10 +1,10 @@
 describe("chorus.dialogs.NotesNewDialog", function() {
     beforeEach(function() {
         stubDelay();
-        this.launchElement = $("<a data-entity-type='workfile' data-allow-workspace-attachments='true' data-entity-id='1' data-workspace-id='22'></a>");
+        this.launchElement = $("<a data-entity-type='instance' data-allow-workspace-attachments='true' data-entity-id='1'></a>");
         this.dialog = new chorus.dialogs.NotesNew({
             launchElement: this.launchElement,
-            pageModel: new chorus.models.Workfile()
+            pageModel: new chorus.models.GreenplumInstance()
         });
         $('#jasmine_content').append(this.dialog.el);
         this.dialog.render();
@@ -12,11 +12,11 @@ describe("chorus.dialogs.NotesNewDialog", function() {
 
     describe("#setup", function() {
         it("creates the correct model", function() {
-            expect(this.dialog.model).toBeA(chorus.models.Comment);
+            expect(this.dialog.model).toBeA(chorus.models.Note);
         });
 
         it("sets the correct properties on the model", function() {
-            expect(this.dialog.model.get("entityType")).toBe("workfile");
+            expect(this.dialog.model.get("entityType")).toBe("instance");
             expect(this.dialog.model.get("entityId")).toBe(1)
         });
     });
@@ -27,7 +27,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
         });
 
         it("has the right placeholder", function() {
-            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", {noteSubject: "workfile"}));
+            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", {noteSubject: "instance"}));
         });
 
         it("has the right button text", function() {
@@ -39,7 +39,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
                 this.launchElement.data("display-entity-type", "foo");
                 this.dialog = new chorus.dialogs.NotesNew({
                     launchElement: this.launchElement,
-                    pageModel: new chorus.models.Workfile()
+                    pageModel: new chorus.models.GreenplumInstance()
                 });
                 $('#jasmine_content').append(this.dialog.el);
                 this.dialog.render();
@@ -55,10 +55,9 @@ describe("chorus.dialogs.NotesNewDialog", function() {
         beforeEach(function() {
             this.dialog = new chorus.dialogs.NotesNew({
                 entityId: "1",
-                entityType: "workfile",
-                workspaceId: "22",
+                entityType: "instance",
                 allowWorkspaceAttachments: true,
-                pageModel: new chorus.models.Workfile()
+                pageModel: new chorus.models.GreenplumInstance()
             });
             $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();
@@ -66,8 +65,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
 
         it("sets the correct properties on the model", function() {
             expect(this.dialog.model.get("entityId")).toBe("1");
-            expect(this.dialog.model.get("entityType")).toBe("workfile");
-            expect(this.dialog.model.get("workspaceId")).toBe("22");
+            expect(this.dialog.model.get("entityType")).toBe("instance");
         });
     });
 });
