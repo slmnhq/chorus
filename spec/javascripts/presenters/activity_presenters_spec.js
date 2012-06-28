@@ -213,6 +213,27 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("sandbox added", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.sandboxAdded();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            var workspace = model.workspace();
+
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.WORKSPACE_ADD_SANDBOX.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            );
+        });
+    });
+
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
     }

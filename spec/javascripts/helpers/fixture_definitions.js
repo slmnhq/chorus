@@ -111,7 +111,8 @@ window.rspecFixtureDefinitions = {
             hadoopInstanceChangedName: {},
             workfileCreated: {},
             sourceTableCreated: {},
-            userCreated: {}
+            userCreated: {},
+            sandboxAdded: {}
         }
     },
 

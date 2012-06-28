@@ -87,7 +87,8 @@ describe EventsController do
       "hadoopInstanceChangedName" => :hadoop_instance_changed_name_event,
       "workfileCreated" => :workfile_created_event,
       "sourceTableCreated" => :source_table_created_event,
-      "userCreated" => :user_created_event
+      "userCreated" => :user_created_event,
+      "sandboxAdded" => :sandbox_added_event
     }
 
     FIXTURE_FILES.each do |filename, event_factory_name|

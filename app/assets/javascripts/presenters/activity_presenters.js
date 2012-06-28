@@ -50,7 +50,7 @@
             },
 
             WORKSPACE_ADD_SANDBOX: {
-                links: [ "actor", "sandbox_schema", "workspace" ]
+                links: [ "actor", "workspace" ]
             },
 
             SOURCE_TABLE_CREATED: {
