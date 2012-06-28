@@ -49,6 +49,7 @@ module PackageMaker
   end
 
   def archive_app(filename, sha)
+    check_clean_working_tree
     run "RAILS_ENV=development rake assets:precompile"
     run "bundle exec jetpack ."
     File.open('version_build', 'w') do |f|
