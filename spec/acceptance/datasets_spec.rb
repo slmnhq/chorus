@@ -21,6 +21,7 @@ resource "Greenplum Tables / Views" do
   before do
     log_in owner
     stub(SqlResults).preview_dataset { result }
+    stub(GpdbColumn).columns_for.with_any_args { [FactoryGirl.build(:gpdb_column), FactoryGirl.build(:gpdb_column)] }
   end
 
   post "/datasets/:dataset_id/previews" do
@@ -39,6 +40,12 @@ resource "Greenplum Tables / Views" do
 
   get "/datasets/:dataset_id/activities" do
     example_request "Get all activities for specified dataset" do
+      status.should == 200
+    end
+  end
+
+  get "/datasets/:dataset_id/columns" do
+    example_request "Get all columns for specified dataset" do
       status.should == 200
     end
   end

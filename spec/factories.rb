@@ -59,6 +59,13 @@ FactoryGirl.define do
     association :schema, :factory => :gpdb_schema
   end
 
+  factory :gpdb_column do
+    sequence(:name) { |n| "column#{n}" }
+    data_type "text"
+    description "A nice description"
+    sequence(:ordinal_position)
+  end
+
   factory :dataset_statistics do
     initialize_with do
       new({
