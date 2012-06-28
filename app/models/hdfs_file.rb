@@ -15,6 +15,10 @@ class HdfsFile
     hdfs_entry.modified_at
   end
 
+  def url
+    hadoop_instance.url.chomp('/') + '/' + path
+  end
+
   private
   def hdfs_entry
     @hdfs_entry ||= HdfsEntry.list(@path, @hadoop_instance)[0]

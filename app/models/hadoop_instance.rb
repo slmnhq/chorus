@@ -4,4 +4,7 @@ class HadoopInstance < ActiveRecord::Base
   has_many :activities, :as => :entity
   validates_presence_of :name, :host, :port
 
+  def url
+    "gphdfs://#{host}:#{port}/"
+  end
 end
