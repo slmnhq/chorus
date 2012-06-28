@@ -101,10 +101,10 @@ class Legacy::ActivityStream
     rails_instance_id = extract_result("chorus_rails_instance_id", Legacy.connection.exec_query(sql))
     instance = Instance.find_by_id(rails_instance_id)
 
-    database = instance.databases.find_by_name(database_name)
-    schema = database.schemas.find_by_name(schema_name)
-    dataset = schema.datasets.find_by_name(dataset_name)
-    dataset.id
+    database = instance.databases.find_by_name(database_name) if instance
+    schema = database.schemas.find_by_name(schema_name) if database
+    dataset = schema.datasets.find_by_name(dataset_name) if schema
+    dataset ? dataset.id : nil
   end
 
   def extract_result(result_key, sql)

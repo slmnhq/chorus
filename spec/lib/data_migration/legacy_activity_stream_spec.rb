@@ -2,7 +2,7 @@ require 'spec_helper'
 
 require 'data_migration/legacy_activity_stream'
 
-describe Legacy::ActivityStream, :type => :data_migration do
+describe Legacy::ActivityStream, :data_migration => true, :type => :data_migration do
   let(:greenplum_activity_stream) { Legacy::ActivityStream.new('10000', nil) }
   let(:hadoop_activity_stream) { Legacy::ActivityStream.new('10006', nil) }
   let(:workfile_activity_stream) { Legacy::ActivityStream.new('10010', nil) }
@@ -149,7 +149,7 @@ describe Legacy::ActivityStream, :type => :data_migration do
     context "when it has a dataset" do
       it "returns the dataset id" do
         instance = FactoryGirl.create(:instance, :id => 123)
-        database = FactoryGirl.create(:gpdb_database, :instance => instance, :name => 'dca_demo ')
+        database = FactoryGirl.create(:gpdb_database, :instance => instance, :name => 'dca_demo')
         schema = FactoryGirl.create(:gpdb_schema, :database => database, :name => 'ddemo')
         FactoryGirl.create(:gpdb_table, :schema => schema, :name => 'a_songs_imp')
         dataset_activity_stream.rails_dataset_id.should be_present

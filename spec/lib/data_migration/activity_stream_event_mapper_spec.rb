@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ActivityStreamEventMapper do
+describe ActivityStreamEventMapper, :data_migration => true, :type => :data_migration do
   let(:mapper) { described_class.new(activity_stream) }
 
   describe "hadoop instance created event" do
