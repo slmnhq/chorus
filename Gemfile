@@ -9,7 +9,7 @@ gem 'net-ldap'
 gem 'paperclip'
 gem 'queue_classic', :git => "git://github.com/pivotal-leopold/queue_classic.git"
 gem 'clockwork'
-gem 'foreman'
+gem 'foreman', '0.46'
 gem 'allowy'
 gem 'httparty', :require => false
 gem 'sunspot_rails'
