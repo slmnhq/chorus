@@ -98,13 +98,34 @@ describe HdfsExternalTable do
       stub_gpdb(account, "select * from 1" => [''])
     end
 
-    it "fires the sql" do
-      schema = Object.new
-      mock(schema).with_gpdb_connection(account) { [''] }
+    context "no exceptions occur" do
+      it "fires the sql" do
+        schema = Object.new
+        mock(schema).with_gpdb_connection(account) { [''] }
 
-      sql = "select * from q"
-      expect { HdfsExternalTable.execute_query(sql, schema, account) }.to_not raise_error
+        sql = "select * from q"
+        expect { HdfsExternalTable.execute_query(sql, schema, account) }.to_not raise_error
+      end
     end
 
+    context "connection failed" do
+      it "raises the creation failed exception" do
+        schema = Object.new
+        mock(schema).with_gpdb_connection(account) { raise StandardError }
+
+        sql = "select * from q"
+        expect { HdfsExternalTable.execute_query(sql, schema, account) }.to raise_error(HdfsExternalTable::CreationFailed)
+      end
+    end
+
+    context "table exists" do
+      it "raises the existing table exception" do
+        schema = Object.new
+        mock(schema).with_gpdb_connection(account) { raise StandardError, 'relation table already exists' }
+
+        sql = "select * from q"
+        expect { HdfsExternalTable.execute_query(sql, schema, account) }.to raise_error(HdfsExternalTable::AlreadyExists)
+      end
+    end
   end
 end
