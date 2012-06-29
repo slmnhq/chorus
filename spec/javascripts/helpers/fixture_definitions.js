@@ -111,7 +111,8 @@ window.rspecFixtureDefinitions = {
             hadoopInstanceChangedName: {},
             workfileCreated: {},
             sourceTableCreated: {},
-            userCreated: {}
+            userCreated: {},
+            sandboxAdded: {}
         }
     },
 
@@ -147,7 +148,9 @@ window.rspecFixtureDefinitions = {
 //
     dataset: { unique: [ "id" ] },
 
-    schemaFunctionSet: {}
+    schemaFunctionSet: {},
+
+    hdfsFile: { model: "HdfsFile"}
 
 //
 //    test: {

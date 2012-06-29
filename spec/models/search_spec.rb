@@ -8,13 +8,20 @@ describe Search do
   end
 
   describe "search" do
-    it "searches for Users and Instances with query" do
+    it "searches for all types with query" do
       search = Search.new(:query => 'bob')
       search.search
       Sunspot.session.should be_a_search_for(User)
       Sunspot.session.should be_a_search_for(Instance)
+      Sunspot.session.should be_a_search_for(Workspace)
       Sunspot.session.should have_search_params(:fulltext, 'bob')
-      Sunspot.session.should have_search_params(:facet, :class)
+      Sunspot.session.should have_search_params(:facet, :type_name)
+      Sunspot.session.should have_search_params(:group, Proc.new {
+        group :grouping_id do
+          truncate
+          limit 3
+        end
+      })
     end
 
     it "uses the page and per_page parameters" do
@@ -25,9 +32,13 @@ describe Search do
 
     describe "per_type" do
       it "performs secondary searches to pull back needed records" do
+        any_instance_of(Sunspot::Search::AbstractSearch) do |search|
+          stub(search).group_response { {} }
+        end
         search = Search.new(:query => 'bob', :per_type => 3)
         stub(search).num_found do
-          {:users => 100, :instances => 100}
+          hsh = Hash.new(0)
+          hsh.merge({:users => 100, :instances => 100, :workspaces => 100})
         end
         stub(search.search).each_hit_with_result { [] }
         search.models
@@ -41,7 +52,7 @@ describe Search do
           end
           sunspot_search.should have_search_params(:fulltext, 'bob')
           sunspot_search.should have_search_params(:paginate, :page => 1, :per_page => 3)
-          sunspot_search.should_not have_search_params(:facet, :class)
+          sunspot_search.should_not have_search_params(:facet, :type_name)
         end
       end
 
@@ -64,13 +75,12 @@ describe Search do
 
   describe "search with a specific model" do
     it "only searches for that model" do
-      search = Search.new(:query => 'bob')
-      search.models_to_search = [User]
+      search = Search.new(:query => 'bob', :entity_type => 'user')
       search.search
       Sunspot.session.should be_a_search_for(User)
       Sunspot.session.should_not be_a_search_for(Instance)
       Sunspot.session.should have_search_params(:fulltext, 'bob')
-      Sunspot.session.should_not have_search_params(:facet, :class)
+      Sunspot.session.should_not have_search_params(:facet, :type_name)
     end
   end
 
@@ -124,7 +134,7 @@ describe Search do
           search = Search.new(:query => 'bob')
           instance = search.instances.first
           instance.highlighted_attributes.length.should == 1
-          instance.highlighted_attributes[:name][0].should == "<em>bob's</em> great greenplum instance"
+          instance.highlighted_attributes[:name][0].should == "<em>bob</em>_great_greenplum_instance"
         end
       end
 
@@ -133,6 +143,18 @@ describe Search do
           search = Search.new(:query => 'bob')
           search.instances.length.should == 1
           search.instances.first.should == @instance
+        end
+      end
+    end
+
+    describe "highlighted comments" do
+      it "includes highlighted comments in the highlighted_attributes" do
+        VCR.use_cassette('search_solr_query_all_types_greenplum') do
+          search = Search.new(:query => 'greenplum')
+          search.instances.length.should == 2
+          instance_with_comments = search.instances[1]
+          instance_with_comments.search_result_comments.length.should == 2
+          instance_with_comments.search_result_comments[0][:highlighted_attributes][:body][0].should == "yes, <em>greenplum</em>"
         end
       end
     end

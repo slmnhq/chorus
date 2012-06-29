@@ -69,7 +69,7 @@
     chorus.collections.Search.WorkspaceSet = chorus.collections.WorkspaceSet.include(
         searchCollectionMixins
     ).extend({
-        searchKey: "workspace"
+        searchKey: "workspaces"
     });
 
     chorus.collections.Search.WorkfileSet = chorus.collections.WorkfileSet.include(

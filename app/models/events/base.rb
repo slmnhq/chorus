@@ -12,6 +12,8 @@ module Events
     belongs_to :target2, :polymorphic => true
     belongs_to :workspace
 
+    default_scope { order("created_at DESC") }
+
     def self.by(actor)
       where(:actor_id => actor.id)
     end
@@ -29,6 +31,27 @@ module Events
         hash[target_name] = send(target_name)
         hash
       end
+    end
+
+    def self.for_dashboard_of(user)
+      memberships = Membership.arel_table
+      activities  = Activity.arel_table
+
+      workspace_ids =
+        memberships.
+        where(memberships[:user_id].eq(user.id)).
+        project(memberships[:workspace_id])
+
+      entity_is_global =
+        activities[:entity_type].eq(Activity::GLOBAL)
+
+      entity_in_user_workspaces =
+        activities[:entity_type].eq("Workspace").
+        and(activities[:entity_id].in(workspace_ids))
+
+      dashboard_activities = activities.where(entity_is_global.or(entity_in_user_workspaces))
+
+      where(:id => dashboard_activities.project(:event_id))
     end
 
     def create_activities

@@ -9,6 +9,7 @@ class Workfile < ActiveRecord::Base
   has_many :versions, :class_name => 'WorkfileVersion'
   has_many :drafts, :class_name => 'WorkfileDraft'
   has_many :activities, :as => :entity
+  has_many :events, :through => :activities
 
   validates_format_of :file_name, :with => /^[a-zA-Z0-9_ \.\(\)\-]+$/
 

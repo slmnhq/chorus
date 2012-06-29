@@ -1,6 +1,6 @@
 describe("chorus.views.HdfsEntrySidebar", function() {
     beforeEach(function() {
-        this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/foo", instanceId: 123});
+        this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/foo", hadoopInstanceId: 123});
     });
 
     describe("#render", function() {
@@ -50,13 +50,13 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             describe("clicking the external table link", function() {
                 beforeEach(function() {
                     this.view.$("a.external_table").click();
-                    this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instanceId: "123", path: "/foo/my_file.sql", content: "hello\nworld"}).attributes);
-                    this.server.completeFetchFor(this.csv);
+                    this.model = new chorus.models.HdfsFile({hadoopInstance: {id: 123}, path: "/foo/my_file.sql"});
+                    this.server.completeFetchFor(this.model);
                 });
 
                 it("launches the right dialog", function() {
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
-                    expect(chorus.modal.csv.get("path")).toBe("/foo/my_file.sql");
+                    expect(chorus.modal.model.get("path")).toBe("/foo/my_file.sql");
                 });
             })
         });

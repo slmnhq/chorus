@@ -44,7 +44,7 @@ FactoryGirl.define do
     instance
   end
 
-  factory :gpdb_schema do
+  factory :gpdb_schema, :aliases => [:sandbox_schema] do
     sequence(:name) { |n| "schema#{n}" }
     association :database, :factory => :gpdb_database
   end
@@ -57,6 +57,13 @@ FactoryGirl.define do
   factory :gpdb_view do
     sequence(:name) { |n| "view#{n}" }
     association :schema, :factory => :gpdb_schema
+  end
+
+  factory :gpdb_column do
+    sequence(:name) { |n| "column#{n}" }
+    data_type "text"
+    description "A nice description"
+    sequence(:ordinal_position)
   end
 
   factory :dataset_statistics do
@@ -153,6 +160,15 @@ FactoryGirl.define do
 
     factory :user_created_event, :class => Events::USER_ADDED do
       association :new_user, :factory => :user
+    end
+
+    factory :note_on_greenplum_instance_event, :class => Events::NOTE_ON_GREENPLUM_INSTANCE do
+      greenplum_instance
+    end
+
+    factory :sandbox_added_event, :class => Events::WORKSPACE_ADD_SANDBOX do
+      workspace
+      sandbox_schema
     end
   end
 end

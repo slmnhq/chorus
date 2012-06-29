@@ -28,29 +28,5 @@ chorus.views.SearchDataset = chorus.views.SearchItemBase.extend({
             content: this.$(".other_menu"),
             classes: "found_in_other_workspaces_menu"
         });
-    },
-
-    getComments: function() {
-        var comments = this._super('getComments').slice();
-        var columnDescription = this.model.get("highlightedAttributes") && this.model.get("highlightedAttributes").columnDescription;
-        _.each(columnDescription || [], function(columnDescription) {
-            comments.push({
-                isColumnDescription: true,
-                highlightedAttributes: {
-                    content: columnDescription
-                }
-            })
-        });
-
-        var tableDescription = this.model.get("highlightedAttributes") && this.model.get("highlightedAttributes").description;
-        if(tableDescription) {
-            comments.push({
-                isTableDescription: true,
-                highlightedAttributes: {
-                    content: tableDescription[0]
-                }
-            })
-        }
-        return comments;
     }
 });

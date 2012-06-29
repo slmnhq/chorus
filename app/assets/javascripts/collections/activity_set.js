@@ -22,7 +22,7 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
         // currently, HdfsEntry models don't have urls
         // this hack is here for specs that expect
         // HdfsEntries to have activities
-        if (model instanceof chorus.models.HdfsEntry) {
+        if (model instanceof chorus.models.HdfsEntry || model instanceof chorus.models.HdfsFile) {
             return "/not_yet_implemented";
         } else {
             var modelUriPath = new URI(model.url()).path();

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ActivityMigrator, :data_migration => true do
+describe ActivityMigrator, :data_migration => true, :type => :data_migration do
   describe ".migrate" do
     before do
       UserMigrator.new.migrate
@@ -10,13 +10,30 @@ describe ActivityMigrator, :data_migration => true do
       WorkfileMigrator.new.migrate
     end
 
-    context "importing data" do
+    context "importing activities that reference datasets" do
       before do
+        mock_dataset_refresh
+        InstanceAccountMigrator.new.migrate
+        DatabaseMigrator.new.migrate
         ActivityMigrator.new.migrate
       end
 
       it "creates new events for all legacy activities" do
         Events::Base.count.should > 0
+      end
+
+      it "copies SOURCE TABLE CREATED data fields from the legacy activity" do
+        event = Events::SOURCE_TABLE_CREATED.find(event_id_for('10002'))
+
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+        event.dataset.should be_a(Dataset)
+      end
+    end
+
+    context "importing activities that do not reference datasets" do
+      before do
+        ActivityMigrator.new.migrate
       end
 
       it "copies WORKFILE CREATED data fields from the legacy activity" do

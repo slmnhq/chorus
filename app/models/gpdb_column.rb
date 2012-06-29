@@ -20,8 +20,7 @@ class GpdbColumn
     ORDER BY a.attnum;
   SQL
 
-  attr_reader :name, :data_type, :description, :ordinal_position, :statistics
-  attr_accessor :statistics
+  attr_accessor :data_type, :description, :ordinal_position, :statistics, :name, :statistics
 
   def self.columns_for(account, table)
     columns_with_stats = table.with_gpdb_connection(account) do |conn|

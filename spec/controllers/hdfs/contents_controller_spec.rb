@@ -1,25 +1,27 @@
 require "spec_helper"
 
 describe Hdfs::ContentsController do
-  let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
+  let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :host => 'gillette', :port => '8020', :username => 'pivotal') }
 
   before do
     log_in FactoryGirl.create :user
   end
 
   describe "#show" do
-    before do
-      service = Object.new
-      mock(Hdfs::QueryService).new(hadoop_instance) { service }
-      mock(service).show('/file') { ["content"] }
+    it "show file content" do
+      VCR.use_cassette('query_service_entry_and_content') do
+        get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/data/test.csv'
+
+        response.code.should == '200'
+        decoded_response[:last_updated_stamp].should_not be_blank
+        decoded_response[:contents].should include('a, b, c')
+      end
     end
 
-    it "show file content" do
-      get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/file'
-      parsed_response = JSON.parse(response.body)
-
-      response.code.should == '200'
-      parsed_response['response']['contents'].should include('content')
+    generate_fixture "hdfsFile.json" do
+      VCR.use_cassette('query_service_entry_and_content') do
+        get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/data/test.csv'
+      end
     end
   end
 end

@@ -1,6 +1,6 @@
 describe("chorus.views.SearchWorkspace", function() {
     beforeEach(function() {
-        this.result = fixtures.searchResult({workspace: {results: [
+        this.result = fixtures.searchResult({workspaces: {results: [
             {
                 entityType: "workspace",
                 id: "10000",
@@ -18,12 +18,12 @@ describe("chorus.views.SearchWorkspace", function() {
                     {
                         "lastUpdatedStamp": "2012-03-08 09:57:46",
                         "isPublished": false,
-                        "content": "good version",
+                        "body": "good version",
                         "isComment": false,
                         "id": "10020",
                         "workspaceId": "10000",
                         "isInsight": false,
-                        "highlightedAttributes": {"content": ["good <em>version<\/em>"]},
+                        "highlightedAttributes": {"body": ["good <em>version<\/em>"]},
                         "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}
                     }
                 ],
@@ -61,7 +61,7 @@ describe("chorus.views.SearchWorkspace", function() {
 
     context("the description does not contain the search string", function() {
         beforeEach(function() {
-            this.result = fixtures.searchResult({workspace: {results: [
+            this.result = fixtures.searchResult({workspaces: {results: [
                 {
                     entityType: "workspace",
                     id: "10000",
@@ -84,7 +84,7 @@ describe("chorus.views.SearchWorkspace", function() {
                             "id": "10020",
                             "workspaceId": "10000",
                             "isInsight": false,
-                            "highlightedAttributes": {"content": ["good <em>version<\/em>"]},
+                            "highlightedAttributes": {"body": ["good <em>version<\/em>"]},
                             "owner": {"id": "InitialUser", "lastName": "Admin", "firstName": "EDC"}
                         }
                     ],

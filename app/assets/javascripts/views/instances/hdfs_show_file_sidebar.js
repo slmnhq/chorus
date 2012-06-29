@@ -40,22 +40,23 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
     },
 
     getEntityId: function() {
-        return this.model.get("instanceId") + "|" + this.model.get("path");
+        return this.model.get("hadoopInstance").id + "|" + this.model.get("path");
     },
 
     createExternalTable: function(e) {
         e && e.preventDefault();
 
-        var csv = new chorus.models.CsvHdfs({
-            instanceId: this.model.get("instanceId"),
-            toTable: this.model.fileNameFromPath(),
-            path: this.model.get("path")
+        var csvOptions = {
+            tableName: this.model.fileNameFromPath(),
+            contents: this.model.get('contents')
+        }
+        
+        var hdfsExternalTable = new chorus.models.HdfsExternalTable({
+            path: this.model.get('path'),
+            hadoopInstanceId: this.model.get('hadoopInstance').id
         });
-        csv.fetch();
 
-        csv.onLoaded(function(){
-            var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({csv: csv});
-            dialog.launchModal();
-        });
+        var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({model: hdfsExternalTable, csvOptions: csvOptions});
+        dialog.launchModal();
     }
 })

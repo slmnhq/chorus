@@ -7,7 +7,6 @@
         "hadoopInstance": "HadoopInstance",
         "workfile": "Workfile",
         "workspace": "Workspace",
-        "sandbox_schema": "Schema",
         "newUser" : "User"
     };
 

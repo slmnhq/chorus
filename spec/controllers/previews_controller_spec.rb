@@ -44,7 +44,7 @@ describe PreviewsController do
         post :create, :dataset_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
 
         response.code.should == "400"
-        decoded_errors.fields.sql_invalid.message.should_not be_nil
+        decoded_errors.fields.query.INVALID.message.should_not be_nil
       end
     end
   end

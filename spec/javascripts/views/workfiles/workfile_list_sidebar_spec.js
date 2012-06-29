@@ -26,7 +26,7 @@ describe("chorus.views.WorkfileListSidebar", function() {
             context("when the workfile's workspace is active", function() {
                 beforeEach(function() {
                     // TODO: REMOVEME
-                    this.workfile.set({ lastUpdatedStamp: "2011-11-22T10:46:03Z" });
+                    _.extend(this.workfile.get("versionInfo"), { updatedAt : "2011-11-22T10:46:03Z" })
                     chorus.PageEvents.broadcast("workfile:selected", this.workfile);
                 })
 

@@ -64,6 +64,30 @@ describe("chorus.dialogs.SandboxNew", function() {
                 });
             });
 
+            it("sets the summary to empty string when it's null", function() {
+                this.workspace.set({summary: null});
+                spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
+                    instance: "4",
+                    database: "5",
+                    schema: "6"
+                });
+                this.dialog.instanceMode.trigger("change", "6");
+                this.dialog.$(".modal_controls button.submit").click();
+                expect(this.server.lastUpdate().params()["workspace[summary]"]).toBe("");
+            });
+
+            it("retains the summary", function() {
+                this.workspace.set({summary: "test"});
+                spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
+                    instance: "4",
+                    database: "5",
+                    schema: "6"
+                });
+                this.dialog.instanceMode.trigger("change", "6");
+                this.dialog.$(".modal_controls button.submit").click();
+                expect(this.server.lastUpdate().params()["workspace[summary]"]).toBe("test");
+            });
+
             context("with a instance id, database id, and schema id", function() {
                 beforeEach(function() {
                     spyOn(this.dialog, 'closeModal');

@@ -7,6 +7,17 @@ set shiftwidth=4
 " don't blink cursor
 set gcr=n:blinkon0
 
+" for test_server plugin
+nmap <D-S-F10> <Esc>:RunTestLine<CR>
+xmap <D-S-F10> <Esc>:RunTestLine<CR>
+imap <D-S-F10> <Esc>:RunTestLine<CR>
+nmap <D-F10> <Esc>:RunTest<CR>
+xmap <D-F10> <Esc>:RunTest<CR>
+imap <D-F10> <Esc>:RunTest<CR>
+nmap <D-F9> <Esc>:RunTestAgain<CR>
+xmap <D-F9> <Esc>:RunTestAgain<CR>
+imap <D-F9> <Esc>:RunTestAgain<CR>
+
 noremap <D-S-F8> <Esc>:call system("/Users/pivotal/workspace/chorus/launch_jasmine.sh " . expand("%"))<CR><C-l>
 map <D-S-F9> :!/Users/pivotal/workspace/chorus/launch_phantom_jasmine.sh %<CR>
 map <D-k> :Gstatus<CR>

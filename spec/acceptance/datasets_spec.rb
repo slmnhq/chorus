@@ -4,6 +4,11 @@ resource "Greenplum Tables / Views" do
   let(:dataset) { FactoryGirl.create(:gpdb_table, :name => "my_table") }
   let(:owner) { dataset.schema.instance.owner }
   let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => dataset.instance, :owner => owner) }
+  let(:dataset_id) { dataset.id }
+  let!(:event) { FactoryGirl.create(:source_table_created_event, :dataset => dataset) }
+  let!(:activity) { Activity.create!(:entity => dataset, :event => event) }
+  let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
+
   let(:result) do
     SqlResults.new(
       [
@@ -13,9 +18,15 @@ resource "Greenplum Tables / Views" do
       [[1, 2.0], [5, 2.5]]
     )
   end
+
   before do
     log_in owner
     stub(SqlResults).preview_dataset { result }
+    stub(GpdbColumn).columns_for.with_any_args { [FactoryGirl.build(:gpdb_column), FactoryGirl.build(:gpdb_column)] }
+    any_instance_of(Dataset) do |u| 
+      stub(u).add_metadata!.with_any_args { statistics }
+      stub(u).statistics.with_any_args { statistics }
+    end
   end
 
   post "/datasets/:dataset_id/previews" do
@@ -25,11 +36,28 @@ resource "Greenplum Tables / Views" do
 
     scope_parameters :task, [:check_id]
 
-    let(:dataset_id) { dataset.id }
     let(:check_id) { '42' }
 
     example_request "Preview 100 rows" do
       status.should == 201
+    end
+  end
+
+  get "/datasets/:dataset_id/activities" do
+    example_request "Get all activities for specified dataset" do
+      status.should == 200
+    end
+  end
+
+  get "/datasets/:dataset_id/columns" do
+    example_request "Get all columns for specified dataset" do
+      status.should == 200
+    end
+  end
+
+  get "/datasets/:dataset_id/statistics" do
+    example_request "Get statistics for specified dataset" do
+      status.should == 200
     end
   end
 end

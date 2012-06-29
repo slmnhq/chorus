@@ -1,4 +1,4 @@
-chorus.dialogs.VisualizationNotesNew = chorus.dialogs.NotesNew.extend({
+chorus.dialogs.VisualizationNotesNew = chorus.dialogs.MemoNew.extend({
     constructorName: "VisualizationNotesNew",
 
     title:t("notes.new_dialog.title"),

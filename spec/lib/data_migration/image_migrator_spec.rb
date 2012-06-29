@@ -43,9 +43,11 @@ describe ImageMigrator, :data_migration => true, :type => :data_migration do
 
           type = TYPE_MAP[image_row["type"]]
           width = image_instance_row["width"]
-          length = image_instance_row["length"]
+          height = image_instance_row["length"]
 
-          `identify #{new_user.image.path(:original)}`.should include "#{type} #{width}x#{length}"
+          g = Paperclip::Geometry.from_file(new_user.image.path(:original))
+          g.width.should == width
+          g.height.should == height
         end
       end
 
@@ -63,9 +65,11 @@ describe ImageMigrator, :data_migration => true, :type => :data_migration do
 
           type = TYPE_MAP[image_row["type"]]
           width = image_instance_row["width"]
-          length = image_instance_row["length"]
+          height = image_instance_row["length"]
 
-          `identify #{new_workspace.image.path(:original)}`.should include "#{type} #{width}x#{length}"
+          g = Paperclip::Geometry.from_file(new_workspace.image.path(:original))
+          g.width.should == width
+          g.height.should == height
         end
       end
     end

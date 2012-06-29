@@ -209,12 +209,12 @@ describe("chorus.dialogs.InstancesNew", function() {
                 var hadoopSection = this.dialog.$("fieldset.register_existing_hadoop")
                 hadoopSection.find("input[type=radio]").attr('checked', true).change();
 
-                hadoopSection.find("input[name=name]").val("Instance_Name");
-                hadoopSection.find("textarea[name=description]").val("Instance Description");
-                hadoopSection.find("input[name=host]").val("foo.bar");
+                hadoopSection.find("input[name=name]").val(" Instance_Name ");
+                hadoopSection.find("textarea[name=description]").val(" Instance Description ");
+                hadoopSection.find("input[name=host]").val(" foo.bar ");
                 hadoopSection.find("input[name=port]").val("1234");
-                hadoopSection.find("input.username").val("user");
-                hadoopSection.find("input.group_list").val("hadoop").change();
+                hadoopSection.find("input.username").val(" user ");
+                hadoopSection.find("input.group_list").val(" hadoop ").change();
 
                 spyOn(chorus.models.HadoopInstance.prototype, "save").andCallThrough();
                 this.dialog.$("button.submit").click();

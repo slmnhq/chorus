@@ -1,16 +1,25 @@
 class HdfsEntry
-  attr_accessor :path, :modified_at, :size, :is_directory, :content_count
+  attr_accessor :path, :modified_at, :size, :is_directory, :content_count, :hadoop_instance
 
   def self.list(path, hadoop_instance)
     hdfs_query = Hdfs::QueryService.new(hadoop_instance)
-    hdfs_query.list(path).map {|result| new(result) }
+    hdfs_query.list(path).map {|result| new(result, hadoop_instance) }
   end
 
-  def initialize(response_item)
+  def initialize(response_item, hadoop_instance)
+    @hadoop_instance = hadoop_instance
     @path = response_item["path"]
     @modified_at = Time.parse(response_item["modifiedAt"])
     @size = response_item["size"]
-    @is_directory = response_item["directory"]
+    @is_directory = response_item["directory"].to_s == "true"
     @content_count = response_item["contentCount"]
+  end
+
+  def file
+    unless @is_directory
+      HdfsFile.new(@path, @hadoop_instance, {
+          :modified_at => @modified_at
+      })
+    end
   end
 end

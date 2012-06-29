@@ -2,11 +2,12 @@
     beforeEach(function() {
         var now = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ")
 
-        this.file = fixtures.hdfsFile({
+        this.file = rspecFixtures.hdfsFile({
             path: "/folder/filename.txt",
-            instanceId: 9876,
+            hadoopInstance: {id: 9876},
             lastUpdatedStamp: now
-        })
+        });
+
         this.view = new chorus.views.HdfsShowFileSidebar({ model: this.file })
     });
 
@@ -53,13 +54,11 @@
                 var $linkExternalTable = this.view.$("a.external_table");
                 expect($linkExternalTable).toExist();
                 $linkExternalTable.click();
-                this.csv = new chorus.models.CsvHdfs(fixtures.csvImport({instanceId: "9876", path: "/folder/filename.txt", content: "hello\nworld"}).attributes);
-                this.server.completeFetchFor(this.csv);
             });
 
             it("launches the right dialog", function() {
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs)
-                expect(chorus.modal.csv.get("path")).toBe("/folder/filename.txt");
+                expect(chorus.modal.model.get("path")).toBe("/folder/filename.txt");
             });
         });
 

@@ -73,25 +73,39 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
             if (this.resource.get("id")) {
                 return this.resource.get("id");
             } else {
-                return this.options.instanceId + "|" + (this.options.rootPath + "/" +this.resource.get("name"));
+                return this.options.hadoopInstanceId + "|" + (this.options.rootPath + "/" +this.resource.get("name"));
             }
         }
     },
 
     createExternalTable: function(e) {
         e && e.preventDefault();
-        var csv = new chorus.models.CsvHdfs({
-            instanceId: this.options.instanceId,
-            toTable: this.resource.get("name"),
-            path: this.options.rootPath+"/"+this.resource.get("name")
-        });
-        csv.fetch();
+        var hadoopInstance = new chorus.models.HadoopInstance({id: this.options.hadoopInstanceId});
 
-        csv.onLoaded(function(){
-            var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({csv: csv});
+        var hdfsFile = new chorus.models.HdfsFile({
+            hadoopInstance: hadoopInstance,
+            path: this.options.rootPath + "/" + this.resource.get("name")
+        });
+
+        hdfsFile.fetch();
+
+        hdfsFile.onLoaded(function(){
+            var externalTable = new chorus.models.HdfsExternalTable({
+                path: hdfsFile.get('path'),
+                hadoopInstanceId: hadoopInstance.get('id')
+            });
+
+            var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({
+                model: externalTable,
+                csvOptions: {
+                    tableName: hdfsFile.name(),
+                    contents: hdfsFile.get('contents')
+                }
+            });
             dialog.launchModal();
         });
     },
+
     openDirectoryExternalTable: function(e) {
         e.preventDefault();
 

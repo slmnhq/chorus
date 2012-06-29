@@ -1,9 +1,11 @@
 describe("chorus.presenters.Activity", function() {
-    var model, actor, presenter;
+    var model, actor, presenter, workfile, workspace;
 
     describe("common aspects", function() {
         beforeEach(function() {
-            model = rspecFixtures.activity.greenplumInstanceCreated();
+            model = rspecFixtures.activity.workfileCreated();
+            workfile = model.workfile();
+            workspace = model.workspace();
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
         });
@@ -14,6 +16,28 @@ describe("chorus.presenters.Activity", function() {
         });
 
         describe("#headerHtml", function() {
+            it("returns the translation for the first style that matches", function() {
+                presenter.options.displayStyle = ["without_object", "without_workspace"];
+                expect(presenter.headerHtml().toString()).toContainTranslation(
+                "activity.header.WORKFILE_CREATED.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workfileLink: linkTo(workfile.showUrl(), workfile.name())
+                    }
+                );
+            });
+
+            it("returns the translation for the default style if no style is provided", function() {
+                presenter.options.displayStyle = null
+                expect(presenter.headerHtml().toString()).toContainTranslation(
+                    "activity.header.WORKFILE_CREATED.default", {
+                        actorLink: linkTo(actor.showUrl(), actor.name()),
+                        workfileLink: linkTo(workfile.showUrl(), workfile.name()),
+                        workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                    }
+                );
+            });
+
+
             it("returns a handlebars safe-string (so that html won't be stripped)", function() {
                 expect(presenter.headerHtml()).toBeA(Handlebars.SafeString);
             });
@@ -184,6 +208,27 @@ describe("chorus.presenters.Activity", function() {
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name()),
                     datasetType: t("dataset.types.view")
+                }
+            );
+        });
+    });
+
+    context("sandbox added", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.sandboxAdded();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            var workspace = model.workspace();
+
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.WORKSPACE_ADD_SANDBOX.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
             );
         });

@@ -10,7 +10,7 @@ class ActivityMigrator
       mapper = ActivityStreamEventMapper.new(activity_stream)
       next unless mapper.can_build?
 
-      event = mapper.build_event
+      next unless event = mapper.build_event
 
       event.workspace = find_workspace(activity_stream)
       event.actor = find_actor(activity_stream)

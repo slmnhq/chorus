@@ -802,19 +802,6 @@ beforeEach(function() {
             }, overrides));
         },
 
-        csvImport: function(overrides) {
-            var attributes = _.extend({
-                lines: [
-                    "col1,col2,col3",
-                    "val1,val2,val3"
-                ],
-                fileName: "/file.csv",
-                workspaceId: this.nextId().toString(),
-                hasHeader: true
-            }, overrides)
-            return new chorus.models.CSVImport(attributes);
-        },
-
         datasetHadoopExternalTable: function(overrides) {
             var attributes = _.extend(fixtures.datasetCommonJson(overrides), {
                 modifiedBy: {},
@@ -1407,7 +1394,7 @@ beforeEach(function() {
                     ],
                     "numFound": 2
                 },
-                "workspace": {
+                "workspaces": {
                     "results": [
                         {
                             comments: [],

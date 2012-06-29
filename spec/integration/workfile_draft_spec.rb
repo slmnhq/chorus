@@ -1,13 +1,13 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe "workfile show page" do
+describe "Workfile drafts" do
   def wait_for_text_element
     wait_until do
         !!evaluate_script('chorus.page.mainContent && chorus.page.mainContent.content && chorus.page.mainContent.content.textContent && chorus.page.mainContent.content.textContent.editor && !!chorus.page.mainContent.content.textContent.editor.setValue')
     end
   end
 
-  before do
+  before :each do
     login('edcadmin', 'secret')
     visit("#/workspaces")
     wait_until { current_route == '/workspaces' && page.has_selector?("button[data-dialog=WorkspacesNew]") }
@@ -30,16 +30,7 @@ describe "workfile show page" do
     wait_for_text_element
   end
 
-  it "pop up the open draft option" do
-    page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood")')
-    click_link "Work Files"
-    wait_until { current_route =~ /workspaces\/\d+\/workfiles/ }
-    click_link @file_name
-    wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
-    page.should have_content('Open Draft')
-  end
-
-  it "content should be of draft" do
+  it "should open the text editor for the draft" do
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood -1")')
     click_link "Work Files"
     wait_until { current_route =~ /workspaces\/\d+\/workfiles/ }
@@ -71,5 +62,4 @@ describe "workfile show page" do
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
     page.find("textarea.text_editor").should have_content('new Blood')
   end
-
 end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Gpdb::ConnectionBuilder do
   let(:instance) { FactoryGirl::create :instance, :host => "hello" }
-  let(:instance_account) { FactoryGirl::create :instance_account, :db_username => "user1", :db_password => "pw1" }
+  let(:instance_account) { FactoryGirl::create :instance_account, :db_username => "user1", :db_password => "pw1111" }
   let(:fake_connection_adapter) { stub(Object.new).disconnect!.subject }
 
   let(:expected_connection_params) do

@@ -26,19 +26,14 @@ describe "save as Menu" do
     }
   end
 
-  it "pops up the right menu" do
+  it "saves the file" do
+    #replacing current version
+    page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood")')
     page.should have_no_css(".components_menu a[data-menu-name='new']")
     page.should have_no_css(".components_menu a[data-menu-name='replace']")
     page.find(".save .save_file_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
     page.find(".components_menu a[data-menu-name='new']").should be_visible
-    page.find(".components_menu a[data-menu-name='replace']").should be_visible
-  end
-
-  it "click the save as replace version" do
-    page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood")')
-    page.find(".save .save_file_as").click
-    wait_until { page.find(".qtip[aria-hidden=false]") }
     page.find(".components_menu a[data-menu-name='replace']").click
     wait_until { page.find(".qtip[aria-hidden=true]") }
     page.find("textarea.text_editor").should have_content('new Blood')
@@ -47,9 +42,8 @@ describe "save as Menu" do
     click_link @file_name
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
     page.find("textarea.text_editor").should have_content('new Blood')
-  end
 
-  it "click the save as new  version" do
+    #saving as new version
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood -2")')
     page.find(".save .save_file_as").click
     wait_until { page.find(".qtip[aria-hidden=false]") }
@@ -59,6 +53,7 @@ describe "save as Menu" do
     click_button "Save New Version"
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
     page.find("textarea.text_editor").should have_content('new Blood -2')
+
   end
 
   it "open the specific version" do
@@ -72,7 +67,7 @@ describe "save as Menu" do
     page.execute_script('chorus.page.mainContent.content.textContent.editor.setValue("new Blood -2")')
     page.find(".save .save_file_as").click
     wait_until { page.find("a[data-menu-name='new']") }
-    sleep 0.5
+    wait_for_ajax
     page.find(".components_menu a[data-menu-name='new']").click
     wait_until { page.find(".qtip[aria-hidden=true]") }
     fill_in 'commitMessage', :with => "commit Message -2"

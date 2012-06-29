@@ -43,6 +43,7 @@ describe "creating a note on a workspace" do
     within("#facebox") do
       page.execute_script("$('#selectowner').selectmenu('value', #{user_id})")
       click_button "Save Changes"
+      wait_for_ajax
     end
 
     click_link "Edit Workspace"

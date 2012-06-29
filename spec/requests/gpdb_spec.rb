@@ -28,9 +28,9 @@ describe "gpdb instances", :network => true do
     it "can be updated" do
       post "/instances", :instance => valid_attributes
       instance_id = decoded_response.id
-      put "/instances/#{instance_id}", :instance => valid_attributes.merge(:name => "new name")
+      put "/instances/#{instance_id}", :instance => valid_attributes.merge(:name => "new_name")
 
-      decoded_response.name.should == "new name"
+      decoded_response.name.should == "new_name"
     end
   end
 end

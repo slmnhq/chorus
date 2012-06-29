@@ -10,6 +10,7 @@ class Workspace < ActiveRecord::Base
   has_many :members, :through => :memberships, :source => :user
   has_many :workfiles
   has_many :activities, :as => :entity
+  has_many :events, :through => :activities
   has_one :sandbox, :class_name => 'GpdbSchema'
 
   has_many :associated_datasets
@@ -20,6 +21,14 @@ class Workspace < ActiveRecord::Base
   validate :owner_is_member, :on => :update
 
   scope :active, where(:archived_at => nil)
+
+  attr_accessor :highlighted_attributes, :search_result_comments
+  searchable do
+    text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+    text :summary, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    string :grouping_id
+    string :type_name
+  end
 
   def uniqueness_of_workspace_name
     if self.name
@@ -82,6 +91,10 @@ class Workspace < ActiveRecord::Base
   def unarchive
     self.archived_at = nil
     self.archiver = nil
+  end
+
+  def has_dataset?(dataset)
+    dataset.schema == sandbox || bound_datasets.include?(dataset)
   end
 
   private

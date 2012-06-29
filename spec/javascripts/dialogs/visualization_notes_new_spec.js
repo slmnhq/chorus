@@ -2,7 +2,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
     describe("when in workspace context ( in Data tab )", function() {
         beforeEach(function() {
             stubDelay();
-            spyOn(chorus.dialogs.NotesNew.prototype, "modelSaved").andCallThrough();
+            spyOn(chorus.dialogs.MemoNew.prototype, "modelSaved").andCallThrough();
 
             this.dialog = new chorus.dialogs.VisualizationNotesNew({
                 entityId: "1",
@@ -32,7 +32,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
         });
 
         it("sub-classes NoteNewDialog", function() {
-            expect(this.dialog).toBeA(chorus.dialogs.NotesNew);
+            expect(this.dialog).toBeA(chorus.dialogs.MemoNew);
         });
 
         describe("#render", function() {
@@ -56,7 +56,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
             });
 
             it("calls super#modelSaved", function() {
-                expect(chorus.dialogs.NotesNew.prototype.modelSaved).toHaveBeenCalled();
+                expect(chorus.dialogs.MemoNew.prototype.modelSaved).toHaveBeenCalled();
             });
 
             it("saves the visualization chart as an attachment to the note", function() {

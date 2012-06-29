@@ -5,10 +5,9 @@ chorus.dialogs.NotesNew = chorus.dialogs.MemoNew.extend({
     submitButton: t("notes.button.create"),
 
     makeModel: function() {
-        this.model = new chorus.models.Comment({
+        this.model = new chorus.models.Note({
             entityId: this.options.launchElement ? this.options.launchElement.data("entity-id") : this.options.entityId,
             entityType: this.options.launchElement ? this.options.launchElement.data("entity-type") : this.options.entityType,
-            workspaceId: this.options.launchElement ? this.options.launchElement.data("workspace-id") : this.options.workspaceId
         });
 
         var subject;
@@ -19,6 +18,13 @@ chorus.dialogs.NotesNew = chorus.dialogs.MemoNew.extend({
         }
 
         this.placeholder = t("notes.placeholder", {noteSubject: subject});
-        this._super("makeModel", arguments);
+
+        this.bindings.add(this.model, "saved", this.modelSaved);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+    },
+
+    modelSaved: function() {
+        this.saved();
     }
 });

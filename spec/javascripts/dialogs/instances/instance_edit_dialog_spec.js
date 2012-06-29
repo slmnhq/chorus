@@ -130,10 +130,11 @@ describe("chorus.dialogs.InstanceEdit", function() {
             spyOn(this.dialog, "closeModal");
             spyOn(chorus, "toast");
 
-            this.dialog.$("input[name=name]").val("test1");
+            this.dialog.$("input[name=name]").val(" test1 ");
             this.dialog.$("input[name=port]").val("8555");
-            this.dialog.$("input[name=host]").val("testhost");
-            this.dialog.$("input[name=maintenanceDb]").val("not_postgres");
+            this.dialog.$("input[name=host]").val(" testhost ");
+            this.dialog.$("input[name=maintenanceDb]").val(" not_postgres ");
+            this.dialog.$("textarea[name=description]").val("  instance   ")
         });
 
         it("puts the button in 'loading' mode", function() {
@@ -155,6 +156,7 @@ describe("chorus.dialogs.InstanceEdit", function() {
             expect(this.dialog.model.save.argsForCall[0][0].name).toBe("test1");
             expect(this.dialog.model.save.argsForCall[0][0].port).toBe("8555");
             expect(this.dialog.model.save.argsForCall[0][0].host).toBe("testhost");
+            expect(this.dialog.model.save.argsForCall[0][0].description).toBe("instance");
             expect(this.dialog.model.save.argsForCall[0][0].maintenanceDb).toBe("not_postgres");
             expect(this.dialog.model.save.argsForCall[0][0].provisionType).toBe("register");
         });

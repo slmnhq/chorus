@@ -39,8 +39,8 @@ module Events
   end
 
   class WORKSPACE_ADD_SANDBOX < Base
-    has_targets :sandbox_schema, :workspace
-    has_activities :actor, :sandbox_schema, :workspace, :global
+    has_targets :workspace
+    has_activities :actor, :workspace, :global
   end
 
   class USER_ADDED < Base

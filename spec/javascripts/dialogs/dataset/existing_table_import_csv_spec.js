@@ -8,24 +8,29 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             }
         });
         this.sandbox = chorus.page.workspace.sandbox();
-        this.csv = newFixtures.csvImport({
-            lines: [
+        this.csvOptions = {
+            tableName: 'existing_table',
+            hasHeader: true,
+            contents: [
                 "COL1,col2, col3 ,col 4,Col_5",
                 "val1.1,val1.2,val1.3,val1.4,val1.5",
                 "val2.1,val2.2,val2.3,val2.4,val2.5",
                 "val3.1,val3.2,val3.3,val3.4,val3.5",
                 "val4.1,val4.2,val4.3,val4.4,val4.5"
             ]
-        });
+        };
 
-        // todo - why aren't these attributes in our fixture?
-        this.csv.set({
-            toTable: "existingTable",
+        this.model = new (chorus.models.Base.extend({
+            constructorName: 'FakeModel',
+            urlTemplate: "workspaces/{{workspaceId}}/existing_tables"
+        }))();
+
+        this.model.set({
             truncate: true,
-            hasHeader: true
+            workspaceId: '123'
         }, { silent: true });
 
-        this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
+        this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions , datasetId: "dat-id"});
         this.columns = [
             {name: "col1", typeCategory: "WHOLE_NUMBER", ordinalPosition: "3"},
             {name: "col2", typeCategory: "STRING", ordinalPosition: "4"},
@@ -35,7 +40,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         ]
         this.dataset = newFixtures.workspaceDataset.sandboxTable({
             id: "dat-id",
-            workspace: {id: this.csv.get("workspaceId")},
+            workspace: {id: this.model.get("workspaceId")},
             columnNames: this.columns
         });
         this.server.completeFetchFor(this.dataset);
@@ -61,23 +66,23 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     });
 
     it("shows an error when the CSV doesn't parse correctly", function() {
-        this.csv.get("lines").push('"Has Spaces",2,3,4,5');
+        this.csvOptions.contents.push('"Has Spaces",2,3,4,5');
         this.dialog.$("input.delimiter[value=' ']").click();
 
-        expect(this.csv.serverErrors).toBeDefined();
+        expect(this.model.serverErrors).toBeDefined();
         expect(this.dialog.$(".errors")).not.toBeEmpty();
     });
 
     describe("with an existing toTable that has a funny name", function() {
         beforeEach(function() {
-            this.dialog.csv.set({ toTable: "!@#$%^&*()_+" });
+            this.dialog.tableName = "!@#$%^&*()_+";
             this.dialog.$("a.automap").click();
             this.server.reset();
             this.dialog.$("button.submit").click();
         });
 
         it("still imports and passes client side validation", function() {
-            expect(this.server.lastCreateFor(this.dialog.csv).url.length).toBeGreaterThan(0);
+            expect(this.server.lastCreateFor(this.dialog.model).url.length).toBeGreaterThan(0);
         });
     });
 
@@ -88,32 +93,29 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
     describe("changing the separator", function() {
         beforeEach(function() {
-            expect(this.dialog.csv.get("types").length).toBe(5);
+            expect(this.dialog.model.get("types").length).toBe(5);
             this.dialog.$("input.delimiter[value=';']").click();
         });
 
         it("recalculates the column types", function() {
-            expect(this.dialog.csv.get("types").length).toBe(1);
+            expect(this.dialog.model.get("types").length).toBe(1);
         });
     });
 
     function hasRightSeparator(separator) {
         return function() {
             beforeEach(function() {
-                this.csv = newFixtures.csvImport({
-                    lines: [
+                this.csvOptions = {
+                    contents: [
                         "COL1" + separator + "col2" + separator + "col3" + separator + "col_4" + separator + "Col_5",
                         "val1.1" + separator + "val1.2" + separator + "val1.3" + separator + "val1.4" + separator + "val1.5",
                         "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
                         "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
-                    ]
-                });
+                    ],
+                    tableName: 'existing_table'
+                };
 
-                this.csv.set({
-                    toTable: "existingTable"
-                }, { silent: true });
-
-                this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
+                this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions, datasetId: "dat-id"});
                 this.server.completeFetchFor(this.dataset);
                 this.dialog.render();
 
@@ -168,20 +170,18 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             describe("entering 'z' as a separator", function() {
                 beforeEach(function() {
-                    this.csv = newFixtures.csvImport({
-                        lines: [
+                    this.csvOptions =  {
+                        contents: [
                             "COL1zcol2zcol3zcol_4zCol_5",
                             "val1.1zval1.2zval1.3zval1.4zval1.5",
                             "val2.1zval2.2zval2.3zval2.4zval2.5",
                             "val3.1zval3.2zval3.3zval3.4zval3.5"
-                        ]
-                    });
+                        ],
+                        tableName: "existing_table"
+                    };
 
-                    this.csv.set({
-                        toTable: "existingTable"
-                    }, { silent: true });
 
-                    this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
+                    this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions, datasetId: "dat-id"});
                     this.server.completeFetchFor(this.dataset);
                     this.dialog.render();
 
@@ -204,7 +204,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     it("has directions", function() {
         expect(this.dialog.$('.directions')).toContainTranslation("dataset.import.table.existing.directions",
             {
-                toTable: "existingTable"
+                toTable: "existing_table"
             });
     });
 
@@ -235,20 +235,17 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
     describe("clicking the 'automap' link when the csv has fewer columns than the table", function() {
         beforeEach(function() {
-            this.csv = newFixtures.csvImport({
-                lines: [
+            this.csvOptions = {
+                contents: [
                     "COL1, col2, col3",
                     "val1.1, val1.2, val1.3",
                     "val2.1, val2.2, val2.3",
                     "val3.1, val3.2, val3.3"
-                ]
-            });
+                ],
+                tableName: "existing_table"
+            };
 
-            this.csv.set({
-                toTable: "existingTable",
-            }, { silent: true });
-
-            this.dialog = new chorus.dialogs.ExistingTableImportCSV({csv: this.csv, datasetId: "dat-id"});
+            this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions, datasetId: "dat-id"});
             this.server.completeFetchFor(this.dataset);
             this.dialog.render();
             this.dialog.$("a.automap").click();
@@ -466,7 +463,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         })
 
         it("sets header on the csv model", function() {
-            expect(this.dialog.csv.get("hasHeader")).toBeFalsy();
+            expect(this.dialog.model.get("hasHeader")).toBeFalsy();
         });
 
         it("re-renders", function() {
@@ -488,7 +485,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 this.dialog.$("#hasHeader").change();
             })
             it("sets header on the csv model", function() {
-                expect(this.dialog.csv.get("hasHeader")).toBeTruthy();
+                expect(this.dialog.model.get("hasHeader")).toBeTruthy();
             })
             it("re-renders", function() {
                 expect(this.dialog.postRender).toHaveBeenCalled();
@@ -545,7 +542,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
         context("clicking import button with invalid fields", function() {
             beforeEach(function() {
-                spyOn(this.dialog.csv, "performValidation").andReturn(false);
+                spyOn(this.dialog.model, "performValidation").andReturn(false);
                 this.dialog.$("button.submit").click();
             });
 
@@ -566,15 +563,15 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             });
 
             it("imports the file", function() {
-                expect(this.server.lastCreate().url).toBe(this.dialog.csv.url());
+                expect(this.server.lastCreate().url).toBe(this.dialog.model.url());
                 var params = this.server.lastCreate().params();
-                expect(params["csvimport[file_name]"]).toBe(this.dialog.csv.get("fileName"));
-                expect(params["csvimport[to_table]"]).toBe("existingTable");
-                expect(params["csvimport[delimiter]"]).toBe(",");
-                expect(params["csvimport[type]"]).toBe("existingTable");
-                expect(params["csvimport[has_header]"]).toBe('true');
-                expect(params["csvimport[truncate]"]).toBe('true');
-                expect(JSON.parse(params["csvimport[columns_map]"])).toEqual(this.expectedColumnsMap);
+                expect(params["fake_model[file_name]"]).toBe(this.dialog.model.get("fileName"));
+                expect(params["fake_model[table_name]"]).toBe("existing_table");
+                expect(params["fake_model[delimiter]"]).toBe(",");
+                expect(params["fake_model[type]"]).toBe("existingTable");
+                expect(params["fake_model[has_header]"]).toBe('true');
+                expect(params["fake_model[truncate]"]).toBe('true');
+                expect(JSON.parse(params["fake_model[columns_map]"])).toEqual(this.expectedColumnsMap);
 
             });
 
@@ -583,7 +580,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                     spyOn(chorus, 'toast');
                     spyOn(chorus.router, "navigate");
                     spyOn(chorus.PageEvents, 'broadcast');
-                    this.server.lastCreateFor(this.dialog.csv).succeed();
+                    this.server.lastCreateFor(this.dialog.model).succeed();
                 });
 
                 it("closes the dialog and displays a toast", function() {
@@ -602,7 +599,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             context("when the import fails", function() {
                 beforeEach(function() {
-                    this.server.lastCreateFor(this.dialog.csv).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                    this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 });
 
                 it("displays the error", function() {

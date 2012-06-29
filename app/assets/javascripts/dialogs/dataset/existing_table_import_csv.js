@@ -17,20 +17,33 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.resource = this.csv = this.options.csv;
-        this.tableName = this.csv.get("toTable");
-        this.dataset = new chorus.models.WorkspaceDataset({ workspace: {id: this.csv.get("workspaceId")}, id: this.options.datasetId })
+        this.resource = this.model = this.options.model;
+        this.csvOptions = this.options.csvOptions;
+        this.tableName = this.csvOptions.tableName;
+        this.dataset = new chorus.models.WorkspaceDataset({ workspace: {id: this.model.get("workspaceId")}, id: this.options.datasetId })
 
         this.requiredResources.add(this.dataset);
         this.dataset.fetch();
-        var columns = this.csv.columnOrientedData();
+
+        var parser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.csvOptions);
+        var columns = parser.getColumnOrientedData();
         this.numberOfColumns = columns.length;
         this.destinationColumns = _.map(columns, function() { return null });
         this.destinationMenus = [];
 
-        this.bindings.add(this.csv, "saved", this.saved);
-        this.bindings.add(this.csv, "saveFailed", this.saveFailed);
-        this.bindings.add(this.csv, "validationFailed", this.saveFailed);
+        this.initializeModel(columns);
+
+        this.bindings.add(this.model, "saved", this.saved);
+        this.bindings.add(this.model, "saveFailed", this.saveFailed);
+        this.bindings.add(this.model, "validationFailed", this.saveFailed);
+    },
+
+    initializeModel: function(columnData) {
+        this.model.set({
+            hasHeader: this.csvOptions.hasHeader,
+            tableName: chorus.utilities.CsvParser.normalizeForDatabase(this.csvOptions.tableName),
+            types: _.pluck(columnData, 'type')
+        });
     },
 
     saved: function() {
@@ -56,12 +69,12 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.handleScrolling();
         this.cleanUpQtip();
 
-        if (this.csv.serverErrors) {
-            this.showErrors();
-        }
-
         if (this.dataset.loaded) {
             this.validateColumns();
+        }
+
+        if (this.model.serverErrors) {
+            this.showErrors();
         }
 
         _.each(this.$(".column_mapping .map a"), function(map, i) {
@@ -166,14 +179,15 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function() {
+        var parser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.model.attributes);
         return {
-            columns: this.csv.columnOrientedData(),
+            columns : parser.getColumnOrientedData(),
             destinationColumns: _.map(this.dataset.get("columnNames"), function(column) {
                 return { name: column.name, type: chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory] };
             }),
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: t("dataset.import.table.existing.directions", {
-                toTable: new Handlebars.SafeString(chorus.helpers.spanFor(this.csv.get("toTable"), {"class": "destination"}))
+                toTable: new Handlebars.SafeString(chorus.helpers.spanFor(this.model.get("tableName"), {"class": "destination"}))
             })
         }
     },
@@ -193,7 +207,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             }
         });
 
-        this.csv.set({
+        this.model.set({
             delimiter: this.delimiter,
             type: "existingTable",
             hasHeader: !!(this.$("#hasHeader").prop("checked")),
@@ -202,13 +216,21 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
         this.$("button.submit").startLoading("dataset.import.importing");
 
-        this.csv.save();
+        this.model.save();
     },
 
     refreshCSV: function() {
-        this.csv.set({hasHeader: !!(this.$("#hasHeader").prop("checked")), delimiter: this.delimiter});
-        this.csv.unset("types")
-        this.numberOfColumns = this.csv.columnOrientedData().length;
+        this.model.set({hasHeader: !!(this.$("#hasHeader").prop("checked")), delimiter: this.delimiter});
+
+        var options = _.clone(this.csvOptions);
+        options.delimiter = this.delimiter;
+
+        var parser = new chorus.utilities.CsvParser(this.csvOptions.contents, options);
+        var columnData = parser.getColumnOrientedData();
+        this.numberOfColumns = columnData.length;
+
+        this.model.set({types: _.pluck(columnData, 'type')});
+
         this.render();
         this.recalculateScrolling();
     },
@@ -231,8 +253,8 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             this.other_delimiter = false;
         }
 
-        this.csv.unset("headerColumnNames", {silent: true});
-        this.csv.unset("generatedColumnNames", {silent: true});
+        this.model.unset("headerColumnNames", {silent: true});
+        this.model.unset("generatedColumnNames", {silent: true});
 
         this.refreshCSV();
     },
@@ -265,7 +287,13 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     validateColumns: function() {
-        var sourceColumnsNum = this.csv.columnOrientedData().length;
+        this.clearErrors();
+        var parser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.model.attributes);
+        var columnData = parser.getColumnOrientedData()
+        var sourceColumnsNum = columnData.length;
+
+        this.model.serverErrors = parser.serverErrors;
+
         var destinationColumnsNum = this.dataset.get("columnNames") ? this.dataset.get("columnNames").length : 0;
         if (destinationColumnsNum < sourceColumnsNum) {
             this.resource.serverErrors = { fields: { source_columns: { LESS_THAN_OR_EQUAL_TO: {} } } };

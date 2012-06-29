@@ -7,6 +7,7 @@ class MembersController < ApplicationController
   def create
     workspace = Workspace.find(params[:workspace_id])
     authorize! :administrative_edit, workspace
+    # TODO: This next line saves records immediately.  Save does nothing! Validations are ignored.
     workspace.member_ids = params[:member_ids]
     workspace.has_added_member = true
     workspace.save!

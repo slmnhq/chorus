@@ -1,4 +1,4 @@
-class ActivityPresenter < Presenter
+class EventPresenter < Presenter
   def to_hash
     basic_hash.
       merge(targets_hash).
@@ -10,25 +10,31 @@ class ActivityPresenter < Presenter
   def basic_hash
     {
       :id => model.id,
-      :actor => present(event.actor),
-      :action => event.action,
+      :actor => present(model.actor),
+      :action => action,
       :timestamp => model.created_at
     }
   end
 
+  def action
+    return "NOTE" if model.is_a?(Events::Note)
+
+    model.action
+  end
+
   def additional_data_hash
-    event.additional_data
+    pairs = model.additional_data.map do |key, value|
+      [key, h(value)]
+    end
+
+    Hash[pairs]
   end
 
   def targets_hash
-    event.targets.reduce({}) do |hash, entry|
+    model.targets.reduce({}) do |hash, entry|
       name, model = entry
       hash[name] = present(model)
       hash
     end
-  end
-
-  def event
-    model.event
   end
 end

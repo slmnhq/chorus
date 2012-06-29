@@ -1,8 +1,4 @@
 class Presenter
-  PRESENTER_NAME_MAP = {
-    ::Paperclip::Attachment => "Image"
-  }
-
   def self.present(model_or_collection, view_context, options={})
     if model_or_collection.is_a?(ActiveRecord::Relation) || model_or_collection.is_a?(Enumerable)
       present_collection(model_or_collection, view_context, options)
@@ -12,11 +8,7 @@ class Presenter
   end
 
   def self.present_model(model, view_context, options)
-    model_class = model.class
-
-    class_name = PRESENTER_NAME_MAP[model_class] || model_class.name
-
-    presenter_class = "#{class_name}Presenter".constantize
+    presenter_class = get_presenter_class(model)
     presenter_class.new(model, view_context, options).to_hash
   end
 
@@ -37,4 +29,17 @@ class Presenter
   delegate :h, :sanitize, :to => :@view_context
 
   attr_reader :model, :options
+
+  private
+
+  def self.get_presenter_class(model)
+    case model
+    when Paperclip::Attachment
+      ImagePresenter
+    when Events::Base
+      EventPresenter
+    else
+      "#{model.class.name}Presenter".constantize
+    end
+  end
 end

@@ -3,7 +3,7 @@ require "spec_helper"
 describe Hdfs::FilesController do
   let(:hadoop_instance) { FactoryGirl.create :hadoop_instance }
   let(:entry) do
-    HdfsEntry.new('path' => '/empty', 'modifiedAt' => Time.now.to_s)
+    HdfsEntry.new({'path' => '/empty', 'modifiedAt' => Time.now.to_s}, hadoop_instance)
   end
 
   before do
