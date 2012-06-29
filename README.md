@@ -82,6 +82,9 @@ This script
 * Creates databases
 * Runs tests
 
+For Macs only:
+brew install qt
+
 ## Development
 
     cd ~/workspace/chorusrails && foreman start
