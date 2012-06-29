@@ -65,6 +65,31 @@ describe HdfsExternalTable do
       end
     end
 
+    describe "#create_dataset" do
+      let(:schema) { FactoryGirl.create(:gpdb_schema) }
+      let(:parameters) do { :table_name => "highway_to_heaven", :path => "/data/file.csv", :hadoop_instance_id => hadoop_instance.id } end
+      let(:creator) { FactoryGirl.create(:user) }
+
+      before do
+        @dataset = HdfsExternalTable.create_dataset(schema, parameters[:table_name])
+      end
+
+      it "should create a dataset" do
+        GpdbTable.last.should == @dataset
+      end
+
+      it "create a WORKSPACE_ADD_HDFS_AS_EXT_TABLE event" do
+        workspace = FactoryGirl.create(:workspace, :sandbox => FactoryGirl.create(:gpdb_schema))
+        HdfsExternalTable.create_event(@dataset, workspace, parameters, creator)
+        event = Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.last
+        event.hadoop_instance_id.should == hadoop_instance.id
+        event.path.should == "/data/"
+        event.hdfs_file_name.should == "file.csv"
+        event.dataset.should == @dataset
+        event.workspace.should == workspace
+      end
+    end
+
     context "validate parameters" do
       let(:parameters) do
         {

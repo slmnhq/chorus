@@ -51,7 +51,7 @@ describe ExternalTablesController do
       end
 
       it "creates hdfs external table for a workspace with sandbox amd responds with ok" do
-        mock(HdfsExternalTable).create(sandbox, instance_account, anything)
+        mock(HdfsExternalTable).create(workspace, instance_account, anything, current_user)
 
         post :create, parameters
         response.code.should == "200"

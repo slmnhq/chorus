@@ -27,9 +27,11 @@ class HdfsExternalTable
     end
   end
 
-  def self.create(schema, account, parameters)
+  def self.create(workspace, account, parameters, creator)
     sql = create_sql(parameters)
-    execute_query(sql, schema, account)
+    execute_query(sql, workspace.sandbox, account)
+    dataset = create_dataset(workspace.sandbox, parameters[:table_name])
+    create_event(dataset, workspace, parameters, creator)
   end
 
   def self.map_columns(column_names, column_types)
@@ -45,5 +47,21 @@ class HdfsExternalTable
     if parameters[:column_names].length != parameters[:types].length
       raise ApiValidationError, "Column names size should match column types for Hdfs External Table"
     end
+  end
+
+  def self.create_dataset(schema, table_name)
+    GpdbTable.find_or_create_by_name_and_schema_id(table_name, schema.id)
+  end
+
+  def self.create_event(dataset, workspace, parameters, creator)
+    filename = parameters[:path].split("/").last
+
+    Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(creator).add(
+      :workspace => workspace,
+      :dataset => dataset,
+      :hadoop_instance_id => parameters[:hadoop_instance_id].to_i,
+      :path => parameters[:path].gsub(filename, ""),
+      :hdfs_file_name => filename
+    )
   end
 end

@@ -166,4 +166,30 @@ describe "Event types" do
     it_creates_activities_for { [actor, workspace] }
     it_creates_a_global_activity
   end
+
+  describe "WORKSPACE_ADD_HDFS_AS_EXT_TABLE" do
+    subject do
+      Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.add(
+        :actor => actor,
+        :workspace => workspace,
+        :dataset => dataset,
+        :hadoop_instance_id => hadoop_instance.id,
+        :path => "/data",
+        :hdfs_file_name => "test.csv"
+      )
+    end
+
+    its(:dataset) { should == dataset }
+    its(:hadoop_instance_id) { should == hadoop_instance.id }
+    its(:path) { should == "/data" }
+    its(:hdfs_file_name) { should == "test.csv" }
+
+    its(:targets) { should == { :dataset => dataset, :workspace => workspace } }
+    its(:additional_data) { should == { :hadoop_instance_id => hadoop_instance.id,
+                                        :hdfs_file_name => "test.csv",
+                                        :path => "/data" } }
+
+    it_creates_activities_for { [actor, dataset, workspace] }
+    it_creates_a_global_activity
+  end
 end
