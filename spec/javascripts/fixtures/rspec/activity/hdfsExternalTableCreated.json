@@ -1,0 +1,107 @@
+{
+  "response": {
+    "id": 939,
+    "actor": {
+      "id": 9413,
+      "username": "user165",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person165@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "action": "WORKSPACE_ADD_HDFS_AS_EXT_TABLE",
+    "timestamp": "2012-06-29T23:35:17Z",
+    "dataset": {
+      "id": 461,
+      "type": "SOURCE_TABLE",
+      "object_name": "table2",
+      "schema": {
+        "id": 572,
+        "name": "schema2",
+        "database": {
+          "id": 624,
+          "name": "database2",
+          "instance": {
+            "name": "instance5",
+            "host": "host5.emc.com",
+            "port": 5005,
+            "id": 1489,
+            "owner": {
+              "id": 9415,
+              "username": "user167",
+              "first_name": "John",
+              "last_name": "Doe",
+              "email": "person167@example.com",
+              "title": "Grand Poo Bah",
+              "dept": "Corporation Corp., Inc.",
+              "notes": "One of our top performers",
+              "admin": false,
+              "image": {
+                "original": "/images/default-user-icon.png",
+                "icon": "/images/default-user-icon.png"
+              }
+            },
+            "shared": false,
+            "state": "online",
+            "provision_type": null,
+            "maintenance_db": "postgres",
+            "description": null,
+            "instance_provider": null,
+            "version": "9.1.2 - FactoryVersion"
+          }
+        },
+        "dataset_count": 1
+      },
+      "associated_workspaces": [
+
+      ],
+      "object_type": "TABLE"
+    },
+    "workspace": {
+      "id": 1961,
+      "name": "workspace45",
+      "summary": null,
+      "owner": {
+        "id": 9414,
+        "username": "user166",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person166@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "archiver": null,
+      "archived_at": null,
+      "public": true,
+      "image": {
+        "original": "",
+        "icon": ""
+      },
+      "permission": [
+        "admin"
+      ],
+      "has_added_member": false,
+      "has_added_workfile": false,
+      "has_added_sandbox": false,
+      "has_changed_settings": false,
+      "sandbox_info": null,
+      "latest_comment_list": null
+    },
+    "hdfs_file_name": "test.csv",
+    "hadoop_instance_id": "25",
+    "path": "/hadoop/data/"
+  }
+}
