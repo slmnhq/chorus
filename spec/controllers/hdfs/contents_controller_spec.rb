@@ -8,20 +8,23 @@ describe Hdfs::ContentsController do
   end
 
   describe "#show" do
-    it "show file content" do
-      VCR.use_cassette('query_service_entry_and_content') do
-        get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/data/test.csv'
-
-        response.code.should == '200'
-        decoded_response[:last_updated_stamp].should_not be_blank
-        decoded_response[:contents].should include('a, b, c')
+    before do
+      any_instance_of(Hdfs::QueryService) do |h|
+        stub(h).show { ["a, b, c"] }
+        stub(h).list { [{'modified_at' => Time.now.to_s, 'path' => '/data/test.csv'}] }
       end
     end
 
+    it "shows file content" do
+      get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/data/test.csv'
+
+      response.code.should == '200'
+      decoded_response[:last_updated_stamp].should_not be_blank
+      decoded_response[:contents].should include('a, b, c')
+    end
+
     generate_fixture "hdfsFile.json" do
-      VCR.use_cassette('query_service_entry_and_content') do
-        get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/data/test.csv'
-      end
+      get :show, :hadoop_instance_id => hadoop_instance.id, :id => '/data/test.csv'
     end
   end
 end

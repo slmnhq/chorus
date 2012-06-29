@@ -8,7 +8,7 @@ class HdfsFile
   end
 
   def contents
-    hdfs_query = Hdfs::QueryService.new(hadoop_instance)
+    hdfs_query = Hdfs::QueryService.new(hadoop_instance.host, hadoop_instance.port, hadoop_instance.username, hadoop_instance.version)
     hdfs_query.show(path)
   end
 

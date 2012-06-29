@@ -8,9 +8,9 @@ describe HdfsFile do
 
   describe "#contents" do
     before do
-      service = Object.new
-      mock(Hdfs::QueryService).new(hadoop_instance) { service }
-      mock(service).show('/file') { ["content"] }
+      any_instance_of(Hdfs::QueryService) do |h|
+        stub(h).show('/file') { ["content"] }
+      end
     end
 
     it "retrieves file content from the query service" do

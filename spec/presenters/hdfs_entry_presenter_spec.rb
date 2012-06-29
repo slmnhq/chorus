@@ -5,10 +5,10 @@ describe HdfsEntryPresenter, :type => :view do
   before(:each) do
     entry = HdfsEntry.new({
       'path' => "/data",
-      'modifiedAt' => "2010-10-20 10:11:12",
+      'modified_at' => "2010-10-20 10:11:12",
       'size' => '10',
-      'directory' => 'true',
-      'contentCount' => 1
+      'is_directory' => 'true',
+      'content_count' => 1
     }, hadoop_instance)
 
     @presenter = HdfsEntryPresenter.new(entry, view)

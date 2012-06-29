@@ -7,9 +7,9 @@ describe HdfsEntry do
     HdfsEntry.new({
       "path" => "/abc",
       "size" => 10,
-      "directory" => "true",
-      "modifiedAt" => "2010-10-20 22:00:00",
-      'contentCount' => 4
+      "is_directory" => "true",
+      "modified_at" => "2010-10-20 22:00:00",
+      "content_count" => 4
     }, hadoop_instance)
   end
 
@@ -17,8 +17,8 @@ describe HdfsEntry do
     HdfsEntry.new({
       "path" => "/hello.sql",
       "size" => 10,
-      "directory" => "false",
-      "modifiedAt" => "2010-10-20 22:00:00",
+      "is_directory" => "false",
+      "modified_at" => "2010-10-20 22:00:00",
       'size' => 4096
     }, hadoop_instance)
   end
@@ -27,17 +27,29 @@ describe HdfsEntry do
     context "queries the hdfs query system and retrieve entries objects" do
       let(:hadoop_instance) { HadoopInstance.new(:host => 'garcia', :port => '8020', :username => 'pivotal') }
 
-      it "converts hdfs query results into entries" do
-        VCR.use_cassette('query_service_list_root') do
-          first_result = described_class.list('/', hadoop_instance).sort_by(&:path).first
-
-          first_result.is_directory.should be_true
-          first_result.path.should == '/empty'
-          first_result.size.should == 0
-          first_result.content_count.should == 0
-          first_result.modified_at.should == Time.parse("2012-05-24 11:25:50")
-          first_result.hadoop_instance.should == hadoop_instance
+      before do
+        any_instance_of(Hdfs::QueryService) do |h|
+          stub(h).list('/') do
+            [{
+              "path" => "/empty",
+              "size" => 10,
+              "is_directory" => "true",
+              "modified_at" => "2010-10-20 22:00:00",
+              'content_count' => 0
+            }]
+          end
         end
+      end
+
+      it "converts hdfs query results into entries" do
+        first_result = described_class.list('/', hadoop_instance).sort_by(&:path).first
+
+        first_result.is_directory.should be_true
+        first_result.path.should == '/empty'
+        first_result.size.should == 10
+        first_result.content_count.should == 0
+        first_result.modified_at.should == Time.parse("2010-10-20 22:00:00")
+        first_result.hadoop_instance.should == hadoop_instance
       end
     end
   end
