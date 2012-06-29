@@ -232,4 +232,11 @@ describe Workspace do
       workspace.has_dataset?(dataset).should be_false
     end
   end
+
+  describe "search fields" do
+    it "indexes text fields" do
+      Workspace.should have_searchable_field :name
+      Workspace.should have_searchable_field :summary
+    end
+  end
 end

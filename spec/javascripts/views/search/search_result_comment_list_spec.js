@@ -3,23 +3,20 @@ describe("chorus.views.SearchResultCommentList", function() {
         this.view = new chorus.views.SearchResultCommentList({
             comments: [
                 fixtures.searchResultCommentJson({
-                    content: "lots o content",
                     highlightedAttributes: {
-                        content:["lots o <em>content</em>"]
+                        body:["lots o <em>content</em>"]
                     }
                 }),
                 fixtures.searchResultCommentJson({
                     isComment: true,
-                    content: "even more content",
                     highlightedAttributes: {
-                        content:["even more <em>content</em>"]
+                        body:["even more <em>content</em>"]
                     }
                 }),
                 fixtures.searchResultCommentJson({
                     isInsight: true,
-                    content: "yet more content",
                     highlightedAttributes: {
-                        content:["yet more <em>content</em>"]
+                        body:["yet more <em>content</em>"]
                     }
                 }),
                 fixtures.searchResultCommentJson(),

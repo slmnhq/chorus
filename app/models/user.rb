@@ -34,12 +34,14 @@ class User < ActiveRecord::Base
   validates_length_of :username, :first_name, :last_name, :email, :title, :dept, :maximum => 256
   validates_length_of :notes, :maximum => 4096
 
-  attr_accessor :highlighted_attributes
+  attr_accessor :highlighted_attributes, :search_result_comments
   searchable do
-    text :first_name, :stored => true
-    text :last_name, :stored => true
-    text :username, :stored => true
-    text :email, :stored => true
+    text :first_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+    text :last_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+    text :username, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    text :email, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    string :grouping_id
+    string :type_name
   end
 
   def uniqueness_of_non_deleted_username

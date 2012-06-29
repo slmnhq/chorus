@@ -16,21 +16,46 @@ http_interactions:
     headers:
       Content-Type:
       - text/plain; charset=utf-8
-      Content-Length:
-      - '44'
+      Transfer-Encoding:
+      - chunked
       Server:
-      - Jetty(6.1.3)
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>21}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:29 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 314</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 314</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">John</field><field boost="1000000" name="last_name_texts">Doe</field><field boost="1000" name="username_texts">user1</field><field boost="1000" name="email_texts">person1@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
     http_version:
-  recorded_at: Thu, 28 Jun 2012 20:49:10 GMT
+  recorded_at: Fri, 29 Jun 2012 17:41:29 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="first_name_texts">marty</field><field name="last_name_texts">alpha</field><field name="username_texts">some_user</field><field name="email_texts">person1@example.com</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Instance 1</field><field name="type">Instance</field><field name="type">ActiveRecord::Base</field><field name="class_name">Instance</field><field name="grouping_id_s">Instance 1</field><field name="type_name_s">Instance</field><field boost="1000000" name="name_texts">bob_great_greenplum_instance</field></doc></add>
     headers:
       Content-Type:
       - text/xml
@@ -41,21 +66,21 @@ http_interactions:
     headers:
       Content-Type:
       - text/plain; charset=utf-8
-      Content-Length:
-      - '44'
+      Transfer-Encoding:
+      - chunked
       Server:
-      - Jetty(6.1.3)
+      - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version:
-  recorded_at: Thu, 28 Jun 2012 20:49:10 GMT
+  recorded_at: Fri, 29 Jun 2012 17:41:29 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 2</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="first_name_texts">bob</field><field name="last_name_texts">alpha</field><field name="username_texts">some_other_user</field><field name="email_texts">person2@example.com</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 315</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 315</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">John</field><field boost="1000000" name="last_name_texts">Doe</field><field boost="1000" name="username_texts">user2</field><field boost="1000" name="email_texts">person2@example.com</field></doc></add>
     headers:
       Content-Type:
       - text/xml
@@ -66,21 +91,21 @@ http_interactions:
     headers:
       Content-Type:
       - text/plain; charset=utf-8
-      Content-Length:
-      - '44'
+      Transfer-Encoding:
+      - chunked
       Server:
-      - Jetty(6.1.3)
+      - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version:
-  recorded_at: Thu, 28 Jun 2012 20:49:11 GMT
+  recorded_at: Fri, 29 Jun 2012 17:41:30 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1735</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="first_name_texts">John</field><field name="last_name_texts">Doe</field><field name="username_texts">user1</field><field name="email_texts">person3@example.com</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Instance 2</field><field name="type">Instance</field><field name="type">ActiveRecord::Base</field><field name="class_name">Instance</field><field name="grouping_id_s">Instance 2</field><field name="type_name_s">Instance</field><field boost="1000000" name="name_texts">instance_without_fruit_in_name</field></doc></add>
     headers:
       Content-Type:
       - text/xml
@@ -91,40 +116,365 @@ http_interactions:
     headers:
       Content-Type:
       - text/plain; charset=utf-8
-      Content-Length:
-      - '44'
+      Transfer-Encoding:
+      - chunked
       Server:
-      - Jetty(6.1.3)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>0}}'
-    http_version:
-  recorded_at: Thu, 28 Jun 2012 20:49:11 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Instance 1</field><field name="type">Instance</field><field name="type">ActiveRecord::Base</field><field name="class_name">Instance</field><field name="name_texts">bob_great_greenplum_instance</field></doc></add>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Content-Length:
-      - '44'
-      Server:
-      - Jetty(6.1.3)
+      - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
     http_version:
-  recorded_at: Thu, 28 Jun 2012 20:49:11 GMT
+  recorded_at: Fri, 29 Jun 2012 17:41:30 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 100</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 100</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">marty</field><field boost="1000000" name="last_name_texts">alpha</field><field boost="1000" name="username_texts">some_user</field><field boost="1000" name="email_texts">person3@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:30 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 101</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 101</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">bob</field><field boost="1000000" name="last_name_texts">alpha</field><field boost="1000" name="username_texts">some_other_user</field><field boost="1000" name="email_texts">person4@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:30 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 316</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 316</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">John</field><field boost="1000000" name="last_name_texts">Doe</field><field boost="1000" name="username_texts">user3</field><field boost="1000" name="email_texts">person5@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:30 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1</field><field name="type_name_s">Instance</field><field name="body_texts">i am a comment with greenplum in me</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:30 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 317</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 317</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">John</field><field boost="1000000" name="last_name_texts">Doe</field><field boost="1000" name="username_texts">user4</field><field boost="1000" name="email_texts">person6@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:30 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 2</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1</field><field name="type_name_s">Instance</field><field name="body_texts">i love bob</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:30 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 318</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 318</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">John</field><field boost="1000000" name="last_name_texts">Doe</field><field boost="1000" name="username_texts">user5</field><field boost="1000" name="email_texts">person7@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:31 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 3</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 2</field><field name="type_name_s">Instance</field><field name="body_texts">is this a greenplum instance?</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:31 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 319</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 319</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">John</field><field boost="1000000" name="last_name_texts">Doe</field><field boost="1000" name="username_texts">user6</field><field boost="1000" name="email_texts">person8@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:31 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 4</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 2</field><field name="type_name_s">Instance</field><field name="body_texts">yes, greenplum</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:31 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 320</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 320</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">John</field><field boost="1000000" name="last_name_texts">Doe</field><field boost="1000" name="username_texts">user7</field><field boost="1000" name="email_texts">person9@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:32 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 5</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 2</field><field name="type_name_s">Instance</field><field name="body_texts">really really?</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:32 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 321</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 321</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">John</field><field boost="1000000" name="last_name_texts">Doe</field><field boost="1000" name="username_texts">user8</field><field boost="1000" name="email_texts">person10@example.com</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:32 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Workspace 1</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="grouping_id_s">Workspace 1</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">bob</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+    http_version:
+  recorded_at: Fri, 29 Jun 2012 17:41:32 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -141,14 +491,14 @@ http_interactions:
     headers:
       Content-Type:
       - text/plain; charset=utf-8
-      Content-Length:
-      - '44'
+      Transfer-Encoding:
+      - chunked
       Server:
-      - Jetty(6.1.3)
+      - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>19}}'
     http_version:
-  recorded_at: Thu, 28 Jun 2012 20:49:11 GMT
+  recorded_at: Fri, 29 Jun 2012 17:41:32 GMT
 recorded_with: VCR 2.1.1
 ...

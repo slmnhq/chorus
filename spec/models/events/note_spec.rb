@@ -23,4 +23,24 @@ describe "Notes" do
     it_creates_activities_for { [actor, greenplum_instance] }
     it_creates_a_global_activity
   end
+
+  describe "search" do
+    it "indexes text fields" do
+      Events::Note.should have_searchable_field :body
+    end
+
+    describe "with a target" do
+      before do
+        @note = Events::Note.new(:target1 => actor)
+      end
+
+      it "returns the grouping_id of target1" do
+        @note.grouping_id.should == @note.target1.grouping_id
+      end
+
+      it "returns the type_name of target1" do
+        @note.type_name.should == @note.target1.type_name
+      end
+    end
+  end
 end

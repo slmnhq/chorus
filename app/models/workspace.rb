@@ -22,6 +22,14 @@ class Workspace < ActiveRecord::Base
 
   scope :active, where(:archived_at => nil)
 
+  attr_accessor :highlighted_attributes, :search_result_comments
+  searchable do
+    text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+    text :summary, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    string :grouping_id
+    string :type_name
+  end
+
   def uniqueness_of_workspace_name
     if self.name
       other_workspace = Workspace.where("lower(name) = ?", self.name.downcase)

@@ -12,7 +12,7 @@ gem 'clockwork'
 gem 'foreman', '0.46'
 gem 'allowy'
 gem 'httparty', :require => false
-gem 'sunspot_rails'
+gem 'sunspot_rails', '2.0.0.pre.120417'
 
 platform :jruby do
   gem 'jruby-openssl'
@@ -51,13 +51,13 @@ group :test, :development do
   gem 'jasmine'
   gem 'rspec_api_documentation'
   gem 'forgery'
-  gem 'sunspot_matchers'
+  gem 'sunspot_matchers', :git => "git://github.com/pivotal/sunspot_matchers.git", :branch => "sunspot_2_pre"
 end
 
 group :development do
   #gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
   gem 'jetpack', :git => "git://github.com/bdon/jetpack.git", :branch => 'old'
-  gem 'sunspot_solr'
+  gem 'sunspot_solr', '2.0.0.pre.120417'
 end
 
 # To use ActiveModel has_secure_password

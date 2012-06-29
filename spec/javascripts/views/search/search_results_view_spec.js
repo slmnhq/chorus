@@ -77,7 +77,7 @@ describe("chorus.views.SearchResults", function() {
             beforeEach(function() {
                 this.model = makeSearchResults()
                 this.model.set({ entityType: "workfile" });
-                this.model.unset("workspace");
+                this.model.unset("workspaces");
                 this.model.unset("attachment");
                 this.model.unset("users");
                 this.model.unset("hdfs");
@@ -98,7 +98,7 @@ describe("chorus.views.SearchResults", function() {
                     searchIn: "this_workspace",
 
                     attachment: null,
-                    workspace: null,
+                    workspaces: null,
                     instances: null,
                     dataset: null,
                     hdfs: null,

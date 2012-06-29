@@ -1394,7 +1394,7 @@ beforeEach(function() {
                     ],
                     "numFound": 2
                 },
-                "workspace": {
+                "workspaces": {
                     "results": [
                         {
                             comments: [],

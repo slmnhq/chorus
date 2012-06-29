@@ -9,17 +9,13 @@ describe SearchController do
     it_behaves_like "an action that requires authentication", :get, :show
 
     it "uses the search object" do
-      get :show, :query => 'marty'
-      assigns(:search).should be_a Search
-      assigns(:search).query.should == 'marty'
-    end
-
-    it "presents the search" do
-      search = Search.new
-      stub(Search).new do
-        search
+      any_instance_of(Search) do |search|
+        stub(search).models {Hash.new([])}
       end
-      mock.proxy(controller).present(search)
+      mock_present do |model|
+        model.should be_a Search
+        model.query.should == 'marty'
+      end
       get :show, :query => 'marty'
     end
   end
