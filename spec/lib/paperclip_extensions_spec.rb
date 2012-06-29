@@ -19,12 +19,12 @@ describe Paperclip do
 
     it "should preserve the aspect ratio" do
       f = File.expand_path("spec/fixtures/User-hair.png", Rails.root) # is 246x93
-      t = File.new("test_image", 'w')
+      t = Tempfile.new("test_image")
       t.write(File.read(f))
       t.flush
 
       p = Paperclip::Processor.new(t)
-      o = File.new("output_image", 'w')
+      o = Tempfile.new("output_image")
       p.convert(':source -resize "50x50>" :dest', {:source => t.path, :dest => o.path})
 
       g = Paperclip::Geometry.from_file(o)
