@@ -1,5 +1,5 @@
 require "paperclip"
-require_relative '../vendor/imgscalr-lib-4.2.jar'
+require Rails.root + 'vendor/imgscalr-lib-4.2.jar'
 
 # These methods are taken from the class Paperclip::FileAdapter
 # Rather than trusting the browser's content-type, we want to
