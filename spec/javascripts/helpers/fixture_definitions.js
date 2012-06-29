@@ -116,6 +116,10 @@ window.rspecFixtureDefinitions = {
         }
     },
 
+    searchResult : {},
+    emptySearchResult : {
+        model: "SearchResult"
+    },
 
 //    activity: {
 //        unique: [ "id" ],

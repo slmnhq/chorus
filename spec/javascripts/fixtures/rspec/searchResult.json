@@ -1,0 +1,129 @@
+{
+  "response": {
+    "users": {
+      "results": [
+        {
+          "id": 101,
+          "username": "some_other_user",
+          "first_name": "bob",
+          "last_name": "alpha",
+          "email": "person5@example.com",
+          "title": "Grand Poo Bah",
+          "dept": "Corporation Corp., Inc.",
+          "notes": "One of our top performers",
+          "admin": false,
+          "image": {
+            "original": "/images/default-user-icon.png",
+            "icon": "/images/default-user-icon.png"
+          },
+          "highlighted_attributes": {
+            "first_name": [
+              "<em>bob</em>"
+            ]
+          },
+          "comments": [
+
+          ]
+        }
+      ],
+      "numFound": 1
+    },
+    "instances": {
+      "results": [
+        {
+          "name": "bob_great_greenplum_instance",
+          "host": "host1.emc.com",
+          "port": 5001,
+          "id": 1,
+          "owner": {
+            "id": 39,
+            "username": "user2",
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "person2@example.com",
+            "title": "Grand Poo Bah",
+            "dept": "Corporation Corp., Inc.",
+            "notes": "One of our top performers",
+            "admin": false,
+            "image": {
+              "original": "/images/default-user-icon.png",
+              "icon": "/images/default-user-icon.png"
+            }
+          },
+          "shared": false,
+          "state": "online",
+          "provision_type": null,
+          "maintenance_db": "postgres",
+          "description": null,
+          "instance_provider": null,
+          "version": "9.1.2 - FactoryVersion",
+          "highlighted_attributes": {
+            "name": [
+              "<em>bob</em>_great_greenplum_instance"
+            ]
+          },
+          "comments": [
+            {
+              "highlighted_attributes": {
+                "body": [
+                  "i love <em>bob</em>"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "numFound": 1
+    },
+    "workspaces": {
+      "results": [
+        {
+          "id": 1,
+          "name": "bob",
+          "summary": null,
+          "owner": {
+            "id": 46,
+            "username": "user9",
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "person11@example.com",
+            "title": "Grand Poo Bah",
+            "dept": "Corporation Corp., Inc.",
+            "notes": "One of our top performers",
+            "admin": false,
+            "image": {
+              "original": "/images/default-user-icon.png",
+              "icon": "/images/default-user-icon.png"
+            }
+          },
+          "archiver": null,
+          "archived_at": null,
+          "public": true,
+          "image": {
+            "original": "",
+            "icon": ""
+          },
+          "permission": [
+            "read",
+            "commenting"
+          ],
+          "has_added_member": false,
+          "has_added_workfile": false,
+          "has_added_sandbox": false,
+          "has_changed_settings": false,
+          "sandbox_info": null,
+          "latest_comment_list": null,
+          "highlighted_attributes": {
+            "name": [
+              "<em>bob</em>"
+            ]
+          },
+          "comments": [
+
+          ]
+        }
+      ],
+      "numFound": 1
+    }
+  }
+}

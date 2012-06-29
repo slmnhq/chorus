@@ -1,0 +1,22 @@
+{
+  "response": {
+    "users": {
+      "results": [
+
+      ],
+      "numFound": 0
+    },
+    "instances": {
+      "results": [
+
+      ],
+      "numFound": 0
+    },
+    "workspaces": {
+      "results": [
+
+      ],
+      "numFound": 0
+    }
+  }
+}
