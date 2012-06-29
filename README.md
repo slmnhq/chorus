@@ -97,6 +97,10 @@ Application will be on http://localhost:3000
 
     rake db:seed
 
+## HDFS Service
+	To be able to connect to HDFS you need to run:
+	script/start_hdfs_service.sh
+	
 ### Testing:
 
     script/test
