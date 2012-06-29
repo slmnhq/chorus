@@ -43,10 +43,6 @@ If you don't have a `/etc/sysctl.conf` file, just create one.
 OSX Lion may not retain these settings between reboots, so you may see the message
 could not create shared memory segment: Invalid argument` indicating that the `sysctl` commands need to be run again.
 
-Create and initialize the db:
-
-    ./script/init_db.sh
-
 ### XCode
 
 You need XCode for a compiler
@@ -74,6 +70,8 @@ Start a new terminal.
 From the root directory of this project, run:
 
     script/bootstrap.sh
+    
+Note: Ignore all db errors for now.
 
 This script
 
