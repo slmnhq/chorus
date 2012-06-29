@@ -151,133 +151,134 @@ chorus.pages.StyleGuidePage.SiteElementsView = Backbone.View.extend({
                         { id: 3, city: "Lafayette", state: "IN", zip: "47909", other_state: "IN", other_zip: "47909" }
                     ]
                 }})
-            }),
-
-            "Visualization: BoxPlot": new chorus.views.visualizations.Boxplot({
-                model: new chorus.models.BoxplotTask({
-                    xAxis: "test_coverage",
-                    yAxis: "speed",
-                    columns: [
-                        { name: "bucket", typeCategory: "STRING" },
-                        { name: "min", typeCategory: "REAL_NUMBER" },
-                        { name: "median", typeCategory: "REAL_NUMBER" },
-                        { name: "max", typeCategory: "REAL_NUMBER" },
-                        { name: "firstQuartile", typeCategory: "REAL_NUMBER" },
-                        { name: "thirdQuartile", typeCategory: "REAL_NUMBER" },
-                        { name: "percentage", typeCategory: "STRING" }
-                    ],
-                    rows: [
-                        { bucket: 'january', min: 1, firstQuartile: 5, median: 8, thirdQuartile: 12, max: 25, percentage: "20.999%" },
-                        { bucket: 'february', min: 2, firstQuartile: 3, median: 5, thirdQuartile: 7, max: 8, percentage: "40.3%" },
-                        { bucket: 'march', min: 10, firstQuartile: 10, median: 25, thirdQuartile: 30, max: 35, percentage: "10.12" },
-                        { bucket: 'april', min: 2, firstQuartile: 3, median: 8, thirdQuartile: 9, max: 15, percentage: "30%" }
-                    ]
-                }),
-                x: 'animal',
-                y: 'value'
-            }),
-
-            "Visualization: Frequency Plot": new chorus.views.visualizations.Frequency({
-                model: new chorus.models.FrequencyTask({
-                    columns: [
-                        {name: "bucket", typeCategory: "STRING"},
-                        {name: "count", typeCategory: "WHOLE_NUMBER"}
-                    ],
-
-                    rows: [
-                        { bucket: "Twenty", count: 20 },
-                        { bucket: "Eight", count: 8 },
-                        { bucket: "Five", count: 5 },
-                        { bucket: "One", count: 1 },
-                        { bucket: "Zero", count: 0 }
-                    ],
-                    "chart[yAxis]": "Custom y Axis Title"
-                })
-            }),
-
-
-            "Visualization: HistogramPlot": new chorus.views.visualizations.Histogram({
-                model: new chorus.models.HistogramTask({
-                    columns: [
-                        {name: "bin", typeCategory: "STRING"},
-                        {name: "frequency", typeCategory: "WHOLE_NUMBER"}
-                    ],
-
-                    rows: [
-                        { bin: "Five", frequency: 5 },
-                        { bin: "Eight", frequency: 8 },
-                        { bin: "Zero", frequency: 0 },
-                        { bin: "One", frequency: 1 },
-                        { bin: "Twenty", frequency: 20 }
-                    ],
-                    "chart[xAxis]": "Custom x Axis Title"
-                })
-            }),
-
-            "Visualization: Heatmap": new chorus.views.visualizations.Heatmap({
-                model: new chorus.models.HistogramTask({
-                    xAxis: "brutality",
-                    yAxis: "victory_points",
-                    columns: [
-                        { "name": "x", "typeCategory": "WHOLE_NUMBER" },
-                        { "name": "y", "typeCategory": "WHOLE_NUMBER" },
-                        { "name": "value", "typeCategory": "REAL_NUMBER" },
-                        { "name": "xLabel", "typeCategory": "STRING" },
-                        { "name": "yLabel", "typeCategory": "STRING" }
-                    ],
-
-                    rows: [
-                        { yLabel: "[30-71.8]", xLabel: "[00000000-1.8111100]", value: 39541, y: 1, x: 1 },
-                        { yLabel: "[71.8-113.6]", xLabel: "[00000000-1.8111100]", value: 39873, y: 2, x: 1 },
-                        { yLabel: "[113.6-155.4]", xLabel: "[00000000-1.8111100]", value: 39993, y: 3, x: 1 },
-                        { yLabel: "[155.4-197.2]", xLabel: "[00000000-1.8111100]", value: 39596, y: 4, x: 1 },
-                        { yLabel: "[30-71.8]", xLabel: "[1.8-3.6000]", value: 39818, y: 1, x: 2 },
-                        { yLabel: "[71.8-113.6]", xLabel: "[1.8-3.6000]", value: 39838, y: 2, x: 2 },
-                        { yLabel: "[113.6-155.4]", xLabel: "[1.8-3.6000]", value: 39911, y: 3, x: 2 },
-                        { yLabel: "[155.4-197.2]", xLabel: "[1.8-3.6000]", value: 40757, y: 4, x: 2 },
-                        { yLabel: "[30-71.8]", xLabel: "[3.6-5.40000011110]", value: 39631, y: 1, x: 3 },
-                        { yLabel: "[71.8-113.6]", xLabel: "[3.6-5.40000011110]", value: 40174, y: 2, x: 3 },
-                        { yLabel: "[113.6-155.4]", xLabel: "[3.6-5.40000011110]", value: 39700, y: 3, x: 3 },
-                        { yLabel: "[155.4-197.2]", xLabel: "[3.6-5.40000011110]", value: 40084, y: 4, x: 3 },
-                        { yLabel: "[30-71.8]", xLabel: "[5.4-7.20000011110]", value: 40551, y: 1, x: 4 },
-                        { yLabel: "[71.8-113.6]", xLabel: "[5.4-7.20000011110]", value: 40411, y: 2, x: 4 },
-                        { yLabel: "[113.6-155.4]", xLabel: "[5.4-7.20000011110]", value: 39841, y: 3, x: 4 },
-                        { yLabel: "[155.4-197.2]", xLabel: "[5.4-7.20000011110]", value: 40359, y: 4, x: 4 }
-                    ]
-                })
-            }),
-
-            "Visualization: Timeseries": new chorus.views.visualizations.Timeseries({
-                model: new chorus.models.TimeseriesTask({
-                    columns: [
-                        {name: "time", typeCategory: "DATE"},
-                        {name: "value", typeCategory: "WHOLE_NUMBER"}
-                    ],
-
-                    rows: [
-                        { time: '2010-01-01', value: 321 },
-                        { time: '2010-02-01', value: 124 },
-                        { time: '2011-03-01', value: 321 },
-                        { time: '2011-04-01', value: 321 },
-                        { time: '2011-05-01', value: 421 },
-                        { time: '2012-06-01', value: 621 },
-                        { time: '2012-07-01', value: 524 },
-                        { time: '2012-08-01', value: 824 },
-                        { time: '2012-09-01', value: 924 },
-                        { time: '2012-09-02', value: 926 },
-                        { time: '2012-09-03', value: 927 },
-                        { time: '2012-09-04', value: 124 },
-                        { time: '2012-09-05', value: 224 },
-                        { time: '2012-09-06', value: 924 },
-                        { time: '2012-09-07', value: 524 },
-                        { time: '2012-09-08', value: 924 },
-                        { time: '2012-10-01', value: 724 }
-                    ],
-                    xAxis: "Day of the Week",
-                    yAxis: "Parties",
-                    timeType: "date"
-                })
             })
+//TODO: UNCOMMENT THIS WHEN VISUALIZATION IS DONE
+//            "Visualization: BoxPlot": new chorus.views.visualizations.Boxplot({
+//                model: new chorus.models.BoxplotTask({
+//                    xAxis: "test_coverage",
+//                    yAxis: "speed",
+//                    columns: [
+//                        { name: "bucket", typeCategory: "STRING" },
+//                        { name: "min", typeCategory: "REAL_NUMBER" },
+//                        { name: "median", typeCategory: "REAL_NUMBER" },
+//                        { name: "max", typeCategory: "REAL_NUMBER" },
+//                        { name: "firstQuartile", typeCategory: "REAL_NUMBER" },
+//                        { name: "thirdQuartile", typeCategory: "REAL_NUMBER" },
+//                        { name: "percentage", typeCategory: "STRING" }
+//                    ],
+//                    rows: [
+//                        { bucket: 'january', min: 1, firstQuartile: 5, median: 8, thirdQuartile: 12, max: 25, percentage: "20.999%" },
+//                        { bucket: 'february', min: 2, firstQuartile: 3, median: 5, thirdQuartile: 7, max: 8, percentage: "40.3%" },
+//                        { bucket: 'march', min: 10, firstQuartile: 10, median: 25, thirdQuartile: 30, max: 35, percentage: "10.12" },
+//                        { bucket: 'april', min: 2, firstQuartile: 3, median: 8, thirdQuartile: 9, max: 15, percentage: "30%" }
+//                    ]
+//                }),
+//                x: 'animal',
+//                y: 'value'
+//            })
+//            ,
+//
+//            "Visualization: Frequency Plot": new chorus.views.visualizations.Frequency({
+//                model: new chorus.models.FrequencyTask({
+//                    columns: [
+//                        {name: "bucket", typeCategory: "STRING"},
+//                        {name: "count", typeCategory: "WHOLE_NUMBER"}
+//                    ],
+//
+//                    rows: [
+//                        { bucket: "Twenty", count: 20 },
+//                        { bucket: "Eight", count: 8 },
+//                        { bucket: "Five", count: 5 },
+//                        { bucket: "One", count: 1 },
+//                        { bucket: "Zero", count: 0 }
+//                    ],
+//                    "chart[yAxis]": "Custom y Axis Title"
+//                })
+//            }),
+//
+//
+//            "Visualization: HistogramPlot": new chorus.views.visualizations.Histogram({
+//                model: new chorus.models.HistogramTask({
+//                    columns: [
+//                        {name: "bin", typeCategory: "STRING"},
+//                        {name: "frequency", typeCategory: "WHOLE_NUMBER"}
+//                    ],
+//
+//                    rows: [
+//                        { bin: "Five", frequency: 5 },
+//                        { bin: "Eight", frequency: 8 },
+//                        { bin: "Zero", frequency: 0 },
+//                        { bin: "One", frequency: 1 },
+//                        { bin: "Twenty", frequency: 20 }
+//                    ],
+//                    "chart[xAxis]": "Custom x Axis Title"
+//                })
+//            }),
+//
+//            "Visualization: Heatmap": new chorus.views.visualizations.Heatmap({
+//                model: new chorus.models.HistogramTask({
+//                    xAxis: "brutality",
+//                    yAxis: "victory_points",
+//                    columns: [
+//                        { "name": "x", "typeCategory": "WHOLE_NUMBER" },
+//                        { "name": "y", "typeCategory": "WHOLE_NUMBER" },
+//                        { "name": "value", "typeCategory": "REAL_NUMBER" },
+//                        { "name": "xLabel", "typeCategory": "STRING" },
+//                        { "name": "yLabel", "typeCategory": "STRING" }
+//                    ],
+//
+//                    rows: [
+//                        { yLabel: "[30-71.8]", xLabel: "[00000000-1.8111100]", value: 39541, y: 1, x: 1 },
+//                        { yLabel: "[71.8-113.6]", xLabel: "[00000000-1.8111100]", value: 39873, y: 2, x: 1 },
+//                        { yLabel: "[113.6-155.4]", xLabel: "[00000000-1.8111100]", value: 39993, y: 3, x: 1 },
+//                        { yLabel: "[155.4-197.2]", xLabel: "[00000000-1.8111100]", value: 39596, y: 4, x: 1 },
+//                        { yLabel: "[30-71.8]", xLabel: "[1.8-3.6000]", value: 39818, y: 1, x: 2 },
+//                        { yLabel: "[71.8-113.6]", xLabel: "[1.8-3.6000]", value: 39838, y: 2, x: 2 },
+//                        { yLabel: "[113.6-155.4]", xLabel: "[1.8-3.6000]", value: 39911, y: 3, x: 2 },
+//                        { yLabel: "[155.4-197.2]", xLabel: "[1.8-3.6000]", value: 40757, y: 4, x: 2 },
+//                        { yLabel: "[30-71.8]", xLabel: "[3.6-5.40000011110]", value: 39631, y: 1, x: 3 },
+//                        { yLabel: "[71.8-113.6]", xLabel: "[3.6-5.40000011110]", value: 40174, y: 2, x: 3 },
+//                        { yLabel: "[113.6-155.4]", xLabel: "[3.6-5.40000011110]", value: 39700, y: 3, x: 3 },
+//                        { yLabel: "[155.4-197.2]", xLabel: "[3.6-5.40000011110]", value: 40084, y: 4, x: 3 },
+//                        { yLabel: "[30-71.8]", xLabel: "[5.4-7.20000011110]", value: 40551, y: 1, x: 4 },
+//                        { yLabel: "[71.8-113.6]", xLabel: "[5.4-7.20000011110]", value: 40411, y: 2, x: 4 },
+//                        { yLabel: "[113.6-155.4]", xLabel: "[5.4-7.20000011110]", value: 39841, y: 3, x: 4 },
+//                        { yLabel: "[155.4-197.2]", xLabel: "[5.4-7.20000011110]", value: 40359, y: 4, x: 4 }
+//                    ]
+//                })
+//            }),
+//
+//            "Visualization: Timeseries": new chorus.views.visualizations.Timeseries({
+//                model: new chorus.models.TimeseriesTask({
+//                    columns: [
+//                        {name: "time", typeCategory: "DATE"},
+//                        {name: "value", typeCategory: "WHOLE_NUMBER"}
+//                    ],
+//
+//                    rows: [
+//                        { time: '2010-01-01', value: 321 },
+//                        { time: '2010-02-01', value: 124 },
+//                        { time: '2011-03-01', value: 321 },
+//                        { time: '2011-04-01', value: 321 },
+//                        { time: '2011-05-01', value: 421 },
+//                        { time: '2012-06-01', value: 621 },
+//                        { time: '2012-07-01', value: 524 },
+//                        { time: '2012-08-01', value: 824 },
+//                        { time: '2012-09-01', value: 924 },
+//                        { time: '2012-09-02', value: 926 },
+//                        { time: '2012-09-03', value: 927 },
+//                        { time: '2012-09-04', value: 124 },
+//                        { time: '2012-09-05', value: 224 },
+//                        { time: '2012-09-06', value: 924 },
+//                        { time: '2012-09-07', value: 524 },
+//                        { time: '2012-09-08', value: 924 },
+//                        { time: '2012-10-01', value: 724 }
+//                    ],
+//                    xAxis: "Day of the Week",
+//                    yAxis: "Parties",
+//                    timeType: "date"
+//                })
+//            })
 
         }
     },
