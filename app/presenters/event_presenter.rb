@@ -23,7 +23,11 @@ class EventPresenter < Presenter
   end
 
   def additional_data_hash
-    model.additional_data
+    pairs = model.additional_data.map do |key, value|
+      [key, h(value)]
+    end
+
+    Hash[pairs]
   end
 
   def targets_hash

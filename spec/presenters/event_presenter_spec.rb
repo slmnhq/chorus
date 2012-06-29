@@ -54,6 +54,18 @@ describe EventPresenter, :type => :view do
         hash = subject.to_hash
         hash[:action].should == "NOTE"
       end
+
+      it "sanitizes notes' body" do
+        stub(event).additional_data do
+          {
+              :body => "<script>foo</script>"
+          }
+        end
+
+        hash = subject.to_hash
+        hash[:body].should_not include('<')
+        hash[:body].should_not include('>')
+      end
     end
   end
 end
