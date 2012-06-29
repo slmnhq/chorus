@@ -152,4 +152,18 @@ describe "Event types" do
     it_creates_activities_for { [actor, user] }
     it_creates_a_global_activity
   end
+
+  describe "WORKSPACE_ADD_SANDBOX" do
+    subject do
+      Events::WORKSPACE_ADD_SANDBOX.add(
+        :actor => actor,
+        :workspace => workspace
+      )
+    end
+
+    its(:targets) { should == { :workspace => workspace } }
+
+    it_creates_activities_for { [actor, workspace] }
+    it_creates_a_global_activity
+  end
 end
