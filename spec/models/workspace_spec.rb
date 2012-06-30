@@ -1,4 +1,6 @@
 require "spec_helper"
+require 'timecop'
+
 describe Workspace do
   describe "validations" do
     before(:each) do

@@ -1,3 +1,5 @@
+require 'allowy'
+
 class DefaultAccess
   include Allowy::AccessControl
 

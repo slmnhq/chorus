@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'timecop'
 
 describe ApplicationController do
 

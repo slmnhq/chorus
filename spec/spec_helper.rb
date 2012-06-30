@@ -4,12 +4,13 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require "paperclip/matchers"
-require "json"
-require "tempfile"
+require 'rspec_api_documentation'
 require 'rspec_api_documentation/dsl'
 require 'allowy/rspec'
 require "vcr"
 require "webmock/rspec"
+require 'shoulda-matchers'
+require 'sunspot_matchers'
 
 module Shoulda # :nodoc:
   module Matchers
