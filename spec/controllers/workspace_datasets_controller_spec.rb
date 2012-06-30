@@ -21,7 +21,7 @@ describe WorkspaceDatasetsController do
 
   describe "#index" do
     it "presents the workspace's datasets, ordered by name and paginated" do
-      mock_present { |collection| collection.should =~ datasets.to_a }
+      mock_present { |collection| collection.to_a.should =~ datasets.to_a }
       get :index, :workspace_id => workspace.to_param
       response.should be_success
     end
