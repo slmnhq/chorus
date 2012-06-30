@@ -258,6 +258,30 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("add a hdfs file as external table", function() {
+        var dataset, hdfsFile;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.hdfsExternalTableCreated()
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            dataset = model.dataset();
+            hdfsEntry = model.hdfsEntry();
+        });
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.WORKSPACE_ADD_HDFS_AS_EXT_TABLE.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                    hdfsEntryLink: linkTo(hdfsEntry.showUrl(), hdfsEntry.name()),
+                    datasetLink: linkTo(dataset.showUrl(), dataset.name())
+                }
+            )
+        });
+    });
+
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
     }

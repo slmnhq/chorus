@@ -8,7 +8,8 @@
         "workfile": "Workfile",
         "workspace": "Workspace",
         "newUser" : "User",
-        "noteObject" : "GreenplumInstance"
+        "noteObject" : "GreenplumInstance",
+        "hdfsEntry" : "HdfsEntry"
     };
 
     chorus.models.Activity = chorus.models.Base.extend({
@@ -32,6 +33,14 @@
         noteObject: makeAssociationMethod("greenplumInstance"),
         dataset: makeAssociationMethod("dataset", function(model) {
            model.set({workspace: this.get("workspace")}, {silent: true});
+        }),
+
+        hdfsEntry: makeAssociationMethod("hdfsEntry", function(model) {
+            model.set({
+                hadoopInstance: { id : this.get("hadoopInstanceId")},
+                path : this.get("path"),
+                name : this.get("hdfsFileName")
+            })
         }),
 
         comments: function() {
@@ -130,7 +139,7 @@
         },
 
         isNote: function() {
-            return this.get("action") === "NOTE";
+            return this.get("type") === "NOTE";
         },
 
         isInsight: function() {

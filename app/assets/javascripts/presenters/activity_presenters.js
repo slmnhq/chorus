@@ -66,6 +66,10 @@
                 links: [ "newUser"]
             },
 
+            WORKSPACE_ADD_HDFS_AS_EXT_TABLE: {
+                links: [ "actor", "hdfsEntry", "workspace", "dataset"]
+            },
+
             NOTE: {
                 links: [ "actor", "noteObject" ],
                 computed: [ "noteObjectType"]

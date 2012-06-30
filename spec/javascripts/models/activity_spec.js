@@ -4,7 +4,7 @@ describe("chorus.models.Activity", function() {
     });
 
     describe("model associations", function() {
-        var activity1, activity2, activity3, activity4, activity5, activity6;
+        var activity1, activity2, activity3, activity4, activity5, activity6, activity7;
 
         beforeEach(function() {
             activity1 = rspecFixtures.activity.greenplumInstanceChangedOwner({
@@ -31,6 +31,12 @@ describe("chorus.models.Activity", function() {
 
             activity6 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
                 greenplumInstance: { id: 13 }
+            });
+            
+            activity6 = rspecFixtures.activity.hdfsExternalTableCreated({
+                hadoopInstanceId: 1,
+                path : "/data",
+                hdfsFileName : "test.csv"
             });
 
         });
@@ -114,6 +120,18 @@ describe("chorus.models.Activity", function() {
                 expect(instance).toBeA(chorus.models.GreenplumInstance);
                 expect(instance.id).toBe(13);
             });
+        });
+        
+        
+        describe("#hdfsEntry", function() {
+            it("returns hdfs entry with the right data", function() {
+                var hdfsEntry = activity7.hdfsEntry();
+                expect(hdfsEntry).toBeA(chorus.models.HdfsEntry);
+                expect(hdfsEntry.get("path")).toBe("/data")
+                expect(hdfsEntry.name()).toBe("test.csv")
+                expect(hdfsEntry.get("hadoopInstance").id).toBe(1)
+            });
+
         });
     });
 
