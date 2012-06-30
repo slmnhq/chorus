@@ -2,44 +2,68 @@ describe("chorus.presenters.Activity", function() {
     var model, actor, presenter, workfile, workspace;
 
     describe("common aspects", function() {
-        beforeEach(function() {
-            model = rspecFixtures.activity.workfileCreated();
-            workfile = model.workfile();
-            workspace = model.workspace();
-            presenter = new chorus.presenters.Activity(model);
-            actor = model.actor();
-        });
-
-        it("includes the relative timestamp", function() {
-            var relativeTime = chorus.helpers.relativeTimestamp(model.get("timestamp"));
-            expect(presenter.timestamp()).toBe(relativeTime);
-        });
-
-        describe("#headerHtml", function() {
-            it("returns the translation for the first style that matches", function() {
-                presenter.options.displayStyle = ["without_object", "without_workspace"];
-                expect(presenter.headerHtml().toString()).toContainTranslation(
-                "activity.header.WORKFILE_CREATED.without_workspace", {
-                    actorLink: linkTo(actor.showUrl(), actor.name()),
-                    workfileLink: linkTo(workfile.showUrl(), workfile.name())
-                    }
-                );
+        context("activity with a workspace", function() {
+            beforeEach(function() {
+                model = rspecFixtures.activity.workfileCreated();
+                workfile = model.workfile();
+                workspace = model.workspace();
+                presenter = new chorus.presenters.Activity(model);
+                actor = model.actor();
             });
 
-            it("returns the translation for the default style if no style is provided", function() {
-                presenter.options.displayStyle = null
-                expect(presenter.headerHtml().toString()).toContainTranslation(
-                    "activity.header.WORKFILE_CREATED.default", {
-                        actorLink: linkTo(actor.showUrl(), actor.name()),
-                        workfileLink: linkTo(workfile.showUrl(), workfile.name()),
-                        workspaceLink: linkTo(workspace.showUrl(), workspace.name())
-                    }
-                );
+            it("includes the relative timestamp", function() {
+                var relativeTime = chorus.helpers.relativeTimestamp(model.get("timestamp"));
+                expect(presenter.timestamp()).toBe(relativeTime);
             });
 
+            describe("#headerHtml", function() {
+                it("returns the translation for the first style that matches", function() {
+                    presenter.options.displayStyle = ["without_object", "without_workspace"];
+                    expect(presenter.headerHtml().toString()).toContainTranslation(
+                        "activity.header.WORKFILE_CREATED.without_workspace", {
+                            actorLink: linkTo(actor.showUrl(), actor.name()),
+                            workfileLink: linkTo(workfile.showUrl(), workfile.name())
+                        }
+                    );
+                });
 
-            it("returns a handlebars safe-string (so that html won't be stripped)", function() {
-                expect(presenter.headerHtml()).toBeA(Handlebars.SafeString);
+                it("returns the translation for the default style if no style is provided " +
+                    "and the model has a valid workspace", function() {
+                    presenter.options.displayStyle = null
+                    expect(presenter.headerHtml().toString()).toContainTranslation(
+                        "activity.header.WORKFILE_CREATED.default", {
+                            actorLink: linkTo(actor.showUrl(), actor.name()),
+                            workfileLink: linkTo(workfile.showUrl(), workfile.name()),
+                            workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                        }
+                    );
+                });
+
+                it("returns a handlebars safe-string (so that html won't be stripped)", function() {
+                    expect(presenter.headerHtml()).toBeA(Handlebars.SafeString);
+                });
+            });
+        });
+
+        context("activity without a workspace", function() {
+            beforeEach(function() {
+                model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                noteObject = model.greenplumInstance();
+                presenter = new chorus.presenters.Activity(model);
+                actor = model.actor();
+            });
+            describe("#headerHtml", function() {
+                it("returns the translation for the without_workspace style if no style is provided " +
+                    "and the model does not have a valid workspace", function() {
+                    presenter.options.displayStyle = null
+                    expect(presenter.headerHtml().toString()).toContainTranslation(
+                        "activity.header.NOTE.without_workspace", {
+                            actorLink: linkTo(actor.showUrl(), actor.name()),
+                            noteObjectLink: linkTo(noteObject.showUrl(), noteObject.name()),
+                            noteObjectType: "Greenplum instance"
+                        }
+                    );
+                });
             });
         });
     });

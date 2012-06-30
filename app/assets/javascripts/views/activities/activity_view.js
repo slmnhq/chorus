@@ -22,7 +22,7 @@ chorus.views.Activity = chorus.views.Base.extend({
         this.commentList = new chorus.views.CommentList({ collection: this.model.comments() });
         if (this.model.isUserGenerated()) {
             this.model.loaded = true;
-            this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "text", attributeIsHtmlSafe: true});
+            this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "body", attributeIsHtmlSafe: true});
         }
     },
 

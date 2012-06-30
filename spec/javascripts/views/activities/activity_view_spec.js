@@ -5,10 +5,10 @@ describe("chorus.views.Activity", function() {
         this.view = new chorus.views.Activity({ model: this.model });
     });
 
-    xdescribe("html content", function() {
+    describe("html content", function() {
         describe("#show", function() {
             beforeEach(function() {
-                this.model = fixtures.activities.NOTE_ON_WORKSPACE();
+                this.model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
                 this.view = new chorus.views.Activity({ model: this.model });
                 this.view.render();
 
@@ -23,7 +23,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the activity is a note", function() {
             beforeEach(function() {
-                this.model = fixtures.activities.NOTE_ON_WORKSPACE();
+                this.model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
                 this.model.loaded = true;
                 this.view = new chorus.views.Activity({ model: this.model });
                 this.view.render();
@@ -32,13 +32,13 @@ describe("chorus.views.Activity", function() {
             it("displays the body as html", function() {
                 expect(this.view.$(".activity_content .body")).not.toExist();
                 expect(this.view.$(".activity_content .truncated_text")).toExist();
-                expect(this.view.$(".activity_content .truncated_text .styled_text")).toContainText(this.model.get("text"));
+                expect(this.view.$(".activity_content .truncated_text .styled_text")).toContainText(this.model.get("body"));
                 expect(this.view.htmlContent).toBeA(chorus.views.TruncatedText);
                 expect(this.view.htmlContent.options.attributeIsHtmlSafe).toBeTruthy();
             });
         });
 
-        context("when the activity is an insight", function() {
+        xcontext("when the activity is an insight", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.INSIGHT_CREATED();
                 this.model.loaded = true;
@@ -55,7 +55,7 @@ describe("chorus.views.Activity", function() {
             });
         });
 
-        context("when the activity is something else", function() {
+        xcontext("when the activity is something else", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.IMPORT_FAILED_FILE();
                 this.model.loaded = true;

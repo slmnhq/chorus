@@ -61,40 +61,6 @@ beforeEach(function() {
                 });
             },
 
-            "NOTE_ON_INSTANCE": function(overrides) {
-                return new chorus.models.Activity(_.extend({
-                    author: fixtures.authorJson(),
-                    type: "NOTE",
-                    text: "How about that.",
-                    timestamp: "2011-12-01 00:00:00",
-                    id: "10101",
-                    comments: [
-                        {
-                            text: "sub-comment 1",
-                            author: fixtures.authorJson(),
-                            timestamp: "2011-12-15 12:34:56"
-                        }
-                    ],
-                    instance: fixtures.instanceJson(),
-                    artifacts: [
-                        {
-                            entityId: "10101",
-                            entityType: "file",
-                            id: "10101",
-                            name: "something.sql",
-                            type: "SQL"
-                        },
-                        {
-                            entityId: "10102",
-                            entityType: "file",
-                            id: "10102",
-                            name: "something.txt",
-                            type: "TXT"
-                        }
-                    ]
-                }, overrides));
-            },
-
             "NOTE_ON_CHORUS_VIEW": function(overrides) {
                 var instanceId = fixtures.nextId().toString();
                 var attrs = _.extend({

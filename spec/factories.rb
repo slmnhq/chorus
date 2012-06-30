@@ -44,7 +44,7 @@ FactoryGirl.define do
     instance
   end
 
-  factory :gpdb_schema, :aliases => [:sandbox_schema] do
+  factory :gpdb_schema do
     sequence(:name) { |n| "schema#{n}" }
     association :database, :factory => :gpdb_database
   end
@@ -164,11 +164,11 @@ FactoryGirl.define do
 
     factory :note_on_greenplum_instance_event, :class => Events::NOTE_ON_GREENPLUM_INSTANCE do
       greenplum_instance
+      body "Note to self, include a body"
     end
 
     factory :sandbox_added_event, :class => Events::WORKSPACE_ADD_SANDBOX do
       workspace
-      sandbox_schema
     end
   end
 end

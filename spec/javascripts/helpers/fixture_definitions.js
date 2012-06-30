@@ -112,7 +112,8 @@ window.rspecFixtureDefinitions = {
             workfileCreated: {},
             sourceTableCreated: {},
             userCreated: {},
-            sandboxAdded: {}
+            sandboxAdded: {},
+            noteOnGreenplumInstanceCreated: {}
         }
     },
 

@@ -1,5 +1,6 @@
 ;(function() {
     chorus.presenters.Activity = chorus.presenters.Base.extend({
+
         headerHtml: function() {
             var string = t(private.headerTranslationKey(this), private.headerParams(this));
             return new Handlebars.SafeString(string);
@@ -17,6 +18,9 @@
             return this.model.actor().showUrl();
         },
 
+        isUserGenerated: function() {
+            return this.model.isUserGenerated();
+        },
         iconClass: "profile"
     });
 
@@ -63,7 +67,8 @@
             },
 
             NOTE: {
-                links: [ "actor" ]
+                links: [ "actor", "noteObject" ],
+                computed: [ "noteObjectType"]
             }
         },
 
@@ -90,9 +95,18 @@
             return params;
         },
 
+        defaultStyle: function(self) {
+            if (self.workspace().id) {
+                return 'default';
+            } else {
+                return 'without_workspace';
+            }
+        },
+
+
         headerTranslationKey: function(self) {
             var mainKey = ["activity.header", self.model.get("action")].join(".")
-            var possibleStyles = _.compact(_.flatten([self.options.displayStyle, "default"]))
+            var possibleStyles = _.compact(_.flatten([self.options.displayStyle, this.defaultStyle(self.model), 'default']))
 
             var key, n = possibleStyles.length;
                  for (var i = 0; i < n; i++) {
@@ -104,6 +118,10 @@
         datasetType: function(self) {
             var type = self.model.dataset().metaType();
             return t("dataset.types." + type);
+        },
+
+        noteObjectType: function(self) {
+            return "Greenplum instance" ;
         },
 
         modelLink: function(model) {

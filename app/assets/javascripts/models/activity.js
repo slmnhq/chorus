@@ -7,7 +7,8 @@
         "hadoopInstance": "HadoopInstance",
         "workfile": "Workfile",
         "workspace": "Workspace",
-        "newUser" : "User"
+        "newUser" : "User",
+        "noteObject" : "GreenplumInstance"
     };
 
     chorus.models.Activity = chorus.models.Base.extend({
@@ -28,7 +29,7 @@
         hadoopInstance: makeAssociationMethod("hadoopInstance"),
         workfile: makeAssociationMethod("workfile"),
         newUser: makeAssociationMethod("newUser"),
-
+        noteObject: makeAssociationMethod("greenplumInstance"),
         dataset: makeAssociationMethod("dataset", function(model) {
            model.set({workspace: this.get("workspace")}, {silent: true});
         }),
@@ -129,7 +130,7 @@
         },
 
         isNote: function() {
-            return this.get("type") === "NOTE";
+            return this.get("action") === "NOTE";
         },
 
         isInsight: function() {

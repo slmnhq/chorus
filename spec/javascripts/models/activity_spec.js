@@ -4,13 +4,13 @@ describe("chorus.models.Activity", function() {
     });
 
     describe("model associations", function() {
-        var activity1, activity2, activity3, activity4, activity5;
+        var activity1, activity2, activity3, activity4, activity5, activity6;
 
         beforeEach(function() {
             activity1 = rspecFixtures.activity.greenplumInstanceChangedOwner({
                 actor: { id: 5 },
                 greenplumInstance: { id: 6 },
-                newOwner: { id: 7 },
+                newOwner: { id: 7 }
             });
 
             activity2 = rspecFixtures.activity.hadoopInstanceCreated({
@@ -27,6 +27,10 @@ describe("chorus.models.Activity", function() {
 
             activity5 = rspecFixtures.activity.userCreated({
                 newUser: {id: 12}
+            });
+
+            activity6 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+                greenplumInstance: { id: 13 }
             });
 
         });
@@ -103,11 +107,19 @@ describe("chorus.models.Activity", function() {
                 expect(user.id).toBe(12);
             });
         });
+
+        describe("#noteObject", function() {
+            it("returns a greenplumInstance with the right data", function() {
+                var instance = activity6.greenplumInstance();
+                expect(instance).toBeA(chorus.models.GreenplumInstance);
+                expect(instance.id).toBe(13);
+            });
+        });
     });
 
     describe("#isUserGenerated", function() {
         it("returns true for notes", function() {
-            expect(fixtures.activities.NOTE_ON_WORKFILE().isUserGenerated()).toBeTruthy();
+            expect(rspecFixtures.activity.noteOnGreenplumInstanceCreated().isUserGenerated()).toBeTruthy();
         });
 
         it("returns true for 'INSIGHT_CREATED' activities", function() {
@@ -123,7 +135,7 @@ describe("chorus.models.Activity", function() {
         });
     });
 
-    describe("#toComment", function() {
+    xdescribe("#toComment", function() {
         beforeEach(function() {
             this.model = fixtures.activities.NOTE_ON_INSTANCE({ id: "101", instance: { id: "45" } });
             this.model.collection = chorus.collections.ActivitySet.forDashboard();
@@ -180,7 +192,7 @@ describe("chorus.models.Activity", function() {
 
     describe("#isNote", function() {
         it("returns true for notes", function() {
-            this.model.set({ type: "NOTE" });
+            this.model.set({ action: "NOTE" });
             expect(this.model.isNote()).toBeTruthy();
         });
 

@@ -101,7 +101,8 @@ describe EventsController do
       "workfileCreated" => :workfile_created_event,
       "sourceTableCreated" => :source_table_created_event,
       "userCreated" => :user_created_event,
-      "sandboxAdded" => :sandbox_added_event
+      "sandboxAdded" => :sandbox_added_event,
+      "noteOnGreenplumInstanceCreated" => :note_on_greenplum_instance_event
     }
 
     FIXTURE_FILES.each do |filename, event_factory_name|
