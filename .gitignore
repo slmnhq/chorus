@@ -17,10 +17,6 @@ app/assets/javascripts/environment.js
 # Ignore workfile attachments outside of public folder
 /system/workfile_versions/*
 
-# Ignore the directory where hadoop versions are installed
-/vendor/hadoop
-script/vendor/hadoop
-
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
