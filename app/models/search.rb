@@ -1,8 +1,9 @@
 class Search
   attr_accessor :query, :page, :per_page
-  attr_reader :models_to_search, :per_type
+  attr_reader :models_to_search, :per_type, :current_user
 
-  def initialize(params = {})
+  def initialize(current_user, params = {})
+    @current_user = current_user
     @models_to_search = [User, Instance, Workspace]
     self.query = params[:query]
     self.per_type = params[:per_type]
@@ -16,7 +17,8 @@ class Search
   end
 
   def search
-    @search ||= Sunspot.search(*(models_to_search + [Events::Note])) do
+    return @search if @search
+    @search = Sunspot.new_search(*(models_to_search + [Events::Note])) do
       group :grouping_id do
         limit 3
         truncate
@@ -30,11 +32,17 @@ class Search
 
       with :type_name, models_to_search.collect(&:name)
     end
+    models_to_search.each do |model_to_search|
+      model_to_search.search_permissions(current_user, @search) if model_to_search.respond_to? :search_permissions
+    end
+
+    @search.execute
+    @search
   end
 
   def models
     return @models if @models
-    @models = Hash.new() {|hsh, key| hsh[key] = [] }
+    @models = Hash.new() { |hsh, key| hsh[key] = [] }
 
     search.associate_grouped_comments_with_primary_records
 
@@ -101,8 +109,8 @@ class Search
     models_to_search.each do |model|
       model_key = class_name_to_key(model.name)
       found_count = models[model_key].length
-      if(found_count < per_type && found_count < num_found[model_key])
-        model_search = Search.new(:query => query, :per_page => per_type, :entity_type => model.name)
+      if (found_count < per_type && found_count < num_found[model_key])
+        model_search = Search.new(current_user, :query => query, :per_page => per_type, :entity_type => model.name)
         models[model_key] = model_search.models[model_key]
       end
     end

@@ -2,16 +2,17 @@ require 'spec_helper'
 
 describe SearchPresenter, :type => :view do
 
+  let(:user) { User.find_by_first_name('bob') }
+
   before(:each) do
     create_solr_fixtures
-    @user = User.find_by_first_name('bob')
-    stub(view).current_user { @user }
-    @instance = Instance.first
-    @search = Search.new(:query => 'bob')
-    VCR.use_cassette('search_solr_query_all_types_bob') do
-      @search.search
+    stub(view).current_user { user }
+    search = Search.new(user, :query => 'bob')
+
+    VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
+      search.search
     end
-    @presenter = SearchPresenter.new(@search, view)
+    @presenter = SearchPresenter.new(search, view)
   end
 
   describe "#to_hash" do

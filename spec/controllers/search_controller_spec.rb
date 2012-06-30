@@ -2,20 +2,21 @@ require 'spec_helper'
 
 describe SearchController do
   describe "#show" do
+    let(:user) { FactoryGirl.create(:user) }
+
     before do
-      log_in FactoryGirl.create(:user)
+      log_in user
     end
 
     it_behaves_like "an action that requires authentication", :get, :show
 
     it "uses the search object" do
-      any_instance_of(Search) do |search|
-        stub(search).models {Hash.new([])}
+      fake_search = Object.new
+      mock(Search).new(user, anything) do |_, params|
+        params[:query].should == "marty"
+        fake_search
       end
-      mock_present do |model|
-        model.should be_a Search
-        model.query.should == 'marty'
-      end
+      mock_present { |model| model.should == fake_search }
       get :show, :query => 'marty'
     end
 

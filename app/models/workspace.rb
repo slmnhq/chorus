@@ -6,7 +6,7 @@ class Workspace < ActiveRecord::Base
 
   belongs_to :archiver, :class_name => 'User'
   belongs_to :owner, :class_name => 'User'
-  has_many :memberships
+  has_many :memberships, :inverse_of => :workspace
   has_many :members, :through => :memberships, :source => :user
   has_many :workfiles
   has_many :activities, :as => :entity
@@ -26,8 +26,22 @@ class Workspace < ActiveRecord::Base
   searchable do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :summary, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    integer :member_ids, :multiple => true
+    boolean :public
     string :grouping_id
     string :type_name
+  end
+
+  def self.search_permissions(current_user, search)
+    unless current_user.admin?
+      search.build do
+        any_of do
+          without :type_name, Workspace.type_name
+          with :member_ids, current_user.id
+          with :public, true
+        end
+      end
+    end
   end
 
   def uniqueness_of_workspace_name

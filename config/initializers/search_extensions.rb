@@ -1,10 +1,18 @@
 module SearchExtensions
+  extend ActiveSupport::Concern
+
+  module ClassMethods
+    def type_name
+      name
+    end
+  end
+
   def grouping_id
     "#{self.class.name} #{id}"
   end
 
   def type_name
-    self.class.name
+    self.class.type_name
   end
 end
 
