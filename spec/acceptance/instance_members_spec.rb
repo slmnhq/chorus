@@ -36,7 +36,7 @@ resource "Greenplum DB members" do
 
     let(:owner_id) { non_member.to_param }
     let(:db_username) { "big" }
-    let(:db_password) { "bird" }
+    let(:db_password) { "bird_grosservogel" }
 
     required_parameters :owner_id, :db_username, :db_password
     scope_parameters :account, :all

@@ -21,13 +21,13 @@ resource "Greenplum DB instances" do
     parameter :db_password, "Password for connection"
     parameter :shared, "1 to allow anyone to connect using these credentials, 0 to require individuals to enter their own credentials"
 
-    let(:name) { "Sesame Street" }
+    let(:name) { "Sesame_Street" }
     let(:description) { "Can you tell me how to get..." }
     let(:host) { "sesame.street.local" }
     let(:port) { "5432" }
     let(:maintenance_db) { "postgres" }
     let(:db_username) { "big" }
-    let(:db_password) { "bird" }
+    let(:db_password) { "bird_yellow" }
     let(:shared) { "1" }
 
     required_parameters :name, :host, :port, :maintenance_db, :db_username, :db_password
@@ -65,7 +65,7 @@ resource "Greenplum DB instances" do
     scope_parameters :instance, :all
 
     let(:id) { owned_instance.to_param }
-    let(:name) { "Sesame Street" }
+    let(:name) { "Sesame_Street" }
     let(:description) { "Can you tell me how to get..." }
     let(:host) { "sesame.street.local" }
     let(:port) { "5432" }

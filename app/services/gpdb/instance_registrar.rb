@@ -1,5 +1,4 @@
 module Gpdb
-
   class InstanceRegistrar
     class InvalidInstanceError < RuntimeError
     end

@@ -34,7 +34,7 @@ resource "Greenplum DB account for current user" do
     parameter :db_password, "Password for connection"
 
     let(:db_username) { "big" }
-    let(:db_password) { "bird" }
+    let(:db_password) { "bird_long_password" }
 
     required_parameters :db_username, :db_password
     scope_parameters :account, :all

@@ -42,7 +42,7 @@ group :test, :development do
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false
   gem 'jasmine',                 :require => false
-  gem 'rspec_api_documentation', :require => false
+  gem 'rspec_api_documentation'
   gem 'forgery',                 :require => false
   gem 'sunspot_matchers', :git => "git://github.com/pivotal/sunspot_matchers.git", :branch => "sunspot_2_pre"
 end

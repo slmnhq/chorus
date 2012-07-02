@@ -3,8 +3,8 @@ require 'spec_helper'
 resource "Hadoop DB instances" do
   let!(:owner) { FactoryGirl.create :user }
   let!(:instance) { FactoryGirl.create(:hadoop_instance, :owner => owner, :host => 'garcia', :port => '8020', :username => 'pivotal', :group_list => 'pivotal') }
-  let!(:entry1) { HdfsEntry.new('path' => '/files', 'modifiedAt' => Time.now.to_s, 'directory' => "true", 'contentCount' => "3") }
-  let!(:entry2) { HdfsEntry.new('path' => 'test.txt', 'modifiedAt' => Time.now.to_s, 'size' => "1234kB") }
+  let!(:entry1) { HdfsEntry.new({'path' => '/files', 'modified_at' => Time.now.to_s, 'directory' => "true", 'content_count' => "3"}, instance) }
+  let!(:entry2) { HdfsEntry.new({'path' => '/test.txt', 'modified_at' => Time.now.to_s, 'size' => "1234kB"}, instance) }
   let(:hadoop_instance_id) { instance.to_param }
 
   before do
@@ -13,10 +13,11 @@ resource "Hadoop DB instances" do
     stub(Hdfs::QueryService).instance_version(anything) { "1.0.0" }
 
     service = Object.new
-    stub(Hdfs::QueryService).new(instance) { service }
-    stub(service).show('/file') { ["This is such a nice file. It's my favourite file. I could read this file all day.'"] }
+    stub(Hdfs::QueryService).new(instance.host, instance.port, instance.username, instance.version) { service }
+    stub(service).show('/test.txt') { ["This is such a nice file.", "It's my favourite file.", "I could read this file all day.'"] }
     stub(HdfsEntry).list('/', instance) { [entry1, entry2] }
     stub(HdfsEntry).list('/files/', instance) { [entry1] }
+    stub(HdfsEntry).list('/test.txt', instance) { [entry2] }
   end
 
   post "/hadoop_instances" do
@@ -63,7 +64,7 @@ resource "Hadoop DB instances" do
   end
 
   get "/hadoop_instances/:hadoop_instance_id/contents/:id" do
-    let(:id) { "%2Ffile" }
+    let(:id) { "%2Ftest.txt" }
 
     example_request "Get the contents of a file for a specific hadoop instance"  do
       status.should == 200

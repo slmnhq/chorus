@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/bdon/activerecord-jdbc-adapter.git
-  revision: ea1210e0251ddcc75ea48468175348179b5f008d
+  revision: dbf1f6ee97740eae226b8a03ec56823aace6e60d
   specs:
     activerecord-jdbc-adapter (1.2.2)
     activerecord-jdbcpostgresql-adapter (1.2.2)
