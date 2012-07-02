@@ -5,6 +5,8 @@ resource "Hadoop DB instances" do
   let!(:instance) { FactoryGirl.create(:hadoop_instance, :owner => owner, :host => 'garcia', :port => '8020', :username => 'pivotal', :group_list => 'pivotal') }
   let!(:entry1) { HdfsEntry.new({'path' => '/files', 'modified_at' => Time.now.to_s, 'directory' => "true", 'content_count' => "3"}, instance) }
   let!(:entry2) { HdfsEntry.new({'path' => '/test.txt', 'modified_at' => Time.now.to_s, 'size' => "1234kB"}, instance) }
+  let!(:event) { FactoryGirl.create(:hadoop_instance_created_event, :hadoop_instance => instance) }
+  let!(:activity) { Activity.create!(:entity => instance, :event => event) }
   let(:hadoop_instance_id) { instance.to_param }
 
   before do
@@ -75,6 +77,12 @@ resource "Hadoop DB instances" do
     let(:id) { "%2Ffiles" }
 
     example_request "Get a list of files for a subdirectory of a specific hadoop instance"  do
+      status.should == 200
+    end
+  end
+
+  get "/hadoop_instances/:hadoop_instance_id/activities" do
+    example_request "List activities for a hadoop instance"  do
       status.should == 200
     end
   end
