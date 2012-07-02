@@ -63,4 +63,12 @@ resource "Workspaces" do
       status.should == 201
     end
   end
+
+  delete "/workspaces/:workspace_id/quickstart" do
+    let(:workspace_id) { workspace.to_param }
+
+    example_request "Dismiss the quickstart for a workspace" do
+      status.should == 200
+    end
+  end
 end
