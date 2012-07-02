@@ -22,20 +22,20 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
         summary_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''dismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''bob'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Workspace
         OR Events\\:\\:Note)'',''type_name_s:(Workspace)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>3,''ngroups''=>3,''groups''=>[{''groupValue''=>''Workspace
-        1'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>940642.5,''docs''=>[{''id''=>''Workspace
-        1'',''name_texts''=>[''bob''],''score''=>940642.5}]}},{''groupValue''=>''Workspace
-        2'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>537510.0,''docs''=>[{''id''=>''Workspace
-        2'',''name_texts''=>[''private bob workspace''],''score''=>537510.0}]}},{''groupValue''=>''Workspace
-        3'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>403132.5,''docs''=>[{''id''=>''Workspace
-        3'',''name_texts''=>[''private hidden from bob workspace''],''score''=>403132.5}]}}]}},''highlighting''=>{''Workspace
+        1'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1139874.2,''docs''=>[{''id''=>''Workspace
+        1'',''name_texts''=>[''bob''],''score''=>1139874.2}]}},{''groupValue''=>''Workspace
+        2'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>651356.75,''docs''=>[{''id''=>''Workspace
+        2'',''name_texts''=>[''private bob workspace''],''score''=>651356.75}]}},{''groupValue''=>''Workspace
+        3'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>488517.56,''docs''=>[{''id''=>''Workspace
+        3'',''name_texts''=>[''private hidden from bob workspace''],''score''=>488517.56}]}}]}},''highlighting''=>{''Workspace
         1''=>{''name_texts''=>[''@@@hl@@@bob@@@endhl@@@'']},''Workspace 2''=>{''name_texts''=>[''private
         @@@hl@@@bob@@@endhl@@@ workspace'']},''Workspace 3''=>{''name_texts''=>[''private
         hidden from @@@hl@@@bob@@@endhl@@@ workspace'']}}}'
     http_version:
-  recorded_at: Sat, 30 Jun 2012 00:16:43 GMT
+  recorded_at: Thu, 05 Jul 2012 21:23:52 GMT
 recorded_with: VCR 2.1.1
 ...
