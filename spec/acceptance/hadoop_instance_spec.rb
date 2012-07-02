@@ -30,7 +30,7 @@ resource "Hadoop DB instances" do
     parameter :username, "Username for connection"
     parameter :group_list, "Group list for connection"
 
-    let(:name) { "Sesame Street" }
+    let(:name) { "Sesame_Street" }
     let(:description) { "Can you tell me how to get..." }
     let(:host) { "sesame.street.local" }
     let(:port) { "8020" }
@@ -42,6 +42,30 @@ resource "Hadoop DB instances" do
 
     example_request "Register a Hadoop database" do
       status.should == 201
+    end
+  end
+
+  put "/hadoop_instances/:id" do
+    parameter :name, "Instance alias"
+    parameter :description, "Description"
+    parameter :host, "Host IP or address"
+    parameter :port, "Port"
+    parameter :username, "Username for connection"
+    parameter :group_list, "Group list for connection"
+
+    let(:name) { "22 Duck Street" }
+    let(:description) { "Quack!" }
+    let(:host) { "duck.heroku.com" }
+    let(:port) { "8121" }
+    let(:username) { "donaldd" }
+    let(:group_list) { "scroogemcduck" }
+    let(:id) { instance.id }
+
+    required_parameters :name, :host, :port, :username, :group_list
+    scope_parameters :hadoop_instance, :all
+
+    example_request "Update the details on a hadoop instance" do
+      status.should == 200
     end
   end
 

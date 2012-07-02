@@ -52,6 +52,11 @@ describe HadoopInstancesController do
         mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, attributes, @user)
       end
 
+      it "uses authorization" do
+        mock(subject).authorize!(:edit, hadoop_instance)
+        put :update, :id => hadoop_instance.id, :hadoop_instance => attributes
+      end
+
       it "responds with validation error" do
         put :update, :id => hadoop_instance.id, :hadoop_instance => attributes
         response.code.should == "200"
