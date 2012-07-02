@@ -1,7 +1,11 @@
 require 'capybara/rspec'
 require 'capybara-screenshot'
+require 'headless'
 require 'database_cleaner'
 require 'yaml'
+
+headless = Headless.new
+headless.start
 
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../../config/environment", __FILE__)

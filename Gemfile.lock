@@ -112,6 +112,7 @@ GEM
       sprockets (>= 2.0.3)
       tilt
     hashie (1.2.0)
+    headless (0.3.1)
     hike (1.2.1)
     i18n (0.6.0)
     jasmine (1.2.0)
@@ -267,6 +268,7 @@ DEPENDENCIES
   forgery
   handlebars_assets
   hashie
+  headless
   jasmine
   jetpack!
   jruby-openssl

@@ -2,7 +2,7 @@ source :rubygems
 
 gem 'rails', '3.2.5'
 
-gem 'will_paginate', :require => false
+gem 'will_paginate'
 gem 'net-ldap',      :require => false
 gem 'paperclip'
 gem 'queue_classic', :git => "git://github.com/pivotal-leopold/queue_classic.git", :require => false
@@ -27,12 +27,13 @@ group :test do
   gem 'rr'
   gem 'factory_girl'
   gem 'capybara',            :require => false
-  gem 'capybara-webkit',     :require => false
+  gem 'capybara-webkit'
+  gem 'headless'
   gem 'database_cleaner',    :require => false
   gem 'capybara-screenshot', :require => false
   gem 'shoulda-matchers',    :require => false
   gem 'rspec-rails'
-  gem 'timecop',             :require => false
+  gem 'timecop'
   gem 'hashie'
   gem 'vcr'
 end
@@ -41,9 +42,9 @@ group :test, :development do
   gem 'foreman', '0.46',         :require => false
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false
-  gem 'jasmine',                 :require => false
+  gem 'jasmine'
   gem 'rspec_api_documentation'
-  gem 'forgery',                 :require => false
+  gem 'forgery'
   gem 'sunspot_matchers', :git => "git://github.com/pivotal/sunspot_matchers.git", :branch => "sunspot_2_pre"
 end
 
