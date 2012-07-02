@@ -17,6 +17,11 @@ resource "Greenplum DB schemas" do
     stub(GpdbSchema).refresh(owner_account, database) { [db_schema] }
     stub(Dataset).refresh(owner_account, db_schema) { [table, view] }
     stub(Dataset).add_metadata!(anything, owner_account)
+    any_instance_of(GpdbSchema) do |schema|
+      stub(schema).stored_functions(owner_account) {
+        GpdbSchemaFunction.new(db_schema.name, "test_function", "SQL", "text", "{number,other}", "{int4,int4}")
+      }
+    end
   end
 
   get "/schemas/:id" do
@@ -27,6 +32,12 @@ resource "Greenplum DB schemas" do
 
   get "/schemas/:schema_id/datasets" do
     example_request "Get the list of database objects for a specific schema" do
+      status.should == 200
+    end
+  end
+
+  get "/schemas/:schema_id/functions" do
+    example_request "List of functions on a schema" do
       status.should == 200
     end
   end

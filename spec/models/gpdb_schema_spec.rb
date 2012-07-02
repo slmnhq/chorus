@@ -76,8 +76,8 @@ describe GpdbSchema do
     before do
       stub_gpdb(account,
                 GpdbSchema::SCHEMA_FUNCTION_QUERY % schema.name=> [
-                    ["1091843", "add", "sql", "int4", "{num1, num2}", "{int4,int4}"],
-                    ["1091842", "foo", "sql", "text", nil, "{text}"]
+                    {"oid" => "1091843", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => "{num1, num2}",  "arg_types" => "{int4,int4}"},
+                    {"oid" => "1091844", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => nil,  "arg_types" => "{text}"},
                 ]
       )
     end

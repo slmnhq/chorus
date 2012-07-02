@@ -69,7 +69,8 @@ class GpdbSchema < ActiveRecord::Base
     end
 
     results.map do |result|
-      GpdbSchemaFunction.new(name, *result[1..5])
+      result_array = result.values
+      GpdbSchemaFunction.new(name, *result_array[1..5])
     end
   end
 
