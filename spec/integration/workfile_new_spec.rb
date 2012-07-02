@@ -12,7 +12,7 @@ describe "add a workfile" do
     create_valid_workfile(:name => "sqlfile")
     click_link "Work Files"
     click_button "Create SQL File"
-    within "#facebox" do
+    within_modal do
       fill_in 'fileName', :with => "sqlfile"
       click_button "Add SQL File"
       wait_for_ajax
@@ -23,7 +23,7 @@ describe "add a workfile" do
     click_button("Upload File")
     wait_for_ajax
 
-    within("#facebox") do
+    within_modal do
       attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
       wait_for_ajax
@@ -33,7 +33,7 @@ describe "add a workfile" do
     click_button("Upload File")
     wait_for_ajax
 
-    within("#facebox") do
+    within_modal do
       attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
       wait_for_ajax

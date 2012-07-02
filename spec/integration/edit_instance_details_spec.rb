@@ -17,7 +17,7 @@ describe "Editing instance details" do
       end
       click_link "Edit Instance"
 
-      within("#facebox") do
+      within_modal do
         fill_in 'name', :with => "ChangeInstanceName"
         fill_in 'description', :with => "Change Description"
         click_button "Save Configuration"
@@ -35,7 +35,7 @@ describe "Editing instance details" do
             page.find("li[data-greenplum-instance-id='#{validinstance_id}']").click
           end
       click_link "Edit Instance"
-      within("#facebox") do
+      within_modal do
         fill_in 'host', :with => "gillette.sf.pivotallabs.com"
         fill_in 'port', :with => "5432"
         click_button "Save Configuration"

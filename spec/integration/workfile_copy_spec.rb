@@ -11,7 +11,8 @@ describe "copy a workfile" do
     page.find("h1").should have_content("Work Files")
     wait_for_ajax
     click_button "Create SQL File"
-    within "#facebox" do
+
+    within_modal do
       fill_in 'fileName', :with => "workfile"
       click_button "Add SQL File"
       wait_for_ajax

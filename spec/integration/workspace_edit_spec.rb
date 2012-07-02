@@ -9,9 +9,8 @@ describe "creating a note on a workspace" do
     create_valid_workspace
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace"}
     click_link "Edit Workspace"
-    wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
 
-    within("#facebox") do
+    within_modal do
       fill_in 'name', :with => "change_ws_name#{Time.now.to_i}"
       set_cleditor_value("summary", "Changing the <b>summary</b> <script>foo</script> of the workspace")
       find(".submit").click
@@ -29,7 +28,7 @@ describe "creating a note on a workspace" do
     click_link "Add or Edit Members"
     wait_for_ajax
 
-    within("#facebox") do
+    within_modal do
       within("li[data-id='#{user_id}']") do
         click_link "Add"
         wait_for_ajax
@@ -39,9 +38,8 @@ describe "creating a note on a workspace" do
     end
 
     click_link "Edit Workspace"
-    wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
 
-    within("#facebox") do
+    within_modal do
       page.find("select").text.should match(/John Smith/)
       page.execute_script("$('#selectowner').selectmenu('value', #{user_id})")
       click_button "Save Changes"
@@ -49,9 +47,8 @@ describe "creating a note on a workspace" do
     end
 
     click_link "Edit Workspace"
-    wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
 
-    within("#facebox") do
+    within_modal do
       within('.ui-selectmenu-status') { page.should have_content "John Smith" }
     end
 
@@ -66,8 +63,8 @@ describe "creating a note on a workspace" do
       end
 
       click_link "Edit Workspace"
-      wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
-      within("#facebox") do
+
+      within_modal do
         choose("workspace_archived")
         find(".submit").click
       end
@@ -82,7 +79,7 @@ describe "creating a note on a workspace" do
     click_link "Edit Workspace"
     wait_for_ajax
 
-    within("#facebox") do
+    within_modal do
       choose("workspace_archived")
       find(".submit").click
       wait_for_ajax
@@ -113,7 +110,7 @@ describe "creating a note on a workspace" do
     click_link "Edit Workspace"
     wait_for_ajax
 
-    within("#facebox") do
+    within_modal do
       choose("workspace_active")
       find(".submit").click
       wait_for_ajax

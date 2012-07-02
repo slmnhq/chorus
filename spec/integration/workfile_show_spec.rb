@@ -6,7 +6,7 @@ describe "workfile show page" do
     visit("#/workspaces")
 
     click_button "Create Workspace"
-    within("#facebox") do
+    within_modal do
         fill_in 'name', :with => "partyman#{Time.now.to_i}"
         click_button "Create Workspace"
     end

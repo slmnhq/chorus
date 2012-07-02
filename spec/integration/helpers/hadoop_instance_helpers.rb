@@ -13,7 +13,7 @@ def create_valid_hadoop_instance(params = {})
   wait_until { current_route == "/instances" && page.has_selector?("button[data-dialog=InstancesNew]") }
   click_button "Add instance"
   wait_for_ajax
-  within("#facebox") do
+  within_modal do
     choose("register_existing_hadoop")
     find_hadoop_instance_dialog
     wait_for_ajax
@@ -35,7 +35,7 @@ def edit_hadoop_instance(params={})
   click_link "Edit Instance"
   find_hadoop_instance_dialog
 
-  within("#facebox") do
+  within_modal do
       fill_in 'name', :with => name if name
       fill_in 'description', :with => description if description
       fill_in 'host', :with => "gillette.sf.pivotallabs.com"

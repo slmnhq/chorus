@@ -18,7 +18,7 @@ describe "creating an instance credential" do
       page.find("li[data-greenplum-instance-id='#{instance_id}']").click
     end
     click_link "Edit"
-    within("#facebox") do
+    within_modal do
       click_button "Add Account"
       page.execute_script("$('#select_new_instance_account_owner').selectmenu('value', #{user_id})")
       fill_in 'dbUsername', :with => "gpadmin"
@@ -38,7 +38,7 @@ describe "creating an instance credential" do
     visit("/#/instances")
     wait_until { current_route == "/instances" && page.has_selector?("a[data-dialog=InstancePermissions]") }
     click_link "Edit"
-    within("#facebox") do
+    within_modal do
       click_link "Switch to single shared account"
       click_button "Enable shared account"
       page.should_not have_content "Add Account"
@@ -51,7 +51,7 @@ describe "creating an instance credential" do
   it "changes the shared password on a shared instance" do
     create_gpdb_gillette_instance(:shared => true)
     click_link "Edit"
-    within("#facebox") do
+    within_modal do
       click_link "Edit"
       fill_in 'dbUsername', :with => 'gpadmin'
       fill_in 'dbPassword', :with => 'secret2'

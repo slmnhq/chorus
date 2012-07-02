@@ -4,7 +4,7 @@ def open_gpdb_instance_dialog
   wait_until { current_route == "/instances" && page.has_selector?("button[data-dialog=InstancesNew]") }
   click_button "Add instance"
   wait_for_ajax
-  within("#facebox") do
+  within_modal do
     choose("register_existing_greenplum")
     wait_until { find("input[name=name]").visible? }
     wait_until { find("textarea[name=description]").visible? }

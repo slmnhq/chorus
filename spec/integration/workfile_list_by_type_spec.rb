@@ -13,7 +13,7 @@ describe "Listing workfiles by type" do
     # upload a text file
     click_button("Upload File")
     wait_for_ajax
-    within("#facebox") do
+    within_modal do
       attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
     end
@@ -29,7 +29,7 @@ describe "Listing workfiles by type" do
     # create an img file
     click_link("Work Files")
     click_button("Upload File")
-    within("#facebox") do
+    within_modal do
       attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/small2.png'))
       click_button("Upload File")
       wait_for_ajax
@@ -43,7 +43,7 @@ describe "Listing workfiles by type" do
     #create a code file
     click_link("Work Files")
     click_button("Upload File")
-    within("#facebox") do
+    within_modal do
       attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/somecode.r'))
       click_button("Upload File")
       wait_for_ajax
@@ -56,7 +56,7 @@ describe "Listing workfiles by type" do
     # create an unpreviewable workfile
     click_link("Work Files")
     click_button("Upload File")
-    within("#facebox") do
+    within_modal do
       attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/somepdf.pdf'))
       click_button("Upload File")
       wait_for_ajax

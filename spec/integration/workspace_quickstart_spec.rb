@@ -12,9 +12,9 @@ describe "Showing the workspace quickstart page" do
     visit("#/workspaces")
     wait_until { current_route == "/workspaces" && page.has_selector?("button[data-dialog=WorkspacesNew]") }
     click_button "Create Workspace"
-    within("#facebox") do
-        fill_in 'name', :with => "QuicklyStartedWorkspace"
-        click_button "Create Workspace"
+    within_modal do
+      fill_in 'name', :with => "QuicklyStartedWorkspace"
+      click_button "Create Workspace"
     end
     wait_for_ajax
     @workspace_id = Workspace.find_by_name("QuicklyStartedWorkspace").id
@@ -44,9 +44,7 @@ describe "Showing the workspace quickstart page" do
     it "dismisses Dismiss the workspace quick start guidethe Add Team Members box" do
       click_link "Add Team Members"
 
-      wait_until { page.has_selector?("#facebox") && page.find("#facebox .dialog h1").text == "Edit Workspace Members" }
-
-      within("#facebox") do
+      within_modal do
         within("li[data-id='#{@user_id}']") do
           click_link "Add"
         end
@@ -61,9 +59,7 @@ describe "Showing the workspace quickstart page" do
       wait_until { current_route =~ /workspaces\/\d+\/quickstart/ && page.has_selector?("a.dismiss")}
       click_link "Edit Workspace Settings"
 
-      wait_until { page.has_selector?("#facebox") && page.find("#facebox .dialog h1").text == "Workspace Settings" }
-
-      within("#facebox") do
+      within_modal do
         click_button "Save Changes"
       end
 
@@ -75,9 +71,7 @@ describe "Showing the workspace quickstart page" do
     xit "dismisses Add a Sandbox (30940889)" do
       click_link "Add a Sandbox"
 
-      wait_until { page.has_selector?("#facebox") && page.find("#facebox .dialog h1").text == "Add a Sandbox" }
-
-      within("#facebox") do
+      within_modal do
         # Once Add a Sandbox has been implemented, this should be changed to Add Sandbox
         click_button "Cancel"
       end
@@ -90,9 +84,7 @@ describe "Showing the workspace quickstart page" do
     xit "dismisses Add Work Files" do
       click_link "Add Work Files"
 
-      wait_until { page.has_selector?("#facebox") && page.find("#facebox .dialog h1").text == "Upload File" }
-
-      within("#facebox") do
+      within_modal do
         attach_file "workfile[contents]", "spec/fixtures/workfile.sql"
         click_button "Upload File"
       end
@@ -114,7 +106,7 @@ describe "Showing the workspace quickstart page" do
       visit("#/workspaces")
       wait_until { current_route == "/workspaces" && page.has_selector?("button[data-dialog=WorkspacesNew]") }
       click_button "Create Workspace"
-      within("#facebox") do
+      within_modal do
         fill_in 'name', :with => "AnotherQuicklyStartedWorkspace"
         click_button "Create Workspace"
       end

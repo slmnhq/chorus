@@ -8,7 +8,7 @@ describe "Deleting workfiles" do
     wait_until { page.find('a[data-dialog="WorkspaceSettings"]').text == "Edit Workspace" }
     click_link("Work Files")
     click_button("Upload File")
-    within("#facebox") do
+    within_modal do
       attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
       wait_for_ajax
@@ -17,7 +17,8 @@ describe "Deleting workfiles" do
     page.should have_content("some.txt")
     click_link "some.txt"
     click_link "Delete"
-    within ("#facebox") do
+
+    within_modal do
       click_submit_button
     end
     page.should_not have_content("some.txt")

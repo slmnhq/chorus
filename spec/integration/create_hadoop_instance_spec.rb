@@ -12,7 +12,7 @@ describe "adding an instance " do
     click_button "Add instance"
     wait_for_ajax
 
-    within("#facebox") do
+    within_modal do
       choose("register_existing_hadoop")
       find_hadoop_instance_dialog
 
@@ -27,7 +27,7 @@ describe "adding an instance " do
     end
     field_errors.should_not be_empty
 
-    within("#facebox") do
+    within_modal do
       fill_in 'name', :with => "hadoop_invalid_instance_name"
       find(".submit").click
       wait_for_ajax
@@ -41,7 +41,7 @@ describe "adding an instance " do
     click_button "Add instance"
     wait_for_ajax
 
-    within("#facebox") do
+    within_modal do
       choose("register_existing_hadoop")
       find_hadoop_instance_dialog
 
@@ -56,7 +56,7 @@ describe "adding an instance " do
     end
     page.should have_content"Unable to determine HDFS server version. Check connection parameters"
 
-    within("#facebox") do
+    within_modal do
       fill_in 'host', :with => "gillette.sf.pivotallabs.com"
       fill_in 'port', :with => "8020"
       find(".submit").click

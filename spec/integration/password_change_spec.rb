@@ -31,7 +31,7 @@ describe "creating a user" do
     click_link "Change password"
     page.should have_content("Change Password")
 
-    within("#facebox") do
+    within_modal do
       fill_in 'password', :with => "secret123"
       fill_in 'passwordConfirmation', :with => "secret123"
       click_button "Change Password"

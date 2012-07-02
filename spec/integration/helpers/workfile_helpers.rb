@@ -3,7 +3,7 @@ def create_valid_workfile(params = {})
   page.find("h1").should have_content("Work Files")
   click_button "Create SQL File"
   wf_name = params[:name] || "sql_wf#{Time.now.to_i}"
-  within "#facebox" do
+  within_modal do
     fill_in 'fileName', :with => wf_name
     click_button "Add SQL File"
     wait_for_ajax

@@ -13,7 +13,7 @@ describe "Workfile drafts" do
     wait_until { current_route == '/workspaces' && page.has_selector?("button[data-dialog=WorkspacesNew]") }
 
     click_button "Create Workspace"
-    within("#facebox") do
+    within_modal do
       fill_in 'name', :with => "partyman#{Time.now.to_i}"
       click_button "Create Workspace"
     end
