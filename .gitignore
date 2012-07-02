@@ -36,6 +36,7 @@ tags
 
 # Ignore solr data
 /solr/data
+log/sunspot-solr-test.log*
 
 # Ignore jetpack artifacts
 /vendor/jetty
