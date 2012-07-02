@@ -17,9 +17,10 @@ echo "Jasmine process id is : $jasmine_pid"
 RAILS_ENV=test bundle exec rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
 solr_pid=$!
 echo "Solr process id is : $solr_pid"
+sleep 10
 
 set +e
-script/test spec/integration/ 2>&1
+rspec spec/integration/ 2>&1
 INTEGRATION_TESTS_RESULT=$?
 script/test 2>&1
 RUBY_TESTS_RESULT=$?
