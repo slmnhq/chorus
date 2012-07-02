@@ -44,7 +44,7 @@ describe " add an instance " do
     fill_in 'host', :with => "gillette.sf.pivotallabs.com"
     fill_in 'port', :with => "5432"
     fill_in 'dbUsername', :with => "gpadmin"
-    fill_in 'dbPassword', :with => "secre"
+    fill_in 'dbPassword', :with => "secrettt"
     check("register_greenplum_shared")
     click_submit_button
     sleep(5)
