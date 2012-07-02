@@ -6,6 +6,7 @@ describe EventsController do
 
   let!(:event1) { FactoryGirl.create(:workfile_created_event) }
   let!(:event2) { FactoryGirl.create(:workfile_created_event) }
+
   let!(:dashboard_event1) { Activity.create! }
   let!(:dashboard_event2) { Activity.create! }
 
@@ -63,6 +64,18 @@ describe EventsController do
       end
     end
 
+    context "when getting the activities for a gpdb_table" do
+      let!(:object) { FactoryGirl.create(:gpdb_table) }
+
+      let!(:event1) { FactoryGirl.create(:source_table_created_event, :dataset => object) }
+      let!(:event2) { FactoryGirl.create(:source_table_created_event, :dataset => object) }
+
+      it "presents the gpdb_table's activities" do
+        mock_present { |models| models.should =~ [event1, event2] }
+        get :index, :gpdb_table_id => object.id
+      end
+    end
+
     context "when getting the activities for the current user's home page" do
       it "presents the user's activities" do
         mock(Events::Base).for_dashboard_of(current_user) { fake_relation [dashboard_event1, dashboard_event2] }
@@ -98,7 +111,6 @@ describe EventsController do
         activity = Activity.global.create!(:event => event)
         get :show, :id => event.to_param
       end
-
     end
   end
 end
