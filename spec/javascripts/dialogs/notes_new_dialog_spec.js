@@ -19,6 +19,11 @@ describe("chorus.dialogs.NotesNewDialog", function() {
             expect(this.dialog.model.get("entityType")).toBe("instance");
             expect(this.dialog.model.get("entityId")).toBe(1)
         });
+
+        it("stores the correct pageModel", function() {
+            expect(this.dialog.pageModel).not.toBeUndefined();
+        });
+
     });
 
     describe("#render", function() {
