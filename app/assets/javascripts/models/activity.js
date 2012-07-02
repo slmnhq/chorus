@@ -139,7 +139,7 @@
         },
 
         isNote: function() {
-            return this.get("type") === "NOTE";
+            return this.get("action") === "NOTE";
         },
 
         isInsight: function() {

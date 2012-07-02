@@ -33,7 +33,7 @@ describe("chorus.models.Activity", function() {
                 greenplumInstance: { id: 13 }
             });
             
-            activity6 = rspecFixtures.activity.hdfsExternalTableCreated({
+            activity7 = rspecFixtures.activity.hdfsExternalTableCreated({
                 hadoopInstanceId: 1,
                 path : "/data",
                 hdfsFileName : "test.csv"
