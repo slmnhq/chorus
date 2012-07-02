@@ -30,6 +30,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
             if (!this.workspaces.length) {
                 this.workspaces.serverErrors = { fields: { workspaces: { EMPTY: {} } } }
                 this.showErrors(this.workspaces);
+                this.$('button.submit').attr('disabled', true);
             }
 
             this.$("select").val(this.model.get("workspaceId"));

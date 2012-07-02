@@ -49,7 +49,12 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
         it("populates the dialog's errors div", function() {
             expect(this.dialog.$(".errors")).toContainTranslation("field_error.workspaces.EMPTY");
-        })
+        });
+
+        it("disables the submit button", function() {
+            expect(this.dialog.$('button.submit')).toBeDisabled();
+        });
+
     })
 
     context("when the workspace fetch completes and there are workspaces", function() {
