@@ -47,28 +47,27 @@ describe " add an instance " do
     fill_in 'dbPassword', :with => "secrettt"
     check("register_greenplum_shared")
     click_submit_button
-    sleep(5)
     page.find('.errors').should have_content("FATAL: password authentication failed for user")
 
     within(".register_existing_greenplum") do
       fill_in 'dbUsername', :with => "gpadmi"
-      fill_in 'dbPassword', :with => "secre"
+      fill_in 'dbPassword', :with => "secrettt"
     end
     click_submit_button
     page.find('.errors').should have_content("FATAL: password authentication failed for user")
+
     within(".register_existing_greenplum") do
       fill_in 'dbUsername', :with => "gpadmi"
       fill_in 'dbPassword', :with => "secret"
     end
     click_submit_button
     page.find('.errors').should have_content("FATAL: password authentication failed for user")
+
     within(".register_existing_greenplum")do
       fill_in 'dbUsername', :with => "gpadmin"
       fill_in 'dbPassword', :with => "secret"
     end
     click_submit_button
-    find('.instance_list').should have_content("dbpass_dbuser")
-    visit("/#/instances")
     find('.instance_list').should have_content("dbpass_dbuser")
   end
 end

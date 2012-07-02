@@ -27,11 +27,12 @@ describe "creating a note on a workspace" do
 
     wait_until { page.find('a[data-dialog="WorkspaceEditMembers"]').text == "Add or Edit Members"}
     click_link "Add or Edit Members"
-    wait_until { page.has_selector?("#facebox") && page.find("#facebox .dialog h1").text == "Edit Workspace Members" }
+    wait_for_ajax
 
     within("#facebox") do
       within("li[data-id='#{user_id}']") do
         click_link "Add"
+        wait_for_ajax
       end
       click_button "Save Changes"
       wait_for_ajax
@@ -41,6 +42,7 @@ describe "creating a note on a workspace" do
     wait_until { page.find("#facebox .dialog h1").text == "Workspace Settings" }
 
     within("#facebox") do
+      page.find("select").text.should match(/John Smith/)
       page.execute_script("$('#selectowner').selectmenu('value', #{user_id})")
       click_button "Save Changes"
       wait_for_ajax

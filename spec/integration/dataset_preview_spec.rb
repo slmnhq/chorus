@@ -87,7 +87,6 @@ describe "Viewing data inside GPDB instances" do
        wait_for_ajax
        click_link "Close"
      end
-
   end
 
   xit "Dataset includes list of workspaces which it is associated" do

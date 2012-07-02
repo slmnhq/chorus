@@ -8,6 +8,7 @@ describe "editing user profiles" do
     end
 
     it "can edit a user" do
+      wait_for_ajax
       fill_in "firstName", :with => "james"
       fill_in "lastName", :with => "brown"
       fill_in "email", :with => "fake@example.com"
@@ -28,6 +29,7 @@ describe "editing user profiles" do
     end
 
     it "should allow an admin to make another user an admin" do
+      wait_for_ajax
       page.should have_unchecked_field('admin')
       check "admin"
       click_submit_button

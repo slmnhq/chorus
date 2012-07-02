@@ -30,7 +30,7 @@ group :test do
   gem 'capybara-webkit'
   gem 'headless'
   gem 'database_cleaner',    :require => false
-  gem 'capybara-screenshot', :require => false
+  gem 'capybara-screenshot'
   gem 'shoulda-matchers',    :require => false
   gem 'rspec-rails'
   gem 'timecop'
