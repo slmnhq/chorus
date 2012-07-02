@@ -29,7 +29,7 @@ describe Hdfs::QueryService do
       end
 
       it "raises ApiValidationError" do
-        stub(described_class).timeout{ 0.1.second }
+        stub(described_class).timeout{ 1.second }
 
         any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |h|
           mock(h).server_version{ sleep 2 }
@@ -65,7 +65,7 @@ describe Hdfs::QueryService do
 
     context "connection times out" do
       it "raises ApiValidationError" do
-        stub(described_class).timeout { 0.5.second }
+        stub(described_class).timeout { 1.second }
 
         any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |h|
           mock(h).list(anything) { sleep 2 }
@@ -103,7 +103,7 @@ describe Hdfs::QueryService do
 
     context "connection times out" do
       it "raises an exception" do
-        stub(described_class).timeout { 0.5.second }
+        stub(described_class).timeout { 1.second }
 
         any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |h|
           mock(h).content(anything) { sleep 2 }
