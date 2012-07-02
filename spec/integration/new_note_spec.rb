@@ -1,5 +1,31 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
+describe "creating a note on an instance" do
+  before(:each) do
+    login('edcadmin', 'secret')
+    new_instance_name = "GPDB_inst_sel_test#{Time.now.to_i}"
+    create_gpdb_gillette_instance(:name => new_instance_name)
+    wait_until { page.has_selector?('a[data-dialog="NotesNew"]') }
+    sleep(1)
+    click_link "Add a note"
+    wait_until { page.has_selector?("#facebox .dialog h1") }
+
+  end
+
+  describe "launching the submodal dialog" do
+    before do
+      within("#facebox") do
+        set_cleditor_value("body", "Note on the instance")
+        click_button "Add Note"
+        wait_for_ajax
+      end
+    end
+    it "should contains the new note" do
+      page.find(".activity_content").should have_content("Note on the instance")
+    end
+  end
+end
+
 describe "creating a note on a workspace" do
   before(:each) do
     login('edcadmin', 'secret')
