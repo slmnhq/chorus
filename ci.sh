@@ -19,12 +19,12 @@ solr_pid=$!
 echo "Solr process id is : $solr_pid"
 
 set +e
+script/test spec/integration/ 2>&1
+INTEGRATION_TESTS_RESULT=$?
 script/test 2>&1
 RUBY_TESTS_RESULT=$?
 bundle exec rake phantom 2>&1
 JS_TESTS_RESULT=$?
-script/test spec/integration/ 2>&1
-INTEGRATION_TESTS_RESULT=$?
 
 set -e
 echo "Cleaning up jasmine process $jasmine_pid"
