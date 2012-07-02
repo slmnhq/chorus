@@ -52,4 +52,5 @@ group :development do
   #gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
   gem 'jetpack', :git => "git://github.com/bdon/jetpack.git", :branch => 'old', :require => false
   gem 'sunspot_solr', '2.0.0.pre.120417'
+  gem 'quiet_assets'
 end

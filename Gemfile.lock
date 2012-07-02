@@ -150,6 +150,8 @@ GEM
     polyglot (0.3.3)
     posix-spawn (0.3.6)
     pr_geohash (1.0.0)
+    quiet_assets (1.0.1)
+      railties (~> 3.1)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -275,6 +277,7 @@ DEPENDENCIES
   net-ldap
   paperclip
   queue_classic!
+  quiet_assets
   rails (= 3.2.5)
   rake
   rr
