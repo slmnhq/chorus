@@ -7,6 +7,7 @@ class Dataset < ActiveRecord::Base
   attr_accessor :statistics
 
   has_many :activities, :as => :entity
+  has_many :events, :through => :activities
   has_many :associated_datasets
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
 
