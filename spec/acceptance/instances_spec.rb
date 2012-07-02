@@ -5,6 +5,8 @@ resource "Greenplum DB instances" do
   let(:owned_instance) { FactoryGirl.create(:instance, :owner => owner) }
   let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => owned_instance, :owner => owner)}
   let!(:other_instance) { FactoryGirl.create(:instance) }
+  let!(:event) { FactoryGirl.create(:greenplum_instance_created_event, :greenplum_instance => owned_instance) }
+  let!(:activity) { Activity.create!(:entity => owned_instance, :event => event) }
 
   before do
     log_in owner
@@ -72,6 +74,14 @@ resource "Greenplum DB instances" do
     let(:maintenance_db) { "postgres" }
 
     example_request "Update an instance" do
+      status.should == 200
+    end
+  end
+
+  get "/instances/:instance_id/activities" do
+    let(:instance_id) { owned_instance.to_param }
+
+    example_request "List all activities on an instance" do
       status.should == 200
     end
   end
