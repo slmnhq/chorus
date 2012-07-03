@@ -9,7 +9,7 @@ rbenv shell `cat .rbenv-version`
 ruby -v | grep "jruby 1.6.7"
 gem list bundler | grep bundler || gem install bundler
 bundle install
-bundle exec rake legacy:setup db:drop db:create db:migrate db:seed assets:precompile
+bundle exec rake db:drop db:create db:migrate db:seed assets:precompile --trace
 
 bundle exec rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
 solr_pid=$!
