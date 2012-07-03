@@ -8,7 +8,7 @@ rbenv shell `cat .rbenv-version`
 ruby -v | grep "jruby 1.6.7"
 gem list bundler | grep bundler || gem install bundler
 bundle install --binstubs=b/
-b/rake db:drop db:create db:migrate assets:precompile --trace > $WORKSPACE/bundle.log
+b/rake db:drop db:create db:migrate --trace > $WORKSPACE/bundle.log
 
 # start solr
 b/rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
