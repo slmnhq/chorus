@@ -21,8 +21,7 @@ app/assets/javascripts/environment.js
 /db/*.sqlite3
 
 # Ignore all logfiles and tempfiles.
-/log/*.log
-/log/*.lck
+/log
 /tmp
 .idea/
 .DS_Store
@@ -36,7 +35,6 @@ tags
 
 # Ignore solr data
 /solr/data
-log/sunspot-solr-test.log*
 
 # Ignore jetpack artifacts
 /vendor/jetty
