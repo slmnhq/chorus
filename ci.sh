@@ -23,6 +23,10 @@ set +e
 echo "Running integration tests"
 rspec spec/integration/ 2>&1
 INTEGRATION_TESTS_RESULT=$?
+
+echo "Repreparing database"
+bundle exec rake db:test:prepare
+
 echo "Running unit tests"
 script/test 2>&1
 RUBY_TESTS_RESULT=$?
