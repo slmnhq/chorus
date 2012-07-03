@@ -11,7 +11,7 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
     }
 }, {
     forDashboard: function() {
-        return new this([], { url: "/activities" });
+        return new this([], { url: "/activities?entity_type=dashboard" });
     },
 
     forModel: function(model) {
@@ -25,8 +25,7 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
         if (model instanceof chorus.models.HdfsEntry || model instanceof chorus.models.HdfsFile) {
             return "/not_yet_implemented";
         } else {
-            var modelUriPath = new URI(model.url()).path();
-            return modelUriPath + "/activities";
+            return "/activities?entity_type=" + model.entityType + "&entity_id=" + model.id;
         }
     }
 });

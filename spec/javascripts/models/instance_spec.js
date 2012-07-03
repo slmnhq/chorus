@@ -3,6 +3,10 @@ describe("chorus.models.Instance", function() {
         this.instance = rspecFixtures.greenplumInstance({id: 1, version: "1234"});
     });
 
+    it("has the correct entityType", function() {
+        expect(this.instance.entityType).toBe("instance");
+    });
+
     describe("#stateIconUrl and #stateText", function() {
         it("works for 'offline' instances", function() {
             this.instance.set({ state: "offline" });

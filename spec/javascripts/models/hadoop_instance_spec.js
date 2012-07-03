@@ -12,6 +12,10 @@ describe("chorus.models.HadoopInstance", function() {
         expect(this.model.get("shared")).toBeTruthy();
     });
 
+    it("has the correct entityType", function() {
+        expect(this.model.entityType).toBe("hadoop_instance");
+    });
+
     it("has the right provider icon url", function() {
         expect(this.model.providerIconUrl()).toBe("/images/instances/hadoop_instance.png");
     });

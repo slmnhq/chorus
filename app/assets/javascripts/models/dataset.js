@@ -3,6 +3,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 ).extend({
     nameAttribute: 'objectName',
     constructorName: "Dataset",
+    entityType: "dataset",
 
     urlTemplate: "datasets/{{id}}",
     showUrlTemplate: "datasets/{{id}}",

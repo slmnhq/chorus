@@ -12,6 +12,7 @@
     chorus.models.Workfile = chorus.models.Base.extend({
         constructorName: "Workfile",
         nameAttribute: 'fileName',
+        entityType: "workfile",
 
         urlTemplate: function(options) {
             var method = options && options.method;

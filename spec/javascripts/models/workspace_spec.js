@@ -14,6 +14,10 @@ describe("chorus.models.Workspace", function() {
         expect(this.model.urlTemplate).toBe("workspaces/{{id}}");
     });
 
+    it("has the correct entityType", function() {
+        expect(this.model.entityType).toBe("workspace");
+    });
+
     describe("#isActive", function() {
         it("return true when active:true", function() {
             this.model.set({archivedAt: null});

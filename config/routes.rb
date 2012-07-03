@@ -8,7 +8,6 @@ Chorus::Application.routes.draw do
       get :ldap
     end
     resource :image, :only => [:update], :controller => :user_images
-    resources :activities, :only => [:index], :controller => 'events'
   end
 
   resources :hadoop_instances, :only => [:create, :index, :show, :update] do
@@ -16,13 +15,10 @@ Chorus::Application.routes.draw do
       resources :files, :only => [:show, :index], :constraints => {:id => /.*/}
       resources :contents, :only => :show, :constraints => {:id => /.*/}
     end
-
-    resources :activities, :only => [:index], :controller => 'events'
   end
 
   resources :instances, :only => [:index, :show, :create, :update] do
     resources :databases, :only => [:index], :controller => 'instance_databases'
-    resources :activities, :only => [:index], :controller => 'events'
 
     scope :module => 'instances' do
       resource :owner, :only => [:update], :controller => 'owner'
@@ -48,23 +44,19 @@ Chorus::Application.routes.draw do
   resources :datasets, :only => [:show] do
     resources :columns, :only => [:index], :controller => 'column'
     resources :previews, :only => [:create, :destroy], :constraints => {:id => /.*/}
-    resources :activities, :only => [:index], :controller => 'events'
     resource :statistics, :only => :show
   end
 
   resources :workspaces, :only => [:index, :create, :show, :update] do
-    resources :activities, :only => [:index], :controller => 'events'
     resources :members, :only => [:index, :create]
     resource :image, :only => [:update], :controller => :workspace_images
     resources :workfiles, :only => [:create, :index]
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
     resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets"
-    resources :activities, :only => [:index], :controller => 'events'
     resources :external_tables, :only => [:create]
   end
 
   resources :workfiles, :only => [:show, :destroy] do
-    resources :activities, :only => [:index], :controller => 'events'
     resource :draft, :only => [:show, :update, :create, :destroy], :controller => :workfile_draft
     resources :versions, :only => [:update, :create, :show, :index], :controller => 'workfile_versions'
     resource :copy, :only => [:create], :controller => 'workfile_copy'

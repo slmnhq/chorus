@@ -3,6 +3,10 @@ describe("chorus.models.Workfile", function() {
         this.model = rspecFixtures.workfile.sql({workspace: { id: "10000"}, id: '10020'});
     });
 
+    it("has the correct entityType", function() {
+        expect(this.model.entityType).toBe("workfile");
+    });
+
     describe("#modifier", function() {
         it("returns a partially constructed user, based on the workfile's modifier attribute", function() {
             var modifier = this.model.modifier();

@@ -3,6 +3,7 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
     urlTemplate: "hadoop_instances/{{id}}",
     showUrlTemplate: "hadoop_instances/{{id}}/browse/",
     shared: true,
+    entityType: "hadoop_instance",
 
     dataBinding: 'data-hadoop-instance-id',
 

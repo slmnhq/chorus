@@ -1,4 +1,5 @@
 chorus.models.Instance = chorus.models.Base.extend({
+    entityType: "instance",
     _imagePrefix: "/images/instances/",
 
     _stateIconMap: {

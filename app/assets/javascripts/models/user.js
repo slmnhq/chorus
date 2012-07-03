@@ -4,6 +4,7 @@ chorus.models.User = chorus.models.Base.extend({
     urlTemplate: "users/{{id}}",
     showUrlTemplate: "users/{{id}}",
     nameFunction: 'displayName',
+    entityType: 'user',
 
     workspaces:function () {
         if (!this._workspaces) {

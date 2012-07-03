@@ -36,6 +36,10 @@ describe("chorus.models.Dataset", function() {
         expect(this.dataset.showUrl()).toMatchUrl("#/datasets/45");
     });
 
+    it("has the correct entityType", function() {
+        expect(this.dataset.entityType).toBe("dataset");
+    });
+
     describe("when the 'invalidated' event is triggered", function() {
         describe("when the dataset belongs to a collection", function() {
             beforeEach(function() {

@@ -24,7 +24,8 @@ describe EventsController do
 
       it "presents the instance's activities" do
         mock_present { |models| models.should =~ [event1, event2] }
-        get :index, :instance_id => object.id
+        get :index, :entity_type => "instance", :entity_id => object.id
+        response.code.should == "200"
       end
     end
 
@@ -33,7 +34,8 @@ describe EventsController do
 
       it "presents the hadoop instance's activities" do
         mock_present { |models| models.should =~ [event1, event2] }
-        get :index, :hadoop_instance_id => object.id
+        get :index, :entity_type => "hadoop_instance", :entity_id => object.id
+        response.code.should == "200"
       end
     end
 
@@ -42,7 +44,8 @@ describe EventsController do
 
       it "presents the user's activities" do
         mock_present { |models| models.should =~ [event1, event2] }
-        get :index, :user_id => object.id
+        get :index, :entity_type => "user", :entity_id => object.id
+        response.code.should == "200"
       end
     end
 
@@ -51,7 +54,8 @@ describe EventsController do
 
       it "presents the workfile's activities" do
         mock_present { |models| models.should =~ [event1, event2] }
-        get :index, :workfile_id => object.id
+        get :index, :entity_type => "workfile", :entity_id => object.id
+        response.code.should == "200"
       end
     end
 
@@ -60,7 +64,8 @@ describe EventsController do
 
       it "presents the workspace's activities" do
         mock_present { |models| models.should =~ [event1, event2] }
-        get :index, :workspace_id => object.id
+        get :index, :entity_type => "workspace", :entity_id => object.id
+        response.code.should == "200"
       end
     end
 
@@ -72,7 +77,8 @@ describe EventsController do
 
       it "presents the gpdb_table's activities" do
         mock_present { |models| models.should =~ [event1, event2] }
-        get :index, :gpdb_table_id => object.id
+        get :index, :entity_type => "dataset", :entity_id => object.id
+        response.code.should == "200"
       end
     end
 
@@ -80,16 +86,17 @@ describe EventsController do
       it "presents the user's activities" do
         mock(Events::Base).for_dashboard_of(current_user) { fake_relation [dashboard_event1, dashboard_event2] }
         mock_present { |models| models.should =~ [dashboard_event1, dashboard_event2] }
-        get :index
+        get :index, :entity_type => "dashboard"
+        response.code.should == "200"
       end
     end
   end
 
   describe "#show" do
-    it "shows the particular activity " do
-      stub(Events::Base).for_dashboard_of(current_user) { fake_relation [dashboard_event1, dashboard_event2] }
-      mock_present { |model| model.should == dashboard_event1 }
-      get :show, :id => dashboard_event1.to_param
+    it "shows the particular event " do
+      mock_present { |model| model.should == event1 }
+      get :show, :id => event1.to_param
+      response.code.should == "200"
     end
 
     FIXTURE_FILES = {

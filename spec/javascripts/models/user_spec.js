@@ -11,6 +11,10 @@ describe("chorus.models.User", function() {
         expect(this.model.urlTemplate).toBe("users/{{id}}");
     });
 
+    it("has the correct entityType", function() {
+        expect(this.model.entityType).toBe("user");
+    });
+
     describe("#currentUserCanEdit", function() {
         beforeEach(function() {
             this.model.set({ username: "chris" });

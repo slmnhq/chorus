@@ -13,30 +13,22 @@ describe("chorus.collections.ActivitySet", function() {
         it("creates an activity set with the entity type for the dashboard", function() {
             var activities = chorus.collections.ActivitySet.forDashboard();
             expect(activities.url()).toHaveUrlPath("/activities");
+            expect(activities.url()).toContainQueryParams({entity_type : "dashboard"})
         });
     });
 
     describe(".forModel(model)", function() {
-        it("throws an exception when the model does not have an entityType mapping", function() {
-            var model = new chorus.models.Base();
-            expect(function() { model.activities(); }).toThrow();
-        });
-
         describe("the url of the activity set", function() {
-            var activities;
+            var activities, model;
 
             beforeEach(function() {
-                var model = new chorus.models.Base();
-                spyOn(model, "url").andReturn("/dudes/1?isCool=true");
+                model = new chorus.models.Base({id : 1});
+                model.entityType = "hello";
                 activities = chorus.collections.ActivitySet.forModel(model);
             });
 
             it("is the model's url, with '/activities' appended to the path", function() {
-                expect(activities.url()).toHaveUrlPath("/dudes/1/activities");
-            });
-
-            it("does not include the query parameters from the model's url", function() {
-                expect(activities.url()).not.toContainQueryParams({ isCool: true });
+                expect(activities.url()).toBe("/activities?entity_type=hello&entity_id=" + model.id );
             });
         });
 
