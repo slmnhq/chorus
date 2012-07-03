@@ -41,7 +41,7 @@ group :test, :integration do
   gem 'vcr'
 end
 
-group :test, :development do
+group :test, :development, :integration do
   gem 'foreman', '0.46',         :require => false
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false
