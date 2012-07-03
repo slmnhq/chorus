@@ -4,7 +4,7 @@ chorus.views.visualizations.Frequency = chorus.views.Base.extend({
         $el.html("");
         $el.addClass("visualization");
 
-        var data = this.model.get("rows").reverse();
+        var data = this.model.get("rows");
         var buckets = _.pluck(data, 'bucket');
 
         var svg = d3.select(this.el).append("svg").

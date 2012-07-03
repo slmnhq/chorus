@@ -26,7 +26,7 @@ module Visualization
       results = @schema.with_gpdb_connection(account) do |conn|
         conn.exec_query(build_sql)
       end
-      @rows = results
+      @rows = results.reverse
     end
   end
 end

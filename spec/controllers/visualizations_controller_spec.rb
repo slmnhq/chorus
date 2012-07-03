@@ -25,16 +25,17 @@ describe VisualizationsController do
       end
     end
 
-    it "returns json for visualization" do
+    it "returns json for visualization, in ascending order" do
       post :create, :chart_task => {:type => "frequency"}, :dataset_id => dataset.id
       response.status.should == 200
       rows = decoded_response["rows"]
-      rows[0][:bucket].should == "David Bowie"
-      rows[0][:count].should == 12
+
+      rows[0][:bucket].should == "Vanilla Ice"
+      rows[0][:count].should == 1
       rows[1][:bucket].should == "The Beatles"
       rows[1][:count].should == 9
-      rows[2][:bucket].should == "Vanilla Ice"
-      rows[2][:count].should == 1
+      rows[2][:bucket].should == "David Bowie"
+      rows[2][:count].should == 12
     end
 
     generate_fixture "frequencyTask.json" do
