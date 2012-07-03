@@ -2,16 +2,16 @@
   "response": {
     "rows": [
       {
-        "count": 12,
-        "bucket": "David Bowie"
+        "count": 1,
+        "bucket": "Vanilla Ice"
       },
       {
         "count": 9,
         "bucket": "The Beatles"
       },
       {
-        "count": 1,
-        "bucket": "Vanilla Ice"
+        "count": 12,
+        "bucket": "David Bowie"
       }
     ]
   }
