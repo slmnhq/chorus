@@ -30,6 +30,9 @@ app/assets/javascripts/environment.js
 # Ignore ctags file
 tags
 
+# Bundler binstub dir
+/b
+
 # Ignore postgres database
 /var
 
