@@ -23,14 +23,17 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-group :test do
-  gem 'rr'
-  gem 'factory_girl'
+group :integration do
   gem 'capybara',            :require => false
   gem 'capybara-webkit'
   gem 'headless'
   gem 'database_cleaner',    :require => false
   gem 'capybara-screenshot'
+end
+
+group :test, :integration do
+  gem 'rr'
+  gem 'factory_girl'
   gem 'shoulda-matchers',    :require => false
   gem 'rspec-rails'
   gem 'timecop'
