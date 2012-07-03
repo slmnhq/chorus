@@ -29,9 +29,7 @@ def current_route
   route if route and not route.empty?
 end
 
-def wait_for_ajax(timeout = Capybara.default_wait_time)
-  timeout = 10 #Increase timeout from 10 to 60 to allow more time for logins to complete
-
+def wait_for_ajax(timeout = 10)
   page.wait_until(timeout) do
     page.evaluate_script 'jQuery.active == 0'
   end

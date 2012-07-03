@@ -20,15 +20,12 @@ describe "The workspace add/remove members dialog" do
     end
 
     click_link "Add or Edit Members"
-    wait_for_ajax
 
     within_modal do
-      within(".shuttle_body") do
-        within(".selected") do
-          page.should have_content "Alex Red"
-          within("li[data-id='#{alex_id}']") do
-            click_link "Remove"
-          end
+      within(".shuttle_body .selected") do
+        page.should have_content "Alex Red"
+        within("li[data-id='#{alex_id}']") do
+          click_link "Remove"
         end
       end
       click_button "Save Changes"
@@ -37,10 +34,8 @@ describe "The workspace add/remove members dialog" do
     click_link "Add or Edit Members"
 
     within_modal do
-      within(".shuttle_body") do
-        within(".available") do
-          page.should have_content "Alex Red"
-        end
+      within(".shuttle_body .available") do
+        page.should have_content "Alex Red"
       end
     end
   end
