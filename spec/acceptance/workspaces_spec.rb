@@ -4,6 +4,9 @@ resource "Workspaces" do
   let!(:user) { FactoryGirl.create :admin }
   let!(:workspace) { FactoryGirl.create :workspace, :owner => user }
   let!(:schema) { FactoryGirl.create :gpdb_schema }
+  let(:workspace_id) { workspace.to_param }
+  let(:dataset) { FactoryGirl.create(:gpdb_table) }
+  let!(:associated_dataset) {FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
 
   before do
     log_in user
@@ -73,12 +76,15 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/datasets/:id" do
-    let(:workspace_id) { workspace.to_param }
-    let(:dataset) { FactoryGirl.create(:gpdb_table) }
-    let!(:associated_dataset) {FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
     let(:id) { dataset.to_param }
 
     example_request "Show details for a dataset" do
+      status.should == 200
+    end
+  end
+
+  get "/workspaces/:workspace_id/datasets" do
+    example_request "List datasets associated with a workspace" do
       status.should == 200
     end
   end
