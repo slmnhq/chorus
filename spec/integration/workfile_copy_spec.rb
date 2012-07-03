@@ -43,7 +43,6 @@ describe "copy a workfile" do
     click_link "Work Files"
     wait_for_ajax
     workfiles = page.all("li.workfile")
-    workfiles.first.text.should == "workfile.sql"
-    workfiles.last.text.should == "workfile_1.sql"
+    workfiles.map(&:text).should =~ ["workfile.sql", "workfile_1.sql"]
   end
 end

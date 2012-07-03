@@ -42,10 +42,11 @@ describe "add a workfile" do
     click_link("Work Files")
     wait_for_ajax
     workfiles = page.all("li.workfile")
-
-    workfiles[0].text.should == "some.txt"
-    workfiles[1].text.should == "some_1.txt"
-    workfiles[2].text.should == "sqlfile.sql"
-    workfiles[3].text.should == "sqlfile_1.sql"
+    workfiles.map(&:text).should =~ [
+      "some.txt",
+      "some_1.txt",
+      "sqlfile.sql",
+      "sqlfile_1.sql"
+    ]
   end
 end
