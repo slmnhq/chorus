@@ -31,6 +31,10 @@ test:
   database: chorus_rails_test
   <<: *default
 
+integration:
+  database: chorus_rails_integration
+  <<: *default
+
 production:
   database: chorus_rails_production
   <<: *default

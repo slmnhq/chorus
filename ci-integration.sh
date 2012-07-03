@@ -1,15 +1,17 @@
 #!/bin/bash
 
 set -e
+
+export RAILS_ENV=integration
+
 eval "$(rbenv init -)"
 rbenv shell `cat .rbenv-version`
 ruby -v | grep "jruby 1.6.7"
 gem list bundler | grep bundler || gem install bundler
 bundle install
-bundle exec rake legacy:setup db:migrate db:test:prepare db:test:prepare:legacy
+bundle exec rake legacy:setup db:reset db:migrate db:seed assets:precompile
 
-RAILS_ENV=development bundle exec rake devmode:enable assets:precompile
-RAILS_ENV=test bundle exec rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
+bundle exec rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
 solr_pid=$!
 echo "Solr process id is : $solr_pid"
 sleep 20
