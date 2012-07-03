@@ -6,6 +6,11 @@ describe "Notes" do
 
   let(:actor) { FactoryGirl.create(:user) }
   let(:greenplum_instance) { FactoryGirl.create(:instance) }
+  let(:hdfs_file_reference) do
+    HdfsFileReference.create({'path' => '/data/test.csv',
+                              'hadoop_instance_id' => 1234})
+  end
+
 
   describe "NOTE_ON_GREENPLUM_INSTANCE" do
     subject do
@@ -21,6 +26,23 @@ describe "Notes" do
     its(:additional_data) { should == {:body => "This is the body"} }
 
     it_creates_activities_for { [actor, greenplum_instance] }
+    it_creates_a_global_activity
+  end
+
+  describe "NOTE_ON_HDFS_FILE" do
+    subject do
+      Events::NOTE_ON_HDFS_FILE.add(
+          :actor => actor,
+          :hdfs_file => hdfs_file_reference,
+          :body => "This is the text of the note"
+      )
+    end
+
+    its(:hdfs_file) { should == hdfs_file_reference }
+    its(:targets) { should == {:hdfs_file => hdfs_file_reference} }
+    its(:additional_data) { should == {:body => "This is the text of the note"} }
+
+    it_creates_activities_for { [actor, hdfs_file_reference] }
     it_creates_a_global_activity
   end
 

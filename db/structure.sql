@@ -350,6 +350,38 @@ ALTER SEQUENCE hadoop_instances_id_seq OWNED BY hadoop_instances.id;
 
 
 --
+-- Name: hdfs_file_references; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE hdfs_file_references (
+    id integer NOT NULL,
+    path character varying(255),
+    hadoop_instance_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: hdfs_file_references_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE hdfs_file_references_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: hdfs_file_references_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE hdfs_file_references_id_seq OWNED BY hdfs_file_references.id;
+
+
+--
 -- Name: instance_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -735,6 +767,13 @@ ALTER TABLE hadoop_instances ALTER COLUMN id SET DEFAULT nextval('hadoop_instanc
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE hdfs_file_references ALTER COLUMN id SET DEFAULT nextval('hdfs_file_references_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE instance_accounts ALTER COLUMN id SET DEFAULT nextval('instance_credentials_id_seq'::regclass);
 
 
@@ -848,6 +887,14 @@ ALTER TABLE ONLY gpdb_schemas
 
 ALTER TABLE ONLY hadoop_instances
     ADD CONSTRAINT hadoop_instances_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hdfs_file_references_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY hdfs_file_references
+    ADD CONSTRAINT hdfs_file_references_pkey PRIMARY KEY (id);
 
 
 --
@@ -1203,3 +1250,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120620183115');
 INSERT INTO schema_migrations (version) VALUES ('20120621182920');
 
 INSERT INTO schema_migrations (version) VALUES ('20120628230223');
+
+INSERT INTO schema_migrations (version) VALUES ('20120702224758');

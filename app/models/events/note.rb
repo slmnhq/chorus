@@ -20,4 +20,10 @@ module Events
     has_activities :actor, :greenplum_instance, :global
     has_additional_data :body
   end
+
+  class NOTE_ON_HDFS_FILE < Note
+    has_targets :hdfs_file
+    has_activities :actor, :hdfs_file, :global
+    has_additional_data :body
+  end
 end
