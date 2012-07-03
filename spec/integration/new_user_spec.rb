@@ -55,7 +55,7 @@ describe "creating a user" do
     page.find("h1").should have_content("#{first_name} #{last_name}")
 
     click_link "Edit Profile"
-    attach_file("image_upload_input", File.join(File.dirname(__FILE__), '../fixtures/user.png'))
+    attach_file("image_upload_input", File.join(File.dirname(__FILE__), '../fixtures/User.png'))
     click_submit_button
 
   end

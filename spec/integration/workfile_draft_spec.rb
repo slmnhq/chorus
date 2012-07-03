@@ -36,7 +36,9 @@ describe "Workfile drafts" do
     wait_until { current_route =~ /workspaces\/\d+\/workfiles/ }
     click_link @file_name
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
-    click_button 'Open Draft'
+    within_modal do
+      click_button 'Open Draft'
+    end
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
     page.find("textarea.text_editor").should have_content('new Blood -1')
   end
