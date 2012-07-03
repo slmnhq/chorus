@@ -7,7 +7,7 @@ gem 'net-ldap',      :require => false
 gem 'paperclip'
 gem 'queue_classic', :git => "git://github.com/pivotal-leopold/queue_classic.git", :require => false
 gem 'clockwork',     :require => false
-gem 'allowy',        :require => false
+gem 'allowy'
 gem 'sunspot_rails', '2.0.0.pre.120417'
 
 platform :jruby do
