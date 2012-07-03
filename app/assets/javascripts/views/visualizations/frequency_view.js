@@ -4,10 +4,8 @@ chorus.views.visualizations.Frequency = chorus.views.Base.extend({
         $el.html("");
         $el.addClass("visualization");
 
-        var data = new chorus.presenters.visualizations.Frequency(this.model).present();
+        var data = this.model.get("rows").reverse();
         var buckets = _.pluck(data, 'bucket');
-
-        var counts = _.pluck(data, 'count')
 
         var svg = d3.select(this.el).append("svg").
             attr("class", "chart frequency").
@@ -17,11 +15,11 @@ chorus.views.visualizations.Frequency = chorus.views.Base.extend({
         this.axes = new chorus.views.visualizations.Axes({
             el: svg,
             minXValue: 0,
-            maxXValue: _.max(counts),
+            maxXValue: d3.max(data, function(d) { return d.count; }),
             xScaleType: "numeric",
             yLabels: buckets,
             xAxisLabel: "count",
-            yAxisLabel: this.model.get("chart[yAxis]"),
+            yAxisLabel: this.model.get("yAxis"),
             ticks: true,
             hasXGrids: true
         });

@@ -10,12 +10,8 @@ describe("chorus.models.ChartTask", function() {
         expect(this.model.name()).toMatchTranslation("dataset.visualization.data.filename");
     });
 
-    it("has the right taskType", function() {
-        expect(this.model.get("taskType")).toBe("getChartData");
-    });
-
     it("sets the 'chart[type]' attribute based on the prototype's 'chartType' property", function() {
-        expect(this.model.get("chart[type]")).toBe("fantastic");
+        expect(this.model.get("type")).toBe("fantastic");
     });
 
     it("sets workspaceId and datasetId", function() {

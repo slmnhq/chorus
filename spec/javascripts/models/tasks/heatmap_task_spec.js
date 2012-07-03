@@ -14,7 +14,7 @@ describe("chorus.models.HeatmapTask", function() {
     });
 
     it("has the right chart type parameter", function() {
-        expect(this.model.get("chart[type]")).toBe("heatmap");
+        expect(this.model.get("type")).toBe("heatmap");
     });
 
     describe("column label translations", function() {

@@ -64,9 +64,6 @@ describe Visualization::Frequency do
       visualization.rows.should include({'count' => 19, 'bucket' => 'The Beatles'})
       visualization.rows.should include({'count' => 24, 'bucket' => 'Bob Dylan'})
       visualization.rows.should include({'count' => 9, 'bucket' => 'David Bowie'})
-
-      visualization.columns.should include({:name => 'bucket'})
-      visualization.columns.should include({:name => 'count'})
     end
   end
 end

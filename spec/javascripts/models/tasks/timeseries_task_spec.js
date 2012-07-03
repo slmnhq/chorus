@@ -14,7 +14,7 @@ describe("chorus.models.TimeseriesTask", function() {
     });
 
     it("has the right chart type parameter", function() {
-        expect(this.model.get("chart[type]")).toBe("timeseries");
+        expect(this.model.get("type")).toBe("timeseries");
     });
 
     describe("column label translations", function() {

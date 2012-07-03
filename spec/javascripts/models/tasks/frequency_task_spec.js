@@ -12,7 +12,7 @@ describe("chorus.models.FrequencyTask", function() {
     });
 
     it("has the right chart type parameter", function() {
-        expect(this.model.get("chart[type]")).toBe("frequency");
+        expect(this.model.get("type")).toBe("frequency");
     });
 
     describe("column label translations", function() {

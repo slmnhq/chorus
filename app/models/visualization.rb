@@ -1,9 +1,7 @@
 module Visualization
-  def self.build(params)
-    dataset = Dataset.find(params[:dataset_id])
-
-    if params[:type] == 'frequency'
-      Visualization::Frequency.new(dataset, params)
+  def self.build(dataset, chart_task_params)
+    if chart_task_params[:type] == 'frequency'
+      Visualization::Frequency.new(dataset, chart_task_params)
     end
   end
 end

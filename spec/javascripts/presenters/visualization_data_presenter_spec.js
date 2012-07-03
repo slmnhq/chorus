@@ -60,30 +60,6 @@ describe("chorus.presenters.visualizations", function() {
 
     });
 
-    describe("Frequency", function() {
-        beforeEach(function() {
-            this.model = fixtures.frequencyTaskWithResult({
-                rows: [
-                    { bucket: 'aardvark', count: 1024 },
-                    { bucket: 'beluga', count: 573 },
-                    { bucket: 'chupacabra', count: 321 }
-                ]
-            });
-
-            this.presenter = new chorus.presenters.visualizations.Frequency(this.model);
-            this.data = this.presenter.present();
-        });
-
-        it("returns a reversed array of bucket, count hashes", function() {
-            var reversed_rows = [
-                { bucket: 'chupacabra', count: 321 },
-                { bucket: 'beluga', count: 573 },
-                { bucket: 'aardvark', count: 1024 }
-            ];
-            expect(this.data).toEqual(reversed_rows);
-        });
-    });
-
     describe("Boxplot", function() {
         beforeEach(function() {
             this.model = fixtures.boxplotTaskWithResult({

@@ -1,12 +1,6 @@
 describe("chorus.views.visualizations.Timeseries", function() {
     var leftX   = chorus.svgHelpers.leftX,
-        rightX  = chorus.svgHelpers.rightX,
-        width   = chorus.svgHelpers.width,
-        height  = chorus.svgHelpers.height,
-        centerX = chorus.svgHelpers.centerX,
-        topY    = chorus.svgHelpers.topY,
-        bottomY = chorus.svgHelpers.bottomY,
-        centerY = chorus.svgHelpers.centerY;
+        rightX  = chorus.svgHelpers.rightX;
 
     beforeEach(function() {
         this.task = new chorus.models.SqlExecutionTask({

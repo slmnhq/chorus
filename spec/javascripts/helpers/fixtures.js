@@ -850,23 +850,6 @@ beforeEach(function() {
             return new chorus.models.TimeseriesTask(attributes);
         },
 
-        frequencyTaskWithResult: function(overrides) {
-            var attributes = _.extend({
-                dataset: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
-                yAxis: "num_hands",
-
-                columns: [
-                    { name: "bucket", typeCategory: "STRING" },
-                    { name: "count", typeCategory: "WHOLE_NUMBER" }
-                ],
-                rows: [
-                    { bucket: 1, count: '321' },
-                    { bucket: 2, count: '1024' }
-                ]
-            }, overrides);
-            return new chorus.models.FrequencyTask(attributes);
-        },
-
         boxplotTaskWithResult: function(overrides) {
             var attributes = _.extend({
                 dataset: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),

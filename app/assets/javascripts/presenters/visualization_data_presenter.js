@@ -26,19 +26,6 @@
         }
     });
 
-    ns.presenters.visualizations.Frequency = function(task, options) {
-        this.task = task;
-        this.options = options;
-    };
-
-    _.extend(chorus.presenters.visualizations.Frequency.prototype, {
-        present: function() {
-            return _.map(this.task.get("rows"), function(row) {
-                return {bucket: row.bucket, count: row.count};
-            }).reverse();
-        }
-    });
-
     ns.presenters.visualizations.Boxplot = function(task, options) {
         this.task = task;
         this.options = options;

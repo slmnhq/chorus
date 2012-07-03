@@ -13,7 +13,7 @@ describe("chorus.models.BoxplotTask", function() {
     });
 
     it("has the right chart type parameter", function() {
-        expect(this.model.get("chart[type]")).toBe("boxplot");
+        expect(this.model.get("type")).toBe("boxplot");
     });
 
     describe("column label translations", function() {

@@ -123,6 +123,8 @@ window.rspecFixtureDefinitions = {
         model: "SearchResult"
     },
 
+    frequencyTask: {},
+
 //    activity: {
 //        unique: [ "id" ],
 //

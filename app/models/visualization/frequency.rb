@@ -1,10 +1,10 @@
 module Visualization
   class Frequency
-    attr_reader :rows, :columns
+    attr_reader :rows
 
     def initialize(dataset, attributes)
       @bins = attributes[:bins]
-      @group = attributes[:y_axis]
+      @category = attributes[:y_axis]
       @filters = attributes[:filters]
       @dataset = dataset
       @schema = dataset.schema
@@ -12,15 +12,13 @@ module Visualization
 
     def build_sql
       relation = Arel::Table.new(%Q{"#{@schema.name}"."#{@dataset.name}"})
-
       query = relation.
-        group(relation[@group]).
-        project(relation[@group].as('bucket'), Arel.sql('count(1)').as('count')).
+        group(relation[@category]).
+        project(relation[@category].as('bucket'), Arel.sql('count(1)').as('count')).
         order(Arel.sql('count').desc).
         take(@bins)
 
       query = query.where(Arel.sql(@filters)) if @filters.present?
-
       query.to_sql
     end
 
@@ -28,8 +26,6 @@ module Visualization
       results = @schema.with_gpdb_connection(account) do |conn|
         conn.exec_query(build_sql)
       end
-
-      @columns = results[0].keys.map { |key| {:name => key} }
       @rows = results
     end
   end

@@ -1,6 +1,6 @@
 chorus.models.ChartTask = chorus.models.Task.extend({
+    urlTemplate: 'datasets/{{datasetId}}/visualizations',
     constructorName: "ChartTask",
-    taskType: "getChartData",
 
     name: function() {
         return t("dataset.visualization.data.filename");
@@ -18,7 +18,7 @@ chorus.models.ChartTask = chorus.models.Task.extend({
         }
         this.unset("dataset");
         this._super("initialize", arguments);
-        this.set({ "chart[type]": this.chartType });
+        this.set({ "type": this.chartType });
     },
 
     workspace: function() {

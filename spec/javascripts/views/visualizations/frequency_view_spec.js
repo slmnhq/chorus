@@ -9,14 +9,10 @@ describe("chorus.views.visualizations.FrequencyView", function() {
         centerY = chorus.svgHelpers.centerY;
 
     beforeEach(function() {
-        this.task = fixtures.frequencyTaskWithResult({
-            rows: [
-                { bucket: 'aardvark',   count: 10000},
-                { bucket: 'beluga',     count: 4000},
-                { bucket: 'chupacabra', count: 500}
-            ],
-            "chart[yAxis]": "animals"
-        });
+        var dataset = rspecFixtures.dataset();
+        this.task = dataset.makeFrequencyTask({"bins": 3, "yAxis": "animals"});
+        this.task.save();
+        this.server.lastCreate().succeed(rspecFixtures.frequencyTaskJson().response);
 
         this.view = new chorus.views.visualizations.Frequency({ model: this.task });
         this.addMatchers(chorus.svgHelpers.matchers);
