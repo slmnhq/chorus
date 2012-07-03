@@ -13,25 +13,13 @@ RAILS_ENV=development bundle exec rake devmode:enable assets:precompile
 bundle exec rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
 jasmine_pid=$!
 echo "Jasmine process id is : $jasmine_pid"
-# start solr
-RAILS_ENV=test bundle exec rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
-solr_pid=$!
-echo "Solr process id is : $solr_pid"
-sleep 20
 
 set +e
-echo "Running integration tests"
-rspec spec/integration/ 2>&1
-INTEGRATION_TESTS_RESULT=$?
-
-echo "Cleaning up solr process $solr_pid"
-kill -s SIGINT $solr_pid
-echo "Repreparing database"
-bundle exec rake db:test:prepare
 
 echo "Running unit tests"
 script/test 2>&1
 RUBY_TESTS_RESULT=$?
+
 echo "Running javascript tests"
 bundle exec rake phantom 2>&1
 JS_TESTS_RESULT=$?
@@ -40,5 +28,5 @@ set -e
 echo "Cleaning up jasmine process $jasmine_pid"
 kill -s SIGINT $jasmine_pid
 
-SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT + $INTEGRATION_TESTS_RESULT`
+SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT`
 exit $SUCCESS
