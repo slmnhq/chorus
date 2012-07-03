@@ -85,6 +85,31 @@ class Legacy::ActivityStream
     extract_result("chorus_rails_user_id", Legacy.connection.exec_query(sql))
   end
 
+  def author_id
+    sql = "SELECT eu.chorus_rails_user_id FROM edc_user eu, edc_activity_stream ats
+                                           WHERE ats.id = '#{id}'
+                                           AND eu.user_name = ats.author"
+
+    extract_result("chorus_rails_user_id", Legacy.connection.exec_query(sql))
+  end
+
+  def hadoop_instance_id
+    sql = sql = "SELECT aso.object_id FROM edc_activity_stream_object aso
+                                         WHERE aso.activity_stream_id = '#{id}'
+                                         AND aso.object_type = 'actor'"
+
+    object_id = extract_result("object_id", Legacy.connection.exec_query(sql))
+    ids = object_id.delete("\"").split("|")
+    legacy_hadoop_instance_id = ids[0]
+    path_file_name = ids[1].split("/")
+    file_name = path_file_name[-1]
+    path = ids[1].gsub(file_name, "")
+    sql = "SELECT ei.chorus_rails_instance_id FROM edc_instance ei WHERE ei.id = '#{legacy_hadoop_instance_id}'"
+    rails_hadoop_instance_id = extract_result("chorus_rails_instance_id", Legacy.connection.exec_query(sql))
+    hadoop_instance = HadoopInstance.find_by_id(rails_hadoop_instance_id)
+    return hadoop_instance[:id] , path, file_name
+  end
+
   def rails_dataset_id
     sql = "SELECT aso.object_id FROM edc_activity_stream_object aso
                                      WHERE aso.activity_stream_id = '#{id}'

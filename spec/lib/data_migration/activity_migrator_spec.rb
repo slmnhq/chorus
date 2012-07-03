@@ -10,7 +10,7 @@ describe ActivityMigrator, :data_migration => true, :type => :data_migration do
       WorkfileMigrator.new.migrate
     end
 
-    context "importing activities that reference datasets" do
+    context "migrating activities that reference datasets" do
       before do
         mock_dataset_refresh
         InstanceAccountMigrator.new.migrate
@@ -29,9 +29,19 @@ describe ActivityMigrator, :data_migration => true, :type => :data_migration do
         event.actor.should be_instance_of(User)
         event.dataset.should be_a(Dataset)
       end
+
+      it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE fields from the legacy activity" do
+        event = Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.find(event_id_for('10718'))
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+        event.dataset.should be_a(Dataset)
+        event.hadoop_instance_id.should_not be_nil
+        event.path.should == "/data/"
+        event.hdfs_file_name.should == "Top_1_000_Songs_To_Hear_Before_You_Die.csv"
+      end
     end
 
-    context "importing activities that do not reference datasets" do
+    context "migrating activities that do not reference datasets" do
       before do
         ActivityMigrator.new.migrate
       end

@@ -15,6 +15,10 @@ class ActivityMigrator
       event.workspace = find_workspace(activity_stream)
       event.actor = find_actor(activity_stream)
 
+      if activity_stream.type == 'WORKSPACE_ADD_HDFS_AS_EXT_TABLE'
+        store_additional_data(event, activity_stream)
+      end
+
       event.save!
 
       activity_stream.update_event_id(event.id)
@@ -30,6 +34,20 @@ class ActivityMigrator
 
   def find_actor(activity_stream)
     user_id = activity_stream.user_id
-    user_id.present? ? User.find_with_destroyed(user_id) : nil
+    actor = user_id.present? ? User.find_with_destroyed(user_id) : nil
+
+    if actor.nil? && activity_stream.type == 'WORKSPACE_ADD_HDFS_AS_EXT_TABLE'
+      user_id = activity_stream.author_id
+      actor = user_id.present? ? User.find_with_destroyed(user_id) : nil
+    end
+
+    actor
+  end
+
+  def store_additional_data(event, activity_stream)
+    hadoop_instance_id, path, file_name = activity_stream.hadoop_instance_id
+    event.hadoop_instance_id = hadoop_instance_id
+    event.path = path
+    event.hdfs_file_name = file_name
   end
 end
