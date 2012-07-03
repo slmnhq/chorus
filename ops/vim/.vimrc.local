@@ -7,6 +7,9 @@ set shiftwidth=4
 " don't blink cursor
 set gcr=n:blinkon0
 
+set wildignore+=public/system
+set wildignore+=vendor
+
 " for test_server plugin
 nmap <D-S-F10> <Esc>:RunTestLine<CR>
 xmap <D-S-F10> <Esc>:RunTestLine<CR>
