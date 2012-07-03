@@ -24,6 +24,8 @@ echo "Running integration tests"
 rspec spec/integration/ 2>&1
 INTEGRATION_TESTS_RESULT=$?
 
+echo "Cleaning up solr process $solr_pid"
+kill -s SIGINT $solr_pid
 echo "Repreparing database"
 bundle exec rake db:test:prepare
 
@@ -37,7 +39,6 @@ JS_TESTS_RESULT=$?
 set -e
 echo "Cleaning up jasmine process $jasmine_pid"
 kill -s SIGINT $jasmine_pid
-echo "Cleaning up solr process $solr_pid"
-kill -s SIGINT $solr_pid
+
 SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT + $INTEGRATION_TESTS_RESULT`
 exit $SUCCESS
