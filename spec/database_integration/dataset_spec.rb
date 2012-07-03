@@ -70,7 +70,7 @@ describe Dataset::Query, :type => :database_integration do
         row['name'].should == "base_table1"
         row['description'].should == "comment on base_table1"
         row['definition'].should be_nil
-        row['column_count'].should == 3
+        row['column_count'].should == 4
         row['row_count'].should == 5
         row['table_type'].should == "BASE_TABLE"
         row['last_analyzed'].should_not be_nil
@@ -122,8 +122,8 @@ describe Dataset::Query, :type => :database_integration do
         row = rows.first
         row['name'].should == 'view1'
         row['description'].should == "comment on view1"
-        row['definition'].should == "SELECT base_table1.id, base_table1.column1, base_table1.column2 FROM base_table1;"
-        row['column_count'].should == 3
+        row['definition'].should == "SELECT base_table1.id, base_table1.column1, base_table1.column2, base_table1.category FROM base_table1;"
+        row['column_count'].should == 4
         row['row_count'].should == 0
         row['disk_size'].should == '0 bytes'
         row['partition_count'].should == 0

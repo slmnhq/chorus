@@ -7,14 +7,14 @@ CREATE DATABASE gpdb_test_database OWNER gpadmin;
     SET search_path TO 'gpdb_test_schema';
 
     CREATE TABLE base_table1
-      (id integer, column1 integer, column2 integer)
+      (id integer, column1 integer, column2 integer, category text)
       DISTRIBUTED BY (id);
     COMMENT ON TABLE base_table1 IS 'comment on base_table1';
-    INSERT INTO base_table1 VALUES ( 0,0,0 );
-    INSERT INTO base_table1 VALUES ( 1,1,1 );
-    INSERT INTO base_table1 VALUES ( 2,2,2 );
-    INSERT INTO base_table1 VALUES ( 3,3,3 );
-    INSERT INTO base_table1 VALUES ( 4,4,4 );
+    INSERT INTO base_table1 VALUES ( 0,0,0, 'apple' );
+    INSERT INTO base_table1 VALUES ( 1,1,1, 'apple' );
+    INSERT INTO base_table1 VALUES ( 2,2,2, 'orange' );
+    INSERT INTO base_table1 VALUES ( 3,3,3, 'orange' );
+    INSERT INTO base_table1 VALUES ( 4,4,4, 'orange' );
     ANALYZE base_table1;
 
     CREATE VIEW view1 AS
