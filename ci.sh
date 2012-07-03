@@ -8,7 +8,7 @@ rbenv shell `cat .rbenv-version`
 ruby -v | grep "jruby 1.6.7"
 gem list bundler | grep bundler || gem install bundler
 bundle install
-bundle exec rake legacy:setup db:migrate db:test:prepare assets:precompile
+bundle exec rake legacy:setup db:drop db:create db:migrate db:seed assets:precompile
 
 # start jasmine
 bundle exec rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
