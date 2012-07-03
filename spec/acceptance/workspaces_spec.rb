@@ -6,7 +6,7 @@ resource "Workspaces" do
   let!(:schema) { FactoryGirl.create :gpdb_schema }
   let(:workspace_id) { workspace.to_param }
   let(:dataset) { FactoryGirl.create(:gpdb_table) }
-  let!(:associated_dataset) {FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
+  let!(:associated_dataset) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
 
   before do
     log_in user
