@@ -71,4 +71,15 @@ resource "Workspaces" do
       status.should == 200
     end
   end
+
+  get "/workspaces/:workspace_id/datasets/:id" do
+    let(:workspace_id) { workspace.to_param }
+    let(:dataset) { FactoryGirl.create(:gpdb_table) }
+    let!(:associated_dataset) {FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
+    let(:id) { dataset.to_param }
+
+    example_request "Show details for a dataset" do
+      status.should == 200
+    end
+  end
 end
