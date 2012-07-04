@@ -128,4 +128,11 @@ describe Workfile do
     it { should have_many :activities }
     it { should have_many :events }
   end
+
+  describe "search fields" do
+    it "indexes text fields" do
+      Workfile.should have_searchable_field :file_name
+      Workfile.should have_searchable_field :description
+    end
+  end
 end

@@ -44,11 +44,10 @@ describe Search do
           search = Search.new(@user, :query => 'bob', :per_type => 3)
           stub(search).num_found do
             hsh = Hash.new(0)
-            hsh.merge({:users => 100, :instances => 100, :workspaces => 100})
+            hsh.merge({:users => 100, :instances => 100, :workspaces => 100, :workfiles => 100})
           end
           stub(search.search).each_hit_with_result { [] }
           search.models
-
           Sunspot.session.searches.length.should == search.models_to_search.length + 1
           search.models_to_search.each_with_index do |model, index|
             sunspot_search = Sunspot.session.searches[index+1]
@@ -98,6 +97,9 @@ describe Search do
     let(:public_workspace) { Workspace.where(:public => true).first }
     let(:private_workspace) { Workspace.find_by_name("private bob workspace") }
     let(:private_workspace_not_a_member) { Workspace.find_by_name("private hidden from bob workspace") }
+    let(:private_workfile_hidden_from_bob) { Workfile.find_by_file_name("private_hidden_from_bob_workfile") }
+    let(:private_workfile_bob) { Workfile.find_by_file_name("private_bob_workfile") }
+    let(:public_workfile_bob) { Workfile.find_by_file_name("bob") }
 
     before do
       create_solr_fixtures
@@ -197,6 +199,26 @@ describe Search do
           search.workspaces.should include(public_workspace)
           search.workspaces.should include(private_workspace)
           search.workspaces.should include(private_workspace_not_a_member)
+        end
+      end
+    end
+
+    describe "workfile permissions" do
+      it "returns workfiles for public and member workspaces, but not private ones" do
+        VCR.use_cassette('search_solr_query_workfiles_bob_as_bob') do
+          search = Search.new(bob, :query => 'bob', :entity_type => :workfile)
+          search.workfiles.should include(public_workfile_bob)
+          search.workfiles.should include(private_workfile_bob)
+          search.workfiles.should_not include(private_workfile_hidden_from_bob)
+        end
+      end
+
+      it "returns workfiles for every workspace for admins" do
+        VCR.use_cassette('search_solr_query_workfiles_bob_as_admin') do
+          search = Search.new(admin, :query => 'bob', :entity_type => :workfile)
+          search.workfiles.should include(public_workfile_bob)
+          search.workfiles.should include(private_workfile_bob)
+          search.workfiles.should include(private_workfile_hidden_from_bob)
         end
       end
     end

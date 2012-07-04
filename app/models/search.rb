@@ -4,7 +4,7 @@ class Search
 
   def initialize(current_user, params = {})
     @current_user = current_user
-    @models_to_search = [User, Instance, Workspace]
+    @models_to_search = [User, Instance, Workspace, Workfile]
     self.query = params[:query]
     self.per_type = params[:per_type]
     if per_type
@@ -67,6 +67,10 @@ class Search
 
   def workspaces
     models[:workspaces] || []
+  end
+
+  def workfiles
+    models[:workfiles] || []
   end
 
   def num_found

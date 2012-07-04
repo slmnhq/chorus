@@ -9,5 +9,8 @@ class Membership < ActiveRecord::Base
 
   def index_workspace
     workspace.solr_index
+    (workspace.workfiles(:reload => true)).each do |workfile|
+      workfile.solr_index
+    end
   end
 end

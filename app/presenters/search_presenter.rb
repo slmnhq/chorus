@@ -1,6 +1,6 @@
 class SearchPresenter < Presenter
 
-  delegate :users, :instances, :num_found, :workspaces, to: :model
+  delegate :users, :instances, :num_found, :workspaces, :workfiles, to: :model
 
   def to_hash
     {
@@ -16,6 +16,10 @@ class SearchPresenter < Presenter
         :workspaces => {
             :results => present_models_with_highlights(workspaces),
             :numFound => num_found[:workspaces]
+        },
+        :workfiles => {
+            :results => present_models_with_highlights(workfiles),
+            :numFound => num_found[:workfiles]
         }
     }
   end
