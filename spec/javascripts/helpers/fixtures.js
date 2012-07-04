@@ -1311,7 +1311,7 @@ beforeEach(function() {
             // WTF: old fixtures reference new fixtures ???
             var modifiedByUser = rspecFixtures.userJson();
             return _.extend({
-                "workfile": {
+                "workfiles": {
                     "results": [
                         {
                             "id": "10020",
