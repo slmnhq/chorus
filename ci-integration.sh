@@ -3,6 +3,7 @@
 set -e
 export RAILS_ENV=integration
 
+mkdir -p tmp/pids
 eval "$(rbenv init -)"
 rbenv shell `cat .rbenv-version`
 ruby -v | grep "jruby 1.6.7"
