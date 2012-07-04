@@ -82,6 +82,19 @@ describe EventsController do
       end
     end
 
+    context "when getting the activities for an hdfs file" do
+      let!(:object) { FactoryGirl.create(:hdfs_file_reference) }
+
+      let!(:event1) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
+      let!(:event2) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
+
+      it "presents the workspace's activities" do
+        mock_present { |models| models.should =~ [event1, event2] }
+        get :index, :entity_type => "hdfs", :entity_id => object.hadoop_instance_id.to_s + "|" + object.path
+        response.code.should == "200"
+      end
+    end
+
     context "when getting the activities for the current user's home page" do
       it "presents the user's activities" do
         mock(Events::Base).for_dashboard_of(current_user) { fake_relation [dashboard_event1, dashboard_event2] }

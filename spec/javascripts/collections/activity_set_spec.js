@@ -21,14 +21,33 @@ describe("chorus.collections.ActivitySet", function() {
         describe("the url of the activity set", function() {
             var activities, model;
 
-            beforeEach(function() {
-                model = new chorus.models.Base({id : 1});
-                model.entityType = "hello";
-                activities = chorus.collections.ActivitySet.forModel(model);
-            });
 
-            it("is the model's url, with '/activities' appended to the path", function() {
-                expect(activities.url()).toBe("/activities?entity_type=hello&entity_id=" + model.id );
+
+            context("for a hdfs model type", function () {
+                beforeEach(function() {
+                    model = rspecFixtures.hdfsFile({
+                        hadoopInstance : {
+                            id : 1
+                        },
+                        path : "/data/test.csv"
+                    })
+                    model.entityType = "hdfs";
+
+                    activities = chorus.collections.ActivitySet.forModel(model);
+                });
+                it("includes the entity_type, the ", function() {
+                    expect(activities.url()).toBe("/activities?entity_type=hdfs&entity_id=1%7C%2Fdata%2Ftest.csv" );
+                });
+            });
+            context("for a non-hdfs model type", function () {
+                beforeEach(function() {
+                    model = new chorus.models.Base({id: 1});
+                    model.entityType = "hello";
+                    activities = chorus.collections.ActivitySet.forModel(model);
+                });
+                it("includes the entity_type and the id of the model", function() {
+                    expect(activities.url()).toBe("/activities?entity_type=hello&entity_id=" + model.id );
+                });
             });
         });
 

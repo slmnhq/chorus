@@ -1,6 +1,7 @@
 chorus.models.HdfsEntry = chorus.models.Base.extend({
     constructorName: "HdfsEntry",
     nameAttribute: 'name',
+    entityType: "hdfs",
 
     showUrlTemplate: function() {
         if(this.get("isDir")) {
@@ -13,6 +14,14 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
     getPath: function() {
         var encodedPath = encodeURIComponent((this.get("path") == "/") ? "" : this.get("path"));
         return encodedPath.replace(/%2F/g, "/");
+    },
+
+    getFullAbsolutePath: function() {
+        return this.getPath() + '/' + this.get('name');
+    },
+
+    getActivityStreamId: function() {
+      return this.getHadoopInstance().id + "|" + this.getFullAbsolutePath();
     },
 
     pathSegments: function() {
@@ -28,9 +37,5 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
 
     getHadoopInstance: function() {
         return new chorus.models.HadoopInstance(this.get('hadoopInstance')).set({ instanceProvider: "Hadoop" })
-    },
-
-    getFullAbsolutePath: function() {
-        return this.getPath() + '/' + this.get('name');
     }
 });

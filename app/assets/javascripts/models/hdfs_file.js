@@ -1,9 +1,14 @@
 chorus.models.HdfsFile = chorus.models.Base.extend({
     constructorName: "HdfsFile",
+    entityType: "hdfs",
 
     name: function() {
         splittedPath = this.attributes.path.split('/');
         return splittedPath[splittedPath.length - 1];
+    },
+
+    getActivityStreamId: function() {
+      return this.get('hadoopInstance').id + "|" + this.attributes.path;
     },
 
     showUrlTemplate: function() {

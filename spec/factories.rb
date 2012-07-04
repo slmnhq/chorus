@@ -120,6 +120,11 @@ FactoryGirl.define do
     workspace
   end
 
+  factory :hdfs_file_reference do
+    hadoop_instance_id 25
+    path "/folder/subfolder/file.csv"
+  end
+
   factory :event, :class => Events::Base do
     actor
 
@@ -162,11 +167,6 @@ FactoryGirl.define do
       association :new_user, :factory => :user
     end
 
-    factory :note_on_greenplum_instance_event, :class => Events::NOTE_ON_GREENPLUM_INSTANCE do
-      greenplum_instance
-      body "Note to self, add a body"
-    end
-
     factory :sandbox_added_event, :class => Events::WORKSPACE_ADD_SANDBOX do
       workspace
     end
@@ -177,6 +177,16 @@ FactoryGirl.define do
       hdfs_file_name "test.csv"
       hadoop_instance_id "25"
       path "/hadoop/data/"
+    end
+
+    factory :note_on_greenplum_instance_event, :class => Events::NOTE_ON_GREENPLUM_INSTANCE do
+      greenplum_instance
+      body "Note to self, add a body"
+    end
+
+    factory :note_on_hdfs_file_event, :class => Events::NOTE_ON_HDFS_FILE do
+      association :hdfs_file, :factory => :hdfs_file_reference
+      body "This is a note on an hdfs file"
     end
   end
 end

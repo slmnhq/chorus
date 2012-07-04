@@ -18,7 +18,7 @@ describe("chorus.models.HdfsEntry", function() {
 
         context("when entry is a file", function() {
             beforeEach(function() {
-                this.model = fixtures.hdfsEntryFile({
+                this.model = new chorus.models.HdfsEntry({
                     hadoopInstance: {
                         id: '42'
                     },
@@ -116,6 +116,19 @@ describe("chorus.models.HdfsEntry", function() {
         it("should have an instanceProvider of Hadoop", function() {
             expect(this.hadoopInstance.get('instanceProvider')).toBe('Hadoop');
         })
+    });
+
+    describe("#getActivityStreamId", function() {
+        it("returns the right activity stream id", function() {
+             var model = new chorus.models.HdfsEntry({
+                hadoopInstance: {
+                    id: 111
+                },
+                path: "/test/foo",
+                name: "foo.csv"
+            })
+           expect(model.getActivityStreamId()).toBe("111|/test/foo/foo.csv")
+        });
     });
 
     describe("getFullAbsolutePath", function() {

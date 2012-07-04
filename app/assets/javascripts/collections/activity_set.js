@@ -19,13 +19,7 @@ chorus.collections.ActivitySet = chorus.collections.Base.extend({
     },
 
     urlForModel: function(model) {
-        // currently, HdfsEntry models don't have urls
-        // this hack is here for specs that expect
-        // HdfsEntries to have activities
-        if (model instanceof chorus.models.HdfsEntry || model instanceof chorus.models.HdfsFile) {
-            return "/not_yet_implemented";
-        } else {
-            return "/activities?entity_type=" + model.entityType + "&entity_id=" + model.id;
-        }
+        var entityId = model.getActivityStreamId ? encodeURIComponent(model.getActivityStreamId()) : model.id;
+        return "/activities?entity_type=" + model.entityType + "&entity_id=" + entityId;
     }
 });

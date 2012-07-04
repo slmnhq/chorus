@@ -1,7 +1,6 @@
 describe("chorus.models.HdfsFile", function() {
     beforeEach(function() {
-        this.file = fixtures.hdfsFile({
-            hadoopInstanceId: "1234",
+        this.file = rspecFixtures.hdfsFile({
             path: "/my/complicated/home/folder/my file.txt",
             hadoopInstance: { id: "1234" }
         });
@@ -21,5 +20,13 @@ describe("chorus.models.HdfsFile", function() {
 
     it("has the show url template", function(){
         expect(this.file.showUrlTemplate()).toBe("hadoop_instances/1234/browseFile/%2Fmy%2Fcomplicated%2Fhome%2Ffolder%2Fmy%20file.txt")
+    });
+
+    it("has the right entity type", function() {
+        expect(this.file.entityType).toBe("hdfs");
+    });
+
+    it("#getActivityStreamId", function() {
+        expect(this.file.getActivityStreamId()).toBe("1234|/my/complicated/home/folder/my file.txt")
     });
 });
