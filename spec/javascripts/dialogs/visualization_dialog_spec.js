@@ -680,7 +680,6 @@ describe("chorus.dialogs.Visualization", function() {
         describe("#refreshChart", function() {
             beforeEach(function() {
                 this.server.reset();
-                spyOn(this.dialog.filters, "whereClause").andReturn("newSql");
                 spyOn(this.dialog, "drawChart").andCallThrough();
                 this.dialog.refreshChart();
             });
@@ -705,8 +704,9 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.$("button.stop")).toContainTranslation("actions.cancel");
             });
 
-            it("updates the task sql", function() {
-                expect(this.dialog.task.get("filters")).toBe("newSql");
+            it("converts the dataset filters to SQL fragments when saving", function() {
+                expect(this.dialog.task.get("filters").length).toBe(6); // ?????
+                expect(this.dialog.task.get("filters")[0]).toContain('=');
             });
 
             describe("clicking the 'cancel' button", function() {

@@ -18,7 +18,7 @@ module Visualization
         order(Arel.sql('count').desc).
         take(@bins)
 
-      query = query.where(Arel.sql(@filters)) if @filters.present?
+      query = query.where(Arel.sql(@filters.join(" AND "))) if @filters.present?
       query.to_sql
     end
 

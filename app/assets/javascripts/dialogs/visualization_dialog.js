@@ -92,7 +92,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     refreshChart: function() {
         this.$(".overlay").addClass("disabled");
-        this.task.set({filters: this.filters && this.filters.whereClause()});
+        this.task.set({filters: this.filters && this.filters.sqlStrings()});
         this.task.bindOnce("saveFailed", this.saveFailed, this);
         this.task.save();
 

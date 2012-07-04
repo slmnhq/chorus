@@ -107,7 +107,7 @@
 
             var func = 'make' + _.capitalize(this.chartOptions().type) + 'Task';
             this.task = this.model[func](this.chartOptions());
-            this.task.set({filters: this.filters && this.filters.whereClause()});
+            this.task.set({filters: this.filters && this.filters.sqlStrings()});
 
             this.dialog = new chorus.dialogs.Visualization({
                 task: this.task,
