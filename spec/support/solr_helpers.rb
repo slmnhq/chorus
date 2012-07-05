@@ -18,9 +18,12 @@ module SolrHelpers
       private_bob_workspace = FactoryGirl.create(:workspace, :id => 2, :name => 'private bob workspace', :public => false)
       private_hidden_from_bob_workspace = FactoryGirl.create(:workspace, :id => 3, :name => 'private hidden from bob workspace', :public => false)
       FactoryGirl.create(:membership, :user => bob, :workspace => private_bob_workspace)
-      FactoryGirl.create(:workfile, :id => 1, :owner => bob, :workspace => public_bob_workspace, :file_name => 'bob')
-      FactoryGirl.create(:workfile, :id => 2, :owner => bob, :workspace => private_bob_workspace, :file_name => 'private_bob_workfile')
-      FactoryGirl.create(:workfile, :id => 3, :owner => admin, :workspace => private_hidden_from_bob_workspace, :file_name => 'private_hidden_from_bob_workfile')
+      workfile1 = FactoryGirl.create(:workfile, :id => 1, :owner => bob, :workspace => public_bob_workspace, :file_name => 'bob')
+      FactoryGirl.create(:workfile_version, :workfile => workfile1)
+      workfile2 = FactoryGirl.create(:workfile, :id => 2, :owner => bob, :workspace => private_bob_workspace, :file_name => 'private_bob_workfile')
+      FactoryGirl.create(:workfile_version, :workfile => workfile2)
+      workfile3 = FactoryGirl.create(:workfile, :id => 3, :owner => admin, :workspace => private_hidden_from_bob_workspace, :file_name => 'private_hidden_from_bob_workfile')
+      FactoryGirl.create(:workfile_version, :workfile => workfile3)
       Sunspot.commit
     end
   end
