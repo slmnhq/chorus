@@ -36,7 +36,6 @@ echo "Running javascript tests"
 b/rake phantom 2>&1
 JS_TESTS_RESULT=$?
 
-set -e
 echo "Cleaning up jasmine process $jasmine_pid"
 kill -s SIGTERM $jasmine_pid
 echo "Cleaning up solr process $solr_pid"
