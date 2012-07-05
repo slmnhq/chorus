@@ -3,11 +3,11 @@ require 'spec_helper'
 describe "gpdb instances", :network => true do
   let(:valid_attributes) do
     {
-        :name => "good_gillette",
+        :name => "chorusgpdb42",
         :port => 5432,
-        :host => "gillette.sf.pivotallabs.com",
+        :host => "chorus-gpdb42",
         :maintenance_db => "postgres",
-        :db_username => "gpadmin",
+        :db_username => "test",
         :db_password => "secret"
     }
   end
