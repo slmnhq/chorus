@@ -43,4 +43,6 @@ echo "Cleaning up solr process $solr_pid"
 kill -s SIGTERM $solr_pid
 
 SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT`
+echo "RSpec exit code: $RUBY_TESTS_RESULT"
+echo "Jasmine exit code: $JS_TESTS_RESULT"
 exit $SUCCESS

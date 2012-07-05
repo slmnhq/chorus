@@ -27,4 +27,5 @@ INTEGRATION_TESTS_RESULT=$?
 echo "Cleaning up solr process $solr_pid"
 kill -s SIGTERM $solr_pid
 
+echo "RSpec exit code: $INTEGRATION_TESTS_RESULT"
 exit $INTEGRATION_TESTS_RESULT
