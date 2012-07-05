@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''file_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''file_name_texts
         description_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''dismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''bob'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Workfile
         OR Events\\:\\:Note)'',''type_name_s:(Workfile)'',''-(type_name_s:Workfile
@@ -34,6 +34,6 @@ http_interactions:
         nice description''],''score''=>1082793.9}]}}]}},''highlighting''=>{''Workfile
         1''=>{''file_name_texts''=>[''@@@hl@@@bob@@@endhl@@@'']},''Workfile 2''=>{''file_name_texts''=>[''private_@@@hl@@@bob@@@endhl@@@_workfile'']}}}'
     http_version:
-  recorded_at: Tue, 03 Jul 2012 22:42:16 GMT
+  recorded_at: Thu, 05 Jul 2012 18:39:51 GMT
 recorded_with: VCR 2.1.1
 ...

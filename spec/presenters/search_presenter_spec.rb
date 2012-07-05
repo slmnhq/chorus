@@ -38,10 +38,19 @@ describe SearchPresenter, :type => :view do
 
     it "includes the right workspace keys" do
       @hash.should have_key(:workspaces)
-      instance_hash = @hash[:workspaces]
-      instance_hash.should have_key(:numFound)
-      instance_hash.should have_key(:results)
-      instance_hash[:results][0].should have_key(:highlighted_attributes)
+      workspaces_hash = @hash[:workspaces]
+      workspaces_hash.should have_key(:numFound)
+      workspaces_hash.should have_key(:results)
+      workspaces_hash[:results][0].should have_key(:highlighted_attributes)
+    end
+
+    it "includes the right workfile keys" do
+      @hash.should have_key(:workfiles)
+      workfile_hash = @hash[:workfiles]
+      workfile_hash.should have_key(:numFound)
+      workfile_hash.should have_key(:results)
+      workfile_hash[:results][0].should have_key(:highlighted_attributes)
+      workfile_hash[:results][0].should have_key(:version_info)
     end
 
     it "includes the comments" do

@@ -1,124 +1,129 @@
-/**
- * Wait until the test condition is true or a timeout occurs. Useful for waiting
- * on a server response or for a ui change (fadeIn, etc.) to occur.
- *
- * @param testFx javascript condition that evaluates to a boolean,
- * it can be passed in as a string (e.g.: "1 == 1" or "$('#bar').is(':visible')" or
- * as a callback function.
- * @param onReady what to do when testFx condition is fulfilled,
- * it can be passed in as a string (e.g.: "1 == 1" or "$('#bar').is(':visible')" or
- * as a callback function.
- * @param timeOutMillis the max amount of time to wait. If not specified, 3 sec is used.
- */
-function waitFor(testFx, onReady, timeOutMillis) {
-    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 6000001, //< Default Max Timeout is 3s
-        start = new Date().getTime(),
-        condition = false,
-        interval = setInterval(function() {
-            if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
-                // If not time-out yet and condition not yet fulfilled
-                condition = (typeof(testFx) === "string" ? eval(testFx) : testFx()); //< defensive code
-            } else {
-                if(!condition) {
-                    // If condition still not fulfilled (timeout but condition is 'false')
-                    console.log("\nPhantomJS: Execution time exceeded\n");
-                    phantom.exit(1);
-                } else {
-                    // Condition fulfilled (timeout and/or condition is 'true')
-                    console.log("\nRuntime (ms):  " + (new Date().getTime() - start));
-                    typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
-                    clearInterval(interval); //< Stop this interval
-                }
-            }
-        }, 100); //< repeat check every 100ms
-};
+// Part of OpenPhantomScripts
+// http://github.com/mark-rushakoff/OpenPhantomScripts
 
+// Copyright (c) 2012 Mark Rushakoff
 
-var port = phantom.args[0];
-var filter = phantom.args[1];
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 
-if (!parseInt(port) || phantom.args.length > 2) {
-    console.log('Usage: run-jasmine.js PORT [spec_name_filter]');
-    phantom.exit(1);
-}
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 
-var page = require('webpage').create();
-var fs = require('fs');
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 
-// Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
-page.onConsoleMessage = function(msg, lineNumber, sourceIdentifier) {
-    fs.write('/dev/stdout', msg, 'w');
-};
+var fs = require("fs");
 
+// var system = require("system");
+// var args = system.args;
+
+var args = phantom.args;
+var port = args[0];
+var filter = args[1];
 var url = 'http://localhost:' + port
+
 if (filter) {
     url += '?spec=' + encodeURIComponent(filter);
 }
 
-page.open(url, function(status){
-    if (status !== "success") {
-        console.log("Unable to access network");
-        phantom.exit(1);
-    } else {
+if (!parseInt(port) || args.length > 2) {
+    console.log('Usage: run-jasmine.js PORT [spec_name_filter]');
+    phantom.exit(1);
+}
 
-        page.evaluate(function() {
-            if (window.phantomInitialized) {
-                return;
+function printError(message) {
+    fs.write("/dev/stderr", message + "\n", "w");
+}
+
+var page = require("webpage").create();
+
+var attachedDoneCallback = false;
+page.onResourceReceived = function() {
+    // Without this guard, I was occasionally seeing the done handler
+    // pushed onto the array multiple times -- it looks like the
+    // function was queued up several times, depending on the server.
+    if (!attachedDoneCallback) {
+        attachedDoneCallback = page.evaluate(function() {
+            if (window.jasmine) {
+                var reporter = {
+                    numPassed: 0,
+                    numFailed: 0,
+                    numSkipped: 0,
+
+                    reportRunnerStarting: function() {
+                        this.startTime = (new Date()).getTime();
+                    },
+
+                    reportSpecResults: function(spec) {
+                        var results = spec.results();
+                        if (results.skipped) {
+                            this.numSkipped++;
+                        } else if (results.passed()) {
+                            this.numPassed++;
+                        } else {
+                            this.numFailed++;
+                        }
+                    },
+
+                    reportRunnerResults: function() {
+                        var totalTime = (new Date()).getTime() - this.startTime;
+                        var totalTests = (this.numPassed + this.numSkipped + this.numFailed);
+                        console.log("Tests passed:  " + this.numPassed);
+                        console.log("Tests skipped: " + this.numSkipped);
+                        console.log("Tests failed:  " + this.numFailed);
+                        console.log("Total tests:   " + totalTests);
+                        console.log("Runtime (ms):  " + totalTime);
+                        window.phantomComplete = true;
+                        window.phantomResults = {
+                            numPassed: this.numPassed,
+                            numSkipped: this.numSkipped,
+                            numFailed: this.numFailed,
+                            totalTests: totalTests,
+                            totalTime: totalTime
+                        };
+                    }
+                };
+
+                reporter.prototype = window.jasmine.Reporter.prototype;
+
+                window.jasmine.getEnv().addReporter(reporter);
+
+                return true;
             }
 
-            window.phantomInitialized = true;
-
-            // don't do any setTimeout garbage
-            jasmine.getEnv().updateInterval = null;
-            var phantomReporter = {
-                reportSpecResults: function(spec) {
-                    if (spec.results().skipped) {
-                        // nothing for now!
-                    } else if (spec.results().passed()) {
-                        console.log(".");
-                    } else {
-                        console.log("\nF (" + spec.getFullName()  + ")\n");
-
-                        var resultItems = spec.results().getItems();
-                        _.each(resultItems, function(result) {
-                            if (result.type == 'expect' && result.passed && !result.passed()) {
-                                console.log(">>> " + result.message + "\n");
-                            }
-                        });
-                    }
-                }
-            };
-            phantomReporter.prototype = jasmine.Reporter;
-            jasmine.getEnv().addReporter(phantomReporter);
+            return false;
         });
-        waitFor(function(){
-            return page.evaluate(function(){
-                return !jasmine.getEnv().currentRunner().queue.running;
-            });
-        }, function(){
-            var exitCode = page.evaluate(function(){
-                var passedCount = 0,
-                    failedCount = 0,
-                    skippedCount = 0;
-                _.each(jasmine.getEnv().currentRunner().specs(), function(spec) {
-                    if (spec.results().skipped) {
-                        skippedCount++;
-                        return;
-                    }
+    }
+}
 
-                    if (spec.results().failedCount > 0) {
-                        failedCount++;
-                    } else {
-                        passedCount++;
-                    }
-                });
+page.onConsoleMessage = function(message) {
+    console.log(message);
+}
 
-                console.log("Specs passed:  " + passedCount + "\n");
-                console.log("Specs skipped: " + skippedCount + "\n");
-                console.log("Specs failed:  " + failedCount + "\n");
-                return failedCount;
-            });
-            phantom.exit(exitCode);
-        }, 1000 * 60 * 20); // wait 20 minutes (CI can be slow)
+page.open(url, function(success) {
+    if (success === "success") {
+        if (!attachedDoneCallback) {
+            printError("Phantom callbacks not attached in time.  See http://github.com/mark-rushakoff/OpenPhantomScripts/issues/1");
+            phantom.exit(1);
+        }
+
+        setInterval(function() {
+            if (page.evaluate(function() { return window.phantomComplete; })) {
+                var failures = page.evaluate(function() {return window.phantomResults.numFailed;});
+                phantom.exit(failures);
+            }
+        }, 250);
+    } else {
+        printError("Failure opening " + url);
+        phantom.exit(1);
     }
 });
