@@ -23,9 +23,6 @@
 
 var fs = require("fs");
 
-// var system = require("system");
-// var args = system.args;
-
 var args = phantom.args;
 var port = args[0];
 var filter = args[1];
@@ -40,13 +37,20 @@ if (!parseInt(port) || args.length > 2) {
     phantom.exit(1);
 }
 
+var page = require("webpage").create();
+
+var stdout = fs.open("/dev/stdout", "w");
+var stderr = fs.open("/dev/stderr", "w");
+
 function printError(message) {
-    var stderr = fs.open("/dev/stderr", "w");
     stderr.write(message + "\n");
     stderr.flush();
 }
 
-var page = require("webpage").create();
+page.onConsoleMessage = function(message) {
+    stdout.write(message);
+    stdout.flush();
+}
 
 var attachedDoneCallback = false;
 page.onResourceReceived = function() {
@@ -128,12 +132,6 @@ page.onResourceReceived = function() {
             return false;
         });
     }
-}
-
-page.onConsoleMessage = function(message) {
-    var stdout = fs.open("/dev/stdout", 'w');
-    stdout.write(message);
-    stdout.flush();
 }
 
 page.open(url, function(success) {
