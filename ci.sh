@@ -10,19 +10,21 @@ ruby -v | grep "jruby 1.6.7"
 gem list bundler | grep bundler || gem install bundler
 bundle install --binstubs=b/
 b/rake db:drop db:create db:migrate legacy:setup --trace > $WORKSPACE/bundle.log
+b/rake assets:precompile
 
 # start solr
 b/rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
 solr_pid=$!
 echo "Solr process id is : $solr_pid"
 echo $solr_pid > tmp/pids/solr-$RAILS_ENV.pid
-sleep 20
 
 # start jasmine
 b/rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
 jasmine_pid=$!
 echo "Jasmine process id is : $jasmine_pid"
 echo $jasmine_pid > tmp/pids/jasmine-$RAILS_ENV.pid
+
+sleep 30
 
 set +e
 
