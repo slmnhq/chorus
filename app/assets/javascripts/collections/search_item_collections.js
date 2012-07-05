@@ -75,7 +75,7 @@
     chorus.collections.Search.WorkfileSet = chorus.collections.WorkfileSet.include(
         searchCollectionMixins
     ).extend({
-        searchKey: "workfile"
+        searchKey: "workfiles"
     });
 
     chorus.collections.Search.ArtifactSet = chorus.collections.ArtifactSet.include(
