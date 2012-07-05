@@ -55,6 +55,8 @@ page.onResourceReceived = function() {
         attachedDoneCallback = page.evaluate(function() {
             if (window.jasmine) {
                 var reporter = {
+                    failures: [],
+
                     numPassed: 0,
                     numFailed: 0,
                     numSkipped: 0,
@@ -69,19 +71,42 @@ page.onResourceReceived = function() {
                             this.numSkipped++;
                         } else if (results.passed()) {
                             this.numPassed++;
+                            console.log(".");
                         } else {
                             this.numFailed++;
+
+                            var name = spec.getFullName();
+                            var failedExpectations = _.filter(spec.results().getItems(), function(item) {
+                                return (item.type == 'expect') && item.passed && !item.passed()
+                            });
+                            var messages = _.map(failedExpectations, function(expectation) {
+                                return expectation.message;
+                            });
+                            this.failures.push({ name: name, messages: messages });
+
+                            console.log("F");
                         }
                     },
 
                     reportRunnerResults: function() {
                         var totalTime = (new Date()).getTime() - this.startTime;
                         var totalTests = (this.numPassed + this.numSkipped + this.numFailed);
-                        console.log("Tests passed:  " + this.numPassed);
-                        console.log("Tests skipped: " + this.numSkipped);
-                        console.log("Tests failed:  " + this.numFailed);
-                        console.log("Total tests:   " + totalTests);
-                        console.log("Runtime (ms):  " + totalTime);
+
+                        _.each(this.failures, function(failure, i) {
+                            console.log("\n\n" + (i+1) + ") " + failure.name);
+                            _.each(failure.messages, function(message) {
+                                console.log("\n" + message);
+                            });
+                        });
+
+                        console.log("\n");
+                        console.log("\nTests passed:  " + this.numPassed);
+                        console.log("\nTests skipped: " + this.numSkipped);
+                        console.log("\nTests failed:  " + this.numFailed);
+                        console.log("\nTotal tests:   " + totalTests);
+                        console.log("\nRuntime (ms):  " + totalTime);
+                        console.log("\n\n");
+
                         window.phantomComplete = true;
                         window.phantomResults = {
                             numPassed: this.numPassed,
@@ -92,8 +117,6 @@ page.onResourceReceived = function() {
                         };
                     }
                 };
-
-                reporter.prototype = window.jasmine.Reporter.prototype;
 
                 window.jasmine.getEnv().addReporter(reporter);
 
@@ -106,7 +129,7 @@ page.onResourceReceived = function() {
 }
 
 page.onConsoleMessage = function(message) {
-    console.log(message);
+    fs.write('/dev/stdout', message, 'w');
 }
 
 page.open(url, function(success) {
