@@ -41,7 +41,9 @@ if (!parseInt(port) || args.length > 2) {
 }
 
 function printError(message) {
-    fs.write("/dev/stderr", message + "\n", "w");
+    var stderr = fs.open("/dev/stderr", "w");
+    stderr.write(message + "\n");
+    stderr.flush();
 }
 
 var page = require("webpage").create();
@@ -129,7 +131,9 @@ page.onResourceReceived = function() {
 }
 
 page.onConsoleMessage = function(message) {
-    fs.write('/dev/stdout', message, 'w');
+    var stdout = fs.open("/dev/stdout", 'w');
+    stdout.write(message);
+    stdout.flush();
 }
 
 page.open(url, function(success) {
