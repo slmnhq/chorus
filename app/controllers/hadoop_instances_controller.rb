@@ -1,3 +1,6 @@
+require 'allowy'
+require 'hadoop_instance_access'
+
 class HadoopInstancesController < ApplicationController
   def create
     cached_instance = Hdfs::InstanceRegistrar.create!(params[:hadoop_instance], current_user)

@@ -355,7 +355,7 @@ ALTER SEQUENCE hadoop_instances_id_seq OWNED BY hadoop_instances.id;
 
 CREATE TABLE hdfs_file_references (
     id integer NOT NULL,
-    path character varying(255),
+    path character varying(2048),
     hadoop_instance_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -1252,3 +1252,5 @@ INSERT INTO schema_migrations (version) VALUES ('20120621182920');
 INSERT INTO schema_migrations (version) VALUES ('20120628230223');
 
 INSERT INTO schema_migrations (version) VALUES ('20120702224758');
+
+INSERT INTO schema_migrations (version) VALUES ('20120705225230');
