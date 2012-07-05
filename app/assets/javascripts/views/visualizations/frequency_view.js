@@ -1,4 +1,6 @@
 chorus.views.visualizations.Frequency = chorus.views.Base.extend({
+    persistent: true,
+
     render: function() {
         var $el = $(this.el);
         $el.html("");

@@ -18,6 +18,18 @@ describe("chorus.views.visualizations.FrequencyView", function() {
         this.addMatchers(chorus.svgHelpers.matchers);
     });
 
+    describe("changing model", function() {
+        it("does not cause render to be called", function() {
+            spyOn(chorus.views.visualizations.Frequency.prototype, 'render');
+            var task = rspecFixtures.dataset().makeFrequencyTask({"bins": 3, "yAxis": "animals"});
+            var view = new chorus.views.visualizations.Frequency({ model: task });
+
+            task.set({rows: []});
+
+            expect(view.render).not.toHaveBeenCalled();
+        });
+    });
+
     describe("#render", function() {
         beforeEach(function() {
             $("#jasmine_content").append(this.view.el);
