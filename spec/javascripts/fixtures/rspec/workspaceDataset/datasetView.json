@@ -1,15 +1,55 @@
 {
   "response": {
+    "id": 9,
+    "type": "SOURCE_TABLE",
+    "object_name": "view2",
+    "schema": {
+      "id": 10,
+      "name": "schema6",
+      "database": {
+        "id": 10,
+        "name": "database7",
+        "instance": {
+          "name": "instance16",
+          "host": "host18.emc.com",
+          "port": 5018,
+          "id": 16,
+          "owner": {
+            "id": 258,
+            "username": "user255",
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "person260@example.com",
+            "title": "Grand Poo Bah",
+            "dept": "Corporation Corp., Inc.",
+            "notes": "One of our top performers",
+            "admin": false,
+            "image": {
+              "original": "/images/default-user-icon.png",
+              "icon": "/images/default-user-icon.png"
+            }
+          },
+          "shared": false,
+          "state": "online",
+          "provision_type": null,
+          "maintenance_db": "postgres",
+          "description": null,
+          "instance_provider": null,
+          "version": "9.1.2 - FactoryVersion"
+        }
+      },
+      "dataset_count": 1
+    },
     "workspace": {
-      "id": 5928,
-      "name": "workspace2",
+      "id": 57,
+      "name": "workspace57",
       "summary": null,
       "owner": {
-        "id": 3674,
-        "username": "user10",
+        "id": 257,
+        "username": "user254",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person10@example.com",
+        "email": "person259@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -37,46 +77,9 @@
       "sandbox_info": null,
       "latest_comment_list": null
     },
-    "id": 132,
-    "type": "SOURCE_TABLE",
-    "object_name": "view3",
-    "schema": {
-      "id": 140,
-      "name": "schema6",
-      "database": {
-        "id": 164,
-        "name": "database6",
-        "instance": {
-          "name": "instance6",
-          "host": "host6.emc.com",
-          "port": 5006,
-          "id": 596,
-          "owner": {
-            "id": 3673,
-            "username": "user9",
-            "first_name": "John",
-            "last_name": "Doe",
-            "email": "person9@example.com",
-            "title": "Grand Poo Bah",
-            "dept": "Corporation Corp., Inc.",
-            "notes": "One of our top performers",
-            "admin": false,
-            "image": {
-              "original": "/images/default-user-icon.png",
-              "icon": "/images/default-user-icon.png"
-            }
-          },
-          "shared": false,
-          "state": "online",
-          "provision_type": null,
-          "maintenance_db": "postgres",
-          "description": null,
-          "instance_provider": null,
-          "version": "9.1.2 - FactoryVersion"
-        }
-      },
-      "dataset_count": 1
-    },
+    "associated_workspaces": [
+
+    ],
     "object_type": "VIEW"
   }
 }

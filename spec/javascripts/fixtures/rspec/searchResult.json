@@ -3,11 +3,11 @@
     "users": {
       "results": [
         {
-          "id": 101,
+          "id": 102,
           "username": "some_other_user",
           "first_name": "bob",
           "last_name": "alpha",
-          "email": "person5@example.com",
+          "email": "person202@example.com",
           "title": "Grand Poo Bah",
           "dept": "Corporation Corp., Inc.",
           "notes": "One of our top performers",
@@ -32,15 +32,15 @@
       "results": [
         {
           "name": "bob_great_greenplum_instance",
-          "host": "host1.emc.com",
-          "port": 5001,
+          "host": "host14.emc.com",
+          "port": 5014,
           "id": 1,
           "owner": {
-            "id": 39,
-            "username": "user2",
+            "id": 199,
+            "username": "user198",
             "first_name": "John",
             "last_name": "Doe",
-            "email": "person2@example.com",
+            "email": "person198@example.com",
             "title": "Grand Poo Bah",
             "dept": "Corporation Corp., Inc.",
             "notes": "One of our top performers",
@@ -82,11 +82,11 @@
           "name": "bob",
           "summary": null,
           "owner": {
-            "id": 46,
-            "username": "user9",
+            "id": 206,
+            "username": "user206",
             "first_name": "John",
             "last_name": "Doe",
-            "email": "person11@example.com",
+            "email": "person208@example.com",
             "title": "Grand Poo Bah",
             "dept": "Corporation Corp., Inc.",
             "notes": "One of our top performers",
@@ -121,9 +121,59 @@
           "comments": [
 
           ]
+        },
+        {
+          "id": 2,
+          "name": "private bob workspace",
+          "summary": null,
+          "owner": {
+            "id": 207,
+            "username": "user207",
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "person209@example.com",
+            "title": "Grand Poo Bah",
+            "dept": "Corporation Corp., Inc.",
+            "notes": "One of our top performers",
+            "admin": false,
+            "image": {
+              "original": "/images/default-user-icon.png",
+              "icon": "/images/default-user-icon.png"
+            }
+          },
+          "archiver": null,
+          "archived_at": null,
+          "public": false,
+          "image": {
+            "original": "",
+            "icon": ""
+          },
+          "permission": [
+
+          ],
+          "has_added_member": false,
+          "has_added_workfile": false,
+          "has_added_sandbox": false,
+          "has_changed_settings": false,
+          "sandbox_info": null,
+          "latest_comment_list": null,
+          "highlighted_attributes": {
+            "name": [
+              "private <em>bob</em> workspace"
+            ]
+          },
+          "comments": [
+
+          ]
         }
       ],
-      "numFound": 1
+      "numFound": 2
+    },
+    "workfiles": {
+      "results": [
+
+      ],
+      "numFound": 0
     }
   }
 }

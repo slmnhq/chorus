@@ -79,5 +79,15 @@ describe InstanceDatabasesController do
         response.code.should == "404"
       end
     end
+
+    context "when the current user does not have credentials for the instance" do
+      subject { described_class.new }
+
+      generate_fixture "forbiddenInstance.json" do
+        stub(subject).can? { false }
+        get :show, :id => database.to_param
+        response.should be_forbidden
+      end
+    end
   end
 end
