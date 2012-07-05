@@ -11,7 +11,7 @@ describe "creating a note on an instance" do
 
     within_modal do
       set_cleditor_value("body", "Note on the instance")
-      click_button "Add Note"
+      click_submit_button
       wait_for_ajax
     end
 
