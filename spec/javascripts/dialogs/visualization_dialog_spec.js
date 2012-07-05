@@ -644,6 +644,15 @@ describe("chorus.dialogs.Visualization", function() {
         });
     });
 
+    describe("#refreshChart", function() {
+        it("updates the filters", function() {
+            this.server.reset();
+            this.dialog.refreshChart();
+
+            expect(this.dialog.task.get('filters').length).toBe(2);
+        });
+    });
+
     function itDoesNotShowRefreshOverlay() {
         it("does not show refresh overlay", function() {
             expect(this.dialog.$('.overlay')).toHaveClass('hidden');
@@ -680,6 +689,7 @@ describe("chorus.dialogs.Visualization", function() {
         describe("#refreshChart", function() {
             beforeEach(function() {
                 this.server.reset();
+                spyOn(this.dialog.filters, "sqlStrings").andReturn(["newSql"]);
                 spyOn(this.dialog, "drawChart").andCallThrough();
                 this.dialog.refreshChart();
             });
@@ -704,9 +714,8 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.$("button.stop")).toContainTranslation("actions.cancel");
             });
 
-            it("converts the dataset filters to SQL fragments when saving", function() {
-                expect(this.dialog.task.get("filters").length).toBe(6); // ?????
-                expect(this.dialog.task.get("filters")[0]).toContain('=');
+            it("updates the task sql", function() {
+                expect(this.dialog.task.get("filters")).toEqual(["newSql"]);
             });
 
             describe("clicking the 'cancel' button", function() {
@@ -745,22 +754,22 @@ describe("chorus.dialogs.Visualization", function() {
 
                 describe("changing the filters again and clicking 'revert'", function() {
                     beforeEach(function() {
-                        this.dialog.filters.whereClause.andCallThrough();
-                        this.previousWhereClause = this.dialog.filters.whereClause();
+                        this.dialog.filters.sqlStrings.andCallThrough();
+                        this.previousSqlstring = this.dialog.filters.sqlStrings();
                         this.dialog.filterWizard.$(".filter input").val("even_newer").trigger("keyup");
-                        expect(this.dialog.filters.whereClause()).not.toBe(this.previousWhereClause);
+                        expect(this.dialog.filters.sqlStrings()).not.toBe(this.previousSqlstring);
                     });
 
                     it("returns the filters to their last saved state", function() {
                         this.dialog.$("button.revert").click();
-                        expect(this.dialog.filters.whereClause()).toBe(this.previousWhereClause);
+                        expect(this.dialog.filters.sqlStrings()).toEqual(this.previousSqlstring);
                     });
 
                     it("can be used multiple times in a row without saving", function() {
                         this.dialog.$("button.revert").click();
                         this.dialog.filterWizard.$(".filter input").val("even_newer").trigger("keyup");
                         this.dialog.$("button.revert").click();
-                        expect(this.dialog.filters.whereClause()).toBe(this.previousWhereClause);
+                        expect(this.dialog.filters.sqlStrings()).toEqual(this.previousSqlstring);
                     })
                 });
             });
