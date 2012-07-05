@@ -22,6 +22,8 @@ chorus.views.UserNew = chorus.views.Base.extend({
 
     submitNewUser:function submitNewUser(e) {
         e.preventDefault();
+        if(this.saving) {return;}
+        this.saving = true;
 
         delete this.model.serverErrors;
         this.clearErrors();
@@ -46,6 +48,11 @@ chorus.views.UserNew = chorus.views.Base.extend({
 
     goBack:function () {
         window.history.back();
+    },
+
+    showErrors: function() {
+        this._super("showErrors", arguments);
+        this.saving = false;
     },
 
     userSaved: function() {
