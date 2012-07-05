@@ -73,7 +73,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
             if (this.resource.get("id")) {
                 return this.resource.get("id");
             } else {
-                return this.options.hadoopInstanceId + "|" + (this.options.rootPath + "/" +this.resource.get("name"));
+                return this.resource.getActivityStreamId();
             }
         }
     },

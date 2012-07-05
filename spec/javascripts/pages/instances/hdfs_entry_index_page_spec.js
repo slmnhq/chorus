@@ -71,7 +71,15 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                 spyOn(chorus, "menu")
 
                 this.page = new chorus.pages.HdfsEntryIndexPage("1234", "start/m1/m2/m3/end");
-                this.server.completeFetchFor(this.page.collection, [fixtures.hdfsEntryFile()]);
+                var model = new chorus.models.HdfsEntry({
+                   hadoopInstance: {
+                       id: 111
+                   },
+                   path: "/",
+                   name: "foo.csv"
+               })
+
+                this.server.completeFetchFor(this.page.collection, [model]);
                 this.server.completeFetchFor(this.page.instance, this.instance);
             });
 
@@ -102,7 +110,15 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
         describe("when an entry is selected", function() {
             beforeEach(function() {
-                this.entry = fixtures.hdfsEntryFile({id: "not_in_the_fixture"});
+                this.entry = new chorus.models.HdfsEntry({
+                    id: "not_in_the_fixture",
+                    hadoopInstance: {
+                        id: 111
+                    },
+                    path: "/",
+                    name: "foo.csv"
+                });
+
                 expect(this.page.model).toEqual(this.page.collection.models[0]);
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.entry);
             });

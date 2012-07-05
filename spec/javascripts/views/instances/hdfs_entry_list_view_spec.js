@@ -65,7 +65,14 @@ describe("chorus.views.HdfsEntryList", function() {
         })
 
         it("broadcasts hdfs_entry:selected on itemSelected", function() {
-            var model = fixtures.hdfsEntryFile();
+            var model = new chorus.models.HdfsEntry({
+                hadoopInstance: {
+                    id: 111
+                },
+                path: "/",
+                name: "foo.csv"
+            })
+
             chorus.PageEvents.broadcast.reset();
             this.view.itemSelected(model);
             expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", model);

@@ -40,13 +40,13 @@ describe("chorus.models.HdfsEntry", function() {
 
     describe("#parent", function() {
         it("returns the entry's parent directory", function() {
-            this.model = fixtures.hdfsEntryFile({
-                path: '/imports/july/21',
-                name: 'injuries.csv',
-                instance: {
-                    id: 10000
-                }
-            });
+            this.model = new chorus.models.HdfsEntry({
+               hadoopInstance: {
+                   id: 10000
+               },
+               path: "/imports/july/21",
+               name: "injuries.csv"
+           })
 
             var parent = this.model.parent();
 
@@ -57,13 +57,15 @@ describe("chorus.models.HdfsEntry", function() {
 
     describe("pathSegments", function() {
         beforeEach(function() {
-            this.model = fixtures.hdfsEntryFile({
-                path: '/foo/bar/%baz',
-                randomAttr: 'something',
-                instance: {
+            this.model = new chorus.models.HdfsEntry({
+                hadoopInstance: {
                     id: 10000
-                }
-            });
+                },
+                path: "/foo/bar/%baz",
+                randomAttr: 'something',
+                name: "foo.csv"
+            })
+
             this.segments = this.model.pathSegments();
         });
 
@@ -95,12 +97,14 @@ describe("chorus.models.HdfsEntry", function() {
 
     describe('getHadoopInstance', function() {
         beforeEach(function() {
-            this.model = fixtures.hdfsEntryFile({
-                hadoopInstance: {
-                    id: '3',
-                    name: 'obscene'
-                }
-            });
+            this.model = new chorus.models.HdfsEntry({
+               hadoopInstance: {
+                   id: 3,
+                   name: "obscene"
+               },
+               path: "/"
+           })
+
             this.hadoopInstance = this.model.getHadoopInstance();
         });
 
@@ -109,7 +113,7 @@ describe("chorus.models.HdfsEntry", function() {
         });
 
         it('has the correct attributes', function() {
-            expect(this.hadoopInstance.get('id')).toBe('3');
+            expect(this.hadoopInstance.get('id')).toBe(3);
             expect(this.hadoopInstance.get('name')).toBe('obscene');
         });
 
@@ -128,6 +132,17 @@ describe("chorus.models.HdfsEntry", function() {
                 name: "foo.csv"
             })
            expect(model.getActivityStreamId()).toBe("111|/test/foo/foo.csv")
+        });
+
+        it("does not prepend an extra slash when the file is in the root directory", function() {
+             var model = new chorus.models.HdfsEntry({
+                hadoopInstance: {
+                    id: 111
+                },
+                path: "/",
+                name: "foo.csv"
+            })
+           expect(model.getActivityStreamId()).toBe("111|/foo.csv")
         });
     });
 

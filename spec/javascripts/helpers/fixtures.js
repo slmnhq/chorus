@@ -981,10 +981,6 @@ beforeEach(function() {
             return new chorus.models.HdfsEntry(this.hdfsEntryDirJson(overrides));
         },
 
-        hdfsEntryFile: function(overrides) {
-            return new chorus.models.HdfsEntry(this.hdfsEntryFileJson(overrides));
-        },
-
         hdfsEntryDirJson: function(overrides) {
             var id = fixtures.nextId();
             return _.extend({

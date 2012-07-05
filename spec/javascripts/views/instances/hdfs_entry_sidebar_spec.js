@@ -37,7 +37,15 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
                 this.modalSpy = stubModals();
 
-                this.hdfsEntry = fixtures.hdfsEntryFile({name: "my_file.sql", isBinary: false});
+                this.hdfsEntry = new chorus.models.HdfsEntry({
+                    hadoopInstance: {
+                        id: 123
+                    },
+                    path: "/foo",
+                    name: "my_file.sql",
+                    isBinary: false
+               })
+
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 
@@ -94,7 +102,15 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
                 this.modalSpy = stubModals();
 
-                this.hdfsEntry = fixtures.hdfsEntryFile({name: "my_file.exe", isBinary: true});
+                this.hdfsEntry = new chorus.models.HdfsEntry({
+                    hadoopInstance: {
+                        id: 111
+                    },
+                    path: "/",
+                    name: "my_file.exe",
+                    isBinary: true
+                })
+
                 chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
             });
 
