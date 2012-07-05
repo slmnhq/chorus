@@ -125,7 +125,18 @@
         },
 
         noteObjectType: function(self) {
-            return "Greenplum instance" ;
+            var actionType = self.model.get("actionType");
+            switch (actionType) {
+                case "NOTE_ON_GREENPLUM_INSTANCE":
+                    return "Greenplum instance";
+                    break;
+                case "NOTE_ON_HDFS_FILE":
+                    return "file";
+                    break;
+                default:
+                    return "";
+                    break;
+            }
         },
 
         modelLink: function(model) {

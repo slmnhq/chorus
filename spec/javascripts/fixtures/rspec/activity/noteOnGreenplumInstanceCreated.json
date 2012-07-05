@@ -1,8 +1,8 @@
 {
   "response": {
-    "id": 90,
+    "id": 142,
     "actor": {
-      "id": 500,
+      "id": 420,
       "username": "user165",
       "first_name": "John",
       "last_name": "Doe",
@@ -17,14 +17,14 @@
       }
     },
     "action": "NOTE",
-    "timestamp": "2012-06-29T22:03:41Z",
+    "timestamp": "2012-07-05T18:25:32Z",
     "greenplum_instance": {
       "name": "instance5",
       "host": "host5.emc.com",
       "port": 5005,
-      "id": 17,
+      "id": 51,
       "owner": {
-        "id": 501,
+        "id": 421,
         "username": "user166",
         "first_name": "John",
         "last_name": "Doe",
@@ -46,6 +46,7 @@
       "instance_provider": null,
       "version": "9.1.2 - FactoryVersion"
     },
-    "body": "Note to self, include a body"
+    "body": "Note to self, add a body",
+    "action_type": "NOTE_ON_GREENPLUM_INSTANCE"
   }
 }

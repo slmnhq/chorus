@@ -113,17 +113,18 @@ describe EventsController do
     end
 
     FIXTURE_FILES = {
-      "greenplumInstanceCreated" => :greenplum_instance_created_event,
-      "hadoopInstanceCreated" => :hadoop_instance_created_event,
-      "greenplumInstanceChangedOwner" => :greenplum_instance_changed_owner_event,
-      "greenplumInstanceChangedName" => :greenplum_instance_changed_name_event,
-      "hadoopInstanceChangedName" => :hadoop_instance_changed_name_event,
-      "workfileCreated" => :workfile_created_event,
-      "sourceTableCreated" => :source_table_created_event,
-      "userCreated" => :user_created_event,
-      "sandboxAdded" => :sandbox_added_event,
-      "noteOnGreenplumInstanceCreated" => :note_on_greenplum_instance_event,
-      "hdfsExternalTableCreated" => :hdfs_external_table_created_event
+        "greenplumInstanceCreated" => :greenplum_instance_created_event,
+        "hadoopInstanceCreated" => :hadoop_instance_created_event,
+        "greenplumInstanceChangedOwner" => :greenplum_instance_changed_owner_event,
+        "greenplumInstanceChangedName" => :greenplum_instance_changed_name_event,
+        "hadoopInstanceChangedName" => :hadoop_instance_changed_name_event,
+        "workfileCreated" => :workfile_created_event,
+        "sourceTableCreated" => :source_table_created_event,
+        "userCreated" => :user_created_event,
+        "sandboxAdded" => :sandbox_added_event,
+        "noteOnGreenplumInstanceCreated" => :note_on_greenplum_instance_event,
+        "hdfsExternalTableCreated" => :hdfs_external_table_created_event,
+        "noteOnHdfsFileCreated" => :note_on_hdfs_file_event
     }
 
     FIXTURE_FILES.each do |filename, event_factory_name|

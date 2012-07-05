@@ -8,7 +8,7 @@
         "workfile": "Workfile",
         "workspace": "Workspace",
         "newUser" : "User",
-        "noteObject" : "GreenplumInstance",
+        "noteObject" : "NoteObject",
         "hdfsEntry" : "HdfsEntry"
     };
 
@@ -30,7 +30,7 @@
         hadoopInstance: makeAssociationMethod("hadoopInstance"),
         workfile: makeAssociationMethod("workfile"),
         newUser: makeAssociationMethod("newUser"),
-        noteObject: makeAssociationMethod("greenplumInstance"),
+
         dataset: makeAssociationMethod("dataset", function(model) {
            model.set({workspace: this.get("workspace")}, {silent: true});
         }),
@@ -42,6 +42,28 @@
                 name : this.get("hdfsFileName")
             })
         }),
+
+        noteObject: function() {
+            var model;
+
+            switch (this.get("actionType")) {
+                case "NOTE_ON_GREENPLUM_INSTANCE":
+                    model = new chorus.models.GreenplumInstance();
+                    model.set({
+                        id : this.get("greenplumInstance").id,
+                        name: this.get("greenplumInstance").name
+                    });
+                    break;
+                case "NOTE_ON_HDFS_FILE":
+                    model = new chorus.models.HdfsFile();
+                    model.set({
+                        hadoopInstance: new chorus.models.HadoopInstance({ id: this.get("hdfsFile").hadoopInstanceId }),
+                        path: this.get("hdfsFile").path
+                    });
+                    break;
+            }
+            return model;
+        },
 
         comments: function() {
             this._comments || (this._comments = new chorus.collections.CommentSet(

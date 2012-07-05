@@ -2,7 +2,8 @@ class EventPresenter < Presenter
   def to_hash
     basic_hash.
       merge(targets_hash).
-      merge(additional_data_hash)
+      merge(additional_data_hash).
+      merge(note_action_type_hash)
   end
 
   private
@@ -20,6 +21,11 @@ class EventPresenter < Presenter
     return "NOTE" if model.is_a?(Events::Note)
 
     model.action
+  end
+
+  def note_action_type_hash
+    return { :action_type => model.action } if model.is_a?(Events::Note)
+    {}
   end
 
   def additional_data_hash

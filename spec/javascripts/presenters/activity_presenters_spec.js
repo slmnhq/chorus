@@ -55,7 +55,7 @@ describe("chorus.presenters.Activity", function() {
             describe("#headerHtml", function() {
                 it("returns the translation for the without_workspace style if no style is provided " +
                     "and the model does not have a valid workspace", function() {
-                    presenter.options.displayStyle = null
+                    presenter.options.displayStyle = null;
                     expect(presenter.headerHtml().toString()).toContainTranslation(
                         "activity.header.NOTE.without_workspace", {
                             actorLink: linkTo(actor.showUrl(), actor.name()),
@@ -277,6 +277,32 @@ describe("chorus.presenters.Activity", function() {
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
                     hdfsEntryLink: linkTo(hdfsEntry.showUrl(), hdfsEntry.name()),
                     datasetLink: linkTo(dataset.showUrl(), dataset.name())
+                }
+            )
+        });
+    });
+
+    context("note on a hdfs file", function() {
+        var dataset, hdfsFile;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.noteOnHdfsFileCreated({
+                hdfsFile: { hadoopInstanceId: 1234, path: "/random/path.csv" }
+            })
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            hdfsFile = rspecFixtures.hdfsFile({
+                hadoopInstance: { id: 1234 },
+                path: "/random/path.csv"
+            });
+        });
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.NOTE.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    noteObjectLink: linkTo(hdfsFile.showUrl(), hdfsFile.name()),
+                    noteObjectType: "file"
                 }
             )
         });

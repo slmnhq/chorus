@@ -4,46 +4,17 @@ describe("chorus.models.Activity", function() {
     });
 
     describe("model associations", function() {
-        var activity1, activity2, activity3, activity4, activity5, activity6, activity7;
-
-        beforeEach(function() {
-            activity1 = rspecFixtures.activity.greenplumInstanceChangedOwner({
-                actor: { id: 5 },
-                greenplumInstance: { id: 6 },
-                newOwner: { id: 7 }
-            });
-
-            activity2 = rspecFixtures.activity.hadoopInstanceCreated({
-                hadoopInstance: { id: 8 }
-            });
-
-            activity3 = rspecFixtures.activity.sourceTableCreated({
-                dataset: { id: 9 }, workspace: {id: 10}
-
-            });
-            activity4 = rspecFixtures.activity.workfileCreated({
-                workfile: {id: 11}
-            });
-
-            activity5 = rspecFixtures.activity.userCreated({
-                newUser: {id: 12}
-            });
-
-            activity6 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                greenplumInstance: { id: 13 }
-            });
-            
-            activity7 = rspecFixtures.activity.hdfsExternalTableCreated({
-                hadoopInstanceId: 1,
-                path : "/data",
-                hdfsFileName : "test.csv"
-            });
-
-        });
+        var activity;
 
         describe("#newOwner", function() {
             it("returns a user with the newOwner data", function() {
-                var newOwner = activity1.newOwner();
+                activity = rspecFixtures.activity.greenplumInstanceChangedOwner({
+                    actor: { id: 5 },
+                    greenplumInstance: { id: 6 },
+                    newOwner: { id: 7 }
+                });
+
+                var newOwner = activity.newOwner();
                 expect(newOwner).toBeA(chorus.models.User);
                 expect(newOwner.id).toBe(7);
             });
@@ -51,7 +22,13 @@ describe("chorus.models.Activity", function() {
 
         describe("#actor", function() {
             it("returns a user with the right data", function() {
-                var actor = activity1.actor();
+                activity = rspecFixtures.activity.greenplumInstanceChangedOwner({
+                    actor: { id: 5 },
+                    greenplumInstance: { id: 6 },
+                    newOwner: { id: 7 }
+                });
+
+                var actor = activity.actor();
                 expect(actor).toBeA(chorus.models.User);
                 expect(actor.id).toBe(5);
             });
@@ -59,7 +36,11 @@ describe("chorus.models.Activity", function() {
 
         describe("#hadoopInstance", function() {
             it("returns a hadoop instance with the right data", function() {
-                var hadoopInstance = activity2.hadoopInstance();
+                activity = rspecFixtures.activity.hadoopInstanceCreated({
+                    hadoopInstance: { id: 8 }
+                });
+
+                var hadoopInstance = activity.hadoopInstance();
                 expect(hadoopInstance).toBeA(chorus.models.HadoopInstance);
                 expect(hadoopInstance.id).toBe(8);
             });
@@ -67,7 +48,13 @@ describe("chorus.models.Activity", function() {
 
         describe("#greenplumInstance", function() {
             it("returns a greenplum instance with the right data", function() {
-                var greenplumInstance = activity1.greenplumInstance();
+                activity = rspecFixtures.activity.greenplumInstanceChangedOwner({
+                    actor: { id: 5 },
+                    greenplumInstance: { id: 6 },
+                    newOwner: { id: 7 }
+                });
+
+                var greenplumInstance = activity.greenplumInstance();
                 expect(greenplumInstance).toBeA(chorus.models.GreenplumInstance);
                 expect(greenplumInstance.id).toBe(6);
             });
@@ -75,7 +62,11 @@ describe("chorus.models.Activity", function() {
 
          describe("#workspace", function() {
             it("returns a Workspace with the right data", function() {
-                var workspace = activity3.workspace();
+                activity = rspecFixtures.activity.sourceTableCreated({
+                    dataset: { id: 9 }, workspace: {id: 10}
+                });
+
+                var workspace = activity.workspace();
                 expect(workspace).toBeA(chorus.models.Workspace);
                 expect(workspace.id).toBe(10);
             });
@@ -83,7 +74,11 @@ describe("chorus.models.Activity", function() {
 
         describe("#workfile", function() {
             it("returns a workfile with the right data", function() {
-                var workfile = activity4.workfile();
+                activity = rspecFixtures.activity.workfileCreated({
+                    workfile: {id: 11}
+                });
+
+                var workfile = activity.workfile();
                 expect(workfile).toBeA(chorus.models.Workfile);
                 expect(workfile.id).toBe(11);
             });
@@ -93,7 +88,12 @@ describe("chorus.models.Activity", function() {
             var dataset;
 
             beforeEach(function() {
-                dataset = activity3.dataset();
+                activity = rspecFixtures.activity.sourceTableCreated({
+                    dataset: { id: 9 }, workspace: {id: 10}
+
+                });
+
+                dataset = activity.dataset();
             });
 
             it("returns a WorkspaceDataset with the right data", function() {
@@ -108,24 +108,52 @@ describe("chorus.models.Activity", function() {
 
         describe("#newUser", function() {
             it("returns a new user with the right data", function() {
-                var user = activity5.newUser();
+                activity = rspecFixtures.activity.userCreated({
+                    newUser: {id: 12}
+                });
+
+                var user = activity.newUser();
                 expect(user).toBeA(chorus.models.User);
                 expect(user.id).toBe(12);
             });
         });
 
         describe("#noteObject", function() {
-            it("returns a greenplumInstance with the right data", function() {
-                var instance = activity6.greenplumInstance();
-                expect(instance).toBeA(chorus.models.GreenplumInstance);
-                expect(instance.id).toBe(13);
+            context("for a NOTE_ON_GREENPLUM_INSTANCE", function() {
+                it("returns a greenplumInstance with the right data", function() {
+                    activity = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+                        greenplumInstance: { id: 13 }
+                    });
+
+                    var instance = activity.greenplumInstance();
+                    expect(instance).toBeA(chorus.models.GreenplumInstance);
+                    expect(instance.id).toBe(13);
+                });
+            });
+
+            context("for a NOTE_ON_HDFS_FILE", function() {
+                it("returns a hdfsFile with the right data", function() {
+                    activity = rspecFixtures.activity.noteOnHdfsFileCreated({
+                        hdfsFile: { path: "/happy/path.txt", hadoopInstanceId: 331 }
+                    });
+                    var hdfsFile = activity.noteObject();
+                    expect(hdfsFile).toBeA(chorus.models.HdfsFile);
+                    expect(hdfsFile.get("path")).toBe("/happy/path.txt");
+                    expect(hdfsFile.get("hadoopInstance").id).toBe(331)
+                });
             });
         });
         
         
         describe("#hdfsEntry", function() {
             it("returns hdfs entry with the right data", function() {
-                var hdfsEntry = activity7.hdfsEntry();
+                activity = rspecFixtures.activity.hdfsExternalTableCreated({
+                    hadoopInstanceId: 1,
+                    path : "/data",
+                    hdfsFileName : "test.csv"
+                });
+
+                var hdfsEntry = activity.hdfsEntry();
                 expect(hdfsEntry).toBeA(chorus.models.HdfsEntry);
                 expect(hdfsEntry.get("path")).toBe("/data")
                 expect(hdfsEntry.name()).toBe("test.csv")

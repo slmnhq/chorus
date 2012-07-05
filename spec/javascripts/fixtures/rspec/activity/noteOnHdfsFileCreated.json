@@ -1,0 +1,28 @@
+{
+  "response": {
+    "id": 148,
+    "actor": {
+      "id": 453,
+      "username": "user198",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person198@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "action": "NOTE",
+    "timestamp": "2012-07-05T18:25:33Z",
+    "hdfs_file": {
+      "hadoop_instance_id": 25,
+      "path": "/folder/subfolder/file.csv"
+    },
+    "body": "This is a note on an hdfs file",
+    "action_type": "NOTE_ON_HDFS_FILE"
+  }
+}
