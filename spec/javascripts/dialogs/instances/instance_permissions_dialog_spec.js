@@ -810,7 +810,8 @@ describe("chorus.dialogs.InstancePermissions", function() {
 
                 describe("after re-fetching the accounts", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dialog.collection, [rspecFixtures.instanceAccount({owner: { id: this.newOwner.get("id")}})]);
+                        this.instanceAccount = rspecFixtures.instanceAccount({owner: { id: this.newOwner.get("id")}})
+                        this.server.completeFetchFor(this.dialog.collection, [this.instanceAccount]);
                     });
 
                     it("closes the dialog", function() {
@@ -826,7 +827,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                     });
 
                     it("can render the instance's shared db username", function() {
-                        expect(this.instance.accountForOwner().get("dbUsername")).toBe("username1")
+                        expect(this.instance.accountForOwner().get("dbUsername")).toBe(this.instanceAccount.get("dbUsername"))
                     });
                 });
             });

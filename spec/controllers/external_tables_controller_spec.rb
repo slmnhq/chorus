@@ -40,10 +40,10 @@ describe ExternalTablesController do
         {
             :hdfs_external_table => {
                 :hadoop_instance_id => hadoop_instance.id,
-                :path => "foo_fighter/twisted_sisters/",
+                :pathname => "foo_fighter/twisted_sisters/",
                 :has_header => true,
                 :column_names => ["field1", "field2"],
-                :column_types => ["text", "text"],
+                :types => ["text", "text"],
                 :delimiter => ',',
                 :table_name => "highway_to_heaven"},
             :workspace_id => workspace.id

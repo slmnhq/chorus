@@ -386,7 +386,6 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
     describe("clicking the import button", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeModal");
-
         });
 
         it("starts the spinner", function() {

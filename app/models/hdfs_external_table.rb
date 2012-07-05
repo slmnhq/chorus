@@ -28,6 +28,7 @@ class HdfsExternalTable
   end
 
   def self.create(workspace, account, parameters, creator)
+    parameters[:path] = parameters[:pathname]
     sql = create_sql(parameters)
     execute_query(sql, workspace.sandbox, account)
     dataset = create_dataset(workspace.sandbox, parameters[:table_name])

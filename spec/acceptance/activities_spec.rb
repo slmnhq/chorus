@@ -3,7 +3,7 @@ require 'spec_helper'
 resource "Activities" do
   let(:user) { FactoryGirl.create :user }
 
-  get "/activities" do
+  get "/activities?entity_type=dashboard" do
     before do
       log_in user
     end
