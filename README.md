@@ -88,9 +88,13 @@ brew install qt
 ## Development
 
     cd ~/workspace/chorusrails && foreman start
+    If foreman fails to start run:
+    bundle  
 
-    In another terminal window, run
-
+    In another terminal window, run: 
+	cd ~/workspace/chorusrails && script/start_db.sh (or script/start_db_noisy.sh for verbouse db output.)
+   
+    Run the following rake commands, ignore DB errors.
     rake db:migrate
     rake db:test:prepare
 
