@@ -55,14 +55,14 @@ class HdfsExternalTable
   end
 
   def self.create_event(dataset, workspace, parameters, creator)
-    filename = parameters[:path].split("/").last
+
+    hdfs_file_ref = HdfsFileReference.find_or_create_by_path({ :hadoop_instance_id => parameters[:hadoop_instance_id].to_i,
+                                                           :path => parameters[:path] })
 
     Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(creator).add(
-      :workspace => workspace,
-      :dataset => dataset,
-      :hadoop_instance_id => parameters[:hadoop_instance_id].to_i,
-      :path => parameters[:path].gsub(filename, ""),
-      :hdfs_file_name => filename
+        :workspace => workspace,
+        :dataset => dataset,
+        :hdfs_file => hdfs_file_ref
     )
   end
 end

@@ -101,13 +101,11 @@ class Legacy::ActivityStream
     object_id = extract_result("object_id", Legacy.connection.exec_query(sql))
     ids = object_id.delete("\"").split("|")
     legacy_hadoop_instance_id = ids[0]
-    path_file_name = ids[1].split("/")
-    file_name = path_file_name[-1]
-    path = ids[1].gsub(file_name, "")
+    path_name = ids[1]
     sql = "SELECT ei.chorus_rails_instance_id FROM edc_instance ei WHERE ei.id = '#{legacy_hadoop_instance_id}'"
     rails_hadoop_instance_id = extract_result("chorus_rails_instance_id", Legacy.connection.exec_query(sql))
     hadoop_instance = HadoopInstance.find_by_id(rails_hadoop_instance_id)
-    return hadoop_instance[:id] , path, file_name
+    return hadoop_instance[:id] , path_name
   end
 
   def rails_dataset_id

@@ -2,13 +2,14 @@ describe("chorus.models.HdfsEntry", function() {
     describe("showUrl", function() {
         context("when entry is a directory", function() {
             beforeEach(function() {
-                this.model = fixtures.hdfsEntryDir({
-                    hadoopInstance: {
-                        id: '42'
-                    },
-                    path: '/data/a%pct',
-                    name: '%foo%'
-                });
+                this.model = new chorus.models.HdfsEntry({
+                   hadoopInstance: {
+                       id: 42
+                   },
+                    path: "/data/a%pct",
+                    name: "%foo%",
+                    isDir: true
+                })
             });
 
             it("is correct", function() {
@@ -149,11 +150,13 @@ describe("chorus.models.HdfsEntry", function() {
     describe("getFullAbsolutePath", function() {
         context("path is not root", function() {
             it("returns the path including the filename", function() {
-                var model = fixtures.hdfsEntryFile({
-                    hadoopInstance: {id: '3'},
-                    name: 'file.sql',
-                    path: '/'
-                });
+                var model = new chorus.models.HdfsEntry({
+                   hadoopInstance: {
+                       id: 3
+                   },
+                    path: "/",
+                    name: "file.sql"
+               })
 
                 expect(model.getFullAbsolutePath()).toEqual("/file.sql");
             });
@@ -161,11 +164,13 @@ describe("chorus.models.HdfsEntry", function() {
 
         context("path is not root", function() {
             it("returns the path including the filename", function() {
-                var model = fixtures.hdfsEntryFile({
-                    hadoopInstance: {id: '3'},
-                    name: 'file.sql',
-                    path: '/workfiles'
-                });
+                var model = new chorus.models.HdfsEntry({
+                    hadoopInstance: {
+                        id: 3
+                    },
+                    path: "/workfiles",
+                    name: "file.sql"
+                })
 
                 expect(model.getFullAbsolutePath()).toEqual("/workfiles/file.sql");
             });

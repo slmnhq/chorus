@@ -71,12 +71,13 @@ module Events
       end
     end
 
-    def self.has_targets(target1_name, target2_name = nil)
-      self.target_names = [target1_name, target2_name].compact
-      self.attr_accessible target1_name, target2_name
+    def self.has_targets(*target_names)
+      self.target_names = target_names.compact
+      self.attr_accessible(*target_names)
 
-      alias_getter_and_setter(:target1, target1_name)
-      alias_getter_and_setter(:target2, target2_name)
+      target_names.each_with_index do |name, i|
+        alias_getter_and_setter("target#{i+1}", name)
+      end
     end
 
     def self.alias_getter_and_setter(existing_name, new_name)

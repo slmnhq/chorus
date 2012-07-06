@@ -49,8 +49,7 @@ module Events
   end
 
   class WORKSPACE_ADD_HDFS_AS_EXT_TABLE < Base
-    has_targets :dataset, :workspace
-    has_additional_data :hadoop_instance_id, :path, :hdfs_file_name
-    has_activities :actor, :workspace, :dataset, :global
+    has_targets :dataset, :hdfs_file, :workspace
+    has_activities :actor, :workspace, :dataset, :hdfs_file, :global
   end
 end

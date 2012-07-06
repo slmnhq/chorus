@@ -9,7 +9,7 @@ describe HdfsExternalTable do
       let(:parameters) do
         {
             :hadoop_instance_id => hadoop_instance.id,
-            :path => "foo_fighter/twisted_sisters/",
+            :path => "/foo_fighter/twisted_sisters/",
             :has_header => true,
             :column_names => ["field1", "field2"],
             :types => ["text", "text"],
@@ -29,7 +29,7 @@ describe HdfsExternalTable do
       let(:parameters) do
         {
             :hadoop_instance_id => hadoop_instance.id,
-            :path => "foo_fighter/twisted_sisters/",
+            :path => "/foo_fighter/twisted_sisters/",
             :has_header => false,
             :column_names => ["field1", "field2"],
             :types => ["text", "text"],
@@ -49,7 +49,7 @@ describe HdfsExternalTable do
       let(:parameters) do
         {
             :hadoop_instance_id => hadoop_instance.id,
-            :path => "foo_fighter/twisted_sisters/",
+            :path => "/foo_fighter/twisted_sisters/",
             :has_header => true,
             :column_names => ["field1", "field2"],
             :types => ["text", "text"],
@@ -82,9 +82,8 @@ describe HdfsExternalTable do
         workspace = FactoryGirl.create(:workspace, :sandbox => FactoryGirl.create(:gpdb_schema))
         HdfsExternalTable.create_event(@dataset, workspace, parameters, creator)
         event = Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.last
-        event.hadoop_instance_id.should == hadoop_instance.id
-        event.path.should == "/data/"
-        event.hdfs_file_name.should == "file.csv"
+        event.hdfs_file.hadoop_instance_id.should == hadoop_instance.id
+        event.hdfs_file.path.should == "/data/file.csv"
         event.dataset.should == @dataset
         event.workspace.should == workspace
       end
@@ -94,7 +93,7 @@ describe HdfsExternalTable do
       let(:parameters) do
         {
             :hadoop_instance_id => hadoop_instance.id,
-            :path => "foo_fighter/twisted_sisters/",
+            :path => "/foo_fighter/twisted_sisters/",
             :has_header => true,
             :column_names => ["field1", "field2"],
             :types => ["text", "text"],

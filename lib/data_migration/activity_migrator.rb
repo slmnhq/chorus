@@ -15,10 +15,6 @@ class ActivityMigrator
       event.workspace = find_workspace(activity_stream)
       event.actor = find_actor(activity_stream)
 
-      if activity_stream.type == 'WORKSPACE_ADD_HDFS_AS_EXT_TABLE'
-        store_additional_data(event, activity_stream)
-      end
-
       event.save!
 
       activity_stream.update_event_id(event.id)
@@ -42,12 +38,5 @@ class ActivityMigrator
     end
 
     actor
-  end
-
-  def store_additional_data(event, activity_stream)
-    hadoop_instance_id, path, file_name = activity_stream.hadoop_instance_id
-    event.hadoop_instance_id = hadoop_instance_id
-    event.path = path
-    event.hdfs_file_name = file_name
   end
 end

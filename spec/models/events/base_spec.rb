@@ -8,12 +8,17 @@ describe Events::Base do
       user1 = FactoryGirl.create(:user)
       user2 = FactoryGirl.create(:user)
       user3 = FactoryGirl.create(:user)
+      dataset = FactoryGirl.create(:gpdb_table)
+      hdfs_file = HdfsFileReference.create({:hadoop_instance_id => 1234, :path => "/path/file.txt"})
+      workspace = FactoryGirl.create(:workspace)
 
       Events::GREENPLUM_INSTANCE_CREATED.by(user1).add(:greenplum_instance => instance1)
       Events::GREENPLUM_INSTANCE_CHANGED_OWNER.by(user2).add(:greenplum_instance => instance2, :new_owner => user3)
+      Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(user1).add(:dataset => dataset, :hdfs_file => hdfs_file, :workspace => workspace)
 
       event1 = Events::GREENPLUM_INSTANCE_CREATED.first
       event2 = Events::GREENPLUM_INSTANCE_CHANGED_OWNER.first
+      event3 = Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.first
 
       event1.actor.should == user1
       event1.greenplum_instance.should == instance1
@@ -21,6 +26,8 @@ describe Events::Base do
       event2.actor.should == user2
       event2.greenplum_instance.should == instance2
       event2.new_owner.should == user3
+
+      event3.workspace.should == workspace
     end
   end
 

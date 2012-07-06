@@ -60,7 +60,15 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 beforeEach(function() {
                     this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/", hadoopInstanceId: 123});
 
-                    this.hdfsEntry = fixtures.hdfsEntryFile({name: "my_file.sql", isBinary: false, path: "/"});
+                    this.hdfsEntry = new chorus.models.HdfsEntry({
+                        hadoopInstance: {
+                            id: '42'
+                        },
+                        path: '/',
+                        name: 'my_file.sql',
+                        isBinary: false
+                    });
+
                     chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
 
                     this.model = new chorus.models.HdfsFile({hadoopInstance: {id: 123}, path: "/my_file.sql"});
@@ -77,7 +85,14 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             context("when file is in subdirectory", function() {
                 beforeEach(function() {
-                    this.hdfsEntry = fixtures.hdfsEntryFile({name: "my_file.sql", isBinary: false, path: "/foo"});
+                    this.hdfsEntry = new chorus.models.HdfsEntry({
+                        hadoopInstance: {
+                            id: '42'
+                        },
+                        path: '/foo',
+                        name: 'my_file.sql',
+                        isBinary: false
+                    });
                     chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
 
                     this.model = new chorus.models.HdfsFile({hadoopInstance: {id: 123}, path: "/foo/my_file.sql"});

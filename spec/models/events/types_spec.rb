@@ -12,6 +12,8 @@ describe "Event types" do
   let(:workfile) { FactoryGirl.create(:workfile) }
   let(:workspace) { workfile.workspace }
   let(:dataset) { FactoryGirl.create(:gpdb_table) }
+  let(:hdfs_file) { HdfsFileReference.create({ hadoop_instance_id: hadoop_instance.id,
+                                               path: "/any/path/should/work.csv" }) }
 
   describe "GREENPLUM_INSTANCE_CREATED" do
     subject do
@@ -172,24 +174,17 @@ describe "Event types" do
       Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.add(
         :actor => actor,
         :workspace => workspace,
-        :dataset => dataset,
-        :hadoop_instance_id => hadoop_instance.id,
-        :path => "/data",
-        :hdfs_file_name => "test.csv"
+        :hdfs_file => hdfs_file,
+        :dataset => dataset
       )
     end
 
     its(:dataset) { should == dataset }
-    its(:hadoop_instance_id) { should == hadoop_instance.id }
-    its(:path) { should == "/data" }
-    its(:hdfs_file_name) { should == "test.csv" }
+    its(:hdfs_file) { should == hdfs_file }
 
-    its(:targets) { should == { :dataset => dataset, :workspace => workspace } }
-    its(:additional_data) { should == { :hadoop_instance_id => hadoop_instance.id,
-                                        :hdfs_file_name => "test.csv",
-                                        :path => "/data" } }
+    its(:targets) { should == { :dataset => dataset, :hdfs_file => hdfs_file, :workspace => workspace } }
 
-    it_creates_activities_for { [actor, dataset, workspace] }
+    it_creates_activities_for { [actor, dataset, workspace, hdfs_file] }
     it_creates_a_global_activity
   end
 end

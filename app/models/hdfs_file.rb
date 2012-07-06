@@ -17,6 +17,6 @@ class HdfsFile
   end
 
   def url
-    hadoop_instance.url.chomp('/') + '/' + path
+    hadoop_instance.url.chomp('/') + path
   end
 end
