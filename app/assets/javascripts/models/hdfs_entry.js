@@ -28,5 +28,9 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
 
     getHadoopInstance: function() {
         return new chorus.models.HadoopInstance(this.get('hadoopInstance')).set({ instanceProvider: "Hadoop" })
+    },
+
+    getFullAbsolutePath: function() {
+        return this.getPath() + '/' + this.get('name');
     }
 });

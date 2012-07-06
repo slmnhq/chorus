@@ -82,11 +82,13 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         e && e.preventDefault();
         var hadoopInstance = new chorus.models.HadoopInstance({id: this.options.hadoopInstanceId});
 
+        console.log(this.resource);
         var hdfsFile = new chorus.models.HdfsFile({
             hadoopInstance: hadoopInstance,
-            path: this.options.rootPath + "/" + this.resource.get("name")
+            path: this.resource.getFullAbsolutePath()
         });
 
+        console.log(hdfsFile.urlTemplate());
         hdfsFile.fetch();
 
         hdfsFile.onLoaded(function(){

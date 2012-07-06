@@ -117,4 +117,30 @@ describe("chorus.models.HdfsEntry", function() {
             expect(this.hadoopInstance.get('instanceProvider')).toBe('Hadoop');
         })
     });
+
+    describe("getFullAbsolutePath", function() {
+        context("path is not root", function() {
+            it("returns the path including the filename", function() {
+                var model = fixtures.hdfsEntryFile({
+                    hadoopInstance: {id: '3'},
+                    name: 'file.sql',
+                    path: '/'
+                });
+
+                expect(model.getFullAbsolutePath()).toEqual("/file.sql");
+            });
+        });
+
+        context("path is not root", function() {
+            it("returns the path including the filename", function() {
+                var model = fixtures.hdfsEntryFile({
+                    hadoopInstance: {id: '3'},
+                    name: 'file.sql',
+                    path: '/workfiles'
+                });
+
+                expect(model.getFullAbsolutePath()).toEqual("/workfiles/file.sql");
+            });
+        });
+    });
 });
