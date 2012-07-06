@@ -13,6 +13,6 @@ class WorkfileCopyController < ApplicationController
 
     copied_workfile.create_new_version(current_user, workfile.last_version.contents, "")
 
-    present copied_workfile
+    present copied_workfile, :status => :created
   end
 end

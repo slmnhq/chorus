@@ -5,7 +5,6 @@ resource "Workfiles" do
   let!(:workspace) { FactoryGirl.create(:workspace, :owner => owner) }
   let!(:workfile) { FactoryGirl.create(:workfile, :owner => owner, :workspace => workspace, :file_name => 'test.sql') }
   let!(:file) { test_file("workfile.sql", "text/sql") }
-  let!(:workfile_version) { FactoryGirl.create(:workfile_version, :workfile => workfile, :contents => file, :owner => owner) }
   let!(:workfile_id) { workfile.to_param }
 
   before do
@@ -20,42 +19,45 @@ resource "Workfiles" do
     end
   end
 
-  put "/workfiles/:workfile_id/versions/:id" do
-    let!(:id) { workfile_version.to_param }
+  get "/workfiles/:workfile_id/download" do
+    before do
+      FactoryGirl.create(:workfile_version, :owner => owner, :workfile => workfile, :contents => file)
+    end
 
-    parameter :owner_id, "Workfile owner"
-    parameter :commit_message, "Commit message"
-    parameter :modifier_id, "Workfile modifier"
-    parameter :content, "Content of the file"
+    parameter :workfile_id, "Workfile to download"
 
-    required_parameters :owner_id
-    scope_parameters :workfile, :all
+    required_parameters :workfile_id
 
-    let(:owner_id) { owner.to_param }
-    let(:commit_message) { "Hey there, Billy" }
-    let(:modifier_id) { owner.to_param }
-    let(:content) { workfile_version.contents }
+    let(:workspace_id) { workspace.to_param }
 
-    example_request "Update workfile version" do
+    example_request "Downloads the file content" do
       status.should == 200
     end
   end
 
-  post "/workfiles/:workfile_id/versions" do
-    parameter :owner_id, "Workfile owner"
-    parameter :commit_message, "Commit message"
-    parameter :modifier_id, "Workfile modifier"
-    parameter :content, "Content of the file"
+  post "/workfiles/:workfile_id/copy" do
+    before do
+      FactoryGirl.create(:workfile_version, :owner => owner, :workfile => workfile, :contents => file)
+    end
 
-    required_parameters :owner_id
-    scope_parameters :workfile, :all
+    parameter :workfile_id, "Workfile to copy"
+    parameter :workspace_id, "Workspace to copy to"
 
-    let(:owner_id) { owner.to_param }
-    let(:commit_message) { "Get off my lawn, you darn kids!" }
-    let(:modifier_id) { owner.to_param }
-    let(:content) { workfile_version.contents }
+    required_parameters :workfile_id, :workspace_id
 
-    example_request "Create a workfile version" do
+    let(:workspace_id) { workspace.to_param }
+
+    example_request "Copy a workfile to a workspace" do
+      status.should == 201
+    end
+  end
+
+  delete "/workfiles/:id" do
+    let(:id) { workfile.to_param }
+    parameter :id, "ID of the workfile to delete"
+    required_parameters :id
+
+    example_request "Delete the specified workfile" do
       status.should == 200
     end
   end

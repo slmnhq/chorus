@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DownloadController do
+describe WorkfileDownloadController do
 
   let(:user) { FactoryGirl.create(:user) }
   let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }

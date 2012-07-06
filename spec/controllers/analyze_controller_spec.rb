@@ -28,7 +28,7 @@ describe AnalyzeController do
 
     it "reports that the Analyze was created" do
       post :create, :table_id => gpdb_table.to_param
-      response.code.should == "201"
+      response.code.should == "200"
     end
   end
 end

@@ -1,4 +1,4 @@
-class DownloadController < ApplicationController
+class WorkfileDownloadController < ApplicationController
 
   def show
     authorize! :show, workfile.workspace

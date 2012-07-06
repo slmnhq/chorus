@@ -112,7 +112,7 @@ FactoryGirl.define do
   factory :workfile_draft do
     owner
     workfile
-    content "A nice content"
+    content "Excellent content"
   end
 
   factory :associated_dataset do
