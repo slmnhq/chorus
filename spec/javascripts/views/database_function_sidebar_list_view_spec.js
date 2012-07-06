@@ -33,6 +33,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
         context("when schema is associated", function() {
             beforeEach(function() {
                 this.menu = stubQtip(".context a");
+                this.functionQtip = stubQtip(".list li .name")
                 this.view.render();
                 $('#jasmine_content').append(this.view.el);
             });
@@ -84,7 +85,17 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
 
                 it("should display the current schema name", function() {
                     expect(this.view.$('.context')).toContainText("righteous_tables");
-                })
+                });
+
+                context("when hovering on function name", function() {
+                    beforeEach(function() {
+                        this.view.$(".list li:eq(0) .name").mouseenter();
+                    });
+
+                    it("opens a chorus function detail description", function() {
+                        expect(this.functionQtip).toHaveVisibleQtip();
+                    });
+                });
 
                 describe("selecting a schema", function() {
                     beforeEach(function() {

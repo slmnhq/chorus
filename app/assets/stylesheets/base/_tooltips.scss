@@ -56,6 +56,24 @@
     }
 }
 
+.tooltip-function {
+    @include tooltip($error-text-color, #282828, #282828);
+
+    .ui-tooltip-content {
+        font-size: 12px;
+        min-width: 250px;
+        max-width: 350px;
+        line-height: 1.2;
+
+        .content-bold {
+            font-size: 13px;
+            font-weight: $semibold;
+            margin-top: 2px;
+            margin-bottom: 5px;
+        }
+    }
+}
+
 
 .tooltip-insert {
     @include tooltip(red, $selected-row-hover-background-color, $list-border-color);

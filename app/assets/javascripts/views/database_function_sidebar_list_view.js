@@ -10,6 +10,52 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
             list: this.$('ul'),
             input: this.$('input.search')
         });
+
+        this.$("li .name").qtip({
+            events: {
+                render: _.bind(function(e, api) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var cid = $(api.elements.target).parent().data('cid');
+                    var model = this.collection.getByCid(cid);
+                    var content = "<div>" + model.get("returnType") +
+                        "</div><div class='content-bold'>" + model.get("functionName") +
+                        "</div><div>" + model.getFunctionArguments() + "</div>";
+
+                    var description = model.get("description");
+                    content = description ? "<div class='content-bold'>" + description + "</div>" + content : content;
+                    $(api.elements.content).html(content)
+                }, this),
+                show: function(e, api) {
+                    $(api.elements.target).addClass('hover');
+                },
+                hide: function(e, api) {
+                    $(api.elements.target).removeClass('hover');
+                }
+            },
+            show: {
+                delay: 0,
+                effect: false
+            },
+            hide: {
+                delay: 0,
+                fixed: true,
+                effect: false
+            },
+            position: {
+                viewport: $(window),
+                my: "top center",
+                at: "bottom left"
+            },
+            style: {
+                classes: "tooltip-function",
+                tip: {
+                    width: 20,
+                    height: 13
+                }
+            }
+        });
+
     },
 
     collectionModelContext: function(model) {

@@ -1,11 +1,8 @@
 chorus.models.SchemaFunction = chorus.models.Base.extend({
     constructorName: "SchemaFunction",
-    toText:function () {
+    toText: function() {
         var argNames = this.get('argNames');
-        var functionArguments = _.map(this.get('argTypes'), function (argType, index) {
-            var argName = argNames[index] || "arg" + (index + 1);
-            return argType + ' ' + argName;
-        });
+        var functionArguments = this.getFunctionArguments();
 
         var schemaName = this.safePGName(this.get("schemaName"));
         var functionName = this.safePGName(this.get("functionName"));
@@ -16,16 +13,23 @@ chorus.models.SchemaFunction = chorus.models.Base.extend({
         return result;
     },
 
-    toHintText:function () {
+    toHintText: function() {
         var argNames = this.get('argNames');
-        var functionArguments = _.map(this.get('argTypes'), function (argType, index) {
-            var argName = argNames[index] || "arg" + (index + 1);
-            return argType + ' ' + argName;
-        });
+        var functionArguments = this.getFunctionArguments();
 
         var result = this.get("returnType") + " " + this.get('functionName') + '(';
         result = result + functionArguments.join(', ');
         result = result + ')';
         return result;
+    },
+
+    getFunctionArguments: function() {
+        var argNames = this.get('argNames');
+        var functionArguments = _.map(this.get('argTypes'), function(argType, index) {
+            var argName = argNames[index] || "arg" + (index + 1);
+            return argType + ' ' + argName;
+        });
+
+        return functionArguments
     }
 });
