@@ -5,14 +5,22 @@ class NoteCommentMigrator
     end
 
     get_all_comments do |comment_id, comment_type, comment_body, comment_timestamp|
-      if (comment_type == 'instance')
-        greenplum_instance = Instance.find_by_id(rails_greenplum_instance_id(comment_id))
-        next unless greenplum_instance
-        event = Events::NOTE_ON_GREENPLUM_INSTANCE.create(:greenplum_instance => greenplum_instance, :body => comment_body)
-        event.created_at = comment_timestamp
-        event.save!
-        update_event_id(comment_id, event.id)
+      case comment_type
+        when 'instance'
+          greenplum_instance = Instance.find_by_id(rails_greenplum_instance_id(comment_id))
+          next unless greenplum_instance
+          event = Events::NOTE_ON_GREENPLUM_INSTANCE.create(:greenplum_instance => greenplum_instance, :body => comment_body)
+        when 'hdfs'
+          hadoop_id, path = comment_id.split('|')
+          hdfs_file = HdfsFileReference.create(:hadoop_instance_id => hadoop_id, :path => path)
+          event = Events::NOTE_ON_HDFS_FILE.create(:hdfs_file => hdfs_file, :body => comment_body)
+        else
+          next
       end
+
+      event.created_at = comment_timestamp
+      event.save!
+      update_event_id(comment_id, event.id)
     end
   end
 
