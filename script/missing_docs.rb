@@ -27,7 +27,9 @@ routes.each { |r| puts r }
 
 existing_docs = `egrep -Rh "^\\W*(post|put|get|delete)" spec/acceptance`.split("\n").map { |line|
   match = line.match(/(\w+) +['"](\S+)['"]/)
-  match && Route.new(match[1].downcase, match[2])
+  path = match[2]
+  path.sub!(/\?.*/, '')
+  match && Route.new(match[1].downcase, path)
 }.compact
 
 header "Existing docs"

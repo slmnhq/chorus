@@ -66,7 +66,7 @@ Chorus::Application.routes.draw do
 
   resources :notes, :only => [:create]
 
-  resource :search do
+  scope :path => "/search" do
     resource :global, :only => [:show], :controller => 'search'
   end
 
