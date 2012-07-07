@@ -1,18 +1,10 @@
 # Opens gpdb dialog and verifies fields
 def open_gpdb_instance_dialog
   visit("#/instances")
-  wait_until { current_route == "/instances" && page.has_selector?("button[data-dialog=InstancesNew]") }
   click_button "Add instance"
-  wait_for_ajax
   within_modal do
     choose("register_existing_greenplum")
-    wait_until { find("input[name=name]").visible? }
-    wait_until { find("textarea[name=description]").visible? }
-    wait_until { find("input[name=host]").visible? }
-    wait_until { find("input[name=port]").visible? }
-    wait_until { find("input[name=dbUsername]").visible? }
-    wait_until { find("input[name=dbPassword]").visible? }
-    end
+  end
 end
 
 # Fills up instance dialog
@@ -34,14 +26,12 @@ def create_gpdb_instance(params={})
   visit("#/instances")
   fill_up_instance_dialog(params)
   click_submit_button
-  wait_for_ajax(10)
 end
 
 # Make sure that instance name is listed on the instance list page.
 def verify_instance_name(name)
   inst_route = WEBPATH['instance']['route']
   visit(inst_route)
-  wait_until { inst_route == inst_route && page.has_selector?(WEBPATH['instance']['new_btn']) }
   find(WEBPATH['instance']['list']).should have_content(name)
 end
 
