@@ -1,18 +1,19 @@
 class Legacy::ActivityStream
-  attr_reader :id, :type
+  attr_reader :id, :type, :created_stamp
 
   def self.all
-    sql = "SELECT id, type FROM edc_activity_stream"
+    sql = "SELECT id, type, created_stamp FROM edc_activity_stream"
 
     activity_stream_data = Legacy.connection.exec_query(sql)
     activity_stream_data.map do |activity_data|
-      new(activity_data["id"], activity_data["type"])
+      new(activity_data["id"], activity_data["type"], activity_data["created_stamp"])
     end
   end
 
-  def initialize(id, type)
+  def initialize(id, type, created_stamp)
     @id = id
     @type = type
+    @created_stamp = created_stamp
   end
 
   def instance_greenplum?

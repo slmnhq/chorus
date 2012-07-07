@@ -14,7 +14,7 @@ class ActivityMigrator
 
       event.workspace = find_workspace(activity_stream)
       event.actor = find_actor(activity_stream)
-
+      event.created_at = activity_stream.created_stamp
       event.save!
 
       activity_stream.update_event_id(event.id)

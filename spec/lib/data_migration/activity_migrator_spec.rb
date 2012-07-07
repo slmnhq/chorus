@@ -28,6 +28,7 @@ describe ActivityMigrator, :data_migration => true, :type => :data_migration do
         event.workspace.should be_instance_of(Workspace)
         event.actor.should be_instance_of(User)
         event.dataset.should be_a(Dataset)
+        event.created_at.to_s.should == "2012-03-07 17:59:20 UTC"
       end
 
       it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE fields from the legacy activity" do

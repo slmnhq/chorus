@@ -3,11 +3,11 @@ require 'spec_helper'
 require 'data_migration/legacy_activity_stream'
 
 describe Legacy::ActivityStream, :data_migration => true, :type => :data_migration do
-  let(:greenplum_activity_stream) { Legacy::ActivityStream.new('10000', nil) }
-  let(:hadoop_activity_stream) { Legacy::ActivityStream.new('10006', nil) }
-  let(:workfile_activity_stream) { Legacy::ActivityStream.new('10010', nil) }
-  let(:user_activity_stream) { Legacy::ActivityStream.new('10004', nil) }
-  let(:dataset_activity_stream) { Legacy::ActivityStream.new('10097', nil) }
+  let(:greenplum_activity_stream) { Legacy::ActivityStream.new('10000', nil, nil) }
+  let(:hadoop_activity_stream) { Legacy::ActivityStream.new('10006', nil, nil) }
+  let(:workfile_activity_stream) { Legacy::ActivityStream.new('10010', nil, nil) }
+  let(:user_activity_stream) { Legacy::ActivityStream.new('10004', nil, nil) }
+  let(:dataset_activity_stream) { Legacy::ActivityStream.new('10097', nil, nil) }
 
   before do
     Legacy.connection.add_column :edc_instance, :chorus_rails_instance_id, :integer
@@ -25,6 +25,15 @@ describe Legacy::ActivityStream, :data_migration => true, :type => :data_migrati
     Legacy.connection.remove_column :edc_work_file, :chorus_rails_workfile_id
     Legacy.connection.remove_column :edc_user, :chorus_rails_user_id
     Legacy.connection.remove_column :edc_activity_stream, :chorus_rails_event_id
+  end
+
+  describe "#all" do
+    it "gets the id, type and created_stamp for each activity stream items" do
+      activity = Legacy::ActivityStream.all.first
+      activity.id.should_not be_nil
+      activity.type.should_not be_nil
+      activity.created_stamp.should_not be_nil
+    end
   end
 
   describe "#instance_greenplum?" do
@@ -69,7 +78,7 @@ describe Legacy::ActivityStream, :data_migration => true, :type => :data_migrati
 
   describe "#update_event_id" do
     it "updates activity stream's event id in the legacy database" do
-      activity_stream = Legacy::ActivityStream.new('10000', nil)
+      activity_stream = Legacy::ActivityStream.new('10000', nil, nil)
       activity_stream.update_event_id('9876')
 
       result = Legacy.connection.exec_query("SELECT 1 FROM edc_activity_stream WHERE chorus_rails_event_id = '9876' AND id = '10000'")
