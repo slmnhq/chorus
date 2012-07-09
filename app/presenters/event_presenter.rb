@@ -30,7 +30,7 @@ class EventPresenter < Presenter
 
   def additional_data_hash
     pairs = model.additional_data.map do |key, value|
-      [key, h(value)]
+      [key, sanitize(value)]
     end
 
     Hash[pairs]

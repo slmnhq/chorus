@@ -67,6 +67,18 @@ describe EventPresenter, :type => :view do
         hash[:body].should_not include('<')
         hash[:body].should_not include('>')
       end
+
+      it "allows links" do
+        stub(event).additional_data do
+          {
+              :body => "<a href='http://google.com'>foo</a>"
+          }
+        end
+
+        hash = subject.to_hash
+        hash[:body].should include('<')
+        hash[:body].should include('>')
+      end
     end
   end
 end
