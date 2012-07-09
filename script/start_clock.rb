@@ -15,4 +15,4 @@ until started do
   end
 end
 
-exec "clockwork script/clock.rb"
+exec "script/clock.rb"

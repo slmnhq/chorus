@@ -9,3 +9,5 @@ handler do |job|
 end
 
 every(Chorus::Application.config.chorus['instance_poll_interval_minutes'].minutes, 'check.instance.status.job')
+
+run
