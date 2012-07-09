@@ -49,7 +49,7 @@ describe VisualizationsController do
       columns = decoded_response["columns"]
 
       columns[0][:name].should == "bucket"
-      columns[0][:typeCategory].should == "LONG_STRING"
+      columns[0][:typeCategory].should == "STRING"
       columns[1][:name].should == "count"
       columns[1][:typeCategory].should == "WHOLE_NUMBER"
     end

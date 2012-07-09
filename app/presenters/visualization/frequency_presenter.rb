@@ -7,7 +7,7 @@ module Visualization
     def to_hash
       {
           :rows => rows,
-          :columns => columns.map { |c| {:name => c['name'], :typeCategory => to_category(c['typeCategory']) } }
+          :columns => [{name: "bucket", typeCategory: "STRING"}, {name: "count", typeCategory: "WHOLE_NUMBER"}]
       }
     end
   end

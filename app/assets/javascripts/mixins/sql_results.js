@@ -20,7 +20,6 @@ chorus.Mixins.SQLResults = {
     },
 
     columnOrientedData: function() {
-
         var columns = this.getColumns();
         var rows = this.getSortedRows(this.getRows());
 
@@ -29,7 +28,7 @@ chorus.Mixins.SQLResults = {
             var name = column.name;
             return {
                 name: self.getColumnLabel(name),
-                type:column.typeCategory,
+                type: column.typeCategory,
                 values:_.pluck(rows, name)
             };
         });
