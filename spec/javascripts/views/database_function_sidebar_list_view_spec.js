@@ -59,8 +59,13 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                     ]);
 
                     this.server.completeFetchFor(this.view.collection, [
-                        fixtures.schemaFunction({ functionName: "laplace_transform" }),
-                        fixtures.schemaFunction({ functionName: "inc" })
+                        fixtures.schemaFunction({
+                            functionName: "a_laplace_transform",
+                            argTypes: [ "text", "int4", "float64" ],
+                            argNames: [ "name", "age", "height" ],
+                            description: 'Looooooooooooong description. Looooooooooooong description. Looooooooooooong description. Looooooooooooong description. Looooooooooooong description. '
+                        }),
+                        fixtures.schemaFunction({ functionName: "inc", description: null })
                     ]);
                 });
 
@@ -75,7 +80,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                 })
 
                 it("should render the functions", function() {
-                    expect(this.view.$("ul li")).toContainText("laplace_transform");
+                    expect(this.view.$("ul li")).toContainText("a_laplace_transform");
                     expect(this.view.$("ul li")).toContainText("inc");
                 });
 
@@ -94,6 +99,32 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
 
                     it("opens a chorus function detail description", function() {
                         expect(this.functionQtip).toHaveVisibleQtip();
+                    });
+
+                    it("displays the function arguments, in parens and separated by commas", function () {
+                        expect(this.functionQtip.find(".arguments")).toContainText("(text name, int4 age, float64 height)");
+                    });
+
+                    it("ellipsizes the comments if they are long", function () {
+                        expect(this.functionQtip.find(".comment")).toContainText('...');
+                    });
+
+                    it("has a link that opens a dialog showing the function info", function () {
+                        var moreLink = this.functionQtip.find("a.more");
+                        expect(moreLink).toHaveClass("alert");
+                        expect(moreLink).toHaveData("alert", "FunctionInfo");
+                        expect(moreLink.text()).toMatchTranslation("schema.functions.show_more");
+                        expect(moreLink).toHaveData("model", this.view.collection.at(0));
+                    });
+                });
+
+                context("when hovering over the function without a description", function() {
+                    beforeEach(function() {
+                        this.view.$(".list li:eq(1) .name").mouseenter();
+                    });
+
+                    it("does not print null when description is null", function() {
+                        expect(this.functionQtip.find(".comment")).toBeEmpty();
                     });
                 });
 

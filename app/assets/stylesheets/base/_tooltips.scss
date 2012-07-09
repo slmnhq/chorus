@@ -1,10 +1,10 @@
 @import "common.scss";
 
-@mixin tooltip($text, $bg, $border) {
+@mixin tooltip($text, $bg, $border){
     .ui-tooltip-content {
-	    color: $text;
+        color: $text;
         background-color: $bg;
-	    border-color: $border;
+        border-color: $border;
     }
     .ui-tooltip-titlebar {
         background-color: $bg;
@@ -25,7 +25,7 @@
 .tooltip-normal {
     // qTip's author explicitly recommends !important for overriding z-index
     // https://github.com/Craga89/qTip2/issues/274
-    /*z-index: $body-tooltip-z-index !important;*/
+/*z-index: $body-tooltip-z-index !important;*/
 }
 
 .tooltip-modal {
@@ -47,6 +47,7 @@
         max-width: 350px;
     }
 }
+
 .tooltip-help {
     @include tooltip($error-text-color, #282828, #282828);
 
@@ -71,9 +72,24 @@
             margin-top: 2px;
             margin-bottom: 5px;
         }
+
+        .comment {
+            margin-bottom: 5px;
+
+            &:empty {
+                display: none;
+            }
+        }
+    }
+
+    .ui-tooltip-tip {
+        visibility: hidden;
+    }
+
+    a {
+        @include link-with-dotted-underline;
     }
 }
-
 
 .tooltip-insert {
     @include tooltip(red, $selected-row-hover-background-color, $list-border-color);

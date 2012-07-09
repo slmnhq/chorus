@@ -18,12 +18,7 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
                     e.stopPropagation();
                     var cid = $(api.elements.target).parent().data('cid');
                     var model = this.collection.getByCid(cid);
-                    var content = "<div>" + model.get("returnType") +
-                        "</div><div class='content-bold'>" + model.get("functionName") +
-                        "</div><div>" + model.getFunctionArguments() + "</div>";
-
-                    var description = model.get("description");
-                    content = description ? "<div class='content-bold'>" + description + "</div>" + content : content;
+                    var content = this.tooltipContent(model);
                     $(api.elements.content).html(content)
                 }, this),
                 show: function(e, api) {
@@ -38,7 +33,7 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
                 effect: false
             },
             hide: {
-                delay: 0,
+                delay: 250,
                 fixed: true,
                 effect: false
             },
@@ -50,12 +45,26 @@ chorus.views.DatabaseFunctionSidebarList = chorus.views.DatabaseSidebarList.exte
             style: {
                 classes: "tooltip-function",
                 tip: {
-                    width: 20,
-                    height: 13
+                    def: false,
+                    height: 5,
+                    classes: 'hidden'
                 }
             }
         });
 
+    },
+
+    tooltipContent: function(model) {
+        var arguments = model.getFunctionArguments();
+        var html = chorus.helpers.renderTemplate("database_function_sidebar_tooltip", {
+            description:_.prune(model.get("description") || '', 100),
+            returnType: model.get("returnType"),
+            name: model.get("functionName"),
+            argumentsString: model.formattedArgumentList()
+        }).toString();
+        var content = $("<div/>").html(html);
+        content.find("a.more").data("model", model);
+        return content;
     },
 
     collectionModelContext: function(model) {

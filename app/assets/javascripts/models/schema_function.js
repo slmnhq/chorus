@@ -14,13 +14,7 @@ chorus.models.SchemaFunction = chorus.models.Base.extend({
     },
 
     toHintText: function() {
-        var argNames = this.get('argNames');
-        var functionArguments = this.getFunctionArguments();
-
-        var result = this.get("returnType") + " " + this.get('functionName') + '(';
-        result = result + functionArguments.join(', ');
-        result = result + ')';
-        return result;
+        return this.get("returnType") + " " + this.get('functionName') + this.formattedArgumentList(true);
     },
 
     getFunctionArguments: function() {
@@ -31,5 +25,18 @@ chorus.models.SchemaFunction = chorus.models.Base.extend({
         });
 
         return functionArguments
+    },
+
+    formattedArgumentList: function(ensureParams) {
+        var args = this.getFunctionArguments();
+        if (ensureParams || args.length > 0) {
+            return "(" + args.join(", ") + ")";
+        } else {
+            return "";
+        }
+    },
+
+    definition:function () {
+        return this.get("functionDefinition");
     }
 });
