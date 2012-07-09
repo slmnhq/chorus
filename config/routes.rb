@@ -64,6 +64,10 @@ Chorus::Application.routes.draw do
     resource :download, :only => [:show], :controller => 'workfile_download'
   end
 
+  resources :workfile_versions, :only => [:show] do
+    resource :image, :only => [:show], :controller => 'workfile_version_images'
+  end
+
   resources :notes, :only => [:create]
 
   scope :path => "/search" do
