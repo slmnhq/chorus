@@ -4,7 +4,7 @@ class SqlResults
   def self.preview_dataset(dataset, account, check_id)
     dataset.with_gpdb_connection(account) do |conn|
       sql = PREVIEW_SQL % conn.quote_table_name(dataset.name)
-      async_query = AsyncQuery.new(conn, check_id)
+      async_query = CancelableQuery.new(conn, check_id)
 
       from_sql(conn, async_query, sql)
     end
@@ -13,7 +13,7 @@ class SqlResults
   # TODO: How do we test this?
   def self.cancel_preview(dataset, account, check_id)
     dataset.with_gpdb_connection(account) do |conn|
-      async_query = AsyncQuery.new(conn, check_id)
+      async_query = CancelableQuery.new(conn, check_id)
       async_query.cancel
     end
   end

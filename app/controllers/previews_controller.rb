@@ -5,7 +5,7 @@ class PreviewsController < GpdbController
 
     results = SqlResults.preview_dataset(dataset, instance_account, params[:task][:check_id])
     present(results, :status => :created)
-  rescue AsyncQuery::QueryError => e
+  rescue CancelableQuery::QueryError => e
     present_errors({:fields => {:query => {:INVALID => {:message => e.to_s}}}}, :status => :bad_request)
   end
 

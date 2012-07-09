@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe AsyncQuery do
+describe CancelableQuery do
   let(:sql) { "Select * from users" }
   let(:check_id) { '0.1234' }
-  let(:async_query) { AsyncQuery.new(connection, check_id) }
+  let(:async_query) { CancelableQuery.new(connection, check_id) }
   let(:connection) { Object.new }
   let(:fake_driver) { Object.new }
 
@@ -22,7 +22,7 @@ describe AsyncQuery do
         raise "error!"
       }
 
-      expect{async_query.execute(sql)}.to raise_error(AsyncQuery::QueryError)
+      expect{async_query.execute(sql)}.to raise_error(CancelableQuery::QueryError)
     end
 
     it "returns the query result" do

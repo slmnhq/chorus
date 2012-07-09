@@ -1,4 +1,4 @@
-class AsyncQuery
+class CancelableQuery
   QueryError = Class.new(StandardError)
 
   def initialize(connection, check_id)
