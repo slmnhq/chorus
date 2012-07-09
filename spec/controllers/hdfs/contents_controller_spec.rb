@@ -10,7 +10,7 @@ describe Hdfs::ContentsController do
   describe "#show" do
     before do
       any_instance_of(Hdfs::QueryService) do |h|
-        stub(h).show { ["a, b, c"] }
+        stub(h).show { ["a, b, c", "row1a, row1b, row1c"] }
         stub(h).list { [{'modified_at' => Time.now.to_s, 'path' => '/data/test.csv'}] }
       end
     end

@@ -1,15 +1,16 @@
 {
   "response": {
     "contents": [
-      "a, b, c"
+      "a, b, c",
+      "row1a, row1b, row1c"
     ],
     "hadoop_instance": {
       "name": "instance1",
       "host": "gillette",
       "port": 8020,
-      "id": 109,
+      "id": 3,
       "owner": {
-        "id": 4604,
+        "id": 28,
         "username": "user2",
         "first_name": "John",
         "last_name": "Doe",
@@ -29,7 +30,7 @@
       "username": "pivotal",
       "group_list": null
     },
-    "last_updated_stamp": "2012-07-09T10:14:34Z",
+    "last_updated_stamp": "2012-07-09T14:57:33Z",
     "path": "/data/test.csv"
   }
 }
