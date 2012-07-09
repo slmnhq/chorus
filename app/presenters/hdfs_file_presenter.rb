@@ -6,7 +6,7 @@ class HdfsFilePresenter < Presenter
     {
         :contents => contents,
         :hadoop_instance => present(hadoop_instance),
-        :last_updated_stamp => modified_at.strftime("%Y-%m-%d %H:%M:%S"),
+        :last_updated_stamp => modified_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
         :path => path
     }
   end

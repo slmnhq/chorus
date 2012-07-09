@@ -29,7 +29,7 @@ describe HdfsFilePresenter, :type => :view do
     end
 
     it "includes the last modification time" do
-      subject[:last_updated_stamp].should == "2010-10-20 10:11:12"
+      subject[:last_updated_stamp].should == "2010-10-20T10:11:12Z"
     end
   end
 end

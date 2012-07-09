@@ -21,7 +21,7 @@ describe HdfsEntryPresenter, :type => :view do
 
     it "includes the fields" do
       @hash[:path].should == "/data"
-      @hash[:last_updated_stamp].should == "2010-10-20 10:11:12"
+      @hash[:last_updated_stamp].should == "2010-10-20T10:11:12Z"
       @hash[:size].should == "10"
       @hash[:is_dir].should be_true
       @hash[:count].should be(1)

@@ -8,7 +8,7 @@ class HdfsEntryPresenter < Presenter
         :count => content_count,
         :is_dir => is_directory,
         :is_binary => false,
-        :last_updated_stamp => modified_at.strftime("%Y-%m-%d %H:%M:%S")
+        :last_updated_stamp => modified_at.strftime("%Y-%m-%dT%H:%M:%SZ")
     }
   end
 end
