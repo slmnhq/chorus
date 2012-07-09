@@ -16,7 +16,7 @@ describe Visualization::Frequency do
 
       it "creates the SQL based on the grouping and bins" do
         visualization = described_class.new(dataset, attributes)
-        visualization.build_sql.should == 'SELECT  "public"."1000_songs_test_1"."artist" AS bucket, count(1) AS count ' +
+        visualization.build_row_sql.should == 'SELECT  "public"."1000_songs_test_1"."artist" AS bucket, count(1) AS count ' +
             'FROM "public"."1000_songs_test_1"  GROUP BY "public"."1000_songs_test_1"."artist" ORDER BY count DESC LIMIT 20'
       end
     end
@@ -32,45 +32,53 @@ describe Visualization::Frequency do
 
       it "creates the SQL based on the grouping and bins" do
         visualization = described_class.new(dataset, attributes)
-        visualization.build_sql.should == 'SELECT  "public"."1000_songs_test_1"."artist" AS bucket, count(1) AS count ' +
+        visualization.build_row_sql.should == 'SELECT  "public"."1000_songs_test_1"."artist" AS bucket, count(1) AS count ' +
             'FROM "public"."1000_songs_test_1"  WHERE "1000_songs_test_1"."year" < 1980 GROUP BY ' +
             '"public"."1000_songs_test_1"."artist" ORDER BY count DESC LIMIT 20'
       end
     end
 
     context "with more than one filter" do
-          let(:attributes) do
-            {
-                :bins => 20,
-                :y_axis => 'artist',
-                :filters => ['"1000_songs_test_1"."year" < 1980', '"1000_songs_test_1"."year" > 1950']
-            }
-          end
+      let(:attributes) do
+        {
+            :bins => 20,
+            :y_axis => 'artist',
+            :filters => ['"1000_songs_test_1"."year" < 1980', '"1000_songs_test_1"."year" > 1950']
+        }
+      end
 
-          it "creates the SQL based on the grouping and bins" do
-            visualization = described_class.new(dataset, attributes)
-            visualization.build_sql.should == 'SELECT  "public"."1000_songs_test_1"."artist" AS bucket, count(1) AS count ' +
-                'FROM "public"."1000_songs_test_1"  WHERE "1000_songs_test_1"."year" < 1980 AND "1000_songs_test_1"."year" > 1950 GROUP BY ' +
-                '"public"."1000_songs_test_1"."artist" ORDER BY count DESC LIMIT 20'
-          end
-        end
+      it "creates the SQL based on the grouping and bins" do
+        visualization = described_class.new(dataset, attributes)
+        visualization.build_row_sql.should == 'SELECT  "public"."1000_songs_test_1"."artist" AS bucket, count(1) AS count ' +
+            'FROM "public"."1000_songs_test_1"  WHERE "1000_songs_test_1"."year" < 1980 AND "1000_songs_test_1"."year" > 1950 GROUP BY ' +
+            '"public"."1000_songs_test_1"."artist" ORDER BY count DESC LIMIT 20'
+      end
+    end
   end
 
   describe "#fetch!" do
     before do
-      mock(schema).with_gpdb_connection(instance_account) do
-        [
-          {'count' => 19, 'bucket' => 'The Beatles'},
-          {'count' => 24, 'bucket' => 'Bob Dylan'},
-          {'count' => 9, 'bucket' => 'David Bowie'}
-        ]
+      call_count = 0
+      mock(schema).with_gpdb_connection(instance_account).times(2) do
+        r = [
+            [
+                {'name' => 'bucket', 'typeCategory' => 'text'},
+                {'name' => 'count', 'typeCategory' => 'integer'}
+            ],
+            [
+                {'count' => 19, 'bucket' => 'The Beatles'},
+                {'count' => 24, 'bucket' => 'Bob Dylan'},
+                {'count' => 9, 'bucket' => 'David Bowie'}
+            ]][call_count]
+        call_count = call_count + 1
+        r
       end
     end
 
     let(:attributes) do
       {
-        :bins => 3,
-        :y_axis => 'artist'
+          :bins => 3,
+          :y_axis => 'artist'
       }
     end
 

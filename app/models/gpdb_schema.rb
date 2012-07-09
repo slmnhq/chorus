@@ -56,8 +56,6 @@ class GpdbSchema < ActiveRecord::Base
         end
         schema
       rescue Exception => e
-        #p e
-        #puts "failed to refresh schema's datasets: #{schema.name}"
       end
     end
   end

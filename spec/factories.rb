@@ -115,6 +115,14 @@ FactoryGirl.define do
     content "Excellent content"
   end
 
+  factory :visualization_frequency, :class => Visualization::Frequency do
+    bins 20
+    category "title"
+    filters ["\"1000_songs_test_1\".year > '1980'"]
+    association :dataset, :factory => :gpdb_table
+    association :schema, :factory => :gpdb_schema
+  end
+
   factory :associated_dataset do
     association :dataset, :factory => :gpdb_table
     workspace
