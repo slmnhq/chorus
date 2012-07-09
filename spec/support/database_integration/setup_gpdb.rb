@@ -14,6 +14,7 @@ module GpdbIntegration
     account = CONFIG.account
 
     sql = Erubis::Eruby.new(TEMPLATE).result(CONFIG)
+    sql.gsub!(/gpdb_test_database/, database_name)
 
     connection_params = [
       "-U #{account.db_username}",
@@ -31,11 +32,11 @@ module GpdbIntegration
   def refresh_chorus
     account = real_gpdb_account
     GpdbDatabase.refresh(account)
-    database = GpdbDatabase.find_by_name('gpdb_test_database')
+    database = GpdbDatabase.find_by_name(database_name)
     GpdbSchema.refresh(account, database)
     gpdb_schema = GpdbSchema.find_by_name('gpdb_test_schema')
     Dataset.refresh(account, gpdb_schema)
-    database = GpdbDatabase.find_by_name('gpdb_test_database_without_public_schema')
+    database = GpdbDatabase.find_by_name("#{database_name}_without_public_schema")
     GpdbSchema.refresh(account, database)
     gpdb_schema = GpdbSchema.find_by_name('gpdb_test_schema_in_db_without_public_schema')
     Dataset.refresh(account, gpdb_schema)
@@ -45,6 +46,10 @@ module GpdbIntegration
   def real_gpdb_account
     instance = FactoryGirl.create(:instance, CONFIG.instance.to_hash)
     account = FactoryGirl.create(:instance_account, CONFIG.account.to_hash.merge(:instance => instance))
+  end
+
+  def database_name
+    "gpdb_" + Socket.gethostname
   end
 end
 
