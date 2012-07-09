@@ -18,14 +18,13 @@ module GpdbIntegration
     connection_params = [
       "-U #{account.db_username}",
       "-h #{instance.host}",
-      "-p #{instance.port}",
-      "--no-password"
+      "-p #{instance.port}"
     ].join(" ")
 
     f = Tempfile.new("setup_gpdb")
     f.write(sql)
     f.close
-    system "psql #{instance.maintenance_db} #{connection_params} < #{f.path}"
+    system "PGPASSWORD=#{account.db_password} psql #{instance.maintenance_db} #{connection_params} < #{f.path}"
     f.unlink
   end
 

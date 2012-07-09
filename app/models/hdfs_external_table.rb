@@ -6,6 +6,7 @@ class HdfsExternalTable
     validate_parameters!(parameters)
 
     hadoop = HadoopInstance.find(parameters[:hadoop_instance_id])
+
     hdfs_file = HdfsFile.new(parameters[:path], hadoop)
     header = parameters[:has_header].present? ? 'HEADER' : ''
 

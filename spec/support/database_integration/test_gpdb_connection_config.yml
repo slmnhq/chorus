@@ -1,9 +1,9 @@
 instance:
-  host: "gillette"
+  host: "chorus-gpdb42"
   port: 5432
   maintenance_db: "postgres"
 
 account:
-  db_username: "gpadmin"
+  db_username: "test_superuser"
   db_password: "secret"
 
