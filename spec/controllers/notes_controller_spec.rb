@@ -7,12 +7,21 @@ describe NotesController do
   end
 
   describe "#create" do
-    it "creates a note on an instance" do
-      instance = FactoryGirl.create(:instance)
-      post :create, :note => {:entity_type => "instance", :entity_id => instance.id, :body => "Some crazy content"}
+    it "creates a note on a greenplum instance" do
+      greenplum_instance = FactoryGirl.create(:greenplum_instance)
+      post :create, :note => {:entity_type => "greenplum_instance", :entity_id => greenplum_instance.id, :body => "Some crazy content"}
       response.code.should == "201"
 
       Events::Note.last.action == Events::NOTE_ON_GREENPLUM_INSTANCE
+      Events::Note.last.body.should == "Some crazy content"
+    end
+
+    it "creates a note on a hadoop instance" do
+      hadoop_instance = FactoryGirl.create(:hadoop_instance)
+      post :create, :note => {:entity_type => "hadoop_instance", :entity_id => hadoop_instance .id, :body => "Some crazy content"}
+      response.code.should == "201"
+
+      Events::Note.last.action == Events::NOTE_ON_HADOOP_INSTANCE
       Events::Note.last.body.should == "Some crazy content"
     end
 

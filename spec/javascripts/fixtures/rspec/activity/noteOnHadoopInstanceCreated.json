@@ -1,0 +1,50 @@
+{
+  "response": {
+    "id": 169,
+    "actor": {
+      "id": 814,
+      "username": "user181",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "person181@example.com",
+      "title": "Grand Poo Bah",
+      "dept": "Corporation Corp., Inc.",
+      "notes": "One of our top performers",
+      "admin": false,
+      "image": {
+        "original": "/images/default-user-icon.png",
+        "icon": "/images/default-user-icon.png"
+      }
+    },
+    "action": "NOTE",
+    "timestamp": "2012-07-10T18:44:01Z",
+    "hadoop_instance": {
+      "name": "instance3",
+      "host": "host3.emc.com",
+      "port": 5003,
+      "id": 43,
+      "owner": {
+        "id": 815,
+        "username": "user182",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "person182@example.com",
+        "title": "Grand Poo Bah",
+        "dept": "Corporation Corp., Inc.",
+        "notes": "One of our top performers",
+        "admin": false,
+        "image": {
+          "original": "/images/default-user-icon.png",
+          "icon": "/images/default-user-icon.png"
+        }
+      },
+      "state": "online",
+      "description": null,
+      "version": null,
+      "username": null,
+      "group_list": null
+    },
+    "body": "Note to self, add a body",
+    "action_type": "NOTE_ON_HADOOP_INSTANCE"
+  }
+}

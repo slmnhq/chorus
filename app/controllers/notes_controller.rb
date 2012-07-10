@@ -3,9 +3,12 @@ class NotesController < ApplicationController
     body = params[:note][:body]
 
     case params[:note][:entity_type]
-      when "instance"
+      when "greenplum_instance"
         instance = Instance.find(params[:note][:entity_id])
         Events::NOTE_ON_GREENPLUM_INSTANCE.by(current_user).add(:greenplum_instance => instance, :body => body)
+      when "hadoop_instance"
+        instance = HadoopInstance.find(params[:note][:entity_id])
+        Events::NOTE_ON_HADOOP_INSTANCE.by(current_user).add(:hadoop_instance => instance, :body => body)
       when "hdfs"
         hadoop_instance_id, path = params[:note][:entity_id].split('|')
 

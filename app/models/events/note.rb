@@ -21,6 +21,12 @@ module Events
     has_additional_data :body
   end
 
+  class NOTE_ON_HADOOP_INSTANCE < Note
+    has_targets :hadoop_instance
+    has_activities :actor, :hadoop_instance, :global
+    has_additional_data :body
+  end
+
   class NOTE_ON_HDFS_FILE < Note
     has_targets :hdfs_file
     has_activities :actor, :hdfs_file, :global

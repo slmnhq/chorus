@@ -192,6 +192,11 @@ FactoryGirl.define do
       body "Note to self, add a body"
     end
 
+    factory :note_on_hadoop_instance_event, :class => Events::NOTE_ON_HADOOP_INSTANCE do
+      hadoop_instance
+      body "Note to self, add a body"
+    end
+
     factory :note_on_hdfs_file_event, :class => Events::NOTE_ON_HDFS_FILE do
       association :hdfs_file, :factory => :hdfs_file_reference
       body "This is a note on an hdfs file"

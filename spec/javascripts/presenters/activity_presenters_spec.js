@@ -308,6 +308,58 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("note on a greenplum instance", function() {
+        var instance;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+                greenplumInstance: {
+                    id: 42,
+                    name: 'my_instance'
+                }
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            instance = rspecFixtures.greenplumInstance({id: 42, name: 'my_instance'});
+        });
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.NOTE.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    noteObjectLink: linkTo(instance.showUrl(), instance.name()),
+                    noteObjectType: "Greenplum instance"
+                }
+            )
+        });
+    });
+
+    context("note on a hadoop instance", function() {
+        var instance;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.noteOnHadoopInstanceCreated({
+                hadoopInstance: {
+                    id: 42,
+                    name: 'my_instance'
+                }
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            instance = rspecFixtures.hadoopInstance({id: 42, name: 'my_instance'});
+        });
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.NOTE.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    noteObjectLink: linkTo(instance.showUrl(), instance.name()),
+                    noteObjectType: "Hadoop instance"
+                }
+            )
+        });
+    });
+
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
     }

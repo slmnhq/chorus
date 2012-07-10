@@ -47,12 +47,13 @@
             var model;
 
             switch (this.get("actionType")) {
+                case "NOTE_ON_HADOOP_INSTANCE":
+                    model = new chorus.models.HadoopInstance();
+                    model.set(this.get("hadoopInstance"));
+                    break;
                 case "NOTE_ON_GREENPLUM_INSTANCE":
                     model = new chorus.models.GreenplumInstance();
-                    model.set({
-                        id : this.get("greenplumInstance").id,
-                        name: this.get("greenplumInstance").name
-                    });
+                    model.set(this.get("greenplumInstance"));
                     break;
                 case "NOTE_ON_HDFS_FILE":
                     model = new chorus.models.HdfsFile();

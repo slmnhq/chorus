@@ -123,6 +123,7 @@ describe EventsController do
         "userCreated" => :user_created_event,
         "sandboxAdded" => :sandbox_added_event,
         "noteOnGreenplumInstanceCreated" => :note_on_greenplum_instance_event,
+        "noteOnHadoopInstanceCreated" => :note_on_hadoop_instance_event,
         "hdfsExternalTableCreated" => :hdfs_external_table_created_event,
         "noteOnHdfsFileCreated" => :note_on_hdfs_file_event
     }

@@ -114,6 +114,7 @@ window.rspecFixtureDefinitions = {
             userCreated: {},
             sandboxAdded: {},
             noteOnGreenplumInstanceCreated: {},
+            noteOnHadoopInstanceCreated: {},
             hdfsExternalTableCreated: {},
             noteOnHdfsFileCreated: {}
         }

@@ -12,7 +12,7 @@ describe("chorus.views.InstanceListSidebar", function() {
         });
     });
 
-    context("when an instance is selected", function() {
+    context("when a greenplum instance is selected", function() {
         beforeEach(function() {
             this.instance = rspecFixtures.greenplumInstance({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
@@ -68,6 +68,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                 expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
                 expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
                 expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
+                expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('greenplum_instance');
             });
 
             context("when user is an admin or owner of the instance", function() {
@@ -446,6 +447,22 @@ describe("chorus.views.InstanceListSidebar", function() {
                 expect(this.view.$(".instance_name").text()).toBe("Harry's House of Glamour");
                 expect(this.view.$('.actions .workspace_usage')).not.toExist();
             });
+        });
+    });
+
+    context("when a hadoop instance is selected", function() {
+        beforeEach(function() {
+            this.instance = rspecFixtures.hadoopInstance({name: "Harry's House of Glamour" });
+            this.view = new chorus.views.InstanceListSidebar();
+            chorus.PageEvents.broadcast("instance:selected", this.instance);
+            this.server.completeFetchFor(this.instance.activities());
+        });
+
+        it("has a 'add a note' link", function() {
+            expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
+            expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
+            expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
+            expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('hadoop_instance');
         });
     });
 });

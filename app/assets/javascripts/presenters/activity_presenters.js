@@ -130,6 +130,9 @@
                 case "NOTE_ON_GREENPLUM_INSTANCE":
                     return "Greenplum instance";
                     break;
+                case "NOTE_ON_HADOOP_INSTANCE":
+                    return "Hadoop instance";
+                    break;
                 case "NOTE_ON_HDFS_FILE":
                     return "file";
                     break;
