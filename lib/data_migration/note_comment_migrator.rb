@@ -7,9 +7,16 @@ class NoteCommentMigrator
     get_all_comments do |comment_id, comment_type, comment_body, comment_timestamp|
       case comment_type
         when 'instance'
-          greenplum_instance = Instance.find_by_id(rails_greenplum_instance_id(comment_id))
-          next unless greenplum_instance
-          event = Events::NOTE_ON_GREENPLUM_INSTANCE.create(:greenplum_instance => greenplum_instance, :body => comment_body)
+          instance_id, instance_provider = instance_id_and_provider(comment_id)
+          if instance_provider == 'Greenplum Database'
+            greenplum_instance = Instance.find(instance_id)
+            event = Events::NOTE_ON_GREENPLUM_INSTANCE.create(:greenplum_instance => greenplum_instance, :body => comment_body)
+          elsif instance_provider == 'Hadoop'
+            hadoop_instance = HadoopInstance.find(instance_id)
+            event = Events::NOTE_ON_HADOOP_INSTANCE.create(:hadoop_instance => hadoop_instance, :body => comment_body)
+          else
+            Raise "Unknown Instance Provider: #{instance_provider}"
+          end
         when 'hdfs'
           hadoop_id, path = comment_id.split('|')
           hdfs_file = HdfsFileReference.create(:hadoop_instance_id => hadoop_id, :path => path)
@@ -35,13 +42,15 @@ class NoteCommentMigrator
     end
   end
 
-  def rails_greenplum_instance_id(comment_id)
-    sql = "SELECT ei.chorus_rails_instance_id  FROM edc_instance ei, edc_comment ec
+  def instance_id_and_provider(comment_id)
+    sql = "SELECT ei.chorus_rails_instance_id, ei.instance_provider  FROM edc_instance ei, edc_comment ec
                                                WHERE ec.id = '#{comment_id}'
-                                               AND ei.id = ec.entity_id
-                                               AND ei.instance_provider = 'Greenplum Database'"
+                                               AND ei.id = ec.entity_id"
 
-    extract_result("chorus_rails_instance_id", Legacy.connection.exec_query(sql))
+    result = Legacy.connection.exec_query(sql)
+    instance_id = extract_result("chorus_rails_instance_id", result)
+    instance_provider = extract_result("instance_provider", result)
+    return instance_id, instance_provider
   end
 
   def update_event_id(comment_id, event_id)
