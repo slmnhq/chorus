@@ -4,28 +4,30 @@ class NoteCommentMigrator
       Legacy.connection.add_column :edc_comment, :chorus_rails_event_id, :integer
     end
 
-    get_all_comments do |comment_id, comment_type, comment_body, comment_timestamp|
+    get_all_comments do |comment_id, comment_type, comment_body, comment_timestamp, updated_timestamp, legacy_user|
+      actor = User.find_with_destroyed(legacy_user)
       case comment_type
         when 'instance'
           instance_id, instance_provider = instance_id_and_provider(comment_id)
           if instance_provider == 'Greenplum Database'
             greenplum_instance = Instance.find(instance_id)
-            event = Events::NOTE_ON_GREENPLUM_INSTANCE.create(:greenplum_instance => greenplum_instance, :body => comment_body)
+            event = Events::NOTE_ON_GREENPLUM_INSTANCE.create(:greenplum_instance => greenplum_instance, :body => comment_body, :actor => actor)
           elsif instance_provider == 'Hadoop'
             hadoop_instance = HadoopInstance.find(instance_id)
-            event = Events::NOTE_ON_HADOOP_INSTANCE.create(:hadoop_instance => hadoop_instance, :body => comment_body)
+            event = Events::NOTE_ON_HADOOP_INSTANCE.create(:hadoop_instance => hadoop_instance, :body => comment_body, :actor => actor)
           else
             Raise "Unknown Instance Provider: #{instance_provider}"
           end
         when 'hdfs'
           hadoop_id, path = comment_id.split('|')
           hdfs_file = HdfsFileReference.create(:hadoop_instance_id => hadoop_id, :path => path)
-          event = Events::NOTE_ON_HDFS_FILE.create(:hdfs_file => hdfs_file, :body => comment_body)
+          event = Events::NOTE_ON_HDFS_FILE.create(:hdfs_file => hdfs_file, :body => comment_body, :actor => actor)
         else
           next
       end
 
       event.created_at = comment_timestamp
+      event.updated_at = updated_timestamp
       event.save!
       update_event_id(comment_id, event.id)
     end
@@ -34,11 +36,11 @@ class NoteCommentMigrator
   private
 
   def get_all_comments
-    sql = "SELECT id, entity_type, body, created_stamp FROM edc_comment"
+    sql = "SELECT chorus_rails_user_id, ec.id, entity_type, body, ec.created_stamp, ec.last_updated_stamp FROM edc_comment ec, edc_user eu where user_name = author_name"
 
     comment_table_data = Legacy.connection.exec_query(sql)
     comment_table_data.map do |comment_data|
-      yield comment_data["id"], comment_data["entity_type"], comment_data["body"], comment_data["created_stamp"]
+      yield comment_data["id"], comment_data["entity_type"], comment_data["body"], comment_data["created_stamp"], comment_data["last_updated_stamp"], comment_data["chorus_rails_user_id"]
     end
   end
 
