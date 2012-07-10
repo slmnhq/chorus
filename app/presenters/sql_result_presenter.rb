@@ -1,4 +1,4 @@
-class SqlResultsPresenter < Presenter
+class SqlResultPresenter < Presenter
   delegate :columns, :rows, :to => :model
 
   def to_hash

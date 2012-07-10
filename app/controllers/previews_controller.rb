@@ -3,8 +3,8 @@ class PreviewsController < GpdbController
     dataset = Dataset.find(params[:dataset_id])
     instance_account = authorized_gpdb_account(dataset)
 
-    results = SqlResults.preview_dataset(dataset, instance_account, params[:task][:check_id])
-    present(results, :status => :created)
+    result = SqlExecutor.preview_dataset(dataset, instance_account, params[:task][:check_id])
+    present(result, :status => :created)
   rescue CancelableQuery::QueryError => e
     present_errors({:fields => {:query => {:INVALID => {:message => e.to_s}}}}, :status => :bad_request)
   end
@@ -13,7 +13,7 @@ class PreviewsController < GpdbController
     dataset = Dataset.find(params[:dataset_id])
     instance_account = authorized_gpdb_account(dataset)
 
-    SqlResults.cancel_preview(dataset, instance_account, params[:id])
+    SqlExecutor.cancel_preview(dataset, instance_account, params[:id])
     head :ok
   end
 end

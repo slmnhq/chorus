@@ -13,11 +13,9 @@ describe AnalyzeController do
 
   describe "#create" do
     before do
-      fake_results = SqlResults.new([], [])
+      fake_result = SqlResult.new
       any_instance_of(GpdbTable) do |gpdb_table|
-        stub(gpdb_table).analyze(
-            account
-        ) { fake_results }
+        stub(gpdb_table).analyze(account) { fake_result }
       end
     end
 

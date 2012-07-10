@@ -23,28 +23,12 @@ module Visualization
       query.to_sql
     end
 
-    def build_column_sql
-      relation = Arel::Table.new(%Q{"information_schema"."columns"})
-      query = relation.
-        where(relation[:table_name].eq(%Q{#{@dataset.name}})).
-        where(relation[:table_schema].eq(%Q{#{@schema.name}})).
-        where(relation[:column_name].eq(%Q{#{@category}})).
-        project(relation[:column_name].as('name'), relation[:data_type].as('type_category'))
-
-      query.to_sql
-    end
-
-    def fetch!(account)
-      column_data = @schema.with_gpdb_connection(account) do |conn|
-        conn.exec_query(build_column_sql)
-      end
-
-      row_data = @schema.with_gpdb_connection(account) do |conn|
-        conn.exec_query(build_row_sql)
-      end
+    def fetch!(account, check_id)
+      result = SqlExecutor.execute_sql(@schema, account, check_id, build_row_sql)
+      row_data = result.rows.map { |row| { :bucket => row[0], :count => row[1] } }
 
       @rows = row_data.reverse
-      @columns = column_data
+      @columns = result.columns
     end
   end
 end

@@ -15,8 +15,8 @@ describe PreviewsController do
   describe "#create" do
     context "when create is successful" do
       before do
-        fake_results = SqlResults.new([], [])
-        mock(SqlResults).preview_dataset(gpdb_table, account, '0.43214321') { fake_results }
+        fake_result = SqlResult.new
+        mock(SqlExecutor).preview_dataset(gpdb_table, account, '0.43214321') { fake_result }
       end
 
       it "uses authentication" do
@@ -38,7 +38,7 @@ describe PreviewsController do
 
     context "when there's an error'" do
       before do
-        mock(SqlResults).preview_dataset(gpdb_table, account, '0.43214321') { raise CancelableQuery::QueryError }
+        mock(SqlExecutor).preview_dataset(gpdb_table, account, '0.43214321') { raise CancelableQuery::QueryError }
       end
       it "returns an error if the query fails" do
         post :create, :dataset_id => gpdb_table.to_param, :task => {:check_id => '0.43214321'}
@@ -51,7 +51,7 @@ describe PreviewsController do
 
   describe "#destroy" do
     it "cancels the data preview command" do
-      mock(SqlResults).cancel_preview(gpdb_table, account, '0.12341234')
+      mock(SqlExecutor).cancel_preview(gpdb_table, account, '0.12341234')
       delete :destroy, :dataset_id => gpdb_table.to_param, :id => '0.12341234'
 
       response.code.should == '200'

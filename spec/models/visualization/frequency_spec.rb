@@ -57,38 +57,29 @@ describe Visualization::Frequency do
   end
 
   describe "#fetch!" do
-    before do
-      call_count = 0
-      mock(schema).with_gpdb_connection(instance_account).times(2) do
-        r = [
-            [
-                {'name' => 'bucket', 'typeCategory' => 'text'},
-                {'name' => 'count', 'typeCategory' => 'integer'}
-            ],
-            [
-                {'count' => 19, 'bucket' => 'The Beatles'},
-                {'count' => 24, 'bucket' => 'Bob Dylan'},
-                {'count' => 9, 'bucket' => 'David Bowie'}
-            ]][call_count]
-        call_count = call_count + 1
-        r
-      end
-    end
-
-    let(:attributes) do
-      {
-          :bins => 3,
-          :y_axis => 'artist'
-      }
-    end
-
     it "returns visualization structure" do
-      visualization = described_class.new(dataset, attributes)
-      visualization.fetch!(instance_account)
+      visualization = described_class.new(dataset, {
+        :bins => 3,
+        :y_axis => 'artist'
+      })
 
-      visualization.rows.should include({'count' => 19, 'bucket' => 'The Beatles'})
-      visualization.rows.should include({'count' => 24, 'bucket' => 'Bob Dylan'})
-      visualization.rows.should include({'count' => 9, 'bucket' => 'David Bowie'})
+      mock(SqlExecutor).execute_sql(schema, instance_account, 13, visualization.build_row_sql) do
+        SqlResult.new.tap do |result|
+          result.add_column("bucket", "text")
+          result.add_column("count", "int8")
+          result.add_rows([
+            ['The Beatles', '19'],
+            ['Bob Dylan', '24'],
+            ['David Bowie', '9']
+          ])
+        end
+      end
+
+      visualization.fetch!(instance_account, 13)
+
+      visualization.rows.should include({:count => '19', :bucket => 'The Beatles'})
+      visualization.rows.should include({:count => '24', :bucket => 'Bob Dylan'})
+      visualization.rows.should include({:count => '9', :bucket => 'David Bowie'})
     end
   end
 end
