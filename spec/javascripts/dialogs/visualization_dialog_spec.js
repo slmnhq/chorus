@@ -52,9 +52,38 @@ describe("chorus.dialogs.Visualization", function() {
                     expect(this.dialog.$("button.save")).toBeEnabled();
                 });
 
-                it("has the workspace as a required resource (so it can check whether its archived) when task has workspace", function() {
-                    expect(this.dialog.task.workspace()).toHaveBeenFetched();
-                    expect(this.dialog.requiredResources.models).toContain(this.dialog.task.workspace());
+                context("when the task DOES have a workspace", function() {
+                    it("fetches the workspace", function() {
+                        expect(this.dialog.task.workspace()).toHaveBeenFetched();
+                    });
+
+                    describe("when the workspace fetch completes", function() {
+                        it("keeps the save button enabled", function() {
+                            this.server.completeFetchFor(this.dialog.task.workspace(), rspecFixtures.workspace());
+                            expect(this.dialog.$("button.save")).toBeEnabled();
+                        });
+
+                        it("keeps the 'show data table' link visible", function() {
+                            this.server.completeFetchFor(this.dialog.task.workspace(), rspecFixtures.workspace());
+                            expect(this.dialog.$("a.show")).not.toHaveClass('hidden');
+                        });
+
+                        context("when the workspace is archived", function() {
+                            it("does not include the 'save as workfile' option", function() {
+                                this.server.completeFetchFor(this.dialog.task.workspace(), rspecFixtures.workspace({ archivedAt: "12/21/2012" }));
+                                this.dialog.$("button.save").click();
+                                expect(this.qtip.find("[data-menu-name='save_as_workfile']")).not.toExist();
+                            });
+                        });
+
+                        context("when the workspace is not archived", function() {
+                            it("includes the 'save as workfile' option", function() {
+                                this.server.completeFetchFor(this.dialog.task.workspace(), rspecFixtures.workspace({ archivedAt: null }));
+                                this.dialog.$("button.save").click();
+                                expect(this.qtip.find("[data-menu-name='save_as_workfile']")).toExist();
+                            });
+                        });
+                    });
                 });
 
                 context("when task doesn't have workspace ( from instance browser page)", function() {

@@ -23,9 +23,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.task = this.options.task;
 
         var workspace = this.task.workspace();
-        if(workspace) {
-            this.requiredResources.add(workspace);
-            workspace.fetch();
+        if (workspace) {
+            workspace.fetch().success(_.bind(this.render, this));
         }
         this.type = this.options.chartOptions.type;
         this.title = t("visualization.title", {name: this.options.chartOptions.name});
@@ -72,13 +71,14 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             orientation: "right",
             items: menuItems
         });
+
+        this.drawChart();
     },
 
     drawChart: function() {
         if (this.isValidData()) {
             this.$(".modal_controls a.hide").addClass("hidden");
             this.$(".modal_controls a.show").removeClass("hidden");
-            this.$("button.save").prop("disabled", false);
             this.$("button.save").prop("disabled", false);
             this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model: this.task});
             this.subviews[".chart_area"] = "chart";
