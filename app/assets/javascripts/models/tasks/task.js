@@ -7,7 +7,7 @@ chorus.models.Task = chorus.models.Base.include(
     initialize: function(attrs) {
         this.set({
             taskType: attrs.taskType || this.taskType,
-            checkId: Math.random().toString()
+            checkId: Math.random().toString() + '_' + chorus.session.user().id
         });
     },
 

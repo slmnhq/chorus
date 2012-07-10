@@ -17,7 +17,7 @@ describe("chorus.models.Task", function() {
     it("has a random checkId", function() {
         spyOn(Math, 'random').andReturn(42);
         this.model = new taskSubclass();
-        expect(this.model.get("checkId")).toBe('42');
+        expect(this.model.get("checkId")).toBe('42_' + chorus.session.user().id);
     });
 
     describe("cancel", function() {
