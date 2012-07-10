@@ -1,17 +1,47 @@
 require 'spec_helper'
 
-describe Gpdb::InstanceStatus do
-  let(:user1) { FactoryGirl::create :user }
+describe InstanceStatus do
+  describe "#check_hdfs_instances" do
+    let(:instance1) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
+    let(:instance2) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
+    let(:instance3) { FactoryGirl.create :hadoop_instance, :online => false, :version => "0.20.1" }
 
-  let(:instance_account1) { FactoryGirl::create :instance_account, :instance => instance1, :owner => user1 }
-  let(:instance_account2) { FactoryGirl::create :instance_account, :instance => instance2, :owner => user1 }
-  let(:instance_account3) { FactoryGirl::create :instance_account, :instance => instance3, :owner => user1 }
+    describe "#check_hdfs_instances" do
+      before do
+        mock(Hdfs::QueryService).instance_version(instance1) { "1.0.0" }
+        mock(Hdfs::QueryService).instance_version(instance2) { nil }
+        mock(Hdfs::QueryService).instance_version(instance3) { "0.20.205" }
+      end
 
-  let(:instance1) { FactoryGirl.create :instance, :owner_id => user1.id }
-  let(:instance2) { FactoryGirl.create :instance, :owner_id => user1.id }
-  let(:instance3) { FactoryGirl.create :instance, :owner_id => user1.id }
+      it "updates the connection status for each instance" do
+        InstanceStatus.check_hdfs_instances
 
-  describe "#check" do
+        instance1.reload.should be_online
+        instance2.reload.should_not be_online
+        instance3.reload.should be_online
+      end
+
+      it "updates the version for each instance" do
+        InstanceStatus.check_hdfs_instances
+
+        instance1.reload.version.should == "1.0.0"
+        instance2.reload.version.should == "0.20.1"
+        instance3.reload.version.should == "0.20.205"
+      end
+    end
+  end
+
+  describe "#check_gpdb_instances" do
+    let(:user1) { FactoryGirl::create :user }
+
+    let(:instance_account1) { FactoryGirl::create :instance_account, :instance => instance1, :owner => user1 }
+    let(:instance_account2) { FactoryGirl::create :instance_account, :instance => instance2, :owner => user1 }
+    let(:instance_account3) { FactoryGirl::create :instance_account, :instance => instance3, :owner => user1 }
+
+    let(:instance1) { FactoryGirl.create :instance, :owner_id => user1.id }
+    let(:instance2) { FactoryGirl.create :instance, :owner_id => user1.id }
+    let(:instance3) { FactoryGirl.create :instance, :owner_id => user1.id }
+
     context "successfully connect to the database" do
 
       before do
@@ -29,7 +59,7 @@ describe Gpdb::InstanceStatus do
         instance2.update_attribute(:online, false)
         instance3.update_attribute(:online, true)
 
-        Gpdb::InstanceStatus.check
+        InstanceStatus.check_gpdb_instances
 
         instance1.reload.should be_online
         instance2.reload.should be_online
@@ -42,7 +72,7 @@ describe Gpdb::InstanceStatus do
         instance2.update_attribute(:version, "random_version")
         instance3.update_attribute(:version, "random_version")
 
-        Gpdb::InstanceStatus.check
+        InstanceStatus.check_gpdb_instances
 
         instance1.reload.version.should == "4.1.1.1"
         instance2.reload.version.should == "4.1.1.2"
@@ -67,7 +97,7 @@ describe Gpdb::InstanceStatus do
         instance2.update_attribute(:online, false)
         instance3.update_attribute(:online, true)
 
-        Gpdb::InstanceStatus.check
+        InstanceStatus.check_gpdb_instances
 
         instance1.reload.should_not be_online
         instance2.reload.should be_online
