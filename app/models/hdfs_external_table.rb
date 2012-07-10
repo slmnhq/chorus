@@ -44,10 +44,10 @@ class HdfsExternalTable
     all_present = [:hadoop_instance_id, :has_header, :path, :column_names, :types, :delimiter, :table_name].all? do |attr|
       parameters.key? attr
     end
-    raise ApiValidationError.new(:connection, :generic, {:message => "One or more parameters missing for Hdfs External Table"}) unless all_present
+    raise ApiValidationError.new(:parameter_missing, :generic, {:message => "One or more parameters missing for Hdfs External Table"}) unless all_present
 
     if parameters[:column_names].length != parameters[:types].length
-      raise ApiValidationError, "Column names size should match column types for Hdfs External Table"
+      raise ApiValidationError.new(:column_name_missing, :generic, {:message => "Column names size should match column types for Hdfs External Table"})
     end
   end
 
