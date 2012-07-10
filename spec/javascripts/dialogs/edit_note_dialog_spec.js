@@ -1,7 +1,9 @@
 describe("chorus.dialogs.EditNote", function() {
     beforeEach(function() {
         this.text = "Hi i'm a friendly text"
-        this.note = fixtures.activities.NOTE_ON_CHORUS_VIEW({ text: this.text });
+        this.note = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+            body: this.text
+        });
         this.note.collection = chorus.collections.ActivitySet.forDashboard();
         this.launchElement = $("<a/>").data("activity", this.note);
         this.dialog = new chorus.dialogs.EditNote({ launchElement: this.launchElement });
@@ -99,10 +101,10 @@ describe("chorus.dialogs.EditNote", function() {
         })
 
         it("updates the note correctly", function() {
-            var comment = this.note.toComment();
-            expect(comment).toHaveBeenUpdated();
-            var update = this.server.lastUpdateFor(comment);
-            expect(update.params()["comment[body]"]).toBe("Agile, meet big data. Let's pair.");
+            var note = this.note.toNote();
+            expect(note).toHaveBeenUpdated();
+            var update = this.server.lastUpdateFor(note);
+            expect(update.params()["note[body]"]).toBe("Agile, meet big data. Let's pair.");
         });
 
         describe("when the put completes successfully", function() {

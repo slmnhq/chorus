@@ -181,27 +181,46 @@ describe("chorus.models.Activity", function() {
         });
     });
 
-    describe("#toComment", function() {
+    describe("#isOwner", function() {
+
+        it("returns true for notes is current user is the owner of note", function() {
+            activity2 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+                greenplumInstance: { id: 13 },
+                actor: {id: chorus.session.user().id}
+
+            });
+            expect(activity2.isOwner()).toBeTruthy();
+        });
+        it("returns false for notes is current user is not the owner of note", function() {
+            activity2 = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
+                greenplumInstance: { id: 13 },
+                actor: {id: 1}
+
+            });
+            expect(activity2.isOwner()).toBeFalsy();
+        });
+
+    });
+
+    describe("#toNote", function() {
         beforeEach(function() {
             this.model = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
-                id: 101,
-                greenplumInstance: {
-                    id: 45
-                }
+                id: 101
             });
+
             this.model.collection = chorus.collections.ActivitySet.forDashboard();
         });
 
-        it("returns a comment with the right attributes", function() {
-            var comment = this.model.toComment();
-            expect(comment).toBeA(chorus.models.Comment);
-            expect(comment.get("id")).toBe(101);
-            expect(comment.get("body")).toBe(this.model.get("text"));
+        it("returns a note with the right attributes", function() {
+            var note = this.model.toNote();
+            expect(note).toBeA(chorus.models.Note);
+            expect(note.get("id")).toBe(101);
+            expect(note.get("body")).toBe(this.model.get("body"));
         });
 
-        describe("when the comment is saved", function() {
+        describe("when the note is saved", function() {
             beforeEach(function() {
-                this.model.toComment().trigger("saved");
+                this.model.toNote().trigger("saved");
             });
 
             it("re-fetches the activity's collection", function() {

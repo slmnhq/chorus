@@ -1,3 +1,5 @@
+require Rails.root + 'app/permissions/note_access'
+
 class NotesController < ApplicationController
   def create
     body = params[:note][:body]
@@ -17,5 +19,13 @@ class NotesController < ApplicationController
     end
 
     render :json => {}, :status => :created
+  end
+
+  def update
+    note = Events::Base.find(params[:id])
+    authorize! :update, note
+    note.body = params[:note][:body]
+    note.save!
+    present note
   end
 end

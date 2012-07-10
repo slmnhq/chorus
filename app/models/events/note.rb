@@ -1,5 +1,6 @@
 module Events
   class Note < Base
+    validates_presence_of :actor_id
     searchable do
       text :body, :stored => true
       string :grouping_id

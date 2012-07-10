@@ -11,7 +11,7 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
     setup: function(options) {
         this.activity = this.options.launchElement.data('activity');
         this.title = this.activity.isInsight() ? t("notes.edit_dialog.insight_title") : t("notes.edit_dialog.note_title");
-        this.resource = this.model = this.activity.toComment();
+        this.resource = this.model = this.activity.toNote();
 
         this.bindings.add(this.resource, "validationFailed", this.showErrors);
         this.bindings.add(this.resource, "saved", this.submitSucceeds);
@@ -35,7 +35,7 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
     },
 
     postRender: function() {
-        this.$("textarea").val(this.activity.get("text"));
+        this.$("textarea").val(this.activity.get("body"));
 
         _.defer(_.bind(function() {
             this.makeEditor($(this.el), ".toolbar", "body", { width: 350 });

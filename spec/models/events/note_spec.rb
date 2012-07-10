@@ -12,6 +12,12 @@ describe "Notes" do
                               'hadoop_instance_id' => 1234})
   end
 
+  it "requires an actor" do
+    note = Events::Note.new
+    note.valid?
+    note.errors.messages[:actor_id].length.should == 1
+  end
+
   describe "NOTE_ON_GREENPLUM_INSTANCE" do
     subject do
       Events::NOTE_ON_GREENPLUM_INSTANCE.add(

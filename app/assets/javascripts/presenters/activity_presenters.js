@@ -21,6 +21,9 @@
         isUserGenerated: function() {
             return this.model.isUserGenerated();
         },
+        isOwner: function() {
+            return this.model.isOwner();
+        },
         iconClass: "profile"
     });
 

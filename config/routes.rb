@@ -68,7 +68,7 @@ Chorus::Application.routes.draw do
     resource :image, :only => [:show], :controller => 'workfile_version_images'
   end
 
-  resources :notes, :only => [:create]
+  resources :notes, :only => [:create, :update]
 
   scope :path => "/search" do
     resource :global, :only => [:show], :controller => 'search'

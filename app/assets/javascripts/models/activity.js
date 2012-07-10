@@ -125,14 +125,13 @@
             insight.save(null, { method: "create" });
         },
 
-        toComment: function(attrs, options) {
-            var comment = new chorus.models.Comment({
+        toNote: function() {
+            var comment = new chorus.models.Note({
                 id: this.id,
-                body: this.get("text")
+                body: this.get("body")
             });
 
             comment.bind("saved", function() {
-                options && options.success && options.success();
                 this.collection.fetch();
             }, this);
 
@@ -179,6 +178,9 @@
 
         isPublished: function() {
             return this.get("isPublished") === true;
+        },
+        isOwner: function() {
+            return (this.get("actor").id === chorus.session.user().id);
         }
     });
 
