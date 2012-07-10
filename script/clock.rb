@@ -1,4 +1,4 @@
-require './config/environment.rb'
+require_relative '../config/environment'
 require 'queue_classic'
 require 'clockwork'
 include Clockwork

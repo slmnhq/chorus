@@ -12,38 +12,67 @@ describe Gpdb::InstanceStatus do
   let(:instance3) { FactoryGirl.create :instance, :owner_id => user1.id }
 
   describe "#check" do
-    before do
-      stub_gpdb(instance_account1,
-                "select version()" => [{"version" => "PostgreSQL 9.2.15 (Greenplum Database 4.1.1.1 build 1) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"}]
-      )
-      stub_gpdb(instance_account2,
-                "select version()" => [{"version" => "PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"}]
-      )
-      stub_gpdb_fail(instance_account3)
+    context "successfully connect to the database" do
+
+      before do
+        stub_gpdb(instance_account1,
+                  "select version()" => [{"version" => "PostgreSQL 9.2.15 (Greenplum Database 4.1.1.1 build 1) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"}]
+        )
+        stub_gpdb(instance_account2,
+                  "select version()" => [{"version" => "PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"}]
+        )
+        stub_gpdb_fail(instance_account3)
+      end
+
+      it "checks the connection status for each instance" do
+        instance1.update_attribute(:online, false)
+        instance2.update_attribute(:online, false)
+        instance3.update_attribute(:online, true)
+
+        Gpdb::InstanceStatus.check
+
+        instance1.reload.should be_online
+        instance2.reload.should be_online
+        instance3.reload.should_not be_online
+      end
+
+
+      it "checks the version for each instance" do
+        instance1.update_attribute(:version, "random_version")
+        instance2.update_attribute(:version, "random_version")
+        instance3.update_attribute(:version, "random_version")
+
+        Gpdb::InstanceStatus.check
+
+        instance1.reload.version.should == "4.1.1.1"
+        instance2.reload.version.should == "4.1.1.2"
+        instance3.reload.version.should == "random_version"
+      end
     end
 
-    it "checks the connection status for each instance" do
-      instance1.update_attributes!(:online => false)
-      instance2.update_attributes!(:online => false)
-      instance3.update_attributes!(:online => true)
+    context "Exception occur while trying to connect to the database" do
+      before do
+        stub_gpdb_fail(instance_account1)
 
-      Gpdb::InstanceStatus.check
+        stub_gpdb(instance_account2,
+                  "select version()" => [{"version" => "PostgreSQL 9.2.15 (Greenplum Database 4.1.1.2 build 2) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"}]
+        )
+        stub_gpdb(instance_account3,
+                  "select version()" => [{"version" => "PostgreSQL 9.2.15 (Greenplum Database 4.1.1.1 build 1) on i386-apple-darwin9.8.0, compiled by GCC gcc (GCC) 4.4.2 compiled on May 12 2011 18:08:53"}]
+        )
+      end
 
-      instance1.reload.should be_online
-      instance2.reload.should be_online
-      instance3.reload.should_not be_online
-    end
+      it "does not fail to update other instances" do
+        instance1.update_attribute(:online, false)
+        instance2.update_attribute(:online, false)
+        instance3.update_attribute(:online, true)
 
-    it "checks the version for each instance" do
-      instance1.update_attributes!(:version => "random_version")
-      instance2.update_attributes!(:version => "random_version")
-      instance3.update_attributes!(:version => "random_version")
+        Gpdb::InstanceStatus.check
 
-      Gpdb::InstanceStatus.check
-
-      instance1.reload.version.should == "4.1.1.1"
-      instance2.reload.version.should == "4.1.1.2"
-      instance3.reload.version.should == "random_version"
+        instance1.reload.should_not be_online
+        instance2.reload.should be_online
+        instance3.reload.should be_online
+      end
     end
   end
 end

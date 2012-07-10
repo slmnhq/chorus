@@ -16,11 +16,5 @@ module Gpdb
     ensure
       connection.try(:disconnect!)
     end
-
-    def self.connect(instance, account, database_name=nil, &block)
-      connect!(instance, account, database_name, &block)
-    rescue ActiveRecord::JDBCError
-      nil
-    end
   end
 end

@@ -68,24 +68,4 @@ describe Gpdb::ConnectionBuilder do
       end
     end
   end
-
-  describe "#connect" do
-    it "calls through to connect!" do
-      proc = Proc.new {}
-      mock.proxy(Gpdb::ConnectionBuilder).connect!(instance, instance_account, expected_database, &proc)
-      Gpdb::ConnectionBuilder.connect(instance, instance_account, expected_database, &proc)
-    end
-
-    context "when the connection fails" do
-      let(:fake_connection_adapter) { raise ActiveRecord::JDBCError }
-
-      it "returns nil, and does not execute the given block" do
-        result = Gpdb::ConnectionBuilder.connect(instance, instance_account) do |conn|
-          @block_was_called = true
-        end
-        result.should be_nil
-        @block_was_called.should be_false
-      end
-    end
-  end
 end
