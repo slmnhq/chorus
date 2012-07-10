@@ -18,15 +18,16 @@ module PackageMaker
   COMPONENTS_DIR = File.join(PACKAGING_DIR, "components")
 
   def stage(filename)
-    run 'ssh chorus-staging -C "~/chorusrails/vendor/jetty/jetty-init stop"'
+    run "ssh chorus-staging 'cd ~/chorusrails; RAILS_ENV=production script/server_control.sh stop'"
+
     run "scp #{filename} chorus-staging:~/"
     run "ssh chorus-staging 'cd ~/; tar --overwrite -xvf #{filename}'"
     # Run the migrations
     run "ssh chorus-staging 'cd ~/chorusrails; RAILS_ENV=production bin/rake db:migrate'"
-    run "ssh chorus-staging 'RAILS_ENV=production ~/chorusrails/vendor/jetty/jetty-init start >/dev/null 2>/dev/null &'"
+    run "ssh chorus-staging 'cd ~/chorusrails; RAILS_ENV=production script/server_control.sh start'"
   end
 
-  def make(options)
+  def make(options = {})
     current_sha = head_sha
     filename = "greenplum-chorus-#{Chorus::VERSION::STRING}-#{timestamp}-#{current_sha}.tar.gz"
     setup_directories
