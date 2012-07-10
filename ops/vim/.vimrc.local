@@ -9,6 +9,7 @@ set gcr=n:blinkon0
 
 set wildignore+=public/system
 set wildignore+=vendor
+set wildignore+=var/db
 
 " for test_server plugin
 nmap <D-S-F10> <Esc>:RunTestLine<CR>
