@@ -103,7 +103,10 @@ describe HdfsExternalTable do
       end
 
       it "fails when missing attributes" do
-        expect { HdfsExternalTable.create_sql(parameters.except(:delimiter)) }.to raise_error(ApiValidationError)
+        expect { HdfsExternalTable.create_sql(parameters.except(:delimiter)) }.to raise_error{ |error|
+            error.errors.messages[:connection][0][1][:message].should == "One or more parameters missing for Hdfs External Table"
+            error.should be_a(ApiValidationError)
+        }
         expect { HdfsExternalTable.create_sql(parameters.except(:path)) }.to raise_error(ApiValidationError)
         expect { HdfsExternalTable.create_sql(parameters.except(:column_names)) }.to raise_error(ApiValidationError)
         expect { HdfsExternalTable.create_sql(parameters.except(:types)) }.to raise_error(ApiValidationError)
