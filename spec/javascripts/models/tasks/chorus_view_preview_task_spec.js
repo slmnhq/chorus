@@ -1,10 +1,10 @@
 describe("chorus.models.ChorusViewPreviewTask", function() {
     beforeEach(function() {
-        this.model = new chorus.models.ChorusViewPreviewTask();
+        this.model = new chorus.models.ChorusViewPreviewTask({ datasetId: 45 });
     });
 
-    it("has the right task type", function() {
-       expect(this.model.get("taskType")).toBe("getDatasetPreview");
+    it("has the right task url", function() {
+       expect(this.model.url()).toBe("/datasets/45/previews");
     })
 
     context("when the task has an 'objectName'", function() {

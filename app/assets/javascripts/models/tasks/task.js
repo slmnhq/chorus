@@ -2,26 +2,26 @@ chorus.models.Task = chorus.models.Base.include(
     chorus.Mixins.SQLResults
 ).extend({
     constructorName: "Task",
-    urlTemplate: "task/sync/",
+
+    urlTemplate: function(options) {
+        if (options && options.method === "delete") {
+            return this.urlTemplateBase + "/{{checkId}}"
+        } else {
+            return this.urlTemplateBase;
+        }
+    },
 
     initialize: function(attrs) {
-        this.set({
-            taskType: attrs.taskType || this.taskType,
-            checkId: Math.random().toString() + '_' + chorus.session.user().id
-        });
+        this.set({ checkId: Math.random().toString() + '_' + chorus.session.user().id });
     },
 
     cancel : function() {
-        if (this.cancelled || this.loaded) return;
-        this.cancelled = true;
+        if (this._cancelInProgress || this.loaded) return;
+        this._cancelInProgress = true;
         Backbone.sync('delete', this, {
-            data: {
-                taskType: this.get('taskType'),
-                checkId: this.get('checkId')
-            },
             success: _.bind(function() {
                 this.trigger("canceled");
-                delete this.cancelled;
+                delete this._cancelInProgress;
             }, this)
         });
     }
