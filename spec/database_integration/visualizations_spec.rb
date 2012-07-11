@@ -21,4 +21,8 @@ describe "Visualizations", :type => :database_integration do
     visualization.rows.should include({'count' => 3, 'bucket' => 'orange'})
     visualization.rows.should include({'count' => 2, 'bucket' => 'apple'})
   end
+
+  it "returns the visualization histogram data" do
+    dataset = GpdbTable.find_by_name!('base_table1')
+  end
 end

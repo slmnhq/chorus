@@ -7,7 +7,7 @@ module Visualization
     def to_hash
       {
           :rows => rows,
-          :columns => [{name: "bucket", typeCategory: "STRING"}, {name: "count", typeCategory: "WHOLE_NUMBER"}]
+          :columns => [{name: "bucket", type_category: "STRING"}, {name: "count", type_category: "WHOLE_NUMBER"}]
       }
     end
   end

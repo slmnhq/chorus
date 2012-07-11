@@ -123,6 +123,14 @@ FactoryGirl.define do
     association :schema, :factory => :gpdb_schema
   end
 
+  factory :visualization_histogram, :class => Visualization::Histogram do
+    bins 20
+    category "airport_cleanliness"
+    filters ["\"2009_sfo_customer_survey\".terminal > 5"]
+    association :dataset, :factory => :gpdb_table
+    association :schema, :factory => :gpdb_schema
+  end
+
   factory :associated_dataset do
     association :dataset, :factory => :gpdb_table
     workspace

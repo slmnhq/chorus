@@ -33,8 +33,8 @@ describe Visualization::FrequencyPresenter, :type => :view do
 
     it "includes columns" do
       @hash[:columns].should == [
-          { :name => "bucket", :typeCategory => "STRING" },
-          { :name => "count", :typeCategory => "WHOLE_NUMBER" }
+          { :name => "bucket", :type_category => "STRING" },
+          { :name => "count", :type_category => "WHOLE_NUMBER" }
       ]
     end
   end

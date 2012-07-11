@@ -13,5 +13,16 @@ describe Visualization do
         visualization.should be_a_kind_of(Visualization::Frequency)
       end
     end
+
+    context "histogram visualization" do
+      let(:params) { {:type => 'histogram'}}
+
+      it "builds a histogram visualization" do
+        visualization = described_class.build(table, params)
+
+        visualization.should be_a_kind_of(Visualization::Histogram)
+      end
+
+    end
   end
 end
