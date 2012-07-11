@@ -6,40 +6,76 @@ task :package do
 end
 
 task :stage do
-  PackageMaker.make(:stage => true)
+  deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
+  PackageMaker.deploy(deploy_configuration)
 end
+
+task :prepare_remote do
+  deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
+  PackageMaker.prepare_remote(deploy_configuration)
+end
+
 
 module PackageMaker
   extend self
 
-  ROOT_DIR = File.expand_path("../../..", __FILE__)
-  PACKAGING_DIR  = File.join(ROOT_DIR, "packaging")
-  PACKAGES_DIR   = File.join(PACKAGING_DIR, "packages")
-  COMPONENTS_DIR = File.join(PACKAGING_DIR, "components")
+  def upload(filename, config)
+    host = config['host']
+    path = config['path']
 
-  def stage(filename)
-    run "ssh chorus-staging 'cd ~/chorusrails; RAILS_ENV=production script/server_control.sh stop'"
+    release_name = version_name
 
-    run "scp #{filename} chorus-staging:~/"
-    run "ssh chorus-staging 'cd ~/; tar --overwrite -xvf #{filename}'"
-    # Run the migrations
-    run "ssh chorus-staging 'cd ~/chorusrails; RAILS_ENV=production bin/rake db:migrate'"
-    run "ssh chorus-staging 'cd ~/chorusrails; RAILS_ENV=production script/server_control.sh start'"
+    current_path = path + "/current"
+    release_path = path + "/releases/" + release_name
+
+    run "scp #{filename} #{host}:#{path}"
+    run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename}'"
+
+    run "ssh #{host} 'mkdir -p #{release_path}/solr && ln -s #{path}/shared/solr/data #{release_path}/solr/'"
+
+    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/log #{release_path}/'"
+    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/tmp #{release_path}/'"
+    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/system #{release_path}/'"
+
+    run "ssh #{host} 'cd #{release_path}; RAILS_ENV=production bin/rake db:migrate'"
+
+    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh stop'"
+    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh start'"
+
+    run "ssh #{host} 'cd #{path} && rm -f #{current_path} && ln -s #{release_path} #{current_path}'"
+  end
+
+  def deploy(config)
+    write_jetpack_yaml(config)
+    check_existing_version(config)
+
+    filename = make
+    upload(filename, config)
   end
 
   def make(options = {})
     current_sha = head_sha
-    filename = "greenplum-chorus-#{Chorus::VERSION::STRING}-#{timestamp}-#{current_sha}.tar.gz"
-    setup_directories
+    filename = "greenplum-chorus-#{version_name}-#{timestamp}.tar.gz"
     archive_app(filename, current_sha)
-    if options[:stage]
-      stage(filename)
-    end
+
+    filename
   end
 
-  def setup_directories
-    run "mkdir -p #{COMPONENTS_DIR}"
-    run "mkdir -p #{PACKAGES_DIR}"
+  def prepare_remote(config)
+    path = config['path']
+    host = config['host']
+
+    run "ssh #{host} 'mkdir -p #{path}/releases'"
+    run "ssh #{host} 'mkdir -p #{path}/shared/tmp && mkdir -p #{path}/shared/log && mkdir -p #{path}/shared/system && mkdir -p #{path}/shared/solr/data'"
+  end
+
+  def check_existing_version(config)
+    versions = `ssh #{config['host']} 'ls #{config['path']}/releases/'`.split
+
+    if versions.include? version_name
+      puts "There is a version #{version_name} in the server. Do you want to overwrite it? Press Enter to continue or Ctrl-C to cancel."
+      puts "Press enter to continue..." while STDIN.gets != "\n"
+    end
   end
 
   def check_clean_working_tree
@@ -50,8 +86,9 @@ module PackageMaker
   end
 
   def archive_app(filename, sha)
-    check_clean_working_tree
-    run "RAILS_ENV=development rake assets:precompile"
+    #check_clean_working_tree
+    # TODO: Why?? pwd
+    run "pwd; RAILS_ENV=development bundle exec rake assets:precompile"
     run "bundle exec jetpack ."
     File.open('version_build', 'w') do |f|
       f.puts sha
@@ -78,11 +115,7 @@ module PackageMaker
       ".bundle/config"
     ]
 
-    Dir.chdir("..") do
-      run "tar czf #{filename} --exclude='chorusrails/public/system/' --exclude='javadoc' --exclude='.git' #{files_to_tar.map{|path| "chorusrails/#{path}" }.join(" ")}"
-      `mv #{filename} chorusrails/`
-    end
-
+    run "tar czf #{filename} --exclude='public/system/' --exclude='javadoc' --exclude='.git' --exclude='log' #{files_to_tar.join(" ")}"
   end
 
   def timestamp
@@ -101,5 +134,18 @@ module PackageMaker
   def relative(path)
     current = Pathname.new(Dir.pwd)
     Pathname.new(path).relative_path_from(current).to_s
+  end
+
+  def version_name
+    "#{Chorus::VERSION::STRING}-#{head_sha}"
+  end
+
+  def write_jetpack_yaml(config)
+    defaults = YAML.load_file(Rails.root.join('config', 'jetpack.yml.defaults'))
+    defaults['app_root'] = config['path'] + '/current'
+
+    File.open(Rails.root.join('config', 'jetpack.yml'), 'w') do |file|
+      YAML.dump(defaults, file)
+    end
   end
 end

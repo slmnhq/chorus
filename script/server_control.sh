@@ -51,7 +51,7 @@ function stop () {
   fi
 
   echo "Stopping solr..."
-  ps e | grep solr | grep -v grep  | cut -f1 -d' ' | xargs kill
+  ps e | grep solr | cut -f1 -d' ' | xargs kill
 
   echo "Stopping webserver..."
   vendor/jetty/jetty-init stop

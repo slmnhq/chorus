@@ -53,3 +53,6 @@ tags
 
 # Ignore file with build sha
 /version_build
+
+# jetpack.yml is generated
+config/jetpack.yml

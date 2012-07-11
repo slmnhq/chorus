@@ -1,0 +1,7 @@
+stage:
+  host: chorus-staging
+  path: ~/chorusrails-deploy
+
+chorus21:
+  host: chorus-chorus21
+  path: ~/test/chorusrails
