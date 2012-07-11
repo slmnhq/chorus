@@ -11,9 +11,8 @@ module SqlExecutor
       end
     end
 
-    # TODO: How do we test this?
-    def cancel_preview(dataset, account, check_id)
-      dataset.with_gpdb_connection(account) do |conn|
+    def cancel_query(gpdb_connection_provider, account, check_id)
+      gpdb_connection_provider.with_gpdb_connection(account) do |conn|
         cancelable_query = CancelableQuery.new(conn, check_id)
         cancelable_query.cancel
       end

@@ -9,13 +9,14 @@ describe("chorus.models.SqlExecutionTask", function() {
         });
     });
 
+    // TODO - make this the real url
+    it("has the right URL", function() {
+        expect(this.model.url()).toMatchUrl("/sql_executions");
+    });
+
     it("has a reasonable name", function() {
         expect(this.model.name()).toMatchTranslation("dataset.sql.filename");
     });
-
-    it("has the right task type", function(){
-       expect(this.model.get("taskType")).toBe("workfileSQLExecution");
-    })
 
     it("mixes in SQLResults", function() {
         expect(this.model.columnOrientedData).toBeDefined();

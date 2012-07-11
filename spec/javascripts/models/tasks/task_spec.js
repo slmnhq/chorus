@@ -1,50 +1,62 @@
 describe("chorus.models.Task", function() {
-    var taskSubclass = chorus.models.Task.extend({});
-    taskSubclass.prototype.taskType = "foo";
+    var TaskSubclass, task;
+
     beforeEach(function() {
-        this.model = new taskSubclass();
+        TaskSubclass = chorus.models.Task.extend({
+            urlTemplateBase: "base"
+        });
+
+        task = new TaskSubclass();
     });
 
-    it("has the right url", function() {
-        var expectedUrl = "/task/sync/";
-        expect(this.model.url()).toMatchUrl(expectedUrl);
-    });
+    describe("#url", function() {
+        context("for delete requests", function() {
+            it("appends the task's 'checkId' to the 'urlTemplateBase'", function() {
+                task.set({ checkId: "123_4" });
+                task.cancel();
+                expect(this.server.lastDestroy().url).toBe("/base/123_4");
+            });
+        });
 
-    it("sets the 'taskType' attribute based on the prototype's property", function(){
-       expect(this.model.get("taskType")).toBe("foo");
+        context("for creates, updates and reads", function() {
+            it("uses the 'urlTemplateBase'", function() {
+                task.set({ checkId: "123_4" });
+                task.save();
+                var request = this.server.lastCreate();
+                expect(request.url).toBe("/base");
+                expect(request.params()["task[check_id]"]).toBe("123_4");
+            });
+        });
     });
 
     it("has a random checkId", function() {
         spyOn(Math, 'random').andReturn(42);
-        this.model = new taskSubclass();
-        expect(this.model.get("checkId")).toBe('42_' + chorus.session.user().id);
+        task = new TaskSubclass();
+        expect(task.get("checkId")).toBe('42_' + chorus.session.user().id);
     });
 
     describe("cancel", function() {
         beforeEach(function() {
-            this.model = new taskSubclass();
-            this.model.cancel();
+            task = new TaskSubclass();
+            task.cancel();
         });
 
         itCreatesCancelRequestAndIgnoreSubsequent();
 
         describe("when the request completes", function() {
             beforeEach(function() {
-                spyOnEvent(this.model, 'canceled');
+                spyOnEvent(task, 'canceled');
                 this.server.lastDestroy().succeed();
                 this.server.reset();
+            });
 
-            });
             it("triggers the 'canceled' event on the task", function() {
-                expect('canceled').toHaveBeenTriggeredOn(this.model);
+                expect('canceled').toHaveBeenTriggeredOn(task);
             });
-            it("reset cancelled flag", function() {
-                expect(this.model.cancelled).toBeFalsy();
-            })
 
             context("click on cancel again", function() {
                 beforeEach(function() {
-                    this.model.cancel();
+                    task.cancel();
                 });
 
                 itCreatesCancelRequestAndIgnoreSubsequent();
@@ -54,23 +66,21 @@ describe("chorus.models.Task", function() {
         function itCreatesCancelRequestAndIgnoreSubsequent() {
             it("creates a cancel request", function() {
                 var cancelRequest = this.server.lastDestroy();
-                expect(cancelRequest.url).toMatchUrl(this.model.url());
-                expect(cancelRequest.params()['taskType']).toBe(this.model.get('taskType'));
-                expect(cancelRequest.params()['checkId']).toBe(this.model.get('checkId'));
-                expect(this.model.has('action')).toBeFalsy();
+                expect(cancelRequest.url).toMatchUrl(task.url({ method: "delete" }));
+                expect(task.has('action')).toBeFalsy();
             });
 
             it("ignores subsequent calls to cancel", function() {
-                this.model.cancel();
+                task.cancel();
                 expect(this.server.requests.length).toBe(1);
             });
         }
     });
 
     it("won't cancel after the data has loaded", function() {
-        this.model = new taskSubclass();
-        this.model.loaded = true;
-        this.model.cancel();
+        task = new TaskSubclass();
+        task.loaded = true;
+        task.cancel();
         expect(this.server.requests.length).toBe(0);
     });
 });

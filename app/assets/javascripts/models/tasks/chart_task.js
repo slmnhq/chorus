@@ -1,6 +1,6 @@
 chorus.models.ChartTask = chorus.models.Task.extend({
-    urlTemplate: 'datasets/{{datasetId}}/visualizations',
     constructorName: "ChartTask",
+    urlTemplateBase: 'datasets/{{datasetId}}/visualizations',
 
     name: function() {
         return t("dataset.visualization.data.filename");

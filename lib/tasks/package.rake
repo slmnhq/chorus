@@ -37,12 +37,15 @@ module PackageMaker
     run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/tmp #{release_path}/'"
     run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/system #{release_path}/'"
 
+    # symlink configuration
+    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/database.yml #{release_path}/config'"
+    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/chorus.yml #{release_path}/config'"
+
     run "ssh #{host} 'cd #{release_path}; RAILS_ENV=production bin/rake db:migrate'"
 
     run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh stop'"
-    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh start'"
-
     run "ssh #{host} 'cd #{path} && rm -f #{current_path} && ln -s #{release_path} #{current_path}'"
+    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh start'"
   end
 
   def deploy(config)
@@ -115,7 +118,7 @@ module PackageMaker
       ".bundle/config"
     ]
 
-    run "tar czf #{filename} --exclude='public/system/' --exclude='javadoc' --exclude='.git' --exclude='log' #{files_to_tar.join(" ")}"
+    run "tar czf #{filename} --exclude='public/system/' --exclude='javadoc' --exclude='.git' --exclude='log' --exclude 'config/database.yml' --exclude 'config/chorus.yml' #{files_to_tar.join(" ")}"
   end
 
   def timestamp

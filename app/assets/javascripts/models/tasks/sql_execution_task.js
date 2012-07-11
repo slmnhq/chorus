@@ -1,5 +1,5 @@
 chorus.models.SqlExecutionTask = chorus.models.Task.extend({
-    taskType: "workfileSQLExecution",
+    urlTemplateBase: "sql_executions",
 
     getRows : function() {
         return this.has("result") && this.get("result").rows;

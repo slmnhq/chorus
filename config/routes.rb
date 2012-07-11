@@ -44,7 +44,7 @@ Chorus::Application.routes.draw do
   resources :datasets, :only => [:show] do
     resources :columns, :only => [:index], :controller => 'column'
     resources :previews, :only => [:create, :destroy], :constraints => {:id => /.*/}
-    resources :visualizations, :only => [:create]
+    resources :visualizations, :only => [:create, :destroy]
     resource :statistics, :only => :show
   end
 
