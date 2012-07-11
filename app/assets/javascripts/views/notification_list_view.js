@@ -37,15 +37,19 @@ chorus.views.NotificationList = chorus.views.Base.extend({
 
         this.activities = [];
         this.collection.each(function(model) {
-            var view = new chorus.views.Activity({ model: model.activity(), isNotification: true });
-            view.render();
-            this.activities.push(view);
+            try {
+                var view = new chorus.views.Activity({ model: model.activity(), isNotification: true });
+                view.render();
+                this.activities.push(view);
 
-            if (model.get("unread")) {
-                $(view.el).addClass("unread");
+                if (model.get("unread")) {
+                    $(view.el).addClass("unread");
+                }
+
+                $list.append(view.el);
+            } catch (err) {
+                chorus.log("error", err, "processing notification", model);
             }
-
-            $list.append(view.el);
         }, this);
     },
 

@@ -3,7 +3,8 @@ describe("chorus.views.NotificationList", function() {
         this.collection = new chorus.collections.NotificationSet([
             fixtures.notification({ unread: true }),
             fixtures.notification(),
-            fixtures.notification()
+            fixtures.notification(),
+            fixtures.notification({type: "IMPORT_FAILED"})
         ]);
         this.view = new chorus.views.NotificationList({ collection: this.collection });
     });
@@ -16,6 +17,7 @@ describe("chorus.views.NotificationList", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.collection.loaded = true;
+            spyOn(chorus, 'log');
             spyOn(chorus.views.Activity.prototype, 'initialize').andCallThrough();
             this.view.render();
         });
@@ -33,6 +35,11 @@ describe("chorus.views.NotificationList", function() {
         it("passes the 'isNotification' option to the activity views", function() {
             var viewOptions = chorus.views.Activity.prototype.initialize.mostRecentCall.args[0];
             expect(viewOptions.isNotification).toBeTruthy();
+        });
+
+        it("skips broken notifications", function() {
+            expect(chorus.log).toHaveBeenCalled();
+            expect(chorus.log.mostRecentCall.args[3]).toBe(this.collection.at(3));
         });
     });
 
