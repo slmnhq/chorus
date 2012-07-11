@@ -15,7 +15,7 @@ class CancelableQuery
   end
 
   def cancel
-    @connection.exec_query("SELECT pg_cancel_backend(activity.procpid) from (select procpid from pg_stat_activity where current_query LIKE '/*#{@check_id}*/') AS activity")
+    @connection.exec_query("SELECT pg_cancel_backend(activity.procpid) from (select procpid from pg_stat_activity where current_query LIKE '/*#{@check_id}*/%') AS activity")
   end
 
   private
