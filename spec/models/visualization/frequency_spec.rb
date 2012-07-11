@@ -1,4 +1,4 @@
-require 'spec_helper'
+<D-]>require 'spec_helper'
 
 describe Visualization::Frequency do
   let(:schema) { FactoryGirl.build_stubbed(:gpdb_schema, :name => 'public') }
