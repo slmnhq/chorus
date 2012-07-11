@@ -44,9 +44,8 @@ module PackageMaker
     run "ssh #{host} 'cd #{release_path}; RAILS_ENV=production bin/rake db:migrate'"
 
     run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh stop'"
-    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh start'"
-
     run "ssh #{host} 'cd #{path} && rm -f #{current_path} && ln -s #{release_path} #{current_path}'"
+    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh start'"
   end
 
   def deploy(config)
