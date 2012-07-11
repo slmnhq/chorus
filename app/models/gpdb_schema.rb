@@ -10,12 +10,12 @@ class GpdbSchema < ActiveRecord::Base
   SQL
 
   SCHEMA_FUNCTION_QUERY = <<-SQL
-      SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, ARRAY_AGG(t2.typname ORDER BY inputtypeid) AS proargtypes
+      SELECT t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames, ARRAY_AGG(t2.typname ORDER BY inputtypeid) AS proargtypes, t1.prosrc, d.description
       FROM ( SELECT p.oid,p.proname,
                 CASE WHEN p.proargtypes='' THEN NULL
                     ELSE unnest(p.proargtypes)
                     END as inputtype,
-                now() AS inputtypeid, p.proargnames, l.lanname, t.typname AS rettype
+                now() AS inputtypeid, p.proargnames, p.prosrc, l.lanname, t.typname AS rettype
               FROM pg_proc p, pg_namespace n, pg_type t, pg_language l
               WHERE p.pronamespace=n.oid
                 AND p.prolang=l.oid
@@ -23,7 +23,8 @@ class GpdbSchema < ActiveRecord::Base
                 AND n.nspname= '%s') AS t1
       LEFT JOIN pg_type AS t2
       ON t1.inputtype=t2.oid
-      GROUP BY t1.oid, t1.proname, t1.lanname, t1.rettype, t1.proargnames
+      LEFT JOIN pg_description AS d ON t1.oid=d.objoid
+      GROUP BY t1.oid, t1.proname, t1.lanname, t1.rettype, t1.prosrc, t1.proargnames, d.description
       ORDER BY t1.proname
   SQL
 
@@ -68,7 +69,7 @@ class GpdbSchema < ActiveRecord::Base
 
     results.map do |result|
       result_array = result.values
-      GpdbSchemaFunction.new(name, *result_array[1..5])
+      GpdbSchemaFunction.new(name, *result_array[1..7])
     end
   end
 

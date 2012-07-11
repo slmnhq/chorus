@@ -10,7 +10,9 @@
       ],
       "arg_types": [
         "text"
-      ]
+      ],
+      "definition": "Hi!!",
+      "description": "awesome"
     },
     {
       "schema_name": "a_schema",
@@ -24,7 +26,9 @@
       "arg_types": [
         "text",
         "int4"
-      ]
+      ],
+      "definition": "Hi2",
+      "description": "awesome2"
     },
     {
       "schema_name": "a_schema",
@@ -36,7 +40,9 @@
       ],
       "arg_types": [
         "text"
-      ]
+      ],
+      "definition": "hi3",
+      "description": "cross joins FTW"
     }
   ]
 }

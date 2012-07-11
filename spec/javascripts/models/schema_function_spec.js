@@ -24,9 +24,32 @@ describe("chorus.models.SchemaFunction", function() {
         })
 
     });
+
     describe("#toHintText", function() {
         it("formats the string correctly", function() {
             expect(this.model.toHintText()).toBe("void fun(Int elephant, Bool arg2)")
         })
-    })
+    });
+
+    describe("#formattedArgumentList(ensureParams)", function () {
+        it("returns a formatted argument list", function () {
+            expect(this.model.formattedArgumentList()).toBe("(Int elephant, Bool arg2)");
+        });
+
+        context("when the function takes no parameters", function () {
+            context("when the 'ensureParams' flag is false", function () {
+                it("returns an empty string", function () {
+                    this.model.set({ argNames: null, argTypes: null });
+                    expect(this.model.formattedArgumentList()).toBe("");
+                });
+            });
+
+            context("when the 'ensureParams' flag is true", function () {
+                it("returns empty parens", function () {
+                    this.model.set({ argNames: null, argTypes: null });
+                    expect(this.model.formattedArgumentList(true)).toBe("()");
+                });
+            });
+        });
+    });
 })

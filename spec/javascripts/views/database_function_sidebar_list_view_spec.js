@@ -33,6 +33,7 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
         context("when schema is associated", function() {
             beforeEach(function() {
                 this.menu = stubQtip(".context a");
+                this.functionQtip = stubQtip(".list li .name")
                 this.view.render();
                 $('#jasmine_content').append(this.view.el);
             });
@@ -56,7 +57,19 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                         rspecFixtures.schema({ name: "awesome_tables", id: "5" }),
                         rspecFixtures.schema({ name: "orphaned_tables", id: "6" })
                     ]);
-                    this.server.completeFetchFor(this.view.collection, rspecFixtures.schemaFunctionSet().models);
+
+                    this.server.completeFetchFor(this.view.collection, rspecFixtures.schemaFunctionSet([
+                        {
+                            name: "a_laplace_transform",
+                            argTypes: [ "text", "int4", "float64" ],
+                            argNames: [ "name", "age", "height" ],
+                            description: 'Looooooooooooong description. Looooooooooooong description. Looooooooooooong description. Looooooooooooong description. Looooooooooooong description. '
+                        },
+                        {
+                            name: "inc",
+                            description: null
+                        }
+                    ]).models);
                 });
 
                 itBehavesLike.DatabaseSidebarList();
@@ -70,9 +83,8 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
                 })
 
                 it("should render the functions", function() {
-                    expect(this.view.$("ul li")).toContainText(this.view.collection.at(0).name());
-                    expect(this.view.$("ul li")).toContainText(this.view.collection.at(1).name());
-                    expect(this.view.$("ul li")).toContainText(this.view.collection.at(2).name());
+                    expect(this.view.$("ul li")).toContainText("a_laplace_transform");
+                    expect(this.view.$("ul li")).toContainText("inc");
                 });
 
                 it("should not show the 'no functions found' text", function() {
@@ -81,7 +93,43 @@ describe("chorus.views.DatabaseFunctionSidebarList", function() {
 
                 it("should display the current schema name", function() {
                     expect(this.view.$('.context')).toContainText("righteous_tables");
-                })
+                });
+
+                context("when hovering on function name", function() {
+                    beforeEach(function() {
+                        this.view.$(".list li:eq(0) .name").mouseenter();
+                    });
+
+                    it("opens a chorus function detail description", function() {
+                        expect(this.functionQtip).toHaveVisibleQtip();
+                    });
+
+                    it("displays the function arguments, in parens and separated by commas", function () {
+                        expect(this.functionQtip.find(".arguments")).toContainText("(text name, int4 age, float64 height)");
+                    });
+
+                    it("ellipsizes the comments if they are long", function () {
+                        expect(this.functionQtip.find(".comment")).toContainText('...');
+                    });
+
+                    it("has a link that opens a dialog showing the function info", function () {
+                        var moreLink = this.functionQtip.find("a.more");
+                        expect(moreLink).toHaveClass("alert");
+                        expect(moreLink).toHaveData("alert", "FunctionInfo");
+                        expect(moreLink.text()).toMatchTranslation("schema.functions.show_more");
+                        expect(moreLink).toHaveData("model", this.view.collection.at(0));
+                    });
+                });
+
+                context("when hovering over the function without a description", function() {
+                    beforeEach(function() {
+                        this.view.$(".list li:eq(1) .name").mouseenter();
+                    });
+
+                    it("does not print null when description is null", function() {
+                        expect(this.functionQtip.find(".comment")).toBeEmpty();
+                    });
+                });
 
                 describe("selecting a schema", function() {
                     beforeEach(function() {

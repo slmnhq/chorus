@@ -76,8 +76,8 @@ describe GpdbSchema do
     before do
       stub_gpdb(account,
                 GpdbSchema::SCHEMA_FUNCTION_QUERY % schema.name=> [
-                    {"oid" => "1091843", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => "{num1, num2}",  "arg_types" => "{int4,int4}"},
-                    {"oid" => "1091844", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => nil,  "arg_types" => "{text}"},
+                    {"oid" => "1091843", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => "{num1, num2}",  "arg_types" => "{int4,int4}", "prosrc" => "SELECT 'HI!'", "description" => "awesome!"},
+                    {"oid" => "1091844", "name" => "add", "lang" => "sql", "return_type" => "int4", "arg_names" => nil,  "arg_types" => "{text}", "prosrc" => "SELECT admin_password", "description" => "HAHA"},
                 ]
       )
     end
@@ -96,6 +96,8 @@ describe GpdbSchema do
       first_function.return_type.should == "int4"
       first_function.arg_names.should == ["num1", "num2"]
       first_function.arg_types.should == ["int4","int4"]
+      first_function.definition.should == "SELECT 'HI!'"
+      first_function.description.should == "awesome!"
     end
   end
 

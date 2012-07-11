@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe GpdbSchemaFunctionPresenter, :type => :view do
-  let(:gpdb_schema_function) { GpdbSchemaFunction.new("a_schema", "hello", "sql", "int4", "{int4}", "{text}") }
+  let(:gpdb_schema_function) { GpdbSchemaFunction.new("a_schema", "hello", "sql", "int4", "{int4}", "{text}", "Hi!!!", "awesome") }
 
   subject { GpdbSchemaFunctionPresenter.new(gpdb_schema_function, view)}
 
@@ -14,6 +14,8 @@ describe GpdbSchemaFunctionPresenter, :type => :view do
       hash[:return_type].should == "int4"
       hash[:arg_names].should == ["int4"]
       hash[:arg_types].should == ["text"]
+      hash[:definition].should == "Hi!!!"
+      hash[:description].should == "awesome"
     end
   end
 end
