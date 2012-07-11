@@ -13,7 +13,7 @@ class PreviewsController < GpdbController
     dataset = Dataset.find(params[:dataset_id])
     instance_account = authorized_gpdb_account(dataset)
 
-    SqlExecutor.cancel_preview(dataset, instance_account, params[:id])
+    SqlExecutor.cancel_query(dataset, instance_account, params[:id])
     head :ok
   end
 end

@@ -1,21 +1,16 @@
 require 'spec_helper'
 
-describe SqlExecutor, :type => :database_integration do
-  let(:account) { real_gpdb_account }
-  let(:table) { GpdbTable.find_by_name("pg_all_types") }
+describe SqlExecutor do
   let(:check_id) { "0.1234" }
 
-  before do
-    refresh_chorus
-  end
+  describe ".preview_dataset", :type => :database_integration do
+    let(:account) { real_gpdb_account }
+    let(:table) { GpdbTable.find_by_name("pg_all_types") }
 
-  describe "analyze" do
-    it "can run analyze" do
-      table.analyze(account).should == []
+    before do
+      refresh_chorus
     end
-  end
 
-  describe ".preview_dataset" do
     subject { SqlExecutor.preview_dataset(table, account, check_id) }
 
     it "returns a sql result object with the correct rows" do
@@ -133,6 +128,21 @@ describe SqlExecutor, :type => :database_integration do
           "timestamp",
           "timestamptz"
       ]
+    end
+  end
+
+  describe ".cancel_query" do
+    it "cancels the query" do
+      fake_connection = Object.new
+      fake_query = Object.new
+      connection_provider = Object.new
+      account = Object.new
+
+      mock(connection_provider).with_gpdb_connection(account).yields(fake_connection)
+      mock(CancelableQuery).new(fake_connection, check_id) { fake_query }
+      mock(fake_query).cancel
+
+      SqlExecutor.cancel_query(connection_provider, account, check_id)
     end
   end
 end
