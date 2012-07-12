@@ -34,20 +34,24 @@ chorus.views.NotificationList = chorus.views.Base.extend({
 
     // notifications aren't implemented.
     postRender: function() {
-        // var $list = this.$("ul");
-
-        // this.activities = [];
-        // this.collection.each(function(model) {
-        //     var view = new chorus.views.Activity({ model: model.activity(), isNotification: true });
-        //     view.render();
-        //     this.activities.push(view);
-
-        //     if (model.get("unread")) {
-        //         $(view.el).addClass("unread");
-        //     }
-
-        //     $list.append(view.el);
-        // }, this);
+//        var $list = this.$("ul");
+//
+//        this.activities = [];
+//        this.collection.each(function(model) {
+//            try {
+//                var view = new chorus.views.Activity({ model: model.activity(), isNotification: true });
+//                view.render();
+//                this.activities.push(view);
+//
+//                if (model.get("unread")) {
+//                    $(view.el).addClass("unread");
+//                }
+//
+//                $list.append(view.el);
+//            } catch (err) {
+//                chorus.log("error", err, "processing notification", model);
+//            }
+//        }, this);
     },
 
     show: function() {
