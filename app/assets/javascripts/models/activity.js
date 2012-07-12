@@ -36,10 +36,14 @@
         }),
 
         hdfsEntry: makeAssociationMethod("hdfsEntry", function(model) {
+            var hdfsFile = this.get("hdfsFile");
+            var pathArray = hdfsFile.path.split("/");
+            var path = _.first(pathArray, pathArray.length - 1).join('/');
+            var name = _.last(pathArray);
             model.set({
-                hadoopInstance: { id : this.get("hadoopInstanceId")},
-                path : this.get("path"),
-                name : this.get("hdfsFileName")
+                hadoopInstance: { id : hdfsFile.hadoopInstanceId},
+                path : path,
+                name : name
             })
         }),
 

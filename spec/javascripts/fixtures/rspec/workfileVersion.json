@@ -1,16 +1,16 @@
 {
   "response": {
-    "id": 263,
+    "id": 710,
     "workspace": {
-      "id": 2346,
-      "name": "workspace1",
+      "id": 1265,
+      "name": "workspace123",
       "summary": null,
       "owner": {
-        "id": 1980,
-        "username": "user1",
+        "id": 6799,
+        "username": "user654",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person1@example.com",
+        "email": "person686@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -38,11 +38,11 @@
       "latest_comment_list": null
     },
     "owner": {
-      "id": 1981,
-      "username": "user2",
+      "id": 6800,
+      "username": "user655",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person2@example.com",
+      "email": "person687@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -54,18 +54,18 @@
     },
     "file_name": "workfile.sql",
     "file_type": "sql",
-    "latest_version_id": 303,
+    "latest_version_id": 813,
     "has_draft": false,
     "version_info": {
-      "id": 303,
+      "id": 813,
       "version_num": 1,
       "commit_message": "Factory commit message",
       "owner": {
-        "id": 1982,
-        "username": "user3",
+        "id": 6801,
+        "username": "user656",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person3@example.com",
+        "email": "person688@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -76,11 +76,11 @@
         }
       },
       "modifier": {
-        "id": 1983,
-        "username": "user4",
+        "id": 6802,
+        "username": "user657",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person4@example.com",
+        "email": "person689@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -90,9 +90,9 @@
           "icon": "/images/default-user-icon.png"
         }
       },
-      "created_at": "2012-06-18T19:12:57Z",
-      "updated_at": "2012-06-18T19:12:57Z",
-      "content_url": "/system/workfile_versions/contents/000/000/303/original/workfile.sql?1340046777",
+      "created_at": "2012-07-12T19:28:12Z",
+      "updated_at": "2012-07-12T19:28:12Z",
+      "content_url": "/workfile_versions/813/image?style=original&1342121292",
       "icon_url": null,
       "content": "SELECT test FROM rspec WHERE lame = 'false';\n"
     }

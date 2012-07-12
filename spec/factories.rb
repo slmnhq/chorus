@@ -198,10 +198,8 @@ FactoryGirl.define do
 
     factory :hdfs_external_table_created_event, :class => Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE do
       association :dataset, :factory => :gpdb_table
+      association :hdfs_file, :factory => :hdfs_file_reference
       workspace
-      hdfs_file_name "test.csv"
-      hadoop_instance_id "25"
-      path "/hadoop/data/"
     end
 
     factory :note_on_greenplum_instance_event, :class => Events::NOTE_ON_GREENPLUM_INSTANCE do

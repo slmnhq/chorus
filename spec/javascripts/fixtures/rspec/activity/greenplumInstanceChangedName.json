@@ -1,12 +1,12 @@
 {
   "response": {
-    "id": 2157,
+    "id": 616,
     "actor": {
-      "id": 6809,
-      "username": "user18",
+      "id": 6326,
+      "username": "user219",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person18@example.com",
+      "email": "person219@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -17,18 +17,18 @@
       }
     },
     "action": "GREENPLUM_INSTANCE_CHANGED_NAME",
-    "timestamp": "2012-06-15T21:34:50Z",
+    "timestamp": "2012-07-12T19:27:55Z",
     "greenplum_instance": {
-      "name": "instance3",
-      "host": "host3.emc.com",
-      "port": 5003,
-      "id": 1411,
+      "name": "instance19",
+      "host": "host19.emc.com",
+      "port": 5019,
+      "id": 885,
       "owner": {
-        "id": 6810,
-        "username": "user19",
+        "id": 6327,
+        "username": "user220",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person19@example.com",
+        "email": "person220@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",

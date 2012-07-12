@@ -46,7 +46,6 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   config.mock_with :rr
 
-  config.filter_run_excluding :fixture => true
   config.filter_run_excluding :data_migration => true
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

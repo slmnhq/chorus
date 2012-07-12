@@ -148,14 +148,15 @@ describe("chorus.models.Activity", function() {
         describe("#hdfsEntry", function() {
             it("returns hdfs entry with the right data", function() {
                 activity = rspecFixtures.activity.hdfsExternalTableCreated({
-                    hadoopInstanceId: 1,
-                    path : "/data",
-                    hdfsFileName : "test.csv"
+                    hdfsFile: {
+                        hadoopInstanceId: 1,
+                        path : "/data/test/test.csv"
+                    }
                 });
 
                 var hdfsEntry = activity.hdfsEntry();
                 expect(hdfsEntry).toBeA(chorus.models.HdfsEntry);
-                expect(hdfsEntry.get("path")).toBe("/data")
+                expect(hdfsEntry.get("path")).toBe("/data/test")
                 expect(hdfsEntry.name()).toBe("test.csv")
                 expect(hdfsEntry.get("hadoopInstance").id).toBe(1)
             });

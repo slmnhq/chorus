@@ -1,12 +1,12 @@
 {
   "response": {
-    "id": 635,
+    "id": 613,
     "actor": {
-      "id": 5804,
-      "username": "user11",
+      "id": 6309,
+      "username": "user202",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person11@example.com",
+      "email": "person202@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",
@@ -17,18 +17,18 @@
       }
     },
     "action": "GREENPLUM_INSTANCE_CHANGED_OWNER",
-    "timestamp": "2012-06-15T00:57:17Z",
+    "timestamp": "2012-07-12T19:27:55Z",
     "greenplum_instance": {
-      "name": "instance2",
-      "host": "host2.emc.com",
-      "port": 5002,
-      "id": 921,
+      "name": "instance18",
+      "host": "host18.emc.com",
+      "port": 5018,
+      "id": 884,
       "owner": {
-        "id": 5805,
-        "username": "user12",
+        "id": 6310,
+        "username": "user203",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person12@example.com",
+        "email": "person203@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -47,11 +47,11 @@
       "version": "9.1.2 - FactoryVersion"
     },
     "new_owner": {
-      "id": 5806,
-      "username": "user13",
+      "id": 6311,
+      "username": "user204",
       "first_name": "John",
       "last_name": "Doe",
-      "email": "person13@example.com",
+      "email": "person204@example.com",
       "title": "Grand Poo Bah",
       "dept": "Corporation Corp., Inc.",
       "notes": "One of our top performers",

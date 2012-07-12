@@ -31,6 +31,9 @@ app/assets/javascripts/environment.js
 .DS_Store
 .jhw-cache
 
+# Ignore js fixtures
+/spec/javascripts/fixtures/rspec
+
 # Ignore ctags file
 tags
 

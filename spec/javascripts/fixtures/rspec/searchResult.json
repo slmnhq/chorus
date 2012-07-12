@@ -3,11 +3,11 @@
     "users": {
       "results": [
         {
-          "id": 102,
+          "id": 1000002,
           "username": "some_other_user",
           "first_name": "bob",
           "last_name": "alpha",
-          "email": "person202@example.com",
+          "email": "person517@example.com",
           "title": "Grand Poo Bah",
           "dept": "Corporation Corp., Inc.",
           "notes": "One of our top performers",
@@ -32,15 +32,15 @@
       "results": [
         {
           "name": "bob_great_greenplum_instance",
-          "host": "host14.emc.com",
-          "port": 5014,
+          "host": "host71.emc.com",
+          "port": 5071,
           "id": 1,
           "owner": {
-            "id": 199,
-            "username": "user198",
+            "id": 6622,
+            "username": "user516",
             "first_name": "John",
             "last_name": "Doe",
-            "email": "person198@example.com",
+            "email": "person518@example.com",
             "title": "Grand Poo Bah",
             "dept": "Corporation Corp., Inc.",
             "notes": "One of our top performers",
@@ -82,11 +82,11 @@
           "name": "bob",
           "summary": null,
           "owner": {
-            "id": 206,
-            "username": "user206",
+            "id": 6629,
+            "username": "user523",
             "first_name": "John",
             "last_name": "Doe",
-            "email": "person208@example.com",
+            "email": "person525@example.com",
             "title": "Grand Poo Bah",
             "dept": "Corporation Corp., Inc.",
             "notes": "One of our top performers",
@@ -127,11 +127,11 @@
           "name": "private bob workspace",
           "summary": null,
           "owner": {
-            "id": 207,
-            "username": "user207",
+            "id": 6630,
+            "username": "user524",
             "first_name": "John",
             "last_name": "Doe",
-            "email": "person209@example.com",
+            "email": "person526@example.com",
             "title": "Grand Poo Bah",
             "dept": "Corporation Corp., Inc.",
             "notes": "One of our top performers",
@@ -171,9 +171,221 @@
     },
     "workfiles": {
       "results": [
+        {
+          "id": 1,
+          "workspace": {
+            "id": 1,
+            "name": "bob",
+            "summary": null,
+            "owner": {
+              "id": 6629,
+              "username": "user523",
+              "first_name": "John",
+              "last_name": "Doe",
+              "email": "person525@example.com",
+              "title": "Grand Poo Bah",
+              "dept": "Corporation Corp., Inc.",
+              "notes": "One of our top performers",
+              "admin": false,
+              "image": {
+                "original": "/images/default-user-icon.png",
+                "icon": "/images/default-user-icon.png"
+              }
+            },
+            "archiver": null,
+            "archived_at": null,
+            "public": true,
+            "image": {
+              "original": "",
+              "icon": ""
+            },
+            "permission": [
+              "read",
+              "commenting"
+            ],
+            "has_added_member": false,
+            "has_added_workfile": false,
+            "has_added_sandbox": false,
+            "has_changed_settings": false,
+            "sandbox_info": null,
+            "latest_comment_list": null
+          },
+          "owner": {
+            "id": 1000002,
+            "username": "some_other_user",
+            "first_name": "bob",
+            "last_name": "alpha",
+            "email": "person517@example.com",
+            "title": "Grand Poo Bah",
+            "dept": "Corporation Corp., Inc.",
+            "notes": "One of our top performers",
+            "admin": false,
+            "image": {
+              "original": "/images/default-user-icon.png",
+              "icon": "/images/default-user-icon.png"
+            }
+          },
+          "file_name": "bob",
+          "file_type": "other",
+          "latest_version_id": 790,
+          "has_draft": false,
+          "version_info": {
+            "id": 790,
+            "version_num": 1,
+            "commit_message": "Factory commit message",
+            "owner": {
+              "id": 6632,
+              "username": "user526",
+              "first_name": "John",
+              "last_name": "Doe",
+              "email": "person528@example.com",
+              "title": "Grand Poo Bah",
+              "dept": "Corporation Corp., Inc.",
+              "notes": "One of our top performers",
+              "admin": false,
+              "image": {
+                "original": "/images/default-user-icon.png",
+                "icon": "/images/default-user-icon.png"
+              }
+            },
+            "modifier": {
+              "id": 6633,
+              "username": "user527",
+              "first_name": "John",
+              "last_name": "Doe",
+              "email": "person529@example.com",
+              "title": "Grand Poo Bah",
+              "dept": "Corporation Corp., Inc.",
+              "notes": "One of our top performers",
+              "admin": false,
+              "image": {
+                "original": "/images/default-user-icon.png",
+                "icon": "/images/default-user-icon.png"
+              }
+            },
+            "created_at": "2012-07-12T19:28:05Z",
+            "updated_at": "2012-07-12T19:28:05Z",
+            "content_url": "/contents/original/missing.png",
+            "icon_url": null,
+            "content": null
+          },
+          "highlighted_attributes": {
+            "file_name": [
+              "<em>bob</em>"
+            ]
+          },
+          "comments": [
 
+          ]
+        },
+        {
+          "id": 2,
+          "workspace": {
+            "id": 2,
+            "name": "private bob workspace",
+            "summary": null,
+            "owner": {
+              "id": 6630,
+              "username": "user524",
+              "first_name": "John",
+              "last_name": "Doe",
+              "email": "person526@example.com",
+              "title": "Grand Poo Bah",
+              "dept": "Corporation Corp., Inc.",
+              "notes": "One of our top performers",
+              "admin": false,
+              "image": {
+                "original": "/images/default-user-icon.png",
+                "icon": "/images/default-user-icon.png"
+              }
+            },
+            "archiver": null,
+            "archived_at": null,
+            "public": false,
+            "image": {
+              "original": "",
+              "icon": ""
+            },
+            "permission": [
+
+            ],
+            "has_added_member": false,
+            "has_added_workfile": false,
+            "has_added_sandbox": false,
+            "has_changed_settings": false,
+            "sandbox_info": null,
+            "latest_comment_list": null
+          },
+          "owner": {
+            "id": 1000002,
+            "username": "some_other_user",
+            "first_name": "bob",
+            "last_name": "alpha",
+            "email": "person517@example.com",
+            "title": "Grand Poo Bah",
+            "dept": "Corporation Corp., Inc.",
+            "notes": "One of our top performers",
+            "admin": false,
+            "image": {
+              "original": "/images/default-user-icon.png",
+              "icon": "/images/default-user-icon.png"
+            }
+          },
+          "file_name": "private_bob_workfile",
+          "file_type": "other",
+          "latest_version_id": 791,
+          "has_draft": false,
+          "version_info": {
+            "id": 791,
+            "version_num": 1,
+            "commit_message": "Factory commit message",
+            "owner": {
+              "id": 6634,
+              "username": "user528",
+              "first_name": "John",
+              "last_name": "Doe",
+              "email": "person530@example.com",
+              "title": "Grand Poo Bah",
+              "dept": "Corporation Corp., Inc.",
+              "notes": "One of our top performers",
+              "admin": false,
+              "image": {
+                "original": "/images/default-user-icon.png",
+                "icon": "/images/default-user-icon.png"
+              }
+            },
+            "modifier": {
+              "id": 6635,
+              "username": "user529",
+              "first_name": "John",
+              "last_name": "Doe",
+              "email": "person531@example.com",
+              "title": "Grand Poo Bah",
+              "dept": "Corporation Corp., Inc.",
+              "notes": "One of our top performers",
+              "admin": false,
+              "image": {
+                "original": "/images/default-user-icon.png",
+                "icon": "/images/default-user-icon.png"
+              }
+            },
+            "created_at": "2012-07-12T19:28:05Z",
+            "updated_at": "2012-07-12T19:28:05Z",
+            "content_url": "/contents/original/missing.png",
+            "icon_url": null,
+            "content": null
+          },
+          "highlighted_attributes": {
+            "file_name": [
+              "private_<em>bob</em>_workfile"
+            ]
+          },
+          "comments": [
+
+          ]
+        }
       ],
-      "numFound": 0
+      "numFound": 2
     }
   }
 }

@@ -5,16 +5,16 @@
       "row1a, row1b, row1c"
     ],
     "hadoop_instance": {
-      "name": "instance1",
+      "name": "instance13",
       "host": "gillette",
       "port": 8020,
-      "id": 3,
+      "id": 158,
       "owner": {
-        "id": 28,
-        "username": "user2",
+        "id": 7202,
+        "username": "user1057",
         "first_name": "John",
         "last_name": "Doe",
-        "email": "person2@example.com",
+        "email": "person1089@example.com",
         "title": "Grand Poo Bah",
         "dept": "Corporation Corp., Inc.",
         "notes": "One of our top performers",
@@ -30,7 +30,7 @@
       "username": "pivotal",
       "group_list": null
     },
-    "last_updated_stamp": "2012-07-09T14:57:33Z",
+    "last_updated_stamp": "2012-07-12T12:28:33Z",
     "path": "/data/test.csv"
   }
 }
