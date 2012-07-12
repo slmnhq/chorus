@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SqlExecutor do
   let(:check_id) { "0.1234" }
 
-  describe ".preview_dataset", :type => :database_integration do
+  describe ".preview_dataset", :database_integration => true do
     let(:account) { real_gpdb_account }
     let(:table) { GpdbTable.find_by_name("pg_all_types") }
 

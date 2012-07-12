@@ -76,8 +76,8 @@ RSpec.configure do |config|
     stub(File).read(/.+\/\d{5}\/[\d_]+$/) { "123" }
   end
 
-  config.before(:all, :type => :database_integration) do
-    setup_gpdb
+  config.before(:suite, :database_integration => true) do
+    GpdbIntegration.setup_gpdb
   end
 
   config.include FileHelper
@@ -93,7 +93,7 @@ RSpec.configure do |config|
   config.include Paperclip::Shoulda::Matchers
   config.include GpdbTestHelpers
   config.include AllowyRSpecHelpers
-  config.include GpdbIntegration, :type => :database_integration
+  config.include GpdbIntegration, :database_integration => true
   config.include DataMigrationHelper, :type => :data_migration
   config.include SunspotMatchers
   config.include SolrHelpers

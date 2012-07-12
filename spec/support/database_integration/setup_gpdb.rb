@@ -9,7 +9,7 @@ CONFIG   = Hashie::Mash.new(YAML.load_file(config_file))
 TEMPLATE = File.read(template_file)
 
 module GpdbIntegration
-  def setup_gpdb
+  def self.setup_gpdb
     instance = CONFIG.instance
     account = CONFIG.account
 
@@ -25,8 +25,16 @@ module GpdbIntegration
     f = Tempfile.new("setup_gpdb")
     f.write(sql)
     f.close
-    system "PGPASSWORD=#{account.db_password} psql #{instance.maintenance_db} #{connection_params} < #{f.path}"
+
+    # silence stdout, remove hints and notices warnings from stderr
+    filter_stderr = "2>&1 1>/dev/null | egrep -v \"NOTICE|HINT\" 1>&2"
+    system "PGPASSWORD=#{account.db_password} psql #{instance.maintenance_db} #{connection_params} < #{f.path} #{filter_stderr}"
+
     f.unlink
+  end
+
+  def self.database_name
+    "gpdb_" + Socket.gethostname
   end
 
   def refresh_chorus
@@ -49,7 +57,7 @@ module GpdbIntegration
   end
 
   def database_name
-    "gpdb_" + Socket.gethostname
+    GpdbIntegration.database_name
   end
 end
 

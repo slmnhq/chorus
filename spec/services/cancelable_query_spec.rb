@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CancelableQuery, :type => :database_integration do
+describe CancelableQuery, :database_integration => true do
   let(:sql) { "Select * from users" }
   let(:check_id) { '0.1234' }
   let(:async_query) { CancelableQuery.new(connection, check_id) }

@@ -12,9 +12,13 @@ CREATE DATABASE gpdb_test_database OWNER gpadmin;
     COMMENT ON TABLE base_table1 IS 'comment on base_table1';
     INSERT INTO base_table1 VALUES ( 0,0,0, 'apple' );
     INSERT INTO base_table1 VALUES ( 1,1,1, 'apple' );
-    INSERT INTO base_table1 VALUES ( 2,2,2, 'orange' );
-    INSERT INTO base_table1 VALUES ( 3,3,3, 'orange' );
-    INSERT INTO base_table1 VALUES ( 4,4,4, 'orange' );
+    INSERT INTO base_table1 VALUES ( 2,0,2, 'orange' );
+    INSERT INTO base_table1 VALUES ( 3,1,3, 'orange' );
+    INSERT INTO base_table1 VALUES ( 4,1,4, 'orange' );
+    INSERT INTO base_table1 VALUES ( 5,0,5, 'papaya' );
+    INSERT INTO base_table1 VALUES ( 6,1,6, 'papaya' );
+    INSERT INTO base_table1 VALUES ( 7,1,7, 'papaya' );
+    INSERT INTO base_table1 VALUES ( 8,1,8, 'papaya' );
     ANALYZE base_table1;
 
     CREATE VIEW view1 AS

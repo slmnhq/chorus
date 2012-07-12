@@ -194,4 +194,15 @@ describe Instance do
       Instance.should have_searchable_field :description
     end
   end
+
+  describe "#databases", :database_integration => true do
+    let(:account) { real_gpdb_account }
+
+    subject { account.instance }
+
+    it "should not include the 'template0' database" do
+      subject.databases.map(&:name).tap{|x| puts x}.should_not include "template0"
+    end
+  end
 end
+
