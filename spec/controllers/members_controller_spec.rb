@@ -129,6 +129,28 @@ describe MembersController do
         }.should change(Membership, :count).by(-1)
       end
     end
+
+    context "change some of the members for the workspace without passing owner's id in member array'" do
+      let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id]} }
+      before do
+        workspace.members << workspace.owner
+      end
+
+      it "doesn't update the members'" do
+        lambda {
+          post :create, parameters
+        }.should_not change(Membership, :count)
+      end
+
+      it "throws an error" do
+        post :create, parameters
+
+        response.code.should == '400'
+
+        decoded = JSON.parse(response.body)
+        decoded['errors']['fields']['owner'].should have_key('Owner must be member')
+      end
+    end
   end
 end
 
