@@ -1,99 +1,15 @@
 require 'spec_helper'
 
-describe Visualization::Histogram do
+describe Visualization::Histogram, :database_integration => true do
   let(:schema) { FactoryGirl.build_stubbed(:gpdb_schema, :name => 'analytics') }
-    let(:dataset) { FactoryGirl.build_stubbed(:gpdb_table, :name => '2009_sfo_customer_survey', :schema => schema) }
-    let(:instance_account) { FactoryGirl.build_stubbed(:instance_account) }
-
-    describe "#build_sql" do
-      context "no filters" do
-        let(:attributes) do
-          {
-              :bins => 20,
-              :x_axis => 'airport_cleanliness'
-          }
-        end
-
-        it "creates the SQL to get min and max values" do
-            visualization = described_class.new(dataset, attributes)
-            db_name = '"analytics"."2009_sfo_customer_survey"'
-            category = db_name + '."airport_cleanliness"'
-            visualization.build_min_max_sql.should == 'SELECT MIN(' + category + ') AS min, MAX(' + category + ') AS max FROM ' + db_name + ' '
-        end
-
-        it "creates the SQL based on the grouping and bins" do
-          visualization = described_class.new(dataset, attributes)
-          db_name = '"analytics"."2009_sfo_customer_survey"'
-          category = db_name + '."airport_cleanliness"'
-          width_bucket = 'width_bucket(CAST('+ category +' as numeric), CAST(1.0 as numeric), CAST(9.0 as numeric), 20)'
-
-          visualization.instance_variable_set(:@min, "1.0")
-          visualization.instance_variable_set(:@max, "9.0")
-          visualization.build_row_sql.should == 'SELECT '+ width_bucket +' AS bucket, ' +
-              'COUNT('+ width_bucket +') AS frequency FROM '+ db_name +
-              '  WHERE '+ category +' IS NOT NULL GROUP BY '+ width_bucket
-        end
-
-        it "creates the SQL for columns" do
-          visualization = described_class.new(dataset, attributes)
-          db_name = '"analytics"."2009_sfo_customer_survey"'
-          category = db_name + '."airport_cleanliness"'
-          visualization.build_min_max_sql.should == 'SELECT MIN(' + category + ') AS min, MAX(' + category + ') AS max FROM ' + db_name + ' '
-        end
-      end
-
-    context "with one filter" do
-      let(:attributes) do
-        {
-            :bins => 20,
-            :x_axis => 'airport_cleanliness',
-            :filters => ['"2009_sfo_customer_survey".terminal = \'3\'']
-        }
-      end
-
-      it "creates the SQL based on the grouping and bins" do
-        visualization = described_class.new(dataset, attributes)
-        db_name = '"analytics"."2009_sfo_customer_survey"'
-        category = db_name + '."airport_cleanliness"'
-        width_bucket = 'width_bucket(CAST('+ category +' as numeric), CAST(1.0 as numeric), CAST(9.0 as numeric), 20)'
-
-        visualization.instance_variable_set(:@min, "1.0")
-        visualization.instance_variable_set(:@max, "9.0")
-        visualization.build_row_sql.should == 'SELECT '+ width_bucket +' AS bucket, ' +
-            'COUNT('+ width_bucket +') AS frequency FROM '+ db_name +
-            '  WHERE '+ category +' IS NOT NULL AND "2009_sfo_customer_survey".terminal = \'3\' GROUP BY '+ width_bucket
-      end
-    end
-
-    context "with more than one filter" do
-      let(:attributes) do
-        {
-            :bins => 20,
-            :x_axis => 'airport_cleanliness',
-            :filters => ['"2009_sfo_customer_survey".terminal = \'3\'', '"2009_sfo_customer_survey".airline = \'UNITED\'']
-        }
-      end
-
-      it "creates the SQL based on the grouping and bins" do
-        visualization = described_class.new(dataset, attributes)
-        db_name = '"analytics"."2009_sfo_customer_survey"'
-        category = db_name + '."airport_cleanliness"'
-        width_bucket = 'width_bucket(CAST('+ category +' as numeric), CAST(1.0 as numeric), CAST(9.0 as numeric), 20)'
-
-        visualization.instance_variable_set(:@min, "1.0")
-        visualization.instance_variable_set(:@max, "9.0")
-        visualization.build_row_sql.should == 'SELECT '+ width_bucket +' AS bucket, ' +
-            'COUNT('+ width_bucket +') AS frequency FROM '+ db_name +
-            '  WHERE '+ category +' IS NOT NULL AND "2009_sfo_customer_survey".terminal = \'3\' AND "2009_sfo_customer_survey".airline = \'UNITED\' GROUP BY '+ width_bucket
-      end
-    end
-  end
+  let(:dataset) { FactoryGirl.build_stubbed(:gpdb_table, :name => '2009_sfo_customer_survey', :schema => schema) }
+  let(:instance_account) { FactoryGirl.build_stubbed(:instance_account) }
 
   describe "#fetch!" do
     it "returns visualization structure" do
       visualization = described_class.new(dataset, {
-        :bins => 3,
-        :x_axis => 'airport_cleanliness'
+          :bins => 3,
+          :x_axis => 'airport_cleanliness'
       })
 
       mock(SqlExecutor).execute_sql(schema, instance_account, 17, visualization.build_min_max_sql) do
@@ -121,8 +37,50 @@ describe Visualization::Histogram do
       visualization.fetch!(instance_account, 17)
 
       visualization.rows.should include({:bin => [1.0, 3.7], :frequency => 2})
-      visualization.rows.should include({:bin => [3.7,  6.3], :frequency => 0})
+      visualization.rows.should include({:bin => [3.7, 6.3], :frequency => 0})
       visualization.rows.should include({:bin => [6.3, 9.0], :frequency => 15})
+    end
+  end
+
+  context "integration" do
+    let(:account) { real_gpdb_account }
+    let(:dataset) { GpdbTable.find_by_name!('base_table1') }
+
+    let(:visualization) do
+      Visualization::Histogram.new(dataset, {
+          :bins => 2,
+          :x_axis => 'column1',
+          :filters => filters
+      })
+    end
+
+    describe "#fetch!" do
+      before do
+        refresh_chorus
+        visualization.fetch!(account, 12345)
+      end
+
+      context "with no filter" do
+        let(:filters) { nil }
+
+        it "returns the frequency data" do
+          visualization.rows.should == [
+              {:bin => [0, 0.5], :frequency => 3},
+              {:bin => [0.5, 1.0], :frequency => 6}
+          ]
+        end
+      end
+
+      context "with filters" do
+        let(:filters) { ['"base_table1"."category" = \'papaya\''] }
+
+        it "returns the frequency data based on the filtered dataset" do
+          visualization.rows.should == [
+              {:bin => [0, 0.5], :frequency => 1},
+              {:bin => [0.5, 1.0], :frequency => 3}
+          ]
+        end
+      end
     end
   end
 end
