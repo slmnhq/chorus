@@ -775,6 +775,10 @@ describe("chorus.dialogs.Visualization", function() {
                     expect(this.dialog.drawChart).toHaveBeenCalled();
                 });
 
+                it("re-draws the result console table", function() {
+                    expect(this.dialog.$(".data_table .td").length).not.toBe(0);
+                });
+
                 it("does not hide the filter options", function() {
                    expect(this.dialog.$(".filter_options")).not.toHaveClass("hidden");
                 });
