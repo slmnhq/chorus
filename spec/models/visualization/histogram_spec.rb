@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Visualization::Histogram, :database_integration => true do
+describe Visualization::Histogram do
   let(:schema) { FactoryGirl.build_stubbed(:gpdb_schema, :name => 'analytics') }
   let(:dataset) { FactoryGirl.build_stubbed(:gpdb_table, :name => '2009_sfo_customer_survey', :schema => schema) }
   let(:instance_account) { FactoryGirl.build_stubbed(:instance_account) }
@@ -42,7 +42,7 @@ describe Visualization::Histogram, :database_integration => true do
     end
   end
 
-  context "integration" do
+  context "integration", :database_integration => true do
     let(:account) { real_gpdb_account }
     let(:dataset) { GpdbTable.find_by_name!('base_table1') }
 
