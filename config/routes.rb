@@ -55,6 +55,7 @@ Chorus::Application.routes.draw do
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
     resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets"
     resources :external_tables, :only => [:create]
+    resources :csv, :only => [:create], :controller => 'workspace_csv'
   end
 
   resources :workfiles, :only => [:show, :destroy] do

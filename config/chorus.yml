@@ -1,5 +1,6 @@
 session_timeout_minutes: 120
 instance_poll_interval_minutes: 1
+csv_import_file_storage_path: ":rails_root/system/csv_files/:id/:basename.:extension"
 ldap:
   host: 10.32.88.212
   enable: false

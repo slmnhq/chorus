@@ -108,7 +108,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             }, {silent: true});
 
             this.$("button.submit").startLoading("actions.uploading");
-            this.uploadObj.url = "/workspace/" + this.options.launchElement.data("workspaceId") + "/csv/sample";
+            this.uploadObj.url = "/workspaces/" + this.options.launchElement.data("workspaceId") + "/csv";
 
             if (this.model.performValidation()) {
                 this.request = this.uploadObj.submit();
