@@ -69,15 +69,15 @@ FactoryGirl.define do
   factory :dataset_statistics do
     initialize_with do
       new({
-        'table_type' => 'BASE_TABLE',
-        'row_count' => '1000',
-        'column_count' => '5',
-        'description' => 'This is a nice table.',
-        'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-        'disk_size' => '2048 kB',
-        'partition_count' =>  '0',
-        'definition' => "SELECT * FROM foo"
-      })
+            'table_type' => 'BASE_TABLE',
+            'row_count' => '1000',
+            'column_count' => '5',
+            'description' => 'This is a nice table.',
+            'last_analyzed' => '2012-06-06 23:02:42.40264+00',
+            'disk_size' => '2048 kB',
+            'partition_count' => '0',
+            'definition' => "SELECT * FROM foo"
+          })
     end
   end
 
@@ -108,7 +108,7 @@ FactoryGirl.define do
     commit_message "Factory commit message"
     modifier
   end
-  
+
   factory :workfile_draft do
     owner
     workfile
@@ -136,6 +136,15 @@ FactoryGirl.define do
     y_bins 3
     x_axis "theme"
     y_axis "artist"
+    association :dataset, :factory => :gpdb_table
+    association :schema, :factory => :gpdb_schema
+  end
+
+  factory :visualization_timeseries, :class => Visualization::Timeseries do
+    time "time_value"
+    value "column1"
+    time_interval "month"
+    aggregation "sum"
     association :dataset, :factory => :gpdb_table
     association :schema, :factory => :gpdb_schema
   end

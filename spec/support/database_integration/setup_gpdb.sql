@@ -7,18 +7,18 @@ CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
     SET search_path TO 'gpdb_test_schema';
 
     CREATE TABLE base_table1
-      (id integer, column1 integer, column2 integer, category text)
+      (id integer, column1 integer, column2 integer, category text, time_value timestamp )
       DISTRIBUTED BY (id);
     COMMENT ON TABLE base_table1 IS 'comment on base_table1';
-    INSERT INTO base_table1 VALUES ( 0,0,0, 'apple' );
-    INSERT INTO base_table1 VALUES ( 1,1,1, 'apple' );
-    INSERT INTO base_table1 VALUES ( 2,0,2, 'orange' );
-    INSERT INTO base_table1 VALUES ( 3,1,3, 'orange' );
-    INSERT INTO base_table1 VALUES ( 4,1,4, 'orange' );
-    INSERT INTO base_table1 VALUES ( 5,0,5, 'papaya' );
-    INSERT INTO base_table1 VALUES ( 6,1,6, 'papaya' );
-    INSERT INTO base_table1 VALUES ( 7,1,7, 'papaya' );
-    INSERT INTO base_table1 VALUES ( 8,1,8, 'papaya' );
+    INSERT INTO base_table1 VALUES ( 0,0,0, 'apple', '2012-03-01 00:00:02' );
+    INSERT INTO base_table1 VALUES ( 1,1,1, 'apple', '2012-03-02 00:00:02' );
+    INSERT INTO base_table1 VALUES ( 2,0,2, 'orange' , '2012-04-01 00:00:02');
+    INSERT INTO base_table1 VALUES ( 3,1,3, 'orange' , '2012-03-05 00:00:02');
+    INSERT INTO base_table1 VALUES ( 4,1,4, 'orange' , '2012-03-04 00:02:02');
+    INSERT INTO base_table1 VALUES ( 5,0,5, 'papaya' , '2012-05-01 00:02:02');
+    INSERT INTO base_table1 VALUES ( 6,1,6, 'papaya' , '2012-04-08 00:10:02');
+    INSERT INTO base_table1 VALUES ( 7,1,7, 'papaya' , '2012-05-11 00:10:02');
+    INSERT INTO base_table1 VALUES ( 8,1,8, 'papaya' , '2012-04-09 00:00:02');
     ANALYZE base_table1;
 
     CREATE VIEW view1 AS

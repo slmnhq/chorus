@@ -15,7 +15,7 @@ describe Visualization do
     end
 
     context "histogram visualization" do
-      let(:params) { {:type => 'histogram'}}
+      let(:params) { {:type => 'histogram'} }
 
       it "builds a histogram visualization" do
         visualization = described_class.build(table, params)
@@ -23,6 +23,16 @@ describe Visualization do
         visualization.should be_a_kind_of(Visualization::Histogram)
       end
 
+    end
+
+    context "timeseries visualization" do
+      let(:params) { {:type => 'timeseries'} }
+
+      it "builds a timeseries visualization" do
+        visualization = described_class.build(table, params)
+
+        visualization.should be_a_kind_of(Visualization::Timeseries)
+      end
     end
   end
 end

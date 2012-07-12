@@ -14,8 +14,8 @@ describe Dataset do
     let!(:dataset) { FactoryGirl.create :gpdb_table }
     let!(:workspace) { FactoryGirl.create :workspace }
     let!(:workspace2) { FactoryGirl.create :workspace }
-    let!(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace)}
-    let!(:association2) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace2)}
+    let!(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
+    let!(:association2) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace2) }
 
     it "belongs to multiple workspaces" do
       dataset.bound_workspaces.should == [workspace, workspace2]
@@ -50,8 +50,8 @@ describe Dataset do
   context ".refresh" do
     before(:each) do
       stub_gpdb(account, datasets_sql => [
-        { 'type' => "r", "name" => "table1", "master_table" => 't' },
-        { 'type' => "v", "name" => "view1",  "master_table" => 'f' }
+        {'type' => "r", "name" => "table1", "master_table" => 't'},
+        {'type' => "v", "name" => "view1", "master_table" => 'f'}
       ])
     end
 
@@ -76,7 +76,7 @@ describe Dataset do
       Dataset.refresh(account, schema)
 
       stub_gpdb(account, datasets_sql => [
-        { 'type' => "r", "name" => "table1" }
+        {'type' => "r", "name" => "table1"}
       ])
 
       Dataset.refresh(account, schema)
@@ -92,7 +92,7 @@ describe Dataset do
       to_be_deleted = FactoryGirl.create(:gpdb_table, :schema => schema, :name => "matching")
 
       stub_gpdb(account, datasets_sql => [
-          { 'type' => "r", 'name' => "new" }
+        {'type' => "r", 'name' => "new"}
       ])
       Dataset.refresh(account, schema)
 
@@ -106,23 +106,23 @@ describe Dataset do
 
     before(:each) do
       stub_gpdb(account,
-        datasets_sql => [
-          { 'type' => "r", "name" => "table1", "master_table" => 't' }
-        ],
+                datasets_sql => [
+                  {'type' => "r", "name" => "table1", "master_table" => 't'}
+                ],
 
-        metadata_sql => [
-          {
-            'name' => 'table1',
-            'description' => 'table1 is cool',
-            'definition' => nil,
-            'column_count' => '3',
-            'row_count' => '5',
-            'table_type' => 'BASE_TABLE',
-            'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-            'disk_size' => '500 kB',
-            'partition_count' => '6'
-          }
-        ]
+                metadata_sql => [
+                  {
+                    'name' => 'table1',
+                    'description' => 'table1 is cool',
+                    'definition' => nil,
+                    'column_count' => '3',
+                    'row_count' => '5',
+                    'table_type' => 'BASE_TABLE',
+                    'last_analyzed' => '2012-06-06 23:02:42.40264+00',
+                    'disk_size' => '500 kB',
+                    'partition_count' => '6'
+                  }
+                ]
       )
     end
 
@@ -147,20 +147,20 @@ describe Dataset do
 
     before(:each) do
       stub_gpdb(account,
-        datasets_sql => [
-          { 'type' => "v", "name" => "view1",   }
-        ],
+                datasets_sql => [
+                  {'type' => "v", "name" => "view1", }
+                ],
 
-        metadata_sql => [
-          {
-            'name' => 'view1',
-            'description' => 'view1 is super cool',
-            'definition' => 'SELECT * FROM users;',
-            'column_count' => '3',
-            'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-            'disk_size' => '0 kB',
-          }
-        ]
+                metadata_sql => [
+                  {
+                    'name' => 'view1',
+                    'description' => 'view1 is super cool',
+                    'definition' => 'SELECT * FROM users;',
+                    'column_count' => '3',
+                    'last_analyzed' => '2012-06-06 23:02:42.40264+00',
+                    'disk_size' => '0 kB',
+                  }
+                ]
       )
     end
 
@@ -217,23 +217,23 @@ describe Dataset::Query, :database_integration => true do
     let(:sql) { subject.tables_and_views_in_schema.to_sql }
 
     it "returns a query whose result includes the names of all tables and views in the schema," +
-       "but does not include sub-partition tables, indexes, or relations in other schemas" do
+         "but does not include sub-partition tables, indexes, or relations in other schemas" do
       names = rows.map { |row| row["name"] }
-      names.should =~ [ "base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types" ]
+      names.should =~ ["base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types"]
     end
 
     it "includes the relations' types ('r' for table, 'v' for view)" do
       view_row = rows.find { |row| row['name'] == "view1" }
       view_row["type"].should == "v"
 
-      rows.map { |row| row["type"] }.should =~ [ "v", "r", "r", "r", "r" ]
+      rows.map { |row| row["type"] }.should =~ ["v", "r", "r", "r", "r"]
     end
 
     it "includes whether or not each relation is a master table" do
       master_row = rows.find { |row| row['name'] == "master_table1" }
       master_row["master_table"].should == "t"
 
-      rows.map { |row| row["master_table"] }.should =~ [ "t", "f", "f", "f", "f" ]
+      rows.map { |row| row["master_table"] }.should =~ ["t", "f", "f", "f", "f"]
     end
   end
 
@@ -248,7 +248,7 @@ describe Dataset::Query, :database_integration => true do
         row['name'].should == "base_table1"
         row['description'].should == "comment on base_table1"
         row['definition'].should be_nil
-        row['column_count'].should == 4
+        row['column_count'].should == 5
         row['row_count'].should == 9
         row['table_type'].should == "BASE_TABLE"
         row['last_analyzed'].should_not be_nil
@@ -300,8 +300,8 @@ describe Dataset::Query, :database_integration => true do
         row = rows.first
         row['name'].should == 'view1'
         row['description'].should == "comment on view1"
-        row['definition'].should == "SELECT base_table1.id, base_table1.column1, base_table1.column2, base_table1.category FROM base_table1;"
-        row['column_count'].should == 4
+        row['definition'].should == "SELECT base_table1.id, base_table1.column1, base_table1.column2, base_table1.category, base_table1.time_value FROM base_table1;"
+        row['column_count'].should == 5
         row['row_count'].should == 0
         row['disk_size'].should == '0 bytes'
         row['partition_count'].should == 0

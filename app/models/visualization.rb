@@ -9,6 +9,8 @@ module Visualization
       Visualization::Histogram.new(dataset, chart_task_params)
     elsif chart_task_params[:type] == 'heatmap'
       Visualization::Heatmap.new(dataset, chart_task_params)
+    elsif chart_task_params[:type] == 'timeseries'
+      Visualization::Timeseries.new(dataset, chart_task_params)
     else
       raise UnknownVisualizationException, "Unknown visualization: #{chart_task_params[:type]}"
     end
