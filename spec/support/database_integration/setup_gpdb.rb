@@ -1,29 +1,31 @@
 require "tempfile"
 
-SQL_FILE    = "setup_gpdb.sql"
-CONFIG_FILE = "test_gpdb_connection_config.yml"
-SQL         = File.read(File.expand_path("../#{SQL_FILE}", __FILE__))
-CONFIG      = YAML.load_file(File.expand_path("../#{CONFIG_FILE}", __FILE__))
-
-# silence stdout, remove hints and notices warnings from stderr
-FILTER_STDERR = "2>&1 1>/dev/null | egrep -v \"NOTICE|HINT\" 1>&2"
-
 module GpdbIntegration
+  sql_file    = "setup_gpdb.sql"
+  config_file = "test_gpdb_connection_config.yml"
+  host_name   = ENV['GPDB_HOST'] || 'chorus-gpdb42'
+
+  SQL             = File.read(File.expand_path("../#{sql_file}", __FILE__))
+  CONFIG          = YAML.load_file(File.expand_path("../#{config_file}", __FILE__))
+  INSTANCE_CONFIG = CONFIG['instances'].find { |hash| hash["host"] == host_name }
+  ACCOUNT_CONFIG  = INSTANCE_CONFIG['account']
+
   def self.setup_gpdb
     sql = SQL.gsub('gpdb_test_database', database_name)
-    instance = CONFIG['instance']
-    account  = CONFIG['account']
 
     connection_params = [
-      "-U #{account['db_username']}",
-      "-h #{instance['host']}",
-      "-p #{instance['port']}"
+      "-U #{ACCOUNT_CONFIG['db_username']}",
+      "-h #{INSTANCE_CONFIG['host']}",
+      "-p #{INSTANCE_CONFIG['port']}"
     ].join(" ")
 
     Tempfile.open("setup_gpdb") do |f|
       f.write(sql)
       f.flush
-      system "PGPASSWORD=#{account['db_password']} psql #{instance['maintenance_db']} #{connection_params} < #{f.path} #{FILTER_STDERR}"
+
+      # silence stdout, remove hints and notices warnings from stderr
+      filter_stderr = "2>&1 1>/dev/null | egrep -v \"NOTICE|HINT\" 1>&2"
+      system "PGPASSWORD=#{ACCOUNT_CONFIG['db_password']} psql #{INSTANCE_CONFIG['maintenance_db']} #{connection_params} < #{f.path} #{filter_stderr}"
     end
   end
 
@@ -46,8 +48,8 @@ module GpdbIntegration
   end
 
   def real_gpdb_account
-    instance = FactoryGirl.create(:instance, CONFIG['instance'])
-    account = FactoryGirl.create(:instance_account, CONFIG['account'].merge(:instance => instance))
+    instance = FactoryGirl.create(:instance, INSTANCE_CONFIG.except('account'))
+    account = FactoryGirl.create(:instance_account, ACCOUNT_CONFIG.merge(:instance => instance))
   end
 end
 

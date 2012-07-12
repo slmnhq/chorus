@@ -1,9 +1,21 @@
-instance:
-  host: "chorus-gpdb42"
-  port: 5432
-  maintenance_db: "postgres"
+instances:
+  - host: "chorus-gpdb42"
+    port: 5432
+    maintenance_db: "postgres"
+    account:
+      db_username: "test_superuser"
+      db_password: "secret"
 
-account:
-  db_username: "test_superuser"
-  db_password: "secret"
+  - host: "chorus-gpdb41"
+    port: 5432
+    maintenance_db: "postgres"
+    account:
+      db_username: "test_superuser"
+      db_password: "secret"
 
+  - host: "chorus-gpdb40"
+    port: 5432
+    maintenance_db: "postgres"
+    account:
+      db_username: "test_superuser"
+      db_password: "secret"
