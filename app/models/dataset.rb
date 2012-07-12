@@ -19,7 +19,7 @@ class Dataset < ActiveRecord::Base
       conn.select_all(Query.new(schema).tables_and_views_in_schema.to_sql)
     end
 
-    dataset_names = datasets.map {|attrs| attrs['name']}
+    dataset_names = datasets.map { |attrs| attrs['name'] }
     schema.datasets.where("datasets.name NOT IN (?)", dataset_names).destroy_all
 
     datasets.each do |attrs|
@@ -28,6 +28,10 @@ class Dataset < ActiveRecord::Base
       dataset = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
       dataset.update_attributes(attrs, :without_protection => true)
     end
+  end
+
+  def source_dataset_for(workspace)
+    schema_id != workspace.sandbox_id
   end
 
   def add_metadata!(account)
@@ -86,46 +90,46 @@ class Dataset < ActiveRecord::Base
       relations_in_schema.where(RELATIONS[:relkind].in(['r', 'v'])).
         join(PARTITION_RULE, Arel::Nodes::OuterJoin).
         on(
-          RELATIONS[:oid].eq(PARTITION_RULE[:parchildrelid]).
+        RELATIONS[:oid].eq(PARTITION_RULE[:parchildrelid]).
           and(RELATIONS[:relhassubclass].eq('f'))
-        ).
+      ).
         where(
-          RELATIONS[:relhassubclass].eq('t').or(PARTITION_RULE[:parchildrelid].eq(nil))
-        ).project(
-          RELATIONS[:relkind].as('type'),
-          RELATIONS[:relname].as('name'),
-          RELATIONS[:relhassubclass].as('master_table')
-        )
+        RELATIONS[:relhassubclass].eq('t').or(PARTITION_RULE[:parchildrelid].eq(nil))
+      ).project(
+        RELATIONS[:relkind].as('type'),
+        RELATIONS[:relname].as('name'),
+        RELATIONS[:relhassubclass].as('master_table')
+      )
     end
 
     def metadata_for_dataset(table_name)
       relations_in_schema.
         where(RELATIONS[:relname].eq(table_name)).
         join(DESCRIPTIONS, Arel::Nodes::OuterJoin).
-        on( RELATIONS[:oid].eq(DESCRIPTIONS[:objoid]) ).
+        on(RELATIONS[:oid].eq(DESCRIPTIONS[:objoid])).
         join(VIEWS, Arel::Nodes::OuterJoin).
-        on( VIEWS[:viewname].eq(RELATIONS[:relname]) ).
+        on(VIEWS[:viewname].eq(RELATIONS[:relname])).
         join(LAST_OPERATION, Arel::Nodes::OuterJoin).
         on(
-          LAST_OPERATION[:objid].eq(RELATIONS[:oid]).
+        LAST_OPERATION[:objid].eq(RELATIONS[:oid]).
           and(LAST_OPERATION[:staactionname].eq('ANALYZE'))
-        ).
+      ).
         join(EXT_TABLES, Arel::Nodes::OuterJoin).
         on(EXT_TABLES[:reloid].eq(RELATIONS[:oid])).
         project(
-            (PARTITIONS.where(PARTITIONS[:schemaname].eq(schema.name).
-                                  and(PARTITIONS[:tablename].eq(table_name))).
-                project(Arel.sql("*").count)
-            ).as('partition_count'),
-          RELATIONS[:reltuples].as('row_count'),
-          RELATIONS[:relname].as('name'),
-          DESCRIPTIONS[:description].as('description'),
-          VIEWS[:definition].as('definition'),
-          RELATIONS[:relnatts].as('column_count'),
-          LAST_OPERATION[:statime].as('last_analyzed'),
-          Arel.sql(DISK_SIZE).as('disk_size'),
-          Arel.sql(TABLE_TYPE).as('table_type')
-        )
+        (PARTITIONS.where(PARTITIONS[:schemaname].eq(schema.name).
+                            and(PARTITIONS[:tablename].eq(table_name))).
+          project(Arel.sql("*").count)
+        ).as('partition_count'),
+        RELATIONS[:reltuples].as('row_count'),
+        RELATIONS[:relname].as('name'),
+        DESCRIPTIONS[:description].as('description'),
+        VIEWS[:definition].as('definition'),
+        RELATIONS[:relnatts].as('column_count'),
+        LAST_OPERATION[:statime].as('last_analyzed'),
+        Arel.sql(DISK_SIZE).as('disk_size'),
+        Arel.sql(TABLE_TYPE).as('table_type')
+      )
     end
   end
 end
