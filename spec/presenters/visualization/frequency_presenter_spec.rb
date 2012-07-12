@@ -9,10 +9,6 @@ describe Visualization::FrequencyPresenter, :type => :view do
         { "bucket" => "The Beach Boys", "count"=>6 },
         { "bucket" => "The Kinks", "count"=>6 }
     ]
-    @visualization_data.columns = [
-        { 'name' => "bucket", 'typeCategory' => "text" },
-        { 'name' => "count", 'typeCategory' => "integer" }
-    ]
 
     @presenter = Visualization::FrequencyPresenter.new(@visualization_data, view)
   end
