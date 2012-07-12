@@ -12,10 +12,12 @@ module FixtureGenerator
 end
 
 class RSpec::Core::ExampleGroup
-  def self.generate_fixture(file_path, &block)
-    it "generates a JSON fixture", :fixture => true do
-      instance_exec(&block)
-      save_fixture file_path
+  def self.generate_fixture(file_path, hash={}, &block)
+    describe "JSON fixture generation", hash.merge(:fixture => true) do
+      it "generates a fixture for #{file_path}" do
+        instance_exec(&block)
+        save_fixture file_path
+      end
     end
   end
 end
