@@ -16,6 +16,7 @@ app/assets/javascripts/environment.js
 
 # Ignore workfile attachments outside of public folder
 /system/workfile_versions/*
+/system/csv_files/*
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
