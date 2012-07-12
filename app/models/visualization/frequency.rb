@@ -1,6 +1,6 @@
 module Visualization
   class Frequency
-    attr_accessor :rows, :columns
+    attr_accessor :rows
     attr_writer :bins, :category, :filters, :dataset, :schema
 
     def initialize(dataset=nil, attributes={})
@@ -13,8 +13,7 @@ module Visualization
 
     def fetch!(account, check_id)
       result = SqlExecutor.execute_sql(@schema, account, check_id, build_row_sql)
-      @rows = result.rows.map { |row| { :bucket => row[0], :count => row[1] } }
-      @columns = result.columns
+      @rows = result.rows.map { |row| { :bucket => row[0], :count => row[1].to_i } }
     end
 
     private

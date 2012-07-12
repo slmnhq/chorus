@@ -10,7 +10,7 @@ describe("chorus.views.visualizations.FrequencyView", function() {
 
     beforeEach(function() {
         var dataset = rspecFixtures.dataset();
-        this.task = dataset.makeFrequencyTask({"bins": 3, "yAxis": "animals"});
+        this.task = dataset.makeFrequencyTask({"bins": 3, "yAxis": "fruits"});
         this.task.save();
         this.server.lastCreate().succeed(rspecFixtures.frequencyTaskJson().response);
 
@@ -21,7 +21,7 @@ describe("chorus.views.visualizations.FrequencyView", function() {
     describe("changing model", function() {
         it("does not cause render to be called", function() {
             spyOn(chorus.views.visualizations.Frequency.prototype, 'render');
-            var task = rspecFixtures.dataset().makeFrequencyTask({"bins": 3, "yAxis": "animals"});
+            var task = rspecFixtures.dataset().makeFrequencyTask({"bins": 3, "yAxis": "fruits"});
             var view = new chorus.views.visualizations.Frequency({ model: task });
 
             task.set({rows: []});
@@ -39,16 +39,21 @@ describe("chorus.views.visualizations.FrequencyView", function() {
 
         it("has the correct axis labels", function() {
             expect(this.view.$('.xaxis .axis_label').text()).toBe("count")
-            expect(this.view.$('.yaxis .axis_label').text()).toBe("animals")
+            expect(this.view.$('.yaxis .axis_label').text()).toBe("fruits")
         });
 
         describe("re-rendering", function() {
             beforeEach(function() {
+                this.originalAttributes = JSON.parse(JSON.stringify(this.task.attributes));
                 this.view.render();
             });
 
             it("does not create multiple charts", function() {
                 expect(this.view.$("svg.chart").length).toBe(1);
+            });
+
+            it("does not mutate the model's attributes", function() {
+                expect(this.task.attributes).toEqual(this.originalAttributes);
             });
         });
 
@@ -61,7 +66,7 @@ describe("chorus.views.visualizations.FrequencyView", function() {
                 expect(this.boxes).toBeOrderedTopToBottom();
             });
 
-            it("have the corrects widths", function() {
+            it("have the wider boxes at the top", function() {
                 expect(width(this.boxes[2])).toBeGreaterThan(width(this.boxes[1]));
                 expect(width(this.boxes[1])).toBeGreaterThan(width(this.boxes[0]));
             })
@@ -89,7 +94,7 @@ describe("chorus.views.visualizations.FrequencyView", function() {
         it("draws vertical grid lines", function() {
             expect(this.view.$(".xaxis line.grid").length).toBeGreaterThan(1)
         })
-        
+
         it("does not draw horizontal grid lines", function() {
             expect(this.view.$(".yaxis line.grid").length).toBe(0)
         })

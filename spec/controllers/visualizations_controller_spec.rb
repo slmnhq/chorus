@@ -16,35 +16,29 @@ describe VisualizationsController do
 
   describe "#create" do
     context "succeeds" do
-      let(:fake_visualization) { Object.new }
-
-      before do
+      it "returns json for visualization, in ascending order" do
+        fake_visualization = Object.new
         mock(Visualization).build(dataset, {"type" => "frequency", "check_id" => "43"}) { fake_visualization }
         mock(fake_visualization).fetch!(instance_account, "43")
-      end
-
-      it "returns json for visualization, in ascending order" do
         mock_present { |model| model.should == fake_visualization }
+
         post :create, :chart_task => {:type => "frequency", :check_id => "43"}, :dataset_id => dataset.id
         response.status.should == 200
-
-        # rows = decoded_response["rows"]
-        # rows[0][:bucket].should == "Vanilla Ice"
-        # rows[0][:count].should == "1"
-        # rows[1][:bucket].should == "The Beatles"
-        # rows[1][:count].should == "9"
-        # rows[2][:bucket].should == "David Bowie"
-        # rows[2][:count].should == "12"
-
-        # columns = decoded_response["columns"]
-        # columns[0][:name].should == "bucket"
-        # columns[0][:type_category].should == "STRING"
-        # columns[1][:name].should == "count"
-        # columns[1][:type_category].should == "WHOLE_NUMBER"
       end
 
-      generate_fixture "frequencyTask.json" do
-        post :create, :chart_task => {:type => "frequency", :check_id => "43"}, :dataset_id => dataset.id
+      generate_fixture "frequencyTask.json", :database_integration => true  do
+        account = refresh_chorus
+        log_in account.owner
+        dataset = Dataset.find_by_name!("base_table1")
+
+        post :create, :dataset_id => dataset.id, :chart_task => {
+          :type => "frequency",
+          :check_id => "43",
+          :bins => 4,
+          :y_axis => "category"
+        }
+
+        response.should be_success
       end
     end
 

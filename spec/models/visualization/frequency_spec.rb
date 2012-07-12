@@ -23,8 +23,8 @@ describe Visualization::Frequency, :database_integration => true do
 
       it "returns the frequency data" do
         visualization.rows.should == [
-          { :count => "4", :bucket => 'papaya' },
-          { :count => "3", :bucket => "orange" }
+          { :count => 4, :bucket => 'papaya' },
+          { :count => 3, :bucket => "orange" }
         ]
       end
     end
@@ -34,8 +34,8 @@ describe Visualization::Frequency, :database_integration => true do
 
       it "returns the frequency data based on the filtered dataset" do
         visualization.rows.should == [
-          { :count => "2", :bucket => "orange" },
-          { :count => "1", :bucket => 'apple' }
+          { :count => 2, :bucket => "orange" },
+          { :count => 1, :bucket => 'apple' }
         ]
       end
     end
