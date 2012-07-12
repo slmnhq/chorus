@@ -1,6 +1,6 @@
 module Visualization
   class Heatmap
-    attr_reader :rows
+    attr_accessor :x_bins, :y_bins, :x_axis, :y_axis, :rows
     attr_writer :dataset, :schema
 
     def initialize(dataset=nil, attributes={})

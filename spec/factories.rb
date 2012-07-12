@@ -131,6 +131,15 @@ FactoryGirl.define do
     association :schema, :factory => :gpdb_schema
   end
 
+  factory :visualization_heatmap, :class => Visualization::Heatmap do
+    x_bins 3
+    y_bins 3
+    x_axis "theme"
+    y_axis "artist"
+    association :dataset, :factory => :gpdb_table
+    association :schema, :factory => :gpdb_schema
+  end
+
   factory :associated_dataset do
     association :dataset, :factory => :gpdb_table
     workspace
