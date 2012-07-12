@@ -109,6 +109,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     chartRefreshed: function() {
         this.drawChart();
         this.chartUpToDate();
+        this.tableData.showResultTable(this.task);
     },
 
     chartUpToDate: function() {
