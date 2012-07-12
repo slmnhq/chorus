@@ -12,7 +12,7 @@ chorus.models.Task = chorus.models.Base.include(
     },
 
     initialize: function(attrs) {
-        this.set({ checkId: Math.random().toString() + '_' + chorus.session.user().id });
+        this.set({ checkId: Math.floor((Math.random()*1e8)+1).toString() });
     },
 
     cancel : function() {

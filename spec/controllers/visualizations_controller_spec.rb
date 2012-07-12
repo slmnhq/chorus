@@ -19,7 +19,7 @@ describe VisualizationsController do
       it "returns json for visualization, in ascending order" do
         fake_visualization = Object.new
         mock(Visualization).build(dataset, {"type" => "frequency", "check_id" => "43"}) { fake_visualization }
-        mock(fake_visualization).fetch!(instance_account, "43")
+        mock(fake_visualization).fetch!(instance_account, "43_#{user.id}")
         mock_present { |model| model.should == fake_visualization }
 
         post :create, :chart_task => {:type => "frequency", :check_id => "43"}, :dataset_id => dataset.id
@@ -45,12 +45,12 @@ describe VisualizationsController do
     context "when there's an error'" do
       before do
         any_instance_of(Visualization::Histogram) do |visualization|
-          stub(visualization).fetch!(instance_account, '0.43214321') { raise CancelableQuery::QueryError }
+          stub(visualization).fetch!(instance_account, "43_#{user.id}") { raise CancelableQuery::QueryError }
         end
       end
 
       it "returns an error if the query fails" do
-        post :create, :chart_task => {:type => "histogram", :check_id => '0.43214321'}, :dataset_id => dataset.id
+        post :create, :chart_task => {:type => "histogram", :check_id => '43'}, :dataset_id => dataset.id
         response.code.should == "400"
         decoded_errors.fields.query.INVALID.message.should_not be_nil
       end
@@ -59,12 +59,12 @@ describe VisualizationsController do
 
   describe "#destroy" do
     it "cancels the visualization query" do
-      mock(SqlExecutor).cancel_query(dataset, instance_account, "43")
+      mock(SqlExecutor).cancel_query(dataset, instance_account, "43_#{user.id}")
       delete :destroy, :id => "43", :dataset_id => dataset.to_param
     end
 
     it "returns successfully" do
-      mock(SqlExecutor).cancel_query(dataset, instance_account, "43")
+      mock(SqlExecutor).cancel_query(dataset, instance_account, "43_#{user.id}")
       delete :destroy, :id => "43", :dataset_id => dataset.to_param
       response.should be_success
     end
