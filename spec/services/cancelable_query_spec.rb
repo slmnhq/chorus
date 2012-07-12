@@ -32,7 +32,7 @@ describe CancelableQuery, :database_integration => true do
   describe "#cancel" do
     let!(:account) { refresh_chorus }
     let(:instance) { account.instance }
-    let(:database) { GpdbDatabase.find_by_name!(database_name) }
+    let(:database) { GpdbDatabase.find_by_name!(GpdbIntegration.database_name) }
     let(:check_id) { '54321' }
 
     it "cancels the query" do
