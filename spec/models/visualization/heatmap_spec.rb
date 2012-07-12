@@ -9,7 +9,7 @@ describe Visualization::Heatmap do
   before do
     any_instance_of(Visualization::Heatmap) do |instance|
       stub(instance).fetch_min_max do
-        return 9.0, 1.0, 10.0, 1.0
+        [1.0, 10.0, 1.0, 10.0]
       end
     end
   end
@@ -18,21 +18,17 @@ describe Visualization::Heatmap do
     context "no filters" do
       let(:attributes) do
         {
-          :x_bins => 20,
-          :y_bins => 10,
-          :x_axis => 'theme',
-          :y_axis => 'artist'
+            :x_bins => 3,
+            :y_bins => 3,
+            :x_axis => 'theme',
+            :y_axis => 'artist'
         }
       end
 
       it "creates the SQL based on the grouping and bins" do
         visualization = described_class.new(dataset, attributes)
         visualization.build_min_max_sql.should == "SELECT max('theme') AS maxX, min('theme') AS minX, max('artist') AS maxY, min('artist') AS minY FROM #{relation} "
-
-        column_information = %Q{"information_schema"."columns"}
-        visualization.build_column_sql.should == "SELECT #{column_information}.\"column_name\" AS name, #{column_information}.\"data_type\" AS type_category FROM #{column_information}  WHERE #{column_information}.\"table_name\" = '1000_songs_test_1' AND #{column_information}.\"table_schema\" = 'public' AND #{column_information}.\"column_name\" IN ('theme', 'artist')"
-
-        visualization.build_row_sql.should == "SELECT *, count(*) AS value FROM ( SELECT width_bucket( CAST(\"theme\" AS numeric), CAST(1.0 AS numeric), CAST(9.0 AS numeric), 4) AS xbin, width_bucket( CAST(\"artist\" AS numeric), CAST(1.0 AS numeric), CAST(10.0 AS numeric), 6) AS ybin FROM ( SELECT * FROM \"public\".\"1000_songs_test_1\") AS subquery WHERE \"theme\" IS NOT NULL AND \"artist\" IS NOT NULL) AS foo GROUP BY xbin, ybin"
+        visualization.build_row_sql.should == "SELECT *, count(*) AS value FROM ( SELECT width_bucket( CAST(\"theme\" AS numeric), CAST(1.0 AS numeric), CAST(10.0 AS numeric), 4) AS xbin, width_bucket( CAST(\"artist\" AS numeric), CAST(1.0 AS numeric), CAST(10.0 AS numeric), 6) AS ybin FROM ( SELECT * FROM \"public\".\"1000_songs_test_1\") AS subquery WHERE \"theme\" IS NOT NULL AND \"artist\" IS NOT NULL) AS foo GROUP BY xbin, ybin"
       end
     end
 
@@ -73,29 +69,28 @@ describe Visualization::Heatmap do
 
   describe "#fetch!" do
     before do
-      call_count = 0
-      mock(schema).with_gpdb_connection(instance_account).times(2) do
-        r = [
-            [
-                {'name' => 'x', 'typeCategory' => 'integer'},
-                {'name' => 'y', 'typeCategory' => 'integer'},
-                {'name' => 'value', 'typeCategory' => 'integer'},
-                {'name' => 'xLabel', 'typeCategory' => 'text'},
-                {'name' => 'yLabel', 'typeCategory' => 'text'}
-            ],
-            [
-              {'value' => '9', 'x' => '1', 'xLabel' => [1, 3], 'y' => '1', 'yLabel' => [1, 1.2]},
-              {'value' => '2', 'x' => '3', 'xLabel' => [1, 5], 'y' => '2', 'yLabel' => [3, 1.3]}
-            ]][call_count]
-        call_count = call_count + 1
-        r
+      mock(schema).with_gpdb_connection(instance_account) do
+        [
+            # some lines commented out to test filling in missing values
+            {'value' => '11', 'x' => '1', 'y' => '1'},
+            # { 'value' => '12', 'x' => '1', 'y' => '2'}
+            {'value' => '13', 'x' => '1', 'y' => '3'},
+
+            {'value' => '21', 'x' => '2', 'y' => '1'},
+            {'value' => '22', 'x' => '2', 'y' => '2'},
+            {'value' => '23', 'x' => '2', 'y' => '3'},
+
+            # { 'value' => '31', 'x' => '3', 'y' => '1'}
+            # { 'value' => '32', 'x' => '3', 'y' => '2'}
+            {'value' => '33', 'x' => '3', 'y' => '3'}
+        ]
       end
     end
 
     let(:attributes) do
       {
-          :x_bins => 1,
-          :y_bins => 2,
+          :x_bins => 3,
+          :y_bins => 3,
           :x_axis => 'theme',
           :y_axis => 'artist'
       }
@@ -105,12 +100,15 @@ describe Visualization::Heatmap do
       visualization = described_class.new(dataset, attributes)
       visualization.fetch!(instance_account)
 
-      visualization.rows.should include({'value' => '9', 'x' => '1', 'xLabel' => [1, 3], 'y' => '1', 'yLabel' => [1, 1.2]})
-      visualization.rows.should include({'value' => '2', 'x' => '3', 'xLabel' => [1, 5], 'y' => '2', 'yLabel' => [3, 1.3]})
-    end
-
-    it "interpolates missing rows" do
-
+      visualization.rows.should include({'value' => '11', 'x' => '1', 'xLabel' => [1.0, 4.0], 'y' => '1', 'yLabel' => [1.0, 4.0]})
+      visualization.rows.should include({'value' => '', 'x' => '1', 'xLabel' => [1.0, 4.0], 'y' => '2', 'yLabel' => [4.0, 7.0]})
+      visualization.rows.should include({'value' => '13', 'x' => '1', 'xLabel' => [1.0, 4.0], 'y' => '3', 'yLabel' => [7.0, 10.0]})
+      visualization.rows.should include({'value' => '21', 'x' => '2', 'xLabel' => [4, 7], 'y' => '1', 'yLabel' => [1, 4]})
+      visualization.rows.should include({'value' => '22', 'x' => '2', 'xLabel' => [4, 7], 'y' => '2', 'yLabel' => [4, 7]})
+      visualization.rows.should include({'value' => '23', 'x' => '2', 'xLabel' => [4, 7], 'y' => '3', 'yLabel' => [7, 10]})
+      visualization.rows.should include({'value' => '', 'x' => '3', 'xLabel' => [7, 10], 'y' => '1', 'yLabel' => [1, 4]})
+      visualization.rows.should include({'value' => '', 'x' => '3', 'xLabel' => [7, 10], 'y' => '2', 'yLabel' => [4, 7]})
+      visualization.rows.should include({'value' => '33', 'x' => '3', 'xLabel' => [7, 10], 'y' => '3', 'yLabel' => [7, 10]})
     end
   end
 end
