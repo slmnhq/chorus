@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS gpdb_test_database;
-CREATE DATABASE gpdb_test_database OWNER gpadmin;
+DROP DATABASE IF EXISTS "gpdb_test_database";
+CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
 
-\connect gpdb_test_database
+\connect "gpdb_test_database"
 
   CREATE SCHEMA gpdb_test_schema;
     SET search_path TO 'gpdb_test_schema';
@@ -153,10 +153,10 @@ CREATE DATABASE gpdb_test_database OWNER gpadmin;
 
   \dtvs gpdb_test_schema2.*
 
-DROP DATABASE IF EXISTS gpdb_test_database_without_public_schema;
-CREATE DATABASE gpdb_test_database_without_public_schema OWNER gpadmin;
+DROP DATABASE IF EXISTS "gpdb_test_database_without_public_schema";
+CREATE DATABASE "gpdb_test_database_without_public_schema" OWNER gpadmin;
 
-\connect gpdb_test_database_without_public_schema
+\connect "gpdb_test_database_without_public_schema"
 
   DROP SCHEMA public;
 
