@@ -43,6 +43,7 @@ module Visualization
       result = SqlExecutor.execute_sql(@schema, account, check_id, build_row_sql)
 
       row_data = result.rows.map { |row| {:bin => row[0].to_i, :frequency => row[1].to_i} }
+
       @rows = massage(row_data)
     end
 
