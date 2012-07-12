@@ -33,6 +33,10 @@ set nocursorline
 
 set foldmethod=indent
 
+let g:syntastic_mode_map = { 'mode': 'passive',
+                             \ 'active_filetypes': ['javascript'],
+                             \ 'passive_filetypes': [] }
+
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>""
 map <C-n> :tabnew<cr>
 
