@@ -2,10 +2,10 @@ require "hashie/mash"
 require "tempfile"
 require "erubis"
 
-config_file   = File.expand_path("../test_gpdb_connection_config.yml", __FILE__)
+config_file = File.expand_path("../test_gpdb_connection_config.yml", __FILE__)
 template_file = File.expand_path("../setup_gpdb.sql.erb", __FILE__)
 
-CONFIG   = Hashie::Mash.new(YAML.load_file(config_file))
+CONFIG = Hashie::Mash.new(YAML.load_file(config_file))
 TEMPLATE = File.read(template_file)
 
 module GpdbIntegration
@@ -14,7 +14,9 @@ module GpdbIntegration
     account = CONFIG.account
 
     sql = Erubis::Eruby.new(TEMPLATE).result(CONFIG)
-    sql.gsub!(/gpdb_test_database/, database_name)
+    name = database_name
+    name.gsub!("-", "_")
+    sql.gsub!(/gpdb_test_database/, name)
 
     connection_params = [
       "-U #{account.db_username}",
