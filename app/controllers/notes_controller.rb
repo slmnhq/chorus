@@ -2,21 +2,8 @@ require Rails.root + 'app/permissions/note_access'
 
 class NotesController < ApplicationController
   def create
-    body = params[:note][:body]
-
-    case params[:note][:entity_type]
-      when "greenplum_instance"
-        instance = Instance.find(params[:note][:entity_id])
-        Events::NOTE_ON_GREENPLUM_INSTANCE.by(current_user).add(:greenplum_instance => instance, :body => body)
-      when "hadoop_instance"
-        instance = HadoopInstance.find(params[:note][:entity_id])
-        Events::NOTE_ON_HADOOP_INSTANCE.by(current_user).add(:hadoop_instance => instance, :body => body)
-      when "hdfs"
-        hadoop_instance_id, path = params[:note][:entity_id].split('|')
-
-        hdfs_file_reference = HdfsFileReference.find_or_create_by_hadoop_instance_id_and_path(hadoop_instance_id, path)
-        Events::NOTE_ON_HDFS_FILE.by(current_user).add(:hdfs_file => hdfs_file_reference, :body => body)
-    end
+    note_params = params[:note]
+    Events::Note.create_for_entity(note_params[:entity_type], note_params[:entity_id], note_params[:body], current_user)
 
     render :json => {}, :status => :created
   end

@@ -96,4 +96,43 @@ describe "Notes" do
       end
     end
   end
+
+  describe "#create_for_entity(entity_type, entity_id, body, creator)" do
+    let(:user) { FactoryGirl.create(:user) }
+
+    it "creates a note on a greenplum instance" do
+      greenplum_instance = FactoryGirl.create(:greenplum_instance)
+      Events::Note.create_for_entity("greenplum_instance", greenplum_instance.id, "Some crazy content", user)
+
+      last_note = Events::Note.last
+      last_note.action.should == "NOTE_ON_GREENPLUM_INSTANCE"
+      last_note.body.should == "Some crazy content"
+      last_note.actor.should == user
+    end
+
+    it "creates a note on a hadoop instance" do
+      hadoop_instance = FactoryGirl.create(:hadoop_instance)
+      Events::Note.create_for_entity("hadoop_instance", hadoop_instance.id, "Some crazy content", user)
+
+      last_note = Events::Note.last
+      last_note.action.should == "NOTE_ON_HADOOP_INSTANCE"
+      last_note.body.should == "Some crazy content"
+      last_note.actor.should == user
+    end
+
+    it "creates a note on an hdfs file" do
+      Events::Note.create_for_entity("hdfs", "1234|/data/test.csv", "Some crazy content", user)
+
+      last_note = Events::Note.last
+      last_note.action.should == "NOTE_ON_HDFS_FILE"
+      last_note.actor.should == user
+      last_note.hdfs_file.hadoop_instance_id == 1234
+      last_note.hdfs_file.path.should == "/data/test.csv"
+      last_note.body.should == "Some crazy content"
+    end
+
+    it "raises an exception if the entity type is unknown" do
+      expect { Events::Note.create_for_entity("bogus", "wrong", "invalid", user) }.to raise_error
+    end
+  end
 end
