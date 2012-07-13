@@ -60,8 +60,6 @@ class WorkfilesController < ApplicationController
     workfile = workspace.workfiles.build(params[:workfile])
     workfile.file_name ||= source_file.original_filename
 
-    WorkfileName.resolve_name_for!(workfile)
-
     workfile.owner = current_user
     workfile.save!
 

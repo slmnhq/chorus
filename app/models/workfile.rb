@@ -13,6 +13,8 @@ class Workfile < ActiveRecord::Base
 
   validates_format_of :file_name, :with => /^[a-zA-Z0-9_ \.\(\)\-]+$/
 
+  before_validation :normalize_file_name, :on => :create
+
   attr_accessor :highlighted_attributes, :search_result_comments
   searchable do
     text :file_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
@@ -79,5 +81,9 @@ class Workfile < ActiveRecord::Base
   private
   def last_version_number
     last_version.try(:version_num) || 0
+  end
+
+  def normalize_file_name
+    WorkfileName.resolve_name_for!(self)
   end
 end

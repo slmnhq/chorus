@@ -19,6 +19,38 @@ describe Workfile do
         workfile.errors[:file_name].should_not be_empty
       end
     end
+
+    context "normalize the file name" do
+      let!(:another_workfile) { FactoryGirl.create(:workfile, :file_name => 'workfile.sql') }
+
+      context "first conflict" do
+        it "renames and turns the workfile valid" do
+          workfile = Workfile.new :file_name => 'workfile.sql'
+          workfile.workspace = another_workfile.workspace
+          workfile.owner = another_workfile.owner
+
+          workfile.save
+          workfile.should be_valid
+          workfile.file_name.should == 'workfile_1.sql'
+        end
+      end
+
+      context "multiple conflicts" do
+        let(:workspace) { FactoryGirl.create(:workspace) }
+        let!(:another_workfile_1) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
+        let!(:another_workfile_2) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
+
+        it "increases the version number" do
+          workfile = Workfile.new :file_name => 'workfile.sql'
+          workfile.workspace = workspace
+          workfile.owner = another_workfile_1.owner
+
+          workfile.save
+          workfile.should be_valid
+          workfile.file_name.should == 'workfile_2.sql'
+        end
+      end
+    end
   end
 
   describe "#create_new_version" do
@@ -52,7 +84,7 @@ describe Workfile do
       end
     end
   end
-  
+
   describe ".by_type" do
     let(:user) { FactoryGirl.create(:user) }
     let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
