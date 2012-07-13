@@ -1,6 +1,20 @@
 require 'spec_helper'
+require 'java'
 
 describe Hdfs::QueryService do
+  before :all do
+    # silence the HDFS log output from failed version connections
+    @java_stdout = java.lang.System.out
+    @java_stderr = java.lang.System.err
+    java.lang.System.setOut(nil)
+    java.lang.System.setErr(nil)
+  end
+
+  after :all do
+    java.lang.System.setOut(@java_stdout)
+    java.lang.System.setErr(@java_stderr)
+  end
+
   describe ".instance_version" do
     context "existing hadoop server" do
       let(:instance) do
