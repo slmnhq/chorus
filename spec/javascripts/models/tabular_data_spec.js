@@ -375,7 +375,8 @@ describe("chorus.models.TabularData", function() {
 
     describe("#download", function() {
         beforeEach(function() {
-            this.tabularData.set({ id: '"foo"|"bar"|"baz"' });
+            this.tabularData.set({ id: '"foo"|"bar"|"baz"',
+            workspace: {id: "234", name: "abc"}});
             spyOn(jQuery, "download");
         });
 
@@ -383,16 +384,19 @@ describe("chorus.models.TabularData", function() {
             it("includes the number of rows", function() {
                 this.tabularData.download();
                 expect($.download).toHaveBeenCalledWith("/edc/data/csvDownload", {
-                    datasetId: this.tabularData.id
+                    datasetId: this.tabularData.id,
+                    workspaceId: this.tabularData.workspace().id
                 }, "get");
             });
         });
 
         context("when a number of rows is passed", function() {
             it("makes a request to the tabular data download api", function() {
+
                 this.tabularData.download({ rows: "345" });
                 expect($.download).toHaveBeenCalledWith("/edc/data/csvDownload", {
                     datasetId: this.tabularData.id,
+                    workspaceId: this.tabularData.workspace().id,
                     numOfRows: "345"
                 }, "get");
             });

@@ -162,6 +162,7 @@ chorus.models.TabularData = chorus.models.Base.include(
             if (options && options.rows) {
                 data.numOfRows = options.rows;
             }
+           data.workspaceId = this.get("workspace").id
 
             $.download("/edc/data/csvDownload", data, "get");
         },
