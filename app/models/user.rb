@@ -2,10 +2,10 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
   include SoftDelete
-  
+
   VALID_SORT_ORDERS = HashWithIndifferentAccess.new(
-      :first_name => "LOWER(users.first_name)",
-      :last_name => "LOWER(users.last_name)"
+    :first_name => "LOWER(users.first_name)",
+    :last_name => "LOWER(users.last_name)"
   )
 
   DEFAULT_SORT_ORDER = VALID_SORT_ORDERS[:first_name]
@@ -103,7 +103,7 @@ class User < ActiveRecord::Base
 
   def destroy
     if instances.count > 0
-      errors.add(:instance_count, :equal_to, {:count => 0})
+      errors.add(:user, :nonempty_instance_list)
       raise ActiveRecord::RecordInvalid.new(self)
     elsif owned_workspaces.count > 0
       errors.add(:workspace_count, :equal_to, {:count => 0})

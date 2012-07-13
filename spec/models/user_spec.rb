@@ -104,7 +104,7 @@ describe User do
       end
 
       it "allows a username of 256 characters" do
-        expect { FactoryGirl.build(:user, :username => 'a' * 256).save! }.to change{ User.count }.by(1)
+        expect { FactoryGirl.build(:user, :username => 'a' * 256).save! }.to change { User.count }.by(1)
       end
     end
 
@@ -262,7 +262,7 @@ describe User do
         user.destroy
         fail
       rescue ActiveRecord::RecordInvalid => e
-        e.record.errors.messages[:instance_count].should == [[:equal_to, {:count => 0}]]
+        e.record.errors.messages[:user].should == [[:nonempty_instance_list, {}]]
       end
     end
 
