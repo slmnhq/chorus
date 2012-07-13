@@ -55,7 +55,7 @@ describe Dataset do
       ])
     end
 
-    it "creates new copies of the db objects in our db" do
+    it "creates new copies of the datasets in our db" do
       Dataset.refresh(account, schema)
 
       datasets = schema.datasets.order(:name)
@@ -65,38 +65,11 @@ describe Dataset do
       datasets.pluck(:master_table).should == [true, false]
     end
 
-    it "does not re-create db objects that already exist in our database" do
+    it "does not re-create datasets that already exist in our database" do
       Dataset.refresh(account, schema)
       Dataset.refresh(account, schema)
 
       Dataset.count.should == 2
-    end
-
-    it "destroy db objects that no longer exist in gpdb" do
-      Dataset.refresh(account, schema)
-
-      stub_gpdb(account, datasets_sql => [
-        {'type' => "r", "name" => "table1"}
-      ])
-
-      Dataset.refresh(account, schema)
-      datasets = Dataset.all
-
-      datasets.length.should == 1
-      datasets.map(&:name).should == ["table1"]
-    end
-
-    it "does not destroy db objects on other schemas" do
-      other_schema = FactoryGirl.create(:gpdb_schema)
-      to_be_kept = FactoryGirl.create(:gpdb_table, :schema => other_schema, :name => "matching")
-      to_be_deleted = FactoryGirl.create(:gpdb_table, :schema => schema, :name => "matching")
-
-      stub_gpdb(account, datasets_sql => [
-        {'type' => "r", 'name' => "new"}
-      ])
-      Dataset.refresh(account, schema)
-
-      other_schema.reload.datasets.count.should == 1
     end
   end
 

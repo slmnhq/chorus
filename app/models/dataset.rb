@@ -19,9 +19,6 @@ class Dataset < ActiveRecord::Base
       conn.select_all(Query.new(schema).tables_and_views_in_schema.to_sql)
     end
 
-    dataset_names = datasets.map { |attrs| attrs['name'] }
-    schema.datasets.where("datasets.name NOT IN (?)", dataset_names).destroy_all
-
     datasets.each do |attrs|
       type = attrs.delete('type')
       klass = type == 'r' ? GpdbTable : GpdbView

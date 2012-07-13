@@ -45,9 +45,6 @@ class GpdbSchema < ActiveRecord::Base
       return
     end
 
-    schema_names = schema_rows.map { |row| row["schema_name"] }
-    database.schemas.where("gpdb_schemas.name NOT IN (?)", schema_names).destroy_all
-
     schema_rows.map do |row|
       begin
         schema = database.schemas.find_or_initialize_by_name(row["schema_name"])

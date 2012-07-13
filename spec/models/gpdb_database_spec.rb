@@ -14,7 +14,7 @@ describe GpdbDatabase do
     end
 
     it "creates new copies of the databases in our db" do
-      databases = GpdbDatabase.refresh(account)
+      GpdbDatabase.refresh(account)
 
       GpdbDatabase.refresh(account)
       databases = GpdbDatabase.all
@@ -29,41 +29,6 @@ describe GpdbDatabase do
       GpdbDatabase.refresh(account)
 
       GpdbDatabase.count.should == 4
-    end
-
-    it "destroy databases that no longer exist in gpdb" do
-      GpdbDatabase.refresh(account)
-
-      stub_gpdb(account,
-        GpdbDatabase::DATABASE_NAMES_SQL => [
-          {"datname" => "db_a"}, {"datname" => "db_B"}
-        ]
-      )
-
-      GpdbDatabase.refresh(account)
-      databases = GpdbDatabase.all
-
-      databases.length.should == 2
-      databases.map {|db| db.name }.should == ["db_a", "db_B"]
-      databases.map {|db| db.instance_id }.uniq.should == [instance.id]
-    end
-
-    it "does not destroy databases on other instances" do
-      other_account = FactoryGirl.create(:instance_account)
-      stub_gpdb(other_account,
-        GpdbDatabase::DATABASE_NAMES_SQL => [ {"datname" => "different"}, {"datname" => "matching"} ]
-      )
-      stub_gpdb(account,
-        GpdbDatabase::DATABASE_NAMES_SQL => [ {"datname" => "matching"} ]
-      )
-
-      GpdbDatabase.refresh(other_account)
-
-      lambda {
-        GpdbDatabase.refresh(account)
-      }.should_not change {
-        other_account.reload.instance.databases.count
-      }
     end
   end
 
