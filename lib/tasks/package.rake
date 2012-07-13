@@ -45,7 +45,7 @@ module PackageMaker
 
     run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh stop'"
     run "ssh #{host} 'cd #{path} && rm -f #{current_path} && ln -s #{release_path} #{current_path}'"
-    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh start'"
+    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh monitor &'"
   end
 
   def deploy(config)
