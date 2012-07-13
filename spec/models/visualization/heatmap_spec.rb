@@ -22,7 +22,7 @@ describe Visualization::Heatmap do
 
     before do
       refresh_chorus
-      visualization.fetch!(instance_account)
+      visualization.fetch!(instance_account, 12345)
     end
 
     context "no filters" do
@@ -38,18 +38,16 @@ describe Visualization::Heatmap do
       end
 
       it "creates the SQL based on the grouping and bins" do
-        visualization = described_class.new(dataset, attributes)
-        visualization.fetch!(instance_account)
         visualization.rows.should == [
-          {"xbin"=>1, "ybin"=>1, "value"=>1, "xLabel"=>[2.0, 3.33], "yLabel"=>[2.0, 3.33]},
-          {"xbin"=>1, "ybin"=>2, "value"=>1, "xLabel"=>[2.0, 3.33], "yLabel"=>[3.33, 4.67]},
-          {"xbin"=>1, "ybin"=>3, "value"=>1, "xLabel"=>[2.0, 3.33], "yLabel"=>[4.67, 6.0]},
-          {"xbin"=>2, "ybin"=>1, "value"=>1, "xLabel"=>[3.33, 4.67], "yLabel"=>[2.0, 3.33]},
-          {"xbin"=>2, "ybin"=>2, "value"=>1, "xLabel"=>[3.33, 4.67], "yLabel"=>[3.33, 4.67]},
-          {"xbin"=>2, "ybin"=>3, "value"=>1, "xLabel"=>[3.33, 4.67], "yLabel"=>[4.67, 6.0]},
-          {"xbin"=>3, "ybin"=>1, "value"=>1, "xLabel"=>[4.67, 6.0], "yLabel"=>[2.0, 3.33]},
-          {"xbin"=>3, "ybin"=>2, "value"=>1, "xLabel"=>[4.67, 6.0], "yLabel"=>[3.33, 4.67]},
-          {"xbin"=>3, "ybin"=>3, "value"=>2, "xLabel"=>[4.67, 6.0], "yLabel"=>[4.67, 6.0]}
+          {:x =>1, :y =>1, :value =>1, :xLabel =>[2.0, 3.33], :yLabel =>[2.0, 3.33]},
+          {:x =>1, :y =>2, :value =>1, :xLabel =>[2.0, 3.33], :yLabel =>[3.33, 4.67]},
+          {:x =>1, :y =>3, :value =>1, :xLabel =>[2.0, 3.33], :yLabel =>[4.67, 6.0]},
+          {:x =>2, :y =>1, :value =>1, :xLabel =>[3.33, 4.67], :yLabel =>[2.0, 3.33]},
+          {:x =>2, :y =>2, :value =>1, :xLabel =>[3.33, 4.67], :yLabel =>[3.33, 4.67]},
+          {:x =>2, :y =>3, :value =>1, :xLabel =>[3.33, 4.67], :yLabel =>[4.67, 6.0]},
+          {:x =>3, :y =>1, :value =>1, :xLabel =>[4.67, 6.0], :yLabel =>[2.0, 3.33]},
+          {:x =>3, :y =>2, :value =>1, :xLabel =>[4.67, 6.0], :yLabel =>[3.33, 4.67]},
+          {:x =>3, :y =>3, :value =>2, :xLabel =>[4.67, 6.0], :yLabel =>[4.67, 6.0]}
         ]
 
       end
@@ -60,15 +58,15 @@ describe Visualization::Heatmap do
 
       it "returns the frequency data based on the filtered dataset" do
         visualization.rows.should == [
-          {"xbin"=>1, "ybin"=>1, "value"=>1, "xLabel"=>[2.0, 3.33], "yLabel"=>[2.0, 3.33]},
-          {"xbin"=>1, "ybin"=>2, "value"=>1, "xLabel"=>[2.0, 3.33], "yLabel"=>[3.33, 4.67]},
-          {"xbin"=>1, "ybin"=>3, "value"=>1, "xLabel"=>[2.0, 3.33], "yLabel"=>[4.67, 6.0]},
-          {"xbin"=>2, "ybin"=>1, "value"=>1, "xLabel"=>[3.33, 4.67], "yLabel"=>[2.0, 3.33]},
-          {"xbin"=>2, "ybin"=>2, "value"=>1, "xLabel"=>[3.33, 4.67], "yLabel"=>[3.33, 4.67]},
-          {"xbin"=>2, "ybin"=>3, "value"=>1, "xLabel"=>[3.33, 4.67], "yLabel"=>[4.67, 6.0]},
-          {"xbin"=>3, "ybin"=>1, "value"=>1, "xLabel"=>[4.67, 6.0], "yLabel"=>[2.0, 3.33]},
-          {"xbin"=>3, "ybin"=>2, "value"=>0, "xLabel"=>[4.67, 6.0], "yLabel"=>[3.33, 4.67]},
-          {"xbin"=>3, "ybin"=>3, "value"=>1, "xLabel"=>[4.67, 6.0], "yLabel"=>[4.67, 6.0]}
+          {:x =>1, :y =>1, :value =>1, :xLabel =>[2.0, 3.33], :yLabel =>[2.0, 3.33]},
+          {:x =>1, :y =>2, :value =>1, :xLabel =>[2.0, 3.33], :yLabel =>[3.33, 4.67]},
+          {:x =>1, :y =>3, :value =>1, :xLabel =>[2.0, 3.33], :yLabel =>[4.67, 6.0]},
+          {:x =>2, :y =>1, :value =>1, :xLabel =>[3.33, 4.67], :yLabel =>[2.0, 3.33]},
+          {:x =>2, :y =>2, :value =>1, :xLabel =>[3.33, 4.67], :yLabel =>[3.33, 4.67]},
+          {:x =>2, :y =>3, :value =>1, :xLabel =>[3.33, 4.67], :yLabel =>[4.67, 6.0]},
+          {:x =>3, :y =>1, :value =>1, :xLabel =>[4.67, 6.0], :yLabel =>[2.0, 3.33]},
+          {:x =>3, :y =>2, :value =>0, :xLabel =>[4.67, 6.0], :yLabel =>[3.33, 4.67]},
+          {:x =>3, :y =>3, :value =>1, :xLabel =>[4.67, 6.0], :yLabel =>[4.67, 6.0]}
         ]
       end
     end

@@ -40,6 +40,23 @@ describe VisualizationsController do
 
         response.should be_success
       end
+
+      generate_fixture "heatmapTask.json", :database_integration => true  do
+        account = refresh_chorus
+        log_in account.owner
+        dataset = Dataset.find_by_name!("heatmap_table")
+
+        post :create, :dataset_id => dataset.id, :chart_task => {
+          :type => "heatmap",
+          :check_id => "43",
+          :x_bins => 3,
+          :y_bins => 3,
+          :x_axis => "column1",
+          :y_axis => "column2"
+        }
+
+        response.should be_success
+      end
     end
 
     context "when there's an error'" do

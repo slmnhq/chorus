@@ -21,21 +21,6 @@ CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
     INSERT INTO base_table1 VALUES ( 8,1,8, 'papaya' , '2012-04-09 00:00:02');
     ANALYZE base_table1;
 
-    CREATE TABLE heatmap_table
-    (id integer, column1 integer, column2 integer, category text)
-    DISTRIBUTED BY (id);
-    INSERT INTO heatmap_table VALUES ( 0, 2, 2, 'red');
-    INSERT INTO heatmap_table VALUES ( 1, 2, 4, 'red');
-    INSERT INTO heatmap_table VALUES ( 2, 2, 6, 'red');
-    INSERT INTO heatmap_table VALUES ( 3, 4, 2, 'red');
-    INSERT INTO heatmap_table VALUES ( 4, 4, 4, 'red');
-    INSERT INTO heatmap_table VALUES ( 5, 4, 6, 'red');
-    INSERT INTO heatmap_table VALUES ( 6, 6, 2, 'red');
-    INSERT INTO heatmap_table VALUES ( 7, 6, 4, 'cornflower blue');
-    INSERT INTO heatmap_table VALUES ( 8, 6, 6, 'red');
-    INSERT INTO heatmap_table VALUES ( 9, 6, 6, 'green');
-    ANALYZE heatmap_table;
-
     CREATE VIEW view1 AS
       SELECT * FROM base_table1;
     COMMENT ON VIEW view1 IS 'comment on view1';
@@ -167,6 +152,27 @@ CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
     ANALYZE other_base_table;
 
   \dtvs gpdb_test_schema2.*
+
+  CREATE SCHEMA heatmap_test_schema;
+    SET search_path TO 'heatmap_test_schema';
+
+    CREATE TABLE heatmap_table
+    (id integer, column1 integer, column2 integer, category text)
+    DISTRIBUTED BY (id);
+    INSERT INTO heatmap_table VALUES ( 0, 2, 2, 'red');
+    INSERT INTO heatmap_table VALUES ( 1, 2, 4, 'red');
+    INSERT INTO heatmap_table VALUES ( 2, 2, 6, 'red');
+    INSERT INTO heatmap_table VALUES ( 3, 4, 2, 'red');
+    INSERT INTO heatmap_table VALUES ( 4, 4, 4, 'red');
+    INSERT INTO heatmap_table VALUES ( 5, 4, 6, 'red');
+    INSERT INTO heatmap_table VALUES ( 6, 6, 2, 'red');
+    INSERT INTO heatmap_table VALUES ( 7, 6, 4, 'cornflower blue');
+    INSERT INTO heatmap_table VALUES ( 8, 6, 6, 'red');
+    INSERT INTO heatmap_table VALUES ( 9, 6, 6, 'green');
+    ANALYZE heatmap_table;
+
+  \dtvs heatmap_test_schema.*
+
 
 DROP DATABASE IF EXISTS "gpdb_test_database_without_public_schema";
 CREATE DATABASE "gpdb_test_database_without_public_schema" OWNER gpadmin;
