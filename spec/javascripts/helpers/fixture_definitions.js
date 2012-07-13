@@ -126,6 +126,7 @@ window.rspecFixtureDefinitions = {
     },
 
     frequencyTask: {},
+    heatmapTask: {},
 
 //    activity: {
 //        unique: [ "id" ],
