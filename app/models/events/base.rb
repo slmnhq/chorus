@@ -12,7 +12,7 @@ module Events
     belongs_to :target2, :polymorphic => true
     belongs_to :workspace
 
-    default_scope { order("created_at DESC") }
+    default_scope { order("id DESC") }
 
     def self.by(actor)
       where(:actor_id => actor.id)

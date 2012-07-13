@@ -22,6 +22,8 @@ class Workspace < ActiveRecord::Base
   validate :uniqueness_of_workspace_name
   validate :owner_is_member, :on => :update
 
+  after_create :add_owner_as_member
+
   scope :active, where(:archived_at => nil)
 
   attr_accessor :highlighted_attributes, :search_result_comments
@@ -118,6 +120,12 @@ class Workspace < ActiveRecord::Base
   def owner_is_member
     unless members.include? owner
       errors.add(:owner, "Owner must be a member")
+    end
+  end
+
+  def add_owner_as_member
+    unless members.include? owner
+      memberships.create!({:user => owner}, {:without_protection => true})
     end
   end
 end

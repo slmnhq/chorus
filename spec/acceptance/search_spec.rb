@@ -1,14 +1,10 @@
 require 'spec_helper'
 
 resource "Search" do
-  let(:user) do
-    bob = User.find_by_first_name('bob')
-    bob.password = 'secret'
-    bob
-  end
+  let(:user) { users(:bob) }
 
   before do
-    create_solr_fixtures
+    reindex_solr_fixtures
     log_in user
   end
 

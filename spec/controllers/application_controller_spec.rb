@@ -174,10 +174,12 @@ describe ApplicationController do
 
       it "adds pagination" do
         get :index
+        user_count = User.admin.count
+        page_count = (user_count/2.0).ceil
         decoded_pagination.page.should == 1
         decoded_pagination.per_page.should == 2
-        decoded_pagination.total.should == 2
-        decoded_pagination.records.should == 3
+        decoded_pagination.total.should == page_count
+        decoded_pagination.records.should == user_count
       end
     end
   end

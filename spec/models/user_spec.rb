@@ -30,22 +30,19 @@ describe User do
   end
 
   describe ".order" do
-    let!(:beta) { FactoryGirl.create(:user, :first_name => "Beta", :last_name => "Pi") }
-    let!(:alpha) { FactoryGirl.create(:user, :first_name => "Alpha", :last_name => "Zeta") }
-
     it "sorts by first name, by default" do
-      User.order(nil).should == [alpha, beta]
+      User.order(nil).to_a.should == User.all(:order => "first_name").to_a
     end
 
     context "with a recognized sort order" do
       it "respects the sort order" do
-        User.order("last_name").should == [beta, alpha]
+        User.order("last_name").to_a.should == User.all(:order => "last_name").to_a
       end
     end
 
     context "with an unrecognized sort order" do
       it "sorts by first name" do
-        User.order("last_name; DROP TABLE users;").should == [alpha, beta]
+        User.order("last_name; DROP TABLE users;").to_a.should == User.order("first_name").to_a
       end
     end
   end
@@ -188,42 +185,22 @@ describe User do
     it { should have_many(:events) }
   end
 
-  describe "#workspaces" do
-    it "should be the workspaces the user is a member of" do
-      user = FactoryGirl.create(:user)
-      owned_workspace = FactoryGirl.create(:workspace, :owner => user)
-      not_owned_workspace = FactoryGirl.create(:workspace)
-      not_owned_workspace.members << user
-      not_owned_workspace.save!
-      user.reload.workspaces.size.should == 2
-      user.workspaces.should include(owned_workspace)
-      user.workspaces.should include(not_owned_workspace)
-    end
-  end
-
   describe ".admin_count" do
     it "returns the number of admins that exist" do
-      FactoryGirl.create :admin
-      User.admin_count.should == 1
-
-      FactoryGirl.create :user
-      User.admin_count.should == 1
-
-      FactoryGirl.create :admin
-      User.admin_count.should == 2
+      User.admin_count.should == User.where(:admin => true).count
     end
   end
 
   describe "#admin=" do
-    let(:admin) { FactoryGirl.create :admin }
+    let(:admin) { users(:admin) }
 
     it "allows an admin to remove their own privileges, if there are other admins" do
-      other_admin = FactoryGirl.create(:admin)
       admin.admin = false
       admin.should_not be_admin
     end
 
     it "does not allow an admin to remove their own privileges if there are no other admins" do
+      users(:evil_admin).delete
       admin.admin = false
       admin.should be_admin
     end

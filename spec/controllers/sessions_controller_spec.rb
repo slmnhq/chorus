@@ -31,7 +31,7 @@ describe SessionsController do
     end
 
     context "correct credentials for a deleted user" do
-      let(:user) { FactoryGirl.create(:user, :username => "admin") }
+      let(:user) { users(:evil_admin) }
 
       before do
         user.destroy

@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe SearchPresenter, :type => :view do
 
-  let(:user) { User.find_by_first_name('bob') }
+  let(:user) { users(:bob) }
 
   before(:each) do
-    create_solr_fixtures
+    reindex_solr_fixtures
     stub(view).current_user { user }
     search = Search.new(user, :query => 'bob')
 

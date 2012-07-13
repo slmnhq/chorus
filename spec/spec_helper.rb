@@ -1,6 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
+require 'support/fixture_builder'
 require 'rspec/rails'
 require 'rspec/autorun'
 require "paperclip/matchers"
@@ -27,7 +28,7 @@ module Shoulda # :nodoc:
 end
 
 VCR.configure do |c|
-  c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
+  c.cassette_library_dir = 'spec/other_fixtures/vcr_cassettes'
   c.hook_into :webmock # or :fakeweb
 end
 
@@ -55,6 +56,8 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
+
+  config.global_fixtures = :all
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of

@@ -120,21 +120,16 @@ describe Instance do
 
     context "for admins" do
       it "includes all instances" do
-        Instance.owned_by(FactoryGirl.create(:admin)).should =~ [shared_instance, owned_instance, other_instance]
+        Instance.owned_by(users(:evil_admin)).count.should == Instance.count
       end
     end
   end
 
   describe ".unshared" do
     it "returns unshared instances" do
-      unshared_instance = FactoryGirl.create(:instance, :shared => false)
-      another_unshared_instance = FactoryGirl.create(:instance, :shared => nil)
-      Instance.unshared.should =~ [unshared_instance, another_unshared_instance]
-    end
-
-    it "does not return shared instances" do
-      FactoryGirl.create(:instance, :shared => true)
-      Instance.unshared.should == []
+      instances = Instance.unshared
+      instances.length.should > 0
+      instances.each {|i| i.should_not be_shared}
     end
   end
 

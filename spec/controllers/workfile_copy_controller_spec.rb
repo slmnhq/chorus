@@ -1,11 +1,11 @@
 require "spec_helper"
 
 describe WorkfileCopyController do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
-  let(:workfile) { FactoryGirl.create(:workfile, :workspace => workspace) }
-  let(:workfile_version) { FactoryGirl.create(:workfile_version, :workfile => workfile) }
-  let(:target_workspace) { FactoryGirl.create(:workspace, :owner => user) }
+  let(:user) { users(:carly) }
+  let(:workspace) { workspaces(:bob_public) }
+  let(:workfile) { workfiles(:bob_public) }
+  let(:workfile_version) { workfile.versions.first }
+  let(:target_workspace) { workspaces(:alice_public) }
 
 
   describe "#create" do
@@ -17,8 +17,9 @@ describe WorkfileCopyController do
     end
 
     it "should copy a workfile to a new active workspace" do
-      post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id
-      Workfile.count.should == 2
+      lambda {
+        post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id
+      }.should change(target_workspace.workfiles, :count).by(1)
     end
 
     it "should copy latest version to a new active workspace" do

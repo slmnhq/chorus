@@ -102,8 +102,7 @@ describe Workfile do
 
     it "returns workfiles with other file type" do
       workfiles = Workfile.by_type("other")
-      workfiles.should have(1).files
-      workfiles[0].file_name.should == "binary.tar.gz"
+      workfiles.size.should == Workfile.all.count {|w| w.last_version.file_type == 'other'}
     end
   end
 

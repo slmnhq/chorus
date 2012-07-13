@@ -11,9 +11,9 @@ class DatabaseMigrationRefreshExport
         InstanceAccountMigrator.new.migrate
         DatabaseMigrator.new.migrate
 
-        self.dump_class(GpdbDatabase, Rails.root + 'spec/fixtures/database_migration_refresh/gpdb_database.yml' )
-        self.dump_class(GpdbSchema, Rails.root + 'spec/fixtures/database_migration_refresh/gpdb_schema.yml' )
-        self.dump_class(Dataset, Rails.root + 'spec/fixtures/database_migration_refresh/dataset.yml' )
+        self.dump_class(GpdbDatabase, Rails.root + 'spec/other_fixtures/database_migration_refresh/gpdb_database.yml' )
+        self.dump_class(GpdbSchema, Rails.root + 'spec/other_fixtures/database_migration_refresh/gpdb_schema.yml' )
+        self.dump_class(Dataset, Rails.root + 'spec/other_fixtures/database_migration_refresh/dataset.yml' )
 
         raise ActiveRecord::Rollback
       end

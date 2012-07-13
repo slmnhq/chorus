@@ -19,13 +19,13 @@ describe InstancesController do
     it "returns all instances" do
       get :index
       response.code.should == "200"
-      decoded_response.size.should == 4
+      decoded_response.size.should == Instance.count
     end
 
     it "returns instances to which the user has access, if requested" do
       get :index, :accessible => "true"
       response.code.should == "200"
-      decoded_response.size.should == 3
+      decoded_response.size.should == InstanceAccess.instances_for(@user).count
     end
   end
 

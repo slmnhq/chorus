@@ -3,7 +3,7 @@ require 'spec_helper'
 describe WorkspacesController do
   ignore_authorization!
 
-  let(:owner) { FactoryGirl.create(:user)}
+  let(:owner) { users(:alice) }
   before do
     log_in owner
   end
@@ -20,7 +20,7 @@ describe WorkspacesController do
     it "returns all workspaces that are public or which the current user is a member of" do
       get :index
       response.code.should == "200"
-      decoded_response.length.should == 3
+      decoded_response.length.should == WorkspaceAccess.workspaces_for(owner).count
       decoded_response.map(&:name).should include("secret1")
     end
 
@@ -38,45 +38,29 @@ describe WorkspacesController do
 
     it "sorts by workspace name" do
       get :index
-      decoded_response[0].name.should == "abacus"
-      decoded_response[1].name.should == "secret1"
-      decoded_response[2].name.should == "Work"
+      decoded_response[0].name.downcase.should < decoded_response[1].name.downcase
     end
 
     it "scopes by active status" do
       get :index, :active => 1
-      decoded_response.size.should == 2
-      decoded_response.map(&:name).should =~ ["secret1", "Work"]
+      decoded_response.size.should == WorkspaceAccess.workspaces_for(owner).active.count
     end
 
     it "scopes by memberships" do
       get :index, :user_id => owner.id
-      decoded_response.size.should == 2
-      decoded_response.map(&:name).should =~ ["secret1", "Work"]
+      decoded_response.size.should == WorkspaceAccess.member_of_workspaces(owner).count
     end
 
     describe "pagination" do
-      before do
-        FactoryGirl.create(:workspace, :name=> 'zed')
-      end
 
       it "paginates the collection" do
         get :index, :page => 1, :per_page => 2
         decoded_response.length.should == 2
       end
 
-      it "defaults to page one" do
-        get :index, :per_page => 2
-        decoded_response.length.should == 2
-        decoded_response.first.name.should == "abacus"
-        decoded_response.second.name.should == "secret1"
-      end
-
       it "accepts a page parameter" do
         get :index, :page => 2, :per_page => 2
-        decoded_response.length.should == 2
-        decoded_response.first.name.should == "Work"
-        decoded_response.last.name.should == "zed"
+        decoded_response.first.name.should == WorkspaceAccess.workspaces_for(owner).order("lower(name) ASC")[2].name
       end
 
       it "defaults the per_page to fifty" do

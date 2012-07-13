@@ -25,7 +25,7 @@ describe NotesController do
         post :update, :id => note.id, :note => {:body => "Some crazy content"}
         response.code.should == "200"
 
-        Events::Note.last.body.should == "Some crazy content"
+        Events::Note.first.body.should == "Some crazy content"
       end
     end
 
@@ -40,7 +40,7 @@ describe NotesController do
         post :update, :id => note.id, :note => {:body => "Some crazy content"}
         response.code.should == "403"
 
-        Events::Note.last.body.should_not == "Some crazy content"
+        Events::Note.first.body.should_not == "Some crazy content"
       end
     end
 

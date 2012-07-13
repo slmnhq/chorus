@@ -45,10 +45,6 @@ describe Presenter, :type => :view do
     end
 
     context "with an active record relation" do
-      before do
-        FactoryGirl.create(:admin)
-        FactoryGirl.create(:admin)
-      end
 
       let(:object_to_present) { User.where(:admin => true) }
 

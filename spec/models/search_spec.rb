@@ -91,18 +91,18 @@ describe Search do
   end
 
   context "with solr enabled" do
-    let(:admin) { User.where(:admin => true).first }
-    let(:bob) { User.find_by_first_name('bob') }
-    let(:instance) { Instance.first }
-    let(:public_workspace) { Workspace.where(:public => true).first }
-    let(:private_workspace) { Workspace.find_by_name("private bob workspace") }
-    let(:private_workspace_not_a_member) { Workspace.find_by_name("private hidden from bob workspace") }
-    let(:private_workfile_hidden_from_bob) { Workfile.find_by_file_name("private_hidden_from_bob_workfile") }
-    let(:private_workfile_bob) { Workfile.find_by_file_name("private_bob_workfile") }
-    let(:public_workfile_bob) { Workfile.find_by_file_name("bob") }
+    let(:admin) { users(:admin) }
+    let(:bob) { users(:bob) }
+    let(:instance) { instances(:greenplum) }
+    let(:public_workspace) { workspaces(:alice_public) }
+    let(:private_workspace) { workspaces(:bob_private) }
+    let(:private_workspace_not_a_member) { workspaces(:alice_private) }
+    let(:private_workfile_hidden_from_bob) { workfiles(:alice_private) }
+    let(:private_workfile_bob) { workfiles(:bob_private) }
+    let(:public_workfile_bob) { workfiles(:bob_public) }
 
     before do
-      create_solr_fixtures
+      reindex_solr_fixtures
     end
 
     describe "num_found" do
@@ -128,8 +128,7 @@ describe Search do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
           search = Search.new(bob, :query => 'bob')
           user = search.users.first
-          user.highlighted_attributes.length.should == 1
-          user.highlighted_attributes[:first_name][0].should == '<em>bob</em>'
+          user.highlighted_attributes[:first_name][0].should == '<em>Bob</em>'
         end
       end
 
@@ -148,7 +147,7 @@ describe Search do
           search = Search.new(bob, :query => 'bob')
           instance = search.instances.first
           instance.highlighted_attributes.length.should == 1
-          instance.highlighted_attributes[:name][0].should == "<em>bob</em>_great_greenplum_instance"
+          instance.highlighted_attributes[:description][0].should == "Just for <em>bob</em>"
         end
       end
 
@@ -168,7 +167,7 @@ describe Search do
           search.instances.length.should == 2
           instance_with_comments = search.instances[1]
           instance_with_comments.search_result_comments.length.should == 2
-          instance_with_comments.search_result_comments[0][:highlighted_attributes][:body][0].should == "yes, <em>greenplum</em>"
+          instance_with_comments.search_result_comments[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplum</em>"
         end
       end
     end
@@ -178,7 +177,7 @@ describe Search do
         VCR.use_cassette('search_solr_query_all_per_type_1_as_bob') do
           search = Search.new(bob, :query => 'alpha', :per_type => 1)
           search.users.length.should == 1
-          search.num_found[:users].should == 2
+          search.num_found[:users].should > 1
         end
       end
     end

@@ -104,7 +104,7 @@ describe "Notes" do
       greenplum_instance = FactoryGirl.create(:greenplum_instance)
       Events::Note.create_for_entity("greenplum_instance", greenplum_instance.id, "Some crazy content", user)
 
-      last_note = Events::Note.last
+      last_note = Events::Note.first
       last_note.action.should == "NOTE_ON_GREENPLUM_INSTANCE"
       last_note.body.should == "Some crazy content"
       last_note.actor.should == user
@@ -114,7 +114,7 @@ describe "Notes" do
       hadoop_instance = FactoryGirl.create(:hadoop_instance)
       Events::Note.create_for_entity("hadoop_instance", hadoop_instance.id, "Some crazy content", user)
 
-      last_note = Events::Note.last
+      last_note = Events::Note.first
       last_note.action.should == "NOTE_ON_HADOOP_INSTANCE"
       last_note.body.should == "Some crazy content"
       last_note.actor.should == user
@@ -123,7 +123,7 @@ describe "Notes" do
     it "creates a note on an hdfs file" do
       Events::Note.create_for_entity("hdfs", "1234|/data/test.csv", "Some crazy content", user)
 
-      last_note = Events::Note.last
+      last_note = Events::Note.first
       last_note.action.should == "NOTE_ON_HDFS_FILE"
       last_note.actor.should == user
       last_note.hdfs_file.hadoop_instance_id == 1234

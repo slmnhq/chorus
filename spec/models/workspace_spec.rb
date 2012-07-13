@@ -2,39 +2,43 @@ require "spec_helper"
 require 'timecop'
 
 describe Workspace do
-  describe "validations" do
-    before(:each) do
-      FactoryGirl.create(:workspace)
+  describe "create" do
+    it "creates a membership for the owner" do
+      owner = users(:alice)
+      workspace = owner.owned_workspaces.create!(:name => 'new workspace!')
+      workspace.members.should include(owner)
     end
+  end
 
+  describe "validations" do
     it { should validate_presence_of :name }
     it { should validate_uniqueness_of(:name).case_insensitive }
   end
 
   describe ".active" do
-    let!(:active_workspace) { FactoryGirl.create :workspace }
-    let!(:archived_workspace) { FactoryGirl.create :workspace, :archived_at => 2.days.ago }
+    let!(:active_workspace) { workspaces(:alice_public) }
+    let!(:archived_workspace) { workspaces(:archived) }
 
     it "returns only active workspaces" do
       workspaces = Workspace.active
-      workspaces.should have(1).workspace
+      workspaces.should include(active_workspace)
       workspaces.should_not include(archived_workspace)
     end
   end
 
   describe ".accessible_to" do
-    let!(:public_workspace) { FactoryGirl.create(:workspace, :public => true) }
-    let!(:owned_workspace) { FactoryGirl.create(:workspace, :public => false, :owner => user)}
-    let!(:private_workspace) { FactoryGirl.create(:workspace, :public => false) }
-    let(:user) { FactoryGirl.create(:user) }
+    let!(:public_workspace) { workspaces(:bob_public) }
+    let!(:owned_workspace) { workspaces(:alice_private)}
+    let!(:private_workspace) { workspaces(:bob_private) }
+    let!(:private_workspace_with_membership) { workspaces(:alice_private) }
+    let(:user) { users(:alice) }
 
     it "returns public workspaces" do
       Workspace.accessible_to(user).should include public_workspace
     end
 
     it "returns private workspaces with membership" do
-      FactoryGirl.create(:membership, :user => user, :workspace => private_workspace)
-      Workspace.accessible_to(user).should include private_workspace
+      Workspace.accessible_to(user).should include private_workspace_with_membership
     end
 
     it "returns private owned workspaces" do
@@ -47,39 +51,34 @@ describe Workspace do
   end
 
   describe "#members_accessible_to" do
-    let(:private_workspace) { FactoryGirl.create(:workspace, :public => false) }
-    let(:workspace) { FactoryGirl.create(:workspace, :public => true) }
+    let(:private_workspace) { workspaces(:alice_private) }
+    let(:workspace) { workspaces(:alice_public) }
 
-    let(:joe) { FactoryGirl.create(:user) }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:admin) { FactoryGirl.create(:admin) }
+    let(:bob) { users(:bob) }
+    let(:user) { users(:alice) }
+    let(:admin) { users(:admin) }
 
     context "public workspace" do
       it "returns all members" do
-        workspace.members << joe
+        workspace.members << bob
 
         members = workspace.members_accessible_to(user)
-        members.should have(2).members # including the owner
+        members.should include(bob, user)
       end
     end
 
     context "user is a member of a private workspace" do
       it "returns all members" do
-        workspace.members << user
-        workspace.members << joe
+        private_workspace.members << bob
 
-        members = workspace.members_accessible_to(user)
-        members.should have(3).members # including the owner
+        members = private_workspace.members_accessible_to(bob)
+        members.should include(bob, user)
       end
     end
 
     context "user is not a member of a private workspace" do
       it "returns nothing" do
-        workspace.members << joe
-        workspace.update_attributes :public => false
-
-        members = workspace.members_accessible_to(user)
-        members.should be_empty
+        private_workspace.members_accessible_to(bob).should be_empty
       end
     end
   end
@@ -126,30 +125,36 @@ describe Workspace do
 
   describe "#image" do
     it "should have a nil image instead of a default missing image" do
-      workspace = FactoryGirl.create(:workspace, :image => nil)
+      workspace = workspaces(:alice_public)
+      workspace.update_attributes!(:image => nil)
       workspace.image.url.should == ""
     end
   end
 
   describe "#archive_as(user)" do
     let(:archive_time) { Time.now }
-    let(:user) { FactoryGirl.create :user }
+    let(:user) { users(:alice) }
+    let(:workspace) { workspaces(:alice_public) }
 
     before do
       Timecop.freeze(archive_time)
-      subject.archive_as(user)
+      workspace.archive_as(user)
     end
 
-    its(:archived_at) { should == archive_time }
-    its(:archiver) { should == user }
+    it "is archived by the correct user at the correct time" do
+      workspace.archived_at.should == archive_time
+      workspace.archiver.should == user
+    end
 
     describe "#unarchive" do
       before do
-        subject.unarchive
+        workspace.unarchive
       end
 
-      its(:archived_at) { should be_nil }
-      its(:archiver) { should be_nil }
+      it "clears the archived attributes" do
+        workspace.archived_at.should be_nil
+        workspace.archiver.should be_nil
+      end
     end
   end
 
@@ -163,13 +168,12 @@ describe Workspace do
 
   describe "permissions_for" do
     it "should have the correct permissions per user" do
-      owner = FactoryGirl.create(:user)
-      private_workspace = FactoryGirl.create(:workspace, :public => false, :owner => owner)
-      member = FactoryGirl.create(:user)
-      member.workspaces << private_workspace
-      admin = FactoryGirl.create(:admin)
-      anon = FactoryGirl.create(:user)
-      public_workspace = FactoryGirl.create(:workspace, :public => true)
+      owner = users(:alice)
+      private_workspace = workspaces(:alice_private)
+      public_workspace = workspaces(:alice_public)
+      member = users(:carly)
+      admin = users(:admin)
+      anon = users(:bob)
 
       [
         [private_workspace, owner, [:admin]],
@@ -184,8 +188,8 @@ describe Workspace do
   end
 
   describe "#archived?" do
-    let(:active_workspace) { FactoryGirl.create :workspace }
-    let(:archived_workspace) { FactoryGirl.create :workspace, :archived_at => 2.days.ago }
+    let(:active_workspace) { workspaces(:alice_public) }
+    let(:archived_workspace) { workspaces(:archived) }
 
     it "says that active workspace is not archived" do
       active_workspace.should_not be_archived
@@ -197,7 +201,7 @@ describe Workspace do
   end
 
   describe "#destroy" do
-    let(:workspace) { FactoryGirl.create :workspace }
+    let(:workspace) { workspaces(:alice_public) }
 
     before do
       workspace.destroy
@@ -217,7 +221,7 @@ describe Workspace do
   end
 
   describe "#has_dataset" do
-    let(:workspace) { FactoryGirl.create(:workspace) }
+    let(:workspace) { workspaces(:alice_public) }
     let(:dataset) { FactoryGirl.create(:gpdb_table) }
 
     it "returns true if the dataset is in the workspace's sandbox" do

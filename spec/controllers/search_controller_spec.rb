@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SearchController do
   describe "#show" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { users(:alice) }
 
     before do
       log_in user
@@ -21,7 +21,7 @@ describe SearchController do
     end
 
     generate_fixture "searchResult.json" do
-      create_solr_fixtures
+      reindex_solr_fixtures
 
       VCR.use_cassette "search_solr_query_all_types_bob" do
         get :show, :query => 'bob'

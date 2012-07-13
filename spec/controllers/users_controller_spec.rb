@@ -16,21 +16,19 @@ describe UsersController do
 
     it "shows list of users" do
       get :index
-      decoded_response.length.should == 2
+      decoded_response.length.should == User.count
     end
 
     describe "sorting" do
       it "sorts by first name" do
         get :index
-        decoded_response.first.username.should == "other_user"
-        decoded_response.second.username.should == "some_user"
+        decoded_response.first.first_name.should < decoded_response.second.first_name
       end
 
       context "with a recognized sort order" do
         it "respects the sort order" do
           get :index, :order => "last_name"
-          decoded_response.first.username.should == "some_user"
-          decoded_response.second.username.should == "other_user"
+          decoded_response.first.last_name.downcase.should <= decoded_response.second.last_name.downcase
         end
       end
     end
@@ -48,14 +46,12 @@ describe UsersController do
       it "defaults to page one" do
         get :index, :per_page => 2
         decoded_response.length.should == 2
-        decoded_response.first.username.should == "other_user"
-        decoded_response.second.username.should == "some_user"
       end
 
       it "accepts a page parameter" do
         get :index, :page => 2, :per_page => 2
-        decoded_response.length.should == 1
-        decoded_response.first.username.should == "third_user"
+        decoded_response.length.should == 2
+        decoded_response.first.username.should == User.order(:first_name)[2].username
       end
 
       it "defaults the per_page to fifty" do
@@ -130,9 +126,9 @@ describe UsersController do
   end
 
   describe "#update" do
-    let(:other_user) { FactoryGirl.create :user }
-    let(:admin) { FactoryGirl.create :admin }
-    let(:non_admin) { FactoryGirl.create :user }
+    let(:other_user) { users(:alice) }
+    let(:admin) { users(:admin) }
+    let(:non_admin) { users(:bob) }
 
     it_behaves_like "an action that requires authentication", :put, :update
 
@@ -161,6 +157,7 @@ describe UsersController do
         end
 
         it "does not allow an admin to remove their own priveleges if there are no other admins" do
+          users(:evil_admin).delete
           put :update, :id => admin.to_param, :user => {:admin => "false"}
           response.code.should == "200"
           decoded_response.admin.should == true

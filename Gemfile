@@ -49,6 +49,7 @@ group :test, :development, :integration do
   gem 'rspec_api_documentation'
   gem 'forgery'
   gem 'sunspot_matchers', :git => "git://github.com/pivotal/sunspot_matchers.git", :branch => "sunspot_2_pre"
+  gem 'fixture_builder'
 end
 
 group :development do
