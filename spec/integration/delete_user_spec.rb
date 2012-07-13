@@ -31,7 +31,7 @@ describe "deleting a user" do
       wait_for_ajax
       click_link "Delete User"
       click_button "Delete User"
-      page.find(".error").should have_content("Can't delete user that still has workspaces associated")
+      page.find(".error").should have_content("User cannot be deleted until workspace ownership is transferred to another user")
     end
   end
 end
