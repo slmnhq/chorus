@@ -1,4 +1,5 @@
 require_relative '../../version'
+require 'ldap_client'
 
 class ConfigurationsController < ApplicationController
   skip_before_filter :require_login, :only => :version
