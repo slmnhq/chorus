@@ -15,9 +15,13 @@ class WorkfileVersion < ActiveRecord::Base
 
   after_validation :clean_content_errors
 
+  after_save do
+    workfile.update_attribute(:latest_workfile_version_id, id)
+  end
+  
   def check_file_type
     image?
-  end
+  end  
 
   def file_name
     contents.original_filename
@@ -91,7 +95,7 @@ class WorkfileVersion < ActiveRecord::Base
   def init_version_number
     self.version_num ||= 1
   end
-  
+
   def init_file
     self.contents = Tempfile.new(['untitled', '.sql']) unless contents.file?
   end

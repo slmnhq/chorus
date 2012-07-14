@@ -54,70 +54,71 @@ describe Workfile do
   end
 
   describe ".create_from_file_upload" do
-    let(:user) { users(:admin) }
-    let(:workspace) { workspaces(:alice_public)}
-
-
-    shared_examples "file upload" do
-      it "creates a workfile in the database" do
-        subject.should be_valid
-        subject.should be_persisted
+      let(:user) { users(:admin) }
+      let(:workspace) { workspaces(:alice_public)}
+  
+  
+      shared_examples "file upload" do
+        it "creates a workfile in the database" do
+          subject.should be_valid
+          subject.should be_persisted
+        end
+  
+        it "creates a workfile version in the database" do
+          subject.versions.should have(1).version
+  
+          version = subject.versions.first
+          version.should be_valid
+          version.should be_persisted
+        end
+  
+        it "sets the attributes of the workfile" do
+          subject.owner.should == user
+          subject.file_name.should == 'workfile.sql'
+        end
+  
+        it "sets the modifier of the first, recently created version" do
+          subject.versions.first.modifier.should == user
+        end
+  
+        it "sets the attributes of the workfile version" do
+          version = subject.versions.first
+  
+          version.contents.should be_present
+          version.version_num.should == 1
+        end
       end
-
-      it "creates a workfile version in the database" do
-        subject.versions.should have(1).version
-
-        version = subject.versions.first
-        version.should be_valid
-        version.should be_persisted
+  
+      context "with versions" do
+        let(:attributes) do
+          {
+            :versions_attributes => [{
+              :contents => test_file('workfile.sql')
+            }]
+          }
+        end
+  
+        subject { described_class.create_from_file_upload(attributes, workspace, user) }
+  
+        it_behaves_like "file upload"
+  
+        it "sets the content of the workfile" do
+          subject.versions.first.contents.size.should > 0
+        end
       end
-
-      it "sets the attributes of the workfile" do
-        subject.owner.should == user
-        subject.file_name.should == 'workfile.sql'
-      end
-
-      it "sets the modifier of the first, recently created version" do
-        subject.versions.first.modifier.should == user
-      end
-
-      it "sets the attributes of the workfile version" do
-        version = subject.versions.first
-
-        version.contents.should be_present
-        version.version_num.should == 1
+  
+      context "without a version" do
+        subject { described_class.create_from_file_upload({:file_name => 'workfile.sql'}, workspace, user) }
+  
+        it_behaves_like "file upload"
+  
+        it "sets the file as blank" do
+          subject.versions.first.contents.size.should == 0
+        end
       end
     end
-
-    context "with versions" do
-      let(:attributes) do
-        {
-          :versions_attributes => [{
-            :contents => test_file('workfile.sql')
-          }]
-        }
-      end
-
-      subject { described_class.create_from_file_upload(attributes, workspace, user) }
-
-      it_behaves_like "file upload"
-
-      it "sets the content of the workfile" do
-        subject.versions.first.contents.size.should > 0
-      end
-    end
-
-    context "without a version" do
-      subject { described_class.create_from_file_upload({:file_name => 'workfile.sql'}, workspace, user) }
-
-      it_behaves_like "file upload"
-
-      it "sets the file as blank" do
-        subject.versions.first.contents.size.should == 0
-      end
-    end
-  end
-
+  
+  
   describe "#build_new_version" do
 
     let(:user) { FactoryGirl.create(:user) }
@@ -137,6 +138,8 @@ describe Workfile do
         workfile_version.version_num.should == 2
         workfile_version.commit_message.should == "commit Message"
         workfile_version.should_not be_persisted
+        workfile.reload
+        workfile.latest_workfile_version.should == workfile_version
       end
     end
 
@@ -146,6 +149,8 @@ describe Workfile do
         workfile_version.version_num.should == 1
         workfile_version.commit_message.should == "commit Message"
         workfile_version.should_not be_persisted
+        workfile.reload
+        workfile.latest_workfile_version.should == workfile_version
       end
     end
   end

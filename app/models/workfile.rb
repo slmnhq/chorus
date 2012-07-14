@@ -11,6 +11,8 @@ class Workfile < ActiveRecord::Base
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
 
+  belongs_to :latest_workfile_version, :class_name => 'WorkfileVersion'
+
   validates_format_of :file_name, :with => /^[a-zA-Z0-9_ \.\(\)\-]+$/
 
   before_validation :normalize_file_name, :on => :create
