@@ -49,6 +49,7 @@ module PackageMaker
   end
 
   def deploy(config)
+    write_bundler_config
     write_jetpack_yaml(config)
     check_existing_version(config)
 
@@ -149,6 +150,15 @@ module PackageMaker
 
     File.open(Rails.root.join('config', 'jetpack.yml'), 'w') do |file|
       YAML.dump(defaults, file)
+    end
+  end
+
+  def write_bundler_config
+    config = {
+        'BUNDLE_WITHOUT' => 'integration:test:development'
+    }
+    File.open(Rails.root + '.bundle/config', 'w') do |file|
+      YAML.dump(config, file)
     end
   end
 end
