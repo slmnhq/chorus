@@ -157,7 +157,9 @@ module PackageMaker
     config = {
         'BUNDLE_WITHOUT' => 'integration:test:development'
     }
-    File.open(Rails.root + '.bundle/config', 'w') do |file|
+    path = Rails.root + '.bundle'
+    File.mkdir_p(path.to_s)
+    File.open(path + 'config', 'w') do |file|
       YAML.dump(config, file)
     end
   end
