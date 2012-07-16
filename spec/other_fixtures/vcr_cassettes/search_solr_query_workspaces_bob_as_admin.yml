@@ -26,20 +26,20 @@ http_interactions:
         summary_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''dismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''bob'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Workspace
         OR Events\\:\\:Note)'',''type_name_s:(Workspace)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>4,''ngroups''=>4,''groups''=>[{''groupValue''=>''Workspace
-        2441'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1665554.8,''docs''=>[{''id''=>''Workspace
-        2441'',''name_texts''=>[''Bob Public''],''score''=>1665554.8}]}},{''groupValue''=>''Workspace
-        2442'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1665554.8,''docs''=>[{''id''=>''Workspace
-        2442'',''name_texts''=>[''Bob Private''],''score''=>1665554.8}]}},{''groupValue''=>''Workspace
-        2438'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>975.91095,''docs''=>[{''id''=>''Workspace
-        2438'',''name_texts''=>[''Alice Public''],''summary_texts''=>[''Bob can see
-        I guess''],''score''=>975.91095}]}},{''groupValue''=>''Workspace 2439'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>975.91095,''docs''=>[{''id''=>''Workspace
-        2439'',''name_texts''=>[''Alice Private''],''summary_texts''=>[''Not for bob,
-        ha ha''],''score''=>975.91095}]}}]}},''highlighting''=>{''Workspace 2441''=>{''name_texts''=>[''@@@hl@@@Bob@@@endhl@@@
-        Public'']},''Workspace 2442''=>{''name_texts''=>[''@@@hl@@@Bob@@@endhl@@@
-        Private'']},''Workspace 2438''=>{''summary_texts''=>[''@@@hl@@@Bob@@@endhl@@@
-        can see I guess'']},''Workspace 2439''=>{''summary_texts''=>[''Not for @@@hl@@@bob@@@endhl@@@,
-        ha ha'']}}}'
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1665554.8,''docs''=>[{''id''=>''Workspace
+        1000003'',''name_texts''=>[''Bob Public''],''score''=>1665554.8}]}},{''groupValue''=>''Workspace
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1665554.8,''docs''=>[{''id''=>''Workspace
+        1000004'',''name_texts''=>[''Bob Private''],''score''=>1665554.8}]}},{''groupValue''=>''Workspace
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>975.91095,''docs''=>[{''id''=>''Workspace
+        1000000'',''name_texts''=>[''Alice Public''],''summary_texts''=>[''Bob can
+        see I guess''],''score''=>975.91095}]}},{''groupValue''=>''Workspace 1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>975.91095,''docs''=>[{''id''=>''Workspace
+        1000001'',''name_texts''=>[''Alice Private''],''summary_texts''=>[''Not for
+        bob, ha ha''],''score''=>975.91095}]}}]}},''highlighting''=>{''Workspace 1000003''=>{''name_texts''=>[''@@@hl@@@Bob@@@endhl@@@
+        Public'']},''Workspace 1000004''=>{''name_texts''=>[''@@@hl@@@Bob@@@endhl@@@
+        Private'']},''Workspace 1000000''=>{''summary_texts''=>[''@@@hl@@@Bob@@@endhl@@@
+        can see I guess'']},''Workspace 1000001''=>{''summary_texts''=>[''Not for
+        @@@hl@@@bob@@@endhl@@@, ha ha'']}}}'
     http_version:
-  recorded_at: Fri, 13 Jul 2012 21:55:01 GMT
+  recorded_at: Mon, 16 Jul 2012 17:43:58 GMT
 recorded_with: VCR 2.1.1
 ...

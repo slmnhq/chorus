@@ -8,6 +8,10 @@ FixtureBuilder.configure do |fbuilder|
 
   # now declare objects
   fbuilder.factory do
+    (ActiveRecord::Base.direct_descendants - [Legacy]).each do |klass|
+      ActiveRecord::Base.connection.execute("ALTER SEQUENCE #{klass.table_name}_id_seq RESTART WITH 1000000;")
+    end
+
     #Users
     admin = User.create!({:first_name => 'Admin', :last_name => 'Alpha', :username => 'admin', :email => 'admin@example.com', :password => 'password', :admin => true}, :without_protection => true)
     evil_admin = User.create!({:first_name => 'Evil', :last_name => 'Alpha', :username => 'evil_admin', :email => 'evil_admin@example.com', :password => 'password', :admin => true}, :without_protection => true)
