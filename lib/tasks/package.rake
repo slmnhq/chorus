@@ -78,10 +78,11 @@ module PackageMaker
   end
 
   def check_existing_version(config)
+    return if ENV['FORCE_DEPLOY']
     versions = `ssh #{config['host']} 'ls #{config['path']}/releases/'`.split
 
     if versions.include? version_name
-      puts "There is a version #{version_name} in the server. Do you want to overwrite it? Press Enter to continue or Ctrl-C to cancel."
+      puts "There is a version #{version_name} in the server. Do you want to overwrite it? Press Enter to continue or Ctrl-C to cancel. Or run with FORCE_DEPLOY=true"
       puts "Press enter to continue..." while STDIN.gets != "\n"
     end
   end
