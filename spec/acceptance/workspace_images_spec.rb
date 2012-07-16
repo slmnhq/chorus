@@ -9,7 +9,7 @@ resource "Workspaces" do
     log_in user
   end
 
-  put "/workspaces/:workspace_id/image" do
+  post "/workspaces/:workspace_id/image" do
     parameter :files, "Picture file"
 
     let(:workspace_id) { workspace.to_param }

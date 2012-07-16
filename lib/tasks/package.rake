@@ -49,7 +49,6 @@ module PackageMaker
   end
 
   def deploy(config)
-    write_bundler_config
     write_jetpack_yaml(config)
     check_existing_version(config)
 
@@ -127,7 +126,7 @@ module PackageMaker
   end
 
   def head_sha
-    `git rev-parse head`.strip[0..8]
+    `git rev-parse HEAD`.strip[0..8]
   end
 
   def run(cmd)
@@ -150,17 +149,6 @@ module PackageMaker
 
     File.open(Rails.root.join('config', 'jetpack.yml'), 'w') do |file|
       YAML.dump(defaults, file)
-    end
-  end
-
-  def write_bundler_config
-    config = {
-        'BUNDLE_WITHOUT' => 'integration:test:development'
-    }
-    path = Rails.root + '.bundle'
-    FileUtils.mkdir_p(path.to_s)
-    File.open(path + 'config', 'w') do |file|
-      YAML.dump(config, file)
     end
   end
 end

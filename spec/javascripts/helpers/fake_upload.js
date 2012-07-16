@@ -3,10 +3,13 @@
         return new FakeFileUpload(el);
     };
 
-    function FakeFileUpload(fileInputElement) {
+    function FakeFileUpload() {
         var self = this;
         spyOn($.fn, 'fileupload').andCallFake(function(uploadOptions) {
             self.options = uploadOptions;
+            if(uploadOptions.type == "PUT") {
+                throw("The HTTP PUT method will break in Internet Explorer 9!");
+            }
         });
     }
 
@@ -50,11 +53,14 @@
         },
 
         fail: function(bodyJson) {
+            var bodyText = JSON.stringify(bodyJson);
             this.options.fail(this.fakeEvent(), {
                 jqXHR: {
-                    responseText: JSON.stringify(bodyJson)
-                }
-            })
+                    responseText: bodyText
+                },
+
+                result: bodyText
+            });
         }
     });
 })();

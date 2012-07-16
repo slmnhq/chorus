@@ -8,11 +8,10 @@ GIT
       jdbc-postgres (>= 9.0, < 9.2)
 
 GIT
-  remote: git://github.com/bdon/jetpack.git
-  revision: fb102470b23982ac89fca1b2d59776db5d07150c
-  branch: old
+  remote: git://github.com/pivotal-leopold/jetpack.git
+  revision: e64bc84c02d41b6e3548bccce6c8810f8a4f63e7
   specs:
-    jetpack (0.1.0)
+    jetpack (0.1.2)
 
 GIT
   remote: git://github.com/pivotal-leopold/queue_classic.git

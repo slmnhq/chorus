@@ -7,7 +7,7 @@ describe UserImagesController do
     end
   end
 
-  describe "#update" do
+  describe "#create" do
     context("for User") do
       before do
         @user = FactoryGirl.create(:user, :username => 'some_user', :first_name => "marty")
@@ -19,20 +19,20 @@ describe UserImagesController do
       it "updates the user's image" do
         default_image_path = "/images/default-user-icon.png"
         @user.image.url.should == default_image_path
-        put :update, :user_id => @user.id, :files => files
+        post :create, :user_id => @user.id, :files => files
         @user.reload
         @user.image.url.should_not == default_image_path
       end
 
       it "responds with the urls of the new image" do
-        put :update, :user_id => @user.id, :files => files
+        post :create, :user_id => @user.id, :files => files
         @user.reload
         decoded_response.original.should == @user.image.url(:original)
         decoded_response.icon.should == @user.image.url(:icon)
       end
 
       generate_fixture "image.json" do
-        put :update, :user_id => @user.id, :files => files
+        post :create, :user_id => @user.id, :files => files
       end
     end
   end

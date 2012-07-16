@@ -25,7 +25,7 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
         var multipart = !window.jasmine;
         this.$("input[type=file]").fileupload({
             url: this.model.createImageUrl(),
-            type: 'PUT',
+            type: 'POST',
             add: fileSelected,
             done: uploadFinished,
             fail: uploadFailed,
@@ -66,7 +66,6 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
             self.$("a.action").addClass("disabled");
 
             data.submit();
-
         }
 
         function reEnableUpload() {

@@ -8,13 +8,7 @@ describe("chorus.views.ImageUpload", function() {
         this.view = new chorus.views.ImageUpload({model : this.user});
         this.view.model.loaded = true;
         this.imageJson = rspecFixtures.imageJson();
-        this.successfulResponse = { result: JSON.stringify(this.imageJson) };
-        this.errorResponse = {
-            result: JSON.stringify({
-                errors : { fields: { a: { BLANK: {} } } }
-            })
-        };
-    })
+    });
 
     describe("#render", function() {
         beforeEach(function() {
@@ -73,22 +67,18 @@ describe("chorus.views.ImageUpload", function() {
 
             it("the image is not hidden", function() {
                 expect(this.view.$("img")).not.toHaveClass('hidden')
-            })
+            });
         });
 
         context("when a photo to upload has been chosen", function() {
             beforeEach(function() {
-                spyOn($.fn, 'fileupload');
+                this.fakeFileUpload = stubFileUpload();
                 this.view.render();
-                this.fileList = [
-                    {name: 'foo.png'}
-                ];
+                this.fakeFileUpload.add([ "foo.png" ]);
+            });
 
-                expect($.fn.fileupload).toHaveBeenCalled();
-
-                this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
-                this.request = jasmine.createSpyObj('request', ['abort']);
-                this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+            it("submits the upload immediately", function () {
+                expect(this.fakeFileUpload.wasSubmitted).toBeTruthy();
             });
 
             it("displays a spinner", function() {
@@ -105,19 +95,19 @@ describe("chorus.views.ImageUpload", function() {
             });
 
             it("uploads to the model's createImageUrl", function() {
-                expect(this.fileUploadOptions.url).toBe(this.user.createImageUrl());
+                expect(this.fakeFileUpload.options.url).toBe(this.user.createImageUrl());
             });
 
             context("when the upload has finished successfully", function() {
                 beforeEach(function() {
                     this.originalImgSrc = this.view.$("img").attr("src");
-                    this.validatedSpy = jasmine.createSpy("validated");
-                    this.imageChangedSpy = jasmine.createSpy("imageChange");
-                    spyOn(this.user, "change");
                     spyOn(chorus, "updateCachebuster").andCallThrough();
-                    this.user.bind("validated", this.validatedSpy);
-                    this.user.bind("image:change", this.imageChangedSpy)
-                    this.fileUploadOptions.done(null, this.successfulResponse);
+
+                    spyOnEvent(this.user, "validated");
+                    spyOnEvent(this.user, "image:change");
+                    spyOnEvent(this.user, "change");
+
+                    this.fakeFileUpload.succeed(this.imageJson);
                 });
 
                 it("removes the spinner", function() {
@@ -137,17 +127,19 @@ describe("chorus.views.ImageUpload", function() {
                 });
 
                 it("changes/adds the cache-buster on the original image's URL", function() {
-                    var newUrl = this.view.$("img").attr("src");
-
-                    expect(newUrl).not.toBe(this.originalImgSrc);
+                    expect(this.view.$("img").attr("src")).not.toBe(this.originalImgSrc);
                 });
 
                 it("triggers 'validated' on the model", function() {
-                    expect(this.validatedSpy).toHaveBeenCalled();
+                    expect("validated").toHaveBeenTriggeredOn(this.user);
                 });
 
                 it("triggers 'image:change' on the model", function() {
-                    expect(this.imageChangedSpy).toHaveBeenCalled();
+                    expect("image:change").toHaveBeenTriggeredOn(this.user);
+                });
+
+                it("doesn't trigger change on the model", function() {
+                    expect("change").not.toHaveBeenTriggeredOn(this.user);
                 });
 
                 it("sets the image urls in the model", function() {
@@ -159,10 +151,6 @@ describe("chorus.views.ImageUpload", function() {
                     });
                 });
 
-                it("doesn't trigger model change", function() {
-                    expect(this.user.change).not.toHaveBeenCalled();
-                });
-
                 it("re-enables the upload button", function() {
                     expect(this.view.$("input[type=file]")).not.toBeDisabled();
                     expect(this.view.$("a.action")).not.toHaveClass("disabled");
@@ -171,9 +159,10 @@ describe("chorus.views.ImageUpload", function() {
 
             context("when the upload gives a server error", function() {
                 beforeEach(function() {
-                    this.saveFailedSpy = jasmine.createSpy("saveFailed");
-                    this.user.bind("saveFailed", this.saveFailedSpy);
-                    this.fileUploadOptions.fail(null, this.errorResponse);
+                    spyOnEvent(this.user, "saveFailed");
+                    this.fakeFileUpload.fail({
+                        errors: { fields: { a: { BLANK: {} } } }
+                    });
                 });
 
                 it("sets the server errors on the model", function() {
@@ -181,7 +170,7 @@ describe("chorus.views.ImageUpload", function() {
                 });
 
                 it("triggers saveFailed on the model", function() {
-                    expect(this.saveFailedSpy).toHaveBeenCalled();
+                    expect("saveFailedSpy").toHaveBeenTriggeredOn(this.user);
                 });
 
                 it("removes the spinner", function() {
@@ -201,11 +190,8 @@ describe("chorus.views.ImageUpload", function() {
                     beforeEach(function() {
                         this.originalUrl = '/users/1234/image';
                         this.view.$("img").attr("src", this.originalUrl);
-                        this.fileList = [
-                            {fileName: 'foo.png'}
-                        ];
-                        this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
-                        this.fileUploadOptions.done(null, this.successfulResponse);
+                        this.fakeFileUpload.add([ "foo.png" ]);
+                        this.fakeFileUpload.succeed(this.imageJson);
                     });
 
                     it("clears the errors", function() {
