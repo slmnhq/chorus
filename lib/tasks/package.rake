@@ -49,7 +49,6 @@ module PackageMaker
   end
 
   def deploy(config)
-    write_bundler_config
     write_jetpack_yaml(config)
     check_existing_version(config)
 
@@ -58,6 +57,7 @@ module PackageMaker
   end
 
   def make(options = {})
+    write_bundler_config
     current_sha = head_sha
     filename = "greenplum-chorus-#{version_name}-#{timestamp}.tar.gz"
     archive_app(filename, current_sha)
@@ -127,7 +127,7 @@ module PackageMaker
   end
 
   def head_sha
-    `git rev-parse head`.strip[0..8]
+    `git rev-parse HEAD`.strip[0..8]
   end
 
   def run(cmd)
