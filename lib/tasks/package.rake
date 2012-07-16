@@ -67,6 +67,7 @@ module PackageMaker
 
   def clean_workspace
     run "rm -r .bundle"
+    run "rm -rf vendor/bundler_gem"
   end
 
   def prepare_remote(config)
