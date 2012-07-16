@@ -57,6 +57,7 @@ module PackageMaker
   end
 
   def make(options = {})
+    prepare_workspace
     current_sha = head_sha
     filename = "greenplum-chorus-#{version_name}-#{timestamp}.tar.gz"
     archive_app(filename, current_sha)
@@ -65,9 +66,12 @@ module PackageMaker
     filename
   end
 
+  def prepare_workspace
+    run "rm -rf vendor/bundler_gem"
+  end
+
   def clean_workspace
     run "rm -r .bundle"
-    run "rm -rf vendor/bundler_gem"
   end
 
   def prepare_remote(config)
