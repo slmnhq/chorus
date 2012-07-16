@@ -172,7 +172,7 @@ describe WorkfilesController do
         :workspace_id => workspace.to_param,
         :workfile => {
           :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
-          :contents => file
+          :versions_attributes => [{:contents => file}]
         }
       }
     end
@@ -266,9 +266,9 @@ describe WorkfilesController do
         {
           :workspace_id => workspace.to_param,
           :workfile => {
-            :file_name => 'not_an_image.jpg',
-            :source => 'empty',
-            :contents => test_file('not_an_image.jpg')
+            :versions_attributes => [{
+              :contents => test_file('not_an_image.jpg')
+            }]
           }
         }
       end
@@ -279,7 +279,7 @@ describe WorkfilesController do
         errors = JSON.parse(response.body)['errors']
 
         response.code.should == "422"
-        errors['fields']['versions'].should include('INVALID')
+        errors['fields']['versions.contents'].should include('INVALID')
       end
 
       it "does not create a orphan workfile" do
@@ -299,7 +299,7 @@ describe WorkfilesController do
           :workspace_id => workspace.to_param,
           :workfile => {
             :file_name => "empty file.sql",
-            :source => 'empty'
+            :source => 'empty',
           }
         }
       end
@@ -343,7 +343,7 @@ describe WorkfilesController do
         end
 
         it "sets the commit message to be empty" do
-          subject.commit_message.should == ""
+          subject.commit_message.should be_blank
         end
 
         it "sets the last modifier to the current user" do

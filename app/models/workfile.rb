@@ -1,7 +1,7 @@
 class Workfile < ActiveRecord::Base
   include SoftDelete
 
-  attr_accessible :description, :file_name
+  attr_accessible :description, :file_name, :versions_attributes
 
   belongs_to :workspace
   belongs_to :owner, :class_name => 'User'
@@ -14,6 +14,9 @@ class Workfile < ActiveRecord::Base
   validates_format_of :file_name, :with => /^[a-zA-Z0-9_ \.\(\)\-]+$/
 
   before_validation :normalize_file_name, :on => :create
+  before_validation :init_file_name, :on => :create
+
+  accepts_nested_attributes_for :versions
 
   attr_accessor :highlighted_attributes, :search_result_comments
   searchable do
@@ -40,6 +43,20 @@ class Workfile < ActiveRecord::Base
 
   def self.by_type(file_type)
     scoped.find_all { |workfile| workfile.versions.last.file_type == file_type.downcase }
+  end
+
+  def self.create_from_file_upload(attributes, workspace, owner)
+    workfile = new(attributes)
+    workfile.owner = owner
+    workfile.workspace = workspace
+
+    version = workfile.versions.first
+    version.owner = owner
+    version.modifier = owner
+
+    workfile.save!
+
+    workfile
   end
 
   def build_new_version(user, source_file, message)
@@ -81,6 +98,10 @@ class Workfile < ActiveRecord::Base
   private
   def last_version_number
     last_version.try(:version_num) || 0
+  end
+
+  def init_file_name
+    self.file_name ||= versions.first.file_name
   end
 
   def normalize_file_name

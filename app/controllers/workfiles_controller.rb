@@ -11,7 +11,7 @@ class WorkfilesController < ApplicationController
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
 
-    present create_workfile(workspace, uploaded_file).last_version
+    present create_workfile(workspace, workfile_attributes).last_version
   end
 
   def index
@@ -44,11 +44,16 @@ class WorkfilesController < ApplicationController
     end
   end
 
-  def uploaded_file
+  def workfile_attributes
     if params[:workfile][:source] == "empty"
-      create_sql_file(params[:workfile][:file_name])
+      new_params = params[:workfile].dup
+      new_params[:versions_attributes] = [{
+          :contents => create_sql_file(params[:workfile][:file_name])
+      }]
+
+      new_params
     else
-      params[:workfile][:contents]
+      params[:workfile]
     end
   end
 
@@ -56,15 +61,8 @@ class WorkfilesController < ApplicationController
     ActionDispatch::Http::UploadedFile.new(:filename => filename, :tempfile => Tempfile.new(filename))
   end
 
-  def create_workfile(workspace, source_file)
-    workfile = workspace.workfiles.build(params[:workfile])
-
-    workfile.file_name ||= source_file.original_filename
-    workfile.owner = current_user
-    workfile.build_new_version(current_user, source_file, "")
-
-    workfile.save!
-
+  def create_workfile(workspace, attributes)
+    workfile = Workfile.create_from_file_upload(attributes, workspace, current_user)
 
     Events::WORKFILE_CREATED.by(current_user).add(
       :workfile => workfile,

@@ -53,6 +53,51 @@ describe Workfile do
     end
   end
 
+  describe ".create_from_file_upload" do
+    let(:user) { users(:admin) }
+    let(:workspace) { workspaces(:alice_public)}
+
+    let(:attributes) do
+      {
+        :versions_attributes => [{
+          :contents => test_file('workfile.sql')
+        }]
+
+      }
+    end
+
+    subject { described_class.create_from_file_upload(attributes, workspace, user) }
+
+    it "creates a workfile in the database" do
+      subject.should be_valid
+      subject.should be_persisted
+    end
+
+    it "creates a workfile version in the database" do
+      subject.versions.should have(1).version
+
+      version = subject.versions.first
+      version.should be_valid
+      version.should be_persisted
+    end
+
+    it "sets the attributes of the workfile" do
+      subject.owner.should == user
+      subject.file_name.should == 'workfile.sql'
+    end
+
+    it "sets the modifier of the first, recently created version" do
+      subject.versions.first.modifier.should == user
+    end
+
+    it "sets the attributes of the workfile version" do
+      version = subject.versions.first
+
+      version.contents.should be_present
+      version.version_num.should == 1
+    end
+  end
+
   describe "#build_new_version" do
 
     let(:user) { FactoryGirl.create(:user) }
@@ -88,11 +133,11 @@ describe Workfile do
   describe ".by_type" do
     let(:user) { FactoryGirl.create(:user) }
     let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
-    let!(:workfile1) { FactoryGirl.create(:workfile, :file_name => "small1.gif",:workspace => workspace) }
-    let!(:workfile2) { FactoryGirl.create(:workfile, :file_name => "some.txt",:workspace => workspace) }
-    let!(:workfile3) { FactoryGirl.create(:workfile, :file_name => "workfile.sql",:workspace => workspace) }
-    let!(:workfile4) { FactoryGirl.create(:workfile, :file_name => "binary.tar.gz",:workspace => workspace) }
-    let!(:workfile5) { FactoryGirl.create(:workfile, :file_name => "code.cpp",:workspace => workspace) }
+    let!(:workfile1) { FactoryGirl.create(:workfile, :file_name => "small1.gif", :workspace => workspace) }
+    let!(:workfile2) { FactoryGirl.create(:workfile, :file_name => "some.txt", :workspace => workspace) }
+    let!(:workfile3) { FactoryGirl.create(:workfile, :file_name => "workfile.sql", :workspace => workspace) }
+    let!(:workfile4) { FactoryGirl.create(:workfile, :file_name => "binary.tar.gz", :workspace => workspace) }
+    let!(:workfile5) { FactoryGirl.create(:workfile, :file_name => "code.cpp", :workspace => workspace) }
 
     before do
       file1 = test_file("small1.gif", "image/gif")
@@ -110,7 +155,7 @@ describe Workfile do
 
     it "returns workfiles with text file type" do
       workfiles = Workfile.by_type("text")
-      workfiles.should have(1).files  # TODO: is code also text?
+      workfiles.should have(1).files # TODO: is code also text?
       workfiles[0].file_name.should == "some.txt"
     end
 
@@ -134,7 +179,7 @@ describe Workfile do
 
     it "returns workfiles with other file type" do
       workfiles = Workfile.by_type("other")
-      workfiles.size.should == Workfile.all.count {|w| w.last_version.file_type == 'other'}
+      workfiles.size.should == Workfile.all.count { |w| w.last_version.file_type == 'other' }
     end
   end
 

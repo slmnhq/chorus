@@ -10,10 +10,16 @@ class WorkfileVersion < ActiveRecord::Base
   belongs_to :modifier, :class_name => 'User'
   before_post_process :check_file_type
 
+  before_validation :init_version_number, :on => :create
+
   after_validation :clean_content_errors
 
   def check_file_type
     image?
+  end
+
+  def file_name
+    contents.original_filename
   end
 
   CODE_EXTENSIONS = ["cpp", "r"]
@@ -79,5 +85,9 @@ class WorkfileVersion < ActiveRecord::Base
       errors.delete(:contents)
       errors.add(:contents, :invalid)
     end
+  end
+
+  def init_version_number
+    self.version_num ||= 1
   end
 end
