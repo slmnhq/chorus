@@ -46,7 +46,7 @@ class Workfile < ActiveRecord::Base
   def self.by_type(file_type)
     scoped.find_all { |workfile| workfile.versions.last.file_type == file_type.downcase }
   end
-
+  
   def self.create_from_file_upload(attributes, workspace, owner)
     workfile = new(attributes)
     workfile.owner = owner
@@ -59,6 +59,29 @@ class Workfile < ActiveRecord::Base
     workfile.save!
 
     workfile
+  end
+  
+  def self.create_with_version(user, workspace, params)
+
+    source_file = (params[:source] == "empty") ?
+      self.create_sql_file(params[:file_name]) :
+      params[:contents]
+
+    workfile = workspace.workfiles.build(params)
+    workfile.file_name ||= source_file.original_filename
+
+    WorkfileName.resolve_name_for!(workfile)
+
+    workfile.owner = user
+    workfile.save!
+
+    workfile.create_new_version(user, source_file, "")
+
+    workfile.reload
+  end
+
+  def self.create_sql_file(filename)
+    ActionDispatch::Http::UploadedFile.new(:filename => filename, :tempfile => Tempfile.new(filename))
   end
 
   def build_new_version(user, source_file, message)

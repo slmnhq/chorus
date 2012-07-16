@@ -14,7 +14,6 @@ describe Workfile do
       it "is not valid" do
         workfile = Workfile.new :file_name => 'workfile?.sql'
 
-
         workfile.should_not be_valid
         workfile.errors[:file_name].should_not be_empty
       end
@@ -53,6 +52,75 @@ describe Workfile do
     end
   end
 
+  #describe "#create_with_version" do
+  #    let(:user) { FactoryGirl.create(:user) }
+  #    let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
+  #    let(:file) { test_file("workfile.sql", "text/sql") }
+  #
+  #    before(:each) do
+  #      @params = {
+  #        :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
+  #        :contents => file
+  #      }
+  #    end
+  #
+  #    context "validate changes in the tables" do
+  #      it "should create a new workfile and version, but not a draft" do
+  #        lambda {
+  #          lambda {
+  #            lambda {
+  #              Workfile.create_with_version(user, workspace, @params)
+  #            }.should change(Workfile, :count).by(1)
+  #          }.should change(WorkfileVersion, :count).by(1)
+  #        }.should_not change(WorkfileDraft, :count)
+  #
+  #        Workfile.last.latest_workfile_version.should == WorkfileVersion.last
+  #      end
+  #    end
+  #
+  #    context "validate the contents of the saved workfile/version" do
+  #      before(:each) do
+  #        @workfile = Workfile.create_with_version(user, workspace, @params)
+  #      end
+  #
+  #      it "associates the new workfile with its workspace" do
+  #        @workfile.workspace.should == workspace
+  #      end
+  #
+  #      it "sets the owner of the new workfile as the authenticated user" do
+  #        @workfile.owner.should == user
+  #      end
+  #
+  #      it "sets the right description on the workfile" do
+  #        @workfile.description.should == "Nice workfile, good workfile, I've always wanted a workfile like you"
+  #      end
+  #
+  #      it "sets the filename correctly on the workfile" do
+  #        @workfile.file_name.should == "workfile.sql"
+  #      end
+  #
+  #      it "has a valid latest version" do
+  #        @workfile.latest_workfile_version.should_not be_nil
+  #      end
+  #
+  #      it "sets the commit message to be empty on the version" do
+  #        @workfile.latest_workfile_version.commit_message.should == ""
+  #      end
+  #    end
+  #
+  #    context "creating a blank file" do
+  #      it "uploads the correct file contents" do
+  #        params = {:file_name => "empty file.sql", :source => 'empty'}
+  #        workfile = Workfile.create_with_version(user, workspace, params)
+  #        workfile_version = workfile.latest_workfile_version
+  #
+  #        workfile_version.contents.should be_present
+  #        workfile_version.contents.original_filename.should == "empty_file.sql"
+  #        workfile_version.contents.size.should == 0
+  #      end
+  #    end
+  #  end
+  
   describe ".create_from_file_upload" do
       let(:user) { users(:admin) }
       let(:workspace) { workspaces(:alice_public)}
@@ -153,6 +221,37 @@ describe Workfile do
         workfile.latest_workfile_version.should == workfile_version
       end
     end
+    
+    #context "creating the first version" do
+    #  before(:each) do
+    #    @workfile_version = workfile.create_new_version(user, test_file('workfile.sql'), "")
+    #  end
+    #
+    #  it "associates the new version with its workfile" do
+    #    @workfile_version.workfile.should == Workfile.last
+    #  end
+    #
+    #  it "sets the workfile version owner to the current user" do
+    #    @workfile_version.owner.should == user
+    #  end
+    #
+    #  it "sets the last modifier to the current user" do
+    #    @workfile_version.modifier.should == user
+    #  end
+    #
+    #  it "uploads the correct file contents" do
+    #    @workfile_version.contents.should be_present
+    #    @workfile_version.contents_file_name.should == "workfile.sql"
+    #  end
+    #
+    #  it "create a version with version number as 1" do
+    #    @workfile_version.version_num.should == 1
+    #    @workfile_version.should be_persisted
+    #    workfile.reload
+    #    workfile.latest_workfile_version.should == @workfile_version
+    #  end
+    #end
+    
   end
 
   describe ".by_type" do

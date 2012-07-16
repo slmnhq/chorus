@@ -113,20 +113,20 @@ describe WorkfilesController do
         end
 
         it "responds with a success" do
-          get :show, { :id => private_workfile }
+          get :show, {:id => private_workfile}
           response.should be_success
         end
 
         it "presents the workfile" do
           mock.proxy(controller).present(private_workfile.last_version)
-          get :show, { :id => private_workfile }
+          get :show, {:id => private_workfile}
         end
       end
 
       context "as a non-member" do
         it "responds with unsuccessful" do
           log_in non_member
-          get :show, { :id => private_workfile }
+          get :show, {:id => private_workfile}
           response.should_not be_success
         end
       end
@@ -140,7 +140,7 @@ describe WorkfilesController do
       end
 
       it "responds with a success" do
-        get :show, { :id => public_workfile }
+        get :show, {:id => public_workfile}
         response.should be_success
       end
     end
@@ -187,6 +187,16 @@ describe WorkfilesController do
       end
 
       it_behaves_like "uploading a new workfile"
+      
+      #it "creates a workfile" do
+      #  post :create, @params
+      #  Workfile.last.file_name.should == "workfile.sql"
+      #end
+      #
+      #it "sets has_added_workfile on the workspace to true" do
+      #  post :create, @params
+      #  workspace.reload.has_added_workfile.should be_true
+      #end
 
       it "makes a WORKFILE_CREATED event" do
         post :create, @params
@@ -204,6 +214,11 @@ describe WorkfilesController do
       end
 
       it_behaves_like "uploading a new workfile"
+      
+      #it "creates a workfile" do
+      #  post :create, @params
+      #  Workfile.last.file_name.should == "workfile.sql"
+      #end
     end
 
     context "as a non-admin non-member" do
@@ -229,7 +244,7 @@ describe WorkfilesController do
       end
 
       it "does authorize the user to create the workfile" do
-        post :create, { :workspace_id => archived_workspace.id, :workfile => { } }
+        post :create, {:workspace_id => archived_workspace.id, :workfile => {}}
         response.code.should == "403"
       end
     end

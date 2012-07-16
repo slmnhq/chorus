@@ -11,6 +11,8 @@ class WorkfilesController < ApplicationController
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
 
+    #present workfile.latest_workfile_version
+    
     present create_workfile(workspace).last_version
   end
 
@@ -28,7 +30,7 @@ class WorkfilesController < ApplicationController
 
   def destroy
     workfile = Workfile.find(params[:id])
-    authorize! :can_edit_sub_objects,  workfile.workspace
+    authorize! :can_edit_sub_objects, workfile.workspace
 
     workfile.destroy
     render :json => {}
@@ -45,6 +47,8 @@ class WorkfilesController < ApplicationController
   end
 
   def create_workfile(workspace)
+    #workfile = Workfile.create_with_version(current_user, workspace, params[:workfile])
+    
     workfile = Workfile.create_from_file_upload(params[:workfile], workspace, current_user)
 
     Events::WORKFILE_CREATED.by(current_user).add(

@@ -62,10 +62,10 @@ describe WorkfileVersion do
 
       it "cleans the message" do
         workfile_version = described_class.new({
-          :contents => test_file('not_an_image.jpg'),
-          :owner => user,
-          :modifier => user
-        })
+                                                 :contents => test_file('not_an_image.jpg'),
+                                                 :owner => user,
+                                                 :modifier => user
+                                               })
 
         workfile_version.should_not be_valid
 
@@ -74,6 +74,12 @@ describe WorkfileVersion do
         flattened_messages.should include(:invalid)
         flattened_messages.join.should_not match(/not recognized by the 'identify' command/)
       end
+    end
+  end
+
+  describe "after_save" do
+    it "updates the latest_workfile_version association in the workfile" do
+      workfile.latest_workfile_version.should == version2
     end
   end
 
