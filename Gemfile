@@ -9,6 +9,9 @@ gem 'queue_classic', :git => "git://github.com/pivotal-leopold/queue_classic.git
 gem 'clockwork',     :require => false
 gem 'allowy'
 gem 'sunspot_rails', '2.0.0.pre.120417'
+gem 'jetpack', :git => "git://github.com/pivotal-leopold/jetpack.git", :require => false
+gem 'sunspot_solr', '2.0.0.pre.120417'
+gem 'quiet_assets'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false
@@ -54,7 +57,5 @@ end
 
 group :development do
   #gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
-  gem 'jetpack', :git => "git://github.com/bdon/jetpack.git", :branch => 'old', :require => false
-  gem 'sunspot_solr', '2.0.0.pre.120417'
-  gem 'quiet_assets'
+
 end

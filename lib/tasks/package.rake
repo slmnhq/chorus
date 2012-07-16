@@ -57,7 +57,6 @@ module PackageMaker
   end
 
   def make(options = {})
-    write_bundler_config
     current_sha = head_sha
     filename = "greenplum-chorus-#{version_name}-#{timestamp}.tar.gz"
     archive_app(filename, current_sha)
@@ -150,17 +149,6 @@ module PackageMaker
 
     File.open(Rails.root.join('config', 'jetpack.yml'), 'w') do |file|
       YAML.dump(defaults, file)
-    end
-  end
-
-  def write_bundler_config
-    config = {
-        'BUNDLE_WITHOUT' => 'integration:test:development'
-    }
-    path = Rails.root + '.bundle'
-    FileUtils.mkdir_p(path.to_s)
-    File.open(path + 'config', 'w') do |file|
-      YAML.dump(config, file)
     end
   end
 end
