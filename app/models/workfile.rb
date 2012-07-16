@@ -50,7 +50,7 @@ class Workfile < ActiveRecord::Base
     workfile.owner = owner
     workfile.workspace = workspace
 
-    version = workfile.versions.first
+    version = workfile.versions.first || workfile.versions.build
     version.owner = owner
     version.modifier = owner
 

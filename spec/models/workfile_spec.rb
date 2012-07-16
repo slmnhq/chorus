@@ -57,44 +57,64 @@ describe Workfile do
     let(:user) { users(:admin) }
     let(:workspace) { workspaces(:alice_public)}
 
-    let(:attributes) do
-      {
-        :versions_attributes => [{
-          :contents => test_file('workfile.sql')
-        }]
 
-      }
+    shared_examples "file upload" do
+      it "creates a workfile in the database" do
+        subject.should be_valid
+        subject.should be_persisted
+      end
+
+      it "creates a workfile version in the database" do
+        subject.versions.should have(1).version
+
+        version = subject.versions.first
+        version.should be_valid
+        version.should be_persisted
+      end
+
+      it "sets the attributes of the workfile" do
+        subject.owner.should == user
+        subject.file_name.should == 'workfile.sql'
+      end
+
+      it "sets the modifier of the first, recently created version" do
+        subject.versions.first.modifier.should == user
+      end
+
+      it "sets the attributes of the workfile version" do
+        version = subject.versions.first
+
+        version.contents.should be_present
+        version.version_num.should == 1
+      end
     end
 
-    subject { described_class.create_from_file_upload(attributes, workspace, user) }
+    context "with versions" do
+      let(:attributes) do
+        {
+          :versions_attributes => [{
+            :contents => test_file('workfile.sql')
+          }]
+        }
+      end
 
-    it "creates a workfile in the database" do
-      subject.should be_valid
-      subject.should be_persisted
+      subject { described_class.create_from_file_upload(attributes, workspace, user) }
+
+      it_behaves_like "file upload"
+
+      it "sets the content of the workfile" do
+        subject.versions.first.contents.size.should > 0
+      end
     end
 
-    it "creates a workfile version in the database" do
-      subject.versions.should have(1).version
+    context "without a version" do
+      subject { described_class.create_from_file_upload({:file_name => 'workfile.sql'}, workspace, user) }
 
-      version = subject.versions.first
-      version.should be_valid
-      version.should be_persisted
-    end
+      it_behaves_like "file upload"
 
-    it "sets the attributes of the workfile" do
-      subject.owner.should == user
-      subject.file_name.should == 'workfile.sql'
-    end
-
-    it "sets the modifier of the first, recently created version" do
-      subject.versions.first.modifier.should == user
-    end
-
-    it "sets the attributes of the workfile version" do
-      version = subject.versions.first
-
-      version.contents.should be_present
-      version.version_num.should == 1
+      it "sets the file as blank" do
+        subject.versions.first.contents.size.should == 0
+      end
     end
   end
 
@@ -131,7 +151,7 @@ describe Workfile do
   end
 
   describe ".by_type" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { users(:admin) }
     let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
     let!(:workfile1) { FactoryGirl.create(:workfile, :file_name => "small1.gif", :workspace => workspace) }
     let!(:workfile2) { FactoryGirl.create(:workfile, :file_name => "some.txt", :workspace => workspace) }

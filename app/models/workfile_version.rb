@@ -11,6 +11,7 @@ class WorkfileVersion < ActiveRecord::Base
   before_post_process :check_file_type
 
   before_validation :init_version_number, :on => :create
+  before_validation :init_file, :on => :create
 
   after_validation :clean_content_errors
 
@@ -89,5 +90,9 @@ class WorkfileVersion < ActiveRecord::Base
 
   def init_version_number
     self.version_num ||= 1
+  end
+  
+  def init_file
+    self.contents = Tempfile.new(['untitled', '.sql']) unless contents.file?
   end
 end

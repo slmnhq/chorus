@@ -352,7 +352,7 @@ describe WorkfilesController do
 
         it "uploads the correct file contents" do
           subject.contents.should be_present
-          subject.contents.original_filename.should == "empty_file.sql"
+          subject.file_name.should match(/\.sql$/)
           subject.contents.size.should == 0
         end
       end
