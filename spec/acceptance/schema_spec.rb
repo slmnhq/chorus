@@ -19,7 +19,16 @@ resource "Greenplum DB schemas" do
     stub(Dataset).add_metadata!(anything, owner_account)
     any_instance_of(GpdbSchema) do |schema|
       stub(schema).stored_functions(owner_account) {
-        GpdbSchemaFunction.new(db_schema.name, "test_function", "SQL", "text", "{number,other}", "{int4,int4}")
+        GpdbSchemaFunction.new(
+          db_schema.name,
+          "test_function",
+          "SQL",
+          "text",
+          "{number, other}",
+          "{int4,int4}",
+          "select pg_sleep(100)",
+          "does nothing. do not call."
+        )
       }
     end
   end

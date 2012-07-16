@@ -18,7 +18,7 @@ resource "Notes" do
 
 
     let(:body) { note.body }
-    let(:entity_type) { "instance" }
+    let(:entity_type) { "greenplum_instance" }
     let(:entity_id) { "123" }
 
     example_request "Post a new note on a Greenplum instance" do

@@ -8,7 +8,6 @@ resource "Search" do
     log_in user
   end
 
-
   get "/search/global" do
     parameter :query, "Search term"
     parameter :per_type, "Number of each entity to return"
