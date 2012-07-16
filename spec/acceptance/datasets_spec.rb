@@ -10,25 +10,26 @@ resource "Greenplum Tables / Views" do
   let!(:statistics) { FactoryGirl.build(:dataset_statistics) }
 
   let(:result) do
-    SqlResults.new(
-      [
-        { :name => "column_1", :data_type => "integer", :type_category => "WHOlE_NUMBER", :description => "first col" },
-        { :name => "column_1", :data_type => "double", :type_category => "REAL_NUMBER", :description => "second col" }
-      ],
-      [[1, 2.0], [5, 2.5]]
-    )
+    SqlResult.new.tap do |r|
+      r.add_column("column_1", "integer")
+      r.add_column("column_2", "double")
+      r.add_rows([
+        [1, 2.0],
+        [5, 2.5]
+      ])
+    end
   end
 
   before do
     log_in owner
-    stub(SqlResults).preview_dataset { result }
+    stub(SqlExecutor).preview_dataset { result }
     stub(GpdbColumn).columns_for.with_any_args { [FactoryGirl.build(:gpdb_column), FactoryGirl.build(:gpdb_column)] }
-    any_instance_of(Dataset) do |u| 
+    any_instance_of(Dataset) do |u|
       stub(u).add_metadata!.with_any_args { statistics }
       stub(u).statistics.with_any_args { statistics }
     end
 
-    stub(SqlResults).cancel_preview.with_any_args { status }
+    stub(SqlExecutor).cancel_query.with_any_args { status }
   end
 
   get "/datasets/:id" do
