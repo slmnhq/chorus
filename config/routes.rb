@@ -7,7 +7,7 @@ Chorus::Application.routes.draw do
     collection do
       get :ldap
     end
-    resource :image, :only => [:update], :controller => :user_images
+    resource :image, :only => [:create], :controller => :user_images
   end
 
   resources :hadoop_instances, :only => [:create, :index, :show, :update] do
@@ -50,7 +50,7 @@ Chorus::Application.routes.draw do
 
   resources :workspaces, :only => [:index, :create, :show, :update] do
     resources :members, :only => [:index, :create]
-    resource :image, :only => [:update], :controller => :workspace_images
+    resource :image, :only => [:create], :controller => :workspace_images
     resources :workfiles, :only => [:create, :index]
     resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
     resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets"

@@ -104,7 +104,7 @@ resource "Users" do
     end
   end
 
-  put "/users/:user_id/image" do
+  post "/users/:user_id/image" do
     parameter :files, "Picture file"
     let(:user_id) { user.to_param }
     let(:files) { [Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/small2.png", Rails.root), "image/png")] }

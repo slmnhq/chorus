@@ -13,6 +13,12 @@ describe("FakeFileUpload", function() {
         expect($.fn.fileupload).not.toHaveBeenCalled();
     });
 
+    it("throws an exception if you try to use PUT, since IE doesn't do that", function() {
+        expect(function() {
+            input.fileupload({ type: "PUT" });
+        }).toThrow();
+    });
+
     describe("setting up the file upload", function() {
         var doneSpy, addSpy, failSpy;
 
