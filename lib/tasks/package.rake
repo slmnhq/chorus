@@ -26,6 +26,7 @@ module PackageMaker
     release_name = version_name
 
     current_path = path + "/current"
+    releases_path = path + "/releases"
     release_path = path + "/releases/" + release_name
 
     run "scp #{filename} #{host}:#{path}"
@@ -46,6 +47,9 @@ module PackageMaker
     run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh stop'"
     run "ssh #{host} 'cd #{path} && rm -f #{current_path} && ln -s #{release_path} #{current_path}'"
     run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh start'"
+
+    run "ssh chorus-staging 'cd #{path}; rm greenplum*.tar.gz"
+    run "ssh chorus-staging 'cd #{releases_path}; ls | grep -v #{head_sha} | xargs rm -r'"
   end
 
   def deploy(config)
@@ -59,7 +63,7 @@ module PackageMaker
   def make(options = {})
     prepare_workspace
     current_sha = head_sha
-    filename = "greenplum-chorus-#{version_name}-#{timestamp}.tar.gz"
+    filename = "greenplum-chorus-#{timestamp}-#{version_name}.tar.gz"
     archive_app(filename, current_sha)
 
     clean_workspace
