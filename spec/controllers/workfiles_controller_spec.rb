@@ -262,19 +262,30 @@ describe WorkfilesController do
         log_in user
       end
 
-      it "shows an error to the user" do
-        post :create, {
+      let(:parameters) do
+        {
           :workspace_id => workspace.to_param,
           :workfile => {
             :file_name => 'not_an_image.jpg',
-            :source => 'empty'
+            :source => 'empty',
+            :contents => test_file('not_an_image.jpg')
           }
         }
+      end
+
+      it "shows an error to the user" do
+        post :create, parameters
 
         errors = JSON.parse(response.body)['errors']
 
         response.code.should == "422"
-        errors['fields']['contents'].should include('INVALID')
+        errors['fields']['versions'].should include('INVALID')
+      end
+
+      it "does not create a orphan workfile" do
+        expect do
+          post :create, parameters
+        end.to_not change(Workfile, :count)
       end
     end
 

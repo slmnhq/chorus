@@ -30,7 +30,8 @@ describe WorkfileDownloadController do
     context "with version_id specified " do
 
       it "returns the content of version specified in params" do
-        workfile_version2 = workfile.create_new_version(user, test_file('workfile.sql'), "commit message - 2")
+        workfile_version2 = workfile.build_new_version(user, test_file('workfile.sql'), "commit message - 2")
+        workfile_version2.save!
         get :show, :workfile_id => workfile.id, :version_id => workfile_version.id
 
         response.body.should include ("<!DOCTYPE")

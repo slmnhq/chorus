@@ -42,8 +42,8 @@ class Workfile < ActiveRecord::Base
     scoped.find_all { |workfile| workfile.versions.last.file_type == file_type.downcase }
   end
 
-  def create_new_version(user, source_file, message)
-    versions.create!(
+  def build_new_version(user, source_file, message)
+    versions.build(
       :owner => user,
       :modifier => user,
       :contents => source_file,

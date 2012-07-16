@@ -65,7 +65,9 @@ describe WorkfileVersionsController do
     end
 
     it "show the specific version for the workfile" do
-      another_version = workfile.create_new_version(user, test_file('some.txt'), "commit message - 1")
+      another_version = workfile.build_new_version(user, test_file('some.txt'), "commit message - 1")
+      another_version.save
+
       get :show, :workfile_id => workfile.id, :id => workfile_version.id
 
       decoded_response[:version_info][:version_num].should == 1
@@ -80,8 +82,8 @@ describe WorkfileVersionsController do
   context "#index" do
     before :each do
       workfile_version.save
-      workfile.create_new_version(user, test_file('some.txt'), "commit message - 2")
-      workfile.create_new_version(user, test_file('some.txt'), "commit message - 3")
+      workfile.build_new_version(user, test_file('some.txt'), "commit message - 2").save
+      workfile.build_new_version(user, test_file('some.txt'), "commit message - 3").save
     end
 
     it "returns the index of all the workfile versions" do

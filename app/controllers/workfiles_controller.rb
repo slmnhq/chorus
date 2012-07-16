@@ -58,12 +58,13 @@ class WorkfilesController < ApplicationController
 
   def create_workfile(workspace, source_file)
     workfile = workspace.workfiles.build(params[:workfile])
-    workfile.file_name ||= source_file.original_filename
 
+    workfile.file_name ||= source_file.original_filename
     workfile.owner = current_user
+    workfile.build_new_version(current_user, source_file, "")
+
     workfile.save!
 
-    workfile.create_new_version(current_user, source_file, "")
 
     Events::WORKFILE_CREATED.by(current_user).add(
       :workfile => workfile,

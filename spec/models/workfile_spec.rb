@@ -53,7 +53,7 @@ describe Workfile do
     end
   end
 
-  describe "#create_new_version" do
+  describe "#build_new_version" do
 
     let(:user) { FactoryGirl.create(:user) }
     let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
@@ -67,20 +67,20 @@ describe Workfile do
         workfile_version.save
       end
 
-      it "creates a new version with version number increased by 1 " do
-        workfile_version = workfile.create_new_version(user, test_file('workfile.sql'), "commit Message")
+      it "build a new version with version number increased by 1 " do
+        workfile_version = workfile.build_new_version(user, test_file('workfile.sql'), "commit Message")
         workfile_version.version_num.should == 2
         workfile_version.commit_message.should == "commit Message"
-        workfile_version.should be_persisted
+        workfile_version.should_not be_persisted
       end
     end
 
     context "creating the first version" do
-      it "create a version with version number as 1" do
-        workfile_version = workfile.create_new_version(user, test_file('workfile.sql'), "commit Message")
+      it "build a version with version number as 1" do
+        workfile_version = workfile.build_new_version(user, test_file('workfile.sql'), "commit Message")
         workfile_version.version_num.should == 1
         workfile_version.commit_message.should == "commit Message"
-        workfile_version.should be_persisted
+        workfile_version.should_not be_persisted
       end
     end
   end
