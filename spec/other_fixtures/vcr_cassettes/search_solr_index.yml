@@ -22,115 +22,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
-    http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:11 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1000000</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1000000</field><field name="type_name_s">Instance</field><field name="body_texts">i am a comment with greenplum in me</field></doc><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1000001</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1000000</field><field name="type_name_s">Instance</field><field name="body_texts">i love bob</field></doc><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1000002</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1000001</field><field name="type_name_s">Instance</field><field name="body_texts">is this a greenplum instance?</field></doc><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1000003</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1000001</field><field name="type_name_s">Instance</field><field name="body_texts">no, not greenplum</field></doc><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1000004</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1000001</field><field name="type_name_s">Instance</field><field name="body_texts">really really?</field></doc></add>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
-    http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:11 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
-    http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:11 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Instance 1000000</field><field name="type">Instance</field><field name="type">ActiveRecord::Base</field><field name="class_name">Instance</field><field name="grouping_id_s">Instance 1000000</field><field name="type_name_s">Instance</field><field boost="1000000" name="name_texts">Greenplum</field><field boost="1000" name="description_texts">Just for bob</field></doc><doc><field name="id">Instance 1000001</field><field name="type">Instance</field><field name="type">ActiveRecord::Base</field><field name="class_name">Instance</field><field name="grouping_id_s">Instance 1000001</field><field name="type_name_s">Instance</field><field boost="1000000" name="name_texts">PurpleBanana</field><field boost="1000" name="description_texts">A nice instance in FactoryBuilder</field></doc></add>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
-    http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:11 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
-    headers:
-      Content-Type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - text/plain; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
     http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:11 GMT
+  recorded_at: Tue, 17 Jul 2012 17:07:26 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1000000</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000000</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Admin</field><field boost="1000000" name="last_name_texts">Alpha</field><field boost="1000" name="username_texts">admin</field><field boost="1000" name="email_texts">admin@example.com</field></doc><doc><field name="id">User 1000001</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000001</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Evil</field><field boost="1000000" name="last_name_texts">Alpha</field><field boost="1000" name="username_texts">evil_admin</field><field boost="1000" name="email_texts">evil_admin@example.com</field></doc><doc><field name="id">User 1000002</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000002</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Alice</field><field boost="1000000" name="last_name_texts">Alpha</field><field boost="1000" name="username_texts">alice</field><field boost="1000" name="email_texts">alice@example.com</field></doc><doc><field name="id">User 1000003</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000003</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Bob</field><field boost="1000000" name="last_name_texts">Brockovich</field><field boost="1000" name="username_texts">bob</field><field boost="1000" name="email_texts">bob@example.com</field></doc><doc><field name="id">User 1000004</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000004</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Carly</field><field boost="1000000" name="last_name_texts">Carlson</field><field boost="1000" name="username_texts">carly</field><field boost="1000" name="email_texts">carly@example.com</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1000000</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1000000</field><field name="type_name_s">Instance</field><field name="body_texts">i am a comment with greenplumsearch in me</field></doc><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1000001</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1000000</field><field name="type_name_s">Instance</field><field name="body_texts">i love bobsearch</field></doc><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1000002</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1000001</field><field name="type_name_s">Instance</field><field name="body_texts">is this a greenplumsearch instance?</field></doc><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1000003</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1000001</field><field name="type_name_s">Instance</field><field name="body_texts">no, not greenplumsearch</field></doc><doc><field name="id">Events::NOTE_ON_GREENPLUM_INSTANCE 1000004</field><field name="type">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="type">Events::Note</field><field name="type">Events::Base</field><field name="type">ActiveRecord::Base</field><field name="class_name">Events::NOTE_ON_GREENPLUM_INSTANCE</field><field name="grouping_id_s">Instance 1000001</field><field name="type_name_s">Instance</field><field name="body_texts">really really?</field></doc></add>
     headers:
       Content-Type:
       - text/xml
@@ -149,7 +49,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
     http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:11 GMT
+  recorded_at: Tue, 17 Jul 2012 17:07:26 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -172,15 +72,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11}}'
     http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:11 GMT
+  recorded_at: Tue, 17 Jul 2012 17:07:26 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Workfile 1000000</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_i">1000001</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000000</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Alice Private</field><field boost="1000" name="description_texts">Bob</field></doc><doc><field name="id">Workfile 1000001</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_i">1000004</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000001</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Bob Private</field></doc><doc><field name="id">Workfile 1000002</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_i">1000003</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000002</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Bob Public</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Instance 1000000</field><field name="type">Instance</field><field name="type">ActiveRecord::Base</field><field name="class_name">Instance</field><field name="grouping_id_s">Instance 1000000</field><field name="type_name_s">Instance</field><field boost="1000000" name="name_texts">Greenplum</field><field boost="1000" name="description_texts">Just for bobsearch and greenplumsearch</field></doc><doc><field name="id">Instance 1000001</field><field name="type">Instance</field><field name="type">ActiveRecord::Base</field><field name="class_name">Instance</field><field name="grouping_id_s">Instance 1000001</field><field name="type_name_s">Instance</field><field boost="1000000" name="name_texts">PurpleBanana</field><field boost="1000" name="description_texts">A nice instance in FactoryBuilder</field></doc><doc><field name="id">Instance 1000002</field><field name="type">Instance</field><field name="type">ActiveRecord::Base</field><field name="class_name">Instance</field><field name="grouping_id_s">Instance 1000002</field><field name="type_name_s">Instance</field><field boost="1000000" name="name_texts">bobs_instance</field><field boost="1000" name="description_texts">Bob-like</field></doc></add>
     headers:
       Content-Type:
       - text/xml
@@ -197,9 +97,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4}}'
     http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:12 GMT
+  recorded_at: Tue, 17 Jul 2012 17:07:26 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -224,13 +124,13 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
     http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:12 GMT
+  recorded_at: Tue, 17 Jul 2012 17:07:26 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Workspace 1000000</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workspace 1000000</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">Alice Public</field><field boost="1000" name="summary_texts">Bob can see I guess</field></doc><doc><field name="id">Workspace 1000001</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workspace 1000001</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">Alice Private</field><field boost="1000" name="summary_texts">Not for bob, ha ha</field></doc><doc><field name="id">Workspace 1000002</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workspace 1000002</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">Archived</field></doc><doc><field name="id">Workspace 1000003</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workspace 1000003</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">Bob Public</field></doc><doc><field name="id">Workspace 1000004</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workspace 1000004</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">Bob Private</field></doc></add>
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">User 1000000</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000000</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Admin</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">admin</field><field boost="1000" name="email_texts">admin@example.com</field></doc><doc><field name="id">User 1000001</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000001</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Evil</field><field boost="1000000" name="last_name_texts">AlphaSearch</field><field boost="1000" name="username_texts">evil_admin</field><field boost="1000" name="email_texts">evil_admin@example.com</field></doc><doc><field name="id">User 1000002</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000002</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Alice</field><field boost="1000000" name="last_name_texts">Alpha</field><field boost="1000" name="username_texts">alice</field><field boost="1000" name="email_texts">alice@example.com</field></doc><doc><field name="id">User 1000003</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000003</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">BobSearch</field><field boost="1000000" name="last_name_texts">Brockovich</field><field boost="1000" name="username_texts">bob</field><field boost="1000" name="email_texts">bob@example.com</field></doc><doc><field name="id">User 1000004</field><field name="type">User</field><field name="type">ActiveRecord::Base</field><field name="class_name">User</field><field name="grouping_id_s">User 1000004</field><field name="type_name_s">User</field><field boost="1000000" name="first_name_texts">Carly</field><field boost="1000000" name="last_name_texts">Carlson</field><field boost="1000" name="username_texts">carly</field><field boost="1000" name="email_texts">carly@example.com</field></doc></add>
     headers:
       Content-Type:
       - text/xml
@@ -247,9 +147,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>2}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
     http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:12 GMT
+  recorded_at: Tue, 17 Jul 2012 17:07:26 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -274,7 +174,32 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>7}}'
     http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:12 GMT
+  recorded_at: Tue, 17 Jul 2012 17:07:26 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Workfile 1000000</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_i">1000001</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000000</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Alice Private</field><field boost="1000" name="description_texts">BobSearch</field></doc><doc><field name="id">Workfile 1000001</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_i">1000004</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workfile 1000001</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Bob Private</field><field boost="1000" name="description_texts">BobSearch</field></doc><doc><field name="id">Workfile 1000002</field><field name="type">Workfile</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workfile</field><field name="workspace_id_i">1000003</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workfile 1000002</field><field name="type_name_s">Workfile</field><field boost="1000000" name="file_name_texts">Bob Public</field><field boost="1000" name="description_texts">BobSearch</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5}}'
+    http_version:
+  recorded_at: Tue, 17 Jul 2012 17:07:26 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -297,8 +222,83 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1}}'
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>16}}'
     http_version:
-  recorded_at: Mon, 16 Jul 2012 17:43:12 GMT
+  recorded_at: Tue, 17 Jul 2012 17:07:27 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">Workspace 1000000</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workspace 1000000</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">Alice Public</field><field boost="1000" name="summary_texts">BobSearch can see I guess</field></doc><doc><field name="id">Workspace 1000001</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workspace 1000001</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">Alice Private</field><field boost="1000" name="summary_texts">Not for bobsearch, ha ha</field></doc><doc><field name="id">Workspace 1000002</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="member_ids_im">1000002</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workspace 1000002</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">Archived</field></doc><doc><field name="id">Workspace 1000003</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">true</field><field name="grouping_id_s">Workspace 1000003</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">Bob Public</field><field boost="1000" name="summary_texts">BobSearch</field></doc><doc><field name="id">Workspace 1000004</field><field name="type">Workspace</field><field name="type">ActiveRecord::Base</field><field name="class_name">Workspace</field><field name="member_ids_im">1000003</field><field name="member_ids_im">1000004</field><field name="public_b">false</field><field name="grouping_id_s">Workspace 1000004</field><field name="type_name_s">Workspace</field><field boost="1000000" name="name_texts">Bob Private</field><field boost="1000" name="summary_texts">BobSearch</field></doc></add>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
+    http_version:
+  recorded_at: Tue, 17 Jul 2012 17:07:27 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>10}}'
+    http_version:
+  recorded_at: Tue, 17 Jul 2012 17:07:27 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+    headers:
+      Content-Type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3}}'
+    http_version:
+  recorded_at: Tue, 17 Jul 2012 17:07:27 GMT
 recorded_with: VCR 2.1.1
 ...

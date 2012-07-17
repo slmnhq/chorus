@@ -35,9 +35,10 @@ describe GpdbSchema do
 
     it "does not re-create schemas that already exist in our database" do
       GpdbSchema.refresh(account, database)
-      GpdbSchema.refresh(account, database)
 
-      GpdbSchema.count.should == 2
+      expect {
+        GpdbSchema.refresh(account, database)
+      }.not_to change(GpdbSchema, :count)
     end
   end
 

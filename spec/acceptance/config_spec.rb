@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Config" do
-  let(:user) { FactoryGirl.create :admin }
+  let(:user) { users(:admin) }
 
   get "/config" do
     before do

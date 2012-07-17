@@ -170,7 +170,7 @@ describe("chorus.views.ImageUpload", function() {
                 });
 
                 it("triggers saveFailed on the model", function() {
-                    expect("saveFailedSpy").toHaveBeenTriggeredOn(this.user);
+                    expect("saveFailed").toHaveBeenTriggeredOn(this.user);
                 });
 
                 it("removes the spinner", function() {

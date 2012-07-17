@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Notes" do
-  let(:user) { FactoryGirl.create :user }
+  let(:user) { users(:bob) }
   let(:note) { FactoryGirl.create :note_on_hdfs_file_event }
   let!(:instance) { FactoryGirl.create(:instance, :id => 123) }
 
@@ -18,7 +18,7 @@ resource "Notes" do
 
 
     let(:body) { note.body }
-    let(:entity_type) { "instance" }
+    let(:entity_type) { "greenplum_instance" }
     let(:entity_id) { "123" }
 
     example_request "Post a new note on a Greenplum instance" do

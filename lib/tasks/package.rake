@@ -26,6 +26,7 @@ module PackageMaker
     release_name = version_name
 
     current_path = path + "/current"
+    releases_path = path + "/releases"
     release_path = path + "/releases/" + release_name
 
     run "scp #{filename} #{host}:#{path}"
@@ -45,7 +46,10 @@ module PackageMaker
 
     run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh stop'"
     run "ssh #{host} 'cd #{path} && rm -f #{current_path} && ln -s #{release_path} #{current_path}'"
-    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh monitor &'"
+    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh start'"
+
+    run "ssh chorus-staging 'cd #{path}; rm greenplum*.tar.gz'"
+    run "ssh chorus-staging 'cd #{releases_path}; ls | grep -v #{head_sha} | xargs rm -r'"
   end
 
   def deploy(config)
@@ -58,10 +62,15 @@ module PackageMaker
 
   def make(options = {})
     current_sha = head_sha
-    filename = "greenplum-chorus-#{version_name}-#{timestamp}.tar.gz"
+    filename = "greenplum-chorus-#{timestamp}-#{version_name}.tar.gz"
     archive_app(filename, current_sha)
 
+    clean_workspace
     filename
+  end
+
+  def clean_workspace
+    run "rm -r .bundle"
   end
 
   def prepare_remote(config)
@@ -73,23 +82,26 @@ module PackageMaker
   end
 
   def check_existing_version(config)
+    return if ENV['FORCE_DEPLOY']
     versions = `ssh #{config['host']} 'ls #{config['path']}/releases/'`.split
 
     if versions.include? version_name
-      puts "There is a version #{version_name} in the server. Do you want to overwrite it? Press Enter to continue or Ctrl-C to cancel."
+      puts "There is a version #{version_name} in the server. Do you want to overwrite it? Press Enter to continue or Ctrl-C to cancel. Or run with FORCE_DEPLOY=true"
       puts "Press enter to continue..." while STDIN.gets != "\n"
     end
   end
 
   def check_clean_working_tree
     unless system('git diff-files --quiet')
-      puts "You have a dirty working tree. You must stash or commit your changes before packaging."
+      puts "You have a dirty working tree. You must stash or commit your changes before packaging. Or run with IGNORE_DIRTY=true"
       exit
     end
   end
 
   def archive_app(filename, sha)
-    #check_clean_working_tree
+    unless ENV['IGNORE_DIRTY']
+      check_clean_working_tree
+    end
     # TODO: Why?? pwd
     run "pwd; RAILS_ENV=development bundle exec rake assets:precompile"
     run "bundle exec jetpack ."

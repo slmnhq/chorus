@@ -7,7 +7,7 @@ describe SearchPresenter, :type => :view do
   before(:each) do
     reindex_solr_fixtures
     stub(view).current_user { user }
-    search = Search.new(user, :query => 'bob')
+    search = Search.new(user, :query => 'bobsearch')
 
     VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
       search.search

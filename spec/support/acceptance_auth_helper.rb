@@ -1,7 +1,7 @@
 module AcceptanceAuthHelper
   def log_in(user)
     no_doc do
-      client.post "/sessions", :session => {:username => user.username, :password => user.password}
+      client.post "/sessions", :session => {:username => user.username, :password => "password"}
     end
   end
 

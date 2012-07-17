@@ -24,7 +24,7 @@ describe SearchController do
       reindex_solr_fixtures
 
       VCR.use_cassette "search_solr_query_all_types_bob" do
-        get :show, :query => 'bob'
+        get :show, :query => 'bobsearch'
       end
     end
 

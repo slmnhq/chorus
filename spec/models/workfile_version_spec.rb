@@ -1,7 +1,7 @@
-require "spec_helper" 
+require "spec_helper"
 
 describe WorkfileVersion do
-  let!(:workfile) { workfile = FactoryGirl.create(:workfile)}
+  let!(:workfile) { workfile = FactoryGirl.create(:workfile) }
   let!(:version) { version = FactoryGirl.create(:workfile_version, :workfile => workfile) }
   let!(:version2) { version = FactoryGirl.create(:workfile_version, :workfile => workfile, :version_num => "2") }
 
@@ -44,14 +44,14 @@ describe WorkfileVersion do
       let(:filename) { "no_extension" }
       its(:file_type) { should == "text" }
       its(:image?) { should be_false }
-      its(:text?)  { should be_true }
+      its(:text?) { should be_true }
     end
 
     context "with a binary file" do
       let(:filename) { "binary.tar.gz" }
       its(:file_type) { should == "other" }
       its(:image?) { should be_false }
-      its(:text?)  { should be_false }
+      its(:text?) { should be_false }
     end
   end
 
@@ -102,6 +102,43 @@ describe WorkfileVersion do
         it "raise an error " do
           expect { version.update_content("this is new content") }.to raise_error(ActiveRecord::RecordInvalid)
         end
+      end
+    end
+  end
+
+  describe "initialization hooks" do
+    let(:user) { users(:admin) }
+
+    before do
+      subject.workfile = workfile
+      subject.owner = subject.modifier = user
+      subject.save!
+    end
+
+    context "when the file is set" do
+      let(:file) { test_file("code.cpp") }
+
+      subject { WorkfileVersion.new(:contents => file) }
+
+      it "does not change the file" do
+        original_content = File.readlines(file.path)
+        content = File.readlines(subject.contents.path)
+
+        content.should == original_content
+        subject.should be_valid
+        subject.should be_persisted
+      end
+    end
+
+    context "when the file is not set" do
+      subject { WorkfileVersion.new }
+
+      it "creates a blank file" do
+        content = File.readlines(subject.contents.path)
+
+        content.should be_blank
+        subject.should be_valid
+        subject.should be_persisted
       end
     end
   end

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 resource "Workspace Members" do
-  let!(:owner) { FactoryGirl.create :user }
-  let!(:user1) { FactoryGirl.create :user }
+  let!(:owner) { users(:bob) }
+  let!(:user1) { users(:alice) }
   let!(:workspace) { FactoryGirl.create(:workspace, :owner => owner ) }
   let!(:workspace_id) { workspace.to_param }
 

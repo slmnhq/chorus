@@ -2,7 +2,7 @@ class WorkfileVersion < ActiveRecord::Base
   attr_accessible :commit_message, :owner, :modifier, :contents, :version_num
   has_attached_file :contents,
                     :styles => {:original => "", :icon => "50x50>"},
-                    :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
+                    :path => Chorus::Application.config.chorus['workfile_storage_path'] + ":class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style"
 
   belongs_to :workfile, :touch => true
@@ -10,10 +10,17 @@ class WorkfileVersion < ActiveRecord::Base
   belongs_to :modifier, :class_name => 'User'
   before_post_process :check_file_type
 
+  before_validation :init_version_number, :on => :create
+  before_validation :init_file, :on => :create
+
   after_validation :clean_content_errors
 
   def check_file_type
     image?
+  end
+
+  def file_name
+    contents.original_filename
   end
 
   CODE_EXTENSIONS = ["cpp", "r"]
@@ -79,5 +86,13 @@ class WorkfileVersion < ActiveRecord::Base
       errors.delete(:contents)
       errors.add(:contents, :invalid)
     end
+  end
+
+  def init_version_number
+    self.version_num ||= 1
+  end
+  
+  def init_file
+    self.contents = Tempfile.new(['untitled', '.sql']) unless contents.file?
   end
 end

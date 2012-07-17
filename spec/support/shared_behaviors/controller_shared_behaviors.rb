@@ -61,7 +61,7 @@ shared_examples_for "uploading a new workfile" do
     end
 
     it "sets the commit message to be empty" do
-      WorkfileVersion.last.commit_message.should == ""
+      WorkfileVersion.last.commit_message.should be_blank
     end
 
     it "sets the last modifier to the current user" do

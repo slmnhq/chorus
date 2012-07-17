@@ -108,7 +108,7 @@ describe Search do
     describe "num_found" do
       it "returns a hash with the number found of each type" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bob')
+          search = Search.new(bob, :query => 'bobsearch')
           search.num_found[:users].should == 1
           search.num_found[:instances].should == 1
         end
@@ -116,7 +116,7 @@ describe Search do
 
       it "returns a hash with the total count for the given type" do
         VCR.use_cassette('search_solr_query_user_bob_as_bob') do
-          search = Search.new(bob, :query => 'bob', :entity_type => 'user')
+          search = Search.new(bob, :query => 'bobsearch', :entity_type => 'user')
           search.num_found[:users].should == 1
           search.num_found[:instances].should == 0
         end
@@ -126,15 +126,15 @@ describe Search do
     describe "users" do
       it "includes the highlighted attributes" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bob')
+          search = Search.new(bob, :query => 'bobsearch')
           user = search.users.first
-          user.highlighted_attributes[:first_name][0].should == '<em>Bob</em>'
+          user.highlighted_attributes[:first_name][0].should == '<em>BobSearch</em>'
         end
       end
 
       it "returns the User objects found" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bob')
+          search = Search.new(bob, :query => 'bobsearch')
           search.users.length.should == 1
           search.users.first.should == bob
         end
@@ -144,16 +144,16 @@ describe Search do
     describe "instances" do
       it "includes the highlighted attributes" do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
-          search = Search.new(bob, :query => 'bob')
+          search = Search.new(bob, :query => 'bobsearch')
           instance = search.instances.first
           instance.highlighted_attributes.length.should == 1
-          instance.highlighted_attributes[:description][0].should == "Just for <em>bob</em>"
+          instance.highlighted_attributes[:description][0].should == "Just for <em>bobsearch</em> and greenplumsearch"
         end
       end
 
       it "returns the Instance objects found" do
         VCR.use_cassette('search_solr_query_all_types_bob') do
-          search = Search.new(bob, :query => 'bob')
+          search = Search.new(bob, :query => 'bobsearch')
           search.instances.length.should == 1
           search.instances.first.should == instance
         end
@@ -163,11 +163,11 @@ describe Search do
     describe "highlighted comments" do
       it "includes highlighted comments in the highlighted_attributes" do
         VCR.use_cassette('search_solr_query_all_types_greenplum_as_bob') do
-          search = Search.new(bob, :query => 'greenplum')
+          search = Search.new(bob, :query => 'greenplumsearch')
           search.instances.length.should == 2
           instance_with_comments = search.instances[1]
           instance_with_comments.search_result_comments.length.should == 2
-          instance_with_comments.search_result_comments[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplum</em>"
+          instance_with_comments.search_result_comments[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplumsearch</em>"
         end
       end
     end
@@ -175,7 +175,7 @@ describe Search do
     describe "per_type" do
       it "does not return more than per_type of any model" do
         VCR.use_cassette('search_solr_query_all_per_type_1_as_bob') do
-          search = Search.new(bob, :query => 'alpha', :per_type => 1)
+          search = Search.new(bob, :query => 'alphasearch', :per_type => 1)
           search.users.length.should == 1
           search.num_found[:users].should > 1
         end
@@ -185,7 +185,7 @@ describe Search do
     describe "workspace permissions" do
       it "returns public and member workspaces, but not private ones" do
         VCR.use_cassette('search_solr_query_workspaces_bob_as_bob') do
-          search = Search.new(bob, :query => 'bob', :entity_type => :workspace)
+          search = Search.new(bob, :query => 'bobsearch', :entity_type => :workspace)
           search.workspaces.should include(public_workspace)
           search.workspaces.should include(private_workspace)
           search.workspaces.should_not include(private_workspace_not_a_member)
@@ -194,7 +194,7 @@ describe Search do
 
       it "returns everything for admins" do
         VCR.use_cassette('search_solr_query_workspaces_bob_as_admin') do
-          search = Search.new(admin, :query => 'bob', :entity_type => :workspace)
+          search = Search.new(admin, :query => 'bobsearch', :entity_type => :workspace)
           search.workspaces.should include(public_workspace)
           search.workspaces.should include(private_workspace)
           search.workspaces.should include(private_workspace_not_a_member)
@@ -205,7 +205,7 @@ describe Search do
     describe "workfile permissions" do
       it "returns workfiles for public and member workspaces, but not private ones" do
         VCR.use_cassette('search_solr_query_workfiles_bob_as_bob') do
-          search = Search.new(bob, :query => 'bob', :entity_type => :workfile)
+          search = Search.new(bob, :query => 'bobsearch', :entity_type => :workfile)
           search.workfiles.should include(public_workfile_bob)
           search.workfiles.should include(private_workfile_bob)
           search.workfiles.should_not include(private_workfile_hidden_from_bob)
@@ -214,7 +214,7 @@ describe Search do
 
       it "returns workfiles for every workspace for admins" do
         VCR.use_cassette('search_solr_query_workfiles_bob_as_admin') do
-          search = Search.new(admin, :query => 'bob', :entity_type => :workfile)
+          search = Search.new(admin, :query => 'bobsearch', :entity_type => :workfile)
           search.workfiles.should include(public_workfile_bob)
           search.workfiles.should include(private_workfile_bob)
           search.workfiles.should include(private_workfile_hidden_from_bob)

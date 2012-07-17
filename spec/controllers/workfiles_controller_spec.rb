@@ -172,7 +172,7 @@ describe WorkfilesController do
         :workspace_id => workspace.to_param,
         :workfile => {
           :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
-          :contents => file
+          :versions_attributes => [{:contents => file}]
         }
       }
     end
@@ -262,19 +262,30 @@ describe WorkfilesController do
         log_in user
       end
 
-      it "shows an error to the user" do
-        post :create, {
+      let(:parameters) do
+        {
           :workspace_id => workspace.to_param,
           :workfile => {
-            :file_name => 'not_an_image.jpg',
-            :source => 'empty'
+            :versions_attributes => [{
+              :contents => test_file('not_an_image.jpg')
+            }]
           }
         }
+      end
+
+      it "shows an error to the user" do
+        post :create, parameters
 
         errors = JSON.parse(response.body)['errors']
 
         response.code.should == "422"
-        errors['fields']['contents'].should include('INVALID')
+        errors['fields']['versions.contents'].should include('INVALID')
+      end
+
+      it "does not create a orphan workfile" do
+        expect do
+          post :create, parameters
+        end.to_not change(Workfile, :count)
       end
     end
 
@@ -288,7 +299,7 @@ describe WorkfilesController do
           :workspace_id => workspace.to_param,
           :workfile => {
             :file_name => "empty file.sql",
-            :source => 'empty'
+            :source => 'empty',
           }
         }
       end
@@ -332,7 +343,7 @@ describe WorkfilesController do
         end
 
         it "sets the commit message to be empty" do
-          subject.commit_message.should == ""
+          subject.commit_message.should be_blank
         end
 
         it "sets the last modifier to the current user" do
@@ -341,38 +352,10 @@ describe WorkfilesController do
 
         it "uploads the correct file contents" do
           subject.contents.should be_present
-          subject.contents.original_filename.should == "empty_file.sql"
+          subject.file_name.should match(/\.sql$/)
           subject.contents.size.should == 0
         end
       end
-    end
-    context "File name conflicts" do
-      let(:current_user) { user }
-
-      before(:each) do
-        log_in current_user
-
-        @params = {
-            :workspace_id => workspace.to_param,
-            :workfile => {
-                :file_name => "test.sql",
-                :source => 'empty'
-            }
-        }
-
-        post :create, @params
-      end
-
-      it "appends a number to the file name if there is a conflict" do
-        post :create, @params
-
-        Workfile.last.file_name.should == "test_1.sql"
-        post :create, @params
-        Workfile.last.file_name.should == "test_2.sql"
-        post :create, @params
-        Workfile.last.file_name.should == "test_3.sql"
-      end
-
     end
   end
 

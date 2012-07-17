@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Activities" do
-  let(:user) { FactoryGirl.create :user }
+  let(:user) { users(:bob) }
 
   get "/activities?entity_type=dashboard" do
     before do

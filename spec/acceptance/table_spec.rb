@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 resource "Greenplum Table" do
-  let(:owner) { gpdb_table.schema.instance.owner }
-  let(:gpdb_table) { FactoryGirl.create(:gpdb_table) }
+  let(:owner) { users(:bob) }
+  let(:gpdb_table) { datasets(:bobs_table) }
   let(:table_id) { gpdb_table.to_param }
   let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => gpdb_table.instance, :owner => owner) }
 
