@@ -32,12 +32,12 @@ FixtureBuilder.configure do |fbuilder|
     bobs_instance = Instance.create!({ :name => "bobs_instance", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => bob, :shared => false}, :without_protection => true)
 
     # Instance Accounts
-    carly_bobs_instance_account = InstanceAccount.create!({ :owner => carly, :instance => bobs_instance, :db_username => "iamcarly", :db_password => "corvette" }, :without_protection => true)
+    carly_bobs_instance_account = InstanceAccount.create!({:owner => carly, :instance => bobs_instance, :db_username => "iamcarly", :db_password => "corvette"}, :without_protection => true)
 
     # Datasets
-    bob_database = GpdbDatabase.create!({ :instance => bobs_instance }, :without_protection => true)
-    bob_schema = GpdbSchema.create!({ :database => bob_database }, :without_protection => true)
-    GpdbTable.create!({ :name => "bobs_table", :schema => bob_schema }, :without_protection => true)
+    bob_database = GpdbDatabase.create!({:instance => bobs_instance}, :without_protection => true)
+    bob_schema = GpdbSchema.create!({:database => bob_database}, :without_protection => true)
+    GpdbTable.create!({:name => "bobs_table", :schema => bob_schema}, :without_protection => true)
 
     #Workspaces
     workspaces = []
@@ -50,17 +50,17 @@ FixtureBuilder.configure do |fbuilder|
       workspace.members << carly
     end
 
-
     #Workfiles
-    alice_private = Workfile.create!({:file_name => "Alice Private", :description => "BobSearch", :owner => alice, :workspace => alice_private_workspace}, :without_protection => true)
-    WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice}, :without_protection => true)
+    File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
+      alice_private = Workfile.create!({:file_name => "Alice Private", :description => "BobSearch", :owner => alice, :workspace => alice_private_workspace}, :without_protection => true)
+      WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
 
-    bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace}, :without_protection => true)
-    WorkfileVersion.create!({:workfile => bob_private, :version_num => "1", :owner => bob, :modifier => bob}, :without_protection => true)
+      bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace}, :without_protection => true)
+      WorkfileVersion.create!({:workfile => bob_private, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
 
-    bob_public = Workfile.create!({:file_name => "Bob Public", :description => "BobSearch", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
-    WorkfileVersion.create!({:workfile => bob_public, :version_num => "1", :owner => bob, :modifier => bob}, :without_protection => true)
-
+      bob_public = Workfile.create!({:file_name => "Bob Public", :description => "BobSearch", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
+      WorkfileVersion.create!({:workfile => bob_public, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
+    end
 
     #Notes
     Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00'}, :without_protection => true)

@@ -58,7 +58,7 @@ describe SearchPresenter, :type => :view do
       instance_result = instance_hash[:results][0]
       instance_result.should have_key(:comments)
       instance_result[:comments].length.should == 1
-      instance_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>bob</em>"
+      instance_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>bobsearch</em>"
     end
   end
 end
