@@ -1,6 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
+require 'sunspot_matchers'
 require 'support/fixture_builder'
 require 'rspec/rails'
 require 'rspec/autorun'
@@ -11,7 +12,6 @@ require 'allowy/rspec'
 require "vcr"
 require "webmock/rspec"
 require 'shoulda-matchers'
-require 'sunspot_matchers'
 
 module Shoulda # :nodoc:
   module Matchers
