@@ -334,6 +334,32 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("note on a workspace ", function() {
+        var instance;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.noteOnWorkspaceCreated({
+                workspace: {
+                    name: 'le_workspace',
+                    id: 42
+                }
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = rspecFixtures.workspace({id: 42, name: 'le_workspace' });
+        });
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.NOTE.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    noteObjectLink: linkTo(workspace.showUrl(), workspace.name()),
+                    noteObjectType: "workspace"
+                }
+            )
+        });
+    });
+
     context("note on a hadoop instance", function() {
         var instance;
 

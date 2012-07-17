@@ -103,7 +103,7 @@
         },
 
         defaultStyle: function(self) {
-            if (self.workspace().id) {
+            if (self.workspace().id && self.get("actionType") != "NOTE_ON_WORKSPACE") {
                 return 'default';
             } else {
                 return 'without_workspace';
@@ -139,6 +139,9 @@
                 case "NOTE_ON_HDFS_FILE":
                     return "file";
                     break;
+                case "NOTE_ON_WORKSPACE":
+                    return "workspace";
+                    break;
                 default:
                     return "";
                     break;
@@ -148,7 +151,5 @@
         modelLink: function(model) {
             return chorus.helpers.linkTo(model.showUrl(), model.name());
         }
-
     };
-
 })();

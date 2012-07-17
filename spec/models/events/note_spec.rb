@@ -7,6 +7,7 @@ describe "Notes" do
   let(:actor) { FactoryGirl.create(:user) }
   let(:greenplum_instance) { FactoryGirl.create(:instance) }
   let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
+  let(:workspace) { FactoryGirl.create(:workspace) }
   let(:hdfs_file_reference) do
     HdfsFileReference.create({'path' => '/data/test.csv',
                               'hadoop_instance_id' => 1234})
@@ -77,6 +78,23 @@ describe "Notes" do
     it_creates_a_global_activity
   end
 
+  describe "NOTE_ON_WORKSPACE" do
+    subject do
+      Events::NOTE_ON_WORKSPACE.add(
+          :actor => actor,
+          :workspace => workspace,
+          :body => "This is the text of the note on the workspace"
+      )
+    end
+
+    its(:workspace) { should == workspace }
+    its(:targets) { should == {:workspace => workspace} }
+    its(:additional_data) { should == {:body => "This is the text of the note on the workspace"} }
+
+    it_creates_activities_for { [actor, workspace] }
+    it_creates_a_global_activity
+  end
+
   describe "search" do
     it "indexes text fields" do
       Events::Note.should have_searchable_field :body
@@ -129,6 +147,16 @@ describe "Notes" do
       last_note.hdfs_file.hadoop_instance_id == 1234
       last_note.hdfs_file.path.should == "/data/test.csv"
       last_note.body.should == "Some crazy content"
+    end
+
+    it "creates a note on a workspace" do
+      Events::Note.create_for_entity("workspace", workspace.id, "More crazy content", user)
+
+      last_note = Events::Note.first
+      last_note.action.should == "NOTE_ON_WORKSPACE"
+      last_note.actor.should == user
+      last_note.workspace.id == workspace.id
+      last_note.body.should == "More crazy content"
     end
 
     it "raises an exception if the entity type is unknown" do

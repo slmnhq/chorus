@@ -225,6 +225,11 @@ FactoryGirl.define do
       association :hdfs_file, :factory => :hdfs_file_reference
       body "This is a note on an hdfs file"
     end
+
+    factory :note_on_workspace_event, :class => Events::NOTE_ON_WORKSPACE do
+      association :workspace, :factory => :workspace
+      body "This is a note on a workspace"
+    end
   end
 end
 

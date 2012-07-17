@@ -66,6 +66,10 @@
                         path: this.get("hdfsFile").path
                     });
                     break;
+                case "NOTE_ON_WORKSPACE":
+                    model = new chorus.models.Workspace();
+                    model.set(this.get("workspace"));
+                    break;
             }
             return model;
         },

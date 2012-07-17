@@ -125,7 +125,8 @@ describe EventsController do
         "noteOnGreenplumInstanceCreated" => :note_on_greenplum_instance_event,
         "noteOnHadoopInstanceCreated" => :note_on_hadoop_instance_event,
         "hdfsExternalTableCreated" => :hdfs_external_table_created_event,
-        "noteOnHdfsFileCreated" => :note_on_hdfs_file_event
+        "noteOnHdfsFileCreated" => :note_on_hdfs_file_event,
+        "noteOnWorkspaceCreated" => :note_on_workspace_event
     }
 
     FIXTURE_FILES.each do |filename, event_factory_name|

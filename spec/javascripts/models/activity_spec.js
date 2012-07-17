@@ -142,9 +142,19 @@ describe("chorus.models.Activity", function() {
                     expect(hdfsFile.get("hadoopInstance").id).toBe(331)
                 });
             });
+
+            context("for a NOTE_ON_WORKSPACE", function() {
+                it("returns a workspace with the right data", function() {
+                    activity = rspecFixtures.activity.noteOnWorkspaceCreated({
+                        workspace: { id: 123 }
+                    });
+                    var workspace = activity.noteObject();
+                    expect(workspace).toBeA(chorus.models.Workspace);
+                    expect(workspace.get("id")).toBe(123)
+                });
+            });
         });
-        
-        
+
         describe("#hdfsEntry", function() {
             it("returns hdfs entry with the right data", function() {
                 activity = rspecFixtures.activity.hdfsExternalTableCreated({
