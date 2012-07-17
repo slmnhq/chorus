@@ -6,7 +6,7 @@ describe DatasetsController do
   let(:instance) { instance_account.instance }
 
   let(:database) { instance.databases.first }
-  let(:schema) { database.schemas.first }
+  let(:schema) { gpdb_schemas(:bobs_schema) }
   let(:table) { schema.datasets.tables.first }
   let(:view) { schema.datasets.views.first }
 
