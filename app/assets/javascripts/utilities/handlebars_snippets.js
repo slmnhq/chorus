@@ -223,6 +223,7 @@
         },
 
         renderTableData: function(tableData) {
+            tableData = tableData && tableData.trim()
             if (tableData || tableData === 0 || isNaN(tableData)) {
                 return tableData
             } else if (tableData === false) {
