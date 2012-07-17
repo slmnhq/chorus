@@ -81,7 +81,7 @@ describe HdfsExternalTable do
       it "create a WORKSPACE_ADD_HDFS_AS_EXT_TABLE event" do
         workspace = FactoryGirl.create(:workspace, :sandbox => FactoryGirl.create(:gpdb_schema))
         HdfsExternalTable.create_event(@dataset, workspace, parameters, creator)
-        event = Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.last
+        event = Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.first
         event.hdfs_file.hadoop_instance_id.should == hadoop_instance.id
         event.hdfs_file.path.should == "/data/file.csv"
         event.dataset.should == @dataset

@@ -1,104 +1,100 @@
 require "spec_helper"
 
 describe EventsController do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:object) { FactoryGirl.build(:user) }
-
-  let!(:event1) { FactoryGirl.create(:workfile_created_event) }
-  let!(:event2) { FactoryGirl.create(:workfile_created_event) }
-
-  let!(:dashboard_event1) { Activity.create! }
-  let!(:dashboard_event2) { Activity.create! }
-
-  let(:current_user) { FactoryGirl.create(:admin) }
+  let(:event) { Events::Base.first }
+  let(:current_user) { users(:carly) }
 
   before do
     log_in current_user
-    Activity.create!(:entity => object, :event => event1)
-    Activity.create!(:entity => object, :event => event2)
   end
 
   describe "#index" do
+    before do
+      Activity.create!(:entity => object, :event => event)
+    end
+
     context "when getting the activities for an instance" do
-      let(:object) { FactoryGirl.create(:instance) }
+      let(:object) { instances(:greenplum) }
 
       it "presents the instance's activities" do
-        mock_present { |models| models.should =~ [event1, event2] }
+        mock_present { |models| models.should include(event) }
         get :index, :entity_type => "instance", :entity_id => object.id
         response.code.should == "200"
       end
     end
 
     context "when getting the activities for a hadoop instance" do
-      let(:object) { FactoryGirl.create(:hadoop_instance) }
+      let(:object) { hadoop_instances(:hadoop) }
 
       it "presents the hadoop instance's activities" do
-        mock_present { |models| models.should =~ [event1, event2] }
+        mock_present { |models| models.should include(event) }
         get :index, :entity_type => "hadoop_instance", :entity_id => object.id
         response.code.should == "200"
       end
     end
 
     context "when getting the activities for a user" do
-      let(:object) { FactoryGirl.create(:user) }
+      let(:object) { users(:bob) }
 
       it "presents the user's activities" do
-        mock_present { |models| models.should =~ [event1, event2] }
+        mock_present { |models| models.should include(event) }
         get :index, :entity_type => "user", :entity_id => object.id
         response.code.should == "200"
       end
     end
 
     context "when getting the activities for a workfile" do
-      let(:object) { FactoryGirl.create(:workfile) }
+      let(:object) { workfiles(:bob_public) }
 
       it "presents the workfile's activities" do
-        mock_present { |models| models.should =~ [event1, event2] }
+        mock_present { |models| models.should include(event) }
         get :index, :entity_type => "workfile", :entity_id => object.id
         response.code.should == "200"
       end
     end
 
     context "when getting the activities for a workspace" do
-      let(:object) { FactoryGirl.create(:workspace) }
+      let(:object) { workspaces(:alice_public) }
 
       it "presents the workspace's activities" do
-        mock_present { |models| models.should =~ [event1, event2] }
+        mock_present { |models| models.should include(event) }
         get :index, :entity_type => "workspace", :entity_id => object.id
         response.code.should == "200"
       end
     end
 
     context "when getting the activities for a gpdb_table" do
-      let!(:object) { FactoryGirl.create(:gpdb_table) }
-
-      let!(:event1) { FactoryGirl.create(:source_table_created_event, :dataset => object) }
-      let!(:event2) { FactoryGirl.create(:source_table_created_event, :dataset => object) }
+      let(:object) { datasets(:bobs_table) }
 
       it "presents the gpdb_table's activities" do
-        mock_present { |models| models.should =~ [event1, event2] }
+        mock_present { |models| models.should include(event) }
         get :index, :entity_type => "dataset", :entity_id => object.id
         response.code.should == "200"
       end
     end
 
     context "when getting the activities for an hdfs file" do
-      let!(:object) { FactoryGirl.create(:hdfs_file_reference) }
+      let(:object) { HdfsFileReference.first }
 
-      let!(:event1) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
-      let!(:event2) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
+      let(:event1) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
+      let(:event2) { FactoryGirl.create(:note_on_hdfs_file_event, :hdfs_file => object) }
 
       it "presents the workspace's activities" do
-        mock_present { |models| models.should =~ [event1, event2] }
-        get :index, :entity_type => "hdfs", :entity_id => object.hadoop_instance_id.to_s + "|" + object.path
+        mock_present { |models| models.should include(event) }
+        get :index, :entity_type => "hdfs", :entity_id => "#{object.hadoop_instance_id.to_s}|#{object.path}"
         response.code.should == "200"
       end
     end
 
     context "when getting the activities for the current user's home page" do
+      let(:object) { datasets(:bobs_table) }
+
+      before do
+        mock(Events::Base).for_dashboard_of(current_user) { fake_relation [event] }
+      end
+
       it "presents the user's activities" do
-        mock(Events::Base).for_dashboard_of(current_user) { fake_relation [dashboard_event1, dashboard_event2] }
-        mock_present { |models| models.should =~ [dashboard_event1, dashboard_event2] }
+        mock_present { |models| models.should == [event] }
         get :index, :entity_type => "dashboard"
         response.code.should == "200"
       end
@@ -107,33 +103,33 @@ describe EventsController do
 
   describe "#show" do
     it "shows the particular event " do
-      mock_present { |model| model.should == event1 }
-      get :show, :id => event1.to_param
+      mock_present { |model| model.should == event }
+      get :show, :id => event.to_param
       response.code.should == "200"
     end
 
     FIXTURE_FILES = {
-        "greenplumInstanceCreated" => :greenplum_instance_created_event,
-        "hadoopInstanceCreated" => :hadoop_instance_created_event,
-        "greenplumInstanceChangedOwner" => :greenplum_instance_changed_owner_event,
-        "greenplumInstanceChangedName" => :greenplum_instance_changed_name_event,
-        "hadoopInstanceChangedName" => :hadoop_instance_changed_name_event,
-        "workfileCreated" => :workfile_created_event,
-        "sourceTableCreated" => :source_table_created_event,
-        "userCreated" => :user_created_event,
-        "sandboxAdded" => :sandbox_added_event,
-        "noteOnGreenplumInstanceCreated" => :note_on_greenplum_instance_event,
-        "noteOnHadoopInstanceCreated" => :note_on_hadoop_instance_event,
-        "hdfsExternalTableCreated" => :hdfs_external_table_created_event,
-        "noteOnHdfsFileCreated" => :note_on_hdfs_file_event,
-        "noteOnWorkspaceCreated" => :note_on_workspace_event
+        "greenplumInstanceCreated" => Events::GREENPLUM_INSTANCE_CREATED,
+        "hadoopInstanceCreated" => Events::HADOOP_INSTANCE_CREATED,
+        "greenplumInstanceChangedOwner" => Events::GREENPLUM_INSTANCE_CHANGED_OWNER,
+        "greenplumInstanceChangedName" => Events::GREENPLUM_INSTANCE_CHANGED_NAME,
+        "hadoopInstanceChangedName" => Events::HADOOP_INSTANCE_CHANGED_NAME,
+        "workfileCreated" => Events::WORKFILE_CREATED,
+        "sourceTableCreated" => Events::SOURCE_TABLE_CREATED,
+        "userCreated" => Events::USER_ADDED,
+        "sandboxAdded" => Events::WORKSPACE_ADD_SANDBOX,
+        "noteOnGreenplumInstanceCreated" => Events::NOTE_ON_GREENPLUM_INSTANCE,
+        "noteOnHadoopInstanceCreated" => Events::NOTE_ON_HADOOP_INSTANCE,
+        "hdfsExternalTableCreated" => Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE,
+        "noteOnHdfsFileCreated" => Events::NOTE_ON_HDFS_FILE,
+        "noteOnWorkspaceCreated" => Events::NOTE_ON_WORKSPACE
     }
 
-    FIXTURE_FILES.each do |filename, event_factory_name|
+    FIXTURE_FILES.each do |filename, event_class_name|
 
       generate_fixture "activity/#{filename}.json" do
-        event = FactoryGirl.create(event_factory_name)
-        activity = Activity.global.create!(:event => event)
+        event = event_class_name.first
+        Activity.global.create!(:event => event)
         get :show, :id => event.to_param
       end
     end

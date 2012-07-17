@@ -118,7 +118,7 @@ describe UsersController do
       end
 
       it "makes a USER_ADDED event" do
-        event = Events::USER_ADDED.last
+        event = Events::USER_ADDED.first
         event.new_user.should == User.find_by_username(@values[:username])
         event.actor.should == admin
       end
