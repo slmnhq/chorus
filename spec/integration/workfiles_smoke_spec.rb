@@ -17,7 +17,7 @@ describe "add a workfile" do
     click_button("Upload File")
     wait_for_ajax
     within_modal do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+      attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
       wait_for_ajax
     end
@@ -35,7 +35,7 @@ describe "Deleting workfiles" do
     click_link("Work Files")
     click_button("Upload File")
     within_modal do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+      attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
       wait_for_ajax
     end
