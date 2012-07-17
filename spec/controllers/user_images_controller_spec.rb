@@ -2,6 +2,8 @@ require "spec_helper"
 
 describe UserImagesController do
   before do
+    @user = FactoryGirl.create(:user, :username => 'some_user', :first_name => "marty")
+    log_in @user
     any_instance_of(User) do |user|
       stub(user).save_attached_files { true }
     end
@@ -9,11 +11,6 @@ describe UserImagesController do
 
   describe "#create" do
     context("for User") do
-      before do
-        @user = FactoryGirl.create(:user, :username => 'some_user', :first_name => "marty")
-        log_in @user
-      end
-
       let(:files) { [Rack::Test::UploadedFile.new(File.expand_path("spec/fixtures/small1.gif", Rails.root), "image/gif")] }
 
       it "updates the user's image" do
@@ -34,6 +31,21 @@ describe UserImagesController do
       generate_fixture "image.json" do
         post :create, :user_id => @user.id, :files => files
       end
+    end
+  end
+
+  describe "#show" do
+    let(:user1) { FactoryGirl.create(:user, :image => test_file('small1.gif')) }
+    before do
+      stub(File).binread(user1.image.path("original")) {
+        "Hi!"
+      }
+    end
+
+    it "returns the image" do
+      get :show, :user_id => user1.id
+      response.code.should == "200"
+      decoded_response.type == "image/gif"
     end
   end
 end

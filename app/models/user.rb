@@ -23,7 +23,9 @@ class User < ActiveRecord::Base
   has_many :instance_accounts, :foreign_key => :owner_id
   has_many :hadoop_instances, :foreign_key => :owner_id
 
-  has_attached_file :image, :default_url => '/images/default-user-icon.png', :styles => {:original => "", :icon => "50x50>"}
+  has_attached_file :image, :path => Chorus::Application.config.chorus['image_storage'] + ":class/:id/:style/:basename.:extension",
+                    :url => "/:class/:id/image?style=:style",
+                    :default_url => '/images/default-user-icon.png', :styles => {:original => "", :icon => "50x50>"}
 
   validates_presence_of :username, :first_name, :last_name, :email
   validate :uniqueness_of_non_deleted_username

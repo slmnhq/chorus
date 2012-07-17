@@ -1,8 +1,10 @@
 class Workspace < ActiveRecord::Base
   include SoftDelete
-  attr_accessible :name, :public, :summary, :sandbox_id
+  attr_accessible :name, :public, :summary, :sandbox_id, :image
 
-  has_attached_file :image, :default_url => "", :styles => {:original => "", :icon => "50x50>"}
+  has_attached_file :image, :path => Chorus::Application.config.chorus['image_storage'] + ":class/:id/:style/:basename.:extension",
+                    :url => "/:class/:id/image?style=:style",
+                    :default_url => "", :styles => {:original => "", :icon => "50x50>"}
 
   belongs_to :archiver, :class_name => 'User'
   belongs_to :owner, :class_name => 'User'

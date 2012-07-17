@@ -52,6 +52,7 @@ class WorkspacesController < ApplicationController
 
     authorize! :member_edit, workspace
     workspace.has_changed_settings = true if !add_sandbox
+    params[:workspace].delete(:image)
     workspace.update_attributes!(params[:workspace])
     present workspace
   end
