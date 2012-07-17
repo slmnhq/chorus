@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Sessions" do
-  let(:user) { FactoryGirl.create :admin }
+  let(:user) { users(:admin) }
 
   post "/sessions" do
     parameter :username, "username"
@@ -9,7 +9,7 @@ resource "Sessions" do
     scope_parameters :session, [:username, :password]
 
     let(:username) { user.username }
-    let(:password) { user.password }
+    let(:password) { FixtureBuilder.password }
 
     example_request "Login" do
       status.should == 201

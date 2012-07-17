@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Notes" do
-  let(:user) { FactoryGirl.create :user }
+  let(:user) { users(:bob) }
   let(:note) { FactoryGirl.create :note_on_hdfs_file_event }
   let!(:instance) { FactoryGirl.create(:instance, :id => 123) }
 

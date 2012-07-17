@@ -2,7 +2,7 @@ require 'spec_helper'
 require './spec/acceptance/image_hack'
 
 resource "Workspaces" do
-  let!(:user) { FactoryGirl.create :admin }
+  let!(:user) { users(:admin) }
   let!(:workspace) { FactoryGirl.create :workspace, :owner => user }
 
   before do

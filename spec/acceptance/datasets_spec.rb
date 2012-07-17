@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 resource "Greenplum Tables / Views" do
-  let(:dataset) { FactoryGirl.create(:gpdb_table, :name => "my_table") }
-  let(:owner) { dataset.schema.instance.owner }
+  let(:dataset) { datasets(:bobs_table) }
+  let(:owner) { users(:bob) }
+
   let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => dataset.instance, :owner => owner) }
   let(:dataset_id) { dataset.id }
   let!(:event) { FactoryGirl.create(:source_table_created_event, :dataset => dataset) }

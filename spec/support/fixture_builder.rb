@@ -1,3 +1,7 @@
+def FixtureBuilder.password
+  'password'
+end
+
 FixtureBuilder.configure do |fbuilder|
   # rebuild fixtures automatically when these files change:
   fbuilder.files_to_check += Dir["spec/support/fixture_builder.rb"]
@@ -13,17 +17,25 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     #Users
-    admin = User.create!({:first_name => 'Admin', :last_name => 'Alpha', :username => 'admin', :email => 'admin@example.com', :password => 'password', :admin => true}, :without_protection => true)
-    evil_admin = User.create!({:first_name => 'Evil', :last_name => 'Alpha', :username => 'evil_admin', :email => 'evil_admin@example.com', :password => 'password', :admin => true}, :without_protection => true)
-    alice = User.create!(:first_name => 'Alice', :last_name => 'Alpha', :username => 'alice', :email => 'alice@example.com', :password => 'password')
-    bob = User.create!(:first_name => 'Bob', :last_name => 'Brockovich', :username => 'bob', :email => 'bob@example.com', :password => 'password')
-    carly = User.create!(:first_name => 'Carly', :last_name => 'Carlson', :username => 'carly', :email => 'carly@example.com', :password => 'password')
+    admin = User.create!({:first_name => 'Admin', :last_name => 'Alpha', :username => 'admin', :email => 'admin@example.com', :password => FixtureBuilder.password, :admin => true}, :without_protection => true)
+    evil_admin = User.create!({:first_name => 'Evil', :last_name => 'Alpha', :username => 'evil_admin', :email => 'evil_admin@example.com', :password => FixtureBuilder.password, :admin => true}, :without_protection => true)
+    alice = User.create!(:first_name => 'Alice', :last_name => 'Alpha', :username => 'alice', :email => 'alice@example.com', :password => FixtureBuilder.password)
+    bob = User.create!(:first_name => 'Bob', :last_name => 'Brockovich', :username => 'bob', :email => 'bob@example.com', :password => FixtureBuilder.password)
+    carly = User.create!(:first_name => 'Carly', :last_name => 'Carlson', :username => 'carly', :email => 'carly@example.com', :password => FixtureBuilder.password)
 
 
     #Instances
     greenplum_instance = Instance.create!({ :name => "Greenplum", :description => "Just for bob", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
     purplebanana_instance = Instance.create!({ :name => "PurpleBanana", :description => "A nice instance in FactoryBuilder", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin, :shared => true }, :without_protection => true)
+    bobs_instance = Instance.create!({ :name => "bobs_instance", :description => "Bob-like", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => bob, :shared => false}, :without_protection => true)
 
+    # Instance Accounts
+    carly_bobs_instance_account = InstanceAccount.create!({ :owner => carly, :instance => bobs_instance, :db_username => "iamcarly", :db_password => "corvette" }, :without_protection => true)
+
+    # Datasets
+    bob_database = GpdbDatabase.create!({ :instance => bobs_instance }, :without_protection => true)
+    bob_schema = GpdbSchema.create!({ :database => bob_database }, :without_protection => true)
+    GpdbTable.create!({ :name => "bobs_table", :schema => bob_schema }, :without_protection => true)
 
     #Workspaces
     workspaces = []

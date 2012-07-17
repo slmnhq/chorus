@@ -16,8 +16,7 @@ describe GpdbDatabase do
     it "creates new copies of the databases in our db" do
       GpdbDatabase.refresh(account)
 
-      GpdbDatabase.refresh(account)
-      databases = GpdbDatabase.all
+      databases = instance.databases
 
       databases.length.should == 4
       databases.map {|db| db.name }.should == ["db_a", "db_B", "db_C", "db_d"]
@@ -26,9 +25,7 @@ describe GpdbDatabase do
 
     it "does not re-create databases that already exist in our database" do
       GpdbDatabase.refresh(account)
-      GpdbDatabase.refresh(account)
-
-      GpdbDatabase.count.should == 4
+      expect { GpdbDatabase.refresh(account) }.not_to change(GpdbDatabase, :count)
     end
   end
 

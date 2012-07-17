@@ -1,12 +1,11 @@
 require 'spec_helper'
 
 resource "Greenplum DB account for current user" do
-  let!(:owner) { FactoryGirl.create :user }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => instance, :owner => owner) }
-  let!(:non_owner) { FactoryGirl.create(:user) }
-  let!(:member) {FactoryGirl.create(:instance_account, :instance => instance).owner }
+  let!(:owner) { users(:bob) }
+  let!(:non_owner) { users(:alice) }
+  let!(:member) { users(:carly) }
 
-  let!(:instance) { FactoryGirl.create(:instance, :owner => owner) }
+  let!(:instance) { instances(:bobs_instance) }
   let(:instance_id) { instance.to_param }
 
   before do

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Workspaces" do
-  let!(:user) { FactoryGirl.create :admin }
+  let!(:user) { users(:admin) }
 
   let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :owner => user) }
   let(:greenplum_instance) { FactoryGirl.create(:greenplum_instance, :owner => user) }

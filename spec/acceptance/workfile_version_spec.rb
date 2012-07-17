@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Workfile versions" do
-  let!(:owner) { FactoryGirl.create :user }
+  let!(:owner) { users(:bob) }
   let!(:workspace) { FactoryGirl.create(:workspace, :owner => owner) }
   let!(:workfile) { FactoryGirl.create(:workfile, :owner => owner, :workspace => workspace, :file_name => 'test.sql') }
   let!(:file) { test_file("workfile.sql", "text/sql") }

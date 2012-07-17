@@ -2,8 +2,8 @@ require 'spec_helper'
 require './spec/acceptance/image_hack'
 
 resource "Users" do
-  let!(:user) { FactoryGirl.create :admin }
-  let!(:otherUser) { FactoryGirl.create :user }
+  let!(:user) { users(:admin) }
+  let!(:other_user) { users(:carly) }
 
   before do
     log_in user
@@ -44,7 +44,7 @@ resource "Users" do
   end
 
   get "/users/:id" do
-    let(:id) { otherUser.id }
+    let(:id) { other_user.id }
 
     example_request "Get a user" do
       status.should == 200
@@ -52,7 +52,7 @@ resource "Users" do
   end
 
   put "/users/:id" do
-    let(:id) { otherUser.id }
+    let(:id) { other_user.id }
 
     parameter :username, "Username"
     parameter :first_name, "First Name"
@@ -81,7 +81,7 @@ resource "Users" do
   end
 
   delete "/users/:id" do
-    let(:id) { otherUser.id }
+    let(:id) { other_user.id }
 
     example_request "Delete a user" do
       status.should == 200
@@ -92,10 +92,10 @@ resource "Users" do
     parameter :username, "Username"
     required_parameters :username
 
-    let(:username) { otherUser.username }
+    let(:username) { other_user.username }
 
     before do
-      stub(LdapClient).search.with_any_args { [otherUser.attributes] }
+      stub(LdapClient).search.with_any_args { [other_user.attributes] }
     end
 
     example_request "Search for an LDAP user" do

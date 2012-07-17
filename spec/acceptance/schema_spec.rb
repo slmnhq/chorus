@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Greenplum DB schemas" do
-  let!(:owner) { FactoryGirl.create :user }
+  let!(:owner) { users(:bob) }
   let!(:owned_instance) { FactoryGirl.create :instance, :owner => owner }
   let!(:database) { FactoryGirl.create :gpdb_database, :instance => owned_instance }
   let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => owned_instance, :owner => owner)}

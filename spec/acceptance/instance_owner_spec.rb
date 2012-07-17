@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 resource "Greenplum DB ownership" do
-  let!(:owner) { FactoryGirl.create :user }
+  let!(:owner) { users(:bob) }
   let(:owned_instance) { FactoryGirl.create(:instance, :owner => owner, :shared => true) }
   let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => owned_instance, :owner => owner)}
-  let!(:new_owner) { FactoryGirl.create(:user) }
+  let!(:new_owner) { users(:alice) }
 
   before do
     log_in owner
