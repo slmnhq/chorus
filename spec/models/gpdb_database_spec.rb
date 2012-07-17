@@ -19,7 +19,7 @@ describe GpdbDatabase do
       databases = instance.databases
 
       databases.length.should == 4
-      databases.map {|db| db.name }.should == ["db_a", "db_B", "db_C", "db_d"]
+      databases.map {|db| db.name }.should =~ ["db_a", "db_B", "db_C", "db_d"]
       databases.map {|db| db.instance_id }.uniq.should == [instance.id]
     end
 
