@@ -21,9 +21,6 @@ class WorkfilesController < ApplicationController
     finder = Workfile.order(workfile_sort(params[:order])).includes(:latest_workfile_version)
 
     if params.has_key?(:file_type)
-      p "file_type = #{params[:file_type]}"
-      p finder.inspect
-
       workfiles = finder.find_all_by_workspace_id_and_content_type(workspace, params[:file_type].downcase)
     else
       workfiles = finder.find_all_by_workspace_id(workspace)
