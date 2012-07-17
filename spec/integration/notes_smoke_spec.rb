@@ -4,7 +4,7 @@ describe "creating a note on an instance" do
   it "contains the new note" do
     login('edcadmin', 'secret')
     new_instance_name = "GPDB_inst_sel_test#{Time.now.to_i}"
-    create_gpdb_gillette_instance(:name => new_instance_name)
+    create_gpdb_instance(:name => new_instance_name)
     wait_until { page.has_selector?('a[data-dialog="NotesNew"]') }
     sleep(1)
     click_link "Add a note"

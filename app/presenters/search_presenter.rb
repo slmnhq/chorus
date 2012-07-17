@@ -4,31 +4,31 @@ class SearchPresenter < Presenter
 
   def to_hash
     {
-        :users => {
-            :results => present_models_with_highlights(users),
-            :numFound => num_found[:users]
-        },
+      :users => {
+        :results => present_models_with_highlights(users),
+        :numFound => num_found[:users]
+      },
 
-        :instances => {
-            :results => present_models_with_highlights(instances),
-            :numFound => num_found[:instances]
-        },
+      :instances => {
+        :results => present_models_with_highlights(instances),
+        :numFound => num_found[:instances]
+      },
 
-        :workspaces => {
-            :results => present_models_with_highlights(workspaces),
-            :numFound => num_found[:workspaces]
-        },
+      :workspaces => {
+        :results => present_models_with_highlights(workspaces),
+        :numFound => num_found[:workspaces]
+      },
 
-        :workfiles => {
-            :results => present_models_with_highlights(workfiles),
-            :numFound => num_found[:workfiles]
-        }
+      :workfiles => {
+        :results => present_models_with_highlights(workfiles),
+        :numFound => num_found[:workfiles]
+      }
     }
   end
 
   def present_models_with_highlights(models)
     models.collect do |model|
-      m = (model.is_a? Workfile) ? model.last_version : model
+      m = (model.is_a? Workfile) ? model.latest_workfile_version : model
       hsh = present(m)
 
       hsh[:highlighted_attributes] = model.highlighted_attributes

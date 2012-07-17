@@ -25,8 +25,8 @@ instance:
 
 gpdb_instance:
   route: '#/instances'
-  #Gillette
-  gillette_host: gillette.sf.pivotallabs.com
-  gillette_port: 5432
-  gillette_user: gpadmin
-  gillette_pass: secret
+
+  gpdb_host: chorus-gpdb40.sf.pivotallabs.com
+  gpdb_port: 5432
+  gpdb_user: gpadmin
+  gpdb_pass: secret
