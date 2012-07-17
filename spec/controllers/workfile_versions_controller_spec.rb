@@ -21,7 +21,7 @@ describe WorkfileVersionsController do
     it "changes the file content" do
       post :update, :workfile_id => workfile.id, :id => workfile_version.id, :workfile => {:content => 'New content'}
 
-      File.read(workfile.last_version.contents.path).should == 'New content'
+      File.read(workfile.latest_workfile_version.contents.path).should == 'New content'
     end
 
     it "deletes any saved workfile drafts for this workfile and user" do
@@ -41,8 +41,9 @@ describe WorkfileVersionsController do
 
     it "changes the file content" do
       post :create, :workfile_id => workfile.id, :workfile => {:content => 'New content', :commit_message => 'A new version'}
+      workfile.reload
 
-      File.read(workfile.last_version.contents.path).should == 'New content'
+      File.read(workfile.latest_workfile_version.contents.path).should == 'New content'
       decoded_response[:version_info][:content].should == 'New content'
 
       decoded_response[:version_info][:commit_message].should == 'A new version'

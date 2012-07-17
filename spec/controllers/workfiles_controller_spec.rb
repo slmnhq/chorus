@@ -118,7 +118,7 @@ describe WorkfilesController do
         end
 
         it "presents the workfile" do
-          mock.proxy(controller).present(private_workfile.last_version)
+          mock.proxy(controller).present(private_workfile.latest_workfile_version)
           get :show, {:id => private_workfile}
         end
       end
@@ -186,190 +186,21 @@ describe WorkfilesController do
         log_in user
       end
 
-      it_behaves_like "uploading a new workfile"
-      
-      #it "creates a workfile" do
-      #  post :create, @params
-      #  Workfile.last.file_name.should == "workfile.sql"
-      #end
-      #
-      #it "sets has_added_workfile on the workspace to true" do
-      #  post :create, @params
-      #  workspace.reload.has_added_workfile.should be_true
-      #end
+      it "creates a workfile" do
+        post :create, @params
+        Workfile.last.file_name.should == "workfile.sql"
+      end
+
+      it "sets has_added_workfile on the workspace to true" do
+        post :create, @params
+        workspace.reload.has_added_workfile.should be_true
+      end
 
       it "makes a WORKFILE_CREATED event" do
         post :create, @params
         event = Events::WORKFILE_CREATED.by(user).first
         event.workfile.description.should == @params[:workfile][:description]
         event.workspace.to_param.should == @params[:workspace_id]
-      end
-    end
-
-    context "as an admin" do
-      let(:current_user) { admin }
-
-      before(:each) do
-        log_in admin
-      end
-
-      it_behaves_like "uploading a new workfile"
-      
-      #it "creates a workfile" do
-      #  post :create, @params
-      #  Workfile.last.file_name.should == "workfile.sql"
-      #end
-    end
-
-    context "as a non-admin non-member" do
-      before(:each) do
-        log_in non_member
-      end
-
-      it "should not allow workfile creation" do
-        lambda {
-          lambda {
-            post :create, @params
-            response.should_not be_success
-          }.should_not change(Workfile, :count)
-        }.should_not change(WorkfileVersion, :count)
-      end
-    end
-
-    context "archived workspaces" do
-      let(:archived_workspace) { FactoryGirl.create(:workspace, :owner => user, :archived_at => Time.current) }
-
-      before do
-        log_in user
-      end
-
-      it "does authorize the user to create the workfile" do
-        post :create, {:workspace_id => archived_workspace.id, :workfile => {}}
-        response.code.should == "403"
-      end
-    end
-
-    context "creating work file with invalid name" do
-      let(:current_user) { user }
-
-      before(:each) do
-        log_in current_user
-
-        @params = {
-          :workspace_id => workspace.to_param,
-          :workfile => {
-            :file_name => "empty []file?.sql",
-            :source => 'empty'
-          }
-        }
-      end
-      before do
-        post :create, @params
-      end
-
-      it "should fail" do
-        response.code.should == "422"
-      end
-    end
-
-    context "create workfile that has image extension but it is not an image" do
-      before do
-        log_in user
-      end
-
-      let(:parameters) do
-        {
-          :workspace_id => workspace.to_param,
-          :workfile => {
-            :versions_attributes => [{
-              :contents => test_file('not_an_image.jpg')
-            }]
-          }
-        }
-      end
-
-      it "shows an error to the user" do
-        post :create, parameters
-
-        errors = JSON.parse(response.body)['errors']
-
-        response.code.should == "422"
-        errors['fields']['versions.contents'].should include('INVALID')
-      end
-
-      it "does not create a orphan workfile" do
-        expect do
-          post :create, parameters
-        end.to_not change(Workfile, :count)
-      end
-    end
-
-    context "creating a blank file" do
-      let(:current_user) { user }
-
-      before(:each) do
-        log_in current_user
-
-        @params = {
-          :workspace_id => workspace.to_param,
-          :workfile => {
-            :file_name => "empty file.sql",
-            :source => 'empty',
-          }
-        }
-      end
-
-      before do
-        post :create, @params
-      end
-
-      subject { Workfile.last }
-
-      it "associates the new workfile with its workspace" do
-        subject.workspace.should == workspace
-        decoded_response.workspace.should be_present
-      end
-
-      it "sets the owner of the new workfile as the authenticated user" do
-        subject.owner.should == current_user
-      end
-
-      it "sets the right description on the workfile" do
-        subject.description.should be_blank
-      end
-
-      it "sets the file name" do
-        subject.file_name.should == 'empty file.sql'
-      end
-
-      describe "workfile version" do
-        subject { WorkfileVersion.last }
-
-        it "associates the new version with its workfile" do
-          subject.workfile.should == Workfile.last
-        end
-
-        it "sets the version number of the workfile version to 1" do
-          subject.version_num.should == 1
-        end
-
-        it "sets the workfile version owner to the current user" do
-          subject.owner.should == current_user
-        end
-
-        it "sets the commit message to be empty" do
-          subject.commit_message.should be_blank
-        end
-
-        it "sets the last modifier to the current user" do
-          subject.modifier.should == current_user
-        end
-
-        it "uploads the correct file contents" do
-          subject.contents.should be_present
-          subject.file_name.should match(/\.sql$/)
-          subject.contents.size.should == 0
-        end
       end
     end
   end

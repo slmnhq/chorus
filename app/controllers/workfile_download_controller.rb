@@ -13,7 +13,7 @@ class WorkfileDownloadController < ApplicationController
   private
 
   def send_draft
-    last_version = workfile.last_version
+    last_version = workfile.latest_workfile_version
 
     draft = workfile.drafts.find_by_owner_id(current_user.id)
     send_data draft.content,
@@ -27,7 +27,7 @@ class WorkfileDownloadController < ApplicationController
     if version_id
       download_workfile = workfile.versions.find(version_id)
     else
-      download_workfile = workfile.last_version
+      download_workfile = workfile.latest_workfile_version
     end
 
     send_file download_workfile.contents.path,

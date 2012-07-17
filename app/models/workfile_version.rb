@@ -15,13 +15,17 @@ class WorkfileVersion < ActiveRecord::Base
 
   after_validation :clean_content_errors
 
-  after_save do
-    workfile.update_attribute(:latest_workfile_version_id, id)
+  after_create do
+    workfile.update_attributes!({:latest_workfile_version_id => id}, :without_protection => true)
+
+    if version_num == 1
+      workfile.update_attributes!({:content_type => file_type}, :without_protection => true)
+    end
   end
-  
+
   def check_file_type
     image?
-  end  
+  end
 
   def file_name
     contents.original_filename
@@ -82,7 +86,7 @@ class WorkfileVersion < ActiveRecord::Base
   private
 
   def latest_version?
-    version_num == workfile.last_version.version_num
+    version_num == workfile.latest_workfile_version.version_num
   end
 
   def clean_content_errors

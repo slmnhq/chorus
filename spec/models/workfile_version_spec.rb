@@ -77,9 +77,13 @@ describe WorkfileVersion do
     end
   end
 
-  describe "after_save" do
+  describe "after_create" do
     it "updates the latest_workfile_version association in the workfile" do
       workfile.latest_workfile_version.should == version2
+    end
+
+    it "updates the content_type field in the workfile" do
+      workfile.content_type == version2.file_type
     end
   end
 
@@ -99,11 +103,6 @@ describe WorkfileVersion do
     end
 
     context "when the version is not the latest version" do
-      before do
-        version.contents = test_file("workfile.sql")
-        version.save
-      end
-
       context "Updating the content of workfile" do
         it "raise an error " do
           expect { version.update_content("this is new content") }.to raise_error(ActiveRecord::RecordInvalid)

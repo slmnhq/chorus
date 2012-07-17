@@ -52,141 +52,109 @@ describe Workfile do
     end
   end
 
-  #describe "#create_with_version" do
-  #    let(:user) { FactoryGirl.create(:user) }
-  #    let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
-  #    let(:file) { test_file("workfile.sql", "text/sql") }
-  #
-  #    before(:each) do
-  #      @params = {
-  #        :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
-  #        :contents => file
-  #      }
-  #    end
-  #
-  #    context "validate changes in the tables" do
-  #      it "should create a new workfile and version, but not a draft" do
-  #        lambda {
-  #          lambda {
-  #            lambda {
-  #              Workfile.create_with_version(user, workspace, @params)
-  #            }.should change(Workfile, :count).by(1)
-  #          }.should change(WorkfileVersion, :count).by(1)
-  #        }.should_not change(WorkfileDraft, :count)
-  #
-  #        Workfile.last.latest_workfile_version.should == WorkfileVersion.last
-  #      end
-  #    end
-  #
-  #    context "validate the contents of the saved workfile/version" do
-  #      before(:each) do
-  #        @workfile = Workfile.create_with_version(user, workspace, @params)
-  #      end
-  #
-  #      it "associates the new workfile with its workspace" do
-  #        @workfile.workspace.should == workspace
-  #      end
-  #
-  #      it "sets the owner of the new workfile as the authenticated user" do
-  #        @workfile.owner.should == user
-  #      end
-  #
-  #      it "sets the right description on the workfile" do
-  #        @workfile.description.should == "Nice workfile, good workfile, I've always wanted a workfile like you"
-  #      end
-  #
-  #      it "sets the filename correctly on the workfile" do
-  #        @workfile.file_name.should == "workfile.sql"
-  #      end
-  #
-  #      it "has a valid latest version" do
-  #        @workfile.latest_workfile_version.should_not be_nil
-  #      end
-  #
-  #      it "sets the commit message to be empty on the version" do
-  #        @workfile.latest_workfile_version.commit_message.should == ""
-  #      end
-  #    end
-  #
-  #    context "creating a blank file" do
-  #      it "uploads the correct file contents" do
-  #        params = {:file_name => "empty file.sql", :source => 'empty'}
-  #        workfile = Workfile.create_with_version(user, workspace, params)
-  #        workfile_version = workfile.latest_workfile_version
-  #
-  #        workfile_version.contents.should be_present
-  #        workfile_version.contents.original_filename.should == "empty_file.sql"
-  #        workfile_version.contents.size.should == 0
-  #      end
-  #    end
-  #  end
-  
   describe ".create_from_file_upload" do
-      let(:user) { users(:admin) }
-      let(:workspace) { workspaces(:alice_public)}
-  
-  
-      shared_examples "file upload" do
-        it "creates a workfile in the database" do
-          subject.should be_valid
-          subject.should be_persisted
-        end
-  
-        it "creates a workfile version in the database" do
-          subject.versions.should have(1).version
-  
-          version = subject.versions.first
-          version.should be_valid
-          version.should be_persisted
-        end
-  
-        it "sets the attributes of the workfile" do
-          subject.owner.should == user
-          subject.file_name.should == 'workfile.sql'
-        end
-  
-        it "sets the modifier of the first, recently created version" do
-          subject.versions.first.modifier.should == user
-        end
-  
-        it "sets the attributes of the workfile version" do
-          version = subject.versions.first
-  
-          version.contents.should be_present
-          version.version_num.should == 1
-        end
+    let(:user) { users(:admin) }
+    let(:workspace) { workspaces(:alice_public) }
+
+
+    shared_examples "file upload" do
+      it "creates a workfile in the database" do
+        subject.should be_valid
+        subject.should be_persisted
       end
-  
-      context "with versions" do
-        let(:attributes) do
-          {
-            :versions_attributes => [{
-              :contents => test_file('workfile.sql')
-            }]
-          }
-        end
-  
-        subject { described_class.create_from_file_upload(attributes, workspace, user) }
-  
-        it_behaves_like "file upload"
-  
-        it "sets the content of the workfile" do
-          subject.versions.first.contents.size.should > 0
-        end
+
+      it "creates a workfile version in the database" do
+        subject.versions.should have(1).version
+
+        version = subject.versions.first
+        version.should be_valid
+        version.should be_persisted
       end
-  
-      context "without a version" do
-        subject { described_class.create_from_file_upload({:file_name => 'workfile.sql'}, workspace, user) }
-  
-        it_behaves_like "file upload"
-  
-        it "sets the file as blank" do
-          subject.versions.first.contents.size.should == 0
-        end
+
+      it "sets the attributes of the workfile" do
+        subject.owner.should == user
+        subject.file_name.should == 'workfile.sql'
+        subject.workspace.should == workspace
+      end
+
+      it "has a valid latest version" do
+        subject.latest_workfile_version.should_not be_nil
+      end
+
+      it "sets the modifier of the first, recently created version" do
+        subject.versions.first.modifier.should == user
+      end
+
+      it "sets the attributes of the workfile version" do
+        version = subject.versions.first
+
+        version.contents.should be_present
+        version.version_num.should == 1
+      end
+
+      it "does not set a commit message" do
+        subject.versions.first.commit_message.should be_nil
       end
     end
-  
-  
+
+    context "with versions" do
+      let(:attributes) do
+        {
+          :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
+          :versions_attributes => [{
+                                     :contents => test_file('workfile.sql')
+                                   }]
+        }
+      end
+
+      subject { described_class.create_from_file_upload(attributes, workspace, user) }
+
+      it_behaves_like "file upload"
+
+      it "sets the content of the workfile" do
+        subject.versions.first.contents.size.should > 0
+      end
+
+      it "sets the right description on the workfile" do
+        subject.description.should == "Nice workfile, good workfile, I've always wanted a workfile like you"
+      end
+    end
+
+    context "without a version" do
+      subject { described_class.create_from_file_upload({:file_name => 'workfile.sql'}, workspace, user) }
+
+      it_behaves_like "file upload"
+
+      it "sets the file as blank" do
+        subject.versions.first.contents.size.should == 0
+      end
+    end
+
+    context "with an image extension on a non-image file" do
+      let(:attributes) do
+        {
+          :versions_attributes => [{
+                                     :contents => test_file('not_an_image.jpg')
+                                   }]
+        }
+      end
+
+      it "throws an exception" do
+        expect { described_class.create_from_file_upload(attributes, workspace, user) }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "does not create a orphan workfile" do
+        expect do
+          begin
+            described_class.create_from_file_upload(attributes, workspace, user)
+          rescue Exception => e
+          end
+        end.to_not change(Workfile, :count)
+      end
+    end
+  end
+
+
   describe "#build_new_version" do
 
     let(:user) { FactoryGirl.create(:user) }
@@ -206,8 +174,6 @@ describe Workfile do
         workfile_version.version_num.should == 2
         workfile_version.commit_message.should == "commit Message"
         workfile_version.should_not be_persisted
-        workfile.reload
-        workfile.latest_workfile_version.should == workfile_version
       end
     end
 
@@ -217,92 +183,7 @@ describe Workfile do
         workfile_version.version_num.should == 1
         workfile_version.commit_message.should == "commit Message"
         workfile_version.should_not be_persisted
-        workfile.reload
-        workfile.latest_workfile_version.should == workfile_version
       end
-    end
-    
-    #context "creating the first version" do
-    #  before(:each) do
-    #    @workfile_version = workfile.create_new_version(user, test_file('workfile.sql'), "")
-    #  end
-    #
-    #  it "associates the new version with its workfile" do
-    #    @workfile_version.workfile.should == Workfile.last
-    #  end
-    #
-    #  it "sets the workfile version owner to the current user" do
-    #    @workfile_version.owner.should == user
-    #  end
-    #
-    #  it "sets the last modifier to the current user" do
-    #    @workfile_version.modifier.should == user
-    #  end
-    #
-    #  it "uploads the correct file contents" do
-    #    @workfile_version.contents.should be_present
-    #    @workfile_version.contents_file_name.should == "workfile.sql"
-    #  end
-    #
-    #  it "create a version with version number as 1" do
-    #    @workfile_version.version_num.should == 1
-    #    @workfile_version.should be_persisted
-    #    workfile.reload
-    #    workfile.latest_workfile_version.should == @workfile_version
-    #  end
-    #end
-    
-  end
-
-  describe ".by_type" do
-    let(:user) { users(:admin) }
-    let(:workspace) { FactoryGirl.create(:workspace, :owner => user) }
-    let!(:workfile1) { FactoryGirl.create(:workfile, :file_name => "small1.gif", :workspace => workspace) }
-    let!(:workfile2) { FactoryGirl.create(:workfile, :file_name => "some.txt", :workspace => workspace) }
-    let!(:workfile3) { FactoryGirl.create(:workfile, :file_name => "binary.tar.gz", :workspace => workspace) }
-    let!(:workfile4) { FactoryGirl.create(:workfile, :file_name => "code.cpp", :workspace => workspace) }
-
-    before do
-      file1 = test_file("small1.gif", "image/gif")
-      file2 = test_file("some.txt", "text/plain")
-      file3 = test_file("binary.tar.gz", "application/octet-stream")
-      file4 = test_file("code.cpp", "text/plain")
-
-      FactoryGirl.create(:workfile_version, :workfile => workfile1, :contents => file1)
-      FactoryGirl.create(:workfile_version, :workfile => workfile2, :contents => file2)
-      FactoryGirl.create(:workfile_version, :workfile => workfile3, :contents => file3)
-      FactoryGirl.create(:workfile_version, :workfile => workfile4, :contents => file4)
-    end
-
-    it "returns workfiles with text file type" do
-      workfiles = Workfile.by_type("text")
-      workfiles.should have(1).files # TODO: is code also text?
-      workfiles[0].file_name.should == "some.txt"
-    end
-
-    it "returns workfiles with sql file type" do
-      # We get SQL data from the fixtures
-
-      workfiles = Workfile.by_type("SQL")
-      workfiles.should have(3).files
-      workfiles[0].file_name.should == "Alice Private"
-    end
-
-    it "returns workfiles with image file type" do
-      workfiles = Workfile.by_type("image")
-      workfiles.should have(1).files
-      workfiles[0].file_name.should == "small1.gif"
-    end
-
-    it "returns workfiles with code file type" do
-      workfiles = Workfile.by_type("code")
-      workfiles.should have(1).files
-      workfiles[0].file_name.should == "code.cpp"
-    end
-
-    it "returns workfiles with other file type" do
-      workfiles = Workfile.by_type("other")
-      workfiles.size.should == Workfile.all.count { |w| w.last_version.file_type == 'other' }
     end
   end
 

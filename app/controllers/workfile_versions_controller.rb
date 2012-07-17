@@ -1,28 +1,29 @@
 class WorkfileVersionsController < ApplicationController
   def update
     workfile = Workfile.find(params[:workfile_id])
-    authorize! :can_edit_sub_objects,  workfile.workspace
+    authorize! :can_edit_sub_objects, workfile.workspace
     workfile_version = workfile.versions.find(params[:id])
     workfile_version.update_content(params[:workfile][:content])
     remove_draft(workfile)
 
-    present workfile.last_version
+    present workfile.latest_workfile_version
   end
 
   def create
     workfile = Workfile.find(params[:workfile_id])
-    authorize! :can_edit_sub_objects,  workfile.workspace
+    authorize! :can_edit_sub_objects, workfile.workspace
     file = build_new_file(workfile.file_name, params[:workfile][:content])
-    file.content_type = workfile.last_version.contents_content_type
+    file.content_type = workfile.latest_workfile_version.contents_content_type
     workfile.build_new_version(current_user, file, params[:workfile][:commit_message]).save
     remove_draft(workfile)
 
-    present workfile.last_version
+    workfile.reload
+    present workfile.latest_workfile_version
   end
 
   def show
     workfile = Workfile.find(params[:workfile_id])
-    authorize! :show,  workfile.workspace
+    authorize! :show, workfile.workspace
 
     workfile_version = WorkfileVersion.find(params[:id])
     present workfile_version
@@ -30,10 +31,11 @@ class WorkfileVersionsController < ApplicationController
 
   def index
     workfile = Workfile.find(params[:workfile_id])
-    authorize! :show,  workfile.workspace
+    authorize! :show, workfile.workspace
 
     present workfile.versions
   end
+
   private
 
   def remove_draft(workfile)

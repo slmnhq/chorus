@@ -29,7 +29,7 @@ describe WorkfileCopyController do
       workfile_version1.save!
       post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id
       copied_workfile = Workfile.last
-      File.read(workfile_version1.contents.path).should == File.read(copied_workfile.last_version.contents.path)
+      File.read(workfile_version1.contents.path).should == File.read(copied_workfile.latest_workfile_version.contents.path)
     end
 
     it "should not copy if user is not a member of source workspace" do
