@@ -10,6 +10,10 @@ FixtureBuilder.configure do |fbuilder|
     record['file_name'].gsub(/\s+/, '_').downcase
   end
 
+  fbuilder.name_model_with(InstanceAccount) do |record|
+    record['db_username']
+  end
+
   # now declare objects
   fbuilder.factory do
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
@@ -35,9 +39,14 @@ FixtureBuilder.configure do |fbuilder|
     carly_bobs_instance_account = InstanceAccount.create!({:owner => carly, :instance => bobs_instance, :db_username => "iamcarly", :db_password => "corvette"}, :without_protection => true)
 
     # Datasets
-    bob_database = GpdbDatabase.create!({:instance => bobs_instance}, :without_protection => true)
-    bob_schema = GpdbSchema.create!({:database => bob_database}, :without_protection => true)
-    GpdbTable.create!({:name => "bobs_table", :schema => bob_schema}, :without_protection => true)
+    bob_database = GpdbDatabase.create!({ :instance => bobs_instance, :name => 'bobs_database' }, :without_protection => true)
+    bob_schema = GpdbSchema.create!({ :database => bob_database }, :without_protection => true)
+    GpdbTable.create!({ :name => "bobs_table", :schema => bob_schema }, :without_protection => true)
+    GpdbView.create!({ :name => "bobs_view", :schema => bob_schema }, :without_protection => true)
+
+    other_schema = GpdbSchema.create!({:database => bob_database}, :without_protection => true)
+    GpdbTable.create!({ :name => "other_table", :schema => other_schema }, :without_protection => true)
+    GpdbView.create!({ :name => "other_view", :schema => other_schema }, :without_protection => true)
 
     #Workspaces
     workspaces = []

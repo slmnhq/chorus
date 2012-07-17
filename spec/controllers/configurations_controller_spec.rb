@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ConfigurationsController do
   describe "#show" do
     before do
-      @user = FactoryGirl.create(:user)
+      @user = users(:alice)
       log_in @user
       mock(LdapClient).enabled? { true }
     end

@@ -3,14 +3,14 @@ require 'spec_helper'
 describe ColumnController do
   ignore_authorization!
 
-  let(:user) { FactoryGirl.create :user }
+  let(:user) { users(:alice) }
 
   before do
     log_in user
   end
 
   context "#index" do
-    let!(:table) { FactoryGirl.create(:gpdb_table) }
+    let!(:table) { datasets(:bobs_table) }
 
     before do
       fake_account = Object.new

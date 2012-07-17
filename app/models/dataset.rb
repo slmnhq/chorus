@@ -11,6 +11,9 @@ class Dataset < ActiveRecord::Base
   has_many :associated_datasets
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
 
+  scope :tables, where(:type => GpdbTable.name)
+  scope :views, where(:type => GpdbView.name)
+
   delegate :with_gpdb_connection, :to => :schema
   delegate :instance, :to => :schema
 

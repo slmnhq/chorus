@@ -43,7 +43,7 @@ describe Dataset do
 
     it "returns all objects if name is not provided" do
       FactoryGirl.create(:gpdb_table)
-      Dataset.with_name_like(nil).count.should == 2
+      Dataset.with_name_like(nil).count.should == Dataset.count
     end
   end
 
@@ -67,9 +67,9 @@ describe Dataset do
 
     it "does not re-create datasets that already exist in our database" do
       Dataset.refresh(account, schema)
-      Dataset.refresh(account, schema)
-
-      Dataset.count.should == 3
+      lambda {
+        Dataset.refresh(account, schema)
+      }.should_not change(Dataset, :count)
     end
   end
 

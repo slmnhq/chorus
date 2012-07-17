@@ -15,7 +15,7 @@ describe ApplicationController do
     end
 
     before do
-      log_in FactoryGirl.create :user
+      log_in users(:alice)
     end
 
     it "renders 'not found' JSON when record not found" do
@@ -55,11 +55,11 @@ describe ApplicationController do
     end
 
     describe "when an access denied error is raised" do
-      let(:object_to_present) { FactoryGirl.build(:instance, :id => -54) }
+      let(:object_to_present) { instances(:greenplum) }
       let(:exception) { Allowy::AccessDenied.new('', 'action', object_to_present) }
 
       before do
-        log_in FactoryGirl.create(:user)
+        log_in users(:bob)
         stub(controller).index { raise exception }
       end
 
@@ -89,7 +89,7 @@ describe ApplicationController do
     end
 
     context "when user has no admin rights" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { users(:alice) }
 
       it "returns error 403" do
         get :index
@@ -98,7 +98,7 @@ describe ApplicationController do
     end
 
     context "when user has admin rights" do
-      let(:user) { FactoryGirl.create(:admin) }
+      let(:user) { users(:admin) }
 
       it "returns success" do
         get :index
@@ -115,7 +115,7 @@ describe ApplicationController do
     end
 
     before do
-      @user = FactoryGirl.create(:user)
+      @user = users(:alice)
     end
 
     it "returns the user based on the session's user id" do
@@ -143,11 +143,11 @@ describe ApplicationController do
 
     before do
       stub(controller).object_to_present { object_to_present }
-      log_in FactoryGirl.create :user
+      log_in users(:alice)
     end
 
     context "with a single model" do
-      let(:object_to_present) { FactoryGirl.build(:user) }
+      let(:object_to_present) { users(:bob) }
 
       it "sets the response to a hash of the model" do
         get :index
@@ -156,14 +156,9 @@ describe ApplicationController do
     end
 
     context "with a paginated collection" do
-      before do
-        FactoryGirl.create(:admin)
-        FactoryGirl.create(:admin)
-        FactoryGirl.create(:admin)
-      end
 
       let(:object_to_present) do
-        User.where(:admin => true).paginate(:per_page => 2, :page => 1)
+        User.paginate(:per_page => 2, :page => 1)
       end
 
       it "sets the response to an array with a hash for each model in current page" do
@@ -174,7 +169,7 @@ describe ApplicationController do
 
       it "adds pagination" do
         get :index
-        user_count = User.admin.count
+        user_count = User.count
         page_count = (user_count/2.0).ceil
         decoded_pagination.page.should == 1
         decoded_pagination.per_page.should == 2
@@ -192,7 +187,7 @@ describe ApplicationController do
     end
 
     before do
-      log_in FactoryGirl.create :user
+      log_in users(:alice)
       session[:expires_at] = 1.hour.from_now
     end
 
