@@ -37,26 +37,26 @@ describe Events::Base do
   end
 
   describe ".for_dashboard_of(user)" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:events) { (1..4).map { FactoryGirl.create(:workfile_created_event) } }
+    let(:user) { users(:alice) }
+    let(:the_events) {[
+      events(:alice_creates_private_workfile),
+      events(:bob_creates_private_workfile),
+      events(:bob_creates_public_workfile),
+      events(:alice_creates_private_workfile)
+    ]
+    }
 
-    let(:other_workspace1) { FactoryGirl.create(:workspace, :public => true) }
-    let(:other_workspace2) { FactoryGirl.create(:workspace, :public => false) }
-    let(:user_workspace) do
-      FactoryGirl.create(:workspace).tap do |workspace|
-        workspace.memberships.build.tap do |m|
-          m.user = user
-          m.save!
-        end
-      end
-    end
+    let(:other_workspace1) { workspaces(:bob_public) }
+    let(:other_workspace2) { workspaces(:bob_private) }
+    let(:user_workspace) { workspaces(:alice_public) }
 
-    let!(:workspace_activity) { Activity.create!(:entity => user_workspace, :event => events[0] ) }
-    let!(:other_workspace1_activity) { Activity.create!(:entity => other_workspace1, :event => events[1]) }
-    let!(:other_workspace2_activity) { Activity.create!(:entity => other_workspace2, :event => events[2]) }
+    let!(:workspace_activity) { Activity.create!(:entity => user_workspace, :event => the_events[0] ) }
 
-    let!(:global_activity) { Activity.global.create!(:event => events[3]) }
-    let!(:duplicate_global_activity) { Activity.global.create!(:event => events[0]) }
+    let!(:other_workspace1_activity) { Activity.create!(:entity => other_workspace1, :event => the_events[1]) }
+    let!(:other_workspace2_activity) { Activity.create!(:entity => other_workspace2, :event => the_events[2]) }
+
+    let!(:global_activity) { Activity.global.create!(:event => the_events[3]) }
+    let!(:duplicate_global_activity) { Activity.global.create!(:event => the_events[0]) }
 
     subject { Events::Base.for_dashboard_of(user) }
 

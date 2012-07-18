@@ -21,7 +21,10 @@ module Events
           Events::NOTE_ON_HDFS_FILE.by(current_user).add(:hdfs_file => hdfs_file_reference, :body => body)
         when "workspace"
           workspace = Workspace.find(entity_id)
-          Events::NOTE_ON_WORKSPACE.by(current_user).add(:workspace =>workspace, :body => body)
+
+          if WorkspaceAccess.show?(workspace)
+            Events::NOTE_ON_WORKSPACE.by(current_user).add(:workspace =>workspace, :body => body)
+          end
         else
           raise "Unknown entity type: #{entity_type}"
       end

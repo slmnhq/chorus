@@ -151,6 +151,7 @@ describe "Notes" do
 
     context "workspace not archived" do
       it "creates a note on a workspace" do
+        mock(WorkspaceAccess).show?(workspace) { true }
         Events::Note.create_for_entity("workspace", workspace.id, "More crazy content", user)
 
         last_note = Events::Note.first
@@ -163,6 +164,7 @@ describe "Notes" do
 
     context "workspace is archived" do
       it "does not create a note on a workspace" do
+        mock(WorkspaceAccess).show?(workspace) { true }
         workspace.archived_at = DateTime.now
         workspace.save!
         expect {

@@ -60,6 +60,9 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
   config.global_fixtures = :all
+  config.before(:all) do
+    self.class.set_fixture_class :events => Events::Base
+  end
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of

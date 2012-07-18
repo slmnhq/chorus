@@ -79,6 +79,10 @@ FixtureBuilder.configure do |fbuilder|
       WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
       fbuilder.name :alice_creates_private_workfile, Events::WORKFILE_CREATED.by(alice).add(:workfile => alice_private, :workspace => alice_private_workspace)
 
+      alice_public = Workfile.create!({:file_name => "Alice Public", :description => "AliceSearch", :owner => alice, :workspace => alice_public_workspace}, :without_protection => true)
+      WorkfileVersion.create!({:workfile => alice_public, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
+      fbuilder.name :alice_creates_public_workfile, Events::WORKFILE_CREATED.by(alice).add(:workfile => alice_public, :workspace => alice_public_workspace)
+
       bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_private, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
       fbuilder.name :bob_creates_private_workfile, Events::WORKFILE_CREATED.by(bob).add(:workfile => bob_private, :workspace => bob_private_workspace)
@@ -105,8 +109,8 @@ FixtureBuilder.configure do |fbuilder|
     Events::SOURCE_TABLE_CREATED.by(admin).add(:dataset => bobs_table, :workspace => bob_public_workspace)
     Events::WORKSPACE_ADD_SANDBOX.by(bob).add(:sandbox_schema => bob_schema, :workspace => bob_public_workspace)
     Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_file_reference)
-    
-    
+
+
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
   end
 end
