@@ -1,6 +1,7 @@
 GIT
-  remote: git://github.com/bdon/activerecord-jdbc-adapter.git
-  revision: dbf1f6ee97740eae226b8a03ec56823aace6e60d
+  remote: git://github.com/pivotal-leopold/activerecord-jdbc-adapter.git
+  revision: 55f62f78306af634b4b1808d7d8e237fc93dbad0
+  branch: dynamic-schema-search-path
   specs:
     activerecord-jdbc-adapter (1.2.2)
     activerecord-jdbcpostgresql-adapter (1.2.2)

@@ -15,7 +15,8 @@ gem 'quiet_assets'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false
-  gem 'activerecord-jdbcpostgresql-adapter', :git => "git://github.com/bdon/activerecord-jdbc-adapter.git"
+  # Pull request: https://github.com/jruby/activerecord-jdbc-adapter/pull/207
+  gem 'activerecord-jdbcpostgresql-adapter', :git => "git://github.com/pivotal-leopold/activerecord-jdbc-adapter.git", :branch => "dynamic-schema-search-path"
 end
 
 group :assets do
