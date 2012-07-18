@@ -74,5 +74,7 @@ module Chorus
     # Log UUIDs for all requests. This is also in the X-Request-Id header response.
     # To facilitate support staff tracking web requests.
     config.log_tags = [:uuid]
+
+    config.middleware.use Rack::Sendfile
   end
 end

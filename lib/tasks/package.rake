@@ -44,12 +44,18 @@ module PackageMaker
 
     run "ssh #{host} 'cd #{release_path}; RAILS_ENV=production bin/rake db:migrate'"
 
-    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh stop'"
-    run "ssh #{host} 'cd #{path} && rm -f #{current_path} && ln -s #{release_path} #{current_path}'"
-    run "ssh chorus-staging 'cd #{current_path}; RAILS_ENV=production script/server_control.sh start'"
+    run "ssh #{host} 'cp -f #{release_path}/packaging/server_control.sh.example #{path}/server_control.sh'"
 
-    run "ssh chorus-staging 'cd #{path}; rm greenplum*.tar.gz'"
-    run "ssh chorus-staging 'cd #{releases_path}; ls | grep -v #{head_sha} | xargs rm -r'"
+    run "ssh #{host} 'cd #{path}; RAILS_ENV=production ./server_control.sh stop'"
+    run "ssh #{host} 'cd #{path}; rm -rf ./nginx_dist'"
+
+    run "ssh #{host} 'cd #{path} && ln -sfT #{release_path} #{current_path}'"
+    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/nginx_dist-1.2.2.tar.gz'"
+    run "ssh #{host} 'cp -f #{release_path}/packaging/nginx.conf.example #{path}/nginx_dist/nginx_data/conf/nginx.conf'"
+    run "ssh #{host} 'cd #{path}; RAILS_ENV=production ./server_control.sh start'"
+
+    run "ssh #{host} 'cd #{path}; rm greenplum*.tar.gz'"
+    run "ssh #{host} 'cd #{releases_path}; ls | grep -v #{head_sha} | xargs rm -r'"
   end
 
   def deploy(config)
@@ -127,7 +133,8 @@ module PackageMaker
       "config.ru",
       "version.rb",
       "version_build",
-      ".bundle/config"
+      ".bundle/config",
+      "packaging/"
     ]
 
     run "tar czf #{filename} --exclude='public/system/' --exclude='javadoc' --exclude='.git' --exclude='log' --exclude 'config/database.yml' --exclude 'config/chorus.yml' #{files_to_tar.join(" ")}"

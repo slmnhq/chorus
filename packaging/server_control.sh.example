@@ -2,29 +2,55 @@
 
 : ${RAILS_ENV?"Need to set RAILS_ENV"}
 
-CHORUS_HOME=.
-CHORUS_LOG=$CHORUS_HOME/log
-CHORUS_PID=$CHORUS_HOME/tmp/pids
+STARTING_DIR=$(pwd)
+SCRIPT_DIR=$(dirname $0)
+cd $STARTING_DIR/$SCRIPT_DIR
+CHORUS_HOME=$(pwd)
+CHORUS_CURRENT=$CHORUS_HOME/current
+CHORUS_LOG=$CHORUS_HOME/current/log
+CHORUS_PID=$CHORUS_HOME/current/tmp/pids
+CHORUS_NGINX=$CHORUS_HOME/nginx_dist
 
 SOLR_ATTEMPTS=200
 
 CLOCK_PID_FILE=$CHORUS_PID/clock.$RAILS_ENV.pid
 WORKER_PID_FILE=$CHORUS_PID/queue_classic.$RAILS_ENV.pid
+NGINX_PID_FILE=$CHORUS_NGINX/nginx_data/logs/nginx.pid
 
 function start_worker () {
   echo "Starting worker..."
+  cd $CHORUS_CURRENT
   bin/ruby script/rails runner "require 'queue_classic'; QC::Worker.new.start" > $CHORUS_LOG/queue_classic.$RAILS_ENV.log 2>&1 &
   echo $! > $WORKER_PID_FILE
 }
 
 function start_clock () {
   echo "Starting clock..."
+  cd $CHORUS_CURRENT
   bin/ruby script/clock.rb > $CHORUS_LOG/clock.$RAILS_ENV.log 2>&1 &
   echo $! > $CLOCK_PID_FILE
 }
 
+function start_nginx () {
+    test ! -e $CHORUS_NGINX && echo "nginx not found, skipping." && return 0
+
+    pushd $CHORUS_NGINX
+
+    if [ -e ./nginx_data/logs/nginx.pid ]
+    then
+        echo "nginx already running, reloading config"
+        ./nginx -s reload
+    else
+        echo "starting nginx..."
+        ./nginx
+    fi
+
+    popd
+}
+
 function start_solr () {
   echo "Starting solr..."
+  cd $CHORUS_CURRENT
   bin/rake services:solr:run > $CHORUS_LOG/solr.$RAILS_ENV.log 2>&1 &
 
   ps e | grep "solr.*start" | grep -v grep > /dev/null
@@ -34,7 +60,7 @@ function start_solr () {
   while [ $child_solr_pid -eq 1 -a $attempts -lt $SOLR_ATTEMPTS ]
   do
     sleep 1
-    ps e | grep "solr.*start.jar" | grep -v grep > /dev/null
+    ps aux | grep "solr.*start.jar" | grep -v grep > /dev/null
     child_solr_pid=$?
     let "attempts += 1"
   done
@@ -44,21 +70,22 @@ function start_solr () {
 
 function start_webserver () {
   echo "Starting webserver..."
+  cd $CHORUS_CURRENT
   vendor/jetty/jetty-init start >/dev/null 2>/dev/null &
 }
 
 function start () {
-  cd $CHORUS_HOME
   mkdir -p $CHORUS_PID
 
   start_worker
   start_clock
-  start_solr
   start_webserver
+  start_solr
+  start_nginx
 }
 
 function stop () {
-  cd $CHORUS_HOME
+  cd $CHORUS_CURRENT
 
   if [ -e $WORKER_PID_FILE ]
   then
@@ -83,10 +110,15 @@ function stop () {
   fi
 
   echo "Stopping solr..."
-  ps e | grep solr | grep -v grep | awk '{print $1}' | xargs kill
+  ps aux | grep solr | grep -v grep | awk '{print $2}' | xargs kill
 
   echo "Stopping webserver..."
-  vendor/jetty/jetty-init stop
+  $CHORUS_CURRENT/vendor/jetty/jetty-init stop
+
+  echo "Stopping nginx..."
+  pushd $CHORUS_NGINX
+  ./nginx -s stop
+  popd
 }
 
 function pid_is_running () {
@@ -105,7 +137,7 @@ function monitor () {
   then
     echo "Worker is not running, restarting..."
     start_worker
-  else 
+  else
     echo "Worker is still running..."
   fi
 
@@ -117,7 +149,7 @@ function monitor () {
   then
     echo "Clock is not running, restarting..."
     start_clock
-  else 
+  else
     echo "Clock is still running..."
   fi
 
@@ -142,6 +174,17 @@ function monitor () {
   else
     echo "Jetty is still running..."
   fi
+
+  pid_is_running "$(cat $NGINX_PID_FILE 2> /dev/null)"
+  nginx_pid_present=$?
+
+  if [ $nginx_pid_present -eq 1 ]
+  then
+    echo "nginx is not running, restarting..."
+    start_nginx
+  else
+    echo "nginx is still running..."
+  fi
 }
 
 if [ "$1" = "start" ]
@@ -154,6 +197,13 @@ then
   echo "stopping service"
   stop
   exit 0
+elif [ "$1" = "restart" ]
+then
+  echo "stopping service"
+  stop
+  echo "starting service"
+  monitor
+  exit 0
 elif [ "$1" = "monitor" ]
 then
   echo "monitoring services"
@@ -163,6 +213,6 @@ then
     sleep 10
   done
 else
-  echo "Usage: $0 <start|stop|monitor>"
+  echo "Usage: $0 <start|stop|restart|monitor>"
 fi
 

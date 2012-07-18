@@ -5,5 +5,5 @@ app_user: pivotal
 app_root: /home/pivotal/chorusrails-deploy/current
 ruby_version: 1.9
 app_type: rack
-http_port: 8080
+http_port: 8081
 bundle_without: [integration, development, test]
