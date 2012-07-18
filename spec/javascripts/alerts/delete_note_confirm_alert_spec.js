@@ -3,10 +3,8 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
         beforeEach(function() {
             this.activity = fixtures.activities.NOTE_ON_WORKSPACE();
             this.collection = new chorus.collections.ActivitySet([this.activity], {entityType: "workspace", entityId: 10000});
-            this.launchElement = $("<a/>");
-            this.launchElement.data("activity", this.activity);
             this.pageModel = new chorus.models.Base();
-            this.alert = new chorus.alerts.DeleteNoteConfirmAlert({launchElement: this.launchElement, pageModel: this.pageModel});
+            this.alert = new chorus.alerts.DeleteNoteConfirmAlert({ activity: this.activity, pageModel: this.pageModel});
             this.alert.render()
             this.alert.$('button.submit').click()
         })
@@ -53,8 +51,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
             beforeEach(function() {
                 this.activity = fixtures.activities.INSIGHT_CREATED();
                 this.collection = new chorus.collections.ActivitySet([this.activity], {entityType: "workspace", entityId: 10000});
-                this.launchElement.data("activity", this.activity);
-                this.alert = new chorus.alerts.DeleteNoteConfirmAlert({launchElement: this.launchElement, pageModel: this.pageModel});
+                this.alert = new chorus.alerts.DeleteNoteConfirmAlert({ activity: this.activity, pageModel: this.pageModel});
                 this.alert.render()
                 this.alert.$('button.submit').click()
             });
@@ -79,12 +76,13 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
 
     describe("delete confirmation clicked from comment", function() {
         beforeEach(function() {
-            var launchElement = $("<a/>");
-            launchElement.data("entityId", 10000);
-            launchElement.data("entityType", "workspace");
-            launchElement.data("commentId", 12345);
             this.pageModel = new chorus.models.Base();
-            this.alert = new chorus.alerts.DeleteNoteConfirmAlert({launchElement: launchElement, pageModel: this.pageModel});
+            this.alert = new chorus.alerts.DeleteNoteConfirmAlert({
+                entityId: 10000,
+                entityType: "workspace",
+                commentId: 12345,
+                pageModel: this.pageModel
+            });
             this.alert.render()
             this.alert.$('button.submit').click()
         });

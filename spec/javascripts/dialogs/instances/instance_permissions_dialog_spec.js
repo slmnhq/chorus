@@ -8,8 +8,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
             this.instance = rspecFixtures.greenplumInstance({shared: true, id: "5"});
-            var launchElement = $("<a/>").data("instance", this.instance);
-            this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
+            this.dialog = new chorus.dialogs.InstancePermissions({ instance: this.instance });
         });
 
         it("does not re-render on model changes", function() {
@@ -32,8 +31,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
             this.instance.set({ owner: {id: account.user().get("id")} });
             this.instance.accounts().reset(account);
 
-            var launchElement = $("<a/>").data("instance", this.instance);
-            this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
+            this.dialog = new chorus.dialogs.InstancePermissions({ instance: this.instance });
         });
 
         describe("#render", function() {
@@ -234,8 +232,7 @@ describe("chorus.dialogs.InstancePermissions", function() {
                 rspecFixtures.instanceAccount({ id: '2', owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
                 rspecFixtures.instanceAccount({ id: '3', owner: this.owner.attributes })
             ]);
-            var launchElement = $("<a/>").data("instance", this.instance);
-            this.dialog = new chorus.dialogs.InstancePermissions({ launchElement: launchElement });
+            this.dialog = new chorus.dialogs.InstancePermissions({ instance: this.instance });
             this.dialog.launchModal();
 
             var ownerAccountId = this.instance.accountForOwner().get('id');

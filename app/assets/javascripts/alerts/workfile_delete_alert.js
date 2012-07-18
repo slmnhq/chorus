@@ -8,9 +8,9 @@ chorus.alerts.WorkfileDelete = chorus.alerts.ModelDelete.extend({
 
     makeModel:function () {
         this.model = this.model || new chorus.models.Workfile({
-            id:this.options.launchElement.data("workfile-id"),
-            workspace: { id:this.options.launchElement.data("workspace-id") },
-            fileName:this.options.launchElement.data("workfile-name")
+            id:this.options.workfileId,
+            fileName:this.options.workfileName,
+            workspace: { id: this.options.workspaceId }
         });
     },
 

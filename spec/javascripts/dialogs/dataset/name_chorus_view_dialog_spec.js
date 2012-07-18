@@ -2,12 +2,8 @@ describe("chorus.dialogs.NameChorusView", function() {
     beforeEach(function() {
         stubModals();
         stubDefer();
-        this.launchElement = $("<a></a>");
         this.chorusView = newFixtures.workspaceDataset.chorusView({ query: "select name, quantity from shipments;" });
-        this.dialog = new chorus.dialogs.NameChorusView({
-            model: this.chorusView,
-            launchElement: this.launchElement
-        });
+        this.dialog = new chorus.dialogs.NameChorusView({ model: this.chorusView });
         this.dialog.launchModal();
     });
 
@@ -16,7 +12,7 @@ describe("chorus.dialogs.NameChorusView", function() {
     });
 
     it("initializes the name", function() {
-        expect(this.dialog.$("input[name=objectName]").val()).toBe(this.chorusView.get("objectName"))
+        expect(this.dialog.$("input[name=objectName]").val()).toBe(this.chorusView.get("objectName"));
     });
 
     it("starts with the submit button enabled", function() {
@@ -25,21 +21,15 @@ describe("chorus.dialogs.NameChorusView", function() {
 
     describe("submit button disabling", function() {
         context("when the name is non-empty", function(){
-            beforeEach(function() {
-                this.dialog.$("input[name=objectName]").val("whatever").keyup();
-            });
-
             it("enables the submit button", function() {
+                this.dialog.$("input[name=objectName]").val("whatever").keyup();
                 expect(this.dialog.$("button.submit")).toBeEnabled();
-            })
-        })
+            });
+        });
 
         context("when the name is empty", function() {
-            beforeEach(function() {
-                this.dialog.$("input[name=objectName]").val("  ").keyup();
-            });
-
             it("disables the submit button", function() {
+                this.dialog.$("input[name=objectName]").val("  ").keyup();
                 expect(this.dialog.$("button.submit")).toBeDisabled();
             });
         });
@@ -47,33 +37,33 @@ describe("chorus.dialogs.NameChorusView", function() {
 
     describe("creating the chorus view", function() {
         beforeEach(function() {
-            spyOn(this.dialog.model, "save")
+            spyOn(this.dialog.model, "save");
             this.dialog.$("input[name=objectName]").val(" whatever  ").keyup();
             this.dialog.$("form").submit();
         });
 
         it("puts the button in the loading state", function() {
             expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
-            expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.creating")
+            expect(this.dialog.$("button.submit").text()).toMatchTranslation("actions.creating");
         });
 
         it("fills in the objectName, with trim", function() {
-            expect(this.dialog.model.get("objectName")).toBe("whatever")
+            expect(this.dialog.model.get("objectName")).toBe("whatever");
         });
 
         it("does not change the SQL", function() {
-            expect(this.dialog.model.get("query")).toBe("select name, quantity from shipments;")
+            expect(this.dialog.model.get("query")).toBe("select name, quantity from shipments;");
         });
 
         it("saves the chorus view", function() {
-            expect(this.dialog.model.save).toHaveBeenCalled()
+            expect(this.dialog.model.save).toHaveBeenCalled();
         });
 
         context("when chorus view creation is successful", function() {
             beforeEach(function() {
                 spyOn(chorus.router, "navigate");
                 spyOnEvent($(document), "close.facebox");
-                this.dialog.model.set({ id: "10102" }, { silent: true })
+                this.dialog.model.set({ id: "10102" }, { silent: true });
                 this.dialog.model.trigger("saved");
             });
 
@@ -82,7 +72,7 @@ describe("chorus.dialogs.NameChorusView", function() {
             });
 
             it("dismisses the dialog", function() {
-                expect("close.facebox").toHaveBeenTriggeredOn($(document))
+                expect("close.facebox").toHaveBeenTriggeredOn($(document));
             });
         });
 
@@ -95,11 +85,11 @@ describe("chorus.dialogs.NameChorusView", function() {
             });
 
             it("displays the error message", function() {
-                expect(this.dialog.$(".errors").text()).toContain("A can't be blank")
+                expect(this.dialog.$(".errors").text()).toContain("A can't be blank");
             });
 
             it("does not dismiss the dialog", function() {
-                expect("close.facebox").not.toHaveBeenTriggeredOn($(document))
+                expect("close.facebox").not.toHaveBeenTriggeredOn($(document));
             });
 
             it("doesn't navigate", function() {

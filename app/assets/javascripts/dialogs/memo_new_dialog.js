@@ -158,15 +158,15 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this._super("showErrors");
 
         if (!model) {
-            model = this.resource
+            model = this.resource;
         }
 
         if(model.errors && model.errors.body){
             var $input = this.$(".cleditorMain");
             this.markInputAsInvalid($input, model.errors.body, true);
 
-            this.$("iframe").contents().find("body").css("margin-right", "20px")
-            this.$(".cleditorMain").css("width", "330px")
+            this.$("iframe").contents().find("body").css("margin-right", "20px");
+            this.$(".cleditorMain").css("width", "330px");
         }
     },
 
@@ -175,14 +175,14 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
             formUrl: this.model.url(),
             placeholder: this.placeholder,
             submitButton: this.submitButton || "Submit",
-            allowWorkspaceAttachments: this.options.launchElement ? this.options.launchElement.data("allowWorkspaceAttachments") : this.options.allowWorkspaceAttachments
+            allowWorkspaceAttachments: this.options.allowWorkspaceAttachments
         };
     },
 
     showOptions: function(e) {
         e && e.preventDefault();
-        this.$(".options_text").addClass("hidden")
-        this.$(".options_area").removeClass("hidden")
+        this.$(".options_text").addClass("hidden");
+        this.$(".options_area").removeClass("hidden");
     },
 
     launchWorkfileDialog: function(e) {

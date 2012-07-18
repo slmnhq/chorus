@@ -2,9 +2,8 @@ describe("chorus.dialogs.PickWorkspace", function() {
     beforeEach(function() {
         setLoggedInUser({id: 4003});
         chorus.session.trigger("saved")
-        this.launchElement = $("<a></a>");
         spyOn(chorus.dialogs.PickItems.prototype, "submit").andCallThrough();
-        this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement});
+        this.dialog = new chorus.dialogs.PickWorkspace();
     });
 
     describe("#setup", function() {
@@ -16,33 +15,19 @@ describe("chorus.dialogs.PickWorkspace", function() {
             expect(this.dialog.collection.attributes.userId).toBe(chorus.session.user().get("id"));
         })
 
-        context("when the launch element activeOnly is set to true", function() {
-            beforeEach(function() {
-                this.launchElement = $("<a data-activeOnly = 'true'></a>");
-                this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement});
-            });
-
+        context("when activeOnly is set to true", function() {
             it("only fetches the active workspaces", function() {
+                this.dialog = new chorus.dialogs.PickWorkspace({ activeOnly: true });
                 expect(this.dialog.collection.attributes.active).toBeTruthy();
             });
         });
-
-        context("when options.activeOnly is set to true", function() {
-            beforeEach(function() {
-                this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement, activeOnly: true});
-            });
-
-            it("only fetches the active workspaces", function() {
-                expect(this.dialog.collection.attributes.active).toBeTruthy();
-            });
-        });
-    })
+    });
 
     describe("#render", function() {
         beforeEach(function() {
-            this.dialog = new chorus.dialogs.PickWorkspace({launchElement: this.launchElement});
+            this.dialog = new chorus.dialogs.PickWorkspace();
             this.dialog.render();
-        })
+        });
 
         context("when the fetch completes", function() {
             beforeEach(function() {

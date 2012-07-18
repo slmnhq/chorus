@@ -4,9 +4,9 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
     makeModel: function() {
         this._super("makeModel", arguments);
 
-        var entityId = this.options.launchElement.data("entityId")
-        var entityType = this.options.launchElement.data("entityType")
-        var commentId = this.options.launchElement.data("commentId")
+        var entityId = this.options.entityId;
+        var entityType = this.options.entityType;
+        var commentId = this.options.commentId;
 
         if (entityId && entityType) {
             this.model = new chorus.models.Comment({ id: commentId,
@@ -15,7 +15,7 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
             })
             this.setComment()
         } else {
-            var model = this.options.launchElement.data("activity");
+            var model = this.options.activity;
 
             this.model = new chorus.models.Comment({ id: model.id,
                 entityType: model.collection.attributes.entityType,

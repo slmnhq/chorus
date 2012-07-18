@@ -1,14 +1,16 @@
 describe("chorus.dialogs.MemoNewDialog", function() {
     beforeEach(function() {
-        this.launchElement = $("<a data-entity-type='workfile' data-allow-workspace-attachments='true' data-entity-id='1' data-workspace-id='22'></a>")
         this.model = new chorus.models.Comment({
-            entityType:this.launchElement.data("entity-type"),
-            entityId:this.launchElement.data("entity-id"),
-            workspaceId: this.launchElement.data("workspace-id")
+            entityType: 'workfile',
+            entityId: 1,
+            workspaceId: 22,
         });
 
         this.dialog = new chorus.dialogs.MemoNew({
-            launchElement : this.launchElement,
+            allowWorkspaceAttachments: true,
+            entityType: 'workfile',
+            entityId: 1,
+            workspaceId: 22,
             pageModel : new chorus.models.Workfile(),
             model: this.model
         });
@@ -129,13 +131,13 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.$('.options_area')).toBeVisible();
         });
 
-        it("renders the workfiles attachment link and dataset attachment link when the allowWorkfileAttachments data is truthy", function() {
+        it("renders the attachment links when the allowWorkspaceAttachments option is truthy", function() {
             expect(this.dialog.$("a.add_workfile")).toExist();
             expect(this.dialog.$("a.add_dataset")).toExist();
         });
 
-        it("doesn't render the workfiles attachment link or the dataset attachment link when the allowWorkfileAttachments data is falsy", function() {
-            this.launchElement.data("allowWorkspaceAttachments", false);
+        it("doesn't render the attachment links when the allowWorkspaceAttachments option is falsy", function() {
+            this.dialog.options.allowWorkspaceAttachments = false;
             this.dialog.render();
             expect(this.dialog.$("a.add_workfile")).not.toExist();
             expect(this.dialog.$("a.add_dataset")).not.toExist();

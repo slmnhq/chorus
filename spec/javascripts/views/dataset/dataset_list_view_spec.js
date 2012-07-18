@@ -118,7 +118,7 @@ describe("chorus.views.DatasetList", function() {
 
         function expectDatasetChecked(expectedModels) {
             expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
-            var eventName = chorus.PageEvents.broadcast.mostRecentCall.args[0]
+            var eventName = chorus.PageEvents.broadcast.mostRecentCall.args[0];
             expect(eventName).toBe("dataset:checked");
 
             var collection = chorus.PageEvents.broadcast.mostRecentCall.args[1];

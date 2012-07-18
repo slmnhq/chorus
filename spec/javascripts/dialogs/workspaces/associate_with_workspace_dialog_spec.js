@@ -1,13 +1,9 @@
 describe("chorus.dialogs.AssociateWithWorkspace", function() {
-    beforeEach(function() {
-        this.launchElement = $("<a></a>")
-    });
-
     describe("after workspaces are fetched", function() {
         context("when the model is a source table/view with multiple workspaces", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.dataset();
-                this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
+                this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     rspecFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
                     rspecFixtures.workspace({ name: "im_not_the_current_one" }),
@@ -25,7 +21,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             beforeEach(function() {
                 this.model = newFixtures.workspaceDataset.sourceTable();
                 this.model.unset("associatedWorkspaces");
-                this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
+                this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     rspecFixtures.workspace({ name: "im_not_the_current_one'" }),
                     rspecFixtures.workspace({ name: "me_neither" }),
@@ -43,7 +39,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
         context("when the model is a sandbox table/view or a chorus view (in a workspace)", function() {
             beforeEach(function() {
                 this.model = newFixtures.workspaceDataset.sandboxTable({workspace: {id: "645"}});
-                this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
+                this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     rspecFixtures.workspace({ name: "im_not_the_current_one'" }),
                     rspecFixtures.workspace({ name: "me_neither" }),
@@ -65,7 +61,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 this.model = rspecFixtures.dataset();
                 this.workspace = rspecFixtures.workspace({ name: "im_not_the_current_one" });
 
-                this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
+                this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     rspecFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
                     this.workspace,
@@ -144,7 +140,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 });
 
                 it("displays the server error message", function() {
-                    expect(this.dialog.$(".errors ul").text().trim()).toBe("A can't be blank")
+                    expect(this.dialog.$(".errors ul").text().trim()).toBe("A can't be blank");
                 });
             });
         });
@@ -155,7 +151,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 this.workspace = rspecFixtures.workspace({ name: "im_not_the_current_one", id: "123"});
                 this.model = newFixtures.workspaceDataset.chorusView({ workspace: { id: "987" } });
 
-                this.dialog = new chorus.dialogs.AssociateWithWorkspace({launchElement: this.launchElement, model: this.model });
+                this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.dialog.render();
 
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [

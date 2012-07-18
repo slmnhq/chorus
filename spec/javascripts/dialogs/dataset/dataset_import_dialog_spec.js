@@ -4,8 +4,6 @@ describe("chorus.dialogs.DatasetImport", function() {
         chorus.page.workspace = rspecFixtures.workspace({id: 242});
         this.modalSpy = stubModals();
         spyOn($.fn, 'fileupload');
-        this.launchElement = $('<button data-workspace-id="242">Import File</button>');
-        this.launchElement.data("canonicalName", "FooBar");
         this.validDatasets = [
             newFixtures.workspaceDataset.sandboxTable({objectName: "table_a", workspace: {id: 242}}),
             newFixtures.workspaceDataset.sandboxTable({objectName: "table_b", workspace: {id: 243}})
@@ -16,7 +14,10 @@ describe("chorus.dialogs.DatasetImport", function() {
             fixtures.datasetHadoopExternalTable()
         ];
         this.datasets = this.validDatasets.concat(this.invalidDatasets);
-        this.dialog = new chorus.dialogs.DatasetImport({launchElement: this.launchElement});
+        this.dialog = new chorus.dialogs.DatasetImport({
+            workspaceId: 242,
+            canonicalName: "FooBar"
+        });
         spyOn(this.dialog, "modalClosed").andCallThrough();
         this.dialog.launchModal();
     });
@@ -56,11 +57,11 @@ describe("chorus.dialogs.DatasetImport", function() {
     });
 
     it("hides the import controls by default", function() {
-        expect(this.dialog.$(".import_controls")).toHaveClass("hidden")
+        expect(this.dialog.$(".import_controls")).toHaveClass("hidden");
     });
 
     it("hides the file type img by default", function() {
-        expect(this.dialog.$(".file_details img")).toHaveClass("hidden")
+        expect(this.dialog.$(".file_details img")).toHaveClass("hidden");
     });
 
     it("hides the 'Change' link by default", function() {
@@ -91,7 +92,7 @@ describe("chorus.dialogs.DatasetImport", function() {
             });
 
             it("displays the appropriate file icon", function() {
-                expect(this.dialog.$(".file_details img")).not.toHaveClass("hidden")
+                expect(this.dialog.$(".file_details img")).not.toHaveClass("hidden");
                 expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("csv", "medium"));
             });
 
@@ -106,8 +107,8 @@ describe("chorus.dialogs.DatasetImport", function() {
 
         describe("import controls", function() {
             it("does not hide them", function() {
-                expect(this.dialog.$(".import_controls")).not.toHaveClass("hidden")
-            })
+                expect(this.dialog.$(".import_controls")).not.toHaveClass("hidden");
+            });
 
             it("shows the 'import into a new table' radio button", function() {
                 expect(this.dialog.$(".new_table input:radio")).toExist();
@@ -135,7 +136,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
             describe("the default selection", function() {
                 it("selects the new table button by default", function() {
-                    expect(this.dialog.$(".new_table input:radio").prop("checked")).toBeTruthy()
+                    expect(this.dialog.$(".new_table input:radio").prop("checked")).toBeTruthy();
                 });
 
                 it("shows the file name entry, in lowercase, with spaces converted to underscores", function() {
@@ -270,8 +271,9 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                         context("and the workfile is showable", function() {
                             beforeEach(function() {
-                                this.fileUploadOptions.done(null, this.data)
+                                this.fileUploadOptions.done(null, this.data);
                             });
+
                             it("presents a toast message", function() {
                                 expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success", {fileName: "myFile"});
                             });
@@ -284,7 +286,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         context("and the workfile is not showable", function() {
                             beforeEach(function() {
                                 spyOn(chorus.models.Workfile.prototype, "hasOwnPage").andReturn(false);
-                                this.fileUploadOptions.done(null, this.data)
+                                this.fileUploadOptions.done(null, this.data);
                             });
 
                             it("presents a toast message", function() {
@@ -307,8 +309,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                                     errors: { fields: { a: { BLANK: {} } } }
                                 }
                             };
-                            this.fileUploadOptions.done(null, this.data)
-
+                            this.fileUploadOptions.done(null, this.data);
                         });
 
                         it("does not present a toast message", function() {
@@ -317,12 +318,10 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                         it("displays the errors", function() {
                             expect(this.dialog.$('.errors')).toContainText("A can't be blank");
-                        })
-
+                        });
                     });
-
-                })
-            })
+                });
+            });
         });
 
         describe("clicking 'Upload File'", function() {
@@ -337,13 +336,13 @@ describe("chorus.dialogs.DatasetImport", function() {
                 });
 
                 it("uploads the specified file", function() {
-                    expect(this.dialog.uploadObj.url).toEqual("/workspaces/242/csv")
+                    expect(this.dialog.uploadObj.url).toEqual("/workspaces/242/csv");
                     expect(this.dialog.uploadObj.submit).toHaveBeenCalled();
                 });
 
                 context("when upload succeeds", function() {
                     beforeEach(function() {
-                        spyOn(chorus.dialogs.NewTableImportCSV.prototype, "setup").andCallThrough()
+                        spyOn(chorus.dialogs.NewTableImportCSV.prototype, "setup").andCallThrough();
                         spyOn(chorus.alerts.EmptyCSV.prototype, "setup").andCallThrough();
                     });
 
@@ -355,7 +354,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                                     status: "ok"
                                 }
                             };
-                            this.fileUploadOptions.done(null, this.data)
+                            this.fileUploadOptions.done(null, this.data);
                         });
 
                         it("stops the spinner", function() {
@@ -369,7 +368,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         it("launches the import new table dialog", function() {
                             expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalled();
 
-                            var dialogArgs = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.args[0]
+                            var dialogArgs = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.args[0];
                             expect(dialogArgs.model.get("contents").length).toBe(2);
 
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
@@ -385,7 +384,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                         it("does not show an alert dialog", function() {
                             expect(chorus.alerts.EmptyCSV.prototype.setup).not.toHaveBeenCalled();
                             expect(this.modalSpy).not.toHaveModal(chorus.alerts.EmptyCSV);
-                        })
+                        });
                     });
 
                     context("when the csv contains no column data", function() {
@@ -396,7 +395,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                                     status: "ok"
                                 }
                             };
-                            this.fileUploadOptions.done(null, this.data)
+                            this.fileUploadOptions.done(null, this.data);
                         });
 
                         it("stops the spinner", function() {
@@ -408,14 +407,14 @@ describe("chorus.dialogs.DatasetImport", function() {
                         });
 
                         it("does not launch the import new table dialog", function() {
-                            expect(chorus.dialogs.NewTableImportCSV.prototype.setup).not.toHaveBeenCalled()
+                            expect(chorus.dialogs.NewTableImportCSV.prototype.setup).not.toHaveBeenCalled();
                             expect(this.modalSpy).not.toHaveModal(chorus.dialogs.NewTableImportCSV);
                         });
 
                         it("shows an alert dialog", function() {
                             expect(chorus.alerts.EmptyCSV.prototype.setup).toHaveBeenCalled();
                             expect(this.modalSpy).toHaveModal(chorus.alerts.EmptyCSV);
-                        })
+                        });
                     });
 
                     context("when the csv contains unparseable data", function() {
@@ -426,11 +425,11 @@ describe("chorus.dialogs.DatasetImport", function() {
                                     status: "ok"
                                 }
                             };
-                            this.fileUploadOptions.done(null, this.data)
+                            this.fileUploadOptions.done(null, this.data);
                         });
 
                         it("still launches the import new table dialog", function() {
-                            expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalled()
+                            expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalled();
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
                         });
                     });
@@ -439,15 +438,16 @@ describe("chorus.dialogs.DatasetImport", function() {
                 context("when the user tries to close the dialog", function() {
                     beforeEach(function() {
                         $(document).trigger("close.facebox");
-                    })
+                    });
+
                     it("cancels the upload", function() {
                         expect(this.dialog.request.abort).toHaveBeenCalled();
-                    })
+                    });
 
                     it("closes the dialog", function() {
                         expect(this.dialog.modalClosed).toHaveBeenCalled();
                     });
-                })
+                });
 
                 context("when the upload fails", function() {
                     beforeEach(function() {
@@ -460,7 +460,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                                 {name: "myfile"}
                             ]
                         };
-                        this.fileUploadOptions.done(null, this.data)
+                        this.fileUploadOptions.done(null, this.data);
                     });
 
                     it("does not launch the new table configuration dialog", function() {

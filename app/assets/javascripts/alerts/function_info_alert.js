@@ -5,7 +5,7 @@ chorus.alerts.FunctionInfo = chorus.alerts.Base.extend({
     additionalClass: "info function_info",
 
     makeModel: function(options) {
-        this.model = options.launchElement.data("model");
+        this.model = options.model;
     },
 
     preRender: function() {

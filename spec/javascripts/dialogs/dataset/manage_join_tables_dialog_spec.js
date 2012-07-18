@@ -26,13 +26,11 @@ describe("chorus.dialogs.ManageJoinTables", function() {
         this.schema = dataset.schema();
         this.chorusView = dataset.deriveChorusView();
 
-        var launchElement = $("<a class='add_join'></a>").data("chorusView", this.chorusView);
-
-        this.dialog = new chorus.dialogs.ManageJoinTables({ pageModel: dataset, launchElement: launchElement });
+        this.dialog = new chorus.dialogs.ManageJoinTables({ pageModel: dataset, chorusView: this.chorusView });
         $("#jasmine_content").append(this.dialog.el);
     });
 
-    it("retrieves the chorus view model from the launch element", function() {
+    it("sets the model based on the chorus view option", function() {
         expect(this.dialog.model).toBe(this.chorusView);
     });
 

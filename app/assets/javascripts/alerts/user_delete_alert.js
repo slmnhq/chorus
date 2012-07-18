@@ -8,6 +8,6 @@ chorus.alerts.UserDelete = chorus.alerts.ModelDelete.extend({
     deleteMessage:"user.delete.toast",
 
     makeModel:function () {
-        this.model = this.model || new chorus.models.User({ id:this.options.launchElement.data("id") });
+        this.model = this.model || new chorus.models.User({ id: this.options.id });
     }
 })

@@ -23,7 +23,7 @@ chorus.alerts.WorkfileConflict = chorus.alerts.Base.extend({
 
     confirmAlert:function () {
         this.closeModal();
-        this.dialog = new chorus.dialogs.WorkfileNewVersion({ launchElement:this, pageModel:this.model });
+        this.dialog = new chorus.dialogs.WorkfileNewVersion({ pageModel: this.model });
         this.dialog.launchModal();
     },
 

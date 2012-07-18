@@ -7,11 +7,11 @@ chorus.dialogs.InstanceAccount = chorus.dialogs.Account.extend({
     },
 
     setup:function () {
-        this.title = this.options.title || this.options.launchElement.data("title");
+        this.title = this.options.title;
     },
 
     makeModel:function (options) {
-        var instance = this.options.instance || this.options.launchElement.data("instance");
+        var instance = this.options.instance;
         this.model = instance.accountForCurrentUser();
         this._super("makeModel", arguments);
     },

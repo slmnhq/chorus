@@ -1,7 +1,5 @@
 describe("chorus.dialogs.WorkspaceSettings", function() {
     beforeEach(function() {
-        this.launchElement = $("<a></a>");
-
         this.workspace = rspecFixtures.workspace({
             name: "my name",
             summary: "my summary",
@@ -25,7 +23,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
             new chorus.models.User({ id: 13, firstName: "Richard", lastName: "G" })
         ]);
 
-        this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
+        this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
     });
 
     it("does not re-render when the model changes", function() {
@@ -34,7 +32,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
 
     describe("#setup", function() {
         beforeEach(function() {
-            this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
+            this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
         });
 
         it("fetches the workspace's members", function() {
@@ -94,7 +92,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 it("shows sandbox info", function() {
                     var workspace = rspecFixtures.workspace();
                     workspace.unset("sandboxInfo")
-                    this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: workspace });
+                    this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: workspace });
                     this.dialog.render();
                     expect(this.dialog.$(".sandboxLocation").text()).toMatchTranslation("workspace.settings.sandbox.none");
                 });
@@ -132,7 +130,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     name: "richard"
                 }});
                 disableSpy.reset();
-                this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
+                this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
                 this.dialog.render();
             });
 
@@ -208,7 +206,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 this.workspace.set({ permission: ["read", "commenting", "update"] });
                 setLoggedInUser({ id: 11 });
                 disableSpy.reset();
-                this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
+                this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
                 this.dialog.render();
             });
 
@@ -228,7 +226,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                 beforeEach(function() {
                     setLoggedInUser({ id: '99', admin: false });
                     disableSpy.reset();
-                    this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
+                    this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
                     this.dialog.render();
                 })
 
@@ -288,7 +286,7 @@ describe("chorus.dialogs.WorkspaceSettings", function() {
                     setLoggedInUser({ admin: true });
                     this.workspace.set({ permission: ["admin"] });
                     disableSpy.reset();
-                    this.dialog = new chorus.dialogs.WorkspaceSettings({launchElement: this.launchElement, pageModel: this.workspace });
+                    this.dialog = new chorus.dialogs.WorkspaceSettings({ pageModel: this.workspace });
                     this.dialog.render();
                 });
 

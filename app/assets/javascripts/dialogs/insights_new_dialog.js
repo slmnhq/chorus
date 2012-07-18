@@ -5,9 +5,9 @@ chorus.dialogs.InsightsNew = chorus.dialogs.MemoNew.extend({
 
     makeModel:function () {
         this.model = new chorus.models.Insight({
-            entityType:this.options.launchElement.data("entity-type"),
-            entityId:this.options.launchElement.data("entity-id"),
-            workspaceId: this.options.launchElement.data("workspace-id")
+            entityType: this.options.entityType,
+            entityId: this.options.entityId,
+            workspaceId: this.options.workspaceId
         });
         this._super("makeModel", arguments);
     }

@@ -21,8 +21,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     },
 
     makeModel: function() {
-        this.dataset = this.options.launchElement.data("dataset");
-        this.workspace = this.options.launchElement.data("workspace");
+        this.dataset = this.options.dataset;
+        this.workspace = this.options.workspace;
         this.model = this.dataset.getImport();
         this.model.fetchIfNotLoaded();
         this.requiredResources.push(this.model);
@@ -36,14 +36,14 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     setup: function() {
         this.scheduleViewNew = new chorus.views.ImportSchedule();
         this.scheduleViewExisting = new chorus.views.ImportSchedule();
-        var launchElement = this.options.launchElement;
+        var action = this.options.action;
 
-        if (launchElement.hasClass("create_schedule")) {
+        if (action === "create_schedule") {
             this.title = t("import.title_schedule");
             this.submitText = t("import.begin_schedule");
             this.showSchedule = true;
             this.activeScheduleView = this.scheduleViewNew;
-        } else if (launchElement.hasClass("edit_schedule")) {
+        } else if (action === "edit_schedule") {
             this.title = t("import.title_edit_schedule");
             this.submitText = t("actions.save_changes");
             this.showSchedule = true;
@@ -57,7 +57,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
     postRender: function() {
         this.setFieldValues(this.model);
 
-        if (this.options.launchElement.hasClass("create_schedule")) {
+        if (this.options.action === "create_schedule") {
             this.$("input[name='schedule']").prop("checked", true);
             this.activeScheduleView.enable();
             this.$("input[name='schedule']").prop("disabled", true);
@@ -144,7 +144,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         this.$("fieldset.existing_table").toggleClass("disabled", disableExisting);
 
         this.activeScheduleView = disableExisting ? this.scheduleViewNew : this.scheduleViewExisting;
-        if (this.options.launchElement.hasClass("create_schedule")) {
+        if (this.options.action === "create_schedule") {
             this.activeScheduleView.enable();
         }
 
@@ -157,12 +157,12 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            allowNewTruncate: !this.options.launchElement.hasClass("import_now"),
+            allowNewTruncate: this.options.action !== "import_now",
             canonicalName: this.workspace.sandbox().schema().canonicalName(),
             showSchedule: this.showSchedule,
             hideScheduleCheckbox: !this.model.hasActiveSchedule(),
             submitText: this.submitText
-        }
+        };
     },
 
     onInputFieldChanged: function() {
@@ -194,7 +194,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         }
 
         saveOptions = {};
-        if (this.options.launchElement.hasClass("import_now")) {
+        if (this.options.action === "import_now") {
             saveOptions.method = "create";
         }
 
@@ -218,7 +218,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
         var $enabledFieldSet = this.$("fieldset").not(".disabled");
         _.each($enabledFieldSet.find("input:text, input[type=hidden]"), function(i) {
             var input = $(i);
-            if (input.is(":enabled") && input.closest(".schedule_widget").length == 0) {
+            if (input.is(":enabled") && input.closest(".schedule_widget").length === 0) {
                 updates[input.attr("name")] = input.val() && input.val().trim();
             }
         });

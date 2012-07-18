@@ -1,12 +1,8 @@
 describe("chorus.dialogs.SqlPreview", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.launchElement = $("<a></a>");
             var model = newFixtures.workspaceDataset.chorusView({query: "select awesome from sql"});
-            this.dialog = new chorus.dialogs.SqlPreview({
-                launchElement: this.launchElement,
-                model: model
-            });
+            this.dialog = new chorus.dialogs.SqlPreview({ model: model });
             spyOn(_, 'defer');
             spyOn(CodeMirror, 'fromTextArea').andReturn({ refresh: $.noop });
 

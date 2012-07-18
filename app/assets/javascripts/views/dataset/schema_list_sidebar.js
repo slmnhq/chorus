@@ -4,7 +4,6 @@ chorus.views.SchemaListSidebar = chorus.views.Sidebar.extend({
     setup: function() {
         chorus.PageEvents.subscribe("schema:selected", this.setSchema, this);
         chorus.PageEvents.subscribe("schema:deselected", this.unsetSchema, this);
-
     },
 
     setSchema: function(schema) {

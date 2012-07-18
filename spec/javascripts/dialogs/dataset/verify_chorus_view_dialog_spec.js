@@ -3,12 +3,8 @@ describe("chorus.dialogs.VerifyChorusView", function() {
         stubModals();
         stubDefer();
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
-        this.launchElement = $("<a></a>");
         this.chorusView = newFixtures.workspaceDataset.chorusView({ query: "select name, quantity from shipments;" });
-        this.dialog = new chorus.dialogs.VerifyChorusView({
-            model: this.chorusView,
-            launchElement: this.launchElement
-        });
+        this.dialog = new chorus.dialogs.VerifyChorusView({ model: this.chorusView });
         this.dialog.launchModal();
     });
 
@@ -47,10 +43,8 @@ describe("chorus.dialogs.VerifyChorusView", function() {
 
         it("copies SQL from editor to model before launching submodal", function() {
             var namingDialog = this.dialog.launchSubModal.mostRecentCall.args[0];
-
-            expect(namingDialog.model.get("query")).toBe("newquery")
+            expect(namingDialog.model.get("query")).toBe("newquery");
         });
-
     });
 
     describe("editing the SQL", function() {

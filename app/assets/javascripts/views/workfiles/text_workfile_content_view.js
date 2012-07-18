@@ -53,7 +53,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
 
     versionConflict: function() {
         if (this.model.hasConflict()) {
-            this.alert = new chorus.alerts.WorkfileConflict({ launchElement: this, model: this.model });
+            this.alert = new chorus.alerts.WorkfileConflict({ model: this.model });
             this.alert.launchModal();
         }
     },
@@ -144,7 +144,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
         this.stopTimer();
         this.model.content(value, {silent: true});
 
-        this.dialog = new chorus.dialogs.WorkfileNewVersion({ launchElement: this, pageModel: this.model, pageCollection: this.collection });
+        this.dialog = new chorus.dialogs.WorkfileNewVersion({ pageModel: this.model, pageCollection: this.collection });
         this.dialog.launchModal(); // we need to manually create the dialog instead of using data-dialog because qtip is not part of page
         this.bindings.add(this.dialog.model, "change", this.render);
         this.bindings.add(this.dialog.model, "autosaved", function() {

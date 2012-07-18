@@ -14,9 +14,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     launchDatasetPickerDialog: function(e) {
         e.preventDefault();
         if (!this.saving) {
-            var datasetDialog = new chorus.dialogs.ImportDatasetsPicker({
-                workspaceId: this.options.launchElement.data("workspace-id")
-            });
+            var datasetDialog = new chorus.dialogs.ImportDatasetsPicker({ workspaceId: this.options.workspaceId });
             this.bindings.add(datasetDialog, "datasets:selected", this.datasetsChosen, this);
             this.launchSubModal(datasetDialog);
         }
@@ -70,16 +68,11 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function() {
-        return {
-            canonicalName: this.options.launchElement.data("canonicalName")
-        }
+        return { canonicalName: this.options.canonicalName };
     },
 
     makeModel: function() {
-        this.resource = this.model = this.csv = new chorus.models.CSVImport({
-            workspaceId: this.options.launchElement.data("workspaceId")
-        });
-
+        this.resource = this.model = this.csv = new chorus.models.CSVImport({ workspaceId: this.options.workspaceId });
         this.csvOptions = {hasHeader: true};
     },
 
@@ -96,7 +89,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
         if (this.importTarget === "workfile") {
             this.$("button.submit").startLoading("actions.uploading");
-            this.uploadObj.url = "/workspace/" + this.options.launchElement.data("workspaceId") + "/workfile";
+            this.uploadObj.url = "/workspace/" + this.options.workspaceId + "/workfile";
             this.uploadObj.source = "fs";
             this.request = this.uploadObj.submit();
 
@@ -108,7 +101,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             }, {silent: true});
 
             this.$("button.submit").startLoading("actions.uploading");
-            this.uploadObj.url = "/workspaces/" + this.options.launchElement.data("workspaceId") + "/csv";
+            this.uploadObj.url = "/workspaces/" + this.options.workspaceId + "/csv";
 
             if (this.model.performValidation()) {
                 this.request = this.uploadObj.submit();
@@ -129,7 +122,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
     postRender: function() {
         var self = this;
 
-        this.importTarget = "new"
+        this.importTarget = "new";
 
         this.$("input[type=file]").fileupload({
             change: fileChosen,
@@ -181,7 +174,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 workingCsv.set(workingCsv.parse(data.result), {silent: true});
                 workingCsv.parseErrors(data.result);
 
-                self.csvOptions.contents = workingCsv.get('contents')
+                self.csvOptions.contents = workingCsv.get('contents');
 
                 if (workingCsv.serverErrors) {
                     self.csv.serverErrors = workingCsv.serverErrors;

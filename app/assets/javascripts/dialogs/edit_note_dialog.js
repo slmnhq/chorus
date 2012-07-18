@@ -9,7 +9,7 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
     },
 
     setup: function(options) {
-        this.activity = this.options.launchElement.data('activity');
+        this.activity = this.options.activity;
         this.title = this.activity.isInsight() ? t("notes.edit_dialog.insight_title") : t("notes.edit_dialog.note_title");
         this.resource = this.model = this.activity.toNote();
 
@@ -22,15 +22,15 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
         this._super("showErrors");
 
         if (!model) {
-            model = this.resource
+            model = this.resource;
         }
 
         if (model.errors && model.errors.body) {
             var $input = this.$(".cleditorMain");
             this.markInputAsInvalid($input, model.errors.body, true);
 
-            this.$("iframe").contents().find("body").css("margin-right", "20px")
-            this.$(".cleditorMain").css("width", "330px")
+            this.$("iframe").contents().find("body").css("margin-right", "20px");
+            this.$(".cleditorMain").css("width", "330px");
         }
     },
 
@@ -43,7 +43,7 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
     },
 
     submit: function(e) {
-        e && e.preventDefault()
+        e && e.preventDefault();
         this.$("button.submit").startLoading("actions.saving");
 
         var newText = this.getNormalizedText(this.$("textarea"));
@@ -54,7 +54,7 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
             newText = "";
         }
 
-        this.model.save({ body: newText })
+        this.model.save({ body: newText });
     },
 
     submitSucceeds: function() {

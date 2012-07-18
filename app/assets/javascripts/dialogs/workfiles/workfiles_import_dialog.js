@@ -16,7 +16,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     },
 
     makeModel: function() {
-        this.model = this.model || new chorus.models.Workfile({workspace: { id: this.options.launchElement.data("workspace-id")}})
+        this.model = this.model || new chorus.models.Workfile({workspace: { id: this.options.workspaceId } });
     },
 
     setup: function() {

@@ -1,12 +1,11 @@
 describe("chorus.dialogs.EditNote", function() {
     beforeEach(function() {
-        this.text = "Hi i'm a friendly text"
+        this.text = "Hi i'm a friendly text";
         this.note = rspecFixtures.activity.noteOnGreenplumInstanceCreated({
             body: this.text
         });
         this.note.collection = chorus.collections.ActivitySet.forDashboard();
-        this.launchElement = $("<a/>").data("activity", this.note);
-        this.dialog = new chorus.dialogs.EditNote({ launchElement: this.launchElement });
+        this.dialog = new chorus.dialogs.EditNote({ activity: this.note });
         $('#jasmine_content').append(this.dialog.el);
 
         spyOn(this.dialog, "makeEditor").andCallThrough();
@@ -16,20 +15,19 @@ describe("chorus.dialogs.EditNote", function() {
     });
 
     it("displays 'edit this note' as the title", function() {
-        expect(this.dialog.$('h1').text()).toMatchTranslation("notes.edit_dialog.note_title")
+        expect(this.dialog.$('h1').text()).toMatchTranslation("notes.edit_dialog.note_title");
     });
 
     context("when the activity is an insight", function() {
         beforeEach(function() {
             this.note = fixtures.activities.INSIGHT_CREATED({ workspace: { id: '2' }});
-            this.launchElement = $("<a/>").data("activity", this.note);
-            this.dialog = new chorus.dialogs.EditNote({ launchElement: this.launchElement });
+            this.dialog = new chorus.dialogs.EditNote({ activity: this.note });
             $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();
         });
 
         it("displays 'edit this insight' as the title", function() {
-            expect(this.dialog.$('h1').text()).toMatchTranslation("notes.edit_dialog.insight_title")
+            expect(this.dialog.$('h1').text()).toMatchTranslation("notes.edit_dialog.insight_title");
         });
     });
 
@@ -39,8 +37,8 @@ describe("chorus.dialogs.EditNote", function() {
     });
 
     it("has the text field, containing the user's previously entered text'", function() {
-        expect(this.dialog.$('textarea').val()).toContain(this.text)
-    })
+        expect(this.dialog.$('textarea').val()).toContain(this.text);
+    });
 
     it("makes a cl editor with toolbar", function() {
         expect(this.dialog.$('.toolbar')).toExist();
@@ -58,7 +56,7 @@ describe("chorus.dialogs.EditNote", function() {
             this.dialog.$("textarea").val("");
             this.dialog.$("button.submit").click();
 
-            expect(this.dialog.model.errors.body).toEqual("Note is required")
+            expect(this.dialog.model.errors.body).toEqual("Note is required");
             expect(this.dialog.$(".cleditorMain")).toHaveClass("has_error");
         });
 

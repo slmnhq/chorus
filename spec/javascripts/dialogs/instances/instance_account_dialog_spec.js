@@ -1,17 +1,17 @@
 describe("chorus.dialogs.InstanceAccount", function() {
     beforeEach(function() {
         this.instance = rspecFixtures.greenplumInstance();
-        var launchElement = $("<a></a>")
-            .data("title", t("instances.account.add.title"))
-            .data("instance", this.instance);
-        this.dialog = new chorus.dialogs.InstanceAccount({ launchElement: launchElement });
+        this.dialog = new chorus.dialogs.InstanceAccount({
+            instance: this.instance,
+            title: t("instances.account.add.title")
+        });
         this.dialog.launchModal();
         this.dialog.render();
     });
 
     describe("#render", function() {
         it("has the right title based on the launch element", function() {
-            expect(this.dialog.title).toMatchTranslation("instances.account.add.title")
+            expect(this.dialog.title).toMatchTranslation("instances.account.add.title");
         });
     });
 

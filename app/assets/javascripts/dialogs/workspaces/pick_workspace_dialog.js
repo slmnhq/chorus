@@ -28,7 +28,7 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
     },
 
     defaultWorkspaces: function() {
-        if (this.options.activeOnly || (this.options.launchElement && this.options.launchElement.data("activeonly"))) {
+        if (this.options.activeOnly) {
             return chorus.session.user().activeWorkspaces();
         }
         return chorus.session.user().workspaces();
@@ -38,6 +38,6 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
         return {
             name: model.name(),
             imageUrl: model.defaultIconUrl("small")
-        }
+        };
     }
 });

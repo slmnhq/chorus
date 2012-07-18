@@ -59,11 +59,11 @@
             {{#if activeWorkspace}}
                 {{#if canExport}}
                     {{#if hasSandbox}}
-                        <li><a class="import_now dialog" data-dialog="ImportScheduler" href="#">{{t "actions.import_now"}}</a></li>
+                        <li><a class="import_now dialog" data-dialog="ImportScheduler" data-action="import_now" href="#">{{t "actions.import_now"}}</a></li>
                         {{#if hasSchedule}}
-                            <li><a class="edit_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.edit_schedule"}}</a></li>
+                            <li><a class="edit_schedule dialog" data-dialog="ImportScheduler" data-action="edit_schedule" href="#">{{t "actions.edit_schedule"}}</a></li>
                         {{else}}
-                            <li><a class="create_schedule dialog" data-dialog="ImportScheduler" href="#">{{t "actions.create_schedule"}}</a></li>
+                            <li><a class="create_schedule dialog" data-dialog="ImportScheduler" data-action="create_schedule" href="#">{{t "actions.create_schedule"}}</a></li>
                         {{/if}}
                     {{else}}
                         <li><span class="import_now disabled">{{t "actions.import_now"}}</span></li>

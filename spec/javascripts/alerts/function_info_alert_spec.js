@@ -1,6 +1,6 @@
 xdescribe("chorus.alerts.FunctionInfo", function() {
     var model, alert;
-    
+
     beforeEach(function() {
         model = rspecFixtures.schemaFunctionSet([{
             name: "infinite_loop",
@@ -11,8 +11,7 @@ xdescribe("chorus.alerts.FunctionInfo", function() {
             returnType: "beverage"
         }]).at(0);
 
-        var link = $("<a/>").data("model", model);
-        alert = new chorus.alerts.FunctionInfo({ launchElement: link });
+        alert = new chorus.alerts.FunctionInfo({ model: model });
         alert.render();
     });
 

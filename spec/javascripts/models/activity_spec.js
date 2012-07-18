@@ -153,6 +153,17 @@ describe("chorus.models.Activity", function() {
                     expect(workspace.get("id")).toBe(123)
                 });
             });
+
+            context("for a NOTE_ON_DATASET", function() {
+                it("returns a dataset with the right data", function() {
+                    activity = rspecFixtures.activity.noteOnWorkspaceCreated({
+                        workspace: { id: 123 }
+                    });
+                    var workspace = activity.noteObject();
+                    expect(workspace).toBeA(chorus.models.Workspace);
+                    expect(workspace.get("id")).toBe(123)
+                });
+            });
         });
 
         describe("#hdfsEntry", function() {

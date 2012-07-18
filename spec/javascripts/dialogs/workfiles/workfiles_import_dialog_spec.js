@@ -1,14 +1,13 @@
 describe("chorus.dialogs.WorkfilesImport", function() {
     beforeEach(function() {
-        this.launchElement = $("<a data-workspace-id='4'></a>")
         this.model = rspecFixtures.workfile.sql({ workspace: { id: 4 } });
         var workfileSet = new chorus.collections.WorkfileSet([this.model], { workspaceId: 4 });
-        this.dialog = new chorus.dialogs.WorkfilesImport({ launchElement : this.launchElement, pageModel: this.model, pageCollection: workfileSet });
+        this.dialog = new chorus.dialogs.WorkfilesImport({ workspaceId: 4, pageModel: this.model, pageCollection: workfileSet });
     });
 
     it("does not re-render when the model changes", function() {
-        expect(this.dialog.persistent).toBeTruthy()
-    })
+        expect(this.dialog.persistent).toBeTruthy();
+    });
 
     describe("#render", function() {
         beforeEach(function() {

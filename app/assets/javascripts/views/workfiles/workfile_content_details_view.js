@@ -21,7 +21,7 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
             isLatestVersion: this.model.isLatestVersion()
         };
     },
-        
+
     selectionMenuItems: function() {
         return [{
                 name: "new",

@@ -25,10 +25,7 @@ describe("chorus.alerts.Error", function() {
 
         describe("without a model, but with data attributes", function() {
             beforeEach(function() {
-                this.launchElement = $("<a/>");
-                this.launchElement.attr("data-body", "Something failed");
-                this.launchElement.attr("data-title", "There was an error!");
-                this.alert = new FakeAlert({ launchElement: this.launchElement });
+                this.alert = new FakeAlert({ body: "Something failed", title: "There was an error!" });
             });
 
             it("should have the correct title", function() {

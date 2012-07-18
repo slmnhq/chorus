@@ -254,9 +254,11 @@ describe("chorus.pages.Base", function() {
                 expect(this.modalSpy).toHaveModal(modalClass);
             })
 
-            it("passes the launch element to the modal", function() {
+            it("passes the data attributes on the clicked element to the modal as options", function() {
+                this.elementToClick.data({ foo: 5, bar: 8 });
                 this.elementToClick.click();
-                expect(this.modalSpy.lastModal().options.launchElement).toBe(this.elementToClick);
+                expect(this.modalSpy.lastModal().options.foo).toBe(5);
+                expect(this.modalSpy.lastModal().options.bar).toBe(8);
             });
 
             it("passes the pageModel to the modal", function() {

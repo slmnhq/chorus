@@ -1,9 +1,9 @@
 describe("chorus.dialogs.NotesNewDialog", function() {
     beforeEach(function() {
         stubDelay();
-        this.launchElement = $("<a data-entity-type='instance' data-allow-workspace-attachments='true' data-entity-id='1'></a>");
         this.dialog = new chorus.dialogs.NotesNew({
-            launchElement: this.launchElement,
+            entityType: "instance",
+            entityId: 1,
             pageModel: new chorus.models.GreenplumInstance()
         });
         $('#jasmine_content').append(this.dialog.el);
@@ -17,7 +17,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
 
         it("sets the correct properties on the model", function() {
             expect(this.dialog.model.get("entityType")).toBe("instance");
-            expect(this.dialog.model.get("entityId")).toBe(1)
+            expect(this.dialog.model.get("entityId")).toBe(1);
         });
 
         it("stores the correct pageModel", function() {
@@ -41,9 +41,10 @@ describe("chorus.dialogs.NotesNewDialog", function() {
 
         context("when a displayEntityType is available", function() {
             beforeEach(function() {
-                this.launchElement.data("display-entity-type", "foo");
                 this.dialog = new chorus.dialogs.NotesNew({
-                    launchElement: this.launchElement,
+                    entityType: "instance",
+                    entityId: 1,
+                    displayEntityType: 'foo',
                     pageModel: new chorus.models.GreenplumInstance()
                 });
                 $('#jasmine_content').append(this.dialog.el);
@@ -53,24 +54,6 @@ describe("chorus.dialogs.NotesNewDialog", function() {
             it("shows the displayEntityType in the placeholder", function() {
                 expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", {noteSubject: "foo"}));
             });
-        });
-    });
-
-    describe("when the options are not specified in the launchElement", function() {
-        beforeEach(function() {
-            this.dialog = new chorus.dialogs.NotesNew({
-                entityId: "1",
-                entityType: "instance",
-                allowWorkspaceAttachments: true,
-                pageModel: new chorus.models.GreenplumInstance()
-            });
-            $('#jasmine_content').append(this.dialog.el);
-            this.dialog.render();
-        });
-
-        it("sets the correct properties on the model", function() {
-            expect(this.dialog.model.get("entityId")).toBe("1");
-            expect(this.dialog.model.get("entityType")).toBe("instance");
         });
     });
 });

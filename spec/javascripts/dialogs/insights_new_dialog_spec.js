@@ -1,10 +1,7 @@
 describe("chorus.dialogs.InsightsNewDialog", function() {
     beforeEach(function() {
         stubDelay();
-        this.launchElement = $("<a data-allow-workspace-attachments='true' data-workspace-id='22'></a>")
-        this.dialog = new chorus.dialogs.InsightsNew({
-            launchElement : this.launchElement
-        });
+        this.dialog = new chorus.dialogs.InsightsNew({ allowWorkspaceAttachments: true, workspaceId: 22 });
 
         $('#jasmine_content').append(this.dialog.el);
         this.dialog.render();
@@ -16,7 +13,7 @@ describe("chorus.dialogs.InsightsNewDialog", function() {
         });
 
         it("uses the correct workspace id", function() {
-            expect(this.dialog.model.get("workspaceId")).toBe(22)
+            expect(this.dialog.model.get("workspaceId")).toBe(22);
         });
     });
 

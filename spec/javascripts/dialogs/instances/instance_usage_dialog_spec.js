@@ -6,9 +6,7 @@ describe("chorus.dialogs.InstanceUsage", function() {
             port: "8555",
             description: "it is a food name"
         });
-        this.launchElement = $("<a/>");
-        this.launchElement.data("instance", this.instance);
-        this.dialog = new chorus.dialogs.InstanceUsage({launchElement : this.launchElement });
+        this.dialog = new chorus.dialogs.InstanceUsage({ instance: this.instance });
     });
 
     it("requires the config object", function() {

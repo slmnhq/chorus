@@ -8,7 +8,7 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
     },
 
     makeModel: function() {
-        this.sourceModel = this.options.launchElement.data("instance")
+        this.sourceModel = this.options.instance;
         this.model = new chorus.models[this.sourceModel.constructorName](this.sourceModel.attributes);
     },
 
@@ -33,12 +33,12 @@ chorus.dialogs.InstanceEdit = chorus.dialogs.Base.extend({
             provisionType: this.model.get("provisionType")
         };
 
-        _(["name", "host", "port", "size", "maintenanceDb", "username", "groupList"]).each(function(name) {
-            var input = this.$("input[name=" + name + "]")
+        _.each(["name", "host", "port", "size", "maintenanceDb", "username", "groupList"], function(name) {
+            var input = this.$("input[name=" + name + "]");
             if (input) {
                 attrs[name] = input.val() &&  input.val().trim();
             }
-        }, this)
+        }, this);
 
         this.$("button.submit").startLoading("instances.edit_dialog.saving");
         this.$("button.cancel").prop("disabled", true);

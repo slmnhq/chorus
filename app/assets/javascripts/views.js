@@ -60,18 +60,21 @@ chorus.views.Bare = Backbone.View.include(
             this.requiredResources.reset(options.requiredResources);
         },
 
-        createDialog: function(e) {
+        createModal: function(e, modalType) {
             e.preventDefault();
             var button = $(e.target).closest("button, a");
-            var dialog = new chorus.dialogs[button.data("dialog")]({ launchElement: button, pageModel: this.model, pageCollection: this.collection });
-            dialog.launchModal();
+            var modalClass = chorus[modalType + 's'][button.data(modalType)];
+            var options = _.extend(button.data(), { pageModel: this.model, pageCollection: this.collection });
+            var modal = new modalClass(options);
+            modal.launchModal();
+        },
+
+        createDialog: function(e) {
+            this.createModal(e, "dialog");
         },
 
         createAlert: function(e) {
-            e.preventDefault();
-            var launchElement = $(e.target).closest("button, a");
-            var alert = new chorus.alerts[launchElement.data("alert")]({launchElement: launchElement, pageModel: this.model, pageCollection: this.collection });
-            alert.launchModal();
+            this.createModal(e, "alert");
         },
 
         verifyResourcesLoaded: function(preventRender) {

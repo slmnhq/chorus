@@ -5,8 +5,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
     title:t("comments.new_dialog.title"),
     persistent:true,
 
-
-    events:{
+    events: {
         "submit form":"save"
     },
 
@@ -14,16 +13,14 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
         this._super("makeModel", arguments);
 
         this.model = new chorus.models.Comment({
-            entityType:this.options.launchElement.data("entity-type"),
-            entityId:this.options.launchElement.data("entity-id")
+            entityType: this.options.entityType,
+            entityId: this.options.entityId
         });
         this.bindings.add(this.model, "saved", this.saved);
-
-        this.entityTitle = this.options.launchElement.data("entity-title")
     },
 
     additionalContext:function () {
-        return { entityTitle:this.entityTitle }
+        return { entityTitle: this.options.entityTitle };
     },
 
     postRender: function() {
@@ -34,7 +31,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
 
     save:function (e) {
         e.preventDefault();
-        this.model.save({body: this.getNormalizedText(this.$("textarea[name=body]"))});
+        this.model.save({ body: this.getNormalizedText(this.$("textarea[name=body]")) });
     },
 
     saved:function () {

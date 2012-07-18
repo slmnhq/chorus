@@ -8,8 +8,7 @@ chorus.alerts.NotificationDeleteAlert = chorus.alerts.ModelDelete.extend({
 
     makeModel: function() {
         this._super("makeModel", arguments);
-        var activityModel = this.options.launchElement.data("activity");
-        this.model = new chorus.models.Notification({id: activityModel.get("id")});
+        this.model = new chorus.models.Notification({id: this.options.activity.get("id")});
     },
 
     modelDeleted: function() {

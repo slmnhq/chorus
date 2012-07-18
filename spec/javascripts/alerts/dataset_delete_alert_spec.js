@@ -1,8 +1,7 @@
 describe("chorus.alerts.DatasetDelete", function() {
     beforeEach(function() {
-        this.launchElement = $("<a data-key-prefix='delete'></a>")
         this.model = newFixtures.workspaceDataset.chorusView();
-        this.alert = new chorus.alerts.DatasetDelete({ launchElement : this.launchElement, pageModel : this.model });
+        this.alert = new chorus.alerts.DatasetDelete({ keyPrefix: 'delete', pageModel : this.model });
         stubModals();
         this.alert.launchModal();
     });

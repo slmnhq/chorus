@@ -6,16 +6,11 @@ chorus.dialogs.NotesNew = chorus.dialogs.MemoNew.extend({
 
     makeModel: function() {
         this.model = new chorus.models.Note({
-            entityId: this.options.launchElement ? this.options.launchElement.data("entity-id") : this.options.entityId,
-            entityType: this.options.launchElement ? this.options.launchElement.data("entity-type") : this.options.entityType,
+            entityId:    this.options.entityId,
+            entityType:  this.options.entityType,
         });
 
-        var subject;
-        if (this.options.launchElement) {
-            subject = this.options.launchElement.data("displayEntityType") || this.model.get("entityType");
-        } else {
-            subject = this.model.get("entityType");
-        }
+        var subject = this.options.displayEntityType || this.options.entityType;
 
         this.placeholder = t("notes.placeholder", {noteSubject: subject});
 

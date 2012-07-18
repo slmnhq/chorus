@@ -2,20 +2,19 @@ describe("chorus.dialogs.CopyWorkfile", function() {
     beforeEach(function() {
         this.workspaceId = '4';
         this.workfileId = '10';
-        this.launchElement = $("<a data-workspace-id='" + this.workspaceId + "' data-workfile-id='" + this.workfileId + "'></a>")
         this.workfile = rspecFixtures.workfile.text({ id: this.workfileId, workspace: {id: this.workspaceId} });
         this.workspace = rspecFixtures.workspace({ id: this.workspaceId });
         setLoggedInUser({id: 4003});
-        chorus.session.trigger("saved")
+        chorus.session.trigger("saved");
 
-        this.dialog = new chorus.dialogs.CopyWorkfile({launchElement: this.launchElement });
+        this.dialog = new chorus.dialogs.CopyWorkfile({ workspaceId: this.workspaceId, workfileId: this.workfileId });
         this.dialog.render();
     });
 
     describe("#setup", function() {
         it("fetches the source workfile", function() {
-            expect(this.server.lastFetch().url).toBe("/workfiles/10")
-        })
+            expect(this.server.lastFetch().url).toBe("/workfiles/10");
+        });
     });
 
     describe("after the workfile and workspaces are fetched", function() {

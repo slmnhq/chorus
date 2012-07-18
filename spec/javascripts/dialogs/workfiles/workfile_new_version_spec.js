@@ -6,8 +6,7 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
             versionInfo: { id: 4 },
             latestVersionId: 4
         });
-        var launchElement = $("<a></a>");
-        this.dialog = new chorus.dialogs.WorkfileNewVersion({ pageModel: this.workfile, launchElement: launchElement });
+        this.dialog = new chorus.dialogs.WorkfileNewVersion({ pageModel: this.workfile });
         this.dialog.render();
     });
 
@@ -49,7 +48,7 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
             it("closes the dialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });
-            
+
             it("invalidates the page model", function() {
               expect(this.invalidatedSpy).toHaveBeenCalled();
             })

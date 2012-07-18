@@ -19,11 +19,8 @@ chorus.dialogs.NameChorusView = chorus.dialogs.Base.extend({
     nameChorusView: function(e) {
         e.preventDefault();
 
-        this.model.set({
-            objectName: this.$("input[name=objectName]").val().trim()
-        })
-
-        this.$("button.submit").startLoading("actions.creating")
+        this.model.set({ objectName: this.$("input[name=objectName]").val().trim() });
+        this.$("button.submit").startLoading("actions.creating");
         this.model.save();
     },
 
@@ -33,7 +30,7 @@ chorus.dialogs.NameChorusView = chorus.dialogs.Base.extend({
     },
 
     chorusViewFailed: function() {
-        this.$("button.submit").stopLoading()
+        this.$("button.submit").stopLoading();
     },
 
     checkInput: function() {

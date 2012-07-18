@@ -1,8 +1,6 @@
 describe("chorus.alerts.ImportFailed", function() {
     beforeEach(function() {
-        this.launchElement = $("<a/>");
-        this.launchElement.attr("data-task-id", "123");
-        this.alert = new chorus.alerts.ImportFailed({ launchElement: this.launchElement });
+        this.alert = new chorus.alerts.ImportFailed({ taskId: 123 });
     });
 
     describe("initialization", function() {

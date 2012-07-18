@@ -4,7 +4,7 @@ chorus.alerts.DatasetDelete = chorus.alerts.ModelDelete.extend({
     setup: function() {
         this._super("setup")
 
-        var keyPrefix = this.options.launchElement.data("key-prefix");
+        var keyPrefix = this.options.keyPrefix;
         this.text = t("dataset." + keyPrefix + ".text");
         this.title = t("dataset." + keyPrefix + ".title");
         this.ok = t("dataset." + keyPrefix + ".button");

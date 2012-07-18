@@ -59,9 +59,8 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     makeModel: function() {
         this._super("makeModel", arguments);
-        var workspaceId = this.options.launchElement.data("workspaceId");
         this.workspace = this.pageModel;
-        this.model = new chorus.models.Sandbox({ workspaceId: workspaceId });
+        this.model = new chorus.models.Sandbox({ workspaceId: this.options.workspaceId });
         this.bindings.add(this.workspace, "saved", this.saved);
         this.bindings.add(this.workspace, "saveFailed", this.saveFailed);
         this.bindings.add(this.workspace, "validationFailed", this.saveFailed);
@@ -95,7 +94,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         if (this.activeForm != this.standaloneMode) {
             chorus.toast("sandbox.create.toast");
         }
-        if (!this.options.launchElement.data("noReload")) {
+        if (!this.options.noReload) {
             chorus.router.reload();
         }
         this.closeModal();

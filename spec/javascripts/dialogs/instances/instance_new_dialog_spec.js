@@ -1,7 +1,6 @@
 describe("chorus.dialogs.InstancesNew", function() {
     beforeEach(function() {
-        this.launchElement = $("<button/>");
-        this.dialog = new chorus.dialogs.InstancesNew({launchElement: this.launchElement});
+        this.dialog = new chorus.dialogs.InstancesNew();
         $('#jasmine_content').append(this.dialog.el);
     });
 
@@ -31,7 +30,7 @@ describe("chorus.dialogs.InstancesNew", function() {
             });
 
             it("shows the correct text", function() {
-                expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum")
+                expect(this.dialog.$("label[for=create_new_greenplum]").text()).toMatchTranslation("instances.new_dialog.create_new_greenplum");
             });
 
             it("defaults the schema name to 'public'", function() {
@@ -206,7 +205,7 @@ describe("chorus.dialogs.InstancesNew", function() {
 
         context("when registering a hadoop instance", function() {
             beforeEach(function() {
-                var hadoopSection = this.dialog.$("fieldset.register_existing_hadoop")
+                var hadoopSection = this.dialog.$("fieldset.register_existing_hadoop");
                 hadoopSection.find("input[type=radio]").attr('checked', true).change();
 
                 hadoopSection.find("input[name=name]").val(" Instance_Name ");
@@ -303,7 +302,7 @@ describe("chorus.dialogs.InstancesNew", function() {
                     expect(attrs.dbPassword).toBe("supersecret");
                     expect(attrs.template).toBe("large");
 
-                    expect(chorus.toast).not.toHaveBeenCalledWith("instances.new_dialog.provisioning")
+                    expect(chorus.toast).not.toHaveBeenCalledWith("instances.new_dialog.provisioning");
                 });
 
                 describe("when the save completes successfully", function() {
@@ -313,8 +312,8 @@ describe("chorus.dialogs.InstancesNew", function() {
                     });
 
                     it("display the toast message", function() {
-                        expect(chorus.toast).toHaveBeenCalledWith("instances.new_dialog.provisioning")
-                    })
+                        expect(chorus.toast).toHaveBeenCalledWith("instances.new_dialog.provisioning");
+                    });
 
                     it("navigates to the instance list", function() {
                         expect(chorus.router.navigate).toHaveBeenCalledWith("/instances", {selectId: 123});

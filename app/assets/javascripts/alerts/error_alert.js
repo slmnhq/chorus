@@ -6,9 +6,8 @@ chorus.alerts.Error = chorus.alerts.Base.extend({
     makeModel:function () {
         this._super("makeModel", arguments);
         this.options = this.options || {};
-        this.options.launchElement = this.options.launchElement || $("<a/>");
-        this.body = this.options.launchElement.data("body") || this.model.serverErrorMessage();
-        this.title = this.options.launchElement.data("title") || this.title;
+        this.body = this.options.body || this.model.serverErrorMessage();
+        this.title = this.options.title || this.title;
     },
 
     postRender:function () {
