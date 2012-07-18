@@ -15,8 +15,8 @@ describe NotesController do
 
     context "with an exception" do
       it "responds with an error code" do
-        mock(Events::Note).create_for_entity("workspace", "3", "I'm a faulty note", @user) { raise "An error" }
-        post :create, :note => { :entity_type => "workspace", :entity_id => "3", :body => "I'm a faulty note" }
+        workspace = workspaces(:archived)
+        post :create, :note => { :entity_type => "workspace", :entity_id => workspace.id, :body => "I'm a faulty note" }
         response.code.should == "422"
       end
     end
