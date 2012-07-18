@@ -21,10 +21,12 @@ module Events
           Events::NOTE_ON_HDFS_FILE.by(current_user).add(:hdfs_file => hdfs_file_reference, :body => body)
         when "workspace"
           workspace = Workspace.find(entity_id)
-
           if workspace && (WorkspaceAccess.member_of_workspaces(current_user).include?(workspace) || workspace.public)
             Events::NOTE_ON_WORKSPACE.by(current_user).add(:workspace =>workspace, :body => body)
           end
+        when "dataset"
+          dataset = Dataset.find(entity_id)
+          Events::NOTE_ON_DATASET.by(current_user).add(:dataset => dataset, :body => body)
         else
           raise "Unknown entity type: #{entity_type}"
       end
@@ -67,5 +69,17 @@ module Events
     def no_note_on_archived_workspace
       errors.add(:workspace, :generic , {:message => "Can not add a note on an archived workspace"} ) if workspace.archived?
     end
+  end
+
+  class NOTE_ON_DATASET < Note
+    has_targets :dataset
+    has_activities :actor, :dataset, :global
+    has_additional_data :body
+  end
+
+  class NOTE_ON_WORKSPACE_DATASET < Note
+    has_targets :dataset, :workspace
+    has_activities :actor, :dataset, :workspace
+    has_additional_data :body
   end
 end

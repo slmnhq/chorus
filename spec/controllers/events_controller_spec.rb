@@ -122,7 +122,9 @@ describe EventsController do
         "noteOnHadoopInstanceCreated" => Events::NOTE_ON_HADOOP_INSTANCE,
         "hdfsExternalTableCreated" => Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE,
         "noteOnHdfsFileCreated" => Events::NOTE_ON_HDFS_FILE,
-        "noteOnWorkspaceCreated" => Events::NOTE_ON_WORKSPACE
+        "noteOnWorkspaceCreated" => Events::NOTE_ON_WORKSPACE,
+        "noteOnDatasetCreated" => Events::NOTE_ON_DATASET,
+        "noteOnWorkspaceDatasetCreated" => Events::NOTE_ON_WORKSPACE_DATASET
     }
 
     FIXTURE_FILES.each do |filename, event_class_name|

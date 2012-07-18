@@ -8,6 +8,7 @@ describe "Notes" do
   let(:greenplum_instance) { FactoryGirl.create(:instance) }
   let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
   let(:workspace) { FactoryGirl.create(:workspace) }
+  let(:dataset) { datasets(:bobs_table) }
   let(:hdfs_file_reference) do
     HdfsFileReference.create({'path' => '/data/test.csv',
                               'hadoop_instance_id' => 1234})
@@ -95,6 +96,41 @@ describe "Notes" do
     it_does_not_create_a_global_activity
   end
 
+  describe "NOTE_ON_DATASET" do
+    subject do
+      Events::NOTE_ON_DATASET.add(
+        :actor => actor,
+        :dataset => dataset,
+        :body => "<3 <3 <3"
+      )
+    end
+
+    its(:dataset) { should == dataset }
+    its(:targets) { should == {:dataset => dataset} }
+    its(:additional_data) { should == { :body => "<3 <3 <3" } }
+
+    it_creates_activities_for { [actor, dataset] }
+    it_creates_a_global_activity
+  end
+
+  describe "NOTE_ON_WORKSPACE_DATASET" do
+    subject do
+      Events::NOTE_ON_WORKSPACE_DATASET.add(
+        :actor => actor,
+        :dataset => dataset,
+        :workspace => workspace,
+        :body => "<3 <3 <3"
+      )
+    end
+
+    its(:dataset) { should == dataset }
+    its(:targets) { should == {:dataset => dataset, :workspace => workspace} }
+    its(:additional_data) { should == { :body => "<3 <3 <3" } }
+
+    it_creates_activities_for { [actor, dataset, workspace] }
+    it_does_not_create_a_global_activity
+  end
+
   describe "search" do
     it "indexes text fields" do
       Events::Note.should have_searchable_field :body
@@ -171,6 +207,17 @@ describe "Notes" do
           Events::Note.create_for_entity("workspace", workspace.id, "More crazy content", user)
         }.to raise_error
       end
+    end
+
+    it "creates a note on a dataset" do
+      dataset = datasets(:bobs_table)
+      Events::Note.create_for_entity("dataset", dataset.id, "Crazy dataset content", user)
+
+      last_note = Events::Note.first
+      last_note.action.should == "NOTE_ON_DATASET"
+      last_note.actor.should == user
+      last_note.dataset.id == dataset.id
+      last_note.body.should == "Crazy dataset content"
     end
 
     it "raises an exception if the entity type is unknown" do

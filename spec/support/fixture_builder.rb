@@ -101,6 +101,8 @@ FixtureBuilder.configure do |fbuilder|
     Events::NOTE_ON_HADOOP_INSTANCE.by(bob).add(:hadoop_instance => hadoop_instance, :body => 'hadoop-idy-doop')
     Events::NOTE_ON_HDFS_FILE.by(bob).add(:hdfs_file => hdfs_file_reference, :body => 'hhhhhhaaaadooooopppp')
     Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'Come see my awesome workspace!')
+    Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
+    Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
 
     #Events
     Events::GREENPLUM_INSTANCE_CHANGED_OWNER.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
