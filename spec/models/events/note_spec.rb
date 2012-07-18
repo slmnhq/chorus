@@ -81,9 +81,9 @@ describe "Notes" do
   describe "NOTE_ON_WORKSPACE" do
     subject do
       Events::NOTE_ON_WORKSPACE.add(
-          :actor => actor,
-          :workspace => workspace,
-          :body => "This is the text of the note on the workspace"
+        :actor => actor,
+        :workspace => workspace,
+        :body => "This is the text of the note on the workspace"
       )
     end
 
@@ -149,14 +149,26 @@ describe "Notes" do
       last_note.body.should == "Some crazy content"
     end
 
-    it "creates a note on a workspace" do
-      Events::Note.create_for_entity("workspace", workspace.id, "More crazy content", user)
+    context "workspace not archived" do
+      it "creates a note on a workspace" do
+        Events::Note.create_for_entity("workspace", workspace.id, "More crazy content", user)
 
-      last_note = Events::Note.first
-      last_note.action.should == "NOTE_ON_WORKSPACE"
-      last_note.actor.should == user
-      last_note.workspace.id == workspace.id
-      last_note.body.should == "More crazy content"
+        last_note = Events::Note.first
+        last_note.action.should == "NOTE_ON_WORKSPACE"
+        last_note.actor.should == user
+        last_note.workspace.id == workspace.id
+        last_note.body.should == "More crazy content"
+      end
+    end
+
+    context "workspace is archived" do
+      it "does not create a note on a workspace" do
+        workspace.archived_at = DateTime.now
+        workspace.save!
+        expect {
+          Events::Note.create_for_entity("workspace", workspace.id, "More crazy content", user)
+        }.to raise_error
+      end
     end
 
     it "raises an exception if the entity type is unknown" do

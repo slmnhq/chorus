@@ -12,6 +12,14 @@ describe NotesController do
       post :create, :note => { :entity_type => "greenplum_instance", :entity_id => "3", :body => "I'm a note" }
       response.code.should == "201"
     end
+
+    context "with an exception" do
+      it "responds with an error code" do
+        mock(Events::Note).create_for_entity("workspace", "3", "I'm a faulty note", @user) { raise "An error" }
+        post :create, :note => { :entity_type => "workspace", :entity_id => "3", :body => "I'm a faulty note" }
+        response.code.should == "422"
+      end
+    end
   end
 
   describe "#update" do

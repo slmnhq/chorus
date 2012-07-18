@@ -58,5 +58,11 @@ module Events
     has_targets :workspace
     has_activities :actor, :workspace, :global
     has_additional_data :body
+
+    validate :no_note_on_archived_workspace
+
+    def no_note_on_archived_workspace
+      errors.add(:workspace, :generic , {:message => "Can not add a note on an archived workspace"} ) if workspace.archived?
+    end
   end
 end

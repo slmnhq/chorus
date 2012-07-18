@@ -4,7 +4,6 @@ class NotesController < ApplicationController
   def create
     note_params = params[:note]
     Events::Note.create_for_entity(note_params[:entity_type], note_params[:entity_id], note_params[:body], current_user)
-
     render :json => {}, :status => :created
   end
 
