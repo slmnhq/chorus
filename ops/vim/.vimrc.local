@@ -43,6 +43,8 @@ map <C-n> :tabnew<cr>
 autocmd FileType javascript set softtabstop=4 | set tabstop=4 | set shiftwidth=4
 autocmd FileType ruby       set softtabstop=2 | set tabstop=2 | set shiftwidth=2
 
+autocmd FileType * normal zR
+
 function! OpenHandlebars()
     let file_path = "~/workspace/chorusrails/" . system("~/workspace/chorusrails/script/find_handlebars.rb " . expand("%"))
     exec ":e " . file_path
@@ -70,3 +72,4 @@ map <leader>l              :call WinMove('l')<cr>
 map <leader>j              :call WinMove('j')<cr>
 
 let g:CommandTMaxFiles = 100000
+
