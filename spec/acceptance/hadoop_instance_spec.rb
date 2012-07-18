@@ -2,7 +2,7 @@ require 'spec_helper'
 
 resource "Hadoop DB instances" do
   let!(:owner) { users(:bob) }
-  let!(:instance) { FactoryGirl.create(:hadoop_instance, :owner => owner, :host => 'garcia', :port => '8020', :username => 'pivotal', :group_list => 'pivotal') }
+  let!(:instance) { FactoryGirl.create(:hadoop_instance, :owner => owner, :host => 'will_be_stubbed', :port => '8020', :username => 'pivotal', :group_list => 'pivotal') }
   let!(:entry1) { HdfsEntry.new({'path' => '/files', 'modified_at' => Time.now.to_s, 'directory' => "true", 'content_count' => "3"}, instance) }
   let!(:entry2) { HdfsEntry.new({'path' => '/test.txt', 'modified_at' => Time.now.to_s, 'size' => "1234kB"}, instance) }
   let!(:event) { FactoryGirl.create(:hadoop_instance_created_event, :hadoop_instance => instance) }

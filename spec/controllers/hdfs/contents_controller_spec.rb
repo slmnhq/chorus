@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Hdfs::ContentsController do
-  let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :host => 'gillette', :port => '8020', :username => 'pivotal') }
+  let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :host => HADOOP_TEST_INSTANCE, :port => '8020', :username => 'pivotal') }
 
   before do
     log_in FactoryGirl.create :user

@@ -125,7 +125,7 @@ describe HdfsExternalTable do
       let(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
       let(:schema) { GpdbSchema.find_by_name('gpdb_test_schema') }
       let(:account) { real_gpdb_account }
-      let!(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :host => "gillette", :port => '8020') }
+      let!(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :host => HADOOP_TEST_INSTANCE, :port => '8020') }
 
       let(:parameters) do
         {

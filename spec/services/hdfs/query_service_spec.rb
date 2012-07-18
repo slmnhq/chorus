@@ -18,7 +18,7 @@ describe Hdfs::QueryService do
   describe ".instance_version" do
     context "existing hadoop server" do
       let(:instance) do
-        HadoopInstance.new :host => "gillette", :port => "8020", :username => "pivotal"
+        HadoopInstance.new :host => HADOOP_TEST_INSTANCE, :port => "8020", :username => "pivotal"
       end
 
       it "returns the hadoop version" do
@@ -29,7 +29,7 @@ describe Hdfs::QueryService do
 
     context "unexisting hadoop server" do
       let(:unexisting_instance) do
-        HadoopInstance.new :host => "gillette1", :port => "8888", :username => "pivotal"
+        HadoopInstance.new :host => "garbage", :port => "8888", :username => "pivotal"
       end
 
       it "raises ApiValidationError" do
@@ -39,7 +39,7 @@ describe Hdfs::QueryService do
 
     context "timeout" do
       let(:slow_instance) do
-        HadoopInstance.new :host => "gillette", :port => "8888", :username => "pivotal"
+        HadoopInstance.new :host => HADOOP_TEST_INSTANCE, :port => "8888", :username => "pivotal"
       end
 
       it "raises ApiValidationError" do
@@ -55,7 +55,7 @@ describe Hdfs::QueryService do
   end
 
   describe "#list" do
-    let(:service) { Hdfs::QueryService.new("gillette", "8020", "pivotal", "0.20.1gp") }
+    let(:service) { Hdfs::QueryService.new(HADOOP_TEST_INSTANCE, "8020", "pivotal", "0.20.1gp") }
 
     context "listing root with sub content" do
       it "returns list of content for root directory" do
@@ -90,7 +90,7 @@ describe Hdfs::QueryService do
     end
 
     context "connection is invalid" do
-      let(:service) { Hdfs::QueryService.new("gillette1234", "8020", "pivotal", "0.20.1gp") }
+      let(:service) { Hdfs::QueryService.new("garbage", "8020", "pivotal", "0.20.1gp") }
 
       it "raises an exception" do
         expect { service.list("/") }.to raise_error(Hdfs::DirectoryNotFoundError)
@@ -99,7 +99,7 @@ describe Hdfs::QueryService do
   end
 
   describe "#show" do
-    let(:service) { Hdfs::QueryService.new("gillette", "8020", "pivotal", "0.20.1gp") }
+    let(:service) { Hdfs::QueryService.new(HADOOP_TEST_INSTANCE, "8020", "pivotal", "0.20.1gp") }
 
     context "show an existing file" do
       it "should return part of the content" do
@@ -128,7 +128,7 @@ describe Hdfs::QueryService do
     end
 
     context "connection is invalid" do
-      let(:service) { Hdfs::QueryService.new("gillette1234", "8020", "pivotal", "0.20.1gp") }
+      let(:service) { Hdfs::QueryService.new("garbage", "8020", "pivotal", "0.20.1gp") }
 
       it "raises an exception" do
         expect { service.show("/file") }.to raise_error(Hdfs::FileNotFoundError)

@@ -25,7 +25,7 @@ describe HdfsEntry do
 
   describe ".list" do
     context "queries the hdfs query system and retrieve entries objects" do
-      let(:hadoop_instance) { HadoopInstance.new(:host => 'garcia', :port => '8020', :username => 'pivotal') }
+      let(:hadoop_instance) { HadoopInstance.new(:host => 'will_be_stubbed', :port => '8020', :username => 'pivotal') }
 
       before do
         any_instance_of(Hdfs::QueryService) do |h|
