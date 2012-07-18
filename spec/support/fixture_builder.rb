@@ -64,7 +64,7 @@ FixtureBuilder.configure do |fbuilder|
     workspaces << alice_public_workspace = alice.owned_workspaces.create!(:name => "Alice Public", :summary => 'BobSearch can see I guess')
     workspaces << alice_private_workspace = alice.owned_workspaces.create!(:name => "Alice Private", :summary => "Not for bobsearch, ha ha", :public => false)
     workspaces << alice_archived_workspace = alice.owned_workspaces.create!({:name => "Archived", :archived_at => '2010-01-01'}, :without_protection => true)
-    workspaces << bob_public_workspace = bob.owned_workspaces.create!(:name => "Bob Public", :summary => "BobSearch")
+    workspaces << bob_public_workspace = bob.owned_workspaces.create!({:name => "Bob Public", :summary => "BobSearch", :sandbox => bob_schema}, :without_protection => true)
     workspaces << bob_private_workspace = bob.owned_workspaces.create!(:name => "Bob Private", :summary => "BobSearch", :public => false)
     workspaces.each do |workspace|
       workspace.members << carly

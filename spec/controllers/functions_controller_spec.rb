@@ -3,18 +3,18 @@ require 'spec_helper'
 describe FunctionsController do
   ignore_authorization!
 
-  let(:user) { FactoryGirl.create :user }
+  let(:user) { users(:carly) }
 
   before do
     log_in user
   end
 
   describe "#index" do
-    let(:instance) { FactoryGirl.create(:instance, :owner_id => user.id) }
-    let(:instanceAccount) { FactoryGirl.create(:instance_account, :instance_id => instance.id, :owner_id => user.id) }
+    let(:instance) { instances(:greenplum) }
+    let(:instanceAccount) { instance_accounts(:iamcarly) }
 
-    let(:database) { FactoryGirl.create(:gpdb_database, :instance => instance, :name => "database1") }
-    let!(:schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema1xx', :database => database) }
+    let(:database) { gpdb_databases(:bobs_database) }
+    let!(:schema) { gpdb_schemas(:bobs_schema) }
 
     before do
       stub(subject).gpdb_account_for_current_user(schema) { instanceAccount }

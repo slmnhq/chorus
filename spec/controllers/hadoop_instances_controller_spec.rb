@@ -3,8 +3,10 @@ require 'spec_helper'
 describe HadoopInstancesController do
   ignore_authorization!
 
+  let(:hadoop_instance) { hadoop_instances(:hadoop) }
+
   before do
-    @user = FactoryGirl.create :user
+    @user = users(:alice)
     log_in @user
   end
 
@@ -13,8 +15,7 @@ describe HadoopInstancesController do
       let(:valid_attributes) { Hash.new }
 
       before do
-        instance = FactoryGirl.build(:hadoop_instance, :name => "new")
-        stub(Hdfs::InstanceRegistrar).create!(valid_attributes, @user) { instance }
+        stub(Hdfs::InstanceRegistrar).create!(valid_attributes, @user) { hadoop_instance }
       end
 
       it "reports that the instance was created" do
@@ -24,29 +25,14 @@ describe HadoopInstancesController do
 
       it "renders the newly created instance" do
         post :create, :hadoop_instance => valid_attributes
-        decoded_response.name.should == "new"
-      end
-    end
-
-    context "with invalid attributes" do
-      let(:invalid_attributes) { Hash.new }
-
-      before do
-        instance = FactoryGirl.build(:hadoop_instance, :name => nil)
-        stub(Hdfs::InstanceRegistrar).create!(invalid_attributes, @user) { raise(ActiveRecord::RecordInvalid.new(instance)) }
-      end
-
-      it "responds with validation errors" do
-        post :create, :hadoop_instance => invalid_attributes
-        response.code.should == "422"
+        decoded_response.name.should == hadoop_instance.name
       end
     end
   end
 
   describe "#update" do
     context "with valid attributes" do
-      let(:attributes) { { 'name' => 'new_name' } }
-      let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
+      let(:attributes) { {'name' => 'new_name'} }
 
       before do
         mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, attributes, @user)
@@ -64,8 +50,7 @@ describe HadoopInstancesController do
     end
 
     context "with invalid attributes" do
-      let(:invalid_attributes) { { 'name' => '' } }
-      let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
+      let(:invalid_attributes) { {'name' => ''} }
 
       before do
         mock(Hdfs::InstanceRegistrar).update!(hadoop_instance.id, invalid_attributes, @user) do
@@ -82,21 +67,19 @@ describe HadoopInstancesController do
 
   describe "#index" do
     it "presents all hadoop instances" do
-      mock_present {|model| model.should =~ HadoopInstance.all}
+      mock_present { |model| model.should =~ HadoopInstance.all }
       get :index
     end
   end
 
   describe "#show" do
     it "presents the hadoop instance with the given id" do
-      instance = FactoryGirl.create(:hadoop_instance, :name => "hadoop3")
-      get :show, :id => instance.id
-      decoded_response.name.should == "hadoop3"
+      get :show, :id => hadoop_instance.id
+      decoded_response.name.should == hadoop_instance.name
     end
 
     generate_fixture "hadoopInstance.json" do
-      instance = FactoryGirl.create(:hadoop_instance, :name => "hadoop3")
-      get :show, :id => instance.id
+      get :show, :id => hadoop_instance.id
     end
   end
 end

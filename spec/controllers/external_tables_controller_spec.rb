@@ -1,17 +1,15 @@
 require 'spec_helper'
 
 describe ExternalTablesController do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:sandbox) { FactoryGirl.create(:gpdb_schema) }
-  let(:workspace) { FactoryGirl.create(:workspace, :owner => user, :sandbox => sandbox) }
-  let(:workspace_without_sandbox) { FactoryGirl.create(:workspace, :owner => user) }
+  let(:user) { users(:carly) }
+  let(:sandbox) { gpdb_schemas(:bobs_schema) }
+  let(:workspace) { workspaces(:bob_public) }
+  let(:workspace_without_sandbox) { workspaces(:bob_private) }
 
-  let!(:instance_account) { FactoryGirl.create(:instance_account, :owner => user, :instance => sandbox.instance) }
-  let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :host => "emc.com", :port => '8020') }
+  let!(:instance_account) { instance_accounts(:iamcarly) }
+  let(:hadoop_instance) { hadoop_instances(:hadoop) }
 
   describe "#create" do
-    let(:current_user) { user }
-
     before do
       log_in user
     end
@@ -51,7 +49,7 @@ describe ExternalTablesController do
       end
 
       it "creates hdfs external table for a workspace with sandbox amd responds with ok" do
-        mock(HdfsExternalTable).create(workspace, instance_account, anything, current_user)
+        mock(HdfsExternalTable).create(workspace, instance_account, anything, user)
 
         post :create, parameters
         response.code.should == "200"
