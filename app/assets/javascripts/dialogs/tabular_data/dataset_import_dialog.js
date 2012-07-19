@@ -105,10 +105,11 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
                 truncate: this.$(".existing_table input#truncate").is(':checked')
             }, {silent: true});
 
-            this.$("button.submit").startLoading("actions.uploading");
             this.uploadObj.url = "/edc/workspace/" + this.options.launchElement.data("workspaceId") + "/csv/sample";
 
             if (this.csv.performValidation()) {
+                this.$("button.submit").startLoading("actions.uploading");
+                this.clearErrors();
                 this.request = this.uploadObj.submit();
             } else {
                 this.showErrors(this.model);

@@ -17,6 +17,7 @@ describe("chorus.dialogs.DatasetImport", function() {
         ];
         this.datasets = this.validDatasets.concat(this.invalidDatasets);
         this.dialog = new chorus.dialogs.DatasetImport({launchElement: this.launchElement});
+
         spyOn(this.dialog, "modalClosed").andCallThrough();
         this.dialog.launchModal();
     });
@@ -135,12 +136,14 @@ describe("chorus.dialogs.DatasetImport", function() {
 
             describe("the default selection", function() {
                 it("selects the new table button by default", function() {
-                    expect(this.dialog.$(".new_table input:radio").prop("checked")).toBeTruthy()
+                    expect(this.dialog.$(".new_table input:radio").prop("checked")).toBeTruthy();
                 });
 
                 it("shows the file name entry, in lowercase, with spaces converted to underscores", function() {
-                    expect(this.dialog.$(".new_table input:text")).toBeEnabled();
-                    expect(this.dialog.$(".new_table input:text").val()).toBe("foo_bar_baz");
+                    var input = this.dialog.$(".new_table input:text");
+                    expect(input).toBeEnabled();
+                    expect(input.val()).toBe("foo_bar_baz");
+                    expect(input.attr("name")).toBe("toTable");
                 });
 
                 it("enables the table name input", function() {
@@ -474,6 +477,26 @@ describe("chorus.dialogs.DatasetImport", function() {
                         expect(this.dialog.$(".import_controls")).not.toHaveClass("hidden");
                         expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
                         expect(this.dialog.$(".file-wrapper button")).toHaveClass("hidden");
+                    });
+                });
+            });
+
+            context("when there is a validation error", function() {
+                beforeEach(function() {
+                    this.dialog.$(".new_table input[name='toTable']").val("__this_aint_valid");
+                    this.dialog.$("form").submit();
+                });
+
+                it("does not show the loading spinner on the submit button", function() {
+                    expect(this.dialog.$(".has_error")).toExist();
+                    expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                });
+
+                describe("when the user fixes the errors and submits again", function() {
+                    it("clears any errors that were showing", function() {
+                        this.dialog.$(".new_table input[name='toTable']").val("this_is_now_valid");
+                        this.dialog.$("form").submit();
+                        expect(this.dialog.$(".has_error")).not.toExist();
                     });
                 });
             });
