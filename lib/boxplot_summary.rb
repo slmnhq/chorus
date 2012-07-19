@@ -32,6 +32,7 @@ class BoxplotSummary
       end
 
       new_map << {:bucket => category,
+                  :count => count,
                   :min => min,
                   :median => median,
                   :max => max,
@@ -40,6 +41,7 @@ class BoxplotSummary
                   :percentage => percentage}
     end
 
+    new_map = new_map.sort {|a, b| b[:percentage] <=> a[:percentage] }
     new_map = new_map[0..bins-1] if bins.present? && bins > 0
     return new_map
   end
