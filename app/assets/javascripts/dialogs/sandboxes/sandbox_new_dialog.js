@@ -30,11 +30,18 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 //      this.aurora.fetch();
         this.aurora.loaded = true;
 
+        this.workspace.fetch();
+
+        this.requiredResources.add(this.workspace);
         this.requiredResources.add(this.aurora);
         this.requiredResources.add(chorus.models.Config.instance());
 
         this.standaloneMode = new chorus.views.SandboxNewStandaloneMode({addingSandbox: true});
         this.activeForm = this.instanceMode;
+
+        this.bindings.add(this.workspace, "saved", this.saved);
+        this.bindings.add(this.workspace, "saveFailed", this.saveFailed);
+        this.bindings.add(this.workspace, "validationFailed", this.saveFailed);
     },
 
     fetchTemplates: function() {
@@ -59,11 +66,9 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     makeModel: function() {
         this._super("makeModel", arguments);
-        this.workspace = this.pageModel;
-        this.model = new chorus.models.Sandbox({ workspaceId: this.options.workspaceId });
-        this.bindings.add(this.workspace, "saved", this.saved);
-        this.bindings.add(this.workspace, "saveFailed", this.saveFailed);
-        this.bindings.add(this.workspace, "validationFailed", this.saveFailed);
+        var workspaceId = this.options.workspaceId;
+        this.workspace = new chorus.models.Workspace({id : workspaceId});
+        this.model = new chorus.models.Sandbox({ workspaceId: workspaceId });
     },
 
     resourcesLoaded: function() {

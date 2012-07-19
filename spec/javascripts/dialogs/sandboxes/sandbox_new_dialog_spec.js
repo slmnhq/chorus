@@ -1,16 +1,22 @@
 describe("chorus.dialogs.SandboxNew", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace();
+        this.workspace = rspecFixtures.workspace({id: 45});
         spyOn(chorus, "toast");
         spyOn(chorus, 'styleSelect');
         spyOn(chorus.router, 'reload');
-        this.dialog = new chorus.dialogs.SandboxNew({ workspaceId: 45, pageModel: this.workspace});
+        this.dialog = new chorus.dialogs.SandboxNew({ workspaceId: 45});
+        this.server.completeFetchFor(this.workspace);
         this.dialog.render();
     });
 
     xit("fetches the aurora provisioning status", function() {
         expect(chorus.models.GreenplumInstance.aurora()).toHaveBeenFetched();
     });
+
+    it("fetches the workspace", function() {
+        expect(this.dialog.workspace).toHaveBeenFetched();
+    });
+
 
     context("when the SchemaPicker triggers an error", function() {
         beforeEach(function() {
@@ -64,7 +70,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             it("sets the summary to empty string when it's null", function() {
-                this.workspace.set({summary: null});
+                this.dialog.workspace.set({summary: null});
                 spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
                     instance: "4",
                     database: "5",
@@ -76,7 +82,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             it("retains the summary", function() {
-                this.workspace.set({summary: "test"});
+                this.dialog.workspace.set({summary: "test"});
                 spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
                     instance: "4",
                     database: "5",
@@ -127,7 +133,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                 describe("when save fails", function() {
                     beforeEach(function() {
-                        this.workspace.trigger("saveFailed");
+                        this.dialog.workspace.trigger("saveFailed");
                     });
 
                     it("takes the button out of the loading state", function() {
@@ -137,9 +143,9 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                 describe("when the model is saved successfully", function() {
                     beforeEach(function() {
-                        spyOnEvent(this.workspace, 'invalidated');
-                        spyOn(this.workspace, 'fetch');
-                        this.workspace.trigger("saved");
+                        spyOnEvent(this.dialog.workspace, 'invalidated');
+                        spyOn(this.dialog.workspace, 'fetch');
+                        this.dialog.workspace.trigger("saved");
                     });
 
                     context("when the 'noReload' option is set", function() {
