@@ -33,7 +33,7 @@ xdescribe("chorus.alerts.FunctionInfo", function() {
         it("doesn't include the 'description' label", function () {
             model.unset("description");
             alert.render();
-            expect(alert.$(".body")).not.toContainTranslation("schema.functions.description")
+            expect(alert.$(".body")).not.toContainTranslation("schema.functions.description");
         });
     });
 

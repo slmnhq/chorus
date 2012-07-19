@@ -59,7 +59,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         });
 
         it("makes a cl editor with toolbar", function() {
-            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width : 350, controls : 'bold italic | bullets numbering | link unlink' } );
+            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width : 566, height: 150, controls : 'bold italic | bullets numbering | link unlink' } );
             expect(this.dialog.$('.toolbar')).toExist();
         });
 
