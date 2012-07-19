@@ -1,4 +1,6 @@
 module Events
+  UnknownEntityType = Class.new(StandardError)
+
   class Note < Base
     validates_presence_of :actor_id
     searchable do
@@ -7,28 +9,37 @@ module Events
       string :type_name
     end
 
-    def self.create_for_entity(entity_type, entity_id, body, current_user)
+    def self.create_from_params(params, creator)
+      entity_id = params[:entity_id]
+      entity_type = params[:entity_type]
+      body = params[:body]
+      workspace_id = params[:workspace_id]
+
       case entity_type
         when "greenplum_instance"
           instance = Instance.find(entity_id)
-          Events::NOTE_ON_GREENPLUM_INSTANCE.by(current_user).add(:greenplum_instance => instance, :body => body)
+          Events::NOTE_ON_GREENPLUM_INSTANCE.by(creator).add(:greenplum_instance => instance, :body => body)
         when "hadoop_instance"
           instance = HadoopInstance.find(entity_id)
-          Events::NOTE_ON_HADOOP_INSTANCE.by(current_user).add(:hadoop_instance => instance, :body => body)
+          Events::NOTE_ON_HADOOP_INSTANCE.by(creator).add(:hadoop_instance => instance, :body => body)
         when "hdfs"
           hadoop_instance_id, path = entity_id.split('|')
           hdfs_file_reference = HdfsFileReference.find_or_create_by_hadoop_instance_id_and_path(hadoop_instance_id, path)
-          Events::NOTE_ON_HDFS_FILE.by(current_user).add(:hdfs_file => hdfs_file_reference, :body => body)
+          Events::NOTE_ON_HDFS_FILE.by(creator).add(:hdfs_file => hdfs_file_reference, :body => body)
         when "workspace"
           workspace = Workspace.find(entity_id)
-          if workspace && (WorkspaceAccess.member_of_workspaces(current_user).include?(workspace) || workspace.public)
-            Events::NOTE_ON_WORKSPACE.by(current_user).add(:workspace =>workspace, :body => body)
+          if workspace && (WorkspaceAccess.member_of_workspaces(creator).include?(workspace) || workspace.public)
+            Events::NOTE_ON_WORKSPACE.by(creator).add(:workspace =>workspace, :body => body)
           end
         when "dataset"
           dataset = Dataset.find(entity_id)
-          Events::NOTE_ON_DATASET.by(current_user).add(:dataset => dataset, :body => body)
+          Events::NOTE_ON_DATASET.by(creator).add(:dataset => dataset, :body => body)
+        when "workspace_dataset"
+          dataset = Dataset.find(entity_id)
+          workspace = Workspace.find(workspace_id)
+          Events::NOTE_ON_WORKSPACE_DATASET.by(creator).add(:dataset => dataset, :workspace => workspace, :body => body)
         else
-          raise "Unknown entity type: #{entity_type}"
+          raise UnknownEntityType
       end
     end
 

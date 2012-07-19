@@ -151,12 +151,16 @@ describe "Notes" do
     end
   end
 
-  describe "#create_for_entity(entity_type, entity_id, body, creator)" do
+  describe "#create_from_params(entity_type, entity_id, body, creator)" do
     let(:user) { FactoryGirl.create(:user) }
 
     it "creates a note on a greenplum instance" do
       greenplum_instance = FactoryGirl.create(:greenplum_instance)
-      Events::Note.create_for_entity("greenplum_instance", greenplum_instance.id, "Some crazy content", user)
+      Events::Note.create_from_params({
+        :entity_type => "greenplum_instance",
+        :entity_id => greenplum_instance.id,
+        :body => "Some crazy content",
+      }, user)
 
       last_note = Events::Note.first
       last_note.action.should == "NOTE_ON_GREENPLUM_INSTANCE"
@@ -166,7 +170,11 @@ describe "Notes" do
 
     it "creates a note on a hadoop instance" do
       hadoop_instance = FactoryGirl.create(:hadoop_instance)
-      Events::Note.create_for_entity("hadoop_instance", hadoop_instance.id, "Some crazy content", user)
+      Events::Note.create_from_params({
+        :entity_type => "hadoop_instance",
+        :entity_id => hadoop_instance.id,
+        :body => "Some crazy content",
+      }, user)
 
       last_note = Events::Note.first
       last_note.action.should == "NOTE_ON_HADOOP_INSTANCE"
@@ -175,7 +183,11 @@ describe "Notes" do
     end
 
     it "creates a note on an hdfs file" do
-      Events::Note.create_for_entity("hdfs", "1234|/data/test.csv", "Some crazy content", user)
+      Events::Note.create_from_params({
+        :entity_type => "hdfs",
+        :entity_id => "1234|/data/test.csv",
+        :body => "Some crazy content",
+      }, user)
 
       last_note = Events::Note.first
       last_note.action.should == "NOTE_ON_HDFS_FILE"
@@ -188,7 +200,11 @@ describe "Notes" do
     context "workspace not archived" do
       it "creates a note on a workspace" do
         mock(WorkspaceAccess).member_of_workspaces(user) { [workspace] }
-        Events::Note.create_for_entity("workspace", workspace.id, "More crazy content", user)
+        Events::Note.create_from_params({
+          :entity_type => "workspace",
+          :entity_id => workspace.id,
+          :body => "More crazy content",
+        }, user)
 
         last_note = Events::Note.first
         last_note.action.should == "NOTE_ON_WORKSPACE"
@@ -204,14 +220,21 @@ describe "Notes" do
         workspace.archived_at = DateTime.now
         workspace.save!
         expect {
-          Events::Note.create_for_entity("workspace", workspace.id, "More crazy content", user)
+          Events::Note.create_from_params({
+            :entity_type => "workspace",
+            :entity_id => workspace.id,
+            :body => "More crazy content",
+          }, user)
         }.to raise_error
       end
     end
 
     it "creates a note on a dataset" do
-      dataset = datasets(:bobs_table)
-      Events::Note.create_for_entity("dataset", dataset.id, "Crazy dataset content", user)
+      Events::Note.create_from_params({
+        :entity_type => "dataset",
+        :entity_id => dataset.id,
+        :body => "Crazy dataset content",
+      }, user)
 
       last_note = Events::Note.first
       last_note.action.should == "NOTE_ON_DATASET"
@@ -220,8 +243,30 @@ describe "Notes" do
       last_note.body.should == "Crazy dataset content"
     end
 
+    it "creates a note on a dataset in a workspace" do
+      Events::Note.create_from_params({
+        :entity_type => "workspace_dataset",
+        :entity_id => dataset.id,
+        :body => "Crazy workspace dataset content",
+        :workspace_id => workspace.id
+      }, user)
+
+      last_note = Events::Note.first
+      last_note.action.should == "NOTE_ON_WORKSPACE_DATASET"
+      last_note.actor.should == user
+      last_note.dataset == dataset
+      last_note.workspace == workspace
+      last_note.body.should == "Crazy workspace dataset content"
+    end
+
     it "raises an exception if the entity type is unknown" do
-      expect { Events::Note.create_for_entity("bogus", "wrong", "invalid", user) }.to raise_error
+      expect {
+        Events::Note.create_from_params({
+          :entity_type => "bogus",
+          :entity_id => "wrong",
+          :body => "invalid"
+        }, user)
+      }.to raise_error(Events::UnknownEntityType)
     end
   end
 end

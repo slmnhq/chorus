@@ -8,7 +8,11 @@ describe NotesController do
     end
 
     it "creates a note on the model specified by the 'entity_type' and 'entity_id'" do
-      mock(Events::Note).create_for_entity("greenplum_instance", "3", "I'm a note", @user)
+      mock(Events::Note).create_from_params({
+        "entity_type" => "greenplum_instance",
+        "entity_id" => "3",
+        "body" => "I'm a note",
+      }, @user)
       post :create, :note => { :entity_type => "greenplum_instance", :entity_id => "3", :body => "I'm a note" }
       response.code.should == "201"
     end

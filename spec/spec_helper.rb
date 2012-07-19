@@ -84,7 +84,7 @@ RSpec.configure do |config|
   end
 
   config.before(:suite, :database_integration => true) do
-    GpdbIntegration.setup_gpdb
+    # GpdbIntegration.setup_gpdb
   end
 
   config.include FileHelper
