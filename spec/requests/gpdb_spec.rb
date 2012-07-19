@@ -7,7 +7,7 @@ describe "gpdb instances", :network => true do
         :port => 5432,
         :host => "chorus-gpdb42",
         :maintenance_db => "postgres",
-        :db_username => "test",
+        :db_username => "gpadmin",
         :db_password => "secret"
     }
   end
