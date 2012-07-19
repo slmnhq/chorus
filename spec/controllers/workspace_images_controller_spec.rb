@@ -38,12 +38,12 @@ describe WorkspaceImagesController do
   describe "#show" do
     before do
       @workspace = FactoryGirl.create(:workspace, :image => test_file('small1.gif'))
-      stub(File).binread(@workspace.image.path("original")) {
-        "Hi!"
-      }
     end
 
     it "responds with the urls of the image" do
+      mock(controller).send_file(@workspace.image.path('original'), :type => @workspace.image_content_type) {
+        controller.head :ok
+      }
       get :show, :workspace_id => @workspace.id
       response.code.should == "200"
       decoded_response.type == "image/gif"

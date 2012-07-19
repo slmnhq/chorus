@@ -5,6 +5,6 @@ class WorkfileVersionImagesController < ApplicationController
     workfile = WorkfileVersion.find(params[:workfile_version_id])
     content_type = workfile.contents_content_type
     file_path = workfile.contents.path(style)
-    send_data File.binread(file_path), :type => content_type, :status => :ok
+    send_file file_path, :type => content_type
   end
 end

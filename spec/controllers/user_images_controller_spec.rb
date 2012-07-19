@@ -35,15 +35,13 @@ describe UserImagesController do
   end
 
   describe "#show" do
-    let(:user1) { FactoryGirl.create(:user, :image => test_file('small1.gif')) }
-    before do
-      stub(File).binread(user1.image.path("original")) {
-        "Hi!"
-      }
-    end
+    let(:user) { FactoryGirl.create(:user, :image => test_file('small1.gif')) }
 
-    it "returns the image" do
-      get :show, :user_id => user1.id
+    it "uses send_file" do
+      mock(controller).send_file(user.image.path('original'), :type => user.image_content_type) {
+        controller.head :ok
+      }
+      get :show, :user_id => user.id
       response.code.should == "200"
       decoded_response.type == "image/gif"
     end

@@ -9,7 +9,7 @@ class ImagesController < ApplicationController
 
   def show
     style = params[:style] ? params[:style] : 'original'
-    send_data File.binread(@entity.image.path(style)), :type => @entity.image_content_type, :status => :ok
+    send_file @entity.image.path(style), :type => @entity.image_content_type
   end
 
   protected
