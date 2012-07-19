@@ -1,6 +1,11 @@
 @import "../_common.scss";
 
 .alert {
+    .errors {
+        width: 483px;
+        max-width: 483px;
+    }
+
     .guts {
         width: 450px;
         max-width: 450px;
