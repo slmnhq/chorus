@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''100'',''defType''=>''dismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''alphasearch'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''facet.field''=>''type_name_s'',''fq''=>[''type:(User
@@ -30,13 +30,13 @@ http_interactions:
         OR Instance OR Workspace OR Workfile)'',''-(type_name_s:Workspace AND -member_ids_im:1000003
         AND -public_b:true)'',''-(type_name_s:Workfile AND -member_ids_im:1000003
         AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>2,''ngroups''=>2,''groups''=>[{''groupValue''=>''User
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1968701.0,''docs''=>[{''id''=>''User
-        1000000'',''first_name_texts''=>[''Admin''],''username_texts''=>[''admin''],''email_texts''=>[''admin@example.com''],''last_name_texts''=>[''AlphaSearch''],''score''=>1968701.0}]}},{''groupValue''=>''User
-        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1968701.0,''docs''=>[{''id''=>''User
-        1000001'',''first_name_texts''=>[''Evil''],''username_texts''=>[''evil_admin''],''email_texts''=>[''evil_admin@example.com''],''last_name_texts''=>[''AlphaSearch''],''score''=>1968701.0}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2117355.5,''docs''=>[{''id''=>''User
+        1000000'',''first_name_texts''=>[''Admin''],''username_texts''=>[''admin''],''email_texts''=>[''admin@example.com''],''last_name_texts''=>[''AlphaSearch''],''score''=>2117355.5}]}},{''groupValue''=>''User
+        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>2117355.5,''docs''=>[{''id''=>''User
+        1000001'',''first_name_texts''=>[''Evil''],''username_texts''=>[''evil_admin''],''email_texts''=>[''evil_admin@example.com''],''last_name_texts''=>[''AlphaSearch''],''score''=>2117355.5}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''User'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
         1000000''=>{''last_name_texts''=>[''@@@hl@@@AlphaSearch@@@endhl@@@'']},''User
         1000001''=>{''last_name_texts''=>[''@@@hl@@@AlphaSearch@@@endhl@@@'']}}}'
     http_version:
-  recorded_at: Tue, 17 Jul 2012 17:07:29 GMT
+  recorded_at: Wed, 18 Jul 2012 23:51:49 GMT
 recorded_with: VCR 2.1.1
 ...

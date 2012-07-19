@@ -69,8 +69,11 @@ describe Events::Base do
     end
 
     it "does not include events for other public workspaces" do
-      subject.should_not include(other_workspace1_activity.event)
       subject.should_not include(other_workspace2_activity.event)
+    end
+
+    it "does not include other's private workspaces" do
+      subject.should_not include(other_workspace1_activity.event)
     end
 
     it "does not include multiples of the same event" do

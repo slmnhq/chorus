@@ -41,7 +41,6 @@ module Events
         memberships.
         where(memberships[:user_id].eq(user.id)).
         project(memberships[:workspace_id])
-
       entity_is_global =
         activities[:entity_type].eq(Activity::GLOBAL)
 

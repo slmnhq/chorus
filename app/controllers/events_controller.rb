@@ -18,7 +18,6 @@ class EventsController < ApplicationController
         object = klass.find(params[:entity_id])
         events = object && object.events
     end
-
     events ? present(events) : render(:json => {}, :status => :ok)
   end
 

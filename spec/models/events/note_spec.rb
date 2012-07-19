@@ -92,7 +92,7 @@ describe "Notes" do
     its(:additional_data) { should == {:body => "This is the text of the note on the workspace"} }
 
     it_creates_activities_for { [actor, workspace] }
-    it_creates_a_global_activity
+    it_does_not_create_a_global_activity
   end
 
   describe "search" do
@@ -151,7 +151,7 @@ describe "Notes" do
 
     context "workspace not archived" do
       it "creates a note on a workspace" do
-        mock(WorkspaceAccess).show?(workspace) { true }
+        mock(WorkspaceAccess).member_of_workspaces(user) { [workspace] }
         Events::Note.create_for_entity("workspace", workspace.id, "More crazy content", user)
 
         last_note = Events::Note.first
@@ -164,7 +164,7 @@ describe "Notes" do
 
     context "workspace is archived" do
       it "does not create a note on a workspace" do
-        mock(WorkspaceAccess).show?(workspace) { true }
+        mock(WorkspaceAccess).member_of_workspaces(user) { [workspace] }
         workspace.archived_at = DateTime.now
         workspace.save!
         expect {

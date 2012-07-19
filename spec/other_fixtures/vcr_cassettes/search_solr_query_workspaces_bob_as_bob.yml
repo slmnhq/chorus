@@ -22,22 +22,22 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
         summary_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''dismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''bobsearch'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Workspace
         OR Events\\:\\:Note)'',''type_name_s:(Workspace)'',''-(type_name_s:Workspace
         AND -member_ids_im:1000003 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>3,''ngroups''=>3,''groups''=>[{''groupValue''=>''Workspace
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1313.6174,''docs''=>[{''id''=>''Workspace
-        1000003'',''name_texts''=>[''Bob Public''],''summary_texts''=>[''BobSearch''],''score''=>1313.6174}]}},{''groupValue''=>''Workspace
-        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1313.6174,''docs''=>[{''id''=>''Workspace
-        1000004'',''name_texts''=>[''Bob Private''],''summary_texts''=>[''BobSearch''],''score''=>1313.6174}]}},{''groupValue''=>''Workspace
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>562.9789,''docs''=>[{''id''=>''Workspace
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1446.123,''docs''=>[{''id''=>''Workspace
+        1000003'',''name_texts''=>[''Bob Public''],''summary_texts''=>[''BobSearch''],''score''=>1446.123}]}},{''groupValue''=>''Workspace
+        1000004'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1446.123,''docs''=>[{''id''=>''Workspace
+        1000004'',''name_texts''=>[''Bob Private''],''summary_texts''=>[''BobSearch''],''score''=>1446.123}]}},{''groupValue''=>''Workspace
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>619.767,''docs''=>[{''id''=>''Workspace
         1000000'',''name_texts''=>[''Alice Public''],''summary_texts''=>[''BobSearch
-        can see I guess''],''score''=>562.9789}]}}]}},''highlighting''=>{''Workspace
+        can see I guess''],''score''=>619.767}]}}]}},''highlighting''=>{''Workspace
         1000003''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workspace
         1000004''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workspace
         1000000''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@ can see I guess'']}}}'
     http_version:
-  recorded_at: Tue, 17 Jul 2012 17:07:29 GMT
+  recorded_at: Wed, 18 Jul 2012 23:51:49 GMT
 recorded_with: VCR 2.1.1
 ...

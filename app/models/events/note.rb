@@ -22,7 +22,7 @@ module Events
         when "workspace"
           workspace = Workspace.find(entity_id)
 
-          if WorkspaceAccess.show?(workspace)
+          if workspace && (WorkspaceAccess.member_of_workspaces(current_user).include?(workspace) || workspace.public)
             Events::NOTE_ON_WORKSPACE.by(current_user).add(:workspace =>workspace, :body => body)
           end
         else
@@ -59,7 +59,7 @@ module Events
 
   class NOTE_ON_WORKSPACE < Note
     has_targets :workspace
-    has_activities :actor, :workspace, :global
+    has_activities :actor, :workspace
     has_additional_data :body
 
     validate :no_note_on_archived_workspace
