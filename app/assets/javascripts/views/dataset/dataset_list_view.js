@@ -1,4 +1,5 @@
 chorus.views.DatasetList = chorus.views.SelectableList.extend({
+    constructorName: "DatasetListView",
     templateName: "dataset_list",
     useLoadingSection: true,
     eventName: "dataset",

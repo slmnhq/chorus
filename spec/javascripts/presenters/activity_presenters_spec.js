@@ -386,6 +386,55 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("note on a dataset", function() {
+        var dataset;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.noteOnDatasetCreated({
+                dataset: { id: 42, objectName: "lunch_boxes" }
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            dataset = model.noteObject();
+        });
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.NOTE.without_workspace", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    noteObjectLink: linkTo(dataset.showUrl(), dataset.name()),
+                    noteObjectType: t("dataset.types.table")
+                }
+            );
+        });
+    });
+
+    context("note on a workspace dataset", function() {
+        var dataset, workspace;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.noteOnWorkspaceDatasetCreated({
+                dataset: { id: 42, objectName: "lunch_boxes" },
+                workspace: { id: 55, name: "paleo_eaters" }
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            dataset = model.noteObject();
+            workspace = model.workspace();
+        });
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.NOTE.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    noteObjectLink: linkTo(dataset.showUrl(), dataset.name()),
+                    noteObjectType: t("dataset.types.table"),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            );
+        });
+    });
+
     function linkTo(url, text) {
         return chorus.helpers.linkTo(url, text);
     }

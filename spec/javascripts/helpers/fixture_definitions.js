@@ -117,7 +117,9 @@ window.rspecFixtureDefinitions = {
             noteOnHadoopInstanceCreated: {},
             hdfsExternalTableCreated: {},
             noteOnHdfsFileCreated: {},
-            noteOnWorkspaceCreated: {}
+            noteOnWorkspaceCreated: {},
+            noteOnDatasetCreated: {},
+            noteOnWorkspaceDatasetCreated: {}
         }
     },
 

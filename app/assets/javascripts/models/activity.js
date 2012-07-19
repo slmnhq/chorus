@@ -70,6 +70,14 @@
                     model = new chorus.models.Workspace();
                     model.set(this.get("workspace"));
                     break;
+                case "NOTE_ON_DATASET":
+                    model = new chorus.models.Dataset();
+                    model.set(this.get("dataset"));
+                    break;
+                case "NOTE_ON_WORKSPACE_DATASET":
+                    model = new chorus.models.WorkspaceDataset();
+                    model.set(this.get("dataset"));
+                    break;
             }
             return model;
         },

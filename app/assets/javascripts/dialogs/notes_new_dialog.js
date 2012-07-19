@@ -8,6 +8,7 @@ chorus.dialogs.NotesNew = chorus.dialogs.MemoNew.extend({
         this.model = new chorus.models.Note({
             entityId:    this.options.entityId,
             entityType:  this.options.entityType,
+            workspaceId: this.options.workspaceId
         });
 
         var subject = this.options.displayEntityType || this.options.entityType;

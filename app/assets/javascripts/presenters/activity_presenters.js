@@ -2,7 +2,7 @@
     chorus.presenters.Activity = chorus.presenters.Base.extend({
 
         headerHtml: function() {
-            var string = t(private.headerTranslationKey(this), private.headerParams(this));
+            var string = t(hidden.headerTranslationKey(this), hidden.headerParams(this));
             return new Handlebars.SafeString(string);
         },
 
@@ -27,7 +27,7 @@
         iconClass: "profile"
     });
 
-    var private = {
+    var hidden = {
 
         headerParamOptions: {
             GREENPLUM_INSTANCE_CHANGED_NAME: {
@@ -74,8 +74,8 @@
             },
 
             NOTE: {
-                links: [ "actor", "noteObject" ],
-                computed: [ "noteObjectType"]
+                links: [ "actor", "noteObject", "workspace" ],
+                computed: [ "noteObjectType" ]
             }
         },
 
@@ -84,11 +84,11 @@
             var action = model.get("action");
 
             var params = {};
-            var options = private.headerParamOptions[action];
+            var options = hidden.headerParamOptions[action];
 
             _.each(options.links, function(name) {
                 var associatedModel = model[name]();
-                params[name + "Link"] = private.modelLink(associatedModel);
+                params[name + "Link"] = hidden.modelLink(associatedModel);
             });
 
             _.each(options.attrs, function(name) {
@@ -96,7 +96,7 @@
             });
 
             _.each(options.computed, function(name) {
-                params[name] = private[name](self);
+                params[name] = hidden[name](self);
             });
 
             return params;
@@ -110,10 +110,9 @@
             }
         },
 
-
         headerTranslationKey: function(self) {
-            var mainKey = ["activity.header", self.model.get("action")].join(".")
-            var possibleStyles = _.compact(_.flatten([self.options.displayStyle, this.defaultStyle(self.model), 'default']))
+            var mainKey = ["activity.header", self.model.get("action")].join(".");
+            var possibleStyles = _.compact(_.flatten([self.options.displayStyle, hidden.defaultStyle(self.model), 'default']));
 
             var key, n = possibleStyles.length;
                  for (var i = 0; i < n; i++) {
@@ -132,19 +131,17 @@
             switch (actionType) {
                 case "NOTE_ON_GREENPLUM_INSTANCE":
                     return "Greenplum instance";
-                    break;
                 case "NOTE_ON_HADOOP_INSTANCE":
                     return "Hadoop instance";
-                    break;
                 case "NOTE_ON_HDFS_FILE":
                     return "file";
-                    break;
                 case "NOTE_ON_WORKSPACE":
                     return "workspace";
-                    break;
+                case "NOTE_ON_DATASET":
+                case "NOTE_ON_WORKSPACE_DATASET":
+                    return hidden.datasetType(self);
                 default:
                     return "";
-                    break;
             }
         },
 

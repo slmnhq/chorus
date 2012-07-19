@@ -24,6 +24,18 @@ describe("chorus.dialogs.NotesNewDialog", function() {
             expect(this.dialog.pageModel).not.toBeUndefined();
         });
 
+        context("when a workspaceId option is passed", function() {
+            it("sets that attribute on the note model", function() {
+                this.dialog = new chorus.dialogs.NotesNew({
+                    entityType: "instance",
+                    entityId: 1,
+                    workspaceId: 45,
+                    pageModel: new chorus.models.GreenplumInstance()
+                });
+
+                expect(this.dialog.model.get("workspaceId")).toBe(45);
+            });
+        });
     });
 
     describe("#render", function() {
