@@ -214,6 +214,9 @@
         },
 
         renderTableData: function(tableData) {
+            if (tableData && typeof(tableData) =='string') {
+                tableData = tableData.trim()
+            }
             if (tableData || tableData === 0 || isNaN(tableData)) {
                 return tableData
             } else if (tableData === false) {

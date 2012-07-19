@@ -1,4 +1,4 @@
-chorus.models.CsvHdfs = chorus.models.CSVImport.extend({
+chorus.models.CsvHdfs = chorus.models.Base.extend({
     constructorName: "CsvHdfs",
     urlTemplate: function (options) {
         var defaultUrl = "hadoop_instances/{{hadoopInstanceId}}/contents/{{encode path}}";

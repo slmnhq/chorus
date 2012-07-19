@@ -96,14 +96,16 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         } else {
             this.csvOptions.tableName = this.importDestination();
 
-            this.model.set({
+            this.csv.set({
+                toTable: this.importDestination(),
                 truncate: this.$(".existing_table input#truncate").is(':checked')
             }, {silent: true});
 
-            this.$("button.submit").startLoading("actions.uploading");
             this.uploadObj.url = "/workspaces/" + this.options.workspaceId + "/csv";
 
-            if (this.model.performValidation()) {
+            if (this.csv.performValidation()) {
+                this.$("button.submit").startLoading("actions.uploading");
+                this.clearErrors();
                 this.request = this.uploadObj.submit();
             } else {
                 this.showErrors(this.model);

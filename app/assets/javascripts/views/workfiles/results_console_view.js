@@ -34,7 +34,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             var data = {
                 columnData: JSON.stringify(this.resource.getColumns()),
                 rowsData: JSON.stringify(this.resource.getRows()),
-                datasetName: this.resource.name()
+                datasetName: this.resource.name(),
+                workspaceId: this.resource.get("workspaceId")
             };
 
             $.download("/data/cvsResultDownload", data, "post");
