@@ -118,8 +118,8 @@ describe("chorus.dialogs.DatasetDownload", function() {
 
     describe("with a search result", function() {
         beforeEach(function() {
-            var searchResult = fixtures.searchResult();
-            this.selectedItem = searchResult.selectedItem = searchResult.dataset().at(0);
+            var searchResult = rspecFixtures.searchResult();
+            this.selectedItem = searchResult.selectedItem = searchResult.datasets().at(0);
             this.selectedItem.set({"objectName" : "test_dataset"})
             this.dialog = new chorus.dialogs.DatasetDownload({ pageModel: searchResult });
             this.dialog.render();

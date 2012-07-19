@@ -8,7 +8,7 @@ module SearchExtensions
   end
 
   def grouping_id
-    "#{self.class.name} #{id}"
+    "#{type_name} #{id}"
   end
 
   def type_name
@@ -22,29 +22,46 @@ module ActiveRecord
   end
 end
 
-module Sunspot
-  module Search
-    class AbstractSearch
+module SunspotSearchExtensions
+  extend ActiveSupport::Concern
+  def execute
+    results = super
 
-      def associate_grouped_comments_with_primary_records
-        solr_response['docs'] = []
-        docs = solr_response['docs']
-        group = group(:grouping_id)
-        return unless group && group.groups
-        comments_for_object = Hash.new() { |hsh, key| hsh[key] = [] }
-        group.groups.each do |group|
-          docs << {'id' => group.value}
-          group.hits.each do |group_hit|
-            if group_hit.class_name =~ /^Event/
-              comments_for_object[group.value] << {:highlighted_attributes => group_hit.highlights_hash}
-            end
-          end
-        end
+    new_highlights = {}
+    @solr_result['highlighting'].each do |key, value|
+      key = key.sub(/^Gpdb(Table|View)/, 'Dataset')
+      new_highlights[key] = value
+    end
+    @solr_result['highlighting'] = new_highlights
 
-        hits.each do |hit|
-          hit.comments = comments_for_object[hit.id]
+    results
+  end
+
+  def associate_grouped_comments_with_primary_records
+    solr_response['docs'] = []
+    docs = solr_response['docs']
+    group = group(:grouping_id)
+    return unless group && group.groups
+    comments_for_object = Hash.new() { |hsh, key| hsh[key] = [] }
+    group.groups.each do |group|
+      docs << {'id' => group.value}
+      group.hits.each do |group_hit|
+        if group_hit.class_name =~ /^Event/
+          comments_for_object[group.value] << {:highlighted_attributes => group_hit.highlights_hash}
         end
       end
+    end
+
+    hits.each do |hit|
+      hit.comments = comments_for_object[hit.id]
+    end
+  end
+end
+
+module Sunspot
+  module Search
+    class StandardSearch
+      include SunspotSearchExtensions
     end
 
     class Hit

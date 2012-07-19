@@ -1344,7 +1344,7 @@ beforeEach(function() {
                     ],
                     "numFound": 3
                 },
-                "dataset": {
+                "datasets": {
                     "results": [
                         {
                             schemaName: "public",

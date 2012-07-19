@@ -81,7 +81,7 @@ describe("chorus.views.SearchResults", function() {
                 this.model.unset("attachment");
                 this.model.unset("users");
                 this.model.unset("hdfs");
-                this.model.unset("dataset");
+                this.model.unset("datasets");
                 this.model.unset("instances");
                 this.view = new chorus.views.SearchResults({ model: this.model });
                 this.view.render();
@@ -100,7 +100,7 @@ describe("chorus.views.SearchResults", function() {
                     attachment: null,
                     workspaces: null,
                     instances: null,
-                    dataset: null,
+                    datasets: null,
                     hdfs: null,
                     users: null
                 });
@@ -176,7 +176,7 @@ describe("chorus.views.SearchResults", function() {
 
             context("when the li is for a tabular data", function() {
                 it("broadcasts the 'dataset:selected' page event, with the clicked tabular data", function() {
-                    var modelToClick = this.model.dataset().at(0);
+                    var modelToClick = this.model.datasets().at(0);
                     this.view.$(".dataset_list li").eq(0).click();
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", modelToClick);
                 });

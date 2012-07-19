@@ -57,7 +57,7 @@
     chorus.collections.Search.DynamicDatasetSet = chorus.collections.DynamicDatasetSet.include(
         searchCollectionMixins
     ).extend({
-        searchKey: "dataset"
+        searchKey: "datasets"
     });
 
     chorus.collections.Search.UserSet = chorus.collections.UserSet.include(

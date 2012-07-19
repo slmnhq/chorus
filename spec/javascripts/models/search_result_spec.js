@@ -281,7 +281,7 @@ describe("chorus.models.SearchResult", function() {
 
         describe("#workfiles", function() {
             it("returns a Search WorkfileSet", function() {
-                this.model = fixtures.searchResult();
+                this.model = rspecFixtures.searchResult();
                 this.workfiles = this.model.workfiles();
                 expect(this.workfiles).toBeA(chorus.collections.Search.WorkfileSet)
             });
@@ -289,8 +289,8 @@ describe("chorus.models.SearchResult", function() {
 
         describe("#dataset", function() {
             it("returns a collection of tabular data", function() {
-                this.model = fixtures.searchResult();
-                expect(this.model.dataset()).toBeA(chorus.collections.Search.DynamicDatasetSet);
+                this.model = rspecFixtures.searchResult();
+                expect(this.model.datasets()).toBeA(chorus.collections.Search.DynamicDatasetSet);
             });
         });
 
@@ -330,7 +330,7 @@ describe("chorus.models.SearchResult", function() {
 
                 var methodCollectionPairs = {
                     hdfs: "HdfsEntrySet",
-                    dataset: "DynamicDatasetSet",
+                    datasets: "DynamicDatasetSet",
                     workfiles: "WorkfileSet",
                     workspaces: "WorkspaceSet",
                     workspaceItems: "WorkspaceItemSet",
@@ -375,7 +375,7 @@ describe("chorus.models.SearchResult", function() {
 
             it("is preserved through fetches", function() {
                 this.model.fetch();
-                this.server.completeFetchFor(this.model, fixtures.searchResult());
+                this.server.completeFetchFor(this.model, rspecFixtures.searchResult());
                 expect(this.model.entityType()).toBe("foo");
             });
         });
@@ -397,7 +397,7 @@ describe("chorus.models.SearchResult", function() {
 
             it("is preserved through fetches", function() {
                 this.model.fetch();
-                this.server.completeFetchFor(this.model, fixtures.searchResult());
+                this.server.completeFetchFor(this.model, rspecFixtures.searchResult());
                 expect(this.model.currentPageNumber()).toBe(5);
             });
         });
@@ -424,7 +424,7 @@ describe("chorus.models.SearchResult", function() {
 
         context("when there are no results", function() {
             beforeEach(function() {
-                this.model = fixtures.emptySearchResult();
+                this.model = rspecFixtures.emptySearchResult();
             })
 
             it("returns 0", function() {
@@ -435,7 +435,7 @@ describe("chorus.models.SearchResult", function() {
 
     describe("#isConstrained", function() {
         beforeEach(function() {
-            this.model = fixtures.searchResult();
+            this.model = rspecFixtures.searchResult();
         });
 
         context("when isScoped returns true", function() {
@@ -474,7 +474,7 @@ describe("chorus.models.SearchResult", function() {
 
     describe("triggering invalidated", function() {
         beforeEach(function() {
-            var search = fixtures.searchResult()
+            var search = rspecFixtures.searchResult()
             this.model = search;
             this.model.selectedItem = search.users().at(0);
             spyOnEvent(this.model.selectedItem, 'invalidated');
@@ -499,7 +499,7 @@ describe("chorus.models.SearchResult", function() {
                 }
             });
 
-            this.model.selectedItem = searchResult.dataset().at(0);
+            this.model.selectedItem = searchResult.datasets().at(0);
             spyOn(this.model.selectedItem, "download");
             this.model.download({ "theOption": "isTrue" });
         });
@@ -512,9 +512,9 @@ describe("chorus.models.SearchResult", function() {
     describe("#name", function() {
         var searchResult;
         beforeEach(function() {
-            searchResult = fixtures.searchResult();
+            searchResult = rspecFixtures.searchResult();
 
-            this.model.selectedItem = searchResult.dataset().at(0);
+            this.model.selectedItem = searchResult.datasets().at(0);
             this.model.selectedItem.set({"objectName": "the_name"})
         });
 

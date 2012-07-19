@@ -2,7 +2,7 @@ describe("chorus.views.SearchDataset", function() {
     beforeEach(function() {
         this.result = fixtures.searchResult();
         this.result.set({query: "foo"});
-        this.model = this.result.dataset().models[0];
+        this.model = this.result.datasets().models[0];
         this.view = new chorus.views.SearchDataset({model: this.model});
         this.view.render();
     });

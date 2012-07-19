@@ -147,7 +147,31 @@ describe Dataset do
       dataset.statistics.last_analyzed.to_s.should == "2012-06-06 23:02:42 UTC"
       dataset.statistics.disk_size == '0 kB'
     end
+  end
 
+  describe "search fields" do
+    let(:dataset) {datasets(:bobsearch_table)}
+    it "indexes text fields" do
+      Dataset.should have_searchable_field :name
+      Dataset.should have_searchable_field :database_name
+      Dataset.should have_searchable_field :schema_name
+    end
+
+    it "returns the schema name for schema_name" do
+      dataset.schema_name.should == dataset.schema.name
+    end
+
+    it "returns the database name for database_name" do
+      dataset.database_name.should == dataset.schema.database.name
+    end
+
+    it "returns the grouping_id " do
+      dataset.grouping_id.should == "Dataset #{dataset.id}"
+    end
+
+    it "returns the type_name of target1" do
+      dataset.type_name.should == 'Dataset'
+    end
   end
 end
 

@@ -30,8 +30,8 @@ chorus.views.SearchResults = chorus.views.Base.extend({
         if (this.model.workspaces().length) {
             this.workspaceList = this.buildListView('workspace', this.model.workspaces());
         }
-        if (this.model.dataset().length) {
-            this.datasetList = this.buildListView('dataset', this.model.dataset());
+        if (this.model.datasets().length) {
+            this.datasetList = this.buildListView('dataset', this.model.datasets());
         }
         if (this.model.instances().length) {
             this.instanceList = this.buildListView('instance', this.model.instances());

@@ -17,6 +17,15 @@ class Dataset < ActiveRecord::Base
   delegate :with_gpdb_connection, :to => :schema
   delegate :instance, :to => :schema
 
+  attr_accessor :highlighted_attributes, :search_result_comments
+  searchable do
+    text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+    text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    string :grouping_id
+    string :type_name
+  end
+
   def self.refresh(account, schema)
     datasets = schema.with_gpdb_connection(account, false) do |conn|
       conn.select_all(Query.new(schema).tables_and_views_in_schema.to_sql)
@@ -47,6 +56,18 @@ class Dataset < ActiveRecord::Base
     else
       scoped
     end
+  end
+
+  def database_name
+    schema.database.name
+  end
+
+  def schema_name
+    schema.name
+  end
+
+  def type_name
+    'Dataset'
   end
 
   class Query

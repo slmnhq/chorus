@@ -4,7 +4,7 @@ class Search
 
   def initialize(current_user, params = {})
     @current_user = current_user
-    @models_to_search = [User, Instance, Workspace, Workfile]
+    @models_to_search = [User, Instance, Workspace, Workfile, Dataset]
     self.query = params[:query]
     self.per_type = params[:per_type]
     if per_type
@@ -48,7 +48,7 @@ class Search
 
     search.each_hit_with_result do |hit, result|
       result.highlighted_attributes = hit.highlights_hash
-      model_key = class_name_to_key(result.class.name)
+      model_key = class_name_to_key(result.type_name)
       @models[model_key] << result unless per_type && @models[model_key].length >= per_type
     end
 
@@ -71,6 +71,10 @@ class Search
 
   def workfiles
     models[:workfiles] || []
+  end
+
+  def datasets
+    models[:datasets] ||  []
   end
 
   def num_found

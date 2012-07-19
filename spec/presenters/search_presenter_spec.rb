@@ -60,5 +60,22 @@ describe SearchPresenter, :type => :view do
       instance_result[:comments].length.should == 1
       instance_result[:comments][0][:highlighted_attributes][:body][0].should == "i love <em>bobsearch</em>"
     end
+
+    it "includes the right dataset keys" do
+      @hash.should have_key(:datasets)
+      datasets_hash = @hash[:datasets]
+      datasets_hash.should have_key(:numFound)
+      datasets_hash.should have_key(:results)
+      datasets_hash[:results][0].should have_key(:highlighted_attributes)
+      datasets_hash[:results][0][:highlighted_attributes].should have_key(:object_name)
+      datasets_hash[:results][0][:schema].should have_key(:highlighted_attributes)
+      datasets_hash[:results][0][:schema][:highlighted_attributes].should have_key(:name)
+      datasets_hash[:results][0][:schema][:database].should have_key(:highlighted_attributes)
+      datasets_hash[:results][0][:schema][:database][:highlighted_attributes].should have_key(:name)
+
+      datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:name)
+      datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:database_name)
+      datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:schema_name)
+    end
   end
 end

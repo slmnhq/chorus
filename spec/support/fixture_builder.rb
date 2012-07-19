@@ -55,6 +55,11 @@ FixtureBuilder.configure do |fbuilder|
     bobs_table = GpdbTable.create!({ :name => "bobs_table", :schema => bob_schema }, :without_protection => true)
     GpdbView.create!({ :name => "bobs_view", :schema => bob_schema }, :without_protection => true)
 
+    bobsearch_database = GpdbDatabase.create!({ :instance => bobs_instance, :name => 'bobsearch_database' }, :without_protection => true)
+    bobsearch_schema = GpdbSchema.create!({ :name => "bobsearch_schema", :database => bobsearch_database }, :without_protection => true)
+    GpdbTable.create!({ :name => "bobsearch_table", :schema => bobsearch_schema }, :without_protection => true)
+
+
     other_schema = GpdbSchema.create!({ :name => "other_schema", :database => bob_database}, :without_protection => true)
     GpdbTable.create!({ :name => "other_table", :schema => other_schema }, :without_protection => true)
     GpdbView.create!({ :name => "other_view", :schema => other_schema }, :without_protection => true)

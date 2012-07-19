@@ -20,6 +20,7 @@ describe Search do
         Sunspot.session.should be_a_search_for(User)
         Sunspot.session.should be_a_search_for(Instance)
         Sunspot.session.should be_a_search_for(Workspace)
+        Sunspot.session.should be_a_search_for(Dataset)
         Sunspot.session.should have_search_params(:fulltext, 'bob')
         Sunspot.session.should have_search_params(:facet, :type_name)
         Sunspot.session.should have_search_params(:group, Proc.new {
@@ -44,7 +45,7 @@ describe Search do
           search = Search.new(@user, :query => 'bob', :per_type => 3)
           stub(search).num_found do
             hsh = Hash.new(0)
-            hsh.merge({:users => 100, :instances => 100, :workspaces => 100, :workfiles => 100})
+            hsh.merge({:users => 100, :instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100})
           end
           stub(search.search).each_hit_with_result { [] }
           search.models
@@ -100,6 +101,7 @@ describe Search do
     let(:private_workfile_hidden_from_bob) { workfiles(:alice_private) }
     let(:private_workfile_bob) { workfiles(:bob_private) }
     let(:public_workfile_bob) { workfiles(:bob_public) }
+    let(:dataset) { datasets(:bobsearch_table) }
 
     before do
       reindex_solr_fixtures
@@ -111,6 +113,7 @@ describe Search do
           search = Search.new(bob, :query => 'bobsearch')
           search.num_found[:users].should == 1
           search.num_found[:instances].should == 1
+          search.num_found[:datasets].should == 1
         end
       end
 
@@ -156,6 +159,27 @@ describe Search do
           search = Search.new(bob, :query => 'bobsearch')
           search.instances.length.should == 1
           search.instances.first.should == instance
+        end
+      end
+    end
+
+    describe "datasets" do
+      it "includes the highlighted attributes" do
+        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
+          search = Search.new(bob, :query => 'bobsearch')
+          dataset = search.datasets.first
+          dataset.highlighted_attributes.length.should == 3
+          dataset.highlighted_attributes[:name][0].should == "<em>bobsearch</em>_table"
+          dataset.highlighted_attributes[:database_name][0].should == "<em>bobsearch</em>_database"
+          dataset.highlighted_attributes[:schema_name][0].should == "<em>bobsearch</em>_schema"
+        end
+      end
+
+      it "returns the Dataset objects found" do
+        VCR.use_cassette('search_solr_query_all_types_bob') do
+          search = Search.new(bob, :query => 'bobsearch')
+          search.datasets.length.should == 1
+          search.datasets.first.should == dataset
         end
       end
     end
