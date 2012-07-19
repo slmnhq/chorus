@@ -41,7 +41,7 @@ describe("chorus.dialogs.CommentDialog", function() {
         });
 
         it("makes a cl editor with toolbar", function() {
-            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width : 350 } );
+            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width : 566, height: 150 } );
             expect(this.dialog.$('.toolbar')).toExist();
         });
     });
