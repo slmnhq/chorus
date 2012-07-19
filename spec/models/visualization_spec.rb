@@ -34,5 +34,15 @@ describe Visualization do
         visualization.should be_a_kind_of(Visualization::Timeseries)
       end
     end
+
+    context "boxplot visualization" do
+      let(:params) { {:type => 'boxplot'} }
+
+      it "builds a boxplot visualization" do
+        visualization = described_class.build(table, params)
+        visualization.should be_a_kind_of(Visualization::Boxplot)
+      end
+
+    end
   end
 end

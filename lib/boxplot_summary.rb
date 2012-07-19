@@ -3,13 +3,13 @@ class BoxplotSummary
     (a + b) / 2.0
   end
 
-  def self.summarize(i)
+  def self.summarize(i, bins)
     new_map = []
 
-    all_categories = i.map{|r| r[:category]}.uniq
+    all_categories = i.map{|r| r[:bucket]}.uniq
     total = i.inject(0) { |sum, r| sum + r[:count] }
     all_categories.each do |category|
-      subarray = i.select{ |r| r[:category] == category }
+      subarray = i.select{ |r| r[:bucket] == category }
       min = subarray.first[:min]
       max = subarray.last[:max]
       count = subarray.inject(0) { |sum, r| sum + r[:count] }
@@ -31,15 +31,16 @@ class BoxplotSummary
         third_quartile = mean(subarray[2][:max], subarray[3][:min])
       end
 
-      new_map << {:category => category,
+      new_map << {:bucket => category,
                   :min => min,
                   :median => median,
                   :max => max,
                   :first_quartile => first_quartile,
                   :third_quartile => third_quartile,
-                  :count => count,
                   :percentage => percentage}
     end
+
+    new_map = new_map[0..bins-1] if bins.present? && bins > 0
     return new_map
   end
 end

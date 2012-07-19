@@ -23,7 +23,7 @@ describe Visualization::Timeseries, :database_integration => true do
     context "with no filter" do
       let(:filters) { nil }
 
-      it "returns the frequency data" do
+      it "returns the timeseries data" do
         visualization.rows.should == [
           {:value => 3, :time => '2012-03'},
           {:value => 2, :time => '2012-04'},
@@ -35,7 +35,7 @@ describe Visualization::Timeseries, :database_integration => true do
     context "with filters" do
       let(:filters) { ['"base_table1"."time_value" > \'2012-03-03\'', '"base_table1"."column1" < 5'] }
 
-      it "returns the frequency data based on the filtered dataset" do
+      it "returns the timeseries data based on the filtered dataset" do
         visualization.rows.should == [
           {:value => 2, :time => "2012-03"},
           {:value => 2, :time => "2012-04"},

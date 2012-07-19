@@ -149,6 +149,14 @@ FactoryGirl.define do
     association :schema, :factory => :gpdb_schema
   end
 
+  factory :visualization_boxplot, :class => Visualization::Boxplot do
+    bins 10
+    category "category"
+    values "column1"
+    association :dataset, :factory => :gpdb_table
+    association :schema, :factory => :gpdb_schema
+  end
+
   factory :associated_dataset do
     association :dataset, :factory => :gpdb_table
     workspace

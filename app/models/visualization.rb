@@ -11,6 +11,8 @@ module Visualization
       Visualization::Heatmap.new(dataset, chart_task_params)
     elsif chart_task_params[:type] == 'timeseries'
       Visualization::Timeseries.new(dataset, chart_task_params)
+    elsif chart_task_params[:type] == 'boxplot'
+      Visualization::Boxplot.new(dataset, chart_task_params)
     else
       raise UnknownVisualizationException, "Unknown visualization: #{chart_task_params[:type]}"
     end
