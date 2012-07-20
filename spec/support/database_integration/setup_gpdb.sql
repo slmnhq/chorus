@@ -179,8 +179,6 @@ CREATE DATABASE "gpdb_test_database_without_public_schema" OWNER gpadmin;
 
 \connect "gpdb_test_database_without_public_schema"
 
-  DROP SCHEMA public;
-
   CREATE SCHEMA gpdb_test_schema_in_db_without_public_schema;
     SET search_path TO 'gpdb_test_schema_in_db_without_public_schema';
 
