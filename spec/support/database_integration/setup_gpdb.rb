@@ -32,7 +32,9 @@ module GpdbIntegration
   end
 
   def self.database_name
-    "gpdb_" + Socket.gethostname
+    clean_name = Socket.gethostname.gsub(/-/, "_")
+    puts "============= DATABASE_NAME = #{clean_name} ============="
+    "gpdb_" + clean_name
   end
 
   def refresh_chorus
