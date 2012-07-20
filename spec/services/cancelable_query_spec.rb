@@ -49,6 +49,9 @@ describe CancelableQuery, :database_integration => true do
       database.with_gpdb_connection(account) do |conn|
         rows_before = get_rows_by_check_id(conn)
         CancelableQuery.new(conn, check_id).cancel
+
+        sleep 0.5
+
         rows_after = get_rows_by_check_id(conn)
 
         rows_before.should be_present
