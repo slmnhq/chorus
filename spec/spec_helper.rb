@@ -84,7 +84,9 @@ RSpec.configure do |config|
   end
 
   config.before(:suite, :database_integration => true) do
+    p "GpdbIntegration.setup_gpdb in progress..."
     GpdbIntegration.setup_gpdb
+    p "GpdbIntegration.setup_gpdb complete."
   end
 
   config.include FileHelper

@@ -24,9 +24,8 @@ module GpdbIntegration
       f.flush
 
       # silence stdout, remove hints and notices warnings from stderr
-      #filter_stderr = "2>&1 1>/dev/null | egrep -v \"NOTICE|HINT\" 1>&2"
+      filter_stderr = "2>&1 1>/dev/null | egrep -v \"NOTICE|HINT\" 1>&2"
 
-      filter_stderr = "" #temporarily disable filtering to debug ci
       system "PGPASSWORD=#{ACCOUNT_CONFIG['db_password']} psql #{INSTANCE_CONFIG['maintenance_db']} #{connection_params} < #{f.path} #{filter_stderr}"
     end
   end

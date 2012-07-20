@@ -4,7 +4,7 @@ CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
 \connect "gpdb_test_database"
 
   CREATE SCHEMA gpdb_test_schema;
-    SET search_path TO 'gpdb_test_schema';
+    SET search_path TO 'test_schema';
 
     CREATE TABLE base_table1
       (id integer, column1 integer, column2 integer, category text, time_value timestamp )
@@ -139,11 +139,11 @@ CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
             '1999-01-08 04:05:06-08'
          );
 
-  \dtvs gpdb_test_schema.*
+  \dtvs test_schema.*
 
 
-  CREATE SCHEMA gpdb_test_schema2;
-    SET search_path TO 'gpdb_test_schema2';
+  CREATE SCHEMA test_schema2;
+    SET search_path TO 'test_schema2';
 
     CREATE TABLE other_base_table
       (id integer)
@@ -151,7 +151,7 @@ CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
     COMMENT ON TABLE other_base_table IS '';
     ANALYZE other_base_table;
 
-  \dtvs gpdb_test_schema2.*
+  \dtvs test_schema2.*
 
   CREATE SCHEMA heatmap_test_schema;
     SET search_path TO 'heatmap_test_schema';
@@ -174,19 +174,19 @@ CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
   \dtvs heatmap_test_schema.*
 
 
-DROP DATABASE IF EXISTS "gpdb_test_database_without_public_schema";
-CREATE DATABASE "gpdb_test_database_without_public_schema" OWNER gpadmin;
+DROP DATABASE IF EXISTS "gpdb_test_database_no_public_schema";
+CREATE DATABASE "gpdb_test_database_no_public_schema" OWNER gpadmin;
 
-\connect "gpdb_test_database_without_public_schema"
+\connect "gpdb_test_database_no_public_schema"
 
   DROP SCHEMA public;
 
-  CREATE SCHEMA gpdb_test_schema_in_db_without_public_schema;
-    SET search_path TO 'gpdb_test_schema_in_db_without_public_schema';
+  CREATE SCHEMA non_public_schema;
+    SET search_path TO 'non_public_schema';
 
     CREATE TABLE base_table1
       (id integer, column1 integer, column2 integer)
       DISTRIBUTED BY (id);
     INSERT INTO base_table1 VALUES ( 0,0,0 );
 
-  \dtvs gpdb_test_schema_in_db_without_public_schema.*
+  \dtvs non_public_schema.*
