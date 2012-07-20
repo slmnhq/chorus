@@ -127,7 +127,7 @@ class Workspace < ActiveRecord::Base
 
   def add_owner_as_member
     unless members.include? owner
-      memberships.create!({:user => owner}, {:without_protection => true})
+      memberships.create!({ :user => owner, :workspace => self }, { :without_protection => true })
     end
   end
 end

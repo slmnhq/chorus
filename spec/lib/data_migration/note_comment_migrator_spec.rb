@@ -1,10 +1,11 @@
- require 'spec_helper'
+require 'spec_helper'
 
 describe NoteCommentMigrator, :data_migration => true, :type => :data_migration do
   before do
     UserMigrator.new.migrate
     InstanceMigrator.new.migrate
     HadoopInstanceMigrator.new.migrate
+    WorkspaceMigrator.new.migrate
   end
 
   describe ".migrate" do
@@ -43,6 +44,18 @@ describe NoteCommentMigrator, :data_migration => true, :type => :data_migration 
       Events::NOTE_ON_HDFS_FILE.count.should == 6
       Legacy.connection.select_all("SELECT ec.*, chorus_rails_user_id FROM edc_comment ec,edc_user eu where entity_type = 'hdfs' and ec.is_deleted = false and ec.author_name = eu.user_name").each do |legacy_comment|
         note = Events::NOTE_ON_HDFS_FILE.find(legacy_comment["chorus_rails_event_id"])
+        note.body.should == legacy_comment["body"]
+        note.created_at.should == legacy_comment["created_stamp"]
+        note.updated_at.should == legacy_comment["last_updated_stamp"]
+        note.actor_id.should == User.find_with_destroyed(legacy_comment["chorus_rails_user_id"]).id
+      end
+    end
+
+    it "should migrate the Notes on Workspaces to the new database" do
+      NoteCommentMigrator.new.migrate
+      Events::NOTE_ON_WORKSPACE.count.should == 40
+      Legacy.connection.select_all("SELECT ec.*, chorus_rails_user_id FROM edc_comment ec,edc_user eu where entity_type = 'workspace' and ec.is_deleted = false and ec.author_name = eu.user_name").each do |legacy_comment|
+        note = Events::NOTE_ON_WORKSPACE.find(legacy_comment["chorus_rails_event_id"])
         note.body.should == legacy_comment["body"]
         note.created_at.should == legacy_comment["created_stamp"]
         note.updated_at.should == legacy_comment["last_updated_stamp"]

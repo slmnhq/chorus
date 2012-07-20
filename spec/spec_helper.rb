@@ -59,9 +59,9 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
-  config.global_fixtures = :all
   config.before(:all) do
     self.class.set_fixture_class :events => Events::Base
+    self.class.fixtures :all unless self.class.metadata[:data_migration]
   end
 
   # If true, the base class of anonymous controllers will be inferred

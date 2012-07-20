@@ -34,7 +34,7 @@ describe InstanceAccountMigrator, :data_migration => true, :type => :data_migrat
       it "marks instances as shared when shared accounts exist" do
         Instance.find(Legacy.connection.select_one("SELECT chorus_rails_instance_id AS id FROM edc_instance WHERE id = '10020'")["id"]).should be_shared
       end
-      
+
       it "ignores the zombie accounts" do
         InstanceAccount.where(:db_username => "zombie").should_not be_present
       end

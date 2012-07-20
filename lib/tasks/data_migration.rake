@@ -1,8 +1,9 @@
 namespace :data_migration do
-
   task :default do
     spec_file_path = ARGV[1..-1].join(" ")
     script = File.expand_path("../../../script/test", __FILE__)
+    Rake::Task["db:test:prepare"].invoke
+    Rake::Task["db:test:prepare:legacy"].invoke
     exec "#{script} spec/lib/data_migration --tag data_migration"
   end
 

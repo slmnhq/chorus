@@ -22,6 +22,9 @@ class NoteCommentMigrator
           hadoop_id, path = comment_id.split('|')
           hdfs_file = HdfsFileReference.create(:hadoop_instance_id => hadoop_id, :path => path)
           event = Events::NOTE_ON_HDFS_FILE.create(:hdfs_file => hdfs_file, :body => comment_body, :actor => actor)
+        when 'workspace'
+          workspace = Workspace.find_with_destroyed(workspace_id(comment_id))
+          event = Events::NOTE_ON_WORKSPACE.create(:workspace => workspace, :body => comment_body, :actor => actor)
         else
           next
       end
@@ -55,6 +58,15 @@ class NoteCommentMigrator
     return instance_id, instance_provider
   end
 
+  def workspace_id(comment_id)
+    sql = "SELECT ew.chorus_rails_workspace_id, ec.entity_id FROM edc_workspace ew, edc_comment ec
+                                               WHERE ec.id = '#{comment_id}'
+                                               AND ew.id = ec.entity_id"
+
+    result = Legacy.connection.exec_query(sql)
+    extract_result("chorus_rails_workspace_id", result)
+  end
+
   def update_event_id(comment_id, event_id)
     Legacy.connection.update("UPDATE edc_comment SET chorus_rails_event_id = #{event_id} WHERE id = '#{comment_id}'")
   end
@@ -63,5 +75,4 @@ class NoteCommentMigrator
     instance_data = Array(sql)[0]
     instance_data && instance_data[result_key]
   end
-
 end

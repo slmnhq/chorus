@@ -23,7 +23,7 @@ describe MembershipMigrator, :data_migration => true, :type => :data_migration d
       end
 
       it "creates new membership for legacy GPDB instances" do
-        Membership.count.should == 70
+        Membership.count.should == 143
       end
 
       it "copies the correct data fields from the legacy member" do

@@ -3,7 +3,7 @@ module DataMigrationHelper
     any_instance_of(DatabaseMigrator) do |dm|
       stub(dm).migrate do
         ['dataset', 'gpdb_database', 'gpdb_schema'].each do |name|
-          fixture_data = YAML.load(IO.read(Rails.root + "spec/fixtures/other_database_migration_refresh/#{name}.yml"))
+          fixture_data = YAML.load(IO.read(Rails.root + "spec/other_fixtures/database_migration_refresh/#{name}.yml"))
           klass = name.classify.constantize
           fixture_data.each do |k, data|
             klass.connection.insert_fixture(data, klass.table_name)
