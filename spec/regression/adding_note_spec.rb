@@ -51,7 +51,7 @@ describe "creating a note on a dataset" do
     wait_for_ajax
     click_link "gpdb_garcia"
     wait_for_ajax
-    click_link "gpdb_test_schema"
+    click_link "test_schema"
     click_link "Add a note"
     within_modal do
       set_cleditor_value("body", "Note on a dataset")

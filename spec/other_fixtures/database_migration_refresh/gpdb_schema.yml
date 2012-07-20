@@ -1,7 +1,7 @@
 ---
 1:
   id: 6545
-  name: gpdb_test_schema_in_db_without_public_schema
+  name: non_public_schema
   database_id: 1618
   created_at: 2012-06-21 18:05:43.871986000 Z
   updated_at: 2012-06-21 18:05:43.871986000 Z
@@ -9,7 +9,7 @@
   workspace_id: 
 2:
   id: 6546
-  name: gpdb_test_schema
+  name: test_schema
   database_id: 1617
   created_at: 2012-06-21 18:05:43.975256000 Z
   updated_at: 2012-06-21 18:05:43.975256000 Z
@@ -17,7 +17,7 @@
   workspace_id: 
 3:
   id: 6547
-  name: gpdb_test_schema2
+  name: test_schema2
   database_id: 1617
   created_at: 2012-06-21 18:05:44.028319000 Z
   updated_at: 2012-06-21 18:05:44.028319000 Z
@@ -2681,7 +2681,7 @@
   workspace_id: 
 336:
   id: 6880
-  name: gpdb_test_schema_in_db_without_public_schema
+  name: non_public_schema
   database_id: 1672
   created_at: 2012-06-21 18:06:14.031398000 Z
   updated_at: 2012-06-21 18:06:14.031398000 Z
@@ -2689,7 +2689,7 @@
   workspace_id: 
 337:
   id: 6881
-  name: gpdb_test_schema
+  name: test_schema
   database_id: 1671
   created_at: 2012-06-21 18:06:14.080587000 Z
   updated_at: 2012-06-21 18:06:14.080587000 Z
@@ -2697,7 +2697,7 @@
   workspace_id: 
 338:
   id: 6882
-  name: gpdb_test_schema2
+  name: test_schema2
   database_id: 1671
   created_at: 2012-06-21 18:06:14.126661000 Z
   updated_at: 2012-06-21 18:06:14.126661000 Z
@@ -5361,7 +5361,7 @@
   workspace_id: 
 671:
   id: 7215
-  name: gpdb_test_schema_in_db_without_public_schema
+  name: non_public_schema
   database_id: 1726
   created_at: 2012-06-21 18:06:41.418084000 Z
   updated_at: 2012-06-21 18:06:41.418084000 Z
@@ -5369,7 +5369,7 @@
   workspace_id: 
 672:
   id: 7216
-  name: gpdb_test_schema
+  name: test_schema
   database_id: 1725
   created_at: 2012-06-21 18:06:41.469187000 Z
   updated_at: 2012-06-21 18:06:41.469187000 Z
@@ -5377,7 +5377,7 @@
   workspace_id: 
 673:
   id: 7217
-  name: gpdb_test_schema2
+  name: test_schema2
   database_id: 1725
   created_at: 2012-06-21 18:06:41.513845000 Z
   updated_at: 2012-06-21 18:06:41.513845000 Z

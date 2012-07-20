@@ -123,7 +123,7 @@ describe HdfsExternalTable do
 
     context "with a real greenplum database connection", :database_integration => true do
       let(:workspace) { FactoryGirl.create(:workspace, :sandbox => schema) }
-      let(:schema) { GpdbSchema.find_by_name('gpdb_test_schema') }
+      let(:schema) { GpdbSchema.find_by_name('test_schema') }
       let(:account) { real_gpdb_account }
       let!(:hadoop_instance) { FactoryGirl.create(:hadoop_instance, :host => HADOOP_TEST_INSTANCE, :port => '8020') }
 

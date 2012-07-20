@@ -39,11 +39,11 @@ module GpdbIntegration
     GpdbDatabase.refresh(account)
     database = GpdbDatabase.find_by_name(GpdbIntegration.database_name)
     GpdbSchema.refresh(account, database)
-    gpdb_schema = GpdbSchema.find_by_name('gpdb_test_schema')
+    gpdb_schema = GpdbSchema.find_by_name('test_schema')
     Dataset.refresh(account, gpdb_schema)
-    database = GpdbDatabase.find_by_name("#{GpdbIntegration.database_name}_without_public_schema")
+    database = GpdbDatabase.find_by_name("#{GpdbIntegration.database_name}_no_public_schema")
     GpdbSchema.refresh(account, database)
-    gpdb_schema = GpdbSchema.find_by_name('gpdb_test_schema_in_db_without_public_schema')
+    gpdb_schema = GpdbSchema.find_by_name('non_public_schema')
     Dataset.refresh(account, gpdb_schema)
     account
   end

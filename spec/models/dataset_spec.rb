@@ -177,7 +177,7 @@ end
 
 describe Dataset::Query, :database_integration => true do
   let(:account) { real_gpdb_account }
-  let(:schema) { GpdbSchema.find_by_name('gpdb_test_schema') }
+  let(:schema) { GpdbSchema.find_by_name('test_schema') }
 
   before do
     refresh_chorus
@@ -201,7 +201,7 @@ describe Dataset::Query, :database_integration => true do
     end
 
     context "when 'public' schema does not exist" do
-      let(:schema) { GpdbSchema.find_by_name('gpdb_test_schema_in_db_without_public_schema') }
+      let(:schema) { GpdbSchema.find_by_name('non_public_schema') }
       let(:sql) { "SELECT * FROM base_table1" }
 
       it "works" do
