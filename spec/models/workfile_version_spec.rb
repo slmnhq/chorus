@@ -110,41 +110,4 @@ describe WorkfileVersion do
       end
     end
   end
-
-  describe "initialization hooks" do
-    let(:user) { users(:admin) }
-
-    before do
-      subject.workfile = workfile
-      subject.owner = subject.modifier = user
-      subject.save!
-    end
-
-    context "when the file is set" do
-      let(:file) { test_file("code.cpp") }
-
-      subject { WorkfileVersion.new(:contents => file) }
-
-      it "does not change the file" do
-        original_content = File.readlines(file.path)
-        content = File.readlines(subject.contents.path)
-
-        content.should == original_content
-        subject.should be_valid
-        subject.should be_persisted
-      end
-    end
-
-    context "when the file is not set" do
-      subject { WorkfileVersion.new }
-
-      it "creates a blank file" do
-        content = File.readlines(subject.contents.path)
-
-        content.should be_blank
-        subject.should be_valid
-        subject.should be_persisted
-      end
-    end
-  end
 end

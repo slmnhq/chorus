@@ -48,7 +48,16 @@ class Workfile < ActiveRecord::Base
     workfile.owner = owner
     workfile.workspace = workspace
 
-    version = workfile.versions.first || workfile.versions.build
+    version = nil
+
+    if(workfile.versions.first)
+      version = workfile.versions.first
+    else
+      version = workfile.versions.build
+      filename = workfile.file_name
+      version.contents = File.new(File.join('/tmp/',filename), 'w')
+    end
+
     version.owner = owner
     version.modifier = owner
 

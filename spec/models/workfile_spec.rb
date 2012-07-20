@@ -127,6 +127,7 @@ describe Workfile do
 
       it "sets the file as blank" do
         subject.versions.first.contents.size.should == 0
+        subject.versions.first.file_name.should == 'workfile.sql'
       end
     end
 
