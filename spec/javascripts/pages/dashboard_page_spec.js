@@ -10,6 +10,16 @@ describe("chorus.pages.DashboardPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            this.server.completeFetchFor(new chorus.collections.InstanceSet([], { hasCredentials: true }), [
+                                         rspecFixtures.greenplumInstance(),
+                                         rspecFixtures.greenplumInstance()
+            ], { accessible: true }, { accessible: true });
+
+            this.server.completeFetchFor(new chorus.collections.HadoopInstanceSet(), [
+                                         rspecFixtures.hadoopInstance(),
+                                         rspecFixtures.hadoopInstance()
+            ]);
+
             this.page.render();
         })
 

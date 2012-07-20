@@ -57,4 +57,27 @@ describe NotesController do
     end
 
   end
+
+  describe "#destroy" do
+    let(:note) { Events::NOTE_ON_GREENPLUM_INSTANCE.first }
+
+    before do
+      log_in note.actor
+    end
+
+    it "destroys the note with the given id" do
+      delete :destroy, :id => note.id
+      Events::NOTE_ON_GREENPLUM_INSTANCE.find_by_id(note.id).should be_nil
+    end
+
+    it "returns an empty JSON body" do
+      delete :destroy, :id => note.id
+      response.body.should == "{}"
+    end
+
+    it "uses the note access to check permissions" do
+      mock(controller).authorize!(:destroy, note)
+      delete :destroy, :id => note.id
+    end
+  end
 end

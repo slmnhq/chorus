@@ -21,12 +21,6 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
         this.fetchInstances();
         this.model = chorus.session.user();
 
-        this.mainContent = new chorus.views.Dashboard({
-            collection: this.workspaceSet,
-            greenplumInstanceSet: this.instanceSet,
-            hadoopInstanceSet: this.hadoopInstanceSet
-        });
-
         this.userSet = new chorus.collections.UserSet();
         this.userSet.bindOnce("loaded", function() {
             this.userCount = this.userSet.pagination.records;
