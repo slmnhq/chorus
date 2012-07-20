@@ -38,13 +38,14 @@ describe Events::Base do
 
   describe ".for_dashboard_of(user)" do
     let(:user) { users(:alice) }
-    let(:the_events) {[
-      events(:alice_creates_private_workfile),
-      events(:bob_creates_private_workfile),
-      events(:bob_creates_public_workfile),
-      events(:alice_creates_private_workfile)
-    ]
-    }
+    let(:the_events) do
+      [
+        events(:alice_creates_private_workfile),
+        events(:bob_creates_private_workfile),
+        events(:bob_creates_public_workfile),
+        events(:alice_creates_private_workfile)
+      ]
+    end
 
     let(:other_workspace1) { workspaces(:bob_public) }
     let(:other_workspace2) { workspaces(:bob_private) }
@@ -85,5 +86,12 @@ describe Events::Base do
       event = global_activity.event
       subject.find(event.to_param).should == event
     end
+  end
+
+  it "destroys all of its associated activities when it is destroyed" do
+    event = Events::SOURCE_TABLE_CREATED.first
+    Activity.where(:event_id => event.id).size.should > 0
+    event.destroy
+    Activity.where(:event_id => event.id).size.should == 0
   end
 end

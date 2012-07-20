@@ -17,7 +17,7 @@ class NotesController < ApplicationController
   def destroy
     note = Events::Base.find(params[:id])
     authorize! :destroy, note
-    note.delete
+    note.destroy
     render :json => {}
   end
 end
