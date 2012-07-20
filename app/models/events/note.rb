@@ -28,6 +28,7 @@ module Events
           Events::NOTE_ON_HDFS_FILE.by(creator).add(:hdfs_file => hdfs_file_reference, :body => body)
         when "workspace"
           workspace = Workspace.find(entity_id)
+          # TODO: add :for_members state, like global but only shows on members' dashboards, and pull out logic here
           if workspace && (WorkspaceAccess.member_of_workspaces(creator).include?(workspace) || workspace.public)
             Events::NOTE_ON_WORKSPACE.by(creator).add(:workspace =>workspace, :body => body)
           end
@@ -40,7 +41,8 @@ module Events
           Events::NOTE_ON_WORKSPACE_DATASET.by(creator).add(:dataset => dataset, :workspace => workspace, :body => body)
         when "workfile"
           workfile = Workfile.find(entity_id)
-          Events::NOTE_ON_WORKFILE.by(creator).add(:workfile =>workfile, :body => body)
+          workspace = Workspace.find(workspace_id)
+          Events::NOTE_ON_WORKFILE.by(creator).add(:workfile =>workfile, :workspace => workspace, :body => body)
         else
           raise UnknownEntityType
       end
@@ -87,7 +89,7 @@ module Events
 
   class NOTE_ON_WORKFILE < Note
     has_targets :workfile
-    has_activities :actor, :workfile
+    has_activities :actor, :workfile, :workspace
     has_additional_data :body
   end
 

@@ -20,4 +20,30 @@ module EventHelpers
       global_activity.should be_nil
     end
   end
+
+end
+
+shared_examples 'event associated with a workspace' do
+  let(:private_workspace) { workspaces(:alice_private) }
+  let(:public_workspace)  { workspaces(:alice_public) }
+  let(:not_a_member)      { users(:bob) }
+  let(:member)            { users(:alice) }
+
+  it "does not appear on a non-member's dashboard" do
+    subject.workspace = private_workspace
+    subject.save!
+
+    Events::Base.for_dashboard_of(not_a_member).should_not include(subject)
+  end
+
+  it "appears on a member's dashboard" do
+    subject.workspace = private_workspace
+    subject.save!
+
+    Events::Base.for_dashboard_of(member).should include(subject)
+  end
+
+  it "is associated with the workspace" do
+    workspace.events.should include(subject)
+  end
 end

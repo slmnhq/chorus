@@ -36,6 +36,8 @@ FixtureBuilder.configure do |fbuilder|
     carly = User.create!(:first_name => 'Carly', :last_name => 'Carlson', :username => 'carly', :email => 'carly@example.com', :password => FixtureBuilder.password)
     Events::USER_ADDED.by(admin).add(:new_user => carly)
 
+    not_a_member = User.create!(:first_name => 'Alone', :last_name => 'NoMember', :username => 'not_a_member', :email => 'alone@example.com', :password => FixtureBuilder.password)
+    Events::USER_ADDED.by(admin).add(:new_user => not_a_member)
 
     #Instances
     greenplum_instance = Instance.create!({ :name => "Greenplum", :description => "Just for bobsearch and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :maintenance_db => "postgres", :owner => admin }, :without_protection => true)
@@ -95,6 +97,8 @@ FixtureBuilder.configure do |fbuilder|
       bob_public = Workfile.create!({:file_name => "Bob Public", :description => "BobSearch", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
       WorkfileVersion.create!({:workfile => bob_public, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
       fbuilder.name :bob_creates_public_workfile, Events::WORKFILE_CREATED.by(bob).add(:workfile => bob_public, :workspace => bob_public_workspace)
+
+      Events::NOTE_ON_WORKFILE.by(bob).add(:workfile => bob_public, :body => 'Note on workfile')
     end
 
     #Notes

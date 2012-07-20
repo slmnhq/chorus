@@ -4,10 +4,10 @@ require_relative "helpers"
 describe "Notes" do
   extend EventHelpers
 
-  let(:actor) { FactoryGirl.create(:user) }
-  let(:greenplum_instance) { FactoryGirl.create(:instance) }
-  let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
-  let(:workspace) { FactoryGirl.create(:workspace) }
+  let(:actor) { users(:not_a_member) }
+  let(:greenplum_instance) { instances(:greenplum) }
+  let(:hadoop_instance) { hadoop_instances(:hadoop) }
+  let(:workspace) { workspaces(:alice_private) }
   let(:workfile) { workfiles(:bob_public)}
   let(:dataset) { datasets(:bobs_table) }
   let(:hdfs_file_reference) do
@@ -95,6 +95,7 @@ describe "Notes" do
 
     it_creates_activities_for { [actor, workspace] }
     it_does_not_create_a_global_activity
+    it_behaves_like 'event associated with a workspace'
   end
 
   describe "NOTE_ON_WORKFILE" do
@@ -102,6 +103,7 @@ describe "Notes" do
       Events::NOTE_ON_WORKFILE.add(
         :actor => actor,
         :workfile => workfile,
+        :workspace => workspace,
         :body => "This is the text of the note on the workfile"
       )
     end
@@ -110,8 +112,9 @@ describe "Notes" do
     its(:targets) { should == {:workfile => workfile} }
     its(:additional_data) { should == {:body => "This is the text of the note on the workfile"} }
 
-    it_creates_activities_for { [actor, workfile] }
+    it_creates_activities_for { [actor, workfile, workspace] }
     it_does_not_create_a_global_activity
+    it_behaves_like 'event associated with a workspace'
   end
 
   describe "NOTE_ON_DATASET" do
@@ -252,6 +255,7 @@ describe "Notes" do
           :entity_type => "workfile",
           :entity_id => workfile.id,
           :body => "Workfile content",
+          :workspace_id => workspace.id
         }, user)
 
         last_note = Events::Note.first
