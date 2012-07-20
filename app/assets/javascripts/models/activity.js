@@ -78,6 +78,10 @@
                     model = new chorus.models.WorkspaceDataset();
                     model.set(this.get("dataset"));
                     break;
+                case "NOTE_ON_WORKFILE":
+                    model = new chorus.models.Workfile();
+                    model.set(this.get("workfile"));
+                    break;
             }
             return model;
         },

@@ -175,6 +175,17 @@ describe("chorus.models.Activity", function() {
                     expect(ws_dataset.get("id")).toBe(123)
                 });
             });
+
+            context("for a NOTE_ON_WORKFILE", function() {
+                it("returns a workfile with the right data", function() {
+                    activity = rspecFixtures.activity.noteOnWorkfileCreated({
+                        workfile: { id: 123 }
+                    });
+                    var workfile = activity.noteObject();
+                    expect(workfile).toBeA(chorus.models.Workfile);
+                    expect(workfile.get("id")).toBe(123)
+                });
+            });
         });
 
         describe("#hdfsEntry", function() {

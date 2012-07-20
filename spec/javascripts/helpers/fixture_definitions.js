@@ -119,7 +119,8 @@ window.rspecFixtureDefinitions = {
             noteOnHdfsFileCreated: {},
             noteOnWorkspaceCreated: {},
             noteOnDatasetCreated: {},
-            noteOnWorkspaceDatasetCreated: {}
+            noteOnWorkspaceDatasetCreated: {},
+            noteOnWorkfileCreated: {}
         }
     },
 

@@ -123,6 +123,7 @@ describe EventsController do
         "hdfsExternalTableCreated" => Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE,
         "noteOnHdfsFileCreated" => Events::NOTE_ON_HDFS_FILE,
         "noteOnWorkspaceCreated" => Events::NOTE_ON_WORKSPACE,
+        "noteOnWorkfileCreated" => Events::NOTE_ON_WORKFILE,
         "noteOnDatasetCreated" => Events::NOTE_ON_DATASET,
         "noteOnWorkspaceDatasetCreated" => Events::NOTE_ON_WORKSPACE_DATASET
     }
