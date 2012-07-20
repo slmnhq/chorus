@@ -8,6 +8,7 @@ describe "Notes" do
   let(:greenplum_instance) { FactoryGirl.create(:instance) }
   let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
   let(:workspace) { FactoryGirl.create(:workspace) }
+  let(:workfile) { workfiles(:bob_public)}
   let(:dataset) { datasets(:bobs_table) }
   let(:hdfs_file_reference) do
     HdfsFileReference.create({'path' => '/data/test.csv',
@@ -93,6 +94,23 @@ describe "Notes" do
     its(:additional_data) { should == {:body => "This is the text of the note on the workspace"} }
 
     it_creates_activities_for { [actor, workspace] }
+    it_does_not_create_a_global_activity
+  end
+
+  describe "NOTE_ON_WORKFILE" do
+    subject do
+      Events::NOTE_ON_WORKFILE.add(
+        :actor => actor,
+        :workfile => workfile,
+        :body => "This is the text of the note on the workfile"
+      )
+    end
+
+    its(:workfile) { should == workfile }
+    its(:targets) { should == {:workfile => workfile} }
+    its(:additional_data) { should == {:body => "This is the text of the note on the workfile"} }
+
+    it_creates_activities_for { [actor, workfile] }
     it_does_not_create_a_global_activity
   end
 
@@ -228,6 +246,20 @@ describe "Notes" do
         }.to raise_error
       end
     end
+
+      it "creates a note on a workfile" do
+        Events::Note.create_from_params({
+          :entity_type => "workfile",
+          :entity_id => workfile.id,
+          :body => "Workfile content",
+        }, user)
+
+        last_note = Events::Note.first
+        last_note.action.should == "NOTE_ON_WORKFILE"
+        last_note.actor.should == user
+        last_note.workfile.id == workfile.id
+        last_note.body.should == "Workfile content"
+      end
 
     it "creates a note on a dataset" do
       Events::Note.create_from_params({

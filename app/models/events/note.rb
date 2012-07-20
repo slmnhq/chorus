@@ -38,6 +38,9 @@ module Events
           dataset = Dataset.find(entity_id)
           workspace = Workspace.find(workspace_id)
           Events::NOTE_ON_WORKSPACE_DATASET.by(creator).add(:dataset => dataset, :workspace => workspace, :body => body)
+        when "workfile"
+          workfile = Workfile.find(entity_id)
+          Events::NOTE_ON_WORKFILE.by(creator).add(:workfile =>workfile, :body => body)
         else
           raise UnknownEntityType
       end
@@ -81,6 +84,13 @@ module Events
       errors.add(:workspace, :generic , {:message => "Can not add a note on an archived workspace"} ) if workspace.archived?
     end
   end
+
+  class NOTE_ON_WORKFILE < Note
+    has_targets :workfile
+    has_activities :actor, :workfile
+    has_additional_data :body
+  end
+
 
   class NOTE_ON_DATASET < Note
     has_targets :dataset
