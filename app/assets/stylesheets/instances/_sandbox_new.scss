@@ -64,6 +64,13 @@
             margin-left: $input-spacing;
         }
 
+        .create_container {
+          input[name=schemaName] {
+            margin: 0;
+            width: $account-width;
+          }
+        }
+
         img.help {
             display: inline-block;
             margin-top: -3px;
