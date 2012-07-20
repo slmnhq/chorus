@@ -3,7 +3,7 @@ CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
 
 \connect "gpdb_test_database"
 
-  CREATE SCHEMA gpdb_test_schema;
+  CREATE SCHEMA test_schema;
     SET search_path TO 'test_schema';
 
     CREATE TABLE base_table1
