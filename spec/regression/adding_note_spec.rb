@@ -100,3 +100,22 @@ describe "creating a note on a workfile" do
 
 
 end
+
+describe "creating a note on the workspace" do
+
+  it "contains the new note on workspace" do
+    login('edcadmin', 'secret')
+    create_valid_workspace
+    wait_until { page.has_selector?('a[data-dialog="NotesNew"]') }
+    sleep(1)
+    click_link "Add a note"
+
+    within_modal do
+      set_cleditor_value("body", "Note on the workspace")
+      click_submit_button
+      wait_for_ajax
+    end
+
+    page.should have_content("Note on the workspace")
+  end
+end
