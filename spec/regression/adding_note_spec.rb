@@ -63,3 +63,40 @@ describe "creating a note on a dataset" do
   end
 
 end
+
+
+describe "creating a note on a workfile" do
+
+  it "contains a note on the workfile list page" do
+    login('edcadmin', 'secret')
+    create_valid_workspace
+    create_valid_workfile(:name => "notewf")
+    click_link "Add a note"
+    within_modal do
+      set_cleditor_value("body", "Note on a workfile")
+      click_submit_button
+      wait_for_ajax
+    end
+    page.should have_content("Note on a workfile")
+
+  end
+
+  it "contains a note on the workfile show page" do
+
+    login('edcadmin', 'secret')
+    create_valid_workspace
+    create_valid_workfile(:name => "notewf1")
+    click_link "notewf1"
+    wait_for_ajax
+    click_link "Add a note"
+    within_modal do
+      set_cleditor_value("body", "Note on a workfile show page")
+      click_submit_button
+      wait_for_ajax
+    end
+    page.should have_content("Note on a workfile show page")
+
+  end
+
+
+end
