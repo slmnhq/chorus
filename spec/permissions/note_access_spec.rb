@@ -46,6 +46,7 @@ describe Events::NoteAccess do
     it "has a class for each type of note" do
       Events::NOTE_ON_WORKSPACEAccess.new(fake_controller).should be_a Events::NoteAccess
       Events::NOTE_ON_GREENPLUM_INSTANCEAccess.new(fake_controller).should be_a Events::NoteAccess
+      Events::NOTE_ON_HADOOP_INSTANCEAccess.new(fake_controller).should be_a Events::NoteAccess
     end
   end
 end

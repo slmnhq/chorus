@@ -15,7 +15,9 @@ module Events
     end
   end
 
-  NOTE_ON_GREENPLUM_INSTANCEAccess =
-  NOTE_ON_WORKSPACEAccess =
-  NoteAccess
+  # Right now, we need an access class for each subclass of Note
+  Events::Note.subclasses.each do |subclass|
+    model_class_name = subclass.name.demodulize
+    Events.const_set("#{model_class_name}Access", NoteAccess)
+  end
 end
