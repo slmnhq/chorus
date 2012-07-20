@@ -9,22 +9,20 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
         var commentId = this.options.commentId;
 
         if (entityId && entityType) {
-            this.model = new chorus.models.Comment({ id: commentId,
+            this.model = new chorus.models.Comment({
+                id: commentId,
                 entityType: entityType,
                 entityId: entityId
-            })
+            });
             this.setComment()
         } else {
-            var model = this.options.activity;
+            var activity = this.options.activity;
+            this.model = activity.toNote();
 
-            this.model = new chorus.models.Comment({ id: model.id,
-                entityType: model.collection.attributes.entityType,
-                entityId: model.collection.attributes.entityId
-            });
-            if (model.get("type") == "NOTE") {
-                this.setNote();
-            } else {
+            if (activity.isInsight()) {
                 this.setInsight();
+            } else {
+                this.setNote();
             }
         }
     },

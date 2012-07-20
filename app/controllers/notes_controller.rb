@@ -13,4 +13,11 @@ class NotesController < ApplicationController
     note.save!
     present note
   end
+
+  def destroy
+    note = Events::Base.find(params[:id])
+    authorize! :destroy, note
+    note.delete
+    render :json => {}
+  end
 end
