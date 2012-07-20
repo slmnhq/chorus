@@ -25,6 +25,10 @@ class NoteCommentMigrator
         when 'workspace'
           workspace = Workspace.find_with_destroyed(workspace_id(comment_id))
           event = Events::NOTE_ON_WORKSPACE.create(:workspace => workspace, :body => comment_body, :actor => actor)
+        when 'workfile'
+          workspace = Workspace.find_with_destroyed(comment_workspace_id(comment_id))
+          workfile = Workfile.find_with_destroyed(workfile_id(comment_id))
+          event = Events::NOTE_ON_WORKFILE.create(:workspace => workspace, :workfile => workfile, :body => comment_body, :actor => actor)
         else
           next
       end
@@ -59,12 +63,32 @@ class NoteCommentMigrator
   end
 
   def workspace_id(comment_id)
-    sql = "SELECT ew.chorus_rails_workspace_id, ec.entity_id FROM edc_workspace ew, edc_comment ec
+    sql = "SELECT ew.chorus_rails_workspace_id FROM edc_workspace ew, edc_comment ec
                                                WHERE ec.id = '#{comment_id}'
                                                AND ew.id = ec.entity_id"
 
     result = Legacy.connection.exec_query(sql)
+
     extract_result("chorus_rails_workspace_id", result)
+  end
+
+  def comment_workspace_id(comment_id)
+    sql = "SELECT ew.chorus_rails_workspace_id FROM edc_workspace ew, edc_comment ec
+                                               WHERE ec.id = '#{comment_id}'
+                                               AND ew.id = ec.workspace_id"
+
+    result = Legacy.connection.exec_query(sql)
+
+    extract_result("chorus_rails_workspace_id", result)
+  end
+
+  def workfile_id(comment_id)
+    sql = "SELECT ewf.chorus_rails_workfile_id FROM edc_work_file ewf, edc_comment ec
+                                               WHERE ec.id = '#{comment_id}'
+                                               AND ewf.id = ec.entity_id"
+
+    result = Legacy.connection.exec_query(sql)
+    extract_result("chorus_rails_workfile_id", result)
   end
 
   def update_event_id(comment_id, event_id)
