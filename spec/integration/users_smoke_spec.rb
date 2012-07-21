@@ -52,6 +52,7 @@ describe "creating a user" do
                            :department => department, :title => title)
     wait_until { current_route == "/users" }
     click_link("#{first_name} #{last_name}")
+    wait_for_ajax
     page.find("h1").should have_content("#{first_name} #{last_name}")
 
     click_link "Edit Profile"
