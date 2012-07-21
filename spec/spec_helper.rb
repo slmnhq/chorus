@@ -59,6 +59,10 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
+  config.before(:suite) do
+    GpdbIntegration.drop_gpdb
+  end
+
   config.before(:all) do
     self.class.set_fixture_class :events => Events::Base
     self.class.fixtures :all unless self.class.metadata[:data_migration]
@@ -81,12 +85,6 @@ RSpec.configure do |config|
     # stub file reads of legacy workfiles
     #
     stub(File).read(/.+\/\d{5}\/[\d_]+$/) { "123" }
-  end
-
-  config.before(:suite, :database_integration => true) do
-    p "GpdbIntegration.setup_gpdb in progress..."
-    GpdbIntegration.setup_gpdb
-    p "GpdbIntegration.setup_gpdb complete."
   end
 
   config.include FileHelper

@@ -1,0 +1,1 @@
+DROP DATABASE IF EXISTS "gpdb_test_database";

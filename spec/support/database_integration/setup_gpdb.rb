@@ -1,17 +1,17 @@
 require "tempfile"
 
 module GpdbIntegration
-  sql_file    = "setup_gpdb.sql"
   config_file = "test_gpdb_connection_config.yml"
   host_name   = ENV['GPDB_HOST'] || 'chorus-gpdb42'
 
-  SQL             = File.read(File.expand_path("../#{sql_file}", __FILE__))
   CONFIG          = YAML.load_file(File.expand_path("../#{config_file}", __FILE__))
   INSTANCE_CONFIG = CONFIG['instances'].find { |hash| hash["host"] == host_name }
   ACCOUNT_CONFIG  = INSTANCE_CONFIG['account']
 
-  def self.setup_gpdb
-    sql = SQL.gsub('gpdb_test_database', database_name)
+  def self.execute_sql(sql_file)
+    sql_read = File.read(File.expand_path("../#{sql_file}", __FILE__))
+
+    sql = sql_read.gsub('gpdb_test_database', GpdbIntegration.database_name)
 
     connection_params = [
       "-U #{ACCOUNT_CONFIG['db_username']}",
@@ -30,6 +30,14 @@ module GpdbIntegration
     end
   end
 
+  def self.setup_gpdb
+    execute_sql("setup_gpdb.sql")
+  end
+
+  def self.drop_gpdb
+    execute_sql("drop_gpdb.sql")
+  end
+
   def self.database_name
     "gpdb_" + Socket.gethostname
   end
@@ -38,6 +46,13 @@ module GpdbIntegration
     account = real_gpdb_account
     GpdbDatabase.refresh(account)
     database = GpdbDatabase.find_by_name(GpdbIntegration.database_name)
+
+    if !database
+      GpdbIntegration.setup_gpdb
+      GpdbDatabase.refresh(account)
+      database = GpdbDatabase.find_by_name(GpdbIntegration.database_name)
+    end
+
     GpdbSchema.refresh(account, database)
     gpdb_schema = GpdbSchema.find_by_name('test_schema')
     Dataset.refresh(account, gpdb_schema)
