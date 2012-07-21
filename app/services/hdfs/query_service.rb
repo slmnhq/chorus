@@ -8,6 +8,10 @@ module Hdfs
 
   JavaHdfs = com.emc.greenplum.hadoop.Hdfs
 
+  # NOTE: If we have 3 versions and 6 seconds timeout,
+  #       we're going to wait 2 seconds for each one
+  JavaHdfs.timeout = 3
+
   class QueryService
     def self.timeout
       5.seconds
