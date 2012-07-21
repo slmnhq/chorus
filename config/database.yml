@@ -39,7 +39,7 @@ production:
   database: chorus_rails_production
   <<: *default
   username: pivotal
-  port: 5432
+  # port: 5432
 
 legacy:
   database: chorus
