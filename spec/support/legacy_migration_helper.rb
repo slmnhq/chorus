@@ -1,4 +1,4 @@
-module DataMigrationHelper
+module LegacyMigrationHelper
   def mock_dataset_refresh
     any_instance_of(DatabaseMigrator) do |dm|
       stub(dm).migrate do

@@ -49,7 +49,7 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   config.mock_with :rr
 
-  config.filter_run_excluding :data_migration => true
+  config.filter_run_excluding :legacy_migration => true
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -65,7 +65,7 @@ RSpec.configure do |config|
 
   config.before(:all) do
     self.class.set_fixture_class :events => Events::Base
-    self.class.fixtures :all unless self.class.metadata[:data_migration]
+    self.class.fixtures :all unless self.class.metadata[:legacy_migration]
   end
 
   # If true, the base class of anonymous controllers will be inferred
@@ -81,7 +81,7 @@ RSpec.configure do |config|
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
   end
 
-  config.before(:each, :data_migration => true) do
+  config.before(:each, :legacy_migration => true) do
     # stub file reads of legacy workfiles
     #
     stub(File).read(/.+\/\d{5}\/[\d_]+$/) { "123" }
@@ -101,7 +101,7 @@ RSpec.configure do |config|
   config.include GpdbTestHelpers
   config.include AllowyRSpecHelpers
   config.include GpdbIntegration, :database_integration => true
-  config.include DataMigrationHelper, :type => :data_migration
+  config.include LegacyMigrationHelper, :type => :legacy_migration
   config.include SunspotMatchers
   config.include SolrHelpers
 end
