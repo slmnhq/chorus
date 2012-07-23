@@ -1,5 +1,5 @@
 require 'capybara/rspec'
-require 'capybara-webkit'
+# require 'capybara-webkit'
 require 'capybara-screenshot'
 require 'headless'
 require 'database_cleaner'
@@ -12,9 +12,9 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../../config/environment", __FILE__)
 
 Capybara.app = Rails.application
-Capybara.default_driver = :webkit
-Capybara.javascript_driver = :webkit
-Capybara.automatic_reload = false
+Capybara.default_driver = :selenium
+# Capybara.javascript_driver = :webkit
+# Capybara.automatic_reload = false
 Capybara.run_server = true #Whether start server when testing
 Capybara.server_port = 8200
 Capybara.server_boot_timeout = 100
