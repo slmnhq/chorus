@@ -14,14 +14,14 @@ describe "logging in" do
     create_valid_workspace(:name => "FooWorkspace")
     Timecop.travel(Time.current + 3.hours) do
       click_link "Home"
+      wait_for_ajax
       wait_until { current_route == "/login" }
       login(adminlogin, adminpassword)
       click_link("FooWorkspace")
       Timecop.travel(Time.current + 6.hours) do
-        click_link("Home")
+        wait_for_ajax
         wait_until { current_route == "/login" }
       end
     end
-
   end
 end
