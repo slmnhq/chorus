@@ -18,8 +18,9 @@ describe NotesController do
     end
 
     it "uses authorization" do
-      mock(controller).authorize!(:create, Events::Note, "greenplum_instance", "3")
-      post :create, :note => { :entity_type => "greenplum_instance", :entity_id => "3", :body => "I'm a note" }
+      id = instances(:greenplum).to_param
+      mock(controller).authorize!(:create, Events::Note, "greenplum_instance", id)
+      post :create, :note => { :entity_type => "greenplum_instance", :entity_id => id, :body => "I'm a note" }
     end
 
     context "with an exception" do

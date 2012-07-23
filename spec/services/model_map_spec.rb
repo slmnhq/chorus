@@ -29,7 +29,7 @@ describe ModelMap do
     end
 
     it "works for HdfsFileReference" do
-      model = ModelMap.model_from_params("hdfs", "1234|/data/test.csv")
+      model = ModelMap.model_from_params("hdfs_file", "1234|/data/test.csv")
       model.hadoop_instance_id.should == 1234
       model.path.should == "/data/test.csv"
     end

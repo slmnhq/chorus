@@ -3,7 +3,7 @@ module ModelMap
 
   CLASS_MAP = {
     "greenplum_instance" => Instance,
-    "hdfs" => HdfsFileReference,
+    "hdfs_file" => HdfsFileReference,
     "hadoop_instance" => HadoopInstance,
     "workspace" => Workspace,
     "dataset" => Dataset,
