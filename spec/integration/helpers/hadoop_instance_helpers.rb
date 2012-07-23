@@ -12,6 +12,7 @@ def create_valid_hadoop_instance(params = {})
     fill_in 'groupList', :with => "hadoop"
     find(".submit").click
   end
+  wait_for_ajax
 
 end
 

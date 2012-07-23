@@ -52,7 +52,30 @@ describe " system generated activities " do
 
   end
 
-  xit "System generates activity stream for hadoop instance name change" do
+  it "System generates activity stream for hadoop instance name change" do
+
+    create_valid_hadoop_instance(:name => "hadoopchangename")
+    hadoop_id = HadoopInstance.find_by_name("hadoopchangename").id
+
+    go_to_home_page
+    page.should have_content "EDC Admin added a new instance hadoopchangename"
+
+    go_to_instance_page
+    within(".instance_provider.hadoop_instance") do
+      wait_for_ajax
+      page.find("li[data-hadoop-instance-id='#{hadoop_id}']").click
+    end
+    click_link "Edit Instance"
+    fill_in 'name', :with => "hadoopnamechange"
+    click_submit_button
+
+    page.should have_content "EDC Admin changed the name of instance hadoopnamechange from hadoopchangename to hadoopnamechange"
+
+        go_to_user_list_page
+        within(".list") do
+          click_link "EDC Admin"
+        end
+        page.should have_content "EDC Admin changed the name of instance hadoopnamechange from hadoopchangename to hadoopnamechange"
 
   end
 
