@@ -76,15 +76,23 @@ describe " system generated activities " do
 
   end
 
-  xit "System generates activity stream for WORKFILE_CREATED (29788327)" do
-=begin
-  DO To:
-  1. Add Personal Activity stream
-  2. Workspace Activity stream
-  3. Home page activity stream (for all members))
+  it "System generates activity stream for WORKFILE_CREATED" do
 
-=end
+    create_valid_workspace
+    create_valid_workfile(:name => "aswf")
+    wait_for_ajax
+    page.should have_content "EDC Admin added file aswf.sql"
+
+    go_to_home_page
+    page.should have_content "EDC Admin added file aswf.sql"
+
+    go_to_user_list_page
+    within(".list") do
+      click_link "EDC Admin"
+    end
+    page.should have_content "EDC Admin added file aswf.sql"
   end
+
 
   xit "System generates activity stream for WORKSPACE_ADD_SANDBOX (29788309)" do
 
