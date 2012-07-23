@@ -3,6 +3,10 @@ describe("chorus.models.GreenplumInstance", function() {
         this.instance = rspecFixtures.greenplumInstance({id: 1});
     });
 
+    it("has the right entity type", function() {
+        expect(this.instance.entityType).toBe("greenplum_instance");
+    });
+
     it("has the right show url", function() {
         expect(this.instance.showUrl()).toBe("#/instances/1/databases");
     });
