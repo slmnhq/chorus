@@ -4,8 +4,8 @@ describe CsvFilePresenter, :type => :view do
   let(:file) { test_file("test.csv", "text/csv") }
 
   before do
-    csv = CsvFile.create(:contents => file)
-    @presenter = CsvFilePresenter.new(csv, view)
+    @csv = CsvFile.create(:contents => file)
+    @presenter = CsvFilePresenter.new(@csv, view)
   end
 
   describe "#to_hash" do
@@ -15,7 +15,7 @@ describe CsvFilePresenter, :type => :view do
 
     it "includes the right keys" do
       @hash[:contents].should include('1,1,1')
-      @hash[:file_name].should == 'test.csv'
+      @hash[:id].should == @csv.id
     end
   end
 end
