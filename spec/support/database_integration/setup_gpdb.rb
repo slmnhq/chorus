@@ -64,8 +64,9 @@ module GpdbIntegration
   end
 
   def real_gpdb_account
+    return @real_gpdb_account if @real_gpdb_account
     instance = FactoryGirl.create(:instance, INSTANCE_CONFIG.except('account'))
-    account = FactoryGirl.create(:instance_account, ACCOUNT_CONFIG.merge(:instance => instance))
+    @real_gpdb_account = FactoryGirl.create(:instance_account, ACCOUNT_CONFIG.merge(:instance => instance))
   end
 end
 
