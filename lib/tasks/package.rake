@@ -109,7 +109,7 @@ module PackageMaker
       check_clean_working_tree
     end
     # TODO: Why?? pwd
-    # run "pwd; RAILS_ENV=production bundle exec rake assets:precompile"
+    run "pwd; RAILS_ENV=production bundle exec rake assets:precompile"
     run "bundle exec jetpack ."
     File.open('version_build', 'w') do |f|
       f.puts sha
