@@ -199,8 +199,9 @@
         isPublished: function() {
             return this.get("isPublished") === true;
         },
+
         isOwner: function() {
-            return (this.get("actor").id === chorus.session.user().id);
+            return (this.actor().id === chorus.session.user().id);
         }
     });
 

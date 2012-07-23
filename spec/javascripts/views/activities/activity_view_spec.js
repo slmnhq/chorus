@@ -105,6 +105,33 @@ describe("chorus.views.Activity", function() {
             expect(this.view.$(".timestamp")).toContainText("A nice timestamp.");
         });
 
+        describe("for notes", function() {
+            beforeEach(function() {
+                this.model = this.presenter.model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                this.view = new chorus.views.Activity({ model: this.model });
+            });
+
+            it("displays a delete link or not, based on the presenter", function() {
+                spyOn(this.presenter, "canDelete").andReturn(true);
+                this.view.render();
+                expect(this.view.$("a.delete_link")).toExist();
+
+                this.presenter.canDelete.andReturn(false);
+                this.view.render();
+                expect(this.view.$("a.delete_link")).not.toExist();
+            });
+
+            it("displays an edit link or not, based on the presenter", function() {
+                spyOn(this.presenter, "canEdit").andReturn(true);
+                this.view.render();
+                expect(this.view.$("a.edit_link")).toExist();
+
+                this.presenter.canEdit.andReturn(false);
+                this.view.render();
+                expect(this.view.$("a.edit_link")).not.toExist();
+            });
+        });
+
         xcontext("isNotification", function() {
             beforeEach(function() {
                 this.presenter = new chorus.presenters.Activity(this.view.model);

@@ -52,6 +52,7 @@ describe("chorus.presenters.Activity", function() {
                 presenter = new chorus.presenters.Activity(model);
                 actor = model.actor();
             });
+
             describe("#headerHtml", function() {
                 it("returns the translation for the without_workspace style if no style is provided " +
                     "and the model does not have a valid workspace", function() {
@@ -63,6 +64,55 @@ describe("chorus.presenters.Activity", function() {
                             noteObjectType: "Greenplum instance"
                         }
                     );
+                });
+            });
+        });
+
+        describe("#canDelete", function() {
+            beforeEach(function() {
+                model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                presenter = new chorus.presenters.Activity(model);
+            });
+
+            context("User is admin", function() {
+                it("returns true", function() {
+                    setLoggedInUser({ admin: true });
+                    expect(presenter.canDelete()).toBeTruthy();
+                });
+            });
+
+            context ("user is owner of the note" , function() {
+                it("returns true", function() {
+                    setLoggedInUser({ admin: false, id: model.actor().id });
+                    expect(presenter.canDelete()).toBeTruthy();
+                });
+            });
+
+            context ("user is neither owner or admin" , function() {
+                it("returns false", function() {
+                    setLoggedInUser({ admin: false });
+                    expect(presenter.canDelete()).toBeFalsy();
+                });
+            });
+        });
+
+        describe("#canEdit", function() {
+            beforeEach(function() {
+                model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                presenter = new chorus.presenters.Activity(model);
+            });
+
+            context ("user is owner of the note" , function() {
+                it("returns true", function() {
+                    setLoggedInUser({ id: model.actor().id });
+                    expect(presenter.canEdit()).toBeTruthy();
+                });
+            });
+
+            context ("user is not the owner" , function() {
+                it("returns false", function() {
+                    setLoggedInUser({ id: 12341324 });
+                    expect(presenter.canEdit()).toBeFalsy();
                 });
             });
         });

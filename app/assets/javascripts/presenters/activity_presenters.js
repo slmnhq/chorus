@@ -21,9 +21,19 @@
         isUserGenerated: function() {
             return this.model.isUserGenerated();
         },
-        isOwner: function() {
+
+        canEdit: function() {
             return this.model.isOwner();
         },
+
+        canDelete: function() {
+            return this.model.isOwner() || chorus.session.user().isAdmin();
+        },
+
+        canPublish: function() {
+            return this.canDelete();
+        },
+
         iconClass: "profile"
     });
 
