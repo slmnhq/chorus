@@ -52,7 +52,7 @@ describe " system generated activities " do
 
   end
 
-  xit "System generates activity stream for hadoop instance name change (29788347)" do
+  xit "System generates activity stream for hadoop instance name change" do
 
   end
 
