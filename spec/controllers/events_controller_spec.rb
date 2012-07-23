@@ -18,7 +18,7 @@ describe EventsController do
 
       it "presents the instance's activities" do
         mock_present { |models| models.should include(event) }
-        get :index, :entity_type => "instance", :entity_id => object.id
+        get :index, :entity_type => "greenplum_instance", :entity_id => object.id
         response.code.should == "200"
       end
     end
