@@ -6,7 +6,7 @@ describe " system generated activities " do
   end
 
   it "creates an activity stream when a gpdb instance is created" do
-    create_gpdb_gillette_instance(:name => "gpdb_instance")
+    create_gpdb_instance(:name => "gpdb_instance")
     gpdb_instance_id = Instance.find_by_name("gpdb_instance").id
     go_to_home_page
     page.should have_content "EDC Admin added a new instance gpdb_instance"
@@ -20,22 +20,36 @@ describe " system generated activities " do
     page.should have_content "EDC Admin added a new instance gpdb_instance"
   end
 
-  xit "System generates activity stream for gpdb instance name change (29788347)" do
-    name = "initial_instance_name"
-    modified_name = "edit_instance_name"
+  it "System generates activity stream for gpdb instance name change" do
+    name = "changechorusname"
 
-    create_gpdb_gillette_instance(:name => name)
+    create_gpdb_instance(:name => name)
     gpdb_instance_id = Instance.find_by_name(name).id
+
     go_to_home_page
     page.should have_content "EDC Admin added a new instance #{name}"
+
     go_to_instance_page
     page.find(".instance_provider li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
-    page.should have_content "EDC Admin added a new instance #{name}"
+
+    click_link "Edit Instance"
+    fill_in 'name', :with => "editchorusname"
+    click_submit_button
+
+    go_to_home_page
+    page.should have_content "EDC Admin changed the name of instance editchorusname from changechorusname to editchorusname"
+
+    go_to_instance_page
+    page.find(".instance_provider li[data-greenplum-instance-id='#{gpdb_instance_id}']").click
+    page.should have_content "EDC Admin changed the name of instance editchorusname from changechorusname to editchorusname"
+
     go_to_user_list_page
-    within(".list") do
+    within(".list")do
       click_link "EDC Admin"
     end
-    page.should have_content "EDC Admin added a new instance #{name}"
+    page.should have_content "EDC Admin changed the name of instance editchorusname from changechorusname to editchorusname"
+
+
   end
 
   xit "System generates activity stream for hadoop instance name change (29788347)" do
