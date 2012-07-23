@@ -755,7 +755,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
 
                 expect(notesNew).toHaveData("entityId", this.dataset.id);
-                expect(notesNew).toHaveData("entityType", "workspace_dataset");
+                expect(notesNew).toHaveData("entityType", "dataset");
                 expect(notesNew).toHaveData("displayEntityType", this.dataset.metaType());
                 expect(notesNew).toHaveData("allowWorkspaceAttachments", true);
             });
