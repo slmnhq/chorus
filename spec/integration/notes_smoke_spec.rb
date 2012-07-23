@@ -25,7 +25,6 @@ describe "creating a note on a workspace" do
     login('edcadmin', 'secret')
     create_valid_workspace
     wait_until { page.has_selector?('a[data-dialog="NotesNew"]') }
-    sleep(1)
     click_link "Add a note"
     wait_until { page.has_selector?("#facebox .dialog h1") }
     within_modal do
