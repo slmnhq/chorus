@@ -133,4 +133,11 @@ describe " system generated activities " do
     page.should have_content ("User Daddy cool added to Chorus")
   end
 
+  it "generates activity when an instance owner is changed" do
+
+
+
+  end
+
+
 end
