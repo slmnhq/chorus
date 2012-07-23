@@ -205,7 +205,7 @@ describe "Notes" do
 
     it "creates a note on an hdfs file" do
       Events::Note.create_from_params({
-        :entity_type => "hdfs",
+        :entity_type => "hdfs_file",
         :entity_id => "1234|/data/test.csv",
         :body => "Some crazy content",
       }, user)
@@ -220,7 +220,6 @@ describe "Notes" do
 
     context "workspace not archived" do
       it "creates a note on a workspace" do
-        mock(WorkspaceAccess).member_of_workspaces(user) { [workspace] }
         Events::Note.create_from_params({
           :entity_type => "workspace",
           :entity_id => workspace.id,
@@ -237,7 +236,6 @@ describe "Notes" do
 
     context "workspace is archived" do
       it "does not create a note on a workspace" do
-        mock(WorkspaceAccess).member_of_workspaces(user) { [workspace] }
         workspace.archived_at = DateTime.now
         workspace.save!
         expect {
@@ -250,20 +248,20 @@ describe "Notes" do
       end
     end
 
-      it "creates a note on a workfile" do
-        Events::Note.create_from_params({
-          :entity_type => "workfile",
-          :entity_id => workfile.id,
-          :body => "Workfile content",
-          :workspace_id => workspace.id
-        }, user)
+    it "creates a note on a workfile" do
+      Events::Note.create_from_params({
+        :entity_type => "workfile",
+        :entity_id => workfile.id,
+        :body => "Workfile content",
+        :workspace_id => workspace.id
+      }, user)
 
-        last_note = Events::Note.first
-        last_note.action.should == "NOTE_ON_WORKFILE"
-        last_note.actor.should == user
-        last_note.workfile.id == workfile.id
-        last_note.body.should == "Workfile content"
-      end
+      last_note = Events::Note.first
+      last_note.action.should == "NOTE_ON_WORKFILE"
+      last_note.actor.should == user
+      last_note.workfile.id == workfile.id
+      last_note.body.should == "Workfile content"
+    end
 
     it "creates a note on a dataset" do
       Events::Note.create_from_params({

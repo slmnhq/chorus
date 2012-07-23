@@ -53,7 +53,7 @@ describe Events::NoteAccess do
         any_instance_of(WorkspaceAccess) do |workspace_access|
           mock(workspace_access).create_note_on?(workspace) { "delegated_return_value" }
         end
-        access.create?("workspace", workspace.id).should == "delegated_return_value"
+        access.create?(Events::Note, "workspace", workspace.id).should == "delegated_return_value"
       end
     end
 
@@ -63,7 +63,7 @@ describe Events::NoteAccess do
         any_instance_of(DefaultAccess) do |workspace_access|
           mock(workspace_access).create_note_on?(user) { "delegated_return_value" }
         end
-        access.create?("user", user.id).should == "delegated_return_value"
+        access.create?(Events::Note, "user", user.id).should == "delegated_return_value"
       end
     end
   end

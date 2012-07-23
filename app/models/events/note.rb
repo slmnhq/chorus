@@ -28,10 +28,7 @@ module Events
           Events::NOTE_ON_HDFS_FILE.by(creator).add(:hdfs_file => hdfs_file_reference, :body => body)
         when "workspace"
           workspace = Workspace.find(entity_id)
-          # TODO: add :for_members state, like global but only shows on members' dashboards, and pull out logic here
-          if workspace && (WorkspaceAccess.member_of_workspaces(creator).include?(workspace) || workspace.public)
-            Events::NOTE_ON_WORKSPACE.by(creator).add(:workspace =>workspace, :body => body)
-          end
+          Events::NOTE_ON_WORKSPACE.by(creator).add(:workspace => workspace, :body => body)
         when "dataset"
           dataset = Dataset.find(entity_id)
           Events::NOTE_ON_DATASET.by(creator).add(:dataset => dataset, :body => body)

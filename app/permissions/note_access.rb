@@ -8,7 +8,7 @@ module Events
       note.actor == current_user || current_user.admin? || current_user_is_workspace_owner?(note)
     end
 
-    def create?(entity_type, entity_id)
+    def create?(klass, entity_type, entity_id)
       model = ModelMap.model_from_params(entity_type, entity_id)
       access_for(model).can? :create_note_on, model
     end
