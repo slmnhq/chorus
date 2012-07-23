@@ -1,6 +1,48 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.join(File.dirname(__FILE__), '../integration/spec_helper')
 
-describe "creating a note on a workspace" do
+describe "The workspace add/remove members dialog" do
+  it "adds and removes a single member" do
+    login('edcadmin', 'secret')
+
+    create_valid_user(:first_name => "Alex", :last_name => "Red")
+
+    alex_id = User.find_by_username("AlexRed").id
+
+    create_valid_workspace
+    wait_until { page.find('a[data-dialog="WorkspaceEditMembers"]').text == "Add or Edit Members"}
+    click_link "Add or Edit Members"
+
+    within_modal do
+      within("li[data-id='#{alex_id}']") do
+        click_link "Add"
+      end
+      click_button "Save Changes"
+    end
+
+    click_link "Add or Edit Members"
+
+    within_modal do
+      within(".shuttle_body .selected") do
+        page.should have_content "Alex Red"
+        within("li[data-id='#{alex_id}']") do
+          click_link "Remove"
+        end
+      end
+      click_button "Save Changes"
+    end
+
+    click_link "Add or Edit Members"
+
+    within_modal do
+      within(".shuttle_body .available") do
+        page.should have_content "Alex Red"
+      end
+    end
+  end
+end
+
+
+describe "editing the workspace" do
   before(:each) do
     login('edcadmin', 'secret')
   end
@@ -51,6 +93,7 @@ describe "creating a note on a workspace" do
     within_modal do
       within('.ui-selectmenu-status') { page.should have_content "John Smith" }
     end
+    wait_for_ajax
 
     as_user("JohnSmith") do
       visit("#/workspaces/#{workspace_id}")

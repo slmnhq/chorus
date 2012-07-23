@@ -27,7 +27,7 @@ describe "associating dataset to a workspace" do
     click_link "associate_dataset"
     click_link "Data"
     page.should have_content "base_table1"
-    
+
   end
 
 end
