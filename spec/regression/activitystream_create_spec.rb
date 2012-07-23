@@ -56,15 +56,21 @@ describe " system generated activities " do
 
   end
 
-  xit "Creates an activity stream when a hadoop instance is created" do
+  it "Creates an activity stream when a hadoop instance is created" do
     create_valid_hadoop_instance(:name => "hadoop_instance")
     hadoop_instance_id = HadoopInstance.find_by_name("hadoop_instance").id
+
     go_to_home_page
     page.should have_content "EDC Admin added a new instance hadoop_instance"
+
     go_to_instance_page
     wait_for_ajax
-    page.find(".instance_provider li[data-hadoop-instance-id='#{hadoop_instance_id}']").click
+    within(".instance_provider.hadoop_instance") do
+      wait_for_ajax
+      page.find("li[data-hadoop-instance-id='#{hadoop_instance_id}']").click
+    end
     page.should have_content "EDC Admin added a new instance hadoop_instance"
+
     go_to_user_list_page
     within(".list") do
       click_link "EDC Admin"

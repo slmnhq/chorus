@@ -12,6 +12,7 @@ def create_valid_hadoop_instance(params = {})
     fill_in 'groupList', :with => "hadoop"
     find(".submit").click
   end
+
 end
 
 def edit_hadoop_instance(params={})
