@@ -93,11 +93,6 @@ describe " system generated activities " do
     page.should have_content "EDC Admin added file aswf.sql"
   end
 
-
-  xit "System generates activity stream for WORKSPACE_ADD_SANDBOX (29788309)" do
-
-  end
-
   it "Creates system Generated activity when a user is added" do
     create_valid_user(:first_name => "Daddy", :last_name => "cool")
     go_to_home_page
