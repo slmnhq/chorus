@@ -17,6 +17,15 @@ describe Visualization::TimeseriesPresenter, :type => :view do
       @hash = @presenter.to_hash
     end
 
+    it "includes base attributes" do
+      @hash[:type].should == @visualization_data.type
+      @hash[:x_axis].should == @visualization_data.time
+      @hash[:y_axis].should == @visualization_data.value
+      @hash[:time_interval].should == @visualization_data.time_interval
+      @hash[:aggregation].should == @visualization_data.aggregation
+      @hash[:filters].should == @visualization_data.filters
+    end
+
     it "includes rows" do
       @hash[:rows].should == [
         {"time" => "2012-03", "value" => 5},

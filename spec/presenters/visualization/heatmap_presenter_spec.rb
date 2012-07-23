@@ -23,6 +23,15 @@ describe Visualization::HeatmapPresenter, :type => :view do
       @hash = @presenter.to_hash
     end
 
+    it "includes base attributes" do
+      @hash[:type].should == @visualization_data.type
+      @hash[:x_bins].should == @visualization_data.x_bins
+      @hash[:y_bins].should == @visualization_data.y_bins
+      @hash[:x_axis].should == @visualization_data.x_axis
+      @hash[:y_axis].should == @visualization_data.y_axis
+      @hash[:filters].should == @visualization_data.filters
+    end
+
     it "includes rows" do
       @hash[:rows].should == [
         {'value' => '11', 'x' => '1', 'xLabel' => [1.0, 4.0], 'y' => '1', 'yLabel' => [1.0, 4.0]},

@@ -1,9 +1,10 @@
 module Visualization
   class Histogram
-    attr_accessor :rows
-    attr_writer :bins, :category, :filters, :dataset, :schema
+    attr_accessor :rows, :bins, :category, :filters, :type
+    attr_writer :dataset, :schema
 
     def initialize(dataset=nil, attributes={})
+      @type = attributes[:type]
       @bins = attributes[:bins].to_i
       @category = attributes[:x_axis]
       @filters = attributes[:filters]

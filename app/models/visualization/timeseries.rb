@@ -1,9 +1,10 @@
 module Visualization
   class Timeseries
-    attr_accessor :rows
-    attr_writer :time, :value, :time_interval, :aggregation, :filters, :dataset, :schema
+    attr_accessor :rows, :time, :value, :time_interval, :aggregation, :filters, :type
+    attr_writer :dataset, :schema
 
     def initialize(dataset=nil, attributes={})
+      @type = attributes[:type]
       @time = attributes[:x_axis]
       @value = attributes[:y_axis]
       @time_interval = attributes[:time_interval]

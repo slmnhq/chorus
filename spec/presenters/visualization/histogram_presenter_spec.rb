@@ -18,6 +18,13 @@ describe Visualization::HistogramPresenter, :type => :view do
       @hash = @presenter.to_hash
     end
 
+    it "includes base attributes" do
+      @hash[:type].should == @visualization_data.type
+      @hash[:bins].should == @visualization_data.bins
+      @hash[:x_axis].should == @visualization_data.category
+      @hash[:filters].should == @visualization_data.filters
+    end
+
     it "includes rows" do
       @hash[:rows].should == [
           {"bin" => [0, 1], "frequency" => 6},

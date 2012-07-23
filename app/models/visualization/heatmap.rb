@@ -1,6 +1,6 @@
 module Visualization
   class Heatmap
-    attr_accessor :x_bins, :y_bins, :x_axis, :y_axis, :rows
+    attr_accessor :x_bins, :y_bins, :x_axis, :y_axis, :rows, :type, :filters
     attr_writer :dataset, :schema
 
     def initialize(dataset=nil, attributes={})
@@ -9,6 +9,7 @@ module Visualization
       @x_bins = attributes[:x_bins].to_i
       @y_bins = attributes[:y_bins].to_i
       @filters = attributes[:filters]
+      @type = attributes[:type]
       @dataset = dataset
       @schema = dataset.try :schema
     end

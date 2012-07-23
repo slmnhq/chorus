@@ -1,13 +1,14 @@
 module Visualization
   class Boxplot
-    attr_accessor :rows
-    attr_writer :bins, :category, :values, :filters, :dataset, :schema
+    attr_accessor :rows, :bins, :category, :values, :filters, :type
+    attr_writer :dataset, :schema
 
     def initialize(dataset=nil, attributes={})
       @bins = attributes[:bins].to_i
       @category = attributes[:x_axis]
       @values = attributes[:y_axis]
       @filters = attributes[:filters]
+      @type = attributes[:type]
       @dataset = dataset
       @schema = dataset.try :schema
     end
