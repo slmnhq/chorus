@@ -17,3 +17,7 @@ end
 def go_to_home_page
   visit("#/")
 end
+
+def go_to_login_page
+  visit("#/login")
+end

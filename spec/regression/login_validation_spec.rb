@@ -35,3 +35,16 @@ describe "trying different login methods" do
   end
 
 end
+
+describe "displays the version and the SHA info on the login page" do
+
+  it "displays the version and sha version" do
+
+    go_to_login_page
+    page.should have_content "Version 2.2."
+    page.should have_content "EMC2, EMC, Greenplum, Greenplum Chorus, and the EMC logo are registered trademarks or trademarks of EMC Corporation in the United States and other countries. All other trademarks used herein are the property of their respective owners."
+    page.should have_content "This software is protected, without limitation, by copyright law and international treaties. Use of this software and the intellectual property contained therein is expressly limited to the terms and conditions of the License Agreement under which it is provided by or on behalf of EMC."
+
+  end
+
+end
