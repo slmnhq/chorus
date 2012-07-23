@@ -8,8 +8,9 @@ eval "$(rbenv init -)"
 rbenv shell `cat .rbenv-version`
 ruby -v | grep "jruby 1.6.7"
 gem list bundler | grep bundler || gem install bundler
-bundle install --binstubs=b/
+bundle install --binstubs=b/ --without assets
 b/rake db:drop db:create db:migrate --trace > $WORKSPACE/bundle.log
+b/rake assets:precompile
 
 # start solr
 b/rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
@@ -26,6 +27,9 @@ INTEGRATION_TESTS_RESULT=$?
 
 echo "Cleaning up solr process $solr_pid"
 kill -s SIGTERM $solr_pid
+
+echo "Cleaning assets"
+b/rake assets:clean
 
 echo "RSpec exit code: $INTEGRATION_TESTS_RESULT"
 exit $INTEGRATION_TESTS_RESULT

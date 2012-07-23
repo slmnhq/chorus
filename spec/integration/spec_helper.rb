@@ -2,7 +2,6 @@ require 'capybara/rspec'
 require 'capybara-webkit'
 require 'capybara-screenshot'
 require 'headless'
-require 'capybara-webkit'
 require 'database_cleaner'
 require 'yaml'
 
