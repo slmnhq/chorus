@@ -53,7 +53,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     workspace: function() {
-        if (!this._workspace) {
+        if (!this._workspace && this.get("workspace")) {
             this._workspace = new chorus.models.Workspace(this.get("workspace"));
         }
         return this._workspace;

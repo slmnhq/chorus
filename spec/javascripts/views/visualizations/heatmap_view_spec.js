@@ -29,7 +29,7 @@ describe("chorus.views.visualizations.Heatmap", function() {
     beforeEach(function() {
         this.task = rspecFixtures.dataset().makeHeatmapTask({xAxis: "hair_length", yAxis: "kill_count"});
         this.task.save();
-        this.server.lastCreate().succeed(rspecFixtures.heatmapTaskJson().response);
+        this.server.lastCreate().succeed(rspecFixtures.heatmapTaskJson({response: {x_axis: "hair_length", y_axis: "kill_count"}}).response);
 
         this.width = 925;
         this.height = 340;

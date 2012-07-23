@@ -24,7 +24,9 @@ describe("chorus.dialogs.Visualization", function() {
         this.filters = new chorus.collections.DatasetFilterSet([filter1, filter2, incompleteFilter1, incompleteFilter2]);
 
         spyOn(this.filters, "clone").andCallThrough();
-        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, task: fixtures.boxplotTaskWithResult(), chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
+        task = rspecFixtures.boxplotTask();
+        task.loaded = false;
+        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, task: task, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
 
         spyOn(this.dialog, 'refreshChart').andCallThrough();
         spyOn(this.dialog, "launchSubModal").andCallThrough();
@@ -54,23 +56,23 @@ describe("chorus.dialogs.Visualization", function() {
 
                 context("when the task DOES have a workspace", function() {
                     it("fetches the workspace", function() {
-                        expect(this.dialog.task.workspace()).toHaveBeenFetched();
+                        expect(this.dialog.model.workspace()).toHaveBeenFetched();
                     });
 
                     describe("when the workspace fetch completes", function() {
                         it("keeps the save button enabled", function() {
-                            this.server.completeFetchFor(this.dialog.task.workspace(), rspecFixtures.workspace());
+                            this.server.completeFetchFor(this.dialog.model.workspace(), rspecFixtures.workspace());
                             expect(this.dialog.$("button.save")).toBeEnabled();
                         });
 
                         it("keeps the 'show data table' link visible", function() {
-                            this.server.completeFetchFor(this.dialog.task.workspace(), rspecFixtures.workspace());
+                            this.server.completeFetchFor(this.dialog.model.workspace(), rspecFixtures.workspace());
                             expect(this.dialog.$("a.show")).not.toHaveClass('hidden');
                         });
 
                         context("when the workspace is archived", function() {
                             it("does not include the 'save as workfile' option", function() {
-                                this.server.completeFetchFor(this.dialog.task.workspace(), rspecFixtures.workspace({ archivedAt: "12/21/2012" }));
+                                this.server.completeFetchFor(this.dialog.model.workspace(), rspecFixtures.workspace({ archivedAt: "12/21/2012" }));
                                 this.dialog.$("button.save").click();
                                 expect(this.qtip.find("[data-menu-name='save_as_workfile']")).not.toExist();
                             });
@@ -78,7 +80,7 @@ describe("chorus.dialogs.Visualization", function() {
 
                         context("when the workspace is not archived", function() {
                             it("includes the 'save as workfile' option", function() {
-                                this.server.completeFetchFor(this.dialog.task.workspace(), rspecFixtures.workspace({ archivedAt: null }));
+                                this.server.completeFetchFor(this.dialog.model.workspace(), rspecFixtures.workspace({ archivedAt: null }));
                                 this.dialog.$("button.save").click();
                                 expect(this.qtip.find("[data-menu-name='save_as_workfile']")).toExist();
                             });
@@ -86,11 +88,12 @@ describe("chorus.dialogs.Visualization", function() {
                     });
                 });
 
-                context("when task doesn't have workspace ( from instance browser page)", function() {
+                context("when dataset doesn't have workspace ( from instance browser page)", function() {
                     beforeEach(function() {
                         this.server.reset();
-                        var task = fixtures.boxplotTaskWithResult({dataset : rspecFixtures.dataset()})
-                        this.dialog = new chorus.dialogs.Visualization({model: this.dataset, task: task, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
+                        var dataset = rspecFixtures.dataset();
+                        var task = rspecFixtures.boxplotTask();
+                        this.dialog = new chorus.dialogs.Visualization({model: dataset, task: task, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
                     });
                     it("doesn't add workspace as a requiredResources", function() {
                         expect(this.server.requests.length).toBe(0);
@@ -161,7 +164,7 @@ describe("chorus.dialogs.Visualization", function() {
                 this.chartOptions["type"] = "histogram";
                 this.dialog = new chorus.dialogs.Visualization({
                     model: this.dataset,
-                    task: fixtures.boxplotTaskWithResult(),
+                    task: rspecFixtures.boxplotTask(),
                     chartOptions: this.chartOptions,
                     filters: this.filters,
                     columnSet: this.columns
@@ -181,7 +184,7 @@ describe("chorus.dialogs.Visualization", function() {
                     chartOptions: this.chartOptions,
                     filters: this.filters,
                     columnSet: this.columns,
-                    task: fixtures.boxplotTaskWithResult({ rows: [] })
+                    task: rspecFixtures.boxplotTask({ rows: [] })
                 });
             })
 
@@ -193,7 +196,7 @@ describe("chorus.dialogs.Visualization", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.dialog.task.workspace(), { active: true });
+            this.server.completeFetchFor(this.dialog.model.workspace(), { active: true });
             this.dialog.render();
         });
 
@@ -467,13 +470,13 @@ describe("chorus.dialogs.Visualization", function() {
                 beforeEach(function() {
                     this.dialog = new chorus.dialogs.Visualization({
                         model: this.dataset,
-                        task: fixtures.boxplotTaskWithResult(),
+                        task: rspecFixtures.boxplotTask(),
                         chartOptions: this.chartOptions,
                         filters: this.filters,
                         columnSet: this.columns
                     });
 
-                    spyOn(this.dialog.task.workspace(), "isActive").andReturn(false);
+                    spyOn(this.dialog.model.workspace(), "isActive").andReturn(false);
 
                     this.dialog.launchModal();
                     this.dialog.$("button.save").click();
@@ -544,7 +547,8 @@ describe("chorus.dialogs.Visualization", function() {
 
                 context("when the dialog was launched from outside of a workspace", function() {
                     beforeEach(function() {
-                        this.dialog.task.unset("workspaceId");
+                        this.dialog.model.unset("workspace");
+                        delete this.dialog.model._workspace;
                         spyOn(chorus.models.Workfile.prototype, 'save').andCallThrough();
                         this.dialog.$(".chart_area").addClass("visualization").append("<svg/>");
                         this.dialog.$("button.save").prop("disabled", false);

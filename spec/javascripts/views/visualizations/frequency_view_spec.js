@@ -12,7 +12,7 @@ describe("chorus.views.visualizations.FrequencyView", function() {
         var dataset = rspecFixtures.dataset();
         this.task = dataset.makeFrequencyTask({"bins": 3, "yAxis": "fruits"});
         this.task.save();
-        this.server.lastCreate().succeed(rspecFixtures.frequencyTaskJson().response);
+        this.server.lastCreate().succeed(rspecFixtures.frequencyTaskJson({response: {"bins": 3, "y_axis": "fruits"}}).response);
 
         this.view = new chorus.views.visualizations.Frequency({ model: this.task });
         this.addMatchers(chorus.svgHelpers.matchers);

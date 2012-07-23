@@ -22,7 +22,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     setup: function() {
         this.task = this.options.task;
 
-        var workspace = this.task.workspace();
+        var workspace = this.model.workspace();
         if (workspace) {
             workspace.fetch().success(_.bind(this.render, this));
         }
@@ -57,7 +57,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             }
         ];
 
-        var inArchivedWorkspace = this.task.workspace() && !this.task.workspace().isActive();
+        var inArchivedWorkspace = this.model.workspace() && !this.model.workspace().isActive();
         if (!inArchivedWorkspace) {
             menuItems.unshift({
                 name: "save_as_workfile",
@@ -152,7 +152,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     saveWorkfile: function(workspace) {
         this.$('button.save').startLoading("actions.saving");
 
-        var workspaceId = workspace ? workspace.get("id") : this.task.get("workspaceId");
+        var workspaceId = workspace ? workspace.get("id") : this.model.workspace().id;
 
         this.workfile = new chorus.models.Workfile({
             workspaceId: workspaceId,
@@ -173,7 +173,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         return {
             filterCount: this.effectiveFilterLength(),
             chartType: t("dataset.visualization.names." + this.type),
-            workspaceId: this.task.get("workspaceId"),
+            workspaceId: this.model.workspace() && this.model.workspace().id,
             hasChart: !!this.chart,
             entityName: this.model.get("objectName"),
             serverErrors: this.task.serverErrors
@@ -247,8 +247,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
             entityId: this.model.get("id"),
             entityName: this.model.name(),
             entityType: "dataset",
-            workspaceId: this.model.get("workspace") && this.model.get("workspace").id,
-            allowWorkspaceAttachments: !!this.task.get("workspaceId"),
+            workspaceId: this.model.workspace() && this.model.workspace().id,
+            allowWorkspaceAttachments: !!this.model.get("workspace"),
             attachVisualization: {
                 fileName: this.makeFilename(),
                 svgData: this.makeSvgData()
@@ -258,7 +258,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     saveAsWorkfile: function() {
-        if (!this.task.get("workspaceId")) {
+        if (!this.model.workspace()) {
             this.workspacePicker = new chorus.dialogs.VisualizationWorkspacePicker();
             this.launchSubModal(this.workspacePicker);
             this.workspacePicker.bindOnce("workspace:selected", this.saveWorkfile, this);

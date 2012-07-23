@@ -832,46 +832,6 @@ beforeEach(function() {
             return this.task(overrides);
         },
 
-        timeseriesTaskWithResult: function(overrides) {
-            var attributes = _.extend({
-                dataset: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
-                yAxis: "num_hands",
-                xAxis: "per_year",
-
-                columns: [
-                    { name: "time", typeCategory: "DATE" },
-                    { name: "value", typeCategory: "WHOLE_NUMBER" }
-                ],
-                rows: [
-                    { time: 1, value: '321' },
-                    { time: 2, value: '1024' }
-                ]
-            }, overrides);
-            return new chorus.models.TimeseriesTask(attributes);
-        },
-
-        boxplotTaskWithResult: function(overrides) {
-            var attributes = _.extend({
-                dataset: newFixtures.workspaceDataset.sandboxTable({objectName: 'pirates'}),
-                xAxis: "gender",
-                yAxis: "age",
-                columns: [
-                    { name: "bucket", typeCategory: "STRING" },
-                    { name: "min", typeCategory: "REAL_NUMBER" },
-                    { name: "median", typeCategory: "REAL_NUMBER" },
-                    { name: "max", typeCategory: "REAL_NUMBER" },
-                    { name: "firstQuartile", typeCategory: "REAL_NUMBER" },
-                    { name: "thirdQuartile", typeCategory: "REAL_NUMBER" },
-                    { name: "percentage", typeCategory: "STRING" }
-                ],
-                rows: [
-                    { min: 0, median: 2, max: 4, count: 279089, percentage: '27.9%', bucket: 'FEMALE', firstQuartile: 1, thirdQuartile: 3 },
-                    { min: 0, median: 2, max: 4, count: 720911, percentage: '72.1%', bucket: 'MALE', firstQuartile: 1, thirdQuartile: 3 }
-                ]
-            }, overrides);
-            return new chorus.models.BoxplotTask(attributes);
-        },
-
         taskWithErrors: function(overrides) {
             var attributes = _.extend({ result: {
                 executeResult: "failed",

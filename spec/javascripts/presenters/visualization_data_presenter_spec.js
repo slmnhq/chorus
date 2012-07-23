@@ -1,7 +1,7 @@
 describe("chorus.presenters.visualizations", function() {
     describe("Timeseries", function() {
         beforeEach(function() {
-            this.model = fixtures.timeseriesTaskWithResult({
+            this.model = rspecFixtures.timeseriesTask({
                 rows: [
                     { time: '2012-01-01', value: 321 },
                     { time: '2012-02-21', value: 124 },
@@ -11,7 +11,7 @@ describe("chorus.presenters.visualizations", function() {
                     { time: '2012-07-08', value: 524 },
                     { time: '2012-08-01', value: 824 },
                     { time: '2012-09-01', value: 924 },
-                    { time: '2012-10-01', value: 724 },
+                    { time: '2012-10-01', value: 724 }
                 ]
             });
 
@@ -39,7 +39,7 @@ describe("chorus.presenters.visualizations", function() {
 
         describe("with time-only data", function() {
             beforeEach(function() {
-                this.model = fixtures.timeseriesTaskWithResult({
+                this.model = rspecFixtures.timeseriesTask({
                     rows: [
                         { time: '0000-00-00 01:02:03', value: 321 },
                         { time: '2012-02-21 03:04:05', value: 124 }
@@ -62,7 +62,7 @@ describe("chorus.presenters.visualizations", function() {
 
     describe("Boxplot", function() {
         beforeEach(function() {
-            this.model = fixtures.boxplotTaskWithResult({
+            this.model = rspecFixtures.boxplotTask({
                 rows: [
                     { bucket: 'beluga', min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "25.3%" },
                     { bucket: 'aardvark', min: 1, firstQuartile: 1, median: 2.5, thirdQuartile: 3, max: 4, percentage: "25%" },
@@ -88,7 +88,7 @@ describe("chorus.presenters.visualizations", function() {
         });
 
         it("makes sure minY and maxY aren't the same", function() {
-            this.model = fixtures.boxplotTaskWithResult({
+            this.model = rspecFixtures.boxplotTask({
                 rows: [
                     { bucket: 'beluga', min: -100, firstQuartile: -100, median: -100, thirdQuartile: -100, max: -100, percentage: "25.3%" }
                 ]
@@ -101,20 +101,14 @@ describe("chorus.presenters.visualizations", function() {
 
     describe("histogram", function() {
         beforeEach(function() {
-            this.model = new chorus.models.HistogramTask({
-                columns: [
-                    {name: "bin", typeCategory: "STRING"},
-                    {name: "frequency", typeCategory: "WHOLE_NUMBER"}
-                ],
-
+            this.model = rspecFixtures.histogramTask({
                 rows: [
-                    { bin: "0-9", frequency: 5 },
-                    { bin: "10-19", frequency: 8 },
-                    { bin: "20-29", frequency: 0 },
-                    { bin: "30-39", frequency: 1 },
-                    { bin: "40-49", frequency: 2000 }
-                ],
-                dataset: newFixtures.workspaceDataset.sandboxTable()
+                    { bin: [0,9], frequency: 5 },
+                    { bin: [10,19], frequency: 8 },
+                    { bin: [20,29], frequency: 0 },
+                    { bin: [30,39], frequency: 1 },
+                    { bin: [40,49], frequency: 2000 }
+                ]
             });
             this.presenter = new chorus.presenters.visualizations.Histogram(this.model);
 
@@ -124,16 +118,13 @@ describe("chorus.presenters.visualizations", function() {
             var x = _.pluck(this.data, "bin");
             var y = _.pluck(this.data, "frequency");
             expect(y).toEqual([5, 8, 0, 1, 2000]);
-            expect(x).toEqual(["0-9", "10-19", "20-29", "30-39", "40-49"]);
+            expect(x).toEqual([[0,9], [10,19], [20,29], [30,39], [40,49]]);
         });
     });
 
     describe("Heatmap", function() {
         beforeEach(function() {
-            var workspace = rspecFixtures.workspace({sandboxInfo: {name: 'pirates'}});
-            this.model = rspecFixtures.dataset().makeHeatmapTask({xAxis: "hair_length", yAxis: "kill_count"});
-
-            this.model.set({
+            this.model = rspecFixtures.heatmapTask({
                 rows: [
                     { yLabel: [30, 71.8], xLabel: [0, 1.8], value: 39541, y: 1, x: 1 },
                     { yLabel: [71.8, 113.6], xLabel: [0, 1.8], value: 39873, y: 2, x: 1 },
@@ -145,8 +136,7 @@ describe("chorus.presenters.visualizations", function() {
                     { yLabel: [155.4, 197.2], xLabel: [1.8, 3.6], value: 40757, y: 4, x: 2 },
                     { yLabel: [30, 71.8], xLabel: [3.6, 5.4], value: 39631, y: 1, x: 3 },
                     { yLabel: [71.8, 113.6], xLabel: [3.6, 5.4], value: 40174, y: 2, x: 3 }
-                ]
-            });
+                ]});
 
             this.presenter = new chorus.presenters.visualizations.Heatmap(this.model);
             this.data = this.presenter.present();

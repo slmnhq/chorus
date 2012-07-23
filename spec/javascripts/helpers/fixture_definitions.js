@@ -132,6 +132,9 @@ window.rspecFixtureDefinitions = {
 
     frequencyTask: {},
     heatmapTask: {},
+    boxplotTask: {},
+    timeseriesTask: {},
+    histogramTask: {},
 
 //    activity: {
 //        unique: [ "id" ],

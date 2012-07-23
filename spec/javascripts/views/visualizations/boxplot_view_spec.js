@@ -9,7 +9,7 @@ describe("chorus.views.visualizations.BoxPlot", function() {
         centerY = chorus.svgHelpers.centerY;
 
     beforeEach(function() {
-        this.task = fixtures.boxplotTaskWithResult({
+        this.task = rspecFixtures.boxplotTask({
             rows: [
                 { bucket: 'aardvark',   min: 1,   firstQuartile: 1,   median: 2.5, thirdQuartile: 3,   max: 4,   percentage: "25%" },
                 { bucket: 'beluga',     min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "33.3%" },
@@ -117,7 +117,7 @@ describe("chorus.views.visualizations.BoxPlot", function() {
 
         describe("the x positions when the ellipsized names are all the same", function() {
             beforeEach(function() {
-                this.task = fixtures.boxplotTaskWithResult({
+                this.task = rspecFixtures.boxplotTask({
                     rows: [
                         { bucket: 'thelongname_aardvark', min: 1, firstQuartile: 1, median: 2.5, thirdQuartile: 3, max: 4, percentage: "25%" },
                         { bucket: 'thelongname_beluga', min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "25%" },

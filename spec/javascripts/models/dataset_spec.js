@@ -575,8 +575,13 @@ describe("chorus.models.Dataset", function() {
     });
 
     describe("#workspace", function() {
-        it("is a chorus.models.Workspace", function() {
+        it("is a chorus.models.Workspace when it has a workspace", function() {
+            this.dataset.set({workspace: rspecFixtures.workspaceJson()});
             expect(this.dataset.workspace()).toBeA(chorus.models.Workspace);
+        });
+
+        it("is undefined when there is no workspace", function() {
+            expect(this.dataset.workspace()).toBeUndefined();
         });
     });
 

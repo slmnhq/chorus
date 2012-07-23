@@ -4,7 +4,7 @@ describe("chorus.models.BoxplotTask", function() {
             xAxis: "age",
             yAxis: "height",
             bins: "56",
-            dataset: newFixtures.workspaceDataset.sandboxTable({objectName: "users"})
+            dataset: rspecFixtures.dataset()
         });
     });
 

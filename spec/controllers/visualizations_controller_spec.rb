@@ -26,36 +26,72 @@ describe VisualizationsController do
         response.status.should == 200
       end
 
-      generate_fixture "frequencyTask.json", :database_integration => true  do
-        account = refresh_chorus
-        log_in account.owner
-        dataset = Dataset.find_by_name!("base_table1")
+      describe "fixtures", :database_integration => true do
+        before do
+          account = refresh_chorus
+          log_in account.owner
+        end
 
-        post :create, :dataset_id => dataset.id, :chart_task => {
-          :type => "frequency",
-          :check_id => "43",
-          :bins => 4,
-          :y_axis => "category"
-        }
+        generate_fixture "frequencyTask.json" do
+          dataset = Dataset.find_by_name!("base_table1")
 
-        response.should be_success
-      end
+          post :create, :dataset_id => dataset.id, :chart_task => {
+              :type => "frequency",
+              :check_id => "43",
+              :bins => 4,
+              :y_axis => "category"
+          }
 
-      generate_fixture "heatmapTask.json", :database_integration => true  do
-        account = refresh_chorus
-        log_in account.owner
-        dataset = Dataset.find_by_name!("heatmap_table")
+          response.should be_success
+        end
 
-        post :create, :dataset_id => dataset.id, :chart_task => {
-          :type => "heatmap",
-          :check_id => "43",
-          :x_bins => 3,
-          :y_bins => 3,
-          :x_axis => "column1",
-          :y_axis => "column2"
-        }
+        generate_fixture "heatmapTask.json" do
+          dataset = Dataset.find_by_name!("heatmap_table")
 
-        response.should be_success
+          post :create, :dataset_id => dataset.id, :chart_task => {
+              :type => "heatmap",
+              :check_id => "43",
+              :x_bins => 3,
+              :y_bins => 3,
+              :x_axis => "column1",
+              :y_axis => "column2"
+          }
+
+          response.should be_success
+        end
+
+        generate_fixture "boxplotTask.json" do
+          dataset = Dataset.find_by_name!("base_table1")
+           post :create, :dataset_id => dataset.id, :chart_task => {
+               :type => "boxplot",
+               :check_id => "43",
+               :bins => 20,
+               :x_axis => "category",
+               :y_axis => "column2"
+           }
+        end
+
+        generate_fixture "timeseriesTask.json" do
+          dataset = Dataset.find_by_name!("base_table1")
+          post :create, :dataset_id => dataset.id, :chart_task => {
+              :type => "timeseries",
+              :check_id => "43",
+              :time_interval => "month",
+              :aggregation => "sum",
+              :x_axis => "time_value",
+              :y_axis => "column1"
+          }
+        end
+
+        generate_fixture "histogramTask.json" do
+          dataset = Dataset.find_by_name!("base_table1")
+          post :create, :dataset_id => dataset.id, :chart_task => {
+              :type => "histogram",
+              :check_id => "43",
+              :bins => 2,
+              :x_axis => "column1"
+          }
+        end
       end
     end
 
