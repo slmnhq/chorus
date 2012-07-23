@@ -21,24 +21,21 @@ describe("chorus.collections.ActivitySet", function() {
         describe("the url of the activity set", function() {
             var activities, model;
 
-
-
             context("for a hdfs model type", function () {
                 beforeEach(function() {
                     model = rspecFixtures.hdfsFile({
-                        hadoopInstance : {
-                            id : 1
-                        },
+                        hadoopInstance : { id : 1 },
                         path : "/data/test.csv"
-                    })
-                    model.entityType = "hdfs";
+                    });
 
                     activities = chorus.collections.ActivitySet.forModel(model);
                 });
+
                 it("includes the entity_type, the ", function() {
-                    expect(activities.url()).toBe("/activities?entity_type=hdfs&entity_id=1%7C%2Fdata%2Ftest.csv" );
+                    expect(activities.url()).toBe("/activities?entity_type=hdfs_file&entity_id=1%7C%2Fdata%2Ftest.csv" );
                 });
             });
+
             context("for a non-hdfs model type", function () {
                 beforeEach(function() {
                     model = new chorus.models.Base({id: 1});

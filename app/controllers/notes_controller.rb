@@ -2,7 +2,11 @@ require Rails.root + 'app/permissions/note_access'
 
 class NotesController < ApplicationController
   def create
-    Events::Note.create_from_params(params[:note], current_user)
+    note_params = params[:note]
+    entity_type = note_params[:entity_type]
+    entity_id = note_params[:entity_id]
+    authorize! :create, Events::Note, entity_type, entity_id
+    Events::Note.create_from_params(note_params, current_user)
     render :json => {}, :status => :created
   end
 

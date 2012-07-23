@@ -1,6 +1,4 @@
 module Events
-  UnknownEntityType = Class.new(StandardError)
-
   class Note < Base
     validates_presence_of :actor_id
     searchable do
@@ -10,42 +8,17 @@ module Events
     end
 
     def self.create_from_params(params, creator)
+      body = params[:body]
       entity_id = params[:entity_id]
       entity_type = params[:entity_type]
-      body = params[:body]
       workspace_id = params[:workspace_id]
 
-      case entity_type
-        when "greenplum_instance"
-          instance = Instance.find(entity_id)
-          Events::NOTE_ON_GREENPLUM_INSTANCE.by(creator).add(:greenplum_instance => instance, :body => body)
-        when "hadoop_instance"
-          instance = HadoopInstance.find(entity_id)
-          Events::NOTE_ON_HADOOP_INSTANCE.by(creator).add(:hadoop_instance => instance, :body => body)
-        when "hdfs"
-          hadoop_instance_id, path = entity_id.split('|')
-          hdfs_file_reference = HdfsFileReference.find_or_create_by_hadoop_instance_id_and_path(hadoop_instance_id, path)
-          Events::NOTE_ON_HDFS_FILE.by(creator).add(:hdfs_file => hdfs_file_reference, :body => body)
-        when "workspace"
-          workspace = Workspace.find(entity_id)
-          # TODO: add :for_members state, like global but only shows on members' dashboards, and pull out logic here
-          if workspace && (WorkspaceAccess.member_of_workspaces(creator).include?(workspace) || workspace.public)
-            Events::NOTE_ON_WORKSPACE.by(creator).add(:workspace =>workspace, :body => body)
-          end
-        when "dataset"
-          dataset = Dataset.find(entity_id)
-          Events::NOTE_ON_DATASET.by(creator).add(:dataset => dataset, :body => body)
-        when "workspace_dataset"
-          dataset = Dataset.find(entity_id)
-          workspace = Workspace.find(workspace_id)
-          Events::NOTE_ON_WORKSPACE_DATASET.by(creator).add(:dataset => dataset, :workspace => workspace, :body => body)
-        when "workfile"
-          workfile = Workfile.find(entity_id)
-          workspace = Workspace.find(workspace_id)
-          Events::NOTE_ON_WORKFILE.by(creator).add(:workfile =>workfile, :workspace => workspace, :body => body)
-        else
-          raise UnknownEntityType
-      end
+      model = ModelMap.model_from_params(entity_type, entity_id)
+      raise ActiveRecord::RecordNotFound unless model
+      event_params = { entity_type => model, "body" => body }
+      event_params["workspace"] = Workspace.find(workspace_id) if workspace_id
+      event_class = event_class_for_model(model, workspace_id)
+      event_class.by(creator).add(event_params)
     end
 
     def grouping_id
@@ -54,6 +27,25 @@ module Events
 
     def type_name
       (target1 && target1.type_name) || workspace.type_name
+    end
+
+    private
+
+    def self.event_class_for_model(model, workspace_id)
+      case model
+      when Instance
+        NOTE_ON_GREENPLUM_INSTANCE
+      when HadoopInstance
+        NOTE_ON_HADOOP_INSTANCE
+      when Workspace
+        NOTE_ON_WORKSPACE
+      when Workfile
+        NOTE_ON_WORKFILE
+      when HdfsFileReference
+        NOTE_ON_HDFS_FILE
+      when Dataset
+        workspace_id ? NOTE_ON_WORKSPACE_DATASET : NOTE_ON_DATASET
+      end
     end
   end
 

@@ -17,6 +17,12 @@ describe NotesController do
       response.code.should == "201"
     end
 
+    it "uses authorization" do
+      id = instances(:greenplum).to_param
+      mock(controller).authorize!(:create, Events::Note, "greenplum_instance", id)
+      post :create, :note => { :entity_type => "greenplum_instance", :entity_id => id, :body => "I'm a note" }
+    end
+
     context "with an exception" do
       it "responds with an error code" do
         workspace = workspaces(:archived)

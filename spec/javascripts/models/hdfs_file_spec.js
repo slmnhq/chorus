@@ -23,7 +23,7 @@ describe("chorus.models.HdfsFile", function() {
     });
 
     it("has the right entity type", function() {
-        expect(this.file.entityType).toBe("hdfs");
+        expect(this.file.entityType).toBe("hdfs_file");
     });
 
     it("#getActivityStreamId", function() {
