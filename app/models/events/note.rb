@@ -22,9 +22,8 @@ module Events
         when "hadoop_instance"
           instance = HadoopInstance.find(entity_id)
           Events::NOTE_ON_HADOOP_INSTANCE.by(creator).add(:hadoop_instance => instance, :body => body)
-        when "hdfs"
-          hadoop_instance_id, path = entity_id.split('|')
-          hdfs_file_reference = HdfsFileReference.find_or_create_by_hadoop_instance_id_and_path(hadoop_instance_id, path)
+        when "hdfs_file"
+          hdfs_file_reference = HdfsFileReference.from_param(entity_id)
           Events::NOTE_ON_HDFS_FILE.by(creator).add(:hdfs_file => hdfs_file_reference, :body => body)
         when "workspace"
           workspace = Workspace.find(entity_id)
@@ -39,7 +38,7 @@ module Events
         when "workfile"
           workfile = Workfile.find(entity_id)
           workspace = Workspace.find(workspace_id)
-          Events::NOTE_ON_WORKFILE.by(creator).add(:workfile =>workfile, :workspace => workspace, :body => body)
+          Events::NOTE_ON_WORKFILE.by(creator).add(:workfile => workfile, :workspace => workspace, :body => body)
         else
           raise UnknownEntityType
       end
