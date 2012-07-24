@@ -6,6 +6,7 @@ module SoftDelete
   end
 
   def destroy
+    destroy_associations
     self.deleted_at = Time.now.utc
     save
   end

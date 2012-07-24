@@ -1,5 +1,7 @@
 module Events
   class Base < ActiveRecord::Base
+    include SoftDelete
+
     self.table_name = :events
     self.inheritance_column = :action
     serialize :additional_data, Hash
