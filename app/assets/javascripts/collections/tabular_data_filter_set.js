@@ -1,4 +1,5 @@
 chorus.collections.TabularDataFilterSet = chorus.collections.Base.extend({
+    constructorName: "TabularDataFilterSet",
     model: chorus.models.TabularDataFilter,
 
     sqlStrings: function() {

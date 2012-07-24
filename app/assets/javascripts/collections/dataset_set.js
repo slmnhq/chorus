@@ -1,4 +1,5 @@
 chorus.collections.DatasetSet = chorus.collections.LastFetchWins.extend({
+    constructorName: "DatasetSet",
     model:chorus.models.Dataset,
 
     setup: function() {

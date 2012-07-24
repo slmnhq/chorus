@@ -1,4 +1,5 @@
 chorus.collections.SchemaFunctionSet = chorus.collections.Base.extend({
+    constructorName: "SchemaFunctionSet",
     model:chorus.models.SchemaFunction,
     urlTemplate:"instance/{{instanceId}}/database/{{encode databaseName}}/schema/{{encode schemaName}}/function",
 

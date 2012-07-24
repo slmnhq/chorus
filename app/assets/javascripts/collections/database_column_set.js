@@ -1,4 +1,5 @@
 chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
+    constructorName: "DatabaseColumnSet",
     model: chorus.models.DatabaseColumn,
 
     urlTemplate: function() {
