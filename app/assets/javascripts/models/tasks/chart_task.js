@@ -7,11 +7,11 @@ chorus.models.ChartTask = chorus.models.Task.extend({
     },
 
     initialize: function(attrs) {
-        var dataset = attrs.dataset;
-        if (dataset) {
-            this.set({ datasetId: dataset.get("id") }, {silent: true});
-        }
         this.unset("dataset");
+        this.dataset = attrs.dataset;
+        if (this.dataset) {
+            this.set({ datasetId: this.dataset.get("id") }, {silent: true});
+        }
         this._super("initialize", arguments);
         this.set({ "type": this.chartType });
     },

@@ -26,7 +26,7 @@ describe("chorus.views.DatasetSidebar", function() {
     context("when a dataset is selected", function() {
         beforeEach(function() {
             this.server.reset();
-            this.dataset = newFixtures.workspaceDataset.sourceTable();
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
             chorus.PageEvents.broadcast("dataset:selected", this.dataset);
         });
 
