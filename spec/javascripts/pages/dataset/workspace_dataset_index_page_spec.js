@@ -140,7 +140,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             describe("when the fetch returns two items", function() {
                 beforeEach(function() {
                     this.datasets = [
-                        newFixtures.workspaceDataset.sourceTable(),
+                        rspecFixtures.workspaceDataset.datasetTable(),
                         rspecFixtures.workspaceDataset.datasetTable()
                     ];
                     this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
@@ -423,7 +423,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.page.render();
 
-            this.dataset = newFixtures.workspaceDataset.sourceTable();
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
             chorus.PageEvents.broadcast("dataset:selected", this.dataset);
         })
 

@@ -2,7 +2,7 @@ describe("chorus.dialogs.PreviewColumns", function() {
     beforeEach(function() {
         stubModals();
         spyOn(chorus, "search");
-        this.dataset = newFixtures.workspaceDataset.sourceTable();
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
         this.dialog = new chorus.dialogs.PreviewColumns({model: this.dataset});
         this.dialog.render();
     });

@@ -200,9 +200,6 @@ describe("chorus.models.Dataset", function() {
             dataset = newFixtures.workspaceDataset.sandboxView();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
-            dataset = newFixtures.workspaceDataset.sourceTable();
-            expect(dataset.canBeImportSource()).toBeTruthy();
-
             dataset = rspecFixtures.workspaceDataset.datasetTable();
             expect(dataset.canBeImportSource()).toBeTruthy();
 
@@ -220,9 +217,6 @@ describe("chorus.models.Dataset", function() {
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
             dataset = newFixtures.workspaceDataset.sandboxView();
-            expect(dataset.canBeImportDestination()).toBeTruthy();
-
-            dataset = newFixtures.workspaceDataset.sourceTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
             dataset = rspecFixtures.workspaceDataset.datasetTable();
@@ -671,7 +665,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#isDeleteable", function() {
         it("is true when the tabular data is a source table", function() {
-            expect(newFixtures.workspaceDataset.sourceTable().isDeleteable()).toBeTruthy();
+            expect(rspecFixtures.workspaceDataset.datasetTable().isDeleteable()).toBeTruthy();
         });
 
         it("is true when the tabular data is a source view", function() {

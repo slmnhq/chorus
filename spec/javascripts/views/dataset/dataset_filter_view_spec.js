@@ -1,6 +1,6 @@
 describe("chorus.views.DatasetFilter", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.workspaceDataset.sourceTable();
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
         this.collection = this.dataset.columns();
         this.collection.reset([ fixtures.databaseColumn(), fixtures.databaseColumn() ]);
 

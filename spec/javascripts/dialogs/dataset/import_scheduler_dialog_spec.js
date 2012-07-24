@@ -1,6 +1,6 @@
 describe("chorus.dialogs.ImportScheduler", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.workspaceDataset.sourceTable();
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
         this.datasetImport = fixtures.datasetImport({
             datasetId: this.dataset.get('id'),
             workspaceId: this.dataset.get('workspace').id
@@ -617,7 +617,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     describe("when a dataset is selected", function() {
                         var datasets;
                         beforeEach(function() {
-                            datasets = [newFixtures.workspaceDataset.sourceTable({ objectName: "myDataset" })];
+                            datasets = [rspecFixtures.workspaceDataset.datasetTable({ objectName: "myDataset" })];
                             chorus.modal.trigger("datasets:selected", datasets);
                         });
 

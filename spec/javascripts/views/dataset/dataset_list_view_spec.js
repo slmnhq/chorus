@@ -3,7 +3,7 @@ describe("chorus.views.DatasetList", function() {
         this.collection = new chorus.collections.DatasetSet([
             newFixtures.workspaceDataset.chorusView({ hasCredentials: true, objectName: "foo" }),
             newFixtures.workspaceDataset.sandboxTable({ hasCredentials: true, objectName: "bar" }),
-            newFixtures.workspaceDataset.sourceTable({ hasCredentials: true, objectName: "baz" })
+            rspecFixtures.workspaceDataset.datasetTable({ hasCredentials: true, objectName: "baz" })
         ], { instanceId: "1", databaseName: "two", schemaName: "three" });
         this.collection.loaded = true;
 

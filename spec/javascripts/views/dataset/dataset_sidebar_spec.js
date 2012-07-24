@@ -198,7 +198,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 this.view.options.listMode = true;
                 this.view.options.workspace = rspecFixtures.workspace({archivedAt: "2012-05-08T21:40:14Z", permission: ["update", "admin"]});
                 this.view.render();
-                this.dataset = newFixtures.workspaceDataset.sourceTable();
+                this.dataset = rspecFixtures.workspaceDataset.datasetTable();
                 chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 this.server.completeFetchFor(this.view.importConfiguration, []);
 
@@ -735,7 +735,7 @@ describe("chorus.views.DatasetSidebar", function() {
             context("when the dataset is a source table", function() {
                 _.each(["TABLE", "EXTERNAL_TABLE", "MASTER_TABLE", "HDFS_EXTERNAL_TABLE"], function(type) {
                     beforeEach(function() {
-                        this.dataset = newFixtures.workspaceDataset.sourceTable({ objectType : type});
+                        this.dataset = rspecFixtures.workspaceDataset.datasetTable({ objectType : type});
                         chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                     });
 
@@ -878,7 +878,7 @@ describe("chorus.views.DatasetSidebar", function() {
     describe("when a single dataset is checked", function() {
         beforeEach(function() {
             this.checkedDatasets = new chorus.collections.DynamicDatasetSet([
-                newFixtures.workspaceDataset.sourceTable()
+                rspecFixtures.workspaceDataset.datasetTable()
             ]);
 
             this.multiSelectSection = this.view.$(".multiple_selection");
@@ -921,7 +921,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when a dataset is selected", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("dataset:selected", newFixtures.workspaceDataset.sourceTable());
+                    chorus.PageEvents.broadcast("dataset:selected", rspecFixtures.workspaceDataset.datasetTable());
                 });
 
                 it("should still show the multiple selection section", function() {
@@ -937,7 +937,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
     describe("column statistics", function() {
         beforeEach(function() {
-            this.dataset = newFixtures.workspaceDataset.sourceTable();
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
             this.column = fixtures.databaseColumn({
                 dataType: "int8",
                 typeCategory: "WHOLE_NUMBER",
@@ -1103,7 +1103,7 @@ describe("chorus.views.DatasetSidebar", function() {
     describe("has all the translations for all objectTypes", function() {
         _.each(["QUERY", "VIEW", "TABLE", "TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
             it("does not have any missing translations for" + type, function() {
-                this.dataset = newFixtures.workspaceDataset.sourceTable({objectType: type});
+                this.dataset = rspecFixtures.workspaceDataset.datasetTable({objectType: type});
                 chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 expect(this.view.tabs.activity.options.type).not.toContain("missing");
             })

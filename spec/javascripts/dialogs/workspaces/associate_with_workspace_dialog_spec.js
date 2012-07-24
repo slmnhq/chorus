@@ -19,7 +19,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
         context("when the model is a source table/view with no workspaces", function() {
             beforeEach(function() {
-                this.model = newFixtures.workspaceDataset.sourceTable();
+                this.model = rspecFixtures.workspaceDataset.datasetTable();
                 this.model.unset("associatedWorkspaces");
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [

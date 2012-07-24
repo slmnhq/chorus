@@ -6,7 +6,7 @@ describe("chorus.dialogs.Visualization", function() {
         stubClEditor();
         spyOn(chorus.Modal.prototype, "closeModal");
 
-        this.dataset = newFixtures.workspaceDataset.sourceTable();
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
         this.columns = this.dataset.columns();
         this.columns.reset([
             fixtures.databaseColumn(),

@@ -3,7 +3,7 @@ describe("chorus.views.DatasetContentDetails", function() {
         beforeEach(function() {
             this.$columnList = $("<ul/>");
             this.qtipMenu = stubQtip();
-            this.dataset = newFixtures.workspaceDataset.sourceTable();
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
             this.collection = this.dataset.columns([fixtures.databaseColumn(), fixtures.databaseColumn()]);
 
             this.view = new chorus.views.DatasetContentDetails({
@@ -81,7 +81,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when there is no sql", function() {
                     beforeEach(function() {
-                        var dataset = newFixtures.workspaceDataset.sourceTable()
+                        var dataset = rspecFixtures.workspaceDataset.datasetTable()
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
                         this.server.completeFetchFor(dataset.statistics(), fixtures.datasetStatisticsTable());
                         this.view.render();
@@ -492,7 +492,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when the workspace is archived", function() {
                     beforeEach(function() {
-                        var dataset = newFixtures.workspaceDataset.sourceTable();
+                        var dataset = rspecFixtures.workspaceDataset.datasetTable();
                         var workspace = rspecFixtures.workspace({ archivedAt: "2012-05-08 21:40:14"});
                         dataset.initialQuery = "select * from abc";
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection, workspace: workspace});
@@ -506,7 +506,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when the workspace is active", function() {
                     beforeEach(function() {
-                        var dataset = newFixtures.workspaceDataset.sourceTable();
+                        var dataset = rspecFixtures.workspaceDataset.datasetTable();
                         var workspace = rspecFixtures.workspace({archivedAt: null});
                         dataset.initialQuery = "select * from abc";
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection, workspace: workspace});

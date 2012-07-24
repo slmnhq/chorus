@@ -1,6 +1,6 @@
 describe("chorus.views.DatasetStatistics", function() {
     beforeEach(function() {
-        this.dataset = newFixtures.workspaceDataset.sourceTable();
+        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
         this.view = new chorus.views.DatasetStatistics({ model: this.dataset });
         this.view.render();
     });

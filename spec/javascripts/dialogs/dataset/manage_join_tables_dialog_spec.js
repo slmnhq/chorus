@@ -50,21 +50,21 @@ describe("chorus.dialogs.ManageJoinTables", function() {
             this.schemaTed = rspecFixtures.schema({name: "Ted", database: this.schema.database().attributes });
             this.server.completeFetchFor(this.dialog.schemas, [this.schemaBob, this.schema, this.schemaTed]);
 
-            this.dataset1 = newFixtures.workspaceDataset.sourceTable({
+            this.dataset1 = rspecFixtures.workspaceDataset.datasetTable({
                 objectName: "cats",
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
                 id: '"10000"|"dca_demo"|"ddemo"|"VIEW"|"cats"'
             });
 
-            this.dataset2 = newFixtures.workspaceDataset.sourceTable({
+            this.dataset2 = rspecFixtures.workspaceDataset.datasetTable({
                 objectName: "dogs",
                 type: "SOURCE_TABLE",
                 objectType: "TABLE",
                 id: '"10000"|"dca_demo"|"ddemo"|"TABLE"|"dogs"'
             });
 
-            this.dataset3 = newFixtures.workspaceDataset.sourceTable({
+            this.dataset3 = rspecFixtures.workspaceDataset.datasetTable({
                 objectName: "lions",
                 type: "SOURCE_TABLE",
                 objectType: "VIEW",
@@ -218,9 +218,9 @@ describe("chorus.dialogs.ManageJoinTables", function() {
                         describe("when the datasets are fetched", function() {
                             beforeEach(function() {
                                 this.server.completeFetchFor(this.schemaBob.datasets(), [
-                                    newFixtures.workspaceDataset.sourceTable({ objectName: "fred" }),
-                                    newFixtures.workspaceDataset.sourceTable({ objectName: "lou" }),
-                                    newFixtures.workspaceDataset.sourceTable({ objectName: "bryan" })
+                                    rspecFixtures.workspaceDataset.datasetTable({ objectName: "fred" }),
+                                    rspecFixtures.workspaceDataset.datasetTable({ objectName: "lou" }),
+                                    rspecFixtures.workspaceDataset.datasetTable({ objectName: "bryan" })
                                 ]);
                             });
 

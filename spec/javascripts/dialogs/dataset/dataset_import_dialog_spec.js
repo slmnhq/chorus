@@ -207,7 +207,7 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                     context("when a dataset is selected", function() {
                         beforeEach(function() {
-                            this.datasets = [newFixtures.workspaceDataset.sourceTable({ objectName: "myDataset" })];
+                            this.datasets = [rspecFixtures.workspaceDataset.datasetTable({ objectName: "myDataset" })];
                             chorus.modal.trigger("datasets:selected", this.datasets);
                         });
 
