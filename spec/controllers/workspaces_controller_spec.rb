@@ -196,7 +196,7 @@ describe WorkspacesController do
 
       it "allows archiving the workspace" do
         put :update, :id => workspace.id, :workspace => {
-          :archived => "true"
+            :archived => "true"
         }
         workspace.reload
         workspace.archived_at.should_not be_nil
@@ -250,7 +250,29 @@ describe WorkspacesController do
 
       it "uses schema authentication" do
         mock(subject).authorize!(:show_contents, sandbox.instance)
-        put :update, :id => workspace.to_param, :workspace => { :sandbox_id => sandbox.to_param }
+        put :update, :id => workspace.to_param, :workspace => {:sandbox_id => sandbox.to_param}
+      end
+    end
+
+    context "creating sandbox" do
+      let!(:dataset_view) { datasets(:bobs_view)}
+      let(:new_dataset) { datasets(:other_table) }
+
+      let(:owner) { users(:bob) }
+      let(:workspace_new) { FactoryGirl.create :workspace, :owner => owner }
+      let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => dataset_view.instance, :owner => owner) }
+      let!(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset_view, :workspace => workspace_new) }
+      let(:datasets1) { fake_relation [new_dataset, dataset_view] }
+      before :each do
+        stub(dataset_view.schema).datasets { datasets1 }
+        mock(subject).authorize!(:administrative_edit, workspace_new)
+        stub(Dataset).refresh {  }
+      end
+      it "delete any already associated datasets" do
+        put :update, :id => workspace_new.id, :workspace => {
+            :sandbox_id => dataset_view.schema.to_param
+        }
+        AssociatedDataset.find_by_dataset_id_and_workspace_id(dataset_view.to_param, workspace_new.to_param).should be_nil
       end
     end
   end
