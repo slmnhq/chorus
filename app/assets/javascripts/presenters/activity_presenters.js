@@ -62,6 +62,14 @@
                 links: [ "actor", "greenplumInstance", "newOwner" ]
             },
 
+            PUBLIC_WORKSPACE_CREATED: {
+                links: [ "actor", "workspace" ]
+            },
+
+            PRIVATE_WORKSPACE_CREATED: {
+                links: [ "actor", "workspace" ]
+            },
+
             WORKFILE_CREATED: {
                 links: [ "actor", "workfile", "workspace" ]
             },

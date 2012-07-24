@@ -33,6 +33,16 @@ module Events
     has_activities :actor, :workfile, :workspace
   end
 
+  class PUBLIC_WORKSPACE_CREATED < Base
+    has_targets :workspace
+    has_activities :actor, :workspace, :global
+  end
+
+  class PRIVATE_WORKSPACE_CREATED < Base
+    has_targets :workspace
+    has_activities :actor, :workspace
+  end
+
   class SOURCE_TABLE_CREATED < Base
     has_targets :dataset, :workspace
     has_activities :actor, :dataset, :workspace, :global

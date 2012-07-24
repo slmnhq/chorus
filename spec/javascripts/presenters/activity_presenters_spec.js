@@ -240,6 +240,48 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("public workspace created", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.publicWorkspaceCreated();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            var workspace = model.workspace();
+
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.PUBLIC_WORKSPACE_CREATED.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            );
+        });
+    });
+
+    context("private workspace created", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.privateWorkspaceCreated();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            var workspace = model.workspace();
+
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.PUBLIC_WORKSPACE_CREATED.default", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            );
+        });
+    });
+
     context("workfile created", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.workfileCreated();

@@ -77,12 +77,26 @@ describe WorkspacesController do
 
   describe "#create" do
     context "with valid parameters" do
-      let(:parameters) { { :workspace => { :name => "foobar" } } }
+      let(:parameters) { { :workspace => { :name => "foobar"} } }
 
       it "creates a workspace" do
         lambda {
           post :create, parameters
         }.should change(Workspace, :count).by(1)
+      end
+
+      it "creates an event for public workspace" do
+        parameters = { :workspace => { :name => "foobar", :public => true } }
+        lambda {
+          post :create, parameters
+        }.should change(Events::PUBLIC_WORKSPACE_CREATED, :count).by(1)
+      end
+
+      it "creates an event for private workspace" do
+        parameters = { :workspace => { :name => "foobar", :public => false } }
+        lambda {
+          post :create, parameters
+        }.should change(Events::PRIVATE_WORKSPACE_CREATED, :count).by(1)
       end
 
       it "presents the workspace" do

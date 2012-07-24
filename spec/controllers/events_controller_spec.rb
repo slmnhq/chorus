@@ -114,6 +114,8 @@ describe EventsController do
         "greenplumInstanceChangedOwner" => Events::GREENPLUM_INSTANCE_CHANGED_OWNER,
         "greenplumInstanceChangedName" => Events::GREENPLUM_INSTANCE_CHANGED_NAME,
         "hadoopInstanceChangedName" => Events::HADOOP_INSTANCE_CHANGED_NAME,
+        "publicWorkspaceCreated" => Events::PUBLIC_WORKSPACE_CREATED,
+        "privateWorkspaceCreated" => Events::PRIVATE_WORKSPACE_CREATED,
         "workfileCreated" => Events::WORKFILE_CREATED,
         "sourceTableCreated" => Events::SOURCE_TABLE_CREATED,
         "userCreated" => Events::USER_ADDED,

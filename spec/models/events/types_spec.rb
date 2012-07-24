@@ -106,6 +106,48 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
+  describe "WORKSPACE_CREATED" do
+    context "public workspace" do
+      before do
+        workspace.public = true
+      end
+
+      subject do
+        Events::PUBLIC_WORKSPACE_CREATED.add(
+          :actor => actor,
+          :workspace => workspace
+        )
+      end
+
+      its(:workspace) { should == workspace }
+
+      its(:targets) { should == { :workspace => workspace } }
+
+      it_creates_activities_for { [actor, workspace] }
+      it_creates_a_global_activity
+    end
+
+    context "private workspace" do
+      before do
+        workspace.public = false
+      end
+
+      subject do
+        Events::PRIVATE_WORKSPACE_CREATED.add(
+          :actor => actor,
+          :workspace => workspace
+        )
+      end
+
+      its(:workspace) { should == workspace }
+
+      its(:targets) { should == { :workspace => workspace } }
+
+      it_creates_activities_for { [actor, workspace] }
+      it_does_not_create_a_global_activity
+    end
+  end
+
   describe "WORKFILE_CREATED" do
     subject do
       Events::WORKFILE_CREATED.add(
