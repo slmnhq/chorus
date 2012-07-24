@@ -1,3 +1,3 @@
-<% unless Rails.env.production? || (ENV['RAILS_GROUPS'] && ENV['RAILS_GROUPS'].match /assets/) %>
+<% unless Rails.env.production? || (ENV['RAILS_GROUPS'] && ENV['RAILS_GROUPS'].match(/assets/)) %>
   window.CHORUS_DEV_MODE = true;
 <% end %>
