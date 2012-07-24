@@ -6,8 +6,10 @@ module SoftDelete
   end
 
   def destroy
-    self.deleted_at = Time.now.utc
-    save
+    run_callbacks(:destroy) do
+      self.deleted_at = Time.now.utc
+      save
+    end
   end
 
   module ClassMethods

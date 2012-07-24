@@ -4,7 +4,7 @@ class NoteCommentMigrator
       Legacy.connection.add_column :edc_comment, :chorus_rails_event_id, :integer
     end
 
-    get_all_comments do |comment_id, comment_type, comment_body, comment_timestamp, updated_timestamp, legacy_user|
+    get_all_comments do |comment_id, comment_type, comment_body, comment_timestamp, updated_timestamp, is_deleted, legacy_user|
       actor = User.find_with_destroyed(legacy_user)
       case comment_type
         when 'instance'
@@ -35,6 +35,7 @@ class NoteCommentMigrator
 
       event.created_at = comment_timestamp
       event.updated_at = updated_timestamp
+      event.deleted_at = updated_timestamp if is_deleted == 't'
       event.save!
       update_event_id(comment_id, event.id)
     end
@@ -43,11 +44,11 @@ class NoteCommentMigrator
   private
 
   def get_all_comments
-    sql = "SELECT chorus_rails_user_id, ec.id, entity_type, body, ec.created_stamp, ec.last_updated_stamp FROM edc_comment ec, edc_user eu where user_name = author_name"
+    sql = "SELECT chorus_rails_user_id, ec.id, entity_type, body, ec.created_stamp, ec.last_updated_stamp, ec.is_deleted FROM edc_comment ec, edc_user eu where user_name = author_name"
 
     comment_table_data = Legacy.connection.exec_query(sql)
     comment_table_data.map do |comment_data|
-      yield comment_data["id"], comment_data["entity_type"], comment_data["body"], comment_data["created_stamp"], comment_data["last_updated_stamp"], comment_data["chorus_rails_user_id"]
+      yield comment_data["id"], comment_data["entity_type"], comment_data["body"], comment_data["created_stamp"], comment_data["last_updated_stamp"], comment_data["is_deleted"], comment_data["chorus_rails_user_id"]
     end
   end
 
