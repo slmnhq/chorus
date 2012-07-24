@@ -116,6 +116,8 @@ describe EventsController do
         "hadoopInstanceChangedName" => Events::HADOOP_INSTANCE_CHANGED_NAME,
         "publicWorkspaceCreated" => Events::PUBLIC_WORKSPACE_CREATED,
         "privateWorkspaceCreated" => Events::PRIVATE_WORKSPACE_CREATED,
+        "workspaceMakePublic" => Events::WORKSPACE_MAKE_PUBLIC,
+        "workspaceMakePrivate" => Events::WORKSPACE_MAKE_PRIVATE,
         "workfileCreated" => Events::WORKFILE_CREATED,
         "sourceTableCreated" => Events::SOURCE_TABLE_CREATED,
         "userCreated" => Events::USER_ADDED,

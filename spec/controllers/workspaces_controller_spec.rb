@@ -182,6 +182,21 @@ describe WorkspacesController do
         response.should be_success
       end
 
+      it "makes the right event when making the workspace public" do
+        parameters = { :id => workspace.id, :workspace => { :public => true } }
+        lambda {
+          put :update, parameters
+        }.should change(Events::WORKSPACE_MAKE_PUBLIC, :count).by(1)
+      end
+
+      it "makes the right event when making the workspace private" do
+        workspace = FactoryGirl.create :workspace, :owner => owner, :public => true
+        parameters = { :id => workspace.id, :workspace => { :public => false } }
+        lambda {
+          put :update, parameters
+        }.should change(Events::WORKSPACE_MAKE_PRIVATE, :count).by(1)
+      end
+
       it "sets has_changed_settings on the workspace to true" do
         member = FactoryGirl.create(:user)
         member.workspaces << workspace

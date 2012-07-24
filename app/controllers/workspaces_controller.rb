@@ -35,6 +35,10 @@ class WorkspacesController < ApplicationController
     if workspace.public.to_s != w[:public]
       authorize! :administrative_edit, workspace
       workspace.public = w[:public]
+
+    workspace.public ?
+      Events::WORKSPACE_MAKE_PUBLIC.by(current_user).add(:workspace => workspace) :
+      Events::WORKSPACE_MAKE_PRIVATE.by(current_user).add(:workspace => workspace)
     end
 
     if w.has_key?(:archived) && (!!workspace.archived_at).to_s != w[:archived]
