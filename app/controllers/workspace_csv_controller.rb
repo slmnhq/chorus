@@ -12,7 +12,7 @@ class WorkspaceCsvController < ApplicationController
     csv_file = CsvFile.find(params[:id])
     authorize! :import, csv_file
     csv_file.update_attributes(params[:csvimport])
-    CsvImporter.import_file(csv_file.id)
+    QC.enqueue("CsvImporter.import_file", csv_file.id)
     present csv_file
   end
 end

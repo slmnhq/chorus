@@ -5,7 +5,7 @@ gem 'rails', '3.2.5'
 gem 'will_paginate'
 gem 'net-ldap',      :require => false
 gem 'paperclip'
-gem 'queue_classic', :git => "git://github.com/pivotal-leopold/queue_classic.git", :require => false
+gem 'queue_classic', :git => "git://github.com/pivotal-leopold/queue_classic.git"
 gem 'clockwork',     :require => false
 gem 'allowy'
 gem 'sunspot_rails', '2.0.0.pre.120417'

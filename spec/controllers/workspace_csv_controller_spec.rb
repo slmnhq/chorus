@@ -52,7 +52,7 @@ describe WorkspaceCsvController do
     before do
       post :create, csv_file_params
       @csv_file = CsvFile.last
-      mock(CsvImporter).import_file.with(@csv_file.id)
+      mock(QC).enqueue.with("CsvImporter.import_file", @csv_file.id)
     end
 
     let(:csv_import_params) do
