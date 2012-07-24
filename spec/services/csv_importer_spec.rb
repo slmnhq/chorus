@@ -9,6 +9,7 @@ describe CsvImporter, :database_integration => true do
   let(:schema) { GpdbSchema.find_by_name('test_schema') }
   let(:user) { account.owner }
   let(:account) { real_gpdb_account }
+  let(:workspace) { Workspace.create({:sandbox => schema, :owner => user, :name => "TestCsvWorkspace"}, :without_protection => true) }
 
   it "imports a basic csv file as a new table" do
     f = Tempfile.new("test_csv")
@@ -21,10 +22,10 @@ describe CsvImporter, :database_integration => true do
                               :header => true,
                               :to_table => "new_table_from_csv")
     csv_file.user = user
+    csv_file.workspace = workspace
     csv_file.save!
 
-    c = CsvImporter.new(csv_file)
-    c.import_using(schema)
+    CsvImporter.import_file(csv_file.id)
 
     schema.with_gpdb_connection(account) do |connection|
       result = connection.exec_query("select * from new_table_from_csv order by ID asc;")
@@ -46,10 +47,10 @@ describe CsvImporter, :database_integration => true do
                               :header => false,
                               :to_table => "another_new_table_from_csv")
     csv_file.user = user
+    csv_file.workspace = workspace
     csv_file.save!
 
-    c = CsvImporter.new(csv_file)
-    c.import_using(schema)
+    CsvImporter.import_file(csv_file.id)
 
 
     schema.with_gpdb_connection(account) do |connection|

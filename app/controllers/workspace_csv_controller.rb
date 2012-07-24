@@ -10,10 +10,9 @@ class WorkspaceCsvController < ApplicationController
 
   def import
     csv_file = CsvFile.find(params[:id])
-    workspace = Workspace.find(params[:workspace_id])
     authorize! :import, csv_file
     csv_file.update_attributes(params[:csvimport])
-    CsvImporter.new(csv_file).import_using(workspace.sandbox)
+    CsvImporter.import_file(csv_file.id)
     present csv_file
   end
 end

@@ -22,9 +22,11 @@ describe WorkspaceCsvController do
 
   describe "#create" do
 
-    it "saves the user onto the csv file" do
+    it "saves the user and workspace onto the csv file" do
       post :create, csv_file_params
-      CsvFile.last.user.should == user
+      csv_file = CsvFile.last
+      csv_file.user.should == user
+      csv_file.workspace.should == workspace
     end
 
     it "returns 100 rows" do
@@ -50,9 +52,7 @@ describe WorkspaceCsvController do
     before do
       post :create, csv_file_params
       @csv_file = CsvFile.last
-      any_instance_of(CsvImporter) do |csv_importer|
-        mock(csv_importer).import_using(workspace.sandbox)
-      end
+      mock(CsvImporter).import_file.with(@csv_file.id)
     end
 
     let(:csv_import_params) do
@@ -65,7 +65,7 @@ describe WorkspaceCsvController do
       }
     end
 
-    it "updates the user defined options on the csv file model" do
+    it "updates the necessary import fields on the csv file model" do
       put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
       @csv_file.reload
       @csv_file.delimiter.should == ','
@@ -73,6 +73,7 @@ describe WorkspaceCsvController do
       @csv_file.types.should == ['integer', 'varchar']
       @csv_file.to_table.should == "table_importing_into"
       @csv_file.header.should == false
+      @csv_file.workspace.should == workspace
     end
 
     it "uses authentication" do
