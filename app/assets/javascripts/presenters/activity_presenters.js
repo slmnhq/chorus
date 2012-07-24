@@ -94,6 +94,12 @@
             NOTE: {
                 links: [ "actor", "noteObject", "workspace" ],
                 computed: [ "noteObjectType" ]
+            },
+
+            IMPORT_SUCCESS: {
+                links: ["workspace", "dataset"],
+                attrs: ["importType"],
+                computed: ["importSourceLink", "datasetType"]
             }
         },
 
@@ -161,6 +167,10 @@
                 default:
                     return "";
             }
+        },
+
+        importSourceLink: function(self) {
+            return self.model.get("fileName");
         },
 
         modelLink: function(model) {

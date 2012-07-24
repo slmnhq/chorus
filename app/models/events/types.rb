@@ -62,4 +62,10 @@ module Events
     has_targets :dataset, :hdfs_file, :workspace
     has_activities :actor, :workspace, :dataset, :hdfs_file, :global
   end
+
+  class IMPORT_SUCCESS < Base
+    has_targets :workspace, :dataset
+    has_activities :actor, :workspace, :dataset
+    has_additional_data :file_name, :import_type
+  end
 end

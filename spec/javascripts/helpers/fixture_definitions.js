@@ -119,6 +119,7 @@ window.rspecFixtureDefinitions = {
             noteOnGreenplumInstanceCreated: {},
             noteOnHadoopInstanceCreated: {},
             hdfsExternalTableCreated: {},
+            importSuccess: {},
             noteOnHdfsFileCreated: {},
             noteOnWorkspaceCreated: {},
             noteOnDatasetCreated: {},
