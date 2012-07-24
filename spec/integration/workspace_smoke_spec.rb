@@ -7,9 +7,7 @@ describe "Create workspaces" do
 
   it "creates a private workspace" do
     go_to_workspace_page
-    click_button "Create Workspace"
-    fill_in 'name', :with => "Private Workspace"
-    uncheck ("Make this workspace publicly available")
+    create_valid_workspace(:name => "Private Workspace", :shared => false)
     create_valid_user(:username => "private")
     login('private','secret')
     go_to_workspace_page
@@ -21,7 +19,7 @@ describe "Create workspaces" do
   end
 end
 
-describe "deleting a workspace" do
+describe "Delete a workspace" do
   before(:each) do
     login('edcadmin', 'secret')
   end

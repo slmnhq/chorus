@@ -1,13 +1,13 @@
-test: value_of_test
-
 admin:
   login: edcadmin
   password: secret
 
 login_route: '/#/login'
 new_user_route: '/#/users/new'
+homepage: '#/'
 
 user:
+  route: '#/users'
   first_name: Joe
   last_name: Blow
   email: '@blow.com'
@@ -15,7 +15,7 @@ user:
 
 user_menu:
   menu: '.header .username a'
-  profile: 
+  profile:
   signout: '.menu.popup_username a[href="#/logout"]'
 
 instance:
@@ -23,10 +23,14 @@ instance:
   new_btn: 'button[data-dialog=InstancesNew]'
   list: '.instance_list'
 
-gpdb_instance:
-  route: '#/instances'
+workspace:
+  route: '#/workspaces'
+  new: 'Create Workspace'
 
+gpdb_instance:
   gpdb_host: chorus-gpdb40.sf.pivotallabs.com
   gpdb_port: 5432
   gpdb_user: gpadmin
   gpdb_pass: secret
+
+hadoop_instance:

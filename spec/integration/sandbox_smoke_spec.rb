@@ -5,9 +5,9 @@ describe "Create Sandbox" do
     login('edcadmin', 'secret')
   end
 
-  it "creates sandbox in private workspace" do
+  xit "creates sandbox in private workspace" do
     go_to_workspace_page
-    click_button "Create Workspace"
+    create_valid_workspace(:name => "Private Workspace", :shared => false)
     fill_in 'name', :with => "Private Workspace"
     uncheck ("Make this workspace publicly available")
     create_valid_user(:username => "private")
@@ -16,7 +16,7 @@ describe "Create Sandbox" do
     page.should_not have_content ("Private Workspace")
   end
 
-  it "creates sandbox in public workspace" do
+  xit "creates sandbox in public workspace" do
     create_valid_workspace
   end
 end

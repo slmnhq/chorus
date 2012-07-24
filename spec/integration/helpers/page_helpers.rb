@@ -1,23 +1,23 @@
 def go_to_workspace_page
-  visit("#/workspaces")
+  visit(WEBPATH['workspace']['route'])
 end
 
 def go_to_instance_page
-  visit("#/instances")
+  visit(WEBPATH['instance']['route'])
 end
 
 def go_to_user_list_page
-  visit("#/users")
+  visit(WEBPATH['user']['route'])
 end
 
 def create_new_user_page
-  visit("/#/users/new")
+  visit(WEBPATH['new_user_route'])
 end
 
 def go_to_home_page
-  visit("#/")
+  visit(WEBPATH['homepage'])
 end
 
 def go_to_login_page
-  visit("#/login")
+  visit(WEBPATH['login_route'])
 end
