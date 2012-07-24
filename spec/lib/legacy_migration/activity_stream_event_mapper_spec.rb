@@ -7,8 +7,8 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
     let(:hadoop_instance) { FactoryGirl.create(:hadoop_instance) }
     let(:activity_stream) do
       Object.new.tap do |activity|
-        mock(activity).type { 'INSTANCE_CREATED' }
-        mock(activity).instance_hadoop? { true }
+        mock(activity).type.times(any_times) { 'INSTANCE_CREATED' }
+        mock(activity).instance_hadoop?.times(any_times) { true }
       end
     end
 
@@ -39,8 +39,8 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
     let(:greenplum_instance) { FactoryGirl.create(:instance) }
     let(:activity_stream) do
       Object.new.tap do |activity|
-        mock(activity).type { 'INSTANCE_CREATED' }
-        mock(activity).instance_hadoop? { false }
+        mock(activity).type.times(any_times) { 'INSTANCE_CREATED' }
+        mock(activity).instance_hadoop?.times(any_times) { false }
       end
     end
 
@@ -71,7 +71,7 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
     let(:workfile) { FactoryGirl.create(:workfile) }
     let(:activity_stream) do
       Object.new.tap do |activity|
-        mock(activity).type.twice { 'WORKFILE_CREATED' }
+        mock(activity).type.times(any_times) { 'WORKFILE_CREATED' }
       end
     end
 
@@ -98,11 +98,49 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
     end
   end
 
+  describe "public workspace created event" do
+    let!(:workspace) { FactoryGirl.create(:workspace, :public => true) }
+    let(:activity_stream) do
+      Object.new.tap do |activity|
+        mock(activity).type.times(any_times) { 'WORKSPACE_CREATED' }
+        mock(activity).chorus_rails_workspace_id.times(any_times) { workspace.id }
+      end
+    end
+
+    it "#build_event" do
+      event = mapper.build_event
+      event.should be_a_kind_of(Events::PUBLIC_WORKSPACE_CREATED)
+    end
+
+    it "#can_build?" do
+      mapper.can_build?.should be_true
+    end
+  end
+
+  describe "private workspace created event" do
+    let!(:workspace) { FactoryGirl.create(:workspace, :public => false) }
+    let(:activity_stream) do
+      Object.new.tap do |activity|
+        mock(activity).type.times(any_times) { 'WORKSPACE_CREATED' }
+        mock(activity).chorus_rails_workspace_id { workspace.id }
+      end
+    end
+
+    it "#build_event" do
+      event = mapper.build_event
+      event.should be_a_kind_of(Events::PRIVATE_WORKSPACE_CREATED)
+    end
+
+    it "#can_build?" do
+      mapper.can_build?.should be_true
+    end
+  end
+
   describe "user added event" do
     let(:user) { FactoryGirl.create(:user) }
     let(:activity_stream) do
       Object.new.tap do |activity|
-        mock(activity).type.twice { 'USER_ADDED' }
+        mock(activity).type.times(any_times) { 'USER_ADDED' }
       end
     end
 
@@ -134,7 +172,7 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
     let(:workspace) { FactoryGirl.create(:workspace) }
     let(:activity_stream) do
       Object.new.tap do |activity|
-        mock(activity).type.twice { 'SOURCE_TABLE_CREATED' }
+        mock(activity).type.times(any_times) { 'SOURCE_TABLE_CREATED' }
       end
     end
 
@@ -164,7 +202,7 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
   describe "instance change owner event" do
     let(:activity_stream) do
       Object.new.tap do |activity|
-        mock(activity).type.twice { 'INSTANCE_CHANGED_OWNER' }
+        mock(activity).type.times(any_times) { 'INSTANCE_CHANGED_OWNER' }
       end
     end
 
@@ -184,7 +222,7 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
   describe "instance change name event" do
     let(:activity_stream) do
       Object.new.tap do |activity|
-        mock(activity).type.twice { 'INSTANCE_CHANGED_NAME' }
+        mock(activity).type.times(any_times) { 'INSTANCE_CHANGED_NAME' }
       end
     end
 
