@@ -71,9 +71,9 @@ describe("chorus.views.Activity", function() {
             });
         });
 
-        xcontext("when the activity is something else", function() {
+        context("when the activity is something else", function() {
             beforeEach(function() {
-                this.model = fixtures.activities.IMPORT_FAILED_FILE();
+                this.model = rspecFixtures.activity.importSuccess();
                 this.model.loaded = true;
                 this.view = new chorus.views.Activity({ model: this.model });
                 this.view.render();
@@ -285,18 +285,6 @@ describe("chorus.views.Activity", function() {
 
             itDoesNotDisplayDeleteLink();
             itDoesNotDisplayEditLink();
-        });
-
-        xcontext("when the presentation contains a detailsLink", function() {
-            beforeEach(function() {
-                this.view.model = fixtures.activities.IMPORT_FAILED_SOURCE_TABLE();
-                this.presenter = new chorus.presenters.Activity(this.view.model)
-                this.view.render();
-            });
-
-            it("links to the details", function() {
-                expect(this.view.$(".actions .details a")).toExist();
-            });
         });
     });
 
