@@ -263,11 +263,15 @@ describe("chorus.models.Activity", function() {
         });
 
         describe("when the note is saved", function() {
-            beforeEach(function() {
-                this.model.toNote().trigger("saved");
-            });
-
             it("re-fetches the activity's collection", function() {
+                this.model.toNote().trigger("saved");
+                expect(this.model.collection).toHaveBeenFetched();
+            });
+        });
+
+        describe("when the note is destroyed", function() {
+            it("re-fetches the activity's collection", function() {
+                this.model.toNote().trigger("destroy");
                 expect(this.model.collection).toHaveBeenFetched();
             });
         });

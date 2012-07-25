@@ -27,11 +27,6 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
         }
     },
 
-    modelDeleted: function() {
-        this._super("modelDeleted")
-        this.options.pageModel.trigger("invalidated")
-    },
-
     setComment: function() {
         this.text = t("comments.delete.alert.text")
         this.title = t("comments.delete.alert.title")

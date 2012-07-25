@@ -26,6 +26,10 @@
             return this.model.isOwner();
         },
 
+        isNote: function() {
+            return this.model.get("action") == "NOTE";
+        },
+
         canDelete: function() {
             return this.model.isOwner() || chorus.session.user().isAdmin();
         },

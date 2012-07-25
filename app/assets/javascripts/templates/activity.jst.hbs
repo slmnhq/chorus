@@ -37,11 +37,13 @@
             {{#if isNotification}}
                 <a class="delete_link alert" data-alert="NotificationDeleteAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
             {{else}}
-                {{#if canEdit}}
-                    <a class="edit_link dialog" data-dialog="EditNote" href="#">{{t "actions.edit"}}</a>
-                {{/if}}
-                {{#if canDelete}}
-                    <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
+                {{#if isNote}}
+                    {{#if canEdit}}
+                        <a class="edit_link dialog" data-dialog="EditNote" href="#">{{t "actions.edit"}}</a>
+                    {{/if}}
+                    {{#if canDelete}}
+                        <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" href="#">{{t "actions.delete"}} <img src="images/trashcan.png"/></a>
+                    {{/if}}
                 {{/if}}
             {{/if}}
         </div>

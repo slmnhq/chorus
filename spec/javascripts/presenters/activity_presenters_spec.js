@@ -116,6 +116,30 @@ describe("chorus.presenters.Activity", function() {
                 });
             });
         });
+
+        describe("#isNote", function() {
+            context ("when it is a note" , function() {
+                beforeEach(function() {
+                    model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
+                    presenter = new chorus.presenters.Activity(model);
+                });
+                it("returns true", function() {
+                    setLoggedInUser({ id: model.actor().id });
+                    expect(presenter.isNote()).toBeTruthy();
+                });
+            });
+
+            context ("when it is a not a note" , function() {
+                beforeEach(function() {
+                    model = rspecFixtures.activity.greenplumInstanceCreated();
+                    presenter = new chorus.presenters.Activity(model);
+                });
+                it("returns false", function() {
+                    setLoggedInUser({ id: model.actor().id });
+                    expect(presenter.isNote()).toBeFalsy();
+                });
+            });
+        })
     });
 
     context("greenplum instance created", function() {

@@ -16,13 +16,8 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
 
         describe("when the delete succeeds", function() {
             beforeEach(function() {
-                spyOnEvent(this.pageModel, "invalidated");
                 spyOn(chorus, "toast")
                 this.server.lastDestroy().succeed();
-            });
-
-            it("triggers invalidated on the pageModel", function() {
-                expect("invalidated").toHaveBeenTriggeredOn(this.pageModel);
             });
 
             it("shows a toast message", function() {
@@ -95,16 +90,5 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
         it("sets the alert title correctly", function() {
             expect(this.alert.title).toMatchTranslation("comments.delete.alert.title");
         });
-
-        describe("when the delete succeeds", function() {
-            beforeEach(function() {
-                spyOnEvent(this.pageModel, "invalidated");
-                this.server.lastDestroy().succeed();
-            });
-
-            it("triggers invalidated on the pageModel", function() {
-                expect("invalidated").toHaveBeenTriggeredOn(this.pageModel);
-            });
-        });
-    })
+    });
 });
