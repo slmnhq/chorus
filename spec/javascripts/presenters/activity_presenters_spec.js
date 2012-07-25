@@ -464,6 +464,29 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("import failed", function() {
+        var dataset;
+
+        beforeEach(function() {
+            model = rspecFixtures.activity.importFailed();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+        });
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.IMPORT_FAILED.default", {
+                    importType: model.get("importType"),
+                    importSourceLink: model.get("fileName"),
+                    datasetType: t("dataset.types.table"),
+                    datasetLink: model.get('destinationTable'),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            )
+        });
+    });
+
     context("note on a hdfs file", function() {
         var dataset, hdfsFile;
 

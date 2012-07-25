@@ -4,7 +4,7 @@ chorus.alerts.ImportFailed = chorus.alerts.Error.extend({
     title: t("import.failed.alert.title"),
 
     makeModel: function() {
-        this.model = new chorus.models.TaskReport({ id: this.options.taskId });
+        this.model = new chorus.models.Activity({ id: this.options.activityId });
     },
 
     setup: function() {
@@ -14,7 +14,7 @@ chorus.alerts.ImportFailed = chorus.alerts.Error.extend({
 
     additionalContext: function() {
         return _.extend(this._super("additionalContext"), {
-            body: this.model.get("result")
+            body: this.model.get("errorMessage")
         });
     }
 });

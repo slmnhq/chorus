@@ -130,7 +130,8 @@ describe EventsController do
         "noteOnWorkfileCreated" => Events::NOTE_ON_WORKFILE,
         "noteOnDatasetCreated" => Events::NOTE_ON_DATASET,
         "noteOnWorkspaceDatasetCreated" => Events::NOTE_ON_WORKSPACE_DATASET,
-        "importSuccess" => Events::IMPORT_SUCCESS
+        "importSuccess" => Events::IMPORT_SUCCESS,
+        "importFailed" => Events::IMPORT_FAILED
     }
 
     FIXTURE_FILES.each do |filename, event_class_name|

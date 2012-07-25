@@ -11,7 +11,8 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     subviews:{
         ".comment_list":"commentList",
-        ".activity_content > .truncated_text": "htmlContent"
+        ".activity_content > .truncated_text": "htmlContent",
+        ".activity_content > .actions": "failureContent"
     },
 
     context: function () {
@@ -23,6 +24,9 @@ chorus.views.Activity = chorus.views.Base.extend({
         if (this.model.isUserGenerated()) {
             this.model.loaded = true;
             this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: "body", attributeIsHtmlSafe: true});
+        }
+        if (this.model.isFailure()) {
+            this.failureContent = new chorus.views.ErrorDetails({model: this.model});
         }
     },
 

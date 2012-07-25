@@ -1,6 +1,6 @@
 describe("chorus.alerts.ImportFailed", function() {
     beforeEach(function() {
-        this.alert = new chorus.alerts.ImportFailed({ taskId: 123 });
+        this.alert = new chorus.alerts.ImportFailed({ activityId: 123 });
     });
 
     describe("initialization", function() {
@@ -9,26 +9,25 @@ describe("chorus.alerts.ImportFailed", function() {
         });
 
         it("fetches the task with the given id", function() {
-            var task = new chorus.models.TaskReport({id: "123"});
+            var task = new chorus.models.Activity({id: "123"});
             expect(task).toHaveBeenFetched();
         });
 
         it("declares the task as a required resource", function() {
             expect(this.alert.requiredResources.length).toBe(1);
-            expect(this.alert.requiredResources.at(0)).toBeA(chorus.models.TaskReport);
+            expect(this.alert.requiredResources.at(0)).toBeA(chorus.models.Activity);
             expect(this.alert.requiredResources.at(0).id).toBe(123);
         });
 
         describe("when the task is fetched", function() {
             beforeEach(function() {
-                this.server.lastFetch().succeed(new chorus.models.TaskReport({
-                    result: "this failed",
-                    state: "failed"
+                this.server.lastFetch().succeed(new chorus.models.Activity({
+                    errorMessage: "some error message"
                 }));
             });
 
             it("renders the error details", function() {
-                expect(this.alert.$(".body p")).toHaveText("this failed");
+                expect(this.alert.$(".body p")).toHaveText("some error message");
             });
         });
     });

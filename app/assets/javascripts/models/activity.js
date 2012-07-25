@@ -14,6 +14,7 @@
 
     chorus.models.Activity = chorus.models.Base.extend({
         constructorName: "Activity",
+        urlTemplate: "activities/{{id}}",
 
         author: function() {
             if (!this._author && this.has("author")) {
@@ -206,6 +207,10 @@
 
         isOwner: function() {
             return (this.actor().id === chorus.session.user().id);
+        },
+
+        isFailure: function() {
+            return this.get("action") === "IMPORT_FAILED";
         }
     });
 

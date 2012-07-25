@@ -38,6 +38,22 @@ describe("chorus.views.Activity", function() {
             });
         });
 
+        context("when the activity is a failure", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.activity.importFailed();
+                this.view = new chorus.views.Activity({ model: this.model });
+                this.view.render();
+            });
+
+            it("displays a link to the error message", function() {
+                console.log(this.view);
+                expect(this.view.$(".activity_content .actions")).toExist();
+                expect(this.view.$(".activity_content .actions .details")).toExist();
+                expect(this.view.$(".activity_content .actions .details")).toContainText(t("activity.view_error_details"));
+                expect(this.view.failureContent).toBeA(chorus.views.ErrorDetails);
+            });
+        });
+
         xcontext("when the activity is an insight", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.INSIGHT_CREATED();

@@ -112,6 +112,12 @@
                 links: ["workspace", "dataset"],
                 attrs: ["importType"],
                 computed: ["importSourceLink", "datasetType"]
+            },
+
+            IMPORT_FAILED: {
+                links: ["workspace"],
+                attrs: ["importType", "destinationTable"],
+                computed: ["importSourceLink", "datasetType", "datasetLink"]
             }
         },
 
@@ -183,6 +189,10 @@
 
         importSourceLink: function(self) {
             return self.model.get("fileName");
+        },
+
+        datasetLink: function(self) {
+            return self.model.get("destinationTable");
         },
 
         modelLink: function(model) {

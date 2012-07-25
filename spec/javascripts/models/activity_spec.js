@@ -225,6 +225,17 @@ describe("chorus.models.Activity", function() {
         });
     });
 
+    describe("#isFailure", function() {
+        it("returns true for IMPORT_FAILED", function() {
+            expect(rspecFixtures.activity.importFailed().isFailure()).toBeTruthy();
+        });
+
+        it("returns false for other activities", function() {
+            expect(rspecFixtures.activity.userCreated().isFailure()).toBeFalsy();
+        });
+
+    });
+
     describe("#isOwner", function() {
 
         it("returns true for notes is current user is the owner of note", function() {
