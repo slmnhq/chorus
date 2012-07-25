@@ -121,84 +121,83 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         this._super("modalClosed");
     },
 
-    postRender: function() {
-        var self = this;
+    uploadFailed: function(e, response) {
+        e && e.preventDefault();
+        this.model.serverErrors = JSON.parse(response.jqXHR.responseText).errors;
+        this.model.trigger("saveFailed");
+    },
 
+    uploadFinished: function(e, data) {
+        e && e.preventDefault();
+        this.$("button.submit").stopLoading();
+    },
+
+    uploadSuccess: function(e, data) {
+        e && e.preventDefault();
+
+        if (this.importTarget === "workfile") {
+            var workfile = new chorus.models.Workfile();
+            workfile.set(workfile.parse(data.result), {silent: true});
+
+            chorus.toast("dataset.import.workfile_success", {fileName: workfile.get("fileName")});
+            chorus.router.navigate(workfile.hasOwnPage() ? workfile.showUrl() : workfile.workfilesUrl());
+        } else {
+            var workingCsv = this.model.clone();
+            workingCsv.set(workingCsv.parse(data.result), {silent: true});
+
+            this.csvOptions.contents = workingCsv.get('contents');
+
+            var csvParser = new chorus.utilities.CsvParser(workingCsv.get('contents'), this.csvOptions);
+            if ((csvParser.getColumnOrientedData().length === 0) && !csvParser.serverErrors) {
+                var alert = new chorus.alerts.EmptyCSV();
+                alert.launchModal();
+            } else {
+                var dialog;
+                if (this.importTarget === "existing") {
+                    dialog = new chorus.dialogs.ExistingTableImportCSV({csv: workingCsv, datasetId: this.selectedDataset.get("id")});
+                } else {
+                    dialog = new chorus.dialogs.NewTableImportCSV({model: workingCsv, csvOptions: this.csvOptions});
+                }
+                chorus.PageEvents.subscribe("csv_import:started", this.closeModal, this);
+                dialog.launchModal();
+            }
+        }
+    },
+    
+    fileChosen: function(e, data) {
+        this.$("button.submit").prop("disabled", false);
+        this.$('.empty_selection').addClass('hidden');
+        
+        this.uploadObj = data;
+        var filename = data.files[0].name;
+        var filenameComponents = filename.split('.');
+        var basename = _.first(filenameComponents);
+        var extension = _.last(filenameComponents);
+        this.$(".file_name").text(filename);
+        this.$(".new_table input[type='text']").val(basename.toLowerCase().replace(/ /g, '_'));
+        
+        this.$("img").removeClass("hidden");
+        this.$("img").attr("src", chorus.urlHelpers.fileIconUrl(extension, "medium"));
+        
+        this.$(".import_controls").removeClass("hidden");
+        
+        this.$(".file-wrapper a").removeClass("hidden");
+        this.$(".file-wrapper button").addClass("hidden");
+        
+        this.$("input[type=file]").prop("title", t("dataset.import.change_file"));
+    },
+    
+    postRender: function() {
         this.importTarget = "new";
 
         this.$("input[type=file]").fileupload({
-            change: fileChosen,
-            add: fileChosen,
-            done: uploadFinished,
+            change: _.bind(this.fileChosen, this),
+            add: _.bind(this.fileChosen, this),
+            done: _.bind(this.uploadSuccess, this),
+            fail: _.bind(this.uploadFailed, this),
+            always: _.bind(this.uploadFinished, this),
             dataType: "json"
         });
 
-        function fileChosen(e, data) {
-            self.$("button.submit").prop("disabled", false);
-            self.$('.empty_selection').addClass('hidden');
-
-            self.uploadObj = data;
-            var filename = data.files[0].name;
-            var filenameComponents = filename.split('.');
-            var basename = _.first(filenameComponents);
-            var extension = _.last(filenameComponents);
-            self.$(".file_name").text(filename);
-            self.$(".new_table input[type='text']").val(basename.toLowerCase().replace(/ /g, '_'));
-
-            self.$("img").removeClass("hidden");
-            self.$("img").attr("src", chorus.urlHelpers.fileIconUrl(extension, "medium"));
-
-            self.$(".import_controls").removeClass("hidden");
-
-            self.$(".file-wrapper a").removeClass("hidden");
-            self.$(".file-wrapper button").addClass("hidden");
-
-            self.$("input[type=file]").prop("title", t("dataset.import.change_file"));
-        }
-
-        function uploadFinished(e, data) {
-            e && e.preventDefault();
-            self.$("button.submit").stopLoading();
-
-            if (self.importTarget === "workfile") {
-                var workfile = new chorus.models.Workfile();
-                workfile.set(workfile.parse(data.result), {silent: true});
-                workfile.parseErrors(data.result);
-
-                if (workfile.serverErrors) {
-                    self.showErrors(workfile);
-                } else {
-                    chorus.toast("dataset.import.workfile_success", {fileName: workfile.get("fileName")});
-                    chorus.router.navigate(workfile.hasOwnPage() ? workfile.showUrl() : workfile.workfilesUrl());
-                }
-            } else {
-                var workingCsv = self.model.clone();
-                workingCsv.set(workingCsv.parse(data.result), {silent: true});
-                workingCsv.parseErrors(data.result);
-
-                self.csvOptions.contents = workingCsv.get('contents');
-
-                if (workingCsv.serverErrors) {
-                    self.csv.serverErrors = workingCsv.serverErrors;
-                    self.csv.trigger("saveFailed");
-                    fileChosen(e, data);
-                } else {
-                    var csvParser = new chorus.utilities.CsvParser(workingCsv.get('contents'), self.csvOptions);
-                    if ((csvParser.getColumnOrientedData().length === 0) && !csvParser.serverErrors) {
-                        var alert = new chorus.alerts.EmptyCSV();
-                        alert.launchModal();
-                    } else {
-                        var dialog;
-                        if (self.importTarget === "existing") {
-                            dialog = new chorus.dialogs.ExistingTableImportCSV({csv: workingCsv, datasetId: self.selectedDataset.get("id")});
-                        } else {
-                            dialog = new chorus.dialogs.NewTableImportCSV({model: workingCsv, csvOptions: self.csvOptions});
-                        }
-                        chorus.PageEvents.subscribe("csv_import:started", self.closeModal, self);
-                        dialog.launchModal();
-                    }
-                }
-            }
-        }
     }
 });

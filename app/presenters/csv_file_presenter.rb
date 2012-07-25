@@ -5,5 +5,8 @@ class CsvFilePresenter < Presenter
         :id => id,
         :contents => File.readlines(contents.path).map{ |line| line.gsub(/\n$/, '') }[0..99]
     }
+  rescue
+    model.errors.add(:contents, :FILE_INVALID)
+    raise ActiveRecord::RecordInvalid.new(model)
   end
 end

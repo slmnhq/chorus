@@ -305,13 +305,12 @@ describe("chorus.dialogs.DatasetImport", function() {
                             spyOn(chorus.router, "navigate");
                             spyOn(chorus, "toast");
                             this.workfile = rspecFixtures.workfile.text({id: "23", fileName: "myFile"});
-                            this.data = {
-                                result: {
-                                    response: [],
-                                    errors: { fields: { a: { BLANK: {} } } }
+                            var errorResponse = {
+                                jqXHR: {
+                                    responseText: '{"errors":{"fields":{"a":{"BLANK":{}}}}}'
                                 }
                             };
-                            this.fileUploadOptions.done(null, this.data);
+                            this.fileUploadOptions.fail(null, errorResponse);
                         });
 
                         it("does not present a toast message", function() {
@@ -357,6 +356,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                                 }
                             };
                             this.fileUploadOptions.done(null, this.data);
+                            this.fileUploadOptions.always();
                         });
 
                         it("stops the spinner", function() {
@@ -398,6 +398,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                                 }
                             };
                             this.fileUploadOptions.done(null, this.data);
+                            this.fileUploadOptions.always();
                         });
 
                         it("stops the spinner", function() {
@@ -453,16 +454,12 @@ describe("chorus.dialogs.DatasetImport", function() {
 
                 context("when the upload fails", function() {
                     beforeEach(function() {
-                        this.data = {
-                            result: {
-                                resource: [],
-                                errors: { fields: { a: { BLANK: {} } } }
-                            },
-                            files: [
-                                {name: "myfile"}
-                            ]
+                        var errorResponse = {
+                            jqXHR: {
+                                responseText: '{"errors":{"fields":{"a":{"BLANK":{}}}}}'
+                            }
                         };
-                        this.fileUploadOptions.done(null, this.data);
+                        this.fileUploadOptions.fail(null, errorResponse);
                     });
 
                     it("does not launch the new table configuration dialog", function() {
