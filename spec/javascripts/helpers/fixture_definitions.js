@@ -112,6 +112,8 @@ window.rspecFixtureDefinitions = {
             hadoopInstanceChangedName: {},
             publicWorkspaceCreated: {},
             privateWorkspaceCreated: {},
+            workspaceMakePublic: {},
+            workspaceMakePrivate: {},
             workfileCreated: {},
             sourceTableCreated: {},
             userCreated: {},

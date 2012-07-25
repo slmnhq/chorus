@@ -35,6 +35,10 @@ class WorkspacesController < ApplicationController
     if workspace.public.to_s != w[:public]
       authorize! :administrative_edit, workspace
       workspace.public = w[:public]
+
+    workspace.public ?
+      Events::WORKSPACE_MAKE_PUBLIC.by(current_user).add(:workspace => workspace) :
+      Events::WORKSPACE_MAKE_PRIVATE.by(current_user).add(:workspace => workspace)
     end
 
     if w.has_key?(:archived) && (!!workspace.archived_at).to_s != w[:archived]
@@ -47,6 +51,7 @@ class WorkspacesController < ApplicationController
       sandbox_schema =  GpdbSchema.find(w[:sandbox_id])
       authorize! :show_contents, sandbox_schema.instance
       workspace.sandbox = sandbox_schema
+      delete_source_dataset(sandbox_schema, workspace)
       create_event_for_sandbox(sandbox_schema, workspace)
 
       workspace.has_added_sandbox = true
@@ -75,5 +80,16 @@ class WorkspacesController < ApplicationController
       :sandbox_schema => sandbox_schema,
       :workspace => workspace
     )
+  end
+
+  def delete_source_dataset(sandbox_schema, workspace)
+    workspace_datasets = workspace.bound_datasets
+    sandbox_datasets = sandbox_schema.datasets
+    sandbox_datasets.each { |sandbox_dataset|
+      if workspace_datasets.include?(sandbox_dataset)
+        dataset = AssociatedDataset.find_by_dataset_id_and_workspace_id(sandbox_dataset.id, workspace.id)
+        dataset.destroy
+      end
+    }
   end
 end

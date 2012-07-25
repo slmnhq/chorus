@@ -21,6 +21,8 @@ class ActivityStreamEventMapper
   def event_class
     if @activity_stream.type == 'INSTANCE_CREATED'
       instance_event_class
+    elsif @activity_stream.type == 'WORKSPACE_CREATED'
+      workspace_create_event_class
     else
       "Events::#{@activity_stream.type}".constantize
     end
@@ -33,6 +35,14 @@ class ActivityStreamEventMapper
       Events::HADOOP_INSTANCE_CREATED
     else
       Events::GREENPLUM_INSTANCE_CREATED
+    end
+  end
+
+  def workspace_create_event_class
+    if Workspace.find_by_id(@activity_stream.chorus_rails_workspace_id).public
+      Events::PUBLIC_WORKSPACE_CREATED
+    else
+      Events::PRIVATE_WORKSPACE_CREATED
     end
   end
 

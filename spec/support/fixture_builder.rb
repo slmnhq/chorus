@@ -82,6 +82,9 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :bob_creates_public_workspace, Events::PUBLIC_WORKSPACE_CREATED.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
     fbuilder.name :bob_creates_private_workspace, Events::PRIVATE_WORKSPACE_CREATED.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
 
+    fbuilder.name :bob_makes_workspace_public, Events::WORKSPACE_MAKE_PUBLIC.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
+    fbuilder.name :bob_makes_workspace_private, Events::WORKSPACE_MAKE_PRIVATE.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
+
     #HDFS File References
     hdfs_file_reference = HdfsFileReference.create!({ :hadoop_instance_id => hadoop_instance.id, :path => '/foo/bar/baz.sql'}, :without_protection => true)
 

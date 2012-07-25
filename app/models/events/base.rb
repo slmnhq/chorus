@@ -1,5 +1,7 @@
 module Events
   class Base < ActiveRecord::Base
+    include SoftDelete
+
     self.table_name = :events
     self.inheritance_column = :action
     serialize :additional_data, Hash
@@ -7,13 +9,19 @@ module Events
     class_attribute :entities_that_get_activities, :target_names
     attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data
 
-    has_many :activities, :foreign_key => :event_id, :dependent => :destroy
+    has_many :activities, :foreign_key => :event_id
     belongs_to :actor, :class_name => 'User'
     belongs_to :target1, :polymorphic => true
     belongs_to :target2, :polymorphic => true
     belongs_to :workspace
 
     default_scope { order("id DESC") }
+
+    after_destroy :destroy_activities
+
+    def destroy_activities
+      activities.destroy_all
+    end
 
     def self.by(actor)
       where(:actor_id => actor.id)

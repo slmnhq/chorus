@@ -47,6 +47,20 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
         ActivityMigrator.new.migrate
       end
 
+      it "copies PUBLIC WORKSPACE CREATED data fields from the legacy activity" do
+        event = Events::PUBLIC_WORKSPACE_CREATED.find(event_id_for('10158'))
+
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+      end
+
+      it "copies PRIVATE WORKSPACE CREATED data fields from the legacy activity" do
+        event = Events::PRIVATE_WORKSPACE_CREATED.find(event_id_for('10401'))
+
+        event.workspace.should be_instance_of(Workspace)
+        event.actor.should be_instance_of(User)
+      end
+
       it "copies WORKFILE CREATED data fields from the legacy activity" do
         event = Events::WORKFILE_CREATED.find(event_id_for('10010'))
 

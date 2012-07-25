@@ -74,47 +74,6 @@ describe("newFixtures", function() {
         });
     });
 
-    describe("#datasetJson", function() {
-        it("generates its id based on the instance, database, schema, type and table name", function() {
-            var dataset = newFixtures.workspaceDataset.sourceTable({
-                instance: { id: "45" },
-                databaseName: "chorus_events",
-                schemaName: "plague",
-                objectType: "TABLE",
-                objectName: "outbreaks"
-            });
-
-            expect(dataset.id).toBe('"45"|"chorus_events"|"plague"|"TABLE"|"outbreaks"');
-        });
-
-        context("when the id is overridden manually", function() {
-            it("uses the override", function() {
-                var dataset = newFixtures.workspaceDataset.sourceTable({
-                    id: "foo",
-                    instance: { id: "45" },
-                    databaseName: "chorus_events",
-                    schemaName: "plague",
-                    objectName: "outbreaks"
-                });
-                expect(dataset.id).toBe("foo");
-            });
-        });
-
-        context("when some of the id parameters are not overridden", function() {
-            it("uses the default parameter to generate the id", function() {
-                var dataset = newFixtures.workspaceDataset.sourceTable({
-                    databaseName: "chorus_events",
-                    schemaName: "plague",
-                    objectName: "outbreaks"
-                });
-
-                var instanceId = '"' + dataset.get("instance").id + '"';
-
-                expect(dataset.id).toBe(instanceId + '|"chorus_events"|"plague"|"TABLE"|"outbreaks"');
-            });
-        });
-    });
-
     describe("#userJson", function() {
         var userJson;
 

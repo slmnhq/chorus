@@ -70,6 +70,14 @@
                 links: [ "actor", "workspace" ]
             },
 
+            WORKSPACE_MAKE_PUBLIC: {
+                links: [ "actor", "workspace" ]
+            },
+
+            WORKSPACE_MAKE_PRIVATE: {
+                links: [ "actor", "workspace" ]
+            },
+
             WORKFILE_CREATED: {
                 links: [ "actor", "workfile", "workspace" ]
             },

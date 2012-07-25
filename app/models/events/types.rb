@@ -33,6 +33,16 @@ module Events
     has_activities :actor, :workfile, :workspace
   end
 
+  class WORKSPACE_MAKE_PUBLIC < Base
+    has_targets :workspace
+    has_activities :actor, :workspace, :global
+  end
+
+  class WORKSPACE_MAKE_PRIVATE < Base
+    has_targets :workspace
+    has_activities :actor, :workspace
+  end
+
   class PUBLIC_WORKSPACE_CREATED < Base
     has_targets :workspace
     has_activities :actor, :workspace, :global
