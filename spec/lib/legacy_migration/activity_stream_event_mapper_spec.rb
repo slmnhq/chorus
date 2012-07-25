@@ -136,6 +136,42 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
     end
   end
 
+  describe "workspace make public event" do
+    let!(:workspace) { FactoryGirl.create(:workspace, :public => true) }
+    let(:activity_stream) do
+      Object.new.tap do |activity|
+        mock(activity).type.times(any_times) { 'WORKSPACE_MAKE_PUBLIC' }
+      end
+    end
+
+    it "#build_event" do
+      event = mapper.build_event
+      event.should be_a_kind_of(Events::WORKSPACE_MAKE_PUBLIC)
+    end
+
+    it "#can_build?" do
+      mapper.can_build?.should be_true
+    end
+  end
+
+  describe "workspace make private event" do
+    let!(:workspace) { FactoryGirl.create(:workspace, :public => false) }
+    let(:activity_stream) do
+      Object.new.tap do |activity|
+        mock(activity).type.times(any_times) { 'WORKSPACE_MAKE_PRIVATE' }
+      end
+    end
+
+    it "#build_event" do
+      event = mapper.build_event
+      event.should be_a_kind_of(Events::WORKSPACE_MAKE_PRIVATE)
+    end
+
+    it "#can_build?" do
+      mapper.can_build?.should be_true
+    end
+  end
+
   describe "user added event" do
     let(:user) { FactoryGirl.create(:user) }
     let(:activity_stream) do
