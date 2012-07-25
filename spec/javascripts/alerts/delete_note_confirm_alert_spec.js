@@ -16,7 +16,8 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
 
         describe("when the delete succeeds", function() {
             beforeEach(function() {
-                spyOn(chorus, "toast")
+                spyOn(chorus, "toast");
+                spyOn(this.collection, "url").andReturn("abc");
                 this.server.lastDestroy().succeed();
             });
 

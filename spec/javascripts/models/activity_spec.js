@@ -271,6 +271,7 @@ describe("chorus.models.Activity", function() {
 
         describe("when the note is destroyed", function() {
             it("re-fetches the activity's collection", function() {
+                spyOn(chorus, "toast")
                 this.model.toNote().trigger("destroy");
                 expect(this.model.collection).toHaveBeenFetched();
             });
