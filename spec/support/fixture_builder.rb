@@ -49,7 +49,9 @@ FixtureBuilder.configure do |fbuilder|
     Events::HADOOP_INSTANCE_CREATED.by(admin).add(:greenplum_instance => greenplum_instance)
 
     # Instance Accounts
+    shared_instance_account = InstanceAccount.create!({:owner => admin, :instance => purplebanana_instance, :db_username => 'admin', :db_password => '12345'}, :without_protection => true)
     carly_bobs_instance_account = InstanceAccount.create!({:owner => carly, :instance => bobs_instance, :db_username => "iamcarly", :db_password => "corvette"}, :without_protection => true)
+    bob_bobs_instance_account = InstanceAccount.create!({:owner => bob, :instance => bobs_instance, :db_username => 'bobo', :db_password => 'i <3 me'}, :without_protection => true)
 
     # Datasets
     bob_database = GpdbDatabase.create!({ :instance => bobs_instance, :name => 'bobs_database' }, :without_protection => true)
@@ -61,10 +63,18 @@ FixtureBuilder.configure do |fbuilder|
     bobsearch_schema = GpdbSchema.create!({ :name => "bobsearch_schema", :database => bobsearch_database }, :without_protection => true)
     GpdbTable.create!({ :name => "bobsearch_table", :schema => bobsearch_schema }, :without_protection => true)
 
+    shared_search_database = GpdbDatabase.create!({ :instance => purplebanana_instance, :name => 'shared_database' }, :without_protection => true)
+    shared_search_schema = GpdbSchema.create!({ :name => 'shared_schema', :database => shared_search_database }, :without_protection => true)
+    GpdbTable.create!({ :name => "bobsearch_shared_table", :schema => shared_search_schema }, :without_protection => true)
+
 
     other_schema = GpdbSchema.create!({ :name => "other_schema", :database => bob_database}, :without_protection => true)
     GpdbTable.create!({ :name => "other_table", :schema => other_schema }, :without_protection => true)
     GpdbView.create!({ :name => "other_view", :schema => other_schema }, :without_protection => true)
+
+    # Database Instance Accounts
+    bobsearch_database.instance_accounts << bob_bobs_instance_account
+    shared_search_database.instance_accounts << shared_instance_account
 
     #Workspaces
     workspaces = []

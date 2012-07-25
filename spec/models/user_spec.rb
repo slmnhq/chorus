@@ -264,5 +264,14 @@ describe User do
     end
   end
 
+  describe "#accessible_account_ids" do
+    it "includes the users individual instance accounts plus all shared instance accounts" do
+      user = users(:bob)
+      shared_ids = InstanceAccount.joins(:instance).where("instances.shared = true").collect(&:id)
+      user_ids = user.instance_account_ids
+      user.accessible_account_ids.should =~ (shared_ids + user_ids).uniq
+    end
+  end
+
   it { should have_attached_file(:image) }
 end

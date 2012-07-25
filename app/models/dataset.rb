@@ -22,8 +22,21 @@ class Dataset < ActiveRecord::Base
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    integer :instance_account_ids, :multiple => true do
+      schema.database.instance_account_ids
+    end
     string :grouping_id
     string :type_name
+  end
+
+  def self.search_permissions(current_user, search)
+    search.build do
+      any_of do
+        without :type_name, Dataset.type_name
+        account_ids = current_user.accessible_account_ids
+        with :instance_account_ids, account_ids unless account_ids.blank?
+      end
+    end
   end
 
   def self.refresh(account, schema)

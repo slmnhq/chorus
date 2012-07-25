@@ -113,4 +113,9 @@ class User < ActiveRecord::Base
     end
     super
   end
+
+  def accessible_account_ids
+    shared_account_ids = InstanceAccount.joins(:instance).where("instances.shared = true").collect(&:id)
+    (shared_account_ids + instance_account_ids).uniq
+  end
 end

@@ -9,11 +9,6 @@ describe InstanceAccount do
   describe "validations" do
     it { should validate_presence_of :db_username }
     it { should validate_presence_of :db_password }
-
-    describe "field length" do
-      it { should ensure_length_of(:db_password).is_at_most(256)  }
-      it { should ensure_length_of(:db_password).is_at_least(6) }
-    end
   end
 
   describe "associations" do

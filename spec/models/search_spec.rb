@@ -2,20 +2,19 @@ require "spec_helper"
 describe Search do
 
   describe "with solr disabled" do
-    before do
-      @user = FactoryGirl.create(:user)
-    end
+    let(:user) {users(:bob)}
+
     describe "new" do
       it "takes current user and search params" do
-        search = Search.new(@user, :query => 'fries')
-        search.current_user.should == @user
+        search = Search.new(user, :query => 'fries')
+        search.current_user.should == user
         search.query.should == 'fries'
       end
     end
 
     describe "search" do
       it "searches for all types with query" do
-        search = Search.new(@user, :query => 'bob')
+        search = Search.new(user, :query => 'bob')
         search.search
         Sunspot.session.should be_a_search_for(User)
         Sunspot.session.should be_a_search_for(Instance)
@@ -32,7 +31,7 @@ describe Search do
       end
 
       it "uses the page and per_page parameters" do
-        search = Search.new(@user, :query => 'bob', :page => 4, :per_page => 42)
+        search = Search.new(user, :query => 'bob', :page => 4, :per_page => 42)
         search.search
         Sunspot.session.should have_search_params(:paginate, :page => 4, :per_page => 42)
       end
@@ -42,7 +41,7 @@ describe Search do
           any_instance_of(Sunspot::Search::AbstractSearch) do |search|
             stub(search).group_response { {} }
           end
-          search = Search.new(@user, :query => 'bob', :per_type => 3)
+          search = Search.new(user, :query => 'bob', :per_type => 3)
           stub(search).num_found do
             hsh = Hash.new(0)
             hsh.merge({:users => 100, :instances => 100, :workspaces => 100, :workfiles => 100, :datasets => 100})
@@ -64,7 +63,7 @@ describe Search do
 
         describe "entity_type" do
           it "searches for the provided models" do
-            search = Search.new(@user, :query => 'bob', :entity_type => 'instance')
+            search = Search.new(user, :query => 'bob', :entity_type => 'instance')
             search.search
             Sunspot.session.should_not be_a_search_for(User)
             Sunspot.session.should be_a_search_for(Instance)
@@ -72,16 +71,28 @@ describe Search do
         end
 
         it "overrides page and per_page" do
-          search = Search.new(@user, :query => 'bob', :per_type => 3, :page => 2, :per_page => 5)
+          search = Search.new(user, :query => 'bob', :per_type => 3, :page => 2, :per_page => 5)
           search.search
           Sunspot.session.should have_search_params(:paginate, :page => 1, :per_page => 100)
+        end
+      end
+
+      describe "dataset search with no accessible instance accounts for the user" do
+        it "does not include the condition for instance accounts" do
+          stub(user).accessible_account_ids { [] }
+          Search.new(user, :query => 'whatever', :entity_type => :dataset).search
+          Sunspot.session.should have_search_params(:with, Proc.new {
+            any_of do
+              without :type_name, Dataset.type_name
+            end
+          })
         end
       end
     end
 
     describe "search with a specific model" do
       it "only searches for that model" do
-        search = Search.new(@user, :query => 'bob', :entity_type => 'user')
+        search = Search.new(user, :query => 'bob', :entity_type => 'user')
         search.search
         Sunspot.session.should be_a_search_for(User)
         Sunspot.session.should_not be_a_search_for(Instance)
@@ -94,6 +105,7 @@ describe Search do
   context "with solr enabled" do
     let(:admin) { users(:admin) }
     let(:bob) { users(:bob) }
+    let(:carly) { users(:carly) }
     let(:instance) { instances(:greenplum) }
     let(:public_workspace) { workspaces(:alice_public) }
     let(:private_workspace) { workspaces(:bob_private) }
@@ -102,6 +114,7 @@ describe Search do
     let(:private_workfile_bob) { workfiles(:bob_private) }
     let(:public_workfile_bob) { workfiles(:bob_public) }
     let(:dataset) { datasets(:bobsearch_table) }
+    let(:shared_dataset) { datasets(:bobsearch_shared_table) }
 
     before do
       reindex_solr_fixtures
@@ -113,7 +126,7 @@ describe Search do
           search = Search.new(bob, :query => 'bobsearch')
           search.num_found[:users].should == 1
           search.num_found[:instances].should == 1
-          search.num_found[:datasets].should == 1
+          search.num_found[:datasets].should == 2
         end
       end
 
@@ -178,8 +191,15 @@ describe Search do
       it "returns the Dataset objects found" do
         VCR.use_cassette('search_solr_query_all_types_bob') do
           search = Search.new(bob, :query => 'bobsearch')
-          search.datasets.length.should == 1
-          search.datasets.first.should == dataset
+          search.datasets.should =~ [dataset, shared_dataset]
+        end
+      end
+
+      it "excludes datasets you don't have permissions to" do
+        VCR.use_cassette('search_solr_query_datasets_bobsearch_as_carly') do
+          carly.instance_accounts.joins(:gpdb_databases).should be_empty
+          search = Search.new(carly, :query => 'bobsearch', :entity_type => :dataset)
+          search.datasets.should == [shared_dataset]
         end
       end
     end
