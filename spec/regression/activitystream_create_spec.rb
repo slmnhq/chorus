@@ -152,22 +152,27 @@ describe " system generated activities " do
 
   end
 
-  xit "create system generate activity when a workspace is created" do
+  it "create system generate activity when a workspace is made public" do
 
-    create_valid_workspace(:name => "workspace_public", :shared => true)
+    create_valid_workspace(:name => "workspace_public")
     wait_for_ajax
     page.should have_content "EDC Admin created workspace workspace_public"
+    click_link "Edit Workspace"
+    check "Publicly available"
+    click_submit_button
+    wait_for_ajax
+    page.should have_content "EDC Admin made workspace workspace_public public"
 
     go_to_home_page
     wait_for_ajax
-    page.should have_content "EDC Admin created workspace workspace_public"
+    page.should have_content "EDC Admin made workspace workspace_public public"
 
     go_to_user_list_page
     within(".list")  do
       click_link "EDC Admin"
     end
     wait_for_ajax
-    page.should have_content "EDC Admin created workspace workspace_public"
+    page.should have_content "EDC Admin made workspace workspace_public public"
 
   end
 
