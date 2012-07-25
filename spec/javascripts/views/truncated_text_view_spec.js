@@ -45,11 +45,16 @@ describe("chorus.views.TruncatedText", function() {
 
                 describe("clicking 'read more'", function() {
                     beforeEach(function() {
+                        spyOn(this.view, "recalculateScrolling");
                         this.view.$("a.more").click();
                     });
 
                     it("adds the 'expanded' class to the .truncated_text element", function() {
                         expect($(this.view.el)).toHaveClass('expanded');
+                    });
+
+                    it("recalculates scrolling on the parent custom scroll object", function() {
+                        expect(this.view.recalculateScrolling).toHaveBeenCalled();
                     });
 
                     describe("when the view is re-rendered", function() {
