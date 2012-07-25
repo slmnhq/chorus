@@ -45,6 +45,7 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
         e && e.preventDefault();
         e.stopPropagation();
         $(this.el).toggleClass("expanded");
+        this.recalculateScrolling($(this.el).closest(".custom_scroll"));
     },
 
     openLink: function(e) {
