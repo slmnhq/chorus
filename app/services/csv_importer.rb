@@ -21,18 +21,28 @@ class CsvImporter
       sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
       copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
     end
-    create_event
+    create_success_event
+  rescue => e
+    create_failure_event(e.message)
   end
 
-  def create_event
-
+  def create_success_event
     Events::IMPORT_SUCCESS.by(csv_file.user).add(
         :workspace => csv_file.workspace,
         :dataset => destination_dataset,
         :file_name => csv_file.contents_file_name,
         :import_type => 'file'
     )
+  end
 
+  def create_failure_event(error_message)
+    Events::IMPORT_FAILED.by(csv_file.user).add(
+        :workspace => csv_file.workspace,
+        :file_name => csv_file.contents_file_name,
+        :import_type => 'file',
+        :destination_table => csv_file.to_table,
+        :error_message => error_message
+    )
   end
 
   def destination_dataset

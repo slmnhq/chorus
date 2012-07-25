@@ -66,7 +66,6 @@ describe CsvImporter, :database_integration => true do
   end
 
   describe "without connecting to GPDB" do
-
     let(:csv_file) { CsvFile.first }
     let(:user) { csv_file.user }
     let(:dataset) { datasets(:bobs_table) }
@@ -98,7 +97,25 @@ describe CsvImporter, :database_integration => true do
         event.file_name.should == csv_file.contents_file_name
         event.import_type.should == 'file'
       end
+    end
 
+    describe "when the import fails" do
+      before do
+        @error = 'ActiveRecord::JDBCError: ERROR: relation "test" already exists: CREATE TABLE test(a float, b float, c float);'
+        exception = ActiveRecord::StatementInvalid.new(@error)
+        any_instance_of(GpdbSchema) { |schema| stub(schema).with_gpdb_connection { raise exception } }
+        CsvImporter.import_file(csv_file.id)
+      end
+
+      it "makes a IMPORT_FAILED event" do
+        event = Events::IMPORT_FAILED.first
+        event.actor.should == user
+        event.destination_table.should == dataset.name
+        event.workspace.should == csv_file.workspace
+        event.file_name.should == csv_file.contents_file_name
+        event.import_type.should == 'file'
+        event.error_message.should == @error
+      end
     end
   end
 end

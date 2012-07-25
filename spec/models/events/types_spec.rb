@@ -288,4 +288,23 @@ describe "Event types" do
     it_creates_activities_for { [actor, workspace, dataset] }
     it_does_not_create_a_global_activity
   end
+
+  describe "IMPORT_FAILED" do
+    subject do
+      Events::IMPORT_FAILED.add(
+          :actor => actor,
+          :file_name => 'import.csv',
+          :import_type => 'file',
+          :destination_table => 'test',
+          :workspace => workspace,
+          :error_message => 'Flying Monkey Attack'
+      )
+    end
+
+    its(:targets) { should == {:workspace => workspace} }
+    its(:additional_data) { should == {:file_name => "import.csv", :import_type => "file", :destination_table => 'test', :error_message => 'Flying Monkey Attack'} }
+
+    it_creates_activities_for { [actor, workspace] }
+    it_does_not_create_a_global_activity
+  end
 end
