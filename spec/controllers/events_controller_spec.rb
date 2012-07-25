@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe EventsController do
-  let(:event) { Events::Base.first }
   let(:current_user) { users(:carly) }
 
   before do
@@ -9,6 +8,8 @@ describe EventsController do
   end
 
   describe "#index" do
+    let(:event) { Events::Base.first }
+
     before do
       Activity.create!(:entity => object, :event => event)
     end
@@ -102,10 +103,19 @@ describe EventsController do
   end
 
   describe "#show" do
+    let(:event) { Events::NOTE_ON_WORKSPACE.first }
+
     it "shows the particular event " do
       mock_present { |model| model.should == event }
+      log_in users(:carly)
       get :show, :id => event.to_param
       response.code.should == "200"
+    end
+
+    it "returns an error when trying to show an activity for which the user doesn't have access" do
+      log_in users(:alice)
+      get :show, :id => event.to_param
+      response.code.should == "404"
     end
 
     FIXTURE_FILES = {

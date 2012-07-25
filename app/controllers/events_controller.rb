@@ -9,6 +9,6 @@ class EventsController < ApplicationController
   end
 
   def show
-    present Events::Base.find(params[:id])
+    present Events::Base.for_dashboard_of(current_user).find(params[:id])
   end
 end
