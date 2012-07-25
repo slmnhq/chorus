@@ -17,20 +17,81 @@ describe("chorus.views.TruncatedText", function() {
     });
 
     describe("#render", function() {
-        context("when the model is not yet loaded", function() {
-            beforeEach(function() {
-                this.model.loaded = undefined;
-                this.view.render();
+        beforeEach(function() {
+            this.view.render();
+        });
+
+        it("renders the text", function() {
+            expect(this.view.$(".original").html()).toBe(this.text);
+        });
+
+        context("when the text height is greater than two lines", function() {
+            it("marks the view as expandable", function() {
+                expect($(this.view.el)).toHaveClass('expandable');
             });
 
-            it("renders nothing", function() {
-                expect($(this.view.el).text().trim()).toBe("");
+            describe("clicking 'read more'", function() {
+                beforeEach(function() {
+                    spyOn(this.view, "recalculateScrolling");
+                    this.view.$("a.more").click();
+                });
+
+                it("adds the 'expanded' class to the .truncated_text element", function() {
+                    expect($(this.view.el)).toHaveClass('expanded');
+                });
+
+                it("recalculates scrolling on the parent custom scroll object", function() {
+                    expect(this.view.recalculateScrolling).toHaveBeenCalled();
+                })
+
+                describe("when the view is re-rendered", function() {
+                    beforeEach(function() {
+                        this.view.render();
+                    });
+
+                    it("still has the 'expandable' class", function() {
+                        expect($(this.view.el)).toHaveClass('expandable');
+                    });
+                });
+
+                describe("clicking 'read less'", function() {
+                    beforeEach(function() {
+                        this.view.$("a.less").click();
+                    })
+
+                    it("removes the 'expanded' class to the .truncated_text element", function() {
+                        expect($(this.view.el)).not.toHaveClass('expanded');
+                    })
+                })
+            })
+        });
+
+        context("when the text height is less than or equal to two lines", function() {
+            beforeEach(function() {
+                this.model.set({ summary: "This is <br/>a test"})
+            });
+
+            it("marks the view as not expandable", function() {
+                expect($(this.view.el)).not.toHaveClass('expandable');
             });
         });
 
-        context("after the model is loaded", function() {
+        context("when attributeIsHtmlSafe is false", function() {
             beforeEach(function() {
-                this.model.loaded = true;
+                this.view.options.attributeIsHtmlSafe = false;
+                this.view.render();
+            });
+
+            it("escapes the HTML", function() {
+                expect(this.view.$('span')).not.toExist();
+            });
+        });
+
+        context("when given an extraLine option", function() {
+            beforeEach(function() {
+                this.text = "This is <br>a test <br> more"
+                this.model.set({ summary: this.text})
+                this.view.options.extraLine = true;
                 this.view.render();
             });
 
@@ -38,107 +99,32 @@ describe("chorus.views.TruncatedText", function() {
                 expect(this.view.$(".original").html()).toBe(this.text);
             });
 
-            context("when the text height is greater than two lines", function() {
-                it("marks the view as expandable", function() {
-                    expect($(this.view.el)).toHaveClass('expandable');
-                });
-
-                describe("clicking 'read more'", function() {
-                    beforeEach(function() {
-                        spyOn(this.view, "recalculateScrolling");
-                        this.view.$("a.more").click();
-                    });
-
-                    it("adds the 'expanded' class to the .truncated_text element", function() {
-                        expect($(this.view.el)).toHaveClass('expanded');
-                    });
-
-                    it("recalculates scrolling on the parent custom scroll object", function() {
-                        expect(this.view.recalculateScrolling).toHaveBeenCalled();
-                    })
-
-                    describe("when the view is re-rendered", function() {
-                        beforeEach(function() {
-                            this.view.render();
-                        });
-
-                        it("still has the 'expandable' class", function() {
-                            expect($(this.view.el)).toHaveClass('expandable');
-                        });
-                    });
-
-                    describe("clicking 'read less'", function() {
-                        beforeEach(function() {
-                            this.view.$("a.less").click();
-                        })
-
-                        it("removes the 'expanded' class to the .truncated_text element", function() {
-                            expect($(this.view.el)).not.toHaveClass('expanded');
-                        })
-                    })
-                })
+            it("marks the view as not expandable", function() {
+                expect($(this.view.el)).not.toHaveClass('expandable');
             });
 
-            context("when the text height is less than or equal to two lines", function() {
-                beforeEach(function() {
-                    this.model.set({ summary: "This is <br/>a test"})
-                });
-
-                it("marks the view as not expandable", function() {
-                    expect($(this.view.el)).not.toHaveClass('expandable');
-                });
-            });
-
-            context("when attributeIsHtmlSafe is false", function() {
-                beforeEach(function() {
-                    this.view.options.attributeIsHtmlSafe = false;
-                    this.view.render();
-                });
-
-                it("escapes the HTML", function() {
-                    expect(this.view.$('span')).not.toExist();
-                });
-            });
-
-            context("when given an extraLine option", function() {
-                beforeEach(function() {
-                    this.text = "This is <br>a test <br> more"
-                    this.model.set({ summary: this.text})
-                    this.view.options.extraLine = true;
-                    this.view.render();
-                });
-
-                it("renders the text", function() {
-                    expect(this.view.$(".original").html()).toBe(this.text);
-                });
-
-                it("marks the view as not expandable", function() {
-                    expect($(this.view.el)).not.toHaveClass('expandable');
-                });
-
-                it("adds class extra_line to the .styled_text", function() {
-                    expect(this.view.$(".styled_text")).toHaveClass("extra_line");
-                })
+            it("adds class extra_line to the .styled_text", function() {
+                expect(this.view.$(".styled_text")).toHaveClass("extra_line");
             })
+        })
 
-            it("renders 'read more' and 'read less' links", function() {
-                expect(this.view.$(".links a.more").text().trim()).toMatchTranslation("truncated_text.more");
-                expect(this.view.$(".links a.less").text().trim()).toMatchTranslation("truncated_text.less");
-            })
+        it("renders 'read more' and 'read less' links", function() {
+            expect(this.view.$(".links a.more").text().trim()).toMatchTranslation("truncated_text.more");
+            expect(this.view.$(".links a.less").text().trim()).toMatchTranslation("truncated_text.less");
+        })
 
-            it("is not expanded", function() {
-                expect($(this.view.el)).not.toHaveClass('expanded');
+        it("is not expanded", function() {
+            expect($(this.view.el)).not.toHaveClass('expanded');
+        });
+
+        describe("clicking links in the text", function() {
+            beforeEach(function() {
+                spyOn(window, "open")
+                this.view.$(".original a").click();
             });
 
-            describe("clicking links in the text", function() {
-                beforeEach(function() {
-                    spyOn(window, "open")
-                    this.view.$(".original a").click();
-                });
-
-                it("opens the link in a new window", function() {
-                    expect(window.open).toHaveBeenCalledWith("http://example.com")
-                });
+            it("opens the link in a new window", function() {
+                expect(window.open).toHaveBeenCalledWith("http://example.com")
             });
         });
     });

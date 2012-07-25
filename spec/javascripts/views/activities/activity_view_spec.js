@@ -24,7 +24,6 @@ describe("chorus.views.Activity", function() {
         context("when the activity is a note", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.activity.noteOnGreenplumInstanceCreated();
-                this.model.loaded = true;
                 this.view = new chorus.views.Activity({ model: this.model });
                 this.view.render();
             });
@@ -57,7 +56,6 @@ describe("chorus.views.Activity", function() {
         xcontext("when the activity is an insight", function() {
             beforeEach(function() {
                 this.model = fixtures.activities.INSIGHT_CREATED();
-                this.model.loaded = true;
                 this.view = new chorus.views.Activity({ model: this.model });
                 this.view.render();
             });
@@ -74,7 +72,6 @@ describe("chorus.views.Activity", function() {
         context("when the activity is something else", function() {
             beforeEach(function() {
                 this.model = rspecFixtures.activity.importSuccess();
-                this.model.loaded = true;
                 this.view = new chorus.views.Activity({ model: this.model });
                 this.view.render();
             });
