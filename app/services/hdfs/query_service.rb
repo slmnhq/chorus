@@ -3,6 +3,7 @@ require 'timeout'
 require Rails.root.join('vendor/hadoop/hdfs-query-service-0.0.1.jar')
 
 module Hdfs
+  PREVIEW_LINE_COUNT = 200
   DirectoryNotFoundError = Class.new(StandardError)
   FileNotFoundError = Class.new(StandardError)
 
@@ -53,7 +54,7 @@ module Hdfs
 
     def show(path)
       protect_remote_query do
-        contents = JavaHdfs.new(@host, @port, @username, @version).content(path)
+        contents = JavaHdfs.new(@host, @port, @username, @version).content(path, PREVIEW_LINE_COUNT)
         raise FileNotFoundError, "File not found on HDFS: #{path}" unless contents
         contents
       end
