@@ -10,13 +10,9 @@ module Hdfs
 
   # NOTE: If we have 3 versions and 6 seconds timeout,
   #       we're going to wait 2 seconds for each one
-  #JavaHdfs.timeout = 3
+  JavaHdfs.timeout = 5
 
   class QueryService
-    def self.timeout
-      5.seconds
-    end
-
     def self.instance_version(instance)
       new(instance.host, instance.port, instance.username).version
     end
@@ -31,10 +27,11 @@ module Hdfs
     def version
       protect_remote_query do
         version = JavaHdfs.new(@host, @port, @username).server_version
+
         unless version
           raise ApiValidationError.new(:connection, :generic, {:message => 'Unable to determine HDFS server version. Check connection parameters.'})
         end
-        version.getName
+        version.get_name
       end
     end
 
@@ -64,8 +61,8 @@ module Hdfs
 
     private
 
-    def protect_remote_query(&block)
-      Timeout::timeout(self.class.timeout, &block)
+    def protect_remote_query
+      yield
     rescue Errno::ECONNREFUSED
       raise ApiValidationError.new(:connection, :generic, {:message => "Impossible to connect to HDFS Query Service."})
     rescue Timeout::Error

@@ -41,16 +41,6 @@ describe Hdfs::QueryService do
       let(:slow_instance) do
         HadoopInstance.new :host => HADOOP_TEST_INSTANCE, :port => "8888", :username => "pivotal"
       end
-
-      it "raises ApiValidationError" do
-        stub(described_class).timeout{ 1.second }
-
-        any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |h|
-          mock(h).server_version{ sleep 2 }
-        end
-
-        expect { described_class.instance_version(slow_instance) }.to raise_error(ApiValidationError)
-      end
     end
   end
 
@@ -77,18 +67,6 @@ describe Hdfs::QueryService do
       end
     end
 
-    context "connection times out" do
-      it "raises ApiValidationError" do
-        stub(described_class).timeout { 1.second }
-
-        any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |h|
-          mock(h).list(anything) { sleep 2 }
-        end
-
-        expect { service.list("/") }.to raise_error(ApiValidationError)
-      end
-    end
-
     context "connection is invalid" do
       let(:service) { Hdfs::QueryService.new("garbage", "8020", "pivotal", "0.20.1gp") }
 
@@ -112,18 +90,6 @@ describe Hdfs::QueryService do
     context "show a non existing file" do
       it "should return an error" do
         expect { service.show("/file") }.to raise_error(Hdfs::FileNotFoundError)
-      end
-    end
-
-    context "connection times out" do
-      it "raises an exception" do
-        stub(described_class).timeout { 1.second }
-
-        any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |h|
-          mock(h).content(anything) { sleep 2 }
-        end
-
-        expect { service.show("/file") }.to raise_error(ApiValidationError)
       end
     end
 
