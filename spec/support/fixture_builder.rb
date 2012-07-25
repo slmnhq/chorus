@@ -1,5 +1,3 @@
-require_relative 'database_integration/setup_gpdb.rb'
-
 def FixtureBuilder.password
   'password'
 end

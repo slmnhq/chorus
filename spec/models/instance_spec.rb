@@ -129,7 +129,7 @@ describe Instance do
     it "returns unshared instances" do
       instances = Instance.unshared
       instances.length.should > 0
-      instances.each {|i| i.should_not be_shared}
+      instances.each { |i| i.should_not be_shared }
     end
   end
 
@@ -190,13 +190,36 @@ describe Instance do
     end
   end
 
+  describe "refresh_database_permissions", :database_integration => true do
+    let(:account_with_access) { real_gpdb_account }
+    let(:account_without_access) { account_for_user_with_restricted_access }
+    let(:instance) { account_with_access.instance }
+    let(:database) { instance.databases.find_by_name(GpdbIntegration.database_name) }
+
+    before do
+      refresh_chorus
+    end
+
+    it "adds new database_instance_accounts" do
+      database.instance_accounts.find_by_id(account_with_access.id).should be_nil
+      instance.refresh_database_permissions
+      database.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
+    end
+
+    it "removes database_instance_accounts if they no longer exist" do
+      database.instance_accounts << account_without_access
+      instance.refresh_database_permissions
+      database.instance_accounts.find_by_id(account_without_access.id).should be_nil
+    end
+  end
+
   describe "#databases", :database_integration => true do
     let(:account) { real_gpdb_account }
 
     subject { account.instance }
 
     it "should not include the 'template0' database" do
-      subject.databases.map(&:name).tap{|x| puts x}.should_not include "template0"
+      subject.databases.map(&:name).tap { |x| puts x }.should_not include "template0"
     end
   end
 end

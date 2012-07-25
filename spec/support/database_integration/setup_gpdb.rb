@@ -66,7 +66,13 @@ module GpdbIntegration
   def real_gpdb_account
     return @real_gpdb_account if @real_gpdb_account
     instance = FactoryGirl.create(:instance, INSTANCE_CONFIG.except('account'))
-    @real_gpdb_account = FactoryGirl.create(:instance_account, ACCOUNT_CONFIG.merge(:instance => instance))
+    @real_gpdb_account = FactoryGirl.create(:instance_account, ACCOUNT_CONFIG.merge(:instance => instance, :owner => instance.owner))
+  end
+
+  def account_for_user_with_restricted_access
+    return @account_for_user_with_restricted_access if @account_for_user_with_restricted_access
+    instance = real_gpdb_account.instance
+    @account_for_user_with_restricted_access = FactoryGirl.create(:instance_account, :instance => instance, :db_username => 'user_with_restricted_access')
   end
 end
 

@@ -39,6 +39,26 @@ class Instance < ActiveRecord::Base
     )
   end
 
+  def refresh_database_permissions
+    rows = Gpdb::ConnectionBuilder.connect!(self, owner_account, maintenance_db) { |conn| conn.select_all(database_and_role_sql) }
+
+    database_account_groups = rows.inject({}) do |groups, row|
+      groups[row["database_name"]] ||= []
+      groups[row["database_name"]] << row["db_username"]
+      groups
+    end
+
+    database_account_groups.each do |database_name, db_usernames|
+      database = databases.find_by_name!(database_name)
+      database_accounts = accounts.where(:db_username => db_usernames)
+      database.instance_accounts = database_accounts
+    end
+  end
+
+  def account_names
+    accounts.pluck(:db_username)
+  end
+
   def owner_account
     account_owned_by!(owner)
   end
@@ -62,6 +82,23 @@ class Instance < ActiveRecord::Base
   end
 
   private
+
+  def database_and_role_sql
+    roles = Arel::Table.new("pg_catalog.pg_roles", :as => "r")
+    databases = Arel::Table.new("pg_catalog.pg_database", :as => "d")
+
+    roles.join(databases).
+        on(Arel.sql("has_database_privilege(r.oid, d.oid, 'CONNECT')")).
+        where(
+        databases[:datname].not_eq("postgres").
+            and(databases[:datistemplate].eq(false)).
+            and(databases[:datallowconn].eq(true)).
+            and(roles[:rolname].in(account_names))
+    ).project(
+        roles[:rolname].as("db_username"),
+        databases[:datname].as("database_name")
+    ).to_sql
+  end
 
   def account_owned_by!(user)
     accounts.find_by_owner_id!(user.id)

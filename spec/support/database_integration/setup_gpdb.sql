@@ -1,5 +1,10 @@
+DROP ROLE IF EXISTS "user_with_restricted_access";
+CREATE ROLE "user_with_restricted_access";
+
 DROP DATABASE IF EXISTS "gpdb_test_database";
 CREATE DATABASE "gpdb_test_database" OWNER gpadmin;
+
+REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
 
 \connect "gpdb_test_database"
 
