@@ -135,9 +135,27 @@ describe " system generated activities " do
 
   it "create system generate activity when a workspace is created" do
 
+    create_valid_workspace(:name => "workspace_create", :shared => true)
+    wait_for_ajax
+    page.should have_content "EDC Admin created workspace workspace_create"
+
+    go_to_home_page
+    wait_for_ajax
+    page.should have_content "EDC Admin created workspace workspace_create"
+
+    go_to_user_list_page
+    within(".list")  do
+      click_link "EDC Admin"
+    end
+    wait_for_ajax
+    page.should have_content "EDC Admin created workspace workspace_public"
+
+  end
+
+  xit "create system generate activity when a workspace is created" do
+
     create_valid_workspace(:name => "workspace_public", :shared => true)
     wait_for_ajax
-
     page.should have_content "EDC Admin created workspace workspace_public"
 
     go_to_home_page
@@ -152,6 +170,7 @@ describe " system generated activities " do
     page.should have_content "EDC Admin created workspace workspace_public"
 
   end
+
 
 
 end
