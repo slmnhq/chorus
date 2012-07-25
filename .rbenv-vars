@@ -1,2 +1,1 @@
-JRUBY_OPTS?=--1.9 --client -J-Xmx512m -J-Xms512m -J-Xmn128m -J-d32
-
+JRUBY_OPTS=--1.9 --client -J-Xmx512m -J-Xms512m -J-Xmn128m
