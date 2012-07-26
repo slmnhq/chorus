@@ -204,14 +204,14 @@ describe Search do
       end
     end
 
-    describe "highlighted comments" do
-      it "includes highlighted comments in the highlighted_attributes" do
+    describe "highlighted notes" do
+      it "includes highlighted notes in the highlighted_attributes" do
         VCR.use_cassette('search_solr_query_all_types_greenplum_as_bob') do
           search = Search.new(bob, :query => 'greenplumsearch')
           search.instances.length.should == 2
-          instance_with_comments = search.instances[1]
-          instance_with_comments.search_result_comments.length.should == 2
-          instance_with_comments.search_result_comments[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplumsearch</em>"
+          instance_with_notes = search.instances[1]
+          instance_with_notes.search_result_notes.length.should == 2
+          instance_with_notes.search_result_notes[0][:highlighted_attributes][:body][0].should == "no, not <em>greenplumsearch</em>"
         end
       end
     end

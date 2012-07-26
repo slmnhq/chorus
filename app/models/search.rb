@@ -44,7 +44,7 @@ class Search
     return @models if @models
     @models = Hash.new() { |hsh, key| hsh[key] = [] }
 
-    search.associate_grouped_comments_with_primary_records
+    search.associate_grouped_notes_with_primary_records
 
     search.each_hit_with_result do |hit, result|
       result.highlighted_attributes = hit.highlights_hash

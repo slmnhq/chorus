@@ -24,6 +24,7 @@ end
 
 module SunspotSearchExtensions
   extend ActiveSupport::Concern
+
   def execute
     results = super
 
@@ -37,23 +38,22 @@ module SunspotSearchExtensions
     results
   end
 
-  def associate_grouped_comments_with_primary_records
-    solr_response['docs'] = []
-    docs = solr_response['docs']
+  def associate_grouped_notes_with_primary_records
+    docs = solr_response['docs'] = []
     group = group(:grouping_id)
     return unless group && group.groups
-    comments_for_object = Hash.new() { |hsh, key| hsh[key] = [] }
+    notes_for_object = Hash.new() { |hsh, key| hsh[key] = [] }
     group.groups.each do |group|
       docs << {'id' => group.value}
       group.hits.each do |group_hit|
         if group_hit.class_name =~ /^Event/
-          comments_for_object[group.value] << {:highlighted_attributes => group_hit.highlights_hash}
+          notes_for_object[group.value] << {:highlighted_attributes => group_hit.highlights_hash}
         end
       end
     end
 
     hits.each do |hit|
-      hit.comments = comments_for_object[hit.id]
+      hit.notes = notes_for_object[hit.id]
     end
   end
 end
@@ -65,7 +65,7 @@ module Sunspot
     end
 
     class Hit
-      attr_accessor :comments
+      attr_accessor :notes
 
       def id
         @stored_values['id']
@@ -80,8 +80,8 @@ module Sunspot
       end
 
       def result=(new_result)
-        if(comments)
-          new_result.search_result_comments = comments
+        if (notes)
+          new_result.search_result_notes = notes
         end
         @result = new_result
       end

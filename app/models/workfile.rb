@@ -20,7 +20,7 @@ class Workfile < ActiveRecord::Base
 
   accepts_nested_attributes_for :versions
 
-  attr_accessor :highlighted_attributes, :search_result_comments
+  attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
     text :file_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
