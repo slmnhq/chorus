@@ -101,9 +101,6 @@ describe " system generated activities " do
     page.should have_content "EDC Admin added a new instance hadoop_instance"
   end
 
-  xit "System generates activity stream for instance owner change (29788349)" do
-
-  end
 
   it "System generates activity stream for WORKFILE_CREATED" do
 
@@ -148,7 +145,7 @@ describe " system generated activities " do
       click_link "EDC Admin"
     end
     wait_for_ajax
-    page.should have_content "EDC Admin created workspace workspace_public"
+    page.should have_content "EDC Admin created workspace workspace_create"
 
   end
 

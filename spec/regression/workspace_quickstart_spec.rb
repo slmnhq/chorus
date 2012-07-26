@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'spec_helper')
+require File.join(File.dirname(__FILE__), '../integration/spec_helper')
 
 describe "Showing the workspace quickstart page" do
   before(:all) do
@@ -119,18 +119,6 @@ describe "Showing the workspace quickstart page" do
   end
 end
 
-xit "dismisses each modal with each press of escape" do
-    click_link "Show options"
-    wait_until { page.has_selector?("#facebox .dialog span.label") }
-    click_link "Work File"
-    wait_until { page.has_selector?("#facebox .dialog h1") }
-
-    page.find("body").native.send_keys :escape
-    wait_until { page.has_selector?("#facebox .dialog h1") }
-    page.find("body").native.send_keys :escape
-    evaluate_script('$("#facebox").length').should be_zero
-  end
-
   describe "choosing a 'desktop file'" do
     let(:file) { Tempfile.new("my_desktop_file_name") }
 
@@ -175,5 +163,5 @@ xit "dismisses each modal with each press of escape" do
       end
     end
   end
-end
+
 

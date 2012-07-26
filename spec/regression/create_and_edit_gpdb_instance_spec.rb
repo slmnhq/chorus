@@ -7,9 +7,9 @@ describe " add an instance " do
   end
 
   it "tries to create an instance with an invalid name" do
-    create_gpdb_gillette_instance(:name => "instance name")
+    create_gpdb_instance(:name => "instance name")
     field_errors.should_not be_empty
-    create_gpdb_gillette_instance(:name => "instance_name")
+    create_gpdb_instance(:name => "instance_name")
     verify_instance_name("instance_name")
   end
 
@@ -27,7 +27,7 @@ describe " add an instance " do
     #page.find('.errors').should have_content("could not translate host name")
     page.find('.errors').should have_content("The connection attempt failed")
     # Still can register an instance
-    create_gpdb_gillette_instance(:name => "valid_instance")
+    create_gpdb_instance(:name => "valid_instance")
     verify_instance_name("valid_instance")
   end
 
@@ -35,7 +35,7 @@ describe " add an instance " do
     open_gpdb_instance_dialog
     fill_in 'name', :with => "dbpass_dbuser"
     fill_in 'description', :with => "GPDB instance creation"
-    fill_in 'host', :with => "gillette.sf.pivotallabs.com"
+    fill_in 'host', :with => "chorus-gpdb40.sf.pivotallabs.com"
     fill_in 'port', :with => "5432"
     fill_in 'dbUsername', :with => "gpadmin"
     fill_in 'dbPassword', :with => "secrettt"
@@ -63,5 +63,52 @@ describe " add an instance " do
     end
     click_submit_button
     find('.instance_list').should have_content("dbpass_dbuser")
+  end
+end
+
+
+describe "Editing instance details" do
+  before(:each) do
+    login('edcadmin', 'secret')
+  end
+
+  context "greenplum instances" do
+    it "should allow editing of the instance name and description" do
+      create_gpdb_instance(:name => "Instance1")
+      create_gpdb_instance(:name => "Instance2")
+
+      instance_1_id = Instance.find_by_name("Instance1").id
+      visit("#/instances")
+      within(".instance_provider") do
+        page.find("li[data-greenplum-instance-id='#{instance_1_id}']").click
+      end
+      click_link "Edit Instance"
+
+      within_modal do
+        fill_in 'name', :with => "ChangeInstanceName"
+        fill_in 'description', :with => "Change Description"
+        click_button "Save Configuration"
+      end
+
+      page.find("li[data-greenplum-instance-id='#{instance_1_id}']").should have_content("ChangeInstanceName")
+      page.find("li[data-greenplum-instance-id='#{instance_1_id}']").should have_content("Change Description")
+    end
+
+    it "should allow the editing of the instance host and port" do
+      create_gpdb_instance(:name => "validinstance")
+      validinstance_id = Instance.find_by_name("validinstance").id
+      visit("#/instances")
+      within(".instance_provider") do
+        page.find("li[data-greenplum-instance-id='#{validinstance_id}']").click
+      end
+      click_link "Edit Instance"
+      within_modal do
+        fill_in 'host', :with => "gillette.sf.pivotallabs.com"
+        fill_in 'port', :with => "5432"
+        click_button "Save Configuration"
+      end
+
+    end
+
   end
 end
