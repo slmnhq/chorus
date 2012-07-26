@@ -1,9 +1,40 @@
 module SearchExtensions
   extend ActiveSupport::Concern
 
+  included do
+    class_attribute :shared_search_fields
+  end
+
   module ClassMethods
     def type_name
       name
+    end
+
+    def has_shared_search_fields(field_definitions)
+      self.shared_search_fields = field_definitions
+      define_shared_search_fields(field_definitions)
+    end
+
+    def define_shared_search_fields(field_definitions, receiver_name=nil)
+      searchable do |s|
+        field_definitions.each do |field_def|
+          delegate field_def[:method], :to => receiver_name if receiver_name
+          s.public_send(field_def[:type], field_def[:method], field_def[:options].try(:dup))
+        end
+      end
+
+      # define_shared_search_fields([...], :dataset)
+      #
+      # searchable do
+      #   delegate :instance_account_ids, :to => :dataset
+      #   integer :instance_account_ids, :options => {:multiple => true}
+      # end
+      #
+      # define_shared_search_fields([...])
+      #
+      # searchable do
+      #   integer :instance_account_ids, :options => {:multiple => true}
+      # end
     end
   end
 

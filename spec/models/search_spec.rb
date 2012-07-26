@@ -168,7 +168,7 @@ describe Search do
       end
 
       it "returns the Instance objects found" do
-        VCR.use_cassette('search_solr_query_all_types_bob') do
+        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
           search = Search.new(bob, :query => 'bobsearch')
           search.instances.length.should == 1
           search.instances.first.should == instance
@@ -189,7 +189,7 @@ describe Search do
       end
 
       it "returns the Dataset objects found" do
-        VCR.use_cassette('search_solr_query_all_types_bob') do
+        VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
           search = Search.new(bob, :query => 'bobsearch')
           search.datasets.should =~ [dataset, shared_dataset]
         end
@@ -200,6 +200,23 @@ describe Search do
           carly.instance_accounts.joins(:gpdb_databases).should be_empty
           search = Search.new(carly, :query => 'bobsearch', :entity_type => :dataset)
           search.datasets.should == [shared_dataset]
+        end
+      end
+
+      it "includes notes" do
+        events(:note_on_dataset).body.should == "notesearch ftw"
+        VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
+          search = Search.new(bob, :query => 'notesearch')
+          dataset = search.datasets.first
+          dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>notesearch</em> ftw"
+        end
+      end
+
+      it "excludes notes on datasets you can't see" do
+        events(:note_on_dataset).body.should == "notesearch ftw"
+        VCR.use_cassette('search_solr_notes_query_all_types_bob_as_carly') do
+          search = Search.new(carly, :query => 'notesearch')
+          search.datasets.should be_empty
         end
       end
     end
@@ -244,6 +261,23 @@ describe Search do
           search.workspaces.should include(private_workspace_not_a_member)
         end
       end
+
+      it "includes notes" do
+        events(:note_on_bob_public).body.should == "notesearch forever"
+        VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
+          search = Search.new(bob, :query => 'notesearch')
+          workspace = search.workspaces.first
+          workspace.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>notesearch</em> forever"
+        end
+      end
+
+      it "excludes notes on workspaces you can't see" do
+        events(:note_on_alice_private).body.should == "notesearch never"
+        VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
+          search = Search.new(bob, :query => 'notesearch')
+          workspace = search.workspaces.should_not include private_workspace_not_a_member
+        end
+      end
     end
 
     describe "workfile permissions" do
@@ -262,6 +296,23 @@ describe Search do
           search.workfiles.should include(public_workfile_bob)
           search.workfiles.should include(private_workfile_bob)
           search.workfiles.should include(private_workfile_hidden_from_bob)
+        end
+      end
+
+      it "includes notes" do
+        events(:note_on_bob_public_workfile).body.should == "notesearch forever"
+        VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
+          search = Search.new(bob, :query => 'notesearch')
+          workfiles = search.workfiles.first
+          workfiles.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>notesearch</em> forever"
+        end
+      end
+
+      it "excludes notes on workfiles you can't see" do
+        events(:note_on_alice_private_workfile).body.should == "notesearch never"
+        VCR.use_cassette('search_solr_notes_query_all_types_as_bob') do
+          search = Search.new(bob, :query => 'notesearch')
+          workfile = search.workfiles.should_not include private_workfile_hidden_from_bob
         end
       end
     end

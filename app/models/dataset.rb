@@ -17,16 +17,21 @@ class Dataset < ActiveRecord::Base
   delegate :with_gpdb_connection, :to => :schema
   delegate :instance, :to => :schema
 
-  attr_accessor :highlighted_attributes, :search_result_comments
-  searchable do
-    text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
-    text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    integer :instance_account_ids, :multiple => true do
-      schema.database.instance_account_ids
-    end
-    string :grouping_id
-    string :type_name
+  attr_accessor :highlighted_attributes, :search_result_notes
+  searchable do |s|
+    s.text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+    s.text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    s.text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    s.string :grouping_id
+    s.string :type_name
+  end
+
+  has_shared_search_fields [
+    { :type => :integer, :method => :instance_account_ids, :options => { :multiple => true } }
+  ]
+
+  def instance_account_ids
+    schema.database.instance_account_ids
   end
 
   def self.search_permissions(current_user, search)

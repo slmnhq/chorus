@@ -61,7 +61,7 @@ FixtureBuilder.configure do |fbuilder|
 
     bobsearch_database = GpdbDatabase.create!({ :instance => bobs_instance, :name => 'bobsearch_database' }, :without_protection => true)
     bobsearch_schema = GpdbSchema.create!({ :name => "bobsearch_schema", :database => bobsearch_database }, :without_protection => true)
-    GpdbTable.create!({ :name => "bobsearch_table", :schema => bobsearch_schema }, :without_protection => true)
+    bobssearch_table = GpdbTable.create!({ :name => "bobsearch_table", :schema => bobsearch_schema }, :without_protection => true)
 
     shared_search_database = GpdbDatabase.create!({ :instance => purplebanana_instance, :name => 'shared_database' }, :without_protection => true)
     shared_search_schema = GpdbSchema.create!({ :name => 'shared_schema', :database => shared_search_database }, :without_protection => true)
@@ -99,22 +99,22 @@ FixtureBuilder.configure do |fbuilder|
     #Workfiles
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
       alice_private = Workfile.create!({:file_name => "Alice Private", :description => "BobSearch", :owner => alice, :workspace => alice_private_workspace}, :without_protection => true)
-      WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
-      fbuilder.name :alice_creates_private_workfile, Events::WORKFILE_CREATED.by(alice).add(:workfile => alice_private, :workspace => alice_private_workspace)
-
       alice_public = Workfile.create!({:file_name => "Alice Public", :description => "AliceSearch", :owner => alice, :workspace => alice_public_workspace}, :without_protection => true)
+      bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace}, :without_protection => true)
+      bob_public = Workfile.create!({:file_name => "Bob Public", :description => "BobSearch", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
+
+      WorkfileVersion.create!({:workfile => alice_private, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
       WorkfileVersion.create!({:workfile => alice_public, :version_num => "1", :owner => alice, :modifier => alice, :contents => file}, :without_protection => true)
+      WorkfileVersion.create!({:workfile => bob_private, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
+      WorkfileVersion.create!({:workfile => bob_public, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
+
+      fbuilder.name :alice_creates_private_workfile, Events::WORKFILE_CREATED.by(alice).add(:workfile => alice_private, :workspace => alice_private_workspace)
+      fbuilder.name :bob_creates_public_workfile, Events::WORKFILE_CREATED.by(bob).add(:workfile => bob_public, :workspace => bob_public_workspace)
+      fbuilder.name :bob_creates_private_workfile, Events::WORKFILE_CREATED.by(bob).add(:workfile => bob_private, :workspace => bob_private_workspace)
       fbuilder.name :alice_creates_public_workfile, Events::WORKFILE_CREATED.by(alice).add(:workfile => alice_public, :workspace => alice_public_workspace)
 
-      bob_private = Workfile.create!({:file_name => "Bob Private", :description => "BobSearch", :owner => bob, :workspace => bob_private_workspace}, :without_protection => true)
-      WorkfileVersion.create!({:workfile => bob_private, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
-      fbuilder.name :bob_creates_private_workfile, Events::WORKFILE_CREATED.by(bob).add(:workfile => bob_private, :workspace => bob_private_workspace)
-
-      bob_public = Workfile.create!({:file_name => "Bob Public", :description => "BobSearch", :owner => bob, :workspace => bob_public_workspace}, :without_protection => true)
-      WorkfileVersion.create!({:workfile => bob_public, :version_num => "1", :owner => bob, :modifier => bob, :contents => file}, :without_protection => true)
-      fbuilder.name :bob_creates_public_workfile, Events::WORKFILE_CREATED.by(bob).add(:workfile => bob_public, :workspace => bob_public_workspace)
-
-      Events::NOTE_ON_WORKFILE.by(bob).add(:workfile => bob_public, :body => 'Note on workfile')
+      fbuilder.name :note_on_bob_public_workfile, Events::NOTE_ON_WORKFILE.by(bob).add(:workspace => bob_public_workspace, :workfile => bob_public, :body => 'notesearch forever')
+      fbuilder.name :note_on_alice_private_workfile, Events::NOTE_ON_WORKFILE.by(alice).add(:workspace => alice_private_workspace, :workfile => alice_private, :body => 'notesearch never')
     end
 
     #CSV File
@@ -133,6 +133,9 @@ FixtureBuilder.configure do |fbuilder|
     Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
     Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
     Events::IMPORT_SUCCESS.by(carly).add(:dataset => bobs_table, :workspace => bob_public_workspace)
+    fbuilder.name :note_on_dataset, Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
+    fbuilder.name :note_on_bob_public, Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
+    fbuilder.name :note_on_alice_private, Events::NOTE_ON_WORKSPACE.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
 
     #Events
     Events::GREENPLUM_INSTANCE_CHANGED_OWNER.by(admin).add(:greenplum_instance => greenplum_instance, :new_owner => alice)
