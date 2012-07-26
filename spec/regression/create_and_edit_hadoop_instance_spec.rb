@@ -13,7 +13,7 @@ describe "adding an instance " do
       choose("register_existing_hadoop")
       fill_in 'name', :with => "hadoop invalid instance name"
       fill_in 'description', :with => "hadoop instance"
-      fill_in 'host', :with => "gillette.sf.pivotallabs.com"
+      fill_in 'host', :with => "chorus-gphd11.sf.pivotallabs.com"
       fill_in 'port', :with => "8020"
       fill_in 'username', :with => "hadoop"
       fill_in 'groupList', :with => "hadoop"
@@ -46,7 +46,7 @@ describe "adding an instance " do
     page.should have_content"Unable to determine HDFS server version. Check connection parameters"
 
     within_modal do
-      fill_in 'host', :with => "gillette.sf.pivotallabs.com"
+      fill_in 'host', :with => "chorus-gphd11.sf.pivotallabs.com"
       fill_in 'port', :with => "8020"
       find(".submit").click
     end

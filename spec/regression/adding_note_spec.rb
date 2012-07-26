@@ -11,12 +11,8 @@ it "contains the new note on hadoop file" do
   wait_until { page.has_selector?('a[data-dialog="NotesNew"]') }
   sleep(1)
   click_link "Add a note"
-
-  within_modal do
-    set_cleditor_value("body", "Note on the hadoop file")
-    click_submit_button
-    wait_for_ajax
-  end
+  set_cleditor_value("body", "Note on the hadoop file")
+  click_submit_button
 
   page.should have_content("Note on the hadoop file")
 end
@@ -37,7 +33,6 @@ describe "creating a note on a dataset" do
     within_modal do
       set_cleditor_value("body", "Note on a dataset")
       click_submit_button
-      wait_for_ajax
     end
     page.should have_content("Note on a dataset")
 

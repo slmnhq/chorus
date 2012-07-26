@@ -103,7 +103,7 @@ describe "Editing instance details" do
       end
       click_link "Edit Instance"
       within_modal do
-        fill_in 'host', :with => "gillette.sf.pivotallabs.com"
+        fill_in 'host', :with => "chorus-gpdb40.sf.pivotallabs.com"
         fill_in 'port', :with => "5432"
         click_button "Save Configuration"
       end
