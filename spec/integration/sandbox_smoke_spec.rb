@@ -5,7 +5,7 @@ describe "Create Sandbox" do
     login('edcadmin', 'secret')
   end
 
-  it "creates sandbox in private workspace" do
+  xit "creates sandbox in private workspace" do
     go_to_workspace_page
     create_gpdb_instance(:name => "Gillette")
     create_valid_workspace(:name => "Private Workspace", :shared => false)

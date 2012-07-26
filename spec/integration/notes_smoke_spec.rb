@@ -60,7 +60,9 @@ describe "creating a note on a workfile" do
 
   it "contains a note on the workfile list page" do
     login('edcadmin', 'secret')
-    create_valid_workspace
+    create_valid_workspace(:name => "notewf")
+    wait_for_ajax
+    page.should have_content "notewf"
     create_valid_workfile(:name => "notewf")
     click_link "Add a note"
     within_modal do
