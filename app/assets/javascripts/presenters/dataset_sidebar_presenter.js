@@ -1,13 +1,11 @@
-chorus.presenters.DatasetSidebar = function(sidebar) {
-    var keys = ["resource", "options", "importConfiguration"];
-    _.each(keys, function(key) {
-        this[key] = sidebar[key];
-    }, this);
+chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
+    setup: function() {
+        var keys = ["resource", "options", "importConfiguration"];
+        _.each(keys, function(key) {
+            this[key] = this.model[key];
+        }, this);
+    },
 
-    return this.makeContext();
-}
-
-_.extend(chorus.presenters.DatasetSidebar.prototype, {
     makeContext: function() {
         var additionalContexts = ['resource', 'import', 'nextImport', 'lastImport', 'workspace']
 
@@ -158,6 +156,6 @@ _.extend(chorus.presenters.DatasetSidebar.prototype, {
     ellipsize: function (name) {
         if (!name) return "";
         var length = 15;
-        return ((name.length < length) ? name : name.slice(0, length-3)).trim() + "...";
+        return (name.length < length) ? name : name.slice(0, length-3).trim() + "...";
     }
 });

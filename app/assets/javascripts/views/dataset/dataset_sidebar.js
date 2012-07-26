@@ -100,7 +100,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext: function() {
-        return new chorus.presenters.DatasetSidebar(this);
+        return new chorus.presenters.DatasetSidebar(this).makeContext();
     },
 
     postRender: function() {
