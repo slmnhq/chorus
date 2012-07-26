@@ -11,7 +11,6 @@ describe DataMigrator, :legacy_migration => true, :type => :legacy_migration do
     @data_migrator.migrators[i+=1].should be_instance_of UserMigrator
     @data_migrator.migrators[i+=1].should be_instance_of InstanceMigrator
     @data_migrator.migrators[i+=1].should be_instance_of InstanceAccountMigrator
-    @data_migrator.migrators[i+=1].should be_instance_of DatabaseMigrator
     @data_migrator.migrators[i+=1].should be_instance_of WorkspaceMigrator
     @data_migrator.migrators[i+=1].should be_instance_of MembershipMigrator
     @data_migrator.migrators[i+=1].should be_instance_of ImageMigrator
@@ -40,6 +39,15 @@ describe DataMigrator, :legacy_migration => true, :type => :legacy_migration do
       end
 
       @data_migrator.migrate
+    end
+
+    it "is transactional" do
+      any_instance_of(InstanceMigrator) do |im|
+        mock(im).migrate { raise Exception }
+      end
+
+      expect { @data_migrator.migrate }.to raise_error(Exception)
+      User.count.should == 0
     end
   end
 end

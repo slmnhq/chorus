@@ -3,11 +3,9 @@ require 'spec_helper'
 describe SandboxMigrator, :legacy_migration => true, :type => :legacy_migration do
   describe ".migrate" do
     before do
-      mock_dataset_refresh
       UserMigrator.new.migrate
       InstanceMigrator.new.migrate
       InstanceAccountMigrator.new.migrate
-      DatabaseMigrator.new.migrate
       WorkspaceMigrator.new.migrate
       MembershipMigrator.new.migrate
       SandboxMigrator.new.migrate

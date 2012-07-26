@@ -6,16 +6,11 @@ describe AssociatedDatasetMigrator, :legacy_migration => true, :type => :legacy_
     UserMigrator.new.migrate
     InstanceMigrator.new.migrate
     InstanceAccountMigrator.new.migrate
-    DatabaseMigrator.new.migrate
     WorkspaceMigrator.new.migrate
     AssociatedDatasetMigrator.new.migrate
   end
 
   describe ".migrate" do
-    before do
-      mock_dataset_refresh
-    end
-
     LEGACY_ASSOCIATED_DATASETS_SQL = <<-SQL
       SELECT
         edc_dataset.*,

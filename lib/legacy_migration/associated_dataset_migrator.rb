@@ -7,9 +7,9 @@ class AssociatedDatasetMigrator
     legacy_associated_datasets.each_with_index do |legacy_associated_dataset, i|
       next if legacy_associated_dataset['type'] == 'CHORUS_VIEW'
       instance = Instance.find(legacy_associated_dataset['chorus_rails_instance_id'])
-      database = instance.databases.find_by_name(legacy_associated_dataset['database_name'])
-      schema = database.schemas.find_by_name(legacy_associated_dataset['schema_name'])
-      dataset = schema.datasets.find_by_name(legacy_associated_dataset['object_name'])
+      database = instance.databases.find_or_create_by_name(legacy_associated_dataset['database_name'])
+      schema = database.schemas.find_or_create_by_name(legacy_associated_dataset['schema_name'])
+      dataset = schema.datasets.find_or_create_by_name(legacy_associated_dataset['object_name'])
       new_associated_dataset = AssociatedDataset.new({
           :workspace_id => legacy_associated_dataset['chorus_rails_workspace_id'],
           :dataset_id => dataset.id

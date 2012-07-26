@@ -6,7 +6,6 @@ class DataMigrator
                   UserMigrator.new,
                   InstanceMigrator.new,
                   InstanceAccountMigrator.new,
-                  DatabaseMigrator.new,
                   WorkspaceMigrator.new,
                   MembershipMigrator.new,
                   ImageMigrator.new,
@@ -18,8 +17,10 @@ class DataMigrator
   end
 
   def migrate
-    @migrators.each do |migrator|
-      migrator.migrate
+    ActiveRecord::Base.transaction do
+      @migrators.each do |migrator|
+        migrator.migrate
+      end
     end
   end
 end

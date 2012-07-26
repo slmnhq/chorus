@@ -124,11 +124,12 @@ class Legacy::ActivityStream
     sql = "SELECT ei.chorus_rails_instance_id FROM edc_instance ei WHERE ei.id = '#{legacy_instance_id}'"
     rails_instance_id = extract_result("chorus_rails_instance_id", Legacy.connection.exec_query(sql))
     instance = Instance.find_by_id(rails_instance_id)
+    raise Exception, "Instance for activity could not be found" unless instance
 
-    database = instance.databases.find_by_name(database_name) if instance
-    schema = database.schemas.find_by_name(schema_name) if database
-    dataset = schema.datasets.find_by_name(dataset_name) if schema
-    dataset ? dataset.id : nil
+    database = instance.databases.find_or_create_by_name(database_name)
+    schema = database.schemas.find_or_create_by_name(schema_name)
+    dataset = schema.datasets.find_or_create_by_name(dataset_name)
+    dataset.id
   end
 
   def extract_result(result_key, sql)

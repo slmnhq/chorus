@@ -101,7 +101,6 @@ RSpec.configure do |config|
   config.include GpdbTestHelpers
   config.include AllowyRSpecHelpers
   config.include GpdbIntegration, :database_integration => true
-  config.include LegacyMigrationHelper, :type => :legacy_migration
   config.include SunspotMatchers
   config.include SolrHelpers
 end

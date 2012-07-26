@@ -9,7 +9,6 @@ class DatabaseMigrationRefreshExport
         UserMigrator.new.migrate
         InstanceMigrator.new.migrate
         InstanceAccountMigrator.new.migrate
-        DatabaseMigrator.new.migrate
 
         self.dump_class(GpdbDatabase, Rails.root + 'spec/other_fixtures/database_migration_refresh/gpdb_database.yml' )
         self.dump_class(GpdbSchema, Rails.root + 'spec/other_fixtures/database_migration_refresh/gpdb_schema.yml' )

@@ -166,8 +166,8 @@ describe Legacy::ActivityStream, :legacy_migration => true, :type => :legacy_mig
     end
 
     context "when it doesn't have a dataset'" do
-      it "returns false" do
-        greenplum_activity_stream.rails_dataset_id.should_not be_present
+      it "raises an error" do
+        expect { greenplum_activity_stream.rails_dataset_id }.to raise_error(Exception)
       end
     end
   end

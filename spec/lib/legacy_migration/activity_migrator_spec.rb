@@ -12,9 +12,7 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
 
     context "migrating activities that reference datasets" do
       before do
-        mock_dataset_refresh
         InstanceAccountMigrator.new.migrate
-        DatabaseMigrator.new.migrate
         ActivityMigrator.new.migrate
       end
 
