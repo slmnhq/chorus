@@ -137,8 +137,9 @@ describe Workspace do
     let(:workspace) { workspaces(:alice_public) }
 
     before do
-      Timecop.freeze(archive_time)
-      workspace.archive_as(user)
+      Timecop.freeze(archive_time) do
+        workspace.archive_as(user)
+      end
     end
 
     it "is archived by the correct user at the correct time" do
