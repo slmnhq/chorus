@@ -17,7 +17,7 @@ describe "Listing workfiles by type" do
     click_button("Upload File")
     wait_for_ajax
     within_modal do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+      attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
     end
     wait_until { current_route =~ /workspaces\/\d+\/workfiles\/\d+/ }
@@ -33,7 +33,7 @@ describe "Listing workfiles by type" do
     click_link("Work Files")
     click_button("Upload File")
     within_modal do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/small2.png'))
+      attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/small2.png'))
       click_button("Upload File")
       wait_for_ajax
     end
@@ -47,7 +47,7 @@ describe "Listing workfiles by type" do
     click_link("Work Files")
     click_button("Upload File")
     within_modal do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/somecode.r'))
+      attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/somecode.r'))
       click_button("Upload File")
       wait_for_ajax
     end
@@ -60,7 +60,7 @@ describe "Listing workfiles by type" do
     click_link("Work Files")
     click_button("Upload File")
     within_modal do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/somepdf.pdf'))
+      attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/somepdf.pdf'))
       click_button("Upload File")
       wait_for_ajax
     end
@@ -126,7 +126,7 @@ describe "add a workfile and resolve name conflict" do
     wait_for_ajax
 
     within_modal do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+      attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
       wait_for_ajax
     end
@@ -136,7 +136,7 @@ describe "add a workfile and resolve name conflict" do
     wait_for_ajax
 
     within_modal do
-      attach_file("workfile[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+      attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
       click_button("Upload File")
       wait_for_ajax
     end

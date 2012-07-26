@@ -57,8 +57,6 @@ describe "Viewing data inside GPDB instances" do
 
       within ".statistics_detail" do
         page.should have_content("Source View")
-        page.should have_content("Columns 2")
-        page.should have_content("Description This is the comment on view - __lenny")
       end
 
       within ".definition" do
