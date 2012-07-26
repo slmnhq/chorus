@@ -1,5 +1,5 @@
 module Events
-  class NoteAccess < DefaultAccess
+  class NoteAccess < AdminFullAccess
     def update?(note)
       note.actor == current_user
     end

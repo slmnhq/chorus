@@ -60,21 +60,19 @@ class Instance < ActiveRecord::Base
   end
 
   def owner_account
-    account_owned_by!(owner)
-  end
-
-  def account_for_user!(user)
-    if shared? || user.admin?
-      owner_account
-    else
-      account_owned_by!(user)
-    end
+    account_owned_by(owner)
   end
 
   def account_for_user(user)
-    account_for_user!(user)
-  rescue ActiveRecord::RecordNotFound
-    nil
+    if shared?
+      owner_account
+    else
+      account_owned_by(user)
+    end
+  end
+
+  def account_for_user!(user)
+    account_for_user(user) || (raise ActiveRecord::RecordNotFound.new)
   end
 
   def instance
@@ -100,7 +98,7 @@ class Instance < ActiveRecord::Base
     ).to_sql
   end
 
-  def account_owned_by!(user)
-    accounts.find_by_owner_id!(user.id)
+  def account_owned_by(user)
+    accounts.find_by_owner_id(user.id)
   end
 end

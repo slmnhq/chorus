@@ -5,7 +5,9 @@ class CsvImporter
   CREATE_TABLE_STRING = Rails.env.test? ? 'create temporary table' : 'create table'
 
   def self.import_file(csv_file_id)
-    new(csv_file_id).import
+    csv_importer = new(csv_file_id)
+    csv_importer.import
+    csv_importer.csv_file.delete
   end
 
   def initialize(csv_file_id)

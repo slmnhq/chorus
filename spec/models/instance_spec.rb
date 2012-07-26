@@ -147,38 +147,31 @@ describe Instance do
     end
 
     context "individual instance" do
-      let!(:instance) { FactoryGirl.create :instance, :shared => false }
-      let!(:owner_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => instance.owner.id }
-      let!(:user_account) { FactoryGirl.create :instance_account, :instance => instance, :owner_id => user.id }
-      let!(:admin) { FactoryGirl.create :admin }
+      let!(:instance) { instances(:bobs_instance) }
+      let!(:owner_account) { InstanceAccount.find_by_instance_id_and_owner_id(instance.id, instance.owner.id) }
+      let!(:user_account) { InstanceAccount.find_by_instance_id_and_owner_id(instance.id, users(:carly).id) }
 
-      it "should return the account for the user or nil if the user has no account" do
+      it "should return the account for the user" do
         instance.account_for_user!(instance.owner).should == owner_account
-        instance.account_for_user!(user).should == user_account
-      end
-
-      it "should return the owner's account if current user is admin" do
-        instance.account_for_user!(admin).should == owner_account
+        instance.account_for_user!(user_account.owner).should == user_account
       end
     end
 
     context "missing account" do
-      let!(:instance) { FactoryGirl.create :instance }
+      let!(:instance) { instances(:bobs_instance) }
 
       it "raises an exception" do
-        expect { instance.account_for_user!(user) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { instance.account_for_user!(users(:alice)) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
 
   describe "#account_for_user" do
-    let(:user) { FactoryGirl.create :user }
+    let!(:instance) { instances(:bobs_instance) }
 
     context "missing account" do
-      let!(:instance) { FactoryGirl.create :instance }
-
       it "returns nil" do
-        instance.account_for_user(user).should be_nil
+        instance.account_for_user(users(:alice)).should be_nil
       end
     end
   end

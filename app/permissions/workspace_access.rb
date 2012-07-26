@@ -1,4 +1,4 @@
-class WorkspaceAccess < DefaultAccess
+class WorkspaceAccess < AdminFullAccess
   def self.workspaces_for(current_user)
     if current_user.admin?
       Workspace.scoped
