@@ -30,3 +30,19 @@ describe "searches for worksapce name" do
 
   end
 end
+
+describe "searches for workfile name" do
+
+  it "searches for workspaces" do
+    login('edcadmin', 'secret')
+    create_valid_workspace(:name => "workspace", :shared => true)
+    wait_for_ajax
+    create_valid_workfile(:name => "search_workfile")
+    page.execute_script("$('.chorus_search_container>input').val('search_workfile.sql');")
+    find('.chorus_search_container>input').native.send_keys(:return)
+    wait_for_ajax
+    page.should have_content "Search for"
+    page.should have_content "search_workfile"
+
+  end
+end
