@@ -87,6 +87,9 @@ FixtureBuilder.configure do |fbuilder|
       workspace.members << carly
     end
 
+    # Workspace / Dataset associations
+    bob_public_workspace.bound_datasets << bobs_table
+
     fbuilder.name :bob_creates_public_workspace, Events::PUBLIC_WORKSPACE_CREATED.by(bob).add(:workspace => bob_public_workspace, :actor => bob)
     fbuilder.name :bob_creates_private_workspace, Events::PRIVATE_WORKSPACE_CREATED.by(bob).add(:workspace => bob_private_workspace, :actor => bob)
 
@@ -134,6 +137,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
     Events::IMPORT_SUCCESS.by(carly).add(:dataset => bobs_table, :workspace => bob_public_workspace)
     fbuilder.name :note_on_dataset, Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
+    fbuilder.name :note_on_workspace_dataset, Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
     fbuilder.name :note_on_bob_public, Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
     fbuilder.name :note_on_alice_private, Events::NOTE_ON_WORKSPACE.by(alice).add(:workspace => alice_private_workspace, :body => 'notesearch never')
 

@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>8,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>11,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''dismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''bobsearch'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''facet.field''=>''type_name_s'',''fq''=>[''type:(User
@@ -31,25 +31,25 @@ http_interactions:
         AND -member_ids_im:1000002 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000002 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>9,''ngroups''=>8,''groups''=>[{''groupValue''=>''User
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3249659.5,''docs''=>[{''id''=>''User
-        1000003'',''first_name_texts''=>[''BobSearch''],''username_texts''=>[''bob''],''email_texts''=>[''bob@example.com''],''last_name_texts''=>[''Brockovich''],''score''=>3249659.5}]}},{''groupValue''=>''Dataset
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1510669.2,''docs''=>[{''id''=>''GpdbTable
-        1000003'',''name_texts''=>[''bobsearch_shared_table''],''database_name_texts''=>[''shared_database''],''schema_name_texts''=>[''shared_schema''],''score''=>1510669.2}]}},{''groupValue''=>''Workspace
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1923.0028,''docs''=>[{''id''=>''Workspace
-        1000003'',''name_texts''=>[''Bob Public''],''summary_texts''=>[''BobSearch''],''score''=>1923.0028}]}},{''groupValue''=>''Workfile
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1923.0028,''docs''=>[{''id''=>''Workfile
-        1000000'',''file_name_texts''=>[''Alice Private''],''description_texts''=>[''BobSearch''],''score''=>1923.0028}]}},{''groupValue''=>''Workfile
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1923.0028,''docs''=>[{''id''=>''Workfile
-        1000003'',''file_name_texts''=>[''Bob Public''],''description_texts''=>[''BobSearch''],''score''=>1923.0028}]}},{''groupValue''=>''Instance
-        1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>824.14404,''docs''=>[{''id''=>''Instance
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>3124148.5,''docs''=>[{''id''=>''User
+        1000003'',''first_name_texts''=>[''BobSearch''],''username_texts''=>[''bob''],''email_texts''=>[''bob@example.com''],''last_name_texts''=>[''Brockovich''],''score''=>3124148.5}]}},{''groupValue''=>''Dataset
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1441300.1,''docs''=>[{''id''=>''GpdbTable
+        1000003'',''name_texts''=>[''bobsearch_shared_table''],''database_name_texts''=>[''shared_database''],''schema_name_texts''=>[''shared_schema''],''score''=>1441300.1}]}},{''groupValue''=>''Workspace
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1812.103,''docs''=>[{''id''=>''Workspace
+        1000003'',''name_texts''=>[''Bob Public''],''summary_texts''=>[''BobSearch''],''score''=>1812.103}]}},{''groupValue''=>''Workfile
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1812.103,''docs''=>[{''id''=>''Workfile
+        1000000'',''file_name_texts''=>[''Alice Private''],''description_texts''=>[''BobSearch''],''score''=>1812.103}]}},{''groupValue''=>''Workfile
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1812.103,''docs''=>[{''id''=>''Workfile
+        1000003'',''file_name_texts''=>[''Bob Public''],''description_texts''=>[''BobSearch''],''score''=>1812.103}]}},{''groupValue''=>''Instance
+        1000000'',''doclist''=>{''numFound''=>2,''start''=>0,''maxScore''=>776.6156,''docs''=>[{''id''=>''Instance
         1000000'',''name_texts''=>[''Greenplum''],''description_texts''=>[''Just for
-        bobsearch and greenplumsearch''],''score''=>824.14404},{''id''=>''Events::NOTE_ON_GREENPLUM_INSTANCE
-        1000018'',''body_texts''=>[''i love bobsearch''],''score''=>1.7709239}]}},{''groupValue''=>''Workspace
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>824.14404,''docs''=>[{''id''=>''Workspace
+        bobsearch and greenplumsearch''],''score''=>776.6156},{''id''=>''Events::NOTE_ON_GREENPLUM_INSTANCE
+        1000018'',''body_texts''=>[''i love bobsearch''],''score''=>1.7025259}]}},{''groupValue''=>''Workspace
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>776.6156,''docs''=>[{''id''=>''Workspace
         1000000'',''name_texts''=>[''Alice Public''],''summary_texts''=>[''BobSearch
-        can see I guess''],''score''=>824.14404}]}},{''groupValue''=>''Workspace 1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>824.14404,''docs''=>[{''id''=>''Workspace
+        can see I guess''],''score''=>776.6156}]}},{''groupValue''=>''Workspace 1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>776.6156,''docs''=>[{''id''=>''Workspace
         1000001'',''name_texts''=>[''Alice Private''],''summary_texts''=>[''Not for
-        bobsearch, ha ha''],''score''=>824.14404}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workspace'',3,''Workfile'',2,''Dataset'',1,''Instance'',1,''User'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
+        bobsearch, ha ha''],''score''=>776.6156}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workspace'',3,''Workfile'',2,''Dataset'',1,''Instance'',1,''User'',1]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''User
         1000003''=>{''first_name_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''GpdbTable
         1000003''=>{''name_texts''=>[''@@@hl@@@bobsearch@@@endhl@@@_shared_table'']},''Workspace
         1000003''=>{''summary_texts''=>[''@@@hl@@@BobSearch@@@endhl@@@'']},''Workfile
@@ -61,6 +61,6 @@ http_interactions:
         can see I guess'']},''Workspace 1000001''=>{''summary_texts''=>[''Not for
         @@@hl@@@bobsearch@@@endhl@@@, ha ha'']}}}'
     http_version:
-  recorded_at: Thu, 26 Jul 2012 20:54:06 GMT
+  recorded_at: Thu, 26 Jul 2012 23:06:49 GMT
 recorded_with: VCR 2.1.1
 ...

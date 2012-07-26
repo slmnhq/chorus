@@ -219,6 +219,15 @@ describe Search do
           search.datasets.should be_empty
         end
       end
+
+      it "includes notes created in the workspace context" do
+        events(:note_on_workspace_dataset).body.should == "workspacedatasetnotesearch"
+        VCR.use_cassette('search_solr_ws_dataset_notes_query') do
+          search = Search.new(bob, :query => 'workspacedatasetnotesearch')
+          dataset = search.datasets.first
+          dataset.search_result_notes[0][:highlighted_attributes][:body][0].should == "<em>workspacedatasetnotesearch</em>"
+        end
+      end
     end
 
     describe "highlighted notes" do

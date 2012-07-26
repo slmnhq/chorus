@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>5,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
+      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''first_name_texts
         last_name_texts username_texts email_texts name_texts description_texts summary_texts
         file_name_texts database_name_texts schema_name_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''dismax'',''fl''=>''*
         score'',''start''=>''0'',''q''=>''notesearch'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''facet.field''=>''type_name_s'',''fq''=>[''type:(User
@@ -31,19 +31,19 @@ http_interactions:
         AND -member_ids_im:1000004 AND -public_b:true)'',''-(type_name_s:Workfile
         AND -member_ids_im:1000004 AND -public_b:true)'',''-(type_name_s:Dataset AND
         -instance_account_ids_im:(1000000 OR 1000001))'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>4,''ngroups''=>4,''groups''=>[{''groupValue''=>''Workspace
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.76477593,''docs''=>[{''id''=>''Events::NOTE_ON_WORKSPACE
-        1000029'',''body_texts''=>[''notesearch forever''],''score''=>0.76477593}]}},{''groupValue''=>''Workspace
-        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.76477593,''docs''=>[{''id''=>''Events::NOTE_ON_WORKSPACE
-        1000030'',''body_texts''=>[''notesearch never''],''score''=>0.76477593}]}},{''groupValue''=>''Workfile
-        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.76477593,''docs''=>[{''id''=>''Events::NOTE_ON_WORKFILE
-        1000015'',''body_texts''=>[''notesearch forever''],''score''=>0.76477593}]}},{''groupValue''=>''Workfile
-        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>0.76477593,''docs''=>[{''id''=>''Events::NOTE_ON_WORKFILE
-        1000016'',''body_texts''=>[''notesearch never''],''score''=>0.76477593}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workfile'',2,''Workspace'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NOTE_ON_WORKSPACE
-        1000029''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']},''Events::NOTE_ON_WORKSPACE
-        1000030''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ never'']},''Events::NOTE_ON_WORKFILE
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.118778,''docs''=>[{''id''=>''Events::NOTE_ON_WORKSPACE
+        1000030'',''body_texts''=>[''notesearch forever''],''score''=>1.118778}]}},{''groupValue''=>''Workspace
+        1000001'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.118778,''docs''=>[{''id''=>''Events::NOTE_ON_WORKSPACE
+        1000031'',''body_texts''=>[''notesearch never''],''score''=>1.118778}]}},{''groupValue''=>''Workfile
+        1000003'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.118778,''docs''=>[{''id''=>''Events::NOTE_ON_WORKFILE
+        1000015'',''body_texts''=>[''notesearch forever''],''score''=>1.118778}]}},{''groupValue''=>''Workfile
+        1000000'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.118778,''docs''=>[{''id''=>''Events::NOTE_ON_WORKFILE
+        1000016'',''body_texts''=>[''notesearch never''],''score''=>1.118778}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Workfile'',2,''Workspace'',2]},''facet_dates''=>{},''facet_ranges''=>{}},''highlighting''=>{''Events::NOTE_ON_WORKSPACE
+        1000030''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']},''Events::NOTE_ON_WORKSPACE
+        1000031''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ never'']},''Events::NOTE_ON_WORKFILE
         1000015''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ forever'']},''Events::NOTE_ON_WORKFILE
         1000016''=>{''body_texts''=>[''@@@hl@@@notesearch@@@endhl@@@ never'']}}}'
     http_version:
-  recorded_at: Thu, 26 Jul 2012 20:49:24 GMT
+  recorded_at: Thu, 26 Jul 2012 23:07:51 GMT
 recorded_with: VCR 2.1.1
 ...
