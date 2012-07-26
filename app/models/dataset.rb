@@ -168,16 +168,3 @@ class Dataset < ActiveRecord::Base
   end
 end
 
-# From PostgresDBAccess.getViewMetaList
-#
-#"SELECT c.relname AS name, c.relnatts AS columnCount, d.description AS desc, v.definition as definition " +
-#"FROM pg_views v, pg_namespace n LEFT JOIN pg_class c ON (n.oid=c.relnamespace) " +
-#"LEFT JOIN pg_description d ON (c.oid=d.objoid) " +
-#"WHERE n.nspname= :schemaName AND c.relname IN (:viewNames) AND v.viewname = c.relname ORDER BY lower(c.relname)";
-
-# FROM PostgresDbAccess.getMultipleTableMeta
-#
-#"SELECT n.nspname as schemaName, c.relname AS name, d.description AS description " +
-#        "FROM pg_namespace n LEFT JOIN pg_class c ON (n.oid=c.relnamespace) " +
-#        "                    LEFT JOIN pg_description d ON (c.oid=d.objoid) " +
-#        "WHERE n.nspname= :schemaName AND c.relname IN (:names)";
