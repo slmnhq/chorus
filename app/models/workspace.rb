@@ -64,11 +64,11 @@ class Workspace < ActiveRecord::Base
   end
 
   def datasets
-    associated_dataset_ids = associated_datasets.pluck(:dataset_id)
     if sandbox
+      associated_dataset_ids = associated_datasets.pluck(:dataset_id)
       Dataset.where("schema_id = ? OR id IN (?)", sandbox.id, associated_dataset_ids)
     else
-      Dataset.where("id IN (?)", associated_dataset_ids)
+      bound_datasets
     end
   end
 

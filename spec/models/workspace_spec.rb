@@ -118,7 +118,7 @@ describe Workspace do
       end
 
       it "returns an empty relation" do
-        workspace.datasets.should == []
+        workspace.reload.datasets.should == []
       end
     end
   end

@@ -7,6 +7,10 @@ module Events
       s.string :type_name
     end
 
+    has_additional_data :body
+
+    delegate :grouping_id, :type_name, :to => :primary_target
+
     def self.create_from_params(params, creator)
       body = params[:body]
       entity_id = params[:entity_id]
@@ -19,14 +23,6 @@ module Events
       event_params["workspace"] = Workspace.find(workspace_id) if workspace_id
       event_class = event_class_for_model(model, workspace_id)
       event_class.by(creator).add(event_params)
-    end
-
-    def grouping_id
-      (target1 && target1.grouping_id) || workspace.grouping_id
-    end
-
-    def type_name
-      (target1 && target1.type_name) || workspace.type_name
     end
 
     class << self
@@ -59,25 +55,21 @@ module Events
   class NOTE_ON_GREENPLUM_INSTANCE < Note
     has_targets :greenplum_instance
     has_activities :actor, :greenplum_instance, :global
-    has_additional_data :body
   end
 
   class NOTE_ON_HADOOP_INSTANCE < Note
     has_targets :hadoop_instance
     has_activities :actor, :hadoop_instance, :global
-    has_additional_data :body
   end
 
   class NOTE_ON_HDFS_FILE < Note
     has_targets :hdfs_file
     has_activities :actor, :hdfs_file, :global
-    has_additional_data :body
   end
 
   class NOTE_ON_WORKSPACE < Note
     has_targets :workspace
     has_activities :actor, :workspace
-    has_additional_data :body
 
     validate :no_note_on_archived_workspace
 
@@ -91,7 +83,6 @@ module Events
   class NOTE_ON_WORKFILE < Note
     has_targets :workfile
     has_activities :actor, :workfile, :workspace
-    has_additional_data :body
 
     include_shared_search_fields(:workspace)
   end
@@ -99,7 +90,6 @@ module Events
   class NOTE_ON_DATASET < Note
     has_targets :dataset
     has_activities :actor, :dataset, :global
-    has_additional_data :body
 
     include_shared_search_fields(:dataset)
   end
@@ -107,6 +97,7 @@ module Events
   class NOTE_ON_WORKSPACE_DATASET < Note
     has_targets :dataset, :workspace
     has_activities :actor, :dataset, :workspace
-    has_additional_data :body
+
+    include_shared_search_fields(:dataset)
   end
 end

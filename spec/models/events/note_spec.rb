@@ -158,16 +158,18 @@ describe "Notes" do
     end
 
     describe "with a target" do
-      before do
-        @note = Events::Note.new(:target1 => actor)
+      let(:workspace) { FactoryGirl.build(:workspace) }
+      let(:workfile) { FactoryGirl.build(:workfile) }
+      let(:subclass1) do
+        Class.new(Events::Note) { has_targets :workspace, :workfile }
       end
+      let(:note) { subclass1.new(:workspace => workspace, :workfile => workfile) }
 
-      it "returns the grouping_id of target1" do
-        @note.grouping_id.should == @note.target1.grouping_id
-      end
-
-      it "returns the type_name of target1" do
-        @note.type_name.should == @note.target1.type_name
+      it "groups with its first 'target'" do
+        note.grouping_id.should == workspace.grouping_id
+        note.grouping_id.should_not be_blank
+        note.type_name.should == workspace.type_name
+        note.type_name.should_not be_blank
       end
     end
   end

@@ -86,6 +86,8 @@ module Events
       target_names.each_with_index do |name, i|
         alias_getter_and_setter("target#{i+1}", name)
       end
+
+      alias_method("primary_target", target_names.first)
     end
 
     def self.alias_getter_and_setter(existing_name, new_name)
