@@ -1,10 +1,10 @@
 module Events
   class Note < Base
     validates_presence_of :actor_id
-    searchable do
-      text :body, :stored => true
-      string :grouping_id
-      string :type_name
+    searchable do |s|
+      s.text :body, :stored => true
+      s.string :grouping_id
+      s.string :type_name
     end
 
     def self.create_from_params(params, creator)
@@ -29,22 +29,29 @@ module Events
       (target1 && target1.type_name) || workspace.type_name
     end
 
-    private
+    class << self
+      private
 
-    def self.event_class_for_model(model, workspace_id)
-      case model
-      when Instance
-        NOTE_ON_GREENPLUM_INSTANCE
-      when HadoopInstance
-        NOTE_ON_HADOOP_INSTANCE
-      when Workspace
-        NOTE_ON_WORKSPACE
-      when Workfile
-        NOTE_ON_WORKFILE
-      when HdfsFileReference
-        NOTE_ON_HDFS_FILE
-      when Dataset
-        workspace_id ? NOTE_ON_WORKSPACE_DATASET : NOTE_ON_DATASET
+      def include_shared_search_fields(target_name)
+        klass = ModelMap::CLASS_MAP[target_name.to_s]
+        define_shared_search_fields(klass.shared_search_fields, target_name)
+      end
+
+      def event_class_for_model(model, workspace_id)
+        case model
+        when Instance
+          NOTE_ON_GREENPLUM_INSTANCE
+        when HadoopInstance
+          NOTE_ON_HADOOP_INSTANCE
+        when Workspace
+          NOTE_ON_WORKSPACE
+        when Workfile
+          NOTE_ON_WORKFILE
+        when HdfsFileReference
+          NOTE_ON_HDFS_FILE
+        when Dataset
+          workspace_id ? NOTE_ON_WORKSPACE_DATASET : NOTE_ON_DATASET
+        end
       end
     end
   end
@@ -77,19 +84,24 @@ module Events
     def no_note_on_archived_workspace
       errors.add(:workspace, :generic , {:message => "Can not add a note on an archived workspace"} ) if workspace.archived?
     end
+
+    include_shared_search_fields(:workspace)
   end
 
   class NOTE_ON_WORKFILE < Note
     has_targets :workfile
     has_activities :actor, :workfile, :workspace
     has_additional_data :body
-  end
 
+    include_shared_search_fields(:workspace)
+  end
 
   class NOTE_ON_DATASET < Note
     has_targets :dataset
     has_activities :actor, :dataset, :global
     has_additional_data :body
+
+    include_shared_search_fields(:dataset)
   end
 
   class NOTE_ON_WORKSPACE_DATASET < Note

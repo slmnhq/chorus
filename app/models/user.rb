@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
   validates_length_of :username, :first_name, :last_name, :email, :title, :dept, :maximum => 256
   validates_length_of :notes, :maximum => 4096
 
-  attr_accessor :highlighted_attributes, :search_result_comments
+  attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
     text :first_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :last_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST

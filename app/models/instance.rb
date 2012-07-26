@@ -12,7 +12,7 @@ class Instance < ActiveRecord::Base
   has_many :accounts, :class_name => 'InstanceAccount'
   has_many :databases, :class_name => 'GpdbDatabase'
 
-  attr_accessor :highlighted_attributes, :search_result_comments
+  attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST

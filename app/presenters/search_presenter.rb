@@ -37,7 +37,7 @@ class SearchPresenter < Presenter
       hsh = present(m)
 
       hsh[:highlighted_attributes] = model.highlighted_attributes
-      hsh[:comments] = model.search_result_comments
+      hsh[:comments] = model.search_result_notes
       hsh
     end
   end

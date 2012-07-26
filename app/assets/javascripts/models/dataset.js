@@ -48,6 +48,21 @@ chorus.models.Dataset = chorus.models.Base.include(
         return this.schema().database();
     },
 
+    getImport: function() {
+        return false;
+    },
+
+    hasImport: function() {
+        return this.getImport() && this.getImport().has("id");
+    },
+
+    canExport: function() {
+        return this.workspace() && this.workspace().canUpdate()
+            && this.hasCredentials()
+            && this.canBeImportSource()
+            && this.isImportConfigLoaded()
+    },
+
     schema: function() {
         return new chorus.models.Schema(this.get("schema"));
     },
@@ -66,6 +81,10 @@ chorus.models.Dataset = chorus.models.Base.include(
         }
         return this._workspaceAssociated;
 
+    },
+
+    isImportConfigLoaded: function() {
+        return this.getImport() && this.getImport().loaded;
     },
 
     invalidateWorkspacesAssociated: function() {

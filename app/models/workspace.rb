@@ -28,15 +28,18 @@ class Workspace < ActiveRecord::Base
 
   scope :active, where(:archived_at => nil)
 
-  attr_accessor :highlighted_attributes, :search_result_comments
+  attr_accessor :highlighted_attributes, :search_result_notes
   searchable do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :summary, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    integer :member_ids, :multiple => true
-    boolean :public
     string :grouping_id
     string :type_name
   end
+
+  has_shared_search_fields [
+    { :type => :integer, :method => :member_ids, :options => { :multiple => true } },
+    { :type => :boolean, :method => :public }
+  ]
 
   def self.search_permissions(current_user, search)
     unless current_user.admin?

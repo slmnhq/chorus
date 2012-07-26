@@ -118,7 +118,7 @@ describe("chorus.views.DatasetSidebar", function() {
             });
 
             it("does not have the 'Import Now' action even if there's a workspace", function() {
-                this.view.options.workspace = rspecFixtures.workspace();
+                this.view.resource._workspace = rspecFixtures.workspace();
                 this.view.render();
                 expect(this.view.$(".actions .import_now")).not.toExist();
             });
@@ -195,13 +195,13 @@ describe("chorus.views.DatasetSidebar", function() {
 
         context("when there is an archived workspace", function() {
             beforeEach(function() {
+                this.view.resource._workspace = rspecFixtures.workspace({ archivedAt: "2012-05-08T21:40:14Z", permission: ["update", "admin"] });
                 this.view.options.listMode = true;
-                this.view.options.workspace = rspecFixtures.workspace({archivedAt: "2012-05-08T21:40:14Z", permission: ["update", "admin"]});
                 this.view.render();
                 this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+                this.dataset._workspace = this.view.resource._workspace;
                 chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 this.server.completeFetchFor(this.view.importConfiguration, []);
-
             });
 
             it("has no action links except for 'Preview Data' and 'Download'", function() {
@@ -213,7 +213,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
         context("when there is a workspace", function() {
             beforeEach(function() {
-                this.view.options.workspace = rspecFixtures.workspace();
+                this.view.resource._workspace = rspecFixtures.workspace();
                 this.view.render();
             });
 
@@ -233,7 +233,7 @@ describe("chorus.views.DatasetSidebar", function() {
             context("when the dataset is a sandbox table or view", function() {
                 beforeEach(function() {
                     this.dataset = newFixtures.workspaceDataset.sandboxTable();
-                    this.view.options.workspace = rspecFixtures.workspace({ permission: ["update"] })
+                    this.view.resource._workspace = rspecFixtures.workspace({ id: 6007, permission: ["update"] })
                     chorus.PageEvents.broadcast("dataset:selected", this.dataset);
                 });
 
@@ -334,12 +334,12 @@ describe("chorus.views.DatasetSidebar", function() {
                 describe("when the import fetch completes", function() {
                     context("and the dataset has no import information", function() {
                         beforeEach(function() {
-                            this.server.completeFetchFor(this.view.importConfiguration, []);
+                            this.server.completeFetchFor(this.view.resource.getImport(), []);
                         });
 
                         context("and the current user has update permissions on the workspace", function() {
                             beforeEach(function() {
-                                this.view.options.workspace = rspecFixtures.workspace({ permission: ["update"] })
+                                this.view.resource._workspace = rspecFixtures.workspace({ id: 6008, id: "1337", permission: ["update"] });
                                 this.view.render();
                             });
 
@@ -358,14 +358,14 @@ describe("chorus.views.DatasetSidebar", function() {
                                 });
 
                                 it("should have the workspace attached as data-workspace", function() {
-                                    expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("workspace")).toBe(this.view.options.workspace);
+                                    expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("workspace")).toBe(this.view.resource.workspace());
                                 });
                             });
 
                             context("and the workspace does not have a sandbox", function() {
                                 beforeEach(function() {
-                                    delete this.view.options.workspace._sandbox;
-                                    this.view.options.workspace.set({
+                                    delete this.view.resource.workspace()._sandbox;
+                                    this.view.resource.workspace().set({
                                         "sandboxInfo": null
                                     })
                                     this.view.render();
@@ -385,7 +385,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                         context("and the current user does not have update permissions on the workspace", function() {
                             beforeEach(function() {
-                                this.view.options.workspace = rspecFixtures.workspace({ permission: ["read"] })
+                                this.view.resource._workspace = rspecFixtures.workspace({ id: 6009, permission: ["read"] })
                                 this.view.render();
                             });
 
@@ -418,7 +418,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                 toTable: "our_destination",
                                 destinationTable: '"10000"|"Analytics"|"analytics"|"TABLE"|"our_destination"'
                             });
-                            this.view.options.workspace = rspecFixtures.workspace({ permission: ["update"] })
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6010, id: 6000, permission: ["update"] })
                         });
 
                         it("shows the next import time", function() {
@@ -544,7 +544,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                 datasetId: this.dataset.get("id"),
                                 workspaceId: this.dataset.workspace().id
                             });
-                            this.view.options.workspace = rspecFixtures.workspace({ permission: ["update"] })
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6001, permission: ["update"] })
                         });
 
                         context("when the import has been successfully executed", function() {
@@ -648,7 +648,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                         context("when the user has permission to update in the workspace", function() {
                             beforeEach(function() {
-                                this.view.options.workspace = rspecFixtures.workspace({ permission: ["update"] })
+                                this.view.resource._workspace = rspecFixtures.workspace({ id: 6002, permission: ["update"] })
                                 this.view.render();
                             });
 
@@ -675,7 +675,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                         context("when the user does not have permission to update things in the workspace", function() {
                             beforeEach(function() {
-                                this.view.options.workspace = rspecFixtures.workspace({ permission: ["read"] })
+                                this.view.resource._workspace = rspecFixtures.workspace({ id: 6003, permission: ["read"] })
                                 this.view.render();
                             });
 
@@ -783,7 +783,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("and the logged-in user has update permission on the workspace", function() {
                         beforeEach(function() {
-                            this.view.options.workspace = rspecFixtures.workspace({ permission: ["update"] });
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6004, permission: ["update"] });
                             this.view.render();
                         });
 
@@ -796,7 +796,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("and the logged-in user does not have update permission on the workspace", function() {
                         beforeEach(function() {
-                            this.view.options.workspace = rspecFixtures.workspace({ permission: ["read"] });
+                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6005, permission: ["read"] });
                             this.view.render();
                         });
 

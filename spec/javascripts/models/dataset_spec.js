@@ -837,6 +837,78 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
+    describe("#hasImport", function() {
+        it("fails if there is no config", function() {
+            expect(this.dataset.hasImport()).toBeFalsy();
+        });
+
+        it("succeed if there is a config, but it has an id", function() {
+            var importDataset = rspecFixtures.workspaceDataset.datasetTable();
+            importDataset.getImport().set({ id: "1234" });
+            expect(importDataset.hasImport()).toBeTruthy();
+        });
+    });
+
+    describe("#canExport", function() {
+        var inheritedModelClass = chorus.models.Dataset.extend({
+            canBeImportSource: function() { return true; }
+        });
+
+        var dataset;
+        beforeEach(function() {
+            dataset = new inheritedModelClass();
+            dataset.set({
+                workspace: rspecFixtures.workspace(),
+                hasCredentials: true
+            });
+            dataset.importConfiguration = false;
+        });
+
+        it("shouldn't export when workspace cannot be updated", function() {
+            spyOn(dataset.workspace(), "canUpdate").andReturn(false);
+            expect(dataset.canExport()).toBeFalsy();
+        });
+
+        it("shouldn't export when no credentials", function() {
+            dataset.set({ hasCredentials: false });
+            expect(dataset.canExport()).toBeFalsy();
+        });
+
+        it("shouldn't export when it can't be import source", function() {
+            expect(dataset.canExport()).toBeFalsy();
+        });
+
+        it("exports when all are ok", function() {
+            spyOn(dataset.workspace(), "canUpdate").andReturn(true);
+            spyOn(dataset, "isImportConfigLoaded").andReturn(true);
+            expect(dataset.canExport()).toBeTruthy();
+        });
+
+        it("shouldn't export when import config is not loaded", function() {
+            expect(dataset.canExport()).toBeFalsy();
+        });
+    });
+
+    describe("#isImportConfigLoaded", function() {
+        it("fails if there is no config", function() {
+            this.dataset.importConfiguration = undefined;
+            expect(this.dataset.isImportConfigLoaded()).toBeFalsy();
+        });
+
+        it("fails if there is a config, but it isn't loaded", function() {
+            var importDataset = rspecFixtures.workspaceDataset.datasetTable();
+            this.dataset.importConfiguration = importDataset.getImport();
+            this.dataset.importConfiguration.loaded = false;
+            expect(this.dataset.isImportConfigLoaded()).toBeFalsy();
+        });
+
+        it("succeeds if there's a loaded config", function() {
+            var importDataset = rspecFixtures.workspaceDataset.datasetTable();
+            importDataset.getImport().loaded = true;
+            expect(importDataset.isImportConfigLoaded()).toBeTruthy();
+        });
+    });
+
     describe("Analyze", function() {
         beforeEach(function() {
             this.dataset = rspecFixtures.dataset({
