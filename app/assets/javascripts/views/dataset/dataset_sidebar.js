@@ -1,4 +1,4 @@
-chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
+    chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     constructorName: "DatasetSidebarView",
     templateName: "dataset_sidebar",
 
@@ -106,7 +106,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     postRender: function() {
         var $actionLinks = this.$("a.create_schedule, a.edit_schedule, a.import_now, a.download");
         $actionLinks.data("dataset", this.resource);
-        $actionLinks.data("workspace", this.options.workspace);
+        $actionLinks.data("workspace", this.resource && this.resource.workspace());
         this.showOrHideMultipleSelectionSection();
         this._super("postRender");
     },

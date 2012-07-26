@@ -22,7 +22,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     workspaceContext: function() {
-        if (!this.options.workspace) { return {}; }
+        if (!this.resource || !this.resource.workspace()) { return {}; }
 
         var deleteMsgKey;
         var deleteTextKey;
@@ -44,10 +44,10 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
         return {
             canExport: this.canExport(),
-            hasSandbox: this.options.workspace.sandbox(),
-            workspaceId: this.options.workspace.id,
-            activeWorkspace: this.options.workspace.isActive(),
-            isDeleteable: this.resource && this.resource.isDeleteable() && this.options.workspace.canUpdate(),
+            hasSandbox: this.resource.workspace().sandbox(),
+            workspaceId: this.resource.workspace().id,
+            activeWorkspace: this.resource.workspace().isActive(),
+            isDeleteable: this.resource.isDeleteable() && this.resource.workspace().canUpdate(),
             deleteMsgKey: deleteMsgKey,
             deleteTextKey: deleteTextKey
         }
@@ -58,7 +58,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         if (!this.resource || !this.resource.canBeImportSourceOrDestination()) { return ctx; }
 
         var importConfig = this.importConfiguration;
-        ctx.isImportConfigLoaded = this.isImportConfigLoaded();
+        ctx.isImportConfigLoaded = this.resource.isImportConfigLoaded();
         ctx.hasSchedule = importConfig.hasActiveSchedule();
         ctx.hasImport = this.hasImport();
 
@@ -118,34 +118,51 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         var ctx = {};
         if (!this.resource) { return ctx; }
 
-        if (!this.resource.hasCredentials()) {
-            ctx.noCredentials = true;
-            var addCredentialsLink = chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'});
-            var instanceName = this.resource.instance().name();
-            ctx.noCredentialsWarning = chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink, instanceName: instanceName });
+        if (this.noCredentials()) {
+            ctx.noCredentials = this.noCredentials();
+            ctx.noCredentialsWarning = this.noCredentialsWarning();
         }
 
-        var workspaceArchived = (this.options.workspace && !this.options.workspace.isActive());
-        ctx.displayEntityType = this.resource.metaType();
-        ctx.isChorusView = this.resource.isChorusView();
-        ctx.canAnalyze = this.resource.hasCredentials() && this.resource.canAnalyze() && !workspaceArchived;
-
+        ctx.displayEntityType = this.displayEntityType();
+        ctx.isChorusView = this.isChorusView();
+        ctx.canAnalyze = this.canAnalyze();
         return ctx;
     },
 
-    isImportConfigLoaded: function() {
-        return this.importConfiguration && this.importConfiguration.loaded;
+    noCredentialsWarning: function() {
+        var addCredentialsLink = chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'});
+        var instanceName = this.resource.instance().name();
+        return  chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink, instanceName: instanceName });
+    },
+
+    noCredentials: function() {
+        return !this.resource.hasCredentials();
+    },
+
+    isChorusView: function() {
+        return this.resource.isChorusView();
+    },
+
+    displayEntityType: function() {
+        return this.resource.metaType();
+    },
+
+    workspaceArchived: function() {
+        //TODO: put this on the model
+        return this.resource && this.resource.workspace() && !this.resource.workspace().isActive();
+    },
+
+    canAnalyze: function() {
+        //TODO: put this on the model
+        return this.resource.hasCredentials() && this.resource.canAnalyze() && !this.workspaceArchived();
     },
 
     hasImport: function() {
-        return this.importConfiguration && this.importConfiguration.has("id");
+        return this.resource && this.resource.hasImport();
     },
 
     canExport: function canExport() {
-        return this.options.workspace.canUpdate()
-            && this.resource && this.resource.hasCredentials()
-            && this.isImportConfigLoaded()
-            && this.resource.canBeImportSource()
+        return this.resource && this.resource.canExport();
     },
 
     // TODO: This is a foreign function... belongs in helpers? or on chorus?

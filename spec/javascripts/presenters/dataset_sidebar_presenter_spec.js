@@ -21,11 +21,36 @@ describe("chorus.presenters.DatasetSidebar", function() {
     });
 
     describe("the context", function() {
-        var presenter, sidebar, resource;
-        beforeEach(function() {
-            resource = rspecFixtures.dataset();
-            sidebar = new chorus.views.DatasetSidebar({ model: resource });
-            context = new chorus.presenters.DatasetSidebar(sidebar);
+        context("with a regular dataset", function() {
+            var presenter, sidebar, resource;
+            beforeEach(function() {
+                resource = rspecFixtures.dataset();
+                sidebar = new chorus.views.DatasetSidebar({ model: resource });
+                presenter = new chorus.presenters.DatasetSidebar(sidebar);
+            });
+
+            it("returns everything", function() {
+                expect(presenter.canExport()).toBeFalsy();
+                expect(presenter.hasImport()).toBeFalsy();
+                expect(presenter.displayEntityType()).toEqual("table");
+                expect(presenter.isChorusView()).toBeFalsy();
+                expect(presenter.canAnalyze()).toBeTruthy();
+                expect(presenter.noCredentials()).toBeFalsy();
+                expect(presenter.noCredentialsWarning()).not.toBeEmpty();
+            });
+        });
+
+        context("with a workspace table", function() {
+            var presenter, sidebar, resource;
+            beforeEach(function() {
+                resource = rspecFixtures.workspaceDataset.datasetTable();
+                sidebar = new chorus.views.DatasetSidebar({ model: resource });
+                presenter = new chorus.presenters.DatasetSidebar(sidebar);
+            });
+
+            it("returns everything", function() {
+                expect(presenter.workspaceArchived()).toBeFalsy();
+            });
         });
     });
 });
