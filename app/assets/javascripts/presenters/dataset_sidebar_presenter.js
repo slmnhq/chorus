@@ -17,40 +17,72 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
     initialContext: function() {
         return _.extend({
-            typeString: Handlebars.helpers.humanizedDatasetType(this.resource && this.resource.attributes)
+            typeString: this.typeString()
         }, this.options);
+    },
+
+    typeString: function() {
+        return Handlebars.helpers.humanizedDatasetType(this.resource && this.resource.attributes);
     },
 
     workspaceContext: function() {
         if (!this.resource || !this.resource.workspace()) { return {}; }
 
-        var deleteMsgKey;
-        var deleteTextKey;
+        return {
+            canExport: this.canExport(),
+            hasSandbox: this.hasSandbox(),
+            workspaceId: this.workspaceId(),
+            activeWorkspace: this.activeWorkspace(),
+            isDeleteable: this.isDeleteable(),
+            deleteMsgKey: this.deleteKey("deleteMsgKey"),
+            deleteTextKey: this.deleteKey("deleteTextKey")
+        }
+    },
 
-        if (this.resource) {
-            if (this.resource.get("type") == "CHORUS_VIEW") {
-                deleteMsgKey = "delete";
-                deleteTextKey = "actions.delete";
-            } else if (this.resource.get("type") == "SOURCE_TABLE") {
-                if (this.resource.get("objectType") == "VIEW") {
-                    deleteMsgKey = "disassociate_view";
-                    deleteTextKey = "actions.delete_association";
-                } else {
-                    deleteMsgKey = "disassociate_table";
-                    deleteTextKey = "actions.delete_association";
-                }
+    deleteKey: function(target) {
+        var keyTable = {
+            "CHORUS_VIEW": {
+                deleteMsgKey: "delete",
+                deleteTextKey: "actions.delete"
+            },
+            "SOURCE_TABLE_VIEW":{
+                deleteMsgKey: "disassociate_view",
+                deleteTextKey: "actions.delete_association"
+            },
+            "SOURCE_TABLE":{
+                deleteMsgKey: "disassociate_table",
+                deleteTextKey: "actions.delete_association"
             }
         }
 
-        return {
-            canExport: this.canExport(),
-            hasSandbox: this.resource.workspace().sandbox(),
-            workspaceId: this.resource.workspace().id,
-            activeWorkspace: this.resource.workspace().isActive(),
-            isDeleteable: this.resource.isDeleteable() && this.resource.workspace().canUpdate(),
-            deleteMsgKey: deleteMsgKey,
-            deleteTextKey: deleteTextKey
-        }
+        var resourceType = this.resource && this.resource.get("type");
+        var resourceObjectType = this.resource && this.resource.get("objectType");
+
+        var rescue = {};
+        rescue[target] = "";
+        var deleteMsgKey = (keyTable[resourceType + "_" + resourceObjectType] || keyTable[resourceType] || rescue)[target]
+
+        return deleteMsgKey || "";
+    },
+
+    isDeleteable: function() {
+        return this.hasWorkspace() && this.resource.isDeleteable() && this.resource.workspace().canUpdate();
+    },
+
+    workspaceId: function() {
+        return this.hasWorkspace() && this.resource.workspace().id;
+    },
+
+    hasSandbox: function() {
+        return this.hasWorkspace() && this.resource.workspace().sandbox();
+    },
+
+    hasWorkspace: function() {
+        return this.resource && this.resource.workspace();
+    },
+
+    activeWorkspace: function() {
+        return this.hasWorkspace() && this.resource.workspace().isActive();
     },
 
     importContext: function() {
@@ -81,6 +113,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         var importConfig = this.importConfiguration;
 
         if (!importConfig || (!this.hasImport() && !importConfig.hasLastImport())) { return ctx; }
+
         if (importConfig.thisDatasetIsSource()) {
             var destination = importConfig.lastDestination();
             if (importConfig.isInProgress()) {

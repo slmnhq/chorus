@@ -37,6 +37,13 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 expect(presenter.canAnalyze()).toBeTruthy();
                 expect(presenter.noCredentials()).toBeFalsy();
                 expect(presenter.noCredentialsWarning()).not.toBeEmpty();
+                expect(presenter.typeString()).not.toBeEmpty();
+                expect(presenter.workspaceId()).not.toBeEmpty();
+                expect(presenter.hasSandbox()).toBeFalsy();
+                expect(presenter.activeWorkspace()).toBeFalsy();
+                expect(presenter.isDeleteable()).toBeFalsy();
+                expect(presenter.deleteKey("deleteMsgKey")).not.toBeEmpty();
+                expect(presenter.deleteKey("deleteTextKey")).not.toBeEmpty();
             });
         });
 
@@ -44,12 +51,16 @@ describe("chorus.presenters.DatasetSidebar", function() {
             var presenter, sidebar, resource;
             beforeEach(function() {
                 resource = rspecFixtures.workspaceDataset.datasetTable();
+                resource.workspace()._sandbox = new chorus.models.Sandbox({ id : 123 })
                 sidebar = new chorus.views.DatasetSidebar({ model: resource });
                 presenter = new chorus.presenters.DatasetSidebar(sidebar);
             });
 
             it("returns everything", function() {
                 expect(presenter.workspaceArchived()).toBeFalsy();
+                expect(presenter.hasSandbox()).toBeTruthy();
+                expect(presenter.workspaceId()).not.toBeEmpty();
+                expect(presenter.activeWorkspace()).toBeTruthy();
             });
         });
     });
