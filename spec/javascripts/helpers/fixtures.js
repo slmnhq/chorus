@@ -260,7 +260,8 @@ beforeEach(function() {
                         promotionActioner: {id: 10010, lastName: "1", firstName: "u"},
                         promotionTime: "2012-02-14 12:34:56"
                     }, overrides));
-            },
+            }
+        },
 
         activityJson: function(overrides) {
             var id = fixtures.nextId();

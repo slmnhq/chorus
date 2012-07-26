@@ -11,11 +11,23 @@
         },
 
         iconSrc: function() {
-            return this.model.actor().fetchImageUrl({ size: "icon" });
+            if (this.model.isFailure()) {
+                return "/images/message_error.png";
+            } else if (this.model.isSuccessfulImport()) {
+                return "/images/import_icon.png";
+            } else {
+                return this.model.actor().fetchImageUrl({ size: "icon" });
+            }
         },
 
         iconHref: function() {
-            return this.model.actor().showUrl();
+            if (this.model.isFailure()) {
+                return null;
+            } else if (this.model.isSuccessfulImport()) {
+                return this.model.dataset().showUrl();
+            } else {
+                return this.model.actor().showUrl();
+            }
         },
 
         isUserGenerated: function() {
@@ -38,7 +50,15 @@
             return this.canDelete();
         },
 
-        iconClass: "profile"
+        iconClass: function() {
+            if (this.model.isFailure()) {
+                return "error";
+            } else if (this.model.isSuccessfulImport()) {
+                return "icon";
+            } else {
+                return "profile";
+            }
+        }
     });
 
     var hidden = {

@@ -1,5 +1,5 @@
 describe("chorus.presenters.Activity", function() {
-    var model, actor, presenter, workfile, workspace;
+    var model, actor, presenter, workfile, workspace, dataset;
 
     describe("common aspects", function() {
         context("activity with a workspace", function() {
@@ -381,8 +381,8 @@ describe("chorus.presenters.Activity", function() {
         itHasTheActorIcon();
 
         it("has the right header html", function() {
-            var dataset = model.dataset();
-            var workspace = model.workspace();
+            dataset = model.dataset();
+            workspace = model.workspace();
 
             expect(presenter.headerHtml().toString()).toMatchTranslation(
                 "activity.header.SOURCE_TABLE_CREATED.default", {
@@ -417,7 +417,7 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("add a hdfs file as external table", function() {
-        var dataset, hdfsFile;
+        var hdfsFile;
 
         beforeEach(function() {
             model = rspecFixtures.activity.hdfsExternalTableCreated()
@@ -427,6 +427,8 @@ describe("chorus.presenters.Activity", function() {
             dataset = model.dataset();
             hdfsEntry = model.hdfsEntry();
         });
+
+        itHasTheActorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
@@ -441,8 +443,6 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("import success", function() {
-        var dataset;
-
         beforeEach(function() {
             model = rspecFixtures.activity.importSuccess();
             presenter = new chorus.presenters.Activity(model);
@@ -450,6 +450,8 @@ describe("chorus.presenters.Activity", function() {
             workspace = model.workspace();
             dataset = model.dataset();
         });
+
+        itHasTheImportIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
@@ -465,14 +467,14 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("import failed", function() {
-        var dataset;
-
         beforeEach(function() {
             model = rspecFixtures.activity.importFailed();
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             workspace = model.workspace();
         });
+
+        itHasTheErrorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
@@ -488,7 +490,7 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("note on a hdfs file", function() {
-        var dataset, hdfsFile;
+        var hdfsFile;
 
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnHdfsFileCreated({
@@ -501,6 +503,8 @@ describe("chorus.presenters.Activity", function() {
                 path: "/random/path.csv"
             });
         });
+
+        itHasTheActorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
@@ -528,6 +532,8 @@ describe("chorus.presenters.Activity", function() {
             instance = rspecFixtures.greenplumInstance({id: 42, name: 'my_instance'});
         });
 
+        itHasTheActorIcon();
+
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
                 "activity.header.NOTE.without_workspace", {
@@ -553,6 +559,8 @@ describe("chorus.presenters.Activity", function() {
             actor = model.actor();
             workspace = rspecFixtures.workspace({id: 42, name: 'le_workspace' });
         });
+
+        itHasTheActorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
@@ -580,6 +588,8 @@ describe("chorus.presenters.Activity", function() {
             instance = rspecFixtures.hadoopInstance({id: 42, name: 'my_instance'});
         });
 
+        itHasTheActorIcon();
+
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
                 "activity.header.NOTE.without_workspace", {
@@ -592,8 +602,6 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("note on a dataset", function() {
-        var dataset;
-
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnDatasetCreated({
                 dataset: { id: 42, objectName: "lunch_boxes" }
@@ -602,6 +610,8 @@ describe("chorus.presenters.Activity", function() {
             actor = model.actor();
             dataset = model.noteObject();
         });
+
+        itHasTheActorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
@@ -615,8 +625,6 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("note on a workspace dataset", function() {
-        var dataset, workspace;
-
         beforeEach(function() {
             model = rspecFixtures.activity.noteOnWorkspaceDatasetCreated({
                 dataset: { id: 42, objectName: "lunch_boxes" },
@@ -627,6 +635,8 @@ describe("chorus.presenters.Activity", function() {
             dataset = model.noteObject();
             workspace = model.workspace();
         });
+
+        itHasTheActorIcon();
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
@@ -655,7 +665,39 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("has the class 'profile'", function() {
-                expect(presenter.iconClass).toBe("profile");
+                expect(presenter.iconClass()).toBe("profile");
+            });
+        });
+    }
+
+    function itHasTheErrorIcon() {
+        describe("the icon", function() {
+            it("shows the error icon", function() {
+                expect(presenter.iconSrc()).toBe("/images/message_error.png");
+            });
+
+            it("links to the user's profile", function() {
+                expect(presenter.iconHref()).toBeNull();
+            });
+
+            it("has the class 'profile'", function() {
+                expect(presenter.iconClass()).toBe("error");
+            });
+        });
+    }
+
+    function itHasTheImportIcon() {
+        describe("the icon", function() {
+            it("shows the error icon", function() {
+                expect(presenter.iconSrc()).toBe("/images/import_icon.png");
+            });
+
+            it("links to dataset", function() {
+                expect(presenter.iconHref()).toBe(dataset.showUrl());
+            });
+
+            it("has the class 'profile'", function() {
+                expect(presenter.iconClass()).toBe("icon");
             });
         });
     }

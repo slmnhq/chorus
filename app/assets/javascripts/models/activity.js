@@ -211,6 +211,10 @@
 
         isFailure: function() {
             return this.get("action") === "IMPORT_FAILED";
+        },
+
+        isSuccessfulImport: function() {
+            return this.get("action") === "IMPORT_SUCCESS"
         }
     });
 
