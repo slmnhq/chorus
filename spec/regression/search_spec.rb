@@ -16,7 +16,7 @@ describe "searches for instance name" do
   end
 end
 
-describe "searches for worksapce name" do
+describe "searches for workspace name" do
 
   it "searches for workspaces" do
     login('edcadmin', 'secret')
@@ -46,3 +46,19 @@ describe "searches for workfile name" do
 
   end
 end
+
+describe "searches for a user name" do
+
+  it "searches for workspaces" do
+    login('edcadmin', 'secret')
+    create_valid_user(:first_name => "search", :last_name => "user")
+    wait_for_ajax
+    page.execute_script("$('.chorus_search_container>input').val('search user');")
+    find('.chorus_search_container>input').native.send_keys(:return)
+    wait_for_ajax
+    page.should have_content "Search for"
+    page.should have_content "search user"
+
+  end
+end
+
