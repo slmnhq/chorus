@@ -44,6 +44,9 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 expect(presenter.isDeleteable()).toBeFalsy();
                 expect(presenter.deleteKey("deleteMsgKey")).not.toBeEmpty();
                 expect(presenter.deleteKey("deleteTextKey")).not.toBeEmpty();
+                expect(presenter.isImportConfigLoaded()).toBeFalsy();
+                expect(presenter.hasSchedule()).toBeFalsy();
+                expect(presenter.nextImport()).toBeFalsy();
             });
         });
 

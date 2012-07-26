@@ -1,6 +1,6 @@
 chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     setup: function() {
-        var keys = ["resource", "options", "importConfiguration"];
+        var keys = ["resource", "options"];
         _.each(keys, function(key) {
             this[key] = this.model[key];
         }, this);
@@ -89,28 +89,41 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         var ctx = {};
         if (!this.resource || !this.resource.canBeImportSourceOrDestination()) { return ctx; }
 
-        var importConfig = this.importConfiguration;
-        ctx.isImportConfigLoaded = this.resource.isImportConfigLoaded();
-        ctx.hasSchedule = importConfig.hasActiveSchedule();
+        ctx.isImportConfigLoaded = this.isImportConfigLoaded();
+        ctx.hasSchedule = this.hasSchedule();
         ctx.hasImport = this.hasImport();
 
         return ctx;
     },
 
+    isImportConfigLoaded: function() {
+        return this.resource.isImportConfigLoaded();
+    },
+
+    hasSchedule: function() {
+        return this.resource && this.resource.canBeImportSourceOrDestination() && this.resource.getImport().hasActiveSchedule();
+    },
+
     nextImportContext: function() {
         var ctx = {};
-        if (!this.hasImport() || !this.importConfiguration.hasNextImport()) { return ctx; }
+        if (!this.hasImport() || !this.resource.getImport().hasNextImport()) { return ctx; }
 
-        var destination = this.importConfiguration.nextDestination();
-        var runsAt = chorus.helpers.relativeTimestamp(this.importConfiguration.nextExecutionAt())
-        ctx.nextImport = chorus.helpers.safeT("import.next_import", { nextTime: runsAt, tableLink: this._linkToModel(destination) });
-
+        ctx.nextImport = this.nextImport();
         return ctx;
+    },
+
+    nextImport: function() {
+        if (!this.hasImport() || !this.resource.getImport().hasNextImport()) return "";
+
+        var importConfig = this.resource.getImport();
+        var destination = importConfig.nextDestination();
+        var runsAt = chorus.helpers.relativeTimestamp(importConfig.nextExecutionAt())
+        return chorus.helpers.safeT("import.next_import", { nextTime: runsAt, tableLink: this._linkToModel(destination) });
     },
 
     lastImportContext: function() {
         var ctx = {};
-        var importConfig = this.importConfiguration;
+        var importConfig = this.resource && this.resource.getImport();
 
         if (!importConfig || (!this.hasImport() && !importConfig.hasLastImport())) { return ctx; }
 

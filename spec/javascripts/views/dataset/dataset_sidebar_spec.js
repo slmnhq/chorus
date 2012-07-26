@@ -1090,12 +1090,13 @@ describe("chorus.views.DatasetSidebar", function() {
 
     describe("when importSchedule:changed is triggered", function() {
         beforeEach(function() {
+            this.view.resource = rspecFixtures.workspaceDataset.datasetTable();
             this.newImport = fixtures.datasetImport();
             spyOn(this.view, 'render').andCallThrough();
             chorus.PageEvents.broadcast("importSchedule:changed", this.newImport);
         })
         it("updates the importConfiguration and renders", function() {
-            expect(this.view.importConfiguration).toBe(this.newImport);
+            expect(this.view.resource.getImport()).toBe(this.newImport);
             expect(this.view.render).toHaveBeenCalled();
         })
     })

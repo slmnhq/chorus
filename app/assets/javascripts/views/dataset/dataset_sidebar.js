@@ -146,7 +146,10 @@
     },
 
     updateImportSchedule: function(importConfiguration) {
-        this.importConfiguration = importConfiguration;
+        if(!this.resource)
+            return;
+
+        this.resource._datasetImport = importConfiguration;
         this.render();
     },
 
