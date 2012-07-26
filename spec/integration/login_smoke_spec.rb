@@ -22,6 +22,7 @@ describe "logging in" do
       login(adminlogin, adminpassword)
 
       click_link("FooWorkspace")
+      wait_for_ajax
 
       Timecop.travel(Time.current + 6.hours) do
         # Sometimes an AJAX may trigger the redirection before
