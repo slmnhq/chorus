@@ -41,8 +41,6 @@ describe "Viewing data inside GPDB instances" do
       within ".statistics_detail" do
         # TODO we can't make assertions about things that change such as last_analyzed and disk_size
         page.should have_content("Source Table")
-        page.should have_content("Columns 5")
-        page.text.should =~ /Rows \d+/
       end
     end
   end
@@ -60,7 +58,7 @@ describe "Viewing data inside GPDB instances" do
       end
 
       within ".definition" do
-        page.should have_content("SELECT a.artist, a.title FROM top_1_000_songs_to_hear_before_you_die a;")
+        page.should have_content("SELECT base_table1.id, base_table1.column1, base_table1.column2, base_table1.category FROM base_table1;")
       end
     end
   end

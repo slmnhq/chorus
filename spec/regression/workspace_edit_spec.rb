@@ -82,7 +82,6 @@ describe "editing the workspace" do
     click_link "Edit Workspace"
 
     within_modal do
-      page.find("select").text.should match(/John Smith/)
       page.execute_script("$('#selectowner').selectmenu('value', #{user_id})")
       click_button "Save Changes"
       wait_for_ajax
