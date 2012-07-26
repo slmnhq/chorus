@@ -97,6 +97,10 @@ describe CsvImporter, :database_integration => true do
         event.file_name.should == csv_file.contents_file_name
         event.import_type.should == 'file'
       end
+
+      it "deletes the file" do
+        expect { CsvFile.find(csv_file.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
     describe "when the import fails" do
@@ -115,6 +119,10 @@ describe CsvImporter, :database_integration => true do
         event.file_name.should == csv_file.contents_file_name
         event.import_type.should == 'file'
         event.error_message.should == @error
+      end
+
+      it "deletes the file" do
+        expect { CsvFile.find(csv_file.id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
