@@ -1,18 +1,13 @@
 class InstanceAccess < DefaultAccess
   def self.instances_for(current_user)
-    if current_user.admin?
-      Instance.scoped
-    else
-      Instance.accessible_to(current_user)
-    end
+    Instance.accessible_to(current_user)
   end
 
   def edit?(instance)
-    instance.owner == current_user
+    instance.owner == current_user || current_user.admin?
   end
 
   def show_contents?(instance)
     instance.shared? || current_user.instance_accounts.exists?(:instance_id => instance.id)
   end
 end
-

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Instances::OwnerController do
+  let(:instance) { instances(:purple_banana) }
   let(:user) { instance.owner }
-  let(:instance) { FactoryGirl.create(:instance, :shared => true) }
-  let(:new_owner) { FactoryGirl.create(:user) }
+  let(:new_owner) { users(:alice) }
 
   ignore_authorization!
 
