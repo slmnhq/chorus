@@ -4,6 +4,7 @@ describe WorkspacesController do
   ignore_authorization!
 
   let(:owner) { users(:alice) }
+  let(:other_user) { users(:carly) }
   before do
     log_in owner
   end
@@ -47,8 +48,9 @@ describe WorkspacesController do
     end
 
     it "scopes by memberships" do
-      get :index, :user_id => owner.id
-      decoded_response.size.should == WorkspaceAccess.member_of_workspaces(owner).count
+      other_user.workspaces << @joined_private_workspace
+      get :index, :user_id => other_user.id
+      decoded_response.size.should == WorkspaceAccess.member_of_workspaces(other_user).count
     end
 
     describe "pagination" do

@@ -1,7 +1,8 @@
 class WorkspacesController < ApplicationController
   def index
     if params[:user_id]
-      workspaces = WorkspaceAccess.member_of_workspaces(current_user)
+      user = User.find(params[:user_id])
+      workspaces = WorkspaceAccess.member_of_workspaces(user)
     else
       workspaces = WorkspaceAccess.workspaces_for(current_user)
     end
