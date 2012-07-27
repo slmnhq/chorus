@@ -188,6 +188,22 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
+  describe "WORKSPACE_ARCHIVED" do
+    subject do
+      Events::WORKSPACE_ARCHIVED.add(
+          :actor => actor,
+          :workspace => workspace
+      )
+    end
+
+    its(:workspace) { should == workspace }
+
+    its(:targets) { should == { :workspace => workspace } }
+
+    it_creates_activities_for { [actor, workspace] }
+    it_creates_a_global_activity
+  end
+
   describe "WORKFILE_CREATED" do
     subject do
       Events::WORKFILE_CREATED.add(

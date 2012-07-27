@@ -114,6 +114,7 @@ window.rspecFixtureDefinitions = {
             privateWorkspaceCreated: {},
             workspaceMakePublic: {},
             workspaceMakePrivate: {},
+            workspaceArchived: {},
             workfileCreated: {},
             sourceTableCreated: {},
             userCreated: {},

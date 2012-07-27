@@ -128,6 +128,7 @@ describe EventsController do
         "privateWorkspaceCreated" => Events::PRIVATE_WORKSPACE_CREATED,
         "workspaceMakePublic" => Events::WORKSPACE_MAKE_PUBLIC,
         "workspaceMakePrivate" => Events::WORKSPACE_MAKE_PRIVATE,
+        "workspaceArchived" => Events::WORKSPACE_ARCHIVED,
         "workfileCreated" => Events::WORKFILE_CREATED,
         "sourceTableCreated" => Events::SOURCE_TABLE_CREATED,
         "userCreated" => Events::USER_ADDED,

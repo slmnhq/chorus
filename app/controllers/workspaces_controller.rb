@@ -71,6 +71,7 @@ class WorkspacesController < ApplicationController
   def update_archived_status(workspace)
     if params[:workspace][:archived] == "true"
       workspace.archive_as(current_user)
+      Events::WORKSPACE_ARCHIVED.by(current_user).add(:workspace => workspace)
     else
       workspace.unarchive
     end

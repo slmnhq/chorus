@@ -102,6 +102,10 @@
                 links: [ "actor", "workspace" ]
             },
 
+            WORKSPACE_ARCHIVED: {
+                links: [ "actor", "workspace" ]
+            },
+
             WORKFILE_CREATED: {
                 links: [ "actor", "workfile", "workspace" ]
             },

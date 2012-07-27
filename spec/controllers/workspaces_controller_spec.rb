@@ -218,6 +218,9 @@ describe WorkspacesController do
         workspace.reload
         workspace.archived_at.should_not be_nil
         workspace.archiver.should == owner
+
+        events = Events::WORKSPACE_ARCHIVED.by(owner)
+        events.count.should == 1
       end
 
       it "allows unarchiving the workspace" do

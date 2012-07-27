@@ -147,6 +147,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::HADOOP_INSTANCE_CHANGED_NAME.by(admin).add(:hadoop_instance => hadoop_instance, :old_name => 'Slartibartfast', :new_name => hadoop_instance.name)
     Events::SOURCE_TABLE_CREATED.by(admin).add(:dataset => bobs_table, :workspace => bob_public_workspace)
     Events::WORKSPACE_ADD_SANDBOX.by(bob).add(:sandbox_schema => bob_schema, :workspace => bob_public_workspace)
+    Events::WORKSPACE_ARCHIVED.by(admin).add(:workspace => bob_public_workspace)
     Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_file_reference)
     Events::IMPORT_SUCCESS.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
     Events::IMPORT_FAILED.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
