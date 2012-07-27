@@ -112,7 +112,7 @@ class Legacy::ActivityStream
   def rails_dataset_id
     sql = "SELECT aso.object_id FROM edc_activity_stream_object aso
                                      WHERE aso.activity_stream_id = '#{id}'
-                                     AND aso.object_type = 'object'"
+                                     AND aso.object_type = 'object' AND entity_type IN ('table', 'chorusView', 'databaseOBject', 'sourceObject', 'view', 'databaseObject')"
 
     object_id = extract_result("object_id", Legacy.connection.exec_query(sql))
     ids = object_id.delete("\"").split("|")
@@ -131,6 +131,8 @@ class Legacy::ActivityStream
     dataset = schema.datasets.find_or_create_by_name(dataset_name)
     dataset.id
   end
+
+  private
 
   def extract_result(result_key, sql)
     instance_data = Array(sql)[0]

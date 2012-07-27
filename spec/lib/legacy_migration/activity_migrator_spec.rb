@@ -38,6 +38,14 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
         event.hdfs_file.hadoop_instance_id.should_not be_nil
         event.hdfs_file.path.should == "/data/Top_1_000_Songs_To_Hear_Before_You_Die.csv"
       end
+
+      it "copies IMPORT SUCCESS activities" do
+        event = Events::IMPORT_SUCCESS.find(event_id_for('10112'))
+        event.workspace.should be_a(Workspace)
+        event.actor.should be_a(User)
+        event.dataset.should be_a(Dataset)
+
+      end
     end
 
     context "migrating activities that do not reference datasets" do

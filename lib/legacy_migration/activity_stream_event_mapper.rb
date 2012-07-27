@@ -8,7 +8,7 @@ class ActivityStreamEventMapper
     set_target_objects(event)
 
     event
-  rescue StandardError
+  rescue StandardError => e
     nil
   end
 
@@ -64,7 +64,7 @@ class ActivityStreamEventMapper
       User.find_by_id(@activity_stream.rails_object_user_id)
     when :dataset
       Dataset.find_by_id(@activity_stream.rails_dataset_id)
-      when :hdfs_file
+    when :hdfs_file
       hadoop_instance_id, path = @activity_stream.hadoop_instance_id
       HdfsFileReference.find_or_create_by_path({ :hadoop_instance_id => hadoop_instance_id,
                                                         :path => path })
