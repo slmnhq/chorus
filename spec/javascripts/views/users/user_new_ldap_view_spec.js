@@ -136,93 +136,51 @@ describe("chorus.views.UserNewLdap", function() {
                     this.view.$("input[name=admin]").prop("checked", true);
 
                     this.view.$("form").submit();
-
-                    this.ldapUsers = new chorus.collections.LdapUserSet([], { userName: "frankie2002" });
                 })
 
-                it("checks the LDAP username", function() {
-                    expect(this.ldapUsers).toHaveBeenFetched();
+
+                it("saves the user", function() {
+                    expect(this.user).toHaveBeenCreated();
                 });
 
-                describe("when the server responds to the LDAP username check", function() {
-                    context("and the user exists", function() {
-                        beforeEach(function() {
-                            spyOn(this.view, 'fieldValues').andCallThrough()
+                context("when user creation is successful", function() {
+                    it("redirects to user index", function() {
+                        spyOn(chorus.router, "navigate");
+                        this.server.completeSaveFor(this.user);
+                        expect(chorus.router.navigate).toHaveBeenCalledWith("/users");
+                    });
+                });
 
-                            this.server.completeFetchFor(this.ldapUsers, [
-                                newFixtures.user({ userName: "frankie2002" })
-                            ]);
-                        });
-
-                        it("creates a user with the form's attributes", function() {
-                            expect(this.view.fieldValues).toHaveBeenCalled();
-
-                            expect(this.user.attributes["firstName"]).toBe("Frankie");
-                            expect(this.user.attributes["lastName"]).toBe("Knuckles");
-                            expect(this.user.attributes["userName"]).toBe("frankie2002");
-                            expect(this.user.attributes["emailAddress"]).toBe("frankie_knuckles@nyclol.com");
-                            expect(this.user.attributes["ou"]).toBe("awesomeness dept");
-                            expect(this.user.attributes["admin"]).toBe(true);
-                        });
-
-                        it("saves the user", function() {
-                            expect(this.user).toHaveBeenCreated();
-                        });
-
-                        context("when user creation is successful", function() {
-                            it("redirects to user index", function() {
-                                spyOn(chorus.router, "navigate");
-                                this.server.completeSaveFor(this.user);
-                                expect(chorus.router.navigate).toHaveBeenCalledWith("/users");
-                            });
-                        });
-
-                        context("when user creation fails on the server", function() {
-                            beforeEach(function() {
-                                this.view.model.serverErrors = [
-                                    {message: "Hi there"}
-                                ];
-                                this.view.$("form").submit();
-                                this.view.model.trigger("saveFailed");
-                            });
-
-                            it("doesn't redirect", function() {
-                                expect(this.view.$("form")).toExist();
-                            })
-
-                            it("retains the data already entered", function() {
-                                expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
-                                expect(this.view.$("input[name=lastName]").val()).toBe("Knuckles");
-                                expect(this.view.$("input[name=userName]").val()).toBe("frankie2002");
-                                expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
-                                expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");
-                                expect(this.view.$("input[name=admin]")).toBeChecked();
-                            });
-
-                            describe("check another user name", function(){
-                                beforeEach(function() {
-                                    this.view.$("input[name=userName]").val("max");
-                                    this.view.$("a.check_username").click();
-                                });
-
-                                it("clears the existing error", function() {
-                                    expect(this.view.$(".errors")).toBeEmpty();
-                                });
-                            });
-                        })
+                context("when user creation fails on the server", function() {
+                    beforeEach(function() {
+                        this.view.model.serverErrors = [
+                            {message: "Hi there"}
+                        ];
+                        this.view.$("form").submit();
+                        this.view.model.trigger("saveFailed");
                     });
 
-                    context("and the user does not exist", function() {
+                    it("doesn't redirect", function() {
+                        expect(this.view.$("form")).toExist();
+                    })
+
+                    it("retains the data already entered", function() {
+                        expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
+                        expect(this.view.$("input[name=lastName]").val()).toBe("Knuckles");
+                        expect(this.view.$("input[name=userName]").val()).toBe("frankie2002");
+                        expect(this.view.$("input[name=emailAddress]").val()).toBe("frankie_knuckles@nyclol.com");
+                        expect(this.view.$("input[name=ou]").val()).toBe("awesomeness dept");
+                        expect(this.view.$("input[name=admin]")).toBeChecked();
+                    });
+
+                    describe("check another user name", function() {
                         beforeEach(function() {
-                            this.server.completeFetchFor(this.ldapUsers, []);
+                            this.view.$("input[name=userName]").val("max");
+                            this.view.$("a.check_username").click();
                         });
 
-                        it("does not save the user", function() {
-                            expect(this.user).not.toHaveBeenCreated();
-                        });
-
-                        it("launches an alert dialog", function() {
-                            expect(this.modalSpy).toHaveModal(chorus.alerts.NoLdapUser);
+                        it("clears the existing error", function() {
+                            expect(this.view.$(".errors")).toBeEmpty();
                         });
                     });
                 });
