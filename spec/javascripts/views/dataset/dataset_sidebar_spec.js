@@ -339,7 +339,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                         context("and the current user has update permissions on the workspace", function() {
                             beforeEach(function() {
-                                this.view.resource._workspace = rspecFixtures.workspace({ id: 6008, id: "1337", permission: ["update"] });
+                                this.view.resource._workspace = rspecFixtures.workspace({ id: 6008, permission: ["update"] });
                                 this.view.render();
                             });
 

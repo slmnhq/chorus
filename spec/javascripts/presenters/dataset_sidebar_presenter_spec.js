@@ -47,6 +47,10 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 expect(presenter.isImportConfigLoaded()).toBeFalsy();
                 expect(presenter.hasSchedule()).toBeFalsy();
                 expect(presenter.nextImport()).toBeFalsy();
+                expect(presenter.inProgressText()).not.toBeEmpty();
+                expect(presenter.importInProgress()).not.toBeEmpty();
+                expect(presenter.importFailed()).not.toBeEmpty();
+                expect(presenter.lastImport()).not.toBeEmpty();
             });
         });
 

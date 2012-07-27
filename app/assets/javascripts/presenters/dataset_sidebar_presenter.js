@@ -127,13 +127,44 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
         if (!importConfig || (!this.hasImport() && !importConfig.hasLastImport())) { return ctx; }
 
+        ctx.lastImport = this.lastImport();
+        ctx.inProgressText = this.inProgressText();
+        ctx.importInProgress = this.importInProgress();
+        ctx.importFailed = this.importFailed();
+
+        return ctx;
+    },
+
+    inProgressText: function() {
+        var importConfig = this.resource && this.resource.getImport();
+
+        return (importConfig && importConfig.thisDatasetIsSource() && importConfig.isInProgress()) ?
+            chorus.helpers.safeT("import.in_progress", { tableLink: this._linkToModel(importConfig.lastDestination()) }) : "";
+    },
+
+    importInProgress: function() {
+        var importConfig = this.resource && this.resource.getImport();
+
+        return importConfig && importConfig.thisDatasetIsSource() && importConfig.isInProgress();
+    },
+
+    importFailed: function() {
+        var importConfig = this.resource && this.resource.getImport();
+
+        return importConfig && importConfig.hasLastImport() && !this.importInProgress() && !importConfig.wasSuccessfullyExecuted();
+    },
+
+    lastImport: function() {
+        var importConfig = this.resource && this.resource.getImport();
+
+        if (!importConfig || (!this.hasImport() && !importConfig.hasLastImport())) return "";
+
+        var lastImport;
         if (importConfig.thisDatasetIsSource()) {
             var destination = importConfig.lastDestination();
             if (importConfig.isInProgress()) {
                 var ranAt = chorus.helpers.relativeTimestamp(importConfig.get("executionInfo").startedStamp);
-                ctx.lastImport = chorus.helpers.safeT("import.began", { timeAgo: ranAt });
-                ctx.inProgressText = chorus.helpers.safeT("import.in_progress", { tableLink: this._linkToModel(destination) });
-                ctx.importInProgress = true;
+                lastImport = chorus.helpers.safeT("import.began", { timeAgo: ranAt });
             } else if (importConfig.hasLastImport()) {
                 var ranAt = chorus.helpers.relativeTimestamp(importConfig.lastExecutionAt());
 
@@ -142,10 +173,9 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
                     importStatusKey = "import.last_imported";
                 } else {
                     importStatusKey = "import.last_import_failed";
-                    ctx.importFailed = true;
                 }
 
-                ctx.lastImport = chorus.helpers.safeT(importStatusKey, { timeAgo: ranAt, tableLink: this._linkToModel(destination) });
+                lastImport = chorus.helpers.safeT(importStatusKey, { timeAgo: ranAt, tableLink: this._linkToModel(destination) });
             }
         } else if (importConfig.thisDatasetIsDestination()) {
             var source = importConfig.importSource();
@@ -154,10 +184,10 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
                 this._linkToModel(source)
 
             var ranAt = chorus.helpers.relativeTimestamp(importConfig.lastExecutionAt());
-            ctx.lastImport = chorus.helpers.safeT("import.last_imported_into", { timeAgo: ranAt, tableLink: tableLink });
+            lastImport = chorus.helpers.safeT("import.last_imported_into", { timeAgo: ranAt, tableLink: tableLink });
         }
 
-        return ctx;
+        return lastImport;
     },
 
     resourceContext: function() {
