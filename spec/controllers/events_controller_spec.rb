@@ -103,17 +103,17 @@ describe EventsController do
   end
 
   describe "#show" do
-    let(:event) { Events::NOTE_ON_WORKSPACE.first }
+    let(:event) { events(:note_on_alice_private) }
 
     it "shows the particular event " do
       mock_present { |model| model.should == event }
-      log_in users(:carly)
+      log_in users(:alice)
       get :show, :id => event.to_param
       response.code.should == "200"
     end
 
     it "returns an error when trying to show an activity for which the user doesn't have access" do
-      log_in users(:alice)
+      log_in users(:bob)
       get :show, :id => event.to_param
       response.code.should == "404"
     end
