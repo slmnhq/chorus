@@ -118,3 +118,5 @@ module Events
   end
 end
 
+require_relative 'note'
+require_relative 'types'
