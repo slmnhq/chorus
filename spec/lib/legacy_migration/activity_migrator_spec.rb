@@ -42,8 +42,11 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       it "copies IMPORT SUCCESS activities" do
         event = Events::IMPORT_SUCCESS.find(event_id_for('10112'))
         event.workspace.should be_a(Workspace)
+        event.workspace.name.should == "Workspace"
         event.actor.should be_a(User)
+        event.actor.username.should == "edcadmin"
         event.dataset.should be_a(Dataset)
+        event.dataset.name.should == "__gp_fullname"
 
       end
     end
