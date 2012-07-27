@@ -6,10 +6,7 @@ class ActivityStreamEventMapper
   def build_event
     event = event_class.new
     set_target_objects(event)
-
     event
-  rescue StandardError => e
-    nil
   end
 
   def can_build?

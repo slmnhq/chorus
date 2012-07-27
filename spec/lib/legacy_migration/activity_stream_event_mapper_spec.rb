@@ -242,12 +242,6 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
       end
     end
 
-    context "#build_event" do
-      it "fails to build an event because it is an unexpected type" do
-        mapper.build_event.should be_nil
-      end
-    end
-
     context "#can_build" do
       it "returns false" do
         mapper.can_build?.should be_false
@@ -259,12 +253,6 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
     let(:activity_stream) do
       Object.new.tap do |activity|
         mock(activity).type.times(any_times) { 'INSTANCE_CHANGED_NAME' }
-      end
-    end
-
-    context "#build_event" do
-      it "fails to build an event because it is an unexpected type" do
-        mapper.build_event.should be_nil
       end
     end
 
