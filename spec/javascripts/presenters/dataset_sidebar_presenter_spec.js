@@ -25,8 +25,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
             var presenter, sidebar, resource;
             beforeEach(function() {
                 resource = rspecFixtures.dataset();
-                sidebar = new chorus.views.DatasetSidebar({ model: resource });
-                presenter = new chorus.presenters.DatasetSidebar(sidebar);
+                presenter = new chorus.presenters.DatasetSidebar(resource);
             });
 
             it("returns everything", function() {
@@ -59,8 +58,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
             beforeEach(function() {
                 resource = rspecFixtures.workspaceDataset.datasetTable();
                 resource.workspace()._sandbox = new chorus.models.Sandbox({ id : 123 })
-                sidebar = new chorus.views.DatasetSidebar({ model: resource });
-                presenter = new chorus.presenters.DatasetSidebar(sidebar);
+                presenter = new chorus.presenters.DatasetSidebar(resource);
             });
 
             it("returns everything", function() {

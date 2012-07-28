@@ -1,8 +1,7 @@
 chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     setup: function() {
-        var keys = ["resource", "options"];
-        _.each(keys, function(key) {
-            this[key] = this.model[key];
+        _.each(this.options, function(value, key) {
+           this[key] = value;
         }, this);
     },
 
@@ -212,7 +211,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     noCredentials: function() {
-        return !this.resource.hasCredentials();
+        return this.resource && !this.resource.hasCredentials();
     },
 
     isChorusView: function() {
