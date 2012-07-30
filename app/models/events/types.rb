@@ -48,6 +48,11 @@ module Events
     has_activities :actor, :workspace, :global
   end
 
+  class WORKSPACE_UNARCHIVED < Base
+    has_targets :workspace
+    has_activities :actor, :workspace, :global
+  end
+
   class PUBLIC_WORKSPACE_CREATED < Base
     has_targets :workspace
     has_activities :actor, :workspace, :global

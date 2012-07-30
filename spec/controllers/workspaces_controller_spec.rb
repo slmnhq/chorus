@@ -212,6 +212,9 @@ describe WorkspacesController do
       end
 
       it "allows archiving the workspace" do
+        events = Events::WORKSPACE_ARCHIVED.by(owner)
+        events.count.should == 0
+
         put :update, :id => workspace.id, :workspace => {
             :archived => "true"
         }
@@ -224,6 +227,9 @@ describe WorkspacesController do
       end
 
       it "allows unarchiving the workspace" do
+        events = Events::WORKSPACE_UNARCHIVED.by(owner)
+        events.count.should == 0
+
         workspace.archive_as(owner)
         workspace.save!
 
@@ -234,6 +240,9 @@ describe WorkspacesController do
         workspace.reload
         workspace.archived_at.should be_nil
         workspace.archiver.should be_nil
+
+        events = Events::WORKSPACE_UNARCHIVED.by(owner)
+        events.count.should == 1
       end
 
       it "allows changing the sandbox" do
