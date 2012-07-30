@@ -30,5 +30,28 @@ describe "Create frequency plot" do
 
   end
 
+end
+
+describe "User can cancel a visualization" do
+
+  it "creates frequency plot" do
+
+    login('edcadmin','secret')
+    create_gpdb_instance(:name => "cancel_visualization")
+    wait_for_ajax
+    click_link "frequency_plot"
+    wait_for_ajax
+    click_link "ChorusAnalytics"
+    wait_for_ajax
+    click_link "analytics"
+    wait_for_ajax
+    click_link "2009_sfo_customer_survey"
+    wait_for_ajax
+    click_button "Visualize"
+
+    click_button "Create Chart"
+    click_button "Cancel"
+
+  end
 
 end
