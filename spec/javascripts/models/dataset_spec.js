@@ -810,30 +810,30 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
-    describe("#canAnalyze", function() {
+    describe("#analyzableObjectType", function() {
         it("returns true for a sandbox table", function() {
             this.dataset = newFixtures.workspaceDataset.sandboxTable();
-            expect(this.dataset.canAnalyze()).toBeTruthy();
+            expect(this.dataset.analyzableObjectType()).toBeTruthy();
         });
 
         it("returns true for a source table", function() {
             this.dataset = rspecFixtures.dataset();
-            expect(this.dataset.canAnalyze()).toBeTruthy();
+            expect(this.dataset.analyzableObjectType()).toBeTruthy();
         });
 
         it("returns false for views", function() {
             this.dataset = newFixtures.workspaceDataset.sandboxView();
-            expect(this.dataset.canAnalyze()).toBeFalsy();
+            expect(this.dataset.analyzableObjectType()).toBeFalsy();
         });
 
         it("returns false for Chorus views", function() {
             this.dataset = fixtures.chorusView();
-            expect(this.dataset.canAnalyze()).toBeFalsy();
+            expect(this.dataset.analyzableObjectType()).toBeFalsy();
         });
 
         it("returns false for external tables", function() {
             this.dataset = newFixtures.workspaceDataset.externalTable();
-            expect(this.dataset.canAnalyze()).toBeFalsy();
+            expect(this.dataset.analyzableObjectType()).toBeFalsy();
         });
     });
 
@@ -906,6 +906,78 @@ describe("chorus.models.Dataset", function() {
             var importDataset = rspecFixtures.workspaceDataset.datasetTable();
             importDataset.getImport().loaded = true;
             expect(importDataset.isImportConfigLoaded()).toBeTruthy();
+        });
+    });
+
+    describe("#workspaceArchived", function () {
+        beforeEach(function() {
+            this.dataset._workspace = rspecFixtures.workspace();
+        });
+
+        it("returns false for no workspace", function () {
+            this.dataset._workspace = undefined;
+            expect(this.dataset.workspaceArchived()).toBeFalsy();
+        });
+
+        it("returns false for active workspace", function () {
+            expect(this.dataset.workspaceArchived()).toBeFalsy();
+        });
+
+        it("returns true for archived workspace", function () {
+            this.dataset.workspace().set({ archivedAt: "2012-12-12" });
+            expect(this.dataset.workspaceArchived()).toBeTruthy();
+        });
+    });
+
+    describe("#analyzableObjectType", function () {
+        it("returns true when user has credentials, object type is table and workspace is not archived", function () {
+            this.dataset.set({ hasCredentials: true, objectType: "TABLE" })
+            expect(this.dataset.canAnalyze()).toBeTruthy();
+        });
+
+        it("returns false when hasCredentials is falsy", function () {
+            this.dataset.set({ hasCredentials: false, objectType: "TABLE" })
+            expect(this.dataset.canAnalyze()).toBeFalsy();
+        });
+
+        it("returns false when analyzableObjectType is falsy", function () {
+            this.dataset.set({ hasCredentials: true, objectType: "RUBBISH" })
+            expect(this.dataset.canAnalyze()).toBeFalsy();
+        });
+
+        it("returns false when workspaceArchived is not falsy", function () {
+            this.dataset.set({ hasCredentials: true, objectType: "TABLE" })
+            this.dataset._workspace = rspecFixtures.workspace({ archivedAt: "2012-12-12"});
+            expect(this.dataset.canAnalyze()).toBeFalsy();
+        });
+    });
+
+
+    describe("#nextImportDestination", function() {
+        it("returns the import destination", function() {
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            var anImport = new chorus.models.DatasetImport({ nextImportTime: "2012-12-21", id: 1337, toTable: "toronto" });
+            this.dataset._datasetImport = anImport;
+            expect(this.dataset.nextImportDestination().get("objectName")).toEqual("toronto");
+        });
+    });
+
+    describe("#importRunsAt", function() {
+        it("returns the import run time", function() {
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            var anImport = new chorus.models.DatasetImport({ nextImportTime: Date.formatForApi((50).hours().ago()), id: 1337, toTable: "toronto" });
+            this.dataset._datasetImport = anImport;
+            expect(this.dataset.importRunsAt()).toEqual("2 days ago");
+        });
+    });
+
+    describe("#lastImportDestination", function() {
+        it("returns the correct progress message", function() {
+            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            var anImport = new chorus.models.DatasetImport({ nextImportTime: Date.formatForApi((50).hours().ago()), id: 1337 });
+            anImport.set({ executionInfo: { toTable: "ca-na-da", toTableId: 29394, startedStamp: "2011-01-01 19:19:19" } });
+            this.dataset._datasetImport = anImport;
+            expect(this.dataset.lastImportDestination().get("objectName")).toBe("ca-na-da");
         });
     });
 

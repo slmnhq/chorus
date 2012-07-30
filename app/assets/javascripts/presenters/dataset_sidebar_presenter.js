@@ -72,19 +72,20 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     nextImport: function() {
-        if (!this.hasImport() || !this.resource.getImport().hasNextImport()) return "";
+        if(!this.resource || !this.resource.nextImportDestination()) return "";
 
-        var importConfig = this.resource.getImport();
-        var destination = importConfig.nextDestination();
-        var runsAt = chorus.helpers.relativeTimestamp(importConfig.nextExecutionAt())
-        return chorus.helpers.safeT("import.next_import", { nextTime: runsAt, tableLink: this._linkToModel(destination) });
+        return chorus.helpers.safeT("import.next_import", {
+            nextTime: this.resource.importRunsAt(),
+            tableLink: this._linkToModel(this.resource.nextImportDestination())
+        });
     },
 
     inProgressText: function() {
-        var importConfig = this.resource && this.resource.getImport();
+        var lastDestination = this.resource && this.resource.lastImportDestination();
 
-        return (importConfig && importConfig.thisDatasetIsSource() && importConfig.isInProgress()) ?
-            chorus.helpers.safeT("import.in_progress", { tableLink: this._linkToModel(importConfig.lastDestination()) }) : "";
+        if(!lastDestination) return "";
+
+        return chorus.helpers.safeT("import.in_progress", { tableLink: this._linkToModel(lastDestination) });
     },
 
     importInProgress: function() {
@@ -158,13 +159,11 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     workspaceArchived: function() {
-        //TODO: put this on the model
-        return this.resource && this.resource.workspace() && !this.resource.workspace().isActive();
+        return this.resource && this.resource.workspaceArchived();
     },
 
     canAnalyze: function() {
-        //TODO: put this on the model
-        return this.resource && this.resource.hasCredentials() && this.resource.canAnalyze() && !this.workspaceArchived();
+        return this.resource && this.resource.canAnalyze();
     },
 
     hasImport: function() {
@@ -175,7 +174,6 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.resource && this.resource.canExport();
     },
 
-    // TODO: This is a foreign function... belongs in helpers? or on chorus?
     _linkToModel: function(model) {
         return chorus.helpers.linkTo(model.showUrl(), this.ellipsize(model.name()), {title: model.name()});
     },

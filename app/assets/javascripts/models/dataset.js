@@ -56,7 +56,28 @@ chorus.models.Dataset = chorus.models.Base.include(
         return this.getImport() && this.getImport().has("id");
     },
 
-    canExport: function() {
+    importRunsAt: function() {
+        if (!this.hasImport() || !this.getImport().hasNextImport()) return;
+
+        return chorus.helpers.relativeTimestamp(this.getImport().nextExecutionAt());
+    },
+
+    nextImportDestination: function() {
+        if (!this.hasImport() || !this.getImport().hasNextImport()) return;
+
+        return this.getImport().nextDestination();
+    },
+
+    lastImportDestination:function () {
+        var importConfig = this.getImport();
+
+        return importConfig
+            && importConfig.thisDatasetIsSource()
+            && importConfig.isInProgress()
+            && importConfig.lastDestination();
+    },
+
+    canExport:function () {
         return this.workspace() && this.workspace().canUpdate()
             && this.hasCredentials()
             && this.canBeImportSource()
@@ -64,7 +85,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     schema: function() {
-        return new chorus.models.Schema(this.get("schema"));
+    return new chorus.models.Schema(this.get("schema"));
     },
 
     workspace: function() {
@@ -81,6 +102,10 @@ chorus.models.Dataset = chorus.models.Base.include(
         }
         return this._workspaceAssociated;
 
+    },
+
+    workspaceArchived: function() {
+        return this.workspace() && !this.workspace().isActive();
     },
 
     isImportConfigLoaded: function() {
@@ -223,8 +248,12 @@ chorus.models.Dataset = chorus.models.Base.include(
         return this.get('hasCredentials') !== false
     },
 
-    canAnalyze: function() {
+    analyzableObjectType: function() {
         return this.get("objectType") === "TABLE";
+    },
+
+    canAnalyze: function() {
+        return this.hasCredentials() && this.analyzableObjectType() && !this.workspaceArchived();
     },
 
     analyze: function() {

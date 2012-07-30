@@ -33,7 +33,6 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 expect(presenter.hasImport()).toBeFalsy();
                 expect(presenter.displayEntityType()).toEqual("table");
                 expect(presenter.isChorusView()).toBeFalsy();
-                expect(presenter.canAnalyze()).toBeTruthy();
                 expect(presenter.noCredentials()).toBeFalsy();
                 expect(presenter.noCredentialsWarning()).not.toBeEmpty();
                 expect(presenter.typeString()).not.toBeEmpty();
@@ -41,8 +40,8 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 expect(presenter.hasSandbox()).toBeFalsy();
                 expect(presenter.activeWorkspace()).toBeFalsy();
                 expect(presenter.isDeleteable()).toBeFalsy();
-                expect(presenter.deleteKey("deleteMsgKey")).not.toBeEmpty();
-                expect(presenter.deleteKey("deleteTextKey")).not.toBeEmpty();
+                expect(presenter.deleteMsgKey()).not.toBeEmpty();
+                expect(presenter.deleteTextKey()).not.toBeEmpty();
                 expect(presenter.isImportConfigLoaded()).toBeFalsy();
                 expect(presenter.hasSchedule()).toBeFalsy();
                 expect(presenter.nextImport()).toBeFalsy();
@@ -50,6 +49,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 expect(presenter.importInProgress()).not.toBeEmpty();
                 expect(presenter.importFailed()).not.toBeEmpty();
                 expect(presenter.lastImport()).not.toBeEmpty();
+                expect(presenter.canAnalyze()).not.toBeEmpty();
             });
         });
 
