@@ -100,7 +100,7 @@
     },
 
     additionalContext: function() {
-        return new chorus.presenters.DatasetSidebar(this.resource, this.options).makeContext();
+        return new chorus.presenters.DatasetSidebar(this.resource, this.options);
     },
 
     postRender: function() {
