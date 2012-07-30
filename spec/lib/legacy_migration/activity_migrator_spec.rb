@@ -40,14 +40,27 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies IMPORT SUCCESS activities" do
-        event = Events::IMPORT_SUCCESS.find(event_id_for('10112'))
+        event = Events::IMPORT_SUCCESS.find(event_id_for('10177'))
         event.workspace.should be_a(Workspace)
-        event.workspace.name.should == "Workspace"
+        event.workspace.name.should == "ws"
         event.actor.should be_a(User)
         event.actor.username.should == "edcadmin"
         event.dataset.should be_a(Dataset)
-        event.dataset.name.should == "__gp_fullname"
+        event.dataset.name.should == "sixrows33columns"
+        event.additional_data[:filename].should == "sixrows33columns.csv"
+        event.additional_data[:import_type].should == "file"
+      end
 
+      it "copies IMPORT FAILURE activities" do
+        event = Events::IMPORT_FAILED.find(event_id_for('10368'))
+        event.workspace.should be_a(Workspace)
+        event.workspace.name.should == "active_public"
+        event.actor.should be_a(User)
+        event.actor.username.should == "edcadmin"
+        event.additional_data[:filename].should == "SFO 2011 Annual Survey.csv"
+        event.additional_data[:import_type].should == "file"
+        event.additional_data[:destination_table].should == "sfo_2011_annual_survey"
+        event.additional_data[:error_message].should == "[ERROR: invalid input syntax for type double precision: \"1,909.00\"\n  Where: COPY sfo_2011_annual_survey, line 3851, column runid]"
       end
     end
 

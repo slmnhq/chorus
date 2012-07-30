@@ -262,4 +262,32 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
       end
     end
   end
+
+  describe "import success event" do
+    let(:activity_stream) do
+      Object.new.tap do |activity|
+        mock(activity).type.times(any_times) { 'IMPORT_SUCCESS' }
+      end
+    end
+
+    context "#can_build" do
+      it "returns true" do
+        mapper.can_build?.should be_true
+      end
+    end
+  end
+
+  describe "import failed event" do
+    let(:activity_stream) do
+      Object.new.tap do |activity|
+        mock(activity).type.times(any_times) { 'IMPORT_FAILED' }
+      end
+    end
+
+    context "#can_build" do
+      it "returns true" do
+        mapper.can_build?.should be_true
+      end
+    end
+  end
 end

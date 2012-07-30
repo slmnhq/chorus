@@ -278,7 +278,7 @@ DEPENDENCIES
   jetpack!
   jruby-openssl
   net-ldap
-  paperclip
+  paperclip (= 3.0.4)
   queue_classic!
   quiet_assets
   rails (= 3.2.5)

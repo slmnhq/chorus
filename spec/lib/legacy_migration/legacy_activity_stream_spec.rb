@@ -8,6 +8,8 @@ describe Legacy::ActivityStream, :legacy_migration => true, :type => :legacy_mig
   let(:workfile_activity_stream) { Legacy::ActivityStream.new('10010', nil, nil) }
   let(:user_activity_stream) { Legacy::ActivityStream.new('10004', nil, nil) }
   let(:dataset_activity_stream) { Legacy::ActivityStream.new('10097', nil, nil) }
+  let(:filename_activity_stream) { Legacy::ActivityStream.new('10177', nil, nil) }
+  let(:dest_table_activity_stream) { Legacy::ActivityStream.new('10368', nil, nil) }
 
   before do
     Legacy.connection.add_column :edc_instance, :chorus_rails_instance_id, :integer
@@ -168,6 +170,30 @@ describe Legacy::ActivityStream, :legacy_migration => true, :type => :legacy_mig
     context "when it doesn't have a dataset'" do
       it "raises an error" do
         expect { greenplum_activity_stream.rails_dataset_id }.to raise_error(Exception)
+      end
+    end
+  end
+
+  describe "#file_name" do
+    context "when it has a file" do
+      it "returns the filename" do
+        filename_activity_stream.file_name.should == "sixrows33columns.csv"
+      end
+    end
+  end
+
+  describe "#destination_table" do
+    context "when it has a table" do
+      it "returns the filename" do
+        dest_table_activity_stream.destination_table.should == "sfo_2011_annual_survey"
+      end
+    end
+  end
+
+  describe "#import_error_message" do
+    context "when it has a task" do
+      it "returns the error message" do
+        dest_table_activity_stream.import_error_message.should == "[ERROR: invalid input syntax for type double precision: \"1,909.00\"\n  Where: COPY sfo_2011_annual_survey, line 3851, column runid]"
       end
     end
   end
