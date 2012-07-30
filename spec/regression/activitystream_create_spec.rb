@@ -173,6 +173,23 @@ describe " system generated activities " do
 
   end
 
+  it "create system generate activity when a workspace is made private" do
+
+    create_valid_workspace(:name => "workspace_private", :shared => true)
+    wait_for_ajax
+    page.should have_content "EDC Admin created workspace workspace_public"
+    click_link "Edit Workspace"
+    uncheck "Publicly available"
+    click_submit_button
+    wait_for_ajax
+    page.should have_content "EDC Admin made workspace workspace_private private"
+
+    go_to_home_page
+    wait_for_ajax
+    page.should have_content "EDC Admin made workspace workspace_private private"
+
+  end
+
   xit "creates system generated activity when a dataset is associated to a workspace" do
 
     login('edcadmin','secret')
