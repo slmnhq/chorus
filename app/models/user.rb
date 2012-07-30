@@ -1,4 +1,5 @@
 require 'digest/sha1'
+require 'soft_delete'
 
 class User < ActiveRecord::Base
   include SoftDelete
