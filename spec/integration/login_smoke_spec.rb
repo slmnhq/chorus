@@ -18,6 +18,7 @@ describe "logging in" do
       # Sometimes an AJAX may trigger the redirection before
       # and thus the link does not exist
       page.has_css?("a:contains('Home')") && click_link("Home")
+      wait_for_ajax
 
       wait_until { current_route == "/login" }
       wait_for_ajax
