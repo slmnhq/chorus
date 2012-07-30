@@ -89,7 +89,7 @@
              {{/if}}
 
             {{#if activeWorkspace}}
-                {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey}}</a></li>{{/if}}
+                {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey functionCallContext=this}}</a></li>{{/if}}
             {{/if}}
         </ul>
     </div>

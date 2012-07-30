@@ -5,37 +5,16 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         }, this);
     },
 
-    makeContext: function() {
-        var additionalContexts = ['resource', 'import', 'nextImport', 'lastImport', 'workspace']
-
-        return _.reduce(additionalContexts,
-            function(result, context) { return _.extend(result, this[context + "Context"]()) },
-            this.initialContext(),
-            this)
-    },
-
-    initialContext: function() {
-        return _.extend({
-            typeString: this.typeString()
-        }, this.options);
-    },
-
     typeString: function() {
         return Handlebars.helpers.humanizedDatasetType(this.resource && this.resource.attributes);
     },
 
-    workspaceContext: function() {
-        if (!this.resource || !this.resource.workspace()) { return {}; }
+    deleteMsgKey: function() {
+        return this.deleteKey("deleteMsgKey");
+    },
 
-        return {
-            canExport: this.canExport(),
-            hasSandbox: this.hasSandbox(),
-            workspaceId: this.workspaceId(),
-            activeWorkspace: this.activeWorkspace(),
-            isDeleteable: this.isDeleteable(),
-            deleteMsgKey: this.deleteKey("deleteMsgKey"),
-            deleteTextKey: this.deleteKey("deleteTextKey")
-        }
+    deleteTextKey: function() {
+        return this.deleteKey("deleteTextKey");
     },
 
     deleteKey: function(target) {
@@ -84,31 +63,12 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.hasWorkspace() && this.resource.workspace().isActive();
     },
 
-    importContext: function() {
-        var ctx = {};
-        if (!this.resource || !this.resource.canBeImportSourceOrDestination()) { return ctx; }
-
-        ctx.isImportConfigLoaded = this.isImportConfigLoaded();
-        ctx.hasSchedule = this.hasSchedule();
-        ctx.hasImport = this.hasImport();
-
-        return ctx;
-    },
-
     isImportConfigLoaded: function() {
-        return this.resource.isImportConfigLoaded();
+        return this.resource && this.resource.isImportConfigLoaded();
     },
 
     hasSchedule: function() {
         return this.resource && this.resource.canBeImportSourceOrDestination() && this.resource.getImport().hasActiveSchedule();
-    },
-
-    nextImportContext: function() {
-        var ctx = {};
-        if (!this.hasImport() || !this.resource.getImport().hasNextImport()) { return ctx; }
-
-        ctx.nextImport = this.nextImport();
-        return ctx;
     },
 
     nextImport: function() {
@@ -118,20 +78,6 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         var destination = importConfig.nextDestination();
         var runsAt = chorus.helpers.relativeTimestamp(importConfig.nextExecutionAt())
         return chorus.helpers.safeT("import.next_import", { nextTime: runsAt, tableLink: this._linkToModel(destination) });
-    },
-
-    lastImportContext: function() {
-        var ctx = {};
-        var importConfig = this.resource && this.resource.getImport();
-
-        if (!importConfig || (!this.hasImport() && !importConfig.hasLastImport())) { return ctx; }
-
-        ctx.lastImport = this.lastImport();
-        ctx.inProgressText = this.inProgressText();
-        ctx.importInProgress = this.importInProgress();
-        ctx.importFailed = this.importFailed();
-
-        return ctx;
     },
 
     inProgressText: function() {
@@ -189,37 +135,26 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return lastImport;
     },
 
-    resourceContext: function() {
-        var ctx = {};
-        if (!this.resource) { return ctx; }
-
-        if (this.noCredentials()) {
-            ctx.noCredentials = this.noCredentials();
-            ctx.noCredentialsWarning = this.noCredentialsWarning();
+    noCredentialsWarning: function() {
+        if(!this.resource) {
+            return ""
         }
 
-        ctx.displayEntityType = this.displayEntityType();
-        ctx.isChorusView = this.isChorusView();
-        ctx.canAnalyze = this.canAnalyze();
-        return ctx;
-    },
-
-    noCredentialsWarning: function() {
         var addCredentialsLink = chorus.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'});
         var instanceName = this.resource.instance().name();
-        return  chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink, instanceName: instanceName });
+        return chorus.helpers.safeT("dataset.credentials.missing.body", {linkText: addCredentialsLink, instanceName: instanceName });
     },
 
     noCredentials: function() {
-        return this.resource && !this.resource.hasCredentials();
+        return this.resource ? !this.resource.hasCredentials() : "";
     },
 
     isChorusView: function() {
-        return this.resource.isChorusView();
+        return this.resource ? this.resource.isChorusView() : "";
     },
 
     displayEntityType: function() {
-        return this.resource.metaType();
+        return this.resource ? this.resource.metaType() : "";
     },
 
     workspaceArchived: function() {
@@ -229,7 +164,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
     canAnalyze: function() {
         //TODO: put this on the model
-        return this.resource.hasCredentials() && this.resource.canAnalyze() && !this.workspaceArchived();
+        return this.resource && this.resource.hasCredentials() && this.resource.canAnalyze() && !this.workspaceArchived();
     },
 
     hasImport: function() {

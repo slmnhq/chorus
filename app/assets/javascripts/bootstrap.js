@@ -1,7 +1,9 @@
 (function() {
     window.t = function(key, options) {
         if (_.isObject(options)) {
-            return I18n.t(key, options);
+            var newOptions = _.clone(options);
+            delete newOptions.functionCallContext;
+            return _.isFunction(key) ? I18n.t(key.apply(options.functionCallContext, []), newOptions) : I18n.t(key, options);
         } else {
             return I18n.t(key, _.rest(arguments));
         }

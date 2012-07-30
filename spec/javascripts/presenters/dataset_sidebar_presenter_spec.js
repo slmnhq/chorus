@@ -22,7 +22,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
     describe("the context", function() {
         context("with a regular dataset", function() {
-            var presenter, sidebar, resource;
+            var presenter, resource;
             beforeEach(function() {
                 resource = rspecFixtures.dataset();
                 presenter = new chorus.presenters.DatasetSidebar(resource);
