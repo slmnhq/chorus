@@ -4,7 +4,7 @@
     <div class="instance_type" title="{{instanceProvider}}">{{instanceProvider}}
         {{#if isProvisioning}}<span>{{t "instances.sidebar.provisioning"}}</span>{{/if}}
     </div>
-    {{#if isFault}}
+    {{#if provisioningFailed}}
         <div class="instance_fault">
             <img src="/images/message_error_small.png"/>
             <span>{{t "instances.sidebar.fault"}}</span>

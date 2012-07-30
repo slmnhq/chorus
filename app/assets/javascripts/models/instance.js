@@ -10,12 +10,16 @@ chorus.models.Instance = chorus.models.Base.extend({
         return this.get("state") == "provisioning";
     },
 
-    isFault: function() {
-        return this.get("state") == "offline";
+    provisioningFailed: function() {
+        return this.get("state") == "fault";
     },
 
     isOnline: function() {
         return this.get("state") == "online";
+    },
+
+    isOffline: function() {
+        return this.get("state") == "offline";
     },
 
     stateText: function() {

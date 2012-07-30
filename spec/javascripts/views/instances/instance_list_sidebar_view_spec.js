@@ -137,7 +137,7 @@ describe("chorus.views.InstanceListSidebar", function() {
                     beforeEach(function() {
                         setLoggedInUser({ username: "benjamin", admin: true});
                         this.instance.set({
-                            state: "offline",
+                            state: "fault",
                             provision_type: "create"
                         });
                         this.view.render();
@@ -162,6 +162,30 @@ describe("chorus.views.InstanceListSidebar", function() {
 
                     it("doesn't display the edit instance link", function() {
                         expect(this.view.$(".actions .edit_instance")).not.toExist();
+                    });
+                });
+
+                context("when the instance is offline", function() {
+                    beforeEach(function() {
+                        setLoggedInUser({ username: "benjamin", admin: true});
+                        this.instance.set({
+                            state: "offline",
+                            provision_type: "register"
+                        });
+                        this.view.render();
+                    });
+
+                    it("doesn't displays an error message in the info section", function() {
+                        expect(this.view.$(".instance_fault img")).not.toHaveAttr("src", "/images/message_error_small.png");
+                        expect(this.view.$(".instance_fault span")).not.toContainTranslation("instances.sidebar.fault");
+                    });
+
+                    it("doesn't display the delete instance link", function() {
+                        expect(this.view.$(".actions .delete_instance")).not.toExist();
+                    });
+
+                    it("does display the edit instance link", function() {
+                        expect(this.view.$(".actions .edit_instance")).toExist();
                     });
                 });
             });

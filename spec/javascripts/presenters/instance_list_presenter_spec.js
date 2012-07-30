@@ -48,7 +48,7 @@ describe("chorus.presenters.InstanceList", function() {
     itPresentsModelMethod("showUrl");
     itPresentsModelMethod("providerIconUrl", "providerUrl");
     itPresentsModelMethod("isProvisioning");
-    itPresentsModelMethod("isFault");
+    itPresentsModelMethod("provisioningFailed");
     itPresentsModelMethod("stateText");
 
     itPresentsModelAttribute("id");

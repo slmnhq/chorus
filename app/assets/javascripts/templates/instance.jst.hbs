@@ -4,7 +4,7 @@
     <img class="provider" src="{{providerUrl}}"/>
 </div>
 <div class="instance_details">
-    {{#ifAny isProvisioning isFault}}
+    {{#ifAny isProvisioning provisioningFailed isOffline}}
         <span class="name">{{name}}</span>
     {{else}}
         <a class="name" href="{{showUrl}}">{{name}}</a>

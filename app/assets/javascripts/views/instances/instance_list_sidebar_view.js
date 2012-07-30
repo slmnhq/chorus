@@ -24,10 +24,10 @@ chorus.views.InstanceListSidebar = chorus.views.Sidebar.extend({
             userCanEditPermissions: this.canEditPermissions(),
             userCanEditInstance: this.canEditInstance(),
             instanceAccountsCount: this.instance.accounts().length,
-            editable: !this.instance.isFault() && !this.instance.isProvisioning(),
-            deleteable: this.instance.isFault() && this.instance.get("provision_type") == "create",
+            editable: !this.instance.provisioningFailed() && !this.instance.isProvisioning(),
+            deleteable: this.instance.provisioningFailed() && this.instance.get("provision_type") == "create",
             isProvisioning: this.instance.isProvisioning(),
-            isFault: this.instance.isFault(),
+            provisioningFailed: this.instance.provisioningFailed(),
             isOnline: this.instance.isOnline(),
             instanceProvider: this.instance.isGreenplum() ? "Greenplum Database" : "Hadoop"
         };
