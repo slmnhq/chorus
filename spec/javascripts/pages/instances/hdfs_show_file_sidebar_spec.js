@@ -33,7 +33,7 @@
         it("shows the 'add a note' link", function() {
             expect(this.view.$("a.dialog").data("dialog")).toBe("NotesNew");
             expect(this.view.$("a.dialog").data("entity-id")).toBe("9876|/folder/filename.txt");
-            expect(this.view.$("a.dialog").data("entity-type")).toBe("hdfs");
+            expect(this.view.$("a.dialog").data("entity-type")).toBe("hdfs_file");
         })
 
         it("has a link to create external table", function() {
