@@ -227,6 +227,41 @@ describe " system generated activities " do
 
   end
 
+  it "creates system generated activity when archiving a workspace" do
+    workspace_name = "archiving_ws_as"
+    create_valid_workspace(:name => workspace_name, :shared => true)
+    click_link "Edit Workspace"
+    wait_for_ajax
+
+    within_modal do
+      choose("workspace_archived")
+      click_submit_button
+      wait_for_ajax
+    end
+
+    within(".actions") do
+      page.should_not have_content("Add or Edit Members")
+      page.should_not have_content("Add an insight")
+      page.should_not have_content("Add a note")
+      page.should_not have_content("Add a sandbox")
+    end
+    page.should have_content "EDC Admin archived workspace archiving_ws_as"
+
+    go_to_home_page
+    wait_for_ajax
+    page.should have_content "EDC Admin archived workspace archiving_ws_as"
+
+    go_to_user_list_page
+    within(".list")  do
+      click_link "EDC Admin"
+    end
+    wait_for_ajax
+    page.should have_content "EDC Admin archived workspace archiving_ws_as"
+
+
+
+  end
+
 
 
 end

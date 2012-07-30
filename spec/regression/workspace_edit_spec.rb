@@ -116,14 +116,14 @@ describe "editing the workspace" do
   end
 
   it "can archive and unarchive the workspace, displaying a localized relative time" do
-    workspace_name = "#{Forgery::Name.first_name}'s Workspace'"
-    create_valid_workspace(:name => workspace_name)
+    workspace_name = "archiving_unarchiving_ws"
+    create_valid_workspace(:name => workspace_name, :shared => true)
     click_link "Edit Workspace"
     wait_for_ajax
 
     within_modal do
       choose("workspace_archived")
-      find(".submit").click
+      click_submit_button
       wait_for_ajax
     end
 
@@ -136,10 +136,10 @@ describe "editing the workspace" do
 
     visit('/#/workspaces')
     within(".workspace_list") { page.should_not have_content(workspace_name) }
-    sleep(2)
+    wait_for_ajax
     page.execute_script("$('.popup').click()")
     wait_until { page.has_content? "All Workspaces" }
-    sleep (2)
+    wait_for_ajax
     click_link("All Workspaces")
     within(".workspace_list") do
       page.should have_content(workspace_name)
@@ -154,7 +154,7 @@ describe "editing the workspace" do
 
     within_modal do
       choose("workspace_active")
-      find(".submit").click
+      click_submit_button
       wait_for_ajax
     end
 
@@ -165,5 +165,8 @@ describe "editing the workspace" do
       page.should have_content("Add a sandbox")
     end
   end
+
+
+
 end
 
