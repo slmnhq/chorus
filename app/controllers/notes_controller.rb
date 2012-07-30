@@ -6,8 +6,8 @@ class NotesController < ApplicationController
     entity_type = note_params[:entity_type]
     entity_id = note_params[:entity_id]
     authorize! :create, Events::Note, entity_type, entity_id
-    Events::Note.create_from_params(note_params, current_user)
-    render :json => {}, :status => :created
+    note = Events::Note.create_from_params(note_params, current_user)
+    present note, :status => :created
   end
 
   def update

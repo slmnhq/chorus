@@ -1,6 +1,7 @@
 module Events
   class Note < Base
     validates_presence_of :actor_id
+    has_many :attachments, :class_name => 'NoteAttachment'
     searchable do |s|
       s.text :body, :stored => true
       s.string :grouping_id
@@ -23,6 +24,10 @@ module Events
       event_params["workspace"] = Workspace.find(workspace_id) if workspace_id
       event_class = event_class_for_model(model, workspace_id)
       event_class.by(creator).add(event_params)
+    end
+
+    def create_attachments(source_file)
+      attachments.create!(:contents => source_file)
     end
 
     class << self

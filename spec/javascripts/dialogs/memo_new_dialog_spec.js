@@ -1,6 +1,6 @@
 describe("chorus.dialogs.MemoNewDialog", function() {
     beforeEach(function() {
-        this.model = new chorus.models.Comment({
+        this.model = new chorus.models.Note({
             entityType: 'workfile',
             entityId: 1,
             workspaceId: 22,
@@ -91,7 +91,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 });
 
                 it("should include the recipients in the save request", function() {
-                    expect(this.server.lastCreate().params()["comment[recipients]"]).toBe("1,2");
+                    expect(this.server.lastCreate().params()["note[recipients]"]).toBe("1,2");
                 });
             });
 

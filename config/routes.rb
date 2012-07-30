@@ -74,7 +74,9 @@ Chorus::Application.routes.draw do
     resource :image, :only => [:show], :controller => 'workfile_version_images'
   end
 
-  resources :notes, :only => [:create, :update, :destroy]
+  resources :notes, :only => [:create, :update, :destroy] do
+    resource :attachments, :only => [:create] , :controller => 'note_attachments'
+  end
 
   scope :path => "/search" do
     resource :global, :only => [:show], :controller => 'search'
