@@ -1,7 +1,7 @@
 chorus.models.HdfsEntry = chorus.models.Base.extend({
     constructorName: "HdfsEntry",
     nameAttribute: 'name',
-    entityType: "hdfs",
+    entityType: "hdfs_file",
 
     showUrlTemplate: function() {
         if(this.get("isDir")) {

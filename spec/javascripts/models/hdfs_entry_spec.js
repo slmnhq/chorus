@@ -1,4 +1,8 @@
 describe("chorus.models.HdfsEntry", function() {
+    it("it has the right entity type", function() {
+       expect(new chorus.models.HdfsEntry().entityType).toBe("hdfs_file");
+    });
+
     describe("showUrl", function() {
         context("when entry is a directory", function() {
             beforeEach(function() {
