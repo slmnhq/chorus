@@ -99,13 +99,13 @@ describe("chorus.views.ActivityList", function() {
             })
 
             it("displays information for each comment", function() {
-                expect(this.view.$("li[data-comment-id]:eq(0) .icon a")).toHaveAttr("href", "#/users/1234")
-                expect(this.view.$("li[data-comment-id]:eq(0) .icon a img")).toHaveAttr("src", "/edc/userimage/1234?size=icon&iebuster=555")
-                expect(this.view.$("li[data-comment-id]:eq(0) .comment_header a")).toHaveText("Bob Smith");
+                expect(this.view.$("li[data-comment-id]:eq(0) .icon a")).toHaveAttr("href", "#/users/10101")
+                expect(this.view.$("li[data-comment-id]:eq(0) .icon a img")).toHaveAttr("src", "/edc/userimage/10101?size=icon&iebuster=555")
+                expect(this.view.$("li[data-comment-id]:eq(0) .comment_header a")).toHaveText("John Commenter");
                 expect(this.view.$("li[data-comment-id]:eq(0) .comment_content .actions .timestamp")).toExist();
-                expect(this.view.$("li[data-comment-id]:eq(1) .icon a")).toHaveAttr("href", "#/users/10101")
-                expect(this.view.$("li[data-comment-id]:eq(1) .icon a img")).toHaveAttr("src", "/edc/userimage/10101?size=icon&iebuster=555")
-                expect(this.view.$("li[data-comment-id]:eq(1) .comment_header a")).toHaveText("John Commenter");
+                expect(this.view.$("li[data-comment-id]:eq(1) .icon a")).toHaveAttr("href", "#/users/1234")
+                expect(this.view.$("li[data-comment-id]:eq(1) .icon a img")).toHaveAttr("src", "/edc/userimage/1234?size=icon&iebuster=555")
+                expect(this.view.$("li[data-comment-id]:eq(1) .comment_header a")).toHaveText("Bob Smith");
                 expect(this.view.$("li[data-comment-id]:eq(1) .comment_content .timestamp")).toExist();
             });
 
@@ -144,9 +144,9 @@ describe("chorus.views.ActivityList", function() {
                 })
 
                 it("applies the 'more' class to trailing elements", function() {
-                    expect(this.view.$(".comments li:eq(0)")).not.toHaveClass("more");
-                    expect(this.view.$(".comments li:eq(1)")).not.toHaveClass("more");
-                    expect(this.view.$(".comments li:eq(2)")).toHaveClass("more");
+                    expect(this.view.$(".comments li:eq(0)")).toHaveClass("more");
+                    expect(this.view.$(".comments li:eq(1)")).toHaveClass("more");
+                    expect(this.view.$(".comments li:eq(2)")).not.toHaveClass("more");
                 })
 
                 describe("when the more link is clicked", function() {

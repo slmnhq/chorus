@@ -8,12 +8,15 @@ describe("chorus.views.CommentList", function() {
                 firstName : "Barack",
                 lastName : "Obama",
                 id : "45"
-            }
+            },
+            timestamp: "2010-01-01 01:00:00"
         });
         this.comment2 = fixtures.noteComment({
-            text : "No hate plz"
+            text : "No hate plz",
+            timestamp: "2010-01-01 02:00:00"
+
         });
-        this.comment3 = fixtures.comment();
+        this.comment3 = fixtures.comment({timestamp: "2010-01-01 03:00:00"});
         this.comments = new chorus.collections.CommentSet([this.comment1, this.comment2, this.comment3], {
             entityId: 10000,
             entityType: "workspace"
@@ -78,9 +81,9 @@ describe("chorus.views.CommentList", function() {
             });
 
             it("applies the 'more' class to the extra elements", function() {
-                expect(this.view.$("li:eq(0)")).not.toHaveClass("more");
+                expect(this.view.$("li:eq(0)")).toHaveClass("more");
                 expect(this.view.$("li:eq(1)")).not.toHaveClass("more");
-                expect(this.view.$("li:eq(2)")).toHaveClass("more");
+                expect(this.view.$("li:eq(2)")).not.toHaveClass("more");
             });
         });
 
