@@ -190,7 +190,7 @@ describe " system generated activities " do
 
   end
 
-  xit "creates system generated activity when a dataset is associated to a workspace" do
+  it "creates system generated activity when a dataset is associated to a workspace" do
 
     login('edcadmin','secret')
     create_valid_workspace(:name => "associate_dataset_as")
@@ -211,11 +211,19 @@ describe " system generated activities " do
     end
     click_submit_button
     wait_for_ajax
-    page.should have_content
+    page.should have_content "EDC Admin associated the table base_table1 to workspace associate_dataset_as"
+
     go_to_workspace_page
     click_link "associate_dataset"
     click_link "Data"
+    wait_for_ajax
     page.should have_content "base_table1"
+    click_link"base_table1"
+    wait_for_ajax
+    page.should have_content "EDC Admin associated the table base_table1 to workspace associate_dataset_as"
+
+    go_to_home_page
+    page.should have_content "EDC Admin associated the table base_table1 to workspace associate_dataset_as"
 
   end
 
