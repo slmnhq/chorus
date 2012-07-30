@@ -14,11 +14,13 @@ describe "logging in" do
     create_valid_workspace(:name => "FooWorkspace")
 
     Timecop.travel(Time.current + 3.hours) do
+      wait_for_ajax
       # Sometimes an AJAX may trigger the redirection before
       # and thus the link does not exist
       page.has_css?("a:contains('Home')") && click_link("Home")
 
       wait_until { current_route == "/login" }
+      wait_for_ajax
       login(adminlogin, adminpassword)
 
       click_link("FooWorkspace")

@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../integration/spec_helper')
+require File.join(File.dirname(__FILE__), 'spec_helper')
 
 #These tests actually create the charts from the instances view. Need to write separate tests for visulaization from sandbox
 
