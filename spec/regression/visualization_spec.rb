@@ -32,6 +32,37 @@ describe "Create frequency plot" do
 
 end
 
+describe "Create box plot" do
+
+  it "creates box" do
+
+    login('edcadmin','secret')
+    create_gpdb_instance(:name => "boxplot")
+    wait_for_ajax
+    click_link "boxplot"
+    wait_for_ajax
+    click_link "ChorusAnalytics"
+    wait_for_ajax
+    click_link "analytics"
+    wait_for_ajax
+    click_link "campaign_dim"
+    wait_for_ajax
+    click_button "Visualize"
+    find(".chart_icon.boxplot").click
+
+    click_button "Create Chart"
+    within_modal do
+      page.should have_content "Visualization: campaign_dim"
+      click_link "Show Data Table"
+      page.should have_content "Results Console"
+      click_link "Hide Data Table"
+      click_button "Close"
+    end
+
+  end
+
+end
+
 describe "Create time series plot" do
 
   it "creates time series" do
