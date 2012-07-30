@@ -1,0 +1,1 @@
+ActiveRecord::Base.connection.execute('SET standard_conforming_strings = off', 'SCHEMA')

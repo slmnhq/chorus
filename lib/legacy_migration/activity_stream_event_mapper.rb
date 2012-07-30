@@ -6,6 +6,7 @@ class ActivityStreamEventMapper
   def build_event
     event = event_class.new
     set_target_objects(event)
+    set_additional_data(event)
     event
   end
 
@@ -64,7 +65,20 @@ class ActivityStreamEventMapper
     when :hdfs_file
       hadoop_instance_id, path = @activity_stream.hadoop_instance_id
       HdfsFileReference.find_or_create_by_path({ :hadoop_instance_id => hadoop_instance_id,
-                                                        :path => path })
+                                                 :path => path })
+    end
+  end
+
+  def set_additional_data(event)
+    event.additional_data = {}
+    if event.class == Events::IMPORT_SUCCESS
+      event.additional_data[:filename] = @activity_stream.file_name
+      event.additional_data[:import_type] = "file"
+    elsif event.class == Events::IMPORT_FAILED
+      event.additional_data[:filename] = @activity_stream.file_name
+      event.additional_data[:import_type] = "file"
+      event.additional_data[:destination_table] = @activity_stream.destination_table
+      event.additional_data[:error_message] = "#{@activity_stream.import_error_message}"
     end
   end
 end

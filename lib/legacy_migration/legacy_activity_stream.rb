@@ -132,6 +132,29 @@ class Legacy::ActivityStream
     dataset.id
   end
 
+  def file_name
+    sql = "SELECT aso.object_name FROM edc_activity_stream_object aso
+                                     WHERE aso.activity_stream_id = '#{id}'
+                                     AND aso.object_type = 'object' AND entity_type = 'file'"
+
+    extract_result("object_name", Legacy.connection.exec_query(sql))
+  end
+
+  def destination_table
+    sql = "SELECT aso.object_name FROM edc_activity_stream_object aso
+                                     WHERE aso.activity_stream_id = '#{id}'
+                                     AND aso.object_type = 'object' AND entity_type = 'table'"
+    extract_result("object_name", Legacy.connection.exec_query(sql))
+  end
+
+  def import_error_message
+    sql = "SELECT et.result FROM edc_task et, edc_activity_stream_object aso
+                              WHERE aso.activity_stream_id = '#{id}'
+                              AND aso.object_type = 'object' AND entity_type = 'task'
+                              AND aso.object_id = et.id"
+    extract_result("result", Legacy.connection.exec_query(sql))
+  end
+
   private
 
   def extract_result(result_key, sql)
