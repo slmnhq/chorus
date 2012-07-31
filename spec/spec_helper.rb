@@ -81,10 +81,8 @@ RSpec.configure do |config|
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
   end
 
-  config.before(:each, :legacy_migration => true) do
-    # stub file reads of legacy workfiles
-    #
-    stub(File).read(/.+\/\d{5}\/[\d_]+$/) { "123" }
+  Chorus::Application.configure do |config|
+    config.config.legacy_chorus_root_path = Rails.root + "system/legacy_workfiles"
   end
 
   config.include FileHelper
