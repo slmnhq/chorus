@@ -1,8 +1,7 @@
 class NoteAttachmentsController < ApplicationController
-
   def create
     event = Events::Base.find(params[:note_id])
-    # authorize! :can_edit_sub_objects, event
+    authorize! :create, event
 
     file_to_upload = params[:fileToUpload][:contents]
     filename = file_to_upload.original_filename
@@ -21,5 +20,4 @@ class NoteAttachmentsController < ApplicationController
 
     ActionDispatch::Http::UploadedFile.new(:filename => file_name, :tempfile => tempfile)
   end
-
 end

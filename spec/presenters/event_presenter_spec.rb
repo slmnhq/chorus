@@ -79,6 +79,20 @@ describe EventPresenter, :type => :view do
         hash[:body].should include('<')
         hash[:body].should include('>')
       end
+
+      context "with an attachment" do
+        let(:attachment) { NoteAttachment.first }
+
+        it "contains the attachment" do
+          stub(event).attachments do
+            [
+              attachment
+            ]
+          end
+          hash = subject.to_hash
+          hash[:attachments].should be_present
+        end
+      end
     end
   end
 end
