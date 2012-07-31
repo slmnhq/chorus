@@ -159,7 +159,7 @@ end
 
 describe "User can cancel a visualization" do
 
-  it "cancels visualization" do
+  xit "cancels visualization" do
 
     login('edcadmin','secret')
     create_gpdb_instance(:name => "cancel_visualization")

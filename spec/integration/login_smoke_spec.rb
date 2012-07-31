@@ -9,7 +9,7 @@ describe "logging in" do
     current_route.should == "/"
   end
 
-  it "logs the user out after two hours" do
+  xit "logs the user out after two hours" do
     login(adminlogin, adminpassword)
     create_valid_workspace(:name => "FooWorkspace")
 
