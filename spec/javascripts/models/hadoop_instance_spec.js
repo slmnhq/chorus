@@ -1,6 +1,6 @@
 describe("chorus.models.HadoopInstance", function() {
     beforeEach(function() {
-        this.model = new chorus.models.HadoopInstance({ id: 123 });
+        this.model = rspecFixtures.hadoopInstance({id : 123, username: "hadoop", groupList: "hadoop"})
         this.attrs = {};
     });
 
@@ -55,4 +55,10 @@ describe("chorus.models.HadoopInstance", function() {
         });
     });
 
+    describe("#sharedAccountDetails", function() {
+        it("returns the account name of the user who owns the instance and shared it", function() {
+            var sharedAccountDetails = this.model.get("username") + ", " + this.model.get("groupList")
+            expect(this.model.sharedAccountDetails()).toBe(sharedAccountDetails);
+        });
+    });
 });

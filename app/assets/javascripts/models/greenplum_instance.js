@@ -116,6 +116,10 @@ chorus.models.GreenplumInstance = chorus.models.Instance.extend({
             this._sharing = new chorus.models.InstanceSharing({instanceId: this.get("id")})
         }
         return this._sharing;
+    },
+
+    sharedAccountDetails: function() {
+        return this.accountForOwner() && this.accountForOwner().get("dbUsername");
     }
 }, {
     aurora: function() {

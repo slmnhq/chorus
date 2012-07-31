@@ -283,6 +283,10 @@ describe("chorus.views.InstanceListSidebar", function() {
                     expect(this.view.$(".actions .add_credentials")).not.toExist();
                 });
 
+                it("displays the instance shared account info", function () {
+                    expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(this.instance.accountForOwner().get("dbUsername"))
+                });
+
                 it("displays edit instance link when user is admin", function() {
                     setLoggedInUser({ username: "benjamin", admin: true});
                     this.view.render();
@@ -476,7 +480,7 @@ describe("chorus.views.InstanceListSidebar", function() {
 
     context("when a hadoop instance is selected", function() {
         beforeEach(function() {
-            this.instance = rspecFixtures.hadoopInstance({name: "Harry's House of Glamour" });
+            this.instance = rspecFixtures.hadoopInstance({name: "Harry's House of Glamour", username: "hadoop", groupList: "hadoop" });
             this.view = new chorus.views.InstanceListSidebar();
             chorus.PageEvents.broadcast("instance:selected", this.instance);
             this.server.completeFetchFor(this.instance.activities());
@@ -487,6 +491,11 @@ describe("chorus.views.InstanceListSidebar", function() {
             expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
             expect(this.view.$("a[data-dialog=NotesNew]").data("workfileAttachments")).toBeFalsy();
             expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe('hadoop_instance');
+        });
+
+        it("shows the shared account", function() {
+            var shared_account_info = this.instance.get("username") + ", " + this.instance.get("groupList");
+            expect(this.view.$(".instance_configuration_details .shared_account_info")).toContainText(shared_account_info);
         });
     });
 });

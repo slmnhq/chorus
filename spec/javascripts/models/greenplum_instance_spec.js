@@ -351,7 +351,21 @@ describe("chorus.models.GreenplumInstance", function() {
             var originalModel = this.instance.sharing();
             expect(this.instance.sharing()).toBe(originalModel);
         });
+    });
 
+    describe("#sharedAccountDetails", function() {
+        beforeEach(function() {
+            this.owner = this.instance.owner();
+            this.accounts = rspecFixtures.instanceAccountSet();
+            this.accounts.models[1].set({owner: this.owner.attributes});
+            spyOn(this.instance, "accounts").andReturn(this.accounts);
+        });
+
+        it("returns the account name of the user who owns the instance and shared it", function() {
+            this.user = rspecFixtures.user();
+            this.account = this.instance.accountForUser(this.user);
+            expect(this.instance.sharedAccountDetails()).toBe(this.instance.accountForOwner().get("dbUsername"));
+        });
     });
 
     describe("#providerIconUrl", function() {
@@ -359,5 +373,4 @@ describe("chorus.models.GreenplumInstance", function() {
             expect(this.instance.providerIconUrl()).toBe("/images/instances/greenplum_instance.png");
         });
     });
-
 });
