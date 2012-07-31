@@ -157,13 +157,10 @@ describe "editing the workspace" do
       click_submit_button
       wait_for_ajax
     end
-
-    within(".actions") do
       page.should have_content("Add or Edit Members")
       page.should have_content("Add an insight")
       page.should have_content("Add a note")
       page.should have_content("Add a sandbox")
-    end
   end
 
 
