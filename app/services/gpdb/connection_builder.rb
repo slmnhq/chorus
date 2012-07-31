@@ -11,8 +11,9 @@ module Gpdb
       )
       yield connection if block_given?
     rescue ActiveRecord::JDBCError => e
-      Rails.logger.error e
-      raise e
+      friendly_message = "Failed to establish JDBC connection to #{instance.host}:#{instance.port}"
+      Rails.logger.error(friendly_message + " - " + e.message)
+      raise e, friendly_message
     ensure
       connection.try(:disconnect!)
     end

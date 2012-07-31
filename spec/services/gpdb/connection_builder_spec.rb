@@ -59,12 +59,14 @@ describe Gpdb::ConnectionBuilder do
     end
 
     context "when the connection fails" do
-      let(:fake_connection_adapter) { raise ActiveRecord::JDBCError }
+      let(:exception1) { ActiveRecord::JDBCError.new }
+      let(:fake_connection_adapter) { raise exception1 }
 
       it "does not catch the error" do
+        mock(Rails.logger).error("Failed to establish JDBC connection to #{instance.host}:#{instance.port} - #{exception1.message}")
         expect {
           Gpdb::ConnectionBuilder.connect!(instance, instance_account)
-        }.to raise_error(ActiveRecord::JDBCError)
+        }.to raise_error(ActiveRecord::JDBCError, "Failed to establish JDBC connection to #{instance.host}:#{instance.port}")
       end
     end
   end
