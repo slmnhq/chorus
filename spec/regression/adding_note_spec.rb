@@ -40,3 +40,28 @@ describe "creating a note on a dataset" do
 
 end
 
+describe "adding multiple files to a note" do
+
+  it"attaches multiple files to a note" do
+
+    login('edcadmin', 'secret')
+    create_valid_workspace
+    wait_until { page.has_selector?('a[data-dialog="NotesNew"]') }
+    click_link "Add a note"
+    wait_until { page.has_selector?("#facebox .dialog h1") }
+    within_modal do
+      set_cleditor_value("body", "Note on the workspace with multiple files")
+      click_link "Show options"
+      attach_file("fileToUpload[contents]", File.join(File.dirname(__FILE__), '../fixtures/small2.png'))
+      attach_file("fileToUpload[contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
+      attach_file("fileToUpload[contents]", File.join(File.dirname(__FILE__), '../fixtures/somepdf.pdf'))
+      click_submit_button
+      wait_for_ajax
+    end
+    page.find(".activity_content").should have_content("Note on the workspace with multiple files")
+    page.should have_content "small2.png"
+    page.should have_content "some.txt"
+    page.should have_content "somepdf.pdf"
+  end
+
+end
