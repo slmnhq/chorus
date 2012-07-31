@@ -13,14 +13,14 @@ describe NoteAttachmentAccess do
     context "when current user is same as actor of note" do
       it " returns true" do
         stub(fake_controller).current_user { note.actor }
-        access.create?(note).should == true
+        access.create?(NoteAttachment, note).should == true
       end
     end
 
     context "when current user is not same as actor of note" do
       it " returns false" do
         stub(fake_controller).current_user { users(:carly) }
-        access.create?(note).should == false
+        access.create?(NoteAttachment, note).should == false
       end
     end
   end
