@@ -1,0 +1,9 @@
+production:
+  adapter: jdbcpostgresql
+  encoding: unicode
+  database: chorus_production
+  username: chorus
+  password: PASSWORD
+  min_messages: warning
+  host: 127.0.0.1
+  port: 8543
