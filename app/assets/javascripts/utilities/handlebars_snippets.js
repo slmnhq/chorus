@@ -98,12 +98,18 @@
             }
         },
 
-        eachWithMoreLink: function(context, max, more_key, less_key, block) {
+        eachWithMoreLink: function(context, max, more_key, less_key, showLast, block) {
             var ret = "";
 
+            console.log("context", context);
             if (context && context.length > 0) {
                 for (var i = 0, j = context.length; i < j; i++) {
-                    context[i].moreClass = (i >= max) ? "more" : "";
+                    if(showLast) {
+                        context[i].moreClass = (j >= max && i < (j - max)) ? "more" : "";
+                    } else {
+                        context[i].moreClass = (i >= max) ? "more" : "";
+                    }
+
                     ret = ret + block(context[i]);
                 }
                 ret += Handlebars.helpers.moreLink(context, max, more_key, less_key);

@@ -42,7 +42,7 @@ describe("chorus.views.TruncatedText", function() {
 
                 it("recalculates scrolling on the parent custom scroll object", function() {
                     expect(this.view.recalculateScrolling).toHaveBeenCalled();
-                })
+                });
 
                 describe("when the view is re-rendered", function() {
                     beforeEach(function() {
@@ -57,13 +57,13 @@ describe("chorus.views.TruncatedText", function() {
                 describe("clicking 'read less'", function() {
                     beforeEach(function() {
                         this.view.$("a.less").click();
-                    })
+                    });
 
                     it("removes the 'expanded' class to the .truncated_text element", function() {
                         expect($(this.view.el)).not.toHaveClass('expanded');
-                    })
-                })
-            })
+                    });
+                });
+            });
         });
 
         context("when the text height is less than or equal to two lines", function() {

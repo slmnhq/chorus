@@ -34,6 +34,7 @@
     chorus.collections.Search.WorkspaceItemSet = chorus.collections.Base.include(
         searchCollectionMixins
     ).extend({
+        constructorName: "WorkspaceItemSet",
         model: function(modelJson, options) {
             var constructor = constructorMap[modelJson.entityType];
             return new constructor(modelJson, options);

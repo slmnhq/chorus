@@ -1,4 +1,5 @@
 chorus.collections.DatasetFilterSet = chorus.collections.Base.extend({
+    constructorName: "DatasetFilterSet",
     model: chorus.models.DatasetFilter,
 
     sqlStrings: function() {

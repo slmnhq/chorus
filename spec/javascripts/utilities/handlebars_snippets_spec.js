@@ -300,24 +300,44 @@ describe("handlebars", function() {
                         { name: "bro" }
                     ];
                     Handlebars.helpers.eachWithMoreLink(this.collection, 2, "activity.comments.more",
-                        "activity.comments.less", this.yieldSpy, this.yieldSpy.inverse);
-                })
+                        "activity.comments.less", false, this.yieldSpy);
+                });
 
-                it("yields to the block for each element", function() {
-                    expect(this.yieldSpy.callCount).toBe(3);
-                })
+                    it("yields to the block for each element", function() {
+                        expect(this.yieldSpy.callCount).toBe(3);
+                    });
 
                 it("calls moreLink", function() {
                     expect(Handlebars.helpers.moreLink).toHaveBeenCalledWith(this.collection, 2,
                         "activity.comments.more", "activity.comments.less");
-                })
+                });
 
-                it("sets the 'more' context attribute when yielding for each element with an index greater than max", function() {
-                    expect(this.yieldSpy.calls[0].args[0].moreClass).toBe("");
-                    expect(this.yieldSpy.calls[1].args[0].moreClass).toBe("");
-                    expect(this.yieldSpy.calls[2].args[0].moreClass).toBe("more");
-                })
-            })
+                    it("sets the 'more' context attribute when yielding for each element with an index greater than max", function() {
+                        expect(this.yieldSpy.calls[0].args[0].moreClass).toBe("");
+                        expect(this.yieldSpy.calls[1].args[0].moreClass).toBe("");
+                        expect(this.yieldSpy.calls[2].args[0].moreClass).toBe("more");
+                    });
+                });
+
+                describe("when showLast is true", function() {
+
+                    beforeEach(function() {
+                        this.collection = [
+                            { name: "foo" },
+                            { name: "bar" },
+                            { name: "bro" }
+                        ];
+                        Handlebars.helpers.eachWithMoreLink(this.collection, 2, "activity_stream.comments.more",
+                            "activity_stream.comments.less", true, this.yieldSpy, this.yieldSpy.inverse);
+                    });
+
+                    it("sets the 'more' context attribute when yielding for each element with an index less than length - max", function() {
+                        expect(this.yieldSpy.calls[0].args[0].moreClass).toBe("more");
+                        expect(this.yieldSpy.calls[1].args[0].moreClass).toBe("");
+                        expect(this.yieldSpy.calls[2].args[0].moreClass).toBe("");
+                    });
+                });
+            });
 
             describe("when the collection has less than or equal to max elements", function() {
                 beforeEach(function() {
@@ -326,7 +346,7 @@ describe("handlebars", function() {
                         { name: "bar" }
                     ];
                     Handlebars.helpers.eachWithMoreLink(this.collection, 2, "activity.comments.more",
-                        "activity.comments.less", this.yieldSpy, this.yieldSpy.inverse);
+                        "activity.comments.less", true, this.yieldSpy);
                 })
 
                 it("yields to the block for each element", function() {

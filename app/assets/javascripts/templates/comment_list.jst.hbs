@@ -1,6 +1,6 @@
 {{#if models.length}}
     <ul class="comments">
-        {{#eachWithMoreLink models initialLimit "activity.comments.more" "activity.comments.less"}}
+        {{#eachWithMoreLink models initialLimit "activity.comments.more" "activity.comments.less" true}}
         <li data-comment-id="{{id}}" class="{{moreClass}} activity_item comment media">
             <div class="icon">
                 {{#if isInsight}}

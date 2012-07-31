@@ -30,7 +30,7 @@
             e.preventDefault();
             if(this.saving) {return;}
             this.saving = true;
-            this.checkUsername(this.submitNewUser);
+            this.submitNewUser();
         },
 
         checkUsername: function(callback) {
