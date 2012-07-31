@@ -239,12 +239,12 @@ describe " system generated activities " do
       wait_for_ajax
     end
 
-    within(".actions") do
-      page.should_not have_content("Add or Edit Members")
-      page.should_not have_content("Add an insight")
-      page.should_not have_content("Add a note")
-      page.should_not have_content("Add a sandbox")
-    end
+
+    page.should_not have_content("Add or Edit Members")
+    page.should_not have_content("Add an insight")
+    page.should_not have_content("Add a note")
+    page.should_not have_content("Add a sandbox")
+
     page.should have_content "EDC Admin archived workspace archiving_ws_as"
 
     go_to_home_page
@@ -280,12 +280,12 @@ describe " system generated activities " do
       click_submit_button
       wait_for_ajax
     end
-    within(".actions") do
-      page.should have_content("Add or Edit Members")
-      page.should have_content("Add an insight")
-      page.should have_content("Add a note")
-      page.should have_content("Add a sandbox")
-    end
+
+    page.should have_content("Add or Edit Members")
+    page.should have_content("Add an insight")
+    page.should have_content("Add a note")
+    page.should have_content("Add a sandbox")
+
     page.should have_content "EDC Admin restored workspace unarchiving_ws_as from the archive"
 
     go_to_home_page
