@@ -74,6 +74,7 @@ class WorkspacesController < ApplicationController
       Events::WORKSPACE_ARCHIVED.by(current_user).add(:workspace => workspace)
     else
       workspace.unarchive
+      Events::WORKSPACE_UNARCHIVED.by(current_user).add(:workspace => workspace)
     end
   end
 

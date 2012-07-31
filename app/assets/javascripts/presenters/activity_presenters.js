@@ -106,6 +106,10 @@
                 links: [ "actor", "workspace" ]
             },
 
+            WORKSPACE_UNARCHIVED: {
+                links: [ "actor", "workspace" ]
+            },
+
             WORKFILE_CREATED: {
                 links: [ "actor", "workfile", "workspace" ]
             },
