@@ -18,10 +18,9 @@ chorus.dialogs.NotesNew = chorus.dialogs.MemoNew.extend({
         this.bindings.add(this.model, "saved", this.modelSaved);
         this.bindings.add(this.model, "saveFailed", this.saveFailed);
         this.bindings.add(this.model, "validationFailed", this.saveFailed);
+        this.bindings.add(this.model, "fileUploadSuccess", this.saved);
+        this.bindings.add(this.model, "fileUploadFailed", this.saveFailed);
+        this.bindings.add(this.model, "fileUploadDone", this.uploadDone);
         this.pageModel = this.options.pageModel;
-    },
-
-    modelSaved: function() {
-        this.saved();
     }
 });

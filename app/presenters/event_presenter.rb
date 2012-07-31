@@ -3,7 +3,8 @@ class EventPresenter < Presenter
     basic_hash.
       merge(targets_hash).
       merge(additional_data_hash).
-      merge(note_action_type_hash)
+      merge(note_action_type_hash).
+      merge(note_attachment_hash)
   end
 
   private
@@ -42,5 +43,16 @@ class EventPresenter < Presenter
       hash[name] = present(model)
       hash
     end
+  end
+
+  def note_attachment_hash
+    hash = []
+    if model.is_a?(Events::Note)
+      attachments = model.attachments
+      attachments.each_with_index do |model, index|
+        hash[index] = present(model)
+      end
+    end
+    return {:attachments => hash}
   end
 end

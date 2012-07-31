@@ -125,7 +125,7 @@ FixtureBuilder.configure do |fbuilder|
     csv_file.save!(:validate => false)
 
     #Notes
-    Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00'}, :without_protection => true)
+    note_on_greenplum = Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i am a comment with greenplumsearch in me', :created_at => '2010-01-01 02:00'}, :without_protection => true)
     Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => greenplum_instance, :actor => bob, :body => 'i love bobsearch', :created_at => '2010-01-01 02:01'}, :without_protection => true)
     Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'is this a greenplumsearch instance?', :created_at => '2010-01-01 02:02'}, :without_protection => true)
     Events::NOTE_ON_GREENPLUM_INSTANCE.create!({:greenplum_instance => purplebanana_instance, :actor => bob, :body => 'no, not greenplumsearch', :created_at => '2010-01-01 02:03'}, :without_protection => true)
@@ -154,5 +154,10 @@ FixtureBuilder.configure do |fbuilder|
     Events::IMPORT_FAILED.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
+
+    #NotesAttachment
+    File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
+      note_on_greenplum.attachments.create!(:contents => file)
+    end
   end
 end

@@ -1,16 +1,12 @@
-describe("chorus.models.Artifact", function() {
+describe("chorus.models.Attachment", function() {
     beforeEach(function() {
-        this.model = fixtures.artifact({ id: "97", name: "helmut" });
+        this.model = fixtures.attachment({ id: "97", name: "helmut" });
     });
 
     describe("#downloadUrl", function() {
-        it("prefers fileId over id", function() { // because search results are not consistent with "regular" attachments
-            this.model.set({fileId: "123"})
-            expect(this.model.downloadUrl()).toBe("/file/123");
-        });
-
-        it("uses id when fileId is not present", function() {
-            expect(this.model.downloadUrl()).toBe("/file/97");
+        it("with id of attachment", function() { // because search results are not consistent with "regular" attachments
+            this.model.set({id: "123"})
+            expect(this.model.downloadUrl()).toBe("/attachments/123/download/");
         });
     });
 
@@ -41,8 +37,8 @@ describe("chorus.models.Artifact", function() {
 
     describe("#isImage", function() {
         beforeEach(function() {
-            this.image = fixtures.artifact({ type: "IMAGE" });
-            this.noImage = fixtures.artifact({ type: "OTHER" });
+            this.image = fixtures.attachment({ type: "IMAGE" });
+            this.noImage = fixtures.attachment({ type: "OTHER" });
         });
 
         it("returns the correct value", function() {

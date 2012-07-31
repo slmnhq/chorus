@@ -1,4 +1,4 @@
-chorus.presenters.Artifact = chorus.presenters.Base.extend({
+chorus.presenters.Attachment = chorus.presenters.Base.extend({
     url: function() {
         return this.model.hasOwnPage() ? this.model.showUrl() : this.model.downloadUrl();
     },

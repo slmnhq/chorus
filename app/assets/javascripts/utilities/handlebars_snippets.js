@@ -61,6 +61,17 @@
             }
         },
 
+        eachFunctionResult: function() {
+            var args = _.toArray(arguments);
+            var block = args.pop();
+            var results = "";
+            var attachments = args[0].apply(this);
+            _.each(attachments, function(attachment) {
+                results += block(attachment);
+            });
+            return results;
+        },
+
         currentUserName: function(block) {
             return chorus.session.get("username");
         },

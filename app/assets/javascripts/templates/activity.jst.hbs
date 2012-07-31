@@ -20,14 +20,14 @@
             {{/if}}
         {{/if}}
         <ul class='attachments'>
-        {{#each attachments}}
+        {{#eachFunctionResult attachments}}
             <li>
-                <a href="{{url}}">
-                    <img src="{{iconSrc}}" />
+                <a href="{{downloadUrl}}">
+                    <img src="{{iconUrl}}" />
                     <span class="name" title="{{name}}">{{name}}</span>
                 </a>
             </li>
-        {{/each}}
+        {{/eachFunctionResult}}
         </ul>
         <div class="actions">
             {{#if detailsLink}}

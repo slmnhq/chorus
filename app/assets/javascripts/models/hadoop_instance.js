@@ -7,6 +7,10 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
 
     dataBinding: 'data-hadoop-instance-id',
 
+    isShared: function() {
+        return true;
+    },
+
     providerIconUrl: function() {
         return this._imagePrefix + "hadoop_instance.png";
     },
@@ -50,6 +54,10 @@ chorus.models.HadoopInstance = chorus.models.Instance.extend({
 
     accounts: function() {
         return [];
+    },
+
+    sharedAccountDetails: function() {
+        return this.get("username") + ", " + this.get("groupList");
     },
 
     usage: function() {

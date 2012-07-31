@@ -121,6 +121,8 @@ chorus.models = {
 
         requirePattern: function(attr, regex, newAttrs, messageKey, allowBlank) {
             var value = newAttrs && newAttrs.hasOwnProperty(attr) ? newAttrs[attr] : this.get(attr);
+            value = value && value.toString();
+
             if (allowBlank && !value) {
                 return
             }

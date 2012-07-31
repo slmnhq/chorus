@@ -320,7 +320,7 @@ describe("chorus.models.SearchResult", function() {
 
         describe("#attachments", function() {
             it("returns a Search ArtifactSet", function() {
-                expect(this.model.attachments()).toBeA(chorus.collections.Search.ArtifactSet)
+                expect(this.model.attachments()).toBeA(chorus.collections.Search.AttachmentSet)
             });
         });
 
@@ -336,7 +336,7 @@ describe("chorus.models.SearchResult", function() {
                     workspaceItems: "WorkspaceItemSet",
                     instances: "InstanceSet",
                     users: "UserSet",
-                    attachments: "ArtifactSet"
+                    attachments: "AttachmentSet"
                 };
 
                 _.each(methodCollectionPairs, function(collectionClass, funcName) {
