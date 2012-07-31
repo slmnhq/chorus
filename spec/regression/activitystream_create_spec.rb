@@ -177,7 +177,7 @@ describe " system generated activities " do
 
     create_valid_workspace(:name => "workspace_private", :shared => true)
     wait_for_ajax
-    page.should have_content "EDC Admin created workspace workspace_public"
+    page.should have_content "EDC Admin created workspace workspace_private"
     click_link "Edit Workspace"
     uncheck "Publicly available"
     click_submit_button
