@@ -9,12 +9,10 @@ describe AttachmentDownloadsController do
   end
 
   context "#show" do
-    before do
-    end
 
     context "download" do
-      attachment = NoteAttachment.first
       it "the file" do
+        attachment = NoteAttachment.first
         get :show, :attachment_id => attachment.id
 
         response.headers['Content-Disposition'].should include("attachment")
