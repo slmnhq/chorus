@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/pivotal-leopold/activerecord-jdbc-adapter.git
-  revision: 55f62f78306af634b4b1808d7d8e237fc93dbad0
+  revision: 67b4bf0c62f03feb301cef6e852fc5b70748e322
   branch: dynamic-schema-search-path
   specs:
     activerecord-jdbc-adapter (1.2.2)
