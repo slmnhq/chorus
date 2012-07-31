@@ -78,6 +78,10 @@ Chorus::Application.routes.draw do
     resource :attachments, :only => [:create] , :controller => 'note_attachments'
   end
 
+  resources :attachments, :only => [] do
+    resource :download, :only => [:show] , :controller => 'attachment_downloads'
+  end
+
   scope :path => "/search" do
     resource :global, :only => [:show], :controller => 'search'
   end

@@ -9,7 +9,7 @@
         workspaceItems: "WorkspaceItemSet",
         instances: "InstanceSet",
         users: "UserSet",
-        attachments: "ArtifactSet"
+        attachments: "AttachmentSet"
     };
 
     chorus.models.SearchResult = chorus.models.Base.extend({

@@ -165,7 +165,7 @@
 
         attachments: function() {
             if (!this._attachments) {
-                this._attachments = _.map(this.get("artifacts"), function(artifactJson) {
+                this._attachments = _.map(this.get("attachments"), function(artifactJson) {
                     var klass;
                     switch (artifactJson.entityType) {
                         case 'workfile':
@@ -176,7 +176,7 @@
                             klass = chorus.models.WorkspaceDataset;
                             break;
                         default:
-                            klass = chorus.models.Artifact;
+                            klass = chorus.models.Attachment;
                             break;
                     }
                     return new klass(artifactJson);

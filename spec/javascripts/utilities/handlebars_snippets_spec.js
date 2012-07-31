@@ -222,6 +222,23 @@ describe("handlebars", function() {
             });
         });
 
+        describe("eachFunctionResult", function () {
+            var fake = function() { return ["1", "2"] };
+            beforeEach(function () {
+
+                spyOn(fake ,"apply").andReturn(["3"]) ;
+                this.template = "{{#eachFunctionResult attachment}}numTimes{{/eachFunctionResult}}";
+            });
+
+            it("renders the block with all the arguments", function () {
+                var context = {attachment: fake};
+                var string = Handlebars.compile(this.template)(context);
+                expect(string).toBe("numTimes");
+
+            });
+        });
+
+
         describe("displayNameFromPerson", function() {
             it("renders the fullname", function() {
                 expect(Handlebars.helpers.displayNameFromPerson({firstName: "EDC", lastName: "Admin"})).toBe("EDC Admin");

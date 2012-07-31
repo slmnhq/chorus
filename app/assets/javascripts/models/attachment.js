@@ -1,5 +1,5 @@
-chorus.models.Artifact = chorus.models.Base.extend({
-    constructorName: "Artifact",
+chorus.models.Attachment = chorus.models.Base.extend({
+    constructorName: "Attachment",
 
     name: function() {
         return this.attributes && this.attributes.name;
@@ -26,7 +26,7 @@ chorus.models.Artifact = chorus.models.Base.extend({
     },
 
     downloadUrl:function () {
-        return "/file/" + (this.get("fileId") || this.get("id"));
+        return "/attachments/" + this.get("id") + "/download/" ;
     },
 
     thumbnailUrl: function () {

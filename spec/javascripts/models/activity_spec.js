@@ -464,9 +464,9 @@ describe("chorus.models.Activity", function() {
     describe("#attachments", function() {
         beforeEach(function() {
             this.model.set({
-                artifacts: [
+                attachments: [
                     { entityType: "workfile", id: 1 },
-                    { entityType: "artifact", id: 2 },
+                    { entityType: "attachment", id: 2 },
                     { entityType: "dataset", id: 3 },
                     { entityType: "chorusView", id: 4 }
                 ]
@@ -474,9 +474,9 @@ describe("chorus.models.Activity", function() {
             this.attachments = this.model.attachments();
         });
 
-        it("returns an array of file models (Workfiles, ArtifaWorkspaceDatasetd Datasets)", function() {
+        it("returns an array of file models (Workfiles, Attachments Datasets)", function() {
             expect(this.attachments[0]).toBeA(chorus.models.Workfile)
-            expect(this.attachments[1]).toBeA(chorus.models.Artifact)
+            expect(this.attachments[1]).toBeA(chorus.models.Attachment)
             expect(this.attachments[2]).toBeA(chorus.models.WorkspaceDataset)
             expect(this.attachments[3]).toBeA(chorus.models.WorkspaceDataset)
         });

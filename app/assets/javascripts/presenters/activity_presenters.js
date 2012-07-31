@@ -34,6 +34,10 @@
             return this.model.isUserGenerated();
         },
 
+        attachments: function() {
+            return this.model.attachments();
+        },
+
         canEdit: function() {
             return this.model.isOwner();
         },

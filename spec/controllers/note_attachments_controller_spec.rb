@@ -12,9 +12,9 @@ describe NoteAttachmentsController do
     it "changes the file content" do
       event = Events::NOTE_ON_GREENPLUM_INSTANCE.first
       file = test_file('not_an_image.jpg')
-      post :create, :note_id => event.id, :fileToUpload => {:contents => file, :file_name => 'not_an_image.jpg'}
+      post :create, :note_id => event.id, :fileToUpload => {:contents => file }
       event.reload
-      decoded_response[:attachments][0][:file_name].should == 'not_an_image.jpg'
+      decoded_response[:attachments][0][:name].should == 'not_an_image.jpg'
     end
   end
 end

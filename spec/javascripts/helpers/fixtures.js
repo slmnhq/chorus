@@ -22,7 +22,7 @@ beforeEach(function() {
         activities: {
             "SUB_COMMENT": function(overrides) {
                 var attrs = _.extend({
-                    artifacts: [],
+                    attachments: [],
                     author: fixtures.authorJson(),
                     id: "10109",
                     isDeleted: false,
@@ -83,7 +83,7 @@ beforeEach(function() {
                         objectType: "QUERY",
                         type: "CHORUS_VIEW"
                     },
-                    artifacts: [
+                    attachments: [
                         {
                             entityId: "10101",
                             entityType: "file",
@@ -134,7 +134,7 @@ beforeEach(function() {
                             schemaName: "public",
                             instance: fixtures.instanceJson()
                         },
-                        artifacts: [
+                        attachments: [
                             {
                                 entityId: "10101",
                                 entityType: "file",
@@ -170,7 +170,7 @@ beforeEach(function() {
                         }
                     ],
                     workspace: rspecFixtures.workspaceJson(),
-                    artifacts: [
+                    attachments: [
                         {
                             entityId: "10101",
                             entityType: "file",
@@ -205,7 +205,7 @@ beforeEach(function() {
                     ],
                     workfile: fixtures.nestedWorkfileJson(),
                     workspace: rspecFixtures.workspaceJson(),
-                    artifacts: [
+                    attachments: [
                         {
                             entityId: fixtures.nextId().toString(),
                             entityType: "file",
@@ -238,7 +238,7 @@ beforeEach(function() {
                             timestamp: "2011-12-15 12:34:56"
                         }
                     ],
-                    artifacts: [],
+                    attachments: [],
                     isPromoted: false,
                     promoteCount: 0,
                     table: {
@@ -274,7 +274,7 @@ beforeEach(function() {
                 comments: [
                     fixtures.commentJson()
                 ],
-                artifacts: [
+                attachments: [
                     fixtures.artifactJson()
                 ]
             }, overrides);
@@ -447,7 +447,7 @@ beforeEach(function() {
             var attributes = _.extend({
                 id: id,
                 text: "this is comment text" + id,
-                artifacts: [],
+                attachments: [],
                 timestamp: '2011-01-01 12:00:00'
             }, overrides);
             // WTF: old fixtures reference new fixtures ???
@@ -500,12 +500,12 @@ beforeEach(function() {
             return new chorus.models.Draft(workfileJson);
         },
 
-        artifact: function(overrides) {
+        attachment: function(overrides) {
             var attributes = _.extend({
                 id: this.nextId().toString(),
                 entityType: "file"
             }, overrides);
-            return new chorus.models.Artifact(attributes);
+            return new chorus.models.Attachment(attributes);
         },
 
         chorusViewArtifactJson: function(overrides) {
@@ -967,7 +967,7 @@ beforeEach(function() {
                 },
                 "comments": []
             });
-            return new chorus.models.Artifact(attributes);
+            return new chorus.models.Attachment(attributes);
         },
 
         attachmentOnFileInHdfsSearchResult: function(overrides) {
@@ -1003,7 +1003,7 @@ beforeEach(function() {
                     "comments": []
                 }
             );
-            return new chorus.models.Artifact(attributes);
+            return new chorus.models.Attachment(attributes);
         },
 
         attachmentOnDatasetInWorkspaceSearchResult: function(overrides) {
@@ -1067,7 +1067,7 @@ beforeEach(function() {
                 },
                 comments: []
             });
-            return new chorus.models.Artifact(attributes);
+            return new chorus.models.Attachment(attributes);
         },
 
         attachmentOnInstanceSearchResult: function(overrides) {
@@ -1109,7 +1109,7 @@ beforeEach(function() {
                 },
                 "comments": []
             });
-            return new chorus.models.Artifact(attributes);
+            return new chorus.models.Attachment(attributes);
         },
 
         attachmentOnWorkspaceSearchResult: function(overrides) {
@@ -1138,7 +1138,7 @@ beforeEach(function() {
                 },
                 "comments": []
             });
-            return new chorus.models.Artifact(attributes);
+            return new chorus.models.Attachment(attributes);
         },
 
         searchResultJson: function(overrides) {

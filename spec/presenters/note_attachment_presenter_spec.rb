@@ -13,7 +13,7 @@ describe NoteAttachmentPresenter, :type => :view do
     end
 
     it "includes the right keys" do
-      @hash.should have_key(:file_name)
+      @hash.should have_key(:name)
     end
   end
 end

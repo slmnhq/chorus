@@ -4,7 +4,7 @@ class NoteAttachmentPresenter < Presenter
   def to_hash
     {
         :id => id,
-        :file_name => contents.original_filename,
+        :name => contents.original_filename,
         :timestamp => created_at
     }
   end
