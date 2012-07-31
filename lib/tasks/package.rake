@@ -22,6 +22,7 @@ module PackageMaker
   def upload(filename, config)
     host = config['host']
     path = config['path']
+    distribution = target_distribution_name(config)
 
     release_name = version_name
 
@@ -48,7 +49,7 @@ module PackageMaker
 
     # Setup DB
     run "ssh #{host} 'cd #{path}; rm -rf ./postgres'"
-    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/postgres-9.1.4.tar.gz'"
+    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/postgres-#{distribution}-9.1.4.tar.gz'"
 
     run "ssh #{host} 'test ! -e #{shared_path}/db && RELEASE_PATH=#{release_path} CHORUS_HOME=#{path} bash #{release_path}/packaging/bootstrap_app.sh'"
 
@@ -69,6 +70,7 @@ module PackageMaker
   end
 
   def deploy(config)
+    verify_distribution_compatibility(config)
     write_jetpack_yaml(config)
     check_existing_version(config)
 
@@ -180,5 +182,23 @@ module PackageMaker
     File.open(Rails.root.join('config', 'jetpack.yml'), 'w') do |file|
       YAML.dump(defaults, file)
     end
+  end
+
+  def verify_distribution_compatibility(config)
+    print "Determining target system distribution... "
+    version = target_distribution_name(config)
+
+    puts version
+
+    file = "packaging/postgres-#{version}-9.1.4.tar.gz"
+
+    unless File.exist? file
+      puts "ABORT: Distribution #{version} is NOT supported: #{file} is missing."
+      exit 1
+    end
+  end
+
+  def target_distribution_name(config)
+    @distribution_name ||= `ssh #{config['host']} '(lsb_release -ir | sed -e "s/.*:\\s*\\(.*\\)/\\1/g" | tr -d "\\n" | tr "[:upper:]" "[:lower:]"; echo -n "-"; uname -m) | cat'`.strip
   end
 end
