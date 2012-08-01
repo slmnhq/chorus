@@ -19,6 +19,7 @@ app/assets/javascripts/environment.js
 /system/csv_files/*
 /system/users/*
 /system/workspaces/*
+/system/note_attachments/*
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
