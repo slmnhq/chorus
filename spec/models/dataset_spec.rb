@@ -48,28 +48,52 @@ describe Dataset do
   end
 
   context ".refresh" do
-    before(:each) do
-      stub_gpdb(account, datasets_sql => [
-        {'type' => "r", "name" => "table1", "master_table" => 't'},
-        {'type' => "v", "name" => "view1", "master_table" => 'f'}
-      ])
-    end
+    context "refresh once, without mark_stale flag" do
+      before(:each) do
+        stub_gpdb(account, datasets_sql => [
+          {'type' => "r", "name" => "table1", "master_table" => 't'},
+          {'type' => "v", "name" => "view1", "master_table" => 'f'}
+        ])
+      end
 
-    it "creates new copies of the datasets in our db" do
-      Dataset.refresh(account, schema)
-
-      datasets = schema.datasets.order(:name)
-      datasets.size.should == 2
-      datasets.map(&:class).should == [GpdbTable, GpdbView]
-      datasets.pluck(:name).should == ["table1", "view1"]
-      datasets.pluck(:master_table).should == [true, false]
-    end
-
-    it "does not re-create datasets that already exist in our database" do
-      Dataset.refresh(account, schema)
-      lambda {
+      it "creates new copies of the datasets in our db" do
         Dataset.refresh(account, schema)
-      }.should_not change(Dataset, :count)
+
+        datasets = schema.datasets.order(:name)
+        datasets.size.should == 2
+        datasets.map(&:class).should == [GpdbTable, GpdbView]
+        datasets.pluck(:name).should == ["table1", "view1"]
+        datasets.pluck(:master_table).should == [true, false]
+      end
+
+      it "does not re-create datasets that already exist in our database" do
+        Dataset.refresh(account, schema)
+        lambda {
+          Dataset.refresh(account, schema)
+        }.should_not change(Dataset, :count)
+      end
+    end
+
+    context "refreshing twice, marking records as stale" do
+      it "creates new copies of the datasets in our db" do
+        stub_gpdb(account, datasets_sql => [
+            {'type' => "r", "name" => "table1", "master_table" => 't'},
+            {'type' => "v", "name" => "view1", "master_table" => 'f'}
+        ])
+        Dataset.refresh(account, schema)
+        stub_gpdb(account, datasets_sql => [
+            {'type' => "r", "name" => "table1", "master_table" => 't'},
+        ])
+        now = Time.now
+        Dataset.update_all(:stale_at => now)
+
+        Dataset.refresh(account, schema, true)
+
+        datasets = schema.datasets.order(:name)
+        datasets.size.should == 2
+        datasets.find_by_name("table1").should_not be_stale
+        datasets.find_by_name("view1").should be_stale
+      end
     end
   end
 

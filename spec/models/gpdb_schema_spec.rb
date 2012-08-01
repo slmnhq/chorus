@@ -40,6 +40,11 @@ describe GpdbSchema do
         GpdbSchema.refresh(account, database)
       }.not_to change(GpdbSchema, :count)
     end
+
+    it "passes the mark_stale flag to Dataset.refresh" do
+      mock(Dataset).refresh(account, anything, true)
+      GpdbSchema.refresh(account, database, true)
+    end
   end
 
   describe "#functions" do

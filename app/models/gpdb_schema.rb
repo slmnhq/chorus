@@ -34,7 +34,7 @@ class GpdbSchema < ActiveRecord::Base
   delegate :with_gpdb_connection, :to => :database
   delegate :instance, :to => :database
 
-  def self.refresh(account, database)
+  def self.refresh(account, database, mark_stale = false)
     begin
       schema_rows = database.with_gpdb_connection(account) do |conn|
         conn.exec_query(SCHEMAS_SQL)
@@ -50,14 +50,13 @@ class GpdbSchema < ActiveRecord::Base
         schema = database.schemas.find_or_initialize_by_name(row["schema_name"])
         unless schema.persisted?
           schema.save!
-          Dataset.refresh(account, schema)
         end
+        Dataset.refresh(account, schema, mark_stale)
         schema
       rescue Exception => e
       end
     end
   end
-
 
   def stored_functions(account)
     results = database.with_gpdb_connection(account) do |conn|
