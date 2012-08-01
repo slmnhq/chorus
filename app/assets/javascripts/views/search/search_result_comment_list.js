@@ -8,7 +8,10 @@ chorus.views.SearchResultCommentList = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.collection = this.options.comments;
+        var comments = this.options.comments || [];
+        var columns = this.options.columns || [];
+
+        this.collection = comments.concat(columns);
     },
 
     showMoreComments: function(e) {

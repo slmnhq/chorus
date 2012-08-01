@@ -21,7 +21,8 @@ describe("chorus.views.SearchResultCommentList", function() {
                 }),
                 fixtures.searchResultCommentJson(),
                 fixtures.searchResultCommentJson()
-            ]
+            ],
+            columns: []
         });
         this.view.render();
     });

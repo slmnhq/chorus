@@ -22,6 +22,7 @@ class Dataset < ActiveRecord::Base
     s.text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     s.text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     s.text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    s.text :column_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     s.string :grouping_id
     s.string :type_name
   end
@@ -87,6 +88,13 @@ class Dataset < ActiveRecord::Base
 
   def schema_name
     schema.name
+  end
+
+  def column_name
+    columns = GpdbColumn.columns_for(schema.database.instance.account_for_user(schema.database.instance.owner), self);
+    columns.map do |column|
+      column.name
+    end
   end
 
   def type_name

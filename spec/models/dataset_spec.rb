@@ -179,6 +179,7 @@ describe Dataset do
       Dataset.should have_searchable_field :name
       Dataset.should have_searchable_field :database_name
       Dataset.should have_searchable_field :schema_name
+      Dataset.should have_searchable_field :column_name
     end
 
     it "returns the schema name for schema_name" do

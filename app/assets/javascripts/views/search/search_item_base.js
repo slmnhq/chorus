@@ -14,7 +14,14 @@ chorus.views.SearchItemBase = chorus.views.Base.extend({
     },
 
     makeCommentList: function() {
-        return new chorus.views.SearchResultCommentList({comments: this.getComments()});
+        return new chorus.views.SearchResultCommentList({comments: this.getComments(), columns: this.getColumns()});
+    },
+
+    getColumns: function() {
+        var columns = this.model.get("columns") || [];
+        _.each(columns, function(column) { column.isColumn = true; });
+
+        return columns;
     },
 
     getComments: function() {
