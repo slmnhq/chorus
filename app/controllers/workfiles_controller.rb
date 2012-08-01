@@ -50,15 +50,18 @@ class WorkfilesController < ApplicationController
   end
 
   def create_workfile(workspace)
-    workfile = Workfile.create_from_file_upload(params[:workfile], workspace, current_user)
+    workfile = nil
+    Workfile.transaction do
+      workfile = Workfile.create_from_file_upload(params[:workfile], workspace, current_user)
 
-    Events::WORKFILE_CREATED.by(current_user).add(
-      :workfile => workfile,
-      :workspace => workspace
-    )
+      Events::WORKFILE_CREATED.by(current_user).add(
+        :workfile => workfile,
+        :workspace => workspace
+      )
 
-    workspace.has_added_workfile = true
-    workspace.save!
+      workspace.has_added_workfile = true
+      workspace.save!
+    end
 
     workfile
   end

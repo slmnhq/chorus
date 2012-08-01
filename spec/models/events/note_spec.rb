@@ -241,6 +241,7 @@ describe "Notes" do
     context "workspace is archived" do
       it "does not create a note on a workspace" do
         workspace.archived_at = DateTime.now
+        workspace.archiver = user
         workspace.save!
         expect {
           Events::Note.create_from_params({

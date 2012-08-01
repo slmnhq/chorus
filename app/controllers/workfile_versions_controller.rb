@@ -14,8 +14,10 @@ class WorkfileVersionsController < ApplicationController
     authorize! :can_edit_sub_objects, workfile.workspace
     file = build_new_file(workfile.file_name, params[:workfile][:content])
     file.content_type = workfile.latest_workfile_version.contents_content_type
-    workfile.build_new_version(current_user, file, params[:workfile][:commit_message]).save
-    remove_draft(workfile)
+    Workfile.transaction do
+      workfile.build_new_version(current_user, file, params[:workfile][:commit_message]).save!
+      remove_draft(workfile)
+    end
 
     workfile.reload
     present workfile.latest_workfile_version

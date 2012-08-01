@@ -28,7 +28,7 @@ describe Workspace do
 
   describe ".accessible_to" do
     let!(:public_workspace) { workspaces(:bob_public) }
-    let!(:owned_workspace) { workspaces(:alice_private)}
+    let!(:owned_workspace) { workspaces(:alice_private) }
     let!(:private_workspace) { workspaces(:bob_private) }
     let!(:private_workspace_with_membership) { workspaces(:alice_private) }
     let(:user) { users(:alice) }
@@ -131,34 +131,6 @@ describe Workspace do
     end
   end
 
-  describe "#archive_as(user)" do
-    let(:archive_time) { Time.now }
-    let(:user) { users(:alice) }
-    let(:workspace) { workspaces(:alice_public) }
-
-    before do
-      Timecop.freeze(archive_time) do
-        workspace.archive_as(user)
-      end
-    end
-
-    it "is archived by the correct user at the correct time" do
-      workspace.archived_at.should == archive_time
-      workspace.archiver.should == user
-    end
-
-    describe "#unarchive" do
-      before do
-        workspace.unarchive
-      end
-
-      it "clears the archived attributes" do
-        workspace.archived_at.should be_nil
-        workspace.archiver.should be_nil
-      end
-    end
-  end
-
   it { should have_attached_file(:image) }
 
   describe "associations" do
@@ -177,11 +149,11 @@ describe Workspace do
       anon = users(:bob)
 
       [
-        [private_workspace, owner, [:admin]],
-        [private_workspace, member, [:read, :commenting, :update]],
-        [private_workspace, admin, [:admin]],
-        [private_workspace, anon, []],
-        [public_workspace, anon, [:read, :commenting]]
+          [private_workspace, owner, [:admin]],
+          [private_workspace, member, [:read, :commenting, :update]],
+          [private_workspace, admin, [:admin]],
+          [private_workspace, anon, []],
+          [public_workspace, anon, [:read, :commenting]]
       ].each do |workspace, user, list|
         workspace.permissions_for(user).should == list
       end
@@ -244,6 +216,106 @@ describe Workspace do
     it "indexes text fields" do
       Workspace.should have_searchable_field :name
       Workspace.should have_searchable_field :summary
+    end
+  end
+
+  describe "#member?" do
+    it "is true for members" do
+      workspaces(:bob_public).member?(users(:bob)).should be_true
+    end
+
+    it "is false for non members" do
+      workspaces(:bob_public).member?(users(:alice)).should be_false
+    end
+  end
+
+  describe "#archived=" do
+    context "when setting to 'true'" do
+      let(:workspace) { workspaces(:bob_public) }
+      let(:archiver) { users(:bob) }
+      it "sets the archived_at timestamp" do
+        workspace.update_attributes!(:archiver => archiver, :archived => 'true')
+        workspace.archived_at.should be_within(1.minute).of(Time.current)
+      end
+
+      it "has a validation error when archiver is not set" do
+        workspace.update_attributes(:archived => 'true')
+        workspace.should have(1).error_on(:archived)
+      end
+    end
+
+    context "when setting to 'false'" do
+      let(:workspace) { workspaces(:archived) }
+      it "clears the archived_at timestamp and archiver" do
+        workspace.update_attributes(:archived => 'false')
+        workspace.archived_at.should be_nil
+        workspace.archiver.should be_nil
+      end
+    end
+  end
+
+  describe "callbacks" do
+    let(:workspace) { workspaces(:alice_public) }
+    let(:sandbox) { gpdb_schemas(:bobs_schema) }
+
+    describe "before_save" do
+      describe "update_has_added_sandbox" do
+        it "sets if passed a valid sandbox_id" do
+          workspace.sandbox_id = sandbox.id
+          workspace.save!
+          workspace.should have_added_sandbox
+        end
+
+        it "does not set it if passed an invalid sandbox_id" do
+          workspace.sandbox_id = 867, 5309
+          workspace.save
+          workspace.should_not have_added_sandbox
+        end
+
+        it "does not unset it if sandbox is removed" do
+          workspace = workspaces(:bob_public)
+          workspace.sandbox_id = nil
+          workspace.save!
+          workspace.should have_added_sandbox
+        end
+      end
+    end
+
+    describe "before_update" do
+      describe "update_has_changed_settings" do
+        it "sets if changing random attributes" do
+          workspace.name = 'new name'
+          workspace.save!
+          workspace.should have_changed_settings
+        end
+
+        it "does not set if changing sandbox_id" do
+          workspace.sandbox_id = sandbox.id
+          workspace.save!
+          workspace.should_not have_changed_settings
+        end
+      end
+
+      describe "clear_assigned_datasets_on_sandbox_assignment" do
+        let(:sandbox_dataset) { sandbox.datasets.first }
+        let(:other_dataset) { datasets(:other_table) }
+
+        before do
+          workspace.bound_datasets << sandbox_dataset
+          workspace.bound_datasets << other_dataset
+          workspace.sandbox_id = sandbox.id
+          workspace.save!
+        end
+
+        it "removes duplicate datasets" do
+          workspace.bound_datasets.should_not include(sandbox_dataset)
+          sandbox_dataset.reload.should_not be_nil
+        end
+
+        it "does not remove datasets from other schemas" do
+          workspace.bound_datasets.should include(other_dataset)
+        end
+      end
     end
   end
 end

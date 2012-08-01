@@ -122,10 +122,10 @@ describe MembersController do
       it "throws an error" do
         post :create, parameters
 
-        response.code.should == '400'
+        response.code.should == '422'
 
         decoded = JSON.parse(response.body)
-        decoded['errors']['fields']['owner'].should have_key('Owner must be member')
+        decoded['errors']['fields']['owner'].should have_key('OWNER MUST BE A MEMBER')
       end
     end
   end

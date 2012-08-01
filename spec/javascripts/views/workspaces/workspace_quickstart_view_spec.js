@@ -1,6 +1,6 @@
 describe("chorus.views.WorkspaceQuickstart", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workspace({id: "999"});
+        this.model = rspecFixtures.workspace({id: "999", hasAddedSandbox: false});
         this.model.loaded = true;
         spyOn(chorus.router, "navigate");
         this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
