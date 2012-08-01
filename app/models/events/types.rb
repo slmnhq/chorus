@@ -95,4 +95,8 @@ module Events
     has_additional_data :file_name, :import_type, :destination_table, :error_message
   end
 
+  class MEMBER_ADDED < Base
+    has_targets :new_member, :workspace
+    has_activities :actor, :workspace, :new_member
+  end
 end
