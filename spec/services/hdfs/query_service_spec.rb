@@ -6,8 +6,9 @@ describe Hdfs::QueryService do
     # silence the HDFS log output from failed version connections
     @java_stdout = java.lang.System.out
     @java_stderr = java.lang.System.err
-    java.lang.System.setOut(nil)
-    java.lang.System.setErr(nil)
+    devnull = java.io.PrintStream.new(java.io.FileOutputStream.new("/dev/null"))
+    java.lang.System.setOut(devnull)
+    java.lang.System.setErr(devnull)
   end
 
   after :all do
