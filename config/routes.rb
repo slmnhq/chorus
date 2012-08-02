@@ -46,6 +46,9 @@ Chorus::Application.routes.draw do
     resources :previews, :only => [:create, :destroy], :constraints => {:id => /.*/}
     resources :visualizations, :only => [:create, :destroy]
     resource :statistics, :only => :show
+    member do
+      post :import
+    end
   end
 
   resources :workspaces, :only => [:index, :create, :show, :update] do
@@ -60,7 +63,6 @@ Chorus::Application.routes.draw do
         put :import
       end
     end
-
   end
 
   resources :workfiles, :only => [:show, :destroy] do

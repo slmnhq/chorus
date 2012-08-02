@@ -12,7 +12,7 @@ REVOKE CONNECT ON DATABASE "gpdb_test_database" FROM PUBLIC;
     SET search_path TO 'test_schema';
 
     CREATE TABLE base_table1
-      (id integer, column1 integer, column2 integer, category text, time_value timestamp )
+      (id integer PRIMARY KEY, column1 integer, column2 integer, category text, time_value timestamp )
       DISTRIBUTED BY (id);
     COMMENT ON TABLE base_table1 IS 'comment on base_table1';
     INSERT INTO base_table1 VALUES ( 0,0,0, 'apple', '2012-03-01 00:00:02' );
