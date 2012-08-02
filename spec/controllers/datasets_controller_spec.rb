@@ -151,11 +151,12 @@ describe DatasetsController do
               "sample_count" => 0
           }
         }
-        it "copies the table and ignores the row limit" do
+
+        it "creates the table and copies 0 rows" do
           schema.with_gpdb_connection(account) do |connection|
             dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
             src_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{src_table.name}")
-            dest_rows.count.should == src_rows.count
+            dest_rows.count.should == 0
           end
         end
       end
