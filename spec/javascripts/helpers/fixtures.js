@@ -1795,10 +1795,6 @@ beforeEach(function() {
                     content: ["nice <em>data</em>!"]
                 },
                 id: "10001",
-                isComment: false,
-                isInsight: false,
-                isPublished: false,
-                isColumn: false,
                 lastUpdatedStamp: "2012-03-07 15:03:43"
             }, overrides);
         },
