@@ -81,6 +81,8 @@ describe DatasetsController do
     let(:archived_workspace) { workspaces(:archived) }
     let(:active_workspace) { workspaces(:bob_public) }
     let(:src_table) { GpdbTable.find_by_name('base_table1') }
+    let(:destination_table) { GpdbTable.find_by_name('the_new_table') }
+
     let(:options) {
       {
               "to_table" => "the_new_table",
@@ -93,7 +95,6 @@ describe DatasetsController do
     before(:each) do
       log_in account.owner
       refresh_chorus
-      any_instance_of(DatasetsController) { |c| mock.proxy(c).import }
     end
 
     after(:each) do
@@ -113,6 +114,30 @@ describe DatasetsController do
 
       GpdbTable.refresh(account, schema)
       response.code.should == "422"
+    end
+
+    it "should create a success event for this whole importing business" do
+      post :import, :id => src_table.to_param, "dataset_import" => options
+      event = Events::DATASET_IMPORT_SUCCESS.first
+      event.actor.should == account.owner
+      event.dataset.should == destination_table
+      event.workspace.should == active_workspace
+      event.source_id.should == src_table.id
+    end
+
+    it "should create a fail event when there's an exception" do
+      any_instance_of(Dataset) { |c| stub(c).import { raise SqlCommandFailed, "Tiger uppercut!" } }
+
+      expect {
+        post :import, :id => src_table.to_param, "dataset_import" => options
+      }.to raise_error(SqlCommandFailed)
+
+      event = Events::DATASET_IMPORT_FAILED.first
+      event.actor.should == account.owner
+      event.destination_table.should == options["to_table"]
+      event.workspace.should == active_workspace
+      event.source_id.should == src_table.id
+      event.error_message.should == "Tiger uppercut!"
     end
   end
 end

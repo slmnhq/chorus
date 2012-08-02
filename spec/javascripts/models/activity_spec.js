@@ -240,7 +240,7 @@ describe("chorus.models.Activity", function() {
 
     describe("#isFailure", function() {
         it("returns true for IMPORT_FAILED", function() {
-            expect(rspecFixtures.activity.importFailed().isFailure()).toBeTruthy();
+            expect(rspecFixtures.activity.fileImportFailed().isFailure()).toBeTruthy();
         });
 
         it("returns false for other activities", function() {
@@ -250,11 +250,11 @@ describe("chorus.models.Activity", function() {
 
     describe("#isSuccessfulImport", function() {
         it("returns true for IMPORT SUCCESS", function() {
-            expect(rspecFixtures.activity.importSuccess().isSuccessfulImport()).toBeTruthy();
+            expect(rspecFixtures.activity.fileImportSuccess().isSuccessfulImport()).toBeTruthy();
         });
 
         it("returns false for other activities", function() {
-            expect(rspecFixtures.activity.importFailed().isSuccessfulImport()).toBeFalsy();
+            expect(rspecFixtures.activity.fileImportFailed().isSuccessfulImport()).toBeFalsy();
         });
 
     });

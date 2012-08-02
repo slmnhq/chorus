@@ -17,14 +17,42 @@ class DatasetsController < GpdbController
   end
 
   def import
-
     src_table = Dataset.find(params[:id])
     workspace = Workspace.find(params[:dataset_import]["workspace_id"])
     if workspace.archived?
       head 422
       return
     end
-    src_table.import(params[:dataset_import], current_user)
-    head :created
+    begin
+      src_table.import(params[:dataset_import], current_user)
+      create_success_event(params[:dataset_import]["to_table"], src_table, workspace)
+      head :created
+    rescue Exception => e
+      create_failed_event(params[:dataset_import]["to_table"], src_table, workspace, e.message)
+      raise e
+    end
+  end
+
+  private
+  def destination_dataset(source_table, to_table)
+    Dataset.refresh(source_table.schema.instance.account_for_user!(current_user), source_table.schema)
+    source_table.schema.datasets.find_by_name(to_table)
+  end
+
+  def create_success_event(to_table, source_table, workspace)
+    Events::DATASET_IMPORT_SUCCESS.by(current_user).add(
+        :workspace => workspace,
+        :dataset => destination_dataset(source_table, to_table),
+        :source_id => source_table.id
+    )
+  end
+
+  def create_failed_event(to_table, source_table, workspace, error_message)
+    Events::DATASET_IMPORT_FAILED.by(current_user).add(
+        :workspace => workspace,
+        :destination_table => to_table,
+        :error_message => error_message,
+        :source_id => source_table.id
+    )
   end
 end

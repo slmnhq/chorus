@@ -74,10 +74,10 @@ class ActivityStreamEventMapper
 
   def set_additional_data(event)
     event.additional_data = {}
-    if event.class == Events::IMPORT_SUCCESS
+    if event.class == Events::FILE_IMPORT_SUCCESS
       event.additional_data[:filename] = @activity_stream.file_name
       event.additional_data[:import_type] = "file"
-    elsif event.class == Events::IMPORT_FAILED
+    elsif event.class == Events::FILE_IMPORT_FAILED
       event.additional_data[:filename] = @activity_stream.file_name
       event.additional_data[:import_type] = "file"
       event.additional_data[:destination_table] = @activity_stream.destination_table

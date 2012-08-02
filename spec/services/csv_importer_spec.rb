@@ -203,7 +203,7 @@ describe CsvImporter, :database_integration => true do
       end
 
       it "makes a IMPORT_SUCCESS event" do
-        event = Events::IMPORT_SUCCESS.first
+        event = Events::FILE_IMPORT_SUCCESS.first
         event.actor.should == user
         event.dataset.should == dataset
         event.workspace.should == csv_file.workspace
@@ -225,7 +225,7 @@ describe CsvImporter, :database_integration => true do
       end
 
       it "makes a IMPORT_FAILED event" do
-        event = Events::IMPORT_FAILED.first
+        event = Events::FILE_IMPORT_FAILED.first
         event.actor.should == user
         event.destination_table.should == dataset.name
         event.workspace.should == csv_file.workspace

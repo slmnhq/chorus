@@ -51,9 +51,9 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       it "copies IMPORT SUCCESS activities" do
         expect {
           ActivityMigrator.new.migrate
-        }.to change(Events::IMPORT_SUCCESS, :count).by(101)
+        }.to change(Events::FILE_IMPORT_SUCCESS, :count).by(101)
 
-        event = Events::IMPORT_SUCCESS.find(event_id_for('10177'))
+        event = Events::FILE_IMPORT_SUCCESS.find(event_id_for('10177'))
         event.workspace.should be_a(Workspace)
         event.workspace.name.should == "ws"
         event.actor.should be_a(User)
@@ -67,9 +67,9 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       it "copies IMPORT FAILED activities" do
         expect {
           ActivityMigrator.new.migrate
-        }.to change(Events::IMPORT_FAILED, :count).by(27)
+        }.to change(Events::FILE_IMPORT_FAILED, :count).by(27)
 
-        event = Events::IMPORT_FAILED.find(event_id_for('10368'))
+        event = Events::FILE_IMPORT_FAILED.find(event_id_for('10368'))
         event.workspace.should be_a(Workspace)
         event.workspace.name.should == "active_public"
         event.actor.should be_a(User)

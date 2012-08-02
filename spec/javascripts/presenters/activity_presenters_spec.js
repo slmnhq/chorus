@@ -488,7 +488,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("import success", function() {
         beforeEach(function() {
-            model = rspecFixtures.activity.importSuccess();
+            model = rspecFixtures.activity.fileImportSuccess();
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             workspace = model.workspace();
@@ -512,7 +512,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("import failed", function() {
         beforeEach(function() {
-            model = rspecFixtures.activity.importFailed();
+            model = rspecFixtures.activity.fileImportFailed();
             presenter = new chorus.presenters.Activity(model);
             actor = model.actor();
             workspace = model.workspace();

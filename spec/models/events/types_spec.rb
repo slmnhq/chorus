@@ -302,9 +302,9 @@ describe "Event types" do
     it_creates_a_global_activity
   end
 
-  describe "IMPORT_SUCCESS" do
+  describe "FILE_IMPORT_SUCCESS" do
     subject do
-      Events::IMPORT_SUCCESS.add(
+      Events::FILE_IMPORT_SUCCESS.add(
           :actor => actor,
           :dataset => dataset,
           :file_name => 'import.csv',
@@ -321,9 +321,29 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "IMPORT_FAILED" do
+  describe "DATASET_IMPORT_SUCCESS" do
+    let(:source_dataset) {datasets(:bobs_table)}
     subject do
-      Events::IMPORT_FAILED.add(
+      Events::DATASET_IMPORT_SUCCESS.add(
+          :actor => actor,
+          :dataset => dataset,
+          :source_id => source_dataset.id,
+          :workspace => workspace
+      )
+    end
+
+    its(:dataset) { should == dataset }
+    its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
+    its(:additional_data) { should == {:source_id => source_dataset.id} }
+
+    it_creates_activities_for { [actor, workspace, dataset] }
+    it_does_not_create_a_global_activity
+
+  end
+
+  describe "FILE_IMPORT_FAILED" do
+    subject do
+      Events::FILE_IMPORT_FAILED.add(
           :actor => actor,
           :file_name => 'import.csv',
           :import_type => 'file',
@@ -335,6 +355,25 @@ describe "Event types" do
 
     its(:targets) { should == {:workspace => workspace} }
     its(:additional_data) { should == {:file_name => "import.csv", :import_type => "file", :destination_table => 'test', :error_message => 'Flying Monkey Attack'} }
+
+    it_creates_activities_for { [actor, workspace] }
+    it_does_not_create_a_global_activity
+  end
+
+  describe "DATASET_IMPORT_FAILED" do
+    let(:source_dataset) {datasets(:bobs_table)}
+    subject do
+      Events::DATASET_IMPORT_FAILED.add(
+          :actor => actor,
+          :source_id => source_dataset.id,
+          :destination_table => 'test',
+          :workspace => workspace,
+          :error_message => 'Flying Monkey Attack again'
+      )
+    end
+
+    its(:targets) { should == {:workspace => workspace} }
+    its(:additional_data) { should == {:source_id => source_dataset.id, :destination_table => 'test', :error_message => 'Flying Monkey Attack again'} }
 
     it_creates_activities_for { [actor, workspace] }
     it_does_not_create_a_global_activity

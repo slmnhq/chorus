@@ -83,18 +83,29 @@ module Events
     has_activities :actor, :workspace, :dataset, :hdfs_file, :global
   end
 
-  class IMPORT_SUCCESS < Base
+  class FILE_IMPORT_SUCCESS < Base
     has_targets :workspace, :dataset
     has_activities :actor, :workspace, :dataset
     has_additional_data :file_name, :import_type
   end
 
-  class IMPORT_FAILED < Base
+  class FILE_IMPORT_FAILED < Base
     has_targets :workspace
     has_activities :actor, :workspace
     has_additional_data :file_name, :import_type, :destination_table, :error_message
   end
 
+  class DATASET_IMPORT_SUCCESS < Base
+    has_targets :workspace, :dataset
+    has_activities :actor, :workspace, :dataset
+    has_additional_data :source_id
+  end
+
+  class DATASET_IMPORT_FAILED < Base
+    has_targets :workspace
+    has_activities :actor, :workspace
+    has_additional_data :source_id, :destination_table, :error_message
+  end
   class MEMBERS_ADDED < Base
     has_targets :member, :workspace
     has_activities :actor, :workspace

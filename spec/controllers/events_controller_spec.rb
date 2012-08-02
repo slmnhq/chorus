@@ -143,8 +143,8 @@ describe EventsController do
         "noteOnWorkfileCreated" => Events::NOTE_ON_WORKFILE,
         "noteOnDatasetCreated" => Events::NOTE_ON_DATASET,
         "noteOnWorkspaceDatasetCreated" => Events::NOTE_ON_WORKSPACE_DATASET,
-        "importSuccess" => Events::IMPORT_SUCCESS,
-        "importFailed" => Events::IMPORT_FAILED,
+        "importSuccess" => Events::FILE_IMPORT_SUCCESS,
+        "importFailed" => Events::FILE_IMPORT_FAILED,
         "membersAdded" => Events::MEMBERS_ADDED
     }
 

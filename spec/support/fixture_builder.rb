@@ -143,7 +143,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'Come see my awesome workspace!')
     Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobs_table, :body => 'Note on dataset')
     Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobs_table, :workspace => bob_public_workspace, :body => 'Note on workspace dataset')
-    Events::IMPORT_SUCCESS.by(carly).add(:dataset => bobs_table, :workspace => bob_public_workspace)
+    Events::DATASET_IMPORT_SUCCESS.by(carly).add(:dataset => bobs_table, :workspace => bob_public_workspace)
     fbuilder.name :note_on_dataset, Events::NOTE_ON_DATASET.by(bob).add(:dataset => bobssearch_table, :body => 'notesearch ftw')
     fbuilder.name :note_on_workspace_dataset, Events::NOTE_ON_WORKSPACE_DATASET.by(bob).add(:dataset => bobssearch_table, :workspace => bob_public_workspace, :body => 'workspacedatasetnotesearch')
     fbuilder.name :note_on_bob_public, Events::NOTE_ON_WORKSPACE.by(bob).add(:workspace => bob_public_workspace, :body => 'notesearch forever')
@@ -158,8 +158,8 @@ FixtureBuilder.configure do |fbuilder|
     Events::WORKSPACE_ARCHIVED.by(admin).add(:workspace => bob_public_workspace)
     Events::WORKSPACE_UNARCHIVED.by(admin).add(:workspace => bob_public_workspace)
     Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_file_reference)
-    Events::IMPORT_SUCCESS.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
-    Events::IMPORT_FAILED.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
+    Events::FILE_IMPORT_SUCCESS.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
+    Events::FILE_IMPORT_FAILED.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
     Events::MEMBERS_ADDED.by(bob).add(:workspace => bob_public_workspace, :member => carly, :num_added => '5')
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
