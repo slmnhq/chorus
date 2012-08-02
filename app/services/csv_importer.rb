@@ -18,7 +18,10 @@ class CsvImporter
 
   def import
     schema.with_gpdb_connection(account) do |connection|
-      connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
+      if csv_file.new_table
+        connection.exec_query("CREATE TABLE #{csv_file.to_table}(#{create_table_sql});")
+      end
+
       copy_manager = org.postgresql.copy.CopyManager.new(connection.instance_variable_get(:"@connection").connection)
       sql = "COPY #{csv_file.to_table}(#{column_names_sql}) FROM STDIN WITH DELIMITER '#{csv_file.delimiter}' CSV #{header_sql}"
       copy_manager.copy_in(sql, java.io.FileReader.new(csv_file.contents.path) )
@@ -62,6 +65,6 @@ class CsvImporter
   end
 
   def header_sql
-    csv_file.header ? "" : "HEADER"
+    csv_file.file_contains_header ? "HEADER" : ""
   end
 end

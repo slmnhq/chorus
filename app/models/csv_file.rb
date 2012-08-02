@@ -1,5 +1,5 @@
 class CsvFile < ActiveRecord::Base
-  attr_accessible :contents, :column_names, :types, :delimiter, :to_table, :header
+  attr_accessible :contents, :column_names, :types, :delimiter, :to_table, :file_contains_header, :new_table
 
   serialize :column_names
   serialize :types
