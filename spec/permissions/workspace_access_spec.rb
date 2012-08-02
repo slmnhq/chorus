@@ -142,4 +142,27 @@ describe WorkspaceAccess do
       end
     end
   end
+
+  describe "#owner?" do
+    context "the owner" do
+      let(:user) { owner }
+      it "allows the owner" do
+        workspace_access.can?(:owner, workspace).should be_true
+      end
+    end
+
+    context "a member" do
+      let(:user) { member }
+      it "does not allow a member" do
+        workspace_access.can?(:owner, workspace).should be_false
+      end
+    end
+
+    context "a non-member" do
+      let(:user) { non_member }
+      it "does not allow a member" do
+        workspace_access.can?(:owner, workspace).should be_false
+      end
+    end
+  end
 end
