@@ -104,7 +104,7 @@ describe MembersController do
           post :create, parameters
         }.to change(Events::MEMBERS_ADDED, :count).by(1)
 
-        Events::MEMBERS_ADDED.limit(1).order('id desc').first.num_added.should == 2
+        Events::MEMBERS_ADDED.limit(1).order('id desc').first.num_added.should == "2"
       end
     end
 

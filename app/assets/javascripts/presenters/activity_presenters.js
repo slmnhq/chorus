@@ -152,8 +152,9 @@
                 computed: ["importSourceLink", "datasetType", "datasetLink"]
             },
 
-            MEMBER_ADDED: {
-                links: ["actor", "workspace", "member"]
+            MEMBERS_ADDED: {
+                links: ["actor", "workspace", "member"],
+                computed: ["count"]
             }
         },
 
@@ -181,16 +182,40 @@
         },
 
         defaultStyle: function(self) {
-            if (self.workspace().id && self.get("actionType") != "NOTE_ON_WORKSPACE") {
+            if (self.get("action") == "MEMBERS_ADDED") {
+                switch(self.get("numAdded")) {
+                    case "1":
+                        return 'default.one';
+                    case "2":
+                        return 'default.two';
+                    default:
+                        return 'default.many';
+                }
+            } else if (self.workspace().id && self.get("actionType") != "NOTE_ON_WORKSPACE") {
                 return 'default';
             } else {
                 return 'without_workspace';
             }
         },
 
+        displayStyle: function(self, style) {
+            if (self.get("action") == "MEMBERS_ADDED") {
+                switch(self.get("numAdded")) {
+                    case "1":
+                        return (style + '.one');
+                    case "2":
+                        return (style + '.two');
+                    default:
+                        return (style + '.many');
+                }
+            } else {
+                return style;
+            }
+        },
+
         headerTranslationKey: function(self) {
             var mainKey = ["activity.header", self.model.get("action")].join(".");
-            var possibleStyles = _.compact(_.flatten([self.options.displayStyle, hidden.defaultStyle(self.model), 'default']));
+            var possibleStyles = _.compact(_.flatten([hidden.displayStyle(self.model, self.options.displayStyle), hidden.defaultStyle(self.model), 'default']));
 
             var key, n = possibleStyles.length;
                  for (var i = 0; i < n; i++) {
@@ -202,6 +227,10 @@
         datasetType: function(self) {
             var type = self.model.dataset().metaType();
             return t("dataset.types." + type);
+        },
+
+        count: function(self) {
+          return self.model.get("numAdded");
         },
 
         noteObjectType: function(self) {

@@ -36,7 +36,7 @@ describe("chorus.models.Activity", function() {
 
         describe("#member", function() {
             it("returns a user with the right data", function() {
-                activity = rspecFixtures.activity.memberAdded({
+                activity = rspecFixtures.activity.membersAdded({
                     actor: { id: 5 },
                     member: { id: 6 }
                 });
