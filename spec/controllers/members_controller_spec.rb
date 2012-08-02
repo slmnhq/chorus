@@ -75,7 +75,7 @@ describe MembersController do
     end
 
     it "uses authorization" do
-      mock(subject).authorize!(:administrative_edit, workspace)
+      mock(subject).authorize!(:owner, workspace)
       post :create, parameters
     end
 
@@ -109,9 +109,6 @@ describe MembersController do
 
     context "change some of the members for the workspace without passing owner's id in member array'" do
       let(:parameters) { {:workspace_id => workspace.id, :member_ids => [member1.id]} }
-      before do
-        workspace.members << workspace.owner
-      end
 
       it "doesn't update the members'" do
         lambda {

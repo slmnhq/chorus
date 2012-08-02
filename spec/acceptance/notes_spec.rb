@@ -34,7 +34,7 @@ resource "Notes" do
     scope_parameters :note, :all
 
     let(:body) { note.body }
-    let(:entity_type) { "hdfs" }
+    let(:entity_type) { "hdfs_file" }
     let(:entity_id) { "1|/fake/path/to/a/file.txt" }
 
     example_request "Post a new note on a HDFS file" do

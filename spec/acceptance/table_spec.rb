@@ -4,7 +4,7 @@ resource "Greenplum Table" do
   let(:owner) { users(:bob) }
   let(:gpdb_table) { datasets(:bobs_table) }
   let(:table_id) { gpdb_table.to_param }
-  let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => gpdb_table.instance, :owner => owner) }
+  let(:owner_account) { gpdb_table.instance.owner_account }
 
   before do
     any_instance_of(GpdbTable) do |gpdb_table|
