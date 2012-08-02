@@ -166,7 +166,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
             this.markInputAsInvalid($input, model.errors.body, true);
 
             this.$("iframe").contents().find("body").css("margin-right", "20px")
-            this.$(".cleditorMain").css("width", "330px")
+            this.$(".cleditorMain").css("width", "545px")
         }
     },
 
