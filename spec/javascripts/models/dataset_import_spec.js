@@ -1,14 +1,13 @@
 describe("chorus.models.DatasetImport", function() {
     beforeEach(function() {
         this.model = fixtures.datasetImport({
-            workspaceId: '101',
-            datasetId: '"102"|"my_db_name"|"my_schema_name"|"SOURCE_TABLE"|"my_table_name"'
+            datasetId: '102'
         });
         this.model.unset("id");
     });
 
     it("has the right url", function() {
-        expect(this.model.url()).toContain("/workspace/101/dataset/%22102%22%7C%22my_db_name%22%7C%22my_schema_name%22%7C%22SOURCE_TABLE%22%7C%22my_table_name%22/import");
+        expect(this.model.url()).toContain("/datasets/102/import");
     });
 
     describe("#wasSuccessfullyExecuted", function() {
