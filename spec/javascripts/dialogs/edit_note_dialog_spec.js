@@ -48,7 +48,7 @@ describe("chorus.dialogs.EditNote", function() {
         expect(editorArgs[0]).toBe(this.dialog.el);
         expect(editorArgs[1]).toBe(".toolbar");
         expect(editorArgs[2]).toBe("body");
-        expect(editorArgs[3]).toEqual({ width : 350, controls : 'bold italic | bullets numbering | link unlink' });
+        expect(editorArgs[3]).toEqual({ width : 566, height : 150, controls : 'bold italic | bullets numbering | link unlink' });
     });
 
     describe("submitting the form with a blank body", function() {
