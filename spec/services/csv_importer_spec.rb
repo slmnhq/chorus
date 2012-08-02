@@ -14,10 +14,36 @@ describe CsvImporter, :database_integration => true do
     let(:account) { real_gpdb_account }
     let(:workspace) { Workspace.create({:sandbox => schema, :owner => user, :name => "TestCsvWorkspace"}, :without_protection => true) }
 
-    let(:csv_file) { }
-    let(:csv_file_params) {
+    def fetch_from_gpdb(sql)
+      schema.with_gpdb_connection(account) do |connection|
+        result = connection.exec_query(sql)
+        yield result
+      end
+    end
 
-    }
+    def create_csv_file(options = {})
+      defaults = {
+          :contents => tempfile_with_contents("1,foo\n2,bar\n3,baz\n"),
+          :column_names => [:id, :name],
+          :types => [:integer, :varchar],
+          :delimiter => ',',
+          :file_contains_header => false,
+          :new_table => true,
+          :to_table => "new_table_from_csv"
+      }
+      csv_file = CsvFile.new(defaults.merge(options))
+      csv_file.user = user
+      csv_file.workspace = workspace
+      csv_file.save!
+      csv_file
+    end
+
+    def tempfile_with_contents(str)
+      f = Tempfile.new("test_csv")
+      f.puts str
+      f.close
+      f
+    end
 
     it "imports a basic csv file as a new table" do
       csv_file = create_csv_file
@@ -38,8 +64,7 @@ describe CsvImporter, :database_integration => true do
       csv_file = create_csv_file(:new_table => false)
       CsvImporter.import_file(csv_file.id)
 
-      schema.with_gpdb_connection(account) do |connection|
-        result = connection.exec_query("select count(*) from new_table_from_csv;")
+      fetch_from_gpdb("select count(*) from new_table_from_csv;") do |result|
         result[0]["count"].should == 6
       end
     end
@@ -47,43 +72,25 @@ describe CsvImporter, :database_integration => true do
     it "should truncate the existing table when truncate=true"
 
     it "import a csv file into an existing table with different column order" do
-      f1 = Tempfile.new("test_csv_2")
-      f1.puts "1,foo\n2,bar\n3,baz\n"
-      f1.close
-
-      first_csv_file = CsvFile.new(:contents => f1,
+      first_csv_file = create_csv_file(:contents => tempfile_with_contents("1,foo\n2,bar\n3,baz\n"),
                              :column_names => [:id, :name],
                              :types => [:integer, :varchar],
-                             :delimiter => ',',
                              :file_contains_header => false,
                              :new_table => true,
                              :to_table => "new_table_from_csv_2")
-      first_csv_file.user = user
-      first_csv_file.workspace = workspace
-      first_csv_file.save!
 
       CsvImporter.import_file(first_csv_file.id)
 
-      f2 = Tempfile.new("test_csv_2")
-      f2.puts "dig,4\ndug,5\ndag,6\n"
-      f2.close
-
-
-      second_csv_file = CsvFile.new(:contents => f2,
+      second_csv_file = create_csv_file(:contents => tempfile_with_contents("dig,4\ndug,5\ndag,6\n"),
                              :column_names => [:name, :id],
                              :types => [:varchar, :integer],
-                             :delimiter => ',',
                              :file_contains_header => false,
                              :new_table => false,
                              :to_table => "new_table_from_csv_2")
-      second_csv_file.user = user
-      second_csv_file.workspace = workspace
-      second_csv_file.save!
 
       CsvImporter.import_file(second_csv_file.id)
 
-      schema.with_gpdb_connection(account) do |connection|
-        result = connection.exec_query("select * from new_table_from_csv_2 order by id asc;")
+      fetch_from_gpdb("select * from new_table_from_csv_2 order by id asc;") do |result|
         result[0]["id"].should == 1
         result[0]["name"].should == "foo"
         result[1]["id"].should == 2
@@ -101,43 +108,26 @@ describe CsvImporter, :database_integration => true do
 
     it "import a csv file that has fewer columns than destination table" do
       tablename = "test_import_existing_2"
-      f1 = Tempfile.new("test_csv_2")
-      f1.puts "1,a,snickers\n2,b,kitkat\n"
-      f1.close
 
-      first_csv_file = CsvFile.new(:contents => f1,
+      first_csv_file = create_csv_file(:contents => tempfile_with_contents("1,a,snickers\n2,b,kitkat\n"),
                                    :column_names => [:id, :name, :candy_type],
                                    :types => [:integer, :varchar, :varchar],
-                                   :delimiter => ',',
                                    :file_contains_header => false,
                                    :new_table => true,
                                    :to_table => tablename)
-      first_csv_file.user = user
-      first_csv_file.workspace = workspace
-      first_csv_file.save!
 
       CsvImporter.import_file(first_csv_file.id)
 
-      f2 = Tempfile.new("test_csv_2")
-      f2.puts "marsbar,3\nhersheys,4\n"
-      f2.close
-
-
-      second_csv_file = CsvFile.new(:contents => f2,
+      second_csv_file = create_csv_file(:contents => tempfile_with_contents("marsbar,3\nhersheys,4\n"),
                                     :column_names => [:candy_type, :id],
                                     :types => [:varchar, :integer],
-                                    :delimiter => ',',
                                     :file_contains_header => false,
                                     :new_table => false,
                                     :to_table => tablename)
-      second_csv_file.user = user
-      second_csv_file.workspace = workspace
-      second_csv_file.save!
 
       CsvImporter.import_file(second_csv_file.id)
 
-      schema.with_gpdb_connection(account) do |connection|
-        result = connection.exec_query("select * from #{tablename} order by id asc;")
+      fetch_from_gpdb("select * from #{tablename} order by id asc;") do |result|
         result[0]["id"].should == 1
         result[0]["name"].should == "a"
         result[0]["candy_type"].should == "snickers"
@@ -151,31 +141,20 @@ describe CsvImporter, :database_integration => true do
         result[3]["name"].should == nil
         result[3]["candy_type"].should == "hersheys"
       end
-
-
-
     end
 
     it "imports a file with different column names, header rows and a different delimiter" do
-      f = Tempfile.new("test_csv")
-      f.puts "ignore\tme\n1\tfoo\n2\tbar\n3\tbaz\n"
-      f.close
-
-      csv_file = CsvFile.create(:contents => f,
+      csv_file = create_csv_file(:contents => tempfile_with_contents("ignore\tme\n1\tfoo\n2\tbar\n3\tbaz\n"),
                                 :column_names => [:id, :dog],
                                 :types => [:integer, :varchar],
                                 :delimiter => "\t",
                                 :file_contains_header => true,
                                 :new_table => true,
                                 :to_table => "another_new_table_from_csv")
-      csv_file.user = user
-      csv_file.workspace = workspace
-      csv_file.save!
 
       CsvImporter.import_file(csv_file.id)
 
-      schema.with_gpdb_connection(account) do |connection|
-        result = connection.exec_query("select * from another_new_table_from_csv order by ID asc;")
+      fetch_from_gpdb("select * from another_new_table_from_csv order by ID asc;") do |result|
         result[0].should == {"id" => 1, "dog" => "foo"}
         result[1].should == {"id" => 2, "dog" => "bar"}
         result[2].should == {"id" => 3, "dog" => "baz"}
@@ -243,22 +222,5 @@ describe CsvImporter, :database_integration => true do
         expect { CsvFile.find(csv_file.id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
-  end
-
-  def create_csv_file(options = {})
-    f = Tempfile.new("test_csv_2")
-    f.puts "1,foo\n2,bar\n3,baz\n"
-    f.close
-    csv_file = CsvFile.new(:contents => f,
-                           :column_names => [:id, :name],
-                           :types => [:integer, :varchar],
-                           :delimiter => ',',
-                           :file_contains_header => false,
-                           :new_table => (options[:new_table].nil? ? true : options[:new_table]),
-                           :to_table => "new_table_from_csv")
-    csv_file.user = user
-    csv_file.workspace = workspace
-    csv_file.save!
-    csv_file
   end
 end
