@@ -39,7 +39,9 @@ class Instance < ActiveRecord::Base
     )
   end
 
-  def refresh_database_permissions
+  def refresh_databases
+    GpdbDatabase.refresh(owner_account)
+
     rows = Gpdb::ConnectionBuilder.connect!(self, owner_account, maintenance_db) { |conn| conn.select_all(database_and_role_sql) }
 
     database_account_groups = rows.inject({}) do |groups, row|

@@ -18,10 +18,11 @@ class Dataset < ActiveRecord::Base
   delegate :instance, :to => :schema
 
   attr_accessor :highlighted_attributes, :search_result_notes
-  searchable do |s|
+  searchable :unless => :stale? do |s|
     s.text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     s.text :database_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     s.text :schema_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    s.text :column_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     s.string :grouping_id
     s.string :type_name
   end
@@ -29,6 +30,10 @@ class Dataset < ActiveRecord::Base
   has_shared_search_fields [
     { :type => :integer, :method => :instance_account_ids, :options => { :multiple => true } }
   ]
+
+  def stale?
+    stale_at.present?
+  end
 
   def instance_account_ids
     schema.database.instance_account_ids
@@ -44,15 +49,16 @@ class Dataset < ActiveRecord::Base
     end
   end
 
-  def self.refresh(account, schema)
-    datasets = schema.with_gpdb_connection(account, false) do |conn|
+  def self.refresh(account, schema, mark_stale=false)
+    datasets_in_gpdb = schema.with_gpdb_connection(account, false) do |conn|
       conn.select_all(Query.new(schema).tables_and_views_in_schema.to_sql)
     end
 
-    datasets.each do |attrs|
+    datasets_in_gpdb.each do |attrs|
       type = attrs.delete('type')
       klass = type == 'r' ? GpdbTable : GpdbView
       dataset = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
+      attrs.merge!(:stale_at => nil) if mark_stale
       dataset.update_attributes(attrs, :without_protection => true)
     end
   end
@@ -82,6 +88,13 @@ class Dataset < ActiveRecord::Base
 
   def schema_name
     schema.name
+  end
+
+  def column_name
+    columns = GpdbColumn.columns_for(schema.database.instance.account_for_user(schema.database.instance.owner), self);
+    columns.map do |column|
+      column.name
+    end
   end
 
   def type_name

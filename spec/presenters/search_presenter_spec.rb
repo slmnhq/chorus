@@ -70,12 +70,15 @@ describe SearchPresenter, :type => :view do
       datasets_hash[:results][0][:highlighted_attributes].should have_key(:object_name)
       datasets_hash[:results][0][:schema].should have_key(:highlighted_attributes)
       datasets_hash[:results][0][:schema][:highlighted_attributes].should have_key(:name)
+      datasets_hash[:results][0][:columns][0].should have_key(:highlighted_attributes)
+      datasets_hash[:results][0][:columns][0][:highlighted_attributes].should have_key(:body)
       datasets_hash[:results][0][:schema][:database].should have_key(:highlighted_attributes)
       datasets_hash[:results][0][:schema][:database][:highlighted_attributes].should have_key(:name)
 
       datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:name)
       datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:database_name)
       datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:schema_name)
+      datasets_hash[:results][0][:highlighted_attributes].should_not have_key(:column_name)
     end
   end
 end

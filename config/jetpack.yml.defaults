@@ -3,6 +3,7 @@ jetty: http://dist.codehaus.org/jetty/jetty-hightide-7.4.5/jetty-hightide-7.4.5.
 jruby-rack: http://repository.codehaus.org/org/jruby/rack/jruby-rack/1.0.10/jruby-rack-1.0.10.jar
 app_user: pivotal
 app_root: /home/pivotal/chorusrails-deploy/current
+java_options: -Djava.library.path=$CHORUS_HOME/current/vendor/hadoop/lib/
 ruby_version: 1.9
 app_type: rack
 http_port: 8081

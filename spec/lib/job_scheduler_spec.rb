@@ -25,6 +25,17 @@ describe JobScheduler do
     end
   end
 
+  describe "SolrIndexer.index" do
+    it "runs every Chorus::Application.config.chorus['reindex_datasets_interval_hours'] hours" do
+      job_scheduler.job_named('SolrIndexer.index').period.should == Chorus::Application.config.chorus['reindex_datasets_interval_hours'].hours
+    end
+
+    it "enqueues the 'SolrIndexer.index' job in QC" do
+      mock(QC).enqueue("SolrIndexer.index")
+      job_scheduler.job_named('SolrIndexer.index').run(Time.now)
+    end
+  end
+
   describe "JobScheduler.run" do
     it "builds a JobScheduler and then runs it starts the clockwork" do
       built = false

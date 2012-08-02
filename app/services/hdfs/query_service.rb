@@ -26,48 +26,32 @@ module Hdfs
     end
 
     def version
-      protect_remote_query do
-        version = JavaHdfs.new(@host, @port, @username).server_version
-
-        unless version
-          raise ApiValidationError.new(:connection, :generic, {:message => 'Unable to determine HDFS server version. Check connection parameters.'})
-        end
-        version.get_name
+      version = JavaHdfs.get_server_version(@host, @port, @username)
+      unless version
+        Rails.logger.error "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Within JavaHdfs connection, failed to establish connection to #{@host}:#{@port}"
+        raise ApiValidationError.new(:connection, :generic, {:message => "Unable to determine HDFS server version or unable to reach server at #{@host}:#{@port}. Check connection parameters."})
       end
+      version.get_name
     end
 
     def list(path)
-      protect_remote_query do
-        list = JavaHdfs.new(@host, @port, @username, @version).list(path)
-        raise DirectoryNotFoundError, "Directory does not exist: #{path}" unless list
-        list.map do |object|
-          {
-              'path' => object.path,
-              'modified_at' => object.modified_at,
-              'is_directory' => object.is_directory,
-              'size' =>  object.size,
-              'content_count' => object.content_count
-          }
-        end
+      list = JavaHdfs.new(@host, @port, @username, @version).list(path)
+      raise DirectoryNotFoundError, "Directory does not exist: #{path}" unless list
+      list.map do |object|
+        {
+          'path' => object.path,
+          'modified_at' => object.modified_at,
+          'is_directory' => object.is_directory,
+          'size' => object.size,
+          'content_count' => object.content_count
+        }
       end
     end
 
     def show(path)
-      protect_remote_query do
-        contents = JavaHdfs.new(@host, @port, @username, @version).content(path, PREVIEW_LINE_COUNT)
-        raise FileNotFoundError, "File not found on HDFS: #{path}" unless contents
-        contents
-      end
-    end
-
-    private
-
-    def protect_remote_query
-      yield
-    rescue Errno::ECONNREFUSED
-      raise ApiValidationError.new(:connection, :generic, {:message => "Impossible to connect to HDFS Query Service."})
-    rescue Timeout::Error
-      raise ApiValidationError.new(:connection, :generic, {:message => "Timeout while connecting to HDFS Query Service."})
+      contents = JavaHdfs.new(@host, @port, @username, @version).content(path, PREVIEW_LINE_COUNT)
+      raise FileNotFoundError, "File not found on HDFS: #{path}" unless contents
+      contents
     end
   end
 end

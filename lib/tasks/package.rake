@@ -22,9 +22,11 @@ module PackageMaker
   def upload(filename, config)
     host = config['host']
     path = config['path']
+    distribution = target_distribution_name(config)
 
     release_name = version_name
 
+    shared_path = path + "/shared"
     current_path = path + "/current"
     releases_path = path + "/releases"
     release_path = path + "/releases/" + release_name
@@ -32,26 +34,35 @@ module PackageMaker
     run "scp #{filename} #{host}:#{path}"
     run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename}'"
 
-    run "ssh #{host} 'mkdir -p #{release_path}/solr && ln -s #{path}/shared/solr/data #{release_path}/solr/'"
+    run "ssh #{host} 'mkdir -p #{release_path}/solr && ln -s #{shared_path}/solr/data #{release_path}/solr/'"
 
-    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/log #{release_path}/'"
-    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/tmp #{release_path}/'"
-    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/system #{release_path}/'"
+    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/log #{release_path}/'"
+    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/tmp #{release_path}/'"
+    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/system #{release_path}/'"
 
     # symlink configuration
-    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/database.yml #{release_path}/config'"
-    run "ssh #{host} 'cd #{release_path} && ln -s #{path}/shared/chorus.yml #{release_path}/config'"
+    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/database.yml #{release_path}/config'"
+    run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/chorus.yml #{release_path}/config'"
 
-    run "ssh #{host} 'cd #{release_path}; RAILS_ENV=production bin/rake db:migrate'"
-
+    # Server control
     run "ssh #{host} 'cp -f #{release_path}/packaging/server_control.sh.example #{path}/server_control.sh'"
 
-    run "ssh #{host} 'cd #{path}; RAILS_ENV=production ./server_control.sh stop'"
-    run "ssh #{host} 'cd #{path}; rm -rf ./nginx_dist'"
+    # Setup DB
+    run "ssh #{host} 'cd #{path}; rm -rf ./postgres'"
+    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/postgres-#{distribution}-9.1.4.tar.gz'"
 
-    run "ssh #{host} 'cd #{path} && ln -sfT #{release_path} #{current_path}'"
+    run "ssh #{host} 'test ! -e #{shared_path}/db && RELEASE_PATH=#{release_path} CHORUS_HOME=#{path} bash #{release_path}/packaging/bootstrap_app.sh'"
+
+    run "ssh #{host} 'PATH=$PATH:#{path}/postgres/bin RAILS_ENV=production #{release_path}/bin/rake db:migrate'"
+
+    run "ssh #{host} 'cd #{path}; RAILS_ENV=production ./server_control.sh stop'"
+
+    run "ssh #{host} 'cd #{path}; rm -rf ./nginx_dist'"
     run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/nginx_dist-1.2.2.tar.gz'"
     run "ssh #{host} 'cp -f #{release_path}/packaging/nginx.conf.example #{path}/nginx_dist/nginx_data/conf/nginx.conf'"
+
+    run "ssh #{host} 'cd #{path} && ln -sfT #{release_path} #{current_path}'"
+
     run "ssh #{host} 'cd #{path}; RAILS_ENV=production ./server_control.sh start'"
 
     run "ssh #{host} 'cd #{path}; rm greenplum*.tar.gz'"
@@ -59,6 +70,7 @@ module PackageMaker
   end
 
   def deploy(config)
+    verify_distribution_compatibility(config)
     write_jetpack_yaml(config)
     check_existing_version(config)
 
@@ -82,9 +94,10 @@ module PackageMaker
   def prepare_remote(config)
     path = config['path']
     host = config['host']
+    shared_path = config['path'] + '/shared'
 
     run "ssh #{host} 'mkdir -p #{path}/releases'"
-    run "ssh #{host} 'mkdir -p #{path}/shared/tmp && mkdir -p #{path}/shared/log && mkdir -p #{path}/shared/system && mkdir -p #{path}/shared/solr/data'"
+    run "ssh #{host} 'mkdir -p #{shared_path}/tmp/pids && mkdir -p #{shared_path}/log && mkdir -p #{shared_path}/system && mkdir -p #{shared_path}/solr/data'"
   end
 
   def check_existing_version(config)
@@ -122,6 +135,7 @@ module PackageMaker
       "db/",
       "doc/",
       "lib/",
+      "packaging/",
       "public/",
       "script/",
       "vendor/",
@@ -134,7 +148,6 @@ module PackageMaker
       "version.rb",
       "version_build",
       ".bundle/config",
-      "packaging/"
     ]
 
     run "tar czf #{filename} --exclude='public/system/' --exclude='javadoc' --exclude='.git' --exclude='log' --exclude 'config/database.yml' --exclude 'config/chorus.yml' #{files_to_tar.join(" ")}"
@@ -169,5 +182,23 @@ module PackageMaker
     File.open(Rails.root.join('config', 'jetpack.yml'), 'w') do |file|
       YAML.dump(defaults, file)
     end
+  end
+
+  def verify_distribution_compatibility(config)
+    print "Determining target system distribution... "
+    version = target_distribution_name(config)
+
+    puts version
+
+    file = "packaging/postgres-#{version}-9.1.4.tar.gz"
+
+    unless File.exist? file
+      puts "ABORT: Distribution #{version} is NOT supported: #{file} is missing."
+      exit 1
+    end
+  end
+
+  def target_distribution_name(config)
+    @distribution_name ||= `ssh #{config['host']} '(lsb_release -ir | sed -e "s/.*:\\s*\\(.*\\)/\\1/g" | tr -d "\\n" | tr "[:upper:]" "[:lower:]"; echo -n "-"; uname -m) | cat'`.strip
   end
 end

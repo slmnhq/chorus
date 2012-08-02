@@ -59,6 +59,8 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+
   config.before(:suite) do
     GpdbIntegration.drop_gpdb
   end

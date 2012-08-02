@@ -1,4 +1,5 @@
 require 'digest/sha1'
+require 'soft_delete'
 
 class User < ActiveRecord::Base
   include SoftDelete
@@ -44,6 +45,10 @@ class User < ActiveRecord::Base
     text :email, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
     string :grouping_id
     string :type_name
+  end
+
+  def workspace_accessible_events current_user
+    Events::Base.where("workspace_id in (select id from workspaces where public is true) or workspace_id in (select workspace_id from memberships where user_id = #{current_user.id})")
   end
 
   def uniqueness_of_non_deleted_username

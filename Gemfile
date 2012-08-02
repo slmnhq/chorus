@@ -12,6 +12,7 @@ gem 'sunspot_rails', '2.0.0.pre.120417'
 gem 'jetpack', :git => "git://github.com/pivotal-leopold/jetpack.git", :require => false
 gem 'sunspot_solr', '2.0.0.pre.120417'
 gem 'quiet_assets'
+gem 'nokogiri'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false

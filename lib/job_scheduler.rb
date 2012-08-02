@@ -12,6 +12,10 @@ class JobScheduler
     every(Chorus::Application.config.chorus['delete_unimported_csv_files_interval_hours'].hours, 'CsvFile.delete_old_files!') do
       QC.enqueue("CsvFile.delete_old_files!")
     end
+
+    every(Chorus::Application.config.chorus['reindex_datasets_interval_hours'].hours, 'SolrIndexer.index') do
+      QC.enqueue("SolrIndexer.index")
+    end
   end
 
   def job_named(job)

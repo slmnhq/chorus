@@ -181,7 +181,7 @@ describe Search do
         VCR.use_cassette('search_solr_query_all_types_bob_as_bob') do
           search = Search.new(bob, :query => 'bobsearch')
           dataset = search.datasets.first
-          dataset.highlighted_attributes.length.should == 3
+          dataset.highlighted_attributes.length.should == 4
           dataset.highlighted_attributes[:name][0].should == "<em>bobsearch</em>_table"
           dataset.highlighted_attributes[:database_name][0].should == "<em>bobsearch</em>_database"
           dataset.highlighted_attributes[:schema_name][0].should == "<em>bobsearch</em>_schema"

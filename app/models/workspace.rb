@@ -1,6 +1,7 @@
 class Workspace < ActiveRecord::Base
   include SoftDelete
-  attr_accessible :name, :public, :summary, :sandbox_id, :image
+  attr_accessor :archived
+  attr_accessible :name, :public, :summary, :sandbox_id, :member_ids, :has_added_member, :owner_id, :archiver, :archived
 
   has_attached_file :image, :path => Chorus::Application.config.chorus['image_storage'] + ":class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
@@ -23,7 +24,10 @@ class Workspace < ActiveRecord::Base
   validates_presence_of :name
   validate :uniqueness_of_workspace_name
   validate :owner_is_member, :on => :update
+  validate :archiver_is_set_when_archiving
 
+  before_update :update_has_changed_settings, :clear_assigned_datasets_on_sandbox_assignment
+  before_save :update_has_added_sandbox
   after_create :add_owner_as_member
 
   scope :active, where(:archived_at => nil)
@@ -106,18 +110,21 @@ class Workspace < ActiveRecord::Base
     archived_at?
   end
 
-  def archive_as(user)
-    self.archived_at = Time.current
-    self.archiver = user
-  end
-
-  def unarchive
-    self.archived_at = nil
-    self.archiver = nil
-  end
-
   def has_dataset?(dataset)
     dataset.schema == sandbox || bound_datasets.include?(dataset)
+  end
+
+  def member?(user)
+    members.include?(user)
+  end
+
+  def archived=(value)
+    if value == 'true'
+      self.archived_at = Time.current
+    elsif value == 'false'
+      self.archived_at = nil
+      self.archiver = nil
+    end
   end
 
   private
@@ -132,5 +139,29 @@ class Workspace < ActiveRecord::Base
     unless members.include? owner
       memberships.create!({ :user => owner, :workspace => self }, { :without_protection => true })
     end
+  end
+
+  def archiver_is_set_when_archiving
+    if archived? && !archiver
+      errors.add(:archived, "Archiver is required for archiving")
+    end
+  end
+
+  def update_has_added_sandbox
+    self.has_added_sandbox = true if sandbox_id_changed? && sandbox
+    true
+  end
+
+  def update_has_changed_settings
+    self.has_changed_settings = true if (changed - ['sandbox_id', 'has_added_sandbox']).present?
+    true
+  end
+
+  def clear_assigned_datasets_on_sandbox_assignment
+    return true unless sandbox_id_changed? && sandbox
+    bound_datasets.each do |dataset|
+      bound_datasets.destroy(dataset) if sandbox.datasets.include? dataset
+    end
+    true
   end
 end

@@ -47,6 +47,19 @@ describe User do
     end
   end
 
+  describe "#events" do
+    let(:current_user) { users(:bob) }
+    let(:carly) { users(:carly) }
+
+    it "only returns events from workspaces the user has access to" do
+      public_event = events(:bob_creates_public_workspace)
+      private_event = events(:note_on_alice_private)
+
+      carly.workspace_accessible_events(current_user).should include(public_event)
+      carly.workspace_accessible_events(current_user).should_not include(private_event)
+    end
+  end
+
   describe "validations" do
     before do
       @user = FactoryGirl.create :user #, :username => 'aDmin'

@@ -22,19 +22,6 @@ module SearchExtensions
           s.public_send(field_def[:type], field_def[:method], field_def[:options].try(:dup))
         end
       end
-
-      # define_shared_search_fields([...], :dataset)
-      #
-      # searchable do
-      #   delegate :instance_account_ids, :to => :dataset
-      #   integer :instance_account_ids, :options => {:multiple => true}
-      # end
-      #
-      # define_shared_search_fields([...])
-      #
-      # searchable do
-      #   integer :instance_account_ids, :options => {:multiple => true}
-      # end
     end
   end
 

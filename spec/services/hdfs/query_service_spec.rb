@@ -6,8 +6,9 @@ describe Hdfs::QueryService do
     # silence the HDFS log output from failed version connections
     @java_stdout = java.lang.System.out
     @java_stderr = java.lang.System.err
-    java.lang.System.setOut(nil)
-    java.lang.System.setErr(nil)
+    devnull = java.io.PrintStream.new(java.io.FileOutputStream.new("/dev/null"))
+    java.lang.System.setOut(devnull)
+    java.lang.System.setErr(devnull)
   end
 
   after :all do
@@ -28,18 +29,26 @@ describe Hdfs::QueryService do
     end
 
     context "unexisting hadoop server" do
+      let(:instance) { "garbage" }
+      let(:port) { 8888 }
+      let(:username) { "pivotal" }
       let(:unexisting_instance) do
-        HadoopInstance.new :host => "garbage", :port => "8888", :username => "pivotal"
+        HadoopInstance.new :host => instance, :port => port, :username => username
       end
 
-      it "raises ApiValidationError" do
-        expect { described_class.instance_version(unexisting_instance) }.to raise_error(ApiValidationError)
+      it "raises ApiValidationError and prints to log file" do
+        Timecop.freeze(DateTime.now)
+        mock(Rails.logger).error("#{Time.now.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Within JavaHdfs connection, failed to establish connection to #{instance}:#{port}")
+        expect { described_class.instance_version(unexisting_instance) }.to raise_error(ApiValidationError) { |error|
+          error.record.errors.get(:connection).should == [[:generic, { :message => "Unable to determine HDFS server version or unable to reach server at #{instance}:#{port}. Check connection parameters." }]]
+        }
+        Timecop.return
       end
     end
 
     context "timeout" do
       let(:slow_instance) do
-        HadoopInstance.new :host => HADOOP_TEST_INSTANCE, :port => "8888", :username => "pivotal"
+        HadoopInstance.new :host => HADOOP_TEST_INSTANCE, :port => port, :username => username
       end
     end
   end

@@ -10,31 +10,30 @@ describe WorkspacesController do
   end
 
   describe "#index" do
-    before do
-      FactoryGirl.create(:workspace, :name => "Work", :owner => owner)
-      FactoryGirl.create(:workspace, :name => "abacus", :archived_at => 2.days.ago)
-      @private_workspace = FactoryGirl.create(:workspace, :public => false)
-      @joined_private_workspace = FactoryGirl.create(:workspace, :public => false, :name => "secret1")
-      owner.workspaces << @joined_private_workspace
-    end
+    let(:private_workspace) { workspaces(:alice_private) }
 
-    it "returns all workspaces that are public or which the current user is a member of" do
+    it "returns workspaces that are public" do
       get :index
       response.code.should == "200"
-      decoded_response.length.should == WorkspaceAccess.workspaces_for(owner).count
-      decoded_response.map(&:name).should include("secret1")
+      decoded_response.map(&:name).should include workspaces(:bob_public).name
     end
 
-    it "does not return private workspaces" do
-      FactoryGirl.create(:workspace, :name => "private", :public => false)
+    it "returns workspaces the user is a member of" do
+      log_in other_user
       get :index
-      decoded_response.collect(&:name).should_not include "private"
+      response.code.should == "200"
+      decoded_response.map(&:name).should include private_workspace.name
+    end
+
+    it "does not return private workspaces user is not a member of" do
+      other_private = workspaces(:bob_private)
+      get :index
+      decoded_response.collect(&:name).should_not include other_private.name
     end
 
     it "includes private workspaces owned by the authenticated user" do
-      FactoryGirl.create(:workspace, :name => "private", :public => false, :owner => owner)
       get :index
-      decoded_response.collect(&:name).should include "private"
+      decoded_response.collect(&:name).should include private_workspace.name
     end
 
     it "sorts by workspace name" do
@@ -48,9 +47,9 @@ describe WorkspacesController do
     end
 
     it "scopes by memberships" do
-      other_user.workspaces << @joined_private_workspace
+      other_user.workspaces << private_workspace
       get :index, :user_id => other_user.id
-      decoded_response.size.should == WorkspaceAccess.member_of_workspaces(other_user).count
+      decoded_response.size.should == other_user.workspaces.count
     end
 
     describe "pagination" do
@@ -79,7 +78,7 @@ describe WorkspacesController do
 
   describe "#create" do
     context "with valid parameters" do
-      let(:parameters) { { :workspace => { :name => "foobar"} } }
+      let(:parameters) { {:workspace => {:name => "foobar"}} }
 
       it "creates a workspace" do
         lambda {
@@ -88,14 +87,14 @@ describe WorkspacesController do
       end
 
       it "creates an event for public workspace" do
-        parameters = { :workspace => { :name => "foobar", :public => true } }
+        parameters = {:workspace => {:name => "foobar", :public => true}}
         lambda {
           post :create, parameters
         }.should change(Events::PUBLIC_WORKSPACE_CREATED, :count).by(1)
       end
 
       it "creates an event for private workspace" do
-        parameters = { :workspace => { :name => "foobar", :public => false } }
+        parameters = {:workspace => {:name => "foobar", :public => false}}
         lambda {
           post :create, parameters
         }.should change(Events::PRIVATE_WORKSPACE_CREATED, :count).by(1)
@@ -121,9 +120,7 @@ describe WorkspacesController do
   end
 
   describe "#show" do
-    let(:joe) { FactoryGirl.create(:user) }
-    let(:sandbox) { FactoryGirl.create(:gpdb_schema)}
-    let(:workspace) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
+    let(:workspace) { workspaces(:bob_public) }
 
     context "with a valid workspace id" do
       it "uses authentication" do
@@ -155,27 +152,22 @@ describe WorkspacesController do
   end
 
   describe "#update" do
-    let(:workspace) { FactoryGirl.create :workspace, :owner => owner }
-    let(:sandbox) { FactoryGirl.create :gpdb_schema }
-    let(:admin) { FactoryGirl.create :admin }
-    let(:non_owner) { FactoryGirl.create :user }
+    let(:workspace) { workspaces(:alice_public) }
 
-    context "when the current user has administrative authorization" do
+    context "when the current user has update authorization" do
       it "uses authentication" do
-        mock(subject).authorize!(:administrative_edit, workspace)
+        mock(subject).authorize!(:update, workspace)
         put :update, :id => workspace.id, :workspace => {
-          :owner => { id: "3" },
-          :public => "false"
+            :owner => {id: "3"},
+            :public => "false"
         }
       end
 
       it "allows updating the workspace's privacy and owner" do
-        member = FactoryGirl.create(:user)
-        member.workspaces << workspace
-
+        member = users(:carly)
         put :update, :id => workspace.id, :workspace => {
-          :owner_id => member.id.to_s,
-          :public => "false"
+            :owner_id => member.id.to_s,
+            :public => "false"
         }
 
         workspace.reload
@@ -185,123 +177,60 @@ describe WorkspacesController do
       end
 
       it "makes the right event when making the workspace public" do
-        parameters = { :id => workspace.id, :workspace => { :public => true } }
+        workspace = workspaces(:alice_private)
+        parameters = {:id => workspace.id, :workspace => {:public => true}}
         lambda {
           put :update, parameters
         }.should change(Events::WORKSPACE_MAKE_PUBLIC, :count).by(1)
       end
 
       it "makes the right event when making the workspace private" do
-        workspace = FactoryGirl.create :workspace, :owner => owner, :public => true
-        parameters = { :id => workspace.id, :workspace => { :public => false } }
+        parameters = {:id => workspace.id, :workspace => {:public => false}}
         lambda {
           put :update, parameters
         }.should change(Events::WORKSPACE_MAKE_PRIVATE, :count).by(1)
       end
 
-      it "sets has_changed_settings on the workspace to true" do
-        member = FactoryGirl.create(:user)
-        member.workspaces << workspace
-
-        put :update, :id => workspace.id, :workspace => {
-            :owner_id => member.id.to_s,
-            :public => "false"
-        }
-
-        workspace.reload.has_changed_settings.should be_true
-      end
-
       it "allows archiving the workspace" do
-        events = Events::WORKSPACE_ARCHIVED.by(owner)
-        events.count.should == 0
+        lambda {
+          put :update, :id => workspace.id, :workspace => {
+              :archived => "true"
+          }
+        }.should change(Events::WORKSPACE_ARCHIVED.by(owner), :count).by(1)
 
-        put :update, :id => workspace.id, :workspace => {
-            :archived => "true"
-        }
         workspace.reload
         workspace.archived_at.should_not be_nil
         workspace.archiver.should == owner
-
-        events = Events::WORKSPACE_ARCHIVED.by(owner)
-        events.count.should == 1
       end
 
       it "allows unarchiving the workspace" do
-        events = Events::WORKSPACE_UNARCHIVED.by(owner)
-        events.count.should == 0
+        workspace = workspaces(:archived)
 
-        workspace.archive_as(owner)
-        workspace.save!
-
-        put :update, :id => workspace.id, :workspace => {
-          :archived => "false"
-        }
+        lambda {
+          put :update, :id => workspace.id, :workspace => {
+              :archived => "false"
+          }
+        }.should change(Events::WORKSPACE_UNARCHIVED.by(owner), :count).by(1)
 
         workspace.reload
         workspace.archived_at.should be_nil
         workspace.archiver.should be_nil
-
-        events = Events::WORKSPACE_UNARCHIVED.by(owner)
-        events.count.should == 1
       end
 
       it "allows changing the sandbox" do
-        put :update, :id => workspace.id, :workspace => {
-            :sandbox_id => sandbox.to_param
-        }
+        sandbox = gpdb_schemas(:other_schema)
+        lambda {
+          put :update, :id => workspace.id, :workspace => {
+              :sandbox_id => sandbox.to_param
+          }
+
+          response.should be_success
+        }.should change(Events::WORKSPACE_ADD_SANDBOX.by(owner), :count).by(1)
 
         workspace.reload
         workspace.sandbox_id.should == sandbox.id
         workspace.has_added_sandbox.should == true
         workspace.has_changed_settings.should == false
-
-        events = Events::WORKSPACE_ADD_SANDBOX.by(owner)
-        events.count.should == 1
-      end
-    end
-
-    context "when the current user has membership access" do
-      it "uses authentication" do
-        mock(subject).authorize!(:member_edit, workspace)
-        get :update, :id => workspace.to_param
-      end
-
-      it "allows updates to name and summary" do
-        put :update, :id => workspace.id, :workspace => {
-          :name => "new name",
-          :summary => "new summary"
-        }
-        workspace.reload
-        workspace.name.should == "new name"
-        workspace.summary.should == "new summary"
-        response.should be_success
-      end
-
-      it "uses schema authentication" do
-        mock(subject).authorize!(:show_contents, sandbox.instance)
-        put :update, :id => workspace.to_param, :workspace => {:sandbox_id => sandbox.to_param}
-      end
-    end
-
-    context "creating sandbox" do
-      let!(:dataset_view) { datasets(:bobs_view)}
-      let(:new_dataset) { datasets(:other_table) }
-
-      let(:owner) { users(:bob) }
-      let(:workspace_new) { FactoryGirl.create :workspace, :owner => owner }
-      let!(:owner_account) { FactoryGirl.create(:instance_account, :instance => dataset_view.instance, :owner => owner) }
-      let!(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset_view, :workspace => workspace_new) }
-      let(:datasets1) { fake_relation [new_dataset, dataset_view] }
-      before :each do
-        stub(dataset_view.schema).datasets { datasets1 }
-        mock(subject).authorize!(:administrative_edit, workspace_new)
-        stub(Dataset).refresh {  }
-      end
-      it "delete any already associated datasets" do
-        put :update, :id => workspace_new.id, :workspace => {
-            :sandbox_id => dataset_view.schema.to_param
-        }
-        AssociatedDataset.find_by_dataset_id_and_workspace_id(dataset_view.to_param, workspace_new.to_param).should be_nil
       end
     end
   end

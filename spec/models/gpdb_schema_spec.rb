@@ -25,7 +25,7 @@ describe GpdbSchema do
     end
 
     it "populates new schemas with their tables and views" do
-      stub(Dataset).refresh(account, anything) { |account, schema|
+      stub(Dataset).refresh(account, anything, anything) { |account, schema|
         FactoryGirl.create(:gpdb_table, :schema => schema)
       }
 
@@ -39,6 +39,11 @@ describe GpdbSchema do
       expect {
         GpdbSchema.refresh(account, database)
       }.not_to change(GpdbSchema, :count)
+    end
+
+    it "passes the mark_stale flag to Dataset.refresh" do
+      mock(Dataset).refresh(account, anything, true)
+      GpdbSchema.refresh(account, database, true)
     end
   end
 

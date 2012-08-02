@@ -15,23 +15,19 @@ class WorkspaceAccess < AdminFullAccess
     end
   end
 
-  def self.member_of_workspaces(user)
-    user.workspaces
-  end
-
   def show?(workspace)
-    workspace.public || member_edit?(workspace)
+    workspace.public || workspace.member?(current_user)
   end
 
   def can_edit_sub_objects?(workspace)
-    !workspace.archived? && (member_edit?(workspace) || administrative_edit?(workspace))
+    !workspace.archived? && workspace.member?(current_user)
   end
 
-  def member_edit?(workspace)
-    workspace.members.include?(current_user)
-  end
-
-  def administrative_edit?(workspace)
-    workspace.owner == current_user
+  def update?(workspace)
+    return false unless workspace.member?(current_user)
+    if workspace.sandbox_id_changed?  && workspace.sandbox_id
+      return false unless workspace.owner == current_user && context.can?(:show_contents, workspace.sandbox.instance)
+    end
+    workspace.owner == current_user || (workspace.changed - ['name', 'summary']).empty?
   end
 end

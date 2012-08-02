@@ -5,6 +5,8 @@
 #
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Emanuel', :city => cities.first)
+require 'user'
+
 unless User.where(:username => "edcadmin").present?
   puts "Creating edcadmin user..."
   user = User.new(

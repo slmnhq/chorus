@@ -7,12 +7,9 @@ describe Gpdb::ConnectionChecker do
   it "requires that a real connection to GPDB can be established" do
     stub(Gpdb::ConnectionBuilder).connect! { raise(ActiveRecord::JDBCError.new("connection error")) }
 
-    begin
-      Gpdb::ConnectionChecker.check!(instance, account)
-      fail
-    rescue ApiValidationError => e
-      e.record.errors.get(:connection).should == [[:generic, {:message => "connection error"}]]
-    end
+    expect { Gpdb::ConnectionChecker.check!(instance, account) }.to raise_error(ApiValidationError) { |error|
+      error.record.errors.get(:connection).should == [[:generic, {:message => "connection error"}]]
+    }
   end
 
   it "sets the instance's status to be 'online''" do

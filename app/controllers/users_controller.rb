@@ -16,9 +16,11 @@ class UsersController < ApplicationController
     user = User.new
     user.attributes = params[:user]
     user.admin = params[:user][:admin]
-    user.save!
+    User.transaction do
+      user.save!
 
-    Events::USER_ADDED.by(current_user).add(:new_user => user)
+      Events::USER_ADDED.by(current_user).add(:new_user => user)
+    end
 
     present user, :status => :created
   end

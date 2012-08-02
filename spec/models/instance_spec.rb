@@ -183,7 +183,7 @@ describe Instance do
     end
   end
 
-  describe "refresh_database_permissions", :database_integration => true do
+  describe "refresh_databases", :database_integration => true do
     let(:account_with_access) { real_gpdb_account }
     let(:account_without_access) { account_for_user_with_restricted_access }
     let(:instance) { account_with_access.instance }
@@ -193,15 +193,20 @@ describe Instance do
       refresh_chorus
     end
 
+    it "refreshes the databases" do
+      mock(GpdbDatabase).refresh(instance.owner_account)
+      instance.refresh_databases
+    end
+
     it "adds new database_instance_accounts" do
       database.instance_accounts.find_by_id(account_with_access.id).should be_nil
-      instance.refresh_database_permissions
+      instance.refresh_databases
       database.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
     end
 
     it "removes database_instance_accounts if they no longer exist" do
       database.instance_accounts << account_without_access
-      instance.refresh_database_permissions
+      instance.refresh_databases
       database.instance_accounts.find_by_id(account_without_access.id).should be_nil
     end
   end

@@ -51,6 +51,8 @@ class SearchPresenter < Presenter
       result[:schema][:database][:highlighted_attributes] = {:name => database_name} if database_name
       object_name = result[:highlighted_attributes].delete(:name)
       result[:highlighted_attributes][:object_name] = object_name if object_name
+      column_name = result[:highlighted_attributes].delete(:column_name)
+      result[:columns] = [{:highlighted_attributes =>{:body => column_name}}] if column_name
     end
     results
   end
