@@ -340,19 +340,21 @@ describe "Event types" do
     it_does_not_create_a_global_activity
   end
 
-  describe "MEMBER_ADDED" do
+  describe "MEMBERS_ADDED" do
     subject do
-      Events::MEMBER_ADDED.add(
+      Events::MEMBERS_ADDED.add(
           :actor => actor,
           :member => user,
-          :workspace => workspace
+          :workspace => workspace,
+          :num_added => 3
       )
     end
 
     its(:member) { should == user }
     its(:targets) { should == {:member => user, :workspace => workspace} }
+    its(:additional_data) { should == {:num_added => 3} }
 
-    it_creates_activities_for { [actor, user, workspace] }
+    it_creates_activities_for { [actor, workspace] }
     it_does_not_create_a_global_activity
   end
 end

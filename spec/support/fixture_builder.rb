@@ -158,7 +158,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :hdfs_file => hdfs_file_reference)
     Events::IMPORT_SUCCESS.by(bob).add(:workspace => bob_public_workspace, :dataset => bobs_table, :file_name => 'import.csv', :import_type => 'file')
     Events::IMPORT_FAILED.by(bob).add(:workspace => bob_public_workspace, :file_name => 'import.csv', :import_type => 'file', :destination_table => 'my_table', :error_message => "oh no's! everything is broken!")
-    Events::MEMBER_ADDED.by(bob).add(:workspace => bob_public_workspace, :member => carly)
+    Events::MEMBERS_ADDED.by(bob).add(:workspace => bob_public_workspace, :member => carly, :num_added => 5)
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy
 
