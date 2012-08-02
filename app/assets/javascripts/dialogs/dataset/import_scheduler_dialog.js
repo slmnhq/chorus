@@ -193,6 +193,8 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.Base.extend({
             this.$("button.submit").startLoading("actions.saving");
         }
 
+        this.model.set({ workspaceId: this.workspace.get("id") });
+
         saveOptions = {};
         if (this.options.action === "import_now") {
             saveOptions.method = "create";

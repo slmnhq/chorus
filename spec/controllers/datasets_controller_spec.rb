@@ -78,119 +78,41 @@ describe DatasetsController do
   describe "#import", :database_integration => true do
     let(:account) { real_gpdb_account }
     let(:schema) { GpdbSchema.find_by_name('test_schema') }
+    let(:archived_workspace) { workspaces(:archived) }
+    let(:active_workspace) { workspaces(:bob_public) }
     let(:src_table) { GpdbTable.find_by_name('base_table1') }
     let(:options) {
       {
               "to_table" => "the_new_table",
               "use_limit_rows" => "false",
-              "sample_count" => 0
+              "sample_count" => 0,
+              "workspace_id" => active_workspace.id
       }
     }
 
     before(:each) do
       log_in account.owner
       refresh_chorus
-      post :import, :id => src_table.to_param, "dataset_import" => options
-      GpdbTable.refresh(account, schema)
+      any_instance_of(DatasetsController) { |c| mock.proxy(c).import }
     end
 
     after(:each) do
       call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
     end
 
-    it "should return successfully" do
+    it "should return successfully for active workspaces" do
+      post :import, :id => src_table.to_param, "dataset_import" => options
+
+      GpdbTable.refresh(account, schema)
       response.code.should == "201"
     end
 
-    it "creates the new table" do
-      GpdbTable.find_by_name(options["to_table"]).should be_a(GpdbTable)
-    end
+    it "should return error for archived workspaces" do
+      options[:workspace_id] = archived_workspace.id
+      post :import, :id => src_table.to_param, "dataset_import" => options
 
-    it "copies the constraints" do
-      schema.with_gpdb_connection(account) do |connection|
-        dest_constraints = connection.exec_query("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{options["to_table"]}'")
-        src_constraints = connection.exec_query("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{src_table.name}'")
-
-        dest_constraints.count.should == src_constraints.count
-        dest_constraints.each_with_index do |constraint, i|
-          constraint["constraint_type"].should == src_constraints[i]["constraint_type"]
-          constraint["table_name"].should == options["to_table"]
-        end
-      end
-    end
-
-    it "copies the rows" do
-      schema.with_gpdb_connection(account) do |connection|
-        dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
-        src_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{src_table.name}")
-
-        dest_rows.count.should == src_rows.count
-      end
-    end
-
-    context "when the rows are limited" do
-      let(:options) {
-        {
-            "to_table" => "the_new_table",
-            "use_limit_rows" => "true",
-            "sample_count" => 5
-        }
-      }
-      it "copies the rows up to limit" do
-        schema.with_gpdb_connection(account) do |connection|
-          dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
-          dest_rows.count.should == 5
-        end
-      end
-
-      context "when the row limit value is 0" do
-        let(:options) {
-          {
-              "to_table" => "the_new_table",
-              "use_limit_rows" => "true",
-              "sample_count" => 0
-          }
-        }
-
-        it "creates the table and copies 0 rows" do
-          schema.with_gpdb_connection(account) do |connection|
-            dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
-            src_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{src_table.name}")
-            dest_rows.count.should == 0
-          end
-        end
-      end
-    end
-  end
-
-  describe "#import with exception", :database_integration => true do
-    let(:account) { real_gpdb_account }
-    let(:schema) { GpdbSchema.find_by_name('test_schema') }
-    let(:src_table) { GpdbTable.find_by_name('base_table1') }
-    let(:options) {
-      {
-          "to_table" => "the_new_table",
-          "use_limit_rows" => "true",
-          "sample_count" => -5
-      }
-    }
-
-    before(:each) do
-      log_in account.owner
-      refresh_chorus
-    end
-
-    after(:each) do
-      call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
-    end
-
-    context "when the limit is -5" do
-      it "raises an exception" do
-        expect {
-          post :import, :id => src_table.to_param, "dataset_import" => options
-        }.to raise_error(SqlCommandFailed)
-        GpdbTable.refresh(account, schema)
-      end
+      GpdbTable.refresh(account, schema)
+      response.code.should == "422"
     end
   end
 end

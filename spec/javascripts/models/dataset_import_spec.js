@@ -1,7 +1,8 @@
 describe("chorus.models.DatasetImport", function() {
     beforeEach(function() {
         this.model = fixtures.datasetImport({
-            datasetId: '102'
+            datasetId: '102',
+            workspaceId: '1'
         });
         this.model.unset("id");
     });
