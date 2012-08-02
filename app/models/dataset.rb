@@ -1,3 +1,6 @@
+class SqlCommandFailed < Exception
+end
+
 class Dataset < ActiveRecord::Base
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
   delegate :instance, :to => :schema
@@ -99,6 +102,25 @@ class Dataset < ActiveRecord::Base
 
   def type_name
     'Dataset'
+  end
+
+  def import(options, user)
+    account = schema.instance.account_for_user!(user)
+    dest_table_name = options["to_table"]
+    create_command = "CREATE TABLE \"#{schema.name}\".\"#{dest_table_name}\" (LIKE \"#{schema.name}\".\"#{name}\" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES);"
+    copy_command = "INSERT INTO #{dest_table_name} (SELECT * FROM #{name})"
+    if options["use_limit_rows"] == "true"
+      if options['sample_count'].to_i < 0
+        raise SqlCommandFailed, "Limit can not be Negative"
+      end
+      copy_command += " LIMIT #{options['sample_count']}"
+    end
+    schema.with_gpdb_connection(account) do |connection|
+      connection.exec_query("START TRANSACTION")
+      connection.execute(create_command)
+      result = connection.execute(copy_command)
+      connection.exec_query("COMMIT")
+    end
   end
 
   class Query
