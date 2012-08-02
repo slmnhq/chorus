@@ -1,5 +1,5 @@
 describe("chorus.presenters.Activity", function() {
-    var model, actor, presenter, workfile, workspace, dataset;
+    var model, actor, presenter, workfile, workspace, dataset, member;
 
     describe("common aspects", function() {
         context("activity with a workspace", function() {
@@ -689,6 +689,31 @@ describe("chorus.presenters.Activity", function() {
                     noteObjectLink: linkTo(dataset.showUrl(), dataset.name()),
                     noteObjectType: t("dataset.types.table"),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            );
+        });
+    });
+
+    context("member added event", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.memberAdded({
+                workspace: { id: 55, name: "paleo_eaters" },
+                member: { id: 66, firstName: "Susie", lastName: "Cupcake"}
+            });
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            member = model.member();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.MEMBERS_ADDED.default.one", {
+                    actorLink: linkTo(actor.showUrl(), actor.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                    memberLink: linkTo(member.showUrl(), member.name())
                 }
             );
         });

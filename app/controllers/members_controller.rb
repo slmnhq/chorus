@@ -19,7 +19,7 @@ class MembersController < ApplicationController
   def create_events(workspace, member_ids)
     (member_ids - workspace.members.map(&:id).map(&:to_s)).each do |new_member_id|
       member = User.find(new_member_id)
-      Events::MEMBER_ADDED.by(current_user).add(:workspace => workspace, :new_member => member)
+      Events::MEMBER_ADDED.by(current_user).add(:workspace => workspace, :member => member)
     end
   end
 end

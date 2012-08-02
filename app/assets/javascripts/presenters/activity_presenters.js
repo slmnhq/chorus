@@ -150,6 +150,10 @@
                 links: ["workspace"],
                 attrs: ["importType", "destinationTable"],
                 computed: ["importSourceLink", "datasetType", "datasetLink"]
+            },
+
+            MEMBER_ADDED: {
+                links: ["actor", "workspace", "member"]
             }
         },
 

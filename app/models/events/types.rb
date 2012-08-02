@@ -96,7 +96,7 @@ module Events
   end
 
   class MEMBER_ADDED < Base
-    has_targets :new_member, :workspace
-    has_activities :actor, :workspace, :new_member
+    has_targets :member, :workspace
+    has_activities :actor, :workspace, :member
   end
 end

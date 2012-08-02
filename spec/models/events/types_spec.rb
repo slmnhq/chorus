@@ -344,13 +344,13 @@ describe "Event types" do
     subject do
       Events::MEMBER_ADDED.add(
           :actor => actor,
-          :new_member => user,
+          :member => user,
           :workspace => workspace
       )
     end
 
-    its(:new_member) { should == user }
-    its(:targets) { should == {:new_member => user, :workspace => workspace} }
+    its(:member) { should == user }
+    its(:targets) { should == {:member => user, :workspace => workspace} }
 
     it_creates_activities_for { [actor, user, workspace] }
     it_does_not_create_a_global_activity
