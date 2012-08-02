@@ -172,6 +172,14 @@ describe "Notes" do
         note.type_name.should_not be_blank
       end
     end
+
+    describe "#search_body" do
+      it "removes tags from the body" do
+        note = Events::Note.first
+        note.body = 'this<div>is text</div>'
+        note.search_body.should == 'this is text'
+      end
+    end
   end
 
   describe "#create_from_params(entity_type, entity_id, body, creator)" do

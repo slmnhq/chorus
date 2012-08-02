@@ -3,7 +3,9 @@ module Events
     validates_presence_of :actor_id
     has_many :attachments, :class_name => 'NoteAttachment'
     searchable do |s|
-      s.text :body, :stored => true
+      s.text :body, :stored => true do
+        search_body
+      end
       s.string :grouping_id
       s.string :type_name
     end
@@ -20,10 +22,22 @@ module Events
 
       model = ModelMap.model_from_params(entity_type, entity_id)
       raise ActiveRecord::RecordNotFound unless model
-      event_params = { entity_type => model, "body" => body }
+      event_params = {entity_type => model, "body" => body}
       event_params["workspace"] = Workspace.find(workspace_id) if workspace_id
       event_class = event_class_for_model(model, workspace_id)
       event_class.by(creator).add(event_params)
+    end
+
+    def search_body
+      result = ""
+      doc = Nokogiri::HTML(body)
+      doc.xpath("//text()").each do |node|
+        if result.length > 0
+          result += " "
+        end
+        result += node.to_s
+      end
+      result
     end
 
     def create_attachments(source_file)
@@ -40,18 +54,18 @@ module Events
 
       def event_class_for_model(model, workspace_id)
         case model
-        when Instance
-          NOTE_ON_GREENPLUM_INSTANCE
-        when HadoopInstance
-          NOTE_ON_HADOOP_INSTANCE
-        when Workspace
-          NOTE_ON_WORKSPACE
-        when Workfile
-          NOTE_ON_WORKFILE
-        when HdfsFileReference
-          NOTE_ON_HDFS_FILE
-        when Dataset
-          workspace_id ? NOTE_ON_WORKSPACE_DATASET : NOTE_ON_DATASET
+          when Instance
+            NOTE_ON_GREENPLUM_INSTANCE
+          when HadoopInstance
+            NOTE_ON_HADOOP_INSTANCE
+          when Workspace
+            NOTE_ON_WORKSPACE
+          when Workfile
+            NOTE_ON_WORKFILE
+          when HdfsFileReference
+            NOTE_ON_HDFS_FILE
+          when Dataset
+            workspace_id ? NOTE_ON_WORKSPACE_DATASET : NOTE_ON_DATASET
         end
       end
     end
@@ -79,7 +93,7 @@ module Events
     validate :no_note_on_archived_workspace
 
     def no_note_on_archived_workspace
-      errors.add(:workspace, :generic , {:message => "Can not add a note on an archived workspace"} ) if workspace.archived?
+      errors.add(:workspace, :generic, {:message => "Can not add a note on an archived workspace"}) if workspace.archived?
     end
 
     include_shared_search_fields(:workspace)

@@ -278,6 +278,7 @@ DEPENDENCIES
   jetpack!
   jruby-openssl
   net-ldap
+  nokogiri
   paperclip (= 3.0.4)
   queue_classic!
   quiet_assets
