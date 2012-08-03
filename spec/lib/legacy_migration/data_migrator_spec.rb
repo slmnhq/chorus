@@ -18,6 +18,7 @@ describe DataMigrator, :legacy_migration => true, :type => :legacy_migration do
     @data_migrator.migrators[i+=1].should be_instance_of SandboxMigrator
     @data_migrator.migrators[i+=1].should be_instance_of HadoopInstanceMigrator
     @data_migrator.migrators[i+=1].should be_instance_of ActivityMigrator
+    @data_migrator.migrators[i+=1].should be_instance_of AssociatedDatasetMigrator
   end
 
   describe ".migrate" do

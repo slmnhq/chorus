@@ -12,15 +12,21 @@ class DataMigrator
                   WorkfileMigrator.new,
                   SandboxMigrator.new,
                   HadoopInstanceMigrator.new,
-                  ActivityMigrator.new
+                  ActivityMigrator.new,
+                  AssociatedDatasetMigrator.new
                  ]
   end
 
   def migrate
+    disable_solr
     ActiveRecord::Base.transaction do
       @migrators.each do |migrator|
         migrator.migrate
       end
     end
+  end
+
+  def disable_solr
+    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(Sunspot.session)
   end
 end
