@@ -45,7 +45,7 @@ function start_worker () {
   then
     echo "Starting worker..."
     cd $CHORUS_CURRENT
-    bin/ruby script/rails runner "require 'queue_classic'; QC::Worker.new.start" > $CHORUS_LOG/queue_classic.$RAILS_ENV.log 2>&1 &
+    bin/ruby script/rails runner script/start_worker.rb > $CHORUS_LOG/queue_classic.$RAILS_ENV.log 2>&1 &
     echo $! > $WORKER_PID_FILE
   else
     echo "Worker is still running..."
