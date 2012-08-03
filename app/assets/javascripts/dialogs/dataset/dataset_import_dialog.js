@@ -154,7 +154,7 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             } else {
                 var dialog;
                 if (this.importTarget === "existing") {
-                    dialog = new chorus.dialogs.ExistingTableImportCSV({csv: workingCsv, datasetId: this.selectedDataset.get("id")});
+                    dialog = new chorus.dialogs.ExistingTableImportCSV({model: workingCsv, datasetId: this.selectedDataset.get("id"), csvOptions: this.csvOptions});
                 } else {
                     dialog = new chorus.dialogs.NewTableImportCSV({model: workingCsv, csvOptions: this.csvOptions});
                 }
