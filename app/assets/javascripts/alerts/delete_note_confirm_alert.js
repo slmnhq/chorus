@@ -18,7 +18,7 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
         } else {
             var activity = this.options.activity;
             this.model = activity.toNote();
-
+            this.model.unset('body');
             if (activity.isInsight()) {
                 this.setInsight();
             } else {
