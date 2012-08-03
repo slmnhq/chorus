@@ -66,6 +66,9 @@ class ActivityStreamEventMapper
       hadoop_instance_id, path = @activity_stream.hadoop_instance_id
       HdfsFileReference.find_or_create_by_path({ :hadoop_instance_id => hadoop_instance_id,
                                                  :path => path })
+    when :member
+      member_id, @member_num_added = @activity_stream.rails_member_id_and_count
+      User.find_by_id(member_id)
     end
   end
 
@@ -79,6 +82,8 @@ class ActivityStreamEventMapper
       event.additional_data[:import_type] = "file"
       event.additional_data[:destination_table] = @activity_stream.destination_table
       event.additional_data[:error_message] = "#{@activity_stream.import_error_message}"
+    elsif event.class == Events::MEMBERS_ADDED
+      event.additional_data[:num_added] = @member_num_added.to_s
     end
   end
 end

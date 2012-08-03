@@ -1,5 +1,5 @@
 describe("chorus.presenters.Activity", function() {
-    var model, actor, presenter, workfile, workspace, dataset;
+    var model, actor, presenter, workfile, workspace, dataset, member;
 
     describe("common aspects", function() {
         context("activity with a workspace", function() {
@@ -691,6 +691,105 @@ describe("chorus.presenters.Activity", function() {
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())
                 }
             );
+        });
+    });
+
+    context("members added event", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.membersAdded({
+                workspace: { id: 55, name: "paleo_eaters" },
+                member: { id: 66, firstName: "Susie", lastName: "Cupcake"}
+            });
+            actor = model.actor();
+            workspace = model.workspace();
+            member = model.member();
+
+            activity_data = {
+                actorLink: linkTo(actor.showUrl(), actor.name()),
+                workspaceLink: linkTo(workspace.showUrl(), workspace.name()),
+                memberLink: linkTo(member.showUrl(), member.name())
+            };
+            activity_without_workspace_data = {
+                actorLink: linkTo(actor.showUrl(), actor.name()),
+                memberLink: linkTo(member.showUrl(), member.name())
+            };
+        });
+
+        context("the actor icon is displayed", function () {
+            beforeEach(function() {
+                presenter = new chorus.presenters.Activity(model);
+            });
+            itHasTheActorIcon();
+        });
+
+        context("a single member is added", function() {
+            beforeEach(function () {
+                model.set({numAdded: "1"})
+                presenter = new chorus.presenters.Activity(model);
+            });
+
+            it("has the right header html for the default style", function() {
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.MEMBERS_ADDED.default.one",
+                    activity_data
+                );
+            });
+
+            it("has the right header html for the without_workspace style", function() {
+                presenter.options.displayStyle = ["without_workspace"];
+
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.MEMBERS_ADDED.without_workspace.one",
+                    activity_without_workspace_data
+                );
+            });
+        });
+
+        context("two members are added", function() {
+            beforeEach(function () {
+                model.set({numAdded: "2"})
+                presenter = new chorus.presenters.Activity(model);
+            });
+
+            it("has the right header html for the default style", function() {
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.MEMBERS_ADDED.default.two",
+                    activity_data
+                );
+            });
+
+            it("has the right header html for the without_workspace style", function() {
+                presenter.options.displayStyle = ["without_workspace"];
+
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.MEMBERS_ADDED.without_workspace.two",
+                    activity_without_workspace_data
+                );
+            });
+        });
+
+        context("more than two members are added", function() {
+            beforeEach(function () {
+                model.set({numAdded: "5"});
+                presenter = new chorus.presenters.Activity(model);
+            });
+
+            it("has the right header html for the default style", function() {
+                activity_data["count"] = model.get("numAdded");
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.MEMBERS_ADDED.default.many",
+                    activity_data
+                );
+            });
+
+            it("has the right header html for the without_workspace style", function() {
+                presenter.options.displayStyle = ["without_workspace"];
+                activity_without_workspace_data["count"] = model.get("numAdded");
+                expect(presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.MEMBERS_ADDED.without_workspace.many",
+                        activity_without_workspace_data
+                );
+            });
         });
     });
 

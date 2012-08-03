@@ -149,6 +149,17 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
         event.actor.should be_instance_of(User)
         event.new_user.should be_instance_of(User)
       end
+
+      it "copies MEMBERS ADDED data fields from the legacy activity" do
+        Events::MEMBERS_ADDED.count.should == 4
+
+        event = Events::MEMBERS_ADDED.find(event_id_for('10261'))
+
+        event.actor.should be_instance_of(User)
+        event.member.should be_instance_of(User)
+        event.workspace.should be_instance_of(Workspace)
+        event.num_added.should == "2"
+      end
     end
 
     context "foreign key" do

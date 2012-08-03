@@ -35,4 +35,37 @@ describe SearchController do
       end
     end
   end
+
+  describe "#reindex" do
+    it_behaves_like "an action that requires authentication", :post, :reindex
+
+    context "not admin" do
+      before do
+        log_in users(:alice)
+      end
+
+      it "should refuse" do
+        post :reindex
+        response.code.should == "403"
+      end
+    end
+
+    context "as admin" do
+      before do
+        log_in users(:admin)
+      end
+
+      it "should enqueue the refresh" do
+        mock(QC).enqueue("SolrIndexer.refresh_and_index", ['Dataset', 'Instance'])
+        post :reindex, :types => ['Dataset', 'Instance']
+        response.should be_success
+      end
+
+      it "should allow refresh of all searchable types" do
+        mock(QC).enqueue("SolrIndexer.refresh_and_index", 'all')
+        post :reindex
+        response.should be_success
+      end
+    end
+  end
 end

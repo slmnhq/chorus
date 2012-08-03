@@ -174,6 +174,39 @@ describe Legacy::ActivityStream, :legacy_migration => true, :type => :legacy_mig
     end
   end
 
+  describe "#rails_member_id_and_count" do
+    context "when it has one member" do
+      let(:members_activity_stream) { Legacy::ActivityStream.new('10016', nil, nil) }
+
+      before do
+        member_id, count = members_activity_stream.rails_member_id_and_count
+      end
+
+      it "returns the first member id and a count of 1" do
+        member_id.should be_present
+        count.should == 1
+      end
+    end
+
+    context "when it has more than one member" do
+      let(:members_activity_stream) { Legacy::ActivityStream.new('10261', nil, nil) }
+
+      it "returns the first member id and the right count" do
+        member_id.should be_present
+        count.should == 2
+      end
+    end
+
+    context "when it has zero members" do
+      let(:members_activity_stream) { Legacy::ActivityStream.new('10368', nil, nil) }
+
+      it "returns the first member id and the right count" do
+        member_id.should_not be_present
+        count.should == 0
+      end
+    end
+  end
+
   describe "#file_name" do
     context "when it has a file" do
       it "returns the filename" do

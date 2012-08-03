@@ -1,5 +1,17 @@
 module SolrIndexer
-  def self.index
+  def self.refresh_and_index(types)
+    refresh
+    index(types)
+  end
+
+  def self.index(types)
+    types_to_index(types).each(&:solr_reindex)
+    Sunspot.commit
+  end
+
+  private
+
+  def self.refresh
     now = Time.now
     Dataset.where(:stale_at => nil).update_all(:stale_at => now)
 
@@ -10,9 +22,15 @@ module SolrIndexer
         GpdbSchema.refresh(instance.owner_account, database, true)
       end
     end
+  end
 
-    Dataset.solr_index
-    Dataset.where("stale_at is not null").each { |d| d.solr_remove_from_index }
-    Sunspot.commit
+  def self.types_to_index(types)
+    types = Array(types)
+
+    if types.include? "all"
+      Sunspot.searchable
+    else
+      types.map(&:constantize)
+    end
   end
 end

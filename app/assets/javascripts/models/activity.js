@@ -9,7 +9,8 @@
         "workspace": "Workspace",
         "newUser" : "User",
         "noteObject" : "NoteObject",
-        "hdfsEntry" : "HdfsEntry"
+        "hdfsEntry" : "HdfsEntry",
+        "member": "User"
     };
 
     chorus.models.Activity = chorus.models.Base.extend({
@@ -31,6 +32,7 @@
         hadoopInstance: makeAssociationMethod("hadoopInstance"),
         workfile: makeAssociationMethod("workfile"),
         newUser: makeAssociationMethod("newUser"),
+        member: makeAssociationMethod("member"),
 
         dataset: makeAssociationMethod("dataset", function(model) {
            model.set({workspace: this.get("workspace")}, {silent: true});

@@ -34,6 +34,19 @@ describe("chorus.models.Activity", function() {
             });
         });
 
+        describe("#member", function() {
+            it("returns a user with the right data", function() {
+                activity = rspecFixtures.activity.membersAdded({
+                    actor: { id: 5 },
+                    member: { id: 6 }
+                });
+
+                var member = activity.member();
+                expect(member).toBeA(chorus.models.User);
+                expect(member.id).toBe(6);
+            });
+        });
+
         describe("#hadoopInstance", function() {
             it("returns a hadoop instance with the right data", function() {
                 activity = rspecFixtures.activity.hadoopInstanceCreated({

@@ -129,7 +129,8 @@ window.rspecFixtureDefinitions = {
             noteOnWorkspaceCreated: {},
             noteOnDatasetCreated: {},
             noteOnWorkspaceDatasetCreated: {},
-            noteOnWorkfileCreated: {}
+            noteOnWorkfileCreated: {},
+            membersAdded: {}
         }
     },
 
