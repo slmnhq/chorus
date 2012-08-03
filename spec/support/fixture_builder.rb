@@ -127,7 +127,7 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     #CSV File
-    csv_file = CsvFile.new({:user => carly, :workspace => bob_public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :header => false, :to_table => 'bobs_table', :contents_file_name => 'import.csv'}, :without_protection => true)
+    csv_file = CsvFile.new({:user => carly, :workspace => bob_public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :file_contains_header => true, :to_table => 'bobs_table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
     csv_file.save!(:validate => false)
 
     #Notes

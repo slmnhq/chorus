@@ -7,6 +7,8 @@ csv_import_file_storage_path: ":rails_root/system/"
 workfile_storage_path : ":rails_root/system/"
 image_storage: ":rails_root/system/"
 attachment_storage: ":rails_root/system/"
+max_upload_size_megabytes: 100
+server_port: 8080
 ldap:
   host: 10.32.88.212
   enable: false

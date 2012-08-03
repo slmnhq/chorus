@@ -46,7 +46,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         this.server.completeFetchFor(this.dataset);
         this.qtip = stubQtip();
         stubDefer();
-        this.dialog.render();
+        this.server.completeFetchFor(this.dialog.columnSet, this.columns);
     });
 
     it("has the title", function() {
@@ -247,7 +247,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions, datasetId: "dat-id"});
             this.server.completeFetchFor(this.dataset);
-            this.dialog.render();
+            this.server.completeFetchFor(this.dialog.columnSet, this.columns);
             this.dialog.$("a.automap").click();
         });
 
@@ -532,7 +532,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             for (var i = 0; i < 5; i++) {
                 this.dialog.$(".column_mapping .map a:eq(" + i + ")").click();
                 this.qtip.find(".qtip:last .ui-tooltip-content li:eq(" + (i) + ") a").click();
-                this.expectedColumnsMap.push({sourceOrder: (i + 1), targetOrder: this.columns[i].ordinalPosition})
+                this.expectedColumnsMap.push({sourceOrder: "col" + (i+1), targetOrder: this.columns[i].name})
             }
         });
 
@@ -626,9 +626,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     describe("more source columns than destination columns", function() {
         context("when there are no destination columns", function() {
             beforeEach(function() {
-                this.dialog.dataset.attributes.columnNames = undefined;
-                this.dialog.dataset.trigger("loaded");
-                this.dialog.render();
+                this.csvOptions = {
+                    contents: ["a,b,c,d"],
+                    tableName: 'existing_table'
+                };
+
+                this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions, datasetId: "dat-id"});
+                this.server.completeFetchFor(this.dialog.dataset);
+                this.server.completeFetchFor(this.dialog.columnSet);
             });
 
             it("displays the error message", function() {
@@ -638,9 +643,17 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
         context("when there are fewer destination columns", function() {
             beforeEach(function() {
-                this.dialog.dataset.attributes.columnNames.shift();
-                this.dialog.dataset.trigger("loaded");
-                this.dialog.render();
+                this.csvOptions = {
+                    contents: [ "e,f,g" ],
+                    tableName: 'existing_table'
+                };
+
+                this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions, datasetId: "dat-id"});
+                this.server.completeFetchFor(this.dialog.dataset);
+                this.columns = [
+                    {name: "a", typeCategory: "WHOLE_NUMBER"}
+                ]
+                this.server.completeFetchFor(this.dialog.columnSet, this.columns);
             });
 
             it("displays error message", function() {

@@ -11,7 +11,7 @@ bundle install --binstubs=b/
 b/rake db:drop db:create db:migrate legacy:setup --trace > $WORKSPACE/bundle.log
 
 # start solr
-b/rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
+b/rake services:solr:run > $WORKSPACE/solr.log 2>&1 &
 solr_pid=$!
 echo "Solr process id is : $solr_pid"
 echo $solr_pid > tmp/pids/solr-$RAILS_ENV.pid

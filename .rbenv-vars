@@ -1,1 +1,1 @@
-JRUBY_OPTS=--1.9 --client -J-Xmx512m -J-Xms512m -J-Xmn128m -J-Djava.library.path=/Users/pivotal/workspace/chorusrails/vendor/hadoop/lib/
+JRUBY_OPTS=--1.9 --client -J-Xmx512m -J-Xms512m -J-Xmn128m -J-Djava.library.path=$HOME/workspace/chorusrails/vendor/hadoop/lib/

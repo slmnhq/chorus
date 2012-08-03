@@ -61,9 +61,15 @@ describe WorkspaceCsvController do
           :column_names => ['id', 'name'],
           :types => ['integer', 'varchar'],
           :to_table => "table_importing_into",
-          :header => false
+          :has_header => has_header,
+          :type => csv_import_type,
+          :columns_map => columns_map
       }
     end
+
+    let(:csv_import_type) { "newTable" }
+    let(:has_header) { false }
+    let(:columns_map) { nil }
 
     it "updates the necessary import fields on the csv file model" do
       put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
@@ -72,13 +78,46 @@ describe WorkspaceCsvController do
       @csv_file.column_names.should == ['id', 'name']
       @csv_file.types.should == ['integer', 'varchar']
       @csv_file.to_table.should == "table_importing_into"
-      @csv_file.header.should == false
+      @csv_file.file_contains_header.should == false
       @csv_file.workspace.should == workspace
     end
 
     it "uses authentication" do
       mock(subject).authorize! :import, @csv_file
       put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
+    end
+
+    context "when has_header is true" do
+      let(:has_header) { true }
+      it "changes the has_header field to file_contains_header FIXME" do
+        put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
+        @csv_file.reload
+        @csv_file.file_contains_header.should be_true
+      end
+    end
+
+    context "new or existing table" do
+      context "new table" do
+        it "sets the new_table field to true" do
+          put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
+          @csv_file.reload.new_table.should be_true
+        end
+      end
+
+      context "existing table" do
+        let(:csv_import_type) { "existingTable" }
+        let(:columns_map) { [{:targetOrder => 'name'}, {:targetOrder => 'id'}].to_json }
+
+        it "sets the new_table field to false" do
+          put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
+          @csv_file.reload.new_table.should be_false
+        end
+
+        it "sets the column names based on the columns_map" do
+          put :import, :workspace_id => workspace.id, :id => @csv_file.id, :csvimport => csv_import_params
+          @csv_file.reload.column_names.should == ['name', 'id']
+        end
+      end
     end
   end
 end

@@ -25,10 +25,14 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.requiredResources.add(this.dataset);
         this.dataset.fetch();
 
+        this.columnSet = this.dataset.columns();
+        this.requiredResources.add(this.columnSet);
+        this.columnSet.fetchAll();
+
         var parser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.csvOptions);
         var columns = parser.getColumnOrientedData();
         this.numberOfColumns = columns.length;
-        this.destinationColumns = _.map(columns, function() { return null });
+        this.columnMapping = _.map(columns, function() { return null });
         this.destinationMenus = [];
 
         this.initializeModel(columns);
@@ -58,6 +62,10 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     render: function() {
+        this.destinationColumns = _.map(this.columnSet.models, function(column) {
+            return { name: column.name(), type: chorus.models.DatabaseColumn.humanTypeMap[column.get("typeCategory")] };
+        });
+
         var api = this.$(".tbody").data("jsp");
         this.scrollPosX = api ? api.getContentPositionX() : 0;
         this.scrollPosY = api ? api.getContentPositionY() : 0;
@@ -110,20 +118,20 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         var qtipLaunchLink = api.elements.target;
         var selectedColumnName = $(e.target).attr("title");
         var selectedColumnIndex = destinationColumnLinks.index(qtipLaunchLink);
-        this.destinationColumns[selectedColumnIndex] = selectedColumnName;
+        this.columnMapping[selectedColumnIndex] = selectedColumnName;
         this.updateDestinations();
     },
 
     updateDestinations: function() {
         var frequenciesByDestinationColumn = {};
-        _.each(this.destinationColumns, function(name) {
+        _.each(this.columnMapping, function(name) {
             if (!name) return;
-            frequenciesByDestinationColumn[name] = _.filter(this.destinationColumns, function(name2) {
+            frequenciesByDestinationColumn[name] = _.filter(this.columnMapping, function(name2) {
                 return name && name === name2;
             }).length;
         }, this);
 
-        var frequenciesBySourceColumn = _.map(this.destinationColumns, function(name) {
+        var frequenciesBySourceColumn = _.map(this.columnMapping, function(name) {
             return frequenciesByDestinationColumn[name];
         });
 
@@ -139,7 +147,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         var launchLinks = this.$(".column_mapping .map a");
         _.each(launchLinks, function(launchLink, i) {
             launchLink = $(launchLink);
-            var columnName = this.destinationColumns[i];
+            var columnName = this.columnMapping[i];
             var frequency = frequencies[columnName];
 
             launchLink.find(".column_name").text(columnName || t("dataset.import.table.existing.select_one"));
@@ -152,7 +160,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         _.each(this.destinationMenus, function(menu, i) {
             menu.find(".count").text("");
             menu.find(".name").removeClass("selected");
-            _.each(this.destinationColumns, function(name) {
+            _.each(this.columnMapping, function(name) {
                 var frequency = frequencies[name];
                 if (frequency > 0) {
                     menu.find("li[name=" + name + "] .count").text(" (" + frequency + ")");
@@ -162,7 +170,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
                 }
             });
 
-            var $selectedLi = menu.find("li[name=" + this.destinationColumns[i] + "]");
+            var $selectedLi = menu.find("li[name=" + this.columnMapping[i] + "]");
             menu.find(".check").addClass("hidden");
             $selectedLi.find(".check").removeClass("hidden");
             $selectedLi.find(".name").addClass("selected");
@@ -170,7 +178,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     updateDestinationCount: function() {
-        var count = _.compact(this.destinationColumns).length;
+        var count = _.compact(this.columnMapping).length;
         var total = this.numberOfColumns;
         if (count > total) {
             count = total;
@@ -182,28 +190,25 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         var parser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.model.attributes);
         return {
             columns : parser.getColumnOrientedData(),
-            destinationColumns: _.map(this.dataset.get("columnNames"), function(column) {
-                return { name: column.name, type: chorus.models.DatabaseColumn.humanTypeMap[column.typeCategory] };
-            }),
+            destinationColumns: this.destinationColumns,
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: t("dataset.import.table.existing.directions", {
                 toTable: new Handlebars.SafeString(chorus.helpers.spanFor(this.model.get("tableName"), {"class": "destination"}))
             })
-        }
+        };
     },
 
     startImport: function() {
         this.$('button.submit').startLoading("dataset.import.importing");
         var self = this;
 
-        var columnData = _.map(this.destinationColumns, function(destination, i) {
-            var column = _.find(self.dataset.get("columnNames"), function(column) {
+        var columnData = _.map(this.columnMapping, function(destination, i) {
+            var column = _.find(self.destinationColumns, function(column) {
                 return column.name === destination;
             });
-
             return {
-                sourceOrder: i + 1,
-                targetOrder: column ? column.ordinalPosition : 0
+                sourceOrder: destination,
+                targetOrder: column ? column.name : ''
             }
         });
 
@@ -294,7 +299,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
         this.model.serverErrors = parser.serverErrors;
 
-        var destinationColumnsNum = this.dataset.get("columnNames") ? this.dataset.get("columnNames").length : 0;
+        var destinationColumnsNum = this.destinationColumns ? this.destinationColumns.length : 0;
         if (destinationColumnsNum < sourceColumnsNum) {
             this.resource.serverErrors = { fields: { source_columns: { LESS_THAN_OR_EQUAL_TO: {} } } };
             this.resource.trigger("validationFailed");
@@ -305,7 +310,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         e && e.preventDefault();
 
         for(var i = 0; i< this.numberOfColumns; i++) {
-            this.destinationColumns[i] = this.dataset.get("columnNames")[i].name;
+            this.columnMapping[i] = this.destinationColumns[i].name;
         }
 
         this.updateDestinations();

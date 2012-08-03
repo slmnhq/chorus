@@ -29,12 +29,12 @@ http {
     #keepalive_timeout  0;
     keepalive_timeout  65;
 
-    client_max_body_size       100m;
+    client_max_body_size       <%= chorus_config['max_upload_size_megabytes'] %>m;
 
     #gzip  on;
 
     server {
-        listen       8080;
+        listen       <%= chorus_config['server_port'] %>;
         server_name  localhost;
 
         #charset koi8-r;

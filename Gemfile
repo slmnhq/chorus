@@ -44,6 +44,7 @@ group :test, :integration do
   gem 'timecop'
   gem 'hashie'
   gem 'vcr'
+  gem 'fakefs',              :require => false
 end
 
 group :test, :development, :integration do

@@ -42,6 +42,11 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
             it("sets the delete message correctly", function() {
                 expect(this.alert.deleteMessage).toBe("notes.delete.alert.delete_message");
             })
+
+            it("should not displays the note's body", function () {
+                expect(this.alert.$(".body p").text()).toBe("");
+            });
+
         });
 
         describe("when the activity is an INSIGHT", function() {

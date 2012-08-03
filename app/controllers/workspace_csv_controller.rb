@@ -11,6 +11,16 @@ class WorkspaceCsvController < ApplicationController
   def import
     csv_file = CsvFile.find(params[:id])
     authorize! :import, csv_file
+
+    if params[:csvimport][:type] == "existingTable"
+      # Read and calculate correct column names
+      column_names = JSON.parse(params[:csvimport][:columns_map]).map { |column| column["targetOrder"] }
+      params[:csvimport] = params[:csvimport].merge(:column_names => column_names)
+    else
+      csv_file.new_table = true
+    end
+
+    params[:csvimport][:file_contains_header] = params[:csvimport].delete(:has_header)
     csv_file.update_attributes(params[:csvimport])
     QC.enqueue("CsvImporter.import_file", csv_file.id)
     present csv_file
