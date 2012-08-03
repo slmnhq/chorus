@@ -62,7 +62,8 @@ class Dataset < ActiveRecord::Base
       klass = type == 'r' ? GpdbTable : GpdbView
       dataset = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
       attrs.merge!(:stale_at => nil) if options[:mark_stale]
-      dataset.update_attributes(attrs, :without_protection => true)
+      dataset.assign_attributes(attrs, :without_protection => true)
+      dataset.save if dataset.changed?
     end
   end
 
