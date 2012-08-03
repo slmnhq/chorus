@@ -19,7 +19,7 @@ echo $solr_pid > tmp/pids/solr-$RAILS_ENV.pid
 set +e
 
 echo "Running legacy migration tests"
-rspec spec/lib/legacy_migration --tag legacy_migration 2>&1
+b/rake legacy_migration 2>&1
 LEGACY_MIGRATION_TESTS_RESULT=$?
 
 echo "Cleaning up solr process $solr_pid"
