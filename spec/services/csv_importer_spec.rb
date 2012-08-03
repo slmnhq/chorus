@@ -29,7 +29,8 @@ describe CsvImporter, :database_integration => true do
           :delimiter => ',',
           :file_contains_header => false,
           :new_table => true,
-          :to_table => "new_table_from_csv"
+          :to_table => "new_table_from_csv",
+          :truncate => false
       }
       csv_file = CsvFile.new(defaults.merge(options))
       csv_file.user = user
@@ -58,18 +59,33 @@ describe CsvImporter, :database_integration => true do
     end
 
     it "import a basic csv file into an existing table" do
-      csv_file = create_csv_file(:new_table => true)
+      csv_file = create_csv_file(:new_table => true, :to_table => "table_to_append_to")
       CsvImporter.import_file(csv_file.id)
 
-      csv_file = create_csv_file(:new_table => false)
+      csv_file = create_csv_file(:new_table => false, :to_table => "table_to_append_to")
       CsvImporter.import_file(csv_file.id)
 
-      fetch_from_gpdb("select count(*) from new_table_from_csv;") do |result|
+      fetch_from_gpdb("select count(*) from table_to_append_to;") do |result|
         result[0]["count"].should == 6
       end
     end
 
-    it "should truncate the existing table when truncate=true"
+    it "should truncate the existing table when truncate=true" do
+      csv_file = create_csv_file(:new_table => true, :to_table => "table_to_replace")
+      CsvImporter.import_file(csv_file.id)
+
+      csv_file = create_csv_file(:new_table => false,
+                                 :truncate => true,
+                                 :to_table => "table_to_replace",
+                                 :contents => tempfile_with_contents("1,larry\n2,barry\n"))
+      CsvImporter.import_file(csv_file.id)
+
+      fetch_from_gpdb("select * from table_to_replace order by id asc;") do |result|
+        result[0]["name"].should == "larry"
+        result[1]["name"].should == "barry"
+        result.count.should == 2
+      end
+    end
 
     it "import a csv file into an existing table with different column order" do
       first_csv_file = create_csv_file(:contents => tempfile_with_contents("1,foo\n2,bar\n3,baz\n"),
