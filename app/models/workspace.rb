@@ -127,6 +127,12 @@ class Workspace < ActiveRecord::Base
     end
   end
 
+  def archiver=(value)
+    if value.is_a? User
+      super
+    end
+  end
+
   private
 
   def owner_is_member
