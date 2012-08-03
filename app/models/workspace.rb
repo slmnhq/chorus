@@ -128,7 +128,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def archiver=(value)
-    if value.is_a? User
+    if value.nil? || (value.is_a? User)
       super
     end
   end
