@@ -10,7 +10,7 @@ GIT
 
 GIT
   remote: git://github.com/pivotal-leopold/jetpack.git
-  revision: e64bc84c02d41b6e3548bccce6c8810f8a4f63e7
+  revision: 529c16d730de7e15840f0b2826254faeaf67f53e
   specs:
     jetpack (0.1.2)
 

@@ -72,6 +72,10 @@ function start_clock () {
 
 function start_nginx () {
   test ! -e $CHORUS_NGINX && echo "nginx not found, skipping." && return 0
+
+  cd $CHORUS_CURRENT
+  bin/ruby packaging/generate_nginx_conf.rb
+
   cd $CHORUS_NGINX
 
   pid_is_running "$(cat $NGINX_PID_FILE 2> /dev/null)"

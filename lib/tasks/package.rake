@@ -45,7 +45,7 @@ module PackageMaker
     run "ssh #{host} 'cd #{release_path} && ln -s #{shared_path}/chorus.yml #{release_path}/config'"
 
     # Server control
-    run "ssh #{host} 'cp -f #{release_path}/packaging/server_control.sh.example #{path}/server_control.sh'"
+    run "ssh #{host} 'cp -f #{release_path}/packaging/server_control.sh #{path}/server_control.sh'"
 
     # Setup DB
     run "ssh #{host} 'cd #{path}; rm -rf ./postgres'"
@@ -59,7 +59,6 @@ module PackageMaker
 
     run "ssh #{host} 'cd #{path}; rm -rf ./nginx_dist'"
     run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/nginx_dist-1.2.2.tar.gz'"
-    run "ssh #{host} 'cp -f #{release_path}/packaging/nginx.conf.example #{path}/nginx_dist/nginx_data/conf/nginx.conf'"
 
     run "ssh #{host} 'cd #{path} && ln -sfT #{release_path} #{current_path}'"
 
@@ -71,7 +70,6 @@ module PackageMaker
 
   def deploy(config)
     verify_distribution_compatibility(config)
-    write_jetpack_yaml(config)
     check_existing_version(config)
 
     filename = make
@@ -173,15 +171,6 @@ module PackageMaker
 
   def version_name
     "#{Chorus::VERSION::STRING}-#{head_sha}"
-  end
-
-  def write_jetpack_yaml(config)
-    defaults = YAML.load_file(Rails.root.join('config', 'jetpack.yml.defaults'))
-    defaults['app_root'] = config['path'] + '/current'
-
-    File.open(Rails.root.join('config', 'jetpack.yml'), 'w') do |file|
-      YAML.dump(defaults, file)
-    end
   end
 
   def verify_distribution_compatibility(config)
