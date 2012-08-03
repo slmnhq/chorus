@@ -106,6 +106,19 @@ describe("chorus.collections.DatabaseColumnSet", function() {
     });
 
     describe("sorting", function() {
+        context("without dataset", function() {
+            beforeEach(function() {
+                this.columns = new chorus.collections.DatabaseColumnSet();
+                this.firstColumn = fixtures.databaseColumn({ordinalPosition: 1});
+                this.secondColumn = fixtures.databaseColumn({ordinalPosition: 2});
+                this.columns.add(this.secondColumn);
+                this.columns.add(this.firstColumn);
+            })
+            it("should be ordered by ordinalPosition", function() {
+                expect(this.columns.models).toEqual([this.firstColumn, this.secondColumn]);
+            });
+        });
+
         context("with multiple dataset", function() {
             beforeEach(function() {
                 this.dataset1 = newFixtures.workspaceDataset.sandboxTable();
