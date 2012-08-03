@@ -2,17 +2,15 @@ describe("chorus.views.DatabaseColumnList", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.column1 = fixtures.databaseColumn({
-                name: "column_name_2",
-                ordinalPosition: "2",
-                typeCategory: "WHOLE_NUMBER",
-                dataType: "int4",
+                name: "column_name_1",
+                typeCategory: "BOOLEAN",
+                dataType: "boolean",
                 comment: "column comment"
             });
             this.column2 = fixtures.databaseColumn({
-                name: "column_name_1",
-                ordinalPosition: "1",
-                typeCategory: "BOOLEAN",
-                dataType: "boolean",
+                name: "column_name_2",
+                typeCategory: "WHOLE_NUMBER",
+                dataType: "int4",
                 comment: "column comment"
             });
             this.dataset = newFixtures.workspaceDataset.sandboxTable();
