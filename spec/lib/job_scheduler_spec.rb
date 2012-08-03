@@ -25,14 +25,14 @@ describe JobScheduler do
     end
   end
 
-  describe "SolrIndexer.index" do
+  describe "SolrIndexer.refresh_and_index" do
     it "runs every Chorus::Application.config.chorus['reindex_datasets_interval_hours'] hours" do
-      job_scheduler.job_named('SolrIndexer.index').period.should == Chorus::Application.config.chorus['reindex_datasets_interval_hours'].hours
+      job_scheduler.job_named('SolrIndexer.refresh_and_index').period.should == Chorus::Application.config.chorus['reindex_datasets_interval_hours'].hours
     end
 
-    it "enqueues the 'SolrIndexer.index' job in QC" do
-      mock(QC).enqueue("SolrIndexer.index")
-      job_scheduler.job_named('SolrIndexer.index').run(Time.now)
+    it "enqueues the 'SolrIndexer.refresh_and_index' job in QC" do
+      mock(QC).enqueue("SolrIndexer.refresh_and_index", ['Dataset'])
+      job_scheduler.job_named('SolrIndexer.refresh_and_index').run(Time.now)
     end
   end
 
