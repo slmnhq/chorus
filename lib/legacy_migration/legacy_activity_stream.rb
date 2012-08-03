@@ -95,7 +95,7 @@ class Legacy::ActivityStream
   end
 
   def hadoop_instance_id
-    sql = sql = "SELECT aso.object_id FROM edc_activity_stream_object aso
+    sql = "SELECT aso.object_id FROM edc_activity_stream_object aso
                                          WHERE aso.activity_stream_id = '#{id}'
                                          AND aso.object_type = 'actor'"
 
@@ -130,6 +130,17 @@ class Legacy::ActivityStream
     schema = database.schemas.find_or_create_by_name(schema_name)
     dataset = schema.datasets.find_or_create_by_name(dataset_name)
     dataset.id
+  end
+
+  def rails_member_id_and_count
+    sql = "SELECT eu.chorus_rails_user_id FROM edc_user eu LEFT OUTER JOIN edc_activity_stream_object aso on eu.id = aso.object_id
+                                     WHERE aso.activity_stream_id = '#{id}'
+                                     AND aso.object_type = 'object' AND entity_type = 'user'"
+    results = Array(Legacy.connection.exec_query(sql))
+    user_id = results.first ? results.first["chorus_rails_user_id"] : nil
+    num_members = results.size
+
+    return user_id, num_members
   end
 
   def file_name

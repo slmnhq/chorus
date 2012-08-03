@@ -290,4 +290,39 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
       end
     end
   end
+
+  describe "members added event" do
+    let(:activity_stream) do
+      Object.new.tap do |activity|
+        mock(activity).type.times(any_times) { 'MEMBERS_ADDED' }
+      end
+    end
+
+    context "#build_event" do
+      let(:member) { FactoryGirl.create(:user) }
+      let(:event) { mapper.build_event }
+
+      before do
+        mock(activity_stream).rails_member_id_and_count { [member.id, 3] }
+      end
+
+      it "builds a valid MEMBERS_ADDED event" do
+        event.should be_a_kind_of(Events::MEMBERS_ADDED)
+      end
+
+      it "sets the member target" do
+        event.member.should == member
+      end
+
+      it "sets the num_added additional data" do
+        event.num_added.should == "3"
+      end
+    end
+
+    context "#can_build?" do
+      it "returns true" do
+        mapper.should be_can_build
+      end
+    end
+  end
 end
