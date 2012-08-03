@@ -72,6 +72,14 @@ describe Dataset do
           Dataset.refresh(account, schema)
         }.should_not change(Dataset, :count)
       end
+
+      it "does not reindex unmodified datasets" do
+        Dataset.refresh(account, schema)
+        any_instance_of(Dataset) do |dataset|
+          dont_allow(dataset).solr_index
+        end
+        Dataset.refresh(account, schema)
+      end
     end
 
     context "refreshing twice, marking records as stale" do
