@@ -14,5 +14,12 @@ chorus.collections.DatabaseColumnSet = chorus.collections.Base.extend({
         return {
             type: this.attributes.type
         };
+    },
+
+    comparator: function(column) {
+        if (column.dataset && column.dataset.datasetNumber) {
+            return (column.dataset.datasetNumber * 10000) + column.get('ordinalPosition');
+        }
+        return column.get('ordinalPosition');
     }
 });

@@ -87,7 +87,7 @@ describe Dataset do
         now = Time.now
         Dataset.update_all(:stale_at => now)
 
-        Dataset.refresh(account, schema, true)
+        Dataset.refresh(account, schema, :mark_stale => true)
 
         datasets = schema.datasets.order(:name)
         datasets.size.should == 2

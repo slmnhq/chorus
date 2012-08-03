@@ -33,17 +33,32 @@ describe GpdbSchema do
       GpdbSchema.find_by_name("schema1").datasets.count.should == 1
     end
 
-    it "does not re-create schemas that already exist in our database" do
-      GpdbSchema.refresh(account, database)
-
-      expect {
-        GpdbSchema.refresh(account, database)
-      }.not_to change(GpdbSchema, :count)
+    it "passes the options Dataset.refresh" do
+      options = {:dostuff => true}
+      mock(Dataset).refresh(account, anything, options)
+      GpdbSchema.refresh(account, database, options)
     end
 
-    it "passes the mark_stale flag to Dataset.refresh" do
-      mock(Dataset).refresh(account, anything, true)
-      GpdbSchema.refresh(account, database, true)
+    context "with no new schemas" do
+      before do
+        GpdbSchema.refresh(account, database)
+      end
+
+      it "does not re-create schemas that already exist in our database" do
+        expect {
+          GpdbSchema.refresh(account, database)
+        }.not_to change(GpdbSchema, :count)
+      end
+
+      it "does not refresh Datasets" do
+        dont_allow(Dataset).refresh.with_any_args
+        GpdbSchema.refresh(account, database)
+      end
+
+      it "refreshes Datasets when :refresh_all is true" do
+        mock(Dataset).refresh.with_any_args.twice
+        GpdbSchema.refresh(account, database, :refresh_all => true)
+      end
     end
   end
 

@@ -34,26 +34,26 @@ class GpdbSchema < ActiveRecord::Base
   delegate :with_gpdb_connection, :to => :database
   delegate :instance, :to => :database
 
-  def self.refresh(account, database, mark_stale = false)
+  def self.refresh(account, database, options = {})
     begin
       schema_rows = database.with_gpdb_connection(account) do |conn|
         conn.exec_query(SCHEMAS_SQL)
       end
     rescue Exception => e
-      #p e
-      #puts "failed to query the database for schemas: #{database.name}"
       return
     end
 
     schema_rows.map do |row|
       begin
         schema = database.schemas.find_or_initialize_by_name(row["schema_name"])
-        unless schema.persisted?
+        schema_new = schema.new_record?
+        if schema_new
           schema.save!
         end
-        Dataset.refresh(account, schema, mark_stale)
+        Dataset.refresh(account, schema, options) if schema_new || options[:refresh_all]
+
         schema
-      rescue Exception => e
+      rescue ActiveRecord::StatementInvalid => e
       end
     end
   end

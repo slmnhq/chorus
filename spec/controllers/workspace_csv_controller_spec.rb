@@ -10,23 +10,33 @@ describe WorkspaceCsvController do
   let(:csv_file_params) do
     {
         :workspace_id => workspace.to_param,
-        :csv=> {
-            :contents => file
+        :csv => {
+            :contents => file,
+            :truncate => truncate
         }
     }
   end
+  let(:truncate) { false }
 
   before do
     log_in user
   end
 
   describe "#create" do
-
     it "saves the user and workspace onto the csv file" do
       post :create, csv_file_params
       csv_file = CsvFile.last
       csv_file.user.should == user
       csv_file.workspace.should == workspace
+    end
+
+    context "when truncate is set to true" do
+      let(:truncate) { true }
+      it "saves the setting onto the csv file" do
+        post :create, csv_file_params
+        csv_file = CsvFile.last
+        csv_file.truncate.should be_true
+      end
     end
 
     it "returns 100 rows" do
