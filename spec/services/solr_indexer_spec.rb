@@ -1,41 +1,26 @@
 require 'spec_helper'
 
 describe SolrIndexer do
-  describe ".refresh_and_index", :database_integration do
+  describe ".refresh_and_index" do
     before do
-      @real_gpdb_account = instance_accounts(:chorus_gpdb42_gpadmin)
-      Instance.where("name NOT LIKE 'chorus_gpdb%'").destroy_all
-      Dataset.destroy_all
-      refresh_chorus
       mock(SolrIndexer).index('some stuff to index')
     end
 
-    let(:instance_41) { instances(:chorus_gpdb41) }
-    let(:instance_42) { instances(:chorus_gpdb42) }
-    let(:database) { GpdbDatabase.find_by_name(GpdbIntegration.database_name) }
-    let(:test_schema) { database.schemas.find_by_name("test_schema") }
-
-    let(:stale_dataset_name) { 'table_to_drop_for_solr_indexer' }
-    let!(:stale_dataset) { GpdbTable.create!({:name => stale_dataset_name, :schema => test_schema}, :without_protection => true) }
-
-    subject { SolrIndexer.refresh_and_index('some stuff to index') }
-
-    it "should mark datasets as stale" do
-      subject
-      stale_dataset.reload.should be_stale
-    end
-
-    it "should refresh the databases (and permissions) for all instances" do
-      database.instance_accounts.should be_empty
-      subject
-      database.reload.instance_accounts.should_not be_empty
-    end
-
-    it "should refresh the schemas/datasets for all instances" do
-      subject
-      database.schemas.find_by_name("test_schema").datasets.where(['id != ?', stale_dataset.id]).each do |dataset|
-        dataset.should_not be_stale
+    it "refreshes all instances, then refreshes all their databases with the instance accounts" do
+      instance_count = 0
+      any_instance_of(Instance) do |instance|
+        stub(instance).refresh_databases { instance_count += 1 }
       end
+
+      Instance.all.each do |instance|
+        instance.databases.each do |database|
+          mock(GpdbSchema).refresh(instance.owner_account, database, :mark_stale => true, :refresh_all => true)
+        end
+      end
+
+      SolrIndexer.refresh_and_index('some stuff to index')
+
+      instance_count.should == Instance.count
     end
   end
 
@@ -49,8 +34,9 @@ describe SolrIndexer do
     context "when passed one type to index" do
       let(:to_index) { 'Dataset' }
 
-      it "should re-index datasets" do
-        mock(Dataset).solr_reindex
+      it "should index datasets" do
+        dont_allow(Dataset).solr_reindex
+        mock(Dataset).solr_index
         subject
       end
     end
@@ -58,9 +44,9 @@ describe SolrIndexer do
     context "when passed more than one type to index" do
       let(:to_index) { ['Dataset', 'Instance'] }
 
-      it "should re-index all types" do
-        mock(Dataset).solr_reindex
-        mock(Instance).solr_reindex
+      it "should index all types" do
+        mock(Dataset).solr_index
+        mock(Instance).solr_index
         subject
       end
     end
@@ -68,9 +54,9 @@ describe SolrIndexer do
     context "when told to index all indexable types" do
       let(:to_index) { 'all' }
 
-      it "should re-index all types" do
+      it "should index all types" do
         Sunspot.searchable.each do |type|
-          mock(type).solr_reindex
+          mock(type).solr_index
         end
         subject
       end

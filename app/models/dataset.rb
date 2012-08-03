@@ -53,6 +53,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def self.refresh(account, schema, options = {})
+    found_datasets = []
     datasets_in_gpdb = schema.with_gpdb_connection(account, false) do |conn|
       conn.select_all(Query.new(schema).tables_and_views_in_schema.to_sql)
     end
@@ -61,9 +62,17 @@ class Dataset < ActiveRecord::Base
       type = attrs.delete('type')
       klass = type == 'r' ? GpdbTable : GpdbView
       dataset = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
+      found_datasets << dataset
       attrs.merge!(:stale_at => nil) if options[:mark_stale]
       dataset.assign_attributes(attrs, :without_protection => true)
       dataset.save if dataset.changed?
+    end
+
+    total_datasets = schema.datasets
+
+    (total_datasets - found_datasets).each do |dataset|
+      dataset.stale_at = Time.now
+      dataset.save
     end
   end
 

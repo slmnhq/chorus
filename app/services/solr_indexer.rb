@@ -5,16 +5,13 @@ module SolrIndexer
   end
 
   def self.index(types)
-    types_to_index(types).each(&:solr_reindex)
+    types_to_index(types).each(&:solr_index)
     Sunspot.commit
   end
 
   private
 
   def self.refresh
-    now = Time.now
-    Dataset.where(:stale_at => nil).update_all(:stale_at => now)
-
     Instance.find_each do |instance|
       instance.refresh_databases
 

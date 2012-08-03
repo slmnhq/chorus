@@ -82,8 +82,8 @@ describe Dataset do
       end
     end
 
-    context "refreshing twice, marking records as stale" do
-      it "creates new copies of the datasets in our db" do
+    context "refreshing twice, with records missing" do
+      it "mark missing records as stale" do
         stub_gpdb(account, datasets_sql => [
             {'type' => "r", "name" => "table1", "master_table" => 't'},
             {'type' => "v", "name" => "view1", "master_table" => 'f'}
@@ -92,8 +92,6 @@ describe Dataset do
         stub_gpdb(account, datasets_sql => [
             {'type' => "r", "name" => "table1", "master_table" => 't'},
         ])
-        now = Time.now
-        Dataset.update_all(:stale_at => now)
 
         Dataset.refresh(account, schema, :mark_stale => true)
 
@@ -101,6 +99,7 @@ describe Dataset do
         datasets.size.should == 2
         datasets.find_by_name("table1").should_not be_stale
         datasets.find_by_name("view1").should be_stale
+        datasets.find_by_name("view1").stale_at.should be_within(5.seconds).of(Time.now)
       end
     end
   end
@@ -204,6 +203,20 @@ describe Dataset do
 
     it "returns the type_name of target1" do
       dataset.type_name.should == 'Dataset'
+    end
+
+    it "un-indexes the dataset when it becomes stale" do
+      mock(dataset).solr_remove_from_index
+      dataset.stale_at = Time.now
+      dataset.save!
+    end
+
+    it "re-indexes the dataset when it becomes un stale" do
+      dataset.stale_at = Time.now
+      dataset.save!
+      mock(dataset).solr_index
+      dataset.stale_at = nil
+      dataset.save!
     end
   end
 end
