@@ -178,11 +178,8 @@ describe Legacy::ActivityStream, :legacy_migration => true, :type => :legacy_mig
     context "when it has one member" do
       let(:members_activity_stream) { Legacy::ActivityStream.new('10016', nil, nil) }
 
-      before do
-        member_id, count = members_activity_stream.rails_member_id_and_count
-      end
-
       it "returns the first member id and a count of 1" do
+        member_id, count = members_activity_stream.rails_member_id_and_count
         member_id.should be_present
         count.should == 1
       end
@@ -192,6 +189,7 @@ describe Legacy::ActivityStream, :legacy_migration => true, :type => :legacy_mig
       let(:members_activity_stream) { Legacy::ActivityStream.new('10261', nil, nil) }
 
       it "returns the first member id and the right count" do
+        member_id, count = members_activity_stream.rails_member_id_and_count
         member_id.should be_present
         count.should == 2
       end
@@ -201,6 +199,7 @@ describe Legacy::ActivityStream, :legacy_migration => true, :type => :legacy_mig
       let(:members_activity_stream) { Legacy::ActivityStream.new('10368', nil, nil) }
 
       it "returns the first member id and the right count" do
+        member_id, count = members_activity_stream.rails_member_id_and_count
         member_id.should_not be_present
         count.should == 0
       end

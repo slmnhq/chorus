@@ -107,9 +107,19 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
       end
     end
 
-    it "#build_event" do
-      event = mapper.build_event
-      event.should be_a_kind_of(Events::PUBLIC_WORKSPACE_CREATED)
+    context "for non-deleted workspace" do
+      it "#build_event" do
+        event = mapper.build_event
+        event.should be_a_kind_of(Events::PUBLIC_WORKSPACE_CREATED)
+      end
+    end
+
+    context "for a deleted workspace" do
+      it "#build_event" do
+        workspace.update_attribute(:deleted_at, Time.now)
+        event = mapper.build_event
+        event.should be_a_kind_of(Events::PUBLIC_WORKSPACE_CREATED)
+      end
     end
 
     it "#can_build?" do

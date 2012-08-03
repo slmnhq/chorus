@@ -37,7 +37,7 @@ class ActivityStreamEventMapper
   end
 
   def workspace_create_event_class
-    if Workspace.find_by_id(@activity_stream.chorus_rails_workspace_id).public
+    if Workspace.find_with_destroyed(@activity_stream.chorus_rails_workspace_id).public
       Events::PUBLIC_WORKSPACE_CREATED
     else
       Events::PRIVATE_WORKSPACE_CREATED

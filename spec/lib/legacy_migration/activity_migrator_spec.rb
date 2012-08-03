@@ -13,14 +13,19 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
     context "migrating activities that reference datasets" do
       before do
         InstanceAccountMigrator.new.migrate
-        ActivityMigrator.new.migrate
       end
 
       it "creates new events for all legacy activities" do
-        Events::Base.count.should > 0
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::Base, :count)
       end
 
       it "copies SOURCE TABLE CREATED data fields from the legacy activity" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::SOURCE_TABLE_CREATED, :count).by(12)
+
         event = Events::SOURCE_TABLE_CREATED.find(event_id_for('10002'))
 
         event.workspace.should be_instance_of(Workspace)
@@ -30,6 +35,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies WORKSPACE_ADD_HDFS_AS_EXT_TABLE fields from the legacy activity" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE, :count).by(1)
+
         event = Events::WORKSPACE_ADD_HDFS_AS_EXT_TABLE.find(event_id_for('10718'))
         event.workspace.should be_instance_of(Workspace)
         event.actor.should be_instance_of(User)
@@ -40,6 +49,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies IMPORT SUCCESS activities" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::IMPORT_SUCCESS, :count).by(101)
+
         event = Events::IMPORT_SUCCESS.find(event_id_for('10177'))
         event.workspace.should be_a(Workspace)
         event.workspace.name.should == "ws"
@@ -51,7 +64,11 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
         event.additional_data[:import_type].should == "file"
       end
 
-      it "copies IMPORT FAILURE activities" do
+      it "copies IMPORT FAILED activities" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::IMPORT_FAILED, :count).by(27)
+
         event = Events::IMPORT_FAILED.find(event_id_for('10368'))
         event.workspace.should be_a(Workspace)
         event.workspace.name.should == "active_public"
@@ -65,11 +82,11 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
     end
 
     context "migrating activities that do not reference datasets" do
-      before do
-        ActivityMigrator.new.migrate
-      end
-
       it "copies PUBLIC WORKSPACE CREATED data fields from the legacy activity" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::PUBLIC_WORKSPACE_CREATED, :count).by(70)
+
         event = Events::PUBLIC_WORKSPACE_CREATED.find(event_id_for('10158'))
 
         event.workspace.should be_instance_of(Workspace)
@@ -77,13 +94,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copied WORKSPACE_ARCHIVED data fields from the legacy activity" do
-        event = Events::WORKSPACE_ARCHIVED.find(event_id_for('10304'))
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::WORKSPACE_ARCHIVED, :count).by(4)
 
-        event.workspace.should be_instance_of(Workspace)
-        event.actor.should be_instance_of(User)
-      end
-
-      it "copied WORKSPACE_ARCHIVED data fields from the legacy activity" do
         event = Events::WORKSPACE_ARCHIVED.find(event_id_for('10304'))
 
         event.workspace.should be_instance_of(Workspace)
@@ -91,7 +105,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copied WORKSPACE_UNARCHIVED data fields from the legacy activity" do
-        Events::WORKSPACE_UNARCHIVED.count.should == 1
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::WORKSPACE_UNARCHIVED, :count).by(1)
+
         event = Events::WORKSPACE_UNARCHIVED.find(event_id_for('10721'))
 
         event.workspace.should be_instance_of(Workspace)
@@ -99,6 +116,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies PRIVATE WORKSPACE CREATED data fields from the legacy activity" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::PRIVATE_WORKSPACE_CREATED, :count).by(3)
+
         event = Events::PRIVATE_WORKSPACE_CREATED.find(event_id_for('10401'))
 
         event.workspace.should be_instance_of(Workspace)
@@ -106,6 +127,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies WORKSPACE MAKE PUBLIC data fields from the legacy activity" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::WORKSPACE_MAKE_PUBLIC, :count).by(1)
+
         event = Events::WORKSPACE_MAKE_PUBLIC.find(event_id_for('10719'))
 
         event.workspace.should be_instance_of(Workspace)
@@ -113,6 +138,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies WORKSPACE MAKE PRIVATE data fields from the legacy activity" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::WORKSPACE_MAKE_PRIVATE, :count).by(1)
+
         event = Events::WORKSPACE_MAKE_PRIVATE.find(event_id_for('10720'))
 
         event.workspace.should be_instance_of(Workspace)
@@ -120,6 +149,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies WORKFILE CREATED data fields from the legacy activity" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::WORKFILE_CREATED, :count).by(36)
+
         event = Events::WORKFILE_CREATED.find(event_id_for('10010'))
 
         event.workspace.should be_instance_of(Workspace)
@@ -128,6 +161,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies INSTANCE CREATED (greenplum) data fields from the legacy activity" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::GREENPLUM_INSTANCE_CREATED, :count).by(3)
+
         event = Events::GREENPLUM_INSTANCE_CREATED.find(event_id_for('10036'))
 
         event.workspace.should be_blank
@@ -136,6 +173,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies INSTANCE CREATED (hadoop) data fields from the legacy activity" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::HADOOP_INSTANCE_CREATED, :count).by(2)
+
         event = Events::HADOOP_INSTANCE_CREATED.find(event_id_for('10006'))
 
         event.workspace.should be_blank
@@ -144,6 +185,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies USER ADDED data fields from the legacy activity" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::USER_ADDED, :count).by(7)
+
         event = Events::USER_ADDED.find(event_id_for('10195'))
 
         event.actor.should be_instance_of(User)
@@ -151,7 +196,9 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
       end
 
       it "copies MEMBERS ADDED data fields from the legacy activity" do
-        Events::MEMBERS_ADDED.count.should == 4
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::MEMBERS_ADDED, :count).by(4)
 
         event = Events::MEMBERS_ADDED.find(event_id_for('10261'))
 

@@ -2,12 +2,11 @@ require 'spec_helper'
 
 describe AssociatedDatasetMigrator, :legacy_migration => true, :type => :legacy_migration do
 
-  def migrate
+  def migrate_others
     UserMigrator.new.migrate
     InstanceMigrator.new.migrate
     InstanceAccountMigrator.new.migrate
     WorkspaceMigrator.new.migrate
-    AssociatedDatasetMigrator.new.migrate
   end
 
   describe ".migrate" do
@@ -29,21 +28,26 @@ describe AssociatedDatasetMigrator, :legacy_migration => true, :type => :legacy_
       end
 
       it "adds the new foreign key column" do
-        migrate
+        migrate_others
+        AssociatedDatasetMigrator.new.migrate
         Legacy.connection.column_exists?(:edc_dataset, :chorus_rails_associated_dataset_id).should be_true
       end
     end
 
     describe "copying the data" do
       before do
-        migrate
+        migrate_others
       end
 
       it "creates new associated dataset from legacy associated datasets" do
-        AssociatedDataset.count.should == 14
+        expect {
+          AssociatedDatasetMigrator.new.migrate
+        }.to change(AssociatedDataset, :count).by(14)
       end
 
       it "copies the correct data fields from the legacy associated dataset" do
+        AssociatedDatasetMigrator.new.migrate
+
         Legacy.connection.select_all(LEGACY_ASSOCIATED_DATASETS_SQL).each do |legacy_associated_dataset|
           next if legacy_associated_dataset['type'] == 'CHORUS_VIEW'
           if(!legacy_associated_dataset["chorus_rails_associated_dataset_id"])
