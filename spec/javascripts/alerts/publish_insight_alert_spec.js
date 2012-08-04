@@ -1,6 +1,8 @@
 describe("chorus.alerts.PublishInsight", function() {
     beforeEach(function() {
-        this.activity = fixtures.activity();
+        this.activity = rspecFixtures.activity.noteOnDatasetCreated();
+        //TODO: update code so that this unset is not necessary
+        this.activity.unset("body");
     });
 
     context("when publishing", function() {

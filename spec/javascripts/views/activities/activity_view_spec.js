@@ -148,7 +148,7 @@ describe("chorus.views.Activity", function() {
         xcontext("isNotification", function() {
             beforeEach(function() {
                 this.presenter = new chorus.presenters.Activity(this.view.model);
-                this.view.model = fixtures.activities.NOTE_ON_WORKSPACE();
+                this.view.model = rspecFixtures.activity.noteOnWorkspaceCreated();
                 this.view.options.isNotification = true;
                 this.view.render();
             });
@@ -267,7 +267,7 @@ describe("chorus.views.Activity", function() {
             beforeEach(function() {
                 setLoggedInUser({ id: this.view.model.author().id })
                 this.presenter = new chorus.presenters.Activity(this.view.model);
-                this.view.model = fixtures.activities.NOTE_ON_WORKSPACE();
+                this.view.model = rspecFixtures.activity.noteOnWorkspaceCreated();
                 this.view.options.isReadOnly = true;
                 this.view.render();
             });

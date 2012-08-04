@@ -1,6 +1,6 @@
 describe("chorus.alerts.NotificationDeleteAlert", function() {
     beforeEach(function() {
-        this.activity = fixtures.activities.NOTE_ON_WORKSPACE();
+        this.activity = rspecFixtures.activity.noteOnWorkspaceCreated();
         this.activity.set({id: '1234'});
         this.alert = new chorus.alerts.NotificationDeleteAlert({ activity: this.activity });
     });

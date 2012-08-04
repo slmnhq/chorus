@@ -77,8 +77,8 @@ window.rspecFixtureDefinitions = {
         }
     },
     workfileSet: {},
-
     workfileVersion: {},
+    draft: {},
 
 //    sandbox: { unique: [ "id", "workspaceId", "instanceId", "schemaId", "databaseId" ] },
 //

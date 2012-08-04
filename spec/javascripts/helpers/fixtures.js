@@ -34,33 +34,6 @@ beforeEach(function() {
                 return new chorus.models.Activity(attrs);
             },
 
-            "MEMBERS_ADDED": function() {
-                return new chorus.models.Activity({
-                    author: fixtures.authorJson(),
-                    type: "MEMBERS_ADDED",
-                    timestamp: "2011-12-01 00:00:00",
-                    id: "10101",
-                    comments: [
-                        {
-                            text: "sub-comment 1",
-                            author: fixtures.authorJson(),
-                            timestamp: "2011-12-15 12:34:56"
-                        }
-                    ],
-                    user: [
-                        {
-                            id: 101,
-                            name: "Rhino Hunter"
-                        },
-                        {
-                            id: 102,
-                            name: "Method Man"
-                        }
-                    ],
-                    workspace: rspecFixtures.workspaceJson()
-                });
-            },
-
             "NOTE_ON_CHORUS_VIEW": function(overrides) {
                 var instanceId = fixtures.nextId().toString();
                 var attrs = _.extend({
@@ -132,7 +105,7 @@ beforeEach(function() {
                             type: "dataset",
                             databaseName: "dca_demo",
                             schemaName: "public",
-                            instance: fixtures.instanceJson()
+                            instance: rspecFixtures.greenplumInstanceJson().response
                         },
                         attachments: [
                             {
@@ -155,129 +128,15 @@ beforeEach(function() {
                 return new chorus.models.Activity(attrs);
             },
 
-            "NOTE_ON_WORKSPACE": function() {
-                return new chorus.models.Activity({
-                    author: fixtures.authorJson(),
-                    type: "NOTE",
-                    text: "How about that.",
-                    timestamp: "2011-12-01 00:00:00",
-                    id: "10101",
-                    comments: [
-                        {
-                            text: "sub-comment 1",
-                            author: fixtures.authorJson(),
-                            timestamp: "2011-12-15 12:34:56"
-                        }
-                    ],
-                    workspace: rspecFixtures.workspaceJson(),
-                    attachments: [
-                        {
-                            entityId: "10101",
-                            entityType: "file",
-                            id: "10101",
-                            name: "something.sql",
-                            type: "SQL"
-                        },
-                        {
-                            entityId: "10102",
-                            entityType: "file",
-                            id: "10102",
-                            name: "something.txt",
-                            type: "TXT"
-                        }
-                    ]
-                });
-            },
-
-            "NOTE_ON_WORKFILE_JSON": function() {
-                return {
-                    author: fixtures.authorJson(),
-                    type: "NOTE",
-                    text: "How about that.",
-                    timestamp: "2011-12-01 00:00:00",
-                    id: fixtures.nextId().toString(),
-                    comments: [
-                        {
-                            text: "sub-comment 1",
-                            author: fixtures.authorJson(),
-                            timestamp: "2011-12-15 12:34:56"
-                        }
-                    ],
-                    workfile: fixtures.nestedWorkfileJson(),
-                    workspace: rspecFixtures.workspaceJson(),
-                    attachments: [
-                        {
-                            entityId: fixtures.nextId().toString(),
-                            entityType: "file",
-                            id: fixtures.nextId().toString(),
-                            name: "something.sql",
-                            type: "SQL"
-                        },
-                        {
-                            entityId: fixtures.nextId().toString(),
-                            entityType: "file",
-                            id: fixtures.nextId().toString(),
-                            name: "something.txt",
-                            type: "TXT"
-                        }
-                    ]
-                };
-            },
-
-            "NOTE_ON_DATASET_JSON": function() {
-                return {
-                    author: fixtures.authorJson(),
-                    type: "NOTE",
-                    text: "How about that.",
-                    timestamp: "2011-12-01 00:00:00",
-                    id: fixtures.nextId().toString(),
-                    comments: [
-                        {
-                            text: "sub-comment 1",
-                            author: fixtures.authorJson(),
-                            timestamp: "2011-12-15 12:34:56"
-                        }
-                    ],
-                    attachments: [],
-                    isPromoted: false,
-                    promoteCount: 0,
-                    table: {
-                        id: '"10114"|"dca_demo"|"public"|"a"',
-                        name: "a"
-                    }
-                };
-            },
-
-            "NOTE_ON_WORKFILE": function() {
-                return new chorus.models.Activity(fixtures.activities.NOTE_ON_WORKFILE_JSON());
-            },
-
             "INSIGHT_CREATED": function(overrides) {
                 return new chorus.models.Activity(
-                    _.extend(this.NOTE_ON_DATASET_JSON(), {
+                    _.extend(rspecFixtures.activity.noteOnDatasetCreatedJson().response, {
                         type: "INSIGHT_CREATED",
                         isInsight: true,
                         promotionActioner: {id: 10010, lastName: "1", firstName: "u"},
                         promotionTime: "2012-02-14 12:34:56"
                     }, overrides));
             }
-        },
-
-        activityJson: function(overrides) {
-            var id = fixtures.nextId();
-            return _.extend({
-                author: fixtures.authorJson(),
-                type: "NOTE",
-                text: "How about that.",
-                timestamp: "2011-12-01 00:00:00",
-                id: id,
-                comments: [
-                    fixtures.commentJson()
-                ],
-                attachments: [
-                    fixtures.artifactJson()
-                ]
-            }, overrides);
         },
 
         artifactJson: function() {
@@ -315,14 +174,6 @@ beforeEach(function() {
                 provisionMaxSize: "2000 GB",
                 sandboxRecommendSizeInBytes: 5368709120,
                 sandboxRecommendSize: "5 GB"
-            }, overrides);
-        },
-
-        instanceJson: function(overrides) {
-            var id = this.nextId();
-            return _.extend({
-                id: id.toString(),
-                name: 'Instance_' + id
             }, overrides);
         },
 
@@ -391,57 +242,6 @@ beforeEach(function() {
             }, overrides);
         },
 
-        workfileDraft: function() {
-            return {
-                content: 'draft!',
-                baseVersionNum: 1,
-                draftOwner: 'edcadmin',
-                draftFileId: this.nextId().toString(),
-                isDeleted: false
-            }
-        },
-
-        workfileJson: function(overrides) {
-            var id = this.nextId().toString();
-            var name = 'Workfile ' + id;
-            // WTF: old fixtures reference new fixtures ???
-            var modifiedByUser = rspecFixtures.userJson();
-            var ownerUser = rspecFixtures.userJson();
-            return _.extend({
-                id: id,
-                fileName: name,
-                fileType: "txt",
-                mimeType: "text/plain",
-                versionInfo: this.versionInfoJson(overrides && overrides.versionInfo, modifiedByUser),
-                executionInfo: this.executionInfoJson(overrides && overrides.executionInfo),
-                latestVersionNum: 1,
-                recentComments: [
-                    fixtures.activities.NOTE_ON_WORKFILE_JSON(),
-                    fixtures.activities.NOTE_ON_WORKFILE_JSON()
-                ],
-                canEdit: true,
-                commentCount: 2,
-                draftInfo: {
-                    content: null,
-                    baseVersionNum: null,
-                    draftOwner: null,
-                    draftFileId: null,
-                    isDeleted: null
-                },
-                hasDraft: false,
-                isDeleted: false,
-                owner: ownerUser.username,
-                ownerId: ownerUser.id,
-                workspace: {
-                    id: this.nextId().toString()
-                },
-                imageId: null,
-                source: "empty",
-                lastUpdatedStamp: "2011-11-29 10:46:03.152",
-                createdStamp: "2011-11-29 10:46:03.152"
-            }, overrides);
-        },
-
         comment: function(overrides) {
             var id = this.nextId().toString();
             var attributes = _.extend({
@@ -453,10 +253,6 @@ beforeEach(function() {
             // WTF: old fixtures reference new fixtures ???
             attributes.author = _.extend(rspecFixtures.user().attributes, overrides && overrides.author);
             return new chorus.models.Comment(attributes);
-        },
-
-        activity: function(overrides) {
-            return new chorus.models.Activity(this.activityJson(overrides));
         },
 
         noteComment: function(overrides) {
@@ -492,40 +288,12 @@ beforeEach(function() {
             return collection;
         },
 
-        draft: function(overrides) {
-            var attributes = _.extend({draftInfo: this.workfileDraft(), hasDraft: true}, overrides);
-            // TODO: REMOVEME
-            var workfileJson = this.workfileJson(attributes)
-            workfileJson.workspaceId = overrides.workspaceId || workfileJson.workspace.id;
-            return new chorus.models.Draft(workfileJson);
-        },
-
         attachment: function(overrides) {
             var attributes = _.extend({
                 id: this.nextId().toString(),
                 entityType: "file"
             }, overrides);
             return new chorus.models.Attachment(attributes);
-        },
-
-        chorusViewArtifactJson: function(overrides) {
-            return _.extend({
-                id: this.nextId().toString(),
-                entityType: "chorusView",
-                objectType: "QUERY",
-                type: "CHORUS_VIEW",
-                workspaceId: this.nextId().toString()
-            }, overrides);
-        },
-
-        datasetArtifactJson: function(overrides) {
-            return _.extend({
-                id: this.nextId().toString(),
-                entityType: "dataset",
-                objectType: "TABLE",
-                type: "SANDBOX_TABLE",
-                workspaceId: this.nextId().toString()
-            }, overrides);
         },
 
         instanceUsage: function() {
@@ -559,7 +327,7 @@ beforeEach(function() {
                         }
                     }
                 },
-                recentComment: fixtures.activities.NOTE_ON_DATASET_JSON(),
+                recentComment: rspecFixtures.activity.noteOnDatasetCreatedJson().response,
                 commentCount: 1
             }, overrides);
         },
@@ -622,37 +390,6 @@ beforeEach(function() {
             return new chorus.models.DatasetStatistics(attributes);
         },
 
-        datasetExternalTable: function(overrides) {
-            var datasetCommonAttributes = _.extend({
-                modifiedBy: {},
-                objectType: "EXTERNAL_TABLE",
-                owner: {},
-                type: "SANDBOX_TABLE"
-            }, overrides)
-            var attributes = _.extend(fixtures.datasetCommonJson(datasetCommonAttributes), overrides);
-            return new chorus.models.WorkspaceDataset(attributes);
-        },
-
-        datasetImportSuccessful: function(overrides) {
-            return this.datasetImport(_.extend({executionInfo: {
-                startedStamp: "2012-02-29 14:23:58.169",
-                completedStamp: "2012-02-29 14:23:59.027",
-                result: {executeResult: "success"},
-                state: "success",
-                creator: "InitialUser"
-            }}, overrides));
-        },
-
-        datasetImportFailed: function(overrides) {
-            return this.datasetImport(_.extend({executionInfo: {
-                startedStamp: "2012-02-29 14:23:58.169",
-                completedStamp: "2012-02-29 14:23:59.027",
-                result: "That import was totally bogus",
-                state: "failed",
-                creator: "InitialUser"
-            }}, overrides));
-        },
-
         datasetImport: function(overrides) {
             var in1year = new Date();
             in1year.setFullYear(in1year.getFullYear() + 1);
@@ -688,13 +425,6 @@ beforeEach(function() {
                 workspaceId: this.nextId().toString()
             }, overrides);
             return new chorus.models.DatasetImport(attributes);
-        },
-
-        chartTask: function(overrides) {
-            return new chorus.models.ChartTask(_.extend({
-                columns: [],
-                rows: []
-            }, overrides));
         },
 
         datasetHadoopExternalTable: function(overrides) {
