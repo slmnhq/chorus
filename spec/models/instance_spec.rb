@@ -188,6 +188,7 @@ describe Instance do
     let(:account_without_access) { account_for_user_with_restricted_access }
     let(:instance) { account_with_access.instance }
     let(:database) { instance.databases.find_by_name(GpdbIntegration.database_name) }
+    let(:missing_database) { instance.databases.create!(:name => 'i_am_not_real') }
 
     before do
       refresh_chorus
@@ -208,6 +209,13 @@ describe Instance do
       database.instance_accounts << account_without_access
       instance.refresh_databases
       database.instance_accounts.find_by_id(account_without_access.id).should be_nil
+    end
+
+    it "marks databases as stale if they no longer exist" do
+      missing_database.should_not be_stale
+      instance.refresh_databases(:mark_stale => true)
+      missing_database.should be_stale
+      missing_database.stale_at.should be_within(5.seconds).of(Time.now)
     end
   end
 

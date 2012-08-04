@@ -4,7 +4,7 @@ describe GpdbSchema do
   context "#refresh" do
     let(:account) { FactoryGirl.create(:instance_account) }
     let(:database) { FactoryGirl.create(:gpdb_database) }
-
+    let(:missing_database) { database.instance.databases.create!(:name => 'i_am_not_real') }
     before(:each) do
       stub_gpdb(account, GpdbSchema::SCHEMAS_SQL => [
           {"schema_name" => "schema1"},
@@ -58,6 +58,16 @@ describe GpdbSchema do
       it "refreshes Datasets when :refresh_all is true" do
         mock(Dataset).refresh.with_any_args.twice
         GpdbSchema.refresh(account, database, :refresh_all => true)
+      end
+
+      it "marks schema as stale if database are marked stale" do
+        missing_database.stale_at = Time.now
+        missing_database.save
+        schemas = GpdbSchema.refresh(account, missing_database)
+        schemas.map { |schema | schema.should be_stale }
+        schemas.map { |schema | schema.stale_at.should be_within(5.seconds).of(Time.now) }
+        schemas = GpdbSchema.refresh(account, database)
+        schemas.map { |schema | schema.should_not be_stale }
       end
     end
   end

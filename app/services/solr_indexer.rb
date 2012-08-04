@@ -13,7 +13,7 @@ module SolrIndexer
 
   def self.refresh
     Instance.find_each do |instance|
-      instance.refresh_databases
+      instance.refresh_databases(:mark_stale => true)
 
       instance.databases.each do |database|
         GpdbSchema.refresh(instance.owner_account, database, :mark_stale => true, :refresh_all => true)

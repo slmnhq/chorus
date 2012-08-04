@@ -46,6 +46,7 @@ class GpdbSchema < ActiveRecord::Base
     schema_rows.map do |row|
       begin
         schema = database.schemas.find_or_initialize_by_name(row["schema_name"])
+        schema.stale_at = Time.now if database.stale?
         schema_new = schema.new_record?
         if schema_new
           schema.save!
@@ -78,6 +79,9 @@ class GpdbSchema < ActiveRecord::Base
     end
   end
 
+  def stale?
+    stale_at.present?
+  end
   private
 
   def add_schema_to_search_path(conn)

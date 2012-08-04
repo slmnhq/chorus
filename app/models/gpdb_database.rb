@@ -26,4 +26,8 @@ class GpdbDatabase < ActiveRecord::Base
   def with_gpdb_connection(account, &block)
     Gpdb::ConnectionBuilder.connect!(account.instance, account, name, &block)
   end
+
+  def stale?
+    stale_at.present?
+  end
 end
