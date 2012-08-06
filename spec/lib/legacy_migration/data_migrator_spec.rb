@@ -43,12 +43,14 @@ describe DataMigrator, :legacy_migration => true, :type => :legacy_migration do
     end
 
     it "is transactional" do
+      initial_user_count = User.count
+
       any_instance_of(InstanceMigrator) do |im|
         mock(im).migrate { raise Exception }
       end
 
       expect { @data_migrator.migrate }.to raise_error(Exception)
-      User.count.should == 0
+      User.count.should == initial_user_count
     end
   end
 end

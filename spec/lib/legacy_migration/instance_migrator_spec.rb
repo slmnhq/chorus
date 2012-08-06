@@ -17,14 +17,17 @@ describe InstanceMigrator, :legacy_migration => true, :type => :legacy_migration
     describe "copying the data" do
       before do
         UserMigrator.new.migrate
-        InstanceMigrator.new.migrate
       end
 
       it "creates new instances for legacy GPDB instances" do
-        Instance.count.should == 3
+        expect {
+          InstanceMigrator.new.migrate
+        }.to change(Instance, :count).by(3)
       end
 
       it "copies the correct data fields from the legacy instance" do
+        InstanceMigrator.new.migrate
+
         Legacy.connection.select_all("SELECT * FROM edc_instance WHERE instance_provider = 'Greenplum Database'").each do |legacy_instance|
           instance = Instance.find(legacy_instance["chorus_rails_instance_id"])
           #p instance

@@ -20,7 +20,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
             beforeEach(function() {
                 this.changeSpy = jasmine.createSpy();
                 this.alert.model.bind('change', this.changeSpy);
-                var draft = fixtures.draft({workfileId: this.workfile.get("id"), workspaceId: this.workfile.workspace().id})
+                var draft = rspecFixtures.draft({workfileId: this.workfile.get("id")})
                 this.expectedContent = draft.get("content");
                 this.server.completeFetchFor(draft);
             })

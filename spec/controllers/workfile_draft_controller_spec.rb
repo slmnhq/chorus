@@ -24,13 +24,18 @@ describe WorkfileDraftController do
   end
 
   describe "#show" do
+    let!(:draft) { FactoryGirl.create(:workfile_draft, :content => "Valid content goes here", :workfile_id => 3939, :owner_id => @user.id) }
+
     it "renders the specified draft" do
-      draft = FactoryGirl.create(:workfile_draft, :content => "Valid content goes here", :workfile_id => 3939, :owner_id => @user.id)
       get :show, :workfile_id => 3939
       decoded_response.content.should == "Valid content goes here"
       decoded_response.workfile_id.should == 3939
       decoded_response.owner_id.should == @user.id
       decoded_response.id.should == draft.id
+    end
+
+    generate_fixture "draft.json" do
+      get :show, :workfile_id => 3939
     end
   end
 

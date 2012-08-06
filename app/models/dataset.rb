@@ -68,11 +68,11 @@ class Dataset < ActiveRecord::Base
       dataset.save if dataset.changed?
     end
 
-    total_datasets = schema.datasets
-
-    (total_datasets - found_datasets).each do |dataset|
-      dataset.stale_at = Time.now
-      dataset.save
+    if options[:mark_stale]
+      (schema.datasets - found_datasets).each do |dataset|
+        dataset.stale_at = Time.now
+        dataset.save
+      end
     end
   end
 
@@ -104,7 +104,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def column_name
-    columns = GpdbColumn.columns_for(schema.database.instance.account_for_user(schema.database.instance.owner), self);
+    columns = GpdbColumn.columns_for(schema.database.instance.owner_account, self);
     columns.map do |column|
       column.name
     end

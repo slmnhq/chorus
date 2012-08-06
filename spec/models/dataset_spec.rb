@@ -82,8 +82,8 @@ describe Dataset do
       end
     end
 
-    context "refreshing twice, with records missing" do
-      it "mark missing records as stale" do
+    context "with records missing" do
+      before do
         stub_gpdb(account, datasets_sql => [
             {'type' => "r", "name" => "table1", "master_table" => 't'},
             {'type' => "v", "name" => "view1", "master_table" => 'f'}
@@ -92,7 +92,9 @@ describe Dataset do
         stub_gpdb(account, datasets_sql => [
             {'type' => "r", "name" => "table1", "master_table" => 't'},
         ])
+      end
 
+      it "mark missing records as stale" do
         Dataset.refresh(account, schema, :mark_stale => true)
 
         datasets = schema.datasets.order(:name)
@@ -100,6 +102,15 @@ describe Dataset do
         datasets.find_by_name("table1").should_not be_stale
         datasets.find_by_name("view1").should be_stale
         datasets.find_by_name("view1").stale_at.should be_within(5.seconds).of(Time.now)
+      end
+
+      it "does not mark missing records if option not set" do
+        Dataset.refresh(account, schema)
+
+        datasets = schema.datasets.order(:name)
+        datasets.size.should == 2
+        datasets.find_by_name("table1").should_not be_stale
+        datasets.find_by_name("view1").should_not be_stale
       end
     end
   end

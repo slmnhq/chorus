@@ -21,10 +21,14 @@ describe HadoopInstanceMigrator, :legacy_migration => true, :type => :legacy_mig
       end
 
       it "creates new instances for legacy hadoop instances" do
-        HadoopInstance.count.should == 2
+        expect {
+          HadoopInstanceMigrator.new.migrate
+        }.to change(HadoopInstance, :count).by(2)
       end
 
       it "copies the correct data fields from the legacy instance" do
+        HadoopInstanceMigrator.new.migrate
+
         HadoopInstanceMigrator.new.legacy_instances.each do |legacy_instance|
           instance = HadoopInstance.find(legacy_instance["chorus_rails_instance_id"])
           instance.name.should == legacy_instance["name"]

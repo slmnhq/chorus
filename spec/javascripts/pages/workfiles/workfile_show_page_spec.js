@@ -102,7 +102,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
             context('and the workfile has a draft', function() {
                 beforeEach(function() {
-                    this.model.set({'draftInfo': fixtures.workfileDraft(), hasDraft: true});
+                    this.model.set({'draftInfo': rspecFixtures.draftJson().response, hasDraft: true});
                     this.modalSpy = stubModals();
                     this.server.completeFetchFor(this.model);
                 });

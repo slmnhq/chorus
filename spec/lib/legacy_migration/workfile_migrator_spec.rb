@@ -2,19 +2,35 @@ require 'spec_helper'
 
 describe WorkfileMigrator, :legacy_migration => true, :type => :legacy_migration do
   describe ".migrate" do
-    describe "copying the data" do
-      before do
-        UserMigrator.new.migrate
-        WorkspaceMigrator.new.migrate
-        MembershipMigrator.new.migrate
-        WorkfileMigrator.new.migrate
-        @legacy_workfiles = Legacy.connection.select_all("select * from edc_work_file")
-        @legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version")
-        @legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE is_deleted = 'f'")
+    before do
+      UserMigrator.new.migrate
+      WorkspaceMigrator.new.migrate
+      MembershipMigrator.new.migrate
+    end
+
+    describe "validate the number of entries copied" do
+      it "creates a workfile for every legacy workfile, including deleted ones" do
+        legacy_workfiles = Legacy.connection.select_all("select * from edc_work_file")
+        expect { WorkfileMigrator.new.migrate }.to change(Workfile.unscoped, :count).by(legacy_workfiles.length)
       end
 
-      it "creates a workfile for every legacy workfile, including deleted ones" do
-        @legacy_workfiles.length.should == Workfile.unscoped.count
+      it "creates a workfile draft for every legacy draft, including deleted ones" do
+        legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE is_deleted = 'f'")
+        expect { WorkfileMigrator.new.migrate }.to change(WorkfileDraft, :count).by(legacy_drafts.length)
+      end
+
+      it "creates a workfile version for every legacy version, including deleted ones" do
+        legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version")
+        expect { WorkfileMigrator.new.migrate }.to change(WorkfileVersion.unscoped, :count).by(legacy_versions.length)
+      end
+    end
+
+    describe "copying the data" do
+      before do
+        WorkfileMigrator.new.migrate
+        @legacy_workfiles = Legacy.connection.select_all("select * from edc_work_file")
+        @legacy_drafts = Legacy.connection.select_all("select * from edc_workfile_draft WHERE is_deleted = 'f'")
+        @legacy_versions = Legacy.connection.select_all("select * from edc_workfile_version")
       end
 
       it "saves the id of the new workfile on the legacy workfile" do

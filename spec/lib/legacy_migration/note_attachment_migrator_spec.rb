@@ -12,12 +12,11 @@ describe NoteAttachmentMigrator, :legacy_migration => true, :type => :legacy_mig
   end
 
   it "changes the number of note attachments" do
-    expect { NoteAttachmentMigrator.new.migrate }.to change(NoteAttachment, :count)
+    expect { NoteAttachmentMigrator.new.migrate }.to change(NoteAttachment, :count).by(5)
   end
 
   it "migrates all note attachments" do
     NoteAttachmentMigrator.new.migrate
-    NoteAttachment.count.should == 5
     Legacy.connection.select_all("SELECT ec.id AS comment_id, ef.file file, ec.chorus_rails_event_id, ef.file_name FROM edc_file ef, edc_comment ec, edc_comment_artifact eca WHERE eca.entity_type = 'file' AND eca.comment_id = ec.id AND eca.entity_id = ef.id AND ec.is_deleted = false AND eca.is_deleted = false AND ef.is_deleted = false").each do |legacy_attachment|
       attachment = NoteAttachment.find_by_id(legacy_attachment["chorus_rails_event_id"])
       next unless attachment

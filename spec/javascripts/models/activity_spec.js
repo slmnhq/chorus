@@ -230,7 +230,7 @@ describe("chorus.models.Activity", function() {
         });
 
         it("returns false for other activities", function() {
-            expect(fixtures.activities.MEMBERS_ADDED().isUserGenerated()).toBeFalsy();
+            expect(rspecFixtures.activity.membersAdded().isUserGenerated()).toBeFalsy();
         });
 
         it("returns true for sub-comments", function() {
@@ -425,7 +425,12 @@ describe("chorus.models.Activity", function() {
                 comments: [
                     {
                         text: "I'm cold.'",
-                        author: fixtures.authorJson(),
+                        author: {
+                            image: { original: "/foo", icon: "/bar" },
+                            id: "1234",
+                            lastName: "Smith",
+                            firstName: "Bob"
+                        },
                         timestamp: "2011-12-15 12:34:56"
                     }
                 ]

@@ -4,11 +4,11 @@ describe("chorus.collections.Search", function() {
             instances: {
                 numFound: 131,
                 results: [
-                    fixtures.instanceJson({ id: '101' }),
-                    fixtures.instanceJson({ id: '102' }),
-                    fixtures.instanceJson({ id: '103' }),
-                    fixtures.instanceJson({ id: '104' }),
-                    fixtures.instanceJson({ id: '105' }),
+                    rspecFixtures.greenplumInstanceJson({ response: { name: "instance101", id: '101' } }).response,
+                    rspecFixtures.greenplumInstanceJson({ response: { name: "instance102", id: '102' } }).response,
+                    rspecFixtures.greenplumInstanceJson({ response: { name: "instance103", id: '103' } }).response,
+                    rspecFixtures.greenplumInstanceJson({ response: { name: "instance104", id: '104' } }).response,
+                    rspecFixtures.greenplumInstanceJson({ response: { name: "instance105", id: '105' } }).response
                 ]
             }
         });
@@ -57,9 +57,9 @@ describe("chorus.collections.Search", function() {
                 instances: {
                     numFound: 51,
                     results: [
-                        fixtures.instanceJson({ id: '121' }),
-                        fixtures.instanceJson({ id: '122' }),
-                        fixtures.instanceJson({ id: '123' })
+                        rspecFixtures.greenplumInstanceJson({ response: { name: "instance121", id: '121' } }).response,
+                        rspecFixtures.greenplumInstanceJson({ response: { name: "instance122", id: '122' } }).response,
+                        rspecFixtures.greenplumInstanceJson({ response: { name: "instance123", id: '123' } }).response
                     ]
                 }}));
 

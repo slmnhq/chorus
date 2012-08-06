@@ -14,14 +14,15 @@ describe UserMigrator, :legacy_migration => true, :type => :legacy_migration do
     end
 
     describe "copying the data" do
-      before do
-        UserMigrator.new.migrate
-      end
       it "creates new users for legacy users" do
-        User.find_with_destroyed(:all).length.should == 8
+        expect {
+          UserMigrator.new.migrate
+        }.to change(User.unscoped, :count).by(8)
       end
 
       it "copies the correct data fields from the legacy user" do
+        UserMigrator.new.migrate
+
         Legacy.connection.select_all("SELECT * FROM edc_user").each do |legacy_user|
           user = User.find_with_destroyed(legacy_user["chorus_rails_user_id"])
           user.should be_present
@@ -44,6 +45,7 @@ describe UserMigrator, :legacy_migration => true, :type => :legacy_migration do
       end
 
       it "sets the correct password" do
+        UserMigrator.new.migrate
         User.authenticate("edcadmin", "secret").should be_true
       end
     end
