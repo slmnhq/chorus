@@ -83,7 +83,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
                 expect(uri.path()).toEqual("/workspaces/" + this.workspace.get("id") + "/datasets");
                 expect(uri.query(true)).toEqual({
-                    'dataset_ids[]': this.model.id,
+                    'dataset_ids': this.model.id,
                     page: '1',
                     rows: '50'
                 });

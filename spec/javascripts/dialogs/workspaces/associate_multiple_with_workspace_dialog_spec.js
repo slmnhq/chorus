@@ -33,7 +33,7 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
         });
 
         it("sends all of the datasets' ids", function() {
-            var datasetIdParams = this.server.lastCreate().params()['dataset_ids[]']
+            var datasetIdParams = this.server.lastCreate().params()['dataset_ids']
             expect(datasetIdParams).toContain('123');
             expect(datasetIdParams).toContain('456');
             expect(datasetIdParams).toContain('789');

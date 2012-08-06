@@ -16,16 +16,19 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
         new chorus.models.BulkSaver({collection: this}).save();
     },
 
-    urlParams: function() {
-        var ids = _.pluck(this.models, 'id');
+    urlParams: function(options) {
 
         var params = {
             namePattern: this.attributes.namePattern,
             databaseName: this.attributes.databaseName,
             type: this.attributes.type,
             objectType: this.attributes.objectType,
-            datasetIds: ids.toString()
         };
+
+        if (options && options.method == "create") {
+            var ids = _.pluck(this.models, 'id');
+            params['datasetIds'] = ids.toString()
+        }
 
         return params;
     },

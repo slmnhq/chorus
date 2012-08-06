@@ -1,6 +1,6 @@
 chorus.models.BulkSaver = chorus.models.Base.extend({
-    url: function() {
-        return this.attributes.collection.url();
+    url: function(options) {
+        return this.attributes.collection.url(options);
     },
 
     initialize: function() {
