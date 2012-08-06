@@ -300,5 +300,29 @@ describe " system generated activities " do
     page.should have_content "EDC Admin restored workspace unarchiving_ws_as from the archive"
   end
 
+  it "creates activity stream when users are added on to a workspace" do
+
+    create_valid_user
+    create_valid_workspace(:name => "addmembers", :shared => true)
+    wait_for_ajax
+    click_link "Add or Edit Members"
+    within_modal do
+      click_link "Add all"
+      click_submit_button
+    end
+    page.should have_content "EDC Admin added"
+
+    go_to_home_page
+    page.should have_content "EDC Admin added"
+
+    go_to_user_list_page
+    within(".list")  do
+      click_link "EDC Admin"
+    end
+    wait_for_ajax
+    page.should have_content "EDC Admin added"
+
+  end
+
 
 end
