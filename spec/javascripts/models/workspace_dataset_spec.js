@@ -20,7 +20,7 @@ describe("chorus.models.WorkspaceDataset", function() {
     });
 
     it("has the right url", function() {
-        expect(this.dataset.url()).toMatchUrl('/workspaces/44/datasets/1011');
+        expect(this.dataset.url()).toMatchUrl('/datasets/1011');
     });
 
     describe("when the 'invalidated' event is triggered", function() {

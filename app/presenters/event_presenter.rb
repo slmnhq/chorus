@@ -31,9 +31,13 @@ class EventPresenter < Presenter
 
   def additional_data_hash
     pairs = model.additional_data.map do |key, value|
-      [key, sanitize(value)]
-    end
+      if value.class == String
+        [key, sanitize(value)]
+      else
+        [key, present(value)]
+      end
 
+    end
     Hash[pairs]
   end
 

@@ -103,7 +103,6 @@ describe("chorus.models.Activity", function() {
             beforeEach(function() {
                 activity = rspecFixtures.activity.sourceTableCreated({
                     dataset: { id: 9 }, workspace: {id: 10}
-
                 });
 
                 dataset = activity.dataset();
@@ -116,6 +115,27 @@ describe("chorus.models.Activity", function() {
 
             it("adds the workspace data to the dataset", function() {
                 expect(dataset.get("workspace").id).toBe(10);
+            });
+        });
+
+        describe("#sourceDataset", function() {
+            var dataset;
+
+            beforeEach(function() {
+                activity = rspecFixtures.activity.datasetImportSuccess({
+                    sourceDataset: { id: 9, associatedWorkspaces: [{id: 10}]}
+                });
+
+                dataset = activity.importSource();
+            });
+
+            it("returns a WorkspaceDataset with the right data", function() {
+                expect(dataset).toBeA(chorus.models.WorkspaceDataset);
+                expect(dataset.id).toBe(9);
+            });
+
+            it("adds the workspace data to the sourceDataset", function() {
+                expect(dataset.get("associatedWorkspaces")[0].id).toBe(10);
             });
         });
 
@@ -241,6 +261,7 @@ describe("chorus.models.Activity", function() {
     describe("#isFailure", function() {
         it("returns true for IMPORT_FAILED", function() {
             expect(rspecFixtures.activity.fileImportFailed().isFailure()).toBeTruthy();
+            expect(rspecFixtures.activity.datasetImportFailed().isFailure()).toBeTruthy();
         });
 
         it("returns false for other activities", function() {
@@ -251,10 +272,12 @@ describe("chorus.models.Activity", function() {
     describe("#isSuccessfulImport", function() {
         it("returns true for IMPORT SUCCESS", function() {
             expect(rspecFixtures.activity.fileImportSuccess().isSuccessfulImport()).toBeTruthy();
+            expect(rspecFixtures.activity.datasetImportSuccess().isSuccessfulImport()).toBeTruthy();
         });
 
         it("returns false for other activities", function() {
             expect(rspecFixtures.activity.fileImportFailed().isSuccessfulImport()).toBeFalsy();
+            expect(rspecFixtures.activity.datasetImportFailed().isSuccessfulImport()).toBeFalsy();
         });
 
     });

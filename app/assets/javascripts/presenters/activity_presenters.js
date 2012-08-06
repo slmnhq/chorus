@@ -140,13 +140,13 @@
                 computed: [ "noteObjectType" ]
             },
 
-            IMPORT_SUCCESS: {
+            FILE_IMPORT_SUCCESS: {
                 links: ["workspace", "dataset"],
                 attrs: ["importType"],
                 computed: ["importSourceLink", "datasetType"]
             },
 
-            IMPORT_FAILED: {
+            FILE_IMPORT_FAILED: {
                 links: ["workspace"],
                 attrs: ["importType", "destinationTable"],
                 computed: ["importSourceLink", "datasetType", "datasetLink"]
@@ -155,6 +155,18 @@
             MEMBERS_ADDED: {
                 links: ["actor", "workspace", "member"],
                 computed: ["count"]
+            },
+
+            DATASET_IMPORT_SUCCESS: {
+                links: ["workspace", "dataset"],
+                attrs: ["sourceTable"],
+                computed: ["importSourceDatasetLink", "datasetType"]
+            },
+
+            DATASET_IMPORT_FAILED: {
+                links: ["workspace"],
+                attrs: ["sourceTable"],
+                computed: ["importSourceDatasetLink", "datasetType", "datasetLink"]
             }
         },
 
@@ -254,6 +266,14 @@
 
         importSourceLink: function(self) {
             return self.model.get("fileName");
+        },
+
+        importSourceDatasetLink: function(self) {
+            var workspace = self.model.get("workspace")
+            var dataset = self.model.get("sourceDataset");
+            dataset.workspace = workspace;
+            var dataset_model = new chorus.models.WorkspaceDataset(dataset);
+            return dataset_model.showLink();
         },
 
         datasetLink: function(self) {

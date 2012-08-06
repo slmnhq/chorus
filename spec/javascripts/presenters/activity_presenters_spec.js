@@ -1,5 +1,5 @@
 describe("chorus.presenters.Activity", function() {
-    var model, actor, presenter, workfile, workspace, dataset, member;
+    var model, actor, presenter, workfile, workspace, dataset, member, sourceDataset;
 
     describe("common aspects", function() {
         context("activity with a workspace", function() {
@@ -486,7 +486,7 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("import success", function() {
+    context("file import success", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.fileImportSuccess();
             presenter = new chorus.presenters.Activity(model);
@@ -499,7 +499,7 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.IMPORT_SUCCESS.default", {
+                "activity.header.FILE_IMPORT_SUCCESS.default", {
                     importType: model.get("importType"),
                     importSourceLink: model.get("fileName"),
                     datasetType: t("dataset.types.table"),
@@ -510,7 +510,31 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("import failed", function() {
+    context("dataset import success", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.datasetImportSuccess();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            dataset = model.dataset();
+            sourceDataset = model.importSource();
+        });
+
+        itHasTheImportIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.DATASET_IMPORT_SUCCESS.default", {
+                    importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
+                    datasetType: t("dataset.types.table"),
+                    datasetLink: linkTo(dataset.showUrl(), dataset.name()),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            )
+        });
+    });
+
+    context("file import failed", function() {
         beforeEach(function() {
             model = rspecFixtures.activity.fileImportFailed();
             presenter = new chorus.presenters.Activity(model);
@@ -522,9 +546,32 @@ describe("chorus.presenters.Activity", function() {
 
         it("has the right header html", function() {
             expect(presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.IMPORT_FAILED.default", {
+                "activity.header.FILE_IMPORT_FAILED.default", {
                     importType: model.get("importType"),
                     importSourceLink: model.get("fileName"),
+                    datasetType: t("dataset.types.table"),
+                    datasetLink: model.get('destinationTable'),
+                    workspaceLink: linkTo(workspace.showUrl(), workspace.name())
+                }
+            )
+        });
+    });
+
+    context("dataset import failed", function() {
+        beforeEach(function() {
+            model = rspecFixtures.activity.datasetImportFailed();
+            presenter = new chorus.presenters.Activity(model);
+            actor = model.actor();
+            workspace = model.workspace();
+            sourceDataset = model.importSource();
+        });
+
+        itHasTheErrorIcon();
+
+        it("has the right header html", function() {
+            expect(presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.DATASET_IMPORT_FAILED.default", {
+                    importSourceDatasetLink: linkTo(sourceDataset.showUrl(), sourceDataset.name()),
                     datasetType: t("dataset.types.table"),
                     datasetLink: model.get('destinationTable'),
                     workspaceLink: linkTo(workspace.showUrl(), workspace.name())

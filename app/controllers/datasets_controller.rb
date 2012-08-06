@@ -43,7 +43,7 @@ class DatasetsController < GpdbController
     Events::DATASET_IMPORT_SUCCESS.by(current_user).add(
         :workspace => workspace,
         :dataset => destination_dataset(source_table, to_table),
-        :source_id => source_table.id
+        :source_dataset => source_table
     )
   end
 
@@ -52,7 +52,7 @@ class DatasetsController < GpdbController
         :workspace => workspace,
         :destination_table => to_table,
         :error_message => error_message,
-        :source_id => source_table.id
+        :source_dataset => source_table
     )
   end
 end

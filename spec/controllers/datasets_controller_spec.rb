@@ -122,7 +122,7 @@ describe DatasetsController do
       event.actor.should == account.owner
       event.dataset.should == destination_table
       event.workspace.should == active_workspace
-      event.source_id.should == src_table.id
+      event.source_dataset.name.should == src_table.name
     end
 
     it "should create a fail event when there's an exception" do
@@ -136,7 +136,7 @@ describe DatasetsController do
       event.actor.should == account.owner
       event.destination_table.should == options["to_table"]
       event.workspace.should == active_workspace
-      event.source_id.should == src_table.id
+      event.source_dataset.name.should == src_table.name
       event.error_message.should == "Tiger uppercut!"
     end
   end

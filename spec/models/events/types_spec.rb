@@ -322,19 +322,24 @@ describe "Event types" do
   end
 
   describe "DATASET_IMPORT_SUCCESS" do
-    let(:source_dataset) {datasets(:bobs_table)}
+    let(:source_dataset) { datasets(:bobs_table) }
+    let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
       Events::DATASET_IMPORT_SUCCESS.add(
           :actor => actor,
           :dataset => dataset,
-          :source_id => source_dataset.id,
+          :source_dataset => source_dataset,
           :workspace => workspace
       )
     end
 
     its(:dataset) { should == dataset }
     its(:targets) { should == {:workspace => workspace, :dataset => dataset} }
-    its(:additional_data) { should == {:source_id => source_dataset.id} }
+    its(:additional_data) { should == { :source_dataset => source_dataset} }
+
+    it "has a workspace in the source_dataset" do
+      subject.additional_data[:source_dataset].bound_workspaces.should include(workspace)
+    end
 
     it_creates_activities_for { [actor, workspace, dataset] }
     it_does_not_create_a_global_activity
@@ -362,10 +367,11 @@ describe "Event types" do
 
   describe "DATASET_IMPORT_FAILED" do
     let(:source_dataset) {datasets(:bobs_table)}
+    let!(:workspace_association) { workspace.bound_datasets << source_dataset }
     subject do
       Events::DATASET_IMPORT_FAILED.add(
           :actor => actor,
-          :source_id => source_dataset.id,
+          :source_dataset => source_dataset,
           :destination_table => 'test',
           :workspace => workspace,
           :error_message => 'Flying Monkey Attack again'
@@ -373,7 +379,11 @@ describe "Event types" do
     end
 
     its(:targets) { should == {:workspace => workspace} }
-    its(:additional_data) { should == {:source_id => source_dataset.id, :destination_table => 'test', :error_message => 'Flying Monkey Attack again'} }
+    its(:additional_data) { should == {:source_dataset => source_dataset, :destination_table => 'test', :error_message => 'Flying Monkey Attack again'} }
+
+    it "has a workspace in the source_dataset" do
+      subject.additional_data[:source_dataset].bound_workspaces.should include(workspace)
+    end
 
     it_creates_activities_for { [actor, workspace] }
     it_does_not_create_a_global_activity

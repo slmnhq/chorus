@@ -1,6 +1,6 @@
 describe("chorus.views.ErrorDetails", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.activity.importFailed({ errorMessage: this.text });
+        this.model = rspecFixtures.activity.fileImportFailed({ errorMessage: this.text });
         this.view = new chorus.views.ErrorDetails({ model: this.model });
     });
 

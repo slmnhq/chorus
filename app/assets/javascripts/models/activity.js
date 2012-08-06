@@ -10,7 +10,8 @@
         "newUser" : "User",
         "noteObject" : "NoteObject",
         "hdfsEntry" : "HdfsEntry",
-        "member": "User"
+        "member": "User",
+        "sourceDataset": "WorkspaceDataset"
     };
 
     chorus.models.Activity = chorus.models.Base.extend({
@@ -35,7 +36,11 @@
         member: makeAssociationMethod("member"),
 
         dataset: makeAssociationMethod("dataset", function(model) {
-           model.set({workspace: this.get("workspace")}, {silent: true});
+            model.set({workspace: this.get("workspace")}, {silent: true});
+        }),
+
+        importSource: makeAssociationMethod("sourceDataset", function(model) {
+            model.set({workspace: this.get("workspace")}, {silent: true});
         }),
 
         hdfsEntry: makeAssociationMethod("hdfsEntry", function(model) {
@@ -212,11 +217,11 @@
         },
 
         isFailure: function() {
-            return this.get("action") === "IMPORT_FAILED";
+            return this.get("action") === "FILE_IMPORT_FAILED" ||  this.get("action") === "DATASET_IMPORT_FAILED" ;
         },
 
         isSuccessfulImport: function() {
-            return this.get("action") === "IMPORT_SUCCESS"
+            return this.get("action") === "FILE_IMPORT_SUCCESS" ||  this.get("action") === "DATASET_IMPORT_SUCCESS" ;
         }
     });
 

@@ -143,9 +143,11 @@ describe EventsController do
         "noteOnWorkfileCreated" => Events::NOTE_ON_WORKFILE,
         "noteOnDatasetCreated" => Events::NOTE_ON_DATASET,
         "noteOnWorkspaceDatasetCreated" => Events::NOTE_ON_WORKSPACE_DATASET,
-        "importSuccess" => Events::FILE_IMPORT_SUCCESS,
-        "importFailed" => Events::FILE_IMPORT_FAILED,
-        "membersAdded" => Events::MEMBERS_ADDED
+        "membersAdded" => Events::MEMBERS_ADDED,
+        "fileImportSuccess" => Events::FILE_IMPORT_SUCCESS,
+        "fileImportFailed" => Events::FILE_IMPORT_FAILED,
+        "datasetImportSuccess" => Events::DATASET_IMPORT_SUCCESS,
+        "datasetImportFailed" => Events::DATASET_IMPORT_FAILED
     }
 
     FIXTURE_FILES.each do |filename, event_class_name|

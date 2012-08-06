@@ -39,7 +39,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the activity is a failure", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.importFailed();
+                this.model = rspecFixtures.activity.fileImportFailed();
                 this.view = new chorus.views.Activity({ model: this.model });
                 this.view.render();
             });
@@ -71,7 +71,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the activity is something else", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.importSuccess();
+                this.model = rspecFixtures.activity.fileImportSuccess();
                 this.view = new chorus.views.Activity({ model: this.model });
                 this.view.render();
             });
