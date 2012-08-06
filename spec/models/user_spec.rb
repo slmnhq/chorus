@@ -47,16 +47,27 @@ describe User do
     end
   end
 
-  describe "#events" do
-    let(:current_user) { users(:bob) }
-    let(:carly) { users(:carly) }
+  describe "#accessible_events" do
+    let(:bob) { users(:bob) }
+    let(:instance_event) { events(:bob_creates_greenplum_instance) }
+    let(:public_workspace_event) { events(:bob_creates_public_workspace) }
+    let(:private_workspace_event) { events(:bob_creates_private_workspace) }
 
-    it "only returns events from workspaces the user has access to" do
-      public_event = events(:bob_creates_public_workspace)
-      private_event = events(:note_on_alice_private)
+    context "to members of a private workspace" do
+      let(:current_user) { users(:carly) }
 
-      carly.workspace_accessible_events(current_user).should include(public_event)
-      carly.workspace_accessible_events(current_user).should_not include(private_event)
+      it "returns all the events to a member of the private workspace" do
+        bob.accessible_events(current_user).should include(instance_event, public_workspace_event, private_workspace_event)
+      end
+    end
+
+    context "to non-members of a private workspace" do
+      let(:current_user) { users(:alice) }
+
+      it "returns all the public events to a non-member of the private workspace" do
+        bob.accessible_events(current_user).should include(instance_event, public_workspace_event)
+        bob.accessible_events(current_user).should_not include(private_workspace_event)
+      end
     end
   end
 

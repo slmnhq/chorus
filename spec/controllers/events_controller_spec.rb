@@ -38,7 +38,7 @@ describe EventsController do
       let(:object) { users(:bob) }
 
       it "presents the user's activities" do
-        any_instance_of(User) { |u| mock.proxy(u).workspace_accessible_events(current_user) }
+        any_instance_of(User) { |u| mock.proxy(u).accessible_events(current_user) }
         mock_present { |models| models.should include(event) }
         get :index, :entity_type => "user", :entity_id => object.id
         response.code.should == "200"

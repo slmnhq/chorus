@@ -3,7 +3,7 @@ class EventsController < ApplicationController
     events = if params[:entity_type] == "dashboard"
        Events::Base.for_dashboard_of(current_user)
      elsif params[:entity_type] == "user"
-       ModelMap.model_from_params(params[:entity_type], params[:entity_id]).workspace_accessible_events(current_user)
+       ModelMap.model_from_params(params[:entity_type], params[:entity_id]).accessible_events(current_user)
      else
        ModelMap.model_from_params(params[:entity_type], params[:entity_id]).events
      end
