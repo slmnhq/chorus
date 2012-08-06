@@ -53,7 +53,28 @@ describe("chorus.collections.DatasetSet", function() {
                     namePattern: "Foo",
                     databaseName: "dbName",
                     rows: "10",
-                    page: "1"
+                    page: "1",
+                    datasetIds: "5678,1234"
+                });
+            });
+
+            it("includes the datasetId param for the create method", function() {
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 1234}));
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 5678}));
+                this.collection.options.method = "create";
+
+                expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({
+                    datasetIds: "5678,1234"
+                });
+            });
+
+            it("includes the datasetId param for the create method", function() {
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 1234}));
+                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 5678}));
+                this.collection.options.method = "create";
+
+                expect(this.collection.url({rows: 10, page: 1})).toContainQueryParams({
+                    datasetIds: "5678,1234"
                 });
             });
         });

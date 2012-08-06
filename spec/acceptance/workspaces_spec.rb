@@ -129,7 +129,7 @@ resource "Workspaces" do
 
   post "/workspaces/:workspace_id/datasets" do
     parameter :workspace_id, "ID of the workspace with which to associate the datasets"
-    parameter :dataset_ids, "Array of dataset IDs to associate with the workspace"
+    parameter :dataset_ids, "Comma-delimited list of dataset IDs to associate with the workspace"
 
     let(:workspace_with_sandbox) do
       workspace.sandbox = sandbox
@@ -138,8 +138,9 @@ resource "Workspaces" do
     end
 
     let(:view) { FactoryGirl.create(:gpdb_view) }
+    let(:table) { FactoryGirl.create(:gpdb_table) }
     let(:workspace_id) { workspace_with_sandbox.id }
-    let(:dataset_ids) { [view.to_param] }
+    let(:dataset_ids) { view.to_param + "," + table.to_param }
 
     example_request "Associate the specified datasets with the workspace" do
       status.should == 201

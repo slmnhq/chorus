@@ -18,12 +18,13 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
 
     urlParams: function() {
         var ids = _.pluck(this.models, 'id');
+
         var params = {
             namePattern: this.attributes.namePattern,
             databaseName: this.attributes.databaseName,
             type: this.attributes.type,
             objectType: this.attributes.objectType,
-            'datasetIds[]': ids
+            datasetIds: ids.toString()
         };
 
         return params;

@@ -47,7 +47,7 @@ describe WorkspaceDatasetsController do
     end
 
     it "should associate multiple tables/views to the workspace for one table" do
-      table_ids = [gpdb_table.to_param, gpdb_view.to_param]
+      table_ids = gpdb_table.to_param + "," + gpdb_view.to_param
 
       post :create, :workspace_id => workspace.to_param, :dataset_ids => table_ids
       response.code.should == "201"

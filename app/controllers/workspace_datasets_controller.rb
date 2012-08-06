@@ -5,7 +5,7 @@ class WorkspaceDatasetsController < ApplicationController
   end
 
   def create
-    datasets = Dataset.where(:id => params[:dataset_ids])
+    datasets = Dataset.where(:id => params[:dataset_ids].split(","))
 
     if datasets.any? { |dataset| workspace.has_dataset?(dataset) }
       present_errors({:fields => {:dataset => {:ALREADY_ASSOCIATED => {}}}}, :status => :bad_request)
