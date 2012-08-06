@@ -82,10 +82,17 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     save: function(e) {
         this.$("button.submit").startLoading("sandbox.adding_sandbox");
         var sandboxId  = this.activeForm.fieldValues().schema;
+        var summary = !!this.workspace.get("summary") ? this.workspace.get("summary") : ""; // Necessary because backend treats null as string "null"
+        this.workspace.set({ summary: summary }, {silent: true})
+
         if(sandboxId) {
             this.workspace.set({ sandboxId: sandboxId }, {silent : true});
-            var summary = !!this.workspace.get("summary") ? this.workspace.get("summary") : ""; // Necessary because backend treats null as string "null"
-            this.workspace.set({ summary: summary }, {silent: true})
+            this.workspace.save();
+        } else {
+            // Create new schema
+            var schemaName = this.activeForm.fieldValues().schemaName;
+            var databaseId = this.activeForm.fieldValues().database;
+            this.workspace.set({schemaName: schemaName, databaseId: databaseId}, {silent : true});
             this.workspace.save();
         }
 
@@ -107,6 +114,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     saveFailed: function() {
         this.$("button.submit").stopLoading();
+        this.showErrors(this.workspace);
     },
 
     enableOrDisableSaveButton: function(schemaVal) {

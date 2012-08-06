@@ -133,11 +133,15 @@ describe("chorus.dialogs.SandboxNew", function() {
 
                 describe("when save fails", function() {
                     beforeEach(function() {
-                        this.dialog.workspace.trigger("saveFailed");
+                        this.server.lastUpdateFor(this.dialog.workspace).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                     });
 
                     it("takes the button out of the loading state", function() {
                         expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeFalsy();
+                    });
+
+                    it("displays the error message", function() {
+                        expect(this.dialog.$(".errors")).toContainText("A can't be blank");
                     });
                 });
 
@@ -166,6 +170,27 @@ describe("chorus.dialogs.SandboxNew", function() {
                     it("shows a toast message", function() {
                         expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.toast");
                     });
+                });
+            });
+
+            context("with a instance id, database id, and schema name", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog.instanceMode, 'fieldValues').andReturn({
+                        instance: "4",
+                        database: "5",
+                        schemaName: "new_schema"
+                    });
+
+                    this.dialog.instanceMode.trigger("change", "new_schema");
+                    this.dialog.$("button.submit").click();
+                });
+
+                it("should set schema name on the model", function() {
+                    expect(this.dialog.workspace.get("schemaName")).toBe("new_schema");
+                });
+
+                it("saves the workspace with the new sandbox id", function() {
+                    expect(this.server.lastUpdate().params()["workspace[schema_name]"]).toBe("new_schema");
                 });
             });
 

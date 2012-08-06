@@ -233,5 +233,42 @@ describe WorkspacesController do
         workspace.has_changed_settings.should == false
       end
     end
+
+    context "user can create a new schema as sandbox" do
+      let(:database) { gpdb_schemas(:other_schema).database }
+
+      before do
+        stub(subject).create_schema_in_gpdb("create_new_schema", database) {}
+      end
+
+      it "should create a GpdbSchema in Chorus meta data" do
+        put :update, :id => workspace.id, :workspace => {
+            :owner => {id: "3"},
+            :public => "false",
+            :schema_name => "create_new_schema",
+            :database_id => database.id
+        }
+
+        workspace.reload
+        schema = GpdbSchema.find_by_name("create_new_schema")
+        workspace.sandbox.id.should == schema.id
+        schema.name.should == "create_new_schema"
+        schema.database.should == database
+      end
+
+      it "should clean up the greenplum schema if the Chorus meta data save fails" do
+        stub(subject).create_schema_in_gpdb("create_new_schema", database) {}
+        any_instance_of(GpdbSchema) { |schema| mock(schema).save! {
+          raise ActiveRecord::RecordNotFound
+        } }
+        mock(subject).cleanup_schema_in_gpdb.with_any_args {}
+        put :update, :id => workspace.id, :workspace => {
+            :owner => {id: "3"},
+            :public => "false",
+            :schema_name => "create_new_schema",
+            :database_id => database.id
+        }
+      end
+    end
   end
 end
