@@ -105,7 +105,6 @@
         eachWithMoreLink: function(context, max, more_key, less_key, showLast, fn, inverse) {
             var ret = "";
 
-            console.log("context", context);
             if (context && context.length > 0) {
                 for (var i = 0, j = context.length; i < j; i++) {
                     if(showLast) {
