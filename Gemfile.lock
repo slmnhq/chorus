@@ -265,6 +265,7 @@ DEPENDENCIES
   capybara
   capybara-screenshot
   capybara-webkit
+  chunky_png
   clockwork
   compass-rails
   database_cleaner

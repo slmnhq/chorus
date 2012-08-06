@@ -234,7 +234,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     saveToDesktop: function() {
-        $.download("/downloadChart.jsp", {
+        $.download("/download_chart", {
             svg: this.makeSvgData(),
             "chart-name": this.options.chartOptions.name,
             "chart-type": this.options.chartOptions.type

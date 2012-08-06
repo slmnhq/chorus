@@ -92,6 +92,7 @@ Chorus::Application.routes.draw do
     end
   end
 
+  post 'download_chart', :controller => 'image_downloads'
 
   match "/" => "root#index"
   match "VERSION" => "configurations#version"

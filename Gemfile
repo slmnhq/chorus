@@ -45,6 +45,7 @@ group :test, :integration do
   gem 'hashie'
   gem 'vcr'
   gem 'fakefs',              :require => false
+  gem 'chunky_png'
 end
 
 group :test, :development, :integration do

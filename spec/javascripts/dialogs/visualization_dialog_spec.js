@@ -457,7 +457,7 @@ describe("chorus.dialogs.Visualization", function() {
                     });
 
                     it("makes a request to the chart download api", function() {
-                        expect($.download).toHaveBeenCalledWith("/downloadChart.jsp", {
+                        expect($.download).toHaveBeenCalledWith("/download_chart", {
                             "svg": this.dialog.makeSvgData(),
                             "chart-name": "Foo",
                             "chart-type": "boxplot"
