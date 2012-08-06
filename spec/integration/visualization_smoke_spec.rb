@@ -8,11 +8,10 @@ describe "Create frequency plot" do
 
     login('edcadmin','secret')
     create_gpdb_instance(:name => "frequency_plot")
-    wait_for_ajax
     click_link "frequency_plot"
     wait_for_ajax
     click_link "ChorusAnalytics"
-    wait_for_ajax
+    sleep(2)
     click_link "analytics"
     wait_for_ajax
     click_link "2009_sfo_customer_survey"
@@ -42,7 +41,7 @@ describe "Create box plot" do
     click_link "boxplot"
     wait_for_ajax
     click_link "ChorusAnalytics"
-    wait_for_ajax
+    sleep(2)
     click_link "analytics"
     wait_for_ajax
     click_link "campaign_dim"
@@ -73,7 +72,7 @@ describe "Create time series plot" do
     click_link "time_series"
     wait_for_ajax
     click_link "ChorusAnalytics"
-    wait_for_ajax
+    sleep(2)
     click_link "analytics"
     wait_for_ajax
     click_link "campaign_dim"
@@ -104,7 +103,7 @@ describe "Create heat map plot" do
     click_link "heatmap_plot"
     wait_for_ajax
     click_link "ChorusAnalytics"
-    wait_for_ajax
+    sleep(2)
     click_link "analytics"
     wait_for_ajax
     click_link "2009_sfo_customer_survey"
@@ -136,7 +135,7 @@ describe "Create histogram plot" do
     click_link "histogram_plot"
     wait_for_ajax
     click_link "ChorusAnalytics"
-    wait_for_ajax
+    sleep(2)
     click_link "analytics"
     wait_for_ajax
     click_link "2009_sfo_customer_survey"
@@ -167,7 +166,7 @@ describe "User can cancel a visualization" do
     click_link "cancel_visualization"
     wait_for_ajax
     click_link "ChorusAnalytics"
-    wait_for_ajax
+    sleep(2)
     click_link "analytics"
     wait_for_ajax
     click_link "2009_sfo_customer_survey"
