@@ -3,7 +3,7 @@ chorus.models.CSVImport = chorus.models.Base.extend({
     urlTemplate: "workspaces/{{workspaceId}}/csv/{{id}}/import",
 
     declareValidations:function (newAttrs) {
-        if (this.get("type") !== "existingTable") {
+        if (this.get("destinationType") !== "existing") {
             this.requirePattern('toTable', chorus.ValidationRegexes.ChorusIdentifier64(), newAttrs, "import.validation.toTable.required");
         }
     },

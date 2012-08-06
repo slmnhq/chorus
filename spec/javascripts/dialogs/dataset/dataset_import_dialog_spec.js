@@ -6,7 +6,7 @@ describe("chorus.dialogs.DatasetImport", function() {
         spyOn($.fn, 'fileupload');
         this.validDatasets = [
             newFixtures.workspaceDataset.sandboxTable({objectName: "table_a", workspace: {id: 242}}),
-            newFixtures.workspaceDataset.sandboxTable({objectName: "table_b", workspace: {id: 243}})
+            newFixtures.workspaceDataset.sandboxTable({objectName: "1_table_b", workspace: {id: 243}})
         ];
         this.invalidDatasets = [
             newFixtures.workspaceDataset.externalTable(),
@@ -508,6 +508,7 @@ describe("chorus.dialogs.DatasetImport", function() {
                 it("sets the destination table and truncate options in the csv", function() {
                     expect(this.dialog.csvOptions.tableName).toBe(this.validDatasets[1].name());
                     expect(this.dialog.model.get("truncate")).toBeFalsy();
+                    expect(this.dialog.$(".has_error")).not.toExist();
                 });
             });
         });
