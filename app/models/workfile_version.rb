@@ -25,7 +25,7 @@ class WorkfileVersion < ActiveRecord::Base
   end
 
   def validate_maximum_file_size
-    if contents.file? && ((contents.size / 1024.0 / 1024.0) > maximum_workfile_size)
+    if contents.size && (contents.size / 1024.0 / 1024.0) > maximum_workfile_size
       errors.add(:base, :file_size_exceeded, { :count => maximum_workfile_size })
     end
   end

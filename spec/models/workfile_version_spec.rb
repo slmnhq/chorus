@@ -75,6 +75,20 @@ describe WorkfileVersion do
         flattened_messages.join.should_not match(/not recognized by the 'identify' command/)
       end
     end
+
+    context "validate file sizes" do
+      let(:user) { FactoryGirl.create(:user) }
+
+      it "gives an error when file is too big" do
+         stub(version.contents).size { 9999999999999999999999999999999999999 }
+         version.should_not be_valid
+      end
+
+      it "is ok with reasonable file sizes" do
+         stub(version.contents).size { 1 }
+         version.should be_valid
+      end
+    end
   end
 
   describe "after_create" do
