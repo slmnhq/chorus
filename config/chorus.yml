@@ -1,3 +1,4 @@
+# Don't forget to add your new key to chorus.yml.example AND chorus.yml in chorus-staging server!!!
 session_timeout_minutes: 120
 instance_poll_interval_minutes: 1
 delete_unimported_csv_files_interval_hours: 1
