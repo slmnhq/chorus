@@ -1,14 +1,5 @@
 describe("chorus.models.Session", function() {
     var models = chorus.models;
-    beforeEach(function() {
-        this.savedAuthCookie = $.cookie("authid")
-        this.savedUserIdCookie = $.cookie("userId");
-    });
-
-    afterEach(function() {
-        $.cookie("authid", this.savedAuthCookie);
-        $.cookie("userId", this.savedUserIdCookie);
-    })
 
     describe("#save", function() {
         beforeEach(function() {
@@ -26,11 +17,6 @@ describe("chorus.models.Session", function() {
             this.model = new models.Session();
             spyOnEvent(this.model, "needsLogin");
             spyOn(chorus.router, "navigate")
-            $.cookie("authid", "1234");
-        });
-
-        afterEach(function() {
-            $.cookie("authid", null);
         });
 
         context("when the model has errors", function() {
@@ -83,47 +69,26 @@ describe("chorus.models.Session", function() {
             this.model = new models.Session();
         });
 
-        context("when there is an authid cookie", function() {
-            beforeEach(function() {
-                $.cookie("authid", "1234");
-            })
+        it("returns true when there's a user", function () {
+            this.model._user = rspecFixtures.user();
+            expect(this.model._user.get('id')).toBeTruthy();
+            expect(this.model.loggedIn()).toBeTruthy();
 
-            it("returns false when there is no _user", function() {
-                expect(this.model.loggedIn()).toBeFalsy();
-            });
-
-            it("returns true when the user has been fetched", function() {
-                this.model._user = rspecFixtures.user();
-                expect(this.model._user.get('id')).toBeTruthy();
-                expect(this.model.loggedIn()).toBeTruthy();
-            });
         });
 
-        context("when there is no authid cookie", function() {
-            beforeEach(function() {
-                $.cookie("authid", null);
-                this.model._user = rspecFixtures.user();
-            })
-
-            it("returns false", function() {
-                expect(this.model.loggedIn()).toBeFalsy();
-            })
-        })
+        it("returns false when there is no _user", function () {
+            expect(this.model.loggedIn()).toBeFalsy();
+        });
     });
 
     describe("#fetch", function() {
         beforeEach(function() {
             this.model = new models.Session({ id: "1234", foo: "bar" });
-            $.cookie("authid", "1234");
 
             this.errorSpy = jasmine.createSpy("error");
             this.model.fetch({
                 error: this.errorSpy
             });
-        });
-
-        afterEach(function() {
-            $.cookie("authid", null);
         });
 
         it("has the correct url", function() {

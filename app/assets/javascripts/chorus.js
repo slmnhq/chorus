@@ -68,6 +68,8 @@ window.Chorus = function chorus$Global() {
     };
 
     self.requireLogin = function requireLogin() {
+        delete self.session._user;
+
         self.session.rememberPathBeforeLoggedOut();
 
         self.router.navigate("/login");

@@ -234,7 +234,6 @@ describe("chorus.utilities.CsvParser", function() {
 
                     this.columns = this.csvParser.getColumnOrientedData();
                     this.types = _.pluck(this.columns, "type")
-                    console.log(this.column);
                 })
 
                 it("has the correct number of columns", function() {

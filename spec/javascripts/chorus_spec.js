@@ -638,6 +638,12 @@ describe("chorus global", function() {
             setLoggedInUser({id: "1", username: "iAmNumberOne"}, this.chorus);
         })
 
+        it("deletes the user from the session", function () {
+            expect(this.chorus.session._user).toBeTruthy();
+            this.chorus.requireLogin();
+            expect(this.chorus.session._user).toBeUndefined();
+        });
+
         it("tells the session to save the path of the page the user was trying to get to", function() {
             spyOn(this.chorus.session, 'rememberPathBeforeLoggedOut');
             this.chorus.requireLogin();

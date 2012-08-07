@@ -5,15 +5,9 @@ describe("chorus.router", function() {
             this.backboneSpy = spyOn(Backbone.history, "start")
             this.chorus.initialize();
             spyOn(window, "scroll");
-            this.savedAuthCookie = $.cookie("authid")
-            $.cookie("authid", "1234");
             spyOn(chorus.PageEvents, "reset");
 
         });
-
-        afterEach(function() {
-            $.cookie("authid", this.savedAuthCookie);
-        })
 
         it("generates a new cachebuster value when navigating", function() {
             spyOn(this.chorus, "updateCachebuster").andCallThrough();

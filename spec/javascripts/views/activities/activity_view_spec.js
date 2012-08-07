@@ -45,7 +45,6 @@ describe("chorus.views.Activity", function() {
             });
 
             it("displays a link to the error message", function() {
-                console.log(this.view);
                 expect(this.view.$(".activity_content .actions")).toExist();
                 expect(this.view.$(".activity_content .actions .details")).toExist();
                 expect(this.view.$(".activity_content .actions .details")).toContainText(t("activity.view_error_details"));

@@ -16,7 +16,7 @@ chorus.models.Session = chorus.models.Base.extend({
     },
 
     loggedIn: function() {
-        return $.cookie("authid") && this._user && this._user.get("id");
+        return this._user && this._user.get("id");
     },
 
     fetch: function(options) {
