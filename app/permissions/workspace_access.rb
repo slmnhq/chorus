@@ -1,12 +1,4 @@
 class WorkspaceAccess < AdminFullAccess
-  def self.workspaces_for(current_user)
-    if current_user.admin?
-      Workspace.scoped
-    else
-      Workspace.accessible_to(current_user)
-    end
-  end
-
   def self.members_for(user, workspace)
     if user.admin?
       workspace.members

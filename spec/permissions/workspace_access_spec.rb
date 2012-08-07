@@ -15,24 +15,6 @@ describe WorkspaceAccess do
 
   let(:user) { non_member }
 
-  describe ".workspaces_for" do
-    context "user is admin" do
-      it "returns unscoped workspaces" do
-        mock(Workspace).scoped
-
-        described_class.workspaces_for(admin)
-      end
-    end
-
-    context "user is not admin" do
-      it "returns limited workspaces" do
-        mock(Workspace).accessible_to(user)
-
-        described_class.workspaces_for(user)
-      end
-    end
-  end
-
   describe ".members_for" do
     let(:workspace) { Object.new }
 

@@ -26,6 +26,26 @@ describe Workspace do
     end
   end
 
+  describe ".workspaces_for" do
+    context "user is admin" do
+      let(:admin) { users(:admin) }
+      it "returns unscoped workspaces" do
+        mock(Workspace).scoped
+
+        described_class.workspaces_for(admin)
+      end
+    end
+
+    context "user is not admin" do
+      let(:user) { users(:bob) }
+      it "returns limited workspaces" do
+        mock(Workspace).accessible_to(user)
+
+        described_class.workspaces_for(user)
+      end
+    end
+  end
+
   describe ".accessible_to" do
     let!(:public_workspace) { workspaces(:bob_public) }
     let!(:owned_workspace) { workspaces(:alice_private) }

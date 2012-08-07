@@ -43,11 +43,17 @@ describe WorkspacesController do
 
     it "scopes by active status" do
       get :index, :active => 1
-      decoded_response.size.should == WorkspaceAccess.workspaces_for(owner).active.count
+      decoded_response.size.should == Workspace.workspaces_for(owner).active.count
     end
 
     it "scopes by memberships" do
-      other_user.workspaces << private_workspace
+      get :index, :user_id => other_user.id
+      decoded_response.size.should == other_user.workspaces.count - 1
+      decoded_response.map(&:name).should_not include(workspaces(:bob_private).name)
+    end
+
+    it "shows admins all workspaces scoped by membership" do
+      log_in users(:admin)
       get :index, :user_id => other_user.id
       decoded_response.size.should == other_user.workspaces.count
     end
@@ -61,7 +67,7 @@ describe WorkspacesController do
 
       it "accepts a page parameter" do
         get :index, :page => 2, :per_page => 2
-        decoded_response.first.name.should == WorkspaceAccess.workspaces_for(owner).order("lower(name) ASC")[2].name
+        decoded_response.first.name.should == Workspace.workspaces_for(owner).order("lower(name) ASC")[2].name
       end
 
       it "defaults the per_page to fifty" do

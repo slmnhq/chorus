@@ -2,9 +2,9 @@ class WorkspacesController < ApplicationController
   def index
     if params[:user_id]
       user = User.find(params[:user_id])
-      workspaces = user.workspaces
+      workspaces = user.workspaces.workspaces_for(current_user)
     else
-      workspaces = WorkspaceAccess.workspaces_for(current_user)
+      workspaces = Workspace.workspaces_for(current_user)
     end
     workspaces = workspaces.active if params[:active]
     present paginate(workspaces.order("lower(name) ASC"))

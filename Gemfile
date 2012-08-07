@@ -61,5 +61,5 @@ end
 
 group :development do
   #gem 'license_finder', :git => "https://github.com/pivotal/LicenseFinder.git"
-
+  gem 'thin'
 end

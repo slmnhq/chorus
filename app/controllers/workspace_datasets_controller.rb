@@ -32,7 +32,7 @@ class WorkspaceDatasetsController < ApplicationController
   private
 
   def workspace
-    @workspace ||= WorkspaceAccess.workspaces_for(current_user).find(params[:workspace_id])
+    @workspace ||= Workspace.workspaces_for(current_user).find(params[:workspace_id])
   end
 
   def create_event_for_dataset(dataset, workspace)

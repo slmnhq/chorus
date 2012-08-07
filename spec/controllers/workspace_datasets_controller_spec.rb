@@ -12,7 +12,7 @@ describe WorkspaceDatasetsController do
   before do
     log_in user
 
-    mock(WorkspaceAccess).
+    mock(Workspace).
       workspaces_for(user).mock!.
       find(workspace.to_param) { workspace }
 

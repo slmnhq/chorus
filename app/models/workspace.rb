@@ -76,6 +76,14 @@ class Workspace < ActiveRecord::Base
     end
   end
 
+  def self.workspaces_for(user)
+    if user.admin?
+      scoped
+    else
+      accessible_to(user)
+    end
+  end
+
   def self.accessible_to(user)
     with_membership = user.memberships.pluck(:workspace_id)
     where('workspaces.public OR
