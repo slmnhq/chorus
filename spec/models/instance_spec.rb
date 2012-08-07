@@ -184,38 +184,70 @@ describe Instance do
   end
 
   describe "refresh_databases", :database_integration => true do
-    let(:account_with_access) { real_gpdb_account }
-    let(:account_without_access) { account_for_user_with_restricted_access }
-    let(:instance) { account_with_access.instance }
-    let(:database) { instance.databases.find_by_name(GpdbIntegration.database_name) }
-    let(:missing_database) { instance.databases.create!(:name => 'i_am_not_real') }
+    context "with database integration", :database_integration => true do
+      let(:instance) { account_with_access.instance }
+      let(:database) { instance.databases.find_by_name(GpdbIntegration.database_name) }
+      let(:account_with_access) { real_gpdb_account }
+      before do
+        refresh_chorus
+      end
 
-    before do
-      refresh_chorus
+      it "adds new database_instance_accounts" do
+        database.instance_accounts.find_by_id(account_with_access.id).should be_nil
+        instance.refresh_databases
+        database.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
+      end
     end
 
-    it "refreshes the databases" do
-      mock(GpdbDatabase).refresh(instance.owner_account)
-      instance.refresh_databases
-    end
+    context "with database stubbed" do
+      let(:instance) { instances(:bobs_instance) }
+      let(:database) { gpdb_databases(:bobs_database) }
+      let(:missing_database) { instance.databases.where("id <> #{database.id}").first }
+      let(:account_with_access) { instance.owner_account }
+      let(:account_without_access) { instance_accounts(:iamcarly) }
 
-    it "adds new database_instance_accounts" do
-      database.instance_accounts.find_by_id(account_with_access.id).should be_nil
-      instance.refresh_databases
-      database.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
-    end
+      before do
+        stub_gpdb(instance.owner_account, instance.maintenance_db, instance.send(:database_and_role_sql) => [
+            {'database_name' => database.name, 'db_username' => account_with_access.db_username},
+            {'database_name' => 'something_new', 'db_username' => account_with_access.db_username}
+        ])
+      end
 
-    it "removes database_instance_accounts if they no longer exist" do
-      database.instance_accounts << account_without_access
-      instance.refresh_databases
-      database.instance_accounts.find_by_id(account_without_access.id).should be_nil
-    end
+      it "creates new databases" do
+        instance.refresh_databases
+        instance.databases.where(:name => 'something_new').should exist
+      end
 
-    it "marks databases as stale if they no longer exist" do
-      missing_database.should_not be_stale
-      instance.refresh_databases(:mark_stale => true)
-      missing_database.should be_stale
-      missing_database.stale_at.should be_within(5.seconds).of(Time.now)
+      it "removes database_instance_accounts if they no longer exist" do
+        database.instance_accounts << account_without_access
+        instance.refresh_databases
+        database.instance_accounts.find_by_id(account_without_access.id).should be_nil
+      end
+
+      it "marks databases as stale if they no longer exist" do
+        missing_database.should_not be_stale
+        instance.refresh_databases(:mark_stale => true)
+        missing_database.reload.should be_stale
+        missing_database.stale_at.should be_within(5.seconds).of(Time.now)
+      end
+
+      it "does not mark databases as stalle if flag not set" do
+        missing_database.should_not be_stale
+        instance.refresh_databases
+        missing_database.reload.should_not be_stale
+      end
+
+      it "clears the stale flag on databases if they are found again" do
+        database.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+        instance.refresh_databases
+        database.reload.should_not be_stale
+      end
+
+      it "does not update the stale_at time" do
+        missing_database.update_attributes!({:stale_at => 1.year.ago}, :without_protection => true)
+        instance.refresh_databases(:mark_stale => true)
+        missing_database.reload.stale_at.should be_within(5.seconds).of(1.year.ago)
+      end
     end
   end
 

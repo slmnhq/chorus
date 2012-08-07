@@ -1,4 +1,5 @@
 class GpdbSchema < ActiveRecord::Base
+  include Stale
   SCHEMAS_SQL = <<-SQL
   SELECT
     schemas.nspname as schema_name
@@ -43,18 +44,29 @@ class GpdbSchema < ActiveRecord::Base
       return
     end
 
+    found_schemas = []
+
     schema_rows.map do |row|
       begin
         schema = database.schemas.find_or_initialize_by_name(row["schema_name"])
-        schema.stale_at = Time.now if database.stale?
+        found_schemas << schema
         schema_new = schema.new_record?
         if schema_new
           schema.save!
+        else
+          schema.update_attributes!({:stale_at => nil}, :without_protection => true)
         end
         Dataset.refresh(account, schema, options) if schema_new || options[:refresh_all]
 
         schema
       rescue ActiveRecord::StatementInvalid => e
+      end
+    end
+
+    if options[:mark_stale]
+      (database.schemas.not_stale - found_schemas).each do |schema|
+        schema.stale_at = Time.now
+        schema.save!
       end
     end
   end
@@ -77,10 +89,6 @@ class GpdbSchema < ActiveRecord::Base
       end
       yield conn
     end
-  end
-
-  def stale?
-    stale_at.present?
   end
   private
 

@@ -1,24 +1,22 @@
 require 'spec_helper'
 
 describe Dataset do
-  let(:account) { FactoryGirl.create(:instance_account) }
-  let(:schema) { FactoryGirl.create(:gpdb_schema) }
+  let(:instance) { instances(:bobs_instance) }
+  let(:account) { instance.owner_account }
+  let(:schema) { gpdb_schemas(:bobs_schema) }
   let(:datasets_sql) { Dataset::Query.new(schema).tables_and_views_in_schema.to_sql }
-  let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_tables(["view1", "table1"]).to_sql }
+  let(:dataset) { datasets(:bobs_table) }
+  let(:dataset_view) { datasets(:bobs_view) }
 
   describe "associations" do
     it { should belong_to(:schema) }
   end
 
   describe "workspace association" do
-    let!(:dataset) { FactoryGirl.create :gpdb_table }
-    let!(:workspace) { FactoryGirl.create :workspace }
-    let!(:workspace2) { FactoryGirl.create :workspace }
-    let!(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
-    let!(:association2) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace2) }
+    let(:workspace) { workspaces(:bob_public) }
 
-    it "belongs to multiple workspaces" do
-      dataset.bound_workspaces.should == [workspace, workspace2]
+    it "can be bound to workspaces" do
+      dataset.bound_workspaces.should include workspace
     end
   end
 
@@ -28,42 +26,39 @@ describe Dataset do
 
   describe ".with_name_like" do
     it "scopes objects by name" do
-      FactoryGirl.create(:gpdb_table, :name => "match")
-      FactoryGirl.create(:gpdb_table, :name => "nope")
-
-      Dataset.with_name_like("match").count.should == 1
+      Dataset.with_name_like(dataset.name).count.should == 1
     end
 
     it "matches anywhere in the name, regardless of case" do
-      FactoryGirl.create(:gpdb_table, :name => "amatCHingtable")
+      dataset.update_attributes!({:name => "amatCHingtable"}, :without_protection => true)
 
       Dataset.with_name_like("match").count.should == 1
       Dataset.with_name_like("MATCH").count.should == 1
     end
 
     it "returns all objects if name is not provided" do
-      FactoryGirl.create(:gpdb_table)
       Dataset.with_name_like(nil).count.should == Dataset.count
     end
   end
 
   context ".refresh" do
     context "refresh once, without mark_stale flag" do
-      before(:each) do
+      before do
         stub_gpdb(account, datasets_sql => [
-          {'type' => "r", "name" => "table1", "master_table" => 't'},
-          {'type' => "v", "name" => "view1", "master_table" => 'f'}
+            {'type' => "r", "name" => dataset.name, "master_table" => 't'},
+            {'type' => "v", "name" => "new_view", "master_table" => 'f'},
+            {'type' => "r", "name" => "new_table", "master_table" => 't'}
         ])
       end
 
       it "creates new copies of the datasets in our db" do
         Dataset.refresh(account, schema)
-
-        datasets = schema.datasets.order(:name)
-        datasets.size.should == 2
-        datasets.map(&:class).should == [GpdbTable, GpdbView]
-        datasets.pluck(:name).should == ["table1", "view1"]
-        datasets.pluck(:master_table).should == [true, false]
+        new_table = schema.datasets.find_by_name('new_table')
+        new_view = schema.datasets.find_by_name('new_view')
+        new_table.should be_a GpdbTable
+        new_table.master_table.should be_true
+        new_view.should be_a GpdbView
+        new_view.master_table.should be_false
       end
 
       it "does not re-create datasets that already exist in our database" do
@@ -82,61 +77,68 @@ describe Dataset do
       end
     end
 
+    context "with stale records that now exist" do
+      before do
+        dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+        stub_gpdb(account, datasets_sql => [
+            {'type' => "r", "name" => dataset.name, "master_table" => 't'},
+        ])
+      end
+
+      it "clears the stale flag" do
+        Dataset.refresh(account, schema)
+        dataset.reload.should_not be_stale
+      end
+    end
+
     context "with records missing" do
       before do
-        stub_gpdb(account, datasets_sql => [
-            {'type' => "r", "name" => "table1", "master_table" => 't'},
-            {'type' => "v", "name" => "view1", "master_table" => 'f'}
-        ])
-        Dataset.refresh(account, schema)
-        stub_gpdb(account, datasets_sql => [
-            {'type' => "r", "name" => "table1", "master_table" => 't'},
-        ])
+        stub_gpdb(account, datasets_sql => [])
       end
 
       it "mark missing records as stale" do
         Dataset.refresh(account, schema, :mark_stale => true)
 
-        datasets = schema.datasets.order(:name)
-        datasets.size.should == 2
-        datasets.find_by_name("table1").should_not be_stale
-        datasets.find_by_name("view1").should be_stale
-        datasets.find_by_name("view1").stale_at.should be_within(5.seconds).of(Time.now)
+        dataset.should be_stale
+        dataset.stale_at.should be_within(5.seconds).of(Time.now)
+      end
+
+      it "does not update stale_at time" do
+        dataset.update_attributes!({:stale_at => 1.year.ago}, :without_protection => true)
+        Dataset.refresh(account, schema, :mark_stale => true)
+
+        dataset.reload.stale_at.should be_within(5.seconds).of(1.year.ago)
       end
 
       it "does not mark missing records if option not set" do
         Dataset.refresh(account, schema)
 
-        datasets = schema.datasets.order(:name)
-        datasets.size.should == 2
-        datasets.find_by_name("table1").should_not be_stale
-        datasets.find_by_name("view1").should_not be_stale
+        dataset.should_not be_stale
       end
     end
   end
 
   describe ".add_metadata!(dataset, account)" do
-    let(:dataset) { FactoryGirl.create(:gpdb_table, :schema => schema, :name => "table1") }
-    let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset("table1").to_sql }
+    let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset([dataset.name]).to_sql }
 
-    before(:each) do
+    before do
       stub_gpdb(account,
                 datasets_sql => [
-                  {'type' => "r", "name" => "table1", "master_table" => 't'}
+                    {'type' => "r", "name" => dataset.name, "master_table" => 't'}
                 ],
 
                 metadata_sql => [
-                  {
-                    'name' => 'table1',
-                    'description' => 'table1 is cool',
-                    'definition' => nil,
-                    'column_count' => '3',
-                    'row_count' => '5',
-                    'table_type' => 'BASE_TABLE',
-                    'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-                    'disk_size' => '500 kB',
-                    'partition_count' => '6'
-                  }
+                    {
+                        'name' => dataset.name,
+                        'description' => 'table1 is cool',
+                        'definition' => nil,
+                        'column_count' => '3',
+                        'row_count' => '5',
+                        'table_type' => 'BASE_TABLE',
+                        'last_analyzed' => '2012-06-06 23:02:42.40264+00',
+                        'disk_size' => '500 kB',
+                        'partition_count' => '6'
+                    }
                 ]
       )
     end
@@ -157,42 +159,40 @@ describe Dataset do
   end
 
   describe ".add_metadata! for a view" do
-    let(:dataset) { FactoryGirl.create(:gpdb_view, :schema => schema, :name => "view1") }
-    let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset("view1").to_sql }
-
-    before(:each) do
+    let(:metadata_sql) { Dataset::Query.new(schema).metadata_for_dataset([dataset_view.name]).to_sql }
+    before do
       stub_gpdb(account,
                 datasets_sql => [
-                  {'type' => "v", "name" => "view1", }
+                    {'type' => "v", "name" => dataset_view.name, }
                 ],
 
                 metadata_sql => [
-                  {
-                    'name' => 'view1',
-                    'description' => 'view1 is super cool',
-                    'definition' => 'SELECT * FROM users;',
-                    'column_count' => '3',
-                    'last_analyzed' => '2012-06-06 23:02:42.40264+00',
-                    'disk_size' => '0 kB',
-                  }
+                    {
+                        'name' => dataset_view.name,
+                        'description' => 'view1 is super cool',
+                        'definition' => 'SELECT * FROM users;',
+                        'column_count' => '3',
+                        'last_analyzed' => '2012-06-06 23:02:42.40264+00',
+                        'disk_size' => '0 kB',
+                    }
                 ]
       )
     end
 
     it "fills in the 'description' attribute of each db object in the relation" do
       Dataset.refresh(account, schema)
-      dataset.add_metadata!(account)
+      dataset_view.add_metadata!(account)
 
-      dataset.statistics.description.should == "view1 is super cool"
-      dataset.statistics.definition.should == 'SELECT * FROM users;'
-      dataset.statistics.column_count.should == 3
-      dataset.statistics.last_analyzed.to_s.should == "2012-06-06 23:02:42 UTC"
-      dataset.statistics.disk_size == '0 kB'
+      dataset_view.statistics.description.should == "view1 is super cool"
+      dataset_view.statistics.definition.should == 'SELECT * FROM users;'
+      dataset_view.statistics.column_count.should == 3
+      dataset_view.statistics.last_analyzed.to_s.should == "2012-06-06 23:02:42 UTC"
+      dataset_view.statistics.disk_size == '0 kB'
     end
   end
 
   describe "search fields" do
-    let(:dataset) {datasets(:bobsearch_table)}
+    let(:dataset) { datasets(:bobsearch_table) }
     it "indexes text fields" do
       Dataset.should have_searchable_field :name
       Dataset.should have_searchable_field :database_name
@@ -271,7 +271,7 @@ describe Dataset::Query, :database_integration => true do
     let(:sql) { subject.tables_and_views_in_schema.to_sql }
 
     it "returns a query whose result includes the names of all tables and views in the schema," +
-         "but does not include sub-partition tables, indexes, or relations in other schemas" do
+           "but does not include sub-partition tables, indexes, or relations in other schemas" do
       names = rows.map { |row| row["name"] }
       names.should =~ ["base_table1", "view1", "external_web_table1", "master_table1", "pg_all_types"]
     end
@@ -300,7 +300,7 @@ describe Dataset::Query, :database_integration => true do
 
     context "with correct input" do
       let(:account) { real_gpdb_account }
-      let(:user) { users(:carly)}
+      let(:user) { users(:carly) }
       let(:schema) { GpdbSchema.find_by_name('test_schema') }
       let(:src_table) { GpdbTable.find_by_name('base_table1') }
       let(:options) {
@@ -311,13 +311,13 @@ describe Dataset::Query, :database_integration => true do
         }
       }
 
-      before(:each) do
+      before do
         refresh_chorus
         src_table.import(options, schema.instance.owner)
         GpdbTable.refresh(account, schema)
       end
 
-      after(:each) do
+      after do
         call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
       end
 
@@ -394,11 +394,11 @@ describe Dataset::Query, :database_integration => true do
         }
       }
 
-      before(:each) do
+      before do
         refresh_chorus
       end
 
-      after(:each) do
+      after do
         call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
       end
 

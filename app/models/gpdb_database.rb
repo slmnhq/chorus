@@ -1,4 +1,6 @@
 class GpdbDatabase < ActiveRecord::Base
+  include Stale
+
   belongs_to :instance
   has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id
   has_and_belongs_to_many :instance_accounts
@@ -25,9 +27,5 @@ class GpdbDatabase < ActiveRecord::Base
 
   def with_gpdb_connection(account, &block)
     Gpdb::ConnectionBuilder.connect!(account.instance, account, name, &block)
-  end
-
-  def stale?
-    stale_at.present?
   end
 end

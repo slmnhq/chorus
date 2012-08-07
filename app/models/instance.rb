@@ -40,7 +40,6 @@ class Instance < ActiveRecord::Base
   end
 
   def refresh_databases(options ={})
-    GpdbDatabase.refresh(owner_account)
     rows = Gpdb::ConnectionBuilder.connect!(self, owner_account, maintenance_db) { |conn| conn.select_all(database_and_role_sql) }
     found_databases = []
     database_account_groups = rows.inject({}) do |groups, row|
@@ -50,13 +49,15 @@ class Instance < ActiveRecord::Base
     end
 
     database_account_groups.each do |database_name, db_usernames|
-      database = databases.find_by_name!(database_name)
+      database = databases.find_or_create_by_name!(database_name)
+      database.update_attributes!({:stale_at => nil}, :without_protection => true)
       database_accounts = accounts.where(:db_username => db_usernames)
       database.instance_accounts = database_accounts
       found_databases << database
     end
+
     if options[:mark_stale]
-      (instance.databases - found_databases).each do |database|
+      (instance.databases.not_stale - found_databases).each do |database|
         database.stale_at = Time.now
         database.save
       end

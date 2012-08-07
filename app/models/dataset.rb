@@ -2,6 +2,8 @@ class SqlCommandFailed < Exception
 end
 
 class Dataset < ActiveRecord::Base
+  include Stale
+
   belongs_to :schema, :class_name => 'GpdbSchema', :counter_cache => :datasets_count
   delegate :instance, :to => :schema
   delegate :definition, :to => :statistics
@@ -34,10 +36,6 @@ class Dataset < ActiveRecord::Base
     { :type => :integer, :method => :instance_account_ids, :options => { :multiple => true } }
   ]
 
-  def stale?
-    stale_at.present?
-  end
-
   def instance_account_ids
     schema.database.instance_account_ids
   end
@@ -63,15 +61,14 @@ class Dataset < ActiveRecord::Base
       klass = type == 'r' ? GpdbTable : GpdbView
       dataset = klass.find_or_initialize_by_name_and_schema_id(attrs['name'], schema.id)
       found_datasets << dataset
-      attrs.merge!(:stale_at => nil) if options[:mark_stale]
+      attrs.merge!(:stale_at => nil) if dataset.stale?
       dataset.assign_attributes(attrs, :without_protection => true)
       dataset.save if dataset.changed?
     end
 
     if options[:mark_stale]
-      (schema.datasets - found_datasets).each do |dataset|
-        dataset.stale_at = Time.now
-        dataset.save
+      (schema.datasets.not_stale - found_datasets).each do |dataset|
+        dataset.update_attributes!({:stale_at => Time.now}, :without_protection => true)
       end
     end
   end
