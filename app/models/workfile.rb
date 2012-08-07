@@ -15,7 +15,6 @@ class Workfile < ActiveRecord::Base
 
   validates_format_of :file_name, :with => /^[a-zA-Z0-9_ \.\(\)\-]+$/
 
-  before_validation :normalize_file_name, :on => :create
   before_validation :init_file_name, :on => :create
 
   accepts_nested_attributes_for :versions
@@ -105,9 +104,6 @@ class Workfile < ActiveRecord::Base
 
   def init_file_name
     self.file_name ||= versions.first.file_name
-  end
-
-  def normalize_file_name
     WorkfileName.resolve_name_for!(self)
   end
 end

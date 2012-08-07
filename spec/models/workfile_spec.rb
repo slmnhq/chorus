@@ -24,11 +24,10 @@ describe Workfile do
 
       context "first conflict" do
         it "renames and turns the workfile valid" do
-          workfile = Workfile.new :file_name => 'workfile.sql'
+          workfile = Workfile.new(:versions_attributes => [{:contents => test_file("workfile.sql", "text/sql")}])
           workfile.workspace = another_workfile.workspace
           workfile.owner = another_workfile.owner
 
-          workfile.save
           workfile.should be_valid
           workfile.file_name.should == 'workfile_1.sql'
         end
