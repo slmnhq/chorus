@@ -10,6 +10,11 @@ image_storage: ":rails_root/system/"
 attachment_storage: ":rails_root/system/"
 max_upload_size_megabytes: 100
 server_port: 8080
+gpfdist:
+  url: "localhost"
+  port: 8181
+  data_dir: "/tmp"
+
 ldap:
   host: 10.32.88.212
   enable: false
