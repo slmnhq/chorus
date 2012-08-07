@@ -8,6 +8,7 @@ class Install
   InstallationFailed = Class.new(StandardError)
   NonRootValidationError = Class.new(StandardError)
   CommandFailed = Class.new(StandardError)
+  LocalhostUndefined = Class.new(StandardError)
 
   attr_accessor :destination_path, :database_password, :database_user
 
@@ -23,7 +24,9 @@ class Install
       default_chorus_path:"Please enter Chorus destination path [#{DEFAULT_PATH}]:",
       installation_complete:"Installation completed.",
       installation_failed: "Installation failed. Please check install.log for details",
+      installation_failed_with_reason: "Installation failed: %s",
       abort_install_non_root:"Aborting install: Please run the installer as a non-root user.",
+      abort_install_localhost_undefined: "Aborting install: Could not connect to 'localhost', please set in /etc/hosts",
       run_server_control: "run ./server_control.sh start from %s to start everything up!"
   }
 
@@ -37,6 +40,10 @@ class Install
 
   def validate_non_root
     raise NonRootValidationError if Process.uid == 0
+  end
+
+  def validate_localhost
+    raise LocalhostUndefined unless system("ping -c 1 localhost > /dev/null")
   end
 
   def chorus_installation_path
@@ -153,8 +160,8 @@ class Install
   def create_database_structure
     chorus_exec "cd #{destination_path} && ./server_control.sh start postgres"
     sleep 2
-    chorus_exec %Q{#{destination_path}/postgres/bin/psql -d postgres -p8543 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
-    chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:create db:migrate"
+    chorus_exec %Q{#{destination_path}/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
+    chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:create db:migrate db:seed"
     chorus_exec "cd #{destination_path} && ./server_control.sh stop postgres"
   end
 
@@ -185,7 +192,7 @@ class Install
   end
 
   def chorus_exec(command)
-    system("#{command} >> install.log 2>&1 ") || raise(CommandFailed, command)
+    system("#{command} >> #{destination_path}/install.log 2>&1") || raise(CommandFailed, command)
   end
 end
 
@@ -194,6 +201,7 @@ if __FILE__ == $0
     install = Install.new(File.dirname(__FILE__))
 
     install.validate_non_root
+    install.validate_localhost
     install.get_destination_path
     install.determine_postgres_installer
 
@@ -226,9 +234,14 @@ if __FILE__ == $0
     puts Install::MESSAGES[:run_server_control] % install.destination_path
   rescue Install::NonRootValidationError
     puts Install::MESSAGES[:abort_install_non_root]
-  rescue Install::CommandFailed, e
+  rescue Install::CommandFailed => e
     File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
     puts Install::MESSAGES[:installation_failed]
+  rescue Install::LocalhostUndefined
+    puts Install::MESSAGES[:abort_install_localhost_undefined]
+  rescue => e
+    File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
+    puts Install::MESSAGES[:installation_failed_with_reason] % e.message
   end
 end
 

@@ -33,7 +33,7 @@ function pid_is_running () {
 function start_postgres () {
   echo "Starting postgres..."
   cd $CHORUS_HOME
-  $CHORUS_HOME/postgres/bin/pg_ctl -D $CHORUS_HOME/shared/db -o -p$POSTGRES_PORT start > /dev/null 2>&1
+  $CHORUS_HOME/postgres/bin/pg_ctl -D $CHORUS_HOME/shared/db -o "-p$POSTGRES_PORT -h127.0.0.1" start > /dev/null 2>&1
 }
 
 function start_worker () {

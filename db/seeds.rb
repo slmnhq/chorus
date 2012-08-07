@@ -7,6 +7,16 @@
 #   Mayor.create(:name => 'Emanuel', :city => cities.first)
 require 'user'
 
+class BlackholeSession
+  def initialize(*args)
+  end
+
+  def method_missing(*args)
+  end
+end
+
+Sunspot.session = BlackholeSession.new
+
 unless User.where(:username => "edcadmin").present?
   puts "Creating edcadmin user..."
   user = User.new(

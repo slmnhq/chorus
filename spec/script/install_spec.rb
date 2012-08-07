@@ -274,7 +274,7 @@ describe "Install" do
   describe "#create_database" do
     before do
       installer.destination_path = "/opt/chorus"
-      mock(installer).system("/opt/chorus/postgres/bin/initdb --locale=en_US.UTF-8 /opt/chorus/shared/db 2>&1 > install.log") { true }
+      mock(installer).system("/opt/chorus/postgres/bin/initdb --locale=en_US.UTF-8 /opt/chorus/shared/db >> /opt/chorus/install.log 2>&1") { true }
     end
 
     it "runs postgres' initdb command and creates the db structure" do
@@ -312,10 +312,10 @@ describe "Install" do
       mock(installer).version { "2.2.0.0" }
       mock(installer).sleep(2) { @call_order << "sleep" }
 
-      mock(installer).system("cd /opt/chorus && ./server_control.sh start postgres 2>&1 > install.log") { @call_order << 'start' }
-      mock(installer).system(%Q{/opt/chorus/postgres/bin/psql -d postgres -p8543 -c "CREATE ROLE the_user PASSWORD 'secret' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN" 2>&1 > install.log}) { @call_order << "create_user" }
-      mock(installer).system("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:create db:migrate 2>&1 > install.log") { @call_order << "migrate" }
-      mock(installer).system("cd /opt/chorus && ./server_control.sh stop postgres 2>&1 > install.log") { @call_order << 'stop' }
+      mock(installer).system("cd /opt/chorus && ./server_control.sh start postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'start' }
+      mock(installer).system(%Q{/opt/chorus/postgres/bin/psql -d postgres -p8543 -h 127.0.0.1 -c "CREATE ROLE the_user PASSWORD 'secret' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN" >> /opt/chorus/install.log 2>&1}) { @call_order << "create_user" }
+      mock(installer).system("cd /opt/chorus/releases/2.2.0.0 && RAILS_ENV=production bin/rake db:create db:migrate db:seed >> /opt/chorus/install.log 2>&1") { @call_order << "migrate" }
+      mock(installer).system("cd /opt/chorus && ./server_control.sh stop postgres >> /opt/chorus/install.log 2>&1") { @call_order << 'stop' }
     end
 
     it "creates the database structure" do
@@ -345,7 +345,7 @@ describe "Install" do
     end
 
     it "calls tar to unpack nginx" do
-      mock(installer).system("tar xzf /opt/chorus/releases/2.2.0.0/packaging/nginx_dist-1.2.2.tar.gz -C /opt/chorus/releases/2.2.0.0/ 2>&1 > install.log") { true }
+      mock(installer).system("tar xzf /opt/chorus/releases/2.2.0.0/packaging/nginx_dist-1.2.2.tar.gz -C /opt/chorus/releases/2.2.0.0/ >> /opt/chorus/install.log 2>&1") { true }
       installer.extract_nginx
     end
   end
@@ -358,7 +358,7 @@ describe "Install" do
 
     it "calls tar to unpack postgres" do
       installer.instance_variable_set(:@postgres_package, 'postgres-blahblah.tar.gz')
-      mock(installer).system("tar xzf /opt/chorus/releases/2.2.0.0/packaging/postgres/postgres-blahblah.tar.gz -C /opt/chorus/releases/2.2.0.0/ 2>&1 > install.log")  { true }
+      mock(installer).system("tar xzf /opt/chorus/releases/2.2.0.0/packaging/postgres/postgres-blahblah.tar.gz -C /opt/chorus/releases/2.2.0.0/ >> /opt/chorus/install.log 2>&1")  { true }
       installer.extract_postgres
     end
   end
@@ -369,7 +369,7 @@ describe "Install" do
     end
 
     it "raises an exception if exit code is different than zero" do
-      mock(installer).system("cd /opt/chorus && ./server_control.sh start postgres 2>&1 > install.log") { false }
+      mock(installer).system("cd /opt/chorus && ./server_control.sh start postgres >> /opt/chorus/install.log 2>&1") { false }
       expect { installer.create_database_structure }.to raise_error(Install::CommandFailed)
     end
   end
@@ -382,8 +382,22 @@ describe "Install" do
     end
 
     context "when the script is not run as root" do
-      it "should not raise an exception" do
+      it "does not raise an exception" do
         expect { installer.validate_non_root }.to_not raise_error()
+      end
+    end
+  end
+
+  describe "#validate_localhost" do
+    context "when localhost is undefined"
+    it "raises an exception" do
+      mock(installer).system("ping -c 1 localhost > /dev/null") { false }
+      expect { installer.validate_localhost }.to raise_error(Install::LocalhostUndefined)
+    end
+
+    context "when localhost is defined" do
+      it "does not raise an exception" do
+        expect { installer.validate_localhost }.to_not raise_error()
       end
     end
   end
