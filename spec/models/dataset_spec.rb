@@ -291,11 +291,15 @@ describe Dataset::Query, :database_integration => true do
     end
   end
 
-  describe "#import", :database_integration => true do
+  describe "#import", :database_integration do
     def call_sql(schema, account, sql_command)
       schema.with_gpdb_connection(account) do |connection|
         connection.exec_query(sql_command)
       end
+    end
+
+    before do
+      refresh_chorus
     end
 
     context "with correct input" do
@@ -312,7 +316,6 @@ describe Dataset::Query, :database_integration => true do
       }
 
       before do
-        refresh_chorus
         src_table.import(options, schema.instance.owner)
         GpdbTable.refresh(account, schema)
       end
@@ -382,7 +385,7 @@ describe Dataset::Query, :database_integration => true do
       end
     end
 
-    context "#import with exception", :database_integration => true do
+    context "#import with exception" do
       let(:account) { real_gpdb_account }
       let(:schema) { GpdbSchema.find_by_name('test_schema') }
       let(:src_table) { GpdbTable.find_by_name('base_table1') }
@@ -393,10 +396,6 @@ describe Dataset::Query, :database_integration => true do
             "sample_count" => -5
         }
       }
-
-      before do
-        refresh_chorus
-      end
 
       after do
         call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
