@@ -277,6 +277,7 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
     let(:activity_stream) do
       Object.new.tap do |activity|
         mock(activity).type.times(any_times) { 'IMPORT_SUCCESS' }
+        mock(activity).indirect_verb.times(any_times) {'of file'}
       end
     end
 
@@ -291,6 +292,7 @@ describe ActivityStreamEventMapper, :legacy_migration => true, :type => :legacy_
     let(:activity_stream) do
       Object.new.tap do |activity|
         mock(activity).type.times(any_times) { 'IMPORT_FAILED' }
+        mock(activity).indirect_verb.times(any_times) {'of file'}
       end
     end
 

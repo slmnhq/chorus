@@ -1,19 +1,20 @@
 class Legacy::ActivityStream
-  attr_reader :id, :type, :created_stamp
+  attr_reader :id, :type, :created_stamp, :indirect_verb
 
   def self.all
-    sql = "SELECT id, type, created_stamp FROM edc_activity_stream"
+    sql = "SELECT id, type, created_stamp, indirect_verb FROM edc_activity_stream"
 
     activity_stream_data = Legacy.connection.exec_query(sql)
     activity_stream_data.map do |activity_data|
-      new(activity_data["id"], activity_data["type"], activity_data["created_stamp"])
+      new(activity_data["id"], activity_data["type"], activity_data["created_stamp"], activity_data["indirect_verb"])
     end
   end
 
-  def initialize(id, type, created_stamp)
+  def initialize(id, type, created_stamp, indirect_verb=nil)
     @id = id
     @type = type
     @created_stamp = created_stamp
+    @indirect_verb = indirect_verb if indirect_verb
   end
 
   def instance_greenplum?
@@ -126,6 +127,50 @@ class Legacy::ActivityStream
     instance = Instance.find_by_id(rails_instance_id)
     raise Exception, "Instance for activity could not be found" unless instance
 
+    database = instance.databases.find_or_create_by_name(database_name)
+    schema = database.schemas.find_or_create_by_name(schema_name)
+    dataset = schema.datasets.find_or_create_by_name(dataset_name)
+    dataset.id
+  end
+
+  def rails_dataset_id_for_import_source
+    sql = "SELECT aso.object_id FROM edc_activity_stream_object aso
+                                     WHERE aso.activity_stream_id = '#{id}'
+                                     AND aso.object_type = 'object' AND entity_type IN ('chorusView', 'databaseObject')"
+
+    object_id = extract_result("object_id", Legacy.connection.exec_query(sql))
+    ids = object_id.delete("\"").split("|")
+    legacy_instance_id = ids[0]
+    database_name = ids[1]
+    schema_name = ids[2]
+    dataset_name = ids[4]
+
+    sql = "SELECT ei.chorus_rails_instance_id FROM edc_instance ei WHERE ei.id = '#{legacy_instance_id}'"
+    rails_instance_id = extract_result("chorus_rails_instance_id", Legacy.connection.exec_query(sql))
+    instance = Instance.find_by_id(rails_instance_id)
+    raise Exception, "Instance for activity could not be found" unless instance
+
+    database = instance.databases.find_or_create_by_name(database_name)
+    schema = database.schemas.find_or_create_by_name(schema_name)
+    dataset = schema.datasets.find_or_create_by_name(dataset_name)
+    dataset.id
+  end
+
+  def rails_dataset_id_for_import_destination
+    sql = "SELECT aso.object_id FROM edc_activity_stream_object aso
+                                     WHERE aso.activity_stream_id = '#{id}'
+                                     AND aso.object_type = 'object' AND entity_type IN ('table')"
+    object_id = extract_result("object_id", Legacy.connection.exec_query(sql))
+    ids = object_id.delete("\"").split("|")
+    legacy_instance_id = ids[0]
+    database_name = ids[1]
+    schema_name = ids[2]
+    dataset_name = ids[4]
+
+    sql = "SELECT ei.chorus_rails_instance_id FROM edc_instance ei WHERE ei.id = '#{legacy_instance_id}'"
+    rails_instance_id = extract_result("chorus_rails_instance_id", Legacy.connection.exec_query(sql))
+    instance = Instance.find_by_id(rails_instance_id)
+    raise Exception, "Instance for activity could not be found" unless instance
     database = instance.databases.find_or_create_by_name(database_name)
     schema = database.schemas.find_or_create_by_name(schema_name)
     dataset = schema.datasets.find_or_create_by_name(dataset_name)

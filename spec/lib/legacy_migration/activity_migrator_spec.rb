@@ -48,10 +48,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
         event.hdfs_file.path.should == "/data/Top_1_000_Songs_To_Hear_Before_You_Die.csv"
       end
 
-      it "copies IMPORT SUCCESS activities" do
+      it "copies FILE IMPORT SUCCESS activities" do
         expect {
           ActivityMigrator.new.migrate
-        }.to change(Events::FILE_IMPORT_SUCCESS, :count).by(101)
+        }.to change(Events::FILE_IMPORT_SUCCESS, :count).by(5)
 
         event = Events::FILE_IMPORT_SUCCESS.find(event_id_for('10177'))
         event.workspace.should be_a(Workspace)
@@ -64,10 +64,10 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
         event.additional_data[:import_type].should == "file"
       end
 
-      it "copies IMPORT FAILED activities" do
+      it "copies FILE IMPORT FAILED activities" do
         expect {
           ActivityMigrator.new.migrate
-        }.to change(Events::FILE_IMPORT_FAILED, :count).by(27)
+        }.to change(Events::FILE_IMPORT_FAILED, :count).by(7)
 
         event = Events::FILE_IMPORT_FAILED.find(event_id_for('10368'))
         event.workspace.should be_a(Workspace)
@@ -78,6 +78,36 @@ describe ActivityMigrator, :legacy_migration => true, :type => :legacy_migration
         event.additional_data[:import_type].should == "file"
         event.additional_data[:destination_table].should == "sfo_2011_annual_survey"
         event.additional_data[:error_message].should == "[ERROR: invalid input syntax for type double precision: \"1,909.00\"\n  Where: COPY sfo_2011_annual_survey, line 3851, column runid]"
+      end
+
+      it "copies DATASET IMPORT SUCCESS activities" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::DATASET_IMPORT_SUCCESS, :count).by(96)
+
+        event = Events::DATASET_IMPORT_SUCCESS.find(event_id_for('10308'))
+        event.workspace.should be_a(Workspace)
+        event.workspace.name.should == "New And Improved Title"
+        event.actor.should be_a(User)
+        event.actor.username.should == "notadmin"
+        event.dataset.should be_a(Dataset)
+        event.additional_data[:dataset].name.should == "clv_data_large_new"
+        event.additional_data[:source_dataset].name.should == "clv_data_large"
+      end
+
+      it "copies DATASET IMPORT FAILED activities" do
+        expect {
+          ActivityMigrator.new.migrate
+        }.to change(Events::DATASET_IMPORT_FAILED, :count).by(20)
+
+        event = Events::DATASET_IMPORT_FAILED.find(event_id_for('10336'))
+        event.workspace.should be_a(Workspace)
+        event.workspace.name.should == "New And Improved Title"
+        event.actor.should be_a(User)
+        event.actor.username.should == "notadmin"
+        event.additional_data[:destination_table].should == "import_try_2"
+        event.additional_data[:source_dataset].name.should == "clv_data_large"
+        event.additional_data[:error_message].should include( "ERROR: duplicate key violates unique constraint \"pg_type_typname_nsp_index\"")
       end
     end
 

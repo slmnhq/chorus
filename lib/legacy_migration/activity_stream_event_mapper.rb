@@ -21,6 +21,10 @@ class ActivityStreamEventMapper
       instance_event_class
     elsif @activity_stream.type == 'WORKSPACE_CREATED'
       workspace_create_event_class
+    elsif @activity_stream.type == 'IMPORT_SUCCESS'
+      import_success_event_class
+    elsif @activity_stream.type == 'IMPORT_FAILED'
+      import_failed_event_class
     else
       "Events::#{@activity_stream.type}".constantize
     end
@@ -41,6 +45,22 @@ class ActivityStreamEventMapper
       Events::PUBLIC_WORKSPACE_CREATED
     else
       Events::PRIVATE_WORKSPACE_CREATED
+    end
+  end
+
+  def import_success_event_class
+    if @activity_stream.indirect_verb == 'of file'
+      Events::FILE_IMPORT_SUCCESS
+    else
+      Events::DATASET_IMPORT_SUCCESS
+    end
+  end
+
+  def import_failed_event_class
+    if @activity_stream.indirect_verb == 'of file'
+      Events::FILE_IMPORT_FAILED
+    else
+      Events::DATASET_IMPORT_FAILED
     end
   end
 
@@ -82,6 +102,13 @@ class ActivityStreamEventMapper
       event.additional_data[:import_type] = "file"
       event.additional_data[:destination_table] = @activity_stream.destination_table
       event.additional_data[:error_message] = "#{@activity_stream.import_error_message}"
+    elsif event.class == Events::DATASET_IMPORT_FAILED
+      event.additional_data[:destination_table] = Dataset.find_by_id(@activity_stream.rails_dataset_id_for_import_destination).name
+      event.additional_data[:source_dataset] = Dataset.find_by_id(@activity_stream.rails_dataset_id_for_import_source)
+      event.additional_data[:error_message] = "#{@activity_stream.import_error_message}"
+    elsif event.class == Events::DATASET_IMPORT_SUCCESS
+      event.additional_data[:dataset] = Dataset.find_by_id(@activity_stream.rails_dataset_id_for_import_destination)
+      event.additional_data[:source_dataset] = Dataset.find_by_id(@activity_stream.rails_dataset_id_for_import_source)
     elsif event.class == Events::MEMBERS_ADDED
       event.additional_data[:num_added] = @member_num_added.to_s
     end
