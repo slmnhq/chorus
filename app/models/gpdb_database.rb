@@ -23,7 +23,8 @@ class GpdbDatabase < ActiveRecord::Base
     end.map { |row| row["datname"] }
 
     db_names.map do |name|
-      instance.databases.find_or_create_by_name!(name)
+      db = instance.databases.find_or_create_by_name!(name)
+      db.update_attributes!({:stale_at => nil}, :without_protection => true)
     end
   end
 

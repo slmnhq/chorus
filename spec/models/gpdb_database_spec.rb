@@ -27,6 +27,21 @@ describe GpdbDatabase do
       GpdbDatabase.refresh(account)
       expect { GpdbDatabase.refresh(account) }.not_to change(GpdbDatabase, :count)
     end
+
+    context "when database objects are stale" do
+      before do
+        GpdbDatabase.all.each { |database|
+          database.mark_stale!
+        }
+      end
+
+      it "marks them as non-stale" do
+        GpdbDatabase.refresh(account)
+        account.instance.databases.each { |database|
+          database.reload.should_not be_stale
+        }
+      end
+    end
   end
 
   context "association" do
@@ -35,6 +50,7 @@ describe GpdbDatabase do
 
   describe "callbacks" do
     let(:database) { gpdb_databases(:bobs_database) }
+
     describe "before_save" do
       describe "#mark_schemas_as_stale" do
         it "if the database has become stale, schemas will also be marked as stale" do
