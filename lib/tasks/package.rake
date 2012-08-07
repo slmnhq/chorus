@@ -96,7 +96,7 @@ module PackageMaker
 
     # Setup DB
     run "ssh #{host} 'cd #{path}; rm -rf ./postgres'"
-    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/#{postgres_build}'"
+    run "ssh #{host} 'cd #{path}; tar -xvf #{release_path}/packaging/postgres/#{postgres_build}'"
 
     run "ssh #{host} 'test ! -e #{shared_path}/db && RELEASE_PATH=#{release_path} CHORUS_HOME=#{path} bash #{release_path}/packaging/bootstrap_app.sh'"
 
