@@ -5,11 +5,11 @@ gem 'rails', '3.2.5'
 gem 'will_paginate'
 gem 'net-ldap',      :require => false
 gem 'paperclip', '3.0.4'
-gem 'queue_classic', :git => "git://github.com/pivotal-leopold/queue_classic.git"
+gem 'queue_classic', :github => "pivotal-leopold/queue_classic"
 gem 'clockwork',     :require => false
 gem 'allowy'
 gem 'sunspot_rails', '2.0.0.pre.120417'
-gem 'jetpack', :git => "git://github.com/pivotal-leopold/jetpack.git", :require => false
+gem 'jetpack', :github => "pivotal-leopold/jetpack", :require => false
 gem 'sunspot_solr', '2.0.0.pre.120417'
 gem 'quiet_assets'
 gem 'nokogiri'
@@ -17,7 +17,7 @@ gem 'nokogiri'
 platform :jruby do
   gem 'jruby-openssl', :require => false
   # Pull request: https://github.com/jruby/activerecord-jdbc-adapter/pull/207
-  gem 'activerecord-jdbcpostgresql-adapter', :git => "git://github.com/pivotal-leopold/activerecord-jdbc-adapter.git", :branch => "dynamic-schema-search-path"
+  gem 'activerecord-jdbcpostgresql-adapter', :github => "pivotal-leopold/activerecord-jdbc-adapter", :branch => "dynamic-schema-search-path"
 end
 
 group :assets do
@@ -55,7 +55,7 @@ group :test, :development, :integration do
   gem 'jasmine'
   gem 'rspec_api_documentation'
   gem 'forgery'
-  gem 'sunspot_matchers', :git => "git://github.com/pivotal/sunspot_matchers.git", :branch => "sunspot_2_pre"
+  gem 'sunspot_matchers', :github => "pivotal/sunspot_matchers", :branch => "sunspot_2_pre"
   gem 'fixture_builder'
 end
 
