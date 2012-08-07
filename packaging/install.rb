@@ -7,8 +7,25 @@ require 'yaml'
 class Install
   InstallationFailed = Class.new(StandardError)
   NonRootValidationError = Class.new(StandardError)
+  CommandFailed = Class.new(StandardError)
 
   attr_accessor :destination_path, :database_password, :database_user
+
+  DEFAULT_PATH = "/opt/chorus"
+
+  MESSAGES = {
+      select_os:"Could not detect your Linux version. Please select one of the following:",
+      select_redhat_55:"[1] - RedHat (CentOS/RHEL) 5.5 or compatible",
+      select_redhat_62:"[2] - RedHat (CentOS/RHEL) 6.2 or compatible",
+      select_SLES_11:"[3] - SuSE Enterprise Linux Server 11 or compatible",
+      select_abort_install:"[4] - Abort install",
+      version_not_supported:"Version not supported",
+      default_chorus_path:"Please enter Chorus destination path [#{DEFAULT_PATH}]:",
+      installation_complete:"Installation completed.",
+      installation_failed: "Installation failed. Please check install.log for details",
+      abort_install_non_root:"Aborting install: Please run the installer as a non-root user.",
+      run_server_control: "run ./server_control.sh start from %s to start everything up!"
+  }
 
   def initialize(installer_home)
     @installer_home = installer_home
@@ -31,8 +48,8 @@ class Install
   end
 
   def get_destination_path
-    prompt "Please enter Chorus destination path [/opt/chorus]:"
-    @destination_path = File.expand_path(get_input || "/opt/chorus")
+    prompt MESSAGES[:default_chorus_path]
+    @destination_path = File.expand_path(get_input || DEFAULT_PATH)
   end
 
   def get_postgres_build
@@ -44,11 +61,11 @@ class Install
     input = 2 if redhat_version == '6.2'
 
     while !(1..4).include?(input)
-      prompt "Could not detect your Linux version. Please select one of the following:"
-      prompt "[1] - RedHat (CentOS/RHEL) 5.5 or compatible"
-      prompt "[2] - RedHat (CentOS/RHEL) 6.2 or compatible"
-      prompt "[3] - SuSE Enterprise Linux Server 11 or compatible"
-      prompt "[4] - Abort install"
+      prompt MESSAGES[:select_os]
+      prompt MESSAGES[:select_redhat_55]
+      prompt MESSAGES[:select_redhat_62]
+      prompt MESSAGES[:select_SLES_11]
+      prompt MESSAGES[:select_abort_install]
       input = get_input.to_i
     end
 
@@ -60,7 +77,7 @@ class Install
       when 3
         "postgres-suse11-9.1.4.tar.gz"
       else
-        raise InstallationFailed, "Version not supported"
+        raise InstallationFailed, MESSAGES[:version_not_supported]
     end
   end
 
@@ -116,7 +133,7 @@ class Install
   end
 
   def create_database
-    system "#{destination_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
+    chorus_exec "#{destination_path}/postgres/bin/initdb --locale=en_US.UTF-8 #{destination_path}/shared/db"
   end
 
   def create_database_config
@@ -134,11 +151,11 @@ class Install
   end
 
   def create_database_structure
-    system "cd #{destination_path} && ./server_control.sh start postgres > /dev/null"
+    chorus_exec "cd #{destination_path} && ./server_control.sh start postgres"
     sleep 2
-    system %Q{#{destination_path}/postgres/bin/psql -d postgres -p8543 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN" > /dev/null}
-    system "cd #{release_path} && RAILS_ENV=production bin/rake db:create db:migrate > /dev/null"
-    system "cd #{destination_path} && ./server_control.sh stop postgres > /dev/null"
+    chorus_exec %Q{#{destination_path}/postgres/bin/psql -d postgres -p8543 -c "CREATE ROLE #{database_user} PASSWORD '#{database_password}' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN"}
+    chorus_exec "cd #{release_path} && RAILS_ENV=production bin/rake db:create db:migrate"
+    chorus_exec "cd #{destination_path} && ./server_control.sh stop postgres"
   end
 
   def link_current_to_release
@@ -146,12 +163,11 @@ class Install
   end
 
   def extract_nginx
-    system("tar xzf #{release_path}/packaging/nginx_dist-1.2.2.tar.gz -C #{release_path}/")
+    chorus_exec("tar xzf #{release_path}/packaging/nginx_dist-1.2.2.tar.gz -C #{release_path}/")
   end
 
   def extract_postgres
-
-    system("tar xzf #{release_path}/packaging/postgres/#{@postgres_package} -C #{release_path}/")
+    chorus_exec("tar xzf #{release_path}/packaging/postgres/#{@postgres_package} -C #{release_path}/")
   end
 
   private
@@ -166,6 +182,10 @@ class Install
 
   def release_path
     "#{destination_path}/releases/#{version}"
+  end
+
+  def chorus_exec(command)
+    system("#{command} >> install.log 2>&1 ") || raise(CommandFailed, command)
   end
 end
 
@@ -202,10 +222,13 @@ if __FILE__ == $0
 
     install.link_current_to_release
 
-    puts "Installation completed."
-    puts "run ./server_control.sh start from #{install.destination_path} to start everything up!"
+    puts Install::MESSAGES[:installation_complete]
+    puts Install::MESSAGES[:run_server_control] % install.destination_path
   rescue Install::NonRootValidationError
-    puts "Aborting install: Please run the installer as a non-root user."
+    puts Install::MESSAGES[:abort_install_non_root]
+  rescue Install::CommandFailed, e
+    File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
+    puts Install::MESSAGES[:installation_failed]
   end
 end
 
