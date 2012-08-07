@@ -82,7 +82,6 @@ describe("chorus.dialogs.DatasetImport", function() {
         });
 
         describe("default settings", function() {
-
             it("enables the upload button", function() {
                 expect(this.dialog.$("button.submit")).toBeEnabled();
             });
@@ -102,6 +101,26 @@ describe("chorus.dialogs.DatasetImport", function() {
 
             it("shows the 'Change' link", function() {
                 expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
+            });
+        });
+
+        describe("when the file size exceeds the maximum allowed size", function() {
+            beforeEach(function() {
+                this.fileList = [
+                    {
+                    name: 'foo Bar Baz.csv',
+                    size: 999999999999999999
+                }
+                ];
+                expect($.fn.fileupload).toHaveBeenCalled();
+                this.fileUploadOptions = $.fn.fileupload.mostRecentCall.args[0];
+                this.request = jasmine.createSpyObj('request', ['abort']);
+                this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+            });
+
+            it("shows an error", function() {
+                chorus.modal.validateFileSize();
+                expect(this.dialog.$('.errors')).toContainText("file exceeds");
             });
         });
 

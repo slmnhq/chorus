@@ -164,11 +164,11 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
             }
         }
     },
-    
+
     fileChosen: function(e, data) {
         this.$("button.submit").prop("disabled", false);
         this.$('.empty_selection').addClass('hidden');
-        
+
         this.uploadObj = data;
         var filename = data.files[0].name;
         var filenameComponents = filename.split('.');
@@ -176,18 +176,32 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
         var extension = _.last(filenameComponents);
         this.$(".file_name").text(filename);
         this.$(".new_table input[type='text']").val(basename.toLowerCase().replace(/ /g, '_'));
-        
+
         this.$("img").removeClass("hidden");
         this.$("img").attr("src", chorus.urlHelpers.fileIconUrl(extension, "medium"));
-        
+
         this.$(".import_controls").removeClass("hidden");
-        
+
         this.$(".file-wrapper a").removeClass("hidden");
         this.$(".file-wrapper button").addClass("hidden");
-        
+
         this.$("input[type=file]").prop("title", t("dataset.import.change_file"));
+
+        this.validateFileSize();
     },
-    
+
+    validateFileSize: function() {
+        this.clearErrors();
+        if (!this.model) return;
+
+        _.each( this.uploadObj.files, function(file) {
+            if (file.size > 1000000) {
+                this.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count":1}}}}
+                this.showErrors(this.model);
+            }
+        }, this);
+    },
+
     postRender: function() {
         this.importTarget = "new";
 
