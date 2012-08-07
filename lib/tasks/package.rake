@@ -5,6 +5,11 @@ task :package do
   PackageMaker.make
 end
 
+desc 'Generate binary installer'
+task :installer do
+  PackageMaker.make_installer
+end
+
 task :stage do
   deploy_configuration = YAML.load_file(Rails.root.join('config', 'deploy.yml'))['stage']
   PackageMaker.deploy(deploy_configuration)
@@ -17,7 +22,49 @@ end
 
 
 module PackageMaker
+  PATHS_TO_PACKAGE = [
+      "bin/",
+      "app/",
+      "config/",
+      "db/",
+      "doc/",
+      "lib/",
+      "packaging/",
+      "public/",
+      "script/",
+      "vendor/",
+      "WEB-INF/",
+      "Gemfile",
+      "Gemfile.lock",
+      "README.md",
+      "Rakefile",
+      "config.ru",
+      "version.rb",
+      "version_build",
+      ".bundle/",
+  ]
+
   extend self
+
+  def make_installer
+    rails_root = File.expand_path(File.dirname(__FILE__) + '/../../')
+    install_root = rails_root + '/tmp/installer/'
+    installer_path = install_root + 'chorus_installation'
+
+    FileUtils.rm_rf(install_root)
+    FileUtils.mkdir_p(installer_path)
+
+    prepare_app
+
+    PATHS_TO_PACKAGE.each do |path|
+      FileUtils.ln_s File.join(rails_root, path), File.join(installer_path, path)
+    end
+
+    FileUtils.ln_s File.join(rails_root, 'packaging/install.rb'), install_root
+
+    version = Chorus::VERSION::STRING
+    `#{rails_root}/packaging/makeself/makeself.sh --follow --nox11 --nowait #{install_root} chorus-#{version}.sh 'Chorus #{version} installer' ./chorus_installation/bin/ruby ../install.rb`
+  end
 
   def upload(filename, config)
     host = config['host']
@@ -77,9 +124,8 @@ module PackageMaker
   end
 
   def make(options = {})
-    current_sha = head_sha
     filename = "greenplum-chorus-#{timestamp}-#{version_name}.tar.gz"
-    archive_app(filename, current_sha)
+    archive_app(filename)
 
     clean_workspace
     filename
@@ -115,40 +161,20 @@ module PackageMaker
     end
   end
 
-  def archive_app(filename, sha)
+  def prepare_app
     unless ENV['IGNORE_DIRTY']
       check_clean_working_tree
     end
-    # TODO: Why?? pwd
-    run "pwd; RAILS_ENV=development bundle exec rake assets:precompile"
+    run "RAILS_ENV=development bundle exec rake assets:precompile"
     run "bundle exec jetpack ."
     File.open('version_build', 'w') do |f|
-      f.puts sha
+      f.puts version_name
     end
+  end
 
-    files_to_tar = [
-      "bin/",
-      "app/",
-      "config/",
-      "db/",
-      "doc/",
-      "lib/",
-      "packaging/",
-      "public/",
-      "script/",
-      "vendor/",
-      "WEB-INF/",
-      "Gemfile",
-      "Gemfile.lock",
-      "README.md",
-      "Rakefile",
-      "config.ru",
-      "version.rb",
-      "version_build",
-      ".bundle/config",
-    ]
-
-    run "tar czf #{filename} --exclude='public/system/' --exclude='javadoc' --exclude='.git' --exclude='log' --exclude 'config/database.yml' --exclude 'config/chorus.yml' #{files_to_tar.join(" ")}"
+  def archive_app(filename)
+    prepare_app
+    run "tar czf #{filename} --exclude='public/system/' --exclude='javadoc' --exclude='.git' --exclude='log' --exclude 'config/database.yml' --exclude 'config/chorus.yml' #{PATHS_TO_PACKAGE.join(" ")}"
   end
 
   def timestamp
