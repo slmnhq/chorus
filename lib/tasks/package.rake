@@ -164,7 +164,8 @@ module PackageMaker
     unless ENV['IGNORE_DIRTY']
       check_clean_working_tree
     end
-    run "RAILS_ENV=development bundle exec rake assets:precompile"
+    rails_env = ENV['RAILS_ENV'] || 'development'
+    run "RAILS_ENV=#{rails_env} bundle exec rake assets:precompile"
     run "bundle exec jetpack ."
     File.open('version_build', 'w') do |f|
       f.puts version_name
