@@ -3,11 +3,13 @@ require 'fileutils'
 class Gppipe
   GPFDIST_PIPE_DIR = File.join(Rails.root, '/tmp/gpfdist/')
 
-  attr_reader :source_table, :destination_table
+  attr_reader :src_schema, :src_table, :dst_schema, :dst_table
 
-  def initialize(source_table, destination_table)
-    @source_table = source_table
-    @destination_table = destination_table
+  def initialize(src_schema, src_table, dst_schema, dst_table)
+    @src_schema = src_schema
+    @src_table = src_table
+    @dst_schema = dst_schema
+    @dst_table = dst_table
   end
 
   def tabledef_from_query(arr)
@@ -15,40 +17,48 @@ class Gppipe
   end
 
   def pipe_name
-    @pipe_name ||= "#{source_table}_#{destination_table}"
+    @pipe_name ||= "pipe_#{Process.pid}_#{Time.now.to_i}"
   end
 
   def run
     pipe_file = File.join(GPFDIST_PIPE_DIR, pipe_name)
 
-    table_definition = gpdb1 do |conn|
-      table_def_rows = conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name = '#{source_table}' and table_schema='new_schema';")
-      tabledef_from_query(table_def_rows)
+    table_definition = ""
+    empty_table = false
+
+    gpdb1 do |conn|
+      empty_table = conn.exec_query("SELECT count(*) from #{src_schema}.#{src_table};")[0]['count'] == 0)
+      table_def_rows = conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name = '#{src_table}' and table_schema='new_schema';")
+      table_definition = tabledef_from_query(table_def_rows)
     end
 
-    begin
-      system "mkfifo #{pipe_file}"
+    if empty_table
+      gpdb2 { |conn| conn.exec_query("CREATE TABLE #{dst_schema}.#{dst_table}(#{table_definition})") }
+    else
+      begin
+        system "mkfifo #{pipe_file}"
 
-      thr = Thread.new do
-        gpdb1 do |conn|
-          conn.exec_query("drop external table if exists new_schema.#{pipe_name};")
-          conn.exec_query("CREATE WRITABLE EXTERNAL TABLE new_schema.#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
-          conn.exec_query("INSERT INTO new_schema.#{pipe_name} (SELECT * FROM new_schema.#{source_table});")
-          conn.exec_query("DROP EXTERNAL TABLE new_schema.#{pipe_name};")
+        thr = Thread.new do
+          gpdb1 do |conn|
+            conn.exec_query("DROP EXTERNAL TABLE IF EXISTS #{src_schema}.#{pipe_name};")
+            conn.exec_query("CREATE WRITABLE EXTERNAL TABLE #{src_schema}.#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
+            conn.exec_query("INSERT INTO #{src_schema}.#{pipe_name} (SELECT * FROM #{src_schema}.#{src_table});")
+            conn.exec_query("DROP EXTERNAL TABLE #{src_schema}.#{pipe_name};")
+          end
         end
-      end
 
-      gpdb2 do |conn|
-        conn.exec_query("drop external table if exists new_schema.#{pipe_name};")
-        conn.exec_query("CREATE EXTERNAL TABLE new_schema.#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
-        conn.exec_query("CREATE TABLE new_schema.#{destination_table}(#{table_definition})")
-        conn.exec_query("INSERT INTO new_schema.#{destination_table} (SELECT * FROM new_schema.#{pipe_name});")
-        conn.exec_query("DROP EXTERNAL TABLE new_schema.#{pipe_name};")
-      end
+        gpdb2 do |conn|
+          conn.exec_query("DROP EXTERNAL TABLE IF EXISTS #{dst_schema}.#{pipe_name};")
+          conn.exec_query("CREATE EXTERNAL TABLE #{dst_schema}.#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
+          conn.exec_query("CREATE TABLE #{dst_schema}.#{dst_table}(#{table_definition})")
+          conn.exec_query("INSERT INTO #{dst_schema}.#{dst_table} (SELECT * FROM #{dst_schema}.#{pipe_name});")
+          conn.exec_query("DROP EXTERNAL TABLE #{dst_schema}.#{pipe_name};")
+        end
 
-      thr.join
-    ensure
-      FileUtils.rm pipe_file if File.exists? pipe_file
+        thr.join
+      ensure
+        FileUtils.rm pipe_file if File.exists? pipe_file
+      end
     end
   end
 
