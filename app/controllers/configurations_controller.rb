@@ -9,11 +9,11 @@ class ConfigurationsController < ApplicationController
   end
 
   def version
-    render :inline => Chorus::VERSION::STRING + build_string
+    render :inline => build_string
   end
 
   def build_string
     f = File.join(Rails.root, 'version_build')
-    File.exists?(f) ? "-" + File.read(f) : ""
+    File.exists?(f) ? File.read(f) : Chorus::VERSION::STRING
   end
 end

@@ -16,17 +16,11 @@ describe ConfigurationsController do
   end
 
   describe "#version" do
-    it "shows the app's current version'" do
-      get :version
-      response.code.should == "200"
-      response.body.should include(Chorus::VERSION::STRING)
-    end
-
     it "shows the build SHA if the version_build file exists" do
       stub(File).exists? { true }
       stub(File).read { "foobarbaz" }
       get :version
-      response.body.should == Chorus::VERSION::STRING + "-foobarbaz"
+      response.body.should == "foobarbaz"
     end
 
     it "does not show the build SHA (or crash) if the version_build file does not exist" do
