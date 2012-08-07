@@ -121,4 +121,19 @@ describe GpdbSchema do
     it { should belong_to(:database) }
     it { should have_many(:datasets) }
   end
+
+  describe "callbacks" do
+    let(:schema) { gpdb_schemas(:bobs_schema) }
+
+    describe "before_save" do
+      describe "#mark_datasets_as_stale" do
+        it "if the schema has become stale, datasets will also be marked as stale" do
+          schema.update_attributes!({:stale_at => Time.now}, :without_protection => true)
+          dataset = schema.datasets.first
+          dataset.should be_stale
+          dataset.stale_at.should be_within(5.seconds).of(Time.now)
+        end
+      end
+    end
+  end
 end

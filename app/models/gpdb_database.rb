@@ -5,6 +5,8 @@ class GpdbDatabase < ActiveRecord::Base
   has_many :schemas, :class_name => 'GpdbSchema', :foreign_key => :database_id
   has_and_belongs_to_many :instance_accounts
 
+  before_save :mark_schemas_as_stale
+
   DATABASE_NAMES_SQL = <<-SQL
   SELECT
     datname
@@ -27,5 +29,15 @@ class GpdbDatabase < ActiveRecord::Base
 
   def with_gpdb_connection(account, &block)
     Gpdb::ConnectionBuilder.connect!(account.instance, account, name, &block)
+  end
+
+  private
+
+  def mark_schemas_as_stale
+    if stale? && stale_at_changed?
+      schemas.each do |schema|
+        schema.mark_stale!
+      end
+    end
   end
 end

@@ -35,6 +35,8 @@ class GpdbSchema < ActiveRecord::Base
   delegate :with_gpdb_connection, :to => :database
   delegate :instance, :to => :database
 
+  before_save :mark_schemas_as_stale
+
   def self.refresh(account, database, options = {})
     begin
       schema_rows = database.with_gpdb_connection(account) do |conn|
@@ -96,5 +98,13 @@ class GpdbSchema < ActiveRecord::Base
     conn.schema_search_path = "#{conn.quote_column_name(name)}, 'public'"
   rescue ActiveRecord::StatementInvalid
     conn.schema_search_path = "#{conn.quote_column_name(name)}"
+  end
+
+  def mark_schemas_as_stale
+    if stale? && stale_at_changed?
+      datasets.each do |dataset|
+        dataset.mark_stale!
+      end
+    end
   end
 end
