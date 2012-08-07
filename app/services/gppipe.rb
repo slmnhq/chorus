@@ -1,6 +1,7 @@
 require 'fileutils'
 
 class Gppipe
+  GPFDIST_PIPE_DIR = File.join(Rails.root, '/tmp/gpfdist/')
 
   attr_reader :source_table, :destination_table
 
@@ -17,11 +18,8 @@ class Gppipe
     @pipe_name ||= "#{source_table}_#{destination_table}"
   end
 
-  def run()
-    data_dir = File.join(Rails.root, '/tmp/gpfdist/')
-    protocol = "gpfdist" # /gpfdists
-
-    pipe_file = File.join(data_dir, pipe_name)
+  def run
+    pipe_file = File.join(GPFDIST_PIPE_DIR, pipe_name)
 
     table_definition = gpdb1 do |conn|
       table_def_rows = conn.exec_query("SELECT column_name, data_type from information_schema.columns where table_name = '#{source_table}' and table_schema='new_schema';")
@@ -34,7 +32,6 @@ class Gppipe
       thr = Thread.new do
         gpdb1 do |conn|
           conn.exec_query("drop external table if exists new_schema.#{pipe_name};")
-          #conn.exec_query("USE schema #{export_schema_name}")
           conn.exec_query("CREATE WRITABLE EXTERNAL TABLE new_schema.#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8000/#{pipe_name}') FORMAT 'TEXT';")
           conn.exec_query("INSERT INTO new_schema.#{pipe_name} (SELECT * FROM new_schema.#{source_table});")
           conn.exec_query("DROP EXTERNAL TABLE new_schema.#{pipe_name};")
@@ -42,7 +39,6 @@ class Gppipe
       end
 
       gpdb2 do |conn|
-        # new_schema must already exist, required in GPDB 4.1
         conn.exec_query("drop external table if exists new_schema.#{pipe_name};")
         conn.exec_query("CREATE EXTERNAL TABLE new_schema.#{pipe_name}(#{table_definition}) LOCATION ('gpfdist://gillette:8001/#{pipe_name}') FORMAT 'TEXT';")
         conn.exec_query("CREATE TABLE new_schema.#{destination_table}(#{table_definition})")
