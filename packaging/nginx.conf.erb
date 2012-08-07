@@ -42,13 +42,13 @@ http {
         #access_log  logs/host.access.log  main;
 
         location / {
-            root  ../../current/public/;
+            root  ../../public/;
             try_files $uri @app;
         }
 
         location /system/ {
             internal;
-            alias ../../shared/system/;
+            alias ../s../system/;
         }
 
         location @app {

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-: ${RAILS_ENV?"Need to set RAILS_ENV"}
+test "$RAILS_ENV" = "" && RAILS_ENV=production
 
 POSTGRES_PORT=8543
 SOLR_ATTEMPTS=200
@@ -9,6 +9,7 @@ STARTING_DIR=$(pwd)
 SCRIPT_DIR=$(dirname $0)
 cd $STARTING_DIR/$SCRIPT_DIR
 
+export RAILS_ENV=$RAILS_ENV
 export CHORUS_HOME=$(pwd)
 
 CHORUS_CURRENT=$CHORUS_HOME/current
