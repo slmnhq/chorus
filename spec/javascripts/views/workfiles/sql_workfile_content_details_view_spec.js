@@ -30,7 +30,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         });
 
         it("shows the execution schema name", function() {
-            expect(this.view.$(".execution_schema")).toHaveText(this.model.executionSchema().canonicalName())
+            expect(this.view.$(".execution_schema")).toContainText(this.model.executionSchema().canonicalName())
         });
 
         it("puts the shortcuts next to the menu items", function() {
@@ -187,7 +187,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             describe("when the workspace has a sandbox, and hasn't been executed", function() {
                 it("shows 'Run in the workspace sandbox'", function() {
                     var runLink = this.qtipElement.find(".run_default");
-                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox")
+                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox");
                     expect(runLink).toBe("a");
                 });
             });
@@ -208,7 +208,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
                 it("shows 'Run in the workspace sandbox'", function() {
                     var runLink = this.qtipElement.find(".run_default");
-                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox")
+                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox");
                     expect(runLink).toBe("a");
                 });
             });
@@ -222,7 +222,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
                 it("disables the 'run in sandbox' link", function() {
                     var runLink = this.qtipElement.find(".run_default");
-                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox")
+                    expect(runLink).toContainTranslation("workfile.content_details.run_workspace_sandbox");
                     expect(runLink).toBe("span");
                 });
 
@@ -242,7 +242,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 it("broadcasts the 'file:runCurrent' event on the view", function() {
                     expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runCurrent");
                 });
-            })
+            });
 
             describe("clicking on 'Run in another schema'", function() {
                 it("launches the RunFileInSchema dialog", function() {
@@ -272,7 +272,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         describe("workfile:executed", function() {
             beforeEach(function() {
                 spyOn(this.view, "render");
-                spyOnEvent(this.view.model, "change")
+                spyOnEvent(this.view.model, "change");
                 this.executionInfo = {
                     instanceId: '51',
                     instanceName: "ned",
