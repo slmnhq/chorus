@@ -350,7 +350,7 @@ describe Dataset::Query, :database_integration => true do
       let(:account) { real_gpdb_account }
       let(:user) { users(:carly) }
       let(:schema) { GpdbSchema.find_by_name('test_schema') }
-      let(:src_table) { GpdbTable.find_by_name('base_table1') }
+      let(:src_table) { schema.datasets.find_by_name('base_table1') }
       let(:options) {
         {
             "to_table" => "the_new_table",
@@ -359,70 +359,78 @@ describe Dataset::Query, :database_integration => true do
         }
       }
 
-      before do
-        src_table.import(options, schema.instance.owner)
-        GpdbTable.refresh(account, schema)
+
+
+      context "into a table in another db using gpfdist" do
+
       end
 
-      after do
-        call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
-      end
+      context "into a table in the same db" do
+        before do
+          src_table.import(options, schema.instance.owner)
+          GpdbTable.refresh(account, schema)
+        end
 
-      it "creates the new table" do
-        GpdbTable.find_by_name(options["to_table"]).should be_a(GpdbTable)
-      end
+        after do
+          call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
+        end
 
-      it "copies the constraints" do
-        schema.with_gpdb_connection(account) do |connection|
-          dest_constraints = connection.exec_query("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{options["to_table"]}'")
-          src_constraints = connection.exec_query("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{src_table.name}'")
+        it "creates the new table" do
+          GpdbTable.find_by_name(options["to_table"]).should be_a(GpdbTable)
+        end
 
-          dest_constraints.count.should == src_constraints.count
-          dest_constraints.each_with_index do |constraint, i|
-            constraint["constraint_type"].should == src_constraints[i]["constraint_type"]
-            constraint["table_name"].should == options["to_table"]
+        it "copies the constraints" do
+          schema.with_gpdb_connection(account) do |connection|
+            dest_constraints = connection.exec_query("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{options["to_table"]}'")
+            src_constraints = connection.exec_query("SELECT constraint_type, table_name FROM information_schema.table_constraints WHERE table_name = '#{src_table.name}'")
+
+            dest_constraints.count.should == src_constraints.count
+            dest_constraints.each_with_index do |constraint, i|
+              constraint["constraint_type"].should == src_constraints[i]["constraint_type"]
+              constraint["table_name"].should == options["to_table"]
+            end
           end
         end
-      end
 
-      it "copies the rows" do
-        schema.with_gpdb_connection(account) do |connection|
-          dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
-          src_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{src_table.name}")
-
-          dest_rows.count.should == src_rows.count
-        end
-      end
-
-      context "when the rows are limited" do
-        let(:options) {
-          {
-              "to_table" => "the_new_table",
-              "use_limit_rows" => "true",
-              "sample_count" => 5
-          }
-        }
-        it "copies the rows up to limit" do
+        it "copies the rows" do
           schema.with_gpdb_connection(account) do |connection|
             dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
-            dest_rows.count.should == 5
+            src_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{src_table.name}")
+
+            dest_rows.count.should == src_rows.count
           end
         end
 
-        context "when the row limit value is 0" do
+        context "when the rows are limited" do
           let(:options) {
             {
                 "to_table" => "the_new_table",
                 "use_limit_rows" => "true",
-                "sample_count" => 0
+                "sample_count" => 5
             }
           }
-
-          it "creates the table and copies 0 rows" do
+          it "copies the rows up to limit" do
             schema.with_gpdb_connection(account) do |connection|
               dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
-              src_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{src_table.name}")
-              dest_rows.count.should == 0
+              dest_rows.count.should == 5
+            end
+          end
+
+          context "when the row limit value is 0" do
+            let(:options) {
+              {
+                  "to_table" => "the_new_table",
+                  "use_limit_rows" => "true",
+                  "sample_count" => 0
+              }
+            }
+
+            it "creates the table and copies 0 rows" do
+              schema.with_gpdb_connection(account) do |connection|
+                dest_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{options["to_table"]}")
+                src_rows = connection.exec_query("SELECT * FROM #{schema.name}.#{src_table.name}")
+                dest_rows.count.should == 0
+              end
             end
           end
         end

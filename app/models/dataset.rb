@@ -135,7 +135,7 @@ class Dataset < ActiveRecord::Base
     end
   end
 
-  def gpfdist_import(options, user)
+  def gpfdist_import(options, dst_schema, user)
 
   end
 

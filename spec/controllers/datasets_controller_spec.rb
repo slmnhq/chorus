@@ -149,7 +149,7 @@ describe DatasetsController do
       let(:active_workspace) { workspaces(:bob_public) }
 
       before(:each) do
-        any_instance_of(Dataset) { |c| mock(c).gpfdist_import(options, account.owner) }
+        any_instance_of(Dataset) { |c| mock(c).gpfdist_import(options, active_workspace.sandbox, account.owner) }
       end
 
       it "should return successfully for active workspaces" do
