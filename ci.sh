@@ -12,12 +12,6 @@ bundle install --binstubs=b/
 b/rake db:drop db:create db:migrate --trace > $WORKSPACE/bundle.log
 b/rake assets:precompile
 
-# start solr
-b/rake sunspot:solr:run > $WORKSPACE/solr.log 2>&1 &
-solr_pid=$!
-echo "Solr process id is : $solr_pid"
-echo $solr_pid > tmp/pids/solr-$RAILS_ENV.pid
-
 # start jasmine
 b/rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
 jasmine_pid=$!
@@ -38,8 +32,6 @@ JS_TESTS_RESULT=$?
 
 echo "Cleaning up jasmine process $jasmine_pid"
 kill -s SIGTERM $jasmine_pid
-echo "Cleaning up solr process $solr_pid"
-kill -s SIGTERM $solr_pid
 
 SUCCESS=`expr $RUBY_TESTS_RESULT + $JS_TESTS_RESULT`
 echo "RSpec exit code: $RUBY_TESTS_RESULT"
