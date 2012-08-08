@@ -15,6 +15,13 @@ GIT
     jetpack (0.1.2)
 
 GIT
+  remote: git://github.com/pivotal-leopold/postgresql_cursor.git
+  revision: 75b41556ef2c2d9dfc3ea110d541ffcc7e8ed5fb
+  specs:
+    postgresql_cursor (0.4.0)
+      activerecord
+
+GIT
   remote: git://github.com/pivotal-leopold/queue_classic.git
   revision: 373b8fd466d1348378422ba4461336c9cc83b89c
   specs:
@@ -153,12 +160,8 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (>= 0.0.2)
       mime-types
-    pg (0.14.0)
     polyglot (0.3.3)
     posix-spawn (0.3.6)
-    postgresql_cursor (0.4.0)
-      activerecord
-      pg
     pr_geohash (1.0.0)
     quiet_assets (1.0.1)
       railties (~> 3.1)
@@ -293,7 +296,7 @@ DEPENDENCIES
   net-ldap
   nokogiri
   paperclip (= 3.0.4)
-  postgresql_cursor
+  postgresql_cursor!
   queue_classic!
   quiet_assets
   rails (= 3.2.5)
