@@ -41,6 +41,8 @@ describe ConfigurationsController do
     end
 
     generate_fixture "config.json" do
+      stub(Chorus::Application.config.chorus).[]('file_sizes_mb.csv_imports') { 1 }
+      stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workfiles') { 10 }
       get :show
     end
   end
