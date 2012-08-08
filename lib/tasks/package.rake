@@ -79,7 +79,7 @@ module PackageMaker
     release_path = path + "/releases/" + release_name
 
     run "scp #{filename} #{host}:#{path}"
-    run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename}'"0
+    run "ssh #{host} 'mkdir -p #{release_path} && cd #{release_path}; tar --overwrite -xvf #{path}/#{filename}'"
 .
     run "ssh #{host} 'mkdir -p #{release_path}/solr && ln -s #{shared_path}/solr/data #{release_path}/solr/'"
 
