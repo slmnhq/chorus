@@ -136,7 +136,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def gpfdist_import(options, dst_schema, user)
-
+    Gppipe.new(schema, name, dst_schema, options['to_table'], user).run
   end
 
   def preview_sql

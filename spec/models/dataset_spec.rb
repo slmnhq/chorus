@@ -351,6 +351,7 @@ describe Dataset::Query, :database_integration => true do
       let(:user) { users(:carly) }
       let(:schema) { GpdbSchema.find_by_name('test_schema') }
       let(:src_table) { schema.datasets.find_by_name('base_table1') }
+      let(:sandbox) { schema } # For testing purposes, src schema = sandbox
       let(:options) {
         {
             "to_table" => "the_new_table",
@@ -359,10 +360,14 @@ describe Dataset::Query, :database_integration => true do
         }
       }
 
-
-
       context "into a table in another db using gpfdist" do
+        let(:user) { account.owner }
 
+        it "creates a correct gppipe" do
+          mock.proxy(Gppipe).new(schema, 'base_table1', sandbox, 'the_new_table', user)
+          any_instance_of(Gppipe) { |g| mock(g).run }
+          src_table.gpfdist_import(options, sandbox, user)
+        end
       end
 
       context "into a table in the same db" do
