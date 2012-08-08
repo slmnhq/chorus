@@ -7,39 +7,37 @@ describe ConfigurationsController do
       log_in @user
       mock(LdapClient).enabled? { true }
       stub(File).directory? { true }
+      stub.proxy(Chorus::Application.config.chorus).[](anything)
     end
 
     it "includes the ldap status" do
+      stub(Chorus::Application.config.chorus).[]('ldap') { {'enabled' => true} }
       get :show
       response.code.should == "200"
       decoded_response.external_auth_enabled.should == true
     end
 
-    it "includes the gpfdist config and write permissions" do
-      stub(File).writable? { true }
+    it "gpfdist_configured is true when config.gpfdist_configured? is true" do
+      stub(Chorus::Application.config.chorus).gpfdist_configured? { true }
       get :show
       response.code.should == "200"
-      decoded_response.gpfdist_write_permissions.should == true
-      decoded_response.gpfdist_url.should == "localhost"
-      decoded_response.gpfdist_port.should == 8181
-      decoded_response.gpfdist_data_dir.should == "/tmp"
+      decoded_response.gpfdist_configured.should == true
     end
 
-    it "includes the gpfdist config with no write permissions" do
-      stub(File).writable? { false }
+    it "gpfdist_configured is false when config.gpfdist_configured? is false" do
+      stub(Chorus::Application.config.chorus).gpfdist_configured? { false }
       get :show
       response.code.should == "200"
-      decoded_response.gpfdist_write_permissions.should == false
-      decoded_response.gpfdist_url.should == "localhost"
-      decoded_response.gpfdist_port.should == 8181
-      decoded_response.gpfdist_data_dir.should == "/tmp"
+      decoded_response.gpfdist_configured.should == false
     end
 
     it "includes the file size maximums" do
+      stub(Chorus::Application.config.chorus).[]('file_sizes_mb.csv_imports') { 1 }
+      stub(Chorus::Application.config.chorus).[]('file_sizes_mb.workfiles') { 10 }
       get :show
       response.code.should == "200"
-      decoded_response.file_sizes_mb_workfiles.should == 10
       decoded_response.file_sizes_mb_csv_imports.should == 1
+      decoded_response.file_sizes_mb_workfiles.should == 10
     end
 
     generate_fixture "config.json" do

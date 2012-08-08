@@ -29,10 +29,6 @@ module LdapClient
     ldap.bind
   end
 
-  def config_file_path
-    File.join(Rails.root, 'config', 'chorus.yml')
-  end
-
   private
 
   def make_dn(username)
@@ -44,6 +40,6 @@ module LdapClient
   end
 
   def config
-    @@config ||= YAML.load_file(config_file_path)['ldap']
+    Chorus::Application.config.chorus['ldap']
   end
 end

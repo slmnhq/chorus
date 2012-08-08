@@ -39,6 +39,7 @@ end
 
 group :test, :integration do
   gem 'rr'
+  gem 'fuubar'
   gem 'factory_girl'
   gem 'shoulda-matchers',    :require => false
   gem 'rspec-rails'

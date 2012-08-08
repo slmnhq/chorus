@@ -22,7 +22,7 @@ sleep 20
 set +e
 
 echo "Running integration tests"
-b/rspec spec/integration/ 2>&1
+script/test spec/integration/ 2>&1
 INTEGRATION_TESTS_RESULT=$?
 
 echo "Cleaning up solr process $solr_pid"

@@ -3,7 +3,7 @@ class ConfigMigrator
   attr_accessor :properties_path, :output_path, :example_path
 
   def initialize
-    @output_path = LdapClient.config_file_path
+    @output_path = ChorusConfig.config_file_path
   end
 
   def migrate

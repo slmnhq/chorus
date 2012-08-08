@@ -9,6 +9,9 @@ else # we have no args
 fi
 
 command="ruby -S bundle exec rspec"
+if [ "$JENKINS_HOME" != "" ]; then
+    command="$command --options .rspec-ci"
+fi
 
 args=("$@")
 RAILS_ENV=test $command $filename ${args[@]:1:100}
