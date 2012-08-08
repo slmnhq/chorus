@@ -101,7 +101,6 @@ describe DatasetsController do
       call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
     end
 
-
     context "into a table in the same database and instance" do
       let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
 
@@ -120,6 +119,30 @@ describe DatasetsController do
         GpdbTable.refresh(account, schema)
         response.code.should == "422"
       end
+
+      it "should create a success event for this whole importing business" do
+        post :import, :id => src_table.to_param, "dataset_import" => options
+        event = Events::DATASET_IMPORT_SUCCESS.first
+        event.actor.should == account.owner
+        event.dataset.should == destination_table
+        event.workspace.should == active_workspace
+        event.source_dataset.name.should == src_table.name
+      end
+
+      it "should create a fail event when there's an exception" do
+        any_instance_of(Dataset) { |c| stub(c).import { raise SqlCommandFailed, "Tiger uppercut!" } }
+
+        expect {
+          post :import, :id => src_table.to_param, "dataset_import" => options
+        }.to raise_error(SqlCommandFailed)
+
+        event = Events::DATASET_IMPORT_FAILED.first
+        event.actor.should == account.owner
+        event.destination_table.should == options["to_table"]
+        event.workspace.should == active_workspace
+        event.source_dataset.name.should == src_table.name
+        event.error_message.should == "Tiger uppercut!"
+      end
     end
 
     context "into a table in a different database" do
@@ -135,30 +158,6 @@ describe DatasetsController do
         GpdbTable.refresh(account, schema)
         response.code.should == "201"
       end
-    end
-
-    it "should create a success event for this whole importing business" do
-      post :import, :id => src_table.to_param, "dataset_import" => options
-      event = Events::DATASET_IMPORT_SUCCESS.first
-      event.actor.should == account.owner
-      event.dataset.should == destination_table
-      event.workspace.should == active_workspace
-      event.source_dataset.name.should == src_table.name
-    end
-
-    it "should create a fail event when there's an exception" do
-      any_instance_of(Dataset) { |c| stub(c).import { raise SqlCommandFailed, "Tiger uppercut!" } }
-
-      expect {
-        post :import, :id => src_table.to_param, "dataset_import" => options
-      }.to raise_error(SqlCommandFailed)
-
-      event = Events::DATASET_IMPORT_FAILED.first
-      event.actor.should == account.owner
-      event.destination_table.should == options["to_table"]
-      event.workspace.should == active_workspace
-      event.source_dataset.name.should == src_table.name
-      event.error_message.should == "Tiger uppercut!"
     end
   end
 end
