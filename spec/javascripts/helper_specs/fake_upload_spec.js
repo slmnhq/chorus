@@ -120,6 +120,28 @@ describe("FakeFileUpload", function() {
                     });
                 });
 
+                describe("#HTTPResponseFail", function() {
+                    beforeEach(function() {
+                        fakeUpload.HTTPResponseFail("<html>Hello World</html>", 404, "Page could not be found at all");
+                    });
+
+                    it("calls the 'fail' callback", function() {
+                        expect(failSpy).toHaveBeenCalled();
+                    });
+
+                    it("passes a fake jquery event object", function() {
+                        var event = failSpy.mostRecentCall.args[0];
+                        expect(_.isFunction(event.preventDefault)).toBeTruthy();
+                    });
+
+                    it("passes an error in a format mimicking nginx errors", function() {
+                        var data = failSpy.mostRecentCall.args[1];
+                        expect(data.jqXHR.responseText).toBe('<html>Hello World</html>');
+                        expect(data.jqXHR.status).toBe(404);
+                        expect(data.jqXHR.statusText).toBe('Page could not be found at all');
+                    });
+                });
+
                 describe("when the upload is aborted", function() {
                     it("sets the 'wasAborted' flag", function() {
                         request.abort();

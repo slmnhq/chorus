@@ -129,8 +129,19 @@ chorus.dialogs.DatasetImport = chorus.dialogs.Base.extend({
 
     uploadFailed: function(e, response) {
         e && e.preventDefault();
-        this.model.serverErrors = JSON.parse(response.jqXHR.responseText).errors;
+        try {
+            this.model.serverErrors = JSON.parse(response.jqXHR.responseText).errors;
+        } catch(error) {
+            // TODO: this in untested. If you know how to test fileUploadOptions, plz fix and add the pending test
+            var status = response.jqXHR.status;
+            var statusText = response.jqXHR.statusText;
+            this.displayNginxError(status, statusText);
+        }
         this.model.trigger("saveFailed");
+    },
+
+    displayNginxError: function(status, statusText) {
+        this.model.serverErrors = {"fields":{"base":{GENERIC:{message: status + ": " + statusText }}}}
     },
 
     uploadFinished: function(e, data) {

@@ -117,10 +117,20 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
 
         function uploadFailed(e, json) {
             e.preventDefault();
-            self.resource.serverErrors = JSON.parse(json.jqXHR.responseText).errors;
+            try {
+                self.resource.serverErrors = JSON.parse(json.jqXHR.responseText).errors;
+            } catch(error) {
+                var status = json.jqXHR.status;
+                var statusText = json.jqXHR.statusText;
+                self.displayNginxError(status, statusText);
+            }
             self.$("button.submit").stopLoading();
             self.$("button.submit").prop("disabled", true);
             self.resource.trigger("saveFailed");
         }
+    },
+
+    displayNginxError: function(status, statusText) {
+        this.model.serverErrors = {"fields":{"base":{GENERIC:{message: status + ": " + statusText }}}}
     }
 });

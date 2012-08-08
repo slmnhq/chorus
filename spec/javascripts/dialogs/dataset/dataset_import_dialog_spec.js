@@ -141,6 +141,15 @@ describe("chorus.dialogs.DatasetImport", function() {
                     expect(this.dialog.$('.errors')).not.toContainText("file exceeds");
                 });
             });
+
+            describe("when nginx returns a 413 (body too large) error", function() {
+                xit("shows that error", function() {
+                    this.fileList = [{ name: 'finefile.bar', size: 1 * 1024 * 1024 - 1 }];
+                    this.fileUploadOptions.add(null, {files: this.fileList, submit: jasmine.createSpy().andReturn(this.request)});
+                    html_response = '<html>\n<head><title>413 Request Entity Too Large</title></head>\n<body bgcolor="white">\n<center><h1>413 Request Entity Too Large</h1></center> <hr><center>nginx/1.2.2</center>\n </body>\n </html>\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n <!-- a padding to disable MSIE and Chrome friendly error page -->\n';
+                    expect(this.dialog.$(".errors")).toContainText("413: Request Entity Too Large");
+                });
+            });
         });
 
         describe("import controls", function() {

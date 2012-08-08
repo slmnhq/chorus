@@ -69,6 +69,18 @@
 
                 result: bodyText
             });
-        }
+        },
+
+        HTTPResponseFail: function(bodyText, status, statusText) {
+            this.options.fail(this.fakeEvent(), {
+                jqXHR: {
+                    status: status || 404,
+                    statusText: statusText || "FakeUpload doesn't like what you sent",
+                    responseText: bodyText
+                },
+
+                result: bodyText
+            });
+        },
     });
 })();
