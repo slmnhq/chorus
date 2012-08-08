@@ -41,6 +41,13 @@ http {
 
         #access_log  logs/host.access.log  main;
 
+        location ~ ^/(assets)/ {
+            root  ../../public/;
+            gzip_static on;
+            expires max;
+            add_header Cache-Control public;
+        }
+
         location / {
             root  ../../public/;
             try_files $uri @app;
