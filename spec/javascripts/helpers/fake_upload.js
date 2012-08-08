@@ -14,14 +14,22 @@
     }
 
     _.extend(FakeFileUpload.prototype, {
-        add: function(filenames) {
+        add: function(files) {
             var self = this;
-            this.files = _.map(filenames, function(name) {
-                return {
-                    name: name,
-                    size: 1234,
-                    type: "text/plain"
-                };
+            this.files = _.map(files, function(file) {
+                if(_.isObject(file)) {
+                    return {
+                        name: file.name,
+                        size: file.size || 1234,
+                        type: file.type || "text/plain"
+                    };
+                } else {
+                    return {
+                        name: file,
+                        size: 1234,
+                        type: "text/plain"
+                    };
+                }
             });
 
             this.options.add(this.fakeEvent(), {

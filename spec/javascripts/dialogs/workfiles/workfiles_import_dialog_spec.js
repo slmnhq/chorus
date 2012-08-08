@@ -113,6 +113,13 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             expect(this.dialog.$(".file .defaultText")).toHaveClass("hidden")
         });
 
+        context("when the file size exceeds the maximum file size", function() {
+            it("shows an error", function() {
+                this.fakeUpload.add([{ name: "foo.bar", size: 99999999999999 }]);
+                expect(this.dialog.$(".errors")).toContainText("file exceeds");
+            });
+        });
+
         context("#upload", function() {
             beforeEach(function() {
                 this.dialog.upload();

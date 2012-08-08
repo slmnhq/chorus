@@ -57,6 +57,18 @@ describe("FakeFileUpload", function() {
                 expect(data.submit).toBeDefined();
             });
 
+            describe("when file sizes are given", function() {
+                it("uses them", function() {
+                    fakeUpload.add([{ name: "file1.txt", size: 4321, type: "malware/virus" }]);
+                    var data = addSpy.mostRecentCall.args[1];
+                    var fileList = data.files;
+                    expect(fileList.length).toBe(1);
+                    expect(fileList[0].name).toBe("file1.txt");
+                    expect(fileList[0].size).toBe(4321);
+                    expect(fileList[0].type).toBe("malware/virus");
+                });
+            });
+
             describe("when the 'submit' method is called", function() {
                 var request;
 

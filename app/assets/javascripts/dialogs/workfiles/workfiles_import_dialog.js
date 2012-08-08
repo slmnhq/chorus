@@ -82,7 +82,21 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
                 self.$('img').attr('src', iconSrc);
                 self.$('.fileName').text(filename).attr('title', filename);
                 self.$("form").addClass("chosen");
+
+                validateFile(data.files);
             }
+        }
+
+        function validateFile(files) {
+            self.clearErrors();
+            if (!self.model) return;
+
+            _.each(files, function(file) {
+                if (file.size > 100000) {
+                    self.model.serverErrors = {"fields":{"base":{"FILE_SIZE_EXCEEDED":{"count":1}}}}
+                    self.showErrors(self.model);
+                }
+            }, self);
         }
 
         // TODO: abstract away all of this JSON parsing into some model
