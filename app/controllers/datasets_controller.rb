@@ -23,8 +23,14 @@ class DatasetsController < GpdbController
       head 422
       return
     end
+
     begin
-      src_table.import(params[:dataset_import], current_user)
+      if workspace.sandbox.database == src_table.schema.database
+        src_table.import(params[:dataset_import], current_user)
+      else
+        src_table.gpfdist_import(params[:dataset_import], current_user)
+      end
+
       create_success_event(params[:dataset_import]["to_table"], src_table, workspace)
       head :created
     rescue Exception => e

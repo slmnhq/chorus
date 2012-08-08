@@ -135,6 +135,10 @@ class Dataset < ActiveRecord::Base
     end
   end
 
+  def gpfdist_import(options, user)
+    
+  end
+
   def preview_sql
     all_rows_sql(100)
   end

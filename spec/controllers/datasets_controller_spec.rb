@@ -79,7 +79,7 @@ describe DatasetsController do
     let(:account) { real_gpdb_account }
     let(:schema) { GpdbSchema.find_by_name('test_schema') }
     let(:archived_workspace) { workspaces(:archived) }
-    let(:active_workspace) { workspaces(:bob_public) }
+
     let(:src_table) { GpdbTable.find_by_name('base_table1') }
     let(:destination_table) { GpdbTable.find_by_name('the_new_table') }
 
@@ -87,8 +87,8 @@ describe DatasetsController do
       {
               "to_table" => "the_new_table",
               "use_limit_rows" => "false",
-              "sample_count" => 0,
-              "workspace_id" => active_workspace.id
+              "sample_count" => "0",
+              "workspace_id" => active_workspace.id.to_s
       }
     }
 
@@ -101,19 +101,40 @@ describe DatasetsController do
       call_sql(schema, account, "DROP TABLE IF EXISTS the_new_table")
     end
 
-    it "should return successfully for active workspaces" do
-      post :import, :id => src_table.to_param, "dataset_import" => options
 
-      GpdbTable.refresh(account, schema)
-      response.code.should == "201"
+    context "into a table in the same database and instance" do
+      let(:active_workspace) { Workspace.create!({:name => "TestImportWorkspace", :sandbox => schema, :owner => user}, :without_protection => true) }
+
+      it "should return successfully for active workspaces" do
+        any_instance_of(Dataset) { |c| mock(c).import(options, account.owner) }
+        post :import, :id => src_table.to_param, "dataset_import" => options
+
+        GpdbTable.refresh(account, schema)
+        response.code.should == "201"
+      end
+
+      it "should return error for archived workspaces" do
+        options[:workspace_id] = archived_workspace.id
+        post :import, :id => src_table.to_param, "dataset_import" => options
+
+        GpdbTable.refresh(account, schema)
+        response.code.should == "422"
+      end
     end
 
-    it "should return error for archived workspaces" do
-      options[:workspace_id] = archived_workspace.id
-      post :import, :id => src_table.to_param, "dataset_import" => options
+    context "into a table in a different database" do
+      let(:active_workspace) { workspaces(:bob_public) }
 
-      GpdbTable.refresh(account, schema)
-      response.code.should == "422"
+      before(:each) do
+        any_instance_of(Dataset) { |c| mock(c).gpfdist_import(options, account.owner) }
+      end
+
+      it "should return successfully for active workspaces" do
+        post :import, :id => src_table.to_param, "dataset_import" => options
+
+        GpdbTable.refresh(account, schema)
+        response.code.should == "201"
+      end
     end
 
     it "should create a success event for this whole importing business" do
